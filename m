@@ -1,92 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67423D5AE45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 11:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80B66D5AE45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 11:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D19260D73;
-	Sat, 13 Dec 2025 11:48:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3B8940C22;
+	Sat, 13 Dec 2025 11:55:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4kY5oTqP9bnN; Sat, 13 Dec 2025 11:55:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2495140B89
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765626951;
+	bh=liTb0mkgmmTN+h7l+IaDynbC54fKd0wf4KegFgzk2e4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=mZ8rjyR0QLGjy7tY5G7SXJS3E8TG4+1T9QaZIEFaDgnEb3dXtNsjtZ1xhCNANa+en
+	 Is5oBV8YseGRwuEQLT42G17UFAaIoaYUYEK4r+LlTmcnelAfJsheiR/z4Luofpn3dr
+	 KyLCZgHLxuf6suAC/vW7wpSCrLJimzVYcvkVQBwX0uYi1ayvRM8QwJqNE1JMxKzt/f
+	 HIIVn83lH8IlCaP16X13I3loj2byt6M8TKe2mGFBL74I7JHBujPuEau7cFWLwBssqa
+	 XMPU6bZ+urhik552QxAkyEs6geFlEzQUhR1jxEiEnXL2O3yECcLQVuL0W+Mr1LeTYZ
+	 ysYCmF6wISZaA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2495140B89;
+	Sat, 13 Dec 2025 11:55:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 491F72C1
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:55:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F2E460D6C
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:55:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eq-oLw2N0TtO; Sat, 13 Dec 2025 11:48:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85E4A60C13
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765626515;
-	bh=WT3JgFb17Y9Az6mVgJdWjefqNykVwU64rU18Hi3MsGQ=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=C/gyhqkMD6OBrKCOdQeNZwIZEMGuFCOoqjYqIC74ti7w/h/L15ArSG2X7QmtztnRo
-	 tNZVDBdj6cyQli/gNg8LtaO3giVyDzyurKgKFC8ABrq14YVItXFC6/ikYXWxV8tTSH
-	 M0fntdkK6GOLo41fZPrO5uCE47dvh7I0CXcXMJXFfXGXglGQgVqnphI2Z8mx7Ln6Si
-	 5gO+SEBQjTJeaOwg6dYeELnIuUlJTE/Xu2QsuYukib+RuAP0cafYExjVrLD+6pp+HR
-	 tpxUosz+vxmbwxi5KbIsZ0Jks2RR1fceKJx/MfwM3HL+0sjMIwn9VOGn0P2ptVm+wZ
-	 0ho8ikhe3C3FQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85E4A60C13;
-	Sat, 13 Dec 2025 11:48:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BAF213D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:48:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75B9583231
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:48:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vpjeOgSym5Jr for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 11:48:31 +0000 (UTC)
-X-Greylist: delayed 1255 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 13 Dec 2025 11:48:28 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 11EDB816E3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11EDB816E3
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 11EDB816E3
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:48:28 +0000 (UTC)
-Received: from 81-197-150-176.elisa-laajakaista.fi ([81.197.150.176]
- helo=momiji) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1vUNmb-00CLdQ-Ew; Sat, 13 Dec 2025 12:27:29 +0100
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 3e5755c1;
- Sat, 13 Dec 2025 11:27:27 +0000 (UTC)
-Date: Sat, 13 Dec 2025 13:27:24 +0200
-Message-ID: <20251213132724.GB3288322@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251213100754.198163-1-thomas.perale@mind.be>
-References: <20251213100754.198163-1-thomas.perale@mind.be>
+ id Hgh6Kg1b0taW for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 11:55:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 47205605FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47205605FC
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 47205605FC
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:55:47 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 46E64A4C341C
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:55:44 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60020)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vUODv-000000006bO-2K6D
+ for buildroot@buildroot.org; Sat, 13 Dec 2025 11:55:43 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 13 Dec 2025 12:55:43 +0100
+Message-ID: <20251213115543.1277009-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=mBgjNDHCIks3P0Mwpanved0T/c13ekITBPS+IKzVkU8=; b=PGkzaTYiNKvqnSJ4QEuvLZGLCn
- N5hEZgjEujcOvng+5CTC3YBxX3845NMYMH8qbrx2OfJ70Ww6elVT9ND51M+C95k9JzRYOR9pJj7KR
- NJZYDUTjAV2KEJemNBSZnsMx1U2eGyvf7QfOE0jeCfcEp5ZHtn6/7RafVvrUOju8mcn9pqNGZrrYQ
- E6dy4S5dWkbpSCKy6KBb3DMUo2vtraYxJn+4QS2gvP5s6LOxQFv1GzPe8qfLX81JCRm7pdRuv9e6m
- JYrOPKx8xyb7eXXfRqNf+sle6Pp4/JBb/t6/CKdlp2mf+smggU2lSfXEublPzCGraa159v+PJnQO0
- Gy2DVXDw==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Spamd-Bar: ++++++
+X-Spam: Yes
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1765626944;
+ bh=znvhxb7/B9/A7YmnU0TSLpIO56aqImG7Ftv43nbZGqw=;
+ h=From:To:Subject:Date:From;
+ b=gCVttxbnBVsovx0TljthtTpfttdbr2CcH+ScvLfTwjmNXByKfWVHB5uQUJ7FBGdAG
+ ne3XxlO3WHxE85a3qSvRuSTZJS8cBzGybAeSwnAnySmgzHT7Yxsee1vCQJSlEb8JbU
+ PHKoIQGqW83Ia+MWrhjvziClgcVJDCSs8ffYATNK+mHarxOEYJJGEaw3XGZZ1f4jZs
+ Y0uu6K03cUNAXPUOMW7IR9axIpvT0E9OgQ482FjDYPsrfM8c4iRPrWABBDgCiqul7H
+ rv7op1jovG1ut6XgtII8QCJiHufTlP3ZDo5NoObRWTDJOdI6sdJewjsAPt4c3WY6m9
+ CcrUA1PttyLqw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=PGkzaTYi
-Subject: Re: [Buildroot] [2025.02.x,
- PATCH] package/sysprof: remove 'debuginfod' config symbol
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=gCVttxbn
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.131
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,69 +92,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5092149110340994569=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://lists.x.org/archives/xorg-announce/2025-December/003647.html
 
---===============5092149110340994569==
-Content-Type: multipart/signed; boundary="wyLp08cr5jZsYMpw"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libdrm/libdrm.hash | 6 +++---
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
---wyLp08cr5jZsYMpw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-T24gU2F0LCAxMyBEZWMgMjAyNSAxMTowNzo1NCArMDEwMCBUaG9tYXMgUGVyYWxlIDx0aG9tYXMu
-cGVyYWxlQG1pbmQuYmU+IHdyb3RlOgo+IENvbW1pdCBbMV0gd2FzIGVycm9uZW91c2x5IHBpY2tl
-ZCBiZWNhdXNlIGl0IG1lbnRpb25lZCBjb21taXQgWzJdLCB3aGljaAo+IGlzIHByZXNlbnQgaW4g
-dGhlIExUUyBicmFuY2guCj4gCj4gSW4gZmFjdCwgdGhlICdkZWJ1Z2luZm9kJyBvcHRpb24gd2Fz
-IGludHJvZHVjZWQgaW4gdGhlIHN5c3Byb2YgcGFja2FnZSBpbgo+IHZlcnNpb24gNDguMCAoc2Vl
-IFszXSBhbmQgQnVpbGRyb290IGNvbW1pdCBbNF0pLCB3aGljaCB3YXMgbm90IHBpY2tlZCBpbiB0
-aGUKPiBMVFMgYnJhbmNoLgo+IAo+IFRoaXMgcGF0Y2ggcmV2ZXJ0cyBjb21taXQgWzFdIGFuZCBy
-ZW1vdmVzIHRoZSBvcHRpb24gaXQgaW50cm9kdWNlZCwgd2hpY2gKPiBkb2VzIG5vdCBleGlzdCBp
-biBzeXNwcm9mIDQ3LjIuCj4gCj4gWzFdIDI2ZmQ4ZWIyMTcgcGFja2FnZS9zeXNwcm9mOiBkaXNh
-YmxlIGRlYnVnaW5mb2Qgc3VwcG9ydAo+IFsyXSA1MmM1YzYwNTBjIHBhY2thZ2UvZWxmdXRpbHM6
-IGJ1bXAgdG8gdmVyc2lvbiAwLjE4MQo+IFszXSBodHRwczovL2dpdGxhYi5nbm9tZS5vcmcvR05P
-TUUvc3lzcHJvZi8tL2NvbW1pdC9kMjQ3MWQ0YmY1NzFjM2E3YzhkNzQzYTk2YzkyMDdkNzQ4ZDc2
-M2U4Cj4gWzRdIGU3NDM3NTlhNTIgcGFja2FnZS9zeXNwcm9mOiBidW1wIHRvIHZlcnNpb24gNDgu
-MAo+IAo+IEZpeGVzOiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3Qv
-LS9pc3N1ZXMvMTUyCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBlcmFsZSA8dGhvbWFzLnBlcmFs
-ZUBtaW5kLmJlPgoKQWNrZWQtYnk6IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2Fs
-aWEuY29tPgoKPiAtLS0KPiAgcGFja2FnZS9zeXNwcm9mL3N5c3Byb2YubWsgfCAxIC0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zeXNw
-cm9mL3N5c3Byb2YubWsgYi9wYWNrYWdlL3N5c3Byb2Yvc3lzcHJvZi5tawo+IGluZGV4IDRlNjcw
-NjE0NTIuLjdmMWJhNGM2M2QgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9zeXNwcm9mL3N5c3Byb2Yu
-bWsKPiArKysgYi9wYWNrYWdlL3N5c3Byb2Yvc3lzcHJvZi5tawo+IEBAIC0xMiw3ICsxMiw2IEBA
-IFNZU1BST0ZfTElDRU5TRSA9IEdQTC0zLjArCj4gIFNZU1BST0ZfTElDRU5TRV9GSUxFUyA9IENP
-UFlJTkcKPiAgU1lTUFJPRl9ERVBFTkRFTkNJRVMgPSBlbGZ1dGlscyBsaWJnbGliMiBsaWJkZXgg
-bGlidW53aW5kIGpzb24tZ2xpYiBwb2xraXQKPiAgU1lTUFJPRl9DT05GX09QVFMgPSBcCj4gLQkt
-RGRlYnVnaW5mb2Q9ZGlzYWJsZWQgXAo+ICAJLURkZXZlbG9wbWVudD1mYWxzZSBcCj4gIAktRGV4
-YW1wbGVzPWZhbHNlIFwKPiAgCS1EZ3RrPWZhbHNlIFwKPiAtLSAKPiAyLjUyLjAKPiAKPiAKCkNo
-ZWVycywK4oCUQWRyacOhbgo=
-
---wyLp08cr5jZsYMpw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCaT1NnAAKCRCRxVnb5MkS
-OwE3AJ92QjDn9HxdQSrBMNHM61XZthCHJwCfZiMsQ2fQCEBNIl3TGO7G2DP3MZI=
-=7V3m
------END PGP SIGNATURE-----
-
---wyLp08cr5jZsYMpw--
-
---===============5092149110340994569==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 22c69f1979..52bf0c6228 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2025-December/003646.html
+-sha256  a5c585ba8484c85fa8029bc8d0aad2af814e800b36e0f67150971b5037716ea5  libdrm-2.4.130.tar.xz
+-sha512  1346df2d25552346ceea526ac7b1f0c3c9e4815ac246ba4ca61f54b9e27a5938d0e8041f22348eadce267cd8f6fd27d8ec2b0630f39451c3ec61ff2254896341  libdrm-2.4.130.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-December/003647.html
++sha256  45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5  libdrm-2.4.131.tar.xz
++sha512  d75894215600b648e25bbe13422901b650fb94bba8276d77971a49db7dc001819c9fc4b7e90ed82275f170a331687960ca5752cbb12064b2eec9c5c8eb60bf3c  libdrm-2.4.131.tar.xz
+ 
+ # Hash for license file
+ sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index f64c9ad44c..240c09b8b1 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.130
++LIBDRM_VERSION = 2.4.131
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+-- 
+2.47.3
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5092149110340994569==--
