@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C606AD59D99
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56CEAD59D99
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 765DD606AF;
-	Sun, 14 Dec 2025 21:11:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19ED0606CE;
+	Sun, 14 Dec 2025 21:15:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3rhloOIy4Gjm; Sun, 14 Dec 2025 21:11:30 +0000 (UTC)
+ id rSK-9eyoyFGA; Sun, 14 Dec 2025 21:15:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 950D6607D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34064606FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765746690;
-	bh=hEfXjrUqd+ltsW5v4goOHHjRyEqot2NMQSUnFOaw4i4=;
+	s=default; t=1765746940;
+	bh=bQRRzBNdyN2bwdoRNOgXiGhuV8ZmCf7e3RyX548lxg8=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=nN2rDloEhlZSAxDxsDoO66KuehnFF5EUnzA/r88wQSsvY1TYAmP27imXlzEp8ndNJ
-	 H3R78EKljc/ge9xFfNhrFNUqXWvc9j1RWLvS11uV22DpKi/mWi+reP1FMEcBbauzCF
-	 DX0Cy2N0ilGdZRua6w3+HueJBkoK+6eeb2DUPzM1Sq2gogu5XNCbKvpjxwoAaSG2ZY
-	 TqSG+y1u23YDVvPiW8+ev0o58IwSiRm11HXiiqfiV/ZCH1xUiCanUi7KUtbvpCVW4X
-	 JlCzbMGCM+job3bBFVSNOoj6TwEAZ7WHy+6CpwsizkiEtO/Hwdew3qGvSCFjZcj8jX
-	 yGed1oE3Ncz7g==
+	b=gdWWnEYBYbuof/YYhga1XgPp6QxzKtVmJv+/IyCJ0m7NZGCANdzxodRYNVad1pM+W
+	 73MHogYsgHEYMOVxRax+atXAFCc1Y+8UzVjNccTeKfw0IXc1BHOagcHeIg4Zb/WF0l
+	 gPH98YqGqe5/ieRrMgSHYnmzkzwJNGfoSDLX2lssFRzjtOqXyqcD3Emvt6cYolyeTO
+	 9QduPOxruFdIBUh9KomBz0ZLJStwlP6Bv5Y+cf6QLh1sTWp9lS8ep/dTR4wjmPG+fV
+	 KBBq8ajbq5lFtMnbLJ5zHBCcWa8V0tEbXNN3sI6Fw/abx/TEJAk3vp6x2KShD2DB9H
+	 YkQnWwj393ebg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 950D6607D0;
-	Sun, 14 Dec 2025 21:11:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 751492D0
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:11:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34064606FD;
+	Sun, 14 Dec 2025 21:15:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD5C5117
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67FCB403B6
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:11:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF2054007F
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:15:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXD0VCGnV615 for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 21:11:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 18E0neCJPfYF for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 21:15:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.100;
  helo=smtpdh16-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EE160403B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE160403B0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DCBE4003A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DCBE4003A
 Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EE160403B0
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:11:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DCBE4003A
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:15:36 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id UtNEvsPyW3pJ0UtNEv70GC; Sun, 14 Dec 2025 22:11:24 +0100
+ id UtRGvsRWz3pJ0UtRHv70uT; Sun, 14 Dec 2025 22:15:35 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Christian Stewart <christian@aperture.us>,
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 14 Dec 2025 22:11:23 +0100
-Message-ID: <20251214211123.2531954-1-giulio.benetti@benettiengineering.com>
+Date: Sun, 14 Dec 2025 22:15:34 +0100
+Message-ID: <20251214211534.2541224-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGmcba6VTfFenVVLKwgKrCwF9EuQNeMq3n0bR2apJdfpZsjCFOGbFrPGszKaMdMmOPcAXtuQiyVaFp9IKUrzeoIEw7d+FcOnz+/rIHujjS7DsBmCZvHK
- XtAzyzeSMTKeUKmpTuXC5ZL0nQGxQyKrRCWI8u0R3hakAYMlyT80Z81E90X1n/N4k1jx4qr8KroeL+vuuW/fqyYHXYOjGzTw+2Uc+uNY5ozuUMuMFZv2pyo6
- 7Nckw16Ywg38b+IiD8YuL8oeDAp0LqfRK99zlAePFqYMxO24MWJfBDd4Clha8yUm6M6NQueGUKlCsyCBE9B8Gw==
+X-CMAE-Envelope: MS4xfGnJWwTsOO07/8pPXZTlLD2l0rk9I7h7HPnzDX1ITPfGc2rKuELL0P40P6kwoy/au6J2gjQjs/Ct2uGQpW+wA1Rkxz7PMYaqU5/TLf139eao+n8Wr1nt
+ M5vdeWUiFwYs9MCKJm9ywleZM5TUEArtvuZ9G03jRklMja0wFUmeZcDee2IRs2MUNCqC4H3q9k/GdFiP+QgxDKsKjirqPSWAC/PANC8H2YEv/pfz6Y3zoHTU
+ d5htx9XzvhZSpqHlvuPaaol4cD3PDvmzuHlmL6aYvHQmATXss6k0Srw+Br79RZokIr0JimicVrtawU5gJIUeCQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1765746684; bh=6WT5vWEwHf2NIdgcq38GLQ+B0+7KM14V7tzaNFC2wOc=;
+ t=1765746935; bh=5w3qSoX2XTqwC2dsGE3hWEtLR4wFnBrk7lEl4yaIhXo=;
  h=From:To:Subject:Date:MIME-Version;
- b=N9NIvWxEcPknEQ50uuuXddLulI7vuP0pakQWJvsxbR93EOdRyaWL6UdGBRVg0XIlC
- HM2cmK36NH4rgQkLDt6S34jeAcp7PrXlhSv+9qck44j/YS6NeUNJN8r5Pi0Qv35yzK
- WxiSbpftt9AGNOJiTxfxAGOrJeTuldA/gdmsVWf/WseW0fy/9os7oVABf+UeY7CibQ
- ffcQl7T09c+LPdQx2bRWIUVghbJIKB9VBUwLrbMeQOc+IEihpYWvwHcsYgB4vpV5y0
- J149H23c26ogUxBG90v5Z5kjANViwbrEcKQIkGwiQr93PMlW+un9nF7UR3qSgJAk11
- /adKdy53GJ91w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Ui4ainzppWEXcjkKaBhkSs+0OHX03p0aiKQgt1/HAi5Ofr/A76hLf0ANHcbwnQ7Zo
+ 6iOkRuetzw0nvaholRRMqzG0OEd83jw7hUaxVW10xmP1wtWrvSGinbAdW+nj3dSPZ2
+ LZGnrFMT9lyrFwEB3e0AtbnjNzROIU7wajmv6mdEyoPXYQp3wvtMkpKM5JN40E4xvZ
+ arAtVkaVkohRiUEpNC+wlIifIwKB1qhfuKrFf3OCMEaV6fnY5u2O0h2xSlPmCGTdbo
+ 2PYc3JGND9lsXsgG83jSoXkiC0M9xWLShI5n3dqkD6FhdBx2Pbg2J9Wb6R/tBEuJAZ
+ zmi/d5HcMkAEA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=N9NIvWxE
-Subject: [Buildroot] [PATCH] package/rtl8821cu: fix build failure with Linux
- 6.18
+ header.s=a1 header.b=Ui4ainzp
+Subject: [Buildroot] [PATCH] package/xr819-xradio: fix build failure due to
+ local patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,63 +97,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add pending upstreamed local patch.
+Local patch hasn't been removed while bumping package version resulting
+into build failure. So let's drop local path to fix build failure.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ..._sha256-conflict-with-linux-function.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/rtl8821cu/0001-Fix-hmac_sha256-conflict-with-linux-function.patch
+ .../0001-Fix-build-for-kernel-6.17.patch      | 80 -------------------
+ 1 file changed, 80 deletions(-)
+ delete mode 100644 package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
 
-diff --git a/package/rtl8821cu/0001-Fix-hmac_sha256-conflict-with-linux-function.patch b/package/rtl8821cu/0001-Fix-hmac_sha256-conflict-with-linux-function.patch
-new file mode 100644
-index 0000000000..6f96cb2bee
---- /dev/null
-+++ b/package/rtl8821cu/0001-Fix-hmac_sha256-conflict-with-linux-function.patch
-@@ -0,0 +1,43 @@
-+From 85a4ce313531e0941a8a80f1b198f5fd5ceb9168 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sun, 14 Dec 2025 22:05:45 +0100
-+Subject: [PATCH] Fix hmac_sha256() conflict with linux function
-+
-+Prefix local hmac_sha256() with rtl_ resulting into rtl_hmac_sha256().
-+
-+Upstream: https://github.com/morrownr/8821cu-20210916/pull/195
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ core/crypto/sha256.c | 2 +-
-+ core/crypto/sha256.h | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/core/crypto/sha256.c b/core/crypto/sha256.c
-+index ea5d9e3..d0a18c7 100644
-+--- a/core/crypto/sha256.c
-++++ b/core/crypto/sha256.c
-+@@ -97,7 +97,7 @@ int hmac_sha256_vector(const u8 *key, size_t key_len, size_t num_elem,
-+  * @mac: Buffer for the hash (32 bytes)
-+  * Returns: 0 on success, -1 on failure
-+  */
-+-int hmac_sha256(const u8 *key, size_t key_len, const u8 *data,
-++int rtl_hmac_sha256(const u8 *key, size_t key_len, const u8 *data,
-+ 		size_t data_len, u8 *mac)
-+ {
-+ 	return hmac_sha256_vector(key, key_len, 1, &data, &data_len, mac);
-+diff --git a/core/crypto/sha256.h b/core/crypto/sha256.h
-+index 5219022..6260146 100644
-+--- a/core/crypto/sha256.h
-++++ b/core/crypto/sha256.h
-+@@ -13,7 +13,7 @@
-+ 
-+ int hmac_sha256_vector(const u8 *key, size_t key_len, size_t num_elem,
-+ 		       const u8 *addr[], const size_t *len, u8 *mac);
-+-int hmac_sha256(const u8 *key, size_t key_len, const u8 *data,
-++int rtl_hmac_sha256(const u8 *key, size_t key_len, const u8 *data,
-+ 		size_t data_len, u8 *mac);
-+ int sha256_prf(const u8 *key, size_t key_len, const char *label,
-+ 	       const u8 *data, size_t data_len, u8 *buf, size_t buf_len);
-+-- 
-+2.47.3
-+
+diff --git a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch b/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
+deleted file mode 100644
+index 3329016472..0000000000
+--- a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+-From dbf3f744650e05a40fc3df6325fc657e5c23cece Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Fri, 10 Oct 2025 22:18:12 +0200
+-Subject: [PATCH] Fix build for kernel 6.17
+-
+-With commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
+-set_rts_threshold() and config() gain argument radio_idx to get radio
+-index. So let's add that argument according to Linux version >= 6.17.
+-
+-Upstream: https://github.com/fifteenhex/xradio/commit/43992a7e7ed95ff815cf6d8ba81cef1085e50ab9
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- sta.c | 12 ++++++++++--
+- sta.h | 12 ++++++++++--
+- 2 files changed, 20 insertions(+), 4 deletions(-)
+-
+-diff --git a/sta.c b/sta.c
+-index 1203ce9..d769b81 100644
+---- a/sta.c
+-+++ b/sta.c
+-@@ -381,7 +381,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
+- 	return ret;
+- }
+- 
+--int xradio_config(struct ieee80211_hw *dev, u32 changed)
+-+int xradio_config(struct ieee80211_hw *dev,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+		  int radio_idx,
+-+#endif
+-+		  u32 changed)
+- {
+- 	int ret = 0;
+- 	struct xradio_common *hw_priv = dev->priv;
+-@@ -796,7 +800,11 @@ void xradio_wep_key_work(struct work_struct *work)
+- 	wsm_unlock_tx(hw_priv);
+- }
+- 
+--int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value)
+-+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+			     int radio_idx,
+-+#endif
+-+			     u32 value)
+- {
+- 	struct xradio_common *hw_priv = hw->priv;
+- 	int ret = 0;
+-diff --git a/sta.h b/sta.h
+-index 39a023a..de8f837 100644
+---- a/sta.h
+-+++ b/sta.h
+-@@ -42,7 +42,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
+-                             struct ieee80211_vif *vif,
+-                             enum nl80211_iftype new_type,
+-                             bool p2p);
+--int xradio_config(struct ieee80211_hw *dev, u32 changed);
+-+int xradio_config(struct ieee80211_hw *dev,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+		  int radio_idx,
+-+#endif
+-+		  u32 changed);
+- int xradio_change_interface(struct ieee80211_hw *dev,
+-                             struct ieee80211_vif *vif,
+-                             enum nl80211_iftype new_type,
+-@@ -65,7 +69,11 @@ int xradio_get_stats(struct ieee80211_hw *dev,
+- int xradio_get_tx_stats(struct ieee80211_hw *dev,
+- 			struct ieee80211_tx_queue_stats *stats);
+- */
+--int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value);
+-+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+			     int radio_idx,
+-+#endif
+-+			     u32 value);
+- 
+- void xradio_flush(struct ieee80211_hw *hw, struct ieee80211_vif *vif, u32 queues, bool drop);
+- 
+--- 
+-2.47.3
+-
 -- 
 2.47.3
 
