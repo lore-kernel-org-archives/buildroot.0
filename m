@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D80D5B16C
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 17:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD2FD5B16D
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 17:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0496860DC7;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 247D68153E;
+	Sun, 14 Dec 2025 17:47:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x3ULFz4pgfCP; Sun, 14 Dec 2025 17:47:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A00E81549
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765734478;
+	bh=sEjAgA8XEacniMNbgTS7mckMoXuZMo0FJPOOMCLjH6Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=VIwsL92RLqZ7VmgnbGs/0hiMNqjXQ2fxM9iPWVXQVVIkpFmfiD5AAbJIXU68iTVbB
+	 5Mke/Lyh3YpbgxhGmC/gg+VJqR65QV+58xWthnXOclj0N+xswjNd89vskh96juW3en
+	 F8dnx5vCN+5Y4bsDJuQx7t+prs5ti5gs2GvG2fS1vpZWEVHrTrRfohJB1zfQCLzuVx
+	 Km9RYOCCGtenvOxwF3e+5QyHowF5ddnRR1OS/XbmHR7l553hASDrdtWJstSO119d0q
+	 991hmv0o8FBPZYLQS5GRmEuB3NDcS6A9kLUdmoWCUSGW4Bts6W3HOWpEScYWVHxSRb
+	 Tyq47dwJVfrlg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A00E81549;
 	Sun, 14 Dec 2025 17:47:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5E17117
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 151DA60B55
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qNOV_VztpD_Q; Sun, 14 Dec 2025 17:47:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CB6560DC9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765734477;
-	bh=JDJquZucr9tRVpaLPQlB+3TYKCIFi4oPAFj77DRYVlU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hEQWJKysnDCs810lZIuqt+ko+XO/cG389/VbN4OHc8x+uwazRUOLGuZwmyfiG/W3i
-	 C+AEv44WbG1hyf+yljVDognFYW7e+OFpCVVXkODs6mcAmdrYF8C9xeECg0tqXPZ4Df
-	 W8/J/PazcgjDQEm/8buekTOFDIFKObE6NoSyKKebUg3QU+bRzeXUVkfl68GKEiI+rz
-	 +lVuRcNaBvwAVAEHWEOXUAsfxT4fnaToEX2L999mgg1tJH5WRwbYybpw1BaKTpFe+q
-	 1EU4DOUTD+GH/LlC5ezsEWeYd11itCmQlmKydKKFrvV3sGZh4DDntqNHYY1cBRscQa
-	 3bYO+wNtkBXwQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CB6560DC9;
-	Sun, 14 Dec 2025 17:47:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 150A5117
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25CFF40690
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kTq4TMWh03Z9 for <buildroot@buildroot.org>;
+ id fsKsXVjN4Osc for <buildroot@buildroot.org>;
  Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDB7740697
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 370A860D96
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDB7740697
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 370A860D96
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC2C786E93; Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
+ id 3635286E96; Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 18:47:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3da98857225b4f36db70f7cb4f745a746ed96189
-X-Git-Newrev: 85c346bd747b06e2c074163ed25a75ed2d7ae519
+X-Git-Oldrev: 02b4cc424bed1c2c4a027e313659fe035d1b1b7a
+X-Git-Newrev: 818218ae7e33d0e7ad6071c2778d6e61b910ae30
 X-Patchwork-Hint: ignore
-Message-Id: <20251214174742.CC2C786E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-asyncclick: bump version to
- 8.3.0.7
+Message-Id: <20251214174743.3635286E96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-calver: bump version to
+ 2025.10.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85c346bd747b06e2c074163ed25a75ed2d7ae519
+commit: https://git.buildroot.net/buildroot/commit/?id=818218ae7e33d0e7ad6071c2778d6e61b910ae30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/python-trio/asyncclick/blob/main/CHANGES.rst
+Changes: https://github.com/di/calver/releases
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-asyncclick/python-asyncclick.hash | 4 ++--
- package/python-asyncclick/python-asyncclick.mk   | 4 ++--
+ package/python-calver/python-calver.hash | 4 ++--
+ package/python-calver/python-calver.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asyncclick/python-asyncclick.hash b/package/python-asyncclick/python-asyncclick.hash
-index 1a2603d2aa..15e8b1fb02 100644
---- a/package/python-asyncclick/python-asyncclick.hash
-+++ b/package/python-asyncclick/python-asyncclick.hash
+diff --git a/package/python-calver/python-calver.hash b/package/python-calver/python-calver.hash
+index ebc054e617..c1321475ae 100644
+--- a/package/python-calver/python-calver.hash
++++ b/package/python-calver/python-calver.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asyncclick/json
--md5  3c8af1a8b6151c24a102e5ed891d19d1  asyncclick-8.2.2.2.tar.gz
--sha256  014f6b7bfb1ef34a2215bc36aebd5150d5d2e50668b12eceb749961e32c24660  asyncclick-8.2.2.2.tar.gz
-+md5  9087d387a981ed313cbea4a4b54a13f3  asyncclick-8.3.0.7.tar.gz
-+sha256  8a80d8ac613098ee6a9a8f0248f60c66c273e22402cf3f115ed7f071acfc71d3  asyncclick-8.3.0.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/calver/json
+-md5  e1fd924b9bf953c0b28c49bdfe117d7a  calver-2022.6.26.tar.gz
+-sha256  e05493a3b17517ef1748fbe610da11f10485faa7c416b9d33fd4a52d74894f8b  calver-2022.6.26.tar.gz
++md5  35c480c59ceca9dc0d51f214df5523a5  calver-2025.10.20.tar.gz
++sha256  c98b376c2424642224d456b2f70c51402343e008c63d204634665e1a2a2835f5  calver-2025.10.20.tar.gz
  # Locally computed sha256 checksums
- sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
-diff --git a/package/python-asyncclick/python-asyncclick.mk b/package/python-asyncclick/python-asyncclick.mk
-index d413242def..32d1eedfa2 100644
---- a/package/python-asyncclick/python-asyncclick.mk
-+++ b/package/python-asyncclick/python-asyncclick.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-calver/python-calver.mk b/package/python-calver/python-calver.mk
+index 2fd5468ed4..ca3d9d4dbb 100644
+--- a/package/python-calver/python-calver.mk
++++ b/package/python-calver/python-calver.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASYNCCLICK_VERSION = 8.2.2.2
-+PYTHON_ASYNCCLICK_VERSION = 8.3.0.7
- PYTHON_ASYNCCLICK_SOURCE = asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
--PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/35/51/b01dd77c9a14fb0b312d799fd8c10b145b882535dbaa9ac055a52515b390
-+PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/f9/ca/25e426d16bd0e91c1c9259112cecd17b2c2c239bdd8e5dba430f3bd5e3ef
- PYTHON_ASYNCCLICK_SETUP_TYPE = flit
- PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
- PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.txt
+-PYTHON_CALVER_VERSION = 2022.6.26
++PYTHON_CALVER_VERSION = 2025.10.20
+ PYTHON_CALVER_SOURCE = calver-$(PYTHON_CALVER_VERSION).tar.gz
+-PYTHON_CALVER_SITE = https://files.pythonhosted.org/packages/b5/00/96cbed7c019c49ee04b8a08357a981983db7698ae6de402e57097cefc9ad
++PYTHON_CALVER_SITE = https://files.pythonhosted.org/packages/4a/96/0c57e3e228ffc54074867406b659b197678674f1f0bf600d114965289834
+ PYTHON_CALVER_SETUP_TYPE = setuptools
+ PYTHON_CALVER_LICENSE = Apache-2.0
+ PYTHON_CALVER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
