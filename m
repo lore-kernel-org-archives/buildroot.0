@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A193D5B171
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F710D59D99
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0A324075C;
-	Sun, 14 Dec 2025 21:22:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E679A60E24;
+	Sun, 14 Dec 2025 21:22:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Au6lCaCQe4dJ; Sun, 14 Dec 2025 21:22:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DxqnTNa2MDjH; Sun, 14 Dec 2025 21:22:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E9E140758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 125C860E3F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765747323;
-	bh=a9eFxfa9Y6UP2QYDbmy7h/1tPSkfGfgPEbY30pDZDB0=;
+	s=default; t=1765747324;
+	bh=DNX9k8xgL5EkiIEarzgtUOdvcZMj0twvRm8yiwUdWXo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=emE8QoXiRv3sqQWJJ58n6iBiZef9QNIMIOWJ05/149XUEVNVddtZiqK80z9UFo+vO
-	 8wM7ei+Y5TFVaOTTKfXOiUdQ/t9VY/cv9C/A2WtUXP277enwF91CotCaFKHRpRLYup
-	 E/DIKRj0xvLcZAQjZuohcJe/SYNJBNTf8zVYqxIEqdtqrPdXVPtwJyYpQXfxe8L5f2
-	 Msn7ut78+pWj9h1FqMyrdjNXqGjVoNlTVFIDNtlE8rRSW9eO1pnJM/Xb7+VyXbGMn/
-	 sLAbHLRpMlmSltTYpUJzAfI5qqmiqJ1O7V2b1O/1QHJPfTPSx4bvxfNEW2eR9whO12
-	 WFIC+cR3tTeUw==
+	b=cNMRfRDovu/ZIB8elkui6b1esdwpysOKg481Hv/TGYe9VCZV+1IJZSHJfsSgWizof
+	 N0UD7Etn6F1mXKGgj6yCLFK6PyglcEmM+AjW4I/cFMiOxlji3hPifcCXYbIDUDWIZK
+	 nmauipeT2EDk0YRUhY57136M3fX5ZohgvTY7gg36odbZRjBFmY+VgRcsyoaVB73f3X
+	 eynfXDgGPiw+eI+cu3tFrznpZFMVl/2p/4IVIyyjS5MzRfarp0CCTWDXAxkmdkZ8Gp
+	 SZcVbj5GFsvyD0rbczrVVslTXjnyjNAbFo27X6TEB8XR9W28M72q85xGVST5DNoWhI
+	 McdTwaxfP0JYA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E9E140758;
-	Sun, 14 Dec 2025 21:22:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DEE22D0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 125C860E3F;
+	Sun, 14 Dec 2025 21:22:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 100AF2ED
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F16140657
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EFDF60DB9
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GH_PMyZtesTq for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 21:21:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KpbwlieitfNm for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BC494067A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63D0560A5D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BC494067A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63D0560A5D
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89BB28355B; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+ id 62B1B7FF02; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 22:20:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f056baf7cc15b0b91d1d5474c44d009ca75dcbe
-X-Git-Newrev: d04179c128d9bd7fcccca046370b656b656ebe12
+X-Git-Oldrev: 5ebf7e537998f8a1f44f3d373661cb0da83ea2a4
+X-Git-Newrev: e546b31d88480d2e640600c1a0aee59e5d05e15c
 X-Patchwork-Hint: ignore
-Message-Id: <20251214212140.89BB28355B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-greenlet: bump version to
- 3.3.0
+Message-Id: <20251214212140.62B1B7FF02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-google-api-core: bump
+ version to 2.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d04179c128d9bd7fcccca046370b656b656ebe12
+commit: https://git.buildroot.net/buildroot/commit/?id=e546b31d88480d2e640600c1a0aee59e5d05e15c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/python-greenlet/greenlet/blob/3.3.0/CHANGES.rst
+https://github.com/googleapis/python-api-core/blob/v2.28.1/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-greenlet/python-greenlet.hash | 4 ++--
- package/python-greenlet/python-greenlet.mk   | 4 ++--
+ package/python-google-api-core/python-google-api-core.hash | 4 ++--
+ package/python-google-api-core/python-google-api-core.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index 3f444fb8cb..ca70b5293c 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  9aed26a4881c49d5f56c3f32f73e8572  greenlet-3.2.4.tar.gz
--sha256  0dca0d95ff849f9a364385f36ab49f50065d76964944638be9691e1832e9f86d  greenlet-3.2.4.tar.gz
-+md5  1922c3b620792044728281d0139dc254  greenlet-3.3.0.tar.gz
-+sha256  a82bb225a4e9e4d653dd2fb7b8b2d36e4fb25bc0165422a11e48b88e9e6f78fb  greenlet-3.3.0.tar.gz
+diff --git a/package/python-google-api-core/python-google-api-core.hash b/package/python-google-api-core/python-google-api-core.hash
+index 16845addb4..9e3c732773 100644
+--- a/package/python-google-api-core/python-google-api-core.hash
++++ b/package/python-google-api-core/python-google-api-core.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/google-api-core/json
+-md5  160d95edde90db1d72b6de58b673c993  google_api_core-2.26.0.tar.gz
+-sha256  e6e6d78bd6cf757f4aee41dcc85b07f485fbb069d5daa3afb126defba1e91a62  google_api_core-2.26.0.tar.gz
++md5  fc633e6fd830f249f8dd205f10544660  google_api_core-2.28.1.tar.gz
++sha256  2b405df02d68e68ce0fbc138559e6036559e685159d148ae5861013dc201baf8  google_api_core-2.28.1.tar.gz
  # Locally computed sha256 checksums
- sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index bfe8f5d851..e4d4c03961 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-google-api-core/python-google-api-core.mk b/package/python-google-api-core/python-google-api-core.mk
+index c88fb2ec28..908a37c3e4 100644
+--- a/package/python-google-api-core/python-google-api-core.mk
++++ b/package/python-google-api-core/python-google-api-core.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GREENLET_VERSION = 3.2.4
-+PYTHON_GREENLET_VERSION = 3.3.0
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/03/b8/704d753a5a45507a7aab61f18db9509302ed3d0a27ac7e0359ec2905b1a6
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/c7/e5/40dbda2736893e3e53d25838e0f19a2b417dfc122b9989c91918db30b5d3
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
+-PYTHON_GOOGLE_API_CORE_VERSION = 2.26.0
++PYTHON_GOOGLE_API_CORE_VERSION = 2.28.1
+ PYTHON_GOOGLE_API_CORE_SOURCE = google_api_core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
+-PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/32/ea/e7b6ac3c7b557b728c2d0181010548cbbdd338e9002513420c5a354fa8df
++PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/61/da/83d7043169ac2c8c7469f0e375610d78ae2160134bf1b80634c482fa079c
+ PYTHON_GOOGLE_API_CORE_SETUP_TYPE = setuptools
+ PYTHON_GOOGLE_API_CORE_LICENSE = Apache-2.0
+ PYTHON_GOOGLE_API_CORE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
