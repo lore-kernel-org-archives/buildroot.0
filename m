@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 825A4D5B16D
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 16:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B58BD59D99
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 16:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1210560D8C;
-	Sun, 14 Dec 2025 16:04:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E7E2407F5;
+	Sun, 14 Dec 2025 16:04:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vy1RTaKsd0Oz; Sun, 14 Dec 2025 16:04:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z9xSG8NXv8S5; Sun, 14 Dec 2025 16:04:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6761F60B02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B67F40624
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765728282;
-	bh=8jg3wL45EUD0YuQTlwh/Hn3xHTgeKQMsiSMopBIC9X0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Mzwc6NBrq3nUj/fS0OHbYcz//0KfVCj6mC6FO9HkhrzPp9SSSkb1uQpSdbn5OrFAs
-	 G+eJnQLY3z1V+Z1Ft033Vwc1Hn9VjE501DTsM+258NccNlWBC1YnDr5sd4WBvHyGME
-	 BFmpjVxPNVgOa7Sq5JzsIqW/QEdyFuatRcTWnqWOFqGNly6aHPr8Wn/A10SDAM2c5v
-	 2pdW/qlVD35IVzZIUvF6kcXIiOI4C9x7f6Xrfna9lvTyULNK/hFh9HG/pOT8D/x85W
-	 AzRTExEn9i+OnsS25yFT37wjTaQtKmdH+8h4/B6cEyVvvSKiprT/yDIOcC/+MP3AYh
-	 WoKfsDwKZZxCg==
+	s=default; t=1765728293;
+	bh=Fu68KOA6b7m1tghuYKNPFOItUy4T2rvLT+Kyj0TAgMc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=U4kFrXp4wqh4hq0PAxpl7if8DgJbRy/wFdMH2WfTMKd7w76M9SzL9zakEcnJ58TQX
+	 G+njgEDO27eweVnKxlW5vgi6dNAbKmkj6G+9bJSlXCtCKsPbPoVWILi6YR0JiT4X4Y
+	 vbwu2QaB9QzAAekJMjPsfGhpvtLYn1Cwz9qodREef5IhpUn5akwIbM2y6wcFE2lJoA
+	 8PO0QBkzxsRvXKn6tAaGdtc+yxqamwNhUctc6qH+24kq29PVHdozdMVvlqYOQmABG0
+	 0Q66ZtNM6czIDKsECA7fMyZddtUMPogMdAGqyceq3OsA1+rkkK94PcSTDUJbXwPNSZ
+	 4rm3QyC6fhJ1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6761F60B02;
-	Sun, 14 Dec 2025 16:04:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 40EAB2C1
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 16:04:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B67F40624;
+	Sun, 14 Dec 2025 16:04:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 150F32C1
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 16:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32DBE808BB
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 16:04:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06A654010A
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 16:04:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kim_IzkGm_Pk for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 16:04:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 591AA808A3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 591AA808A3
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 16:04:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 49BE386E3E; Sun, 14 Dec 2025 16:04:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 14 Dec 2025 17:03:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bba86304b0ac4ae266cfb52e54a239b0850b10ca
-X-Git-Newrev: d75b8c5b7501c4b9a4b85df531d6e19c159a7934
-X-Patchwork-Hint: ignore
-Message-Id: <20251214160440.49BE386E3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8821au: bump to version
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GspT93uMJT-t for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 16:04:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00F884005F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00F884005F
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 00F884005F
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 16:04:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 7D9B678050A;
+ Sun, 14 Dec 2025 17:04:45 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 14 Dec 2025 17:04:45 +0100
+MIME-Version: 1.0
+Date: Sun, 14 Dec 2025 17:04:45 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+In-Reply-To: <20251213204021.1811227-1-giulio.benetti@benettiengineering.com>
+References: <20251213204021.1811227-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e57826e1656f5b722232e603777cbf2b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765728287;
+ bh=S/RkU8eaRto/APzBu/3ANciGfL4LVWucKcczzEWXj6w=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=sbMZKsKZlwSfCKdNvVmTBhgq2UHkKUzshAYxk/1hJGN78g0zANSRZHhwg5a1BTK/T
+ vrUKQta5lKte5gQPjCJQW/iXc3KZK7j9Rv0/5LZFA7lrAjBvXHitf64cOehCdTf8DT
+ sqH155OFo6gDnIwjRz2t5gvVTSzYLu0kHau6KZZFlI5aJrv79qOnPTgjkNU9fhkbFy
+ uy5ORm9dnQVwNtM6LRNjEz+KUzTFtF5FWkn4AQS9shz5EDa6LPieCLTt29ApYcVwn4
+ vwNySpPlE6AEaqZx6FMZaY3hobuUygLK041YAxNnhoV0Bdvy7Nxle2xGGCfupSOzEj
+ iA1oebA5UAJ6Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=sbMZKsKZ
+Subject: Re: [Buildroot] [PATCH] package/rtl8821au: bump to version
  2025-12-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,55 +95,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d75b8c5b7501c4b9a4b85df531d6e19c159a7934
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/12/2025 21:40, Giulio Benetti wrote:
+> This allows to build with Linux 6.18
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/bc0ec5fe3acb37740b54eb1af1fe5d9284c87cf2/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-With Kernel >= 6.18 introduced in [1] rtl8821au fails at build
-time with error:
-
-    core/rtw_security.c:2008:13: error: conflicting types for 'sha256_init'; have 'void(struct sha256_state_rtk *)'
-
-Fixes:
-https://autobuild.buildroot.org/results/bc0ec5fe3acb37740b54eb1af1fe5d9284c87cf2/
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/a06d79862a60d3c8d5ddd6a9ab12b5ccdd91984c
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: add details in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/rtl8821au/rtl8821au.hash | 2 +-
- package/rtl8821au/rtl8821au.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-index 29b4d46f8e..ca5f9f15df 100644
---- a/package/rtl8821au/rtl8821au.hash
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  fe9840003e9481cf9fce3a5ed3f5b985615f862abc1b8d51fe6de7da9e4943c9  rtl8821au-dfe6801adb9b3a5572260ab308d3b69522992814.tar.gz
-+sha256  1d9f87c7a30d54f67cb09e98a436565ba9c64a28feca95205f66212d8833836c  rtl8821au-bb26b6b06c47b79c17426ef186f44a608dbed7a0.tar.gz
- sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  LICENSE
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index 734b427019..4e7aee4204 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8821AU_VERSION = dfe6801adb9b3a5572260ab308d3b69522992814
-+RTL8821AU_VERSION = bb26b6b06c47b79c17426ef186f44a608dbed7a0
- RTL8821AU_SITE = $(call github,benetti-engineering,rtl8821au,$(RTL8821AU_VERSION))
- RTL8821AU_LICENSE = GPL-2.0
- RTL8821AU_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
