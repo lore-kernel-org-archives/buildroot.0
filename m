@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD2FD5B16D
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 17:47:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C344D59D99
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 17:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 247D68153E;
-	Sun, 14 Dec 2025 17:47:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2270240537;
+	Sun, 14 Dec 2025 17:48:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x3ULFz4pgfCP; Sun, 14 Dec 2025 17:47:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FVobVdQK6eM7; Sun, 14 Dec 2025 17:47:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A00E81549
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5614940963
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765734478;
-	bh=sEjAgA8XEacniMNbgTS7mckMoXuZMo0FJPOOMCLjH6Y=;
+	s=default; t=1765734479;
+	bh=gOWiV88EoAacMWE9fUvnkvkiKCA4MoqBN+YaDKgk5rU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VIwsL92RLqZ7VmgnbGs/0hiMNqjXQ2fxM9iPWVXQVVIkpFmfiD5AAbJIXU68iTVbB
-	 5Mke/Lyh3YpbgxhGmC/gg+VJqR65QV+58xWthnXOclj0N+xswjNd89vskh96juW3en
-	 F8dnx5vCN+5Y4bsDJuQx7t+prs5ti5gs2GvG2fS1vpZWEVHrTrRfohJB1zfQCLzuVx
-	 Km9RYOCCGtenvOxwF3e+5QyHowF5ddnRR1OS/XbmHR7l553hASDrdtWJstSO119d0q
-	 991hmv0o8FBPZYLQS5GRmEuB3NDcS6A9kLUdmoWCUSGW4Bts6W3HOWpEScYWVHxSRb
-	 Tyq47dwJVfrlg==
+	b=KtjJ5bOnKsAOCOKVx+aqA2Tpe74bxlZhqb3Mz5itCyQovLCiiH+puR6kqaU6tK8lP
+	 qZHkEIFfc0fJrtM8h3hplVV57znoq7Y8BP2mHssAWqDDjCrG90mVa8reiC7+Fz1q2Z
+	 +XHCSvvpGiMV/nk9ONqbu0Y9vPmSbeV55BW7Cre1rSuIZuruHsFQymqQ3N9alsjHA9
+	 AhEZlL/F/fzYcq+6boYG9kX6T/TAShUCL+I7TUKxgkXRvTgqt5A5SVrNQD+JbFmFsy
+	 kAe2JMNEw3bVnPYscFfyFV+iSEmIDmHNwQvKyYHZK7bwr8E2ft/K9TLkYJvYCruUsS
+	 aueJIasUT5mfQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A00E81549;
-	Sun, 14 Dec 2025 17:47:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5614940963;
+	Sun, 14 Dec 2025 17:47:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D5E17117
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E13A2D0
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 151DA60B55
+ by smtp3.osuosl.org (Postfix) with ESMTP id E45BD60730
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fsKsXVjN4Osc for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
+ id YsK5Kb_p7f29 for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 370A860D96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCD7660A8A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 370A860D96
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCD7660A8A
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3635286E96; Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
+ id A086D86E95; Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 18:47:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02b4cc424bed1c2c4a027e313659fe035d1b1b7a
-X-Git-Newrev: 818218ae7e33d0e7ad6071c2778d6e61b910ae30
+X-Git-Oldrev: 22b0d124f26dab9d1a09366e3973f1dc0e213830
+X-Git-Newrev: 09bcc5b9c1b89fe89446ff1fcbddb1a7605fa9b5
 X-Patchwork-Hint: ignore
-Message-Id: <20251214174743.3635286E96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-calver: bump version to
- 2025.10.20
+Message-Id: <20251214174742.A086D86E95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-apispec: bump version to
+ 6.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=818218ae7e33d0e7ad6071c2778d6e61b910ae30
+commit: https://git.buildroot.net/buildroot/commit/?id=09bcc5b9c1b89fe89446ff1fcbddb1a7605fa9b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes: https://github.com/di/calver/releases
+https://github.com/marshmallow-code/apispec/blob/6.9.0/CHANGELOG.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-calver/python-calver.hash | 4 ++--
- package/python-calver/python-calver.mk   | 4 ++--
+ package/python-apispec/python-apispec.hash | 4 ++--
+ package/python-apispec/python-apispec.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-calver/python-calver.hash b/package/python-calver/python-calver.hash
-index ebc054e617..c1321475ae 100644
---- a/package/python-calver/python-calver.hash
-+++ b/package/python-calver/python-calver.hash
+diff --git a/package/python-apispec/python-apispec.hash b/package/python-apispec/python-apispec.hash
+index ecf9b56954..45571f4c53 100644
+--- a/package/python-apispec/python-apispec.hash
++++ b/package/python-apispec/python-apispec.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/calver/json
--md5  e1fd924b9bf953c0b28c49bdfe117d7a  calver-2022.6.26.tar.gz
--sha256  e05493a3b17517ef1748fbe610da11f10485faa7c416b9d33fd4a52d74894f8b  calver-2022.6.26.tar.gz
-+md5  35c480c59ceca9dc0d51f214df5523a5  calver-2025.10.20.tar.gz
-+sha256  c98b376c2424642224d456b2f70c51402343e008c63d204634665e1a2a2835f5  calver-2025.10.20.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/apispec/json
+-md5  aaec05af7368f2e19f562a63f00e2e74  apispec-6.8.1.tar.gz
+-sha256  f4916cbb7be156963b18f5929a0e42bd2349135834b680a81b12432bcfaa9a39  apispec-6.8.1.tar.gz
++md5  ccd10389ca94fe9acc7ff542b9bf1fa2  apispec-6.9.0.tar.gz
++sha256  7a38ce7c3eedc7771e6e33295afdd8c4b0acdd9865b483f8cf6cc369c93e8d1e  apispec-6.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-calver/python-calver.mk b/package/python-calver/python-calver.mk
-index 2fd5468ed4..ca3d9d4dbb 100644
---- a/package/python-calver/python-calver.mk
-+++ b/package/python-calver/python-calver.mk
+ sha256  f345555ff39d6b573342781a6346a5202a8f14bce424fee41f910c6c5379cc7d  LICENSE
+diff --git a/package/python-apispec/python-apispec.mk b/package/python-apispec/python-apispec.mk
+index 3b87ccdced..2cc8bc2304 100644
+--- a/package/python-apispec/python-apispec.mk
++++ b/package/python-apispec/python-apispec.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CALVER_VERSION = 2022.6.26
-+PYTHON_CALVER_VERSION = 2025.10.20
- PYTHON_CALVER_SOURCE = calver-$(PYTHON_CALVER_VERSION).tar.gz
--PYTHON_CALVER_SITE = https://files.pythonhosted.org/packages/b5/00/96cbed7c019c49ee04b8a08357a981983db7698ae6de402e57097cefc9ad
-+PYTHON_CALVER_SITE = https://files.pythonhosted.org/packages/4a/96/0c57e3e228ffc54074867406b659b197678674f1f0bf600d114965289834
- PYTHON_CALVER_SETUP_TYPE = setuptools
- PYTHON_CALVER_LICENSE = Apache-2.0
- PYTHON_CALVER_LICENSE_FILES = LICENSE
+-PYTHON_APISPEC_VERSION = 6.8.1
++PYTHON_APISPEC_VERSION = 6.9.0
+ PYTHON_APISPEC_SOURCE = apispec-$(PYTHON_APISPEC_VERSION).tar.gz
+-PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/74/38/62499ad75cf085f5268458c09ae97007082ed85aec1a9cd9e38f7685fbb0
++PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/02/ad/30cd449f3a0cf213dd13d9af7ba869214d8c66d517939964d3f490307e46
+ PYTHON_APISPEC_SETUP_TYPE = flit
+ PYTHON_APISPEC_LICENSE = MIT
+ PYTHON_APISPEC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
