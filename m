@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC82BD5B16E
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 217AAD5B16C
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 800C560DC7;
-	Sun, 14 Dec 2025 21:21:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB9C860E20;
+	Sun, 14 Dec 2025 21:21:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ij0e97pS7qYS; Sun, 14 Dec 2025 21:21:56 +0000 (UTC)
+ id Kxsui3y-AB_7; Sun, 14 Dec 2025 21:21:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B62A60DF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7C2460E07
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765747316;
-	bh=3hN9qCXdp8z7aOEZOAMFnysGlBLkgxJAv2SUOVLPLic=;
+	s=default; t=1765747318;
+	bh=8h0Lyc7usEWZwdliVqYcm5rJZXVUkhQJ2iRHqhLIzlw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KhBAjOjoBiVSfFG6887e5/uNNKvlcXXA5TgnqUx9WK+8UTRhjTzWxCQcL/KfTJcjk
-	 zVmdDc18nUwjgR1zdRKZLvGjlHh48fAJWwx4Rj0AOzRd1/HUdKmiqB28P3nNtVIsgL
-	 SEuQw1lFkHIFG2cf4V1O0Pt5QCHYqBgSk4QyEUOA+sYoG65p3i9TBTlbcqWF0tsy8P
-	 hDgqJp+Zg80ygRlUKZq2KVz32JYTihOfDHncITL29TwAHy5o+lxJoDERbbkNnVX4zr
-	 wjmqAxG/o+Ra/AyCVaepxWVu5QQBRaYEmemInr/Xr55oUyqBbuq06nEwzHoVeNZfEp
-	 ETa5/w7AAsSBQ==
+	b=XptZ86/e3xgIO07IGzU+X6yWJrDlUQqVaPrqhUU4DI/4OrlYarefXfnXynticzOfh
+	 gaZKr/RIVQiXQdLDovYFFJKWcfHTHKrELPclB/hLg6WwsTrxL/EMTaY7oaDj7en1HB
+	 9ljk9DtHMpukkAbvLZKnZu0WYuMxFz/jMdAYXUZCAVPO7otX21F0TbOCG/mpGPPjP1
+	 w9oYtpH1P3M59tEqxucnIRWig0hm/NG1dlA0FhLaj6qOyQxA+H2lo26cdopjYWZO1G
+	 K0rvEVA8zUzWXs2L+Z2ZtuD1RbHkmTOPfX66bk2OMKVfNrVkIcssYyJ9wRYf6Pg2lu
+	 JpaxgXeXN1sdw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B62A60DF5;
-	Sun, 14 Dec 2025 21:21:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7C2460E07;
+	Sun, 14 Dec 2025 21:21:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 133C12ED
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F98F2ED
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E493C40638
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 008BD40676
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dmkVw4LYs5xN for <buildroot@buildroot.org>;
+ id SnjlZKuAjdnb for <buildroot@buildroot.org>;
  Sun, 14 Dec 2025 21:21:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 740D740676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A49C840680
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 740D740676
+ by smtp4.osuosl.org (Postfix) with ESMTP id A49C840680
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7196B8355B; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+ id A21037FF02; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 22:20:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e546b31d88480d2e640600c1a0aee59e5d05e15c
-X-Git-Newrev: f7f4ebcd2a4ace033342293bb702e143693fe393
+X-Git-Oldrev: fc81f995cc9f1d965e29d2f55ff728a0e065ed86
+X-Git-Newrev: e0bb91fd64135c285fb61c0a3c5be234b5dd624e
 X-Patchwork-Hint: ignore
-Message-Id: <20251214212140.7196B8355B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-google-auth: bump version
- to 2.43.0
+Message-Id: <20251214212140.A21037FF02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-humanize: bump version to
+ 4.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7f4ebcd2a4ace033342293bb702e143693fe393
+commit: https://git.buildroot.net/buildroot/commit/?id=e0bb91fd64135c285fb61c0a3c5be234b5dd624e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/googleapis/google-auth-library-python/blob/v2.43.0/CHANGELOG.md
+https://github.com/python-humanize/humanize/releases
+
+Updated project URL according to https://pypi.org/project/humanize/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-google-auth/python-google-auth.hash | 4 ++--
- package/python-google-auth/python-google-auth.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-humanize/Config.in            | 2 +-
+ package/python-humanize/python-humanize.hash | 4 ++--
+ package/python-humanize/python-humanize.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-google-auth/python-google-auth.hash b/package/python-google-auth/python-google-auth.hash
-index 37641a7a90..17ca9ddd61 100644
---- a/package/python-google-auth/python-google-auth.hash
-+++ b/package/python-google-auth/python-google-auth.hash
+diff --git a/package/python-humanize/Config.in b/package/python-humanize/Config.in
+index f4f4e67b65..b47fec5027 100644
+--- a/package/python-humanize/Config.in
++++ b/package/python-humanize/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PYTHON_HUMANIZE
+ 	  duration ('3 minutes ago') or into a human readable size or
+ 	  throughput.
+ 
+-	  http://github.com/jmoiron/humanize
++	  https://github.com/python-humanize/humanize
+diff --git a/package/python-humanize/python-humanize.hash b/package/python-humanize/python-humanize.hash
+index ea30ca5c22..86dfd80b78 100644
+--- a/package/python-humanize/python-humanize.hash
++++ b/package/python-humanize/python-humanize.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/google-auth/json
--md5  cf398efdf51cd3885eef521198a202a5  google_auth-2.41.1.tar.gz
--sha256  b76b7b1f9e61f0cb7e88870d14f6a94aeef248959ef6992670efee37709cbfd2  google_auth-2.41.1.tar.gz
-+md5  43aef15e30f2646226add26c54256302  google_auth-2.43.0.tar.gz
-+sha256  88228eee5fc21b62a1b5fe773ca15e67778cb07dc8363adcb4a8827b52d81483  google_auth-2.43.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/humanize/json
+-md5  c37298e6bc6604b54aeb0e158c7c0512  humanize-4.11.0.tar.gz
+-sha256  e66f36020a2d5a974c504bd2555cf770621dbdbb6d82f94a6857c0b1ea2608be  humanize-4.11.0.tar.gz
++md5  acac6b2378dd0d9b1d9d1ffefb08e00b  humanize-4.14.0.tar.gz
++sha256  2fa092705ea640d605c435b1ca82b2866a1b601cdf96f076d70b79a855eba90d  humanize-4.14.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-google-auth/python-google-auth.mk b/package/python-google-auth/python-google-auth.mk
-index e649569b37..53e5900856 100644
---- a/package/python-google-auth/python-google-auth.mk
-+++ b/package/python-google-auth/python-google-auth.mk
+ sha256  8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380  LICENCE
+diff --git a/package/python-humanize/python-humanize.mk b/package/python-humanize/python-humanize.mk
+index 4915da2cef..df2e99043a 100644
+--- a/package/python-humanize/python-humanize.mk
++++ b/package/python-humanize/python-humanize.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLE_AUTH_VERSION = 2.41.1
-+PYTHON_GOOGLE_AUTH_VERSION = 2.43.0
- PYTHON_GOOGLE_AUTH_SOURCE = google_auth-$(PYTHON_GOOGLE_AUTH_VERSION).tar.gz
--PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/a8/af/5129ce5b2f9688d2fa49b463e544972a7c82b0fdb50980dafee92e121d9f
-+PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/ff/ef/66d14cf0e01b08d2d51ffc3c20410c4e134a1548fc246a6081eae585a4fe
- PYTHON_GOOGLE_AUTH_SETUP_TYPE = setuptools
- PYTHON_GOOGLE_AUTH_LICENSE = Apache-2.0
- PYTHON_GOOGLE_AUTH_LICENSE_FILES = LICENSE
+-PYTHON_HUMANIZE_VERSION = 4.11.0
++PYTHON_HUMANIZE_VERSION = 4.14.0
+ PYTHON_HUMANIZE_SOURCE = humanize-$(PYTHON_HUMANIZE_VERSION).tar.gz
+-PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/6a/40/64a912b9330786df25e58127194d4a5a7441f818b400b155e748a270f924
++PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/b6/43/50033d25ad96a7f3845f40999b4778f753c3901a11808a584fed7c00d9f5
+ PYTHON_HUMANIZE_SETUP_TYPE = hatch
+ PYTHON_HUMANIZE_LICENSE = MIT
+ PYTHON_HUMANIZE_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
