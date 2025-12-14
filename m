@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2B9ED5B16C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8170ED59D99
 	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 17:44:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A0D8807F9;
-	Sun, 14 Dec 2025 17:44:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0F5A60D98;
+	Sun, 14 Dec 2025 17:44:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ei5Szwp6yyUT; Sun, 14 Dec 2025 17:44:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BBEB60A8A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765734270;
+	bh=6KFX2zt6L1OOqAiL7+cbwUFg4v/jf25tE/gZuAzio14=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=N/ByV29lY4OwwGLqgPcgoGc97uASP7vT3yKUEXRmCN7E+lZLZcqjytoUznXFcytLy
+	 /KB/DBfoL2mY9z+IwMqr4aQAI5PHkbbJbf5QGMFzFEuR8rNlvgJdk4PRymOb+0xpfO
+	 yvV1Ra5R5LGWMIkdFyIfK5vEVb8pAmSEyLpWqMZbqSiPhoO/Brivvl9QxCaDJH0atl
+	 1lPKFM2qu6JVFBBdfJ8sLmnlka5LlHjAFynBuCJYg+Rtl/dJdfJ+b+AVp/NfCOSz7X
+	 KQSeHYAuVcwCfpkV2IDkDFgr/xIURycSfZ66oMySzwXsnu1jTanaXOUFLqikT5wMvS
+	 1SmB/SHTnJ3oA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BBEB60A8A;
+	Sun, 14 Dec 2025 17:44:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A5AA42D0
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:44:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C39A807E9
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:44:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uxKXhwfLP8X1; Sun, 14 Dec 2025 17:44:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E67480810
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765734271;
-	bh=7WSmqsqaxv9wlMwANhb2jFh+N56mi2JJpwq8e0tSws0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BkMMFPYuFI7g/Eg3Exo++t84H+0G79u+JbyhlocEWroUFtedOmiFLQnLLommgc8ao
-	 7QE8z5hQ3GTAHveDWWK/4Pn9cgW60Kdrc5P/hyyGy/2+jygkMTKF8VrBmZHgz6rKLE
-	 3wdYq2TRctqoviZ1Z9tumQmzfOdnFRhCjj+vmvw9SveHmiev3Hjis7KPC8a6ovEBGe
-	 N+mzeQ1FGevTgKCPN2EDNta+mPo2PaXD9OTwZyz6vpJdJ/jnFeqcV3I1HIMiYbF9XX
-	 QP4JUMJjr0CkM1H03ta6GnANH+I8WIcmE2MlnWfMH+pZ4//KlqhMzq4xGCwPtfGLZJ
-	 KCSqzuA1Hiltg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E67480810;
-	Sun, 14 Dec 2025 17:44:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BBD1F2ED
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:44:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA98D4005F
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:44:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mW7KyMkJpRZw for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 17:44:29 +0000 (UTC)
+ id OSXosGwbsYkL for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 17:44:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEE2540188
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D56F8807A2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEE2540188
+ by smtp1.osuosl.org (Postfix) with ESMTP id D56F8807A2
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:44:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB5A486E93; Sun, 14 Dec 2025 17:44:28 +0000 (UTC)
+ id CF5C386E8F; Sun, 14 Dec 2025 17:44:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Dec 2025 18:40:07 +0100
+Date: Sun, 14 Dec 2025 18:29:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 707756a5a8825b3bad408513732ad417b100b99e
-X-Git-Newrev: 55f1d00e8044a3d2959bba4e7c955e1b8a9743f7
+X-Git-Oldrev: f11ac644ea21e5702ce8aa6e030c1a28e6670686
+X-Git-Newrev: 3600d2fd4a45862eba0493a8637987b3655334a3
 X-Patchwork-Hint: ignore
-Message-Id: <20251214174428.EB5A486E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvncserver: install storepasswd
- tool
+Message-Id: <20251214174428.CF5C386E8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvncserver: fix cmake 4
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,64 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55f1d00e8044a3d2959bba4e7c955e1b8a9743f7
+commit: https://git.buildroot.net/buildroot/commit/?id=3600d2fd4a45862eba0493a8637987b3655334a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-storepasswd is used to dynamically create a VNC password on target
-
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvncserver/Config.in       |  5 +++++
- package/libvncserver/libvncserver.mk | 13 ++++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ .../0001-CMake-require-at-least-CMake-3.5.patch    | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
-index 904c805404..4ea9697168 100644
---- a/package/libvncserver/Config.in
-+++ b/package/libvncserver/Config.in
-@@ -26,6 +26,11 @@ config BR2_PACKAGE_LIBVNCSERVER_WEBSOCKETS
- 	help
- 	  Enable WebSocket support (e.g. for noVNC)
- 
-+config BR2_PACKAGE_LIBVNCSERVER_INSTALL_STOREPASSSWD
-+	bool "storepasswd tool"
-+	help
-+	  Install storepasswd tool used to create VNC passwords
+diff --git a/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch b/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
+new file mode 100644
+index 0000000000..48921175fa
+--- /dev/null
++++ b/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
+@@ -0,0 +1,27 @@
++From e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@jolla.com>
++Date: Tue, 13 May 2025 08:37:07 +0300
++Subject: [PATCH] CMake: require at least CMake 3.5
 +
- endif
- 
- comment "libvncserver needs a toolchain w/ dynamic library"
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 9935a32dda..1180fc8dc7 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -15,7 +15,6 @@ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
- 
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
--	-DWITH_EXAMPLES=OFF \
- 	-DWITH_FFMPEG=OFF \
- 	-DWITH_GTK=OFF \
- 	-DWITH_SDL=OFF \
-@@ -90,4 +89,16 @@ else
- LIBVNCSERVER_CONF_OPTS += -DWITH_WEBSOCKETS=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBVNCSERVER_INSTALL_STOREPASSSWD),y)
-+LIBVNCSERVER_CONF_OPTS += -DWITH_EXAMPLES=ON
-+define LIBVNCSERVER_INSTALL_STOREPASSWD
-+	$(INSTALL) -D -m 0755 $(@D)/examples/server/storepasswd \
-+		$(TARGET_DIR)/usr/bin/storepasswd
-+endef
++CMake 4 dropped support for version requirements < 3.5.
 +
-+LIBVNCSERVER_POST_INSTALL_TARGET_HOOKS += LIBVNCSERVER_INSTALL_STOREPASSWD
-+else
-+LIBVNCSERVER_CONF_OPTS += -DWITH_EXAMPLES=OFF
-+endif
++Fixes building with CMake >= 4.
 +
- $(eval $(cmake-package))
++Upstream: https://github.com/LibVNC/libvncserver/commit/e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 205f3928..9b8118c8 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,3 +1,3 @@
++-cmake_minimum_required(VERSION 3.4)
+++cmake_minimum_required(VERSION 3.5)
++ 
++ project(LibVNCServer VERSION 0.9.14 LANGUAGES C)
++
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
