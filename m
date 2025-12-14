@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73CA9D59D99
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25B4DD5B16C
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4910D60E22;
-	Sun, 14 Dec 2025 21:22:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4F8960E39;
+	Sun, 14 Dec 2025 21:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vy83fQvsNaGs; Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
+ id qXFuFBVUIbep; Sun, 14 Dec 2025 21:22:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F1FC60E23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C125A60E26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765747320;
-	bh=DnL+hSB6CVttGZ+XDNUxixM57A3q9uSut5aiqqoU4Hg=;
+	s=default; t=1765747321;
+	bh=VllywQzkyMCpXbgVrzsJt41xUgKvkaqHHLXyJwW5BpQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JjEVtkCnbD8lTsXfQvEaVYNEj7FXtxoL0IfKJVTQNbnvUilm1OtoA1PDY4EFxLKZZ
-	 3/kfPcVD6h37q8MueQLsCTuNQChMK0Tq0m1FvtVqP/i20m8M3+PmFLi2lyNY3/9jgG
-	 0mWj9GRVuGLzPbvk3Fl+fJFYrbNcuV+cKIQuzBy+104AjN8S1n46AO2c/66nZzC8Yw
-	 8od9jKqi1jGWcOFdBXLeBfHBxySS/1FYYL5K97BMNUatX1nyL2WqE+u6/L6RMGpCcX
-	 NmG6I3iOT2DZxFerC6WdVj2gL4jYw96O2kwg3R5nOW43iXrmi4KMGyEM/EamB0ukM/
-	 DaV62Ogioe73A==
+	b=rPQXVPNPD90lmAMWInOhge7uJdlDOYMFx2Gf/VYGQJPjmjUg63w9XqfSbf5LxBC7b
+	 wvFX1k42Jjak407l0K1yYLoJzEKwhKkoDtxIAyWS7wWAtgcQlbmF2AZ1Ln/Ot1JKP+
+	 pL8ugYiQKCdPYSc3GcAnB2OnKbaThoUJPE7ZWZBwGQXqh4fJt/7ydANhxayFSbdW+v
+	 gaJ8GmLM64ijPnccpcIgLvnCqQRg20qaZ58b6qdoTVxeIAVVELQQwjqBexA65AXh1Y
+	 R2HcjuEBeU9tLENkZrD6j6d6kLiAizm912UWk03fDDGMa97pA+wmYSEeBiDhjMkUM+
+	 FygBqVWZp76YA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F1FC60E23;
-	Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CF49117
+	by smtp3.osuosl.org (Postfix) with ESMTP id C125A60E26;
+	Sun, 14 Dec 2025 21:22:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F4B72ED
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1C4460AAD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F47240637
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JYiyRPFaoqBP for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3iojnXADBt5P for <buildroot@buildroot.org>;
  Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95A2360B0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B89440657
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95A2360B0C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B89440657
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9405E84524; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+ id 1876684524; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 22:20:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d04179c128d9bd7fcccca046370b656b656ebe12
-X-Git-Newrev: fc81f995cc9f1d965e29d2f55ff728a0e065ed86
+X-Git-Oldrev: 5e45bd67745a0ec114e564d11b8e15984464b831
+X-Git-Newrev: dc7b83aac5b75986d0b3ed14df04160876945a8f
 X-Patchwork-Hint: ignore
-Message-Id: <20251214212140.9405E84524@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-hiredis: bump version to
- 3.3.0
+Message-Id: <20251214212140.1876684524@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-filelock: bump version to
+ 3.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc81f995cc9f1d965e29d2f55ff728a0e065ed86
+commit: https://git.buildroot.net/buildroot/commit/?id=dc7b83aac5b75986d0b3ed14df04160876945a8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/redis/hiredis-py/releases/tag/v3.3.0
+https://github.com/tox-dev/filelock/releases
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-hiredis/python-hiredis.hash | 4 ++--
- package/python-hiredis/python-hiredis.mk   | 4 ++--
+ package/python-filelock/python-filelock.hash | 4 ++--
+ package/python-filelock/python-filelock.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
-index e0215cb389..57e658e6e3 100644
---- a/package/python-hiredis/python-hiredis.hash
-+++ b/package/python-hiredis/python-hiredis.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/hiredis/json
--md5  3bef98b3714e3944e452a158c7d61f39  hiredis-3.2.1.tar.gz
--sha256  5a5f64479bf04dd829fe7029fad0ea043eac4023abc6e946668cbbec3493a78d  hiredis-3.2.1.tar.gz
-+md5  3dc0c18cedc67e6eb9027245157a29b3  hiredis-3.3.0.tar.gz
-+sha256  105596aad9249634361815c574351f1bd50455dc23b537c2940066c4a9dea685  hiredis-3.3.0.tar.gz
+diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
+index a266762eea..f47e8fdb5a 100644
+--- a/package/python-filelock/python-filelock.hash
++++ b/package/python-filelock/python-filelock.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/filelock/json
+-md5  32624573c1dcea186f907c78e4fb80a2  filelock-3.17.0.tar.gz
+-sha256  ee4e77401ef576ebb38cd7f13b9b28893194acc20a8e68e18730ba9c0e54660e  filelock-3.17.0.tar.gz
++md5  0b9c4280769cd87d874711c13adf50bc  filelock-3.20.0.tar.gz
++sha256  711e943b4ec6be42e1d4e6690b48dc175c822967466bb31c0c293f34334c13f4  filelock-3.20.0.tar.gz
  # Locally computed sha256 checksums
- sha256  3256b5b77e98aa34ff31a4d2c2c10f7f177b0f3058753a6044430a168987353b  LICENSE
- sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
-index 6b365b8dc4..6cedbe0076 100644
---- a/package/python-hiredis/python-hiredis.mk
-+++ b/package/python-hiredis/python-hiredis.mk
+ sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
+diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
+index 44599ee865..8201fb1e66 100644
+--- a/package/python-filelock/python-filelock.mk
++++ b/package/python-filelock/python-filelock.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HIREDIS_VERSION = 3.2.1
-+PYTHON_HIREDIS_VERSION = 3.3.0
- PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
--PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/f7/08/24b72f425b75e1de7442fb1740f69ca66d5820b9f9c0e2511ff9aadab3b7
-+PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/65/82/d2817ce0653628e0a0cb128533f6af0dd6318a49f3f3a6a7bd1f2f2154af
- PYTHON_HIREDIS_SETUP_TYPE = setuptools
- PYTHON_HIREDIS_LICENSE = MIT, BSD-3-Clause
- PYTHON_HIREDIS_LICENSE_FILES = LICENSE vendor/hiredis/COPYING
+-PYTHON_FILELOCK_VERSION = 3.17.0
++PYTHON_FILELOCK_VERSION = 3.20.0
+ PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
+-PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/dc/9c/0b15fb47b464e1b663b1acd1253a062aa5feecb07d4e597daea542ebd2b5
++PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/58/46/0028a82567109b5ef6e4d2a1f04a583fb513e6cf9527fcdd09afd817deeb
+ PYTHON_FILELOCK_SETUP_TYPE = hatch
+ PYTHON_FILELOCK_LICENSE = Public Domain
+ PYTHON_FILELOCK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
