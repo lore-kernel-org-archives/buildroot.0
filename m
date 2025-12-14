@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60476D5B16E
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73CA9D59D99
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3709A40722;
-	Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4910D60E22;
+	Sun, 14 Dec 2025 21:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isu-51wwiCHA; Sun, 14 Dec 2025 21:21:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vy83fQvsNaGs; Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7747940753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F1FC60E23
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765747319;
-	bh=5GGcHfTemGtSRTeG5CjKV5rrk//Bf68Ykkca5a+ulJ0=;
+	s=default; t=1765747320;
+	bh=DnL+hSB6CVttGZ+XDNUxixM57A3q9uSut5aiqqoU4Hg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KM4WLInMwBt9FfJmuNfUoXD1p4R21N+rs1nq1wdBVfpe/K4the18ZY5JW3ctsEd5k
-	 DW9WokiUVs4jQzRjW4cfmmSHv7cT9oLS/jhHCO4nB1DoqU+9C8fpnHpQ8GiY23+s0C
-	 XSTHoifkfiRkHBDYHKzPWSi4Lx5ZXWn7VsNmHwCU6+WnjcmswmSFx98dyePZAqP4Hl
-	 XjDsBCGASl0l8TswR7GGNlUkiggFk95TLNYluvhiCfUuWl1a37dnTkK/G2KN1pFNey
-	 TJqRqBubZfAYrzALOQomoQzPhA4rYYwYPNOUt1ZNkq8UpTt98SnIWJVY1n95jAfXrS
-	 2vNeMmQgsPryA==
+	b=JjEVtkCnbD8lTsXfQvEaVYNEj7FXtxoL0IfKJVTQNbnvUilm1OtoA1PDY4EFxLKZZ
+	 3/kfPcVD6h37q8MueQLsCTuNQChMK0Tq0m1FvtVqP/i20m8M3+PmFLi2lyNY3/9jgG
+	 0mWj9GRVuGLzPbvk3Fl+fJFYrbNcuV+cKIQuzBy+104AjN8S1n46AO2c/66nZzC8Yw
+	 8od9jKqi1jGWcOFdBXLeBfHBxySS/1FYYL5K97BMNUatX1nyL2WqE+u6/L6RMGpCcX
+	 NmG6I3iOT2DZxFerC6WdVj2gL4jYw96O2kwg3R5nOW43iXrmi4KMGyEM/EamB0ukM/
+	 DaV62Ogioe73A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7747940753;
-	Sun, 14 Dec 2025 21:21:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F1FC60E23;
+	Sun, 14 Dec 2025 21:22:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D5FB117
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CF49117
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF22B60D73
+ by smtp3.osuosl.org (Postfix) with ESMTP id E1C4460AAD
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AByF2c56Nd-V for <buildroot@buildroot.org>;
+ id JYiyRPFaoqBP for <buildroot@buildroot.org>;
  Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FB7260AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95A2360B0C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FB7260AAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95A2360B0C
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DDBC7FF02; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+ id 9405E84524; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 22:20:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7f4ebcd2a4ace033342293bb702e143693fe393
-X-Git-Newrev: 2f056baf7cc15b0b91d1d5474c44d009ca75dcbe
+X-Git-Oldrev: d04179c128d9bd7fcccca046370b656b656ebe12
+X-Git-Newrev: fc81f995cc9f1d965e29d2f55ff728a0e065ed86
 X-Patchwork-Hint: ignore
-Message-Id: <20251214212140.7DDBC7FF02@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-googleapis-common-protos:
- bump version to 1.72.0
+Message-Id: <20251214212140.9405E84524@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hiredis: bump version to
+ 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f056baf7cc15b0b91d1d5474c44d009ca75dcbe
+commit: https://git.buildroot.net/buildroot/commit/?id=fc81f995cc9f1d965e29d2f55ff728a0e065ed86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/googleapis/google-cloud-python/blob/main/packages/googleapis-common-protos/CHANGELOG.md
+https://github.com/redis/hiredis-py/releases/tag/v3.3.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-googleapis-common-protos.hash                              | 4 ++--
- .../python-googleapis-common-protos.mk                                | 4 ++--
+ package/python-hiredis/python-hiredis.hash | 4 ++--
+ package/python-hiredis/python-hiredis.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
-index a00b871bb8..682ea22690 100644
---- a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
-+++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/googleapis-common-protos/json
--md5  fca59b82ad99d5dc1da6a94e5ec6e819  googleapis_common_protos-1.70.0.tar.gz
--sha256  0e1b44e0ea153e6594f9f394fef15193a68aaaea2d843f83e2742717ca753257  googleapis_common_protos-1.70.0.tar.gz
-+md5  58ddbf8920c529b542af9be18101fe61  googleapis_common_protos-1.72.0.tar.gz
-+sha256  e55a601c1b32b52d7a3e65f43563e2aa61bcd737998ee672ac9b951cd49319f5  googleapis_common_protos-1.72.0.tar.gz
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index e0215cb389..57e658e6e3 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5  3bef98b3714e3944e452a158c7d61f39  hiredis-3.2.1.tar.gz
+-sha256  5a5f64479bf04dd829fe7029fad0ea043eac4023abc6e946668cbbec3493a78d  hiredis-3.2.1.tar.gz
++md5  3dc0c18cedc67e6eb9027245157a29b3  hiredis-3.3.0.tar.gz
++sha256  105596aad9249634361815c574351f1bd50455dc23b537c2940066c4a9dea685  hiredis-3.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
-index 6afd1ea740..e72a7b45de 100644
---- a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
-+++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
+ sha256  3256b5b77e98aa34ff31a4d2c2c10f7f177b0f3058753a6044430a168987353b  LICENSE
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index 6b365b8dc4..6cedbe0076 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.70.0
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.72.0
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_SOURCE = googleapis_common_protos-$(PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION).tar.gz
--PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/39/24/33db22342cf4a2ea27c9955e6713140fedd51e8b141b5ce5260897020f1a
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/e5/7b/adfd75544c415c487b33061fe7ae526165241c1ea133f9a9125a56b39fd8
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_SETUP_TYPE = setuptools
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE = Apache-2.0
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE_FILES = LICENSE
+-PYTHON_HIREDIS_VERSION = 3.2.1
++PYTHON_HIREDIS_VERSION = 3.3.0
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/f7/08/24b72f425b75e1de7442fb1740f69ca66d5820b9f9c0e2511ff9aadab3b7
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/65/82/d2817ce0653628e0a0cb128533f6af0dd6318a49f3f3a6a7bd1f2f2154af
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = MIT, BSD-3-Clause
+ PYTHON_HIREDIS_LICENSE_FILES = LICENSE vendor/hiredis/COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
