@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 688C1D6E2AF
-	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5299BD6E2B0
+	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:35:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E892F410B8;
-	Thu, 18 Dec 2025 16:35:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EBD2410C7;
+	Thu, 18 Dec 2025 16:35:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ljohSQYfWV8e; Thu, 18 Dec 2025 16:35:15 +0000 (UTC)
+ id wJJS_94HTcRz; Thu, 18 Dec 2025 16:35:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 290D3410B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AA00410BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766075715;
-	bh=gg2BK9+Pdc8MlAOzV0Vp9AJt7EtWllFSCJ5G4mRL9Zo=;
+	s=default; t=1766075716;
+	bh=nQbpDfaHS0AfGNuKjAy1vyjWMXlgxbmnnwMij+dEf2Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YIwHfQfWC4xC5cFOImMfZ5E2Wyv931nnj7wa+lYFCskeT833c4Bx5miXErPfwTlRh
-	 JWDn18BlneGhHHgLhlBQnEK7oLmxccjJuPYZRosEFVkplWcSw+b6F7jlDkJO5sq6Sp
-	 GV072sX3DUm+10/gC+6gW3gpkfspeG/iE+JLtt8zY4KX8oev8peVRNX49G0B+JBAMJ
-	 swo6rIIeDVaDyxjXgL9cB5bcTyhzgborjq62nlieKJ9lhpuAOoasr23tIsKUAvPIwb
-	 mwkvCrjWOA1JAmpkho6bBv59iWBdMC8Wq3CBXFT7MGIJfduOFxHHsR1mKhmHCggCRz
-	 tbjPcWy9Jyxgw==
+	b=IBOTqVka7zeBiKlOHZE4lVzYV8RgaAKFHg1xRfpmsLYfH9Z2yXEQhFdWsDWcFPE6a
+	 k8lmHQ3LJdILaVgI3XyPqKu+TWx744uQvE5ysZPn5SZPw/CyCMhzQSoF2jKTNdQY0y
+	 UPW32DqSJ1JcYsWo5shbOqjvYuyQBzTuuNL0Oh1NU88HLOZ1R0xIe/y5Az1x/ONQmm
+	 mda2yifLeO3b3/Sd/X6JTwr6bM1joNXxH+tfojLJFTkwgTR2vbmrCGBDu5Pg9Zgu4B
+	 gnDY7U8f2ovihc1XJaoMnZCACcRxDIDL97KSEB3EkTPQJS+1zLxX6o2zqQ25U+wTKf
+	 SjIYPKJHMvTkg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 290D3410B9;
-	Thu, 18 Dec 2025 16:35:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 519731A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AA00410BD;
+	Thu, 18 Dec 2025 16:35:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABE431A6
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 438B96115F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EDDC40431
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3C_RdY-FlGIT for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wTa8Oj6rDd3W for <buildroot@buildroot.org>;
  Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CD9660D6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6007940402
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CD9660D6E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6007940402
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F181872FB; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
+ id 4DC48872FA; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Dec 2025 16:54:03 +0100
+Date: Sun, 14 Dec 2025 18:20:33 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 16fd8b6b35b80fa7cf954704c251e890db0c383a
-X-Git-Newrev: 765f70d59d72ecc6ee3d87f3f320ec6e7a84ad1e
+X-Git-Oldrev: 6829a555b3b1265299e6489e7215ca02abcd84ab
+X-Git-Newrev: 256befeb4277b343a69e521f4090985118011f6a
 X-Patchwork-Hint: ignore
-Message-Id: <20251218163507.8F181872FB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libgit2: security
- bump version to 1.9.2
+Message-Id: <20251218163507.4DC48872FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cmake: bump
+ version to 3.31.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=765f70d59d72ecc6ee3d87f3f320ec6e7a84ad1e
+commit: https://git.buildroot.net/buildroot/commit/?id=256befeb4277b343a69e521f4090985118011f6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fix two vulnerabilities related to SSH support:
-* The external SSH execution code lacked shell quoting on repositories
-  name, resulting in arbitrary command execution.
-* SSH public keys were zeroed by calling memset with the wrong length,
-  resulting in either buffer overflow or incomplete zeroing.
+Fixes build error with libcurl 8.16.0 introduced by buildroot commit
+fb5fb06ee5a886df5036c5c5e6c4536f2bc8e1c1
 
-Release notes:
-https://github.com/libgit2/libgit2/releases/tag/v1.9.2
+Fixes:
+https://autobuild.buildroot.net/results/92b/92b1ed36e750d9ad756793814f9d1133bda0e013/
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c4debc99097b6da64cf64ca5009b595ebc95e135)
+(cherry picked from commit 33159bb6ccfd3ba465cf17af25ded2d612b85781)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 8c9b210581..e8c155c994 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  14cab3014b2b7ad75970ff4548e83615f74d719afe00aa479b4a889c1e13fc00  libgit2-1.9.1.tar.gz
-+sha256  6f097c82fc06ece4f40539fb17e9d41baf1a5a2fc26b1b8562d21b89bc355fe6  libgit2-1.9.2.tar.gz
- sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index f615484edb..34cb67929e 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 6101fe16f0..cbca2fc355 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.31/cmake-3.31.8-SHA-256.txt
+-sha256  e3cde3ca83dc2d3212105326b8f1b565116be808394384007e7ef1c253af6caa  cmake-3.31.8.tar.gz
++# From https://cmake.org/files/v3.31/cmake-3.31.9-SHA-256.txt
++sha256  5d4fdec04247ca8a8e8f63692f0d0f1e9d6d082a2bdd008dff8ab3ba7215aa83  cmake-3.31.9.tar.gz
  
--LIBGIT2_VERSION = 1.9.1
-+LIBGIT2_VERSION = 1.9.2
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
+ # Locally calculated
+ sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 1eb4da90ad..8f3a54be5a 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 3.31
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).8
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
