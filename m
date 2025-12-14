@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5631CD59D99
-	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1484D5B171
+	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 21:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 141B160DF0;
-	Sun, 14 Dec 2025 21:21:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFAD860DBE;
+	Sun, 14 Dec 2025 21:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hyJ6uPYPkFIt; Sun, 14 Dec 2025 21:21:53 +0000 (UTC)
+ id Hf8KLG8II6rO; Sun, 14 Dec 2025 21:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2705C60DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E5E260DED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765747313;
-	bh=2PO8lJsPGep6BUpobI7X4lMMR97/chZzaEtFV4lf8UE=;
+	s=default; t=1765747314;
+	bh=INMCSgkPnuba0tRlqV8g8XrN2V5D3ws+TGe/YcegFTw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pCT3ZsCSxqhMqWkozoWdQk/iPziuwEUWr/NgVIvrsKjpjIpT1lMTvZZmQRRHEohxq
-	 C7MwHP35dNypM5zx6Cl4nIAdS3Lpvp6aq+RwMUk3dDZ4vIgj/HM4m9MSXIhEGbw/lz
-	 f3BwDYtWL55ApesykUUX4ys8T/yGRj9cXg0oecuXoBbAOxIIvmdvi/2c0fF8lghmhh
-	 ytNugnWSV74Og6Q/6ip+9SjzuDRAB+wERIXPS/7WPCQevJ/TMVVUWDDNX6QCo4ky/h
-	 nKkadjc+G5Cpxvyx5hKklWhH08tn1rcEN6CI4sfOiDjuPV1udChTa1Du7CMuCVYoUo
-	 3y4ebcEAcwi1A==
+	b=TbMsL3TBlk+ENz6oLfk0e3LjmUsx8bJvyWOMnDuW3AVEn13K6vxsdVhLzP7o+dBcQ
+	 GC5cpIiV2lCnV0tLX6LLitGmmc5vf5WTVTB60juScqLIjW2eOMh0ALZRZVRy4j8JLp
+	 peT0O/bveGmH3IGEzVFXknwAGsk4+TI2QGgQn4UIIDq2z31+K9ARcFVQ1bfFgBjpU0
+	 zZbVJktSOg6OoKUChUuQlsA1DsZy2pR9qJ/8R3No06BVI+4szAOxgAiQCN34PAmjN3
+	 IkY4uMqE9nm7u1jmSgIRwlh9NB0rOCDeI0+SC4ruHtRK9SMfvgiRrQ3Ado/VuYymUt
+	 yT+6fgJOsFLUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2705C60DED;
-	Sun, 14 Dec 2025 21:21:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 048FC117
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E5E260DED;
+	Sun, 14 Dec 2025 21:21:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15D0F2ED
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CA4A60793
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA08440644
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H0pt66Ip2S2s for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YYJGtlE8Balm for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 21:21:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE3A060877
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B55FA40638
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE3A060877
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B55FA40638
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 21:21:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD52E8355B; Sun, 14 Dec 2025 21:21:40 +0000 (UTC)
+ id 8434386E91; Sun, 14 Dec 2025 21:21:39 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 22:20:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0bb91fd64135c285fb61c0a3c5be234b5dd624e
-X-Git-Newrev: 1a17185606161d7a03198e249c02bdc2bdc972d0
+X-Git-Oldrev: e710ae054642cde858783d9421bfc0b634368987
+X-Git-Newrev: 4a24dd62277111f5fc0fae06093574cdd96ed0a5
 X-Patchwork-Hint: ignore
-Message-Id: <20251214212140.AD52E8355B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-iniconfig: bump version to
- 2.3.0
+Message-Id: <20251214212139.8434386E91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cheroot: bump version to
+ 11.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,62 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a17185606161d7a03198e249c02bdc2bdc972d0
+commit: https://git.buildroot.net/buildroot/commit/?id=4a24dd62277111f5fc0fae06093574cdd96ed0a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/pytest-dev/iniconfig/blob/v2.3.0/CHANGELOG
-"* migrate from hatchling to setuptools 77 with setuptools_scm"
-
-Updated project URL according to https://pypi.org/project/iniconfig/
+https://github.com/cherrypy/cheroot/blob/v11.1.2/CHANGES.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-iniconfig/Config.in             | 2 +-
- package/python-iniconfig/python-iniconfig.hash | 4 ++--
- package/python-iniconfig/python-iniconfig.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-cheroot/python-cheroot.hash | 4 ++--
+ package/python-cheroot/python-cheroot.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-iniconfig/Config.in b/package/python-iniconfig/Config.in
-index a288da8a64..6dd11aba3b 100644
---- a/package/python-iniconfig/Config.in
-+++ b/package/python-iniconfig/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_INICONFIG
- 	help
- 	  iniconfig: brain-dead simple config-ini parsing.
- 
--	  http://github.com/RonnyPfannschmidt/iniconfig
-+	  https://github.com/pytest-dev/iniconfig
-diff --git a/package/python-iniconfig/python-iniconfig.hash b/package/python-iniconfig/python-iniconfig.hash
-index 7e5884bb7c..576a93455b 100644
---- a/package/python-iniconfig/python-iniconfig.hash
-+++ b/package/python-iniconfig/python-iniconfig.hash
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
+index cb3119def9..64d7eebb28 100644
+--- a/package/python-cheroot/python-cheroot.hash
++++ b/package/python-cheroot/python-cheroot.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/iniconfig/json
--md5  437ede5b20b0ab2e76ca08f02b5c49dd  iniconfig-2.1.0.tar.gz
--sha256  3abbd2e30b36733fee78f9c7f7308f2d0050e88f0087fd25c2645f63c773e1c7  iniconfig-2.1.0.tar.gz
-+md5  5c1d9c21275feb3da71400bf716edd72  iniconfig-2.3.0.tar.gz
-+sha256  c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730  iniconfig-2.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cheroot/json
+-md5  5299bba86f892b2a8e7f1678e45b96ff  cheroot-11.0.0.tar.gz
+-sha256  dd414eda6bdb15140e864bc1d1c9625030375d14cbe0b290092867368924a52f  cheroot-11.0.0.tar.gz
++md5  08ccbea749c4cd35b7371ced995d08b2  cheroot-11.1.2.tar.gz
++sha256  bfb70c49663f63b0440f2b54dbc6b0d1650e56dfe4e2641f59b2c6f727b44aca  cheroot-11.1.2.tar.gz
  # Locally computed sha256 checksums
- sha256  3409fa91f7ace557894632676656e32264fe5ef7581535725dc9a23774551bd4  LICENSE
-diff --git a/package/python-iniconfig/python-iniconfig.mk b/package/python-iniconfig/python-iniconfig.mk
-index 3276032fd3..68392aaa10 100644
---- a/package/python-iniconfig/python-iniconfig.mk
-+++ b/package/python-iniconfig/python-iniconfig.mk
-@@ -4,10 +4,10 @@
+ sha256  e20feeb491a7e98084f15719349e9857aad41c4503c5e479f8815b063dbf7564  LICENSE.md
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index b0086b93df..4bd382ad65 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_INICONFIG_VERSION = 2.1.0
-+PYTHON_INICONFIG_VERSION = 2.3.0
- PYTHON_INICONFIG_SOURCE = iniconfig-$(PYTHON_INICONFIG_VERSION).tar.gz
--PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/f2/97/ebf4da567aa6827c909642694d71c9fcf53e5b504f2d96afea02718862f3
--PYTHON_INICONFIG_SETUP_TYPE = hatch
-+PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10
-+PYTHON_INICONFIG_SETUP_TYPE = setuptools
- PYTHON_INICONFIG_LICENSE = MIT
- PYTHON_INICONFIG_LICENSE_FILES = LICENSE
- PYTHON_INICONFIG_DEPENDENCIES = host-python-hatch-vcs
+-PYTHON_CHEROOT_VERSION = 11.0.0
++PYTHON_CHEROOT_VERSION = 11.1.2
+ PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
+-PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/f4/01/5ef06df932a974d016ab9d7f93e78740b572c4020016794fd4799cdc09c6
++PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/68/e4/5c2020b60a55aca8d79ed55b62ad1cd7fc47ea44ad6b584e83f5f1bf58b0
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
