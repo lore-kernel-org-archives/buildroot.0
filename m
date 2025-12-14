@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20017D59D99
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CFBDD5B16C
 	for <buildroot@archiver.kernel.org>; Sun, 14 Dec 2025 17:48:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA2DB60E0C;
-	Sun, 14 Dec 2025 17:48:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 544AC814C6;
+	Sun, 14 Dec 2025 17:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a1DnlyQepAXE; Sun, 14 Dec 2025 17:48:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qKjg22xI2MME; Sun, 14 Dec 2025 17:48:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50E6A60E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58F9C816E3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765734492;
-	bh=BPW1cU+oSMDhVV2TfG1dP5tngg9QG2/PRIAWI8++PzY=;
+	s=default; t=1765734493;
+	bh=j+OQjiirxphucutdpKK/qw7odFGtpVUyKap0+uWkqE4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mdaJqxQFEoO5Fr7KV3G8Ck9jjub9OrRFopKjbi5P4y7R0zmAIDlezI1cMqpMa0rHT
-	 isTtblvdnMK/dJlsTprZtK6oC5iVFDqPvmueVzlSQpFc03xgkwRV3Y9BXm+wyJVcoP
-	 y42fdIhWqs9yQqcmmc+ZcVCdC9XJbmw4J2H3/0g8H6kU3HAiOz/1vhPAFqhBDnV3X3
-	 2pSAlDSgg0mDlUMD6opeLKmKXN8+KpcFZUHNlxPxu9I3kxJxilNwAB43wxbHXwAA/u
-	 wCygmaAEDBxvhf4vlkf1D0U1eqZs+ABidm8vfSxU7abtwFk3J886snqQH8BW1MW7lm
-	 X9YhM21b6ajNw==
+	b=JBhT/riSmD8lddq7gGkWDjT2s6b0hCAO+ibQ5VEEe6TnrlYG2CYJICf+isasHFjxj
+	 aZ2PkfpiEgj4D0Pc3b1jptxWfxthylOuxouC9dpX9YQavGl+C2nVHNZm9FcB81sISE
+	 /LeVgiiMj7MTRwwvQMRZM5a4c9Nhm8XLpP/sGiUJ4sVwwjakOiNonu38tzDSOIZuIA
+	 TL+eOYzM59qBDL2YbVtHen8C+UuZTjGjeUxum1v+SjEGsep4ytqf2wxtT+uX8e2B2M
+	 YRLiaJN5QWSDzekMWdAL1anWStVw0tGYZ89Vg9B2xBqXEx+00FbN4/6WVi8gQnnyu6
+	 nXlBrJyphppKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50E6A60E05;
-	Sun, 14 Dec 2025 17:48:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58F9C816E3;
+	Sun, 14 Dec 2025 17:48:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 350082D0
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 063B1117
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D15440690
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61CCC406BC
  for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GLK_wQcc8AG0 for <buildroot@buildroot.org>;
- Sun, 14 Dec 2025 17:47:44 +0000 (UTC)
+ id 7FDVtiH0Sdwp for <buildroot@buildroot.org>;
+ Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FE5E406CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6D464069D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FE5E406CC
- for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6D464069D
+ for <buildroot@buildroot.org>; Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F91186E93; Sun, 14 Dec 2025 17:47:43 +0000 (UTC)
+ id D681286E95; Sun, 14 Dec 2025 17:47:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Dec 2025 18:47:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d2f774e7505fe12b36306a5c0308a61e3b6db20
-X-Git-Newrev: 02b4cc424bed1c2c4a027e313659fe035d1b1b7a
+X-Git-Oldrev: 85c346bd747b06e2c074163ed25a75ed2d7ae519
+X-Git-Newrev: e9becb42c2671b0881fa2f4f660d0529865ebb34
 X-Patchwork-Hint: ignore
-Message-Id: <20251214174743.2F91186E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cachetools: bump version to
- 6.2.2
+Message-Id: <20251214174742.D681286E95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-attrs: bump version to
+ 25.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02b4cc424bed1c2c4a027e313659fe035d1b1b7a
+commit: https://git.buildroot.net/buildroot/commit/?id=e9becb42c2671b0881fa2f4f660d0529865ebb34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/tkem/cachetools/blob/v6.2.2/CHANGELOG.rst
+https://www.attrs.org/en/stable/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-cachetools/python-cachetools.hash | 4 ++--
- package/python-cachetools/python-cachetools.mk   | 4 ++--
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cachetools/python-cachetools.hash b/package/python-cachetools/python-cachetools.hash
-index 5831c2acba..2a11fa1afb 100644
---- a/package/python-cachetools/python-cachetools.hash
-+++ b/package/python-cachetools/python-cachetools.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index 95b0a63bca..bf2aae1ed8 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cachetools/json
--md5  34b0025a306749e0b3619662362a76e2  cachetools-6.2.1.tar.gz
--sha256  3f391e4bd8f8bf0931169baf7456cc822705f4e2a31f840d218f445b9a854201  cachetools-6.2.1.tar.gz
-+md5  f6a09127cf6d315ef12138b20a22f69e  cachetools-6.2.2.tar.gz
-+sha256  8e6d266b25e539df852251cfd6f990b4bc3a141db73b939058d809ebd2590fc6  cachetools-6.2.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  338069d6f69126086d589b2cb44f4c73  attrs-25.1.0.tar.gz
+-sha256  1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e  attrs-25.1.0.tar.gz
++md5  6197561dfec99660529830edcfeee0ba  attrs-25.4.0.tar.gz
++sha256  16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11  attrs-25.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  23c4eff7a1c027a977a0b79c4497e17582c334c5f17ef6ac8ca0b52d1e7d8417  LICENSE
-diff --git a/package/python-cachetools/python-cachetools.mk b/package/python-cachetools/python-cachetools.mk
-index 576202a650..3e3100067d 100644
---- a/package/python-cachetools/python-cachetools.mk
-+++ b/package/python-cachetools/python-cachetools.mk
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 74d0c2f8d1..fd900c5046 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CACHETOOLS_VERSION = 6.2.1
-+PYTHON_CACHETOOLS_VERSION = 6.2.2
- PYTHON_CACHETOOLS_SOURCE = cachetools-$(PYTHON_CACHETOOLS_VERSION).tar.gz
--PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/cc/7e/b975b5814bd36faf009faebe22c1072a1fa1168db34d285ef0ba071ad78c
-+PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/fb/44/ca1675be2a83aeee1886ab745b28cda92093066590233cc501890eb8417a
- PYTHON_CACHETOOLS_SETUP_TYPE = setuptools
- PYTHON_CACHETOOLS_LICENSE = MIT
- PYTHON_CACHETOOLS_LICENSE_FILES = LICENSE
+-PYTHON_ATTRS_VERSION = 25.1.0
++PYTHON_ATTRS_VERSION = 25.4.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/49/7c/fdf464bcc51d23881d110abd74b512a42b3d5d376a55a831b44c603ae17f
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/6b/5c/685e6633917e101e5dcb62b9dd76946cbb57c26e133bae9e0cd36033c0a9
+ PYTHON_ATTRS_SETUP_TYPE = hatch
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
