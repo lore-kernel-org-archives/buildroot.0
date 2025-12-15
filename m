@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD03DD5B866
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06561D5B866
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:15:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B174140A42;
-	Mon, 15 Dec 2025 19:15:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WjrhSJOnVxx9; Mon, 15 Dec 2025 19:15:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D613140792
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765826101;
-	bh=awVP54ubj8j7vu99991mCCXtvNvzGhLDtVtunKpg7aA=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=VmCjcw4KBqLhtlCEEmpmYMPOCQSF6CE1vpZ7cQ7wnM7vtP6lMDiSa8QtOKZVNnbda
-	 N8ktp8uOxGr5hNlxObj8qQdk5jRsKiJDvlGrn/6bXxwN4Mk5iGQZOVTn0zRaGe2/fA
-	 cZN5JmZJxEUMxZsCepswpY40g+lmyIJ2PJvdKegAPiP0HaX49d402n7KPpQ8hP1sFW
-	 hgODAa5b6jwuZ7YeIZfXOP9kAroSZ8xsbMWYHvjtq7aV027wTSX6grcK02R42eRYYo
-	 GBYGaUv8MVGEWh4le4dH0n4+05O7HxwvLplLYOTMc8lczVR3WsY8nQcPP72WDrH1aA
-	 NnGpJFGl8+xlw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D613140792;
-	Mon, 15 Dec 2025 19:15:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BD316151
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:15:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A424880767
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:15:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA04B80767;
+	Mon, 15 Dec 2025 19:15:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LaD1593WWI6l for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 19:14:59 +0000 (UTC)
+ id ZCmfM48kgdeu; Mon, 15 Dec 2025 19:15:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E77DE807D0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765826115;
+	bh=q/8I0rmTte8evUl3AupKnhT1NqRixGy2fVYbkKj0LOI=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=CS5P+hBxd+8c/SmFbNK/SUYT7Oo1m7n9wOX+OPG0UjqovWQCj3K/7f7MPTmmGoC4C
+	 8H8tp1IkYMwOegJhO8+aIHgsY12I+6OkmrLwXvX1hLQRpFD6EyC3gVKYTGw8Ma2Aae
+	 Jr09TqosnO2/I4+KNQnHy5GvS8DRlKX6XfCORQ69pq7hr489r8jzKFVEJEsiHJcLEq
+	 zpiadYpGadrcQWBbUJrGR7ALyN93ofKIjQjexL6/OlccQmnLONOk/nkhNx3DMR3cfz
+	 nijYHHIgl9+iLVszU3UapxyPHBXSu9FdqGorpmUCrlC7iWq4mq4CZ3IVpsxc/28ABK
+	 sfyaXXRJx/p7A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E77DE807D0;
+	Mon, 15 Dec 2025 19:15:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B804A255
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:15:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DE2C407FE
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:15:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TILxFBnqId4j for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 19:15:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4631E807D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4631E807D0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 80C1C4046A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80C1C4046A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4631E807D0
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:14:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 80C1C4046A
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:15:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0034BA4C426C;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 541E7A4C4276;
  Mon, 15 Dec 2025 20:14:26 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40828)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vVE1R-000000005ED-3mq3;
- Mon, 15 Dec 2025 19:14:18 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vVE1Q-000000005ED-2vT4;
+ Mon, 15 Dec 2025 19:14:17 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 15 Dec 2025 20:14:10 +0100
-Message-ID: <20251215191416.421755-21-bernd@kuhls.net>
+Date: Mon, 15 Dec 2025 20:13:55 +0100
+Message-ID: <20251215191416.421755-6-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251215191416.421755-1-bernd@kuhls.net>
 References: <20251215191416.421755-1-bernd@kuhls.net>
@@ -67,23 +67,23 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765826066;
- bh=cqUlAzYrjYmCzdCHvUIK637wgsBDRJJXEsDiygpE/vY=;
+ bh=/5PeWIKoTuMF3y6r0CJHxDlEVa4hBDrRVHGz760jRdo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=iOo13UjO5XpkdtGS8QqnvY0HQrrPSFpYLpQvRmL9qrrQYJouZIdTmkvzIu0C92CEJ
- uSkbCHgN4PX+/GuFe6XIgLW01H1148hMvRGGClLNxA/ynR/YIJcsYThzNtuqEm14oi
- NmH7zHoDIFxNsSysj0KPWrxsUcOCuYQSh+Wd2Nc/emLGEYtqR8ntckG1a6nWoV9frh
- sLIAnYG+sHB/78V/91fNjdWje2uaCZxMZ4RkvPl+KF59RZDJj6cenXnhAzQIfjTlcg
- 0ONz7VGCkPLMDeSP0Gac3zPhvyd0tHdC1W2MI+NAWDjfYmk36gsbbY67tFbM+5D57Y
- fiyJM+ggyyOzQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=mvNSoj1+skujnaxUiWLmKYdl5D9WKGKQncodKns4zNI23jsF23+z5rN9K5T4iDoBX
+ etOSJSSWcwicq7uaY5wJuiv6E12fH9WxSIdZZWqNJTg6NeyOwTTjSCbPj1xtKiprqR
+ 1fkfko/XT/qwi7iNzWw7OXQjbFtVcOcOxI2Mkx0BxgKzOlx2bIEyDf1iFh9Q5jKr37
+ s0DkuuiVct/J5uPzFtK+jV9O0EZoDe8mE6/csdRDRAY5VGDFjP4td95y9iJVzXk1iZ
+ MEvnqNGrucmBcBSDaO9dYqB6zYz7d1qa5Ml76WZCEzG6WBqUJqZvIdBksZD2/RGBmr
+ iTZJ0ivfP5rvQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=iOo13UjO
-Subject: [Buildroot] [PATCH 21/27] package/python-referencing: bump version
- to 0.37.0
+ header.s=kas202511301023 header.b=mvNSoj1+
+Subject: [Buildroot] [PATCH 06/27] package/python-pycairo: bump version to
+ 1.29.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,42 +110,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/python-jsonschema/referencing/blob/v0.37.0/docs/changes.rst
+https://pycairo.readthedocs.io/en/latest/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-referencing/python-referencing.hash | 4 ++--
- package/python-referencing/python-referencing.mk   | 4 ++--
+ package/python-pycairo/python-pycairo.hash | 4 ++--
+ package/python-pycairo/python-pycairo.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
-index 9cbd5e60a5..e407997e98 100644
---- a/package/python-referencing/python-referencing.hash
-+++ b/package/python-referencing/python-referencing.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/referencing/json
--md5  9d116186b2c5225c4e55254b94b2cd8e  referencing-0.36.2.tar.gz
--sha256  df2e89862cd09deabbdba16944cc3f10feb6b3e6f18e902f7cc25609a34775aa  referencing-0.36.2.tar.gz
-+md5  bc9d24d5aec035c707b107cc2d43196b  referencing-0.37.0.tar.gz
-+sha256  44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8  referencing-0.37.0.tar.gz
+diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
+index 633b31d975..6f03581ff8 100644
+--- a/package/python-pycairo/python-pycairo.hash
++++ b/package/python-pycairo/python-pycairo.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycairo/json
+-md5  12097575a1bb683cab7dc425d9769a68  pycairo-1.27.0.tar.gz
+-sha256  5cb21e7a00a2afcafea7f14390235be33497a2cce53a98a19389492a60628430  pycairo-1.27.0.tar.gz
++md5  8202d252ea754e2a17852b9031e01b32  pycairo-1.29.0.tar.gz
++sha256  f3f7fde97325cae80224c09f12564ef58d0d0f655da0e3b040f5807bd5bd3142  pycairo-1.29.0.tar.gz
  # Locally computed sha256 checksums
- sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
-diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
-index cabc9afa23..b998779132 100644
---- a/package/python-referencing/python-referencing.mk
-+++ b/package/python-referencing/python-referencing.mk
+ sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
+diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
+index 8d9459e9e2..fb1d2bac74 100644
+--- a/package/python-pycairo/python-pycairo.mk
++++ b/package/python-pycairo/python-pycairo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REFERENCING_VERSION = 0.36.2
-+PYTHON_REFERENCING_VERSION = 0.37.0
- PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
--PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/2f/db/98b5c277be99dd18bfd91dd04e1b759cad18d1a338188c936e92f921c7e2
-+PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/22/f5/df4e9027acead3ecc63e50fe1e36aca1523e1719559c499951bb4b53188f
- PYTHON_REFERENCING_SETUP_TYPE = pep517
- PYTHON_REFERENCING_LICENSE = MIT
- PYTHON_REFERENCING_LICENSE_FILES = COPYING
+-PYTHON_PYCAIRO_VERSION = 1.27.0
++PYTHON_PYCAIRO_VERSION = 1.29.0
+ PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
+-PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/07/4a/42b26390181a7517718600fa7d98b951da20be982a50cd4afb3d46c2e603
++PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/22/d9/1728840a22a4ef8a8f479b9156aa2943cd98c3907accd3849fb0d5f82bfd
+ PYTHON_PYCAIRO_DEPENDENCIES = cairo
+ PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+ PYTHON_PYCAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
 -- 
 2.47.3
 
