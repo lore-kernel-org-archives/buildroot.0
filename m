@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A063D5B866
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3545BD5B866
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 000B140A9D;
-	Mon, 15 Dec 2025 19:17:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A130807DE;
+	Mon, 15 Dec 2025 19:18:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qLcuCY6-E8zM; Mon, 15 Dec 2025 19:17:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id seKqWWN63Eiw; Mon, 15 Dec 2025 19:18:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B59A40A4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4CE8082A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765826275;
-	bh=JRfUYep8pLdUGPpky0m0UHelmAbLNkH2nWl7fu+1gbU=;
+	s=default; t=1765826288;
+	bh=HLaJPDowlOuaHQWqxoYnHtwwGL1o0uwccxkURc3CdxQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=QfXsSJy8SQtgYONYVzCfa8TS86QB/TJVvC4CpXO6YOQeOVBu6ieSDeZAHjYzvVEAV
-	 dTxnY7D6CuFZBi0YwzdfuoJcoek4xag9TqMLczMQe4kRmO44QAsbwZyCWlvOa4Zkg4
-	 VWmBF5N3bRF/X0F0CdbaCfzOqdqUOVNJ+gjVmu/PowxBHuMCBhJ46Mm77Z0ZrabhLE
-	 TUESQ80jYMkcqDHPQJ+MIR7d4rteNbDHqPkS0N4pvVYIFAmK8taN1V9S6R0W00Uphg
-	 uvyoO6SZSRYvcY5bzWLvTOytPkNzL2hpx/3Do8AR66h6rPZHPKlOxmUwabMJBJOdMj
-	 A0Q3JwcfQ0v4w==
+	b=IKgMoTnMNvT5HcW5X1pgMPvCpf0iGqEus3JmZw6JvxEQaDOwNfShuoDwoHWfg0QYJ
+	 dcT2XVZTyUe2ItUbOhwu7LRYVAgF1zVavW9RyKQ5sGMeQB08MPnN54BX+1OkDhhVs7
+	 F2PGlhsVOgtccy0NEp991I7jtkgiOW/fjHy9gfcsaIkwaBe/u6CTa2YXJzNk5HaTSe
+	 MO0AlzmJckiH6jwdkFuAcrCWzYvSrOLi6Wty6Wg9AGQUVmq7gUdSZj7fezNh3fGVyn
+	 UU6hCsl8Zcw9VEvZmvsllT8SBwfBx4zuZ1pO0W0vukk679gEBjqgRBL3LQZGQFDVCe
+	 v6L2a0oyrtJ1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B59A40A4C;
-	Mon, 15 Dec 2025 19:17:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 45D2D151
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:17:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C4CE8082A;
+	Mon, 15 Dec 2025 19:18:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6B59255
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38473407FE
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:17:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD5AC407FE
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vS_t4jA9jSHT for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 19:17:53 +0000 (UTC)
+ id Jz-SW9fzZj3j for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 19:18:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F5F04046A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F5F04046A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B0EF34046A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0EF34046A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F5F04046A
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:17:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0EF34046A
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:04 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8B54CA4C4357;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CB38DA4C4359;
  Mon, 15 Dec 2025 20:14:29 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40828)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vVE1R-000000005ED-2SxA;
- Mon, 15 Dec 2025 19:14:17 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vVE1R-000000005ED-2mp2;
+ Mon, 15 Dec 2025 19:14:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 15 Dec 2025 20:14:06 +0100
-Message-ID: <20251215191416.421755-17-bernd@kuhls.net>
+Date: Mon, 15 Dec 2025 20:14:07 +0100
+Message-ID: <20251215191416.421755-18-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251215191416.421755-1-bernd@kuhls.net>
 References: <20251215191416.421755-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765826069;
- bh=1BkplxEaVYK1Z1/Yu3Yp4Pw2aKcO51onilBF30e61e4=;
+ bh=nLAeizJddJ1WfpN2TeguixFqkuTXRcxWWknF3UYdHWc=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=NPvgfzXXe8tjuk8tNBTFNYz88MF0+/LEW68lPQEdm/UYk68tAOYPL/zcsVR4gtsDM
- Q9Yt/Oq+HqjnjxA5z+6DAWDZ5nj5BnItZ/FBtL6xNuACtLWp86QAJy+m36UcZTHNcr
- Q2KLmC3bFL+6QVJxbohE/4Psi78HhW5JyJlemtYzRcVACHpSHUyWIu7I7A8MuZmhUw
- 0FnueOusIP55iIZ+0XcVlBJ1SrnIm8DDLyQ2mDnfxmkMLwqY48TW+hp10rhlwgBiVw
- qFD8EMqqNf+tL226Hst2zUSMRobwGN65pnQGnTTgZF2WWNBLJePJc43lxDSwDzROHs
- fT8txXp4kKAwA==
+ b=Xbgb7Id77R6DyEHSv3X3zTLm3YpYmh3c4PdWrkWt0t7XC5oysEw6HlPhDdvYm1SWW
+ F8+3XnAc/rApRysjmRG4ZdXWuUM798BOqPo61iXdUx4gXjO4eD39ERNDqfnFGW33pf
+ 44uAwUq1mJFl7x1NQyQixUK8kQqRgHypnVszSY0O4pCV7oK673m7dpkeyiVdXcjMgP
+ HUgpDABBOrCV7oc5f3mmcCloqnK+hgwr6CfE5xoxgw/B5t9M/i06eHIFmGYEUHxXnp
+ 4Ykcw+uAa1CaTPTIGv7ZKIYSf/UshjCYDWXpFb/aL017QH+12KVxvQ6PRj8nl+2/Kj
+ tfUXJBuMUjiVQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=NPvgfzXX
-Subject: [Buildroot] [PATCH 17/27] package/python-pyspnego: bump version to
- 0.12.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Xbgb7Id7
+Subject: [Buildroot] [PATCH 18/27] package/python-pytest: bump version to
+ 9.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,42 +109,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/jborean93/pyspnego/blob/v0.12.0/CHANGELOG.md
+https://github.com/pytest-dev/pytest/blob/9.0.2/doc/en/changelog.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyspnego/python-pyspnego.hash | 4 ++--
- package/python-pyspnego/python-pyspnego.mk   | 4 ++--
+ package/python-pytest/python-pytest.hash | 4 ++--
+ package/python-pytest/python-pytest.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyspnego/python-pyspnego.hash b/package/python-pyspnego/python-pyspnego.hash
-index dd8203088a..1feca5d305 100644
---- a/package/python-pyspnego/python-pyspnego.hash
-+++ b/package/python-pyspnego/python-pyspnego.hash
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+index 4e400947ce..09644dbdba 100644
+--- a/package/python-pytest/python-pytest.hash
++++ b/package/python-pytest/python-pytest.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyspnego/json
--md5  8d138eeb84bba8ea48b3287dfb3b9ed1  pyspnego-0.11.2.tar.gz
--sha256  994388d308fb06e4498365ce78d222bf4f3570b6df4ec95738431f61510c971b  pyspnego-0.11.2.tar.gz
-+md5  f1e4eb073641fc00dfd0ce053963c73b  pyspnego-0.12.0.tar.gz
-+sha256  e1d9cd3520a87a1d6db8d68783b17edc4e1464eae3d51ead411a51c82dbaae67  pyspnego-0.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytest/json
+-md5  a1b847e1f079dfc5d26a63bc02f47fb7  pytest-8.4.2.tar.gz
+-sha256  86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01  pytest-8.4.2.tar.gz
++md5  ce26088b3b97ab8fed58c8883de23241  pytest-9.0.2.tar.gz
++sha256  75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11  pytest-9.0.2.tar.gz
  # Locally computed sha256 checksums
- sha256  286517c93031c343f809f64b38563a783614b762e1367242af6cdd4107335471  LICENSE
-diff --git a/package/python-pyspnego/python-pyspnego.mk b/package/python-pyspnego/python-pyspnego.mk
-index 4dccc57fad..5e982ac7cf 100644
---- a/package/python-pyspnego/python-pyspnego.mk
-+++ b/package/python-pyspnego/python-pyspnego.mk
+ sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+index 8007036575..427936c69e 100644
+--- a/package/python-pytest/python-pytest.mk
++++ b/package/python-pytest/python-pytest.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSPNEGO_VERSION = 0.11.2
-+PYTHON_PYSPNEGO_VERSION = 0.12.0
- PYTHON_PYSPNEGO_SOURCE = pyspnego-$(PYTHON_PYSPNEGO_VERSION).tar.gz
--PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/6b/f8/53f1fc851dab776a183ffc9f29ebde244fbb467f5237f3ea809519fc4b2e
-+PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/f9/e4/8b32a91aeba6fbc6943a630c44b2fe038615e5c7dec8814316fafdcf4bf4
- PYTHON_PYSPNEGO_SETUP_TYPE = setuptools
- PYTHON_PYSPNEGO_LICENSE = MIT
- PYTHON_PYSPNEGO_LICENSE_FILES = LICENSE
+-PYTHON_PYTEST_VERSION = 8.4.2
++PYTHON_PYTEST_VERSION = 9.0.2
+ PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
+-PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/a3/5c/00a0e072241553e1a7496d638deababa67c5058571567b92a7eaa258397c
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/d1/db/7ef3487e0fb0049ddb5ce41d3a49c235bf9ad299b6a25d5780a89f19230f
+ PYTHON_PYTEST_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_LICENSE = MIT
+ PYTHON_PYTEST_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
