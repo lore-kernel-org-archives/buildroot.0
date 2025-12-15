@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF0FD5B874
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 22:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50256D5B873
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 22:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7F0C80E4E;
-	Mon, 15 Dec 2025 22:50:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C6A940B06;
+	Mon, 15 Dec 2025 22:50:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kD3BlsChLWyb; Mon, 15 Dec 2025 22:50:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r3KAYmuVIfOo; Mon, 15 Dec 2025 22:50:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 248C880E52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27FDC40B1A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765839006;
-	bh=uSSoeVU/d/Htuvt34cbdMwurnIuZQVmFBHcjRmJDsT8=;
+	s=default; t=1765839007;
+	bh=dxy4PTBIS4YgcugyG5NgrSTFfFawXLfHimDkQVH3/tE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=kyhnQpXBJTccXzzQCMNfTgZNS88XPOhON5/Bli/KUPfe9Z1C2z1b0v/wHdhR/9RRL
-	 vBg/e/V+c4Pw7xBVV4Bxy1/OhHpUjuob6jg0TK6Sijoi2/wXfGj9thPRNEaLLoERJF
-	 Unz0LmnJJ37RVQ1lwmSfuN7jKkBygcMsH6ZvFhCh7/zNNB7OB8nSegAT52b7irf1LN
-	 KGOT2cybRbUzIRyxITPJehU6QcxP4BddPVhC535EdrPRfUC5cJycQCaHxRnO5OOPJt
-	 FpcCOjKXD7JNtFhqE9eEheX0fMNa/ZB+iGVmr9vjjzTiQKaofLp8O6fz9W2nhAusDW
-	 rlGNfkido1wNg==
+	b=mWz7OJGE+zl8Yh/RZfxgshw2oQe4YoiB0xeEWWcagzb81c8rjY9NOwg69r7JnwmoO
+	 BFVET7KouoE2WvUwHSs2UHqnN3zWfcqh6ZpF4uiLmDsS9ikwn93rnjociGAhW0ib7w
+	 z+pcmztIztMmkfqDwpxj/hxWmL5jkDOywUlx90hY035K3OtRBrreHjA0Eg+HjKOEuh
+	 a38QNsvpu7Hlh0h+/jxZDfJJfVLSn8H5oh1utCe1NkCBLWD2WILu30p6iWdEkQr8yK
+	 CHggtVPMVTKAiA0KF/3XtXZASeIU3PaeD867z4V/4Mjn6/uaWvBWL9ju+dVUReBSxZ
+	 ujTkZulL8195Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 248C880E52;
-	Mon, 15 Dec 2025 22:50:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27FDC40B1A;
+	Mon, 15 Dec 2025 22:50:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 52989219
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02390151
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 395F560F2B
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F05A960F2D
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cEf2NLLQzRmV for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 22:50:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id IbfuJgwlSbOp for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 22:50:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A30660EE3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A30660EE3
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A30660EE3
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E399260F25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E399260F25
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E399260F25
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:04 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 7DA5C4E41C1B;
- Mon, 15 Dec 2025 22:50:01 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 306561A21C7
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 22:50:03 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 533C860664;
- Mon, 15 Dec 2025 22:50:01 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id F159960664;
+ Mon, 15 Dec 2025 22:50:02 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7E06411942977; Mon, 15 Dec 2025 23:50:00 +0100 (CET)
+ with ESMTPSA id 8DDFE11942979; Mon, 15 Dec 2025 23:50:01 +0100 (CET)
 To: Buildroot List <buildroot@buildroot.org>
 Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>,
  Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
  Martin Bark <martin@barkynet.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Dec 2025 23:49:34 +0100
-Message-ID: <20251215224952.1253359-3-thomas.petazzoni@bootlin.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>
+Date: Mon, 15 Dec 2025 23:49:35 +0100
+Message-ID: <20251215224952.1253359-4-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251215224952.1253359-1-thomas.petazzoni@bootlin.com>
 References: <20251215224952.1253359-1-thomas.petazzoni@bootlin.com>
@@ -71,21 +72,21 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1765839001; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1765839002; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=a30ruIkUBfc/sEz4ai9t8XB2AwE+AmzUgG10SVjui2c=;
- b=Yv20m8YI2epwVGYnswYL6en59nAtefYwJwGo7k1V+kkMXg/r6RahK0YBT4dduZUF56UzA4
- x6kbrBrNVLLHyOqVoYitjqMRe3PAsMLWjjWico881lfnBQ1nkhbezBnGfI2uH/4j1PZb7e
- iT8NWzSOdvYUHcvkwd8FhVmJ66AhMrg37XPX9FWyA7u0d64Xak4Wmn9MPrsR1Q3OCVg8Z8
- LFW11JsDQz1ue3b1tQln9q9dKTeFnCd5U2ajlPGmP/Efj7AbgxB1F2WmdmJSnM/k5tXiwb
- dwEZ0Or7gRqaHiGmIZ/uGF2X8KK3w0QRXIP8NI8rE9pNysj4DomDm/cQh4bqzg==
+ bh=VbpC2So0VMQmi6Iatn3WhisWND4V3W25ExLWGLCWiYI=;
+ b=GPxzC38x7fI850WjFfK3tPgvsUfFnXQgorUlj1kMTTSY6WixiDEDO7B49ZL9owbEuYrSkW
+ JKzMOFvfrBKt+kK4JirX7jVL2iQi/pbgUDKjqGaruNPnrgPyoZRCLQm6xiL4YeYT1DhGe2
+ XwzOA8kEWmYIQJw4d47/ExbsKaFFH0wwz8spuUT9hTTIqAvq0taqfIKZoAMvlsiSo4QA15
+ 1qNyjSuzHyhysT16iqBARniwFTygJd2+x7bo3aF4dTy441Cqe/BpIhXhUvKe8y+ZANbeDv
+ O4zV3MqQS7vaEPMz5AXRoEacSuKsmB1cXG53yImMcvrRcquO+ytA2vZ+aDmAPA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=Yv20m8YI
-Subject: [Buildroot] [PATCH 02/13] configs/raspberrypi3_qt5we: drop defconfig
+ header.a=rsa-sha256 header.s=dkim header.b=GPxzC38x
+Subject: [Buildroot] [PATCH 03/13] package/ffmpeg: drop rpi-userland support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,65 +105,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As we're about to remove the rpi-userland package, remove the only
-defconfig that uses it. This defconfig is according to our DEVELOPERS
-file, unmaintained.
+As we're about to remove the rpi-userland package, drop support for it
+from package/ffmpeg.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/raspberrypi3_qt5we_defconfig | 43 ----------------------------
- 1 file changed, 43 deletions(-)
- delete mode 100644 configs/raspberrypi3_qt5we_defconfig
+ package/ffmpeg/ffmpeg.mk | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-deleted file mode 100644
-index 8cbb8b0d41..0000000000
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ /dev/null
-@@ -1,43 +0,0 @@
--BR2_arm=y
--BR2_cortex_a53=y
--BR2_ARM_FPU_NEON_VFPV4=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
--BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
--BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
--BR2_SYSTEM_DHCP="eth0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
--BR2_PACKAGE_XZ=y
--BR2_PACKAGE_LIBERATION=y
--BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_EXAMPLES=y
--BR2_PACKAGE_QT5BASE_GIF=y
--BR2_PACKAGE_QT5WEBENGINE=y
--BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS=y
--BR2_PACKAGE_RPI_FIRMWARE=y
--BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
--BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
--BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi3/config_3_qt5we.txt"
--BR2_PACKAGE_RPI_USERLAND=y
--BR2_PACKAGE_CA_CERTIFICATES=y
--BR2_PACKAGE_NTP=y
--BR2_PACKAGE_KMOD_TOOLS=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="400M"
--# BR2_TARGET_ROOTFS_TAR is not set
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_KMOD_XZ=y
--BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 4c841d7a94..cee34eba9e 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -52,7 +52,10 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libilbc \
+ 	--disable-libvo-amrwbenc \
+ 	--disable-symver \
+-	--disable-doc
++	--disable-doc \
++	--disable-mmal \
++	--disable-omx \
++	--disable-omx-rpi
+ 
+ FFMPEG_DEPENDENCIES += host-pkgconf
+ 
+@@ -284,19 +287,6 @@ else
+ FFMPEG_CONF_OPTS += --disable-vdpau
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-FFMPEG_CONF_OPTS += --enable-omx --enable-omx-rpi \
+-	--extra-cflags=-I$(STAGING_DIR)/usr/include/IL
+-FFMPEG_DEPENDENCIES += rpi-userland
+-ifeq ($(BR2_arm),y)
+-FFMPEG_CONF_OPTS += --enable-mmal
+-else
+-FFMPEG_CONF_OPTS += --disable-mmal
+-endif
+-else
+-FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
+-endif
+-
+ # To avoid a circular dependency only use opencv if opencv itself does
+ # not depend on ffmpeg.
+ ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),yx)
 -- 
 2.52.0
 
