@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3545BD5B866
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84E5D5B866
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A130807DE;
-	Mon, 15 Dec 2025 19:18:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9B9240AC1;
+	Mon, 15 Dec 2025 19:18:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id seKqWWN63Eiw; Mon, 15 Dec 2025 19:18:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VkZBbpgWDo8a; Mon, 15 Dec 2025 19:18:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4CE8082A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 408D340435
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765826288;
-	bh=HLaJPDowlOuaHQWqxoYnHtwwGL1o0uwccxkURc3CdxQ=;
+	s=default; t=1765826299;
+	bh=vlgidIxZ4E/DXHUH/agwicY9ivddeGUyci2tDV9MERo=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=IKgMoTnMNvT5HcW5X1pgMPvCpf0iGqEus3JmZw6JvxEQaDOwNfShuoDwoHWfg0QYJ
-	 dcT2XVZTyUe2ItUbOhwu7LRYVAgF1zVavW9RyKQ5sGMeQB08MPnN54BX+1OkDhhVs7
-	 F2PGlhsVOgtccy0NEp991I7jtkgiOW/fjHy9gfcsaIkwaBe/u6CTa2YXJzNk5HaTSe
-	 MO0AlzmJckiH6jwdkFuAcrCWzYvSrOLi6Wty6Wg9AGQUVmq7gUdSZj7fezNh3fGVyn
-	 UU6hCsl8Zcw9VEvZmvsllT8SBwfBx4zuZ1pO0W0vukk679gEBjqgRBL3LQZGQFDVCe
-	 v6L2a0oyrtJ1Q==
+	b=gK/B+HzNf9I5tKIwFmZx3LmnbnV7a5JFf83Yb2AwVVRFBN+GWkSeJOhajVheHa8Va
+	 6ie/h9to2/EemlaydWxv/IakrQD3fzry5VMIaGqFJSrk17AB6Euba74WKiek7yUJDy
+	 bhKcLhPxNsMh4TVVW66+jnvXeaTR7avPzsNyS+A24nHDEP+5mTlGTjr2APXtQjUh31
+	 WqJqFW8pMosSgdgaFR7pIcb7G/EAuZS26qgnqBOjMPZF4BlFGWdwAvuiYGaArbVtZa
+	 d3Vem0a3ZctzOBH3oR3UKzQSa1BSQ/DS3/Bfpw+vJnt1wDfX7yCuJX6xoBdIzw99R6
+	 ykFxEKcV1IjiA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C4CE8082A;
-	Mon, 15 Dec 2025 19:18:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6B59255
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 408D340435;
+	Mon, 15 Dec 2025 19:18:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D60F255
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD5AC407FE
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23C51819F3
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jz-SW9fzZj3j for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 19:18:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9U1uFu2xiZci for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 19:18:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B0EF34046A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0EF34046A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0E7948082A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E7948082A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B0EF34046A
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0E7948082A
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:17 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CB38DA4C4359;
- Mon, 15 Dec 2025 20:14:29 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 15217A4C435D;
+ Mon, 15 Dec 2025 20:14:30 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40828)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vVE1R-000000005ED-2mp2;
+ (envelope-from <bernd@kuhls.net>) id 1vVE1R-000000005ED-36WG;
  Mon, 15 Dec 2025 19:14:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 15 Dec 2025 20:14:07 +0100
-Message-ID: <20251215191416.421755-18-bernd@kuhls.net>
+Date: Mon, 15 Dec 2025 20:14:08 +0100
+Message-ID: <20251215191416.421755-19-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251215191416.421755-1-bernd@kuhls.net>
 References: <20251215191416.421755-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765826069;
- bh=nLAeizJddJ1WfpN2TeguixFqkuTXRcxWWknF3UYdHWc=;
+ s=kas202511301023; t=1765826070;
+ bh=IfKr6gvO/YHzzwCHzILyDnXtjB38CAiBMqAFCTLq3+k=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Xbgb7Id77R6DyEHSv3X3zTLm3YpYmh3c4PdWrkWt0t7XC5oysEw6HlPhDdvYm1SWW
- F8+3XnAc/rApRysjmRG4ZdXWuUM798BOqPo61iXdUx4gXjO4eD39ERNDqfnFGW33pf
- 44uAwUq1mJFl7x1NQyQixUK8kQqRgHypnVszSY0O4pCV7oK673m7dpkeyiVdXcjMgP
- HUgpDABBOrCV7oc5f3mmcCloqnK+hgwr6CfE5xoxgw/B5t9M/i06eHIFmGYEUHxXnp
- 4Ykcw+uAa1CaTPTIGv7ZKIYSf/UshjCYDWXpFb/aL017QH+12KVxvQ6PRj8nl+2/Kj
- tfUXJBuMUjiVQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=QiZp/964jk/xx1lvJmNSYg54cSqpxtjb+F71bwqFASbrH8GsYMUceMVNQCu1lsmaE
+ 3dEvQzMKm1lPNrK33+Hl4P9A45EwhJ68YNinwJqaXphrktSl6MfX1MaMGYuV57Tz6A
+ QkaZRG7U4NX5a3UeeeoU/RYNMZ6ejwfOj0qEIPWrPLPzuxHTxtMCtxz5zJyj9rk95h
+ ZTWD8s8rsDTyjqPbyX+tbxa/sPUioDtR098Qizr8StIobY3Fp+8AmSgB5Fis/SHrJA
+ JMZFstPb4MYhqgtasfEResyr++RSut3PcbYDbhg9IvfwIZb5EvzgtwbToUcUqmwGNO
+ F8jHZkwYUu8Hw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Xbgb7Id7
-Subject: [Buildroot] [PATCH 18/27] package/python-pytest: bump version to
- 9.0.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=QiZp/964
+Subject: [Buildroot] [PATCH 19/27] package/python-pythran: bump version to
+ 0.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,42 +109,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pytest-dev/pytest/blob/9.0.2/doc/en/changelog.rst
+https://github.com/serge-sans-paille/pythran/blob/0.18.1/Changelog
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pytest/python-pytest.hash | 4 ++--
- package/python-pytest/python-pytest.mk   | 4 ++--
+ package/python-pythran/python-pythran.hash | 4 ++--
+ package/python-pythran/python-pythran.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-index 4e400947ce..09644dbdba 100644
---- a/package/python-pytest/python-pytest.hash
-+++ b/package/python-pytest/python-pytest.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest/json
--md5  a1b847e1f079dfc5d26a63bc02f47fb7  pytest-8.4.2.tar.gz
--sha256  86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01  pytest-8.4.2.tar.gz
-+md5  ce26088b3b97ab8fed58c8883de23241  pytest-9.0.2.tar.gz
-+sha256  75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11  pytest-9.0.2.tar.gz
+diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
+index b0a0b04258..7b428a18f0 100644
+--- a/package/python-pythran/python-pythran.hash
++++ b/package/python-pythran/python-pythran.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pythran/json
+-md5  829c5cba97e1339556251b631f4faeca  pythran-0.18.0.tar.gz
+-sha256  5c003e8cbedf6dbb68c2869c49fc110ce8b5e8982993078a4a819f1dadc4fc6a  pythran-0.18.0.tar.gz
++md5  9b906f8af949adfd1a132ad9e26f49f9  pythran-0.18.1.tar.gz
++sha256  8803ed948bf841a11bbbb10472a8ff6ea24ebd70e67c3f77b77be3db900eccfe  pythran-0.18.1.tar.gz
  # Locally computed sha256 checksums
- sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-index 8007036575..427936c69e 100644
---- a/package/python-pytest/python-pytest.mk
-+++ b/package/python-pytest/python-pytest.mk
+ sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
+ sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
+diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
+index 358b0c9ec1..271824585a 100644
+--- a/package/python-pythran/python-pythran.mk
++++ b/package/python-pythran/python-pythran.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_VERSION = 8.4.2
-+PYTHON_PYTEST_VERSION = 9.0.2
- PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
--PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/a3/5c/00a0e072241553e1a7496d638deababa67c5058571567b92a7eaa258397c
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/d1/db/7ef3487e0fb0049ddb5ce41d3a49c235bf9ad299b6a25d5780a89f19230f
- PYTHON_PYTEST_SETUP_TYPE = setuptools
- PYTHON_PYTEST_LICENSE = MIT
- PYTHON_PYTEST_LICENSE_FILES = LICENSE
+-PYTHON_PYTHRAN_VERSION = 0.18.0
++PYTHON_PYTHRAN_VERSION = 0.18.1
+ PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
+-PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/94/0a/95a72f09f25dae48f41e367959075ed4c7a0ff02dd3f54eec111501d648a
++PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/d4/84/17c4c44a24f5ec709991e603e601bf316d09c4fe915fbe348c689dede998
+ PYTHON_PYTHRAN_SETUP_TYPE = setuptools
+ PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
+ PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
 -- 
 2.47.3
 
