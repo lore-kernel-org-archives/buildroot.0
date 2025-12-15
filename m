@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FC57D5B872
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A52D5B86D
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 402F981DF8;
-	Mon, 15 Dec 2025 21:38:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF65960F08;
+	Mon, 15 Dec 2025 21:38:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uIzYZBlMvdvA; Mon, 15 Dec 2025 21:38:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NvHQc_KmqWpB; Mon, 15 Dec 2025 21:38:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5346081DFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15D9660F0A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765834731;
-	bh=YLPNb0+/5rOsWltfuc8/mi0fUgpTN3NphKvhAK3sVxs=;
+	s=default; t=1765834729;
+	bh=xhMztz9rXXqC2UKMprw30h8FG1kOq47yu+g2bAuVUj8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sR5kMRkvEOxA9Li/tM5kMGLqbKANkCqqTCqrK075nIDjigLokNJTy//B8wShr0qcS
-	 O52aVvZiuhTfRCp4xQPtl35gK94Vy9qtqZ8ffkB4p1hLsSCfVRc8NBcpRrX8v5sFMp
-	 xkigp+0gT458PghcDS1s8VJnRTbYQAtAX8ofkezla/5Zuq1w7uqWqoFJrJwFGnm6Pg
-	 P75m0K/kKOWGkSS4/pXGhlOwSGxCKap7EOjA5YdRO6CjdmyiBMCkj3ZGeepnOsg24J
-	 mQAndKtUQc+lngrkmdIwg8+fu7wJBWtLI4FGNGAP0w5P0t11sBSmZmhZWNCB5LKruq
-	 6CIBPZGgfXeBQ==
+	b=HBSEds9Dr06QjrP9srkrisVfS8Ct40R9lEcUVmB6XddIdYPRe6Rz+cRe7ufnLwHBn
+	 JFJXdC3ddt2NASqKnuF7ToA7dUPttpwVaiAvSe5CJt9adR5m19RGASxeJZWokQhXHK
+	 5jQDtWQbOGxL8WNcR+zXFJpRMFooufaYyQYEVRuEMFW/0pWloM38DtyGigpuQ3dg+z
+	 hHfxQUNgQg5eH0hAl1igUfn9HrlZzmh26VmA///oJzfwdpDyrxSQJj+dvcTtelDy5c
+	 RMQd0Tb2/nyQ9ko4MgWtjfxAvMZIC2EkuPX94xIuXSpok3wM9UGFxIiP2VzkFGMP5H
+	 kz2k/+qoNcdAQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5346081DFF;
-	Mon, 15 Dec 2025 21:38:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 77AB9117
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15D9660F0A;
+	Mon, 15 Dec 2025 21:38:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19FCA117
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA1BD81DF8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38EB94021B
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dke-Z_VXnsIH for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2RYirHyitpLD for <buildroot@buildroot.org>;
  Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AE5D81DE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 663D140256
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3AE5D81DE3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 663D140256
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3767186FC3; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
+ id 5766A86FC3; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 15 Dec 2025 22:37:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8da8d036beef9312adf55e28238164c3d9c16705
-X-Git-Newrev: b6cb9f0918c83d9c1f4f8b4181770314ed1e1d6a
+X-Git-Oldrev: a8a09c557c1c95b4acd0151ef1295aaa1a1320e8
+X-Git-Newrev: ee022d365c3ca9e8dc302ef6cf3003d1712a0cc8
 X-Patchwork-Hint: ignore
-Message-Id: <20251215213844.3767186FC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-propcache: bump version to
- 0.4.1
+Message-Id: <20251215213844.5766A86FC3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pycairo: bump version to
+ 1.29.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6cb9f0918c83d9c1f4f8b4181770314ed1e1d6a
+commit: https://git.buildroot.net/buildroot/commit/?id=ee022d365c3ca9e8dc302ef6cf3003d1712a0cc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/aio-libs/propcache/blob/v0.4.1/CHANGES.rst
+https://pycairo.readthedocs.io/en/latest/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-propcache/python-propcache.hash | 4 ++--
- package/python-propcache/python-propcache.mk   | 4 ++--
+ package/python-pycairo/python-pycairo.hash | 4 ++--
+ package/python-pycairo/python-pycairo.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-propcache/python-propcache.hash b/package/python-propcache/python-propcache.hash
-index 6e89eac6aa..347f232927 100644
---- a/package/python-propcache/python-propcache.hash
-+++ b/package/python-propcache/python-propcache.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/propcache/json
--md5  1c073b491620a9f6d568276d61f80277  propcache-0.3.2.tar.gz
--sha256  20d7d62e4e7ef05f221e0db2856b979540686342e7dd9973b815599c7057e168  propcache-0.3.2.tar.gz
-+md5  9efab9358cf05265dbee69297e0de96a  propcache-0.4.1.tar.gz
-+sha256  f48107a8c637e80362555f37ecf49abe20370e557cc4ab374f04ec4423c97c3d  propcache-0.4.1.tar.gz
+diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
+index 633b31d975..6f03581ff8 100644
+--- a/package/python-pycairo/python-pycairo.hash
++++ b/package/python-pycairo/python-pycairo.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycairo/json
+-md5  12097575a1bb683cab7dc425d9769a68  pycairo-1.27.0.tar.gz
+-sha256  5cb21e7a00a2afcafea7f14390235be33497a2cce53a98a19389492a60628430  pycairo-1.27.0.tar.gz
++md5  8202d252ea754e2a17852b9031e01b32  pycairo-1.29.0.tar.gz
++sha256  f3f7fde97325cae80224c09f12564ef58d0d0f655da0e3b040f5807bd5bd3142  pycairo-1.29.0.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
-index e1050c4919..88d1f2cfba 100644
---- a/package/python-propcache/python-propcache.mk
-+++ b/package/python-propcache/python-propcache.mk
+ sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
+diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
+index 8d9459e9e2..fb1d2bac74 100644
+--- a/package/python-pycairo/python-pycairo.mk
++++ b/package/python-pycairo/python-pycairo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PROPCACHE_VERSION = 0.3.2
-+PYTHON_PROPCACHE_VERSION = 0.4.1
- PYTHON_PROPCACHE_SOURCE = propcache-$(PYTHON_PROPCACHE_VERSION).tar.gz
--PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/a6/16/43264e4a779dd8588c21a70f0709665ee8f611211bdd2c87d952cfa7c776
-+PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/9e/da/e9fc233cf63743258bff22b3dfa7ea5baef7b5bc324af47a0ad89b8ffc6f
- PYTHON_PROPCACHE_SETUP_TYPE = setuptools
- PYTHON_PROPCACHE_LICENSE = Apache-2.0
- PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
+-PYTHON_PYCAIRO_VERSION = 1.27.0
++PYTHON_PYCAIRO_VERSION = 1.29.0
+ PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
+-PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/07/4a/42b26390181a7517718600fa7d98b951da20be982a50cd4afb3d46c2e603
++PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/22/d9/1728840a22a4ef8a8f479b9156aa2943cd98c3907accd3849fb0d5f82bfd
+ PYTHON_PYCAIRO_DEPENDENCIES = cairo
+ PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+ PYTHON_PYCAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
