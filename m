@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B8B5D5B866
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D880D5B86E
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15CE68114C;
-	Mon, 15 Dec 2025 21:10:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2A4960F45;
+	Mon, 15 Dec 2025 21:10:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JDl11X4nXOMY; Mon, 15 Dec 2025 21:10:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 877avq_e_uJ7; Mon, 15 Dec 2025 21:10:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 263328114D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C40860F3B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765833015;
-	bh=YNxKPI1mJLA5EQwpMLzg7mQhkcliKiKmAE3669Gz0Vk=;
+	s=default; t=1765833016;
+	bh=NjKIiXv9aZQ+1HdfLZtulvjrFc7BetxSCJB7uhbBtNo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=r5kmeIClmIsMqIXGipv4+SjER+jmtCZh4NsiGGu9p8HcfxjAFVUqGNLhB6wdrP79p
-	 s5FiR+zrcxo32NZzFBKVSYan5ZcY+uw4Of/lK+Fp2T3Yw6U9wKbP3nKp6syf787irt
-	 4aeCg41jnB/TwYnQTwwCNBE54tmjt/WwzHfL/bfyq5OoD0rx7V9I3U/Gqz7TFfGAGc
-	 T+ZWITIAgWclpKeovLWM/7BZfrVOb2IaIIrLjgJc/WGXdvr0JrbQrEPWewvI/Gjtxd
-	 xNMPmJHqk9EI9dEW3GjmcXbM+qVGUBh84801q9m3OGmR29aetjSol1PBr6zglZwdBc
-	 TmqCzZTM9xj7w==
+	b=s8pRB8fdsJdLHKdMmG/hLq2Sx8+Xhn5B/PwtZe2CPIMkI1DTQJAAYi4cFRL/ZRVXF
+	 hJueCfDTz11MLxx/oY+S54+FjWURh2r3AV55MDL76pWkZFORylZ3pfNnUuxHyUdC4k
+	 r8Rc4O/3709uIoJOIU8MnFqTF6mTuX2WRrskV6Vf91EajdWJEZVLnbqgH61C5mAZNl
+	 pfYK/hia26oBqJyejAIGX6j/TfPogxkwsEExnb1nD68sypxoFE8YA0tK/XPvQca+6u
+	 GzWs3f6uK31Pd0tsgT9jEtL84Jh+B/NSduEQ5PCgZWdT9uMeGDU+0JDeJl8t0GF5Y6
+	 iLvi694InakGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 263328114D;
-	Mon, 15 Dec 2025 21:10:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CBE5151
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:10:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C40860F3B;
+	Mon, 15 Dec 2025 21:10:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F58E151
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC67A40AC3
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:10:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 013DC607EC
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8JjoLZBRlvSR for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UnGm6ux2EH0Y for <buildroot@buildroot.org>;
  Mon, 15 Dec 2025 21:10:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74D5240AB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9005560EF1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74D5240AB6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9005560EF1
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:10:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EABB86FB0; Mon, 15 Dec 2025 21:10:00 +0000 (UTC)
+ id 7F1BE86FB3; Mon, 15 Dec 2025 21:10:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Dec 2025 20:32:28 +0100
+Date: Mon, 15 Dec 2025 20:33:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a17185606161d7a03198e249c02bdc2bdc972d0
-X-Git-Newrev: 41f18ab2211c6a4481d94bc1ce7b1469e3f2c53b
+X-Git-Oldrev: 9f0dc5401ba1a4738581d35f50dcf49db1b6df46
+X-Git-Newrev: 85b7dbeeeeb8a5c4b2aede270be0b5c21e620442
 X-Patchwork-Hint: ignore
-Message-Id: <20251215211000.6EABB86FB0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jsonschema-specifications:
- bump version to 2025.9.1
+Message-Id: <20251215211000.7F1BE86FB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-legacy-cgi: bump version to
+ 2.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41f18ab2211c6a4481d94bc1ce7b1469e3f2c53b
+commit: https://git.buildroot.net/buildroot/commit/?id=85b7dbeeeeb8a5c4b2aede270be0b5c21e620442
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/python-jsonschema/jsonschema-specifications/releases
+https://github.com/jackrosenthal/legacy-cgi/releases
+
+Switched build system to hatch:
+https://github.com/jackrosenthal/legacy-cgi/commit/0ea10a20213fe89d77110dcaa3f4c932d4a70310
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-jsonschema-specifications.hash                             | 4 ++--
- .../python-jsonschema-specifications.mk                               | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-legacy-cgi/python-legacy-cgi.hash | 4 ++--
+ package/python-legacy-cgi/python-legacy-cgi.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-jsonschema-specifications/python-jsonschema-specifications.hash b/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
-index f68e57cd5a..b4725068f7 100644
---- a/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
-+++ b/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
+diff --git a/package/python-legacy-cgi/python-legacy-cgi.hash b/package/python-legacy-cgi/python-legacy-cgi.hash
+index 53af4ef691..74dd629c98 100644
+--- a/package/python-legacy-cgi/python-legacy-cgi.hash
++++ b/package/python-legacy-cgi/python-legacy-cgi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jsonschema-specifications/json
--md5  e8f726a5b9647031d9ee8b922cf9b56f  jsonschema_specifications-2024.10.1.tar.gz
--sha256  0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272  jsonschema_specifications-2024.10.1.tar.gz
-+md5  ef8e5a762c7ef39dcfb775c81336a690  jsonschema_specifications-2025.9.1.tar.gz
-+sha256  b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d  jsonschema_specifications-2025.9.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/legacy-cgi/json
+-md5  5750721070ad829796ef830308e76907  legacy_cgi-2.6.2.tar.gz
+-sha256  9952471ceb304043b104c22d00b4f333cac27a6abe446d8a528fc437cf13c85f  legacy_cgi-2.6.2.tar.gz
++md5  bbb85dff278de9bf03a3f4e941398ea1  legacy_cgi-2.6.4.tar.gz
++sha256  abb9dfc7835772f7c9317977c63253fd22a7484b5c9bbcdca60a29dcce97c577  legacy_cgi-2.6.4.tar.gz
  # Locally computed sha256 checksums
- sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
-diff --git a/package/python-jsonschema-specifications/python-jsonschema-specifications.mk b/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
-index 4637c14f04..eaeb06c3d8 100644
---- a/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
-+++ b/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
-@@ -4,9 +4,9 @@
+ sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
+diff --git a/package/python-legacy-cgi/python-legacy-cgi.mk b/package/python-legacy-cgi/python-legacy-cgi.mk
+index 457463d9dd..cd87024111 100644
+--- a/package/python-legacy-cgi/python-legacy-cgi.mk
++++ b/package/python-legacy-cgi/python-legacy-cgi.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION = 2024.10.1
-+PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION = 2025.9.1
- PYTHON_JSONSCHEMA_SPECIFICATIONS_SOURCE = jsonschema_specifications-$(PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION).tar.gz
--PYTHON_JSONSCHEMA_SPECIFICATIONS_SITE = https://files.pythonhosted.org/packages/10/db/58f950c996c793472e336ff3655b13fbcf1e3b359dcf52dcf3ed3b52c352
-+PYTHON_JSONSCHEMA_SPECIFICATIONS_SITE = https://files.pythonhosted.org/packages/19/74/a633ee74eb36c44aa6d1095e7cc5569bebf04342ee146178e2d36600708b
- PYTHON_JSONSCHEMA_SPECIFICATIONS_SETUP_TYPE = hatch
- PYTHON_JSONSCHEMA_SPECIFICATIONS_LICENSE = MIT
- PYTHON_JSONSCHEMA_SPECIFICATIONS_LICENSE_FILES = COPYING
+-PYTHON_LEGACY_CGI_VERSION = 2.6.2
++PYTHON_LEGACY_CGI_VERSION = 2.6.4
+ PYTHON_LEGACY_CGI_SOURCE = legacy_cgi-$(PYTHON_LEGACY_CGI_VERSION).tar.gz
+-PYTHON_LEGACY_CGI_SITE = https://files.pythonhosted.org/packages/ad/2e/e1860989bc6cfdecba66db37f2f783636b97a1248ac25fbe864b6e931c22
+-PYTHON_LEGACY_CGI_SETUP_TYPE = poetry
++PYTHON_LEGACY_CGI_SITE = https://files.pythonhosted.org/packages/f4/9c/91c7d2c5ebbdf0a1a510bfa0ddeaa2fbb5b78677df5ac0a0aa51cf7125b0
++PYTHON_LEGACY_CGI_SETUP_TYPE = hatch
+ PYTHON_LEGACY_CGI_LICENSE = PSF-2.0
+ PYTHON_LEGACY_CGI_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
