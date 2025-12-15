@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76C43D5B864
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:18:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCB8BD5B864
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 19:18:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EC1A40AD9;
-	Mon, 15 Dec 2025 19:18:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0B9740AD0;
+	Mon, 15 Dec 2025 19:18:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6BKkqzBG-G9P; Mon, 15 Dec 2025 19:18:44 +0000 (UTC)
+ id 9018k5TDEumm; Mon, 15 Dec 2025 19:18:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D24D540AC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C613D40A6E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765826323;
-	bh=PnyxHTp82clvlnvhbd5JOeWCKeLQKaEM6R2oO0pGBmY=;
+	s=default; t=1765826335;
+	bh=XcePDP7mRQ0PW7Cgsf1DmTvSqlL4rLyAvORuv9OKCc0=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=od19PuRF/MibK8lFocdUA46H+/onVytUXyaPvsMcELs6Q8bcRhBf7pcPAg+Nm+j36
-	 xB9nPH1EO9Iz0MbS/c2ut/230G/+03113+MTboCdTJDYnFyrhSbZBl2zSu48h9WoFa
-	 D4IzVXbjrXU/Ir3maqfdIQMIsXR+PO9SOcjF2PseC/NioeCkkq4WEC/dCExfRwAqh4
-	 A4/srq6ZF0Jg1/Rl64VSFDPeY8rexRfF2v0hmKGU8snjSxbIklRZcpKxhtQrMJ9gPF
-	 AO9yfBS5C6Q0iPVSDyFjFGHmzUE4qUUqPOlgmCDWp8aQQqnNJFi70OBG4fAKWenYuJ
-	 CpT3uvRXCR92g==
+	b=bN0vnBXM5QbqewqmmxxwjqkP84eBbcrjMpc1/a8zLmYdV1wLGw54+x9GNneTE5ABI
+	 B4sRLYwRN5dvXGsZdpgWsZGDfdBW0JhSZQNXpTZODVQNKWQidBV6a5wi5zYOgSIaFM
+	 QCdSY2FI+R2/HNCGObl00LyMp7LMDIE2icZPU5CXTUji05EzcUp4cmeqSMhoY60DH0
+	 f8achmTClzFkG8urR1Fg2AhxqI7YKpDCvoo9bHRqsLeTQzomkEBg6SChzllm93QhtD
+	 klbJxZ1exTkeEZCetiJNFlE+3HA9Q07TA/XTZVMufmjd0rKKSAtcqa8SMBdgstIJ/p
+	 1prz9OkybdNnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D24D540AC6;
-	Mon, 15 Dec 2025 19:18:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A89C255
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C613D40A6E;
+	Mon, 15 Dec 2025 19:18:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6125C151
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C5818082A
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E063607B4
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8pv4AxdGrse8 for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 19:18:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gndiuhoFBljD for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 19:18:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 06103807DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06103807DE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 40039606FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40039606FD
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 06103807DE
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 40039606FD
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 19:18:53 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8676EA4C4366;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C15AEA4C4368;
  Mon, 15 Dec 2025 20:14:30 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40828)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vVE1R-000000005ED-48JU;
+ (envelope-from <bernd@kuhls.net>) id 1vVE1S-000000005ED-0GGH;
  Mon, 15 Dec 2025 19:14:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 15 Dec 2025 20:14:11 +0100
-Message-ID: <20251215191416.421755-22-bernd@kuhls.net>
+Date: Mon, 15 Dec 2025 20:14:12 +0100
+Message-ID: <20251215191416.421755-23-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251215191416.421755-1-bernd@kuhls.net>
 References: <20251215191416.421755-1-bernd@kuhls.net>
@@ -67,22 +67,21 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765826070;
- bh=yF/bmeKDQMf4fEvzgi83wx+pJM71LpkOJc4bTOyJHAE=;
+ bh=7W0X+V5HKS5xFWPiNSdBJ735aLGiBGiRKvMA/+PaQ5w=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=IH+DGeu0Mr/8NTw2/8pjvkx5Dr+efmRBHqXzfvl3jRBy45oJ5h/Y3u0uviLCUJL5t
- LlOAcWEFFPcptVivw6B1r8LKt6G3hpZKDyFudnRxt4shMucI0Dvv9zXfDNmroAdxqM
- p+iHmW+F8dtdS0MvHluTpXRv9xczXZ07l8+UlITkzLDn2WVX/bL92iIpENgB4Mnt5E
- Jmx62r+NnVJD6BShkFg/7YxpC/DtzKF9niiLK08Tl1auj6zuwJtp2hl6g2iQ5XVnk2
- MHGhICKUPXpEYd51tsr+loFKIyNSkLZIUy4TscVsSLf1OcpMt8xle3dB9+bYwW1BuL
- fRSCU2oDAl5mg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=rUUlUyoPICMVz79YJGqsEpOx399yC89l2gMxx/aSK0uojrUrF5ofycWIwHSY+DDQL
+ 3ORFxnRPPSVhEmoPrG0sdyifowzPOgEGMQSDS7TZb/WpnORq4I3aJZ4Jnpi3U9Z6Tm
+ +fJINJP2g4h8T+IZiKBiC5CsPW/JwWRfqbrYDItr+VAsPViJKxWUVrx4F+P5BBPRa8
+ ZCRXlLAiDeKWia0v8Onn9v1aFWtePdWdG7Yc7fcvcsgK6tWYO7lnU/t5mDe1e9Ot9f
+ V1pPlh8yQvNl1icRzUt4NJWwfhPfv2nsguWm65aprOlFG+yX5BXHanU6XmUc9Ab/N+
+ 3IrLERsRdP9mQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=IH+DGeu0
-Subject: [Buildroot] [PATCH 22/27] package/python-regex: bump version to
- 2025.11.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=rUUlUyoP
+Subject: [Buildroot] [PATCH 23/27] package/python-rsa: bump version to 4.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,42 +108,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/mrabarnett/mrab-regex/blob/2025.11.3/changelog.txt
+Please note that this project was archived by the maintainer:
+https://github.com/sybrenstuvel/python-rsa/commit/42b0e14ffbeeb9d99d1037e6440a2cc61780e4ea
+
+The only buildroot package using python-rsa is python-google-auth which
+did not switch to an alternative yet:
+https://github.com/googleapis/google-auth-library-python/pull/1771
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-regex/python-regex.hash | 4 ++--
- package/python-regex/python-regex.mk   | 4 ++--
+ package/python-rsa/python-rsa.hash | 4 ++--
+ package/python-rsa/python-rsa.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-regex/python-regex.hash b/package/python-regex/python-regex.hash
-index 1eb8936d5f..0b1bf1a350 100644
---- a/package/python-regex/python-regex.hash
-+++ b/package/python-regex/python-regex.hash
+diff --git a/package/python-rsa/python-rsa.hash b/package/python-rsa/python-rsa.hash
+index 0e2b3a9119..040b86637f 100644
+--- a/package/python-rsa/python-rsa.hash
++++ b/package/python-rsa/python-rsa.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/regex/json
--md5  02b86394591ba39d34bc35d11e9e7d96  regex-2024.11.6.tar.gz
--sha256  7ab159b063c52a0333c884e4679f8d7a85112ee3078fe3d9004b2dd875585519  regex-2024.11.6.tar.gz
-+md5  23b45104a418985aa934ce00b094ec5a  regex-2025.11.3.tar.gz
-+sha256  1fedc720f9bb2494ce31a58a1631f9c82df6a09b49c19517ea5cc280b4541e01  regex-2025.11.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/rsa/json
+-md5  26a1efb79164a95c363e550c3eefe683  rsa-4.9.tar.gz
+-sha256  e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21  rsa-4.9.tar.gz
++md5  a1d93db78c604788f56a84f6df6f1eee  rsa-4.9.1.tar.gz
++sha256  e7bdbfdb5497da4c07dfd35530e1a902659db6ff241e39d9953cad06ebd0ae75  rsa-4.9.1.tar.gz
  # Locally computed sha256 checksums
- sha256  bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d  LICENSE.txt
-diff --git a/package/python-regex/python-regex.mk b/package/python-regex/python-regex.mk
-index ef8c1f198c..a6a8d6e3fc 100644
---- a/package/python-regex/python-regex.mk
-+++ b/package/python-regex/python-regex.mk
+ sha256  073f28b7d389c8fe74f607e17c27f81eaa5ace69edc43a884f23f41b41c5c726  LICENSE
+diff --git a/package/python-rsa/python-rsa.mk b/package/python-rsa/python-rsa.mk
+index f1c6cf5f3f..aedf19da8e 100644
+--- a/package/python-rsa/python-rsa.mk
++++ b/package/python-rsa/python-rsa.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REGEX_VERSION = 2024.11.6
-+PYTHON_REGEX_VERSION = 2025.11.3
- PYTHON_REGEX_SOURCE = regex-$(PYTHON_REGEX_VERSION).tar.gz
--PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/8e/5f/bd69653fbfb76cf8604468d3b4ec4c403197144c7bfe0e6a5fc9e02a07cb
-+PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/cc/a9/546676f25e573a4cf00fe8e119b78a37b6a8fe2dc95cda877b30889c9c45
- PYTHON_REGEX_SETUP_TYPE = setuptools
- PYTHON_REGEX_LICENSE = Apache-2.0
- PYTHON_REGEX_LICENSE_FILES = LICENSE.txt
+-PYTHON_RSA_VERSION = 4.9
++PYTHON_RSA_VERSION = 4.9.1
+ PYTHON_RSA_SOURCE = rsa-$(PYTHON_RSA_VERSION).tar.gz
+-PYTHON_RSA_SITE = https://files.pythonhosted.org/packages/aa/65/7d973b89c4d2351d7fb232c2e452547ddfa243e93131e7cfa766da627b52
++PYTHON_RSA_SITE = https://files.pythonhosted.org/packages/da/8a/22b7beea3ee0d44b1916c0c1cb0ee3af23b700b6da9f04991899d0c555d4
+ PYTHON_RSA_SETUP_TYPE = poetry
+ PYTHON_RSA_LICENSE = Apache-2.0
+ PYTHON_RSA_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
