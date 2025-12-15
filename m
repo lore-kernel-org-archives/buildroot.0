@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65BB3D5B873
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBDD3D5B86D
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:39:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3317E60F7D;
-	Mon, 15 Dec 2025 21:39:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AC4982177;
+	Mon, 15 Dec 2025 21:39:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yh5Sy9TJJtX7; Mon, 15 Dec 2025 21:39:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rqyPwx9otSO1; Mon, 15 Dec 2025 21:39:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4529A60F75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A42F82138
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765834745;
-	bh=VGsj0EFocKZU8k4jBM7Q6r2iaKWPTmY01U1yv+vR5MI=;
+	s=default; t=1765834747;
+	bh=R3ou3PBJQOjbtgPPhIKeQ7JcrU4VYhPp49ksmh2o3sQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CCvc9GRKKPv1K+HxNohHpw5Wi4sb3xH2z5P2JYi+yd7ybG9HekFGgignpZMGfPnvg
-	 SXFNZ1CHKWcTI1t4Aw6vjKz6aVg9Ib8O2tdIBl787IvYRjYjymJ3noYRwgvvbwXbgS
-	 9sk0CwkTLgUvLZKfqNQR4sQ5oAKAa/VDkMx5piOv7s454TU0x6EP6GJNyDOfgm6zoU
-	 MeBZ5Q1Ywkpr3E+hQeGxqcGN0R56uXcQxaWHw5bCn/dVLhzT2vAT1OKAX3kSzqRywv
-	 GPt9JAuwADEChEAUBPirPyC144yyhmvEXTRrXK6M0Wqh3mXSAuEGF0GXN5TnV6hjOk
-	 rO2fOecyBSwKA==
+	b=mSzS87gIb5mFiXXrJ5ssTcQ/qRBlapUzWtn/nKA1a0ytBqBSrlOT1v6yFkOpB5Exg
+	 1iiAF6y3gZarPnZqzpcod6dps7Q+/mx9dh0yTlgqffM+72oiO0zIAnnzwOG6/hRc32
+	 pN6AZCbfPn/d1oHGy5ww2eb4vtvfbJUewulWpEbNvHVOmyEdhzjMMNSYiM1LQQTOtE
+	 vEd+DRVbF/iF1rs/Zsj9F1jXkprIG4vEMkVwa09wX/MiUiMnt5HjFwTiHn6krCsLWB
+	 PuIaYaD572QyhLvnz1ukoFuVKiNODKIXmfE+I7gxeTl5HJSO7E5BhPdSKzPsh2wh5d
+	 9PAFPglzJUjgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4529A60F75;
-	Mon, 15 Dec 2025 21:39:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A42F82138;
+	Mon, 15 Dec 2025 21:39:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14C06117
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DDAD151
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8089840323
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2D7E40825
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7XCz-gqDvrPC for <buildroot@buildroot.org>;
+ id bsYi_IgpKSBa for <buildroot@buildroot.org>;
  Mon, 15 Dec 2025 21:38:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAAF040951
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0B3740AE5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CAAF040951
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0B3740AE5
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C9CA286FC4; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
+ id DFB1186FC4; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 15 Dec 2025 22:37:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29af58079b17ec3ce6669e0888ee30b4940fb8f7
-X-Git-Newrev: 5d973f166d4af5eeaa7d3cee299ef6062634e477
+X-Git-Oldrev: 64064dc39dd8bd2cf7a1b408cb59f8d62bae1f53
+X-Git-Newrev: dd11ba40bdefa8b41eaadf5eee96f7ebc16230f7
 X-Patchwork-Hint: ignore
-Message-Id: <20251215213844.C9CA286FC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-referencing: bump version
- to 0.37.0
+Message-Id: <20251215213844.DFB1186FC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ruamel-yaml: bump version
+ to 0.18.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d973f166d4af5eeaa7d3cee299ef6062634e477
+commit: https://git.buildroot.net/buildroot/commit/?id=dd11ba40bdefa8b41eaadf5eee96f7ebc16230f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/python-jsonschema/referencing/blob/v0.37.0/docs/changes.rst
+https://sourceforge.net/p/ruamel-yaml/code/ci/0.18.16/tree/CHANGES
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-referencing/python-referencing.hash | 4 ++--
- package/python-referencing/python-referencing.mk   | 4 ++--
+ package/python-ruamel-yaml/python-ruamel-yaml.hash | 4 ++--
+ package/python-ruamel-yaml/python-ruamel-yaml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
-index 9cbd5e60a5..e407997e98 100644
---- a/package/python-referencing/python-referencing.hash
-+++ b/package/python-referencing/python-referencing.hash
+diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.hash b/package/python-ruamel-yaml/python-ruamel-yaml.hash
+index bda0946e33..db511b90fa 100644
+--- a/package/python-ruamel-yaml/python-ruamel-yaml.hash
++++ b/package/python-ruamel-yaml/python-ruamel-yaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/referencing/json
--md5  9d116186b2c5225c4e55254b94b2cd8e  referencing-0.36.2.tar.gz
--sha256  df2e89862cd09deabbdba16944cc3f10feb6b3e6f18e902f7cc25609a34775aa  referencing-0.36.2.tar.gz
-+md5  bc9d24d5aec035c707b107cc2d43196b  referencing-0.37.0.tar.gz
-+sha256  44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8  referencing-0.37.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/ruamel-yaml/json
+-md5  ee73a2076f7ca2ee7258af129a7ef8da  ruamel.yaml-0.18.15.tar.gz
+-sha256  dbfca74b018c4c3fba0b9cc9ee33e53c371194a9000e694995e620490fd40700  ruamel.yaml-0.18.15.tar.gz
++md5  ebfbf2a54d9a5b768bc849f4b2c43efc  ruamel.yaml-0.18.16.tar.gz
++sha256  a6e587512f3c998b2225d68aa1f35111c29fad14aed561a26e73fab729ec5e5a  ruamel.yaml-0.18.16.tar.gz
  # Locally computed sha256 checksums
- sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
-diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
-index cabc9afa23..b998779132 100644
---- a/package/python-referencing/python-referencing.mk
-+++ b/package/python-referencing/python-referencing.mk
+ sha256  0ce9ad6a9d4f0829296a72c77d07795dd67f42751e2922be56c051d39ae1c011  LICENSE
+diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.mk b/package/python-ruamel-yaml/python-ruamel-yaml.mk
+index 1d3619caea..aaabee7be5 100644
+--- a/package/python-ruamel-yaml/python-ruamel-yaml.mk
++++ b/package/python-ruamel-yaml/python-ruamel-yaml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REFERENCING_VERSION = 0.36.2
-+PYTHON_REFERENCING_VERSION = 0.37.0
- PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
--PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/2f/db/98b5c277be99dd18bfd91dd04e1b759cad18d1a338188c936e92f921c7e2
-+PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/22/f5/df4e9027acead3ecc63e50fe1e36aca1523e1719559c499951bb4b53188f
- PYTHON_REFERENCING_SETUP_TYPE = pep517
- PYTHON_REFERENCING_LICENSE = MIT
- PYTHON_REFERENCING_LICENSE_FILES = COPYING
+-PYTHON_RUAMEL_YAML_VERSION = 0.18.15
++PYTHON_RUAMEL_YAML_VERSION = 0.18.16
+ PYTHON_RUAMEL_YAML_SOURCE = ruamel.yaml-$(PYTHON_RUAMEL_YAML_VERSION).tar.gz
+-PYTHON_RUAMEL_YAML_SITE = https://files.pythonhosted.org/packages/3e/db/f3950f5e5031b618aae9f423a39bf81a55c148aecd15a34527898e752cf4
++PYTHON_RUAMEL_YAML_SITE = https://files.pythonhosted.org/packages/9f/c7/ee630b29e04a672ecfc9b63227c87fd7a37eb67c1bf30fe95376437f897c
+ PYTHON_RUAMEL_YAML_SETUP_TYPE = setuptools
+ PYTHON_RUAMEL_YAML_LICENSE = MIT
+ PYTHON_RUAMEL_YAML_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
