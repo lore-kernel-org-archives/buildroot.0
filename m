@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FCA6D5B872
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 467AAD5B86D
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62EBA821B6;
-	Mon, 15 Dec 2025 21:39:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5214460F1E;
+	Mon, 15 Dec 2025 21:44:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jyEjPO6FDusQ; Mon, 15 Dec 2025 21:44:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEE4060EF8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765835070;
+	bh=La5D8BqOnXRB+lFC8ycuPkoH3XPw55sBN976raDmS0Q=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=rJnt7ecv59wZslhA6pUuw1bZAadWTrVGxRqLnx07nLUrns2k6rVciKs8jssor8BoF
+	 oAN02JMZkcDJFsp05L3CZwN8Y0cL7wmsod3M861rp9woM0kFEjthTwxN1EcaIy9YD3
+	 Llybbs9cgLw2MesV3T1sn3c8ZiPacCxjwAaVVGx3nF7O/4GBMs3Nbynk1c6hqrgYzH
+	 sUittCr+HhZ4usSgfDphP0nRb5hAfofCP57+ulHMYeO5uhK/kS4NQPgo6vb02Zg+kV
+	 f3rY7owF7iIBBpDulY4YbfJwl4r/fqmtKJe0Ecx2SIiYKGpdFWsuOjnE6EVjD9yVhv
+	 1GMxLt2PgqicQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEE4060EF8;
+	Mon, 15 Dec 2025 21:44:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FE02117
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:44:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65E528086A
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:44:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b7fmZGKRjMKl; Mon, 15 Dec 2025 21:39:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08802821C3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765834756;
-	bh=mmeR1laFoofYPY1ZOQYpRJeGC5MNvA2685N85yQbjOw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=azOI06QHo6Vm+LMUGCbMSh/I+4731jM5GkCdIyclfDTLwxtSc/nPE37zZWcYFiwot
-	 J/JPSd/7igrSb80M5kE1E9+8a3iI8NOreWgRSzV4HXHRE62p0928CP8qpUaR6ikFgt
-	 /eqtpK2gOaI5ORqHQ16qKoXYp2agim4ek0Ka82gIMCBcaC91UGGRs8N5wDfKcmlMfd
-	 2R2/n0gnHHp4c/nwKlsPgS1KiUNuwY3UAD61NHskDOEnlmPjOpXqp3RX88SASEO2Xb
-	 qqRU3cTrTH9Ph0PwIIca7kCPTViq3dQvldcgYMkD9NrgcQXiQxNEl6EzmsB7GlEDWJ
-	 W8qqaCp+kgwpA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08802821C3;
-	Mon, 15 Dec 2025 21:39:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 102D4151
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:39:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B11340AEA
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id erAWwFzfc-96 for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 21:38:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB62B4068F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB62B4068F
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA8CC86FC3; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Dec 2025 22:37:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86ad5033e1229bea7aab589e40c8e5c988dd1438
-X-Git-Newrev: cbc1023a4b255cc9af71a65da604502d1325f285
-X-Patchwork-Hint: ignore
-Message-Id: <20251215213844.BA8CC86FC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pythran: bump version to
- 0.18.1
+ id pYUxP_D-wwnq for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 21:44:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C98D8084D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C98D8084D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0C98D8084D
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:44:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 430DD13F86A;
+ Mon, 15 Dec 2025 22:44:24 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 15 Dec 2025 22:44:24 +0100
+MIME-Version: 1.0
+Date: Mon, 15 Dec 2025 22:44:24 +0100
+To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251215120941.3466860-1-pkerbrat@free.fr>
+References: <20251215120941.3466860-1-pkerbrat@free.fr>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <a13e3e1bac77765c0428e0eb779b9c4f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765835065;
+ bh=oC0uplnfseuvftqijZkJ09aVJtx2Yilo4whbczJfXTQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=m93F5MAgMSr8LSuSx6qfmZ7KXN/er7Z0RzZj/PMHMXgB8ICHqvliR7KpwskD2+kGK
+ aRqZaMTgsqmzLGsNrjbSshOIYLHzngb13wssTRCF60j3A4zTgm/SiWWKZe5TaLiiQ5
+ lipXA6rM+4YHjBZ9hkEIpbdvdHg/f6d2BnBHqOrrszmYkzXGvqYfUD27lyKIqdQBWn
+ QcRJ+AXe8AtoZAIdOp5a/EDWZ1hH05fup676BZrAW6507tJ+HCUCegYv9cr2k3mSpk
+ GzcMPK5DDSQLnqGD8Xht2bt2gfDYYDNcvAbRV1tGKN4b3Dn4nw70gGQclKOkJzOI/y
+ 3lgphlnAnYBqg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=m93F5MAg
+Subject: Re: [Buildroot] [PATCH 1/1] package/dos2unix: bump package to
+ version 7.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,53 +95,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbc1023a4b255cc9af71a65da604502d1325f285
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/12/2025 13:09, Pierre-Yves Kerbrat via buildroot wrote:
+> COPYING.txt hash updated caused by this commit (updated year)
+> https://sourceforge.net/p/dos2unix/dos2unix/ci/8379cf345bde0267398f0753173f926dbebf1636/tree/dos2unix/COPYING.txt
+> 
+> Changelog:
+> https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
+> 
+> Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 
-https://github.com/serge-sans-paille/pythran/blob/0.18.1/Changelog
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-pythran/python-pythran.hash | 4 ++--
- package/python-pythran/python-pythran.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
-index b0a0b04258..7b428a18f0 100644
---- a/package/python-pythran/python-pythran.hash
-+++ b/package/python-pythran/python-pythran.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pythran/json
--md5  829c5cba97e1339556251b631f4faeca  pythran-0.18.0.tar.gz
--sha256  5c003e8cbedf6dbb68c2869c49fc110ce8b5e8982993078a4a819f1dadc4fc6a  pythran-0.18.0.tar.gz
-+md5  9b906f8af949adfd1a132ad9e26f49f9  pythran-0.18.1.tar.gz
-+sha256  8803ed948bf841a11bbbb10472a8ff6ea24ebd70e67c3f77b77be3db900eccfe  pythran-0.18.1.tar.gz
- # Locally computed sha256 checksums
- sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
- sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
-diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
-index 358b0c9ec1..271824585a 100644
---- a/package/python-pythran/python-pythran.mk
-+++ b/package/python-pythran/python-pythran.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTHRAN_VERSION = 0.18.0
-+PYTHON_PYTHRAN_VERSION = 0.18.1
- PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
--PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/94/0a/95a72f09f25dae48f41e367959075ed4c7a0ff02dd3f54eec111501d648a
-+PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/d4/84/17c4c44a24f5ec709991e603e601bf316d09c4fe915fbe348c689dede998
- PYTHON_PYTHRAN_SETUP_TYPE = setuptools
- PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
- PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
