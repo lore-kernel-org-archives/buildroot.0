@@ -1,119 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A013D59D99
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 11:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC17DD41D74
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 11:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29082409D8;
-	Mon, 15 Dec 2025 11:43:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F49A814C7;
+	Mon, 15 Dec 2025 11:43:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DfFy1GqBK70l; Mon, 15 Dec 2025 11:43:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JeEwsdVbkzxT; Mon, 15 Dec 2025 11:43:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4461140994
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56C89814EA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765799012;
-	bh=jAPp26Hxc7hs7XzykFV8T3d2r0YKCmD/LFBnA5EaOy4=;
+	s=default; t=1765799013;
+	bh=wCf/w6FdCMTl0w9G7qGO3rNFipmMQI5ZmveM3a895o8=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=GpZ1m5LClAYcaoAMpJlBbjeLoBFlh78v06svVtovm/YJt/lvU7PjzB+lO3fU7eAC9
-	 lQmJZNy+1e0M0ZxXwRkxcMiNz3MM/ML6eYWiRbGBZa1356uD2LAA4vIFvpGMVpR/HW
-	 9VXnurD6yUy8IVe8MpGLbJ2GBQ3od2tJqaFIcWmWNRFlNQCyMXQQ1UPLvsAF0JkHA2
-	 JGzDD5SYslR9NePGH+IX7Wycyw7k3oXPdJBh+gARMflKinRThtYt3YO0I9Qx8dsr+U
-	 Bf13Cm921jRAD0fC7YLJhE/Aeml4uSsMc12QzlI4Fsjv1ba+HylCol0P5AGBs4EFkL
-	 QgvvSzewPgH6w==
+	b=M8WnWkCWkMUZAbk5IE+heCci3trUJHW2RcYz0/sKlc+/4R3Uifng+RxDTrcxnzOI0
+	 859imOH4EnfN1wvrqFTK+PHuDVyC1zWVVvg9guwZa9rhC5zQwYg2Pu7lpYjINdY3CA
+	 OQrWjytJcajaUtFsKMHfj5r+7jqDwCqiQggz5ZubMV9xch4M++H2SOUEBNDYYPoExd
+	 qXPkosAAeF0dHIhDgikTrxIBXa7RZZBwyM6AWpgyVhgtwHjXfuCx35BuIV7WfkbAZ7
+	 owSckGCMCgFlvTPc8sFfHSHkq8dQK0gu66y3IBAhT81pNZWeATEep1nU0QOMuz6m3a
+	 1fAOWR3RxI5ZA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4461140994;
-	Mon, 15 Dec 2025 11:43:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DB1C118
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56C89814EA;
+	Mon, 15 Dec 2025 11:43:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7AD2E117
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44517605E6
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CAD04077D
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q-__HIhxIEu0 for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 11:43:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9DubIZ3HjxlX for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 11:43:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 39C62605C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C62605C9
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 39C62605C9
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:25 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-42b3d7c1321so2054902f8f.3
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 03:43:25 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AE7E9406C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE7E9406C6
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AE7E9406C6
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:26 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-42fed090e5fso946326f8f.1
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 03:43:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1765799003; x=1766403803;
+ d=1e100.net; s=20230601; t=1765799005; x=1766403805;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=mAZRhJrDFs4vBCyWJrKUn5N9lvnDjxqtAQ70FD1E79g=;
- b=pBrmW24eLAaw9WiW19MS0dCnViXruN/6tyg0tqs7pzoXdapZpTZ8V9RPXiNyXZACmn
- stV65JCxpl/gxgJUVWBJb7VsvnfzN1uWr0WLJN2Zi0M6xNMxRUGfMRsOnrGBeCxCSuo9
- LPJ/NXRqvgTkRkO0m0P9IzFZsPihFfcNoCh3LxRz+/KlqVd3Rs74YvHmaBCO5hjIfrtV
- WtBStPdLvbwAVudASTvuVZ9fT3kISOZSZHpg0TYjToWdLzbQiCiOVvUFg6t6jnCZP0H4
- 90XHM1sVebroz0qjJPZdXkaQCS9zarEHzzEQimmql4fn5wIxZUbv/rWy+NXENqRk4rWX
- /QeQ==
-X-Gm-Message-State: AOJu0YxZ9Na9emWIh9wiU4xn1LtHa3SidSQZt9NbzBRVTW/pkP6mW6yp
- 0u26WiXBjAZ8IeNTEghn9x8Ti1/99X+GBPP4sU+exvRg0d98p7RlMu7VfsEIeA==
-X-Gm-Gg: AY/fxX7xOGLkHE8JK5Z0Lx8FIbPqIi9WBu/QnUgRsX7k5HbEnIpZHtL0XjySs8Ab7CD
- +MX6v4Z5odQpx3EAsiKSTaPlJRG3J7KiBWc+Rwc+tlGY+KMoYTS+lwwpz6NMWRT65eOKgph22IO
- EtWFJC8YYISwZENuO7/h2FsFW3Dh031Ag6xnvgOwi1nOkK2+BkL0T7+MFRhlFcYglkhhqY5wI4S
- WG4baN3zoXdg67j4HUciHqhTCurDSpKLv5QRvIU4hx8ki/oGqb6Ghi2DYeQVTUP2x5FidAVxgaj
- PI/7kAS3ioUsxwCZIXZNcglULGcOlmcHKzjC89bU6Gq9nn/vbn1pEO1JFNaIIESWeN2R6TKAsnO
- PqgCkM90lN2X6TJbrnu0GjAUSovcJPGH9FHIDOCZxDn6mNeiQIkRCoQg6LEoUfJi3qVgeMo2tnS
- t21ns=
-X-Google-Smtp-Source: AGHT+IG8CFe/73PVznDDM0MoRGGgQbmtrzkBzipsQU0oOG1DJTE9hRibgx7D1XKGVH8K1W6NTD5IPg==
-X-Received: by 2002:a05:6000:2881:b0:429:d6dc:ae10 with SMTP id
- ffacd0b85a97d-42fb46e2cf5mr11407569f8f.29.1765799003220; 
- Mon, 15 Dec 2025 03:43:23 -0800 (PST)
+ bh=tyZPKD7RW9FlZ26r22ItfqjpZPFSSL996j+zndkK3GM=;
+ b=J34RB1vzSlACq8O5KTLRQfmiWTKbVCNzbclx5pL08lP2EZsbTZRjmV24pldB0gFNjk
+ +CLhzIiZLDBhCdLa3kqApuWtnlgnay1OemCc1YEOOWU8aXpIDSCohZUirfcGwPDw8/0h
+ OyLf39yrLVvGoCZStvS6bFesWd+9VIIpenLqdeq3VmWmYSyog9s0O5W5A9poBxAKSTwK
+ UM5mARb0vecQ5QZgh0EQnYa1G3RwZPIZZHVlJ/3Kvw2v7CgCWIM29qRrP/dKxW1drQPY
+ rftGXe/TXlR61+AQBnHbi0aKW2038cZy/aDNOWvcYFt05YhMTIe27IvMBAAVhVdE42Cx
+ kofg==
+X-Gm-Message-State: AOJu0Yx7FeYJ8IPmFf/VjnVYaGW+kZxH6qjIG7uWEpmHJyiw+hZB/rfu
+ /sRcswQeqHnY9Gi39IM5TWtL4GJzMxGC/bSkxot83Zhdd78vKh+kfVjs3zLbPg==
+X-Gm-Gg: AY/fxX6XPFCr67IeGLG2o4q6nAYCIWp4bti39/V3Hz8ThE47hBLpqSCpuHAqI0cgGRz
+ q6efxbBUF0zsB7qfSt0xocdsDqZ02PZg7Qv5dSl4DxkiSEEDpE+kNpG4a6YqIHMIh+fX2ZjSCsk
+ uvfqNzFFbtuQVwopRa3qR17YoD/uWc+QWFMmF68nmgxTQ3XtnrZebcUo8ZgvAVZ3grk49A49JWk
+ UYvdFufpmUcmFapv9q4pF0MiiacJ9gPmyX3M80+bcHP8Mpgi4vMrP8xLwtBm3HID0w0vyx98ZiC
+ G0Go1B4E+la/mDr3UgaJge7uiOP0Jbl/lhbQ5W88rOF9EnzgGAp2rgM4iF/Nq74g131DFtgHRaQ
+ XNva/H9MyPPHxVqpEG0kpSMv7y7aEBxbEzej1oHL8F11+ICEAtLRQB+RExSkz9RgL+/VdXTPlRU
+ GB24w=
+X-Google-Smtp-Source: AGHT+IFOlJMoLy3SLuZPpmouJY00Ve1px56ycQ2f2s55Kge7m8bwYX0J8n/TekUoM520NpmshtdQGg==
+X-Received: by 2002:a05:6000:178e:b0:430:f3ab:569c with SMTP id
+ ffacd0b85a97d-430f3ab58f3mr7941353f8f.53.1765799004513; 
+ Mon, 15 Dec 2025 03:43:24 -0800 (PST)
 Received: from freepad.. ([2a01:e0a:6f:bdf0:a136:2350:a5d3:b428])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-42ff626b591sm16349117f8f.15.2025.12.15.03.43.22
+ ffacd0b85a97d-42ff626b591sm16349117f8f.15.2025.12.15.03.43.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Dec 2025 03:43:22 -0800 (PST)
+ Mon, 15 Dec 2025 03:43:24 -0800 (PST)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: ju.o@free.fr,
 	vjardin@free.fr,
 	Maxime Leroy <maxime@leroys.fr>
-Date: Mon, 15 Dec 2025 12:43:01 +0100
-Message-ID: <20251215114302.32596-7-maxime@leroys.fr>
+Date: Mon, 15 Dec 2025 12:43:02 +0100
+Message-ID: <20251215114302.32596-8-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251204134742.406507-1-maxime@leroys.fr>
 References: <20251204134742.406507-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1765799003; x=1766403803; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1765799005; x=1766403805; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mAZRhJrDFs4vBCyWJrKUn5N9lvnDjxqtAQ70FD1E79g=;
- b=N1HIa4xaTZdJmiHBhZBJx/Fs3Yo0fLvnlYeGRGprP6eYuROoPC1nlF79qKJed0wMev
- Qba7jBhe5lN2U1boWPF/jgP9RRs0pbEHKOHJJg9dJO161gEvxVunssGk0YmVhpKTmktj
- P+Rs65Ba6DGiD3PWMeEikgJrcF9yRyl2Bg7KQlojr/VnpSYu5BtwCXdnLZ0EMBPioDRJ
- sSNYlggSy+pOm2+g9FlGGTCZUEwP88ztSAZaXWltK3ESb1e/V5G3jEsBsJ78vLxlDzxp
- FAE04Q1eiw+RqlYHT2gBHcj0sC/1Kchxiy+ycI5xtJBOcIpkEZ95xNF+G3IuCQ05sSM4
- VALQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=tyZPKD7RW9FlZ26r22ItfqjpZPFSSL996j+zndkK3GM=;
+ b=k8uOwCXDyOIolauzqbmq54XSVrXgl8JwcGyVmuyv1Vt96mrsm8qi/nrrWVkjFXz+eZ
+ lzO/S/RUzM8iEvRz9zmgAZvi+vX21u4GnOMzEFP2SPpcQTN0XS7mBR4ODCT59TMpJ2kW
+ 6qvTj25ubLFjvUzwgtQeRXft74bF8eD7g8vdrpJ+PwYdIuHiu0v7xfDePxVnkTjCLD9n
+ 10R7ArfAF032b0XiIn5LA+IEHNfGRXuS3Ntr+yr4z+mYACP+Nz+HjlA13Y4gj9eqbFBU
+ eAmvDD1LAOfCkvUILXiLBkZolxt8pdI6qVEWwoEVWlZbvg0EBGDGS23fhfBkdkt5caUM
+ O1Gw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=N1HIa4xa
-Subject: [Buildroot] [PATCH v2 6/7] package/grout: link against DPDK static
- libraries
+ header.a=rsa-sha256 header.s=20230601 header.b=k8uOwCXD
+Subject: [Buildroot] [PATCH v2 7/7] package/dpdk: add option to disable
+ target installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,36 +130,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-DPDK always builds both shared and static libraries, regardless of the
-default_library setting. That option only affects how applications are
-linked, not what DPDK itself produces.
+Introduce BR2_PACKAGE_DPDK_INSTALL_TARGET (default y) to control
+whether DPDK is installed on the target. When disabled, DPDK is
+kept in staging only for build-time use.
 
-In Buildroot, Meson libraries are built as shared by default, and fully
-static linking with glibc is not supported globally. However, linking
-grout against the static DPDK libraries provides better performance.
-
-A new Meson option has been added to force static linking against DPDK.
-Use it in the Buildroot package.
-
-Link: https://github.com/DPDK/grout/commit/ec9bf5a12
 Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 ---
- package/grout/grout.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/dpdk/Config.in | 13 +++++++++++++
+ package/dpdk/dpdk.mk   |  6 ++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/grout/grout.mk b/package/grout/grout.mk
-index 7b0fbac4cf..eb20ee52e9 100644
---- a/package/grout/grout.mk
-+++ b/package/grout/grout.mk
-@@ -11,6 +11,8 @@ GROUT_LICENSE_FILES = licenses/BSD-3-clause.txt
+diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
+index 627683d283..c220b4d01a 100644
+--- a/package/dpdk/Config.in
++++ b/package/dpdk/Config.in
+@@ -37,11 +37,24 @@ config BR2_PACKAGE_DPDK
  
- # Avoid using buildroot commit hash
- GROUT_CONF_ENV = GROUT_VERSION=$(GROUT_VERSION)
-+# Link grout statically against DPDK for better performance
-+GROUT_CONF_OPTS = -Ddpdk_static=true
+ if BR2_PACKAGE_DPDK
  
- GROUT_DEPENDENCIES = \
- 	host-pkgconf \
++config BR2_PACKAGE_DPDK_INSTALL_TARGET
++	bool "install DPDK on target"
++	default y
++	help
++	  Say y if you want DPDK libraries and tools installed on the
++	  target root filesystem (e.g. /usr/lib, /usr/bin).
++
++	  Say n if DPDK is only used as a build-time dependency from
++	  the staging directory (e.g. for static linking), and you do
++	  not want any DPDK files on the final image.
++
+ config BR2_PACKAGE_DPDK_EXAMPLES
+ 	bool "Install examples"
++	depends on BR2_PACKAGE_DPDK_INSTALL_TARGET
+ 
+ config BR2_PACKAGE_DPDK_TESTS
+ 	bool "Install tests"
++	depends on BR2_PACKAGE_DPDK_INSTALL_TARGET
+ 
+ config BR2_PACKAGE_DPDK_DRIVERS_LIST
+ 	string "List of enabled drivers"
+diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
+index 080f924329..2f744e519f 100644
+--- a/package/dpdk/dpdk.mk
++++ b/package/dpdk/dpdk.mk
+@@ -74,6 +74,12 @@ ifneq ($(DPDK_APPS),)
+   endif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DPDK_INSTALL_TARGET),y)
++DPDK_INSTALL_TARGET = YES
++else
++DPDK_INSTALL_TARGET = NO
++endif
++
+ ifeq ($(BR2_PACKAGE_DPDK_TESTS),y)
+ DPDK_CONF_OPTS += -Dtests=true
+ else
 -- 
 2.43.0
 
