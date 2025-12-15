@@ -1,96 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCF5D5B86D
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:38:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B63D5B871
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 21:38:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11BA560F13;
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBDCD40AE7;
 	Mon, 15 Dec 2025 21:38:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aIgALvUkdnCK; Mon, 15 Dec 2025 21:38:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z0LAMX3BsEiM; Mon, 15 Dec 2025 21:38:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2401C60F0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CCA540AEA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765834726;
-	bh=zHV+1zNEn7f7WDPASlLDHsoC5vNU/dF6SPLtsw5Taz8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Gp79ydJ0vnVB0XjsLcfjLQEsNMelIM3i2BAPNK+OlkZOyQJbJfhBuENkJL04psIbb
-	 sFAStJYpasjme8Lg/SLmoXgmObW6p3knZGyC/5cVdY5JKiNHjs93U+vfa+pyGsdHWF
-	 Es3BBnvfGjI8NUGsF58jfWQJHVpn+XnzQRKQ+mKpYWnODMXwMeQHgoIgOrfi4JXTQf
-	 1KiMHZa0m+zEC1wdYF387pHYXZreR/lrHachu8wuoHWHcSZW0UlMHKUHhmwAdLGdQW
-	 Wculn9am++sepqsTx26HkRdP+EPB+ZhYugJRYj3YkU67I52gyux6GHTX0KW24xKnkv
-	 sB5a6Y4aa0W2w==
+	s=default; t=1765834727;
+	bh=Xe6BJ3JqlxJwaCJFgWmRKViohldbU9RUlyHcFS21W8k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=QV5sdVUbDvLdAq+G2JmTLgOtSqmju4wa3oFPxDsh8HjzbhU2EfP7K23OeJBbhmf99
+	 VIt8j0xacxFydlYktgRC1ESwFX1VdyXVLt/64rV2ynoPz1faSAFbo40PhDO76kl7it
+	 gBtkZg0P/fRHOlU2dKoAzrsuQdOhtsADRoS9I7Gg0S106OBjh1AH/CpeQoukCIxJVj
+	 YyLDUvFYRkC+i0jwhWpDs1JA9ZKsNNflGqc+mkTJu8CTdvebAMsY2zqymJSvY6wRnz
+	 Wu7WR6EELxFH00FGvIjC3n5v7IBFhgKWciV6vhvfqrEUybtmyuWkOWVHsKpl461ska
+	 /nQ9UDaDamYwA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2401C60F0E;
-	Mon, 15 Dec 2025 21:38:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 21D16117
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CCA540AEA;
+	Mon, 15 Dec 2025 21:38:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B3C325A
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 07C3260F0E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D7D581DFF
  for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uz6DxWJh3RGE for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xoexHSW-sE0B for <buildroot@buildroot.org>;
  Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C504A606C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C504A606C0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C504A606C0
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:43 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 475E413F8A2;
- Mon, 15 Dec 2025 22:38:25 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 15 Dec 2025 22:38:25 +0100
-MIME-Version: 1.0
-Date: Mon, 15 Dec 2025 22:38:25 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>,
- =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>, Grzegorz
- Blach <grzegorz@blach.pl>, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, Guillaume William Brs
- <guillaume.bressaix@gmail.com>, Witold Lipieta
- <witold.lipieta@thaumatec.com>, James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, Falco Hyfing
- <hyfinglists@gmail.com>, Mauro Condarelli <mc5686@mclink.it>, Steve Calfee
- <stevecalfee@gmail.com>
-In-Reply-To: <20251215191416.421755-1-bernd@kuhls.net>
-References: <20251215191416.421755-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <a0c8d54797b1a471474899909972e946@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1765834721;
- bh=ucd/dX+DIoQTozEgPtiPkc2CLI0Ct+SvFtV23pmISoU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=uKq1bjseGi3b/wmJlB8tNC0WPlRQzB5pEPk4XcuWDvkW4pXS33Ky/9rTreN/JgU9P
- gXugeJg3qoMDnE+5gDtEVbKdNqSyrKuudKSW3y+MoozCftNFGyQQTjaYsjVFiOUp/e
- S6ebKkSkMVg6vTzTQRsrZS6e2s4qN953WoK/AWunEi+QopMZVl5YZyle3eHnQIwGC/
- dikf/wR798tp1AR+Y1oAAkBCl+EQttbNy2zHroemzkIiwMrS+RBAl9hZ9+uiD/d4Zv
- J0oV2206VmiL9ZBNe0oKj3mlm/rDuIwonGA3r+nge414B56TsbTwOgksc8xAnEgGEa
- L0EdzSF7TJM7w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=uKq1bjse
-Subject: Re: [Buildroot] [PATCH 01/27] package/python-posix-ipc: bump
- version to 1.3.2
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D91481DF8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4D91481DF8
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3F47D86FC4; Mon, 15 Dec 2025 21:38:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 15 Dec 2025 22:37:28 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b6cb9f0918c83d9c1f4f8b4181770314ed1e1d6a
+X-Git-Newrev: d038740b7c143d22347105213409bbe0fa6b59bd
+X-Patchwork-Hint: ignore
+Message-Id: <20251215213844.3F47D86FC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-psutil: bump version to
+ 7.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,17 +71,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/12/2025 20:13, Bernd Kuhls wrote:
-> https://github.com/osvenskan/posix_ipc/blob/rel1.3.2/history.md
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=d038740b7c143d22347105213409bbe0fa6b59bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thank.
+https://github.com/giampaolo/psutil/blob/release-7.1.3/HISTORY.rst
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 0ba261a7a8..02bd2fcd89 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  26dc8499f435198ab3f907edf9e7d7b4  psutil-7.1.0.tar.gz
+-sha256  655708b3c069387c8b77b072fc429a57d0e214221d01c0a772df7dfedcb3bcd2  psutil-7.1.0.tar.gz
++md5  99dbbe92985d5e5a3a45574ea521af67  psutil-7.1.3.tar.gz
++sha256  6c86281738d77335af7aec228328e944b30930899ea760ecf33a4dba66be5e74  psutil-7.1.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 41fd92fe37..2e20712f9a 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PSUTIL_VERSION = 7.1.0
++PYTHON_PSUTIL_VERSION = 7.1.3
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/b3/31/4723d756b59344b643542936e37a31d1d3204bcdc42a7daa8ee9eb06fb50
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/e1/88/bdd0a41e5857d5d703287598cbf08dad90aed56774ea52ae071bae9071b6
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
