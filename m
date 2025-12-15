@@ -4,76 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E60B5D5B16E
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 13:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0932DD5B16F
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 13:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9646180EC2;
-	Mon, 15 Dec 2025 13:50:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8BED80B9F;
+	Mon, 15 Dec 2025 13:59:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zGfrA3fCSbPV; Mon, 15 Dec 2025 13:50:47 +0000 (UTC)
+ id RiW2b2TdAKYr; Mon, 15 Dec 2025 13:59:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAEFA80EEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F122680C89
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765806647;
-	bh=m2+dEYAnCiM/0HlHSrwqca2Vb4ACml90D5Af8YZFVbI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=ObMYlpBG8Ne8FQEm1WDJcUlt3rxqUOE6wcIRUhlt7Lh7Nok0WNkXceT0YCHLB92sb
-	 wJGCc/Tl5yYbjPW+loiI83KyAmxy44+1FEeNR3O4Y3KEyZwrScBzi5rs4aBsrVjt8D
-	 i7ug+oY0fhhxmPb2DXtGQI/not706qv9W7LMsnxeIi8npWRRL1qwqp6hIEipL1K7uO
-	 E1J5VDGR0OKiHu04dAWTcx3FJRKHBSQjATFK5KgRKI0jrR4U3dyV4v+vEhFqfxSGrS
-	 7rtMIT+O+fQbo+rwag+6BYfhD712f7TwukwM0YyLaewMKDTzOneplmsPl8bw19NO8g
-	 o3Rl/vRUELszA==
+	s=default; t=1765807190;
+	bh=EcwdixxbAWc4usIIp1+gaMDNun16OAEEwl6WDL7IPDQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=UkBLzrdhwFPcP3djTLcDor74DnxXnQGTsz8Vz3lxl9HUyUw33Yv0g+867Qh18b3xU
+	 kP4rCWM1Q388W/q9Kor1PmcM4G9ReWK6roTu+vSlfnE8uKh5ZgRWFG+tjau6lCV52D
+	 jvlBJIjP6HT/M2lc3CgKs/r80hXG96+oMCHrE/A+YFxflE/xWs2NcMgoppohKDoUel
+	 JtsqPfGrq7DFMQTt9Rs98hPmC8GM6yWOnLvZSkDmEXDhae2LfaBL0KzfT3cnqcRDsy
+	 XXXoa8E0afAklj1XpZucaPOzwkIF1/vmKS0E7c2Opj6iw1YGz5MFxf8oHFwIsW/LmD
+	 yJ7dDg5Gw82tA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAEFA80EEE;
-	Mon, 15 Dec 2025 13:50:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F122680C89;
+	Mon, 15 Dec 2025 13:59:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FDD5117
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 13:50:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 53C38117
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 13:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75B8F80EEE
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 13:50:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A31F80C3B
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 13:59:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nW0YLDurI2u6 for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 13:50:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=pkerbrat@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F10380EC2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F10380EC2
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F10380EC2
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 13:50:44 +0000 (UTC)
-Received: from sejong (unknown [82.64.130.240])
- (Authenticated sender: pkerbrat@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id DAA99B00535;
- Mon, 15 Dec 2025 14:50:40 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Pierre-Yves Kerbrat <pkerbrat@free.fr>
-Date: Mon, 15 Dec 2025 14:50:23 +0100
-Message-ID: <20251215135023.3541586-1-pkerbrat@free.fr>
-X-Mailer: git-send-email 2.51.0
+ id oARxE4cwKpwy for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 13:59:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0CF6880B1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CF6880B1C
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0CF6880B1C
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 13:59:46 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id D29614E41C0A;
+ Mon, 15 Dec 2025 13:59:43 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A798860664;
+ Mon, 15 Dec 2025 13:59:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A3A7611942348; Mon, 15 Dec 2025 14:59:35 +0100 (CET)
+Date: Mon, 15 Dec 2025 14:59:34 +0100
+To: Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>, Bryan Brattlof <bb@ti.com>, Bajjuri
+ Praneeth <praneeth@ti.com>, Lothar Felten <lothar.felten@gmail.com>,
+ thomas.petazzoni@bootlin.com
+Message-ID: <20251215145934.4ae9c02e@kmaincent-XPS-13-7390>
+In-Reply-To: <83449352760f5935309de9759b56c1fb@free.fr>
+References: <20251212162053.883682-1-kory.maincent@bootlin.com>
+ <20251212162053.883682-2-kory.maincent@bootlin.com>
+ <83449352760f5935309de9759b56c1fb@free.fr>
+Organization: bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1765806642;
- bh=RS+za71TTS3tztJLXH4UOwvJU8PRbE5KfThSYetR3js=;
- h=From:To:Cc:Subject:Date:From;
- b=jrI8ix9R3EBC2q8Cw8H2sHQpEHlUJzazCwaFetHxUE4ngUvkLLn39wvXAW18sgbOa
- HJts33KPDyl3IvN5/4DpMBqOlAsNij8G0ZRWkhrg6YM6SiZC9rZN2/vHLZKBBhhsig
- Q4XquqaV754+7MAa6aJjOFGdxdiw+Hoeg1u5disVEXGRQC/XsdY3sVJbVI1/cnVeSS
- qj6AloYQ9AtXOumT9egzzqvmnegoIUZQ/Hk52QwUqWQBCnolW3CVJ9YAn23DuI3pvy
- ZJwO8vLMn+FekK8UgeEn0xm6M3/79Z9va+lKwocwRTlCXQs3wo0Cc6C7JaHiWKBV5q
- SJ+N1GBdYaReg==
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1765807178; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=CqxPnowESpkOrMa3Q+CGWSrW0pOzDNrfuXZoh11fnZc=;
+ b=MWKabUCWF/iLQGVWuGh3sJQZB9hd3fYY7GA/XAiLFrwzxewE0lpd2MfZwZiJpsnvNVG3WO
+ VjgSn6upqNiMnyaHYQ5DIMVgHwB6kqj6gy6zK6/ebu7/O86m2wtmMANZrJdQ5pL9WW6oTH
+ m+UkTV0hfJnL0Q091VefWQYMqluADAjgGNlfEEes2tY6C4i0h9KDViTHBwKmXOGFGVHbgL
+ QZejFl+7+WCRY+GzR+I+Sss0KXXMtlBtuGoNvgTRdoVzw2MWq2jvH4a6fsED0d1QQRoedU
+ xvTxHHf3rMjbTyf9ZOuXOEqXOnH331ZgCAxFWTYU1dkpfnvt4TBKfAGwP95KAg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jrI8ix9R
-Subject: [Buildroot] [PATCH 1/1] package/ed: bump package to version 1.22.3
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=MWKabUCW
+Subject: Re: [Buildroot] [PATCH v2 1/2] configs/beaglebone: Bump to Linux
+ mainline 6.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,50 +101,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Pierre-Yves Kerbrat via buildroot <buildroot@buildroot.org>
-Reply-To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: Kory Maincent <kory.maincent@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://lists.gnu.org/archive/html/bug-ed/2025-12/msg00000.html
-
-Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
----
- package/ed/ed.hash | 4 ++--
- package/ed/ed.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ed/ed.hash b/package/ed/ed.hash
-index 44d5bc765370..605c4854f718 100644
---- a/package/ed/ed.hash
-+++ b/package/ed/ed.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnu.org/archive/html/bug-ed/2025-08/msg00010.html
--sha256  1af541116796d6b9e4b66ef9c45ddce0e15a19ed62bfca362ccd7d472cc1c8fb  ed-1.22.1.tar.lz
-+# From https://lists.gnu.org/archive/html/bug-ed/2025-12/msg00000.html
-+sha256  47a55ddfc52d4a1ff6f7559fbd00cf948a16b6cf151ec520392761aeae4e97be  ed-1.22.3.tar.lz
- # Locally calculated
- sha256  022e9c2e9cc1aac3622313df6f971fbb39c1d1b0cb45324c16b8a1fe231c5ea6  COPYING
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 10092d513f0d..3042b3c3707f 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ED_VERSION = 1.22.1
-+ED_VERSION = 1.22.3
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_SOURCE = ed-$(ED_VERSION).tar.lz
- ED_LICENSE = GPL-2.0+
--- 
-2.51.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU2F0LCAxMyBEZWMgMjAyNSAyMTo0NjowMSArMDEwMApKdWxpZW4gT2xpdmFpbiB2aWEgYnVp
+bGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IEhpIEtvcnksCj4gCj4g
+VGhhbmtzIGZvciB0aGUgcGF0Y2ghICBJIGhhdmUgZmV3IGNvbW1lbnRzLCBzZWUgYmVsb3cuCj4g
+Cj4gT24gMTIvMTIvMjAyNSAxNzoyMCwgS29yeSBNYWluY2VudCB2aWEgYnVpbGRyb290IHdyb3Rl
+Ogo+ID4gRnJvbTogIktvcnkgTWFpbmNlbnQgKFRJLmNvbSkiIDxrb3J5Lm1haW5jZW50QGJvb3Rs
+aW4uY29tPgo+ID4gCj4gPiBCdW1wcyB0aGUgTGludXgga2VybmVsIHRvIHRoZSBsYXRlc3QgNi4x
+OCBtYWlubGluZSB2ZXJzaW9uLgo+ID4gCj4gPiBUZXN0ZWQgb24gQmVhZ2xlQm9uZSBCbGFjay4K
+PiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogS29yeSBNYWluY2VudCAoVEkuY29tKSA8a29yeS5tYWlu
+Y2VudEBib290bGluLmNvbT4KCi4uLgoKPiA+IC0tCj4gPiAyLjQzLjAgIAo+IAo+IENvdWxkIHlv
+dSBzZW5kIGFuIHVwZGF0ZWQgcGF0Y2ggZml4aW5nIHRoZSBjdXN0b20gaGFzaCBmaWxlIGFuZAo+
+IHN3aXRjaGluZyB0byBCb290bGluIGV4dGVybmFsIHRvb2xjaGFpbiwgcGxlYXNlPwoKT2sgSSB3
+aWxsLCB0aGFuayB5b3UgZm9yIHlvdXIgcmV2aWV3IQotLQpLw7ZyeSBNYWluY2VudCwgQm9vdGxp
+bgpFbWJlZGRlZCBMaW51eCBhbmQga2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5j
+b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
