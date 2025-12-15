@@ -1,119 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58DD7D59D99
-	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 11:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF76D59D99
+	for <buildroot@archiver.kernel.org>; Mon, 15 Dec 2025 11:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAF1481496;
-	Mon, 15 Dec 2025 11:43:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d5GKGNve-MU5; Mon, 15 Dec 2025 11:43:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D4F881470
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765798999;
-	bh=Gh2318imOJ9iolnMhKsE6gKFdQdcMB9388dODgmGdPc=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=W8BoBHtvmQ6wVMmXCi19jT4gpTLIqnWuHmBLaI2Lalr7VW+5wNS6Hh5fJqWIaZHA6
-	 jOjpTKcXNEwBcGWWGlhu+CxFbw+PnLmQN0VOpT0eU1OJack4BlzJ/ZQJp786AmxITE
-	 fAeP8Pp3/okDqWmqaXf4EWXjmcO5zRmV7Ell0QUIVnNb9gf2fUCtFT9jgQ10QVa1gn
-	 rZntA58It6LJB/ihiIf3FuqAJmSK65NGg6Q+fFoiVUt/6OTzht90nCnwydgxnC7oSi
-	 sNvAvExC7gCfeuZGa7PaGsjHf/kuouRdEJEr8c/OslXNt9yX0w5wYjPA/7LIuqDhRx
-	 OAXG9FnEFCwbw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D4F881470;
-	Mon, 15 Dec 2025 11:43:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E3F4A117
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA46440919
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC13A408DD;
+	Mon, 15 Dec 2025 11:43:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0O5bMVuJdL9H for <buildroot@buildroot.org>;
- Mon, 15 Dec 2025 11:43:17 +0000 (UTC)
+ id uBpDba7APCMz; Mon, 15 Dec 2025 11:43:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F8F3408F2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765799002;
+	bh=iXHC7vDN939FwlcrKWuDMsjKqojD41uAnllTdl/Yu+0=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=JitHA8UOlVvqcXlmURQnxZYz8b7hrDAI83rk/oCHFDlpLoBAiZX0jzMsz2eXny4IX
+	 +U/FfI4cMQTlD9v5YmFwoiqRe8FCxbHJKlbA3EFSpZIGs0qd+17UM2DehAvYFkK7ZT
+	 VgoFlN+m4ASurTpuHJ8pZLJTiY+TJukZ3Hh6jPelPoj6ENom0Ab14m1fR4S+p5sQyi
+	 ppKG0AvFVIPSwcXLEmRPAp2ZvrOmNw4Gv1gOgUFqZi/WrH3alMUF1fcGCr8DxqVyuI
+	 +UQAB1zuqVWjrsnw+XE198oybXf9+lxMbqW+7YLk0uwx+C9Q94hdclllVTfoZmERlx
+	 RR9EX6kcSrizw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F8F3408F2;
+	Mon, 15 Dec 2025 11:43:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF1C8117
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A58C14077D
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B6jos5r61kQS for <buildroot@buildroot.org>;
+ Mon, 15 Dec 2025 11:43:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9F0F2408E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F0F2408E2
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9F0F2408E2
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:16 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-430f3ef2d37so1090838f8f.3
- for <buildroot@buildroot.org>; Mon, 15 Dec 2025 03:43:16 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DD9A5406C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD9A5406C6
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD9A5406C6
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 11:43:19 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4779a637712so22417275e9.1
+ for <buildroot@buildroot.org>; Mon, 15 Dec 2025 03:43:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1765798995; x=1766403795;
+ d=1e100.net; s=20230601; t=1765798998; x=1766403798;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=viqkD1AWf+OB/lXMi0fK4fEbGZRZscF9KMwMgRPiU9Q=;
- b=QTt9zQfHvx8ibrd6IRW3e3c90MRdZb7ZhX+PX23J03mwtgvFS42FnTXPz+HwGrttBx
- 0NCxP3H6zXH1rnnUwmf6Y7vdxVUUv9SfjmL5hq+8HCZiq5uu2pPkadgf8TGig0gcZZzP
- 9HtUaDGOxDAWsct4x0e2sUfPp/v6riU4mOK38DZxX6PeUM1N2dN2zDgm23RQ39QnRMyt
- Uj45n2vXOFDkhZrAwX2T2jObMXeJhjpruBUy9DRC/IjvUwjyWt8gifLqVIpyxAO/058J
- 5A7Fy4sNPV4dNvHYVzH8nQ/yUwv+JL4cWAZKJrgLsuNX2D32Qi1wnPLZ4IfBNJ6C+qmp
- PmUg==
-X-Gm-Message-State: AOJu0YzFobQkM+kPLPsQMNA8RuHeK7v/OLmKXY+gB4nZOmycARaxZwmB
- jkqhY1B0TqrHhA+9dV42JayeOJ7qnm43nP00UHBjA1KvByMLcal0SBJt1tRaLg==
-X-Gm-Gg: AY/fxX79mnk7y7D7Lc4LI/GvS1btkET0dgR8a5m6Fxvj9v1tcjG1gRxG9sP13hbs3oo
- s+AyhY4R69V2TifPEu0XUttf6jGeUITaqpKuv8UCm7R0erohsxCUTQUz5ElhTkoxgJsvilWj3jn
- VXeZmzrcDnyi4515SnHCW/CCFhrxj9uSXVnwOt9tr2TrPNHWP1cMdvdTLdpSaZQIKGPDULzC6Mn
- gsxA+IqpQQ9bgx1CNTBrwR+9ptB9y+FgJY+caSfcXK7JvuHA2CzHjxlJzfhf+NKM5pUusNGy2G4
- ghHTjhg+CrdAw41TtJGKnQNK6s6oOIjt1oJG0x94jyqNEfT559BKobho1jxiKvV2JERTPnHlXzi
- /KHXUml4Ixa6f+WsgQG4XXZkQQ0xtWbzE4AIwkL5bunzRSYfZdJJFqKzHzevbG9xljvPLRvb7c9
- 5zZel9fURmdxsn3Q==
-X-Google-Smtp-Source: AGHT+IF8UeyhndcOtxMSwqcMLpL9pCVJhWiW+Z4AHrT+oS5Ga84sqX2KeNRyAuOX5DKPYFiOzZx19Q==
-X-Received: by 2002:a05:6000:3108:b0:430:f23f:4bc9 with SMTP id
- ffacd0b85a97d-430f23f5243mr7855068f8f.62.1765798994532; 
- Mon, 15 Dec 2025 03:43:14 -0800 (PST)
+ bh=MCiasujti4BpcWwukK2LEPgHSbMxtPYJ3Hr2iIYEJAE=;
+ b=hugKTF70DBJ9hkeEw8aB8oXNlseNWr1fFnFS+jLVk51zUx3NZ5fBhDVh8U7L5XA2Aa
+ BtK1MnVP5AtYOdKNmc077ebdlZXcu6EWzMLk3dELF4VxZIwpeOfEPR5Z0hG1Tupb+H7m
+ bNXXBVPy+WiIwZjfel1ugkjr+xvAbWzUoKb7UvYKNPB1L4kCrsmjkgvDkXDuOD3YIQO/
+ tXAWEB5iEn5e9lKnD8OEGxbI2hQzp3NSlBI5GubGMGsEJGojbL+shxa+5FiKa2Thec13
+ H0lNFUTYCD6KFOFj06gh8If5WWapSryx+m3z8ZjEC00ky8mXtisbR4521u6IxaxCieSo
+ FxSQ==
+X-Gm-Message-State: AOJu0YwRlJSHTkRZgdDI0lE68tN994jbDs52P48Og/uWBBXDshGe6SGU
+ rjLjhMFvoQPYnKI6V8L9muViSXRP7cp/UV+1Pbj1yHySQ6pNdqvjMAW0FLb7+w==
+X-Gm-Gg: AY/fxX4IE/OL+jpLQ7NmlsGj3MkGTfsxc4GRMHfxK7X9/TvE3uSTcd7AOOSysUg9fUZ
+ LEZRbKEGwL3IqOjxcDH2ivbYi2lwjxa/9z6HQfNbazOSoA9FE1h0R3TsqO33lngWYetZCrRjs8e
+ 5T/EFacFh4lAuW1HDZ6Fcl6MSAx2nn9ocIMWavPXOttxtbrLF97mAuLx26LKe1K8RVCbJ+Mg6pa
+ 5brk6esrnja5rB/9H8pAxMKH8RaSsRvm+tOYLAaeIVxGzoZwc9hDAXSop/OKU3sPALsMSmAv6B0
+ fw/WUyl4+guwrsYM90ycxN54ShEWOQbp8Jqs44Bfax2IXPIBISFYjWLTf1iko1XZVF2Lri6/11A
+ n9/9EMvk3k6Cnh8HzhSHZUyiwlbfA2/XE8VXCn0S0p4RP3MEnMTCVcvjVakPZfMf9YHO4XS6lpk
+ WA+7Y=
+X-Google-Smtp-Source: AGHT+IETv9DgyXfDv6/b3rkgLPAKGQfbKKtj068I7O+d5qhsbSNd+iczPFXWFNl23eSPeb/SdcCrQw==
+X-Received: by 2002:a05:600c:8718:b0:477:afc5:fb02 with SMTP id
+ 5b1f17b1804b1-47bd2a6f231mr10454605e9.21.1765798997753; 
+ Mon, 15 Dec 2025 03:43:17 -0800 (PST)
 Received: from freepad.. ([2a01:e0a:6f:bdf0:a136:2350:a5d3:b428])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-42ff626b591sm16349117f8f.15.2025.12.15.03.43.14
+ ffacd0b85a97d-42ff626b591sm16349117f8f.15.2025.12.15.03.43.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Dec 2025 03:43:14 -0800 (PST)
+ Mon, 15 Dec 2025 03:43:17 -0800 (PST)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: ju.o@free.fr,
 	vjardin@free.fr,
 	Maxime Leroy <maxime@leroys.fr>
-Date: Mon, 15 Dec 2025 12:42:56 +0100
-Message-ID: <20251215114302.32596-2-maxime@leroys.fr>
+Date: Mon, 15 Dec 2025 12:42:57 +0100
+Message-ID: <20251215114302.32596-3-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251204134742.406507-1-maxime@leroys.fr>
 References: <20251204134742.406507-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1765798995; x=1766403795; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1765798998; x=1766403798; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=viqkD1AWf+OB/lXMi0fK4fEbGZRZscF9KMwMgRPiU9Q=;
- b=J7Y16G1UEwe3Nu8oxzHZZCucUM8XpDYjNWZiTyfIlU/KTkYJKjhWukE0W2BBY3F/C+
- oRMZ2comA8r/05RrGJ2JYuIX+KF92v7IyHeFZ1FABSZlpwtVnUQ+eIu5TCOvW0AWSdvm
- +7kQqeuErFf5bQTQQsStQhaVlt6XN8A8lrDyKfxX0wsRazeazyYk3tiSkilFR2yinSaF
- nlB1b55Pakzphci8nuzQpb5d5UviDuWAgo6pDq+eRy+Fo3KUr9qedzCHA+qOpIvV5Gs0
- 0rRpF6WI3s3e0fy7sAWceJgpUb/4mOHskLBmrlkj72WM492X1aN4cxkUkABlt1s9VOCa
- 6+vg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=MCiasujti4BpcWwukK2LEPgHSbMxtPYJ3Hr2iIYEJAE=;
+ b=kTD63lltV+mT8Tv14clGBrEN9Jm2vgZnCiI1p8+4Bi99VdW8aOQnlmLVFZ/SdqeAk3
+ hotBvMPtv5xbzirxWRj2CRRDr0osPSkPhWkt1Lwp9KChkHTIZYv/UN2SlOlhbX9sXmvr
+ xZbufSb0SIV/NIbVmApwpNcf2yT9G2+DfDkOLIqbRMg7koy7fyLTJ2ud2VjI7wRteS6e
+ V8CzpVb3nJKEBZTMQ74rJ06XwwbvwSq61gXGkkMabLkvEW4MFpaNCJi1rCeJUQ/v8huY
+ AeHnoie1JAO1ZKC05eEJU/FMd1WNzV4MP/zjAvRCdQ4qqKCBqkq1MBej6SP732WL1Pk7
+ +hwA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=J7Y16G1U
-Subject: [Buildroot] [PATCH v2 1/7] package/dpdk: bump to 25.11 version
+ header.s=20230601 header.b=kTD63llt
+Subject: [Buildroot] [PATCH v2 2/7] package/dpdk: make drivers selectable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,41 +130,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release note of the new versions:
-- https://doc.dpdk.org/guides/rel_notes/release_25_11.html
+Add BR2_PACKAGE_DPDK_DRIVERS_LIST to control which DPDK applications are
+built:
+  - empty : use DPDK defaults
+  - none  : disable all drivers (-Ddisable_drivers='*/*')
+  - list  : pass to -Denable_drivers= (comma-separated)
 
 Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/dpdk/dpdk.hash | 4 ++--
- package/dpdk/dpdk.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dpdk/Config.in | 21 +++++++++++++++++++++
+ package/dpdk/dpdk.mk   |  9 +++++++++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
-index 5c9fd7c087..7e8ef0674c 100644
---- a/package/dpdk/dpdk.hash
-+++ b/package/dpdk/dpdk.hash
-@@ -1,6 +1,6 @@
- # Locally computed
--sha256  d5ae4cfaef05d6aa491af643d61b83d840e53ced96f9c9f60fda986313ed84b2  dpdk-24.11.3.tar.xz
-+sha256  52e90d2a531ef3ded0283bd91abc94980698f1f6471fa09658a0217cf6609526  dpdk-25.11.tar.xz
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
--sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
-+sha256  ec514554f1b9e90c4f55167267c22da9d511f884877c32a5b18bee6b7c8b18cd  license/exceptions.txt
- sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
- sha256  cae178052c96959741acb7f00634a09a8294e6cafb5ad53e158d63e3510875ab  license/README
+diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
+index 7d4a002002..9b6b367ee8 100644
+--- a/package/dpdk/Config.in
++++ b/package/dpdk/Config.in
+@@ -43,6 +43,27 @@ config BR2_PACKAGE_DPDK_EXAMPLES
+ config BR2_PACKAGE_DPDK_TESTS
+ 	bool "Install tests"
+ 
++config BR2_PACKAGE_DPDK_DRIVERS_LIST
++	string "List of enabled drivers"
++	help
++	  Controls which DPDK drivers are built.
++
++	  Values:
++	   (empty): use DPDK defaults
++	   none   : build no drivers
++	   list   : e.g. "net/virtio,net/ixgbe"
++
++	  To list all drivers found in the DPDK source tree:
++	    find drivers -mindepth 2 -maxdepth 2 -type d \
++	    ! -printf '%P\n' | sort
++
++	  Note: providing manually a list of dpdk drivers to enable
++	  does not automatically enable its dependencies (internal or
++	  external). It is the user responsiblity to add internal dpdk
++	  dependencies in this list, and/or select the relevant
++	  Buildroot packages for external dependencies. DPDK
++	  configuration will fail in case of missing dependencies.
++
+ endif
+ 
+ comment "dpdk needs a glibc toolchain w/ threads, gcc >= 4.9, headers >= 4.19"
 diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-index 1c7eada937..4843ba2667 100644
+index 4843ba2667..829b0cc640 100644
 --- a/package/dpdk/dpdk.mk
 +++ b/package/dpdk/dpdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -47,6 +47,15 @@ else
+ DPDK_CONF_OPTS += -Dexamples=
+ endif
  
--DPDK_VERSION = 24.11.3
-+DPDK_VERSION = 25.11
- DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
- DPDK_SITE = https://fast.dpdk.org/rel
- DPDK_LICENSE = \
++DPDK_DRIVERS := $(call qstrip,$(BR2_PACKAGE_DPDK_DRIVERS_LIST))
++ifneq ($(DPDK_DRIVERS),)
++  ifeq ($(DPDK_DRIVERS),none)
++    DPDK_CONF_OPTS += -Ddisable_drivers='*/*'
++  else
++    DPDK_CONF_OPTS += -Denable_drivers='$(DPDK_DRIVERS)'
++  endif
++endif
++
+ ifeq ($(BR2_PACKAGE_DPDK_TESTS),y)
+ DPDK_CONF_OPTS += -Dtests=true
+ else
 -- 
 2.43.0
 
