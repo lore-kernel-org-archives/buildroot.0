@@ -1,114 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1E63D5CC8D
-	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 09:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E58D5CC8D
+	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 09:35:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 087AD8231E;
-	Tue, 16 Dec 2025 09:35:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GEUsv4F4W_X7; Tue, 16 Dec 2025 09:35:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DD1180FC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765877746;
-	bh=B+9dCqgQy9PJv8gQbeNI3DZVnhn/FCswy/FQsN8VlPg=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=DO9He1v9EMZMXlC54vNpSBFiFsdbxUZ/a/bjIQLh8zbvj9+Bx03j0TOx+G397ApgI
-	 koPGbtDq4WEUSJgFy8cTpjUHRnZmtSRtwuV21rq+YQA/y84u7izOuOo0tipiz8wx/x
-	 rkEVvVrpyCY4UPyPIQ923Utuk47fkbVJIncAwBVJ1kTkELoKMP87wxqMUyBYvan2Vv
-	 hiThpJn7l9eyE/29P3Y7CnylqjAUCoP9unUOOnis1DjOxFzc0hBuVHZRWhT4eCS+EJ
-	 1gp/pyqkWbH83UzrJ1hakObnzVuDA0p7ExTRBGte3OhsT1ZodgXUd6Hdko4KRVwXyV
-	 l/x49bM3NapxQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DD1180FC6;
-	Tue, 16 Dec 2025 09:35:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C868372
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DD2F608EA
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8EFB60F90;
+	Tue, 16 Dec 2025 09:35:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W5NkMQWyZOQX for <buildroot@buildroot.org>;
- Tue, 16 Dec 2025 09:35:43 +0000 (UTC)
+ id rPLZaMPnRnYn; Tue, 16 Dec 2025 09:35:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FB7608EA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765877749;
+	bh=SJ4f7tjr3ycUzj55A6Le16cGAisdNmPQl5aWeVKyEpQ=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=NCZ4pulVRaUTojcEqAZQ+l+6bHRFOew/zM0YVtBgyLJQ+AMqppjkSS910fLVOf9O6
+	 l9tInwGl2t6MjftUd3rNyz1TxIRHASGneBpK801vodmjAb70wk+4DV2qTgzlV7G1X+
+	 ZS1YI5nUD1pwgvoXq95UO5QYxXHR9TJKe4lDAEOHvTChTSVg8LMpiVCpxAQmXYckUP
+	 hKneoKhCphI7Zxrg1ccxSH4GYRkCMZ1Cu7YeSSocx5VociUzrxBje4lpxk+BC0P5Gn
+	 OnJ1cSOnCH6AvQdXavE7IqvDaX4/K9SSRqSnmEKO8OJWTjjiJbyRKr3Bg1085asHH3
+	 fZevNWlYbJoiQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41FB7608EA;
+	Tue, 16 Dec 2025 09:35:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D2979372
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B988340936
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bliKYltnTEal for <buildroot@buildroot.org>;
+ Tue, 16 Dec 2025 09:35:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
  envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 50BB360895
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50BB360895
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 50BB360895
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:43 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-595825c8eb3so5100740e87.0
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 01:35:43 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D005F4087E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D005F4087E
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D005F4087E
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:44 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-595819064cdso7153128e87.0
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 01:35:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1765877740; x=1766482540;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
- :date:message-id:reply-to;
- bh=iPcy7+E17vQEn8xQhidCvSrwG0VPfvsWg84vCM8+mXc=;
- b=mWwjoOpytiPEYi1sSiQGJ0rBNSGM97r8M3G4ODIxAcUIKFvOU+oGaLjZTweX3XYRbv
- sgTXk0ALElEYC6Wfd5FDy7C1Z3HeuRKS+T3PkcjVxpS9gCphhcmBmFqN5RDemJBkBMGw
- fP5IA1O7HpEzQUEtvASiaCoXHaylVFP18tjIuU65Qv5otY+r+KSKiwFBauFuS6ZSljKC
- JvZE64+Bsqc+sPYOKvHqIjr9d1tLwEjZ6+vrCPBgYkU24L4LU3UcFb5BKtJyLYBJksUV
- Ibh7ucIT+bs8OEXiIuXzAzoXYBS0jC4or6ZkIFPK0Il7+Q68xtoGVJjJMU4xtKw7fkcR
- e7dg==
-X-Gm-Message-State: AOJu0YzVCN9VBed4gcgJI38gkB22jlUYLW4tlLHPlnGBGlpqGM3mYNbp
- bkVVkZmwF0dr/LlfBXBI3LRoDyCLUyUxT+adNJNdrm7BEmuiKrLaTUf6RFMW+w==
-X-Gm-Gg: AY/fxX7mMjtseFoy1GY+NbvuwSRYcbzbP1pDBNfo/gEvbtWuSnzOXyK2Y74XLqnwOVm
- GwTTrO6Kl1pgtsdkR0boQml5f3ahG8fodCG16N+wz4p3LZOtTlmZcIGu/Rlvgv4fHNwXn9iw+hh
- vKcV+OZpwBV0Uhvh7x6l+4sC822an4R0ob2i6Gdmzy9MCVo2JTYtxqe3cjwiOAX6658Ke4AkBYW
- 0HCNHjlEVJ3YpK+V5kSmwtB+jUBPnN3plqN5dxvUX5Lua54O5fcRtyO8KHLmA7r0yqYaNSvZDVt
- 0zKLunk3kq4Q5v5F0SJZMq3U9FmdEZGNjAJyftHWurngV6D+/4c5pa16gWk/kwQ0a7wY/yHKUVl
- 6Juw0weAGLscqTuOeKRgwHQ/bYymO7OEqkAlJkT9kmHpLaIAbVcrDWyFP4b6sHZ1ljj7+RarwFv
- a0LfMFNQLuEjr5oXDl5UenLvhEt967oBcuK6281kMxh6spT862
-X-Google-Smtp-Source: AGHT+IHjDtXMCOyz2mxN91bOl/kLJmh5qjXP/cmqbs76Qof5+NQyx/2zKhEclech2UcwEQkk6Rr92g==
-X-Received: by 2002:a05:6512:a8b:b0:598:de1b:40e4 with SMTP id
- 2adb3069b0e04-598faa73d4bmr4405105e87.30.1765877740215; 
- Tue, 16 Dec 2025 01:35:40 -0800 (PST)
+ d=1e100.net; s=20230601; t=1765877742; x=1766482542;
+ h=content-transfer-encoding:organization:mime-version:references
+ :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=RYoq78RmXnngUoNBga/xOjyJxHMhTBkAfBrpq73O2IM=;
+ b=N6sw1XKepQuWl9aBWe027YnIIWPOyduOV3wRJgARdOoxI6yvryLJ3GjK3esEq44J48
+ 7CKNJSvShNlSJEH9w8JQ/Os+DufhJZDIPMPlMLN8ZhcccipKxQVdfiExmwGlqSWMdH5a
+ PgO/J4RObb/xwL0vREPJ86mpPnESJg0H+DbLJQg/g/TDpX9Np92RHPaK9aExmFYcNuwS
+ 3eiFszpLozdzmrTfloHG+FwRpzua9dfXFBneU5XrA4ayMJwsfAbxmqLPFONh42iyOqjF
+ +uTxo9bRlFtZWKWolQvEqFCCdw6Hjo0eqJxshPNk+qehiXNtWq6ttCXV7Jb6Z45fIs1K
+ uSrg==
+X-Gm-Message-State: AOJu0Yyx33DqoozYweTEnNof+HBbo5gLcBZ79CkB4In3R/LUfqRkE27E
+ HrQotrW9v6vQeepC0DuEOksdiX16RMf+kMX0BuRq6Nb6Igz4k6rC+kvjSeN1aA==
+X-Gm-Gg: AY/fxX44oyaQLa1xo7/4dFd+qKgqJP/U6IooYPmP7kXuRNUJ2SACQP5niT49kcRGjTy
+ 4o9Pf4OkoKLDzD0ql/oGtcDBNzPzQGnxBlyWCMFjNPr0Qmqyvi3V3DHLiYv5BtAo/r44Du/4/ip
+ Ftk5kXzu87f0f+5sY6VorB+FR0uTdXL4MHifTXoblhSPl5J0N9deGciPSCmHWg98SjP5aQEJwdg
+ /DrkeunX0sSdFdxQzX79lUNFjP8lzM58fo6O2Z9LIkMaDiecVS5MZ+q3h4YyWBGM3poDbsKiPcV
+ A+0AooeOttrMz7ffNeScUDKsPxZGMmDjh0BNOsrjrCLJVN7geVzHQaO8YHhyP9e1OA6stEKff5f
+ YKPgwaYd0Rv1hSRSh0jDDkQl8iw0qqC3kPLKc0GBn0u/E7d9eYvRrFJI65+0QNG9L7B8hOVcKwR
+ NifvwZNat2DoeD1VSc13Aqs51mVotq/5/TAi2Fafe1+qRiXfvY
+X-Google-Smtp-Source: AGHT+IHbSwoiRAjQO1xO3he9LJbc5HQdeXI/AqIB3mcKxarfEVzvIJAsWZRnHUJc2vxdr0SfLm6eaw==
+X-Received: by 2002:a05:6512:3195:b0:594:39c3:b210 with SMTP id
+ 2adb3069b0e04-598f3de3711mr6789749e87.18.1765877742024; 
+ Tue, 16 Dec 2025 01:35:42 -0800 (PST)
 Received: from gimli.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
  [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5990da11bd1sm740828e87.3.2025.12.16.01.35.39
+ 2adb3069b0e04-5990da11bd1sm740828e87.3.2025.12.16.01.35.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Dec 2025 01:35:39 -0800 (PST)
+ Tue, 16 Dec 2025 01:35:41 -0800 (PST)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
 Cc: Joachim Wiberg <troglobit@gmail.com>
-Date: Tue, 16 Dec 2025 10:35:33 +0100
-Message-ID: <20251216093534.2558659-1-troglobit@gmail.com>
+Date: Tue, 16 Dec 2025 10:35:34 +0100
+Message-ID: <20251216093534.2558659-2-troglobit@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251216093534.2558659-1-troglobit@gmail.com>
+References: <20251216093534.2558659-1-troglobit@gmail.com>
 MIME-Version: 1.0
 Organization: Wires
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1765877740; x=1766482540; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=iPcy7+E17vQEn8xQhidCvSrwG0VPfvsWg84vCM8+mXc=;
- b=iNGhMmWS8w0j0Cr3htgzV5blid0mz+q6IichmWYrKatWeJXa2zLzWwWIzLtDCVVkDS
- oavckKFp8rHk8tOWtNja+VAcN+tMoMmkWQ3RXAv1QNlYxsGz4MyWAm92/kcfvdbxyH1A
- vbxSs09sgXjRQ2LEoGhEPlbZ5tW+OojDLooVg1L+wIefaCekTf5Qg7EjisEgGK/nBRyk
- HjZDPDQsrJ7YJRRNaSrzbeCA0dZgXAKrIajuLOfGnkRw4pyon35rtHc0ho7WTkM9agMH
- QtvUU2AUcEA7wjcYaRVq/rI8Yxi9hgWvN8bpIC0JS2S4w1+1ECGh4Mjnk93vfhWOwwpT
- fNxQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1765877742; x=1766482542; darn=buildroot.org;
+ h=content-transfer-encoding:organization:mime-version:references
+ :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=RYoq78RmXnngUoNBga/xOjyJxHMhTBkAfBrpq73O2IM=;
+ b=LHeTAPMaKgUVM9lEv/HSYaafltgZurRcAdc74Ar0Vq1h9wTuPaZMY4g6zr01CMK3+t
+ mbKGmTIoZurGALVkdJhPsnTs1dYZbECIfh2lsOHNed6ZIotCjYlHSHoPQ4Dop/sQp8qF
+ G6Mx4+ZuyrSXtT7NT+rHjre1QcQ+FKJH1aaLAzk0jN7kLhHAu2xFp/c5aEjYIRvlyekQ
+ xxFlxMroIiKsb2bsaM4K82HJUlJVU5Mw8DyMXsCs6unLmmlgM7gxCzCq0mKQFcaEDsK9
+ 1TmVK72lqipUHdiVHnqR+gCQ7F9k82DybOZIrU0tVnB1N9xGVavcismId+HwBi+F5ZX5
+ ExdQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=iNGhMmWS
-Subject: [Buildroot] [PATCH v2 1/2] package/libite: fix missing deps,
- requires fork()
+ header.a=rsa-sha256 header.s=20230601 header.b=LHeTAPMa
+Subject: [Buildroot] [PATCH v2 2/2] package/libite: bump to v2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,48 +128,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Unfortunately, parts of the library is not very no-MMU friendly atm.
-The below check fails due to runbg.c requiring fork().
+Changes:
+- Fix memory leak in which() on realloc() failure
+- Fix pidfile() to handle missing trailing slash in prefix path
 
-$ ./utils/test-pkg -c libite.config -p libite
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: FAILED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                             arm-aarch64 [6/6]: OK
-
-The dependency was introduced in libite v2.6.0, so this patch should
-probably be backported to v2025.02.x.
-
-Fixes:
-
- https://autobuild.buildroot.net/results/6c6fd2ae410a82c44da54ee13a09a38a7ab220c1/
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-
----
-v1 -> v2:
-
-- Clarify this is a fix that applies to previous versions, including LTS
-- Link to relevant autobuilder failure
+https://github.com/troglobit/libite/releases/tag/v2.6.2
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- package/libite/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libite/libite.hash | 4 ++--
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libite/Config.in b/package/libite/Config.in
-index 80d29791db..516d1bff98 100644
---- a/package/libite/Config.in
-+++ b/package/libite/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBITE
- 	bool "libite"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Libite is a lightweight library of frog DNA. It can be used
- 	  to fill the gaps in any dinosaur project. It holds useful
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index 3abad09b0a..c593f7a66d 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,7 +1,7 @@
+ # Upstream .sha256 from GitHub
+-sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
++sha256  0550ac5670836db85569786e00860d1d6999df8f74005307c290371c990e1dbd  libite-2.6.2.tar.xz
+ 
+ # Locally calculated
+ sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
+ sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
+-sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
++sha256  b6cc7074a27b26ee4e1ccda8d634d485d0f6f819e564c663c28ed61f4cc2b451  src/pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index e4bd845487..beb8c27ba7 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBITE_VERSION = 2.6.1
++LIBITE_VERSION = 2.6.2
+ LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
+ LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
 -- 
 2.43.0
 
