@@ -4,114 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E58D5CC8D
-	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 09:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48A8D5CC94
+	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 09:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8EFB60F90;
-	Tue, 16 Dec 2025 09:35:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8525460F7E;
+	Tue, 16 Dec 2025 09:48:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rPLZaMPnRnYn; Tue, 16 Dec 2025 09:35:49 +0000 (UTC)
+ id hfsfPziu0eoK; Tue, 16 Dec 2025 09:48:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FB7608EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AC34608E4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765877749;
-	bh=SJ4f7tjr3ycUzj55A6Le16cGAisdNmPQl5aWeVKyEpQ=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1765878497;
+	bh=/EPeAVmXMnIX6OcX+3KzynWJklUVU50UqhxPDR2YreY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=NCZ4pulVRaUTojcEqAZQ+l+6bHRFOew/zM0YVtBgyLJQ+AMqppjkSS910fLVOf9O6
-	 l9tInwGl2t6MjftUd3rNyz1TxIRHASGneBpK801vodmjAb70wk+4DV2qTgzlV7G1X+
-	 ZS1YI5nUD1pwgvoXq95UO5QYxXHR9TJKe4lDAEOHvTChTSVg8LMpiVCpxAQmXYckUP
-	 hKneoKhCphI7Zxrg1ccxSH4GYRkCMZ1Cu7YeSSocx5VociUzrxBje4lpxk+BC0P5Gn
-	 OnJ1cSOnCH6AvQdXavE7IqvDaX4/K9SSRqSnmEKO8OJWTjjiJbyRKr3Bg1085asHH3
-	 fZevNWlYbJoiQ==
+	 From:Reply-To:From;
+	b=jz5BegZAYtrujkGTHhDOqFTqyjcCqllOUSbp3nMPtLqPEUSL+ezxe+oH24yAEs2dj
+	 VRqsLVy3TRnZHnwi9RN78tV8kJGagbfw0QtdfNpHcGSGeIQ5SJi66oPMzMLBMauxqx
+	 Tevk/17YxfscVw5qxvtSpeu8rUS+Z7BC5SPf+6O2X4Mcd0EwXXlE40+9TdF6lY0jMd
+	 WLYEgBvDruzRMIVUNgNciX56vx43kIFvuMqdMrflrXJl7okGJRJ9qtD59gIn7KiQpT
+	 1FpP4GGa3hBBWjnxhQiQTPfbNcGRr3Kn+FiAAazJlDFTYtXTlVDUleGq4Pbn4AX/Ze
+	 6l3ByRPy0e8WA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41FB7608EA;
-	Tue, 16 Dec 2025 09:35:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D2979372
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AC34608E4;
+	Tue, 16 Dec 2025 09:48:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 294CC372
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B988340936
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A08B608E4
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:48:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bliKYltnTEal for <buildroot@buildroot.org>;
- Tue, 16 Dec 2025 09:35:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
- envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D005F4087E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D005F4087E
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D005F4087E
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:35:44 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-595819064cdso7153128e87.0
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 01:35:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1765877742; x=1766482542;
- h=content-transfer-encoding:organization:mime-version:references
- :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=RYoq78RmXnngUoNBga/xOjyJxHMhTBkAfBrpq73O2IM=;
- b=N6sw1XKepQuWl9aBWe027YnIIWPOyduOV3wRJgARdOoxI6yvryLJ3GjK3esEq44J48
- 7CKNJSvShNlSJEH9w8JQ/Os+DufhJZDIPMPlMLN8ZhcccipKxQVdfiExmwGlqSWMdH5a
- PgO/J4RObb/xwL0vREPJ86mpPnESJg0H+DbLJQg/g/TDpX9Np92RHPaK9aExmFYcNuwS
- 3eiFszpLozdzmrTfloHG+FwRpzua9dfXFBneU5XrA4ayMJwsfAbxmqLPFONh42iyOqjF
- +uTxo9bRlFtZWKWolQvEqFCCdw6Hjo0eqJxshPNk+qehiXNtWq6ttCXV7Jb6Z45fIs1K
- uSrg==
-X-Gm-Message-State: AOJu0Yyx33DqoozYweTEnNof+HBbo5gLcBZ79CkB4In3R/LUfqRkE27E
- HrQotrW9v6vQeepC0DuEOksdiX16RMf+kMX0BuRq6Nb6Igz4k6rC+kvjSeN1aA==
-X-Gm-Gg: AY/fxX44oyaQLa1xo7/4dFd+qKgqJP/U6IooYPmP7kXuRNUJ2SACQP5niT49kcRGjTy
- 4o9Pf4OkoKLDzD0ql/oGtcDBNzPzQGnxBlyWCMFjNPr0Qmqyvi3V3DHLiYv5BtAo/r44Du/4/ip
- Ftk5kXzu87f0f+5sY6VorB+FR0uTdXL4MHifTXoblhSPl5J0N9deGciPSCmHWg98SjP5aQEJwdg
- /DrkeunX0sSdFdxQzX79lUNFjP8lzM58fo6O2Z9LIkMaDiecVS5MZ+q3h4YyWBGM3poDbsKiPcV
- A+0AooeOttrMz7ffNeScUDKsPxZGMmDjh0BNOsrjrCLJVN7geVzHQaO8YHhyP9e1OA6stEKff5f
- YKPgwaYd0Rv1hSRSh0jDDkQl8iw0qqC3kPLKc0GBn0u/E7d9eYvRrFJI65+0QNG9L7B8hOVcKwR
- NifvwZNat2DoeD1VSc13Aqs51mVotq/5/TAi2Fafe1+qRiXfvY
-X-Google-Smtp-Source: AGHT+IHbSwoiRAjQO1xO3he9LJbc5HQdeXI/AqIB3mcKxarfEVzvIJAsWZRnHUJc2vxdr0SfLm6eaw==
-X-Received: by 2002:a05:6512:3195:b0:594:39c3:b210 with SMTP id
- 2adb3069b0e04-598f3de3711mr6789749e87.18.1765877742024; 
- Tue, 16 Dec 2025 01:35:42 -0800 (PST)
-Received: from gimli.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
- [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5990da11bd1sm740828e87.3.2025.12.16.01.35.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Dec 2025 01:35:41 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
-To: buildroot@buildroot.org
-Cc: Joachim Wiberg <troglobit@gmail.com>
-Date: Tue, 16 Dec 2025 10:35:34 +0100
-Message-ID: <20251216093534.2558659-2-troglobit@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251216093534.2558659-1-troglobit@gmail.com>
-References: <20251216093534.2558659-1-troglobit@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9TYzMhVdEst7 for <buildroot@buildroot.org>;
+ Tue, 16 Dec 2025 09:48:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2D43960850
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D43960850
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2D43960850
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:48:14 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id D14D7C19D31
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 09:47:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 4671C6071C;
+ Tue, 16 Dec 2025 09:48:12 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 4F651119432ED; Tue, 16 Dec 2025 10:48:07 +0100 (CET)
+Date: Tue, 16 Dec 2025 10:48:06 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Michael Vetter <jubalh@iodoru.org>
+Message-ID: <20251216104806.1342e697@windsurf>
+In-Reply-To: <20251202175915.1616935-1-bernd@kuhls.net>
+References: <20251202175915.1616935-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Organization: Wires
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1765877742; x=1766482542; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:references
- :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
- :date:message-id:reply-to;
- bh=RYoq78RmXnngUoNBga/xOjyJxHMhTBkAfBrpq73O2IM=;
- b=LHeTAPMaKgUVM9lEv/HSYaafltgZurRcAdc74Ar0Vq1h9wTuPaZMY4g6zr01CMK3+t
- mbKGmTIoZurGALVkdJhPsnTs1dYZbECIfh2lsOHNed6ZIotCjYlHSHoPQ4Dop/sQp8qF
- G6Mx4+ZuyrSXtT7NT+rHjre1QcQ+FKJH1aaLAzk0jN7kLhHAu2xFp/c5aEjYIRvlyekQ
- xxFlxMroIiKsb2bsaM4K82HJUlJVU5Mw8DyMXsCs6unLmmlgM7gxCzCq0mKQFcaEDsK9
- 1TmVK72lqipUHdiVHnqR+gCQ7F9k82DybOZIrU0tVnB1N9xGVavcismId+HwBi+F5ZX5
- ExdQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LHeTAPMa
-Subject: [Buildroot] [PATCH v2 2/2] package/libite: bump to v2.6.2
+ d=bootlin.com; s=dkim; 
+ t=1765878488; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=VGoRe9Su/dmUPSNqU4KFZ2VYROhb0nK62O7oduWDS+k=;
+ b=hZ/mradxXDhmwHQEadC/sc26QiDK1mLfXGYfHq0uqtM50ku3R466GGdx/GDLh2WzvLdu7Q
+ Q9lOqzQRE4i4qmWlqKbds7TbzOijWOTqZybG0YTpM4qk1D3ZhhsiWrNm2zdcNB1xhF1O4C
+ v0/23e3KerfXviJ3bmEU5qOw4dDD820EUM7RuTF7/UOKdEP4usqrmrGAfMoS8EWGVn8aaN
+ QSTKabhHOFlhn8G2entXk5dJLqCfH/ZPhDCM3ZD0jbEzzKvKrbQiQGP3J6Am252Yx0I5Sz
+ /zeVGVjim5+mee1EplsxWQ5S5Tr9B4rPpa456z3cUUl/LefK0Bk7IcIejFa2KA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=hZ/mradx
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/jasper: bump version to
+ 4.2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,53 +96,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
-- Fix memory leak in which() on realloc() failure
-- Fix pidfile() to handle missing trailing slash in prefix path
+Hello Bernd,
 
-https://github.com/troglobit/libite/releases/tag/v2.6.2
+Thanks for this version bump. Is this fixing the CMake 4 compatibility?
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
----
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue,  2 Dec 2025 18:59:15 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 3abad09b0a..c593f7a66d 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,7 @@
- # Upstream .sha256 from GitHub
--sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
-+sha256  0550ac5670836db85569786e00860d1d6999df8f74005307c290371c990e1dbd  libite-2.6.2.tar.xz
- 
- # Locally calculated
- sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
- sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
--sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
-+sha256  b6cc7074a27b26ee4e1ccda8d634d485d0f6f819e564c663c28ed61f4cc2b451  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index e4bd845487..beb8c27ba7 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBITE_VERSION = 2.6.1
-+LIBITE_VERSION = 2.6.2
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+> -# 0002-Fixes-400.patch
+> -JASPER_IGNORE_CVES += CVE-2025-8835
+> +# needed for cross-compile
+> +JASPER_STDC_VERSION="`echo __STDC_VERSION__ | $(TARGET_CROSS)cpp -E -P -`"
+> +JASPER_CONF_OPTS += \
+> +	-DJAS_STDC_VERSION=$(JASPER_STDC_VERSION)
+
+This looks meh. Why does it need this? Why isn't the CMakeLists.txt not
+detecting this?
+
+Thomas
 -- 
-2.43.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
