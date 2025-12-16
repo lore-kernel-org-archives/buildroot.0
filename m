@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAF1DD637A3
-	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 19:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82717D637A1
+	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 19:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4B596068B;
-	Tue, 16 Dec 2025 19:41:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48BB06105E;
+	Tue, 16 Dec 2025 19:41:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Umc-lNI2tPgx; Tue, 16 Dec 2025 19:41:37 +0000 (UTC)
+ id 6Jf8uyjGTF2k; Tue, 16 Dec 2025 19:41:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C978E60F83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF88261037
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765914097;
-	bh=7JGxdDgvwp5bmzAveIUkAol4+FKban7g2nN2xUO+IdQ=;
+	s=default; t=1765914110;
+	bh=Qsbs2to9+UvCTwwuH5hQsiji9eWkyVBBawpOFl0M5LY=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=leQbF3oOAHebi1/et+zIwUllarLKmAak/rjzJYFPHhFI2WV4tX/qfgkl0BERzRn3h
-	 0zYNt3IJo1h6QNq4lA8iHY8h3yhZ3r9CY8yfnENtPhhm2LiN5MkMd52brbRv/A1Dyf
-	 AFiIgEn+1ekHOP+c/S6CI23MOYsyj+elGFyWOzCU7RXXoIwe55K1/3MPpri0yG3GqQ
-	 UipZDWY0i0Hk30GynqYTd9oRPda7AREZlXT4wN/9URV7/a+LabqWTOLTxIGUolxKyN
-	 RtL8WOCygezDDGjmd3jrbUy3SxsdwO7U1NgczLGrhBGrSXuHoim5mvFeq6lXipzw5p
-	 I7bQ2jJ0wgYbA==
+	b=Jzj34TIMowW/GuLCcvklOElAgp1ruTpQrkgDT5Atmwzl4Aod8TVxc+fNUaFbAym4o
+	 4cEEA9Zf6zpxcZ0K/OhubSh0/u2VhN/k+Y4TuJO6scm94z3dzZLHG1MdFNJMjDJChK
+	 vT7hjPS5TXGk+FNF6EMvaa945OE2+1jE9cvrvKTuSv3Zzcfo1G1EiJKqzoBb1MgxG5
+	 O/lcXmDibv5/vBDYY1fxP2J5ZdvGD6yfMhL12LCxguuopmujjbroJbN+vwkgPvI8GJ
+	 Xiuiet0QAJoDafn+Ng7s7AUkhnj9e5Lo8oT+dUHULEYFXJsFvmxvG6o6BfZtW6PUwP
+	 204VSpbNrWe+A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C978E60F83;
-	Tue, 16 Dec 2025 19:41:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BDB2364
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 19:41:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF88261037;
+	Tue, 16 Dec 2025 19:41:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A077B364
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 19:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11F7A60F83
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 19:41:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9367E4049E
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 19:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UGyhgBEOMlWr for <buildroot@buildroot.org>;
- Tue, 16 Dec 2025 19:41:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9b50DSfXMP7b for <buildroot@buildroot.org>;
+ Tue, 16 Dec 2025 19:41:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 010C26068B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 010C26068B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 47DC240499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47DC240499
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 010C26068B
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 19:41:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 47DC240499
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 19:41:48 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A8EF6A4C4060;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BB747A4C4585;
  Tue, 16 Dec 2025 20:41:19 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:47366)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vVav9-000000000Bj-0Att;
+ (envelope-from <bernd@kuhls.net>) id 1vVav9-000000000Bj-0UFX;
  Tue, 16 Dec 2025 19:41:19 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 16 Dec 2025 20:40:55 +0100
-Message-ID: <20251216194119.3020421-2-bernd@kuhls.net>
+Date: Tue, 16 Dec 2025 20:40:56 +0100
+Message-ID: <20251216194119.3020421-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251216194119.3020421-1-bernd@kuhls.net>
 References: <20251216194119.3020421-1-bernd@kuhls.net>
@@ -67,23 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765914079;
- bh=GtUGOQLbFxGI4Au3Aly8uR4NXp1mdasQgU92gQob7+M=;
+ bh=Qj4fiMFy3K0Ro7jdEiSGB8IVPvgZBEjC/j0BXF8txcc=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=QuubJmJA/Wq9fn0lAiALVmW+LznTQyfTIeuWNDKXxo5QoFrfkBgmcy4Jrq0ACZmkU
- hrSU3cXmBWBsqIWyhkHBFbQGeKxAuvcXbjYc9uPP2EvWUyUOHdV7gD9ePYXusnI3+/
- uF11c/KWmJX+AADR5sHTERoJbuSp4v6QtlTaMo4EMkUb1n1qcBlrOtKqt9kpY5rIPY
- q80wu5jzm4LljCCs/olyHegLpiu5vW3od23I+8wd4/yxAKmgcqi9hq95cGwW0BwVjS
- mWRbtepfqP168s/u13O66ibBJQzO+cqJZcHQWCy2Enp75ylLB7mdS7QlPx/GiLc5Q+
- 9lD4q3IFy6MEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=EXIRnnqDq7lbd1f3SvRvLaH9ePOsQvHGponKNfiCfN39ITGeMrdZyNzPHS96eAvOv
+ 5PvnLPSh/H2QAdcg0Gh3wFjmxM/eEZsIt89liBCetnaVy1IDvVigAlyHJZGOiuUSh+
+ 8L3sjRm39myXIPMLCWaxzCEZW5Dl8GKoZKCqcV7RwscO8b7APHFHHEiv+ifakjTsBO
+ o0nWg9nAqz1QBWVRcneHcpIumscofZ+mZpFNR+49vOcjUD4htdV0GHI+R67XEA62l1
+ cCNvInwpR0gCUzB0DW1FWmhdymjGhBux7/lCJW1M8Di6A24MsZa4gBD+pZC3F0k7tj
+ G1/hrYL8ZrSbw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=QuubJmJA
-Subject: [Buildroot] [PATCH 02/26] package/python-setuptools-scm: bump
- version to 9.2.2
+ header.s=kas202511301023 header.b=EXIRnnqD
+Subject: [Buildroot] [PATCH 03/26] package/python-sh: bump version to 2.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,42 +103,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pypa/setuptools-scm/blob/v9.2.2/CHANGELOG.md
+https://github.com/amoffat/sh/blob/2.2.2/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
- package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ package/python-sh/python-sh.hash | 4 ++--
+ package/python-sh/python-sh.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index 9a1c6f0262..eaed490fc7 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
+index 4ed2464260..43da0bc0ee 100644
+--- a/package/python-sh/python-sh.hash
++++ b/package/python-sh/python-sh.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
--md5  35e09656d091a94b27f9c50b383b32c5  setuptools_scm-8.3.1.tar.gz
--sha256  3d555e92b75dacd037d32bafdf94f97af51ea29ae8c7b234cf94b7a5bd242a63  setuptools_scm-8.3.1.tar.gz
-+md5  72975fc3ec40a1ae06bb2d86ca8ac48d  setuptools_scm-9.2.2.tar.gz
-+sha256  1c674ab4665686a0887d7e24c03ab25f24201c213e82ea689d2f3e169ef7ef57  setuptools_scm-9.2.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sh/json
+-md5  d1bc1f56e6a99109fb0f589aba574cf2  sh-2.2.1.tar.gz
+-sha256  287021ae84183dea49787985e33797dda7fe769e4f95f2c94dff8e245ab4cb00  sh-2.2.1.tar.gz
++md5  961d38de16f88556bd70381eddd7f415  sh-2.2.2.tar.gz
++sha256  653227a7c41a284ec5302173fbc044ee817c7bad5e6e4d8d55741b9aeb9eb65b  sh-2.2.2.tar.gz
  # Locally computed sha256 checksums
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index 8bf879082e..8c74a55335 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+ sha256  d8491c6e236568d04f7c8c07f2f1b8f5d142706dab6ab88f6e0d2dd476b6c706  LICENSE.txt
+diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
+index 84ad1aec63..6bbd621af1 100644
+--- a/package/python-sh/python-sh.mk
++++ b/package/python-sh/python-sh.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_SCM_VERSION = 8.3.1
-+PYTHON_SETUPTOOLS_SCM_VERSION = 9.2.2
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/b9/19/7ae64b70b2429c48c3a7a4ed36f50f94687d3bfcd0ae2f152367b6410dff
-+PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/7b/b1/19587742aad604f1988a8a362e660e8c3ac03adccdb71c96d86526e5eb62
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = pep517
+-PYTHON_SH_VERSION = 2.2.1
++PYTHON_SH_VERSION = 2.2.2
+ PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
+-PYTHON_SH_SITE = https://files.pythonhosted.org/packages/bd/30/abf254f7b56ba7bcae938767e3ee0f54d220d931a35a8721de350b76dec5
++PYTHON_SH_SITE = https://files.pythonhosted.org/packages/59/52/f43920223c93e31874677c681b8603d36a40d3d8502d3a37f80d3995d43e
+ PYTHON_SH_SETUP_TYPE = poetry
+ PYTHON_SH_LICENSE = MIT
+ PYTHON_SH_LICENSE_FILES = LICENSE.txt
 -- 
 2.47.3
 
