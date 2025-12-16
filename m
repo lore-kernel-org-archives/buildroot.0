@@ -4,81 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C631D5E39D
-	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 14:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26243D609A6
+	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 15:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05930827D2;
-	Tue, 16 Dec 2025 14:54:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBA5B827A8;
+	Tue, 16 Dec 2025 15:13:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q2wr-7N-41FP; Tue, 16 Dec 2025 14:54:14 +0000 (UTC)
+ id 7GqP3GtIU3Fs; Tue, 16 Dec 2025 15:13:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C94F82897
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C309B826F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765896854;
-	bh=rdQ0dCJgFe0t3ljD4RuDVgjZo55yNMmR5yCEtU9i//8=;
-	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RlLAaXjVrUhYsEdYPbEJ/ficnFfp+s+ux5plDQz+3Fo0rB4vtHfU0RGKHul6h+3D/
-	 VeWEhHPqx6okG6VXzHVMJ36LP9I7EcRglwSWKWmPWshXfcT4X54Rc8QcTyN3GaWOdk
-	 BQxrcRLBFTCN5a06Fby1XN6FBstTXzFQ9bkoErEEau23LUNw4Qsz5WmD54PDZfoRoX
-	 as9y6MKLl1hJyk4nLqZRUzc6cb/PWxc65WXPbXVFCtV91Dm///gtwo3jWzbx85Njku
-	 CwczIG1Mi7Zbbao8Z/r8B0eACh8SkSGhuYK98bO2OE19iZ+m+n1EH24sidXTCfKnS0
-	 4r5aADNso2bqw==
+	s=default; t=1765897998;
+	bh=omGBgbgnje/wU0OWYwPXe8aEf05LDbmVcYDi3MCKSLU=;
+	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=soL1CZxP2ak8yY7GfJ+ZwTHWoIKBFyq40VaktW6N/44BElPq2Timlr5v+d8ZwUm0w
+	 bu9sM0nDFVJuK1vbgS1cPiPZr7qng////mKuUqqoUtQZMPsxAV5qxrHtmfgrCq3AUX
+	 tZjetIRYOFz8E2HolRa1sH5y5gCqfaK5WkWejUAiktrQFEj5/tgJ9I2fzNtTa01aPm
+	 U5g7b5j4FROgR19flC2Dx5n3XmsP0bYX3dkwQE+kLBKBEXppL1PF24B1xUVhagznBM
+	 NNc9qwn2oyHPqNl6leVCVSANIsv3JkvIpD6w6SNx3DxP+pvl6jQRSIRED5yt7cqweU
+	 n5J2YLy4u17xw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C94F82897;
-	Tue, 16 Dec 2025 14:54:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 00EA1372
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 14:54:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C309B826F5;
+	Tue, 16 Dec 2025 15:13:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9DE6370
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 15:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB5D78294A
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 14:54:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B94F440D29
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 15:13:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HEvOvHpN8ZPv for <buildroot@buildroot.org>;
- Tue, 16 Dec 2025 14:54:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A9E0882865
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9E0882865
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9E0882865
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 14:54:09 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.2])
- by mail.tkos.co.il (Postfix) with ESMTP id C13CC44081E;
- Tue, 16 Dec 2025 16:51:38 +0200 (IST)
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20251216135633.1413876-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Tue, 16 Dec 2025 14:56:32
- +0100")
-References: <20251216135633.1413876-1-thomas.petazzoni@bootlin.com>
-User-Agent: mu4e 1.12.13; emacs 30.2
-Date: Tue, 16 Dec 2025 16:54:05 +0200
-Message-ID: <87zf7i5vg2.fsf@tarshish>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s4oMYhWj90pC for <buildroot@buildroot.org>;
+ Tue, 16 Dec 2025 15:13:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4FC5440D26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FC5440D26
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4FC5440D26
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 15:13:16 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id
+ 2adb3069b0e04-5959187c5a9so4433503e87.1
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 07:13:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1765897993; x=1766502793;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=6y3RswpfZeIQJSvdSslfYCPEkC+UIUtOxlG8LGO6eUU=;
+ b=B2zhgOLO5jLVIJJ9xXu0XKfPgs7bBgkudgP1m91SwPS6+HSqiFz8U05IlQ+jlczfb0
+ sVPWQC/JTtesfChliUaPiob5WnDOEVQ0uMclKXv+XBlu9mOcncKoXTU2rr8D8rWQ1OQV
+ ttNz/aJrXEd5WkteuRHmaxKN/qTaKPeyDr2hPBHlfeaVkc6cmQR9+IeamhvMe+7g66v5
+ RN5VaWUOqjRt/KEopeLhpHPscTAWnQ37IsYrWm26bh8MvB/fj0zW9mI+k6DN4Ui37B4s
+ S8jtfMyKG6Uq1KDFQTmR6DWobpvUfea9fPlyCDSeRHyth/h+A8RVzF/9Q3EINS/3jk9x
+ rw0Q==
+X-Gm-Message-State: AOJu0YymAyhSQ6y4ygD8GD/ILQHcB5wn97pA7ST86NSPgWMCkanJ59pC
+ UB9V4314wcU5zjwnfEy0BFtfy1H+tdw7OLhiLPSdI+69Ji3rPhVm3FAE9zQVqvLJ99oXzG1hoiM
+ aS9aSGzhWv+IADBEwuOKbj8Lz1estooCgqg==
+X-Gm-Gg: AY/fxX4AAM+Q3V8KmEtmaFGpPqnsKm3gG/ULbItW3Tsrdslcbb3ICsd6OZ6QnNWnLJG
+ WyrAeSk4okoag9ExhFBR/rT2mYIOwTiAj/674hUM/WbcS7QPfauJ3OWIUAX5kl0ULgCaaXAFkeH
+ 7UknZ7YiMQ3mYbZE+9+ranhDgY3kBU4z7zr+QsgTqg1zyu3uZ5Zwk5bYCqNn77KNoiL71tcii19
+ 9q3Dl8H65iaxuRowniv9jJAClUXb6WduUGLOiaYfZSKcHNndFY3K5+/hPm8hlAfSQMZLR6L
+X-Google-Smtp-Source: AGHT+IHM8oOdnWFufRV+qS4aKsso+hAaGHpofdxdDT4s6X1k9rInLj/02WHzRRL3MQFvbbusNA1E3SlJ+kcrZKrJy6U=
+X-Received: by 2002:a05:6512:3f09:b0:598:ee6c:1172 with SMTP id
+ 2adb3069b0e04-598faa229a3mr5177838e87.9.1765897992814; Tue, 16 Dec 2025
+ 07:13:12 -0800 (PST)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1765896698;
- bh=gwJbIW9pYoTZ5BULBdpzAgSJfWiI0/dCcponteflJkQ=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=zIdGRGkVr2gZQmExo631PVvytZCxYMoLeA2rJxejox2Ty9ymfAPc3/JmNob6qor7v
- YX8zrk6GqHLfioevu0yp3SehWweixwVtZDhJyaug5hG/qswZnKS7lBssQ65MCbwkti
- fBL6+ki5o6EdDUvGSCo2q/X0ac6NTB2PV0DMDUJD0hNe8X/4H1Y42n8aVccv3FCSVb
- kXBxw6s7jn8+gF8nBUcKRlY1z1MBmTicvfapd4dPkUN9Ec9W0zDeevFxGKe7KqO91Z
- awC0hgYlnyWBu6Dxwyd2ukVtyQJAuf958qQqTM07Iqfv5fBl3JUHbqL7lkX3Y1o7XF
- J6chnMwYJl+8Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+References: <20251215140634.2955955-1-yegorslists@googlemail.com>
+In-Reply-To: <20251215140634.2955955-1-yegorslists@googlemail.com>
+Date: Tue, 16 Dec 2025 16:13:05 +0100
+X-Gm-Features: AQt7F2qfKjxf8UFS3RSXXvWJeo1bLseDQ04c-WkV6c2wZP9v1Qk6CtwYVumhzek
+Message-ID: <CAGm1_kurP=wmUeC7uAAU6CO7pf9dW5zt-tc6ZB9u-HjS=9uVug@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20230601; t=1765897993; x=1766502793; darn=buildroot.org; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=6y3RswpfZeIQJSvdSslfYCPEkC+UIUtOxlG8LGO6eUU=;
+ b=RQyqKnddrXbk9M8tcP7oS0WIP1OkysWe1nWy0bTlsr6KjHw8SbnbGLb774wb08NqAy
+ iXJvEJDfNBTFc9M845jquDrzpJf+VE/I2BLRwJZj5jCNma4JihtsDm6Yfy8hLcjNSZCc
+ r2rqc5laQyucIcg1lrbXkItYqZO73vojHHi2TQApseuQ+9zRguEm6p5rU3RnHh7USGFP
+ W1vJVnQfxF+gN6t/cqYLsf0asslmf5l+bj5YqlzIE/2cp31yzN3ZH5jVH5I0TJLMITKf
+ RPRBH3PSORzkDuqmUOCKzcwAOhyVnZdeMyrGX8G/givyE26I2FDggayaSYSwuoLml3eb
+ 5t9w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=zIdGRGkV
-Subject: Re: [Buildroot] [PATCH] package/connman-gtk: remove package
+ header.from=googlemail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=RQyqKndd
+Subject: Re: [Buildroot] [PATCH] package/cmocka: disable documentation
+ building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,144 +114,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-
-On Tue, Dec 16 2025, Thomas Petazzoni via buildroot wrote:
-> - Last upstream release: December 2015
-> - Last upstream commit: June 2018
-> - Github repo marked as archived/read-only
-> - No maintainer in DEVELOPERS file
-> - Doesn't build with recent Gtk versions
-
-Bernd posted a similar patch a few days ago as part of a larger removals
-series:
-
-  https://patchwork.ozlabs.org/project/buildroot/patch/20251213202503.1348845-4-bernd@kuhls.net/
-
-baruch
-
-> Fixes:
->
->   https://autobuild.buildroot.net/results/54d8cc10e4d017deabf8664898a2d09e3a115f66/
->
-> (This has been broken for a long time, this build falure is from
-> January 2025, so our LTS branch is similarly affected)
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  Config.in.legacy                     |  7 +++++++
->  package/Config.in                    |  1 -
->  package/connman-gtk/Config.in        | 22 ----------------------
->  package/connman-gtk/connman-gtk.hash |  3 ---
->  package/connman-gtk/connman-gtk.mk   | 17 -----------------
->  5 files changed, 7 insertions(+), 43 deletions(-)
->  delete mode 100644 package/connman-gtk/Config.in
->  delete mode 100644 package/connman-gtk/connman-gtk.hash
->  delete mode 100644 package/connman-gtk/connman-gtk.mk
->
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 07d5034860..3473dbf010 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2026.02"
->  
-> +config BR2_PACKAGE_CONNMAN_GTK
-> +	bool "connman-gtk"
-> +	select BR2_LEGACY
-> +	help
-> +	  connman-gtk has been removed as it was no longer maintained
-> +	  upstream.
-> +
->  config BR2_PACKAGE_RPI_USERLAND
->  	bool "rpi-userland has been removed"
->  	select BR2_LEGACY
-> diff --git a/package/Config.in b/package/Config.in
-> index 0ffdf5f4d6..f72b935d5a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2458,7 +2458,6 @@ endif
->  	source "package/civetweb/Config.in"
->  	source "package/cloudflared/Config.in"
->  	source "package/connman/Config.in"
-> -	source "package/connman-gtk/Config.in"
->  	source "package/conntrack-tools/Config.in"
->  	source "package/corkscrew/Config.in"
->  	source "package/crda/Config.in"
-> diff --git a/package/connman-gtk/Config.in b/package/connman-gtk/Config.in
-> deleted file mode 100644
-> index 467bf7ec88..0000000000
-> --- a/package/connman-gtk/Config.in
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -comment "connman-gtk needs libgtk3 and a glibc or uClibc toolchain w/ wchar, threads, resolver, dynamic library"
-> -	depends on BR2_USE_MMU
-> -	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> -		BR2_STATIC_LIBS || !BR2_PACKAGE_LIBGTK3 || \
-> -		BR2_TOOLCHAIN_USES_MUSL
-> -
-> -config BR2_PACKAGE_CONNMAN_GTK
-> -	bool "connman-gtk"
-> -	depends on BR2_USE_WCHAR # libglib2, connman
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, connman
-> -	depends on BR2_USE_MMU # libglib2
-> -	depends on !BR2_STATIC_LIBS # connman
-> -	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # connman
-> -	depends on !BR2_TOOLCHAIN_USES_MUSL # connman
-> -	depends on BR2_PACKAGE_LIBGTK3
-> -	select BR2_PACKAGE_CONNMAN
-> -	select BR2_PACKAGE_LIBGLIB2
-> -	help
-> -	  GTK GUI for ConnMan.
-> -
-> -	  https://github.com/jgke/connman-gtk
-> diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
-> deleted file mode 100644
-> index 72e2fcaaa5..0000000000
-> --- a/package/connman-gtk/connman-gtk.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally calculated
-> -sha256  49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca  connman-gtk-1.1.1.tar.bz2
-> -sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/connman-gtk/connman-gtk.mk b/package/connman-gtk/connman-gtk.mk
-> deleted file mode 100644
-> index 0ea49198e6..0000000000
-> --- a/package/connman-gtk/connman-gtk.mk
-> +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -################################################################################
-> -#
-> -# connman-gtk
-> -#
-> -################################################################################
-> -
-> -CONNMAN_GTK_VERSION = 1.1.1
-> -CONNMAN_GTK_SITE = https://github.com/jgke/connman-gtk/releases/download/v$(CONNMAN_GTK_VERSION)
-> -CONNMAN_GTK_SOURCE = connman-gtk-$(CONNMAN_GTK_VERSION).tar.bz2
-> -CONNMAN_GTK_INSTALL_STAGING = YES
-> -CONNMAN_GTK_DEPENDENCIES = host-intltool connman libglib2 libgtk3 \
-> -	$(TARGET_NLS_DEPENDENCIES)
-> -CONNMAN_GTK_LICENSE = GPL-2.0+
-> -CONNMAN_GTK_LICENSE_FILES = COPYING
-> -CONNMAN_GTK_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-> -
-> -$(eval $(autotools-package))
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgYWxsLAoKT24gTW9uLCBEZWMgMTUsIDIwMjUgYXQgMzowNuKAr1BNIDx5ZWdvcnNsaXN0c0Bn
+b29nbGVtYWlsLmNvbT4gd3JvdGU6Cj4KPiBGcm9tOiBZZWdvciBZZWZyZW1vdiA8eWVnb3JzbGlz
+dHNAZ29vZ2xlbWFpbC5jb20+Cj4KPiBjbW9ja2EgdHJpZXMgdG8gZmluZCB0aGUgRG94eWdlbiBi
+aW5hcnkgYnkgZGVmYXVsdCBhbmQgaWYgc3VjY2Vzc2Z1bCwKPiBpdCB0cmllcyB0byBkb3dubG9h
+ZCBzdHlsZSBzaGVldHMgYW5kIGJyZWFrcyB3aXRoIHRoZSBmb2xsb3dpbmcgbWVzc2FnZToKPgo+
+IENNYWtlIEVycm9yIGF0Cj4gZG94eWdlbi1hd2Vzb21lLWNzcy1zdWJidWlsZC9kb3h5Z2VuLWF3
+ZXNvbWUtY3NzLXBvcHVsYXRlLXByZWZpeC9zcmMvZG94eWdlbi1hd2Vzb21lLWNzcy1wb3B1bGF0
+ZS1zdGFtcC9kb3dubG9hZC1kb3h5Z2VuLWF3ZXNvbWUtY3NzLXBvcHVsYXRlLmNtYWtlOjE2Mwo+
+IChtZXNzYWdlKToKPiAgIEVhY2ggZG93bmxvYWQgZmFpbGVkIQo+Cj4gICAgIGVycm9yOiBkb3du
+bG9hZGluZwo+ICdodHRwczovL2dpdGh1Yi5jb20vam90aGVwcm8vZG94eWdlbi1hd2Vzb21lLWNz
+cy9hcmNoaXZlL3JlZnMvdGFncy92Mi40LjEudGFyLmd6Jwo+IGZhaWxlZAo+ICAgICAgICAgICBz
+dGF0dXNfY29kZTogMQo+ICAgICAgICAgICBzdGF0dXNfc3RyaW5nOiAiVW5zdXBwb3J0ZWQgcHJv
+dG9jb2wiCj4gICAgICAgICAgIGxvZzoKPiAgICAgICAgICAgLS0tIExPRyBCRUdJTiAtLS0KPiAg
+ICAgICAgICAgUHJvdG9jb2wgImh0dHBzIiBub3Qgc3VwcG9ydGVkCj4KPiBjbG9zaW5nIGNvbm5l
+Y3Rpb24gIy0xCj4KPiBBZGQgYSBwYXRjaCBpbnRyb2R1Y2luZyB0aGUgQlVJTERfRE9DIG9wdGlv
+biB0byBwcmV2ZW50IHRoaXMgYmVoYXZpb3IuCj4gUGF0Y2ggVVJMOiBodHRwczovL2dpdGxhYi5j
+b20vY21vY2thL2Ntb2NrYS8tL21lcmdlX3JlcXVlc3RzLzEwNQo+Cj4gRml4ZXM6Cj4gaHR0cHM6
+Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2U2YTA0Y2VlOGJjMzAyOGJkOGExYTUz
+NWMyODUyZTYwZjM2MmM0YmEvCj4KPiBTaWduZWQtb2ZmLWJ5OiBZZWdvciBZZWZyZW1vdiA8eWVn
+b3JzbGlzdHNAZ29vZ2xlbWFpbC5jb20+Cj4gLS0tCj4gIC4uLi8wMDAxLUNNYWtlLWFkZC1CVUlM
+RF9ET0Mtb3B0aW9uLnBhdGNoICAgICB8IDQzICsrKysrKysrKysrKysrKysrKysKPiAgMSBmaWxl
+IGNoYW5nZWQsIDQzIGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
+Y21vY2thLzAwMDEtQ01ha2UtYWRkLUJVSUxEX0RPQy1vcHRpb24ucGF0Y2gKPgo+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL2Ntb2NrYS8wMDAxLUNNYWtlLWFkZC1CVUlMRF9ET0Mtb3B0aW9uLnBhdGNo
+IGIvcGFja2FnZS9jbW9ja2EvMDAwMS1DTWFrZS1hZGQtQlVJTERfRE9DLW9wdGlvbi5wYXRjaAo+
+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMjkxMzMxNWZhYgo+IC0t
+LSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2Ntb2NrYS8wMDAxLUNNYWtlLWFkZC1CVUlMRF9E
+T0Mtb3B0aW9uLnBhdGNoCj4gQEAgLTAsMCArMSw0MyBAQAo+ICtGcm9tIDU5N2NkM2EwODYwNWIy
+ZjA0Zjg5YzgwNmQxMjNlZTE0ZjU3ZDNjYjQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zy
+b206IFllZ29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPiArRGF0ZTog
+TW9uLCAxNSBEZWMgMjAyNSAxNDowODozNiArMDEwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIENNYWtl
+OiBhZGQgQlVJTERfRE9DIG9wdGlvbgo+ICsKPiArQnVpbGQgZG9jdW1lbnRhdGlvbiBvbmx5IGlm
+IGV4cGxpY2l0bHkgZW5hYmxlZC4gU2V0IHRoZSBkZWZhdWx0IHRvIE9OIHRvCj4gK3ByZXNlcnZl
+IGN1cnJlbnQgYmVoYXZpb3IuCj4gKwo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRsYWIuY29tL2Nt
+b2NrYS9jbW9ja2EvLS9tZXJnZV9yZXF1ZXN0cy8xMDUKPiArCj4gK1NpZ25lZC1vZmYtYnk6IFll
+Z29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPiArLS0tCj4gKyBDTWFr
+ZUxpc3RzLnR4dCAgICAgIHwgNCArKystCj4gKyBEZWZpbmVPcHRpb25zLmNtYWtlIHwgMSArCj4g
+KyAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ICsKPiAr
+ZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIvQ01ha2VMaXN0cy50eHQKPiAraW5kZXggZTMz
+YTFhOC4uZWJkY2Y0ZSAxMDA2NDQKPiArLS0tIGEvQ01ha2VMaXN0cy50eHQKPiArKysrIGIvQ01h
+a2VMaXN0cy50eHQKPiArQEAgLTUzLDcgKzUzLDkgQEAgZW5kaWYgKE1JTkdXKQo+ICsgIyBjaGVj
+ayBzdWJkaXJlY3Rvcmllcwo+ICsgYWRkX3N1YmRpcmVjdG9yeShpbmNsdWRlKQo+ICsgYWRkX3N1
+YmRpcmVjdG9yeShzcmMpCj4gKy1hZGRfc3ViZGlyZWN0b3J5KGRvYykKPiArK2lmIChCVUlMRF9E
+T0MpCj4gKysgICAgYWRkX3N1YmRpcmVjdG9yeShkb2MpCj4gKytlbmRpZiAoQlVJTERfRE9DKQo+
+ICsKPiArIGlmIChDTUFLRV9QUk9KRUNUX05BTUUgU1RSRVFVQUwgUFJPSkVDVF9OQU1FKQo+ICsg
+ICAgIGluY2x1ZGUoQWRkQ01vY2thVGVzdCkKPiArZGlmZiAtLWdpdCBhL0RlZmluZU9wdGlvbnMu
+Y21ha2UgYi9EZWZpbmVPcHRpb25zLmNtYWtlCj4gK2luZGV4IGU2Yjg3NmYuLjEzZjFiMGIgMTAw
+NjQ0Cj4gKy0tLSBhL0RlZmluZU9wdGlvbnMuY21ha2UKPiArKysrIGIvRGVmaW5lT3B0aW9ucy5j
+bWFrZQo+ICtAQCAtMiwzICsyLDQgQEAgb3B0aW9uKEJVSUxEX1NIQVJFRF9MSUJTICJCdWlsZCBz
+aGFyZWQgbGlicmFyaWVzIiBPTikKPiArIG9wdGlvbihXSVRIX0VYQU1QTEVTICJCdWlsZCBleGFt
+cGxlcyIgT04pCj4gKyBvcHRpb24oVU5JVF9URVNUSU5HICJCdWlsZCB3aXRoIHVuaXQgdGVzdGlu
+ZyIgT0ZGKQo+ICsgb3B0aW9uKFBJQ0tZX0RFVkVMT1BFUiAiQnVpbGQgd2l0aCBwaWNreSBkZXZl
+bG9wZXIgZmxhZ3MiIE9GRikKPiArK29wdGlvbihCVUlMRF9ET0MgIkJ1aWxkIGRvY3VtZW50YXRp
+b24iIE9OKQo+ICstLQoKSSBmb3VuZCBhIGJldHRlciBzb2x1dGlvbi4gV2lsbCBzZW5kIHYyLgoK
+WWVnb3IKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
