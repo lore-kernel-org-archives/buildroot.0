@@ -4,86 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980F8D609C3
-	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 16:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D540D609C2
+	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 17:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 389FF40BCD;
-	Tue, 16 Dec 2025 16:20:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6525040C8C;
+	Tue, 16 Dec 2025 17:44:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5cMojVIwU1lL; Tue, 16 Dec 2025 16:20:12 +0000 (UTC)
+ id zS-9BFGu0rwM; Tue, 16 Dec 2025 17:44:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7D4640BBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C2E54074B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765902012;
-	bh=BZLS0TcuB0f0p1zGiOxsb4k1mFUKqCe9gX6VudGJvkA=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=BDo2b5l/i1VwH8nfjuq50LjC+rv6TB2pgMY4d4YRo5CT7MOcIdG+tZusP57HAOkRs
-	 djBh5hPoDJcaiwMO41eWhf//ydBo7XbaQco0x4DohRJ89jJB3lW2KJ1SlsaIat+2jJ
-	 OTS2BUosSY5/rPp5ld1bI6PhotXyJVoGdCn6MmrdpqVzSPtHiKh4mdtg6cqkA1QdZD
-	 0fw6rE+ql7OCySn9+gGxrHM4SAXoq9sPLJKVx9fcRwGzFcjE3w5WSV+2BLcgeckGlL
-	 3weBIhCBtOuQKOdEcLspbx0fne212SmGmjn6U7LuFdI1xaf8zYKRyu5HZVXABR3HRk
-	 zOWFgE/kZVQGQ==
+	s=default; t=1765907042;
+	bh=DJpFDJ0ZLpFvEJdfY28TVJQGi8lO0yeIVzP1H495LL0=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=L6L8xu7pPWfHwEScYpM6pmfqJwdIXs549lkRIv+oj/ePtaz1hAmAyuXfbZMZd5sik
+	 s29xnuUZ4RerwTFhXRkDGQNSN/aLRR2cD44+AIoQVOYDhSNBKyV2XQ5RUgmevYQua6
+	 RihVaF2nV51VDyCdP/VvJ2lNDh1NHgnr6RW4ioCTqvnciyTLLQalkIrJpIS941XFvu
+	 JtDmKEEHqEpLnd8kKDjySoIEskJH+2p9E2YBFBQleLVYL5bhLx00eyS1P5MfL+hTUW
+	 Jx/v2s0er4jxNpNpHLd39hvqXNw3n9oj81GWq87a+lh9P4BltiMbfkKoqw8sB8KxY8
+	 tw397CfwPJynA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7D4640BBB;
-	Tue, 16 Dec 2025 16:20:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 77A3B151
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 16:20:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C2E54074B;
+	Tue, 16 Dec 2025 17:44:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F76D364
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 17:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 691F780FB3
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 16:20:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 70E776101F
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 17:44:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qXx16VtLy1X6 for <buildroot@buildroot.org>;
- Tue, 16 Dec 2025 16:20:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6444480FAA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6444480FAA
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6444480FAA
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 16:20:10 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 333324E41B69
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 16:20:08 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id EBADF6071C;
- Tue, 16 Dec 2025 16:20:07 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 12F85119A9006; Tue, 16 Dec 2025 17:20:02 +0100 (CET)
-Date: Tue, 16 Dec 2025 17:20:02 +0100
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20251216172002.416d7d20@windsurf>
-In-Reply-To: <87zf7i5vg2.fsf@tarshish>
-References: <20251216135633.1413876-1-thomas.petazzoni@bootlin.com>
- <87zf7i5vg2.fsf@tarshish>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z5IedGWL8S0t for <buildroot@buildroot.org>;
+ Tue, 16 Dec 2025 17:43:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 65F4B60A89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65F4B60A89
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 65F4B60A89
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 17:43:58 +0000 (UTC)
+Received: from localhost.localdomain (unknown [213.36.7.12])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id A794060129;
+ Tue, 16 Dec 2025 18:43:54 +0100 (CET)
+To: buildroot@buildroot.org
+Cc: vjardin@free.fr
+Date: Tue, 16 Dec 2025 18:43:50 +0100
+Message-ID: <20251216174352.11588-1-vjardin@free.fr>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1765902003; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=8AI37bHtI9KvubUz4Fy2urRFsmTvfJa+L83cn8h6vxU=;
- b=SPplR7N23M8m4/sjJVXUe6Ch8K95Uzxvnx7wvRHMKwtFLkijOaAWBV3RD36mwOe0MZGkvk
- yr+79xhYg4VDg5zCSDlhGg3TOTjnxQL72lRwAMj8LhoR9/43sBIivhsJcMG4DusqWj746l
- T+VCmdDsBoyS1CjIw89BXh1U0jEt1axggJSikDlEayhBbHXK1vJbgaFwZVH+fHfeWCKDJc
- mGgqqfmdK8UXzQfEPQsEtahkMFETfpV9Hml7siUwJlUW8YWH077imzzxjCk05mzlAu0zpQ
- cAETcDfUovZXtIR/LNaxiBZSbiTOP7ETJyVKnuLGlH1CDHfMgBAo9AcO8EP/KA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=SPplR7N2
-Subject: Re: [Buildroot] [PATCH] package/connman-gtk: remove package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765907035;
+ bh=IGmKsdVSdYyG3F7Y5d8qlV8OrzzUBn1Rg1Ze/GmiMbw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=uXyFCZ9WZYtfqhcZ3KRviTnkPy+wukUsXuOpTp3DTMWVGN9cKqYCk+1pXAiiRmzRe
+ 0GUww5BXFD+oJNmSTLmGNwzDmFQ154iKBNcMvIjUdB9Zjk1XVlJCOnfXrUsPpRii8/
+ Pu+rXB/INOTKi5aS5h9WijtK9MpA9M3ZWGx/YQ+67NYbpbJY97qHLQd5X0xB5mYbPw
+ tCVRKW+mzbyKlXKUtRi6dcnzl0cDmz3RTwsrEvwKJeVG48hfKTqOV6M9K6TgvDjfgs
+ 7B/Nxyy7fp/f6MZPlKnZJVWkpAZXiFq1bXI4TaRRfYmUMy7OLGJPEzLGtCpghdkkHO
+ WCWsRomZy0BxA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=uXyFCZ9W
+Subject: [Buildroot] [PATCH v1 0/2] Add support for Marvell Armada 8040 DB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,29 +86,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Vincent Jardin via buildroot <buildroot@buildroot.org>
+Reply-To: Vincent Jardin <vjardin@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 16 Dec 2025 16:54:05 +0200
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+This series adds support for the Marvell Armada 8040 Development Board
+(DB-88F8040).
 
-> Bernd posted a similar patch a few days ago as part of a larger removals
-> series:
-> 
->   https://patchwork.ozlabs.org/project/buildroot/patch/20251213202503.1348845-4-bernd@kuhls.net/
+The Armada 8040 SoC features a quad-core ARM Cortex-A72 running at
+2.0 GHz. This is Marvell's reference design board for the SoC.
 
-Ah sorry, didn't notice. Will mark my patch as Not Applicable then.
-Thanks for the review!
+The board boots from SPI NOR flash using ARM Trusted Firmware (TF-A)
+and U-Boot. The kernel with embedded initramfs can be loaded via TFTP
+or from the eMMC.
 
-Thomas
+It was checked at:
+  https://gitlab.com/vjardin/buildroot/-/pipelines/2218390595
+
+Vincent Jardin (3):
+  board/marvell: add Armada 8040 DB board files
+  configs: add marvell_armada8040_db_defconfig
+
+ .../armada-8040-db/linux-extras.config        |   2 +
+ board/marvell/armada-8040-db/readme.txt       | 110 ++++++++++++++++++
+ configs/marvell_armada8040_db_defconfig       |  33 ++++++
+ 3 files changed, 145 insertions(+)
+ create mode 100644 board/marvell/armada-8040-db/linux-extras.config
+ create mode 100644 board/marvell/armada-8040-db/readme.txt
+ create mode 100644 configs/marvell_armada8040_db_defconfig
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
