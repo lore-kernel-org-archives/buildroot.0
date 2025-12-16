@@ -1,62 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0128D637DA
-	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 22:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC377D637DC
+	for <buildroot@archiver.kernel.org>; Tue, 16 Dec 2025 22:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D96A40B4D;
-	Tue, 16 Dec 2025 22:03:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A19D82C3E;
+	Tue, 16 Dec 2025 22:03:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SytVGkXGX2qq; Tue, 16 Dec 2025 22:03:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vn73ib2TjZ88; Tue, 16 Dec 2025 22:03:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AAF140D06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29F0F81E7D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765922584;
-	bh=xGzBwv/T2sta61m43MyimjB+E5TqyrmHao9GQeb3t4k=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=alvOiqCyaWd/3INjyDTi43h+6aaX2IxVZEenDGTQl+0SWLSifgGoLHdVTwNBgbHKS
-	 FC0OOrv9wBQunn4OvX0YoThfOgbjWvKjWDTliHj1iGBDUFmn/ECG7EvLa1Yoa76B+o
-	 YEKt6bP30xeWuAuHGdiKv5thYmzXU7LPSF6O+eSMprfdAgKHXPo/HnPu2wNqfaobWL
-	 qiJ9hx91FpHgoIjWX/YbRudC/oZmC392jFRHX0owZgW/6Op/hpG/7YC3VtBn3vP7HT
-	 9Lfa7L7g1IKdEe/Ib0w+/MT2+vnXYiWTc0AgkKHMvZlBi8GV2nWljARtU1EZ1RWZ2L
-	 MxMioNyJSOEvA==
+	s=default; t=1765922591;
+	bh=C6e5HIP/1kGFzH8Fue9BqSn7Sm3c6k7NQUpInfL5p6M=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=JHMR63lx1G9eQTMLYSEFeul76xt5hoC5rMUfr4MQCedFW+p1E0z5v+vOiRwgqjkTf
+	 SMGyiKnSUM6xUlmRGhbK9yRGImZtspXRN89CcdOPeXT1pbjrg83D72edOArVBqtjEC
+	 tegMWze/WV0SHiaSq1+K5F4cBUI6mry3TWKzsH1A4Ma+ccaF7EAIDeLP/ljQA9jwEi
+	 RcRxwNivy7ptn62zHpN4fzIaHKbaylGwUca2zAeDyk0KDdt0icC0zQyebRtwq64KsR
+	 BCJCSjj2CZtCBrT49lelN90qf8RFZDYzJjcXfytebhW3QuTt8ZchSU1fiXPL8WLnA0
+	 x1hiNdk0VkXEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AAF140D06;
-	Tue, 16 Dec 2025 22:03:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C8A9E372
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 22:03:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29F0F81E7D;
+	Tue, 16 Dec 2025 22:03:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AC43364
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 22:03:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEEC160761
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 22:03:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E604581E7D
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 22:03:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6WzgluQd3pk3 for <buildroot@buildroot.org>;
- Tue, 16 Dec 2025 22:03:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 938BE6074E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 938BE6074E
- for <buildroot@buildroot.org>; Tue, 16 Dec 2025 22:03:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8329C86ED0; Tue, 16 Dec 2025 22:03:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 16 Dec 2025 22:59:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92e1a15522347c5e092496f8603c50d86f62de74
-X-Git-Newrev: b393bff8c44be37f0b56bee61fdd1fef29f16e43
-X-Patchwork-Hint: ignore
-Message-Id: <20251216220301.8329C86ED0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kvmtool: bump to current HEAD
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1JdU04UDFPYk for <buildroot@buildroot.org>;
+ Tue, 16 Dec 2025 22:03:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD57981DE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD57981DE7
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD57981DE7
+ for <buildroot@buildroot.org>; Tue, 16 Dec 2025 22:03:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id D804320039E;
+ Tue, 16 Dec 2025 23:03:02 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 16 Dec 2025 23:03:02 +0100
+MIME-Version: 1.0
+Date: Tue, 16 Dec 2025 23:03:02 +0100
+To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+Cc: buildroot@buildroot.org, Jesse Taube <jesse@rivosinc.com>
+In-Reply-To: <20250911212752.266940-9-alex.bennee@linaro.org>
+References: <20250911212752.266940-1-alex.bennee@linaro.org>
+ <20250911212752.266940-9-alex.bennee@linaro.org>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <36c7d766dc88044da552aa9d3f041d03@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765922585;
+ bh=4ODo+qbKiuSa5n+ON3zYL2XSiCivhwJB0T9BEx5NQfU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NMhSq4pCARIwjGPUK70uzS+ZR7DauM5Zqw/SerD6wfW7zfBlC7sUzc7WAyheHDoYo
+ xKZjX4K8f6w6XOIWcZnuE4pLBlQ+hPVZRhqXrWaUTlQ6DK1QAhWoU59NsUTQAmetMe
+ nYXpLx1zJkBy66LEUmPIKc5B4DgEWMgDT8/jEjCok86jm9Dj30R0PvKggsHid2UjN6
+ rZWznrk7OttuqMncxMCVRzS7L/WE8JxY1QuL3QWEbwPY+s85CsAppbGfiIkblg6N/B
+ qu0egkjAxWSjKAQFe+Te7+dZKFhq+oXvUBeoipDP000TeqHA9Xh8ZIt4Dk//6uuNCI
+ tet1CJgPCSAOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=NMhSq4pC
+Subject: Re: [Buildroot] [PATCH v5 8/9] package/kvmtool: bump to current HEAD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,119 +96,16 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2743715256095508846=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2743715256095508846==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b393bff8c44be37f0b56bee61fdd1fef29f16e43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-By doing so we can also drop the patches for musl which have now been
-merged upstream.
-
-Reviewed-by: Jesse Taube <jesse@rivosinc.com>
-Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...rdsize-h-inclusion-for-musl-compatibility.patch | 52 ----------------------
- package/kvmtool/kvmtool.hash                       |  2 +-
- package/kvmtool/kvmtool.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 54 deletions(-)
-
-diff --git a/package/kvmtool/0001-remove-wordsize-h-inclusion-for-musl-compatibility.patch b/package/kvmtool/0001-remove-wordsize-h-inclusion-for-musl-compatibility.patch
-deleted file mode 100644
-index 3128a23689..0000000000
---- a/package/kvmtool/0001-remove-wordsize-h-inclusion-for-musl-compatibility.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 0592f8f829c843ff5cb2d108c309e32f4f6f5379 Mon Sep 17 00:00:00 2001
--From: Andre Przywara <andre.przywara@arm.com>
--Date: Thu, 1 Aug 2024 12:10:54 +0100
--Subject: remove wordsize.h inclusion (for musl compatibility)
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The wordsize.h header file and the __WORDSIZE definition do not seem
--to be universal, the musl libc for instance has the definition in a
--different header file. This breaks compilation of kvmtool against musl.
--
--The two leading underscores suggest a compiler-internal symbol anyway, so
--let's just remove that particular macro usage entirely, and replace it
--with the number we really want: the size of a "long" type.
--
--Reported-by: J. Neuschäfer <j.neuschaefer@gmx.net>
--Signed-off-by: Andre Przywara <andre.przywara@arm.com>
--Reviewed-by: Alexandru Elisei <alexandru.elisei@arm.com>
--Link: https://lore.kernel.org/r/20240801111054.818765-1-andre.przywara@arm.com
--Signed-off-by: Will Deacon <will@kernel.org>
--Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/commit/?id=0592f8f829c843ff5cb2d108c309e32f4f6f5379
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- include/linux/bitops.h | 6 ++----
-- 1 file changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/include/linux/bitops.h b/include/linux/bitops.h
--index ae33922f..ee8fd560 100644
----- a/include/linux/bitops.h
--+++ b/include/linux/bitops.h
--@@ -1,15 +1,13 @@
-- #ifndef _KVM_LINUX_BITOPS_H_
-- #define _KVM_LINUX_BITOPS_H_
-- 
---#include <bits/wordsize.h>
---
-- #include <linux/kernel.h>
-- #include <linux/compiler.h>
-- #include <asm/hweight.h>
-- 
---#define BITS_PER_LONG __WORDSIZE
-- #define BITS_PER_BYTE           8
---#define BITS_TO_LONGS(nr)       DIV_ROUND_UP(nr, BITS_PER_BYTE * sizeof(long))
--+#define BITS_PER_LONG           (BITS_PER_BYTE * sizeof(long))
--+#define BITS_TO_LONGS(nr)       DIV_ROUND_UP(nr, BITS_PER_LONG)
-- 
-- #define BIT_WORD(nr)		((nr) / BITS_PER_LONG)
-- 
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/kvmtool/kvmtool.hash b/package/kvmtool/kvmtool.hash
-index 63bbb7167c..8df6f929df 100644
---- a/package/kvmtool/kvmtool.hash
-+++ b/package/kvmtool/kvmtool.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a8504d8b184cae4e65ff5555cc84a436f3fbbc832a8017e3ca59d997dd5581db  kvmtool-4d2c017f41533b0e51e00f689050c26190a15318-git4.tar.gz
-+sha256  18841c414e82b405a0bd6f5c546bc088becd298c1145a2bac97563e699231925  kvmtool-1117dbc8ceb21abc6e8cd9861450695995852290-git4.tar.gz
- sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-index 7fec6643f8..f5637e5384 100644
---- a/package/kvmtool/kvmtool.mk
-+++ b/package/kvmtool/kvmtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KVMTOOL_VERSION = 4d2c017f41533b0e51e00f689050c26190a15318
-+KVMTOOL_VERSION = 1117dbc8ceb21abc6e8cd9861450695995852290
- KVMTOOL_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git
- KVMTOOL_SITE_METHOD = git
- KVMTOOL_DEPENDENCIES = \
-
---===============2743715256095508846==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2743715256095508846==--
+T24gMTEvMDkvMjAyNSAyMzoyNywgQWxleCBCZW5uw6llIHdyb3RlOgo+IEJ5IGRvaW5nIHNvIHdl
+IGNhbiBhbHNvIGRyb3AgdGhlIHBhdGNoZXMgZm9yIG11c2wgd2hpY2ggaGF2ZSBub3cgYmVlbgo+
+IG1lcmdlZCB1cHN0cmVhbS4KPiAKPiBSZXZpZXdlZC1ieTogSmVzc2UgVGF1YmUgPGplc3NlQHJp
+dm9zaW5jLmNvbT4KPiBTaWduZWQtb2ZmLWJ5OiBBbGV4IEJlbm7DqWUgPGFsZXguYmVubmVlQGxp
+bmFyby5vcmc+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
