@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9F53D66BBB
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E126D68BC1
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B252940F80;
-	Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cka3xBsImFm3; Wed, 17 Dec 2025 21:45:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA2940F86
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766007900;
-	bh=XXPLA3UHsqbCjF30B+so2VHkPuizhlT/s4rot7fcd9c=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YBUXSijEGZzwnqgzaaA1xHj34MfJrohQvW1k8EuN2UPVJNd6dY2fEGZH86EmUwRwC
-	 AmsW17bNDORzTsIWfYng5KcXy21+d+JusiatIoFy+2sD1g3c/0iekfhK/CYbYxdzKI
-	 WDQ5FfVZZP+utl/zJtib+F1pglXTiFHAep0vi3j18ZD0eWHOrlRQxB6WJqHJXB1pdp
-	 y9Dz4gY97PBZMvpg8gYMoiq2vf+XRcYoz+d5iLRu67t6KJOhWGBGH8/fAtXC9y7SJm
-	 62RGJUBFEKcUR+Eq2EPbAemVPU9jN5lU5svy6FpSkV9D7GHOTP3cigMD6zD9ClV2+b
-	 C3OtbaH30dfSg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEA2940F86;
-	Wed, 17 Dec 2025 21:45:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C5A5937A
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABA4F610F4
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC5636116C;
+	Wed, 17 Dec 2025 21:45:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yiLp1iGmBZEy for <buildroot@buildroot.org>;
+ id 9YPFf-1Lwt7g; Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB6F761161
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766007901;
+	bh=meSYoiSaw+fcSZDJ1s/TMEeSx/pcgbSIpGfPouvcI+o=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=nExOMmCUFxqoOaJwmw8JiaOjgS17bVNfq/c57n+JHIFxqgOTsA7e6uFUHrYM/S51U
+	 klubUor5qkZ40VchNS1BBX76sG8jXGS441ZqpKhUPHoOKf5H4FWz+2Hk5vZliz+jCa
+	 ZFn1N+nFbJmgqOXWg2B3StzhFi13k4EdMWFtVijiDrzny3GSeUJaESviSkrFYKUyo4
+	 0s9MKgmj5djx7HPGQ5rXu3bMkj+9Y85HBCIrC2oYvuPHXLAYYRX5hA+pytuZZnxFTe
+	 GYN4WsB4pgxwlFkMs+c3ycNg9SixOtT4bLDU0K7X7PUpviwKrfG2MMZ6VADqAPCfTM
+	 IlH+CwPYoDRfA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB6F761161;
+	Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6B98431
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB97383B53
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WjwARPwd0M_2 for <buildroot@buildroot.org>;
  Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6CC1610FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D41EF83AAA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6CC1610FF
+ by smtp1.osuosl.org (Postfix) with ESMTP id D41EF83AAA
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8673848DA; Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
+ id A7CDE8713D; Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 22:04:35 +0100
+Date: Wed, 17 Dec 2025 22:04:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12e20ab68b3ab54957a1b2a0ed7bdbc513fd4373
-X-Git-Newrev: e8888ab7ee70b05dd2a741d5dba7bff6b08f5edf
+X-Git-Oldrev: e0cea7186f194a848c723a1ee143afc97f7b9de0
+X-Git-Newrev: 8051485bbc1efcf8cc52983ac57a9b66cc21a06f
 X-Patchwork-Hint: ignore
-Message-Id: <20251217214457.C8673848DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tomli: bump version to 2.3.0
+Message-Id: <20251217214457.A7CDE8713D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-termcolor: bump version to
+ 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8888ab7ee70b05dd2a741d5dba7bff6b08f5edf
+commit: https://git.buildroot.net/buildroot/commit/?id=8051485bbc1efcf8cc52983ac57a9b66cc21a06f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/hukkin/tomli/blob/2.3.0/CHANGELOG.md
+https://github.com/termcolor/termcolor/releases
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-tomli/python-tomli.hash | 4 ++--
- package/python-tomli/python-tomli.mk   | 4 ++--
+ package/python-termcolor/python-termcolor.hash | 4 ++--
+ package/python-termcolor/python-termcolor.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tomli/python-tomli.hash b/package/python-tomli/python-tomli.hash
-index ec30f06db2..560c4cc3f7 100644
---- a/package/python-tomli/python-tomli.hash
-+++ b/package/python-tomli/python-tomli.hash
+diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
+index 4bed487025..d73588d22c 100644
+--- a/package/python-termcolor/python-termcolor.hash
++++ b/package/python-termcolor/python-termcolor.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tomli/json
--md5  1e0e2fb2e29f3d77f0507bee71fb4ab4  tomli-2.2.1.tar.gz
--sha256  cd45e1dc79c835ce60f7404ec8119f2eb06d38b1deba146f07ced3bbc44505ff  tomli-2.2.1.tar.gz
-+md5  30b640d2f852e26c189cb0edd275f1e4  tomli-2.3.0.tar.gz
-+sha256  64be704a875d2a59753d80ee8a533c3fe183e3f06807ff7dc2232938ccb01549  tomli-2.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/termcolor/json
+-md5  26f496075070852b5d39762bbd14ec46  termcolor-2.5.0.tar.gz
+-sha256  998d8d27da6d48442e8e1f016119076b690d962507531df4890fcd2db2ef8a6f  termcolor-2.5.0.tar.gz
++md5  50ce238ff23fb53077f746b751b7ba7b  termcolor-3.2.0.tar.gz
++sha256  610e6456feec42c4bcd28934a8c87a06c3fa28b01561d46aa09a9881b8622c58  termcolor-3.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe  LICENSE
-diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
-index c23ae94758..e4d4a7a62d 100644
---- a/package/python-tomli/python-tomli.mk
-+++ b/package/python-tomli/python-tomli.mk
+ sha256  e79b6bd82962c1330caaa7c42278567b08667777673f8e2371a624d5715d4c0e  COPYING.txt
+diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
+index e2492ab3c4..e0a6677241 100644
+--- a/package/python-termcolor/python-termcolor.mk
++++ b/package/python-termcolor/python-termcolor.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TOMLI_VERSION = 2.2.1
-+PYTHON_TOMLI_VERSION = 2.3.0
- PYTHON_TOMLI_SOURCE = tomli-$(PYTHON_TOMLI_VERSION).tar.gz
--PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/18/87/302344fed471e44a87289cf4967697d07e532f2421fdaf868a303cbae4ff
-+PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/52/ed/3f73f72945444548f33eba9a87fc7a6e969915e7b1acc8260b30e1f76a2f
- PYTHON_TOMLI_LICENSE = MIT
- PYTHON_TOMLI_LICENSE_FILES = LICENSE
- PYTHON_TOMLI_SETUP_TYPE = flit
+-PYTHON_TERMCOLOR_VERSION = 2.5.0
++PYTHON_TERMCOLOR_VERSION = 3.2.0
+ PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
+-PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/37/72/88311445fd44c455c7d553e61f95412cf89054308a1aa2434ab835075fc5
++PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/87/56/ab275c2b56a5e2342568838f0d5e3e66a32354adcc159b495e374cda43f5
+ PYTHON_TERMCOLOR_SETUP_TYPE = hatch
+ PYTHON_TERMCOLOR_LICENSE = MIT
+ PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
