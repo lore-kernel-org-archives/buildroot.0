@@ -1,88 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42095D68BC2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 22:17:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C7DCD66BBB
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 22:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2F0B403CE;
-	Wed, 17 Dec 2025 22:17:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FCB760659;
+	Wed, 17 Dec 2025 22:25:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OGNPaFyBF4ds; Wed, 17 Dec 2025 22:17:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uQLqI_J6YUJ9; Wed, 17 Dec 2025 22:25:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EB5140432
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D6156068B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766009854;
-	bh=y0lwY0aEv9yABKiCyPLvXk8UUqfcA5iSfvI2kdNAymc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1766010352;
+	bh=V2XSWZvYLYZ6r6tlCCxrdnwMGFYX+ktjM5zWZOcCYIo=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Mrm73snq4OcQGbJZjH0icl2zjF7OYYwbOz10WrGZWx1VqG9kY01ERS2cLjl3vv4FS
-	 GuOrWftZjPEvY+VN3txjI0KT13rd+gYCmVbC6IOcfr5pPZ4fR3GlyRvum8q/qPjEHf
-	 wKeJpW5F4Dwcektw82Z4BNImQHKOp5hsgEyJhW4cmeG4xHea0T5lIyhORzO67eUF81
-	 S1YRtaG0vHpbKEK0VqRPs0Uc6sOGWuS6xS9gCavJujiUc3CIhwOUuvNl+f9Tk8tcSn
-	 rb1l5vPhhdJ4cg8Ykmv9BKEmTPuoFa/o7ZjT4aGTrjwIQjuCxCTj1DmRRO/Unl/1kH
-	 0OEnmT7p7rVrw==
+	b=jLIy9XToBwmKIegTJNn3iuTNcA6zQnx85kWdZc7+ZVVJl2120/pBXCZML4/QO98Ag
+	 DUyNZSyzyloMpuThi4ogozKr3cp+mTOM6/bgtKdCGWg85MVz9dQS0CLA6l32FZ4TzL
+	 zH4mpkbthJjhb3ic2ZkFR8A2CwbIa6A8Wf6dfDqWixsKvPm1c3LogYGiH8kfd1kDlG
+	 3OXAGuAN5iE8D8U17cIWZcoqmLTQ9ksc/ZS8pvG6mnAGQIid9HmLFxKSw+ZezxF/LX
+	 ftGwWe8BE0RjnXuKSqVib57DKlZqyvzphUthZGApeviIGwov9p8SGV+QZViNoZ7h/3
+	 Qo7sfAndoJ+Iw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EB5140432;
-	Wed, 17 Dec 2025 22:17:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C62CC375
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:17:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D6156068B;
+	Wed, 17 Dec 2025 22:25:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E78C035B
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFBF240432
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:17:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9C93403C8
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:25:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X7NsYc1Dfo_D for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 22:17:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 44721403CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44721403CE
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 44721403CE
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:17:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 7465419F593;
- Wed, 17 Dec 2025 23:17:28 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 17 Dec 2025 23:17:28 +0100
+ id ENvzgP_00Phr for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 22:25:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A7FC7403A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7FC7403A7
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7FC7403A7
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:25:48 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 58C421A229B
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:25:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 2F0E56072F
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:25:47 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 8C60C102F0AE0; Wed, 17 Dec 2025 23:25:46 +0100 (CET)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Dec 2025 23:25:37 +0100
+Message-ID: <20251217222539.1989993-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251217222539.1989993-1-thomas.petazzoni@bootlin.com>
+References: <20251217222539.1989993-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Date: Wed, 17 Dec 2025 23:17:28 +0100
-To: Vincent Jardin <vjardin@free.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251216174352.11588-3-vjardin@free.fr>
-References: <20251216174352.11588-1-vjardin@free.fr>
- <20251216174352.11588-3-vjardin@free.fr>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <4f8eade4841fb79583d824f63415bdc8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766009849;
- bh=j3ximQ7dk+O8H1JgyyrHqlZZ9lKtYeLbQ/g+R68wCVU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iNRqoTL3+Sv+GIKyzZDSi1IhBx1lBS5trNmKxvOIOv+O7SeS87LhDsWbxl1rk9O6F
- SncbxAu0VM2Ee5PCUGb4Yr43u17FhakySAMiJWVVB6h8RSM4HdD4vnxCIG3csq+HUk
- 7Ad0qFOjP82zEYOT8ASN1cmY1ANvCnVSQqiyUqzEJLRe0HyB+77MjZuPXMhoenrvYU
- cPLul+tMCthaGqA+ie3xW1hlIRjlDPcq+j6FpCxxoVmaPZBmKN5zPVeFsr+dGL/Gct
- 1r/QQ+WFgDkmwK8MnAUd1YS7kLlYdMTrPiDpm+gm+UkWjFe8yOjjBB35wVILMDY85u
- Hi2qLE0nCm1gQ==
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1766010346; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=f3LziC6rRTImURD3wlBumiODlCajLcIk5qtrhJyKCrU=;
+ b=bZj7PB4EZCgVRoFs/zDh4alnfOsaEeW5YTVa2OQkF1PKJRUsDS7RlvLH1fBy8R6VAW0/Ge
+ /Ga5KuFpUX1aPXMOg7sgKucjhXj/86Lbe7iNUNLl3+HcDnSAUmo0kJm7NXsjmDOXCiLLcT
+ PuLi9HhpHNHsVLDPtHzDtfwRQ6DTIRZqc8tYQ1IbOB6PCQTfctUyBZPyFjCY1I9yHcVHVy
+ rfViji8/pj5KoOTVLoGNHsi+KVrn3P/nCpjY+affbUT4SKOQ4BKSm9s+SKWwigAON4Mnn5
+ xnqsoOmRLL3SF6nWqApQdkpFgZb6yAvfUmKhDie5B6+zXCXy/yicG6EgcMO8xg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iNRqoTL3
-Subject: Re: [Buildroot] [PATCH v1 2/2] configs: add
- marvell_armada8040_db_defconfig
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=bZj7PB4E
+Subject: [Buildroot] [PATCH 2/3] package/cppcms: fix build with recent
+ versions of ICU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,138 +96,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Vincent,
+Since Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 that
+bumped package/icu to version 77-1, the build of cppcms with ICU
+support enabled fails.
 
-Thanks for the patch.  I have few comments.
+Indeed, ICU now requires C++17, and while cppcms.mk has some logic to
+get C++ flags using icu-config, the -std=c++17 gets ultimately
+overridden by the built-in -std=c++11 flag encoded in cppcms
+CMakeLists.txt.
 
-Could you squash this series in a single patch that introduces the
-defconfig, please?  See for example:
-https://gitlab.com/buildroot.org/buildroot/-/commit/c584135c0e9a2144ca2ecb09b2b21a1aa7178438
+To fix this, we have submitted a patch upstream that ensures the
+CMAKE_CXX_FLAGS passed on the command line take precedence over the
+built-in flags defined in cppcms CMakeLists.txt.
 
-On 16/12/2025 18:43, Vincent Jardin via buildroot wrote:
-> Add a new defconfig for the Marvell Armada 8040 DB (Development Board)
-> using recent mainline software versions:
-> 
-> - Linux 6.12.8 (LTS kernel)
+Fixes:
 
-Any reason why you introduce this specific version?
-Why not 6.12.62 (the latest 6.12.y as of now), or even 6.18.1, which 
-still
-contains this board:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/arm64/boot/dts/marvell/armada-8040-db.dts?h=v6.18.1
-and is also the next LTS kernel series.
-https://git.kernel.org/pub/scm/docs/kernel/website.git/commit/?id=b9ea3472ee1d973f4c27d075c7e4445afa7ade89
+  https://autobuild.buildroot.net/results/9c34a08ea02499b28093ad3fa184cee10b2883ac/
 
-> - U-Boot 2024.10
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...llow-flags-passed-on-the-command-lin.patch | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch
 
-Same question: why not 2025.10?
-The config still seems to be here:
-https://source.denx.de/u-boot/u-boot/-/blob/v2025.10/configs/mvebu_db_armada8k_defconfig
+diff --git a/package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch b/package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch
+new file mode 100644
+index 0000000000..a6b9526e88
+--- /dev/null
++++ b/package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch
+@@ -0,0 +1,58 @@
++From 58faaa72919076e2c847b595a739469243ac9706 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 16 Dec 2025 16:02:41 +0100
++Subject: [PATCH] CMakeLists.txt: allow flags passed on the command line to win
++ over built-in flags
++
++CMakeLists.txt and booster/CMakeLists.txt define some flags in
++CXX_FLAGS, and then set CMAKE_CXX_FLAGS in a way that causes the flags
++in CXX_FLAGS to override the ones passed (for example on the command
++line through CMAKE_CXX_FLAGS). This prevents the user from overriding
++those compiler flags in CXX_FLAGS.
++
++A specific example is that CXX_FLAGS sets -std=c++11, but with recent
++version of ICU (such as >= 77-1), -std=c++11 is not enough, passing
++-std=c++17 is needed. Unfortunately, it cannot be passed through
++CMAKE_CXX_FLAGS due to the aforementioned problem.
++
++This commit allows to resolve this by ensuring that CMAKE_CXX_FLAGS
++and CMAKE_C_FLAGS win over CXX_FLAGS/C_FLAGS.
++
++Upstream: https://github.com/artyom-beilis/cppcms/pull/107
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ CMakeLists.txt         | 4 ++--
++ booster/CMakeLists.txt | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 826e87f..86693e2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -141,8 +141,8 @@ elseif(MSVC)
++ 	set(C_FLAGS "/W3")
++ endif()
++ 
++-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
++-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_FLAGS}")
+++set(CMAKE_CXX_FLAGS "${CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
+++set(CMAKE_C_FLAGS "${C_FLAGS} ${CMAKE_C_FLAGS} ")
++ 
++ #############################################################################
++ #
++diff --git a/booster/CMakeLists.txt b/booster/CMakeLists.txt
++index 8f63254..4638f76 100644
++--- a/booster/CMakeLists.txt
+++++ b/booster/CMakeLists.txt
++@@ -223,7 +223,7 @@ if(NOT IS_WINDOWS)
++ 	endif()
++ endif()
++ 
++-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
+++set(CMAKE_CXX_FLAGS "${CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
++ 
++ #############################################################################
++ #
++-- 
++2.52.0
++
+-- 
+2.52.0
 
-> - ARM Trusted Firmware v2.12
-
-There is a v2.14 upstream you might consider:
-https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.git/+/refs/tags/v2.14
-(even it is not the "LATEST" version in Buildroot).
-
-> Key configuration choices:
-> - TF-A platform "a80x0" with mrvl_flash target
-> - U-Boot defconfig "mvebu_db_armada8k"
-> - Device tree "marvell/armada-8040-db"
-> - Initramfs embedded into kernel image
-> 
-> Output files in output/images/:
-> - flash-image.bin: ATF + U-Boot for SPI NOR
-> - Image: Linux kernel with embedded initramfs
-> - armada-8040-db.dtb: Device tree
-> 
-> Boot method: SPI NOR boot, kernel loaded via TFTP or eMMC.
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> ---
->  configs/marvell_armada8040_db_defconfig | 33 +++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 configs/marvell_armada8040_db_defconfig
-> 
-> diff --git a/configs/marvell_armada8040_db_defconfig 
-> b/configs/marvell_armada8040_db_defconfig
-> new file mode 100644
-> index 0000000000..3db4f032b7
-> --- /dev/null
-> +++ b/configs/marvell_armada8040_db_defconfig
-> @@ -0,0 +1,33 @@
-> +BR2_aarch64=y
-> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-
-Could you switch the toolchain to use the external Bootlin glibc stable?
-See for example:
-https://gitlab.com/buildroot.org/buildroot/-/commit/47f4e3810c981e8cee19d8a411b38c771ebd2381
-
-> +BR2_TARGET_GENERIC_HOSTNAME="armada8040-db"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell Armada 8040 
-> DB"
-> +BR2_INIT_BUSYBOX=y
-
-This line is not needed (and few others), as it is the default value.
-Could you please regenerate this defconfig by doing a:
-
-make marvell_armada8040_db_defconfig
-make savedefconfig
-
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.8"
-
-Please consider the latest LTS version (6.18.1), if possible.
-
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/marvell/armada-8040-db/linux-extras.config"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-db"
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_TARGET_ROOTFS_CPIO=y
-> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
-> +BR2_TARGET_ROOTFS_INITRAMFS=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION=y
-
-You should preferably pin a specific version (consider v2.14).
-You could also eventually use:
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_12_VERSION=y
-
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="flash-image.bin"
-> +BR2_TARGET_BINARIES_MARVELL=y
-> +BR2_TARGET_MV_DDR_MARVELL=y
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
-
-Please consider 2025.10.
-
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mvebu_db_armada8k"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> --
-> 2.43.0
-
-Could you send an updated patch, please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
