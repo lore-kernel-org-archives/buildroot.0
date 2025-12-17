@@ -1,84 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25402D68BC2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 22:33:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C893DD65C63
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 22:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE55960A38;
-	Wed, 17 Dec 2025 22:33:28 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fkLbod4SXDvm; Wed, 17 Dec 2025 22:33:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F016060869
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766010808;
-	bh=Besaw6xqhX6EUnhCJxujLhS2v+Ka3tBtEtBjsmoXG/s=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=F3S+C5/8elbqpTPlsWog3Y4j9GwyM3Vsvvn+lhEECQlXY+azUe1rPw1AqSwPtJeod
-	 mNq+ZPeHuqd3mR2iHdGKaF2+jibMI85571CfoGgyurGRukBzvxI2Yrw0BE37FsxwrS
-	 8vItIW9O1LdiHiKPMmJKD8C3Fr01WBbJg2om4kv+Ag8IItYprjCExZ2wrdZkkhRcFp
-	 yn89b5qZijfTUBlvn/eLoqrVgF5iLPrbwudsqc9vgxs0EcbD62SPguM5whBkT+RepO
-	 k5jL/NixvGXnopIegI7INaLUiyA78D5Za0yGhpIHv4j4j/0Li3Wh70VAwCbeHQOi9N
-	 30zWj4upp/jKw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F016060869;
-	Wed, 17 Dec 2025 22:33:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CB74535B
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:33:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B219940B0A
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:33:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73D7D4091E;
+	Wed, 17 Dec 2025 22:38:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3rUO5YA6QcnK for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 22:33:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 1ieJi_7bWJ4B; Wed, 17 Dec 2025 22:38:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BBE940933
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766011092;
+	bh=dNtQb2uANdX9ilcqPD+OD7OoOlP8cUYsUjhmzjaZ7vQ=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=oK71F8BvXn8j9GwqCHF7gDACGzE0Q4+j45IjSYWXcv8IyuyCsR7pNsoYAoE1raW/a
+	 sVIUw+iUWQmJzl1JwXSOATBp56PkyOdAbTSsXVOW3lyaw5e2k7IZzY24hGLbFQCe73
+	 gqNow5xdP48H8sCNMsUqlzR5X8aYm/v8zQ/hSXIw6c6GYNNfsolNz4GQF3wiXHgOnz
+	 iKLQyyloA/ZNrAxYWnQKzv/GVSNc/XP6XsNXikXHnoZf8eoogcFOuiygSrHFXF0b0U
+	 XteyUOXb5MaXbjngiex8NFLuNZpi3VK5/X+6JzwJhH+zRwM3wpX4sGJrWPjzO7/GBn
+	 OS93IKLlluNyw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BBE940933;
+	Wed, 17 Dec 2025 22:38:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73E7F375
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6598360774
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xDmvMrlGak_m for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 22:38:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A1F1140954
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1F1140954
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A1F1140954
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:33:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 49AA46060A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49AA46060A
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 49AA46060A
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:09 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 62FDB1A229A
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:33:23 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 00DD9C1A5A2
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:37:42 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 3A3A56072F
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:33:23 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 6981B6072F
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C68D9102F0ADF; Wed, 17 Dec 2025 23:33:18 +0100 (CET)
+ with ESMTPSA id B4811102F0ADF; Wed, 17 Dec 2025 23:38:02 +0100 (CET)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Dec 2025 23:33:16 +0100
-Message-ID: <20251217223317.1993455-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Dec 2025 23:38:00 +0100
+Message-ID: <20251217223801.1995633-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766010799; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=r4KfgTvw8viYpd74d7DhpddUhzJ7PE/K5RMZD4s0jZk=;
- b=hIYpcEYg7rFp0a8UlWXDEWlmU22fHlGR/4N4pMTiQE3j6C6YrPjcUiLeRcS5yOIHNXOo+i
- W1sA7y2i1zczrELQ3gP/daX1Z+Oqpj3NUrSabl804qfTiesMNauQFwKDviHSCR1fJYewfM
- iaVRYgtWlHnAaRkRiyjtRts8MejrRa4SgT7crwtp45sczr8MtGfbQ/1iCXLeHL8kn56AAO
- olZTT9DqLPhzZAS3am6eViUXPa2BoZ01gPh4UStWRP7VbrlHaHkC2zGkBznkNJ6KxfPYvN
- u7axiRDNKKKFFo0H8gdEBnD/fbqZnSaPtQ14hVp1XbwYEtVpvGRQNrCWGGdolQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1766011083; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=FinsWNK0bnt6O1Kr+vIUgk/58DmkxWMb34Lt3TZPB68=;
+ b=dzOMus+p918MZsKQBp5C4ooXkvE7wG1JMkjPxt/ld5QuqeVzi7eYFm6UZN/c5QpDCV7mOF
+ Aqw3aEs0FMFXaiToCooLbMKeXItK7rjxsX/IT5fJRhdZ694PAvAE1iIaYqWeg+RNT0cX7I
+ amlmhuj7UlwuskCLNIH4Ed+EKeNC+8hfPJAIEV7AI6JNdX09U4MT7Uhpi44zFUffGXEMea
+ p8RmOaO28FHeFQDacZ8JWnqhczx9Jn2o1eXKRApatO+Sd/DdOyZePs8TP7uYWg1PL+1YQ6
+ ajGJK6mz5M1MiFmZamlH7W4jr37WgK71Lz5RIBszZ2nwVNJ6wzDx551a5ojFog==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=hIYpcEYg
-Subject: [Buildroot] [PATCH] package/cppdb: fix compatibility with CMake 4
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=dzOMus+p
+Subject: [Buildroot] [PATCH] package/criu: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,62 +98,226 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
+The criu package was added in Nov 2023, and then bumped once in
+December 2023. Since then, it has never been bumped again, and all
+follow-up fixes were provided by other people than the original
+package submitter listed in the DEVELOPERS file.
 
-CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-  Compatibility with CMake < 3.5 has been removed from CMake.
+criu has seen several upstream releases since then, and most notably
+is causing a number of build issues in our autobuilders:
 
-  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-  to tell CMake that the project requires at least <min> but has been updated
-  to work with policies introduced by <max> or earlier.
+  https://autobuild.buildroot.net/?reason=criu-3.19
 
-  Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
+The package was never updated to those newer upstream releases, and
+the autobuilder issues have not been addressed.
 
-We didn't submit the patch upstream, because contrary to cppcms, cppdb
-seems completely dead. Last commit is from 2012 at
-https://sourceforge.net/p/cppcms/code/HEAD/tree/cppdb/.
-
-There are no known autobuilder failures for this issue.
+Therefore, let's drop this package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-If people prefer to drop this package, it would be totally fine for
-me.
----
- ...s.txt-fix-compatibility-with-CMake-4.patch | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
+ Config.in.legacy       |  7 ++++
+ DEVELOPERS             |  1 -
+ package/Config.in      |  1 -
+ package/criu/Config.in | 52 ----------------------------
+ package/criu/criu.hash |  3 --
+ package/criu/criu.mk   | 77 ------------------------------------------
+ 6 files changed, 7 insertions(+), 134 deletions(-)
+ delete mode 100644 package/criu/Config.in
+ delete mode 100644 package/criu/criu.hash
+ delete mode 100644 package/criu/criu.mk
 
-diff --git a/package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch b/package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
-new file mode 100644
-index 0000000000..3bba81f563
---- /dev/null
-+++ b/package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
-@@ -0,0 +1,24 @@
-+From 27003c60a05dd3921538323a53b1650e289cba8c Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Wed, 17 Dec 2025 22:27:33 +0100
-+Subject: [PATCH] CMakeLists.txt: fix compatibility with CMake 4
+diff --git a/Config.in.legacy b/Config.in.legacy
+index da91b68087..4b399f7daa 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_CRIU
++	bool "criu has been removed"
++	help
++	  criu was removed from Buildroot as it was insufficiently
++	  maintained. It can be re-added if someone volunteers to
++	  maintain it.
 +
-+Upstream: N/A, dead upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 5e81b09..32ff3a6 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.5)
-+ project(cppdb)
-+ 
-+ set(CPPDB_MAJOR 0)
-+-- 
-+2.52.0
-+
+ config BR2_PACKAGE_MESA3D_VDPAU
+ 	bool "mesa3d Gallium VDPAU state tracker support removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1b27df9beb..54ce0dc509 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2244,7 +2244,6 @@ F:	support/testing/tests/package/test_python_pytest.py
+ F:	support/testing/tests/package/test_python_pytest_asyncio.py
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+-F:	package/criu/
+ F:	package/libcamera/
+ F:	package/libcamera-apps/
+ F:	package/libostree/
+diff --git a/package/Config.in b/package/Config.in
+index 22970b4d45..5a2e7e1d0b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2827,7 +2827,6 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
+-	source "package/criu/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+deleted file mode 100644
+index 04a2080041..0000000000
+--- a/package/criu/Config.in
++++ /dev/null
+@@ -1,52 +0,0 @@
+-# criu only builds on certain architectures
+-config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	bool
+-	default y if BR2_ARM_CPU_ARMV6
+-	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_ARM_CPU_ARMV7M
+-	default y if BR2_ARM_CPU_ARMV8A && !BR2_aarch64_be
+-	default y if BR2_aarch64
+-	default y if BR2_x86_64
+-	default y if BR2_powerpc64le # Only support powerpc64 with LE
+-	# CRIU has "some" support for s390 but it is not included due to
+-	# BE/LE endian issues.
+-	depends on BR2_USE_MMU # libcap
+-	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-
+-config BR2_PACKAGE_CRIU
+-	bool "criu"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+-	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+-	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
+-	depends on BR2_USE_WCHAR # libbsd
+-	select BR2_PACKAGE_HOST_PYTHON3_SSL
+-	select BR2_PACKAGE_PROTOBUF
+-	select BR2_PACKAGE_PROTOBUF_C
+-	select BR2_PACKAGE_LIBAIO
+-	select BR2_PACKAGE_LIBBSD
+-	select BR2_PACKAGE_LIBCAP
+-	select BR2_PACKAGE_LIBNET
+-	select BR2_PACKAGE_LIBNL
+-	select BR2_PACKAGE_PYTHON3
+-	help
+-	  Checkpoint/Restore In Userspace (CRIU), is a software
+-	  tool for the Linux operating system to make it possible
+-	  to freeze a running application and checkpoint it to
+-	  persistent storage as a collection of files.
+-
+-	  https://criu.org/Main_Page
+-
+-comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+-		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+deleted file mode 100644
+index c3fcdbc03f..0000000000
+--- a/package/criu/criu.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  990cdd147cb670a5d5d14216c2b5c2fc2b9a53ef19396569a6413807ba2a6aa2  criu-3.19.tar.gz
+-sha256  568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  COPYING
+diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+deleted file mode 100644
+index 3b72a1131e..0000000000
+--- a/package/criu/criu.mk
++++ /dev/null
+@@ -1,77 +0,0 @@
+-################################################################################
+-#
+-# CRIU
+-#
+-################################################################################
+-
+-CRIU_VERSION = 3.19
+-CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
+-
+-CRIU_LICENSE = GPL-2.0, LGPL-2.1 (for lib/), MIT (for images/)
+-CRIU_LICENSE_FILES = COPYING images/LICENSE
+-
+-CRIU_DEPENDENCIES =\
+-	host-pkgconf \
+-	host-protobuf-c \
+-	host-python3 \
+-	host-python-pip \
+-	libaio \
+-	libbsd \
+-	libcap \
+-	libnet \
+-	libnl \
+-	protobuf \
+-	protobuf-c \
+-	python3
+-
+-CRIU_MAKE_ENV =\
+-	$(TARGET_MAKE_ENV) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CROSS_COMPILE=$(TARGET_CROSS) \
+-	WERROR=0
+-
+-# Remap to match the used in criu.
+-ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
+-CRIU_MAKE_ENV += ARCH=x86
+-else ifeq ($(BR2_NORMALIZED_ARCH),"powerpc")
+-CRIU_MAKE_ENV += ARCH=ppc64
+-else ifeq ($(BR2_NORMALIZED_ARCH),"arm64")
+-CRIU_MAKE_ENV += ARCH=aarch64
+-else
+-CRIU_MAKE_ENV += ARCH=$(BR2_NORMALIZED_ARCH)
+-endif
+-
+-ifeq ($(BR2_ARM_CPU_ARMV6),y)
+-CRIU_MAKE_ENV += SUBARCH=armv6
+-else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV7M),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv8
+-endif
+-
+-# Criu needs Kernel Checkpoint/restore support which is not enabled
+-# by default.
+-define CRIU_LINUX_CONFIG_FIXUPS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
+-endef
+-
+-define CRIU_BUILD_CMDS
+-	rm -rf $(@D)/images/google/protobuf/descriptor.proto
+-	cp -a  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto \
+-		$(@D)/images/google/protobuf/descriptor.proto
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr
+-endef
+-
+-define CRIU_INSTALL_TARGET_CMDS
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr \
+-		DESTDIR=$(TARGET_DIR) \
+-		install-criu \
+-		install-lib \
+-		install-compel
+-endef
+-
+-$(eval $(generic-package))
 -- 
 2.52.0
 
