@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37A0BD66BA6
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 20:50:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10217D66BA6
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 20:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA59440317;
-	Wed, 17 Dec 2025 20:50:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D36C940317;
+	Wed, 17 Dec 2025 20:50:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rd8ZVwFflsLD; Wed, 17 Dec 2025 20:50:44 +0000 (UTC)
+ id 1sJVHp1Z1A88; Wed, 17 Dec 2025 20:50:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 259B740256
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EC06403A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766004644;
-	bh=BxzH9cw8gDlmUQ8u7xC0+0z/GyYBH2+D9cQgzdnS4gk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rvVg4W7bzP8cB5OgyoH5ZRJZez2pbfyctGgley5o+zUi2wptY6DomgwAwclBQXz0B
-	 N66rvEgmp3fnDQLWYCfgloKg0wuF/2wRcuz5g5sMyg0Aqz+6DoTewC/VNjVLzQafsi
-	 m7PWDl1jzm/7EA5XUAriNzsl26N7BBXqBNSVTy5LT133RKfDMj0G+lECEMr4s5W42b
-	 qIK1Eyt8AFEuMlSnpqi0AmW7F92d3k/DfzMOvRWdgQ4foQxZqBZKMbdqoeN4zublhO
-	 Vi/vr9WP8Axo8Pl8Ll/jmGeTX1i/GJPcSWR/PpwZjyRpDbUbRDiuIwRi3hd2Z2Pqse
-	 MOJmA3fCY3PZg==
+	s=default; t=1766004658;
+	bh=gG1ovd7qqABSnmUedJKFFhE4y42JiW++OAB3k2yeH0Q=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=W40ZyUQi/Ub3oGLgVD/rPl0ghPAVunoXqhl6auGqK39JZ97T4Rh7Cauu0ZJsg4Aj4
+	 bs7WnLpy7H8mwv1Qhmr1oFc5eyZjsa51fiVfOS3kfBm6y4eil7Ryya8KJX9FyRo7K0
+	 WhbxoX6GRScWHo4HrWU3KHUIcf/e3D5gYjbiZZaNCL8Gq1bZPJjpPJ8b68jYcg50xK
+	 CiLwBEf4rspx5LtWpYs2a8SQLOhT8wOwig7U3juJpdfeTJxQ8OGLNZbc1Y5OcGbU9Y
+	 FGMQkv3bjndOFtFJQ037E6udCdIazkfCBzoLWFS/vcKwrd+t33ibbw1iOcYztzN5Oz
+	 lXNkP3m/hBngw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 259B740256;
-	Wed, 17 Dec 2025 20:50:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FEFE35B
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:50:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EC06403A9;
+	Wed, 17 Dec 2025 20:50:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F45035B
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E7D9610D1
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:50:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30786403A9
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:50:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hWOo5PGmeqCe for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 20:50:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B16560B89
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B16560B89
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:50:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 496CB870EA; Wed, 17 Dec 2025 20:50:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 21:46:58 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c958889b10fe377942493ffa87f05ee9d582bc4e
-X-Git-Newrev: 4ffd6166a639a63dd4f00eb735f8dffb78733bdc
-X-Patchwork-Hint: ignore
-Message-Id: <20251217205042.496CB870EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jeepney: bump version to
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gtasz4T7ZtEY for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 20:50:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 346AC40317
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 346AC40317
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 346AC40317
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:50:54 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 97B2F6012D;
+ Wed, 17 Dec 2025 21:50:50 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 17 Dec 2025 21:50:50 +0100
+MIME-Version: 1.0
+Date: Wed, 17 Dec 2025 21:50:50 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20251215214448.2621174-1-bernd@kuhls.net>
+References: <20251215214448.2621174-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <9467dc53cccec385b174d8301674eb31@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766004652;
+ bh=2Z+I0I56U0umu9oBMzS7/5/KY5Ttc/yNlIjBVTOC8jQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=hdACJwa14JUavJTtKAbTGnGFwg839FGLSs4+QLQOpqyrfHTt6/UoMyGodwnA0dL/H
+ RlutdtYK5rnkWh/ys3y4yXRWodRNpsfzGGTo8KAons09030WoqG+hT2IjGuEX80gH5
+ sfGzur6rv54Eh9GBPSZyd6IZJHVz1rRGfmcKSh6UglYelkQXR4S9NLmaOQ+eqtj5Ta
+ GnLkA442pmtVapTnTd1NTxpWQUngnegrIT6Tj1f2Dbxs1rjtbamfCDTabotHOrKsTi
+ azTLZGPWIViSZtMYHU8x22RSW5+fOYoVzkc6/Z209/LzW7ALcU/YsbDC36rOr2Wb1V
+ TD+Nrw+LElDgw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hdACJwa1
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-jeepney: bump version to
  0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,52 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ffd6166a639a63dd4f00eb735f8dffb78733bdc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/12/2025 22:44, Bernd Kuhls wrote:
+> https://gitlab.com/takluyver/jeepney/-/blob/0.9/docs/release-notes.rst
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://gitlab.com/takluyver/jeepney/-/blob/0.9/docs/release-notes.rst
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-jeepney/python-jeepney.hash | 4 ++--
- package/python-jeepney/python-jeepney.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-jeepney/python-jeepney.hash b/package/python-jeepney/python-jeepney.hash
-index 31a5bac183..4e405bfd34 100644
---- a/package/python-jeepney/python-jeepney.hash
-+++ b/package/python-jeepney/python-jeepney.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jeepney/json
--md5  7e2151e9197c751ceca6550bc6b3294c  jeepney-0.8.0.tar.gz
--sha256  5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806  jeepney-0.8.0.tar.gz
-+md5  d0c0d388ee003d6475750aebe56fc699  jeepney-0.9.0.tar.gz
-+sha256  cf0e9e845622b81e4a28df94c40345400256ec608d0e55bb8a3feaa9163f5732  jeepney-0.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
-diff --git a/package/python-jeepney/python-jeepney.mk b/package/python-jeepney/python-jeepney.mk
-index ac4c0283a8..f61e54b871 100644
---- a/package/python-jeepney/python-jeepney.mk
-+++ b/package/python-jeepney/python-jeepney.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_JEEPNEY_VERSION = 0.8.0
-+PYTHON_JEEPNEY_VERSION = 0.9.0
- PYTHON_JEEPNEY_SOURCE = jeepney-$(PYTHON_JEEPNEY_VERSION).tar.gz
--PYTHON_JEEPNEY_SITE = https://files.pythonhosted.org/packages/d6/f4/154cf374c2daf2020e05c3c6a03c91348d59b23c5366e968feb198306fdf
-+PYTHON_JEEPNEY_SITE = https://files.pythonhosted.org/packages/7b/6f/357efd7602486741aa73ffc0617fb310a29b588ed0fd69c2399acbb85b0c
- PYTHON_JEEPNEY_SETUP_TYPE = flit
- PYTHON_JEEPNEY_LICENSE = MIT
- PYTHON_JEEPNEY_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
