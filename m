@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0B5D64083
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 07:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF1CD64085
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 07:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 262EF82A2E;
-	Wed, 17 Dec 2025 07:09:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F34F640CE8;
+	Wed, 17 Dec 2025 07:09:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rZCWX1ZVWTJi; Wed, 17 Dec 2025 07:09:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zWFMi17Wk8a4; Wed, 17 Dec 2025 07:09:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9DBE82681
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FF0C40D43
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765955392;
-	bh=uj8E5BZg3+2T5Z2k4zRvkCXJctuYG+I5gbyrdKhUTUU=;
+	s=default; t=1765955394;
+	bh=LjDdyfrVGihDDwYH0dfcWxO8G0UqORK37EAo2RKdIjc=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=BRXmHezFr2+WOeeNNCGSFkRqgZovT0ZqYG+osBG3fW7N8y6lw7vSAyAgbmBNPklj8
-	 mnimtx6aaOJArznAz1eDnVSo2ryffkRF8n4R052HauOrxeRZIQ4Z68/XonLYavwo2H
-	 0+iHxoj0N4cU7XfgrCE3cdu5TM/5Yf0lKgPE4PPxVWaS+AGedjQkDPAEQFBGlZ3rgZ
-	 bEasrEvRg9q6v2VEX5SC5hdpEOQ4C0yRVsrqv8IWGx9A4fPL0R9/AmLrPLXM0lXfDV
-	 JZFpwIXL2D0RHZ1h7VOWe8B4ay5cEpcwJopxbVw/nmjgA5RW4b4owld63CZgfuEKVG
-	 dJ7uc9EM0PjuQ==
+	b=F2STvxXKaMQ8/wRR3KM45sixByTWe6jfv5khWhKhmaVhj0P+ceqSUYs4serWcFzB+
+	 Yss8RmbwDYgC2WwK/g2IFUbs1QR2472F4TnMhaCauudziOAtmBkVqFZoQbvHeN5s8a
+	 6xVMjpeK63fTP8MJ1A0igK4zW37MmeqFAz5nId5TbJ4yczHqF9M4scs2drm/xtIlUH
+	 lAByc937U30CzYvOJP1u6/cvQNhAMwYHElFf6PxQMRfEAoC733LjyuT7qk9Y+fsx76
+	 hOiswuw5sC9OAVVn+83L7FyDi3D/+HbqfjVuQVs6xEmQRKdZ1uXk7g0SZdfIKvA9aW
+	 pxgUu+ZsqMMsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9DBE82681;
-	Wed, 17 Dec 2025 07:09:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C4E11364
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FF0C40D43;
+	Wed, 17 Dec 2025 07:09:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0E47378
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 07:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6E4D4022E
+ by smtp4.osuosl.org (Postfix) with ESMTP id B60A9409F2
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 07:09:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 69TaWa4vM-1a for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5q1Hms1B_MII for <buildroot@buildroot.org>;
  Wed, 17 Dec 2025 07:09:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B764400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A921409E0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B764400E4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A921409E0
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 07:09:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AD73870A1; Wed, 17 Dec 2025 07:09:50 +0000 (UTC)
+ id 6BBEE870A3; Wed, 17 Dec 2025 07:09:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 08:03:08 +0100
+Date: Wed, 17 Dec 2025 08:08:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b393bff8c44be37f0b56bee61fdd1fef29f16e43
-X-Git-Newrev: 700fcc48471a35dbb11530f818dd5068776ac831
+X-Git-Oldrev: 5cda56f05e4b258d3ef16f77c454293e28f5fc62
+X-Git-Newrev: 2dc61b52e8aa81104ad58e2fdb129da4c11c3327
 X-Patchwork-Hint: ignore
-Message-Id: <20251217070950.5AD73870A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dropbear: security bump to version
- 2025.89
+Message-Id: <20251217070950.6BBEE870A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zic: bump to 2025c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,48 +75,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=700fcc48471a35dbb11530f818dd5068776ac831
+commit: https://git.buildroot.net/buildroot/commit/?id=2dc61b52e8aa81104ad58e2fdb129da4c11c3327
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2025-14282
-https://security-tracker.debian.org/tracker/CVE-2025-14282
-CVE-2019-6111 for scp
-https://security-tracker.debian.org/tracker/CVE-2019-6111
-
 Release notes:
-https://github.com/mkj/dropbear/releases/tag/DROPBEAR_2025.89
+https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
 
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index b18aca3aab..b3f532b1b7 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  783f50ea27b17c16da89578fafdb6decfa44bb8f6590e5698a4e4d3672dc53d4  dropbear-2025.88.tar.bz2
-+sha256  0d1f7ca711cfc336dc8a85e672cab9cfd8223a02fe2da0a4a7aeb58c9e113634  dropbear-2025.89.tar.bz2
- 
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index d57d6b6e37..e4e42cf994 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index b9daccb381..7fe7582f10 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,4 +1,4 @@
+-# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/6JVHNHLB6I2WAYTQ75L6KEPEQHFXAJK3/
+-sha512  19826b12968c10fc4db7e4b07ba782bfb8590eeebaec6f719d74b92a2e642ab817bd72bceff0015ce52a838edfdb00753b3cd87dd84b35abf2606e5bee445f76  tzcode2025b.tar.gz
++# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
++sha512  d14bc0680b9cb33d6526a2c0e483f2abafc2593cfe5fbfe7dcab940aafdc1baaec065dbaa1bb58b03586a8631ffdf43ebb22ff5a70503298b6ea2cf061d82c16  tzcode2025c.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 1abeb2d70e..06d8ebaf15 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPBEAR_VERSION = 2025.88
-+DROPBEAR_VERSION = 2025.89
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
+-ZIC_VERSION = 2025b
++ZIC_VERSION = 2025c
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = https://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
