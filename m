@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2856D65C63
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01DF9D68BC3
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8D9640F8E;
-	Wed, 17 Dec 2025 21:45:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE26D61187;
+	Wed, 17 Dec 2025 21:45:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbIY441_M-em; Wed, 17 Dec 2025 21:45:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5gCog7d8tv3U; Wed, 17 Dec 2025 21:45:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE47040F92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7AC1611BF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
 	s=default; t=1766007925;
-	bh=zPNvQl9KA8wcdCoQPKKf0ftF4GY+CpIj/edEX1lcHeo=;
+	bh=0t/qznwJzdT7/pnnHiGmuxmF/wyi83DOVHMjNZCIqnA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=U/BGKhUjSBFCAMrIR7pcKx4YaRyFFA6fIVpNIcALKFuaJHPbWeShiACKKf1Eg/1oX
-	 GqtRW1gNJT8g98FtbyvzX2i3S3SMJiSxwKFZQ2FXlW7UWtv9cufR6J0Qdqa6s5TKmy
-	 Tx2ThqQacDmhcZVqeJNrbexQsHJXosNUbGaMc9O1OfeiOCtv3aLi2IASWEa0XuYkaj
-	 AnIOhgqIZ5YIjUT7nmALMMofSGJR8S3of+4SDfEoS95jSg+aKS2xZky5+pC0Iv4eIt
-	 AfAi3Xdyb0Y2zsFo+v5hFUoDPrY3/8K+cXE6VYeCo8W/p6DD0Z6d6mNY34gcMBjiuI
-	 9R4DNgxbndjig==
+	b=Z/1oLLHkiG9kHejI4BDwPfMm2D5cPEE5F0RHmwhr0c8a6BklT6SzcZgiWdNL7+z3U
+	 RGhYqfRhlRV/IOXgRTFVt8UofSVhLceBPzNsOlYSr/lAFhwTAP4acARAN/vaWehjNf
+	 VXPEyptcphQa3e37ZIuTF3c2LC8LF3e2w/n8xEJny2/4WWD+ZmfGP1F2+wTyU35KqV
+	 shKvzvHktyJd0Ypy3WUnmCqelRTcs8B/srt7PgCDZgD9bSD4LUxaZAxCIAfFeNqGh6
+	 pQemj3/oOHIQCM1I10XwUUfUC653RUyfEH3QfEbofob1Ofp9EXptVym5jvrNEfqWnt
+	 1ygkDnMs58PJQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE47040F92;
-	Wed, 17 Dec 2025 21:45:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7AC1611BF;
+	Wed, 17 Dec 2025 21:45:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 01AD1361
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:45:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D2FB375
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0F0D40F8B
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09594401A0
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:45:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d1M9ZUPBW8Wc for <buildroot@buildroot.org>;
+ id 694rC9d0RyU5 for <buildroot@buildroot.org>;
  Wed, 17 Dec 2025 21:44:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE1C240F8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C086D40F7C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE1C240F8A
+ by smtp4.osuosl.org (Postfix) with ESMTP id C086D40F7C
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD13681E43; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
+ id BE5178120D; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 22:11:10 +0100
+Date: Wed, 17 Dec 2025 22:11:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4b951da9203fa8195366397d491631fe3dcaad1
-X-Git-Newrev: 476ebb35858d738a0773930379ebe0e8b1c2c7ac
+X-Git-Oldrev: 7074ac656a7aa484c7d25e3d7f6532829efb5292
+X-Git-Newrev: b4b951da9203fa8195366397d491631fe3dcaad1
 X-Patchwork-Hint: ignore
-Message-Id: <20251217214458.CD13681E43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zope-interface: bump
- version to 8.1.1
+Message-Id: <20251217214458.BE5178120D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zeroconf: bump version to
+ 0.148.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=476ebb35858d738a0773930379ebe0e8b1c2c7ac
+commit: https://git.buildroot.net/buildroot/commit/?id=b4b951da9203fa8195366397d491631fe3dcaad1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/zopefoundation/zope.interface/blob/8.1.1/CHANGES.rst
+https://github.com/python-zeroconf/python-zeroconf/releases/tag/0.148.0
+https://github.com/python-zeroconf/python-zeroconf/blob/0.148.0/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-zope-interface/python-zope-interface.hash | 4 ++--
- package/python-zope-interface/python-zope-interface.mk   | 4 ++--
+ package/python-zeroconf/python-zeroconf.hash | 4 ++--
+ package/python-zeroconf/python-zeroconf.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-index 480d572355..3e9844b348 100644
---- a/package/python-zope-interface/python-zope-interface.hash
-+++ b/package/python-zope-interface/python-zope-interface.hash
+diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
+index cf49e6f21e..3e9a2c06ec 100644
+--- a/package/python-zeroconf/python-zeroconf.hash
++++ b/package/python-zeroconf/python-zeroconf.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zope-interface/json
--md5  dd3e8e7b18c0845f9590a13b2ef66a46  zope_interface-8.0.1.tar.gz
--sha256  eba5610d042c3704a48222f7f7c6ab5b243ed26f917e2bc69379456b115e02d1  zope_interface-8.0.1.tar.gz
-+md5  865a1632f5f9fd517f042006381ebf29  zope_interface-8.1.1.tar.gz
-+sha256  51b10e6e8e238d719636a401f44f1e366146912407b58453936b781a19be19ec  zope_interface-8.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/zeroconf/json
+-md5  13003da434beff520db50460d8d603bd  zeroconf-0.141.0.tar.gz
+-sha256  c0c41cfe1331cf885f132dd2400e4091f59ae0a571cae14f3db66919a055489b  zeroconf-0.141.0.tar.gz
++md5  adda1c72099e20b2968ff7f22d9f6f36  zeroconf-0.148.0.tar.gz
++sha256  03fcca123df3652e23d945112d683d2f605f313637611b7d4adf31056f681702  zeroconf-0.148.0.tar.gz
  # Locally computed sha256 checksums
- sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-index e6425ecc4b..2ec511bdfc 100644
---- a/package/python-zope-interface/python-zope-interface.mk
-+++ b/package/python-zope-interface/python-zope-interface.mk
+ sha256  4d1d974999ae8655ee47afb47ac3b327cd1baeea3509aecb35341ba1a1a53c94  COPYING
+diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
+index 7f14651b86..fe7676e2ee 100644
+--- a/package/python-zeroconf/python-zeroconf.mk
++++ b/package/python-zeroconf/python-zeroconf.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ZOPE_INTERFACE_VERSION = 8.0.1
-+PYTHON_ZOPE_INTERFACE_VERSION = 8.1.1
- PYTHON_ZOPE_INTERFACE_SOURCE = zope_interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
--PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/88/3a/7fcf02178b8fad0a51e67e32765cd039ae505d054d744d76b8c2bbcba5ba
-+PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/71/c9/5ec8679a04d37c797d343f650c51ad67d178f0001c363e44b6ac5f97a9da
- PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
- PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
- PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
+-PYTHON_ZEROCONF_VERSION = 0.141.0
++PYTHON_ZEROCONF_VERSION = 0.148.0
+ PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
+-PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d1/36/78f2cc563958d55b079c977ad2d4ae5d8b182f2dab9f1224d89c9b1311d3
++PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/67/46/10db987799629d01930176ae523f70879b63577060d63e05ebf9214aba4b
+ PYTHON_ZEROCONF_SETUP_TYPE = poetry
+ PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
+ PYTHON_ZEROCONF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
