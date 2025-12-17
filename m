@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E126D68BC1
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42237D66BBB
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC5636116C;
-	Wed, 17 Dec 2025 21:45:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5464B61117;
+	Wed, 17 Dec 2025 21:45:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9YPFf-1Lwt7g; Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
+ id 19Yk2crwByIS; Wed, 17 Dec 2025 21:45:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB6F761161
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C14C61131
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766007901;
-	bh=meSYoiSaw+fcSZDJ1s/TMEeSx/pcgbSIpGfPouvcI+o=;
+	s=default; t=1766007903;
+	bh=l85BMhsFK2HP2XGmoVu82Y2PN712SMv9BcirJK2VLb0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nExOMmCUFxqoOaJwmw8JiaOjgS17bVNfq/c57n+JHIFxqgOTsA7e6uFUHrYM/S51U
-	 klubUor5qkZ40VchNS1BBX76sG8jXGS441ZqpKhUPHoOKf5H4FWz+2Hk5vZliz+jCa
-	 ZFn1N+nFbJmgqOXWg2B3StzhFi13k4EdMWFtVijiDrzny3GSeUJaESviSkrFYKUyo4
-	 0s9MKgmj5djx7HPGQ5rXu3bMkj+9Y85HBCIrC2oYvuPHXLAYYRX5hA+pytuZZnxFTe
-	 GYN4WsB4pgxwlFkMs+c3ycNg9SixOtT4bLDU0K7X7PUpviwKrfG2MMZ6VADqAPCfTM
-	 IlH+CwPYoDRfA==
+	b=chsmIILwrqPtt+UJDyiuHQWw46AzjpPjpnVnbQ1RuCCRXA8nqHQVx4qawJTiepW6d
+	 9wxXuFr0x9xNN6xevss08HX3JR74bW5+hWeLLXPd47O2hGRGh70u9ur9h7eA3hXvrb
+	 l5CCoGzFNw8cYnBMu7TaLvIHVJYYHL4SsOFTkysLaHAHXb4dSQpOYMGayjoYeJw6r7
+	 tcIx5Ue1TIxOMYjEENgQnIZy+IETb47lni6NdBgaj5wF/HdmbhtuSocApgkx80Dugl
+	 nGv4qHTyvWntz7IuZTr+tOdvf6d8wsYeLnWIvNrWBcNe7nn34tqx6S1YhjecBiBgbT
+	 WTT+OG8TZ+ZuA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB6F761161;
-	Wed, 17 Dec 2025 21:45:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C6B98431
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C14C61131;
+	Wed, 17 Dec 2025 21:45:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD0FD432
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB97383B53
+ by smtp4.osuosl.org (Postfix) with ESMTP id B068440F89
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WjwARPwd0M_2 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LLqxartzLkvs for <buildroot@buildroot.org>;
  Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D41EF83AAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBAAC401A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D41EF83AAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBAAC401A0
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7CDE8713D; Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
+ id BB4468120D; Wed, 17 Dec 2025 21:44:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 22:04:33 +0100
+Date: Wed, 17 Dec 2025 22:04:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0cea7186f194a848c723a1ee143afc97f7b9de0
-X-Git-Newrev: 8051485bbc1efcf8cc52983ac57a9b66cc21a06f
+X-Git-Oldrev: 8051485bbc1efcf8cc52983ac57a9b66cc21a06f
+X-Git-Newrev: 12e20ab68b3ab54957a1b2a0ed7bdbc513fd4373
 X-Patchwork-Hint: ignore
-Message-Id: <20251217214457.A7CDE8713D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-termcolor: bump version to
- 3.2.0
+Message-Id: <20251217214457.BB4468120D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tinycss2: bump version to
+ 1.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8051485bbc1efcf8cc52983ac57a9b66cc21a06f
+commit: https://git.buildroot.net/buildroot/commit/?id=12e20ab68b3ab54957a1b2a0ed7bdbc513fd4373
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/termcolor/termcolor/releases
+https://github.com/Kozea/tinycss2/blob/v1.5.1/docs/changelog.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-termcolor/python-termcolor.hash | 4 ++--
- package/python-termcolor/python-termcolor.mk   | 4 ++--
+ package/python-tinycss2/python-tinycss2.hash | 4 ++--
+ package/python-tinycss2/python-tinycss2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
-index 4bed487025..d73588d22c 100644
---- a/package/python-termcolor/python-termcolor.hash
-+++ b/package/python-termcolor/python-termcolor.hash
+diff --git a/package/python-tinycss2/python-tinycss2.hash b/package/python-tinycss2/python-tinycss2.hash
+index 4a7b26de82..2ffb280506 100644
+--- a/package/python-tinycss2/python-tinycss2.hash
++++ b/package/python-tinycss2/python-tinycss2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/termcolor/json
--md5  26f496075070852b5d39762bbd14ec46  termcolor-2.5.0.tar.gz
--sha256  998d8d27da6d48442e8e1f016119076b690d962507531df4890fcd2db2ef8a6f  termcolor-2.5.0.tar.gz
-+md5  50ce238ff23fb53077f746b751b7ba7b  termcolor-3.2.0.tar.gz
-+sha256  610e6456feec42c4bcd28934a8c87a06c3fa28b01561d46aa09a9881b8622c58  termcolor-3.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tinycss2/json
+-md5  de6bd20b47354352c2b2344c842385c7  tinycss2-1.4.0.tar.gz
+-sha256  10c0972f6fc0fbee87c3edb76549357415e94548c1ae10ebccdea16fb404a9b7  tinycss2-1.4.0.tar.gz
++md5  003d9f446bddb3dfc76d0f3db0f38fea  tinycss2-1.5.1.tar.gz
++sha256  d339d2b616ba90ccce58da8495a78f46e55d4d25f9fd71dfd526f07e7d53f957  tinycss2-1.5.1.tar.gz
  # Locally computed sha256 checksums
- sha256  e79b6bd82962c1330caaa7c42278567b08667777673f8e2371a624d5715d4c0e  COPYING.txt
-diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
-index e2492ab3c4..e0a6677241 100644
---- a/package/python-termcolor/python-termcolor.mk
-+++ b/package/python-termcolor/python-termcolor.mk
+ sha256  6b94acee20ec9f2709333134f3ba70322535fb420af0ce8c1455d9cbe297f1d5  LICENSE
+diff --git a/package/python-tinycss2/python-tinycss2.mk b/package/python-tinycss2/python-tinycss2.mk
+index b269617ad1..39029278a7 100644
+--- a/package/python-tinycss2/python-tinycss2.mk
++++ b/package/python-tinycss2/python-tinycss2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TERMCOLOR_VERSION = 2.5.0
-+PYTHON_TERMCOLOR_VERSION = 3.2.0
- PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
--PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/37/72/88311445fd44c455c7d553e61f95412cf89054308a1aa2434ab835075fc5
-+PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/87/56/ab275c2b56a5e2342568838f0d5e3e66a32354adcc159b495e374cda43f5
- PYTHON_TERMCOLOR_SETUP_TYPE = hatch
- PYTHON_TERMCOLOR_LICENSE = MIT
- PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
+-PYTHON_TINYCSS2_VERSION = 1.4.0
++PYTHON_TINYCSS2_VERSION = 1.5.1
+ PYTHON_TINYCSS2_SOURCE = tinycss2-$(PYTHON_TINYCSS2_VERSION).tar.gz
+-PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/7a/fd/7a5ee21fd08ff70d3d33a5781c255cbe779659bd03278feb98b19ee550f4
++PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/a3/ae/2ca4913e5c0f09781d75482874c3a95db9105462a92ddd303c7d285d3df2
+ PYTHON_TINYCSS2_SETUP_TYPE = flit
+ PYTHON_TINYCSS2_LICENSE = BSD-3-Clause
+ PYTHON_TINYCSS2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
