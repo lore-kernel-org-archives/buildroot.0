@@ -4,85 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B0AD66B81
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 18:13:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16980D66B81
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 18:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A833B610C2;
-	Wed, 17 Dec 2025 18:13:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4B746075B;
+	Wed, 17 Dec 2025 18:48:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2rEneAEF6k4S; Wed, 17 Dec 2025 18:13:23 +0000 (UTC)
+ id rP0spEQR10CK; Wed, 17 Dec 2025 18:48:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3489460886
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA6F460A7B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765995203;
-	bh=296hjvJ0MKhUr9eJWvQR2LFtsVf3AU7Sx999atopWD0=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=S5gfApC9P2zRIuGnTijNxyx4btkx7lfv4MjJHxvt5jbbUS3skOlCDnKSF3WQCOGtZ
-	 l2GD1doO4QI4yDjunLQci1CbZ5IPxITwyV3TxTS9DuitCeQUq3cj5l2nMSkothb1uO
-	 ADJobCqJL1cXJHKnZKMGLxDwazkWaersMMoiS6cseu7oraDXgKkyQWqPttD8JtLlIl
-	 GqvWGsfhQBJaJQ8PYmkVsa3PgqDSYWLKRgdR4vbPe2nvtiBFb2OVjGikXeqejJgkhR
-	 2rzcvTSeVAnIMuUQbKWaT7xHC/0bim3t6+oHe+PrjENXBkTtLlW83bzhp+FjGjeb6V
-	 lIhtoToVgU0cw==
+	s=default; t=1765997309;
+	bh=PVHNw0SMpkmQ5gc0pblsE2Wa1gnmSWl7F86sfobnZzU=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=DJbSp481fAkyuh8BR5YCGl0rt9txP6v1VXCmvycNDD631vXZN+lssQKMGXUTaEwRv
+	 3dboQ5dx23C8Mls0vNSywOZ/vHwqcCCn3RlT1eFiLLNefK68Bcix7MTBgmIIA62HQZ
+	 iW49pH3U1br7jq3cKdGUWFo6pj5sbH+t/Dahhkp79qxIXDGagr6y66QfCssUA63Gb3
+	 eDufNVyrZs//2TjKKIiTHAYhLXk/kHMmUGZ3wRaKZZEcdFB0ghB514wYsVaoO/Sojk
+	 dAw3xX4oFgKnY62ennazzL84EZG4gdFbb0izVidnPXSqkibdRVtPbiTZIR72bf+kSw
+	 Y1zuBhCdIZoeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3489460886;
-	Wed, 17 Dec 2025 18:13:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1022035B
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 18:13:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA6F460A7B;
+	Wed, 17 Dec 2025 18:48:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D415261
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 18:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA0AD60886
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 18:13:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B5286075B
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 18:48:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQtYFNK0n-d0 for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 18:13:21 +0000 (UTC)
+ id w2_QCJuzn3Ep for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 18:48:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 95CCF606E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95CCF606E8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 24D1860B58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D1860B58
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 95CCF606E8
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 18:13:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 24D1860B58
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 18:48:26 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F2582A4C468D;
- Wed, 17 Dec 2025 19:13:14 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57016)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E49E3A4C420F;
+ Wed, 17 Dec 2025 19:48:22 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49088)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vVw1S-000000004z5-1XSO;
- Wed, 17 Dec 2025 18:13:14 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vVwZS-000000002xr-17ab;
+ Wed, 17 Dec 2025 18:48:22 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Wed, 17 Dec 2025 19:13:14 +0100
-Message-ID: <20251217181314.3675513-1-bernd@kuhls.net>
+Date: Wed, 17 Dec 2025 19:48:22 +0100
+Message-ID: <20251217184822.3765937-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +++++++
-X-Spam: Yes
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765995195;
- bh=WQNyWR8AdzAFNYHcjtrYRUi8RTxXAPU5c6mlT+kOUDQ=;
+ s=kas202511301023; t=1765997302;
+ bh=z3nIrAUo/TAu7ySuNiIlSpQv93kFBCIEH1JfkjIrisY=;
  h=From:To:Cc:Subject:Date:From;
- b=gXuTha1sX7ZqBcBBHjf/qdwLEHrS5eEwi5KXQbntrFVhhcQg935L6NL7Bb07ynv4G
- T4gzQTJJxuVjvvbciF2zHr1LMbZ7vPl2lcXd85YKWqa5XDoQEFUXGFmV9h78z4vyz7
- qLpDo2Ms9vr2ED3CGbG/mkU6n/ERpskaMxHlyMoHzQrzqjWFGJlnGbuczn6BNfLoMa
- ZcukqTFbhOxuOiiE6fwdmo3xYRyPhQ/HdmfZ5F1oqzQtHo6wSojwSnKqVnWCAMdU/K
- L49IMeB8e13p7ysSR2/SaEVD4lB9kuKYltaOyIBRuh/7IE4aM5AACc5anku9o3sMoe
- tH6QvrlyN/4Pg==
+ b=N2eia6IRxEYG+pcy1AA8TQkKYtn+5TSaLp4r/IBxduQBSf4ZfY5gr9W2qhRVw21jD
+ lU8XkvGE1fAceriKOpW0j9lQf26FX008UDamK29MeJ3Hh82oVelYOh9kfiKgoKG9Xo
+ AZtjhbIHQ4+RB6AIAd7L0xDkzqU3f6BJUXjoalnhMUzdL86R5RZC3vFLkzobYkqKQZ
+ omH67jZDdIB8jK7yJF6JNY9mguh+qQ9TcSl75Vc4wIL3T+65S/5/Hoy0f2VTEiSHGJ
+ J/aFdfw85AitBMaTFumikkKmNO3+j8ilGEFN7s9IbyXEHGEMZnqB2IegLG73lIhZ0Q
+ Fe+8YEVLjQkFg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=gXuTha1s
-Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
- 4.99.1
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=N2eia6IR
+Subject: [Buildroot] [PATCH 1/1] package/libselinux: host-python3 needs SSL
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,49 +91,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Antoine Tenart <atenart@kernel.org>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.exim.org/lurker/message/20251217.151548.85d1a2bc.en.html
+Buildroot commit 285097051d4a7dd821f01d15c705867f7e26c635 bumped
+python-pip to version 25.3, causing build errors when host-python3 was
+built without SSL support:
 
-Fixes CVE-2025-67896:
-https://code.exim.org/exim/exim/src/branch/exim-4.99+fixes/doc/doc-txt/exim-security-2025-12-09.1/report.txt
+  WARNING: pip is configured with locations that require TLS/SSL,
+   however the ssl module in Python is not available.
+[...]
+  Could not fetch URL https://pypi.org/simple/setuptools/:
+   There was a problem confirming the ssl certificate:
+   HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded
+   with url: /simple/setuptools/ (Caused by SSLError("Can't connect to
+   HTTPS URL because the SSL module is not available.")) - skipping
+  ERROR: Could not find a version that satisfies the requirement setuptools>=40.8.0 (from versions: none)
+
+Reverting the python-pip bump reveals the true cause of the build error
+by showing these messages:
+
+  WARNING: pip is configured with locations that require TLS/SSL,
+   however the ssl module in Python is not available.
+[...]
+  DEPRECATION: Building 'selinux' using the legacy setup.py bdist_wheel
+  mechanism, which will be removed in a future version. pip 25.3 will
+  enforce this behaviour change. A possible replacement is to use the
+  standardized build interface by setting the `--use-pep517` option,
+  (possibly combined with `--no-build-isolation`), or adding a
+  `pyproject.toml` file to the source tree of 'selinux'.
+  Discussion can be found at https://github.com/pypa/pip/issues/6334
+
+Selecting BR2_PACKAGE_HOST_PYTHON3_SSL fixes the problem.
+
+Criu, the only other buildroot package using host-python-pip as
+dependency, already selects BR2_PACKAGE_HOST_PYTHON3_SSL.
+
+Fixes:
+https://autobuild.buildroot.net/results/fd6/fd6d3edd5f74d094621ac9fdb93db24520b7a6e3/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libselinux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index dd20fb805a..f9a62e0188 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  5df38b042ffa9a9c8d31b20bc8481558070e361b06f657608622a62a327adcba  exim-4.99.tar.xz
-+sha256  eae967bd49a5f879933b8c6ec88c30475a1c6646232135f37f05b55dbc4e3447  exim-4.99.1.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  06521aff437dfe99c015606d2cdde76eaf6e4d2f03779b07fbc0e7d06fe0584366cae9c3fa7d73a86c348f0d25336acd06c42bd5b8f18e5a969de9849088e3aa  exim-4.99.tar.xz
-+sha512  41a280673b23a79684124dba9ba1db4da57047eefd7bac8560fab3e399659698160386c5369deb4aabdbcba1ba9278fb0a61fc1667dc2745c280b3004d02f45d  exim-4.99.1.tar.xz
- # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index d9adfb59d5..47fe17b372 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.99
-+EXIM_VERSION = 4.99.1
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+index bc40e32a46..db5694e7bd 100644
+--- a/package/libselinux/Config.in
++++ b/package/libselinux/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_HOST_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  libselinux is the runtime SELinux library that provides
+ 	  interfaces (e.g. library functions for the SELinux kernel
 -- 
 2.47.3
 
