@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E15A8D66B9A
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 20:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E46AD66BA2
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 20:17:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B3FE60A57;
-	Wed, 17 Dec 2025 20:04:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF83183BC7;
+	Wed, 17 Dec 2025 20:17:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3TBXtlr4FIFb; Wed, 17 Dec 2025 20:04:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oJ5XVEUMtXZT; Wed, 17 Dec 2025 20:17:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 382C160AB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08BB781CA0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766001852;
-	bh=kyjIJQA4uWAgymWUZ5K+rhJP7JdnN9kDrJiQEWJKtLQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=lEWyEpu4yew5R9hzIkA/jY5ASrysM1S4gV5CEbfv5vKkrqxiLxDXuJdo23Yi6jGpM
-	 3tuW6/mwaKGVnZsmGxkwHWLHxuLM0nwPyWi251rsFSS5HErF6IQaaIBYEUDOwozjK6
-	 /uFdtL++J6cV5yNkh5DvBKll/hEicKRW1PYqQTdyflyFiE5zKH+E1D6QS4noljM9pC
-	 UrsvIV7wS62hqQOUPTmDv7l88rPdTBXb+pwnLQBGubfcwiiAud3qa+xNWJFczJceJX
-	 Sk/u7viE3fYjfQNYAZINDI2qL5JmSFIxp7G7G7IyN/22fZ2tLX/MScJwvf8VMuyeUc
-	 erIk1JLluzJmw==
+	s=default; t=1766002625;
+	bh=eG+JD35GILyogO3t0y0fIHWDjOUwtOyGofVrEWGsk8w=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=UF5EnMIfRp/1/gbVBHJDXJL3rx2ynxjRPuYoJyagJBDveJ7u3r/kEzsZZajNYEv6P
+	 GvO/sHofb0CCjPryk7uasyTX6bJ4kY8d6w1hvmJRkU5fEWaX7nH000ZJyls+l3IIEN
+	 UgIBT7F4apnFGM4fw6cWmjJoe2dZeit8DcnxRASIUxgrcriGnDFIMSvzWj/azAFFl1
+	 j1HP02CjUDvOXVdyGoFeLTbqTCOLi7Soc6o+CiJ+lRkR4VF7iQPvaQkRy3WPOGqrms
+	 +EpqarvsUziWA9PCvCu2buCe8xbEIkaS/KA/WV1lXaaPFP86O8pp62SiQ4TImCLkjs
+	 2VnNYR4CMHotw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 382C160AB4;
-	Wed, 17 Dec 2025 20:04:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 800AB361
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:04:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08BB781CA0;
+	Wed, 17 Dec 2025 20:17:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFA39375
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71D884041F
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:04:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A21DD81CA0
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:17:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D4bBMH_X1qJX for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 20:04:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F02340401
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F02340401
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F02340401
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:04:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id E3D0019F5B2;
- Wed, 17 Dec 2025 21:04:03 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 17 Dec 2025 21:04:03 +0100
-MIME-Version: 1.0
-Date: Wed, 17 Dec 2025 21:04:03 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- Adrian Perez de Castro <aperez@igalia.com>
-In-Reply-To: <20251215225837.1257574-1-thomas.petazzoni@bootlin.com>
-References: <20251215225837.1257574-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <e3344bb3e6906c838077115c384edfd0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766001847;
- bh=XmzBIp0bgf1qikuz9osZy/+rLsDWuhnDaPo38hTzjQ4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=A2I38lFlE/IGHgCHeeQu1bKptcstAvXc25NpW20mcOYr1DRnCvfgJ4Y1b419Skwas
- ezy7FEpHj3S8EuzW7RTZVWZ+Wn+p4U4XGLrrxhcCB6FabDPXNf9eCWp6DPdr4yUPH9
- w1mzkXPymi7kXw/KGvdf9NwTILIyz3r/2qjsDU2sjhhkOW/5Ia34ka6/q3yowG2iYY
- o6PZjzFwXJOoJqEEDBf8hubCrIyJ16ZrcFOY6LZCyQCy58e4u5Mc4X/noqwJdDoR+Q
- xDwqhirhM098d03nfAl/kp1xLl9+E848fJ09RnbO829ZeCpwElmpmQxB5ejriAg1OJ
- f3L4KyA1txEJg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=A2I38lFl
-Subject: Re: [Buildroot] [PATCH 1/2] package/cage: properly propagate
- wlroots dependencies
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QBqhKBwmXfO5 for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 20:17:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0783681A3E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0783681A3E
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 20:17:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EB581870C5; Wed, 17 Dec 2025 20:17:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 17 Dec 2025 21:08:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6c512c8be0249e1d0e7a83186dff6482701d779f
+X-Git-Newrev: a7f1ab80cd65616f437ed12b700a4bc2a32e50c8
+X-Patchwork-Hint: ignore
+Message-Id: <20251217201702.EB581870C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: bump package to version
+ 9.1.1989
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,24 +71,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/12/2025 23:58, Thomas Petazzoni via buildroot wrote:
-> Commit 00fb3a57cbaedb8df43f75f0e891423c1ef7d8c6 added a wlroots ->
-> libgbm dependency, but forgot to propagate it to package/cage.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.net/results/dc185c3d4886e9cfd9e6f46b50b864e5b2f28605/
-> 
-> Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=a7f1ab80cd65616f437ed12b700a4bc2a32e50c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Changelog:
+https://github.com/vim/vim/compare/v9.1.1684...v9.1.1989
+
+Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index ae909aaeac..95c44234fe 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  4fe4cb284007e26255267338dde1ceac6f8326f78123ae8c96a36ee15a1ea7ba  vim-9.1.1684.tar.gz
++sha256  e150b40bcf593c10afb39378f2594203d94e5d6110ffe242a0b6bedd258d757f  vim-9.1.1989.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+ sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 4297bdd198..2ecab0652f 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 9.1.1684
++VIM_VERSION = 9.1.1989
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
