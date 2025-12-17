@@ -1,80 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BDB4D637DF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 01:28:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC2C4D64073
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 04:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EF5E40ABC;
-	Wed, 17 Dec 2025 01:28:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 628B36080B;
+	Wed, 17 Dec 2025 04:58:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M3gUS9ocL6LX; Wed, 17 Dec 2025 01:27:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JiNozBkVkf1w; Wed, 17 Dec 2025 04:57:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A805240B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F95E6079D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765934879;
-	bh=uhVgQ00jqDTrPSF8oH7dCWoJva0OZWilEfpJJK5J+wA=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1765947479;
+	bh=bQiQDDNkH5f5KHYVRiZp6wsRrhJVVoVVwpv1u25OGHo=;
+	h=Date:From:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Y+eMUCgGXtby420NER8j26Im/fK5ei11CVdkd9mwLN8I1GoSIIyFM49eUFRSCMMhL
-	 4gEYfBImyYLPh4NukudrXivqfI+1+0NaGkMaAZdwZuLXVQF9xNR3AcQ15z7VDmL8kg
-	 KuNhdM7ivtAsTk945fliE0fxQFXuIYHNAIY2AyUhStZOJjFOnMJnb0q2I6Og+8AMlh
-	 diEOozQQIFyqa8VvI5S7IDcCynjAUgXGaiiqKFDgwgw8fXg07B9S0/xJIvOkVMTzZL
-	 0zAl5ALprjuqbpCMAdZmnBhiQ5sge+SgjgVhOgRMsDmfu3A40F7MT/LJElvAF2hFa/
-	 /AU7l/cEtC/Hw==
+	b=S3L7zCpF5zaUjH+VmT77WrW+cNAMHLSY2cpN84pcn0MledvBV5VEwDMAZzOUA9lZY
+	 xc2DMci/iaLgWe08wp83HG3EvtF/1sS59HlSnhOzI1LNuoH68Eh3DmfzRm5tiyoo6i
+	 EHQ0r+anNVXizq19EcQXpBIrdnGhXzamL2ec5KpuuRMRfmewHo5FEfrKk8NqlHw5Xj
+	 BK+EUMIEU/x9qDKRd4EAJk3wWFiGUQIySjVfbjwh4FdMM77zmCP/g0saOwpSyh27G7
+	 xIWsXeB4X3uDTb8eWDDK0tU9rj9EDIrgJM+47I89NVDDXppQyXnWk3PSOEoZHdLtJS
+	 ywSo1OIdxA0mQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A805240B0A;
-	Wed, 17 Dec 2025 01:27:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F95E6079D;
+	Wed, 17 Dec 2025 04:57:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CB02372
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 01:27:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FBAF364
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 04:57:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E9D740B0A
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 01:27:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 453E040D27
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 04:57:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NA39CMdUbGtu for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 01:27:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.29.241.158;
- helo=codeconstruct.com.au; envelope-from=matt@codeconstruct.com.au;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 206FA40ABC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 206FA40ABC
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 206FA40ABC
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 01:27:57 +0000 (UTC)
-Received: by codeconstruct.com.au (Postfix, from userid 10001)
- id 8CC2E7DFD7; Wed, 17 Dec 2025 09:27:53 +0800 (AWST)
-From: Matt Johnston <matt@codeconstruct.com.au>
-To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 09:27:51 +0800
-Message-ID: <20251217012751.2602488-1-matt@codeconstruct.com.au>
-X-Mailer: git-send-email 2.43.0
+ id m8aQpODIZk6D for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 04:57:57 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6EFAF40D01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EFAF40D01
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6EFAF40D01
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 04:57:56 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 6FE17BDE0684;
+ Wed, 17 Dec 2025 05:57:49 +0100 (CET)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=codeconstruct.com.au; s=2022a; t=1765934873;
- bh=EIXjdBsjC1N2Te3ERDcrbntdSKefxJo3KUVfyWbuWxs=;
- h=From:To:Cc:Subject:Date;
- b=UMNCAK0Z5V2l7c5/uuaXKqgIyt6ornIO5vIiBur4E57e+MXaXdH1U3nJTYDDnyZ+j
- epvCXmxSGfsUHdlHOR1Z8p0NFm4yvvrwOzfgN61CVz6KR4E7bAeRNblE04rthBsCDu
- N5+Qegwdjgym9AddRLvgRz5qCcUVW6fSZGOe6HnKHpCvq0a0BhqGf4MJNqlER/8RxI
- MRieoJ6YVFULkycdrlYE43//A59J7Ecv99bNgPDX1yjK2VvKT+jI5+RNxlosygAUJ3
- zwv+GzdUq4qjJ7m8KR6dBp9DdRna4ZYcJRTIJzreySqQvhCUMaY9OYeS0mrHVxdxyX
- 4nB5sdga4dPpQ==
+Date: Wed, 17 Dec 2025 04:57:49 +0000
+From: Andreas Ziegler <br025@umbiko.net>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot <buildroot@buildroot.org>
+Message-ID: <ed100c99101f7bb7cd6979fe680eed91@umbiko.net>
+X-Sender: br025@umbiko.net
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1765947469; bh=+G8zhbzbFviyRks0WZo2zOXFHmY3GcfQcMxI6cpcWaE=;
+ h=Date:From:To:Cc:Subject;
+ b=YlPb7S4/cwLnQaXmGjFzhp0+okr2daVq/5dojx6T7kaam9GO3yTK2pZ5Ih+R+AGD4
+ IgmsY/nk91wd/Qe902j05OQeLgjWpbq9+rVzDUrsaiKV0AE+tTILHHPxnxi9WMIc6o
+ GlBbLZfYlp+cAJvc+9J/qUmiTZmRx8Ib9EYlRpLM=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=codeconstruct.com.au
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=codeconstruct.com.au
- header.i=@codeconstruct.com.au header.a=rsa-sha256 header.s=2022a
- header.b=UMNCAK0Z
-Subject: [Buildroot] [PATCH] package/dropbear: security bump to version
- 2025.89
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=YlPb7S4/
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/libid3tag: bump version to
+ 0.16.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,49 +85,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2025-14282
-https://security-tracker.debian.org/tracker/CVE-2025-14282
-CVE-2019-6111 for scp
-https://security-tracker.debian.org/tracker/CVE-2019-6111
+Hi Bernd,
 
-Release notes:
-https://github.com/mkj/dropbear/releases/tag/DROPBEAR_2025.89
+[Series: 
+https://patchwork.ozlabs.org/project/buildroot/list/?series=476289]
+[Patch:  
+https://patchwork.ozlabs.org/project/buildroot/patch/20251005080323.2103951-1-bernd@kuhls.net/]
 
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
----
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+There is a pkg-config file 'id3tag.pc' left in package/libid3tag, which 
+is not used anymore. Id3tag 0.16.3. supplies this file, and it has both 
+dependencies.
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index b18aca3aab5d..b3f532b1b79e 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  783f50ea27b17c16da89578fafdb6decfa44bb8f6590e5698a4e4d3672dc53d4  dropbear-2025.88.tar.bz2
-+sha256  0d1f7ca711cfc336dc8a85e672cab9cfd8223a02fe2da0a4a7aeb58c9e113634  dropbear-2025.89.tar.bz2
- 
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index d57d6b6e372b..e4e42cf99442 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2025.88
-+DROPBEAR_VERSION = 2025.89
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
+The file was added in commit 
+https://gitlab.com/buildroot.org/buildroot/-/commit/d6b68e6b6a81985ff5bcb9836d0d02c1fbed3e47
+
+Apart from that you can add my tags:
+   Reviewed-by: Andreas Ziegler <br025@umbiko.net>
+   Tested-by : Andreas Ziegler <br025@umbiko.net>
+
+Kind regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
