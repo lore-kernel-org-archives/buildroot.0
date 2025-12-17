@@ -4,111 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 179BDD68BC2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 22:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD114D68BC2
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 22:39:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC8F440B60;
-	Wed, 17 Dec 2025 22:38:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8359840CDB;
+	Wed, 17 Dec 2025 22:39:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jB4UMCFe-zzd; Wed, 17 Dec 2025 22:38:24 +0000 (UTC)
+ id X-AWZAIv2JLO; Wed, 17 Dec 2025 22:39:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 684E440A69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FF6640D4A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766011104;
-	bh=Hxj3+5X2aUUgqrfyHJwXhLxLLwqE9eDRWbwdya7H9Ss=;
+	s=default; t=1766011147;
+	bh=dNtQb2uANdX9ilcqPD+OD7OoOlP8cUYsUjhmzjaZ7vQ=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=lZO18OliBUekayUzmgiR6oj6mHTX2XqYPHyWgHY93lRI3r4rNTbNzHsBOk5YKKplo
-	 1QEQpBfbJGQLDx4zVW3imtFvoH6Sv4muFtoVFdUEfBOeuZ3kvjWXrhdHF75iJJLUM6
-	 2na338JK7Bv9xejVHSFc6/fXepJudMfVtGqbWIKoO0a83vLDCEmj/nxpG92k11y1tu
-	 e7nYc7EIi90nQ0QnonoPRVR8PbUju2Tpwcay/JKKMwZII/oO6QfeeOQ9OVVihW7ZKV
-	 mPRskivtN8Rrs8iHT7S8ybw0wPAh+j89PDyAlqawf0VhuUnq9pfJ9XeUR+JMBi2DMT
-	 6n9bGUG5oCD2Q==
+	b=JSxC9GZV+PaSCN5Zl3z6rWja5PzfWz/iD/uV7WvGno3NGM2jDzB95IvGXdfxODerx
+	 Hyo424IFwtiK4FI/0XTzbaUyCGo/fK/5L+fnIAvm7sxcCBSUDGx0OHSIpXMt4g381E
+	 mo6Oqx3hq2HeKvofbw4d2f+g1P8nc0adnWrPa4sd5JiXhYsqzH/YzOjP2//rHsWTxZ
+	 1i0f05YgPFL9L4lQ0/DaIsHp/9WQ5QZ+rmFMIUANQanACIfVsqRoxigG+8UGjIxjIi
+	 FgQFuQCivHBMTOriENThPQAJPpZrLyYMCSFpuWHynlFygjYtoSkyaFJaDBlDMtdO+w
+	 S5wmlnjL5VItg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 684E440A69;
-	Wed, 17 Dec 2025 22:38:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 36D9535B
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FF6640D4A;
+	Wed, 17 Dec 2025 22:39:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E63FF35B
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 299C140A69
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D81B983CB1
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:39:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5YO-kDxEvQ_C for <buildroot@buildroot.org>;
- Wed, 17 Dec 2025 22:38:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2863D40A0A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2863D40A0A
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2863D40A0A
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:20 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-64198771a9bso9435537a12.2
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 14:38:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766011099; x=1766615899;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=bjJ5kU2pApWMlXCv9kdKnCyDoLThDYnyhgJlH9Ht5n4=;
- b=wOwIZ/PEgmLbC6XrEl9DyEp2xkamPzhNGrob2HNV047NxwvyRM1qDoWI2Y+YfLijGt
- 65gMG2o97pEQlBq0Jq/PVrMCCIUPApLEiXn76xR3vGxsTLVY7P+UpMeMq2VAROvXJExC
- EkyoGoPMs8m9IvqP8yf7INfPrRTbYdOd/96tv/DDVrylAhWRT9WutMqp7J18r+yWXWtl
- Yz+chi+/Y5UGJ1mxKF+AS4g7AQKaZlU3CACdRrezK6yzfk3ovtHjN2RyDMN7IyzBi79q
- 5TKSuEnJHer8RFee1NWmmTFKgei/XCFpKIaB6g19mWjyTuUMDxhFjFU/LUowv7jNoEg1
- Gyww==
-X-Gm-Message-State: AOJu0YyKtBn0rnfMDEkYYLmPw+3o6UMsE83Du0Y+tzaClD+G3TKIMB8+
- NcosEN4j8qicgBYRyictnyuHfVqrSlDd8CgKb2J6Pjto3BMVvRVRDkFTj+jl5bbf0pDzCHCwkrl
- BPFvH
-X-Gm-Gg: AY/fxX4F5RfLGnpyhBfa1PRqajwQeJWiiZWWywh+UtR9WzMmfRDdkxwvxHfkxG3IuaV
- 5bR19oxlWYWVeB16Ez58e4ml0M1thpWDe1ZesI1v5EcOcijEQD7PkmIMZHtr+AQqd+Rc+dMeS+x
- cn2yarYfc0JWoYJoy4L8TH91g5+jERmcm8ZJi4slBCHRZVS+xY4D8D/a/88GCRWMm+hIh+pLaOy
- Sjw8/XAyj98loA2pz+aB/4BIaYpZ/ufTUOJIO9aIV9UJB8Seh25UeDKtk5HKKw25k7/dr87ddyt
- Olm4BhzAZKzLFMkzKtjGUC1cgS2yeMxouOcsMFcTWnPVMOziZe6UBK5ouUMoU+VAiGItW4A7GR4
- MNJVe7R9MBOgRE4Dw8mI8UaRhOlh3pCRy5i/IxqTGLBlb5+J8Uy3TShusQj0ClbFzUvSjsosBHk
- ybzdQ6KWcpLo0MPEYE/8KCaG91
-X-Google-Smtp-Source: AGHT+IF/knmF5loSq4bfx1gLybtTszyObg2NL/ICTEjF1/jtWgIw+IWOJjnxUv6Ze4vzwCRkL7nSLw==
-X-Received: by 2002:a05:6402:5191:b0:649:ce93:fdb9 with SMTP id
- 4fb4d7f45d1cf-649ce93fe3dmr11827721a12.19.1766011098917; 
- Wed, 17 Dec 2025 14:38:18 -0800 (PST)
-Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-64b585b51a0sm791993a12.4.2025.12.17.14.38.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Dec 2025 14:38:18 -0800 (PST)
-To: buildroot@buildroot.org
-Cc: Daniel Price <daniel.price@gmail.com>,
- Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed, 17 Dec 2025 23:37:50 +0100
-Message-ID: <20251217223750.119857-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.51.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YXRnvaop2M5E for <buildroot@buildroot.org>;
+ Wed, 17 Dec 2025 22:39:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 895E983CB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 895E983CB0
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 895E983CB0
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:39:03 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id B5883C1A5A2
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 22:38:37 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3F9736072F;
+ Wed, 17 Dec 2025 22:39:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id CAB44102F0ADF; Wed, 17 Dec 2025 23:39:00 +0100 (CET)
+To: Buildroot List <buildroot@buildroot.org>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Dec 2025 23:38:58 +0100
+Message-ID: <20251217223859.1996123-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1766011099; x=1766615899; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bjJ5kU2pApWMlXCv9kdKnCyDoLThDYnyhgJlH9Ht5n4=;
- b=RszGgzLnX1wGyEZUiVgznWPGoiGx44o/x783G9ZLopxHUvmOHLNNNP4L9v+vr33dnP
- Ub6VtleSf7lDFqPxLl/j/pm8+7iyCtIwhfvStC3V28HuPOrQuozbTC5be7DJvwUMEPFU
- S5w10kzhe0Ug+jmj5zSxfSQKvtsKfi8vwDrjq2n+mfpW/J8hd/bQoig/k+fvtYWSvOzo
- yUKGP9DGqi22QYgMZi1nmRivIXwj6sFSKjkwIxyl2kmiXYeDHz/hENauGO47TKM4ETC3
- JdVKXEStCDwxPAnh2woInCCGQihxHNuXpwaJcJhGMaIfw2WWdB7dcwq65I+eBsaHLKby
- jZ4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1766011141; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=FinsWNK0bnt6O1Kr+vIUgk/58DmkxWMb34Lt3TZPB68=;
+ b=BQ5WjGc49Tg7jhnzyG2inqmIEpqMiKjhtkNGYUkcDdYQCMmHrDxiNyY43M8NM00JwSes/j
+ AqSoNCby9tk9HJKDppASqemU63quJBOYokWVDvXxeta0xRnVJMeU3cVsHCLQTmYXkNPXgE
+ c8UF8b5p0jkR44eGJJWr5i4Lc5Fp5RmwoDmwHEv+et4l37VR1SgdwmoEbBAXRgoo3+jlqr
+ t2sASd+yYWH2o4VoK3OJNcW3OzmP+oWA6F1nDRiWyPZ3/4wtw+HOGJJxFfQe9VCLeIet5K
+ +POvR3hRtwRcT0DJ322MKR8yih7/E2A59mMyq29YbWPJS6dvqivbmuwx2vK+Rw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=RszGgzLn
-Subject: [Buildroot] [PATCH] [PATCH 1/1] package/redis: bump to v8.4.0
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=BQ5WjGc4
+Subject: [Buildroot] [PATCH RESEND] package/criu: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,47 +92,235 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes: https://github.com/redis/redis/blob/8.4.0/00-RELEASENOTES
+The criu package was added in Nov 2023, and then bumped once in
+December 2023. Since then, it has never been bumped again, and all
+follow-up fixes were provided by other people than the original
+package submitter listed in the DEVELOPERS file.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+criu has seen several upstream releases since then, and most notably
+is causing a number of build issues in our autobuilders:
+
+  https://autobuild.buildroot.net/?reason=criu-3.19
+
+The package was never updated to those newer upstream releases, and
+the autobuilder issues have not been addressed.
+
+Therefore, let's drop this package.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy       |  7 ++++
+ DEVELOPERS             |  1 -
+ package/Config.in      |  1 -
+ package/criu/Config.in | 52 ----------------------------
+ package/criu/criu.hash |  3 --
+ package/criu/criu.mk   | 77 ------------------------------------------
+ 6 files changed, 7 insertions(+), 134 deletions(-)
+ delete mode 100644 package/criu/Config.in
+ delete mode 100644 package/criu/criu.hash
+ delete mode 100644 package/criu/criu.mk
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index f9c70c469f..1ac1b1764d 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  d88f2361fdf3a3a8668fe5753e29915566109dca07b4cb036427ea6dc7783671  redis-8.2.3.tar.gz
-+sha256  ca909aa15252f2ecb3a048cd086469827d636bf8334f50bb94d03fba4bfc56e8  redis-8.4.0.tar.gz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index da91b68087..4b399f7daa 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- # Locally calculated
- sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c8073407b9..36a13a34ef 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2026.02"
  
--REDIS_VERSION = 8.2.3
-+REDIS_VERSION = 8.4.0
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = \
- 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
++config BR2_PACKAGE_CRIU
++	bool "criu has been removed"
++	help
++	  criu was removed from Buildroot as it was insufficiently
++	  maintained. It can be re-added if someone volunteers to
++	  maintain it.
++
+ config BR2_PACKAGE_MESA3D_VDPAU
+ 	bool "mesa3d Gallium VDPAU state tracker support removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1b27df9beb..54ce0dc509 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2244,7 +2244,6 @@ F:	support/testing/tests/package/test_python_pytest.py
+ F:	support/testing/tests/package/test_python_pytest_asyncio.py
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+-F:	package/criu/
+ F:	package/libcamera/
+ F:	package/libcamera-apps/
+ F:	package/libostree/
+diff --git a/package/Config.in b/package/Config.in
+index 22970b4d45..5a2e7e1d0b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2827,7 +2827,6 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
+-	source "package/criu/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+deleted file mode 100644
+index 04a2080041..0000000000
+--- a/package/criu/Config.in
++++ /dev/null
+@@ -1,52 +0,0 @@
+-# criu only builds on certain architectures
+-config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	bool
+-	default y if BR2_ARM_CPU_ARMV6
+-	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_ARM_CPU_ARMV7M
+-	default y if BR2_ARM_CPU_ARMV8A && !BR2_aarch64_be
+-	default y if BR2_aarch64
+-	default y if BR2_x86_64
+-	default y if BR2_powerpc64le # Only support powerpc64 with LE
+-	# CRIU has "some" support for s390 but it is not included due to
+-	# BE/LE endian issues.
+-	depends on BR2_USE_MMU # libcap
+-	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-
+-config BR2_PACKAGE_CRIU
+-	bool "criu"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+-	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+-	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
+-	depends on BR2_USE_WCHAR # libbsd
+-	select BR2_PACKAGE_HOST_PYTHON3_SSL
+-	select BR2_PACKAGE_PROTOBUF
+-	select BR2_PACKAGE_PROTOBUF_C
+-	select BR2_PACKAGE_LIBAIO
+-	select BR2_PACKAGE_LIBBSD
+-	select BR2_PACKAGE_LIBCAP
+-	select BR2_PACKAGE_LIBNET
+-	select BR2_PACKAGE_LIBNL
+-	select BR2_PACKAGE_PYTHON3
+-	help
+-	  Checkpoint/Restore In Userspace (CRIU), is a software
+-	  tool for the Linux operating system to make it possible
+-	  to freeze a running application and checkpoint it to
+-	  persistent storage as a collection of files.
+-
+-	  https://criu.org/Main_Page
+-
+-comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+-		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+deleted file mode 100644
+index c3fcdbc03f..0000000000
+--- a/package/criu/criu.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  990cdd147cb670a5d5d14216c2b5c2fc2b9a53ef19396569a6413807ba2a6aa2  criu-3.19.tar.gz
+-sha256  568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  COPYING
+diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+deleted file mode 100644
+index 3b72a1131e..0000000000
+--- a/package/criu/criu.mk
++++ /dev/null
+@@ -1,77 +0,0 @@
+-################################################################################
+-#
+-# CRIU
+-#
+-################################################################################
+-
+-CRIU_VERSION = 3.19
+-CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
+-
+-CRIU_LICENSE = GPL-2.0, LGPL-2.1 (for lib/), MIT (for images/)
+-CRIU_LICENSE_FILES = COPYING images/LICENSE
+-
+-CRIU_DEPENDENCIES =\
+-	host-pkgconf \
+-	host-protobuf-c \
+-	host-python3 \
+-	host-python-pip \
+-	libaio \
+-	libbsd \
+-	libcap \
+-	libnet \
+-	libnl \
+-	protobuf \
+-	protobuf-c \
+-	python3
+-
+-CRIU_MAKE_ENV =\
+-	$(TARGET_MAKE_ENV) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CROSS_COMPILE=$(TARGET_CROSS) \
+-	WERROR=0
+-
+-# Remap to match the used in criu.
+-ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
+-CRIU_MAKE_ENV += ARCH=x86
+-else ifeq ($(BR2_NORMALIZED_ARCH),"powerpc")
+-CRIU_MAKE_ENV += ARCH=ppc64
+-else ifeq ($(BR2_NORMALIZED_ARCH),"arm64")
+-CRIU_MAKE_ENV += ARCH=aarch64
+-else
+-CRIU_MAKE_ENV += ARCH=$(BR2_NORMALIZED_ARCH)
+-endif
+-
+-ifeq ($(BR2_ARM_CPU_ARMV6),y)
+-CRIU_MAKE_ENV += SUBARCH=armv6
+-else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV7M),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv8
+-endif
+-
+-# Criu needs Kernel Checkpoint/restore support which is not enabled
+-# by default.
+-define CRIU_LINUX_CONFIG_FIXUPS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
+-endef
+-
+-define CRIU_BUILD_CMDS
+-	rm -rf $(@D)/images/google/protobuf/descriptor.proto
+-	cp -a  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto \
+-		$(@D)/images/google/protobuf/descriptor.proto
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr
+-endef
+-
+-define CRIU_INSTALL_TARGET_CMDS
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr \
+-		DESTDIR=$(TARGET_DIR) \
+-		install-criu \
+-		install-lib \
+-		install-compel
+-endef
+-
+-$(eval $(generic-package))
 -- 
-2.51.0
+2.52.0
 
 _______________________________________________
 buildroot mailing list
