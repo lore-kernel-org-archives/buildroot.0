@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A3AAD68BC3
-	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41135D68BC1
+	for <buildroot@archiver.kernel.org>; Wed, 17 Dec 2025 21:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 710EA6119A;
-	Wed, 17 Dec 2025 21:45:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF32C611A0;
+	Wed, 17 Dec 2025 21:45:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kkcqumw7KRCe; Wed, 17 Dec 2025 21:45:13 +0000 (UTC)
+ id dsPrwWo0uBVp; Wed, 17 Dec 2025 21:45:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE6A661187
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28EA6610FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766007912;
-	bh=ix+q5y6P3o6DbT4g0bxr8LZDLq8ylZ18C0F4alXdtzg=;
+	s=default; t=1766007909;
+	bh=KvrL7nOdfbbbLllBzIb9Qh6UaAZPY+14mjoA1JRg1rA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qrruetacdOmeJM/UKivFpHwh0UhM49+adT13ZicvlnES52eHuK6cDVsZa2pRv3iMz
-	 F33aZJTLEXqmE2DLUeowSbc2Co2odyQ9sD+bcIZ4O+5yK9aA1KHLUZLWqlD/7HNqqS
-	 oJFxAGAMIi7przzz0j3UoyFMGJ3sUQw5RCbcwdzDUDuS/1hEkeEtpCL3jq1ebjmtfx
-	 FdaYixLiCwi+b3+4GjpyP9rGc5P/+jOTDUuNpOAcRO6FZde3roQyHhwcF0NZHTzRwV
-	 xEtVYsjJA7McozqVp2eOdipAKtYor0T0l0USpbL/pYQ4+dbEp8oRHfXCLWRrzYNvw3
-	 YtF8D7Dbaedkw==
+	b=K/+h1yay0IIlG8wUxJvIi1I7W/WmVv/0hOwt2EnQKop1ahifBG0wHCl5NY97gMrvd
+	 vcYSjvSe/UGfVBj0mzbQGBsjMk+ZkXZKXNKSPYJEKWqC0G8ss5sP1U5mJeaYB8uNdS
+	 AZIaz5eWLe3AU9EjMI+OM9yKWH+e9SL+Wx5DINieHq23HQ28vg5VPn6rK3sK+zzQ+s
+	 seoUZnNQVXjoIR5u6Jci40wtES9HwPOlq80RFh0weUlMlw57EyJyl6x4nNWdVyetVH
+	 BSZc4ENFZnBy/Di1wrx0Kv8yUQAkllux8IIE99RArplx/LaM4vGKHz2bW6cW72QUZh
+	 G0RqkN+w7hg1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE6A661187;
-	Wed, 17 Dec 2025 21:45:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D097375
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:45:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28EA6610FF;
+	Wed, 17 Dec 2025 21:45:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4984375
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDB2040F77
- for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D97C283AD3
+ for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rz_3GyiYz_5k for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5bX8rLiUzmh8 for <buildroot@buildroot.org>;
  Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37C1340F7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2413A83B52
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37C1340F7E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2413A83B52
  for <buildroot@buildroot.org>; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 363758120D; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
+ id 233AA86198; Wed, 17 Dec 2025 21:44:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Dec 2025 22:08:34 +0100
+Date: Wed, 17 Dec 2025 22:08:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cfe183efbeef55f417e923b344da90fd7e74d85f
-X-Git-Newrev: 66d834b8f054573a36f0e53f5e6589259b47c86f
+X-Git-Oldrev: ae6ff907b6f1583398c9299ef8713eee5a617de5
+X-Git-Newrev: cfe183efbeef55f417e923b344da90fd7e74d85f
 X-Patchwork-Hint: ignore
-Message-Id: <20251217214458.363758120D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-types-psutil: bump version
- to 7.1.3.20251211
+Message-Id: <20251217214458.233AA86198@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-typeguard: bump version to
+ 4.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66d834b8f054573a36f0e53f5e6589259b47c86f
+commit: https://git.buildroot.net/buildroot/commit/?id=cfe183efbeef55f417e923b344da90fd7e74d85f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/psutil.md
+https://github.com/agronholm/typeguard/blob/4.4.4/docs/versionhistory.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-types-psutil/python-types-psutil.hash | 4 ++--
- package/python-types-psutil/python-types-psutil.mk   | 4 ++--
+ package/python-typeguard/python-typeguard.hash | 4 ++--
+ package/python-typeguard/python-typeguard.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-types-psutil/python-types-psutil.hash b/package/python-types-psutil/python-types-psutil.hash
-index a1d673f2b1..b301237599 100644
---- a/package/python-types-psutil/python-types-psutil.hash
-+++ b/package/python-types-psutil/python-types-psutil.hash
+diff --git a/package/python-typeguard/python-typeguard.hash b/package/python-typeguard/python-typeguard.hash
+index 8cd3dd0dc6..e567715fa9 100644
+--- a/package/python-typeguard/python-typeguard.hash
++++ b/package/python-typeguard/python-typeguard.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/types-psutil/json
--md5  411972eff624e78ca26706d297cde546  types_psutil-6.1.0.20241221.tar.gz
--sha256  600f5a36bd5e0eb8887f0e3f3ff2cf154d90690ad8123c8a707bba4ab94d3185  types_psutil-6.1.0.20241221.tar.gz
-+md5  4a65c910d089e87ab722151b4ff11792  types_psutil-7.1.3.20251211.tar.gz
-+sha256  2c25f8fd3a1a4aebdffb861b97755c9a2d5d8019dd6ec1a2f2a77ec796652c89  types_psutil-7.1.3.20251211.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/typeguard/json
+-md5  842237266846dbb102b7239fcf4faeb6  typeguard-4.4.1.tar.gz
+-sha256  0d22a89d00b453b47c49875f42b6601b961757541a2e1e0ef517b6e24213c21b  typeguard-4.4.1.tar.gz
++md5  4f97177b802372a70bb571b2aff09313  typeguard-4.4.4.tar.gz
++sha256  3a7fd2dffb705d4d0efaed4306a704c89b9dee850b688f060a8b1615a79e5f74  typeguard-4.4.4.tar.gz
  # Locally computed sha256 checksums
- sha256  295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe  LICENSE
-diff --git a/package/python-types-psutil/python-types-psutil.mk b/package/python-types-psutil/python-types-psutil.mk
-index 50ae884c85..8c0d681c72 100644
---- a/package/python-types-psutil/python-types-psutil.mk
-+++ b/package/python-types-psutil/python-types-psutil.mk
+ sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE
+diff --git a/package/python-typeguard/python-typeguard.mk b/package/python-typeguard/python-typeguard.mk
+index df5433993d..71d7f11858 100644
+--- a/package/python-typeguard/python-typeguard.mk
++++ b/package/python-typeguard/python-typeguard.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPES_PSUTIL_VERSION = 6.1.0.20241221
-+PYTHON_TYPES_PSUTIL_VERSION = 7.1.3.20251211
- PYTHON_TYPES_PSUTIL_SOURCE = types_psutil-$(PYTHON_TYPES_PSUTIL_VERSION).tar.gz
--PYTHON_TYPES_PSUTIL_SITE = https://files.pythonhosted.org/packages/44/8c/5f82cd554cc5bb79d137f082e4c9f8d22e85c8c08dabee4971d422a9abdd
-+PYTHON_TYPES_PSUTIL_SITE = https://files.pythonhosted.org/packages/d2/d5/85165865b060fed80b5991574c2ae0ddfd4786398dc8bceddfe0a8960b74
- PYTHON_TYPES_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_TYPES_PSUTIL_LICENSE = Apache-2.0
- PYTHON_TYPES_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_TYPEGUARD_VERSION = 4.4.1
++PYTHON_TYPEGUARD_VERSION = 4.4.4
+ PYTHON_TYPEGUARD_SOURCE = typeguard-$(PYTHON_TYPEGUARD_VERSION).tar.gz
+-PYTHON_TYPEGUARD_SITE = https://files.pythonhosted.org/packages/62/c3/400917dd37d7b8c07e9723f3046818530423e1e759a56a22133362adab00
++PYTHON_TYPEGUARD_SITE = https://files.pythonhosted.org/packages/c7/68/71c1a15b5f65f40e91b65da23b8224dad41349894535a97f63a52e462196
+ PYTHON_TYPEGUARD_SETUP_TYPE = setuptools
+ PYTHON_TYPEGUARD_LICENSE = MIT
+ PYTHON_TYPEGUARD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
