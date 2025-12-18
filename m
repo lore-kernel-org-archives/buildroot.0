@@ -1,83 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09DB4D6ACDD
-	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E367ED6ACDD
+	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:37:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2968410B7;
-	Thu, 18 Dec 2025 16:37:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Cv2NakSwvnq; Thu, 18 Dec 2025 16:37:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A7A8410BC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766075839;
-	bh=rUk/HVduMC39JsaB/lvVBD03Py4E9S8+ZA8CSjATkCQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=MhVbNP7NZAh9Gz8P+MXXqxX+lcz6OlAJSDfUBfMjFFtE06Yi91YBQYDeyQz66b0sS
-	 VFMSwB3fmYcHU6Gd8A5goqqd8nPVeEDDwm8yDiNRZ7uiDE7qtwMwm/Q3ov9ydCAsfu
-	 Bq8o0ujGjUGOWwEI4y8KcQwN9WEg74qKn/MmA3s3GIorIc+vABNZ7/ZWSgvj2pEM86
-	 l2CbMwZGjP+kKTB1z2gZIb5LeTYm05O9r7h8E0SW9toWkPQkoWS5BzskpiOyfy2SDh
-	 3g+DCABbY7sxCNUgVrkTxOpCSaOGIJhNpeKABLoeIZ+Mjtim4Yt1bS7tfEjNNXQq58
-	 HHf66+ZUDcIQg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A7A8410BC;
-	Thu, 18 Dec 2025 16:37:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A2C51A6
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70CC3611B3
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B926C6120B;
+	Thu, 18 Dec 2025 16:37:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xA6BV6u329lt for <buildroot@buildroot.org>;
- Thu, 18 Dec 2025 16:37:16 +0000 (UTC)
+ id rPOmwdlrbQ9y; Thu, 18 Dec 2025 16:37:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F39A2611AA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766075860;
+	bh=YynvW+exKCldEMkDg2Mu9bugAUFmneYSHPXh8XaNr4s=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YpgYvflXkgGYntDRzIVnDxHv0l362SMJJ6kXOSNbMasceuDegL9UaoVni4M5GTCC7
+	 iEr0dC6+ASQN47XG3oYSQ5ND/kuv1mYw8x6mza3WBX6ukeP76yXJqB6zRLs0t8IbU7
+	 7a4sP8pMHBG36K7HfADnAWtEGfUITrwv+IJ7koqW6vjdQM3Y8HjPDjbjF4umGn7qrF
+	 hvHkDfIFvHL5MjSSCPG6Xftfu54u0/qrqTdK3AIwLkjq1So4C4gMr66EHU9P+nK5PY
+	 dUtGG7dVmIWD1fT3jJSC+MotjoI6GzxnguOyDljkERFYn/U9nvRivnAVKnx6vyK2OH
+	 HPppHqNUHJh1A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F39A2611AA;
+	Thu, 18 Dec 2025 16:37:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C73041A6
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9BCF410C5
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VeTmr4meF6c9 for <buildroot@buildroot.org>;
+ Thu, 18 Dec 2025 16:37:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 69E85611AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69E85611AA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B3D7D4074D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3D7D4074D
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 69E85611AA
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B3D7D4074D
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:37 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 07291B97A1BF; Thu, 18 Dec 2025 17:37:14 +0100 (CET)
-To: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTPSA id 59943B97A297; Thu, 18 Dec 2025 17:37:35 +0100 (CET)
+To: Kadambini Nema <kadambini.nema@gmail.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Thu, 18 Dec 2025 17:37:12 +0100
-Message-ID: <20251218163712.379310-1-arnout@rnout.be>
+Date: Thu, 18 Dec 2025 17:37:32 +0100
+Message-ID: <20251218163732.379436-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251213115728.1277185-1-bernd@kuhls.net>
-References: <20251213115728.1277185-1-bernd@kuhls.net>
+In-Reply-To: <20250607222538.50866-1-kadambini.nema@gmail.com>
+References: <20250607222538.50866-1-kadambini.nema@gmail.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1766075834; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1766075855; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=NEuArxoNrqdiSuHEKqmAMEDTVnMW3ViKv6RdnNYgzS4=;
- b=QIjAh/jjAVZKZA/S+Ml73BwvXA1kBsX/uyL+Lyn9ososPjRjbOFhuorHj2rRx+v7hcpGk7
- pbsoWJvVPqgbKruuoQq1u9hWk0tGHmHltbhxiFlrB01ceJy3YXDCQuPZqhgf3P8n7qPaAr
- wDalh7/0dOnPIwODba1FmqZOku+je1f2PHgfaULxZG2XO1NEskSz+FgJtjKt5sXX9iCMGz
- lPxHB8bBxJo2aQeM4nGc1jsdOipWlrI7kk9huJHhJopbJswcO2+oPMELpwhj8i0OjPj3Bl
- Dw0SROVumrn7cEtxdA5TNdXJuJ+sFMPRAqTIZdMk3iCxHu3sIWekhAFcv0FHCQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=VsFRMMzvRoLvZoQqY8zWxKTG9Jma1xqMPsT5tNlA/CU=;
+ b=CkpN7Yxu0uOjSokbck2UOByHdkrbBWa8UYwPz8Gkn9XnRD6ARhC/VTAAP7TAA4ioeKkfKw
+ 8ILCNh8sPWSNWNYaRGNnPIu8yVpNhl6rwTzPOh9Wi1AUeT8PRHotaBOCQk+ssCaadlBgp/
+ cQ1B2mdWlpz8hvGfo8AWm/SgzhDv+UA49/HRl7NUAiT7QkHy42wsodQyPVfHrjyPFNt2G4
+ AmtqSJelprXQMxgJhBEmg9M1lr0/mzcjhr7zwPefIhe1RXiXAFIds++HbSgUVkBsq+x2jA
+ 8RZi2G6kxih6V7jJGPWYJwwec3VxYSYW/citzhDGUGpLQPzxWYPLZSkkuCD4yA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=QIjAh/jj
-Subject: Re: [Buildroot] [PATCH 1/1] package/libarchive: security bump
- version to 3.8.4
+ header.a=rsa-sha256 header.s=dkim header.b=CkpN7Yxu
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgit2: bump version to 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,48 +96,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/libarchive/libarchive/releases/tag/v3.8.3
-> "Libarchive 3.8.3 is a bugfix and security release."
-> https://github.com/libarchive/libarchive/releases/tag/v3.8.4
+> Release notes:
+> https://github.com/libgit2/libgit2/releases/tag/v1.9.1
 > 
-> Switch to sha256 tarball hash provided by upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 
-Applied to 2025.02.x and 2025.11.x. Thanks
+Applied to 2025.02.x. Thanks
 
 > ---
->  package/libarchive/libarchive.hash | 5 ++---
->  package/libarchive/libarchive.mk   | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
+>  package/libgit2/libgit2.hash | 2 +-
+>  package/libgit2/libgit2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-> index f31b693c67..21fe7eaa25 100644
-> --- a/package/libarchive/libarchive.hash
-> +++ b/package/libarchive/libarchive.hash
-> @@ -1,5 +1,4 @@
-> -# Locally computed after verifying the signature from
-> -# https://www.libarchive.de/downloads/libarchive-3.8.2.tar.xz.asc
-> -sha256  db0dee91561cbd957689036a3a71281efefd131d35d1d98ebbc32720e4da58e2  libarchive-3.8.2.tar.xz
-> +From https://github.com/libarchive/libarchive/releases/tag/v3.8.4
-> +sha256  c7b847b57feacf5e182f4d14dd6cae545ac6843d55cb725f58e107cdf1c9ad73  libarchive-3.8.4.tar.xz
->  # Locally computed:
->  sha256  30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229  COPYING
-> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-> index 8568847493..083e913033 100644
-> --- a/package/libarchive/libarchive.mk
-> +++ b/package/libarchive/libarchive.mk
+> diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+> index 3f11309750..8c9b210581 100644
+> --- a/package/libgit2/libgit2.hash
+> +++ b/package/libgit2/libgit2.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  75b27d4d6df44bd34e2f70663cfd998f5ec41e680e1e593238bbe517a84c7ed2  libgit2-1.9.0.tar.gz
+> +sha256  14cab3014b2b7ad75970ff4548e83615f74d719afe00aa479b4a889c1e13fc00  libgit2-1.9.1.tar.gz
+>  sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
+> diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+> index 4026ac1f7c..f615484edb 100644
+> --- a/package/libgit2/libgit2.mk
+> +++ b/package/libgit2/libgit2.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBARCHIVE_VERSION = 3.8.2
-> +LIBARCHIVE_VERSION = 3.8.4
->  LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
->  LIBARCHIVE_SITE = https://www.libarchive.de/downloads
->  LIBARCHIVE_INSTALL_STAGING = YES
+> -LIBGIT2_VERSION = 1.9.0
+> +LIBGIT2_VERSION = 1.9.1
+>  LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+>  LIBGIT2_LICENSE = \
+>  	GPL-2.0 with linking exception, \
 > -- 
-> 2.47.3
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
