@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5299BD6E2B0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3828D6ACDD
 	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:35:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EBD2410C7;
-	Thu, 18 Dec 2025 16:35:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9EC2611C3;
+	Thu, 18 Dec 2025 16:35:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wJJS_94HTcRz; Thu, 18 Dec 2025 16:35:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JzNf1KT-R3OP; Thu, 18 Dec 2025 16:35:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AA00410BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC88E611D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766075716;
-	bh=nQbpDfaHS0AfGNuKjAy1vyjWMXlgxbmnnwMij+dEf2Y=;
+	s=default; t=1766075717;
+	bh=3y4M0xHF2gu9NFlMQp/BbbTsVp+FMwKdKQx8+oQmPfs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IBOTqVka7zeBiKlOHZE4lVzYV8RgaAKFHg1xRfpmsLYfH9Z2yXEQhFdWsDWcFPE6a
-	 k8lmHQ3LJdILaVgI3XyPqKu+TWx744uQvE5ysZPn5SZPw/CyCMhzQSoF2jKTNdQY0y
-	 UPW32DqSJ1JcYsWo5shbOqjvYuyQBzTuuNL0Oh1NU88HLOZ1R0xIe/y5Az1x/ONQmm
-	 mda2yifLeO3b3/Sd/X6JTwr6bM1joNXxH+tfojLJFTkwgTR2vbmrCGBDu5Pg9Zgu4B
-	 gnDY7U8f2ovihc1XJaoMnZCACcRxDIDL97KSEB3EkTPQJS+1zLxX6o2zqQ25U+wTKf
-	 SjIYPKJHMvTkg==
+	b=R+JTxUndiDd7BYn7VQp4JSumtgDVPRHu0FbfCtdNYbwJL9en8SYnmyWvgxD1iGToG
+	 7cVPC/p6z3Cy6e0mAzCi5g92/+3J27v3UENCzNeWuTDNY/UY32U91AB/rRjTQK+3Sp
+	 8ADa3U6bfwyMBW/CiZLB2ivAiL77WRLchOZO/jR6cWpihRrFiyF6zHQqkdGTn/ZCEZ
+	 8ZzWbc3QxgzGeC17GnV6zhvyRBItna17it8DsV3Ch1uhoUsx9VQ8O3HDvmzDpcHXg/
+	 NdxpkJ8iky0BmhZHtqNErwk0BsZ80QPRczqe4HTRSwFhfJjqnNGhpP9mmgJidGbCF/
+	 krFJ1z4eaQ4qw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AA00410BD;
-	Thu, 18 Dec 2025 16:35:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id ABE431A6
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC88E611D7;
+	Thu, 18 Dec 2025 16:35:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D62E1A6
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EDDC40431
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6912F60D6E
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wTa8Oj6rDd3W for <buildroot@buildroot.org>;
- Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hhA1AjNRRtlx for <buildroot@buildroot.org>;
+ Thu, 18 Dec 2025 16:35:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6007940402
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE88E61188
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6007940402
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE88E61188
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DC48872FA; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
+ id EC93087314; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Dec 2025 18:20:33 +0100
+Date: Thu, 18 Dec 2025 16:56:23 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6829a555b3b1265299e6489e7215ca02abcd84ab
-X-Git-Newrev: 256befeb4277b343a69e521f4090985118011f6a
+X-Git-Oldrev: 95c0e5ca9571ec1c8b82109588e0087d00a70b95
+X-Git-Newrev: 096589bd59f3f8e827754d43ad01dcdc406cc27f
 X-Patchwork-Hint: ignore
-Message-Id: <20251218163507.4DC48872FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/cmake: bump
- version to 3.31.9
+Message-Id: <20251218163507.EC93087314@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] docs/manual: mention CVE
+ trailer
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=256befeb4277b343a69e521f4090985118011f6a
+commit: https://git.buildroot.net/buildroot/commit/?id=096589bd59f3f8e827754d43ad01dcdc406cc27f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes build error with libcurl 8.16.0 introduced by buildroot commit
-fb5fb06ee5a886df5036c5c5e6c4536f2bc8e1c1
+Adds documentation about adding a patch that address a vulnerability.
 
-Fixes:
-https://autobuild.buildroot.net/results/92b/92b1ed36e750d9ad756793814f9d1133bda0e013/
+The patch-policy file now explain mention that patches that address a
+vulnerability needs to include a `CVE:` trailer with the reference of
+that vulnerability.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 33159bb6ccfd3ba465cf17af25ded2d612b85781)
+Until now only adding the reference to the `_IGNORE_CVES` variable was
+necessary, so the documentation of this entry is modified as well to
+point to the patch policy.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1167d0ff3d225ca9ce2b6299da28a9307d370142)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-generic.adoc |  6 +++---
+ docs/manual/patch-policy.adoc            | 13 ++++++++++++-
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 6101fe16f0..cbca2fc355 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,5 +1,5 @@
--# From https://cmake.org/files/v3.31/cmake-3.31.8-SHA-256.txt
--sha256  e3cde3ca83dc2d3212105326b8f1b565116be808394384007e7ef1c253af6caa  cmake-3.31.8.tar.gz
-+# From https://cmake.org/files/v3.31/cmake-3.31.9-SHA-256.txt
-+sha256  5d4fdec04247ca8a8e8f63692f0d0f1e9d6d082a2bdd008dff8ab3ba7215aa83  cmake-3.31.9.tar.gz
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index 6827b9975e..e7547460fd 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -509,9 +509,9 @@ not and can not work as people would expect it should:
+ * +LIBFOO_IGNORE_CVES+ is a space-separated list of CVEs that tells
+   Buildroot CVE tracking tools which CVEs should be ignored for this
+   package. This is typically used when the CVE is fixed by a patch in
+-  the package, or when the CVE for some reason does not affect the
+-  Buildroot package. A Makefile comment must always precede the
+-  addition of a CVE to this variable. Example:
++  the package (see xref:additional-patch-documentation[]), or when the CVE for
++  some reason does not affect the Buildroot package. A Makefile comment must
++  always precede the addition of a CVE to this variable. Example:
+ +
+ ----
+ # 0001-fix-cve-2020-12345.patch
+diff --git a/docs/manual/patch-policy.adoc b/docs/manual/patch-policy.adoc
+index a4bc5f391a..02051f2f0e 100644
+--- a/docs/manual/patch-policy.adoc
++++ b/docs/manual/patch-policy.adoc
+@@ -144,6 +144,7 @@ AC_PROG_MAKE_SET
+ +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+ ----
  
- # Locally calculated
- sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 1eb4da90ad..8f3a54be5a 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -6,7 +6,7 @@
++[[additional-patch-documentation]]
+ === Additional patch documentation
  
- # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
- CMAKE_VERSION_MAJOR = 3.31
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).8
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
+ Ideally, all patches should document an upstream patch or patch submission, when
+@@ -177,4 +178,14 @@ Upstream: N/A <additional information about why patch is Buildroot specific>
+ ----
+ 
+ Adding this documentation helps streamline the patch review process during
+-package version updates.
+\ No newline at end of file
++package version updates.
++
++If the patch addresses one or multiple vulnerabilities, list each identifier on
++a separate line with a +CVE+ trailer.
++
++----
++CVE: <vulnerability identifier>
++----
++
++If multiple patches address the same vulnerability, reference the vulnerability
++in every patch.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
