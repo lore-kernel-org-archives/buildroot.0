@@ -1,88 +1,167 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A1F6D70DF2
-	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 20:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC60D6E2DC
+	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 20:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 611098329E;
-	Thu, 18 Dec 2025 20:07:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D07B40FBD;
+	Thu, 18 Dec 2025 20:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cQVE2bFJZ4NT; Thu, 18 Dec 2025 20:07:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9idPeYLMtBbr; Thu, 18 Dec 2025 20:11:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36965832DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE52740C66
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766088459;
-	bh=s1NgjLglM1KMbs/AkbAD62+hHqTLkcwskosfe1XT4OQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=X0fD5SE0HHElDN2ehPyoz9Pd1tRKPERS1A5ERFeDk6nr/HCg00SOnXMXd/TdaWZxU
-	 28WrgLsWAM7FV2DidOvivCS4WV2vIYjNKT4qxocV1urNZleJV1c7IyefwRiA+UD3ah
-	 VirJtf7XrU+dckKBVBmv+Ia9Dl5PctJih2x2kBlUci+UKA6z0k4FJP8b5o9oo4PCmP
-	 5ulY/0ycbh3qK4f57SCtMYehb90WBWyb5+SIWCAXhpr5i3ttyNstONXiIT3hGUkhPv
-	 +3gCiVPvToxvm9CMA1VlNix7tlZUi7XHKScTZISutoKUZBdYn/WUuicBfdMe5z7dAr
-	 K4evUvaJXiUuw==
+	s=default; t=1766088715;
+	bh=wYnG9kpvAkRJOB8oJXY++vvuFmLFETDGnFreClp0UUY=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ktqzlPxU/VeAQUs8N9n5deWMcrA8tG33+F0p++HlhYmOUyvGkyrrBV0FhWQa32lLZ
+	 reCOleCNZ0bRHjPaZuhPqb6ZoRFi3QDIGwDS4+GHuhDbEKvUGuZEbmPC4O1XAXXF1i
+	 adx6zsx24tFGNf6Ma6DjZUe2Z/D9yN+QZhlMbgfwf98S0kyz7AewO4M3MRrZrnUTFs
+	 iyovaX1obdEq/EyWybptdaP6gxSAaZi7qy7zsG++w8VjV28nGqhbFTgFwkWMTuU4SO
+	 /IE62q2llmdjNJV8tHiO9N0S4HeqUNH8/3KLfS46TO2sIixcUURq3s6stHBsZdx0RG
+	 UHJVSQresThOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36965832DC;
-	Thu, 18 Dec 2025 20:07:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A9F91A6
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 20:07:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE52740C66;
+	Thu, 18 Dec 2025 20:11:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D557D1A6
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 20:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C76A60BC8
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 20:07:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC0AC40129
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 20:11:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 42zUsGwFf4f1 for <buildroot@buildroot.org>;
- Thu, 18 Dec 2025 20:07:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0BC8360782
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BC8360782
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0BC8360782
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 20:07:36 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 17390A4C43C4;
- Thu, 18 Dec 2025 21:07:34 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59282)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vWKHd-000000004hy-1Xwm;
- Thu, 18 Dec 2025 20:07:33 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0VEdrRkdcamI for <buildroot@buildroot.org>;
+ Thu, 18 Dec 2025 20:11:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 50D0E4007C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50D0E4007C
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 50D0E4007C
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 20:11:52 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from pc-1.fritz.box ([82.135.81.46]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBDj4-1vgl1E0wgQ-008uU2; Thu, 18
+ Dec 2025 21:11:50 +0100
 To: buildroot@buildroot.org
-Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Thu, 18 Dec 2025 21:07:33 +0100
-Message-ID: <20251218200733.3570275-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Martin Bark <martin@barkynet.com>, Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 18 Dec 2025 21:11:47 +0100
+Message-ID: <20251218201147.2617551-2-ps.report@gmx.net>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251218201147.2617551-1-ps.report@gmx.net>
+References: <20251218201147.2617551-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Spam: Yes
+X-Provags-ID: V03:K1:XT86fme9xCT80dH/rUCZCj7uPyjNMtiK9V0BtVJLVSxx02G+PLW
+ P+xdCdFRDUOkOMZ9w8hhkirUz7WkxAYXjCmEzIwrXiVh0fXyOss0Npmu8P+opaQVE9aMItX
+ MUR46awPhU77q7s56weiYkJsjKQ8MoEbrs9iFJSV9ZeBC3bfyD/gajkcKx+K/uLS4/ccgtV
+ M3RGpQ/ix5SbuEbStnIoA==
+UI-OutboundReport: notjunk:1;M01:P0:yNuNTubeDks=;CIzji1FIyXJVv4AMK35CYftVmzy
+ +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
+ 8Ovb+ia8QmED7jobtzytCVPG7UGiG2dC7lesHi
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1766088454;
- bh=GPdvz2ih2VMRit3yt6W8ABtzrN8VgUe9WD7H91Ugs2o=;
- h=From:To:Cc:Subject:Date:From;
- b=ZUNW+AvVvB2kVrReIHHRuO47i94/6W3hvjfrbNXMdlrN1FwUxFUTTNIDAqW3gLGSC
- r7JfJvCKvlTCHBUc0woake1Fu7qFNCGHcfX2aDYg3FazjJIGorKb7Q6OfXpN5OXh85
- JbOOCCbx5EuZIj+bYro5zQDqTfaeeQ5wLgd5Op4hsDmGhwRAZNaXp+KTbBXGA8FpW+
- GnloLQeNUroMq5x7A6fAf7MbL+F9TXPK52kzzgglaC8/LGOyu/a/8SpGQjE07s6d3R
- szuJ4IspuL03qQ5ZTxwGs6jCga7WPj1WWjdQLv1aP/8FahuK8K1jJ196Dxwa8uhg+m
- /EuJSQyMGD9ZA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ZUNW+AvV
-Subject: [Buildroot] [PATCH 1/1] package/llvm-project: bump to version 21.1.8
+ d=gmx.net; 
+ s=s31663417; t=1766088710; x=1766693510; i=ps.report@gmx.net;
+ bh=I75fNuLuptG7N5/q1L8sKb5infxydIraB0MCVNjcs9o=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=rPwtA210y7bFRtDZs1qLLXR6a55xDZHhS9BXYNNvq2R2T85V5DSTW0w0STQ1pT9Z
+ CKGmHMH5dInIOTR+bxNp64edUpCp8RWN+jUF8R8as+E0+x7dag4+uHY+L+0wn7P6c
+ pDWW+r4Mo7qyHjBQAJwlm2n5y5Bvrh0oKY12D94CrWB/X8W1nGy8uhGjFJkiBKm1/
+ bpu62gUabsgu21j0VeFt3rF9Z1gL5JXsRQCWpp/6LhEf/3V2LH4TfTD12dy/8lCZc
+ 024HfFrdMohJUYZP5r8BRo5tIiC99kX7PGW960BoJr7HbvKBjrX3FBFFQ/xhdeD88
+ PCrma7nvlxNRDN9FuQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=rPwtA210
+Subject: [Buildroot] [PATCH v1 2/2] package/rpi-firmware: bump version to
+ 063bcab
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,116 +173,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Peter Seiderer via buildroot <buildroot@buildroot.org>
+Reply-To: Peter Seiderer <ps.report@gmx.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://discourse.llvm.org/t/llvm-21-1-8-released/89144
+Version 063bcab matches with kernel 6.12.61
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/llvm-project/clang/clang.hash                   | 2 +-
- package/llvm-project/compiler-rt/compiler-rt.hash       | 4 ++--
- package/llvm-project/libclc/libclc.hash                 | 2 +-
- package/llvm-project/lld/lld.hash                       | 2 +-
- package/llvm-project/llvm-cmake/llvm-cmake.hash         | 2 +-
- package/llvm-project/llvm-libunwind/llvm-libunwind.hash | 2 +-
- package/llvm-project/llvm-project.mk                    | 2 +-
- package/llvm-project/llvm-runtimes/llvm-runtimes.hash   | 2 +-
- package/llvm-project/llvm/llvm.hash                     | 4 ++--
- 9 files changed, 11 insertions(+), 11 deletions(-)
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/llvm-project/clang/clang.hash b/package/llvm-project/clang/clang.hash
-index 72efe1e09d..1abe819e62 100644
---- a/package/llvm-project/clang/clang.hash
-+++ b/package/llvm-project/clang/clang.hash
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 0645d6ad77..4dd8aa9a26 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
 @@ -1,3 +1,3 @@
- # locally calculated
--sha256  eeb5296f46eacc0a1fe6c47a1af9e8d4eb2a5da7254fd8dbc4fc1f1be74315a1  clang-21.1.7.src.tar.xz
-+sha256  6090e3f23720d003cdd84483a47d0eec6d01adbb5e0c714ac0c8b58de546aa62  clang-21.1.8.src.tar.xz
- sha256  ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47  LICENSE.TXT
-diff --git a/package/llvm-project/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
-index 47a90af9be..0ecea6d400 100644
---- a/package/llvm-project/compiler-rt/compiler-rt.hash
-+++ b/package/llvm-project/compiler-rt/compiler-rt.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  4358e4476ab89b6ca9e4174f05f4a2c2c10e4a41c3c7febd25afe96bc27b5758  compiler-rt-21.1.7.src.tar.xz
--sha256  5fe212feb27f325fa29530eb38e746a73d18205bf6a36d9800778a94108d2ee5  third-party-21.1.7.src.tar.xz
-+sha256  dd54ae21aee1780fac59445b51ebff601ad016b31ac3a7de3b21126fd3ccb229  compiler-rt-21.1.8.src.tar.xz
-+sha256  7fe99424384aea529ffaeec9cc9dfb8b451fd1852c03fc109e426fe208a1f1a7  third-party-21.1.8.src.tar.xz
- sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
-diff --git a/package/llvm-project/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
-index 41c440cebc..8f06a55864 100644
---- a/package/llvm-project/libclc/libclc.hash
-+++ b/package/llvm-project/libclc/libclc.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  de1c8dbffdce898a4c5e70fb7f5aa6dea1e429f63471773da8cb3cdf9e945403  libclc-21.1.7.src.tar.xz
-+sha256  6c2677362a53531c35edf482bdc9171ea0471ca0a1e9138ac9b5a1782925616f  libclc-21.1.8.src.tar.xz
- sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
-diff --git a/package/llvm-project/lld/lld.hash b/package/llvm-project/lld/lld.hash
-index d3a2d22b68..b7483d5564 100644
---- a/package/llvm-project/lld/lld.hash
-+++ b/package/llvm-project/lld/lld.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  607395fc8a5f4d14eb27b219a279558a172d1e3a34ddd2a3509c12b560f1930a  lld-21.1.7.src.tar.xz
-+sha256  d9524c5ee952500a2af92c27042a0d90ab089962af47816d4c85d0ebf76373d1  lld-21.1.8.src.tar.xz
- sha256  f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
-diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
-index ae2d1737d1..c93a606c3c 100644
---- a/package/llvm-project/llvm-cmake/llvm-cmake.hash
-+++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
-@@ -1,2 +1,2 @@
- # locally calculated
--sha256  f25ca011e4453ac035e940aa729d482d08eb83a91b4aaf1f230dc9ea28cadfa4  cmake-21.1.7.src.tar.xz
-+sha256  85735f20fd8c81ecb0a09abb0c267018475420e93b65050cc5b7634eab744de9  cmake-21.1.8.src.tar.xz
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-index e34c79b728..bdd6b2481c 100644
---- a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  ac6ac43b6d54c6f6725a286ce36acff7a94123a8f2a54c161f866b94fcaa3a9b  libunwind-21.1.7.src.tar.xz
-+sha256  03e8adc6c3bdde657dcaedc94886ea70d1f7d551d622fcd8a36a8300e5c36cbc  libunwind-21.1.8.src.tar.xz
- sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
-diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
-index 15b1076d82..411ef5fb3a 100644
---- a/package/llvm-project/llvm-project.mk
-+++ b/package/llvm-project/llvm-project.mk
+ # Locally computed
+-sha256  6c1b017867c3a51e606859f1cd50df61b94af311577583b6b2a113d11131ee93  rpi-firmware-95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93.tar.gz
++sha256  812cb64617d6ffbc76f9b8dce8237b31159a1216b31845faec1bb75b6b6b291f  rpi-firmware-063bcab6c8a90efb0d19f69d88cbbc7ec79cab68.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index d0b6abcc6f..3318e9a0c1 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- LLVM_PROJECT_VERSION_MAJOR = 21
--LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.7
-+LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.8
- LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
- 
- include $(sort $(wildcard package/llvm-project/*/*.mk))
-diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
-index 9f2784b731..419176341a 100644
---- a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
-+++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
-@@ -1,2 +1,2 @@
- # locally calculated
--sha256  7f87971685100bc2bd0fe54042c5140da100b0e37fa12fca888cf1d8d06a8e25  runtimes-21.1.7.src.tar.xz
-+sha256  b6989d35cdfc1acee4af1d110fb8887f76831eb93e1df6ff7365004048742db8  runtimes-21.1.8.src.tar.xz
-diff --git a/package/llvm-project/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
-index afa270b83e..2e08ef5977 100644
---- a/package/llvm-project/llvm/llvm.hash
-+++ b/package/llvm-project/llvm/llvm.hash
-@@ -1,4 +1,4 @@
- # locally calculated
--sha256  8657ee188b673a3285b991131abe905b4129a18d52d334f9d122463164ecd000  llvm-21.1.7.src.tar.xz
--sha256  5fe212feb27f325fa29530eb38e746a73d18205bf6a36d9800778a94108d2ee5  third-party-21.1.7.src.tar.xz
-+sha256  d9022ddadb40a15015f6b27e6549a7144704ded8828ba036ffe4b8165707de21  llvm-21.1.8.src.tar.xz
-+sha256  7fe99424384aea529ffaeec9cc9dfb8b451fd1852c03fc109e426fe208a1f1a7  third-party-21.1.8.src.tar.xz
- sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+ # Please keep in sync with configs/raspberrypi*_deconfig
+-RPI_FIRMWARE_VERSION = 95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93
++RPI_FIRMWARE_VERSION = 063bcab6c8a90efb0d19f69d88cbbc7ec79cab68
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-2.47.3
+2.52.0
 
 _______________________________________________
 buildroot mailing list
