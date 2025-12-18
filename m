@@ -1,83 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D678D6E2B0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D498ED6E2B2
 	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:37:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18C8F61241;
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEE604111E;
 	Thu, 18 Dec 2025 16:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59JlK4AHI4Ps; Thu, 18 Dec 2025 16:37:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jCYXY0zpiv6Q; Thu, 18 Dec 2025 16:37:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09E5E611B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 014E94110B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766075877;
-	bh=tqM1debJKEVz6eKcIqpY+Nru6WDNMyTf7Y3pyJWSOEQ=;
+	s=default; t=1766075878;
+	bh=piT444nqy+RlqS5blRTSk9RnBTyEJMhgp0dw24895xw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Jopxf1vwojdrmofxMyMhcy+YDvSmEo/asys8EphBmxA9giqnXLIu4qARY+gGcOwDa
-	 1kO4Z3nYVw3ARHD2LuAk2g0uVag1Hu6B/pZw2InL9Mk7JO4GJai9fscwEH/SgWdM3Z
-	 Os1OOg4SEshuTtL3lzdIvcE7zm8ell0KTF6dIaLt2BvkQgnScsqrcX0zNkTMDZMfnm
-	 nP/1O+377h6LPb5t9yg5zFn2PV+/YfViPaXNXEn+O89mBXOT8pX1+HX7ajF2jDEeRn
-	 /xnEdpXIrEp4dBPtbmMbvH91abMqAyfyKebPdVHuvHOKuqCW+6RO1lOJNK3UnP1w31
-	 NAt7cPdoTUDAA==
+	b=VGMETh38h/RLyFi7MFp1blu1DSRovKen3Ok+yL9UtW2J/rQ1gd0CQbyWaH0aB1P9X
+	 vWclOYmW89jrUT7exJgM8mfFCDZvB9HFR/1Nn3475zl5YXBmTzcghdPfZW4avRhSBK
+	 WaO01tFVi/6lc69Auy5Nivif6SsxPmBZiKODQbhhbitWAw3rq13ZdRDCV3bfCFJNrS
+	 RBZ2WzwWDNt12HFk/J13Ph1oua+XEoW1o/45/BmCi6HESgdD9KTCg8ThXfH+2rg/4w
+	 NYhWCmK++EMJL12H3c2tyYOdLmmlkyWYckZs5ealW0IaVjL4NKjEdlow/e74meY7Dn
+	 X1jNUNfeo1Hfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09E5E611B6;
-	Thu, 18 Dec 2025 16:37:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 94F7B361
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 014E94110B;
+	Thu, 18 Dec 2025 16:37:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 097A3361
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A3B383DC8
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFC2780BA7
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vm7jMO3ER_Sg for <buildroot@buildroot.org>;
- Thu, 18 Dec 2025 16:37:52 +0000 (UTC)
+ id PE9YDN_c0iDX for <buildroot@buildroot.org>;
+ Thu, 18 Dec 2025 16:37:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 76E0480BA7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76E0480BA7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECBD480BA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBD480BA4
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 76E0480BA7
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECBD480BA4
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:37:54 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 38A10B97A323; Thu, 18 Dec 2025 17:37:50 +0100 (CET)
-To: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTPSA id 993C8B97A297; Thu, 18 Dec 2025 17:37:52 +0100 (CET)
+To: Preyas <preyas17@zohomail.in>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Thu, 18 Dec 2025 17:37:49 +0100
-Message-ID: <20251218163749.379769-1-arnout@rnout.be>
+Date: Thu, 18 Dec 2025 17:37:51 +0100
+Message-ID: <20251218163751.379816-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251208203456.3656837-1-bernd@kuhls.net>
-References: <20251208203456.3656837-1-bernd@kuhls.net>
+In-Reply-To: <20251209154834.5946-2-preyas17@zohomail.in>
+References: <20251209154834.5946-2-preyas17@zohomail.in>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1766075870; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1766075872; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=VXVOUx9hWN8CUrHjFRWuRoG/wkdgjxWAS4Rt8tNE4do=;
- b=MOsuFS9pnzKkYIxMP44/eQNpfjJkS6wUn+oXXhaMVv5vcBvX/Q+q57s6YPOtd8IWbXAKzj
- mz75wd9phUKgRLsj8grm0ktlBbc3riNRmzUQdCv6AsygYC3waxQVLc6sMTao4Nx33ABspl
- b5J95SoV54EymQwtcvtKGLkkgazpL7Q4wHi736ewCSt0PQ9ST5mbL5W8q8lHPdoZIBxLyJ
- m+ZXgb3fJUzAEAgiuIgbx990gPcOAEAR40tzeQPBYZBZEYO0ALJQh2bt7L3Gyy9+xaJwjT
- yLuG1x8W6qcOVoZ1lGZCJBDJXBkn6YThR+ykDhdQ8b0qGyxzNeoL6czKgd5Yfw==
+ bh=RJZxbs8Nn0m2ico038ssOmXt2uBEi2587NJm0NgRQ6w=;
+ b=SftY+4TDalEUslJLzsUs/UakpASoUYYVPz+yKLQtGg7B4Cv2L33OtotYjY/ZWowtGySWHs
+ +JvlfQPdrKPGvINg0ehGeiZiK2WYEW4UxZ914u45KZ7JESd9JG73r7wrJMaCcWAfF4Y5mY
+ XRbuJcR6SG1hq+va2/QE8TKyt1e2GRlDijsYZl9GkF9xK14y0kqhmhsnjKCdk4fR1ujk0f
+ gpR4h1/ZMqBUU6n7DCnGUR7i9gUjLpqh8Uo6lKTxNHEZ9Q/6185U7DHNKrDTzBd9GuAolh
+ L70OWaO3Sle5QXjaPlpawyKvxwvnEw1KGi8KIjg1OIYU1tCepIqOklx4K7CQtA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=MOsuFS9p
-Subject: Re: [Buildroot] [PATCH 1/1] package/libxslt: security bump version
- to 1.1.45
+ header.a=rsa-sha256 header.s=dkim header.b=SftY+4TD
+Subject: Re: [Buildroot] [PATCH 2/2] pigz: switch site to HTTPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,48 +96,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release notes:
-> https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.news
+> Prefer HTTPS for source downloads. No functional change; hashes unchanged. Align comment in .hash.
 > 
-> Fixes
-> CVE-2025-7424, CVE-2025-9714 & CVE-2025-11731.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Preyas <preyas17@zohomail.in>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/libxslt/libxslt.hash | 4 ++--
->  package/libxslt/libxslt.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/pigz/pigz.hash | 2 +-
+>  package/pigz/pigz.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-> index 98c68eded1..0523c51362 100644
-> --- a/package/libxslt/libxslt.hash
-> +++ b/package/libxslt/libxslt.hash
-> @@ -1,5 +1,5 @@
-> -# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.sha256sum
-> -sha256  5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a  libxslt-1.1.43.tar.xz
-> +# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.sha256sum
-> +sha256  9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e  libxslt-1.1.45.tar.xz
+> diff --git a/package/pigz/pigz.hash b/package/pigz/pigz.hash
+> index d09930b62b..d63c5a5717 100644
+> --- a/package/pigz/pigz.hash
+> +++ b/package/pigz/pigz.hash
+> @@ -1,4 +1,4 @@
+> -# From http://zlib.net/pigz
+> +# From https://zlib.net/pigz
+>  sha256  eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de31df416f0d5170fd0  pigz-2.8.tar.gz
 >  
->  # Hash for license file:
->  sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  Copyright
-> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-> index e92b383b89..229f3de2f6 100644
-> --- a/package/libxslt/libxslt.mk
-> +++ b/package/libxslt/libxslt.mk
-> @@ -4,7 +4,7 @@
->  #
+>  # Locally calculated
+> diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
+> index e3273c71c1..0708882a15 100644
+> --- a/package/pigz/pigz.mk
+> +++ b/package/pigz/pigz.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -LIBXSLT_VERSION = 1.1.43
-> +LIBXSLT_VERSION = 1.1.45
->  LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
->  LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
->  LIBXSLT_INSTALL_STAGING = YES
+>  PIGZ_VERSION = 2.8
+> -PIGZ_SITE = http://zlib.net/pigz
+> +PIGZ_SITE = https://zlib.net/pigz
+>  PIGZ_DEPENDENCIES = zlib
+>  HOST_PIGZ_DEPENDENCIES = host-zlib
+>  PIGZ_LICENSE = Zlib
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
