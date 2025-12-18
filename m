@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F58CD6E2AF
-	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 431C2D6E2B0
+	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:35:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FB45410F0;
-	Thu, 18 Dec 2025 16:35:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16A40611DA;
+	Thu, 18 Dec 2025 16:35:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kG4mdaYOYkhi; Thu, 18 Dec 2025 16:35:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 43vkE3kzQlGC; Thu, 18 Dec 2025 16:35:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CC37410EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4157B61188
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766075722;
-	bh=hHsOINd3D/uF8CzrZXQzC54Qm7qLNAeLIl+MwetjyNY=;
+	s=default; t=1766075724;
+	bh=33eMQISIEpojEhhy73TlRfLkmF9Aw7rQ8RjOHj5BiTg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HIOLrWimvOwZcTuNfIVjmM9C45+jHDE190rKYHKRFyid7NnapaJTGA/o1anQHBhOM
-	 V1JNhQ3vj0P2gFjaolDnLvZFXqlytOnDSpaRz0ioeWkwQm1CxZYxcizCaFjciP21tp
-	 BNKCZIuxEOIaeUHNLoDYQjsJbfITA8Wd0+oYf6JQ+8iLdjZoYnjk6OUqOucrMjhv1O
-	 0C60Arf7p+f2jOH/4gMphwmhsfoYjObYwFsVHiL7GtQsf+YklyN43JpFqK8kwMKUtX
-	 2u7AUmSYemKT2uc0mAJG0a7qW/aYG+DUWdqeSZsPvi5sRiwv5Ku4FMKCMUVXDxf7V4
-	 glHdfPbhGDxbQ==
+	b=A530/6tcyT4Hp0yLieRbCw/cEWPJ5SH3tIfcb51yRx4pdMaITyJHYhNUja9k4zmzr
+	 cO4zhhkxSvv7/lx20h/NOsr4NiF1RhTJAKqtv0fvDA2IHm8pBk1jG2OtkDtByk6gw7
+	 ro0xaLN+H3klagUgAZLazXMWzA5Q3f0MzShkzbMDfiWsSuR8K0qF4L78sphNxvOxe3
+	 J91Ta/UNzDL28jcBMRss5eIX0KU7PoR8Jg1tf99azGaFhdCOAkD+Vf/MRf4YV8TK5p
+	 abfFC5sr5lfXOlgPPONP39lkYCKINxaGEsCatI1wA7RIS02VCcYhEqO9gDx02dfvtE
+	 TBOfR0FWTW/yw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CC37410EB;
-	Thu, 18 Dec 2025 16:35:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4157B61188;
+	Thu, 18 Dec 2025 16:35:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11E23361
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02E5A361
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85CE361166
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9916161188
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0zycxAiORLLn for <buildroot@buildroot.org>;
- Thu, 18 Dec 2025 16:35:08 +0000 (UTC)
+ id 3QISjDrpEv9w for <buildroot@buildroot.org>;
+ Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12B4561192
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA8BD60D74
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12B4561192
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA8BD60D74
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10B3286B3B; Thu, 18 Dec 2025 16:35:08 +0000 (UTC)
+ id A7D0E872FA; Thu, 18 Dec 2025 16:35:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Dec 2025 16:59:30 +0100
+Date: Thu, 18 Dec 2025 16:55:15 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: fad4bacc77314139c8b923e4ec6db1b7db796729
-X-Git-Newrev: 9d38383aefea46774faf59fcaae6f28d0c834a2c
+X-Git-Oldrev: 74f45d4d9860afab4075fce18c59545406fe675a
+X-Git-Newrev: cdbd1f62fcf17ed1f4349d072e08012b677fc65f
 X-Patchwork-Hint: ignore
-Message-Id: <20251218163508.10B3286B3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] linux: select
- host-openssl for all architectures when building latest version
+Message-Id: <20251218163507.A7D0E872FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-fonttools:
+ bump version to 4.60.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,93 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d38383aefea46774faf59fcaae6f28d0c834a2c
+commit: https://git.buildroot.net/buildroot/commit/?id=cdbd1f62fcf17ed1f4349d072e08012b677fc65f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since at least Linux 6.16, but possibly earlier, host-openssl is now
-needed on the vast majority of CPU architectures.
-
-A common reason to require host-openssl in the Kernel is to enable
-Wireless Networking. This is now enabled in most defconfigs.
-
-- When enabling CONFIG_NET [1]
-- CONFIG_WIRELESS is enabled by default [2]
-- For Wireless, CONFIG_CFG80211 is commonly enabled too [3]
-- CONFIG_CFG80211_REQUIRE_SIGNED_REGDB is enabled by default
-  which selects SYSTEM_DATA_VERIFICATION [4]
-- CONFIG_SYSTEM_DATA_VERIFICATION
-  select SYSTEM_TRUSTED_KEYRING [5]
-- CONFIG_SYSTEM_TRUSTED_KEYRING adds system_certificates.o
-  which needs x509_certificate_list and extract-cert [6]
-- and finally, extract-cert uses host-openssl [7]
-
-Even if some architecture defconfigs (such as m68k) are not directly
-enabling CONFIG_CFG80211 in the Kernel, there is still chances for
-this option to be enabled by Kernel configuration fixups of selected
-Buildroot package. This situation can happen in Buildroot
-autobuilders.
-
-Also, in some specific cases, host-openssl might be needed for
-some other reasons (e.g. s390 arch defconfig enables
-SYSTEM_DATA_VERIFICATION which ends up the same way).
-
-Indeed, in order to fix build issues, we would have to add: armeb,
-microblaze, loongarch, m68k, mips, mipsel, mips64, mips64el, powerpc,
-powerpc64, powerpc64el, riscv, s390, and possibly others.
-
-So intead, when "latest kernel" is used with the default architecture
-configuration, always select host-openssl independently of the
-selected architectures.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/9a314e759f7640d760003e46f86153300478ec60/ (mipsel)
-  https://autobuild.buildroot.net/results/3bcc674ea5a7cdf031200b0cd2f9f71400ba391c/ (mips64el)
-  https://autobuild.buildroot.net/results/b24983fd91f408de56479b7d7d57fc9fd3333d7d/ (s390)
-  https://autobuild.buildroot.net/results/b262fc6f67a9fed55faffcdd580d89f4664e1e16/ (powerpc64)
-  https://autobuild.buildroot.net/results/45da1538457b18671fa18efe3e1aa57a15561370/ (m68k)
-  https://autobuild.buildroot.net/results/0a457375d2509f1b29a449dfa50f29fc7e56e568/ (armeb)
-  https://autobuild.buildroot.net/results/814ca5f048827a635dea0199878fa82d5012b649/ (loongarch64)
-  https://autobuild.buildroot.net/results/b684d0b37e5187aa9b31693356f8515857d19f7a/ (microblaze)
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/Kconfig?h=v6.18.1#n6
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/Kconfig?h=v6.18.1#n428
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/wireless/Kconfig?h=v6.18.1#n17
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/wireless/Kconfig?h=v6.18.1#n89
-[5] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/init/Kconfig?h=v6.18.1#n2063
-[6] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/certs/Makefile?h=v6.18.1#n6
-[7] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/certs/extract-cert.c?h=v6.18.1#n21
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-[Julien: add extra info in commit log]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit bba86304b0ac4ae266cfb52e54a239b0850b10ca)
+(cherry picked from commit 1e7fc05e8672b651fda836aa68817f4e13333868)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/python-fonttools/python-fonttools.hash | 4 ++--
+ package/python-fonttools/python-fonttools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 769bf3391f..1af6412017 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -171,13 +171,11 @@ config BR2_LINUX_KERNEL_USE_DEFCONFIG
+diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
+index d30b100d51..49f1ca0235 100644
+--- a/package/python-fonttools/python-fonttools.hash
++++ b/package/python-fonttools/python-fonttools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fonttools/json
+-md5  00d1463e65eaff5bcb73e36272ff05a3  fonttools-4.55.6.tar.gz
+-sha256  1beb4647a0df5ceaea48015656525eb8081af226fe96554089fd3b274d239ef0  fonttools-4.55.6.tar.gz
++md5  b4b79d23865d50084d4c05defa186fc9  fonttools-4.60.1.tar.gz
++sha256  ef00af0439ebfee806b25f24c8f92109157ff3fac5731dc7867957812e87b8d9  fonttools-4.60.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
+diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
+index 7a1c9fedf2..3094b1985c 100644
+--- a/package/python-fonttools/python-fonttools.mk
++++ b/package/python-fonttools/python-fonttools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
- 	bool "Use the architecture default configuration"
--	# We know that the default configuration on some architectures
-+	# We know that the default configuration on many architectures
- 	# requires host-openssl, so select it for the latest kernel
- 	# version. This is mainly needed to fix autobuilder testing.
- 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
--	       BR2_LINUX_KERNEL_LATEST_VERSION && \
--	       (BR2_aarch64 || BR2_aarch64_be || BR2_arcle || BR2_arceb || \
--	        BR2_or1k || BR2_riscv || BR2_sparc || BR2_x86_64)
-+	       BR2_LINUX_KERNEL_LATEST_VERSION
- 	help
- 	  This option will use the default configuration for the
- 	  selected architecture. I.e, it is equivalent to running
+-PYTHON_FONTTOOLS_VERSION = 4.55.6
++PYTHON_FONTTOOLS_VERSION = 4.60.1
+ PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).tar.gz
+-PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/49/2e/0b11e907b90665253dbad425479e874e38a9e81ced397a4e3312b9116935
++PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/4b/42/97a13e47a1e51a5a7142475bbcf5107fe3a68fc34aef331c897d5fb98ad0
+ PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
+ PYTHON_FONTTOOLS_LICENSE = MIT
+ PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
