@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A83D6E2B1
-	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 630CAD6E2B0
+	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9FC1611D2;
-	Thu, 18 Dec 2025 16:44:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38A8B41175;
+	Thu, 18 Dec 2025 16:44:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cQK3M8VOm5Cg; Thu, 18 Dec 2025 16:44:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fshBSBMlMf03; Thu, 18 Dec 2025 16:44:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0D5F611D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2B874114E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766076249;
-	bh=t6n1D7RW7YeR3/fWYz3Rj5aWaCQulctPBbau7Z73fVo=;
+	s=default; t=1766076250;
+	bh=F70wlq7gE9GkEIgiQlZHt4wv35mq+Vkid6dKdjoFNRw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rgXQSuEQM7cbrODwJSLlBiHcjKtFnt87XuH1oNerFgRzgAKQuFiK8OoNMtVyY/SSE
-	 8lrt9CpWrkPevr6P6pSZRx8evKaswLcK8odI4xa1elq4T5e6B0lgg5beWhYvpmTMTn
-	 cmaYlo4w1Aj7umFfF4WWIxAKTg5c3PO+rm9dvbWSHsrqldzTtWe18xXGyI/gPLLdvZ
-	 2vBYWVS30/J675f6IsMeALI94Q8omNCGrm1P8BFlRNVSK9RDwuuV/Q0/bonk0A5U2O
-	 JRt8tzT+uIWzmN5seloVKN2+MZLcoFyHGosMcGlY2bUtzvLobXQU+gURPOo1bHJ3tu
-	 82UqnB6oha02w==
+	b=F6IRIF4Z4wsLyjj9lBp1xNLKyE9HGfL+EnbpxvvMH+V8r4+0BcPEMynnEQaxNxJD+
+	 F7Qr5A7IK8dPdir33IeBD1NbHWwvDapoum18xHkWsEo0X0Ssj51mb4Ob5egnq8ibJV
+	 l/jwG2qt2bgH1uRJNZj547EfOV0PiQ4oPhGAqYUG8+cMyCrJDJY/aIkkZZ5TYuaqsD
+	 yY9HvoVf6mdzhXbkVY2cllXdLoEn1DvAOYnzqJ/QWNYt1WdQJy5keHc/bUi0VrfkQ2
+	 ldhi9LfNG2wA0dfY/uPyJmW7KT/wknz/SwUnjG/iWuVUqXH1xg8HvjXNqpQvqjByo/
+	 +bhApPs2CdJ5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0D5F611D4;
-	Thu, 18 Dec 2025 16:44:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 634921A6
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:44:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2B874114E;
+	Thu, 18 Dec 2025 16:44:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 153F3361
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8368B83E72
+ by smtp4.osuosl.org (Postfix) with ESMTP id 990AA41043
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:43:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vii8NTM3Vdfv for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JGxeCnKYdHWB for <buildroot@buildroot.org>;
  Thu, 18 Dec 2025 16:43:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B821783E74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C62964105D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B821783E74
+ by smtp4.osuosl.org (Postfix) with ESMTP id C62964105D
  for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:43:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B72C9873D6; Thu, 18 Dec 2025 16:43:58 +0000 (UTC)
+ id C3E72873D5; Thu, 18 Dec 2025 16:43:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Dec 2025 16:57:53 +0100
+Date: Thu, 18 Dec 2025 17:01:07 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: a291caf139a966867364ab37f0842881572c775f
-X-Git-Newrev: 03b076fec8d2fb3f4604a1ab2936a8a4dce025be
+X-Git-Oldrev: 03b076fec8d2fb3f4604a1ab2936a8a4dce025be
+X-Git-Newrev: 6e99889c74b971e2909156d6ab8e4d3cf7e9e9ba
 X-Patchwork-Hint: ignore
-Message-Id: <20251218164358.B72C9873D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/perl: security
- bump to version 5.40.3
+Message-Id: <20251218164358.C3E72873D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] linux: select
+ host-openssl for all architectures when building latest version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,80 +77,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03b076fec8d2fb3f4604a1ab2936a8a4dce025be
+commit: https://git.buildroot.net/buildroot/commit/?id=6e99889c74b971e2909156d6ab8e4d3cf7e9e9ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-This commit fixes CVE-2025-40909:
-Perl threads have a working directory race condition where file
-operations may target unintended paths.
+Since at least Linux 6.16, but possibly earlier, host-openssl is now
+needed on the vast majority of CPU architectures.
 
-For release notes, see:
-https://perldoc.perl.org/5.40.3/perl5403delta
+A common reason to require host-openssl in the Kernel is to enable
+Wireless Networking. This is now enabled in most defconfigs.
+
+- When enabling CONFIG_NET [1]
+- CONFIG_WIRELESS is enabled by default [2]
+- For Wireless, CONFIG_CFG80211 is commonly enabled too [3]
+- CONFIG_CFG80211_REQUIRE_SIGNED_REGDB is enabled by default
+  which selects SYSTEM_DATA_VERIFICATION [4]
+- CONFIG_SYSTEM_DATA_VERIFICATION
+  select SYSTEM_TRUSTED_KEYRING [5]
+- CONFIG_SYSTEM_TRUSTED_KEYRING adds system_certificates.o
+  which needs x509_certificate_list and extract-cert [6]
+- and finally, extract-cert uses host-openssl [7]
+
+Even if some architecture defconfigs (such as m68k) are not directly
+enabling CONFIG_CFG80211 in the Kernel, there is still chances for
+this option to be enabled by Kernel configuration fixups of selected
+Buildroot package. This situation can happen in Buildroot
+autobuilders.
+
+Also, in some specific cases, host-openssl might be needed for
+some other reasons (e.g. s390 arch defconfig enables
+SYSTEM_DATA_VERIFICATION which ends up the same way).
+
+Indeed, in order to fix build issues, we would have to add: armeb,
+microblaze, loongarch, m68k, mips, mipsel, mips64, mips64el, powerpc,
+powerpc64, powerpc64el, riscv, s390, and possibly others.
+
+So intead, when "latest kernel" is used with the default architecture
+configuration, always select host-openssl independently of the
+selected architectures.
 
 Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-40909
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add link to cve.org]
+  https://autobuild.buildroot.net/results/9a314e759f7640d760003e46f86153300478ec60/ (mipsel)
+  https://autobuild.buildroot.net/results/3bcc674ea5a7cdf031200b0cd2f9f71400ba391c/ (mips64el)
+  https://autobuild.buildroot.net/results/b24983fd91f408de56479b7d7d57fc9fd3333d7d/ (s390)
+  https://autobuild.buildroot.net/results/b262fc6f67a9fed55faffcdd580d89f4664e1e16/ (powerpc64)
+  https://autobuild.buildroot.net/results/45da1538457b18671fa18efe3e1aa57a15561370/ (m68k)
+  https://autobuild.buildroot.net/results/0a457375d2509f1b29a449dfa50f29fc7e56e568/ (armeb)
+  https://autobuild.buildroot.net/results/814ca5f048827a635dea0199878fa82d5012b649/ (loongarch64)
+  https://autobuild.buildroot.net/results/b684d0b37e5187aa9b31693356f8515857d19f7a/ (microblaze)
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/Kconfig?h=v6.18.1#n6
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/Kconfig?h=v6.18.1#n428
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/wireless/Kconfig?h=v6.18.1#n17
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/net/wireless/Kconfig?h=v6.18.1#n89
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/init/Kconfig?h=v6.18.1#n2063
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/certs/Makefile?h=v6.18.1#n6
+[7] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/certs/extract-cert.c?h=v6.18.1#n21
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+[Julien: add extra info in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 61f5e2efcae5ece840a561ad56cdec04dad3a25d)
+(cherry picked from commit bba86304b0ac4ae266cfb52e54a239b0850b10ca)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  5 +++--
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ linux/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index d581054bb5..0035c448c5 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,10 +1,10 @@
--# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz.{md5,sha1,sha256}.txt
--md5  9ad7a269dc4053cdbeecd4fde444291b  perl-5.40.2.tar.xz
--sha1  661fe9ee085ca0aec8ddd65e055bee922af12663  perl-5.40.2.tar.xz
--sha256  0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b  perl-5.40.2.tar.xz
-+# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.3.tar.xz.{md5,sha1,sha256}.txt
-+md5  f526a5975a7cc6f53f28326437b1eb39  perl-5.40.3.tar.xz
-+sha1  7c95250ceff00d649c1f5afa511987a2c4da61d3  perl-5.40.3.tar.xz
-+sha256  65f63b4763ab6cb9bb3d5731dd10369e1705be3c59be9847d453eb60b349ab43  perl-5.40.3.tar.xz
+diff --git a/linux/Config.in b/linux/Config.in
+index 10024bef38..fb4e6f3a08 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -175,13 +175,11 @@ config BR2_LINUX_KERNEL_USE_DEFCONFIG
  
--# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.2/perl-cross-1.6.2.hash
--sha256  131f7496152ee32067dbac2bc9b44b2f582fc778140e545701b3b2faee782f1d  perl-cross-1.6.2.tar.gz
-+# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.3/perl-cross-1.6.3.hash
-+sha256  cd57d8f8017727dc7e19cca55e1e9f22664edecf6c9f04c3515ecc13fd88e4f3  perl-cross-1.6.3.tar.gz
- 
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 34abb734d6..a301b93e46 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 40
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
- PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
-@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
- PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.6.2
-+PERL_CROSS_VERSION = 1.6.3
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
-@@ -28,6 +28,7 @@ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
- define PERL_CROSS_EXTRACT
- 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(PERL_DL_DIR)/$(PERL_CROSS_SOURCE) | \
- 	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
-+	mv $(@D)/cnf/diffs/perl5-5.40.2 $(@D)/cnf/diffs/perl5-5.40.3
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
+ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
+ 	bool "Use the architecture default configuration"
+-	# We know that the default configuration on some architectures
++	# We know that the default configuration on many architectures
+ 	# requires host-openssl, so select it for the latest kernel
+ 	# version. This is mainly needed to fix autobuilder testing.
+ 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
+-	       BR2_LINUX_KERNEL_LATEST_VERSION && \
+-	       (BR2_aarch64 || BR2_aarch64_be || BR2_arcle || BR2_arceb || \
+-	        BR2_or1k || BR2_riscv || BR2_sparc || BR2_x86_64)
++	       BR2_LINUX_KERNEL_LATEST_VERSION
+ 	help
+ 	  This option will use the default configuration for the
+ 	  selected architecture. I.e, it is equivalent to running
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
