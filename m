@@ -4,82 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F031DD6E2AD
-	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 16:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8018D6E2DC
+	for <buildroot@archiver.kernel.org>; Thu, 18 Dec 2025 18:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B163D410AF;
-	Thu, 18 Dec 2025 16:45:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36487410D8;
+	Thu, 18 Dec 2025 18:53:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kwc4y2aGelIL; Thu, 18 Dec 2025 16:45:32 +0000 (UTC)
+ id tOKbTGhh49_v; Thu, 18 Dec 2025 18:53:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3147410BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD7014108A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766076332;
-	bh=RpGHNO3wopLW/GnNh+wby7nzZbMyE3dpl0k8LbP0fBc=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=gyVgDrj2CqELafi8FmdfA7S5awmrb5LE8e/uW+11M5/1hcQnugoWzU4QPWnBGzZwW
-	 dbm8KkImLoJr8KH41N1F54Nl9RWajoiOFUQPB2IWBigo9w5bqDhzoqzIvVl8sf97jz
-	 U/T1AbA1QBjN+4iX3vGVnv4lRvZcbiiaOn0JHRiLaMyObQBv5DNcxbJma3sizXnEFl
-	 TxMtnrQtOtzRVCNSxxeKKqSfLk+BGsbRxMm37Ko7nGeNtMxA243T8LiZ13topM8W7x
-	 ZkFuATkNFbDXRVCk/KDUApEbr4dyaZRm1AA1ViaM5SV5+B+wbh5rIz5Qu8+Nx7KfxB
-	 tZ9DM1ZfHMcjw==
+	s=default; t=1766083983;
+	bh=WvtX1dtLuHjzq1sW8VyhYvW1ZKeV2fUvkXKQQisv2nI=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=UIF4FuumQs0rJN7f7qr1CcI2iVH4b+/2z+yvBxoOgmFmsKTbWECpc2H8/iTtDIZOD
+	 CptzTaSdkroYLxrW5CVFOMX06phiM2N9G8QPNk6jscODtZQOneDgp7ZHobKutoSVyT
+	 7MLkvzonA/X8oL7zj8dMlA/13VO0V0DSZS8112EYP6tFtuAZZrgUV3TEbW9Ey15lED
+	 fVAYgou/oecFezTZoYY8DaDl6LFDjvFUwvqoNd/P5lfZRuQASBXcafd3BlpXnt0TTv
+	 9cvAYVMrm4oFIqYn2vt6skTpLSnMLmYQ0UJ7pEVy3DHaEdQf3NMFmGS2JvuS2hgazy
+	 LHWfxtv9uJl/A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3147410BD;
-	Thu, 18 Dec 2025 16:45:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C19451A6
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:45:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD7014108A;
+	Thu, 18 Dec 2025 18:53:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A3C31A6
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 18:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2A4183E6C
- for <buildroot@buildroot.org>; Thu, 18 Dec 2025 16:45:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 112B44139C
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 18:53:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zZ_KbDLm6u5S for <buildroot@buildroot.org>;
- Thu, 18 Dec 2025 16:45:30 +0000 (UTC)
-X-Greylist: delayed 490 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 18 Dec 2025 16:45:29 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC24183E60
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC24183E60
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC24183E60
- for <buildroot@busybox.net>; Thu, 18 Dec 2025 16:45:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2A90AB97A1BF; Thu, 18 Dec 2025 17:37:17 +0100 (CET)
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: Arnout Vandecappelle <arnout@rnout.be>,
-	buildroot@busybox.net
-Date: Thu, 18 Dec 2025 17:37:15 +0100
-Message-ID: <20251218163715.379358-1-arnout@rnout.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251214084709.312790-1-francois.perrad@gadz.org>
-References: <20251214084709.312790-1-francois.perrad@gadz.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TJm--0sR9Ykn for <buildroot@buildroot.org>;
+ Thu, 18 Dec 2025 18:53:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 48D5341395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48D5341395
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 48D5341395
+ for <buildroot@buildroot.org>; Thu, 18 Dec 2025 18:52:58 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1ba4b.dip0.t-ipconnect.de [84.161.186.75])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B1705A4C08A4;
+ Thu, 18 Dec 2025 19:52:55 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58690)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vWJ7N-000000008Mp-3xXh;
+ Thu, 18 Dec 2025 18:52:54 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 18 Dec 2025 19:52:54 +0100
+Message-ID: <20251218185254.3943149-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: +++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1766075837; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding:in-reply-to:references;
- bh=w1wsp92uLwtv2qTWyzkyoNUlw/iD7VNUGRx2bOYfIvM=;
- b=I/i1MqPFLDo6mQ0VoIb14vlFAIBuPsxv2zD4dOT2MDPid/hErG0M5IKi4ppR1FCPSRVZfv
- Tlzq9ake+mSrT7cf0Q6k2mCxDVH09ixoNbRS3kUdKRSjgYtbQl50bQXHD1CwI7aiMuOzBH
- uouBiBfpBTJTZASww3cCgJbcmCBsNM16XSCN3txx3FCiX1pXF4fB4Qppn/Rw7nVhqcfcyo
- Tuz1z994PPmiaTz8JrIoSOLiTVbLoV+MBsGcbDAIKS97OQx5O4Sc2cjpKNnt506g7Imt7b
- HOv0CUbePE9+rzYXeTATkXTzX+RkensWh/cBrW1ycGbG6M9g25LcuEigWjbfeA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=I/i1MqPF
-Subject: Re: [Buildroot] [PATCH] package/perl: security bump to version
- 5.40.3
+ d=kuhls.net; 
+ s=kas202511301023; t=1766083975;
+ bh=74CIZEOjseWrgMXxPv4s0RgPeqLlCjEsw9KNjVlVymk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=i+rEQcGNl4N3aks8Lnph4khlIxWbnTHf9o6XNatbmMcWuaY6IMYcYdDDux3hmhuvl
+ fOP+jYR6imEgKBx6WJgxVIlukx6hsq8V9M1HfCNiZktt8LqLFlpcLPk0c1A1WSBk0b
+ kPnfAkBMS7FJoJB46D01LqnNZoZaHsjDfuYTG8cqL8acUQnzE67IzrPSz/gj8rfRDa
+ iUslMNh7ergUX5MFo8dajprLWms92202AIlk6LYkd1LDv/mXXtD4c00WQwmaqLGamy
+ 6j17Oqf/KnGOIENuVuUtP/4BxozcQaCRFtcjaKLiN88hZclS9wO15AKrBbTEUOGUuI
+ ES8bcREgKmcUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=i+rEQcGN
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 25.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,85 +94,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> fix CVE-2025-40909: Perl threads have a working directory race condition where file operations may target unintended paths
-> 
-> see https://perldoc.perl.org/5.43.2/perl5403delta
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+https://lists.freedesktop.org/archives/mesa-announce/2025-December/000831.html
 
-Applied to 2025.02.x and 2025.11.x. Thanks
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-> ---
->  package/perl/perl.hash | 12 ++++++------
->  package/perl/perl.mk   |  5 +++--
->  2 files changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-> index d581054bb..0035c448c 100644
-> --- a/package/perl/perl.hash
-> +++ b/package/perl/perl.hash
-> @@ -1,10 +1,10 @@
-> -# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz.{md5,sha1,sha256}.txt
-> -md5  9ad7a269dc4053cdbeecd4fde444291b  perl-5.40.2.tar.xz
-> -sha1  661fe9ee085ca0aec8ddd65e055bee922af12663  perl-5.40.2.tar.xz
-> -sha256  0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b  perl-5.40.2.tar.xz
-> +# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.3.tar.xz.{md5,sha1,sha256}.txt
-> +md5  f526a5975a7cc6f53f28326437b1eb39  perl-5.40.3.tar.xz
-> +sha1  7c95250ceff00d649c1f5afa511987a2c4da61d3  perl-5.40.3.tar.xz
-> +sha256  65f63b4763ab6cb9bb3d5731dd10369e1705be3c59be9847d453eb60b349ab43  perl-5.40.3.tar.xz
->  
-> -# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.2/perl-cross-1.6.2.hash
-> -sha256  131f7496152ee32067dbac2bc9b44b2f582fc778140e545701b3b2faee782f1d  perl-cross-1.6.2.tar.gz
-> +# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.3/perl-cross-1.6.3.hash
-> +sha256  cd57d8f8017727dc7e19cca55e1e9f22664edecf6c9f04c3515ecc13fd88e4f3  perl-cross-1.6.3.tar.gz
->  
->  # Locally calculated
->  sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index 34abb734d..a301b93e4 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -6,7 +6,7 @@
->  
->  # When updating the version here, also update utils/scancpan
->  PERL_VERSION_MAJOR = 40
-> -PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-> +PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
->  PERL_SITE = https://www.cpan.org/src/5.0
->  PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
->  PERL_LICENSE = Artistic or GPL-1.0+
-> @@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
->  PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  PERL_INSTALL_STAGING = YES
->  
-> -PERL_CROSS_VERSION = 1.6.2
-> +PERL_CROSS_VERSION = 1.6.3
->  # DO NOT refactor with the github helper (the result is not the same)
->  PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
->  PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
-> @@ -28,6 +28,7 @@ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
->  define PERL_CROSS_EXTRACT
->  	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(PERL_DL_DIR)/$(PERL_CROSS_SOURCE) | \
->  	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
-> +	mv $(@D)/cnf/diffs/perl5-5.40.2 $(@D)/cnf/diffs/perl5-5.40.3
->  endef
->  PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
->  
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 39564b6af3..88fd71f987 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 25.3.1
++MESA3D_HEADERS_VERSION = 25.3.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 4bfc1d4584..f045d37f91 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2025-December/000829.html
+-sha256  059d0d985622f49588f01aa29152804f4da8ffe6add046e00a52923379c2d8da  mesa-25.3.1.tar.xz
+-sha512  7e2f7295f1f4df129935b60d75c890f6ae585ecc511f69f55a61826df5f2434ffdb4109c632af9842a986bf9beed430a0404d377e8335b71fa36682bd10533ba  mesa-25.3.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2025-December/000831.html
++sha256  e69dab0d0ea03e3e8cb141b032f58ea9fcf3b9c1f61b31f6592cb4bbd8d0185d  mesa-25.3.2.tar.xz
++sha512  499cb0aa254b5a706fb6c2414c23b9d5d03d9397475f7ad16744b982303a2a2bf643ef7adc64870645ee4355b5f95695becd6caff7d7f7caf698e6269589aa13  mesa-25.3.2.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 6fcbf96c80..41b72dd08e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 25.3.1
++MESA3D_VERSION = 25.3.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
