@@ -1,81 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7228E66884
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 21:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36D08E66892
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 21:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA6F183CC7;
-	Fri, 19 Dec 2025 21:10:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bl_3rdx0OR0O; Fri, 19 Dec 2025 21:10:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DAB983C9E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766178612;
-	bh=dEW0yVNQf5tJFPFfqD5PEO+ddgazKyyPbDnrVPWhhNQ=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=raOkBuQToqO5dh9e/DaGuWXpMnUy3c7f83Gcy0ROtqptXRFTTNJZfpY1YdsisM8q/
-	 hNvZLBu+W+J26nxcSipB+ZJDwT5CXvG1BH4guNJnu5HVWaIjb9NJjroTW/3pXYAxk9
-	 vVNiIRrZNi9IUYOTF574c9iFAgQ8o8y4Bbs8NiuZzN+AnWebWvNTmmY8nYUo7jCy++
-	 0ZA7MQndsJzx/MRdzhRHiqHzANYsp0k12Pn39f00iauvl2Ug120GN1JgZ2hjBi+klj
-	 lA/0fE7BZfPvoSuYxKdWFA+8jdbT7Zs67UIo1bI1nDAJEuASDKyaF+/8i0P4/CjLOB
-	 9MgyfAuADqt1g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DAB983C9E;
-	Fri, 19 Dec 2025 21:10:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C9C51A6
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 21:10:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4721F60BB4
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 21:10:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C14960BB3;
+	Fri, 19 Dec 2025 21:10:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fyPajH68zoUZ for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 21:10:10 +0000 (UTC)
+ id wZ7b_1-RpNuA; Fri, 19 Dec 2025 21:10:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E0EC60BBA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766178620;
+	bh=OBUjhdsrLuP4/loWpuRKYnk3GZQQ68MmndqJoPhJMV0=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=KlhxIMAQ7ym4cBG8aNPkZfr7R55KSbOvo22g7zZi5BqEcIczOpMi5p2hqk5bGPhke
+	 3mTzAeF8w0XjJopRJlUEoxQBium59Jx2+rep31NIfW5gCbEr0ubNRtqeF7/0iqkoJv
+	 kh9To7oinwHeXqR39mUYxdfGQJSHRan4zpWd6OsgS+xIzSB9DgqCkivkv5uxyXPqu6
+	 ONkuPckkpO2DApr/TZ4E3kGIMfsJQYjh983fqbybsucVUMwnkiT2raa1+GINmhyKON
+	 32t7w912BWAmbvMVjBgmfBt7TW0YJETs3wcfZnRzgRsM5MWqzxUjtY/4SczCUxTlRh
+	 Z+ePurLtPLElQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E0EC60BBA;
+	Fri, 19 Dec 2025 21:10:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F8D81A6
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 21:10:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71DA483CA3
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 21:10:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JvipwOC497J1 for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 21:10:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
  helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 886C460BB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 886C460BB3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F3C783CA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F3C783CA1
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 886C460BB3
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 21:10:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F3C783CA1
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 21:10:17 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a0d:e487:418e:8c09:857b:bc67:c232:7cba])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 862C7780383;
- Fri, 19 Dec 2025 22:10:05 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 06504780371;
+ Fri, 19 Dec 2025 22:10:10 +0100 (CET)
 To: buildroot@buildroot.org
 Cc: Julien Olivain <ju.o@free.fr>
-Date: Fri, 19 Dec 2025 22:09:54 +0100
-Message-ID: <20251219210957.556930-1-ju.o@free.fr>
+Date: Fri, 19 Dec 2025 22:09:55 +0100
+Message-ID: <20251219210957.556930-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251219210957.556930-1-ju.o@free.fr>
+References: <20251219210957.556930-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766178608;
- bh=LfGE1stQ0AzYy21YpvHvb6EE1gNF9hiUFYmGeStoGkw=;
- h=From:To:Cc:Subject:Date:From;
- b=Kw8ANjE14FOJa6+bFqU6mIZdSfEpAGd7gYcEkiDhe5qLN0EJ7xx3lHtejGAjdnmhs
- 6symYLUkssThRfNceBZKoAH+B8q6IwJfUJCq6rhsuGXbmn0sUmICkVuisg1VH9D2Ld
- 8OkNlY7hUy6BpmWwsUNsRehZCgUo32OVf1O8qlK+QiIrIzcJ+UTYESAv4X9e0uMoeK
- yCG11fdzGJ4X79jtE0qiv9K4iuhe05lKFEUbgf0x8D91veSFDZZDizDb1P+tntoCB6
- A/FS9kKhUTeVNpbdRSu7gVnvrkzrg9cDE+mgt0ydki/3sILwZKP/kA513NQA9pmjEi
- ApKS3gfx9EOhQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1766178615;
+ bh=yEdFHZtStlrhVg1mVPsNohbVN+zFhkvOYt0OroLp2xE=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=m7dqjDdFd4w88WcQ8F9Mv5svA7m+xq4WHCs3+mbKGOtBcC9aVLCgFsaRduaMN1tWS
+ CwSaQAWMN5A+Ft93NorKGQuDVZ+hIBA/OqGfjXxm8GNtxlnmvCs/ggTXe/nhaYXSOa
+ CKJ119Ew0lyAUUmnPmcBnbvUjnAQMwmz2wiAonoXy+iCSP3mfTDcot5H19KFTrWnzg
+ XmMEHA0fE4EmS6OsLCUzNVVdAm3LP5OEj9UaIi7EV7V9nmmU3UkZFe7RFHDDZwPkHF
+ u35GMNAXjYAYnuUW8kofCl1sAkOkTaosyyoOBSR0peevm+r5sUN8/nrQl4MVTSqrDg
+ Qy8Fk0eWbsYNg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Kw8ANjE1
-Subject: [Buildroot] [PATCH 1/4] support/testing: ddrescue: use dmsetup from
- lvm2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=m7dqjDdF
+Subject: [Buildroot] [PATCH 2/4] support/testing: ddrescue: bump test kernel
+ to 6.18.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,39 +97,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The ddresue runtime test is using the `dmsetup` command provided by the
-dmraid package. This package is outdated and will be removed. This
-command is also provided by the lvm2 package, which is still maintained.
-
-This commit replaces the dmraid package by lvm2 in the test config.
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_ddrescue.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_ddrescue.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
-index 989abc8f01..042431eb7b 100644
+index 042431eb7b..eb3f63ae53 100644
 --- a/support/testing/tests/package/test_ddrescue.py
 +++ b/support/testing/tests/package/test_ddrescue.py
-@@ -9,7 +9,7 @@ class TestDdrescue(infra.basetest.BRTest):
-     # - A kernel config fragment enables loop blk dev and device
-     #   mapper dm-dust, which are used to simulate a failing storage
-     #   block device.
--    # - dmraid user space package is needed to configure dm-dust
-+    # - lvm2 user space package is needed to configure dm-dust with dmsetup
-     config = \
-         """
-         BR2_aarch64=y
-@@ -23,7 +23,7 @@ class TestDdrescue(infra.basetest.BRTest):
+@@ -17,7 +17,7 @@ class TestDdrescue(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.15"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.2"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
          BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-         BR2_PACKAGE_DDRESCUE=y
--        BR2_PACKAGE_DMRAID=y
-+        BR2_PACKAGE_LVM2=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         BR2_TARGET_ROOTFS_CPIO_GZIP=y
-         # BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.52.0
 
