@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D850AE668A2
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC90E668A0
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF657811F4;
-	Fri, 19 Dec 2025 22:43:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C20474046E;
+	Fri, 19 Dec 2025 22:43:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VTskuFQC4_yi; Fri, 19 Dec 2025 22:43:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V4-o3oHs-l7U; Fri, 19 Dec 2025 22:43:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8BFC81227
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C15A740498
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766184205;
-	bh=QeCOxXDgBIOXzx+7O419CNkqb9c+61vDBzXNevjHUac=;
+	s=default; t=1766184217;
+	bh=tzr0tB4js9KuQHm2zmI4zHAlND+K4T0NkPJ8XF2ZiMM=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=pC1vb6fp7AFzrEaq04NeJ/IDqCKeUSC0T6k25Z85AAKjCmL4fXFxmrAsYX6ItGAcv
-	 8C2byfd2moTy/0NgXkqQnzmVIl8OzZWcrk5wq7sLbhddnKOFmJ2HTVy6PBtKoQ2DZj
-	 gBK1bjKwwv5oAUZWBFqhmvJtz4a+VZctOVRhi3cKTVIFS15yeZVzFBflWdvqm0n6ol
-	 eui6yggsB16gN/rEUkFXjADmfRegKcb/stJo9//+6YHN+rgWXSg2PVB+1tVotEGsgk
-	 We9wt07vtJqQP5bzEXJxgNKPsLCIWcolduAntE9nfB4wHucvDkzXCdwYf54LAYnePL
-	 LL529EpOKFh7w==
+	b=hbm3PCKURyjrxxqDEaoglRrkRReaQXbEyn7ZZC93qijCwcSOz+oCBqYLcvxVLRgin
+	 w5ih7DGPR3kLAkafTj3uN6j6x0OKMeA/KCqfhRJUqFc2AC5G8S4C+byeniOTdfeaLW
+	 hl2ugqkiFNuZk2uNBRZjnxeRz9+nElCXK6mPwNhBRPbaVljkU4nybW6+Ic3SrEZS8J
+	 ReMDEAc50CUMWo10+pB0wS4FLuwpzIa4Qjhvt9WDbCj8ASFgbSPNOM/ZhwDZZssqAn
+	 jF6oMnBzMkaRNSGL1TbI+l4yXhD7RrraSYE7e8DjpghBiCO/PD1U12gmv8KfpY572e
+	 Wsphvxicux47A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8BFC81227;
-	Fri, 19 Dec 2025 22:43:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0AA141A6
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C15A740498;
+	Fri, 19 Dec 2025 22:43:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E826F119
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5C024006E
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF17283CC6
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iCB4XxqL9olG for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 22:43:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NOvISf_xjswK for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 22:43:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D360F4003A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D360F4003A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB273812CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB273812CA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D360F4003A
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BB273812CA
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:34 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a05d4.dip0.t-ipconnect.de [91.58.5.212])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 70B43A4C485F;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 98085A4C4864;
  Fri, 19 Dec 2025 23:41:51 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45868)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vWjAN-000000002VW-0o6I;
- Fri, 19 Dec 2025 22:41:42 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vWjAN-000000002VW-2Yx8;
+ Fri, 19 Dec 2025 22:41:43 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Andreas Ziegler <br025@umbiko.net>, Simon Dawson <spdawson@gmail.com>,
- Gilles Talis <gilles.talis@gmail.com>
-Date: Fri, 19 Dec 2025 23:41:25 +0100
-Message-ID: <20251219224140.1318253-6-bernd@kuhls.net>
+Cc: Andreas Ziegler <br025@umbiko.net>,
+	Simon Dawson <spdawson@gmail.com>
+Date: Fri, 19 Dec 2025 23:41:28 +0100
+Message-ID: <20251219224140.1318253-9-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219224140.1318253-1-bernd@kuhls.net>
 References: <20251219224140.1318253-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1766184111;
- bh=8rJ4Lp9lgtlNMBJ2oDuu3OjjNKjNbl6VgC0rJQqksbQ=;
+ bh=9OJlNGgE7v3XyulyhOeLj44uK2bOC4CNSGjTroDDIjo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=eoXKoGRit0GrAiKvgyLHBVOVB9xdnI8w1oDLxKL+sViQnFH1uF8M2pY3nF2cED7gq
- cSWU2dRZq9oOOfswqEDywt72eyg+reKiC6wGgqu/vN0Rr/1FMIpqNympKjesaF7e1P
- +IJ6BbNAICUToVC86bsG1yHrl4SQncxStencDG9ifMMrZbyvc8WsJtBrtpo2WJbeRX
- NulTJFegJ9PL0RmdxK2rA/YNUIIvWdKB1XOx190eTqBFhssrUEZ4yuhjfG3uMLYw8L
- UTx6txNGq2N2QCB5UpKPeQ0+3COd+LNUBhwwDWzvCdAw18uDubk8hZOKORDR8ZXq7O
- 2rcHOUmynFMFQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ro1QXq3LCv2aWVqZzjIOcew4wNvY6LnQ35nk8IJ0qbNhl64+h0NcaMpbIrtZ9j7ZY
+ 57GfzLYGGDOZcT3AFiAaHqu7tBIk6rh83lucx+8eRekJ8H68TG1dg0qATEnNbtmtIc
+ l+bTgkKIIbQhT7xwawAir8gy0+oLi2ABHQQprqzJ8hHQtIeAy2BWQJ10KPW3tjZ+k5
+ 2bfWy7posAiOZ907mWN1SVuJD3Sdk3E0CRR6oLCZytNYizq+BTVs+1Urge9g3MxxUR
+ 8swnHkP8vVNaaqWGr6qz3QreZY2MH5TzEoSGsfmhSC8yL3qFOWN4XbxQWfcCexWHID
+ IDCu7/pKfQGrw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=eoXKoGRi
-Subject: [Buildroot] [PATCH v5 05/20] package/hawktracer: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=ro1QXq3L
+Subject: [Buildroot] [PATCH v5 08/20] package/libiqrf: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,163 +100,208 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/amzn/hawktracer:
-last commit: Aug 2023
-last bug report: Nov 2023
-last pull request: Nov 2020
+Fails to build with cmake 4.
 
-The package is broken with cmake 4 and no other package depends on it.
+The package is a library without any reverse dependencies and no active
+development since 2013.
 
 Fixes:
-https://autobuild.buildroot.net/results/c86/c86d4b2127f09f57c83bbc81bfec847055b67ae7/
+https://autobuild.buildroot.net/results/cb5/cb50e158446e83249fc54e54e5a63ccf36e3be96/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Gilles Talis <gilles.talis@gmail.com>
 ---
- Config.in.legacy                   |  6 ++++
- DEVELOPERS                         |  1 -
- package/Config.in                  |  1 -
- package/hawktracer/Config.in       | 25 ----------------
- package/hawktracer/hawktracer.hash |  3 --
- package/hawktracer/hawktracer.mk   | 48 ------------------------------
- 6 files changed, 6 insertions(+), 78 deletions(-)
- delete mode 100644 package/hawktracer/Config.in
- delete mode 100644 package/hawktracer/hawktracer.hash
- delete mode 100644 package/hawktracer/hawktracer.mk
+ .checkpackageignore                           |  2 -
+ Config.in.legacy                              |  6 +++
+ package/Config.in                             |  1 -
+ ...tic-library-and-find-required-thread.patch | 45 -------------------
+ .../libiqrf/0002-use-only-c-language.patch    | 29 ------------
+ package/libiqrf/Config.in                     | 16 -------
+ package/libiqrf/libiqrf.hash                  |  3 --
+ package/libiqrf/libiqrf.mk                    | 14 ------
+ 8 files changed, 6 insertions(+), 110 deletions(-)
+ delete mode 100644 package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+ delete mode 100644 package/libiqrf/0002-use-only-c-language.patch
+ delete mode 100644 package/libiqrf/Config.in
+ delete mode 100644 package/libiqrf/libiqrf.hash
+ delete mode 100644 package/libiqrf/libiqrf.mk
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 660cf03b76..a264434311 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -550,8 +550,6 @@ package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
+ package/libgtk3/0001-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch lib_patch.Upstream
+ package/libhdhomerun/0001-dont-strip.patch lib_patch.Upstream
+ package/libiio/S99iiod Shellcheck lib_sysv.Variables
+-package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch lib_patch.Upstream
+-package/libiqrf/0002-use-only-c-language.patch lib_patch.Upstream
+ package/libjson/0001-fix-broken-makefile.patch lib_patch.Upstream
+ package/libks/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
+ package/liblinear/0001-build-static-lib.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index cc9fc22616..c00edd7495 100644
+index 99b3f00401..fb5fdca893 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_HAWKTRACER
-+	bool "hawktracer has been removed"
++config BR2_PACKAGE_LIBIQRF
++	bool "libiqrf has been removed"
 +	select BR2_LEGACY
 +	help
-+	  hawktracer is unmaintained and has been removed
++	  libiqrf is unmaintained and has been removed
 +
- config BR2_PACKAGE_CONNMAN_GTK
- 	bool "connman-gtk has been removed"
+ config BR2_PACKAGE_LIBCGI
+ 	bool "libcgi has been removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f2ff1a9c05..1de4c9467e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1258,7 +1258,6 @@ F:	package/cctz/
- F:	package/clpeak/
- F:	package/faad2/
- F:	package/fdk-aac/
--F:	package/hawktracer/
- F:	package/httping/
- F:	package/iozone/
- F:	package/leptonica/
 diff --git a/package/Config.in b/package/Config.in
-index 87c91e3439..85b7e02dcc 100644
+index a059e7c372..cf5c7860a5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1949,7 +1949,6 @@ endmenu
- 
- menu "Logging"
- 	source "package/glog/Config.in"
--	source "package/hawktracer/Config.in"
- 	source "package/liblog4c-localtime/Config.in"
- 	source "package/liblogging/Config.in"
- 	source "package/log4cplus/Config.in"
-diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
+@@ -1833,7 +1833,6 @@ menu "Hardware handling"
+ 	source "package/libgudev/Config.in"
+ 	source "package/libiio/Config.in"
+ 	source "package/libinput/Config.in"
+-	source "package/libiqrf/Config.in"
+ 	source "package/libllcp/Config.in"
+ 	source "package/libmbim/Config.in"
+ 	source "package/libnfc/Config.in"
+diff --git a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch b/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
 deleted file mode 100644
-index bee9c27b7d..0000000000
---- a/package/hawktracer/Config.in
+index 7f460c131e..0000000000
+--- a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
 +++ /dev/null
-@@ -1,25 +0,0 @@
--config BR2_PACKAGE_HAWKTRACER
--	bool "hawktracer"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
--	help
--	  HawkTracer is a highly portable, low-overhead, configurable
--	  profiling tool built in Amazon Video for getting performance
--	  metrics from low-end devices.
+@@ -1,45 +0,0 @@
+-From 46660112b76664473cc98b8ae6c863fd27c27d2d Mon Sep 17 00:00:00 2001
+-From: Samuel Martin <s.martin49@gmail.com>
+-Date: Fri, 29 Aug 2014 23:40:59 +0200
+-Subject: [PATCH] cmake: handle static library and find required thread
+- module
 -
--	  https://hawktracer.github.io/
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- CMakeLists.txt     | 2 ++
+- src/CMakeLists.txt | 4 +++-
+- 2 files changed, 5 insertions(+), 1 deletion(-)
 -
--if BR2_PACKAGE_HAWKTRACER
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 79f644c..7779a2a 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -6,7 +6,9 @@ enable_testing()
+- # use local module (for Findlibusb-1.0.cmake)
+- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+- 
+-+find_package(Threads REQUIRED)
+- find_package(libusb-1.0 REQUIRED)
+-+
+- if (NOT LIBUSB_1_FOUND)
+- 	message(FATAL_ERROR "libusb-1.0 not installed. (try apt-get install libusb-1.0-0-dev)")
+- endif (NOT LIBUSB_1_FOUND)
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 149d198..0597ccd 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -18,8 +18,10 @@ set (iqrf_sources
+- 
+- include_directories ("${LIBUSB_1_INCLUDE_DIRS}")
+- 
+--add_library(iqrf SHARED ${iqrf_sources} ${iqrf_headers})
+-+add_library(iqrf ${iqrf_sources} ${iqrf_headers})
+-+
+- target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES})
+-+target_link_libraries(iqrf ${CMAKE_THREAD_LIBS_INIT})
+- 
+- set_target_properties(iqrf PROPERTIES
+- 	VERSION "${iqrf_version_major}.${iqrf_version_minor}"
+--- 
+-2.1.0
 -
--config BR2_PACKAGE_HAWKTRACER_TCP_LISTENER
--	bool "TCP listener"
--	default y
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--
--comment "TCP listener needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--endif
--
--comment "hawktracer needs a toolchain w/ C++, gcc >= 4.8"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+diff --git a/package/libiqrf/0002-use-only-c-language.patch b/package/libiqrf/0002-use-only-c-language.patch
 deleted file mode 100644
-index 585b612c49..0000000000
---- a/package/hawktracer/hawktracer.hash
+index 2f1c23c28b..0000000000
+--- a/package/libiqrf/0002-use-only-c-language.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Use only the C language
+-
+-libirqf is written completely in C, but by default, CMake assumes that
+-both C and C++ are used, and therefore verifies that a C++ compiler is
+-installed. This may not necessarily be the case for a C-only package
+-in Buildroot.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/src/CMakeLists.txt
+-===================================================================
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -1,5 +1,3 @@
+--project(iqrf)
+--
+- set (iqrf_version_major 0)
+- set (iqrf_version_minor 1)
+- set (iqrf_version_patch 2)
+-Index: b/CMakeLists.txt
+-===================================================================
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,3 +1,5 @@
+-+project(iqrf C)
+-+
+- cmake_minimum_required(VERSION 2.8.1)
+- enable_testing()
+- 
+diff --git a/package/libiqrf/Config.in b/package/libiqrf/Config.in
+deleted file mode 100644
+index d86a7fd0ec..0000000000
+--- a/package/libiqrf/Config.in
++++ /dev/null
+@@ -1,16 +0,0 @@
+-config BR2_PACKAGE_LIBIQRF
+-	bool "libiqrf"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+-	select BR2_PACKAGE_LIBUSB
+-	help
+-	  This library implement specific protocol
+-	  which is used for communicating with iqrf devices
+-	  (http://iqrf.org) over usb. For usb access is used
+-	  libusb library.
+-
+-	  https://github.com/nandra/libiqrf
+-
+-comment "libiqrf needs a toolchain w/ threads, gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/libiqrf/libiqrf.hash b/package/libiqrf/libiqrf.hash
+deleted file mode 100644
+index df749def17..0000000000
+--- a/package/libiqrf/libiqrf.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Computed locally
--sha256  12a689a1cfb2ae25ad777b1b2275dbba5cd64905627b0a20d17d6e26de003cef  hawktracer-0.11.0.tar.gz
--sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
-diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+-# Locally calculated
+-sha256  8111031dd9dd6093a1927eb32dd7476fe22cfee9190043aa8e4c88003c104b16  libiqrf-0.1.2.tar.gz
+-sha256  11e0700d7c23604d86fa1e7c54c7caa778d79eeb0035be8f80b5a552224ef015  src/iqrf.c
+diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
 deleted file mode 100644
-index 8e722080f5..0000000000
---- a/package/hawktracer/hawktracer.mk
+index 3f4e3e8498..0000000000
+--- a/package/libiqrf/libiqrf.mk
 +++ /dev/null
-@@ -1,48 +0,0 @@
+@@ -1,14 +0,0 @@
 -################################################################################
 -#
--# hawktracer
+-# libiqrf
 -#
 -################################################################################
 -
--HAWKTRACER_VERSION = 0.11.0
--HAWKTRACER_SITE = $(call github,amzn,hawktracer,v$(HAWKTRACER_VERSION))
--HAWKTRACER_LICENSE = MIT
--HAWKTRACER_LICENSE_FILES = LICENSE
--HAWKTRACER_INSTALL_STAGING = YES
--
--HAWKTRACER_CONF_OPTS = \
--	-DENABLE_ASAN=OFF \
--	-DENABLE_TESTS=OFF \
--	-DENABLE_CODE_COVERAGE=OFF \
--	-DENABLE_BENCHMARKS=OFF \
--	-DENABLE_DOC=OFF \
--	-DENABLE_PYTHON_BINDINGS=OFF \
--	-DENABLE_MAINTAINER_MODE=OFF \
--	-DENABLE_RELEASE_MODE=OFF \
--	-DENABLE_CLIENT=OFF \
--	-DENABLE_EXAMPLES=OFF
--
--ifeq ($(BR2_STATIC_LIBS),y)
--HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=ON
--else
--HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_HAWKTRACER_TCP_LISTENER),y)
--HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=ON
--else
--HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=OFF
--endif
--
--# Enable threads support if supported by toolchain
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--HAWKTRACER_CONF_OPTS += \
--	-DENABLE_CPU_USAGE_FEATURE=ON \
--	-DENABLE_THREADS=ON
--else
--HAWKTRACER_CONF_OPTS += \
--	-DENABLE_CPU_USAGE_FEATURE=OFF \
--	-DENABLE_THREADS=OFF
--endif
+-LIBIQRF_VERSION = 0.1.2
+-LIBIQRF_SITE = $(call github,nandra,libiqrf,v$(LIBIQRF_VERSION))
+-LIBIQRF_INSTALL_STAGING = YES
+-LIBIQRF_DEPENDENCIES = libusb
+-LIBIQRF_LICENSE = LGPL-2.1+
+-LIBIQRF_LICENSE_FILES = src/iqrf.c
 -
 -$(eval $(cmake-package))
 -- 
