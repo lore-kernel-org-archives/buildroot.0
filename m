@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C90AAE668A2
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA754E668A0
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:44:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D2AD4055D;
-	Fri, 19 Dec 2025 22:44:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K_4GhPRwGNs6; Fri, 19 Dec 2025 22:44:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A51D640CF5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766184255;
-	bh=DHPFxxIxIsqAWnmrTwd/TSvBzemGCmAILu2XFyCJqJk=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=FaJSPhwYFI6MtrqOEVnHXfLZNL7rcTtBE5cWuU5tl6okYM45tRwFvOUCtg5x0O7Tf
-	 RQ91Z9LCpPFpeIkDkeYU/rnaJT9V6AYky38817v2gZQNMXWPRx2CekPGcPmOsIsv27
-	 GMI8shhenidbsQsYjK3GpNQfR5NS5BczcAsJ/hG0HN8Q2iFvJ2aavuZLf3x7aTmG/g
-	 UeL1Y3AXu8m+DPvNgKUajdFzax0al6pm7Rjzr9pbrzE1c+zEXJgXm/Hcn9q3o/UyDr
-	 5YaM/ZU9jASyJwHof3PBKi1ZcPmZ7UMd1bxAZM27+wyMxTRRtIH4apCrdqr3/g2O7F
-	 Tsb8dD0f3Ru1g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A51D640CF5;
-	Fri, 19 Dec 2025 22:44:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3731C1A6
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28C9581227
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90C9081341;
+	Fri, 19 Dec 2025 22:44:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dvnK1GX2aMqT for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 22:44:12 +0000 (UTC)
+ id 7MSLM7H0GMCE; Fri, 19 Dec 2025 22:44:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A10DE811F4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766184266;
+	bh=D349z0FMsoVmDWIMQzjOP7YxUGBWaP81m+EYyyfV44s=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=cmH90kMK7ec5AKh1QpxSF2GPtMg4qlCBrZguk5c+otzDzCi7QB0tnkgyS24JhQLZM
+	 m0xLlGL1EOJmNP8erawpNPDCyhpGom8DTt6HC8DUQoOPuhdBZml+m6JCN4NltjvZyc
+	 Z9sZ/yemJcym+PX5nXA4Io/TWDokvNOvK//IfpdTyJi0+hfLrTyS3tX8/1aJTLYLUf
+	 TGbdoMQZfZ+GZF4CFU0QwBnm81gk6BzKrgKLNMAqwKovPUjhVULER6HcS/JBqTR7EJ
+	 hV40p0NlfKdEsbr/KvQzZN3iKH2PKbP3D1Dp3k9YNLly0XRYV2L1xUIT4okD+RNvC+
+	 YLF4LNFoQ7omQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A10DE811F4;
+	Fri, 19 Dec 2025 22:44:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE081119
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B54EC4007F
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pxJd4SBddNZ3 for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 22:44:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 05525811F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05525811F4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A5A0E4003A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5A0E4003A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 05525811F4
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A5A0E4003A
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:24 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a05d4.dip0.t-ipconnect.de [91.58.5.212])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4099EA4C488A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 86CAFA4C489C;
  Fri, 19 Dec 2025 23:41:52 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45868)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vWjAO-000000002VW-0PDd;
+ (envelope-from <bernd@kuhls.net>) id 1vWjAO-000000002VW-2bC2;
  Fri, 19 Dec 2025 22:41:44 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Andreas Ziegler <br025@umbiko.net>, Simon Dawson <spdawson@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Fri, 19 Dec 2025 23:41:31 +0100
-Message-ID: <20251219224140.1318253-12-bernd@kuhls.net>
+ Jan Heylen <jan.heylen@nokia.com>
+Date: Fri, 19 Dec 2025 23:41:32 +0100
+Message-ID: <20251219224140.1318253-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219224140.1318253-1-bernd@kuhls.net>
 References: <20251219224140.1318253-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1766184112;
- bh=4L8Iq1pAqx6xe7ibokfu0717HeFwE1xWsWJbaz3xFew=;
+ bh=PK2/xCHrZketBW1JNEov13dRyCwz0YKt3SGrqLvTPIs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=rwBdZjiAFXjH3wn0st8FobBGjbk4iLNNwYIKX07mBbcMVB9Yeql1V8uHDDuMx3sQo
- f8nv0Oh1QWYRCFt6QEl3O1mpDxHbvb8QQ4ukl7S7RkYonKvPUFFmP/Da1BBH5CCrDo
- WrKPu8bZ7FSU/3AG6Fr8FPu07qci0nDjFqKhphI8FCPuRTEGkUTjc6Mnf85yGZ401X
- WSa6urQy6Vu2dwZIvePrGHUcJiAHLlJoobgh+DvhALRp3E1tlK+w+yUULTi9llk4W4
- X53tHN5C0KDMyooHOJJqLO62ApnJEtm0HOgxcuDdGdLVdNKf2JUxtpha8jeiDNNGpT
- oVkzQvfvnm8sA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=m6BYnm0KHJo6swga7qvjcWPbj5nKoSKvHRu+omd7a5b9Se1z2A2/IXDfR4y3Q2+Av
+ GOqaurCjZaOTeaak9yACmr5SM8Dz+qBo2+K/oeLe4uazKID0eHlnSj22bZwnOeidA1
+ hw1/+4nOzk4PPQ3a0LrOiONb0b2J9GsK53Snav/96Y94FZs1eh1ZnPewrXpI5cD9B2
+ 3r2S/hvPtPYJYz7QH0M5KbHbZ7w6RRqJaZQMbZutmwxTUmV5ZA4fXmy02AIRH1Dlv5
+ r6ce5zRvaOoEd2GW8Ucp+bA0Nc5NIW+vGOQ3MFAHYkplHCq16BT8X9VFsaN1EsWrZG
+ 4GvBbFv+R/u6g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=rwBdZjiA
-Subject: [Buildroot] [PATCH v5 11/20] package/openpowerlink: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=m6BYnm0K
+Subject: [Buildroot] [PATCH v5 12/20] package/opentracing-cpp: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,817 +100,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of
-https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2, linked
-as "Git (2.x)" from https://sourceforge.net/projects/openpowerlink/
-
-last commit: Jun 2021
-last bug report: Jun 2022
-last pull request: Sep 2022
+Quoting https://github.com/opentracing/opentracing-cpp
+"This library is DEPRECATED!"
+https://github.com/opentracing/specification/issues/163
+https://github.com/opentracing/opentracing.io/pull/460
 
 The package is broken with cmake 4 and no other package depends on it.
 
-The issue "Status of openPOWERLINK" from Jul 2025 is unanswered:
-https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/issues/390
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Jan Heylen <jan.heylen@nokia.com>
 ---
- .checkpackageignore                           |   3 -
- Config.in.legacy                              |   6 +
- DEVELOPERS                                    |   1 -
- package/Config.in                             |   1 -
- ...-stack-libraries-to-lib-subdirectory.patch | 167 ---------------
- ...002-cmake-install-oplk-headers-files.patch |  32 ---
- .../0003-Add-top-level-CMakeLists.txt.patch   | 201 ------------------
- package/openpowerlink/Config.in               | 129 -----------
- package/openpowerlink/openpowerlink.hash      |   6 -
- package/openpowerlink/openpowerlink.mk        | 153 -------------
- 10 files changed, 6 insertions(+), 693 deletions(-)
- delete mode 100644 package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
- delete mode 100644 package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
- delete mode 100644 package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
- delete mode 100644 package/openpowerlink/Config.in
- delete mode 100644 package/openpowerlink/openpowerlink.hash
- delete mode 100644 package/openpowerlink/openpowerlink.mk
+ Config.in.legacy                             |  6 +++++
+ DEVELOPERS                                   |  3 ---
+ package/Config.in                            |  1 -
+ package/opentracing-cpp/Config.in            | 18 -------------
+ package/opentracing-cpp/opentracing-cpp.hash |  3 ---
+ package/opentracing-cpp/opentracing-cpp.mk   | 28 --------------------
+ 6 files changed, 6 insertions(+), 53 deletions(-)
+ delete mode 100644 package/opentracing-cpp/Config.in
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a264434311..16f333a8d5 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -769,9 +769,6 @@ package/openocd/0001-configure-enable-build-on-uclinux.patch lib_patch.Upstream
- package/openpgm/0001-Rename-openpgm-5.2.pc.in.patch lib_patch.Upstream
- package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch lib_patch.Upstream
- package/openpgm/0003-fix-build-on-macOS-ARM.patch lib_patch.Upstream
--package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch lib_patch.Upstream
--package/openpowerlink/0002-cmake-install-oplk-headers-files.patch lib_patch.Upstream
--package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch lib_patch.Upstream
- package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch lib_patch.Upstream
- package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch lib_patch.Upstream
- package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 1f7ac7d4b8..02132484f2 100644
+index 02132484f2..1e54930405 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_OPENPOWERLINK
-+	bool "openpowerlink has been removed"
++config BR2_PACKAGE_OPENTRACING_CPP
++	bool "opentracing-cpp has been removed"
 +	select BR2_LEGACY
 +	help
-+	  openpowerlink is unmaintained and has been removed
++	  opentracing-cpp was deprecated upstream and has been removed
 +
- config BR2_PACKAGE_ALURE
- 	bool "alure has been removed"
+ config BR2_PACKAGE_OPENPOWERLINK
+ 	bool "openpowerlink has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b18c745bf..9420bd4336 100644
+index 9420bd4336..93ff7cea4c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2920,7 +2920,6 @@ F:	package/mesa3d/
- F:	package/minetest/
- F:	package/minetest-game/
- F:	package/ogre/
--F:	package/openpowerlink/
- F:	package/physfs/
- F:	package/piglit/
- F:	package/python-libevdev/
+@@ -1553,9 +1553,6 @@ N:	Jan Havran <havran.jan@email.cz>
+ F:	board/pine64/pinecube/
+ F:	configs/pine64_pinecube_defconfig
+ 
+-N:	Jan Heylen <jan.heylen@nokia.com>
+-F:	package/opentracing-cpp/
+-
+ N:	Jan Kraval <jan.kraval@gmail.com>
+ F:	board/orangepi/orangepi-lite
+ F:	configs/orangepi_lite_defconfig
 diff --git a/package/Config.in b/package/Config.in
-index 6d1b78cbfc..e51a23abf3 100644
+index e51a23abf3..4eaa6894e5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -569,7 +569,6 @@ endmenu
- 	source "package/openfpgaloader/Config.in"
- 	source "package/openipmi/Config.in"
- 	source "package/openocd/Config.in"
--	source "package/openpowerlink/Config.in"
- 	source "package/owl-linux/Config.in"
- 	source "package/parted/Config.in"
- 	source "package/pciutils/Config.in"
-diff --git a/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch b/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
+@@ -1951,7 +1951,6 @@ menu "Logging"
+ 	source "package/log4cpp/Config.in"
+ 	source "package/log4cxx/Config.in"
+ 	source "package/log4qt/Config.in"
+-	source "package/opentracing-cpp/Config.in"
+ 	source "package/spdlog/Config.in"
+ 	source "package/ulog/Config.in"
+ 	source "package/zlog/Config.in"
+diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
 deleted file mode 100644
-index 0e1c21ec0d..0000000000
---- a/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
+index ff3067b7d1..0000000000
+--- a/package/opentracing-cpp/Config.in
 +++ /dev/null
-@@ -1,167 +0,0 @@
--From 16230b7f51bff2bdf061fa80e9a49c807596bb92 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Wed, 25 May 2016 15:57:10 +0200
--Subject: [PATCH] install the stack libraries to "lib" subdirectory
--
--Using '.' to install the stack libraries is not correct since
--it will install them to /usr/.
--
--ls /usr/liboplkmnapp-kernelintf.so
--
--Fix this by using 'lib' instead of '.'
--
--The problem with the openpowerlink build system is that it expect
--the stack directory to be a "local staging" directory which
--contains headers and libraries. So the libraries build by the
--stack project are installed in stack/lib by default.
--
--This is wrong to do that because it becomes difficult to package
--openpowerlink for normal Linux systems.
--
--Buildroot like others build system expect from a packaged software
--to install libraries and headers build/provided in a staging
--directory.
--
--It seems that CMAKE_INSTALL_PREFIX is misused by the default value
--"${CMAKE_CURRENT_SOURCE_DIR}/lib/${SYSTEM_NAME_DIR}/${SYSTEM_PROCESSOR_DIR}"
--since it already contains the lib directory and therefore the
--entire build system is messed up.
--
--It seems that the openpowerlink's build system doesn't allow/support
--CMAKE_INSTALL_PREFIX to be set externally
--(which is the standard approach).
--
--The issue has been reported [1] upstream and a build system
--refactoring is needed to fix this properly.
--
--[1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/#8f80/a50a/4649/f07c
--
--[rebase on v2.5.0]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- stack/proj/linux/liboplkcn-sim/CMakeLists.txt           | 2 +-
-- stack/proj/linux/liboplkcn/CMakeLists.txt               | 2 +-
-- stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt | 2 +-
-- stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt   | 2 +-
-- stack/proj/linux/liboplkcndrv-pcap/CMakeLists.txt       | 2 +-
-- stack/proj/linux/liboplkmn-sim/CMakeLists.txt           | 2 +-
-- stack/proj/linux/liboplkmn/CMakeLists.txt               | 2 +-
-- stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt | 2 +-
-- stack/proj/linux/liboplkmnapp-kernelpcp/CMakeLists.txt  | 2 +-
-- stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt   | 2 +-
-- stack/proj/linux/liboplkmndrv-pcap/CMakeLists.txt       | 2 +-
-- 11 files changed, 11 insertions(+), 11 deletions(-)
--
--diff --git a/stack/proj/linux/liboplkcn-sim/CMakeLists.txt b/stack/proj/linux/liboplkcn-sim/CMakeLists.txt
--index 2b3da16..ddb3e92 100644
----- a/stack/proj/linux/liboplkcn-sim/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkcn-sim/CMakeLists.txt
--@@ -96,4 +96,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkcn/CMakeLists.txt b/stack/proj/linux/liboplkcn/CMakeLists.txt
--index 3be6c52..cf1b1dd 100644
----- a/stack/proj/linux/liboplkcn/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkcn/CMakeLists.txt
--@@ -90,4 +90,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt b/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt
--index 904de6c..d8713a8 100644
----- a/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt
--@@ -83,4 +83,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt b/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt
--index e2514cf..a4e2b75 100644
----- a/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt
--@@ -83,4 +83,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkcndrv-pcap/CMakeLists.txt b/stack/proj/linux/liboplkcndrv-pcap/CMakeLists.txt
--index 98f068c..bb20006 100644
----- a/stack/proj/linux/liboplkcndrv-pcap/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkcndrv-pcap/CMakeLists.txt
--@@ -76,4 +76,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkmn-sim/CMakeLists.txt b/stack/proj/linux/liboplkmn-sim/CMakeLists.txt
--index eb6396a..5beaa07 100644
----- a/stack/proj/linux/liboplkmn-sim/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkmn-sim/CMakeLists.txt
--@@ -91,4 +91,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkmn/CMakeLists.txt b/stack/proj/linux/liboplkmn/CMakeLists.txt
--index cf7927f..6b19557 100644
----- a/stack/proj/linux/liboplkmn/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkmn/CMakeLists.txt
--@@ -89,4 +89,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt b/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt
--index 9daa2df..bfccb25 100644
----- a/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt
--@@ -82,4 +82,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkmnapp-kernelpcp/CMakeLists.txt b/stack/proj/linux/liboplkmnapp-kernelpcp/CMakeLists.txt
--index 0135f46..83128eb 100644
----- a/stack/proj/linux/liboplkmnapp-kernelpcp/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkmnapp-kernelpcp/CMakeLists.txt
--@@ -91,4 +91,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt b/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt
--index cd97882..aaaa526 100644
----- a/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt
--@@ -82,4 +82,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
--diff --git a/stack/proj/linux/liboplkmndrv-pcap/CMakeLists.txt b/stack/proj/linux/liboplkmndrv-pcap/CMakeLists.txt
--index 0c29087..1783134 100644
----- a/stack/proj/linux/liboplkmndrv-pcap/CMakeLists.txt
--+++ b/stack/proj/linux/liboplkmndrv-pcap/CMakeLists.txt
--@@ -79,4 +79,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
-- TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-- SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
---INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
--+INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
---- 
--2.9.4
--
-diff --git a/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch b/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
-deleted file mode 100644
-index 8e815c0496..0000000000
---- a/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From f7679a4083de3a9dba80cd719ad4904fbade349b Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Wed, 25 May 2016 15:57:29 +0200
--Subject: [PATCH] cmake: install oplk headers files
--
--In order to be able to link a third party application
--with openpowerlink libraries, we need to install the
--oplk headers files related to openpowerlink stack.
--
--Install all headers file from STACK_INCLUDE_DIR/oplk.
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- stack/CMakeLists.txt | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/stack/CMakeLists.txt b/stack/CMakeLists.txt
--index 69454f2..45f131d 100644
----- a/stack/CMakeLists.txt
--+++ b/stack/CMakeLists.txt
--@@ -110,3 +110,8 @@ ELSEIF((CMAKE_SYSTEM_NAME STREQUAL "Generic") AND (CMAKE_SYSTEM_PROCESSOR STREQU
-- ELSE()
--     MESSAGE(FATAL_ERROR "Unknown Platform and processor combination ${CMAKE_SYSTEM_NAME} and ${CMAKE_SYSTEM_PROCESSOR}!!")
-- ENDIF()
--+
--+################################################################################
--+# Install oplk headers files
--+################################################################################
--+INSTALL(DIRECTORY ${STACK_INCLUDE_DIR}/oplk DESTINATION "include")
---- 
--2.9.4
--
-diff --git a/package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch b/package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
-deleted file mode 100644
-index cd8f9274d6..0000000000
---- a/package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
-+++ /dev/null
-@@ -1,201 +0,0 @@
--From cd0945a323cecb638ce56f2e3d7fb4e8c004b98b Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Wed, 25 May 2016 15:59:20 +0200
--Subject: [PATCH] Add top level CMakeLists.txt
--
--This CMakeLists.txt can be used to build openpowerlink
--using a automated build system.
--
--Don't use FIND_LIBRARY when the stack is built from a top
--level build (ie CFG_OPLK_LIB is ON).
--For a top level build, CMake will automatically add a build
--dependency on oplk libraries for building demos applications.
--
--Also replace OPLKLIB_DEBUG by OPLKLIB in OPLK_LINK_LIBRARIES macro
--if CMAKE_BUILD_TYPE is "Debug", otherwise TARGET_LINK_LIBRARIES can't
--find the openpowerlink library.
--This issue may be related to:
--https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/issues/109
--
--Fixes:
--http://autobuild.buildroot.net/results/da4/da445b65cb136d71577f04e3a17fdb2ef6302a9b
--
--This patch has not been accepted by upstream:
--https://github.com/openPOWERLINK/openPOWERLINK_V2/pull/57
--
--Add PCIe support (v2.3.2)
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- CMakeLists.txt                               | 42 +++++++++++++++++
-- apps/common/cmake/findoplklib.cmake          | 68 +++++++++++++++-------------
-- apps/common/cmake/linkoplklib.cmake          |  2 +-
-- drivers/linux/drv_daemon_pcap/CMakeLists.txt | 12 +++--
-- 4 files changed, 89 insertions(+), 35 deletions(-)
-- create mode 100644 CMakeLists.txt
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--new file mode 100644
--index 0000000..28d4e7a
----- /dev/null
--+++ b/CMakeLists.txt
--@@ -0,0 +1,42 @@
--+
--+CMAKE_MINIMUM_REQUIRED (VERSION 2.8.7)
--+
--+#### LIB ####
--+
--+IF (CFG_OPLK_LIB)
--+    ADD_SUBDIRECTORY("stack")
--+ENDIF (CFG_OPLK_LIB)
--+
--+#### Linux kernel Ethernet module  ####
--+
--+IF (CFG_KERNEL_DRIVERS)
--+    ADD_SUBDIRECTORY("drivers/linux/drv_kernelmod_edrv")
--+ENDIF (CFG_KERNEL_DRIVERS)
--+
--+#### Linux kernel PCIe module  ####
--+
--+IF (CFG_KERNEL_PCIE_DRIVERS)
--+    ADD_SUBDIRECTORY("drivers/linux/drv_kernelmod_pcie")
--+ENDIF (CFG_KERNEL_PCIE_DRIVERS)
--+
--+#### Pcap userspace driver  ####
--+
--+IF (CFG_PCAP_DAEMON)
--+    ADD_SUBDIRECTORY("drivers/linux/drv_daemon_pcap")
--+ENDIF (CFG_PCAP_DAEMON)
--+
--+#### OpenPowerLink Demos  ####
--+
--+# Add subdirectory of CN console demo application
--+IF (CFG_DEMO_CN_CONSOLE)
--+    ADD_SUBDIRECTORY("apps/demo_cn_console")
--+ENDIF (CFG_DEMO_CN_CONSOLE)
--+
--+# Add subdirectory of MN console demo application
--+IF (CFG_DEMO_MN_CONSOLE)
--+    ADD_SUBDIRECTORY("apps/demo_mn_console")
--+ENDIF (CFG_DEMO_MN_CONSOLE)
--+
--+IF (CFG_DEMO_MN_QT)
--+    ADD_SUBDIRECTORY("apps/demo_mn_qt")
--+ENDIF (CFG_DEMO_MN_QT)
--diff --git a/apps/common/cmake/findoplklib.cmake b/apps/common/cmake/findoplklib.cmake
--index f7e710f..b8b04c5 100644
----- a/apps/common/cmake/findoplklib.cmake
--+++ b/apps/common/cmake/findoplklib.cmake
--@@ -85,36 +85,42 @@ MACRO(FIND_OPLK_LIBRARY OPLK_NODE_TYPE)
--     # Set oplk library directory
--     SET(OPLKLIB_DIR ${OPLK_BASE_DIR}/stack/lib/${SYSTEM_NAME_DIR}/${SYSTEM_PROCESSOR_DIR})
-- 
---    IF((CMAKE_GENERATOR MATCHES "Visual Studio") OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
---        # Search for release library
---        UNSET(OPLKLIB CACHE)
---        MESSAGE(STATUS "Searching for LIBRARY ${OPLKLIB_NAME} in ${OPLKLIB_DIR}")
---        FIND_LIBRARY(OPLKLIB NAME ${OPLKLIB_NAME}
---                             HINTS ${OPLKLIB_DIR} ${OPLKLIB_DIR}/${CFG_DEMO_BOARD_NAME}/${CFG_DEMO_NAME})
---
---        IF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
---
---            UNSET(OPLKDLL CACHE)
---            FIND_PROGRAM(OPLKDLL NAME ${OPLKLIB_NAME}.dll
---                                 HINTS ${OPLKLIB_DIR})
---
---        ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
---    ENDIF()
---
---    IF((CMAKE_GENERATOR MATCHES "Visual Studio") OR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
---        # Search for debug library
---        UNSET(OPLKLIB_DEBUG CACHE)
---        MESSAGE(STATUS "Searching for LIBRARY ${OPLKLIB_DEBUG_NAME} in ${OPLKLIB_DIR}")
---        FIND_LIBRARY(OPLKLIB_DEBUG NAME ${OPLKLIB_DEBUG_NAME}
---                                   HINTS ${OPLKLIB_DIR} ${OPLKLIB_DIR}/${CFG_DEMO_BOARD_NAME}/${CFG_DEMO_NAME})
---
---        IF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
---
---            UNSET(OPLKDLL_DEBUG CACHE)
---            FIND_PROGRAM(OPLKDLL_DEBUG NAME ${OPLKLIB_DEBUG_NAME}.dll
---                                       HINTS ${OPLKLIB_DIR})
---
---        ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
---    ENDIF()
--+    # Don't look for oplk libraries for a top level build
--+    IF(CFG_OPLK_LIB)
--+        SET(OPLKLIB ${OPLKLIB_NAME})
--+        SET(OPLKLIB_DEBUG ${OPLKLIB_DEBUG_NAME})
--+    ELSE(CFG_OPLK_LIB)
--+        IF((CMAKE_GENERATOR MATCHES "Visual Studio") OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
--+            # Search for release library
--+            UNSET(OPLKLIB CACHE)
--+            MESSAGE(STATUS "Searching for LIBRARY ${OPLKLIB_NAME} in ${OPLKLIB_DIR}")
--+            FIND_LIBRARY(OPLKLIB NAME ${OPLKLIB_NAME}
--+                                HINTS ${OPLKLIB_DIR} ${OPLKLIB_DIR}/${CFG_DEMO_BOARD_NAME}/${CFG_DEMO_NAME})
--+
--+            IF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
--+
--+                UNSET(OPLKDLL CACHE)
--+                FIND_PROGRAM(OPLKDLL NAME ${OPLKLIB_NAME}.dll
--+                                    HINTS ${OPLKLIB_DIR})
--+
--+            ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
--+        ENDIF()
--+
--+        IF((CMAKE_GENERATOR MATCHES "Visual Studio") OR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
--+            # Search for debug library
--+            UNSET(OPLKLIB_DEBUG CACHE)
--+            MESSAGE(STATUS "Searching for LIBRARY ${OPLKLIB_DEBUG_NAME} in ${OPLKLIB_DIR}")
--+            FIND_LIBRARY(OPLKLIB_DEBUG NAME ${OPLKLIB_DEBUG_NAME}
--+                                    HINTS ${OPLKLIB_DIR} ${OPLKLIB_DIR}/${CFG_DEMO_BOARD_NAME}/${CFG_DEMO_NAME})
--+
--+            IF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
--+
--+                UNSET(OPLKDLL_DEBUG CACHE)
--+                FIND_PROGRAM(OPLKDLL_DEBUG NAME ${OPLKLIB_DEBUG_NAME}.dll
--+                                        HINTS ${OPLKLIB_DIR})
--+
--+            ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Windows")
--+        ENDIF()
--+    ENDIF(CFG_OPLK_LIB)
-- 
-- ENDMACRO(FIND_OPLK_LIBRARY)
--diff --git a/apps/common/cmake/linkoplklib.cmake b/apps/common/cmake/linkoplklib.cmake
--index 49aab66..d9fd418 100644
----- a/apps/common/cmake/linkoplklib.cmake
--+++ b/apps/common/cmake/linkoplklib.cmake
--@@ -33,7 +33,7 @@ MACRO(OPLK_LINK_LIBRARIES EXECUTABLE_NAME)
--         TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} optimized ${OPLKLIB} debug ${OPLKLIB_DEBUG})
--     ELSE()
--         IF(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
---            TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} debug ${OPLKLIB_DEBUG})
--+            TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} debug ${OPLKLIB})
--         ELSE ()
--             TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} optimized ${OPLKLIB})
--         ENDIF()
--diff --git a/drivers/linux/drv_daemon_pcap/CMakeLists.txt b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
--index 2b4a2c1..ecceb4c 100644
----- a/drivers/linux/drv_daemon_pcap/CMakeLists.txt
--+++ b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
--@@ -109,9 +109,15 @@ ENDIF()
-- SET(OPLKLIB_DIR ${OPLK_BASE_DIR}/stack/lib/${SYSTEM_NAME_DIR}/${SYSTEM_PROCESSOR_DIR})
-- SET(OPLKLIB_INCDIR ${OPLK_BASE_DIR}/stack/proj/${SYSTEM_NAME_DIR}/lib${LIB_NAME})
-- 
---UNSET(OPLKLIB CACHE)
---FIND_LIBRARY(OPLKLIB NAME ${LIB_NAME}${BUILD_TYPE_EXT}
---                     HINTS ${OPLKLIB_DIR})
--+# Don't look for oplk libraries for a top level build
--+IF(CFG_OPLK_LIB)
--+    SET(OPLKLIB ${LIB_NAME}${BUILD_TYPE_EXT})
--+ELSE(CFG_OPLK_LIB)
--+    UNSET(OPLKLIB CACHE)
--+    FIND_LIBRARY(OPLKLIB NAME ${LIB_NAME}${BUILD_TYPE_EXT}
--+                        HINTS ${OPLKLIB_DIR})
--+ENDIF(CFG_OPLK_LIB)
--+
-- INCLUDE_DIRECTORIES(${OPLKLIB_INCDIR})
-- 
-- SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c99 -pthread -fno-strict-aliasing")
---- 
--2.9.4
--
-diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-deleted file mode 100644
-index ef59a04baf..0000000000
---- a/package/openpowerlink/Config.in
-+++ /dev/null
-@@ -1,129 +0,0 @@
--comment "openpowerlink needs a toolchain w/ C++, threads"
--	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
--config BR2_PACKAGE_OPENPOWERLINK
--	bool "openpowerlink"
+@@ -1,18 +0,0 @@
+-config BR2_PACKAGE_OPENTRACING_CPP
+-	bool "opentracing-cpp"
 -	depends on BR2_INSTALL_LIBSTDCPP
 -	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
 -	help
--	  openPOWERLINK is an Open Source Industrial Ethernet stack
--	  implementing the POWERLINK protocol for Managing Node (MN,
--	  POWERLINK Master) and Controlled Node (CN, POWERLINK Slave).
+-	  OpenTracing API for C++
 -
--	  It is provided by
--	  SYSTEC electronic (http://www.systec-electronic.com),
--	  B&R (http://www.br-automation.com) and
--	  Kalycito (http://www.kalycito.com).
+-	  http://opentracing.io
 -
--	  http://openpowerlink.sourceforge.net/web/
+-comment "opentracing-cpp needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 -
--if BR2_PACKAGE_OPENPOWERLINK
--
--choice
--	prompt "MN/CN mode"
--
--config BR2_PACKAGE_OPENPOWERLINK_MN
--	bool "Managing Node"
--	help
--	  Enable Managing Node (master) mode
--
--config BR2_PACKAGE_OPENPOWERLINK_CN
--	bool "Controlled Node"
--	help
--	  Enable Controlled Node (slave) mode
--
--endchoice
--
--choice
--	prompt "stack type"
--	default BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB if BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE # legacy
--	default BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB if BR2_PACKAGE_OPENPOWERLINK_LIBPCAP # legacy
--
--config BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB
--	bool "linked into application"
--	select BR2_PACKAGE_LIBPCAP
--	help
--	  Compile a monolithic openPOWERLINK library. The library
--	  contains an Ethernet driver which is using the PCAP library
--	  for accessing the network. No kernel-side driver is needed.
--
--config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
--	bool "user-space pcap daemon"
--	select BR2_PACKAGE_LIBPCAP
--	help
--	  Compile openPOWERLINK application library which contains the
--	  interface to a Linux user space driver, and the Linux user
--	  space driver. It is used for implementing a multi-process
--	  solution where the openPOWERLINK layer is running as a
--	  separate Linux user space daemon (i.e. a PCAP based user
--	  space daemon).  No kernel-side stack is needed.
--
--config BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
--	bool "kernel-space driver"
--	depends on BR2_LINUX_KERNEL
--	help
--	  Compile openPOWERLINK application library which contains the
--	  interface to a Linux kernel space driver. This will also
--	  build and install a Linux kernel module openPOWERLINK
--	  driver.
--
--config BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
--	bool "kernel-space PCIe driver"
--	depends on BR2_LINUX_KERNEL
--	depends on BR2_PACKAGE_OPENPOWERLINK_MN # MN support only
--	help
--	  Compile openPOWERLINK application library which contains the
--	  interface to a Linux kernel PCIe interface driver. The kernel
--	  part of the openPOWERLINK stack is located on an external PCIe
--	  device. The status/control and data exchange between the
--	  application and kernel stack is handled by the PCIe interface
--	  driver.
--
--comment "openpowerlink kernel stack needs a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL
--
--endchoice
--
--if BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
--
--menu "Ethernet drivers"
--
--config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_82573
--	bool "Intel 82573"
--	default y
--
--config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_8255x
--	bool "Intel 8255x"
--
--config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_I210
--	bool "Intel I210"
--
--config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_RTL8111
--	bool "Realtek RTL-8111/8168"
--
--config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_RTL8139
--	bool "Realtek RTL-8139"
--
--endmenu
--
--endif # BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
--
--config BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER
--	bool "PCIe Powerlink Driver"
--	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
--
--menu "demos"
--
--config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE
--	bool "console MN demo"
--	depends on BR2_PACKAGE_OPENPOWERLINK_MN
--
--config BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE
--	bool "console CN demo"
--	depends on BR2_PACKAGE_OPENPOWERLINK_CN
--
--endmenu
--
--endif # BR2_PACKAGE_OPENPOWERLINK
-diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+-comment "opentracing-cpp needs exception_ptr"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
 deleted file mode 100644
-index b6ae8edcd8..0000000000
---- a/package/openpowerlink/openpowerlink.hash
+index 8cfaf5fd47..0000000000
+--- a/package/opentracing-cpp/opentracing-cpp.hash
 +++ /dev/null
-@@ -1,6 +0,0 @@
--# From https://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.2/
--md5  80a64b0a2c2dec1e7aff22a06000b3d6  openPOWERLINK_V2.7.2.tar.gz
--sha1  09dcb5bd7cb9d59cb9e60230ae09c558996be25b  openPOWERLINK_V2.7.2.tar.gz
--# sha256 locally computed
--sha256  2cc660e0f8a939bd65c9f46176d18882dbe1017cbb2567b414a8a7c9af41a356  openPOWERLINK_V2.7.2.tar.gz
--sha256  348e31e9e5094104463d58d33abd31049fdf209afbc12ea7abb7fd4b4a147429  license.md
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  5b170042da4d1c4c231df6594da120875429d5231e9baa5179822ee8d1054ac3  opentracing-cpp-1.6.0.tar.gz
+-sha256  076d03156735d5ff2df2ea0f8b12351ef65e5e9222b5c8c6a35101dadb41e717  LICENSE
+diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
 deleted file mode 100644
-index c8dbb66d05..0000000000
---- a/package/openpowerlink/openpowerlink.mk
+index 12ce40fbed..0000000000
+--- a/package/opentracing-cpp/opentracing-cpp.mk
 +++ /dev/null
-@@ -1,153 +0,0 @@
+@@ -1,28 +0,0 @@
 -################################################################################
 -#
--# openpowerlink
+-# opentracing-cpp
 -#
 -################################################################################
 -
--OPENPOWERLINK_VERSION = 2.7.2
--OPENPOWERLINK_SITE = https://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V$(OPENPOWERLINK_VERSION)
--OPENPOWERLINK_SOURCE = openPOWERLINK_V$(OPENPOWERLINK_VERSION).tar.gz
--OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
--OPENPOWERLINK_LICENSE_FILES = license.md
+-OPENTRACING_CPP_VERSION = 1.6.0
+-OPENTRACING_CPP_SITE = \
+-	$(call github,opentracing,opentracing-cpp,v$(OPENTRACING_CPP_VERSION))
+-OPENTRACING_CPP_LICENSE = Apache-2.0
+-OPENTRACING_CPP_LICENSE_FILES = LICENSE
 -
--OPENPOWERLINK_INSTALL_STAGING = YES
+-OPENTRACING_CPP_INSTALL_STAGING = YES
 -
--# The archive has no leading component.
--OPENPOWERLINK_STRIP_COMPONENTS = 0
--
--OPENPOWERLINK_MN_ONOFF = $(if $(BR2_PACKAGE_OPENPOWERLINK_MN),ON,OFF)
--OPENPOWERLINK_CN_ONOFF = $(if $(BR2_PACKAGE_OPENPOWERLINK_CN),ON,OFF)
--
--#### OPLK LIBRARY ####
--
--# Always build a oplk stack
--# Disable library with simulation interface
--# Disable zynq/FPGA (PCIe) interface
--OPENPOWERLINK_CONF_OPTS += -DCFG_OPLK_LIB=ON \
--	-DCFG_COMPILE_LIB_MN_SIM=OFF \
--	-DCFG_COMPILE_LIB_CN_SIM=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_ZYNQINTF=OFF
--
--# All option are ON by default
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB),y)
--OPENPOWERLINK_DEPENDENCIES += libpcap
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_COMPILE_LIB_MN=$(OPENPOWERLINK_MN_ONOFF) \
--	-DCFG_COMPILE_LIB_MNAPP_USERINTF=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=OFF \
--	-DCFG_COMPILE_LIB_MNDRV_PCAP=OFF \
--	-DCFG_COMPILE_LIB_CN=$(OPENPOWERLINK_CN_ONOFF) \
--	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
--	-DCFG_COMPILE_LIB_CNAPP_KERNELINTF=OFF \
--	-DCFG_COMPILE_LIB_CNDRV_PCAP=OFF \
--	-DPCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config"
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB),y)
--OPENPOWERLINK_DEPENDENCIES += libpcap
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_COMPILE_LIB_MN=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_USERINTF=$(OPENPOWERLINK_MN_ONOFF) \
--	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=OFF \
--	-DCFG_COMPILE_LIB_MNDRV_PCAP=$(OPENPOWERLINK_MN_ONOFF) \
--	-DCFG_COMPILE_LIB_CN=OFF \
--	-DCFG_COMPILE_LIB_CNAPP_USERINTF=$(OPENPOWERLINK_CN_ONOFF) \
--	-DCFG_COMPILE_LIB_CNAPP_KERNELINTF=OFF \
--	-DCFG_COMPILE_LIB_CNDRV_PCAP=$(OPENPOWERLINK_CN_ONOFF) \
--	-DPCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config"
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_COMPILE_LIB_MN=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_USERINTF=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=$(OPENPOWERLINK_MN_ONOFF) \
--	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=OFF \
--	-DCFG_COMPILE_LIB_MNDRV_PCAP=OFF \
--	-DCFG_COMPILE_LIB_CN=OFF \
--	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
--	-DCFG_COMPILE_LIB_CNAPP_KERNELINTF=$(OPENPOWERLINK_CN_ONOFF) \
--	-DCFG_COMPILE_LIB_CNDRV_PCAP=OFF
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_COMPILE_LIB_MN=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_USERINTF=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=OFF \
--	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=$(OPENPOWERLINK_MN_ONOFF) \
--	-DCFG_COMPILE_LIB_MNDRV_PCAP=OFF \
--	-DCFG_COMPILE_LIB_CN=OFF \
--	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
--	-DCFG_COMPILE_LIB_CNAPP_KERNELINTF=OFF \
--	-DCFG_COMPILE_LIB_CNDRV_PCAP=OFF
+-# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+-# although BUILD_STATIC_LIBS=ON is default, make it explicit,
+-# cmake and static/shared libs is confusing enough already.
+-ifeq ($(BR2_STATIC_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
 -endif
 -
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_COMPILE_SHARED_LIBRARY=$(if $(BR2_STATIC_LIBS),OFF,ON)
--
--#### OPLK KERNEL DRIVERS ####
--
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB)$(BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER),y)
--OPENPOWERLINK_DEPENDENCIES += linux
--
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_KERNEL_DIR="$(LINUX_DIR)" \
--	-DCMAKE_SYSTEM_VERSION="$(LINUX_VERSION)" \
--	-DCFG_OPLK_MN="$(OPENPOWERLINK_MN_ONOFF)" \
--	-DMAKE_KERNEL_ARCH="$(KERNEL_ARCH)" \
--	-DMAKE_KERNEL_CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
--endif
--
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB),y)
--OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_DRIVERS=ON \
--	-DCFG_POWERLINK_EDRV_82573=$(if $(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_82573),ON,OFF) \
--	-DCFG_POWERLINK_EDRV_8255X=$(if $(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_8255x),ON,OFF) \
--	-DCFG_POWERLINK_EDRV_I210=$(if $(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_I210),ON,OFF) \
--	-DCFG_POWERLINK_EDRV_8111=$(if $(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_RTL8111),ON,OFF) \
--	-DCFG_POWERLINK_EDRV_8139=$(if $(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_RTL8139),ON,OFF)
--else
--OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_DRIVERS=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER),y)
--OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_PCIE_DRIVERS=ON
--else
--OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_PCIE_DRIVERS=OFF
--endif
--
--#### OPLK PCAP DAEMON ####
--
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_PCAP_DAEMON=ON \
--	-DCFG_OPLK_MN=$(OPENPOWERLINK_MN_ONOFF)
--endif
--
--#### OPLK DEMO APPS ####
--
--# See apps/common/cmake/configure-linux.cmake for available options list.
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_BUILD_KERNEL_STACK="Link to Application"
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_BUILD_KERNEL_STACK="Linux Userspace Daemon"
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_BUILD_KERNEL_STACK="Linux Kernel Module"
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB),y)
--OPENPOWERLINK_CONF_OPTS += \
--	-DCFG_BUILD_KERNEL_STACK="Kernel stack on PCIe card"
--endif
--
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE),y)
--OPENPOWERLINK_CONF_OPTS += -DCFG_DEMO_MN_CONSOLE=ON \
--	-DCFG_DEMO_MN_CONSOLE_USE_SYNCTHREAD=ON
--else
--OPENPOWERLINK_CONF_OPTS += -DCFG_DEMO_MN_CONSOLE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE),y)
--OPENPOWERLINK_CONF_OPTS += -DCFG_DEMO_CN_CONSOLE=ON
--else
--OPENPOWERLINK_CONF_OPTS += -DCFG_DEMO_CN_CONSOLE=OFF
--endif
+-OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
 -
 -$(eval $(cmake-package))
 -- 
