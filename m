@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C001DD7879F
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 17:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59157D7879F
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 17:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 954CE612E3;
-	Fri, 19 Dec 2025 17:53:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 311A883B76;
+	Fri, 19 Dec 2025 17:54:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fi5ToR6JLrol; Fri, 19 Dec 2025 17:53:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m5mwrvWT1haV; Fri, 19 Dec 2025 17:54:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8AB0612BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB3F483B77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766166833;
-	bh=tzr0tB4js9KuQHm2zmI4zHAlND+K4T0NkPJ8XF2ZiMM=;
+	s=default; t=1766166844;
+	bh=5joOPmo0oE9sDxW9gikL9CGNVskFME6YhskQqoDsnu8=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=r57FZ8Sx1ZGnEj3XuWxEf/2X4kXB3p57XYOAs/hKqnUDuSdjQOmC+V63zq3vcFImR
-	 PRXCS3MeiGAuDderAkBty2Jtj2j9AA+AL/wUXtgndepX+jlQ1d6oTqZRyHX7AQk2hX
-	 iCtMHq6h5bF1MFaUHuvREA5hfkm6Vle9sWUqJYdXgvUGyPUwz+55TcKci7GZlqctJs
-	 /+Sg7bSFk3Q/jMYUB4sFCJsVhF9d7D2NslrAw2CoeUUMhWU7tMldtk7FhqWbwiEmst
-	 M9kGeou/5NpQTTkYr8M+k0kFmvjvzbRkHxag4NLDFfUo5GaRuQ09xodAnSSjH3mjYD
-	 3rruCYUm4DjCg==
+	b=bVkLA746d5AJnEeCP2Mx+dH2DVhm38ynzSttxNqF/c/jdrjpTRFqnrM9qbcCOSOj2
+	 fubl6NCLL4TUp4wHxfhFqVoVcUISwS9Jp8sQ6NT51TPluZgDpAL01F6WsG2qCNzq5s
+	 qijo8mHUNCQCz09Cvm6NWI86frgMib9wsv/FtiNvLp5eR3OFUFvZFeY7SCZ6lN5G31
+	 vsEkuW7wa0A/t4BHzHoWwq799a0WJedXZA7/8+CULMazU1P/qSVT9nzV6yVrMNwsGO
+	 0XQ9tcbNUo7WO0oOApUhtg9yyrrFgARX1QSVPRCWIy2PkcqU1s5+6Hw1b8BPdlDwtw
+	 wMXIMDrjv11Ag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8AB0612BD;
-	Fri, 19 Dec 2025 17:53:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1670B119
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:53:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB3F483B77;
+	Fri, 19 Dec 2025 17:54:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F237C293
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F07E0612CA
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:53:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7EA383B77
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HagIcyFF4_sj for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 17:53:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JJqUBAFpA4Dy for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 17:54:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 61E4C612BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61E4C612BB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4C9A583B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C9A583B76
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 61E4C612BB
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:53:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4C9A583B76
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:01 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a05d4.dip0.t-ipconnect.de [91.58.5.212])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D058CA4C4AF5;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EEAC5A4C4B05;
  Fri, 19 Dec 2025 18:52:01 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:38748)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vWedp-000000002KQ-1C2g;
+ (envelope-from <bernd@kuhls.net>) id 1vWedp-000000002KQ-1sQG;
  Fri, 19 Dec 2025 17:51:49 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Andreas Ziegler <br025@umbiko.net>,
-	Simon Dawson <spdawson@gmail.com>
-Date: Fri, 19 Dec 2025 18:51:27 +0100
-Message-ID: <20251219175141.1907408-9-bernd@kuhls.net>
+Cc: Andreas Ziegler <br025@umbiko.net>, Simon Dawson <spdawson@gmail.com>,
+ Jianhui Zhao <zhaojh329@gmail.com>
+Date: Fri, 19 Dec 2025 18:51:28 +0100
+Message-ID: <20251219175141.1907408-10-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219175141.1907408-1-bernd@kuhls.net>
 References: <20251219175141.1907408-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1766166721;
- bh=9OJlNGgE7v3XyulyhOeLj44uK2bOC4CNSGjTroDDIjo=;
+ s=kas202511301023; t=1766166722;
+ bh=mofQpHctwYxbtDZXBf1aDEHGaDtoIANwIMlzLfb3I/0=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=rm7rM6cYKCFFnm8njhzZiK7oge5wAKqd59/2CZAdGFBPydHfCX2kw5ocoBpd/n0vI
- Ijzv593OQhTPNxAcCSx9iZEWX2LimksodL3a5+BDYoJqwugp6DtBR+biOVoh+qjJrl
- 8tAZhkKzT/KHG8Ycy6C9SLJOrtfjNpdbllRbK2ezkcu+Gy9uQKvBF9UTerCkO513hY
- qC5j3Cd6qW6+hJ6qD4/rHnyYEzdPOIGttbr36d1eIeeJKR01+SvmLtTtARahE2zK2x
- C+Am8LEcVDrj7nrlPjFzeb1W5LaZ9ASu2mdu1SerquVhNxDeOdGs6xJZ5evIKCMuKg
- AU+EWw6+cEePg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=J98IFN1GE2nfHcmTEssRPDVsP6JpGvps45GvdxbNSLm3At1mrB63j0Pe2pmS1vQsu
+ UvKcJrV97riPowuO0cQJ32dIc/jCcpFcxmQKCVQkkPwY1+3XBUf4VtNhonWAE0kMH5
+ YOfdcz9/BYMcBLcizsEEx6l6cmrpioWmrGOP/aYxXMA9Ahpns1I8oHlWBRkIRdLKYC
+ jNBDZgpVjdHc3DG2nsr0VofpF6jp7bM3oQgLphG7iiByTw2L0zTMfaIGQvJJoXhclf
+ zZGFcuNBJgW5aw2JjYp4B/L2EiKUBmk1AgXXWEQOdWaVJCaFbZRaZOmfs6o8pw0oUL
+ 32hRxlqpsSUlw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=rm7rM6cY
-Subject: [Buildroot] [PATCH v4 08/20] package/libiqrf: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=J98IFN1G
+Subject: [Buildroot] [PATCH v4 09/20] package/libuwsc: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,205 +103,267 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Fails to build with cmake 4.
 
 The package is a library without any reverse dependencies and no active
-development since 2013.
+development since 2021.
 
 Fixes:
-https://autobuild.buildroot.net/results/cb5/cb50e158446e83249fc54e54e5a63ccf36e3be96/
+https://autobuild.buildroot.net/results/f6b/f6b0c136703e0cf38c052e6a6a3ef91cdcb797a0/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: Jianhui Zhao <zhaojh329@gmail.com>
 ---
- .checkpackageignore                           |  2 -
  Config.in.legacy                              |  6 +++
+ DEVELOPERS                                    |  1 -
  package/Config.in                             |  1 -
- ...tic-library-and-find-required-thread.patch | 45 -------------------
- .../libiqrf/0002-use-only-c-language.patch    | 29 ------------
- package/libiqrf/Config.in                     | 16 -------
- package/libiqrf/libiqrf.hash                  |  3 --
- package/libiqrf/libiqrf.mk                    | 14 ------
- 8 files changed, 6 insertions(+), 110 deletions(-)
- delete mode 100644 package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
- delete mode 100644 package/libiqrf/0002-use-only-c-language.patch
- delete mode 100644 package/libiqrf/Config.in
- delete mode 100644 package/libiqrf/libiqrf.hash
- delete mode 100644 package/libiqrf/libiqrf.mk
+ ...001-CMakeLists.txt-add-BUILD_EXAMPLE.patch | 34 ------------
+ .../libuwsc/0002-fix-bad-indentation.patch    | 26 ---------
+ .../0003-src-ssl.c-fix-wolfssl-build.patch    | 37 -------------
+ package/libuwsc/Config.in                     |  8 ---
+ package/libuwsc/libuwsc.hash                  |  3 --
+ package/libuwsc/libuwsc.mk                    | 53 -------------------
+ 9 files changed, 6 insertions(+), 163 deletions(-)
+ delete mode 100644 package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+ delete mode 100644 package/libuwsc/0002-fix-bad-indentation.patch
+ delete mode 100644 package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+ delete mode 100644 package/libuwsc/Config.in
+ delete mode 100644 package/libuwsc/libuwsc.hash
+ delete mode 100644 package/libuwsc/libuwsc.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 660cf03b76..a264434311 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -550,8 +550,6 @@ package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
- package/libgtk3/0001-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch lib_patch.Upstream
- package/libhdhomerun/0001-dont-strip.patch lib_patch.Upstream
- package/libiio/S99iiod Shellcheck lib_sysv.Variables
--package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch lib_patch.Upstream
--package/libiqrf/0002-use-only-c-language.patch lib_patch.Upstream
- package/libjson/0001-fix-broken-makefile.patch lib_patch.Upstream
- package/libks/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
- package/liblinear/0001-build-static-lib.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 99b3f00401..fb5fdca893 100644
+index fb5fdca893..76e8a213ca 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBIQRF
-+	bool "libiqrf has been removed"
++config BR2_PACKAGE_LIBUWSC
++	bool "libuwsc has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libiqrf is unmaintained and has been removed
++	  libuwsc is unmaintained and has been removed
 +
- config BR2_PACKAGE_LIBCGI
- 	bool "libcgi has been removed"
+ config BR2_PACKAGE_LIBIQRF
+ 	bool "libiqrf has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3f1e0e76fd..60d6ff858f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1622,7 +1622,6 @@ F:	package/qt6/
+ 
+ N:	Jianhui Zhao <zhaojh329@gmail.com>
+ F:	package/libuhttpd/
+-F:	package/libuwsc/
+ F:	package/rtty/
+ 
+ N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
 diff --git a/package/Config.in b/package/Config.in
-index a059e7c372..cf5c7860a5 100644
+index cf5c7860a5..0e11fe4bae 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1833,7 +1833,6 @@ menu "Hardware handling"
- 	source "package/libgudev/Config.in"
- 	source "package/libiio/Config.in"
- 	source "package/libinput/Config.in"
--	source "package/libiqrf/Config.in"
- 	source "package/libllcp/Config.in"
- 	source "package/libmbim/Config.in"
- 	source "package/libnfc/Config.in"
-diff --git a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch b/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+@@ -2094,7 +2094,6 @@ menu "Networking"
+ 	source "package/libupnpp/Config.in"
+ 	source "package/liburiparser/Config.in"
+ 	source "package/libutp/Config.in"
+-	source "package/libuwsc/Config.in"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsockets/Config.in"
+ 	source "package/libyang/Config.in"
+diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
 deleted file mode 100644
-index 7f460c131e..0000000000
---- a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+index 87f343a9d9..0000000000
+--- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 46660112b76664473cc98b8ae6c863fd27c27d2d Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Fri, 29 Aug 2014 23:40:59 +0200
--Subject: [PATCH] cmake: handle static library and find required thread
-- module
+@@ -1,34 +0,0 @@
+-From bb71b21eb9407479ad729b3c858b0fc350fae335 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 21 Feb 2021 19:39:59 +0100
+-Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
 -
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-Allow the user to disable example
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ----
-- CMakeLists.txt     | 2 ++
-- src/CMakeLists.txt | 4 +++-
-- 2 files changed, 5 insertions(+), 1 deletion(-)
+- CMakeLists.txt | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
 -
 -diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 79f644c..7779a2a 100644
+-index 110d933..c52ab79 100644
 ---- a/CMakeLists.txt
 -+++ b/CMakeLists.txt
--@@ -6,7 +6,9 @@ enable_testing()
-- # use local module (for Findlibusb-1.0.cmake)
-- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+-@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 - 
--+find_package(Threads REQUIRED)
-- find_package(libusb-1.0 REQUIRED)
+- project(libuwsc C)
+- 
+-+option(BUILD_EXAMPLE "Build example" ON)
 -+
-- if (NOT LIBUSB_1_FOUND)
-- 	message(FATAL_ERROR "libusb-1.0 not installed. (try apt-get install libusb-1.0-0-dev)")
-- endif (NOT LIBUSB_1_FOUND)
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 149d198..0597ccd 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -18,8 +18,10 @@ set (iqrf_sources
+- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 - 
-- include_directories ("${LIBUSB_1_INCLUDE_DIRS}")
-- 
---add_library(iqrf SHARED ${iqrf_sources} ${iqrf_headers})
--+add_library(iqrf ${iqrf_sources} ${iqrf_headers})
--+
-- target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES})
--+target_link_libraries(iqrf ${CMAKE_THREAD_LIBS_INIT})
-- 
-- set_target_properties(iqrf PROPERTIES
-- 	VERSION "${iqrf_version_major}.${iqrf_version_minor}"
+- add_subdirectory(src)
+--add_subdirectory(example)
+-+if(BUILD_EXAMPLE)
+-+    add_subdirectory(example)
+-+endif()
 --- 
--2.1.0
+-2.25.1
 -
-diff --git a/package/libiqrf/0002-use-only-c-language.patch b/package/libiqrf/0002-use-only-c-language.patch
+diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
 deleted file mode 100644
-index 2f1c23c28b..0000000000
---- a/package/libiqrf/0002-use-only-c-language.patch
+index 77cae92cf2..0000000000
+--- a/package/libuwsc/0002-fix-bad-indentation.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--Use only the C language
+@@ -1,26 +0,0 @@
+-From 8cb416140741a596235b8acc46b2b119b13ebfab Mon Sep 17 00:00:00 2001
+-From: Rosen Penev <rosenp@gmail.com>
+-Date: Tue, 6 Jul 2021 21:01:52 -0700
+-Subject: [PATCH] fix bad indentation
 -
--libirqf is written completely in C, but by default, CMake assumes that
--both C and C++ are used, and therefore verifies that a C++ compiler is
--installed. This may not necessarily be the case for a C-only package
--in Buildroot.
+-Fixes error with GCC11.
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/lua/uwsc_lua.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--Index: b/src/CMakeLists.txt
--===================================================================
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -1,5 +1,3 @@
---project(iqrf)
---
-- set (iqrf_version_major 0)
-- set (iqrf_version_minor 1)
-- set (iqrf_version_patch 2)
--Index: b/CMakeLists.txt
--===================================================================
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,3 +1,5 @@
--+project(iqrf C)
--+
-- cmake_minimum_required(VERSION 2.8.1)
-- enable_testing()
+-diff --git a/src/lua/uwsc_lua.c b/src/lua/uwsc_lua.c
+-index de6932e..84689fe 100644
+---- a/src/lua/uwsc_lua.c
+-+++ b/src/lua/uwsc_lua.c
+-@@ -178,7 +178,7 @@ static int uwsc_lua_on(lua_State *L)
+-     else
+-         luaL_argcheck(L, false, 2, "available event name: open message error close");
 - 
-diff --git a/package/libiqrf/Config.in b/package/libiqrf/Config.in
+--	return 0;
+-+    return 0;
+- }
+- 
+- static int __uwsc_lua_send(lua_State *L, int op)
+diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
 deleted file mode 100644
-index d86a7fd0ec..0000000000
---- a/package/libiqrf/Config.in
+index 4c652a63c2..0000000000
+--- a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
 +++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_LIBIQRF
--	bool "libiqrf"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
--	select BR2_PACKAGE_LIBUSB
--	help
--	  This library implement specific protocol
--	  which is used for communicating with iqrf devices
--	  (http://iqrf.org) over usb. For usb access is used
--	  libusb library.
+@@ -1,37 +0,0 @@
+-From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 14 Jan 2024 16:44:13 +0100
+-Subject: [PATCH] src/ssl.c: fix wolfssl build
 -
--	  https://github.com/nandra/libiqrf
+-wolfssl/options.h must also be included by clients to avoid the
+-following build failure because OPENSSL_ALL won't be defined:
 -
--comment "libiqrf needs a toolchain w/ threads, gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libiqrf/libiqrf.hash b/package/libiqrf/libiqrf.hash
+-/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
+-   62 |     SSL_CTX *ctx;
+-      |     ^~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: N/A (already fixed by
+-https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
+----
+- src/ssl.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/ssl.c b/src/ssl.c
+-index 3640022..6a3d250 100644
+---- a/src/ssl.c
+-+++ b/src/ssl.c
+-@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
+- #include <openssl/err.h>
+- #elif UWSC_HAVE_WOLFSSL
+- #define WC_NO_HARDEN
+-+#include <wolfssl/options.h>
+- #include <wolfssl/openssl/ssl.h>
+- #include <wolfssl/openssl/err.h>
+- #endif
+--- 
+-2.43.0
+-
+diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
 deleted file mode 100644
-index df749def17..0000000000
---- a/package/libiqrf/libiqrf.hash
+index ae99b6d2dc..0000000000
+--- a/package/libuwsc/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_LIBUWSC
+-	bool "libuwsc"
+-	select BR2_PACKAGE_LIBEV
+-	help
+-	  A Lightweight and fully asynchronous WebSocket client
+-	  library based on libev.
+-
+-	  https://github.com/zhaojh329/libuwsc
+diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+deleted file mode 100644
+index f99dfb4c5d..0000000000
+--- a/package/libuwsc/libuwsc.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  8111031dd9dd6093a1927eb32dd7476fe22cfee9190043aa8e4c88003c104b16  libiqrf-0.1.2.tar.gz
--sha256  11e0700d7c23604d86fa1e7c54c7caa778d79eeb0035be8f80b5a552224ef015  src/iqrf.c
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+-sha256  a06b7324671e181ffe3165e93e6f94c7ac1380f69e32a52e80c8da7016acd60d  libuwsc-3.3.5.tar.gz
+-sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
 deleted file mode 100644
-index 3f4e3e8498..0000000000
---- a/package/libiqrf/libiqrf.mk
+index 051ea411fa..0000000000
+--- a/package/libuwsc/libuwsc.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,53 +0,0 @@
 -################################################################################
 -#
--# libiqrf
+-# libuwsc
 -#
 -################################################################################
 -
--LIBIQRF_VERSION = 0.1.2
--LIBIQRF_SITE = $(call github,nandra,libiqrf,v$(LIBIQRF_VERSION))
--LIBIQRF_INSTALL_STAGING = YES
--LIBIQRF_DEPENDENCIES = libusb
--LIBIQRF_LICENSE = LGPL-2.1+
--LIBIQRF_LICENSE_FILES = src/iqrf.c
+-LIBUWSC_VERSION = 3.3.5
+-LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
+-LIBUWSC_LICENSE = MIT
+-LIBUWSC_LICENSE_FILES = LICENSE
+-LIBUWSC_INSTALL_STAGING = YES
+-LIBUWSC_DEPENDENCIES = libev
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBUWSC_DEPENDENCIES += openssl
+-LIBUWSC_CONF_OPTS += \
+-	-DUWSC_SSL_SUPPORT=ON \
+-	-DUWSC_USE_MBEDTLS=OFF \
+-	-DUWSC_USE_OPENSSL=ON \
+-	-DUWSC_USE_WOLFSSL=OFF
+-else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+-LIBUWSC_DEPENDENCIES += wolfssl
+-LIBUWSC_CONF_OPTS += \
+-	-DUWSC_SSL_SUPPORT=ON \
+-	-DUWSC_USE_MBEDTLS=OFF \
+-	-DUWSC_USE_OPENSSL=OFF \
+-	-DUWSC_USE_WOLFSSL=ON
+-else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+-LIBUWSC_DEPENDENCIES += mbedtls
+-LIBUWSC_CONF_OPTS += \
+-	-DUWSC_SSL_SUPPORT=ON \
+-	-DUWSC_USE_MBEDTLS=ON \
+-	-DUWSC_USE_OPENSSL=OFF \
+-	-DUWSC_USE_WOLFSSL=OFF
+-else
+-LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LUA):$(BR2_STATIC_LIBS),y:)
+-LIBUWSC_DEPENDENCIES += lua
+-LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
+-else
+-LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=OFF
+-endif
+-
+-# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+-ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
+-endif
 -
 -$(eval $(cmake-package))
 -- 
