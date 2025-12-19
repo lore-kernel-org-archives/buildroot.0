@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A20FE66891
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A033E6689C
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C35760AC6;
-	Fri, 19 Dec 2025 22:15:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TzMnwbK-bpeh; Fri, 19 Dec 2025 22:15:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18C0960AFF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766182521;
-	bh=wvm0VFT22T4oLrbJVeAue/53/E1UuJglZkES3K/FQVg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JxSDpMoc7LwdG8SuCnU32ij/ea0vyI2d7T1e3htQVgBhSApMNHrQAsmoIAc5NC+Al
-	 ucwTu2vNQoZkFBMKgcR8FPMoi+0wq28wIdc65XNDmZxbjrtzD7prgf+gw3JT54LWFa
-	 +ApxooZcHidq5mag97r3D8FzaflGrbEFJi2V6mha0s2Q0SuNCnUJsXVswk+kezFNV7
-	 /N3UFUg5F3MAj3LqWlEUCCmV1/uq37r+2Y5TQaa3ynw4LhXbReE02EU0ouy5qkMCOl
-	 +F3TQzjf2j/0uPXrs18/7ttFrsiIk61T2VZdIFWJKF3yfb4V4mCrRbnhKnZXwp5VYd
-	 AAu3UPbJjvFPQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18C0960AFF;
-	Fri, 19 Dec 2025 22:15:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F7E71A6
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:15:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C7B583D57
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:15:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A8A880B84;
+	Fri, 19 Dec 2025 22:15:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Szb4T0N_DfWg for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 22:15:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE27583D56
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE27583D56
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:15:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD73F87419; Fri, 19 Dec 2025 22:15:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 19 Dec 2025 22:32:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 469ff398178e73ba733d41127ab85d7cd4477c12
-X-Git-Newrev: 8ee86dabefb74e267bc7a1ffec764b97eccdbe93
-X-Patchwork-Hint: ignore
-Message-Id: <20251219221518.BD73F87419@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zfs: bump version to 2.4.0
+ id ltJ83Ah2aIEB; Fri, 19 Dec 2025 22:15:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 298C580B4C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766182554;
+	bh=gBJIDMUltJIg2i0OghJe4c/cQNJswFF5WYZUsg7kSqE=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=O8jvQ+VMdXE3pU/1cDaLGj+lfIlRoQigV226EHY6P1q6kEBcjkzE6mNGkqOPC6h4A
+	 jNO0E4wXvSScaKilPnXfd/XlzoZBfsHMl5Jy+/VLtoD9S2QPmXRGtM8r4ZonKjO5p5
+	 dqNX0BmpxOkIfBoWwiua81vyQE/WvYgSFDqX2AwWps0ycdGrX0H3InrvxEtFyELcjP
+	 yn/ymWQr1kDW71yBS4TqSvf35KG/78Fr46qIXSvqiW39bltrP6cjkbrsAwmQyu8zWf
+	 l01LfYKU5pS2ICQlLiyageL/JSRVIfHoA8R4YAjsQ1ELbgLl04ACkfjuzpeYWnjBDU
+	 mYjljBVBnr/8Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 298C580B4C;
+	Fri, 19 Dec 2025 22:15:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0DF4119
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:15:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7AA1402D7
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:15:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k20Viv6LVAVM for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 22:15:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B4B1A402D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4B1A402D5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B4B1A402D5
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:15:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id A9681780372;
+ Fri, 19 Dec 2025 23:15:46 +0100 (CET)
+Received: from 2a0d:e487:418e:8c09:857b:bc67:c232:7cba
+ via 2a0d:e487:418e:8c09:857b:bc67:c232:7cba by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 19 Dec 2025 23:15:46 +0100
+MIME-Version: 1.0
+Date: Fri, 19 Dec 2025 23:15:46 +0100
+To: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251218234526.3317029-2-salvador.joseluis@gmail.com>
+References: <20251218234526.3317029-2-salvador.joseluis@gmail.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <806522c5d45fa084020184b2b183e11d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766182547;
+ bh=a1VQQ5skeJooYRfnQcYl4A31NL8h68Ftgmk4jL9EA5E=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=f8/AV7/etBpemK7Q6bKagSxzJLGQ3KSDLRjxjG9PbWkCCsePWypPbNb+1uPTwqvqC
+ fUsiP/0RnUL6WGf2HnwyMahWC/iQK28LVGKgAirY19ReFAFNN/SbtDDjJOK+XfPMPy
+ 7OS9Jsy6JRD8EXmMse97LfyZ05ezoH+YyyQM4N7ybW49C1MuhZlYM9a2UaaTT1u/qz
+ om76wWvhjGggCMqk44Gm+zImiVkc5JcksDU0mOkUxTuYMIUMHqYrEWwsDd8wc0oelm
+ DdXEoQZdVUau17p51RKtOIjX/mN5Fz22dOC8L0ner3SX/xM+Txj4sUW2po1B4kQr/0
+ yo5qDdsNWgvzQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=f8/AV7/e
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/zfs: bump version to 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,170 +95,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8927775601542248923=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8927775601542248923==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=8ee86dabefb74e267bc7a1ffec764b97eccdbe93
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Removed backported patch:
- - 0001-use-sys_stath-instead-of-linux_stath.patch
-Merged upstream in:
-https://github.com/openzfs/zfs/commit/ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d
-
-For release note, see:
-https://github.com/openzfs/zfs/releases/tag/zfs-2.4.0
-
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...0001-use-sys_stath-instead-of-linux_stath.patch | 82 ----------------------
- package/zfs/zfs.hash                               |  4 +-
- package/zfs/zfs.mk                                 |  2 +-
- support/testing/tests/package/test_zfs.py          |  2 +-
- 4 files changed, 4 insertions(+), 86 deletions(-)
-
-diff --git a/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch b/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch
-deleted file mode 100644
-index 5e5d21ec52..0000000000
---- a/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d Mon Sep 17 00:00:00 2001
--From: classabbyamp <5366828+classabbyamp@users.noreply.github.com>
--Date: Wed, 27 Aug 2025 17:42:32 -0400
--Subject: [PATCH] linux: use sys/stat.h instead of linux/stat.h
--
--glibc includes linux/stat.h for statx, but musl defines its own statx
--struct and associated constants, which does not include STATX_MNT_ID
--yet. Thus, including linux/stat.h directly should be avoided for
--maximum libc compatibility.
--
--Tested on:
--  - glibc: x86_64, i686, aarch64, armv7l, armv6l
--  - musl: x86_64, aarch64, armv7l, armv6l
--
--Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
--Tested-By: Achill Gilgenast <achill@achill.org>
--Signed-off-by: classabbyamp <dev@placeviolette.net>
--Closes #17675
--
--Upstream: https://github.com/openzfs/zfs/commit/ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d
--Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-----
-- config/user-statx.m4                   | 6 +++---
-- include/os/linux/spl/sys/stat.h        | 2 +-
-- lib/libspl/include/os/linux/sys/stat.h | 2 +-
-- 3 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/config/user-statx.m4 b/config/user-statx.m4
--index 0315f93e0c20..1ba74a40e9b8 100644
----- a/config/user-statx.m4
--+++ b/config/user-statx.m4
--@@ -2,7 +2,7 @@ dnl #
-- dnl # Check for statx() function and STATX_MNT_ID availability
-- dnl #
-- AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
---	AC_CHECK_HEADERS([linux/stat.h],
--+	AC_CHECK_HEADERS([sys/stat.h],
-- 		[have_stat_headers=yes],
-- 		[have_stat_headers=no])
-- 
--@@ -14,7 +14,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
-- 			AC_MSG_CHECKING([for STATX_MNT_ID])
-- 			AC_COMPILE_IFELSE([
-- 				AC_LANG_PROGRAM([[
---					#include <linux/stat.h>
--+					#include <sys/stat.h>
-- 				]], [[
-- 					struct statx stx;
-- 					int mask = STATX_MNT_ID;
--@@ -29,6 +29,6 @@ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
-- 			])
-- 		])
-- 	], [
---		AC_MSG_WARN([linux/stat.h not found; skipping statx support])
--+		AC_MSG_WARN([sys/stat.h not found; skipping statx support])
-- 	])
-- ])  dnl end AC_DEFUN
--diff --git a/include/os/linux/spl/sys/stat.h b/include/os/linux/spl/sys/stat.h
--index 087389b57b34..ad2815e46394 100644
----- a/include/os/linux/spl/sys/stat.h
--+++ b/include/os/linux/spl/sys/stat.h
--@@ -25,6 +25,6 @@
-- #ifndef _SPL_STAT_H
-- #define	_SPL_STAT_H
-- 
---#include <linux/stat.h>
--+#include <sys/stat.h>
-- 
-- #endif /* SPL_STAT_H */
--diff --git a/lib/libspl/include/os/linux/sys/stat.h b/lib/libspl/include/os/linux/sys/stat.h
--index a605af962a6d..13cc0b46ac93 100644
----- a/lib/libspl/include/os/linux/sys/stat.h
--+++ b/lib/libspl/include/os/linux/sys/stat.h
--@@ -33,7 +33,7 @@
-- 
-- #ifdef HAVE_STATX
-- #include <fcntl.h>
---#include <linux/stat.h>
--+#include <sys/stat.h>
-- #endif
-- 
-- /*
-diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-index 6ebcfb7a3d..87f4e462f1 100644
---- a/package/zfs/zfs.hash
-+++ b/package/zfs/zfs.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openzfs/zfs/releases/download/zfs-2.3.5/zfs-2.3.5.sha256.asc
--sha256  326ae0cba8a615afa42c6891640e76acc4bd230f6d6ddec120c11e30b1392067  zfs-2.3.5.tar.gz
-+# From https://github.com/openzfs/zfs/releases/download/zfs-2.4.0/zfs-2.4.0.sha256.asc
-+sha256  7bdf13de0a71d95554c0e3e47d5e8f50786c30d4f4b63b7c593b1d11af75c9ee  zfs-2.4.0.tar.gz
- 
- # Hash for license files:
- sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index 712f2afb54..30207f7cf7 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZFS_VERSION = 2.3.5
-+ZFS_VERSION = 2.4.0
- ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
- ZFS_SELINUX_MODULES = zfs
- ZFS_LICENSE = CDDL
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index 698d8d8bbd..384fad7e33 100644
---- a/support/testing/tests/package/test_zfs.py
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -57,7 +57,7 @@ class TestZfsBase(infra.basetest.BRTest):
-             "sha256sum -c /tmp/urandom.sha256",
-             "zpool status -v",
-             # Check PyZFS
--            "arc_summary",
-+            "zarcsummary",
-         ]
-         for cmd in cmds:
-             self.assertRunOk(cmd, timeout=self.timeout)
-
---===============8927775601542248923==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8927775601542248923==--
+T24gMTkvMTIvMjAyNSAwMDo0NSwgSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIHdyb3RlOgo+IFJl
+bW92ZWQgYmFja3BvcnRlZCBwYXRjaDoKPiAgLSAwMDAxLXVzZS1zeXNfc3RhdGgtaW5zdGVhZC1v
+Zi1saW51eF9zdGF0aC5wYXRjaAo+IE1lcmdlZCB1cHN0cmVhbSBpbjoKPiBodHRwczovL2dpdGh1
+Yi5jb20vb3Blbnpmcy96ZnMvY29tbWl0L2NjZjVhOGE2ZmNmZGZiZGFhMmYwZmRjYTVkNzg3OTU4
+MjI0YmYwNmQKPiAKPiBGb3IgcmVsZWFzZSBub3RlLCBzZWU6Cj4gaHR0cHM6Ly9naXRodWIuY29t
+L29wZW56ZnMvemZzL3JlbGVhc2VzL3RhZy96ZnMtMi40LjAKPiAKPiBTaWduZWQtb2ZmLWJ5OiBK
+b3PDqSBMdWlzIFNhbHZhZG9yIFJ1Zm8gPHNhbHZhZG9yLmpvc2VsdWlzQGdtYWlsLmNvbT4KCkFw
+cGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
