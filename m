@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E23FDE668A2
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:43:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D65E1E668A2
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 22:44:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA7D1812CA;
-	Fri, 19 Dec 2025 22:43:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABE0E4046E;
+	Fri, 19 Dec 2025 22:44:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hwZuMoLufsa0; Fri, 19 Dec 2025 22:43:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Sj4ELvGIsgt; Fri, 19 Dec 2025 22:44:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B412D812D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9A3140498
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766184229;
-	bh=5joOPmo0oE9sDxW9gikL9CGNVskFME6YhskQqoDsnu8=;
+	s=default; t=1766184242;
+	bh=xIH0QJ1pFPKVS+NpRGD1yhSPha/BIccNEfC8kHomTSQ=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=QBjQXpJGMgoMzRU++lFSA4mUldc72K5AAZMAqZXiHKqXuZQDCXxQxfY7PG2Xr6Y55
-	 9+8e58H8A33Otykjq080LpvA3N46pqojHkuBsnGGRI9jStpTz5p1HyE1fyvcd1A//q
-	 gG4vg9mfAbI8PbZb5OXh729DqhhS7xmIUWZ0a98vHYa7sqWanbhb3UegEzaopF2hYQ
-	 UcpDKevySxzW6WSn+FOcx11jmb9Xlq80Y/Mk+NJjRqmaLpSEBZAtItHty/vvrFffaa
-	 VQGywiXiefu48w5OOSqAT1mJqfZ9zjP1ZvMl+tfOSO6K9yQIz/l3fY3KGslMrgZlSB
-	 uvhhoZ1qgkFQA==
+	b=aghfu0lqn1UAxj3SdUT1plVf1UTJrPg3FLReLx2UMCzA5vszwoAc77dQHmyeLqVUI
+	 c5nLNz068t7G4hAM93VHdPlLZ/tX9HE+5o4PgF4rvpmD0SwBPdbTAJwJJolHpJbkQ1
+	 DHu1LAn/U3d4Pm3vUt87L/IoBe7GkpPcXEGAUrPMNGyNPXE9P+agR715RGzCu2bpB8
+	 N6W7gtzcBQ18zxp3goWjsnNMJQ0/BlR62pUSWtsv9vqBWFIGdvZbAqZCVu87hPXl6i
+	 vbAaXhzbq3b1qac0WcAyk7EqdwJGDrSkborar4xZTzevprCnBdqUrCcHqa0SL2U5cx
+	 2NpjOXSYCq8LA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B412D812D8;
-	Fri, 19 Dec 2025 22:43:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F0981A6
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9A3140498;
+	Fri, 19 Dec 2025 22:44:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4F5B119
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 711A3812D8
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC44740498
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:44:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5XVZfSyUqhu5 for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 22:43:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wkUQRN23tYKN for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 22:43:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21D87812CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21D87812CA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A8C074046E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8C074046E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21D87812CA
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8C074046E
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 22:43:59 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a05d4.dip0.t-ipconnect.de [91.58.5.212])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CAAD8A4C4879;
- Fri, 19 Dec 2025 23:41:51 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0362AA4C4883;
+ Fri, 19 Dec 2025 23:41:52 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45868)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vWjAN-000000002VW-3F2h;
+ (envelope-from <bernd@kuhls.net>) id 1vWjAN-000000002VW-40iM;
  Fri, 19 Dec 2025 22:41:43 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Andreas Ziegler <br025@umbiko.net>, Simon Dawson <spdawson@gmail.com>,
- Jianhui Zhao <zhaojh329@gmail.com>
-Date: Fri, 19 Dec 2025 23:41:29 +0100
-Message-ID: <20251219224140.1318253-10-bernd@kuhls.net>
+ Romain Naour <romain.naour@gmail.com>
+Date: Fri, 19 Dec 2025 23:41:30 +0100
+Message-ID: <20251219224140.1318253-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219224140.1318253-1-bernd@kuhls.net>
 References: <20251219224140.1318253-1-bernd@kuhls.net>
@@ -68,22 +68,22 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1766184111;
- bh=mofQpHctwYxbtDZXBf1aDEHGaDtoIANwIMlzLfb3I/0=;
+ s=kas202511301023; t=1766184112;
+ bh=5zR4hweba9HiHAOYTsR8R09hEu3rx1GtZCF1KL1TZE0=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=owmjguvMxWzGZyt+zL8P6YfdA6x8r/2hRw0uXmouVM3Hw/RwAlgY2Rn3WntXR+yM6
- MyOT3q674RtM+qseqdbYcpANTQH3rtXrMuo/wwfs6ItuyQUjsPoBLYiy/Jmodb+mn1
- lJslsG910xP9f0xQqZT3PxhOFafuXIrB/o0bACod3cm1Jm2Di+FVzFReTmbuoyuB4i
- k7ZOc733t0YzcV1XK0jawwqgRUWYn9I8rdnmTDZa+cJkF+/8Uk4khHh4gYOgLs1jBL
- mR7qgdbinzfsY0QIf2aHg5JjiaV5k5Ry0yDW6Zal+2NPgbyWBvvJDABDS/iufKuYf8
- mEbDMKH7Fn+jg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=AzmFxmmFwSxTLAdoRgfcHmyocp/cOx99mKjkuOk0JuBHohZVqTyH2NAq1TBOyvnVj
+ NHZEdSPB53XkuSKy8smqIONssgS4Bv8IW4FgnCxB8U7iCoZSGobiwvuorkJEga1kwc
+ FwyCzC/asVkBhpoznaBDGewAxNQH7dwcedLMKXo5eOg7DYRQp4S27LSklP+qYakW2q
+ 3UHaSiDWIc1rX5F7OhyPduoliBwn9WjTOwZ5BxV5XVXichqtGO54pOzjfBCADMWr81
+ e7wC87U6CBpKyETx3+nTc/RBVjv99f+93NeAWO+2W1VA1/lydE14F/Wpdq6rniHMHN
+ aiPLJRviJyCTA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=owmjguvM
-Subject: [Buildroot] [PATCH v5 09/20] package/libuwsc: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=AzmFxmmF
+Subject: [Buildroot] [PATCH v5 10/20] package/alure: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,269 +100,216 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fails to build with cmake 4.
+Analysis of https://github.com/kcat/alure:
+last commit: Feb 2020
+last bug report: Oct 2020
+last pull request: 0 open
 
-The package is a library without any reverse dependencies and no active
-development since 2021.
+The package is broken with cmake 4 and no other package depends on it.
+
+The upstream site kcat.strangesoft.net has no DNS record anymore, the
+main site strangesoft.net serves content unrelated to alure.
+
+Although the cmake error is easy to fix we remove this unsupported
+package instead.
 
 Fixes:
-https://autobuild.buildroot.net/results/f6b/f6b0c136703e0cf38c052e6a6a3ef91cdcb797a0/
+https://autobuild.buildroot.net/results/d5a/d5a275f2d282c9dd2e3053667c79be11d48e918d/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 ---
- Config.in.legacy                              |  6 +++
- DEVELOPERS                                    |  1 -
- package/Config.in                             |  1 -
- ...001-CMakeLists.txt-add-BUILD_EXAMPLE.patch | 34 ------------
- .../libuwsc/0002-fix-bad-indentation.patch    | 26 ---------
- .../0003-src-ssl.c-fix-wolfssl-build.patch    | 37 -------------
- package/libuwsc/Config.in                     |  8 ---
- package/libuwsc/libuwsc.hash                  |  3 --
- package/libuwsc/libuwsc.mk                    | 53 -------------------
- 9 files changed, 6 insertions(+), 163 deletions(-)
- delete mode 100644 package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
- delete mode 100644 package/libuwsc/0002-fix-bad-indentation.patch
- delete mode 100644 package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
- delete mode 100644 package/libuwsc/Config.in
- delete mode 100644 package/libuwsc/libuwsc.hash
- delete mode 100644 package/libuwsc/libuwsc.mk
+ Config.in.legacy         |  6 ++++
+ DEVELOPERS               |  1 -
+ package/Config.in        |  1 -
+ package/alure/Config.in  | 56 ----------------------------------
+ package/alure/alure.hash |  3 --
+ package/alure/alure.mk   | 65 ----------------------------------------
+ 6 files changed, 6 insertions(+), 126 deletions(-)
+ delete mode 100644 package/alure/Config.in
+ delete mode 100644 package/alure/alure.hash
+ delete mode 100644 package/alure/alure.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index fb5fdca893..76e8a213ca 100644
+index 76e8a213ca..1f7ac7d4b8 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBUWSC
-+	bool "libuwsc has been removed"
++config BR2_PACKAGE_ALURE
++	bool "alure has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libuwsc is unmaintained and has been removed
++	  alure is unmaintained and has been removed
 +
- config BR2_PACKAGE_LIBIQRF
- 	bool "libiqrf has been removed"
+ config BR2_PACKAGE_LIBUWSC
+ 	bool "libuwsc has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f1e0e76fd..60d6ff858f 100644
+index 60d6ff858f..3b18c745bf 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1622,7 +1622,6 @@ F:	package/qt6/
- 
- N:	Jianhui Zhao <zhaojh329@gmail.com>
- F:	package/libuhttpd/
--F:	package/libuwsc/
- F:	package/rtty/
- 
- N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+@@ -2889,7 +2889,6 @@ F:	configs/qemu_*
+ F:	configs/am574x_idk_defconfig
+ F:	configs/beagleboneai64_defconfig
+ F:	configs/beagley_ai_defconfig
+-F:	package/alure/
+ F:	package/aubio/
+ F:	package/bcc/
+ F:	package/binutils/
 diff --git a/package/Config.in b/package/Config.in
-index cf5c7860a5..0e11fe4bae 100644
+index 0e11fe4bae..6d1b78cbfc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2094,7 +2094,6 @@ menu "Networking"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
- 	source "package/libutp/Config.in"
--	source "package/libuwsc/Config.in"
- 	source "package/libvncserver/Config.in"
- 	source "package/libwebsockets/Config.in"
- 	source "package/libyang/Config.in"
-diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+@@ -1533,7 +1533,6 @@ menu "Libraries"
+ menu "Audio/Sound"
+ 	source "package/alsa-lib/Config.in"
+ 	source "package/alsa-plugins/Config.in"
+-	source "package/alure/Config.in"
+ 	source "package/aubio/Config.in"
+ 	source "package/bcg729/Config.in"
+ 	source "package/caps/Config.in"
+diff --git a/package/alure/Config.in b/package/alure/Config.in
 deleted file mode 100644
-index 87f343a9d9..0000000000
---- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+index c831bba913..0000000000
+--- a/package/alure/Config.in
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From bb71b21eb9407479ad729b3c858b0fc350fae335 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 21 Feb 2021 19:39:59 +0100
--Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
--
--Allow the user to disable example
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- CMakeLists.txt | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 110d933..c52ab79 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 2.8)
-- 
-- project(libuwsc C)
-- 
--+option(BUILD_EXAMPLE "Build example" ON)
--+
-- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-- 
-- add_subdirectory(src)
---add_subdirectory(example)
--+if(BUILD_EXAMPLE)
--+    add_subdirectory(example)
--+endif()
---- 
--2.25.1
--
-diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
-deleted file mode 100644
-index 77cae92cf2..0000000000
---- a/package/libuwsc/0002-fix-bad-indentation.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 8cb416140741a596235b8acc46b2b119b13ebfab Mon Sep 17 00:00:00 2001
--From: Rosen Penev <rosenp@gmail.com>
--Date: Tue, 6 Jul 2021 21:01:52 -0700
--Subject: [PATCH] fix bad indentation
--
--Fixes error with GCC11.
--
--Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/lua/uwsc_lua.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/lua/uwsc_lua.c b/src/lua/uwsc_lua.c
--index de6932e..84689fe 100644
----- a/src/lua/uwsc_lua.c
--+++ b/src/lua/uwsc_lua.c
--@@ -178,7 +178,7 @@ static int uwsc_lua_on(lua_State *L)
--     else
--         luaL_argcheck(L, false, 2, "available event name: open message error close");
-- 
---	return 0;
--+    return 0;
-- }
-- 
-- static int __uwsc_lua_send(lua_State *L, int op)
-diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
-deleted file mode 100644
-index 4c652a63c2..0000000000
---- a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jan 2024 16:44:13 +0100
--Subject: [PATCH] src/ssl.c: fix wolfssl build
--
--wolfssl/options.h must also be included by clients to avoid the
--following build failure because OPENSSL_ALL won't be defined:
--
--/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
--   62 |     SSL_CTX *ctx;
--      |     ^~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: N/A (already fixed by
--https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
-----
-- src/ssl.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/ssl.c b/src/ssl.c
--index 3640022..6a3d250 100644
----- a/src/ssl.c
--+++ b/src/ssl.c
--@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
-- #include <openssl/err.h>
-- #elif UWSC_HAVE_WOLFSSL
-- #define WC_NO_HARDEN
--+#include <wolfssl/options.h>
-- #include <wolfssl/openssl/ssl.h>
-- #include <wolfssl/openssl/err.h>
-- #endif
---- 
--2.43.0
--
-diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
-deleted file mode 100644
-index ae99b6d2dc..0000000000
---- a/package/libuwsc/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_LIBUWSC
--	bool "libuwsc"
--	select BR2_PACKAGE_LIBEV
+@@ -1,56 +0,0 @@
+-config BR2_PACKAGE_ALURE
+-	bool "alure"
+-	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # openal
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+-	depends on BR2_USE_WCHAR # use wchar_t
+-	select BR2_PACKAGE_OPENAL
 -	help
--	  A Lightweight and fully asynchronous WebSocket client
--	  library based on libev.
+-	  Alure is a C++ 3D audio API. It uses OpenAL for audio
+-	  rendering, and provides common higher-level features such as
+-	  file loading and decoding, buffer caching, background
+-	  streaming, and source management for virtually unlimited
+-	  sound source handles.
 -
--	  https://github.com/zhaojh329/libuwsc
-diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+-	  https://kcat.strangesoft.net/alure.html
+-
+-if BR2_PACKAGE_ALURE
+-
+-config BR2_PACKAGE_ALURE_FLAC_DECODER
+-	bool "flac decoder"
+-	help
+-	  Enables the built-in FLAC decoder.
+-
+-config BR2_PACKAGE_ALURE_MINIMP3_DECODER
+-	bool "minimp3 decoder"
+-	help
+-	  Enables the built-in minimp3 decoder.
+-
+-config BR2_PACKAGE_ALURE_OPUS_DECODER
+-	bool "opus decoder"
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_OPUS
+-	help
+-	  Enables the built-in libopusfile decoder.
+-
+-config BR2_PACKAGE_ALURE_SNDFILE_DECODER
+-	bool "sndfile decoder"
+-	select BR2_PACKAGE_LIBSNDFILE
+-	help
+-	  Enables the built-in libsndfile decoder.
+-
+-config BR2_PACKAGE_ALURE_VORBIS_DECODER
+-	bool "vorbis decoder"
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_LIBVORBIS
+-	help
+-	  Enables the built-in libvorbis decoder.
+-
+-endif
+-
+-comment "alure needs a toolchain w/ C++, gcc >= 9, NPTL, wchar"
+-	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/alure/alure.hash b/package/alure/alure.hash
 deleted file mode 100644
-index f99dfb4c5d..0000000000
---- a/package/libuwsc/libuwsc.hash
+index 0d4c36c4ae..0000000000
+--- a/package/alure/alure.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  a06b7324671e181ffe3165e93e6f94c7ac1380f69e32a52e80c8da7016acd60d  libuwsc-3.3.5.tar.gz
--sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+-# Locally computed
+-sha256  9b808e5b5a54d156348221dc86704c7831115047d5238691e6088f8c4814b2ca  alure-14beed2a86d5a36030e907b21c46614d505f07cd.tar.gz
+-sha256  7331ddc67daaf1a283c81e8dc17bac8dc40f54ed3fab3d3964616f4bd502a0a3  LICENSE
+diff --git a/package/alure/alure.mk b/package/alure/alure.mk
 deleted file mode 100644
-index 051ea411fa..0000000000
---- a/package/libuwsc/libuwsc.mk
+index fe27bfd12b..0000000000
+--- a/package/alure/alure.mk
 +++ /dev/null
-@@ -1,53 +0,0 @@
+@@ -1,65 +0,0 @@
 -################################################################################
 -#
--# libuwsc
+-# alure
 -#
 -################################################################################
 -
--LIBUWSC_VERSION = 3.3.5
--LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
--LIBUWSC_LICENSE = MIT
--LIBUWSC_LICENSE_FILES = LICENSE
--LIBUWSC_INSTALL_STAGING = YES
--LIBUWSC_DEPENDENCIES = libev
+-ALURE_VERSION = 14beed2a86d5a36030e907b21c46614d505f07cd
+-ALURE_SITE = $(call github,kcat,alure,$(ALURE_VERSION))
+-ALURE_LICENSE = Zlib, Public Domain (src/decoders/dr_flac.h)
+-ALURE_LICENSE_FILES = LICENSE
+-ALURE_INSTALL_STAGING = YES
 -
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBUWSC_DEPENDENCIES += openssl
--LIBUWSC_CONF_OPTS += \
--	-DUWSC_SSL_SUPPORT=ON \
--	-DUWSC_USE_MBEDTLS=OFF \
--	-DUWSC_USE_OPENSSL=ON \
--	-DUWSC_USE_WOLFSSL=OFF
--else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
--LIBUWSC_DEPENDENCIES += wolfssl
--LIBUWSC_CONF_OPTS += \
--	-DUWSC_SSL_SUPPORT=ON \
--	-DUWSC_USE_MBEDTLS=OFF \
--	-DUWSC_USE_OPENSSL=OFF \
--	-DUWSC_USE_WOLFSSL=ON
--else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--LIBUWSC_DEPENDENCIES += mbedtls
--LIBUWSC_CONF_OPTS += \
--	-DUWSC_SSL_SUPPORT=ON \
--	-DUWSC_USE_MBEDTLS=ON \
--	-DUWSC_USE_OPENSSL=OFF \
--	-DUWSC_USE_WOLFSSL=OFF
+-ALURE_DEPENDENCIES = openal
+-
+-# Disabling alure examples removes the dependencies on physfs and dump
+-# libraries. Enable at least one built-in decoder (wave).
+-ALURE_CONF_OPTS = -DALURE_INSTALL=ON \
+-	-DALURE_BUILD_EXAMPLES=OFF \
+-	-DALURE_ENABLE_WAVE=ON
+-
+-ifeq ($(BR2_PACKAGE_ALURE_FLAC_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=ON
 -else
--LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
+-ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=OFF
 -endif
 -
--ifeq ($(BR2_PACKAGE_LUA):$(BR2_STATIC_LIBS),y:)
--LIBUWSC_DEPENDENCIES += lua
--LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
+-ifeq ($(BR2_PACKAGE_ALURE_MINIMP3_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=ON
 -else
--LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=OFF
+-ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=OFF
 -endif
 -
--# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
--ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
+-ifeq ($(BR2_PACKAGE_ALURE_OPUS_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=ON
+-ALURE_DEPENDENCIES += libogg opus
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_SNDFILE_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=ON
+-ALURE_DEPENDENCIES += libsndfile
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_VORBIS_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=ON
+-ALURE_DEPENDENCIES += libogg libvorbis
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=OFF
+-endif
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=OFF \
+-	-DALURE_BUILD_STATIC=ON
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
+-	-DALURE_BUILD_STATIC=ON
+-else
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
+-	-DALURE_BUILD_STATIC=OFF
 -endif
 -
 -$(eval $(cmake-package))
