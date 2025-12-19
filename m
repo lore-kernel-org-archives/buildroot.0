@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 384FAD7879F
-	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 17:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B63D7879F
+	for <buildroot@archiver.kernel.org>; Fri, 19 Dec 2025 17:54:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C90B612EA;
-	Fri, 19 Dec 2025 17:54:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 493FB612EE;
+	Fri, 19 Dec 2025 17:54:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ygI2AYqCRbtl; Fri, 19 Dec 2025 17:54:15 +0000 (UTC)
+ id yemidDPEwDje; Fri, 19 Dec 2025 17:54:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1EEE60D96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48162612BB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766166855;
-	bh=xIH0QJ1pFPKVS+NpRGD1yhSPha/BIccNEfC8kHomTSQ=;
+	s=default; t=1766166868;
+	bh=D349z0FMsoVmDWIMQzjOP7YxUGBWaP81m+EYyyfV44s=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=rDecgWfmLc24YIfcdqEqOS5qKD2a0LMoIOdvASF4sSRFv07ITxREb5OenIFXPVtWS
-	 EQvSjof3LER6HZBsfMnSXyYbc2BCr5Uw90usYu8varDjIq4seFMDVMGvxGjnKzYwrz
-	 9cQxI29IIBHSzfmYq28JWFv6oOjKI6T70RLXnkPd3aOHCH/9hLn40Nl7gzJ3bb6INL
-	 CeMzrmmBGgbxQapZR7baAxvoxkOE6qrsyzeWucmOGULAVKgFeutCsQ4Isektk7u3aC
-	 ct9y5ysseQqzX5+WyCjfuXG0zdltfnT5iHLi/bklGtapDMhjXk7QBupP0noD0X1y85
-	 +7HcvqFGwrB8w==
+	b=r4PtE3DEjL8Ua3AqqsyM1uX9KvebrD6YjJ5MzfgZlwArfhcY15zsdcRkX0goiN/c2
+	 kJxUkXmuxWNKySNyz0O5jA2wvihPJKhQuvOP4z8RV975Wk5pFUYFKlm+JmJLi06jzH
+	 y1/A/y2ToxtR+2SjrB/7pXBnYH51ETz2CHirBqs9SugjPzRpVkumHFGFWdz3gBZ9vX
+	 UwmcEe69JL6QF+DUOhKQSwqgeUuQi+5djZlCPguKrc/JOb1EIFZm1gxNgu7OV9okcF
+	 /vkGphmEW4Nd+rsKFdGl/cJ+Jp/uY1JHNT8TftiozvqwjKshn9WzL8WdX+y/BwdQkC
+	 o99dYqQj5PAsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1EEE60D96;
-	Fri, 19 Dec 2025 17:54:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4392C119
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48162612BB;
+	Fri, 19 Dec 2025 17:54:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E98C6119
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3516183B77
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB5C5419F6
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5tw7c3YtjgF2 for <buildroot@buildroot.org>;
- Fri, 19 Dec 2025 17:54:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BpZ88RtxkBP1 for <buildroot@buildroot.org>;
+ Fri, 19 Dec 2025 17:54:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1412D83B88
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1412D83B88
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 58CC64010A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58CC64010A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1412D83B88
- for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 58CC64010A
+ for <buildroot@buildroot.org>; Fri, 19 Dec 2025 17:54:25 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a05d4.dip0.t-ipconnect.de [91.58.5.212])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 077E5A4C4B13;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 339F2A4C4B46;
  Fri, 19 Dec 2025 18:52:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:38748)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vWedp-000000002KQ-2etJ;
- Fri, 19 Dec 2025 17:51:49 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vWedq-000000002KQ-1FlN;
+ Fri, 19 Dec 2025 17:51:50 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Andreas Ziegler <br025@umbiko.net>, Simon Dawson <spdawson@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Fri, 19 Dec 2025 18:51:29 +0100
-Message-ID: <20251219175141.1907408-11-bernd@kuhls.net>
+ Jan Heylen <jan.heylen@nokia.com>
+Date: Fri, 19 Dec 2025 18:51:31 +0100
+Message-ID: <20251219175141.1907408-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219175141.1907408-1-bernd@kuhls.net>
 References: <20251219175141.1907408-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1766166722;
- bh=5zR4hweba9HiHAOYTsR8R09hEu3rx1GtZCF1KL1TZE0=;
+ bh=PK2/xCHrZketBW1JNEov13dRyCwz0YKt3SGrqLvTPIs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Pn3ObOOwKE5Ll32fXh6e5JWkQIdWJQ9xBpIHh72P7H2ppEdxnprWD9cJLU06ESkq7
- nMkHqspmtLKW43d01BcsQdwgI7+E/P93p3tTFM7eAgDz2K27GY7XhJAdX+YCNjRduH
- cRPYuTLNru67cDYUaJakqcf5zW3oW9rUjx6by2WJNbiUYYguyMpglla91OvdsWcZS9
- pRq/3Ul0XKpcli4RTJsrtKIgZ2WyLpZTrFvvWpBKiiRfZ3bfxU2JPuBrWzQ7hd0mva
- 8Y8hvq6xs9LgjRDZvrQJPohwWDNXB9WxSYPh4GxTlewswfNYakNKmqNlRYqYRlwzIG
- l8ScDE4xk1Tjg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=mx30t1LDPk842aUFTO5a9BFQEp36NYJWJ8N6A8her7ZgEZz6sUqIOJq/lICLRF8ag
+ FxJaPNOfbbmCIXecSfHEk5fCWQkBtzeQwtEqEpjuHE/rsr04rcyTXPtZOQPDnj0Sjo
+ QWW8ma/ZIIYU2h3s+hVfZgGxBTp1n/LT7EFpr6afjjp4VRoqguJ8jyL+xDETG0yCTI
+ PPUwkkHneSOse/pd4iLmfxLoVLNqOWtl/su/0rTuT8yvd4W6vCJkue8SOuAWeG1PmH
+ ewZlronI3JnXzbLzbDroLbbtV/ql8FxPXRars6hLB71JDDsQmcGL6ak3FAk3Te1cwx
+ nTbNQ6K5sCO1A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Pn3ObOOw
-Subject: [Buildroot] [PATCH v4 10/20] package/alure: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=mx30t1LD
+Subject: [Buildroot] [PATCH v4 12/20] package/opentracing-cpp: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,217 +100,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/kcat/alure:
-last commit: Feb 2020
-last bug report: Oct 2020
-last pull request: 0 open
+Quoting https://github.com/opentracing/opentracing-cpp
+"This library is DEPRECATED!"
+https://github.com/opentracing/specification/issues/163
+https://github.com/opentracing/opentracing.io/pull/460
 
 The package is broken with cmake 4 and no other package depends on it.
 
-The upstream site kcat.strangesoft.net has no DNS record anymore, the
-main site strangesoft.net serves content unrelated to alure.
-
-Although the cmake error is easy to fix we remove this unsupported
-package instead.
-
-Fixes:
-https://autobuild.buildroot.net/results/d5a/d5a275f2d282c9dd2e3053667c79be11d48e918d/
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Jan Heylen <jan.heylen@nokia.com>
 ---
- Config.in.legacy         |  6 ++++
- DEVELOPERS               |  1 -
- package/Config.in        |  1 -
- package/alure/Config.in  | 56 ----------------------------------
- package/alure/alure.hash |  3 --
- package/alure/alure.mk   | 65 ----------------------------------------
- 6 files changed, 6 insertions(+), 126 deletions(-)
- delete mode 100644 package/alure/Config.in
- delete mode 100644 package/alure/alure.hash
- delete mode 100644 package/alure/alure.mk
+ Config.in.legacy                             |  6 +++++
+ DEVELOPERS                                   |  3 ---
+ package/Config.in                            |  1 -
+ package/opentracing-cpp/Config.in            | 18 -------------
+ package/opentracing-cpp/opentracing-cpp.hash |  3 ---
+ package/opentracing-cpp/opentracing-cpp.mk   | 28 --------------------
+ 6 files changed, 6 insertions(+), 53 deletions(-)
+ delete mode 100644 package/opentracing-cpp/Config.in
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 76e8a213ca..1f7ac7d4b8 100644
+index 02132484f2..1e54930405 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_ALURE
-+	bool "alure has been removed"
++config BR2_PACKAGE_OPENTRACING_CPP
++	bool "opentracing-cpp has been removed"
 +	select BR2_LEGACY
 +	help
-+	  alure is unmaintained and has been removed
++	  opentracing-cpp was deprecated upstream and has been removed
 +
- config BR2_PACKAGE_LIBUWSC
- 	bool "libuwsc has been removed"
+ config BR2_PACKAGE_OPENPOWERLINK
+ 	bool "openpowerlink has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 60d6ff858f..3b18c745bf 100644
+index 9420bd4336..93ff7cea4c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2889,7 +2889,6 @@ F:	configs/qemu_*
- F:	configs/am574x_idk_defconfig
- F:	configs/beagleboneai64_defconfig
- F:	configs/beagley_ai_defconfig
--F:	package/alure/
- F:	package/aubio/
- F:	package/bcc/
- F:	package/binutils/
+@@ -1553,9 +1553,6 @@ N:	Jan Havran <havran.jan@email.cz>
+ F:	board/pine64/pinecube/
+ F:	configs/pine64_pinecube_defconfig
+ 
+-N:	Jan Heylen <jan.heylen@nokia.com>
+-F:	package/opentracing-cpp/
+-
+ N:	Jan Kraval <jan.kraval@gmail.com>
+ F:	board/orangepi/orangepi-lite
+ F:	configs/orangepi_lite_defconfig
 diff --git a/package/Config.in b/package/Config.in
-index 0e11fe4bae..6d1b78cbfc 100644
+index e51a23abf3..4eaa6894e5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1533,7 +1533,6 @@ menu "Libraries"
- menu "Audio/Sound"
- 	source "package/alsa-lib/Config.in"
- 	source "package/alsa-plugins/Config.in"
--	source "package/alure/Config.in"
- 	source "package/aubio/Config.in"
- 	source "package/bcg729/Config.in"
- 	source "package/caps/Config.in"
-diff --git a/package/alure/Config.in b/package/alure/Config.in
+@@ -1951,7 +1951,6 @@ menu "Logging"
+ 	source "package/log4cpp/Config.in"
+ 	source "package/log4cxx/Config.in"
+ 	source "package/log4qt/Config.in"
+-	source "package/opentracing-cpp/Config.in"
+ 	source "package/spdlog/Config.in"
+ 	source "package/ulog/Config.in"
+ 	source "package/zlog/Config.in"
+diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
 deleted file mode 100644
-index c831bba913..0000000000
---- a/package/alure/Config.in
+index ff3067b7d1..0000000000
+--- a/package/opentracing-cpp/Config.in
 +++ /dev/null
-@@ -1,56 +0,0 @@
--config BR2_PACKAGE_ALURE
--	bool "alure"
--	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # openal
+@@ -1,18 +0,0 @@
+-config BR2_PACKAGE_OPENTRACING_CPP
+-	bool "opentracing-cpp"
 -	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
--	depends on BR2_USE_WCHAR # use wchar_t
--	select BR2_PACKAGE_OPENAL
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
 -	help
--	  Alure is a C++ 3D audio API. It uses OpenAL for audio
--	  rendering, and provides common higher-level features such as
--	  file loading and decoding, buffer caching, background
--	  streaming, and source management for virtually unlimited
--	  sound source handles.
+-	  OpenTracing API for C++
 -
--	  https://kcat.strangesoft.net/alure.html
+-	  http://opentracing.io
 -
--if BR2_PACKAGE_ALURE
+-comment "opentracing-cpp needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 -
--config BR2_PACKAGE_ALURE_FLAC_DECODER
--	bool "flac decoder"
--	help
--	  Enables the built-in FLAC decoder.
--
--config BR2_PACKAGE_ALURE_MINIMP3_DECODER
--	bool "minimp3 decoder"
--	help
--	  Enables the built-in minimp3 decoder.
--
--config BR2_PACKAGE_ALURE_OPUS_DECODER
--	bool "opus decoder"
--	select BR2_PACKAGE_LIBOGG
--	select BR2_PACKAGE_OPUS
--	help
--	  Enables the built-in libopusfile decoder.
--
--config BR2_PACKAGE_ALURE_SNDFILE_DECODER
--	bool "sndfile decoder"
--	select BR2_PACKAGE_LIBSNDFILE
--	help
--	  Enables the built-in libsndfile decoder.
--
--config BR2_PACKAGE_ALURE_VORBIS_DECODER
--	bool "vorbis decoder"
--	select BR2_PACKAGE_LIBOGG
--	select BR2_PACKAGE_LIBVORBIS
--	help
--	  Enables the built-in libvorbis decoder.
--
--endif
--
--comment "alure needs a toolchain w/ C++, gcc >= 9, NPTL, wchar"
--	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
--		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
-diff --git a/package/alure/alure.hash b/package/alure/alure.hash
+-comment "opentracing-cpp needs exception_ptr"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
 deleted file mode 100644
-index 0d4c36c4ae..0000000000
---- a/package/alure/alure.hash
+index 8cfaf5fd47..0000000000
+--- a/package/opentracing-cpp/opentracing-cpp.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally computed
--sha256  9b808e5b5a54d156348221dc86704c7831115047d5238691e6088f8c4814b2ca  alure-14beed2a86d5a36030e907b21c46614d505f07cd.tar.gz
--sha256  7331ddc67daaf1a283c81e8dc17bac8dc40f54ed3fab3d3964616f4bd502a0a3  LICENSE
-diff --git a/package/alure/alure.mk b/package/alure/alure.mk
+-# Locally calculated
+-sha256  5b170042da4d1c4c231df6594da120875429d5231e9baa5179822ee8d1054ac3  opentracing-cpp-1.6.0.tar.gz
+-sha256  076d03156735d5ff2df2ea0f8b12351ef65e5e9222b5c8c6a35101dadb41e717  LICENSE
+diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
 deleted file mode 100644
-index fe27bfd12b..0000000000
---- a/package/alure/alure.mk
+index 12ce40fbed..0000000000
+--- a/package/opentracing-cpp/opentracing-cpp.mk
 +++ /dev/null
-@@ -1,65 +0,0 @@
+@@ -1,28 +0,0 @@
 -################################################################################
 -#
--# alure
+-# opentracing-cpp
 -#
 -################################################################################
 -
--ALURE_VERSION = 14beed2a86d5a36030e907b21c46614d505f07cd
--ALURE_SITE = $(call github,kcat,alure,$(ALURE_VERSION))
--ALURE_LICENSE = Zlib, Public Domain (src/decoders/dr_flac.h)
--ALURE_LICENSE_FILES = LICENSE
--ALURE_INSTALL_STAGING = YES
+-OPENTRACING_CPP_VERSION = 1.6.0
+-OPENTRACING_CPP_SITE = \
+-	$(call github,opentracing,opentracing-cpp,v$(OPENTRACING_CPP_VERSION))
+-OPENTRACING_CPP_LICENSE = Apache-2.0
+-OPENTRACING_CPP_LICENSE_FILES = LICENSE
 -
--ALURE_DEPENDENCIES = openal
+-OPENTRACING_CPP_INSTALL_STAGING = YES
 -
--# Disabling alure examples removes the dependencies on physfs and dump
--# libraries. Enable at least one built-in decoder (wave).
--ALURE_CONF_OPTS = -DALURE_INSTALL=ON \
--	-DALURE_BUILD_EXAMPLES=OFF \
--	-DALURE_ENABLE_WAVE=ON
--
--ifeq ($(BR2_PACKAGE_ALURE_FLAC_DECODER),y)
--ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=ON
--else
--ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_ALURE_MINIMP3_DECODER),y)
--ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=ON
--else
--ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_ALURE_OPUS_DECODER),y)
--ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=ON
--ALURE_DEPENDENCIES += libogg opus
--else
--ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_ALURE_SNDFILE_DECODER),y)
--ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=ON
--ALURE_DEPENDENCIES += libsndfile
--else
--ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_ALURE_VORBIS_DECODER),y)
--ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=ON
--ALURE_DEPENDENCIES += libogg libvorbis
--else
--ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=OFF
--endif
--
+-# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+-# although BUILD_STATIC_LIBS=ON is default, make it explicit,
+-# cmake and static/shared libs is confusing enough already.
 -ifeq ($(BR2_STATIC_LIBS),y)
--ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=OFF \
--	-DALURE_BUILD_STATIC=ON
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
 -else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
--	-DALURE_BUILD_STATIC=ON
--else
--ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
--	-DALURE_BUILD_STATIC=OFF
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
 -endif
+-
+-OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
 -
 -$(eval $(cmake-package))
 -- 
