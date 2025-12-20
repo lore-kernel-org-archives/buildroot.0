@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A8EFE67483
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AC68E668B7
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA36160E78;
-	Sat, 20 Dec 2025 21:45:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3995809C3;
+	Sat, 20 Dec 2025 21:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3ehZS2Cr_sAW; Sat, 20 Dec 2025 21:45:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F7FetVMp4un5; Sat, 20 Dec 2025 21:45:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1448060E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0012380968
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766267133;
-	bh=oYP4W10kGGq8WcLOLGVTjl6l0UThsz8+PBsPaxgdCfs=;
+	s=default; t=1766267147;
+	bh=zZmla605p3bp2NfqyCjqwqHlN2Ah+LLb0t9Mrh0LQu0=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JWkH4r0mnV5B0l8y03MfVIJSmIucWecArjIWR/+sSmFPXGegpjeU8HJ71Sjxd/YyO
-	 MH7SGEy+ic5KSabDlayo0bi06SprL2SPP76P8Gr/QlGGqj3cICVV3/PQNl62ZKPmds
-	 01RLZ9Q83pHjx50oCpeCC5IOcilx2HrJ1495vWO4Q03Fr/paBmm/Y0yLhX5IgKX/L8
-	 7kwHIa6uVOxnqW3vmlPGv7mmmU1CQtAoTstCvd0FrL7Uii8o1NSZ3VfBks9/3ROEl7
-	 FN0YWgh9WpBr78t5+O5M7w/I+JBu5f11ZAnG+KE6/ueFOciB+CAG/MjVdjdAppDPNH
-	 pycJeN6TLVltQ==
+	b=NCBxBiOuL9O8121dMZdLkNdZPzmcHhs/rsenBIx5d8C8DPr0B7c8Ipxj5LJL1YXTz
+	 RmkgkRNp3iAW2wv5zdMnqTY5O76HLn75tXnUEOc0HxioOczYDYE8z2woOb0Y8GOSTu
+	 sWDQspCj6mN53f8bkETpXwPQIJTVnFIizDmkhxdv0I4aI0nH2E+qFmSVjo3qYl7WaP
+	 5CfJe8AlpP8oQ/kzr1zejuwj3AVflqy9yWD6JMFhAOdUrsXaC5Yy1Yld2eyAgCl4SI
+	 XOtiBoMZ1wn1UCsFJsh/aANiGpBD9spE3+7u9R0C0xRfr51YnZcXI1wWQM393B7C6C
+	 6YvWOjoJ4uxQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1448060E21;
-	Sat, 20 Dec 2025 21:45:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 44923119
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:45:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0012380968;
+	Sat, 20 Dec 2025 21:45:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85AFA293
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3638E406DD
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:45:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37B1F4027C
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:45:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ItML_7fGYt7 for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 21:45:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2GtdG8Rfxf-e for <buildroot@buildroot.org>;
+ Sat, 20 Dec 2025 21:45:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2B7EF405A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B7EF405A3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 328654032D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 328654032D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2B7EF405A3
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:45:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 328654032D
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:45:43 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c714.dip0.t-ipconnect.de [79.214.199.20])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 80EC8A4C5012;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id AB0E0A4C501C;
  Sat, 20 Dec 2025 22:42:11 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39116)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vX4iF-000000002DO-32OX;
+ (envelope-from <bernd@kuhls.net>) id 1vX4iF-000000002DO-3Nav;
  Sat, 20 Dec 2025 21:42:07 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 20 Dec 2025 22:42:02 +0100
-Message-ID: <20251220214206.1089100-14-bernd@kuhls.net>
+Date: Sat, 20 Dec 2025 22:42:03 +0100
+Message-ID: <20251220214206.1089100-15-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251220214206.1089100-1-bernd@kuhls.net>
 References: <20251220214206.1089100-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1766266931;
- bh=TLnLA9Vz3yMJ0fSQUZ067VEqBV8PlDaCvKwfDmvz724=;
+ bh=zzBnpIRECXjdOy/NlWnu96M07e37YRmBYIsFQIe+ftU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Z14z6UqA2ZIDzT655HLmrHAwCxHKS9I2tMlT7FsuuuWOuSdFLWD/hm/YJwu14y24O
- JOlyRddCGKNmT0hZ8qOXVVpVUi2G/RZsdyfBSyp2X3RBEttFCRUf7DH8peGxGwHBlq
- 9trBS1pN3tb/nhts7lOgfdu2TWvU1NaMy9IgmBcQrG8nMmwHMJR0ZiAitLN/HqXBG0
- lxJkeRZGD26Kbp+4eELY1b5P3ECNIied2V75IaBmF7gnvrSP16gI5zWTml8KVu2IJS
- VUrbSYSoVXRhLgdinvx2ufVUQvmtHAC991BM+tBi1ehLLt6uhltOGP4q0Z71KOcJTC
- nNXC0O3Xc43Fw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=p7C5PgkIFPoVxurJV/j94nzWFeknwq3T90Rb4zjqgdAJHdiufUBPgFspwB+oLkb6F
+ GnoxoXBbqdPtNzhMix9M8XngEM4GawB8ADGCPY3VHJCLYoTpgg7lP/9x7EGEs4R85y
+ Wu8nnTxuz+JmvRyF7I8wqOOrcuQzOHox1N1jN54KCAkDS2a+3HAiKMxZCRjv2Vue0B
+ 76vRbTN4w3dreUk+KDmtqPqY0hpoZ77h4Xlyo3Izi4NYRJBEv0PQfUZsmP8QePv9j0
+ THYiSBUaBOFNCB0d7q0FzUyRBreeUsGTZed8wCOQKbUUsEDwPxhZEX6Ga0gDR/3xsB
+ q65jYgkpHrwzg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Z14z6UqA
-Subject: [Buildroot] [PATCH 14/18] package/python-botocore: bump version to
- 1.42.14
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=p7C5PgkI
+Subject: [Buildroot] [PATCH 15/18] package/python-iwlib: bump version to
+ 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,43 +102,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/boto/botocore/blob/1.42.14/CHANGELOG.rst
+https://github.com/nhoad/python-iwlib/blob/1.7.0/README.rst
+"1.6: Added support for Python 3 (via migration to CFFI)"
+
+Switched SITE to pypi.
+
+Added dependency to python-cffi:
+https://github.com/nhoad/python-iwlib/commit/a7c14aff76a28004afb45e08bcf83be5948cb7c1
+
+Updated package as computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-botocore/python-botocore.hash | 4 ++--
- package/python-botocore/python-botocore.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-iwlib/Config.in         | 1 +
+ package/python-iwlib/python-iwlib.hash | 6 ++++--
+ package/python-iwlib/python-iwlib.mk   | 7 ++++---
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
-index 8f2792c829..6b4d788410 100644
---- a/package/python-botocore/python-botocore.hash
-+++ b/package/python-botocore/python-botocore.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/botocore/json
--md5  ed7c48a9f7b0b422b71e6507ab14f957  botocore-1.42.5.tar.gz
--sha256  37bfc487f14286d9795920807fcb8318b940835b18fff6bec5253449f377136f  botocore-1.42.5.tar.gz
-+md5  5905039db132a93c73a18ad9e497bb43  botocore-1.42.14.tar.gz
-+sha256  cf5bebb580803c6cfd9886902ca24834b42ecaa808da14fb8cd35ad523c9f621  botocore-1.42.14.tar.gz
- # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
-index c3770b4833..3d7fe258bb 100644
---- a/package/python-botocore/python-botocore.mk
-+++ b/package/python-botocore/python-botocore.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-iwlib/Config.in b/package/python-iwlib/Config.in
+index eb28d674d9..e15ae38025 100644
+--- a/package/python-iwlib/Config.in
++++ b/package/python-iwlib/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_IWLIB
+ 	bool "python-iwlib"
+ 	depends on BR2_PACKAGE_WIRELESS_TOOLS_LIB
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
+ 	help
+ 	  python-iwlib is a package for interfacing with iwlib,
+ 	  providing an implementation to the wireless tools in Linux.
+diff --git a/package/python-iwlib/python-iwlib.hash b/package/python-iwlib/python-iwlib.hash
+index 4d71a3fea6..d1848e0bd7 100644
+--- a/package/python-iwlib/python-iwlib.hash
++++ b/package/python-iwlib/python-iwlib.hash
+@@ -1,3 +1,5 @@
+-# Locally calculated
+-sha256  7f1ad4354284a452388e178b5d9b191fa5a68a9183423a90a1d261ba2ebd1cac  python-iwlib-1.5.tar.gz
++# md5, sha256 from https://pypi.org/pypi/iwlib/json
++md5  66016f4f7f53128525d1f9d9de7a6fed  iwlib-1.7.0.tar.gz
++sha256  a805f6597a70ee3001aba8f039fb7b2dcb75dc15c4e7852f5594fd6379196da1  iwlib-1.7.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/python-iwlib/python-iwlib.mk b/package/python-iwlib/python-iwlib.mk
+index 9d0985567d..7a4fee7fc9 100644
+--- a/package/python-iwlib/python-iwlib.mk
++++ b/package/python-iwlib/python-iwlib.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_BOTOCORE_VERSION = 1.42.5
-+PYTHON_BOTOCORE_VERSION = 1.42.14
- PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
--PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/8c/46/5b40b1deb780869ca9f0c1de47062a78a0494b53d6f9d6bad10fc38eef9d
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/35/3f/50c56f093c2c6ce6de1f579726598db1cf9a9cccd3bf8693f73b1cf5e319
- PYTHON_BOTOCORE_SETUP_TYPE = setuptools
- PYTHON_BOTOCORE_LICENSE = Apache-2.0
- PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
+-PYTHON_IWLIB_VERSION = 1.5
+-PYTHON_IWLIB_SITE = $(call github,nhoad,python-iwlib,$(PYTHON_IWLIB_VERSION))
++PYTHON_IWLIB_VERSION = 1.7.0
++PYTHON_IWLIB_SOURCE = iwlib-$(PYTHON_IWLIB_VERSION).tar.gz
++PYTHON_IWLIB_SITE = https://files.pythonhosted.org/packages/59/44/fd72c0a7094baeb448dc9e87b3d579da98e2b8593c3fe05c5f9dd20dc6bc
+ PYTHON_IWLIB_LICENSE = GPL-2.0
+ PYTHON_IWLIB_LICENSE_FILES = COPYING
+ PYTHON_IWLIB_SETUP_TYPE = setuptools
+-PYTHON_IWLIB_DEPENDENCIES = wireless_tools
++PYTHON_IWLIB_DEPENDENCIES = host-python-cffi wireless_tools
+ 
+ $(eval $(python-package))
 -- 
 2.47.3
 
