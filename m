@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2941AE668B4
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 16:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E356E668B4
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 16:49:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF21840818;
-	Sat, 20 Dec 2025 16:07:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47B78817AE;
+	Sat, 20 Dec 2025 16:49:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S4TZNX0PrEKK; Sat, 20 Dec 2025 16:49:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AE7A81754
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766249357;
+	bh=BGQlOyv6eqSFIqjCJOf9xmALE+8i9xENabwfblbk/+8=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=bfzGFm5K86yyJmHebO2kIbzo9zAVwfo4NfuVYd/uGT/70zWpkgi5KvZb9gibNGcDL
+	 4Dora+UHICosIjm6DFiBqhnj7oR3TlE9m8GoVLjaVs7fFDVpQZ37s4oT4QtcSDFjHq
+	 OXdzHBntK9qtALprPOupvkCUnwHR+ojjd+70JU7aAKap+fjFA7yiF6r6PItlIqvSyb
+	 sYdtnx83SsRQEnsv3VP3xv3xXwp0GLPu05qERVvbsnMo4oeyawy4SMMgAbWknL+Ele
+	 JloycnjcV0uumYUGzIMrbctLJU1oeH7IlxZKEn6j25R1bfPiiDzKzkcn0PjKk0KH4b
+	 0sad3EdDRyN2A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AE7A81754;
+	Sat, 20 Dec 2025 16:49:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3AED1A6
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:49:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0DB64091B
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:49:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tLZfJ15w5rYY; Sat, 20 Dec 2025 16:07:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46753407BB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766246834;
-	bh=1z1UME25Y/ZQ4yCHCqQcOwMI46QlqTVhfAPfz9lwFhQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kuf688KaAogmTwRAI33GILj6GipChgkutoJ0k8w5Y4+oMG6krv7OsT8kPhFtUMv+4
-	 6jc9yDIyyId8bw/KdKKMrJdwzUT+bAKoveO/KyBuBJcHIp7SW/dP0invJ1vodnCLKK
-	 xpa1fAXAhxC4dtTLWsMuConlgjoxEyOLMXhwngSV7DwNvOHJDcmtbW8yIuDOHUHFmc
-	 6zcNE+Z496HEXTyFvY+rM6ch8EK3sX6KkljW3Eu76bnMRyqB0T4Sn3sgGH8f5U2tac
-	 8hbMT2svyMNDQdWxVIMyv68DO9KommM4L1y40w1mdPIU7LIELbyHs2EpFL5UXMh4fr
-	 S3WWUUFOGhTfg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46753407BB;
-	Sat, 20 Dec 2025 16:07:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C7521A6
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:07:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F27C3400BD
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:07:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KUyMC3F6pflv for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 16:07:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0D8E14008D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D8E14008D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0D8E14008D
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:07:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 32F2219F5C6;
- Sat, 20 Dec 2025 17:07:09 +0100 (CET)
-Received: from [37.167.178.5:29315] via [37.167.178.5] by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 20 Dec 2025 17:07:09 +0100
+ id dAI5JimYSzXd for <buildroot@buildroot.org>;
+ Sat, 20 Dec 2025 16:49:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E612D4091A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E612D4091A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E612D4091A
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:49:13 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c714.dip0.t-ipconnect.de [79.214.199.20])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 43F52A4C44EB
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 17:49:10 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51110)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vX08j-000000001Jn-3DMr
+ for buildroot@buildroot.org; Sat, 20 Dec 2025 16:49:09 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 20 Dec 2025 17:49:08 +0100
+Message-ID: <20251220164909.128665-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251220164909.128665-1-bernd@kuhls.net>
+References: <20251220164909.128665-1-bernd@kuhls.net>
 MIME-Version: 1.0
-Date: Sat, 20 Dec 2025 17:07:09 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251215212924.2618218-1-bernd@kuhls.net>
-References: <20251215212924.2618218-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <ce340fb730342f4596f7fd5de5bdf80e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766246830;
- bh=mC8mpsm14VB1avjLjKpVOly6bFzve4cRG9azw+eN+rA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=GZEoAOr5Lk9dL1f6LpBCU88zAMB0ydqQS75d8wvWqzhntjkABHgOuwYDffxMxP0tj
- l4Qhb04VhK71VCbCKuV1OI7c0cOBf/cCExobbupcymTR0l3K1i9UKnj9OfFF8f5VZV
- E/xABWf4z63INYNUnhyypvEYSiCSrtOi+4/4eLWdxAkurNHFoWo+VlSyU0fzC8Go3x
- UHdVqa5o+HUDK0JwC01Odz6J9SZepnAkkeqVAxlqDCeBVRaRNMjoX+6w8Pk+XA1rRB
- yF9xQwJJ26JBCeKLEmMCFMjXB+J7N91+ru2wGRKyyTPWp5MOmYEpWDvhNW1qG1juyd
- X7cpuCui+oX8w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GZEoAOr5
-Subject: Re: [Buildroot] [PATCH 1/1] package/libinput: bump version to 1.30.1
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1766249350;
+ bh=Iuo7ynAHOwwclEWTMckhtfNyw1+lgJeR8H528vMgHlI=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=OtXVR0+EFWMPVOEIeOy+H++/0N9N8Jpydn0AhvuAO3t6NexQ/2s7YHQop8oY80m9u
+ 4UInhjkjZS6uXR7y8XQeA6gZi2Pq9V4YYOyMvHP6ywgbK5FKZxiig/MMZOi9r3UkVg
+ ecAfNZcAWS9uK9pK5HlCWW9PvNBmXfCCWojmNacuvXTTwuD7BpNm9Czi9ehDSnEZD1
+ PDYoogMQcjvwaSViBzXpKIuu0O/yR1Qtwm2iKD1I9NkSUeL61rByFVYTXaAF0iHM7c
+ xOHKcvIYeop42ssHZLmGTAMljhEQbjndEBvizx/wEH8sF74v9x2ZLmPvtZXn1aUB2L
+ V0gSIeLabVlAA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=OtXVR0+E
+Subject: [Buildroot] [PATCH 2/2] package/alsa-utils: bump version to 1.2.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,23 +94,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/12/2025 22:29, Bernd Kuhls wrote:
-> https://lore.freedesktop.org/wayland-devel/20251125050917.GA854973@quokka/T/#u
-> https://lore.freedesktop.org/wayland-devel/20251208024732.GA3642318@quokka/T/#u
-> 
-> Added optional dependency to lua-5.4:
-> https://gitlab.freedesktop.org/libinput/libinput/-/commit/9461d1a9a17337c6ee5a4baee836fb9b9e12906c
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://www.alsa-project.org/wiki/Changes_v1.2.14_v1.2.15#alsa-utils
+https://www.alsa-project.org/wiki/Changes_v1.2.15_v1.2.15.1#alsa-utils
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index fd03588294..ee47d43ab9 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0794c74d33fed943e7c50609c13089e409312b6c403d6ae8984fc429c0960741  alsa-utils-1.2.14.tar.bz2
++sha256  5ad79f349e59c30c9a4929ad4995ebee33267473e0e632d7c1a30e2b093d3327  alsa-utils-1.2.15.1.tar.bz2
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 64da2201bf..9af2d0136e 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_UTILS_VERSION = 1.2.14
++ALSA_UTILS_VERSION = 1.2.15.1
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = https://www.alsa-project.org/files/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
