@@ -4,85 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7948FD637B2
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 11:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 102ECE668AF
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 11:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43CF883408;
-	Sat, 20 Dec 2025 11:13:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA92F81779;
+	Sat, 20 Dec 2025 11:17:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U1AgyBAffwM0; Sat, 20 Dec 2025 11:13:23 +0000 (UTC)
+ id 3IyO5FjvjDEt; Sat, 20 Dec 2025 11:17:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70F0882803
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD80481A27
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766229203;
-	bh=iqLhkaz/JixuX0MJarvWRrHjvHctitCgrsgI44gs9yo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=C+X3vjJX+ofp+S+YLVUvBBgOQgNQwUAJn9mOBqi+laaX+Mw/DN7nyJh5Djhug3ZuI
-	 cKk6tFfAQIblQGAkYLp8fZBDSC/HwQBgZ8u/UpbGCGHNH9SFrukDGD9X2fvEYlOaM9
-	 vB3iUkmaY3sM1wBUf2qiqosXV6wnF6wsDh6/J4XIxhaonhjpLnNHCObGIks4cGqe3E
-	 oU8QMy2arpMVVHBVqwZ9tMtLutyFW0+fe1Gtdw8SqoZNi9GnMxnf2KH5ngiWslirXI
-	 mrZ/xsOaVnkyqy0sIy7ATonmlDNbpzoDGm0SWGLTrzyjS6ZHkCtjl37Sqc6EoREzda
-	 NAYPtCOa2IizA==
+	s=default; t=1766229465;
+	bh=kgZXm6iYQdSvP09as59xv7fCudKu9XSyYFJSsnzNouY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=qlXSg2cWudnAQN4dd4ldcCnfyVdN66u94m6Rnn0zZ04lxCxli2lHKv+17BdlvJ4hm
+	 Cf5+lTZzne3N2mY7ESPjXzwVySPiYFJNr/Z7SJlMtbP6Sgmc6c2YcdQx0LgzWoeN/z
+	 WQmXm8VzHbuEPBQv99LMzQWDWHmf5AHJwhKfcEpm6G7UB0t+M1uCUHFX8wqAUdj1Wl
+	 Ou21GKDujBl8Djzp4wh3jpDSQ9IVOQimiuPBiZ8+V/+jxMwo1KY7WKkNK/HsmGS9kX
+	 Ru3AHexQIrrGmxPTeh7ed59dq4rGpPcLdmgGoPbsOXWXESnagb5nfW80aQedNQ77RA
+	 R/MfT9ryCb3sg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70F0882803;
-	Sat, 20 Dec 2025 11:13:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D97F2119
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD80481A27;
+	Sat, 20 Dec 2025 11:17:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33B82119
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFC5182751
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AD1340937
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:17:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o3fyJVdQzTv6 for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 11:13:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B9D6382803
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9D6382803
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B9D6382803
- for <buildroot@busybox.net>; Sat, 20 Dec 2025 11:13:20 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 2F3755FFA3;
- Sat, 20 Dec 2025 12:13:15 +0100 (CET)
-Received: from 2a0d:e487:416e:b4c0:bc35:8e33:c88c:ebb9
- via 2a0d:e487:416e:b4c0:bc35:8e33:c88c:ebb9 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 20 Dec 2025 12:13:15 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4u95F9ywAj6H for <buildroot@buildroot.org>;
+ Sat, 20 Dec 2025 11:17:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=169.148.134.94;
+ helo=sender2-pp-o94.zoho.in; envelope-from=preyas17@zohomail.in;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 762514092C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 762514092C
+Received: from sender2-pp-o94.zoho.in (sender2-pp-o94.zoho.in [169.148.134.94])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 762514092C
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:17:42 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1766229455; cv=none; d=zohomail.in; s=zohoarc; 
+ b=ZyUNiNIva5AhVxXGUo0k6BOSUZQa9oLW8rLUE6G9pbuVkavFtkb0LybjCncwfOloNb8ASrBy1MyxL7LJThxSnVAWAWXIoVRCXriDJABmLw2Z04QzClHMjWzx8HRE38D4ujbTazULvaiZUPl6AnR5W4Mq863chiPJmSAFXu07sqA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in;
+ s=zohoarc; t=1766229455;
+ h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
+ bh=h9fCERFwfpNCbo+dfL5JHhH/HdZTCLH0CWzshy533CA=; 
+ b=WeVSwNor1IXW7aQqIfVjv7vyRhZRjMb/IcRJmABVYWVWXYjXmzC8KYSkUdTU8sRFsPfXbqEbKJtmZDjY8KILGA2NaplEWX2wPtYXXKO7EzeXJPGLqpqvR2rF7hNWnvVaB/6SUJDCnv2LTZUmp+N114Uz1FqmrAUtNjLakZ9k62E=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+ dkim=pass  header.i=zohomail.in;
+ spf=pass  smtp.mailfrom=preyas17@zohomail.in;
+ dmarc=pass header.from=<preyas17@zohomail.in>
+Received: by mx.zoho.in with SMTPS id 1766229453594930.3739213638781;
+ Sat, 20 Dec 2025 16:47:33 +0530 (IST)
+To: buildroot@buildroot.org
+Cc: Preyas Sharma <preyas17@zohomail.in>
+Date: Sat, 20 Dec 2025 11:17:07 +0000
+Message-ID: <20251220111707.59273-1-preyas17@zohomail.in>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sat, 20 Dec 2025 12:13:15 +0100
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20251220083916.348329-1-francois.perrad@gadz.org>
-References: <20251220083916.348329-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <f330d1776c4026f73786b0e76dcdc333@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766229197;
- bh=SgIW/AsnSSRjIOvBnT4oRiOurft/eTQ6+IINYBlthXg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Xf7cAz4JOH0S1XikVxNC9LREXwmr3HePhDkI5329CnIJzHkGhTY4hQRK0tq8G9s2+
- VeG6AkpZtLqgxDSbCzKssOgyRTLBoi6sXgoHL7B0t6SptYUZtsTFWrJECGiOTFyv8o
- /9TF/oA7okIxNpfUL3qRCMAPlxGl/XBC991kp+AJp8QiloPlOg2tjaKoQUHtxRn+ip
- Il1Lm+yzuZTiW0GF0VUOhJ8eijpbJe6Esss/msIbqacSo0DRCwmK08zv5oVjK9MiPy
- 3llvRpur5B6wKziRqoIH93NCn71fEGOATGxuMHFsTkdzMCswtCedRB1lrPHnM6wQaE
- iYj3pHRe1NT6w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Xf7cAz4J
-Subject: Re: [Buildroot] [PATCH] package/linenoise: security bump to version
- e26268de5e56bfaad773786471844578fe9f7f4b
+X-ZohoMailClient: External
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1766229455; 
+ s=zoho; d=zohomail.in; i=preyas17@zohomail.in;
+ h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=h9fCERFwfpNCbo+dfL5JHhH/HdZTCLH0CWzshy533CA=;
+ b=Dl4GdQGT+3jXjTylwEeV8QCjFrF4eJ7NOGIhpAP1Zw6YSUX4PJnR8s01XGRnfdBP
+ 8jT8dqhOFPio4bqr2LVYdlV9UevRxmEWPPP84VF8xTtWp6pPeKEnpwylwuDD4v5zeSz
+ eIBPRRsH0qi5+zIrsRFxCvTXjSm/xJJAfx+y1UI0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=zohomail.in
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=zohomail.in header.i=preyas17@zohomail.in
+ header.a=rsa-sha256 header.s=zoho header.b=Dl4GdQGT
+Subject: [Buildroot] [PATCH] docs/website: switch HTTP links to HTTPS Update
+ outdated insecure http links to https for buildroot.org, eLinux wiki,
+ autobuild,
+ and git-scm. Also fix downloads host from buildroot.net to
+ buildroot.org.This reduces mixed-content issues and keeps references
+ current.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,19 +100,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Preyas via buildroot <buildroot@buildroot.org>
+Reply-To: Preyas <preyas17@zohomail.in>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/12/2025 09:39, Francois Perrad via buildroot wrote:
-> fix CVE-2025-9810: TOCTOU  in linenoiseHistorySave
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+From: Preyas Sharma <preyas17@zohomail.in>
 
-Applied to master, thanks.
+---
+ README                       | 2 +-
+ docs/website/contribute.html | 8 ++++----
+ docs/website/download.html   | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/README b/README
+index 008e996f5f..143b476be6 100644
+--- a/README
++++ b/README
+@@ -3,7 +3,7 @@ Linux systems through cross-compilation.
+ 
+ The documentation can be found in docs/manual. You can generate a text
+ document with 'make manual-text' and read output/docs/manual/manual.text.
+-Online documentation can be found at http://buildroot.org/docs.html
++Online documentation can be found at https://buildroot.org/docs.html
+ 
+ To build and use the buildroot stuff, do the following:
+ 
+diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+index 52c30d60d3..1b6b3d6110 100644
+--- a/docs/website/contribute.html
++++ b/docs/website/contribute.html
+@@ -14,22 +14,22 @@
+       <ul>
+ 	<li>Reproducing, analyzing and fixing bugs from our
+ 	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a></li>
+-	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
++	<li>Analyzing and fixing <a href="https://autobuild.buildroot.org/">
+ 	    autobuild failures</a></li>
+ 	<li>Reviewing and testing patches sent by other developers. See the
+ 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
+ 	  </a> or <a href="https://patchwork.ozlabs.org/project/buildroot/list/">
+ 	    patchwork</a>.</li>
+ 	<li>Working on items from the
+-	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
+-	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
++	  <a href="https://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
++	<li><a href="https://buildroot.org/manual.html#submitting-patches">Submitting
+ 	  your own patches</a> through the
+ 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
+ 	</a></li>
+       </ul>
+ 
+       <p>For more details on these topics, check out the
+-	<a href="http://buildroot.org/manual.html#_contributing_to_buildroot">
++	<a href="https://buildroot.org/manual.html#_contributing_to_buildroot">
+ 	  Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
+ 
+       <p>If you need any support yourself, have a look at <a href="./support.html">
+diff --git a/docs/website/download.html b/docs/website/download.html
+index d1d92c8e6b..46e5fde824 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -98,7 +98,7 @@
+       </table>
+ 
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+-      <a href="/downloads/">http://buildroot.net/downloads/</a>.
++      <a href="/downloads/">https://buildroot.org/downloads/</a>.
+     </div>
+   </div>
+ 
+@@ -123,7 +123,7 @@
+       </div><br>
+ 
+       <p>If you are not already familiar with using Git, we recommend
+-	you visit <a href="http://git-scm.org">the Git
++  you visit <a href="https://git-scm.org">the Git
+ 	website</a>.</p>
+ 
+       <p>Once you've checked out a copy of the source tree, you can
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
