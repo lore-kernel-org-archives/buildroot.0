@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E7C5E67483
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:39:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B22DE668BC
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7B4781EC4;
-	Sat, 20 Dec 2025 21:39:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D8D960E23;
+	Sat, 20 Dec 2025 21:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5x1J-hkOo-GL; Sat, 20 Dec 2025 21:39:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Tc2TreyfcZBk; Sat, 20 Dec 2025 21:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FE0381E5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3697660E0F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766266795;
-	bh=d1Yu+CtOdTXu1OPFRcLYSDL5RnHGHXVQDHNV+InsR1I=;
+	s=default; t=1766266806;
+	bh=VwHGOrrSyn5SFe32XiOWUaFymdwYLKCGOim5mIPJUK0=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=F5KQvUnefMqRlg9X4JOIrcBDN5szaz5gcwmXaq7cmjfVXAIEiet8bTXTqTLo6HyEm
-	 OczMlehJFwODilmJNjabaoeFywqkRyeO8rM06pDvh4MTyS4GEpXqt+S5fYZ1+yONkW
-	 qrthkyWigNyt7Mysp7+FjHMwr2WSWWX9LO6dgxs5/t3yETPJ7yLp94kQIEJlkmQf2E
-	 0BKwW3itmxZM0H8hu9IlpUxvp4Cvt+PQOCXg/+rltBPdkjLMXMsTqC3Jqge5PgzvDs
-	 E36Gaf7nzS4PqtWd/5RU7muxW+VaH6AdnRVgb3Y0J3kP2x3NzDytXOKnjuzrh+HBc+
-	 PVgYr/OZMYE2g==
+	b=JiyIPgI0V4JM26xjeb8PSTjjgFK8gIBDpxTlplbpoQvXsOEtPwS81fql98LxNrwV6
+	 4YC7gww/YQkxhEzLYG/nMa2bPP4R0V7J+XTgt8DaKOsGIJhW/Yw2csCYNygtzT7g1z
+	 fuoCrQBOgTfHBcs9PWbDELlW322Nc3UTOZlvUwNQojkOVmTwEiDPO2bcv1VKL5T7mv
+	 IlP9imIe10kkymZ3sJu5YIW7ncWIzFPvullBdeb5/5bOpoOtLaTYRTRKpzrjh9Z5li
+	 jGmqAi8zlCDct4M4EA1nHPxQSuia/mf4/X3igoal+2J9jGeObfVdTQPSeD5twFzJSw
+	 b4sJWMKFmjwLQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FE0381E5D;
-	Sat, 20 Dec 2025 21:39:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1369423D
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3697660E0F;
+	Sat, 20 Dec 2025 21:40:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C14E723D
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE70E40799
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7F3A406D5
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:40:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LOGA5VjF3ft4 for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 21:39:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vEHJjxZBFnMd for <buildroot@buildroot.org>;
+ Sat, 20 Dec 2025 21:40:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E7FE404A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E7FE404A4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8EC38405A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EC38405A3
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E7FE404A4
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8EC38405A3
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:40:03 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c714.dip0.t-ipconnect.de [79.214.199.20])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F097AA4C4D0C;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E64FCA4C4B96;
  Sat, 20 Dec 2025 22:39:46 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:57228)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vX4fy-000000001mj-3Ru3;
+ (envelope-from <bernd@kuhls.net>) id 1vX4fy-000000001mj-3854;
  Sat, 20 Dec 2025 21:39:46 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 20 Dec 2025 22:39:34 +0100
-Message-ID: <20251220213946.1088820-3-bernd@kuhls.net>
+Date: Sat, 20 Dec 2025 22:39:33 +0100
+Message-ID: <20251220213946.1088820-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251220213946.1088820-1-bernd@kuhls.net>
 References: <20251220213946.1088820-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1766266787;
- bh=yxLQBlJPOnI7gP3KNMeKHcAiSxwcizr1cODnOccckq8=;
+ s=kas202511301023; t=1766266786;
+ bh=FeQc6eE4eZ3yPGqLi4tFORH1TBtIIMNIFae0O/uGEv8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=kdw8wgbWxO2ERrF7vhDSWEL40xUZi1H3TrSg8FoKERVkhkLXKvd3/JZAEayp0MCHx
- rswq14hqm2d6ri6TA3uG2GnAyIOu87vwa0wmPFv87ZrWUE+hRmUZpHUsgbpx47roV4
- tvutA2e2vv7po5Dy0dU9q2t4MKRMj0tXRUM7/t7wzepkXEJGmylti7rQrCLTxJoHqS
- ROKUHw1aBCrnFhBb5QvFqo9+mF8gtixL1AWR4IyuXBWOBzPXVkUX1DyYUCFYp1ZFyu
- ZcdkXOj3rZdl/kAokv9W5QFNriGWoe54g16jr0IwUzOwFvv2Fr/jFnHNkpgaQ+qFs0
- WrkdnlRkbPcEQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=paVrhmw2CHJT5ifxRiETqYRouZeWhAE/s3OTnXhKztI5dXjhBQPRC9cnOlHMnFRVA
+ yLG/js70Rz72ZjpwAb4nvMDmY4kIGE4Et+8GxGlH7NC2lP8aJPfA0DqWnkAQZ+DlSx
+ E8fvKBEnH7CnRrxajFNeqc8r5YgTqG1FJpZHUEWbM3FUi9D3hIQ+ffFoQvVz3mqwsE
+ GJynl6TEZuNoCpC8ovd3tO7188Jw5oL6IFnSSuvGh03rgCzVpR13PIF7c7f3d3X3vT
+ vs1UXo0CcxEOHk7yR9zECNBsXKWQE1TsEyAAUMubDXiYZ3IgZ7ntzcwwKWCBPKdNLy
+ 61VeHureS9TxA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=kdw8wgbW
-Subject: [Buildroot] [PATCH 03/15] package/python-crc16: switch SITE to
+ header.s=kas202511301023 header.b=paVrhmw2
+Subject: [Buildroot] [PATCH 02/15] package/python-colorzero: switch SITE to
  pypi.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -112,36 +112,37 @@ Updated package as computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-crc16/python-crc16.hash | 6 ++++--
- package/python-crc16/python-crc16.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/python-colorzero/python-colorzero.hash | 7 ++++---
+ package/python-colorzero/python-colorzero.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-crc16/python-crc16.hash b/package/python-crc16/python-crc16.hash
-index 4576a907ec..5244e400fa 100644
---- a/package/python-crc16/python-crc16.hash
-+++ b/package/python-crc16/python-crc16.hash
-@@ -1,3 +1,5 @@
--# locally computed
--sha256  10aeda70fbe8b284874b3b1b8f74b9c1f6d5e8dee20ac8f9d5bc49f45f12a42a  python-crc16-0.1.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/crc16/json
-+md5  3cb6a4f5fd10a58c09792e321cc467e5  crc16-0.1.1.tar.gz
-+sha256  c1f86aa0390f4baf07d2631b16b979580eae1d9a973a826ce45353a22ee8d396  crc16-0.1.1.tar.gz
+diff --git a/package/python-colorzero/python-colorzero.hash b/package/python-colorzero/python-colorzero.hash
+index fc2455c836..4a1b900453 100644
+--- a/package/python-colorzero/python-colorzero.hash
++++ b/package/python-colorzero/python-colorzero.hash
+@@ -1,4 +1,5 @@
+-# Locally computed
+-sha256  86c9933b004aec8ce1c476d1d1129e00325c7724df3c09aa353d5f8e883ed08d  python-colorzero-2.0.tar.gz
+-# Locally computed
++# md5, sha256 from https://pypi.org/pypi/colorzero/json
++md5  e7f71e181b94754bcc5ca7c92c52c0d7  colorzero-2.0.tar.gz
++sha256  e7d5a5c26cd0dc37b164ebefc609f388de24f8593b659191e12d85f8f9d5eb58  colorzero-2.0.tar.gz
 +# Locally computed sha256 checksums
- sha256  ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9  COPYING.txt
-diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
-index 86e6f2ecf2..7a773eaf8e 100644
---- a/package/python-crc16/python-crc16.mk
-+++ b/package/python-crc16/python-crc16.mk
+ sha256  ee1c76f465410c34802ddf81d70e1ea7a4542cf58459425038498d8f4e36bb45  LICENSE.txt
+diff --git a/package/python-colorzero/python-colorzero.mk b/package/python-colorzero/python-colorzero.mk
+index f38c98a093..0ed6a90c61 100644
+--- a/package/python-colorzero/python-colorzero.mk
++++ b/package/python-colorzero/python-colorzero.mk
 @@ -5,7 +5,8 @@
  ################################################################################
  
- PYTHON_CRC16_VERSION = 0.1.1
--PYTHON_CRC16_SITE = $(call github,gennady,pycrc16,v$(PYTHON_CRC16_VERSION))
-+PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
-+PYTHON_CRC16_SITE = https://files.pythonhosted.org/packages/a6/e0/70a44c4385f2b33df82e518005aae16b5c1feaf082c73c0acebe3426fc0a
- PYTHON_CRC16_LICENSE = LGPL-3.0+
- PYTHON_CRC16_LICENSE_FILES = COPYING.txt
- PYTHON_CRC16_SETUP_TYPE = setuptools
+ PYTHON_COLORZERO_VERSION = 2.0
+-PYTHON_COLORZERO_SITE = $(call github,waveform80,colorzero,release-$(PYTHON_COLORZERO_VERSION))
++PYTHON_COLORZERO_SOURCE = colorzero-$(PYTHON_COLORZERO_VERSION).tar.gz
++PYTHON_COLORZERO_SITE = https://files.pythonhosted.org/packages/b3/ca/688824a06e8c4d04c7d2fd2af2d8da27bed51af20ee5f094154e1d680334
+ PYTHON_COLORZERO_LICENSE = BSD-3-Clause
+ PYTHON_COLORZERO_LICENSE_FILES = LICENSE.txt
+ PYTHON_COLORZERO_SETUP_TYPE = setuptools
 -- 
 2.47.3
 
