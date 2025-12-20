@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4083D637B2
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 11:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7948FD637B2
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 11:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABB1740AA5;
-	Sat, 20 Dec 2025 11:13:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cSWmPiACNCu7; Sat, 20 Dec 2025 11:13:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80E8040A66
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766229188;
-	bh=T73hf48gcQDAVLZvjtMFTzrcFVMMfK82Tp2SD1ziuMA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OeprDtFXB5y7vW6yqu8ge1u8by4et1e2e6CUiqe7xRlrLNgXhf3WWj6K2mSOdTeTE
-	 mWmhFYB3H5sVTC1CrqjkLbSUx4dXVBPT/zPbQSKfT5peiBBJraxPbt0CSW94EBh8/M
-	 yLr6z7nWhxjrzkZqu/hFWhmJF4iuWZZMX75No7nJTPibLPo9tCcxyR/tloP0knaJr2
-	 84c57/8XQyRlSThKNtJufVuWCFOhzoyBDeIPA7gg6QuLr/d71Uas3MYTJX7G4d9oYJ
-	 8KnJd5h0sJGKS6dLv9gU9L+r8O55iTKwS2uzNrBLMzBd52RO0o1l/HLHDwPD4wNUsx
-	 oRT1MVeN2QLew==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80E8040A66;
-	Sat, 20 Dec 2025 11:13:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A44D21A6
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95C3282803
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43CF883408;
+	Sat, 20 Dec 2025 11:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M7ka3Ua0VlCc for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 11:13:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 747E882751
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 747E882751
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 600F18619D; Sat, 20 Dec 2025 11:13:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Dec 2025 12:04:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c18ebc0019b279da3793d5c5531bb8a76ff4c96
-X-Git-Newrev: 3c7cbf97d707e22d07c27894dc8ab3004ad86564
-X-Patchwork-Hint: ignore
-Message-Id: <20251220111305.600F18619D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linenoise: security bump to
- version e26268de5e
+ id U1AgyBAffwM0; Sat, 20 Dec 2025 11:13:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70F0882803
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766229203;
+	bh=iqLhkaz/JixuX0MJarvWRrHjvHctitCgrsgI44gs9yo=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=C+X3vjJX+ofp+S+YLVUvBBgOQgNQwUAJn9mOBqi+laaX+Mw/DN7nyJh5Djhug3ZuI
+	 cKk6tFfAQIblQGAkYLp8fZBDSC/HwQBgZ8u/UpbGCGHNH9SFrukDGD9X2fvEYlOaM9
+	 vB3iUkmaY3sM1wBUf2qiqosXV6wnF6wsDh6/J4XIxhaonhjpLnNHCObGIks4cGqe3E
+	 oU8QMy2arpMVVHBVqwZ9tMtLutyFW0+fe1Gtdw8SqoZNi9GnMxnf2KH5ngiWslirXI
+	 mrZ/xsOaVnkyqy0sIy7ATonmlDNbpzoDGm0SWGLTrzyjS6ZHkCtjl37Sqc6EoREzda
+	 NAYPtCOa2IizA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70F0882803;
+	Sat, 20 Dec 2025 11:13:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D97F2119
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFC5182751
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 11:13:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o3fyJVdQzTv6 for <buildroot@buildroot.org>;
+ Sat, 20 Dec 2025 11:13:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B9D6382803
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9D6382803
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B9D6382803
+ for <buildroot@busybox.net>; Sat, 20 Dec 2025 11:13:20 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 2F3755FFA3;
+ Sat, 20 Dec 2025 12:13:15 +0100 (CET)
+Received: from 2a0d:e487:416e:b4c0:bc35:8e33:c88c:ebb9
+ via 2a0d:e487:416e:b4c0:bc35:8e33:c88c:ebb9 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 20 Dec 2025 12:13:15 +0100
+MIME-Version: 1.0
+Date: Sat, 20 Dec 2025 12:13:15 +0100
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20251220083916.348329-1-francois.perrad@gadz.org>
+References: <20251220083916.348329-1-francois.perrad@gadz.org>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <f330d1776c4026f73786b0e76dcdc333@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766229197;
+ bh=SgIW/AsnSSRjIOvBnT4oRiOurft/eTQ6+IINYBlthXg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Xf7cAz4JOH0S1XikVxNC9LREXwmr3HePhDkI5329CnIJzHkGhTY4hQRK0tq8G9s2+
+ VeG6AkpZtLqgxDSbCzKssOgyRTLBoi6sXgoHL7B0t6SptYUZtsTFWrJECGiOTFyv8o
+ /9TF/oA7okIxNpfUL3qRCMAPlxGl/XBC991kp+AJp8QiloPlOg2tjaKoQUHtxRn+ip
+ Il1Lm+yzuZTiW0GF0VUOhJ8eijpbJe6Esss/msIbqacSo0DRCwmK08zv5oVjK9MiPy
+ 3llvRpur5B6wKziRqoIH93NCn71fEGOATGxuMHFsTkdzMCswtCedRB1lrPHnM6wQaE
+ iYj3pHRe1NT6w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Xf7cAz4J
+Subject: Re: [Buildroot] [PATCH] package/linenoise: security bump to version
+ e26268de5e56bfaad773786471844578fe9f7f4b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,48 +96,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c7cbf97d707e22d07c27894dc8ab3004ad86564
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/12/2025 09:39, Francois Perrad via buildroot wrote:
+> fix CVE-2025-9810: TOCTOU  in linenoiseHistorySave
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Fixes:
-CVE-2025-9810: TOCTOU in linenoiseHistorySave
-https://www.cve.org/CVERecord?id=CVE-2025-9810
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/linenoise/linenoise.hash | 2 +-
- package/linenoise/linenoise.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/linenoise/linenoise.hash b/package/linenoise/linenoise.hash
-index 9a1436eb8b..3f82ba0ff9 100644
---- a/package/linenoise/linenoise.hash
-+++ b/package/linenoise/linenoise.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1086f82fbf30b0618b1953b05d33db62c68fc7ce49391ce1374192f776fde72d  linenoise-97d2850af13c339369093b78abe5265845d78220.tar.gz
-+sha256  d5e702e7e04f0fcd09393bd4c010ce2bb19b4d137e22f2dd6064e848f4a6b5b2  linenoise-e26268de5e56bfaad773786471844578fe9f7f4b.tar.gz
- sha256  efe1692aa5b869edaa0ac88f95eb0276c1125304ffc636a299db3ebbab47f62b  LICENSE
-diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
-index fd2c4c7035..05f8aa4845 100644
---- a/package/linenoise/linenoise.mk
-+++ b/package/linenoise/linenoise.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINENOISE_VERSION = 97d2850af13c339369093b78abe5265845d78220
-+LINENOISE_VERSION = e26268de5e56bfaad773786471844578fe9f7f4b
- LINENOISE_SITE = $(call github,antirez,linenoise,$(LINENOISE_VERSION))
- LINENOISE_LICENSE = BSD-2-Clause
- LINENOISE_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
