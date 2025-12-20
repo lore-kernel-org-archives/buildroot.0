@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17CB9E67485
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6417AE67483
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:39:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF55660E14;
-	Sat, 20 Dec 2025 21:39:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 784DB60E1D;
+	Sat, 20 Dec 2025 21:39:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c7rm-NzWKiQG; Sat, 20 Dec 2025 21:39:20 +0000 (UTC)
+ id BU5BRuqaeYqf; Sat, 20 Dec 2025 21:39:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBF9860DFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E65A160DFA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766266760;
-	bh=a1yhobwHYHoSDtMKco/l/feXcgFISHio5T0zaoDxMec=;
+	s=default; t=1766266762;
+	bh=njaX9PVrabaeD+qanT4QlBxHGxbIaflc0VlJn3SmXdI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=K1XhfNsbB2UFHXolppgrT5+5trgYK7xfSstMUVrbFkf6CTASujlMSQMI7u2pLthyz
-	 V6T5KmwBw2QBeAO58EKzbvYzEKfWrm9FvB4I9WcT2POoOJyK/C+bJdwkU05Z+rc/zP
-	 /aewLMlW+/TRPWQBusOHBqH6JjvL0wm/kyqvIp2SvNGyXR2tuszLdxYOLtEyTGZ6Fc
-	 KAbVJdL/KwX450O08aokN50XevNoAezNEAoYjbrfESpQ4d4xC+6v3LGvfYuvoGTKv4
-	 o+BBF7IMzrarOwYP+bdnLSrQXLpDpCQwtM/ZiWQMvGtDY8G0r7xvHSRmWdEDs6u88Y
-	 mpLaYA9wWyarA==
+	b=MhO3Le23lNjHSPpSrlZkfKswhyOPo3vI+3ZHHoo9oVYL4kgEyD21mdCvY2TJrWfQS
+	 dZ1dTiDj1iusshh0pbJHP3fn9jBK6hkbLegZz0jsxiEwKI49Bn8kmYj61yN/AMiY6H
+	 +Zki3Yf1w0+eGRELT0yG3rgfIzNgExan1lKosvWOSDjliYN12CXIhx4RdctqWAILm6
+	 MrfL2cNs3G9i8isGZ03bZWlPmSieyVNcQxz8uY3qVjG8TxMmTnxoCRs1ovIY/Zdod1
+	 VuRB3FRU8TIg8mSVhFkDnBleYXDUr8rhUJNrouIVUFTlBgWWR7YTR6E3jNtxyAgOLB
+	 PIJ+zgRvrTJXQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBF9860DFA;
-	Sat, 20 Dec 2025 21:39:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E65A160DFA;
+	Sat, 20 Dec 2025 21:39:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1ED85293
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2CBF3119
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05A7E4079A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1350B404A4
  for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VrUUPMqfaz3T for <buildroot@buildroot.org>;
+ id uSKvKgNMxyVO for <buildroot@buildroot.org>;
  Sat, 20 Dec 2025 21:39:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BD19404A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57D1540799
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BD19404A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57D1540799
  for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:39:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C40E87585; Sat, 20 Dec 2025 21:39:17 +0000 (UTC)
+ id 474B887589; Sat, 20 Dec 2025 21:39:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 20 Dec 2025 21:32:56 +0100
+Date: Sat, 20 Dec 2025 21:32:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f2547021d1370849f053fa1b08097b76021f7a2
-X-Git-Newrev: 519272ba14eadd43a6e4075a8991847fe4b96966
+X-Git-Oldrev: 519272ba14eadd43a6e4075a8991847fe4b96966
+X-Git-Newrev: 2440dccc67d09a0c41fce75bc25a9156fd667381
 X-Patchwork-Hint: ignore
-Message-Id: <20251220213917.3C40E87585@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spirv-{headers,
- tools}: bump to version 1.4.335.0
+Message-Id: <20251220213917.474B887589@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-glslang: bump version to
+ 16.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,65 +77,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=519272ba14eadd43a6e4075a8991847fe4b96966
+commit: https://git.buildroot.net/buildroot/commit/?id=2440dccc67d09a0c41fce75bc25a9156fd667381
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/KhronosGroup/SPIRV-Tools/blob/vulkan-sdk-1.4.335.0/CHANGES
-https://github.com/KhronosGroup/SPIRV-Headers/releases/tag/vulkan-sdk-1.4.335.0
+https://github.com/KhronosGroup/glslang/blob/16.1.0/CHANGES.md
+
+Supports spirv-{headers, tools} version 1.4.335.0:
+https://github.com/KhronosGroup/glslang/commit/209b675bf0c0d82c0e536bcb3cb7e1011957dd59
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/spirv-headers/spirv-headers.hash | 2 +-
- package/spirv-headers/spirv-headers.mk   | 2 +-
- package/spirv-tools/spirv-tools.hash     | 2 +-
- package/spirv-tools/spirv-tools.mk       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-glslang/python-glslang.hash | 2 +-
+ package/python-glslang/python-glslang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spirv-headers/spirv-headers.hash b/package/spirv-headers/spirv-headers.hash
-index c62d12a79a..019145f959 100644
---- a/package/spirv-headers/spirv-headers.hash
-+++ b/package/spirv-headers/spirv-headers.hash
+diff --git a/package/python-glslang/python-glslang.hash b/package/python-glslang/python-glslang.hash
+index 16b399e542..5b53cd882a 100644
+--- a/package/python-glslang/python-glslang.hash
++++ b/package/python-glslang/python-glslang.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  602364ab7bf404a7f352df7da5c645f1c4558a9c92616f8ee33422b04d5e35b7  spirv-headers-1.4.328.1.tar.gz
-+sha256  1c47ca6342ebe86f57b46b8dbeb266fa655a1ca8e10d07e45370ff2d9c36312e  spirv-headers-1.4.335.0.tar.gz
- sha256  ea43b1de38a6f90c488800d66dec1ed671e68cda530266bc96951fb5b6307613  LICENSE
-diff --git a/package/spirv-headers/spirv-headers.mk b/package/spirv-headers/spirv-headers.mk
-index 9312e96d41..0d0ee949bd 100644
---- a/package/spirv-headers/spirv-headers.mk
-+++ b/package/spirv-headers/spirv-headers.mk
-@@ -5,7 +5,7 @@
+-sha256  172385478520335147d3b03a1587424af0935398184095f24beab128a254ecc7  python-glslang-16.0.0.tar.gz
++sha256  32c605822ed63a0cdc2d24f318c3d912fa14e58573aff1d8eac0cf69f1a6b6d2  python-glslang-16.1.0.tar.gz
+ sha256  17e70c676e1521ff3e4686f04a2053d93a7e28a33be8de7ec37ab0ff72feb677  LICENSE.txt
+diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
+index 48e5531600..92dc86bf6d 100644
+--- a/package/python-glslang/python-glslang.mk
++++ b/package/python-glslang/python-glslang.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Keep in sync with spirv-tools version
--SPIRV_HEADERS_VERSION = 1.4.328.1
-+SPIRV_HEADERS_VERSION = 1.4.335.0
- SPIRV_HEADERS_SITE = $(call github,KhronosGroup,SPIRV-Headers,vulkan-sdk-$(SPIRV_HEADERS_VERSION))
- SPIRV_HEADERS_LICENSE = MIT
- SPIRV_HEADERS_LICENSE_FILES = LICENSE
-diff --git a/package/spirv-tools/spirv-tools.hash b/package/spirv-tools/spirv-tools.hash
-index e3652a48cd..cba67d7d8d 100644
---- a/package/spirv-tools/spirv-tools.hash
-+++ b/package/spirv-tools/spirv-tools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d00dc47df7163c2bacd70f090441e8fad96234f0e3b96c54ee9091a49e627adb  spirv-tools-1.4.328.1.tar.gz
-+sha256  8b3d5637061b52675e506ffa1100740031e38bdd96b8177978acfd898a705da2  spirv-tools-1.4.335.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/spirv-tools/spirv-tools.mk b/package/spirv-tools/spirv-tools.mk
-index c71a0f8299..f0e76bb9ad 100644
---- a/package/spirv-tools/spirv-tools.mk
-+++ b/package/spirv-tools/spirv-tools.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep in sync with spirv-headers version
--SPIRV_TOOLS_VERSION = 1.4.328.1
-+SPIRV_TOOLS_VERSION = 1.4.335.0
- SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,vulkan-sdk-$(SPIRV_TOOLS_VERSION))
- SPIRV_TOOLS_LICENSE = Apache-2.0
- SPIRV_TOOLS_LICENSE_FILES = LICENSE
+-PYTHON_GLSLANG_VERSION = 16.0.0
++PYTHON_GLSLANG_VERSION = 16.1.0
+ PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
+ PYTHON_GLSLANG_LICENSE = BSD-3-Clause
+ PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
