@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04DEEE67483
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039F8E668BC
+	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 21:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE44260067;
-	Sat, 20 Dec 2025 21:44:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEDC360E58;
+	Sat, 20 Dec 2025 21:44:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Z1PrMvxSAkG; Sat, 20 Dec 2025 21:44:10 +0000 (UTC)
+ id 8GKW5qtXQMFQ; Sat, 20 Dec 2025 21:44:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E75E6605D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E967160E47
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766267050;
-	bh=FcSRU/lbgCMpDajHMI5kCtGXVW6pyssO0LIXmWudJaU=;
+	s=default; t=1766267062;
+	bh=HnixUhiIQNoPgKsQjIYB+JwXNQLpXwtZMxYEjMDIJ/E=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=auYP9/myDJ85qHD9d5wpacQnx4kLhP0uwzRMRatGsAYVx+o0I4L2ZzgwZkkyd1wl+
-	 ObUY1Z+4llVpEmI2v2KdAk4nLuUweW4DCWJbjjxz0LxzY2sJZwpIEyeIKPKXQ8xhfN
-	 r7nFXFaSbxJDN/2+MFvxLFA7BvHu0cgAszj0jNNuqn/S4ZKGe24VcGjjdAmhWaI7oy
-	 R2NK41DozpkliC3AvsL84hGDoC1hYwzXM6TiE1EstYsM8d2h+QlkLjR3dJfRi2SRK9
-	 PCQ0egQcWmblArxg+rsuddS23HUYOxVmSV2F1IhSmVdRj7bQ2rHWx8L3jIpJDmR5bl
-	 fh5GxliPeOl0g==
+	b=bbppYvYpxL+7pAqjeq9zbbFBTD8hYInhhgTMZfUAgTnjJaeEcl/eErdIm67j4VT4E
+	 xggsk5wv7DJJL5WpX2QZ7zzjvvDFxQoVmXJ/IBH8oQ11lFkYCLY2Ayp9lZaB7XHhfF
+	 n07uZHFNK3+pfVcpQBUfxsqR/H9WTEQNVzXBCkCXHlkIBI5UDr1HJ4DUfu5D/TJmRm
+	 NQR/SfLdzr+BGKuZXjsq3sY9mbFy2bhWknStGoXCsAniHc3tmRLwe3ktqMjO5bi3wy
+	 txnVG9r0kbdY65AgYNm2J7bv+wvAJekEmStdMBbRdNPA8d04bXjR9D+tjxjRlC1rWv
+	 zp6fcSGJlGl1A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E75E6605D8;
-	Sat, 20 Dec 2025 21:44:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 96CB223D
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:44:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E967160E47;
+	Sat, 20 Dec 2025 21:44:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5688D23D
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D228406DD
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:44:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4788860E46
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:44:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J6FDDDDZB9iO for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 21:44:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5wDwDqYY2Yzt for <buildroot@buildroot.org>;
+ Sat, 20 Dec 2025 21:44:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 61366405A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61366405A3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3D6AE60E20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D6AE60E20
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 61366405A3
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:44:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D6AE60E20
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 21:44:19 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c714.dip0.t-ipconnect.de [79.214.199.20])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 36DEBA4C4D7C;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F90AA4C4D7A;
  Sat, 20 Dec 2025 22:42:10 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39116)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vX4iF-000000002DO-1Gnb;
+ (envelope-from <bernd@kuhls.net>) id 1vX4iF-000000002DO-1aex;
  Sat, 20 Dec 2025 21:42:07 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 20 Dec 2025 22:41:56 +0100
-Message-ID: <20251220214206.1089100-8-bernd@kuhls.net>
+Date: Sat, 20 Dec 2025 22:41:57 +0100
+Message-ID: <20251220214206.1089100-9-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251220214206.1089100-1-bernd@kuhls.net>
 References: <20251220214206.1089100-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1766266930;
- bh=6jvlQYWEHm+5QO8eoXikX2gQfsUPKQxiaNvsb7UV0H8=;
+ bh=alK5bkmbekukxmQKk0NTAHocESimjKtmlUTreJfPJBo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=XXjNWywm6i7qzjW0miI6IR72B+YR1aIPEqdqKP2tJ7xgKVDhoOULGS+B3yumbjZMM
- OZcCVqOhnTLO5liKbsj9Rn01K/WMoTvpIeMW5bk8PRQE3IG95J+V81NFSyi+5o3ccp
- f/7iR5HETOZ+jU58ZQ7Hiq5fwC4XllJwtRG1lOP2D2Xo+PQ2dV+ajWLFN5CviTQyGi
- tdoCfQQyLYmybdVllvxjNYhFoo/iF5ZIHmuyZGOHbavfpur6xBqkVQpxOmBrsWXay9
- cmxFcuIxLB/M3b3ApD0T0156qnFSi75gfhzpwOuOVY4WKNrsrtlEf4TkRqJTtHvLCk
- xokhg2Yu5uKsg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=E9cK1gacirodFiuEzjGZgqyHvpWXJIAEsY9KlWNa7BPZwnAZ2vWXIROykJUzZYtVn
+ JSTFF2dKJZL0ExIld1R07BNaIi+IKxoVRxvXe5GPKo8iJ/Xartq4wXGT85DdcxxSlw
+ Ed5Ff8Ecel//T4po4j64JdK9yLqhPbm+zxCMmiiLyujeeQPGEm6Etgt6tDdFNY3KI3
+ r/sB4cH9+5MhcJHtF8VNxHzmKY9drMisZy6/qEawzugFcm1HHv1x44lndpJJQZC4vz
+ ZyTb6sqT7KcizqVBWNNq6KpoRmygJ2Ywa7yQY7TAtmG8b+UsQMTFt51RKfCbDS2kCS
+ SlUiRU0+l3qXg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=XXjNWywm
-Subject: [Buildroot] [PATCH 08/18] package/python-flask-jsonrpc: bump
- version to 4.0.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=E9cK1gac
+Subject: [Buildroot] [PATCH 09/18] package/python-fonttools: bump version to
+ 4.61.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,52 +102,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/cenobites/flask-jsonrpc/releases/tag/v4.0
-
-Switched setup type to hatch and updated license file:
-https://github.com/cenobites/flask-jsonrpc/commit/a4031daaaf54b67f002b62de162a904f3f34cee4
+https://github.com/fonttools/fonttools/releases/tag/4.61.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-flask-jsonrpc/python-flask-jsonrpc.hash |  7 +++----
- package/python-flask-jsonrpc/python-flask-jsonrpc.mk   | 10 +++++-----
- 2 files changed, 8 insertions(+), 9 deletions(-)
+ package/python-fonttools/python-fonttools.hash | 4 ++--
+ package/python-fonttools/python-fonttools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.hash b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-index ad1564caab..c8027aced6 100644
---- a/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-+++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-@@ -1,6 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/flask-jsonrpc/json
--md5  29ca67027f53912cb146d9305ea3e810  Flask-JSONRPC-3.0.1.tar.gz
--sha256  110295be39c6d6a110063630c050e3f8a4f79c50281898b3f1cb8a18fb3cb84a  Flask-JSONRPC-3.0.1.tar.gz
-+md5  f5c5a0364fc189e185ac6ddfd700bf0c  flask_jsonrpc-4.0.0.tar.gz
-+sha256  468018215a1363f44e519d9f50248bfd4f3e1f6a7c6e709ac4039fa43be327ce  flask_jsonrpc-4.0.0.tar.gz
+diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
+index b83663e8fb..61dfad4f79 100644
+--- a/package/python-fonttools/python-fonttools.hash
++++ b/package/python-fonttools/python-fonttools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fonttools/json
+-md5  55a7d3d40e191410bbe604d0d795baa4  fonttools-4.61.0.tar.gz
+-sha256  ec520a1f0c7758d7a858a00f090c1745f6cde6a7c5e76fb70ea4044a15f712e7  fonttools-4.61.0.tar.gz
++md5  98125fbc3dd9254fd8b95c309138b837  fonttools-4.61.1.tar.gz
++sha256  6675329885c44657f826ef01d9e4fb33b9158e9d93c537d84ad8399539bc6f69  fonttools-4.61.1.tar.gz
  # Locally computed sha256 checksums
--sha256  5e6175926ba7dde28c7d292a8b0350aa82c40a8c5691a878fe02b0c9c6b43b39  LICENSE
--sha256  5e6175926ba7dde28c7d292a8b0350aa82c40a8c5691a878fe02b0c9c6b43b39  COPYING
-+sha256  fffebf4325dbab265f334f5040718822f7784c4d047b20124d3cfc1680f9b96a  LICENSE.txt
-diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.mk b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-index 2a60d73d42..34e7b7ad98 100644
---- a/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-+++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-@@ -4,11 +4,11 @@
+ sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
+diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
+index 592ef51354..85c589b616 100644
+--- a/package/python-fonttools/python-fonttools.mk
++++ b/package/python-fonttools/python-fonttools.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_JSONRPC_VERSION = 3.0.1
--PYTHON_FLASK_JSONRPC_SOURCE = Flask-JSONRPC-$(PYTHON_FLASK_JSONRPC_VERSION).tar.gz
--PYTHON_FLASK_JSONRPC_SITE = https://files.pythonhosted.org/packages/7e/9d/637a0620802e4c496bd5d48e3766c3a4fd6a03f815f9bcb183bc7a17a5bb
-+PYTHON_FLASK_JSONRPC_VERSION = 4.0.0
-+PYTHON_FLASK_JSONRPC_SOURCE = flask_jsonrpc-$(PYTHON_FLASK_JSONRPC_VERSION).tar.gz
-+PYTHON_FLASK_JSONRPC_SITE = https://files.pythonhosted.org/packages/b9/2e/74dcb729aa2f5b49d4731cfaab5cb5fbfd867906ba7a0a6e32c66779dbb6
- PYTHON_FLASK_JSONRPC_LICENSE = BSD-3-Clause
--PYTHON_FLASK_JSONRPC_LICENSE_FILES = LICENSE COPYING
--PYTHON_FLASK_JSONRPC_SETUP_TYPE = setuptools
-+PYTHON_FLASK_JSONRPC_LICENSE_FILES = LICENSE.txt
-+PYTHON_FLASK_JSONRPC_SETUP_TYPE = hatch
- 
- $(eval $(python-package))
+-PYTHON_FONTTOOLS_VERSION = 4.61.0
++PYTHON_FONTTOOLS_VERSION = 4.61.1
+ PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).tar.gz
+-PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/33/f9/0e84d593c0e12244150280a630999835a64f2852276161b62a0f98318de0
++PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/ec/ca/cf17b88a8df95691275a3d77dc0a5ad9907f328ae53acbe6795da1b2f5ed
+ PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
+ PYTHON_FONTTOOLS_LICENSE = MIT
+ PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
