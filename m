@@ -4,86 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BE64E6748B
-	for <buildroot@archiver.kernel.org>; Sat, 20 Dec 2025 22:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51276E67496
+	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 00:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D75694085F;
-	Sat, 20 Dec 2025 22:37:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3BC140928;
+	Sun, 21 Dec 2025 00:58:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2NY_5Tq4lI83; Sat, 20 Dec 2025 22:37:47 +0000 (UTC)
+ id wxVCAo3t2hql; Sun, 21 Dec 2025 00:58:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17B6F408C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E76B740920
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766270267;
-	bh=YteTyN9adynHblD7gEI4e/4H5FqgDcvATYsSOJQImKI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1766278710;
+	bh=tvLmoxwGNyU6kM6EHAnt1D22DFmKcyDK3NsnpwxgmR4=;
+	h=References:In-Reply-To:From:Date:To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=HlJAXtzLlAZxwWU+ngFruayRQrxbtLKpFecvR0SeP1uc50JtbYTp0BdaN6JZZr6ne
-	 btXAnO2ug/6EjmlzDmdla2Gy2F/ztpQQzfQPYWqDM8IwAZiBP5Ecv2DEs+JKN5w3JQ
-	 dOEsPuUVpZNgcSGZ5Hd0Ny9G2sJdr1c10FhwR8rt98jhyELUaWXVyZMI/WkNIWEy+R
-	 m4N2FlTKks6PzsdM9aVx5DLheuYrMyVGlYea62Tz6gaj837GwAZZT50vPZPvwgmsRJ
-	 7MXjyyeUakLaNrJ1z/YMycX3F07JVbSEFNAqkBODgzwzpQYfpW6d0NPnWsEm+VgURs
-	 V3Cn/RAW4CUkg==
+	 From;
+	b=cR/+8fVcdbvgmK0nnEcJFQT1hM002vIfc+qxJWBkYDeh+nL5BVbndFLcjPE9IRAsK
+	 71SzgJwOsiQXo14EJNR6aDN17caW3Omq8zfRaTUZxVSoeJHlEPTk8w2+qZKC1qzQKs
+	 3FVV8myXvNrfa5ay1YQC2RbzCsPeYTLZF+RgR5yTxKv1Kew91kin+ibi7aMXEg7vHZ
+	 0sx9cUUsNhVtIiW33Q8Hdj0fL1dB0w1ZNGqe52rxBNUT60SkZUIuNAFZn1n9l61AxM
+	 su8Y0hPMrl2tKmL1PvOJnzz25j79R2Db4nBTo+Yzgi5TSYUxQiMa4ZI0OlwJkzODLF
+	 afAsmklGmnjeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17B6F408C3;
-	Sat, 20 Dec 2025 22:37:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E74B923D
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 22:37:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E76B740920;
+	Sun, 21 Dec 2025 00:58:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F8041A6
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 00:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9A3740572
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 22:37:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1609A40920
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 00:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NDKVorPKl07b for <buildroot@buildroot.org>;
- Sat, 20 Dec 2025 22:37:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BC8A940541
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC8A940541
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BC8A940541
- for <buildroot@buildroot.org>; Sat, 20 Dec 2025 22:37:44 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 5D072780368;
- Sat, 20 Dec 2025 23:37:40 +0100 (CET)
-Received: from 2a0d:e487:415e:c872:3368:1af:2d0c:bc81
- via 2a0d:e487:415e:c872:3368:1af:2d0c:bc81 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 20 Dec 2025 23:37:40 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pxa3dblRm3Rb for <buildroot@buildroot.org>;
+ Sun, 21 Dec 2025 00:58:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ envelope-from=obbardc@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DE886408F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE886408F9
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DE886408F9
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 00:58:26 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-640e9f5951aso5976883a12.1
+ for <buildroot@buildroot.org>; Sat, 20 Dec 2025 16:58:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1766278704; x=1766883504;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PZHqRnFNWOEyB93ddqrL/GduaLbPO3sp9mGrBChJ04Y=;
+ b=LKAA2mG1RokMjYSSM5Dg+JoK5+XAqGwknEEANUI8QUu2RNcS3qx2dQqXhopGDxctDe
+ bki6Iy1fma2ChV/TiO98KZJipOxgMAvelSdBVUzXPvUZdHBDltkGSsu3hnvCgy/tbhhF
+ +zH+XhjP1qrt+S8y2l1E6DkO59TQyaUnbnno8WaNiKRYZLM+zckmg1zdBnpRa/gMLcIL
+ KD5k8NGxuExlN+Rpwz1sBSo8Nis7KRpv+5Js538bMcObzFtlBD3iKygDEKKQxrUFFs2a
+ XCLV6F6L62kIhxCj15syqI3KZGMQO6OVXf5qowqhb+6BJTIbCjsKx2J+yVIpyO4/Etgd
+ WPLw==
+X-Gm-Message-State: AOJu0YxmRBlv2ZS0NWxdQIcNflRj5aWnQ2jg07loc5oREumWPgwxdJDX
+ iL+Ya+DfwXtVAd+/xatS3RecNNrE+cJwHU9GgRNF1VwjepaavAVhhzQisIKGC2iu+bLes7nl/r2
+ Z8g/BKPQCdkUE4VT//i2iMJXC03FFIOp2TqyUPa8=
+X-Gm-Gg: AY/fxX5DlApJN705XFxm2GeNW4WnIVgsGjGFhFDRieWb0/EPYbm2nOO0EMv96f2SZGt
+ OX9cuADguveqGpamEVZyiYAWgWPZJ9SBTB3Tb8RIGFqTb+7CZL4Dh0g4UFV3R265H2dveoF8fut
+ BFNjKh1HswmLVbM+sw79uM6VDKiqaI4SxF/3FFANYokE06Ib+PJIaEEc2JTw6jGC0oj0dPehfM7
+ AHY3sFh2BvCEGCqJZJP172dybkQPNuQUBSygDl6vRZUB6fqhE3RtnzubDCrblIwhnSiHZA=
+X-Google-Smtp-Source: AGHT+IEYiVf5JO2+1PDK2a6SnkwIIYsBpAJktzL+ut2M1YK86l3xWbVZbV9AUUdRWY0bV//0BI2GqMkZuZ+7IAEGPz0=
+X-Received: by 2002:a17:907:948a:b0:b79:ea1b:f13d with SMTP id
+ a640c23a62f3a-b80355b7986mr886176966b.2.1766278704422; Sat, 20 Dec 2025
+ 16:58:24 -0800 (PST)
 MIME-Version: 1.0
-Date: Sat, 20 Dec 2025 23:37:40 +0100
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>
-In-Reply-To: <20251116202053.3276072-1-fiona.klute@gmx.de>
-References: <20251116202053.3276072-1-fiona.klute@gmx.de>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <ed049e33cbc7d1ca058b76267ac32a1e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766270262;
- bh=Vh701pqIXacGis6vfkagiyD61ijcxSuLhDCWjeDMqoY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=rWT8AzgIONg7M8bjBMkWJUYyylkMLu794PnDV8wY7ufq1WtntVeSho7G4itMlytR8
- nSAs4pU0QU9AR6x4vyYztJFuS1dfTbqIG9LS34+MqR7PbZFn6JMidPlq9ObjOsK+/+
- 5tgrteb4IuVd0NdLru376y6E24wOPZnf6eGsXZRWPVbqhQ+VU8hLiQqQ8Wzh3AguZd
- JpEP+Ujl7n2jAEzrUivyZP7gj0nIYDaja9+q47sQ+VGuyUcrqGPfVDCOoKKDJZDb3h
- dWCtPVYgZCD2gre3s9+D33tHNasSulh56jOoQc87HDdQC1PE71q7vaJNxBarq5u4+o
- EWJ/jBQf/q+uA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+References: <20251219-wip-obbardc-add-package-dtui-v2-1-744f76604c5e@gmail.com>
+In-Reply-To: <20251219-wip-obbardc-add-package-dtui-v2-1-744f76604c5e@gmail.com>
+From: Christopher Obbard <obbardc@gmail.com>
+Date: Sun, 21 Dec 2025 00:58:12 +0000
+X-Gm-Features: AQt7F2qSd1LN4uFdmTOoNg00Ac8xs5orAY1daOUxi2WSRvTHakmlx5HI4w4KG1w
+Message-ID: <CAP03XeoxdTP4sGCtrZZaKX7o4q+9Qu+WkJQNwKBbTRq=MkiG1A@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1766278704; x=1766883504; darn=buildroot.org;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=PZHqRnFNWOEyB93ddqrL/GduaLbPO3sp9mGrBChJ04Y=;
+ b=nMFUMxL5cRH0vJTzjiLgtGEcqgHjx8G1gryBxq6kdJRXcJvFZ1Eh8yUTPV3dRd8Y9G
+ zbU86ptbYdli+hcEF9WxwYt3+qlp5mgEFFsc8oUTiRsGJMWG1GcQ3B6mqt3MYutHkA8p
+ Tk84xkqaFmWRd7MccmRc3JKM0pdAEbrlButLuhWZdqLExIqih+mBv3yVuK9ndRbqRed4
+ WlWQ0p4D8TU6qYCOfVuAnreGfnmj8Vr+/FwEOMaaksD3xTy2N5iHbl2ohzxPPncVCTc9
+ g2Q8vgU8LntjR3BcWzweYOzdd2EZL5jGkjC5GTr2XWKgMEDXscP/Ojze1IXsP3HWASwk
+ FI2A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=rWT8AzgI
-Subject: Re: [Buildroot] [PATCH 1/3] package/uboot-tools: include FIT print
- support if FIT support is enabled
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=nMFUMxL5
+Subject: Re: [Buildroot] [PATCH v2] dtui: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,27 +114,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/11/2025 21:20, Fiona Klute via buildroot wrote:
-> Otherwise "dumpimage -l" produces only a newline when processing a FIT
-> image.
-> 
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Hi,
 
-Applied to master, thanks.
-For info, I did two minor changes. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/befb6ae81d274342d316061a648c2f276e44db23
-https://gitlab.com/buildroot.org/buildroot/-/commit/2dbe71dba6eb5a813b2685bc5136d78a132a1580
+On Fri, 19 Dec 2025 at 18:23, Christopher Obbard <obbardc@gmail.com> wrote:
+>
+> DTUI is a small TUI for introspecting the state of the system/session
+> D-Bus. It shows current services and lets you introspect objects and
+> their interfaces.
+>
+> This package is built with Rust/Cargo.
+>
+> Upstream: https://github.com/Troels51/dtui
+> License: MIT
+> Signed-off-by: Christopher Obbard <obbardc@gmail.com>
 
-Best regards,
+For next draft patch series v3 I have changed this patch's title to
+"package/dtui: new package" to match other patch submissions I've
+seen.
+I won't send the series for another week or so, just in case may be
+any other feedback to address.
 
-Julien.
+
+Cheers!
+
+Christopher Obbard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
