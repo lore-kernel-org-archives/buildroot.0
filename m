@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2FDE66886
-	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 14:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33991E67482
+	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 15:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A5A460A6A;
-	Sun, 21 Dec 2025 14:54:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D425C80D99;
+	Sun, 21 Dec 2025 15:33:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WEJH6shRozbb; Sun, 21 Dec 2025 14:54:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JzQNERoFU-Wr; Sun, 21 Dec 2025 15:33:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24C5B60810
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFED480DEE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766328859;
-	bh=7+R6ijDEfVeQSptpSSHr7cGLHUehv/MTiIEuoavPBxY=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=bNQ093ROUXXmj6w5o3E3dGrKktIXmVbdJe2HjxXv3HIQI4haQlU+ye13EurS1WcwZ
-	 A0rg0FAg2+pbriwsBAVONfYAwTPIFpH04abDRFD/HJ9CQi+LVrjMyOQcVQnaHTpSmo
-	 Q/gpfNPAQ6XIcTnyj95sm/+DNdJXhYBnNchm1y1SxCPDs2cQ8SSljF5waJiuEnxmUC
-	 l8wQseumVA2TmbbAO3JbO2TM/iIc+wUf1ueVbJxEk14lWekCRMNdeCqCoAdl7DD7rL
-	 hl8Huca+xq+KvLxPNhCYEQEook5EzYJB/a8d0cPoEX8TLR2Gt2VJHKLHUi4IpPzTXI
-	 4T4xH/NIjfz1Q==
+	s=default; t=1766331215;
+	bh=gvNO6h3tR1FNyvcewHQ08fFKpZC1Y72YKhjoxByn/+0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=tFFNff7id2dEBKABVRCFhJ93T+ww+XdxoBwWGFY+RgqOf/Bijcv1VRSN+hLH+mXEJ
+	 ygtJZZpGwzHCi8osCvrnyg0KtstNalzEGkFpN3HebMTVqJ3idhsZmu7ODHepnun3bx
+	 x6G9bSB2ySaZez2umY/0YRfkYnaUyJ2UeRNlcwYoy+o6n74H14Mg2cRXMNMP4dJGZ0
+	 jvz1PJbSFaEZAbuSuAgSPanc4RdA3qcZHEsEqT5M0FcZ0dmP1421AxPpqvaUeS2f2O
+	 fc9HA6LUtMe1h+a93cVtVWgRMi5KEe/kewiCuRRz3v01h50ventlpevKPvRxTFlET3
+	 7zB80cnMU2y4A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24C5B60810;
-	Sun, 21 Dec 2025 14:54:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFED480DEE;
+	Sun, 21 Dec 2025 15:33:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B113C195
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 14:54:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 306D3119
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 15:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9782F400BA
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 14:54:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16F4440337
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 15:33:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qdiULyFiUl5u for <buildroot@buildroot.org>;
- Sun, 21 Dec 2025 14:54:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C1C040092
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C1C040092
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8C1C040092
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 14:54:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 95B5B13F86A;
- Sun, 21 Dec 2025 15:54:11 +0100 (CET)
-Received: from 2a0d:e487:412e:ace1:8cb:5573:7181:a54f
- via 2a0d:e487:412e:ace1:8cb:5573:7181:a54f by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 21 Dec 2025 15:54:11 +0100
-MIME-Version: 1.0
-Date: Sun, 21 Dec 2025 15:54:11 +0100
-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20251214223650.223987-1-petr.vorel@gmail.com>
-References: <20251214223650.223987-1-petr.vorel@gmail.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <39a07351c4f9f8eb511b2c306b957fec@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766328853;
- bh=mpPWxc8530ssWvKgNdhU369curgSDmYbMipACQ6soQ0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=sSd5N1NpXVMnyucrgr4sVeIaWQ1FNEFiEDIQhlRDGz19+MYEW77WCvCtiQ1/43gCe
- W5KE3QOXi6T3chROz3pZ28BIuHRv3smCBA2yPKsw1a/kMWbkhmI4l15OCLVxnjP05/
- rWdBl2/3dTNyOsm9vq1wo0pSaMPG9F5dT9EMI/dNf1qlPmymHfWoDi15WLfj6q03Lk
- jC4v5i6TsA1w0sxi3ukXDQ/IOsolx67VfLuD33C96B7VNh87cynQ7owAniFw+UyTqe
- du+d0MnzqNLRK7t/FWVrt4dnCnJAbmVcBXzqLSDw1u0NwikhHr5k3xH+xMq13LXoyq
- /7tpEB/wPDOBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sSd5N1Np
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version
- to 20250930
+ id k4muo6pAOP6s for <buildroot@buildroot.org>;
+ Sun, 21 Dec 2025 15:33:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2DDB40092
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2DDB40092
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 15:33:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DB33684CC9; Sun, 21 Dec 2025 15:33:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 21 Dec 2025 16:31:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a8446df007e319b71c7b96fa50c323461fd0c61a
+X-Git-Newrev: e42b3de3b1ccd41ef1907a791a7d3792d201c0be
+X-Patchwork-Hint: ignore
+Message-Id: <20251221153331.DB33684CC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmbus: bump version to 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,27 +70,81 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/12/2025 23:36, Petr Vorel wrote:
-> Changelog:
-> https://github.com/linux-test-project/ltp/releases/tag/20250930
-> 
-> Remove patches backported from this release.
-> 
-> Remove LTP_TESTSUITE_AUTORECONF (patch, which required it was 
-> backported
-> from this release).
-> 
-> Require kernel headers for uclibc >= 4.5 for uclibc due F_GETOWN_EX 
-> from <fcntl.h>.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e42b3de3b1ccd41ef1907a791a7d3792d201c0be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://github.com/rscada/libmbus/blob/0.9.0/release_notes.txt
+
+Downloading the source tarball is broken since at least Oct 30th, 2024
+as reported by the buildroot autobuilders:
+https://autobuild.buildroot.net/?reason=libmbus-0.8.0&step=50&start=50
+
+Switching to the github helper provides the correct source code but the
+tarball downloaded has a different hash. A quick search did not provide
+alternative download locations for the original tarball
+libmbus-0.8.0.tar.gz.
+
+To solve the broken build we do not only switch _SITE to github but also
+bump the package to 0.9.0 and add autoreconf which needs two directories
+being created in _POST_PATCH_HOOKS. One missing directory was already
+reported upstream: https://github.com/rscada/libmbus/issues/179
+
+Updated license hash due to upstream commit:
+https://github.com/rscada/libmbus/commit/ab8919136d3cabb943b1cbdd4d6e2f7eea4b8f3f
+
+Fixes:
+https://autobuild.buildroot.net/results/91a/91a82dc73bf87cf1969cd6a2ddea1809ab9a1613/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: change release notes url to use tag]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libmbus/libmbus.hash |  4 ++--
+ package/libmbus/libmbus.mk   | 12 ++++++++++--
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/package/libmbus/libmbus.hash b/package/libmbus/libmbus.hash
+index 493bab5820..212ae9ddef 100644
+--- a/package/libmbus/libmbus.hash
++++ b/package/libmbus/libmbus.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9fca42592da0ba75df66c6f885a4dbfa916d23e65e3d1ce6e38d940d2a2719a4  libmbus-0.8.0.tar.gz
+-sha256  ea171a4ae443eca7186f564db2c3cc8b84c1ac343f227f92cd52ec6a948f4a74  COPYING
++sha256  89fadb9074f5f719b2988cf30af1f8ced3e40f9f499b5b9047f8f33f876cce2d  libmbus-0.9.0.tar.gz
++sha256  034b36d855501ea9c5588f4753335d08757149a02faf1d61baa9a6d861be4e3a  COPYING
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+index 61f797b5b9..65287b083d 100644
+--- a/package/libmbus/libmbus.mk
++++ b/package/libmbus/libmbus.mk
+@@ -4,10 +4,18 @@
+ #
+ ################################################################################
+ 
+-LIBMBUS_VERSION = 0.8.0
+-LIBMBUS_SITE = http://www.rscada.se/public-dist
++LIBMBUS_VERSION = 0.9.0
++LIBMBUS_SITE = $(call github,rscada,libmbus,$(LIBMBUS_VERSION))
+ LIBMBUS_INSTALL_STAGING = YES
+ LIBMBUS_LICENSE = BSD-3-Clause
+ LIBMBUS_LICENSE_FILES = COPYING
++# github tarball does not include configure
++LIBMBUS_AUTORECONF = YES
++# Autoreconf is missing some directories
++define LIBMBUS_CREATE_DIRS
++	mkdir -p $(@D)/libltdl
++	mkdir -p $(@D)/m4
++endef
++LIBMBUS_POST_PATCH_HOOKS += LIBMBUS_CREATE_DIRS
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
