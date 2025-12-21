@@ -1,62 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BC7DE66886
-	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 13:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76AF8E66886
+	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 13:42:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58F1081083;
-	Sun, 21 Dec 2025 13:42:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mpkbqwrb7TWy; Sun, 21 Dec 2025 13:42:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8182F8108B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766324557;
-	bh=dyXtz0t0HGBlLAm+5UNS0tLVxBK3QliUfJrww63apmo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hrCk+Ng2ZQP3xH07z6RnvF8+d83Y0J89JxPegFNE0GOuNvdHiSkxsz/ufkMctCVT2
-	 6qUsCsd3feCnIwcJQWnbh5LUsYcHSzldEM0ZJlgaHWqSNsD+HkJLUMFwuG42WjANuA
-	 qvjyuN67MldqAf3B/Zz1Tu0jt0GyhcKtvob3sB4s0Xj9jWlJ56a2pO80JXI6zev6so
-	 K/1D+gIZ22YJztVEKUhiZiMbCql6ahs8LJRbTKcLK6VefpcGycTi+Tg5ctvVspAqtZ
-	 vRC4J4KkvJtFFk+X3lyoQUs8XhMufTXJfcRDrBLyZ2l3NiKp7+g0p5gtEmrxRwSvCb
-	 pqoB2mNxZAyZA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8182F8108B;
-	Sun, 21 Dec 2025 13:42:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D26B1A6
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 13:42:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63AC66080C
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 13:42:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18D0260E42;
+	Sun, 21 Dec 2025 13:42:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RUf7OcTbEH-M for <buildroot@buildroot.org>;
- Sun, 21 Dec 2025 13:42:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BAE8607C4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BAE8607C4
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 13:42:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3785D874B9; Sun, 21 Dec 2025 13:42:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 21 Dec 2025 14:36:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 440483b8e18060267a66f978426d40a0b1b8ec67
-X-Git-Newrev: bc3128fc57021c1efb8faa6e0643c808dd58c180
-X-Patchwork-Hint: ignore
-Message-Id: <20251221134235.3785D874B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/udpcast: bump version to 20250223
+ id DOO5LvURLKSJ; Sun, 21 Dec 2025 13:42:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 998CD6080F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766324576;
+	bh=YqRp2gBJqqqdUO+TzEYhJzhPFx0ksahAj0/5vuc+52o=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=q/c5BjXb0jo8dgkyQ2V4nQyQMC23Jb+G7EyfEHuGu+d6F4tCc2gYF4mSmjNiuW/2F
+	 tq/iafS8gv+4T7Pm8YLpqlwuaxrukYfeopabG63aw77Oc0Syp/F1louJtJGECU/u4a
+	 +yZzBSu0wcVTW1ihMACh0gXUyViLnfcCHxJ+AEqU8xoHgb9UDpkCCadAJzGcJzLgzF
+	 UjFpqCC2F5onGWNcfmikhm05SUDVh8onigu6c1bDBS0zrc5EvNR/KXqv5o3SOo9qys
+	 86LYhh2O8a0kD+CHn51v+tZfSo6W3Kgz7KFqNbLtrZdJPn1xi4iE6tEA0OUJA9K0Xp
+	 j7Y2THqjrzL5g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 998CD6080F;
+	Sun, 21 Dec 2025 13:42:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 59DE8119
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 13:42:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 556576080F
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 13:42:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pZUryyZ2OTKK for <buildroot@buildroot.org>;
+ Sun, 21 Dec 2025 13:42:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 474BD607C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 474BD607C4
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 474BD607C4
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 13:42:54 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 74C5E13F88F;
+ Sun, 21 Dec 2025 14:42:51 +0100 (CET)
+Received: from 37-167-60-49.coucou-networks.fr ([37.167.60.49:29850])
+ via 37-167-60-49.coucou-networks.fr ([37.167.60.49])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 21 Dec 2025 14:42:51 +0100
+MIME-Version: 1.0
+Date: Sun, 21 Dec 2025 14:42:51 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251125221246.857929-1-bernd@kuhls.net>
+References: <20251125221246.857929-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <b6f9a4deb0b899428a0331d878b9d9a5@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766324572;
+ bh=X5L+hE6hlX3U93mofR+ARl+wfFNL2PwFTz+P78Daqgw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=TrlfDh17mcia5eDkFPuMRZqV/nvWZ6GFShQFwMMBIwXl7rJJbBK8ObgaBG6eqx7ba
+ TogIM8K3E6meF4UKeUfj7fkqx8XNuvtk9B8yUH0ufYiCM7Ku87JfBaqN8CrT358bpZ
+ aInNV9NepeyuL0bb3yl8HlDAu5s0EPZ7AXN08rGZoHwOL0AEW7kFoyNkF+QkK+6bN8
+ +IJiu2zrLkwuDsLMtdWkTGKlCUfmlPpDKyqiqIDxIAjDhQ/9lRFF7W29Gintj8M6+L
+ W3Lmz69CHcZjqVHfqhsKfFD2e9+4USSZUcGYGOwJVGf3sbAHdq6RqPqlUZalsGHhBk
+ vNYFVg9Y6ObBA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TrlfDh17
+Subject: Re: [Buildroot] [PATCH 1/1] package/udpcast: bump version to
+ 20250223
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,72 +96,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc3128fc57021c1efb8faa6e0643c808dd58c180
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/11/2025 23:12, Bernd Kuhls wrote:
+> Release notes of this bugfix release:
+> https://udpcast.linux.lu/mailman3/hyperkitty/list/udpcast@udpcast.linux.lu/thread/JTGZCUMSXYLVT73TIRJJICBX7AWIE4CA/
+> 
+> Switched _SITE to https.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/acf/acf208588c2ca7e658a9a7bee49b947309d6b8be
+> 
+> Upstream removed the tarball of the previous version causing 
+> autobuilder
+> errors, first recorded March, 2nd 2025.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes of this bugfix release:
-https://udpcast.linux.lu/mailman3/hyperkitty/list/udpcast@udpcast.linux.lu/thread/JTGZCUMSXYLVT73TIRJJICBX7AWIE4CA/
-
-Switched _SITE and Config.in homepage URL to https.
-
-Fixes:
-https://autobuild.buildroot.net/results/acf/acf208588c2ca7e658a9a7bee49b947309d6b8be
-
-Upstream removed the tarball of the previous version causing autobuilder
-errors, first recorded March, 2nd 2025.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: update package homepage url to use https]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/udpcast/Config.in    | 2 +-
- package/udpcast/udpcast.hash | 2 +-
- package/udpcast/udpcast.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
-index cc38c6e57c..cc65f94360 100644
---- a/package/udpcast/Config.in
-+++ b/package/udpcast/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_UDPCAST
- 	  A multicast protocol implementation which happens to
- 	  be very handy for imaging drives over the network.
- 
--	  http://www.udpcast.linux.lu/
-+	  https://www.udpcast.linux.lu/
- 
- if BR2_PACKAGE_UDPCAST
- 
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-index aca098d982..5b0426efe6 100644
---- a/package/udpcast/udpcast.hash
-+++ b/package/udpcast/udpcast.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  17b5cd8b1e54f7e2e53357ac02ee86e4198bf704096987a03a3b5c402a0ecea1  udpcast-20230924.tar.gz
-+sha256  cefd7554c877e1bc76987d2b96b23f7699a2e5340c254454f61b6e0dae370aa7  udpcast-20250223.tar.gz
- sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index 64a0bfbd37..e087f2dbb2 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--UDPCAST_VERSION = 20230924
--UDPCAST_SITE = http://www.udpcast.linux.lu/download
-+UDPCAST_VERSION = 20250223
-+UDPCAST_SITE = https://www.udpcast.linux.lu/download
- UDPCAST_DEPENDENCIES = host-m4
- UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
- UDPCAST_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
