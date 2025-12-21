@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34CC8E66886
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4224DE67482
 	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 22:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03B9881780;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1846B407E5;
 	Sun, 21 Dec 2025 22:12:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QvGKx40wKeS8; Sun, 21 Dec 2025 22:12:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u8JTXGkUkgTS; Sun, 21 Dec 2025 22:12:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C0418179C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD122407C0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766355158;
-	bh=tsQiA5wlbSmH+MRW+o3oqeQkzwCzO4ueLkp3shKQcsU=;
+	s=default; t=1766355156;
+	bh=RnjDnIYiZXNMbFKv2JEmm+vPERTqL+wSYVhsur/Sp80=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XXACHMgoS1G0N2tI6vCXVHoE33ixnL7/JwYepiOYsv6dUsI6zDkEWb3nZ6GYdUgmO
-	 yBXiZuukJbJEvxhSJLsqaTLQHlAvzGnuABH0H4rIkdqg7ssELOaxUsAMOIpUt0rFrg
-	 0QN1nU2zT5KIg6jUFzVqATYtQsSoHktWhZXkYsvY+yu/62/AWStSY1xcURGgRQ/th7
-	 8+EkFm72ggFkXagyzk3XxoVThI/DMFnmyy4X11tKJ7VQdQAIj8fkysZ5rvTea3To+h
-	 VQJKbcTYuCWOu2aJiEOA9QXDx79m18hpuFQ+a+SqkpCk2S0FSn7bkD5hhTAPhU+Iya
-	 LZ5jvLiCY5HCQ==
+	b=kxmZaodLaiIz1MLrSwz8/ntyDn7SXtEqYwVlZxZYRmWOUWqp3TUO35etVfC2NI6Tv
+	 yB91i7wEd+H3OGY7yCNrYAeh+iVbjMs5TtPB/qoO6/kU+auEStiOlUlxEQ4GmXwqpx
+	 iON98Xu8sl2Scb2ZkfVfRFgmzP1+tgLJXbQ7KkFiE+iZ0O4Wzxx5jbNCPMkSGWRHql
+	 SwwwXIG950tnqXn4unf0ZzIxKjiBgnmLLJhvN3MKoQEUNf7//43W96qOBUbukEFouA
+	 IjxdVN6hEl1HqRcXl3pB0q+TxtNSsJ6bId+UYNxiMr3rSqFd8ueGmk4Gbzb4s4u3MT
+	 5InneA73W7FXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C0418179C;
-	Sun, 21 Dec 2025 22:12:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA8A1195
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD122407C0;
+	Sun, 21 Dec 2025 22:12:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C320195
  for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CB108156F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D53C60837
  for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:12:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id buqj3GeBtwtN for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 29vIU-8KYXmg for <buildroot@buildroot.org>;
  Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43AF18156D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D2D960756
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43AF18156D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D2D960756
  for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 34524870DC; Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
+ id 2BA90870BB; Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 21 Dec 2025 22:58:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b7505ca7625dc3ea4f5a26424c41978e3f03a56d
-X-Git-Newrev: dede411c7efd31afc0f8e0cbd37781eaade38f36
+X-Git-Oldrev: ca3855c13f5803cd7e47a1b3299786ab4546abdb
+X-Git-Newrev: b7505ca7625dc3ea4f5a26424c41978e3f03a56d
 X-Patchwork-Hint: ignore
-Message-Id: <20251221221227.34524870DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cachetools: bump version to
- 6.2.4
+Message-Id: <20251221221227.2BA90870BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-colorlog: bump version to
+ 6.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dede411c7efd31afc0f8e0cbd37781eaade38f36
+commit: https://git.buildroot.net/buildroot/commit/?id=b7505ca7625dc3ea4f5a26424c41978e3f03a56d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/tkem/cachetools/blob/v6.2.4/CHANGELOG.rst
+https://github.com/borntyping/python-colorlog/releases/tag/v6.10.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-cachetools/python-cachetools.hash | 4 ++--
- package/python-cachetools/python-cachetools.mk   | 4 ++--
+ package/python-colorlog/python-colorlog.hash | 4 ++--
+ package/python-colorlog/python-colorlog.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cachetools/python-cachetools.hash b/package/python-cachetools/python-cachetools.hash
-index 2a11fa1afb..aa44ad61ba 100644
---- a/package/python-cachetools/python-cachetools.hash
-+++ b/package/python-cachetools/python-cachetools.hash
+diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
+index 464ec55321..9dd7dd9354 100644
+--- a/package/python-colorlog/python-colorlog.hash
++++ b/package/python-colorlog/python-colorlog.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cachetools/json
--md5  f6a09127cf6d315ef12138b20a22f69e  cachetools-6.2.2.tar.gz
--sha256  8e6d266b25e539df852251cfd6f990b4bc3a141db73b939058d809ebd2590fc6  cachetools-6.2.2.tar.gz
-+md5  1501ed3542a4ea9212d74e3bf5974bdc  cachetools-6.2.4.tar.gz
-+sha256  82c5c05585e70b6ba2d3ae09ea60b79548872185d2f24ae1f2709d37299fd607  cachetools-6.2.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/colorlog/json
+-md5  eded3e4cf270c1d1fabc170826f4d735  colorlog-6.9.0.tar.gz
+-sha256  bfba54a1b93b94f54e1f4fe48395725a3d92fd2a4af702f6bd70946bdc0c6ac2  colorlog-6.9.0.tar.gz
++md5  177e72715015e36226abdcac193dc82a  colorlog-6.10.1.tar.gz
++sha256  eb4ae5cb65fe7fec7773c2306061a8e63e02efc2c72eba9d27b0fa23c94f1321  colorlog-6.10.1.tar.gz
  # Locally computed sha256 checksums
- sha256  23c4eff7a1c027a977a0b79c4497e17582c334c5f17ef6ac8ca0b52d1e7d8417  LICENSE
-diff --git a/package/python-cachetools/python-cachetools.mk b/package/python-cachetools/python-cachetools.mk
-index 3e3100067d..0804e0f2a5 100644
---- a/package/python-cachetools/python-cachetools.mk
-+++ b/package/python-cachetools/python-cachetools.mk
+ sha256  b1d9082bc483623fd59fc7279b457f0e40d942a76426cde257239e04dfe4125a  LICENSE
+diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
+index c23e1c720f..1b03c3eb19 100644
+--- a/package/python-colorlog/python-colorlog.mk
++++ b/package/python-colorlog/python-colorlog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CACHETOOLS_VERSION = 6.2.2
-+PYTHON_CACHETOOLS_VERSION = 6.2.4
- PYTHON_CACHETOOLS_SOURCE = cachetools-$(PYTHON_CACHETOOLS_VERSION).tar.gz
--PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/fb/44/ca1675be2a83aeee1886ab745b28cda92093066590233cc501890eb8417a
-+PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/bc/1d/ede8680603f6016887c062a2cf4fc8fdba905866a3ab8831aa8aa651320c
- PYTHON_CACHETOOLS_SETUP_TYPE = setuptools
- PYTHON_CACHETOOLS_LICENSE = MIT
- PYTHON_CACHETOOLS_LICENSE_FILES = LICENSE
+-PYTHON_COLORLOG_VERSION = 6.9.0
++PYTHON_COLORLOG_VERSION = 6.10.1
+ PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
+-PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/d3/7a/359f4d5df2353f26172b3cc39ea32daa39af8de522205f512f458923e677
++PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/a2/61/f083b5ac52e505dfc1c624eafbf8c7589a0d7f32daa398d2e7590efa5fda
+ PYTHON_COLORLOG_SETUP_TYPE = setuptools
+ PYTHON_COLORLOG_LICENSE = MIT
+ PYTHON_COLORLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
