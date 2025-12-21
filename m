@@ -4,87 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 960D2E66886
-	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 22:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B2F2E66886
+	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 22:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33D64405DC;
-	Sun, 21 Dec 2025 22:11:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 448D940778;
+	Sun, 21 Dec 2025 22:12:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ua80HZyhvm8L; Sun, 21 Dec 2025 22:11:19 +0000 (UTC)
+ id h7h6JPp1l1T3; Sun, 21 Dec 2025 22:12:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6369F40628
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EE3D4078D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766355079;
-	bh=VH21cULRC9NsvwSnFMIqI6bJ3Z+ZW3RvmMNpIMhEbtE=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=mVEKf9GIFnfSmRhhGiVcr8BCWOYHDdrRUdvUFSdTUol/xEki44f4uxMa5mxWjW+V4
-	 ThkRbQJ7jNRh958fvssFxjLLPK5lMNAFxKzkadDGTS4ZZ+Sagl4C5xUJLlhQemCXBy
-	 R68gOkRLM9ROWEsIyhOJGYwBAXrbm2dgBedbrweTPY0auCVpXnT6wM7jebcl+ZE1A3
-	 2HOJij08NuLAPDTS1+P30eCCw5WBDej5HlKWfCkQhCuCBtZ+1Q66MHmU//rshUqfAy
-	 UMIY3sPEPSwrLXeREGeySYx47VV+5MzrTc8/jCGG9B1hjDgnIPkeeBDa8kemutquk7
-	 h0thJSEnugViQ==
+	s=default; t=1766355149;
+	bh=AWDvAAmuaCueimLVM6pccWuTXNq8I25HC0YV600LiEs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=abDsjXcFIE5brjaONxrYt7fst3l73A5HJHAZgcax8D6ihzZfxfG5VE8YJICkekQBp
+	 AyB65k40ODVTiLA6hwWcHaqw7VWyMcsZeggxwCDZ2EVbqhF399405xFDdO2DP/SyEP
+	 /HgtQSID+O+6RQs8JkKafPr2lyTB8BvirSjrV+rUBZ5K12I+6FGfo6DSi2lsG20nzf
+	 0ItVz52FaQvCvHqOw+xgt/0MJOOy+35OHEjdgov0V+Ld5HdQGGOFAw+H08zA3p2rg2
+	 aIkcUTtjMqXO5cOIAht73xb2WqrW3aTfkIgP9FD4oBfPJ6wis+0Gw6oLFGxex2gxAI
+	 NYUMihqbIpYsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6369F40628;
-	Sun, 21 Dec 2025 22:11:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D871195
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:11:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EE3D4078D;
+	Sun, 21 Dec 2025 22:12:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 44B47119
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:12:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52CDF60776
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:11:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 420D640146
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:12:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qifhipBnfmsL for <buildroot@buildroot.org>;
- Sun, 21 Dec 2025 22:11:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 23B5D6072F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23B5D6072F
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 23B5D6072F
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:11:15 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 022FC5FFAF;
- Sun, 21 Dec 2025 23:11:07 +0100 (CET)
-Received: from 2a0d:e487:416e:93a3:8e76:a104:4b1e:c615
- via 2a0d:e487:416e:93a3:8e76:a104:4b1e:c615 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 21 Dec 2025 23:11:07 +0100
-MIME-Version: 1.0
-Date: Sun, 21 Dec 2025 23:11:07 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?=
- <raphael.melotte@mind.be>, Grzegorz Blach <grzegorz@blach.pl>, Joris Offouga
- <offougajoris@gmail.com>, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20251220214206.1089100-15-bernd@kuhls.net>
-References: <20251220214206.1089100-1-bernd@kuhls.net>
- <20251220214206.1089100-15-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <c4d351c18140eb1e7d5ae539301df19a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766355073;
- bh=JAGgFeuoPjQvlfoC5PLqJBKZpfqD5W/7aRB0g23/Jv4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=QfGq+g0exfE949nfNgHW92wxZnX+rgo6WwQO8zsFOuu7ogIooAkUNsBKxO29s9yiK
- A2OFNHOd+vF7B4fSLdG+0eduzLd46QkQbsPOCeQKKsOzi38LLmhPdDBStSPsTOHGo3
- 8HLeqjo60fvKycn59x6OiIPBSPsvaBMSL1rSl3zTUonVKO8InY+aQ4hQNGJRKZP3xX
- BpAvyhovm1NMAeBUQZIL19z6o3fD7SmX/4gDcDSY+Y58GTHHtC3x/BHgnx5Z1pPX2C
- iklv5aDjWU44pH0Vi+SfP8vbmXepzUysmZ6RVHyBVPETvD2ZZl0V6gbOi/c4cGKvvU
- xEQDkkoZYdD3Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QfGq+g0e
-Subject: Re: [Buildroot] [PATCH 15/18] package/python-iwlib: bump version to
- 1.7.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h-M8EbkTWDdC for <buildroot@buildroot.org>;
+ Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E32B400E3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E32B400E3
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8BE8E874A8; Sun, 21 Dec 2025 22:12:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 21 Dec 2025 22:58:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5957f9e85730b56902c12fb1fa8e3281569be61
+X-Git-Newrev: eb918373c448bd472ed81eed50da7bfb2bea86c2
+X-Patchwork-Hint: ignore
+Message-Id: <20251221221227.8BE8E874A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-boto3: bump version to
+ 1.42.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,86 +71,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=eb918373c448bd472ed81eed50da7bfb2bea86c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch.
+https://github.com/boto/boto3/blob/1.42.14/CHANGELOG.rst
 
-On 20/12/2025 22:42, Bernd Kuhls wrote:
-> https://github.com/nhoad/python-iwlib/blob/1.7.0/README.rst
-> "1.6: Added support for Python 3 (via migration to CFFI)"
-> 
-> Switched SITE to pypi.
-> 
-> Added dependency to python-cffi:
-> https://github.com/nhoad/python-iwlib/commit/a7c14aff76a28004afb45e08bcf83be5948cb7c1
-> 
-> Updated package as computed by scanpypi.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-[...]
-> diff --git a/package/python-iwlib/python-iwlib.mk 
-> b/package/python-iwlib/python-iwlib.mk
-> index 9d0985567d..7a4fee7fc9 100644
-> --- a/package/python-iwlib/python-iwlib.mk
-> +++ b/package/python-iwlib/python-iwlib.mk
-> @@ -4,11 +4,12 @@
->  #
->  
-> ################################################################################
-> 
-> -PYTHON_IWLIB_VERSION = 1.5
-> -PYTHON_IWLIB_SITE = $(call 
-> github,nhoad,python-iwlib,$(PYTHON_IWLIB_VERSION))
-> +PYTHON_IWLIB_VERSION = 1.7.0
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-boto3/python-boto3.hash | 4 ++--
+ package/python-boto3/python-boto3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-When compiling this new version with the commands:
-
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_IWLIB=y
-BR2_PACKAGE_WIRELESS_TOOLS=y
-BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
-EOF
-make olddefconfig
-make python-iwlib
-
-I observe the following error:
-
-cffi.VerificationError: importing 
-'/buildroot/output/build/python-iwlib-1.7.0/iwlib/__pycache__/_cffi__x89ce3654xeb297b6c.cpython-313-x86_64-linux-gnu.so': 
-/buildroot/output/build/python-iwlib-1.7.0/iwlib/__pycache__/_cffi__x89ce3654xeb297b6c.cpython-313-x86_64-linux-gnu.so: 
-cannot open shared object file: No such file or directory
-
-ERROR Backend subprocess exited when trying to invoke build_wheel
-
-The compilation without this patch is working fine.
-Could you have a look, please?
-
-> +PYTHON_IWLIB_SOURCE = iwlib-$(PYTHON_IWLIB_VERSION).tar.gz
-> +PYTHON_IWLIB_SITE = 
-> https://files.pythonhosted.org/packages/59/44/fd72c0a7094baeb448dc9e87b3d579da98e2b8593c3fe05c5f9dd20dc6bc
->  PYTHON_IWLIB_LICENSE = GPL-2.0
->  PYTHON_IWLIB_LICENSE_FILES = COPYING
->  PYTHON_IWLIB_SETUP_TYPE = setuptools
-> -PYTHON_IWLIB_DEPENDENCIES = wireless_tools
-> +PYTHON_IWLIB_DEPENDENCIES = host-python-cffi wireless_tools
-> 
->  $(eval $(python-package))
-> --
-> 2.47.3
-
-Best regards,
-
-Julien.
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
+index f8816bdf1f..ae99b5092c 100644
+--- a/package/python-boto3/python-boto3.hash
++++ b/package/python-boto3/python-boto3.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/boto3/json
+-md5  2dd524bffeeac5d9ee37f8ca136558fc  boto3-1.42.5.tar.gz
+-sha256  e3b7be255e5e29272b6424af4417005384f5a3f1caf6ca3352258ee1d9b8551a  boto3-1.42.5.tar.gz
++md5  8abc4bb707739d3ad3e9fe14b42d5234  boto3-1.42.14.tar.gz
++sha256  a5d005667b480c844ed3f814a59f199ce249d0f5669532a17d06200c0a93119c  boto3-1.42.14.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
+index e3da232e51..9ee51b454d 100644
+--- a/package/python-boto3/python-boto3.mk
++++ b/package/python-boto3/python-boto3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BOTO3_VERSION = 1.42.5
++PYTHON_BOTO3_VERSION = 1.42.14
+ PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
+-PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/8b/91/c00b45b5ca95184f7ab6140f586ba7d23074168ee3feae3eaf6954cc11c3
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/09/72/e236ca627bc0461710685f5b7438f759ef3b4106e0e08dda08513a6539ab
+ PYTHON_BOTO3_SETUP_TYPE = setuptools
+ PYTHON_BOTO3_LICENSE = Apache-2.0
+ PYTHON_BOTO3_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
