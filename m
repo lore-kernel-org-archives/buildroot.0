@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28AFCE67482
-	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 22:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62D2E66886
+	for <buildroot@archiver.kernel.org>; Sun, 21 Dec 2025 22:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F029C821E5;
-	Sun, 21 Dec 2025 22:37:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE5F0821E0;
+	Sun, 21 Dec 2025 22:37:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 67m_PgWRxPqf; Sun, 21 Dec 2025 22:37:11 +0000 (UTC)
+ id VScDiEy-9P12; Sun, 21 Dec 2025 22:37:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AC71821DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9467080AC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766356631;
-	bh=9BxrUiIqgRSMjD4xedN5PJRLfsGO6PXSd8sLKq3Avkg=;
+	s=default; t=1766356643;
+	bh=R87UTBowpoukx/pSh1SboPxdUsgQeYrzK7RhIMqR5tI=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=nbVt/jZO1/II9EvR7bIUdPdy3vXp7XFOaDpqUdYkgqGCe200Rcv7c8Ck3KBIfzSkP
-	 HNQKptsCi4ptRVvZjdqHkzfFhrWECpw5E7E71VG14LXdIHlG5Jo75g9cABOAkWr9UP
-	 YQ/BAgTI/2uBNFadR/HEZDGH+r4xQv4YvgBoZ88KmEfQnMYLZToOsbCj9a/xHZKjqe
-	 D0I/SZzMerqFVsCcXeI+ck2Sn8GzZOT6LD6LG/YovWMihv/VtCrz0JjCR13l+Lde+N
-	 wzkmQsHqtoVnGZfkjIRB+BRTDKL0upH/7mZqBImEo7kw+IzPIB8V2iDjtaTZjGalN4
-	 9fSLWLpQD+z9g==
+	b=I56TmfJv7+aK3mzyvr9X9+ja30DXr1LIqf/FE2YeOCVQdNfdgv6//x89ZNA97htJQ
+	 pEdAoyQPdCefNrvmEPTVtndffTerf7+sJ4uC8whlSiC0v1TzvDI7EQDW4+0JM9U8Nv
+	 bZacvmnyKXTq56hjnjklNbrD6pkINDHlLLNDWeLijsYCnRWGgSK7frw1506o2jihYZ
+	 OW62vuaE6U40zqgVbPxLSfhB3BqEt/r7U/BulBMYAhKrtnlgbizk+1DfHk/OZtNnr9
+	 +AyErCho1y2TK5p8SHw6WEuq9uvPJ3WUCFOcGZ77AFjn7p2P8tN2R8XlxhxssAvnYy
+	 pA74QJlLqi31w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AC71821DC;
-	Sun, 21 Dec 2025 22:37:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9467080AC3;
+	Sun, 21 Dec 2025 22:37:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DE32D195
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:37:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 08F29195
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4BCD400B8
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:37:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3F13400C5
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:37:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gKVctTP29Vwm for <buildroot@buildroot.org>;
- Sun, 21 Dec 2025 22:37:09 +0000 (UTC)
+ id mP1mdxEAiRjV for <buildroot@buildroot.org>;
+ Sun, 21 Dec 2025 22:37:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B6ABE40089
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6ABE40089
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C700C40089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C700C40089
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B6ABE40089
- for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:37:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C700C40089
+ for <buildroot@buildroot.org>; Sun, 21 Dec 2025 22:37:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c75a.dip0.t-ipconnect.de [79.214.199.90])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E57D0A4C4E42;
- Sun, 21 Dec 2025 23:35:04 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 274BFA4C4E45;
+ Sun, 21 Dec 2025 23:35:05 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:60652)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vXS0g-000000005pH-0nN8;
+ (envelope-from <bernd@kuhls.net>) id 1vXS0g-000000005pH-16he;
  Sun, 21 Dec 2025 22:34:42 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 21 Dec 2025 23:34:31 +0100
-Message-ID: <20251221223441.185169-13-bernd@kuhls.net>
+Date: Sun, 21 Dec 2025 23:34:32 +0100
+Message-ID: <20251221223441.185169-14-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251221223441.185169-1-bernd@kuhls.net>
 References: <20251221223441.185169-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1766356504;
- bh=pruITsuPMtHc6+7VEkdNsYj2w1FX5GlSSKxR/VzqkPo=;
+ s=kas202511301023; t=1766356505;
+ bh=2iiwy40VfUWiDmv6RtLRaCk/qljdPW7vzCxr6FLCLmc=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=WjTTpPopPTbgUhbJsXY7PhDjkdFJ+izxJZ1BRSmHWHcRxUv9Iw2OIjZsW5PdEUhBm
- JswlklI4tD7mw8CC8h4qVn5Et/jTfYWUJoxOPrLu2NK4msJF74MSDgZzBAmY5MXPWe
- O54xo/qFnP3J9L9R10eLmRuD2UN7WCPUDD4CC7eHDa9ekKRJFVvrcHw+7t4WzCaFAL
- 8loMOMqsTrQ2AQbJ3YlI4Nwj2l07yxSWPOC/p3K5MnxrtS2zl3TDKz2tYLxBTTZiao
- fgu1rZXcyVf9OFsdvYZSVbKZl4FOC3yvGIGK4PidpXMJ+/m4DuECzcHOlLQXvYGhVM
- TwE68uf5bJ9gw==
+ b=QcB/wlBMbQ0eC/4BIl3e8oa2i3gOgoUBc2+py2w87IWEMdyL2Qy2OER1aNSYKAlMO
+ bjhK7C76+mjvTq/Pca4BrFjqKoH9yofO+EmcliSY9UnrnEyM5WUNtLazPBdMQXEsYZ
+ KeJsWq54shb92M81d+yvvx3lvhTJppNfHuMkFW1GQWZ7z1SgKNX0oV37jQ/LZxFi2s
+ ScRVOTAk5XJMZLVFN+jBp4PfwiaUBMXGzL7qHtJnVNCybGy7qPHwfwmBDT/sZg9DVO
+ qH2RzfNylkmpLmjOxBIHoYu+1tHGx0p/onqDfrHCWr17BsHhy/wqJaorXgVOv4ZroT
+ vwrRWCBZVKeHQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=WjTTpPop
-Subject: [Buildroot] [PATCH v2 13/23] package/python-libconf: update tarball
- URL
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=QcB/wlBM
+Subject: [Buildroot] [PATCH v2 14/23] package/python-minimalmodbus: add md5
+ hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,36 +112,21 @@ Updated package as computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-libconf/python-libconf.hash | 5 +++--
- package/python-libconf/python-libconf.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/python-minimalmodbus/python-minimalmodbus.hash | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-libconf/python-libconf.hash b/package/python-libconf/python-libconf.hash
-index d05efd37fd..40dfeadac6 100644
---- a/package/python-libconf/python-libconf.hash
-+++ b/package/python-libconf/python-libconf.hash
+diff --git a/package/python-minimalmodbus/python-minimalmodbus.hash b/package/python-minimalmodbus/python-minimalmodbus.hash
+index 635090fae7..ee688e49d3 100644
+--- a/package/python-minimalmodbus/python-minimalmodbus.hash
++++ b/package/python-minimalmodbus/python-minimalmodbus.hash
 @@ -1,4 +1,5 @@
--# Locally calculated
--sha256  66897870fcafce05624eafcc99e2dc8e150124e91019d9c29cc4f3bef64311dd  python-libconf-2.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/libconf/json
-+md5  e212611cbf6a696e05742a983b3a0c57  libconf-2.0.1.tar.gz
-+sha256  2f907258953ba60a95a82d5633726b47c81f2d5cf8d8801b092579016d757f4a  libconf-2.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  3c2afc8c9f7a12032f225e6fa870e85af14d1b71236afe28d94a4b67e5e8c873  LICENSE
-diff --git a/package/python-libconf/python-libconf.mk b/package/python-libconf/python-libconf.mk
-index 65bdee8619..5bea1b2cc6 100644
---- a/package/python-libconf/python-libconf.mk
-+++ b/package/python-libconf/python-libconf.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- PYTHON_LIBCONF_VERSION = 2.0.1
--PYTHON_LIBCONF_SITE = $(call github,ChrisAichinger,python-libconf,$(PYTHON_LIBCONF_VERSION))
-+PYTHON_LIBCONF_SOURCE = libconf-$(PYTHON_LIBCONF_VERSION).tar.gz
-+PYTHON_LIBCONF_SITE = https://files.pythonhosted.org/packages/c8/41/592c24b42ec6e349629f2b6310ff31255b213bc696c0e4ad2ee1d2bbb68e
- PYTHON_LIBCONF_SETUP_TYPE = setuptools
- PYTHON_LIBCONF_LICENSE = MIT
- PYTHON_LIBCONF_LICENSE_FILES = LICENSE
+-# sha256 from https://pypi.org/project/minimalmodbus
++# md5, sha256 from https://pypi.org/pypi/minimalmodbus/json
++md5  a981b31df61c7dd9fa04d0def72f8486  minimalmodbus-2.1.1.tar.gz
+ sha256  c3f5a56e107d537e4bb420f7e735841ab2939c8ca6fb528f5fe4124571315b64  minimalmodbus-2.1.1.tar.gz
+-# Hash for license file
++# Locally computed sha256 checksums
+ sha256  abe787d472ae2069e935c84eb13fd770518dfb08b92d5f190f3cd7ff6d1f6f32  LICENSE
 -- 
 2.47.3
 
