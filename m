@@ -1,89 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1341E67803
-	for <buildroot@archiver.kernel.org>; Mon, 22 Dec 2025 18:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58866E67803
+	for <buildroot@archiver.kernel.org>; Mon, 22 Dec 2025 18:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1C0A405F0;
-	Mon, 22 Dec 2025 18:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 293C28086D;
+	Mon, 22 Dec 2025 18:10:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PzyvdWxa84wA; Mon, 22 Dec 2025 18:08:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1mH_9oPgf5sP; Mon, 22 Dec 2025 18:10:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F2A9403BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56142808B8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766426895;
-	bh=t4xQioXSg4ek9E9DHBjZ/cShkP1e66aqUoxzdfPuzoo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Njj4A9XyZ9cX9m41h23LR/3TQNOnBpBfV3lMVzppnP0ldH/HAHf3z4syKIhBqC+ae
-	 9vMlt0AotS0ntaw06auMKv3ASRzi6S+yFxWKb+YU6xv1KRdsUEVtJGAbaPuWHg+8iZ
-	 jXbran/CwegiUZC28tt1mSQrUHa7zMJ1a9udIS7n864qPSH0Ebg6E2XCAofYQVZV68
-	 wKTlGZbg/8m2Krwxv50azjC7JkSpiWGIjm3LgxGNQbjb6V7R1OUXcYCpvpGQczjL2Q
-	 0jrLsvryrnG+j3z/Gjafkrgu0MXiybdIxG0TAJHmQ3L9HbetqtBrCxBhcY8MKVbdNt
-	 kYT4DCtz46lAw==
+	s=default; t=1766427055;
+	bh=/iIjf6KDSDCh2hEpRHRvvGsLZw6vDvdbybdHt5tmRGo=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=MWngZZqHUph/P89FDX1/PzLBANef9XpT5jo7Pb4IwhsWO9FszCU5OXo/Cox2bM2Fo
+	 L6T14Fo6VtgezsKO3r78//TW2Zu8pv/0IvyfZkiTL0e5O6IENTZvRjOb5tfO2yqtz/
+	 /U7/oTmuHbEAeZC2b2I8UgsJ5RuZl7ramjPz41qKDknHzSCcX9yVuscrKZEJHPBsNz
+	 lf8CDiuOrbmt01c5UK6KsjqsmeIlfK4zy3chKJb2ZpiZf2N1Oo/9mSMv87Q8c9C7gm
+	 nsa88MNO0ydrAe/ROng+F+iTRZsQ5O0xj6UA8h9Zvynkb3H47UymVJXLmGNZrq9qBs
+	 gYU311A8GiEEw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F2A9403BB;
-	Mon, 22 Dec 2025 18:08:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56142808B8;
+	Mon, 22 Dec 2025 18:10:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D11A119
- for <buildroot@buildroot.org>; Mon, 22 Dec 2025 18:08:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B6FE119
+ for <buildroot@buildroot.org>; Mon, 22 Dec 2025 18:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F35E60724
- for <buildroot@buildroot.org>; Mon, 22 Dec 2025 18:08:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52779606C4
+ for <buildroot@buildroot.org>; Mon, 22 Dec 2025 18:10:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fb6MxQhOgTXR for <buildroot@buildroot.org>;
- Mon, 22 Dec 2025 18:08:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E1BCE60716
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1BCE60716
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E1BCE60716
- for <buildroot@buildroot.org>; Mon, 22 Dec 2025 18:08:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CF88613F88E;
- Mon, 22 Dec 2025 19:08:05 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 22 Dec 2025 19:08:05 +0100
+ id zxVHfIVwGCMu for <buildroot@buildroot.org>;
+ Mon, 22 Dec 2025 18:10:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.117;
+ helo=smtpcmd03117.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F2B9360716
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2B9360716
+Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F2B9360716
+ for <buildroot@buildroot.org>; Mon, 22 Dec 2025 18:10:49 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id XkMpvbgqjgRm2XkMpvqf9r; Mon, 22 Dec 2025 19:10:47 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 22 Dec 2025 19:05:45 +0100
+Message-ID: <20251222180545.2126505-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Mon, 22 Dec 2025 19:08:05 +0100
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>, Oli
- Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
-In-Reply-To: <20251222145428.440712-1-buildroot@bubu1.eu>
-References: <20251222145428.440712-1-buildroot@bubu1.eu>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <639f760f4bb9064ec67cace2aa11a660@free.fr>
-X-Sender: ju.o@free.fr
+X-CMAE-Envelope: MS4xfDm0C74wRqLrWjXN0Kgj4fNn9KrUWByP6PSk3P+m3w1m2zmRCwmucyIUBe27u2bUiKE+ZsFm86FKkurwAs3jKp4WV2ESV/KsUe+fzZ/bkftqln25s5Kd
+ v7oY4EGb1N7OBJqnLin346abcDGmQRK7+3En76uu0MzmIeEkDfB57TqBboeyxvz7VFnqXd4JJASyyUGZZnUE1QDbHBDdOPLSd1ow90gsN+oeXA6uKWuwiXzv
+ zL0Xy2txglI2w0MKOfx2MEnlcmpZKqT92a76nVrQoqY=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766426890;
- bh=41AK/PJthcYWGu3UMjylv6KKpzQdbQav2fwRd7pQnY4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Dqmr7VXSZz0hve2uXjZS4gb/Hmj9eBOoHY/EExJ6SWSWWSmc4mP6XtRQ6fZGvbRfo
- 6IDLkMuH6BVgd9lQe462JI1/nrkdFxhCI3MkZuHLyq0est5NR/tHJ9gG5oXynjAkO6
- C1L6L1499Rvdxvt9ja44HbttZBeJ9FsQOGRi7h4oEITjPTHq+NJcAnpv6AlGCCPB8G
- 0AHRykOURxqeDsebMVmPnw/lmhBnjbAdtzvqRchrfWjCKZZrEOQedPRKXs1y6mui1E
- UZDuJq8xigXOu7xgP81OBoUpO18/czbTaafYr1T8Eb+qG6fRucg63btZdX9xHiwQt2
- eOjBVPj1LSRqw==
+ d=aruba.it; s=a1; 
+ t=1766427047; bh=55whcFIFLOVXEgeRqcmc+xIWNgA3jZYNlpqffSAUMsw=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=AJIWaQQOe6Y/GdnLkFkmwMsFW1Z3eRhbu5wX7TMXdLM+PH/AKgPu1wAUQv5jOiINZ
+ 9Y9C9lHD0M40xahWapg5TcWv4He1Wn2/aXV+dFjWxyeemtK5va8TR+8mSZCyVzI8tk
+ 5Krbz9X5bDbUq66HHssy7gh8F/azDsIqUeY3r2JePQuB1efUb4PV3PQJBGbeyygR/E
+ HI5o4h5B7xl7Z77LKrCh4CQAE1VuBc39ZULxclpfqFRiFDlxbq8GvlCfYGlKb6jtHj
+ 6nhz+WkBhxFfPARAwL/xLi1834wY4fk2YrzKcHRaJ386fRAwGHbcf7INDGc/zKio5n
+ Z/yC/lZ6QuBfg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Dqmr7VXS
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-django: security bump to
- 5.2.9
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=AJIWaQQO
+Subject: [Buildroot] [PATCH] package/libfuse3: bump to version 3.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,21 +90,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjIvMTIvMjAyNSAxNTo1NCwgTWFyY3VzIEhvZmZtYW5uIHZpYSBidWlsZHJvb3Qgd3JvdGU6
-Cj4gRml4ZXM6Cj4gKiBDVkUtMjAyNS0xMzM3MjogUG90ZW50aWFsIFNRTCBpbmplY3Rpb24gaW4g
-RmlsdGVyZWRSZWxhdGlvbiBjb2x1bW4gCj4gYWxpYXNlcyBvbiBQb3N0Z3JlU1FMwrYKPiAqIENW
-RS0yMDI1LTY0NDYwOiBQb3RlbnRpYWwgZGVuaWFsLW9mLXNlcnZpY2UgdnVsbmVyYWJpbGl0eSBp
-biBYTUwgCj4gRGVzZXJpYWxpemVyCj4gCj4gRnVsbCByZWxlYXNlIG5vdGVzOiAKPiBodHRwczov
-L2RvY3MuZGphbmdvcHJvamVjdC5jb20vZW4vNi4wL3JlbGVhc2VzLzUuMi45Lwo+IAo+IFNpZ25l
-ZC1vZmYtYnk6IE1hcmN1cyBIb2ZmbWFubiA8YnVpbGRyb290QGJ1YnUxLmV1PgoKU2VyaWVzIGFw
-cGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+Release notes:
+https://github.com/libfuse/libfuse/releases/tag/fuse-3.18.1
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libfuse3/libfuse3.hash | 2 +-
+ package/libfuse3/libfuse3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index b4d252ce40..e80d39ac56 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  354b001b112bafa956005d242f6fca9c3a2a03433eeea874e8a44fe2a4a36e7c  libfuse3-3.18.0.tar.gz
++sha256  adb6b7eed09331d72cbbe6d5ef3597024ab46a1d61c6ca7cdd495e51600f8957  libfuse3-3.18.1.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index 6a9d0097bf..6418c5798b 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.18.0
++LIBFUSE3_VERSION = 3.18.1
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
