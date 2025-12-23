@@ -4,90 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14885E6FE43
-	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 21:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98D0EE748EE
+	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 21:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C700C60E88;
-	Tue, 23 Dec 2025 21:25:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C179C60E93;
+	Tue, 23 Dec 2025 21:42:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f-FGslzpW2oX; Tue, 23 Dec 2025 21:25:09 +0000 (UTC)
+ id cupBgL9aBhzg; Tue, 23 Dec 2025 21:42:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E057560E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9C2160E88
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766525109;
-	bh=jEwGdXGmzSLBpr75kDqWIpt5+XQ/tooyRbQeWWZr60Q=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nPPpsYLLUB6yt/xy/R/0hNF/HhqIPGu4VHSxnNnZ5qKrQNA7Xd5GhLl/WQ0CwWXET
-	 bxNHu5wCwWmzfF9PKN/hbMLLOdKlOwuL+xfcVRUPyFyGiNULTkWe1Su5YIUxK6QSyN
-	 qOmGa9EQC4sqrYhSA/l/Bs6igpdnJ7dCyRvgKO+u37sgddUWSA8EERtpUO+pNluVme
-	 EoSBrZ0OjZiAWjq/5cmGZdK4FXwBg/xuPL87r4SC/FtcDRwZSBboeFEJb/mt9Sc15B
-	 CR1tQQYqzkoZ8MmUhpqvnzKowQZeAeanzVs9yoIovL+w0kjIveY2j12arf4oW43RSI
-	 EVylQ40XEsZiA==
+	s=default; t=1766526131;
+	bh=rWdL2WQvWAPZ5fEV+iKKSNeSs/Err9lnmSX7ShBQ9Zg=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=C51LCmhTt7iTLkwrCU4nIxJZ4L3uPWz4gACLmXQSceHIhs3D5vfaZcqjcyFsDKOam
+	 EIU1XOyP/KG6dTAjFUtJACEkxzMo3YscqLri3r+jRD/45BxP1a65fmgHs6w0imnxsI
+	 pIRoGtAQBn6ZAds+mXC8M0lO30BmRHhiatUmJwDoJ9kuUdyqvYZWVOaiBHnAEp/BHf
+	 pNA2+fDlZQwS8QpDKOjVtuMl5xMtONZBRI7GVcdgK4Fa92oe2dusITZhx/Uf6fIwzk
+	 V6B5SHE1SNSXSWUaAEuuCz/L8yt6JsZbWvy93NfygPqAu5FYPDsZqaP3renENqTkRf
+	 V0ytPqQdBYoZg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E057560E8A;
-	Tue, 23 Dec 2025 21:25:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E174BE
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:25:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9C2160E88;
+	Tue, 23 Dec 2025 21:42:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 136C4BE
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 423EC60E8A
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:25:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED3FB409C8
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TikrnCa7y_3X for <buildroot@buildroot.org>;
- Tue, 23 Dec 2025 21:25:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3GL53zo6Sryt for <buildroot@buildroot.org>;
+ Tue, 23 Dec 2025 21:42:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 350DF60E88
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 350DF60E88
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 350DF60E88
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:25:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C41840357
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C41840357
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C41840357
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:07 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id EC2D1C1AE2D;
- Tue, 23 Dec 2025 21:24:36 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 2A80F1A23BC
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0DEF160716;
- Tue, 23 Dec 2025 21:25:02 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id E8BFB60716
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:04 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3216A10AB0CC3; Tue, 23 Dec 2025 22:25:01 +0100 (CET)
-Date: Tue, 23 Dec 2025 22:25:00 +0100
-To: Abelino Romo <abelino.romo@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20251223222500.34ad1120@windsurf>
-In-Reply-To: <20251223222358.51a05729@windsurf>
-References: <20241127052719.3689847-1-abelino.romo@gmail.com>
- <20241129221324.360497-1-abelino.romo@gmail.com>
- <20251223222358.51a05729@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ with ESMTPSA id 085CF10AB0CC3; Tue, 23 Dec 2025 22:42:03 +0100 (CET)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 23 Dec 2025 22:41:54 +0100
+Message-ID: <20251223214154.582451-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766525101; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=QdokqoItelfObxuoblU4p46zROty5DFoPQjhySOaepQ=;
- b=vGbSw8xqtddj1bf3q8xu5gqhtSeLD4gvuonGCIImjrycv1vPIcbLaSsJ3hpghk8n5fsmSA
- qm353g8l1vZzCsrc7AvYBM4aCIB/qm0ZYCZsjAtL9czBaW4pjrZbJfp48uUeChzOzEmOCQ
- fCbIMBWU6gt/WdD1whthXHmJgqNCzslPhUCTKFz1CoxP5ZWkPWMzDLoWb+flgpRAajDNZE
- z2qryYxcc0+IjuYzRBASgRyEsd7Ye8GBTnXmCGS6maLuuTRIXTu33WpyC7yrhiNbb56bSv
- m5H+F/6+La83kzBfL3V4173kw31K1twRcmofgCko9JjS03pEHQ1S4ghzUKJjGg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1766526124; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=nvlcUAWdlclD1Ud+eu4w4Zy1q99AYiHVz+ytpMOYiIo=;
+ b=nnJTJzsPGEexj3sC0feaJkOpAQppvZ+cBp8uAKRd3QSkGz0j+nF3PxnZDdwaPlsCPVUZK/
+ wSt+6xCwIwdKoa4ATxVKW3B0/lqeUER6prVE4y18DeB/to5zn06ttEkgDz5GMwI5AuiLL8
+ 9n7F7XAnCsIWX0rqgX6u/S4J5ENXFW+OJ2ATUFMeV7cMNfcFye38Z5YL1lvci36jdyYJMa
+ Y1e+jcB35ISV9XUYmqDgammOcDTcx+E4Ri8DvRyHKtx0bND+TMt6sRf+j1MjDzteMJdA2J
+ MhPbRMKFFYx8mfkqSi1B+KeqbhE7/tgFvBAjxXZQuxXCq8hpdXto2Ju0V9IxKA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=vGbSw8xq
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/tpm2-tss-engine: add version
- 1.2.0
+ header.s=dkim header.b=nnJTJzsP
+Subject: [Buildroot] [PATCH] package/libdnet: drop support for Python module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,66 +98,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+The libdnet Python module no longer builds with Python >= 3.13. The
+issue has been reported upstream on August 17, 2025, and there has
+been no feedback:
 
-On Tue, 23 Dec 2025 22:23:58 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+  https://github.com/ofalk/libdnet/issues/114
 
-> Sorry for the very very long delay in getting back to you. I wanted to
-> apply this, but unfortunately, it causes a build failure when
-> BR2_PACKAGE_TPM2_TSS_ENGINE_DIGEST_SIGN is enabled:
+Until this gets resolved, we have no choice but to drop support for
+the Python module of this package.
 
-BTW, here is the defconfig that was used to produce this build failure:
+Fixes:
 
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_SEED is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_DES is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_WHIRLPOOL is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST is not set
-# BR2_PACKAGE_LIBOPENSSL_UNSECURE is not set
-# BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_ARGON2 is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_CACHED_FETCH is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_CMP is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_THREAD_POOL is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_ECX is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_PADLOCK_ENGINE is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_MODULE is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_QUIC is not set
-# BR2_PACKAGE_LIBOPENSSL_SECURE_MEMORY is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_SIV is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_SM2_PRECOMP_TABLE is not set
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL_TRACE is not set
-BR2_PACKAGE_TPM2_TSS_ENGINE=y
-BR2_PACKAGE_TPM2_TSS_ENGINE_DIGEST_SIGN=y
-# BR2_TARGET_ROOTFS_TAR is not set
+  https://autobuild.buildroot.net/results/4df6bcaa66d79efac3619a47b08f3cb02c13e276/
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy           |  7 +++++++
+ package/libdnet/Config.in  | 24 ------------------------
+ package/libdnet/libdnet.mk | 11 ++---------
+ 3 files changed, 9 insertions(+), 33 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 75e0ae3c4f..7c598e0e68 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_LIBDNET_PYTHON
++	bool "libdnet python module removed"
++	select BR2_LEGACY
++	help
++	  The libdnet Python module is no longer compatible with
++	  Python >= 3.13, so it had to be removed.
++
+ config BR2_PACKAGE_CVS
+ 	bool "cvs has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/libdnet/Config.in b/package/libdnet/Config.in
+index 473e8aea22..9fd6a85c36 100644
+--- a/package/libdnet/Config.in
++++ b/package/libdnet/Config.in
+@@ -5,27 +5,3 @@ config BR2_PACKAGE_LIBDNET
+ 	  routines.
+ 
+ 	  http://libdnet.sourceforge.net/
+-
+-if BR2_PACKAGE_LIBDNET
+-
+-config BR2_PACKAGE_LIBDNET_PYTHON
+-	bool "libdnet python module"
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_PYTHON3
+-	depends on !BR2_STATIC_LIBS # libbsd
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
+-	depends on BR2_USE_WCHAR # libbsd
+-	select BR2_PACKAGE_LIBBSD
+-	help
+-	  dnet module for python
+-
+-comment "dnet module for python requires python3 package"
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_PYTHON3
+-
+-comment "dnet module for python needs a toolchain w/ dynamic library, threads, wchar"
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR
+-
+-endif
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 8eebd1050d..12491a93bf 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -12,18 +12,11 @@ LIBDNET_INSTALL_STAGING = YES
+ LIBDNET_AUTORECONF = YES
+ LIBDNET_CONF_OPTS = \
+ 	--with-gnu-ld \
+-	--with-check=no
++	--with-check=no \
++	--without-python
+ LIBDNET_CONFIG_SCRIPTS = dnet-config
+ LIBDNET_DEPENDENCIES = host-pkgconf
+ 
+-ifeq ($(BR2_PACKAGE_LIBDNET_PYTHON),y)
+-LIBDNET_DEPENDENCIES += libbsd host-python-cython python3
+-LIBDNET_CONF_OPTS += --with-python=$(HOST_DIR)/bin
+-LIBDNET_MAKE_ENV += $(PKG_PYTHON_SETUPTOOLS_ENV)
+-LIBDNET_INSTALL_TARGET_OPTS = $(LIBDNET_MAKE_OPTS) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
+-LIBDNET_INSTALL_STAGING_OPTS = $(LIBDNET_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+-endif
+-
+ # Needed for autoreconf to work properly
+ define LIBDNET_FIXUP_ACINCLUDE_M4
+ 	ln -sf config/acinclude.m4 $(@D)
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.52.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
