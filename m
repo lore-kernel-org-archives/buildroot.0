@@ -4,82 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98D0EE748EE
-	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 21:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8C4E748FC
+	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 22:14:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C179C60E93;
-	Tue, 23 Dec 2025 21:42:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D97E460B13;
+	Tue, 23 Dec 2025 22:14:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cupBgL9aBhzg; Tue, 23 Dec 2025 21:42:11 +0000 (UTC)
+ id CVBs1Xx8y0zW; Tue, 23 Dec 2025 22:14:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9C2160E88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1A7960E96
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766526131;
-	bh=rWdL2WQvWAPZ5fEV+iKKSNeSs/Err9lnmSX7ShBQ9Zg=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=C51LCmhTt7iTLkwrCU4nIxJZ4L3uPWz4gACLmXQSceHIhs3D5vfaZcqjcyFsDKOam
-	 EIU1XOyP/KG6dTAjFUtJACEkxzMo3YscqLri3r+jRD/45BxP1a65fmgHs6w0imnxsI
-	 pIRoGtAQBn6ZAds+mXC8M0lO30BmRHhiatUmJwDoJ9kuUdyqvYZWVOaiBHnAEp/BHf
-	 pNA2+fDlZQwS8QpDKOjVtuMl5xMtONZBRI7GVcdgK4Fa92oe2dusITZhx/Uf6fIwzk
-	 V6B5SHE1SNSXSWUaAEuuCz/L8yt6JsZbWvy93NfygPqAu5FYPDsZqaP3renENqTkRf
-	 V0ytPqQdBYoZg==
+	s=default; t=1766528052;
+	bh=bdybvumvjC6n93oQkDKqSxMoBYMn6g/ni6SZBNVpo3w=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Lj+lHoMORgVTTtReGZOrK2NqnjDGv9WvRZJ/tDNOHpjc1dj5qFMBfOYInlwm71m6r
+	 4xJjNlbt9gnqh7uPHhQ3n/IlVJiHU8jDs+dgEwb0ecKhsMUK3btVMa4xd5LTP2YC6i
+	 nBhp7YfYcstUOlj5Sdj1zi6DNMCycjSdz9ECzT/F/S4dlQdSpazFtILu/MMcJ9WnKu
+	 ah4EfStjn8gQ9Y+qloHB4D3JRMaOkU78kylbRe29GFg3Q8/uhHKSaWPqccWz5EsEO6
+	 bMwSET2Ek8bcYKHCI2dH/YzPABBabDfI5AmNd8QElnuJdtRT2H569ut3OswDHgbqxk
+	 92mRNDp60OUrA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9C2160E88;
-	Tue, 23 Dec 2025 21:42:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1A7960E96;
+	Tue, 23 Dec 2025 22:14:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 136C4BE
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 98DC7119
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 22:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED3FB409C8
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FEEE404E7
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 22:14:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3GL53zo6Sryt for <buildroot@buildroot.org>;
- Tue, 23 Dec 2025 21:42:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id NUn9RAyljNaF for <buildroot@buildroot.org>;
+ Tue, 23 Dec 2025 22:14:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.52;
+ helo=mail-ej1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C41840357
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C41840357
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C41840357
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:07 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 2A80F1A23BC
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:05 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E8BFB60716
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 21:42:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 085CF10AB0CC3; Tue, 23 Dec 2025 22:42:03 +0100 (CET)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A689404CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A689404CC
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com
+ [209.85.218.52])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4A689404CC
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 22:14:08 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id
+ a640c23a62f3a-b7636c96b9aso954442566b.2
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 14:14:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1766528046; x=1767132846;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ZxsTH2LHz1xCEcz2zcMViljuekBWKAsKGTHHmpzTiiw=;
+ b=IGac1uVGK8b3K2cpGXd12hIqE7k3oIKpUVq0sCX2ZnEdFQqfhMiaV5g8IMzvT8nsId
+ /GyiaCmYV3f/h282GLjqXjJv6i6LlEUqDvlYCMKQDUyte4jnrx4tnjD4EDIxtEnVTAhD
+ N/oNPdgx7FIWOCMf/6gJyqdwi7ijs7gKtAf6ksL6ADOHeInhvGKB1KooXz8jleJ6hVWp
+ nI/BAN9wMAHGYZ59OhW5DhUGvbUWlQnkqVlAWGPQY63OFDwy0qq/bKdxQ8ymtwhANRAy
+ ei69yR6bH/TLQyWDHyKIA1CkpeECKhaE1vVYRaMgWW9jsFvkO22XtBdnfdSvL1upzsQc
+ Ilpw==
+X-Gm-Message-State: AOJu0YxeM3UGephc4zKQ0qKxwO94+/gOzsbcLjwu0uRN2jVvJxNQRLi8
+ XDvQ1WxCW3+7JAwKdALRj3fWDjBX9xKwjzUilRdAhuHTdobmnXEEJSDzHrjDAmTVgGM=
+X-Gm-Gg: AY/fxX4RPz5cNh5iMi+Tsl7HoS5bhyiQBYeJNeWxhszRmOO+B6GTTG0BtSY18wV/OFO
+ DATLxfEALoytx+uM70ZBrwggSwpY8GF4QdwprsPUlw/uCl0UisrxnSV5IJsiFgaTY+uJtCLTnbU
+ GjLneMZJGIkhpZmqi8pCAk4U/bwVy+DZ5DUoBASHxy/1QLqAjWIbHKCayvotI7LoG/NbYHP7Gb+
+ xQNs2VVp2HjGyzyDBOGvWtfcpMk0MUdGmlTr2/RrZ45Wa+vFWg8uCTz2bSScdWUSsw2mG4ztFGa
+ lbW6w1gMv5leYWxWJ8fXuIU56IruxZ48vBvwIRrVMIjTwgkC2evLG2oj5rWF7RAyODDhuGSqDH/
+ GQ1fplrUbfuM4imVKPRczrWluFdDstdRxnWN8iW1MbwP7VtNIby+sXdWpHL9WIg1czlYtoMBEwM
+ rkO84ZFexWBkpBp7D9OoAYmZ1fepzSC7yJKOfB3kck3qSdoQLNc9K1
+X-Google-Smtp-Source: AGHT+IFXNXxUMPVdwIfuceKcalUaTAOYrLKIQz7L9J38xDFc84xHCNQ5kkV+cn14tjfxRgk6VWs2ig==
+X-Received: by 2002:a17:907:d0c:b0:b6d:573d:bbc5 with SMTP id
+ a640c23a62f3a-b80371a3da2mr1604388266b.37.1766528046374; 
+ Tue, 23 Dec 2025 14:14:06 -0800 (PST)
+Received: from KORLIN44614.home ([2a02:a03f:eb5f:fa00:faf0:ebea:87cc:7ff9])
+ by smtp.googlemail.com with ESMTPSA id
+ a640c23a62f3a-b8045a086fasm1346655266b.70.2025.12.23.14.14.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Dec 2025 14:14:06 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 23 Dec 2025 22:41:54 +0100
-Message-ID: <20251223214154.582451-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.52.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Devreese Jorik <jorik.devreese@barco.com>
+Date: Tue, 23 Dec 2025 23:14:03 +0100
+Message-ID: <20251223221403.61295-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1766526124; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=nvlcUAWdlclD1Ud+eu4w4Zy1q99AYiHVz+ytpMOYiIo=;
- b=nnJTJzsPGEexj3sC0feaJkOpAQppvZ+cBp8uAKRd3QSkGz0j+nF3PxnZDdwaPlsCPVUZK/
- wSt+6xCwIwdKoa4ATxVKW3B0/lqeUER6prVE4y18DeB/to5zn06ttEkgDz5GMwI5AuiLL8
- 9n7F7XAnCsIWX0rqgX6u/S4J5ENXFW+OJ2ATUFMeV7cMNfcFye38Z5YL1lvci36jdyYJMa
- Y1e+jcB35ISV9XUYmqDgammOcDTcx+E4Ri8DvRyHKtx0bND+TMt6sRf+j1MjDzteMJdA2J
- MhPbRMKFFYx8mfkqSi1B+KeqbhE7/tgFvBAjxXZQuxXCq8hpdXto2Ju0V9IxKA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=nnJTJzsP
-Subject: [Buildroot] [PATCH] package/libdnet: drop support for Python module
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH] package/sema-linux-ec: add ADLINK sema drivers
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,110 +106,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The libdnet Python module no longer builds with Python >= 3.13. The
-issue has been reported upstream on August 17, 2025, and there has
-been no feedback:
+From: Devreese Jorik <jorik.devreese@barco.com>
 
-  https://github.com/ofalk/libdnet/issues/114
-
-Until this gets resolved, we have no choice but to drop support for
-the Python module of this package.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/4df6bcaa66d79efac3619a47b08f3cb02c13e276/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Devreese Jorik <jorik.devreese@barco.com>
 ---
- Config.in.legacy           |  7 +++++++
- package/libdnet/Config.in  | 24 ------------------------
- package/libdnet/libdnet.mk | 11 ++---------
- 3 files changed, 9 insertions(+), 33 deletions(-)
+ package/Config.in                        |  1 +
+ package/sema-linux-ec/Config.in          | 13 ++++++++++++
+ package/sema-linux-ec/sema-linux-ec.hash |  7 ++++++
+ package/sema-linux-ec/sema-linux-ec.mk   | 27 ++++++++++++++++++++++++
+ 4 files changed, 48 insertions(+)
+ create mode 100644 package/sema-linux-ec/Config.in
+ create mode 100644 package/sema-linux-ec/sema-linux-ec.hash
+ create mode 100644 package/sema-linux-ec/sema-linux-ec.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 75e0ae3c4f..7c598e0e68 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_LIBDNET_PYTHON
-+	bool "libdnet python module removed"
-+	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 22970b4d45a..edafe20eefe 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -608,6 +608,7 @@ endmenu
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/sedutil/Config.in"
++	source "package/sema-linux-ec/Config.in"
+ 	source "package/setserial/Config.in"
+ 	source "package/sg3_utils/Config.in"
+ 	source "package/sigrok-cli/Config.in"
+diff --git a/package/sema-linux-ec/Config.in b/package/sema-linux-ec/Config.in
+new file mode 100644
+index 00000000000..664f24ebe55
+--- /dev/null
++++ b/package/sema-linux-ec/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_SEMA_LINUX_EC
++	bool "sema-linux-ec"
++	depends on !BR2_s390x
++	depends on BR2_LINUX_KERNEL
 +	help
-+	  The libdnet Python module is no longer compatible with
-+	  Python >= 3.13, so it had to be removed.
++	  ADLINK SEMA Linux EC drivers.
++	  Provides support for embedded controller functionality on
++	  ADLINK embedded computing platforms.
 +
- config BR2_PACKAGE_CVS
- 	bool "cvs has been removed"
- 	select BR2_LEGACY
-diff --git a/package/libdnet/Config.in b/package/libdnet/Config.in
-index 473e8aea22..9fd6a85c36 100644
---- a/package/libdnet/Config.in
-+++ b/package/libdnet/Config.in
-@@ -5,27 +5,3 @@ config BR2_PACKAGE_LIBDNET
- 	  routines.
- 
- 	  http://libdnet.sourceforge.net/
--
--if BR2_PACKAGE_LIBDNET
--
--config BR2_PACKAGE_LIBDNET_PYTHON
--	bool "libdnet python module"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_PYTHON3
--	depends on !BR2_STATIC_LIBS # libbsd
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
--	depends on BR2_USE_WCHAR # libbsd
--	select BR2_PACKAGE_LIBBSD
--	help
--	  dnet module for python
--
--comment "dnet module for python requires python3 package"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_PACKAGE_PYTHON3
--
--comment "dnet module for python needs a toolchain w/ dynamic library, threads, wchar"
--	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR
--
--endif
-diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
-index 8eebd1050d..12491a93bf 100644
---- a/package/libdnet/libdnet.mk
-+++ b/package/libdnet/libdnet.mk
-@@ -12,18 +12,11 @@ LIBDNET_INSTALL_STAGING = YES
- LIBDNET_AUTORECONF = YES
- LIBDNET_CONF_OPTS = \
- 	--with-gnu-ld \
--	--with-check=no
-+	--with-check=no \
-+	--without-python
- LIBDNET_CONFIG_SCRIPTS = dnet-config
- LIBDNET_DEPENDENCIES = host-pkgconf
- 
--ifeq ($(BR2_PACKAGE_LIBDNET_PYTHON),y)
--LIBDNET_DEPENDENCIES += libbsd host-python-cython python3
--LIBDNET_CONF_OPTS += --with-python=$(HOST_DIR)/bin
--LIBDNET_MAKE_ENV += $(PKG_PYTHON_SETUPTOOLS_ENV)
--LIBDNET_INSTALL_TARGET_OPTS = $(LIBDNET_MAKE_OPTS) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
--LIBDNET_INSTALL_STAGING_OPTS = $(LIBDNET_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
--endif
--
- # Needed for autoreconf to work properly
- define LIBDNET_FIXUP_ACINCLUDE_M4
- 	ln -sf config/acinclude.m4 $(@D)
++	  https://github.com/ADLINK/sema-linux-ec
++
++comment "sema-linux-ec needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/sema-linux-ec/sema-linux-ec.hash b/package/sema-linux-ec/sema-linux-ec.hash
+new file mode 100644
+index 00000000000..460edba0a88
+--- /dev/null
++++ b/package/sema-linux-ec/sema-linux-ec.hash
+@@ -0,0 +1,7 @@
++# sha256 locally computed: https://github.com/ADLINK/sema-linux-ec/archive/v4.3.11/sema-linux-ec-v4.3.11.tar.gz
++sha256  5ea7379f94d21a3f92d97631b7ee28912be4990e4708d47bff44aa4f4ca9784f  sema-linux-ec-v4.3.11.tar.gz
++
++# hash for the license files, locally computed:
++sha256  c45298c445058c0f8413c94be71ecedd55f306f3149ed2aea90b0e098ddc8810  LICENSE.BSD3
++sha256  2358eef45f799ab496fe93f4791f509524d3d65ca046e562706e62d72f738f20  LICENSE.dual
++sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  LICENSE.GPLv2
+diff --git a/package/sema-linux-ec/sema-linux-ec.mk b/package/sema-linux-ec/sema-linux-ec.mk
+new file mode 100644
+index 00000000000..427ee09943d
+--- /dev/null
++++ b/package/sema-linux-ec/sema-linux-ec.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# sema-linux-ec
++#
++################################################################################
++
++SEMA_LINUX_EC_VERSION = v4.3.11
++SEMA_LINUX_EC_SITE = $(call github,ADLINK,sema-linux-ec,$(SEMA_LINUX_EC_VERSION))
++SEMA_LINUX_EC_LICENSE = GPL-2.0
++SEMA_LINUX_EC_LICENSE_FILES = LICENSE
++
++SEMA_LINUX_EC_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
++
++define SEMA_LINUX_EC_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BACKLIGHT_CLASS_DEVICE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_GPIO_SYSFS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_GPIOLIB)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HWMON)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_I2C)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_I2C_BOARDINFO)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NVMEM)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG_CORE)
++endef
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
-2.52.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
