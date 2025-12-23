@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB181E6F086
-	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 17:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D72BE6F085
+	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 17:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46F2160D4B;
-	Tue, 23 Dec 2025 17:47:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46C71813CC;
+	Tue, 23 Dec 2025 17:47:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9-EWqTeRpAwR; Tue, 23 Dec 2025 17:47:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gfk1_SABScFe; Tue, 23 Dec 2025 17:47:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 570AD60C12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DB07812F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766512032;
-	bh=z856rw4uPCZ30ApNoVs+dSVNKyddEAt6UisOu8AOMAA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AYVMjXBNARrDSevEQa12oCnyLXdpOCAZXUBeWzDqRYTmZ8LRr3jJ0/iqkF5ktFmVE
-	 lKHDCTKWlxs2SURjdttKSNZUg9UzeoHEMAfR+MO96G0Kw6PRgcVirqEBtlz7mTY14y
-	 gJ0fvL7kywrAUtQAXoYN80qQ0tr0S4xbP1YqPTMipW7OLjf36kVrtaYQv/r+toLOnM
-	 2rHwXUzlTEAw8mho8Bb9KvI5b6WEb8fBxLEo7Q8O9nbbCd2wsMnhUrn7mbRAK7EPk7
-	 83mpOGgjvKG3MqV1FDNhJpOBLywfWik02uZMcHMvmp+v8JcTz0pgiDh02NK2cJSlMr
-	 9YCpDDd8wYbEg==
+	s=default; t=1766512049;
+	bh=X1u/l+imiV++la0lQDNUOqBM1VD8iOY8gSVAgmMZjXc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kOFdKGgOKawplkruOohCGDefTF1Czjkc/UAE+m6IKLdugJFMdhyu/LdENzN3/Hx4J
+	 t9x07WKj+NLWoz7YoZ5lYNvPuSQW41vK3EN+9N+NQXCnDj5u6ehrUkCIdqGCaO9sAZ
+	 6PnMb8saXFTUV3eBGkMehFGpvbL2dZ96QEIuY3SSdPdz6lDqzQA5tSoTpCmHTFfBtD
+	 4ExuvkMWwNFb6v9A0CxmfhC/nNfgRHZQwxwcUW23q6Wh2I1et93HVWqDdl783ylGuX
+	 SK0BPHD6qCqysLxCIwu0zdFB2vJFy7/m5JG1HApFRCoiAY1pBCTZiEiD5zuGnxuJd4
+	 pt3fBGmJA5UJQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 570AD60C12;
-	Tue, 23 Dec 2025 17:47:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EBEB4119
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 17:47:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DB07812F7;
+	Tue, 23 Dec 2025 17:47:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9AED625A
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 17:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2A9D405BA
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 17:47:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8DB1B4060F
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 17:47:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cZHIOKxOHdre for <buildroot@buildroot.org>;
- Tue, 23 Dec 2025 17:47:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC11F405B9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC11F405B9
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 17:47:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA97B875E3; Tue, 23 Dec 2025 17:47:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Dec 2025 18:39:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e9786cbb7b50302ae071a83ffaa18958c092290f
-X-Git-Newrev: 57395ccf91bc383770e7ba8e15cc3765c0a5fabd
-X-Patchwork-Hint: ignore
-Message-Id: <20251223174709.CA97B875E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8822cs bump driver version to
- latest with support kernel 6.18
+ id XDtjucQaiLi8 for <buildroot@buildroot.org>;
+ Tue, 23 Dec 2025 17:47:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B6FFC405FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6FFC405FF
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B6FFC405FF
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 17:47:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 2FE652003C1;
+ Tue, 23 Dec 2025 18:47:23 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 23 Dec 2025 18:47:23 +0100
+MIME-Version: 1.0
+Date: Tue, 23 Dec 2025 18:47:23 +0100
+To: Viacheslav Bocharov <adeep@lexina.in>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251223084436.984227-1-adeep@lexina.in>
+References: <20251223084436.984227-1-adeep@lexina.in>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <0dbd696ce43b8020bfeae8d68a3cae0e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766512044;
+ bh=j4N+tWQHsogSjrFw6/WyUyHfPY24M1gbYGOGSjs0CL4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=BAoh4etfUD26h+FpmOdGPPvk4NtPxsYDt/2n9AgxCRccCNo7HFSKK63D7xdt3WJ1A
+ tWvFl6myRw+v5RFl2cMCRiuK8R0YrShG+fkJnOZit1UmUmDnTHA8/3qafoElsHg567
+ cJph/tv+K/wzMJ7BRgKGGADAovJuwkk6Qm19RIYhfk1lMIzUynQGnbW0egAmsg9HAT
+ Nbp6uUIm1+z+P0I6GaB6g/kXOVWMT7A/wi3LVaM+JPw0LDLGg6oA3xnMDmCWr5Z78P
+ TSPxUyDdz/IKZrqLtN7bVNRMzIe/XTJitvf+kFZ/neRiSZ3wdBXDUNLNFh9hKkDS3Q
+ 3EPkAuu/PjmSg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=BAoh4etf
+Subject: Re: [Buildroot] [PATCH] [RESEND] package/rtl8822cs bump driver
+ version to latest with support kernel 6.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,46 +95,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57395ccf91bc383770e7ba8e15cc3765c0a5fabd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 23/12/2025 09:15, Viacheslav Bocharov via buildroot wrote:
+> Update rtl8822cs driver for Kernel 6.17/6.18
+> Fixes: 
+> https://autobuild.buildroot.org/results/bafd5af112e49359201580ece3a12bc8724914fe/
+> 
+> Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
 
-Update rtl8822cs driver for Kernel 6.17/6.18
-Fixes: https://autobuild.buildroot.org/results/bafd5af112e49359201580ece3a12bc8724914fe/
-
-Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/rtl8822cs/rtl8822cs.hash | 2 +-
- package/rtl8822cs/rtl8822cs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
-index 2a649fe493..ff2e5d3eaa 100644
---- a/package/rtl8822cs/rtl8822cs.hash
-+++ b/package/rtl8822cs/rtl8822cs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  12bf44c0dbce921440f5800a98e877fadda2d656824cca546c2b9e0e99e6a489  rtl8822cs-0ef9ddd619d2a386df90fd7c32b65958b0d675ed.tar.gz
-+sha256  71d1d29d1f04a9decaba4e23df0b213fb454c4cf15f6305133d2821188b588b0  rtl8822cs-2519c0b865e31d93daa65fc5b1168722f6ec7526.tar.gz
-diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
-index d10388c2e1..c6a541dd99 100644
---- a/package/rtl8822cs/rtl8822cs.mk
-+++ b/package/rtl8822cs/rtl8822cs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8822CS_VERSION = 0ef9ddd619d2a386df90fd7c32b65958b0d675ed
-+RTL8822CS_VERSION = 2519c0b865e31d93daa65fc5b1168722f6ec7526
- RTL8822CS_SITE = $(call github,jethome-iot,rtl88x2cs,$(RTL8822CS_VERSION))
- RTL8822CS_LICENSE = GPL-2.0
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
