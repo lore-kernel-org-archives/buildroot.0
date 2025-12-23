@@ -1,89 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD99E6FE28
-	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 18:10:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C679E6FE29
+	for <buildroot@archiver.kernel.org>; Tue, 23 Dec 2025 19:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A07F60E6B;
-	Tue, 23 Dec 2025 18:10:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 126194038F;
+	Tue, 23 Dec 2025 19:46:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VfVCBs9aQSVP; Tue, 23 Dec 2025 18:10:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pBIloHOotRVt; Tue, 23 Dec 2025 19:45:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34E5360E5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF2B403A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766513432;
-	bh=1lUsZnXSx7LtPApgDhR1VtdIQ2vXhskc7GcukZCRDic=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nTzCIX+GDuQKMbUWCeR8zmxmarq9zFQdVlktHHZgder0KKOMoYHe2OAI46KvFUPQ3
-	 ZP4B2AlW395pa4K/XgrS0ZbP0IIDL+H6A44XaypSVu3iI4ixAXpsXQ2UGEiwMNBsN1
-	 Rz6enwYN7X8wifkrr0vARl7462DDrWsqvJMwLB9GpaMCGfiN2rYiZrdgRpXRWbehcz
-	 OHhbSkSzYW3twtLn+weZ+iIsRFARZX55lZ9L0b3B1HdY5WbaglM/DlKMEwDuP69PWD
-	 TAozpFfWY9Vt9D8A64rYFvGKECYLISMlzS424ffHHq3UJml0hS6N/uL5AvVYwC3rNe
-	 POsZKeHDoKIGw==
+	s=default; t=1766519159;
+	bh=P2ycVrZIsTFgV47fE7m6Re9wDjpPFNZa3592rS3yBM8=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=NF8Lvjn00PIiGAIrVWkgLOwDmn0VxwB2fvcdq33kyx9YDnSOiS/hDaQE/hvAJiRsl
+	 yev+Z5CtL8/V08G5fb5Aea5g/jh1chuIJQunrX0gXhEVFsEhZhcUmiX2PuHhnkZ6Nb
+	 xVGOLfRNBs3yTnPWyDneDzSYTr8xlM20anBbeoJMCY44InouPpYhtg6JUMNW5OTSIF
+	 R2jVdHakT8FwjVNPUaEZ5xAUTNGBp7SBj/+Qzdrp1L05B4sb17mbebyog/OTYWdVKH
+	 uFUpO84kItWxdaE/naqmsjcL0xgpduyzIRccaPOn5zTL7+GzqiCQ+xIaWO2fKuCxoP
+	 IhCtFxYaOFJPQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34E5360E5C;
-	Tue, 23 Dec 2025 18:10:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 382C125A
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 18:10:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AF2B403A6;
+	Tue, 23 Dec 2025 19:45:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5C97119
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 19:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2974260D4F
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 18:10:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B210F809CE
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 19:45:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zmrlk1x8WBvC for <buildroot@buildroot.org>;
- Tue, 23 Dec 2025 18:10:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 25A0460BFC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25A0460BFC
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 25A0460BFC
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 18:10:26 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 719384E41D74
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 18:10:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 4A5F760716
- for <buildroot@buildroot.org>; Tue, 23 Dec 2025 18:10:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D369F10AB0CB2; Tue, 23 Dec 2025 19:10:23 +0100 (CET)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hYpjkXMFRn-U for <buildroot@buildroot.org>;
+ Tue, 23 Dec 2025 19:45:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 16389809A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16389809A7
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 16389809A7
+ for <buildroot@buildroot.org>; Tue, 23 Dec 2025 19:45:55 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id B400719F57E;
+ Tue, 23 Dec 2025 20:45:51 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 23 Dec 2025 19:10:11 +0100
-Message-ID: <20251223181013.383914-5-thomas.petazzoni@bootlin.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Tue, 23 Dec 2025 20:45:47 +0100
+Message-ID: <20251223194547.293956-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251223181013.383914-1-thomas.petazzoni@bootlin.com>
-References: <20251223181013.383914-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1766513424; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding:in-reply-to:references;
- bh=5STEh6GgICeyko5Z5SVhpd/ztw6cJ2uIpcTYzERd6sU=;
- b=HrUicrVALvu1JS8vFOLKRAXf5HBWiWorKwr5zGIyV35gVIemNYI2j+1Ixd9KZpF/CZHZr9
- ymrQJBJx7Hva42AspWw98dw+wsFW1hDvAh1NwmfHtN/f7lnINQrjAO+ayNTJFlGJDFsD/M
- C5Cq9bL1pUTPtbh3xupvgQWgc9EE41/nNcD0zb4FuPO6MjIBt8YJxQY1rQjOggrM2Sv39+
- enBxItxZ/dlXlmEfqtPvgrFH6f9sjVvxnlo+AQLsjuXrGbIbbAX7nBRIGytiylqNIn2Qkr
- olmSPRXPqJd/GHLBGm4N0JMw7qGBpWKSYt62zR6HUCKVWCkFB+EmhUbkOebUtA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=HrUicrVA
-Subject: [Buildroot] [PATCH 4/4] package/vim: inline the VIM_REMOVE_DOCS
- variable
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766519152;
+ bh=RXd4I64efJWdMRWhduyMM7rXBEWzEN6jMZwB+yFKvVY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZB8AAfX612Mr6zrRKFhP+9b6VfJu+41lGIKQhF7QZZqUIHoXEl7pwG8O/bl/Ntg9N
+ 3jBk/iO21Dw/24xC5ydwdP23vFDvDURiCoSd6r0I8l49Grp7enQxAKESwUqV/W+axD
+ NFKaxLQLOjBAAnqGRLA7sNXc20lgOJJChP+GBn1G1k3qVIcrAq/ZiOqbjkxAtwlYMy
+ avqHsS10wVpHCh5GxzCJ0ll7WgxO0UrREn2Nk8tdGtXH0qYYJvD1FKuqy5T4IO0VJI
+ Iq28ekykxW1Ti7PoA7XG1J4AFe5/fOYf9X+2WuJnc9zqMDcluVEpdIwDhv4zJAXp6D
+ U34VuqxluisiA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZB8AAfX6
+Subject: [Buildroot] [PATCH 1/1] package/oath-toolkit: bump version to 2.6.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,65 +87,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The VIM_REMOVE_DOCS variable is currently a post install target hook,
-but it can just as well be done inside VIM_INSTALL_TARGET_CMDS
-directly.
+For release announce, see:
+https://mail.gnu.org/archive/html/oath-toolkit-help/2025-07/msg00000.html
 
-The hook was registered conditionally based on BR2_PACKAGE_VIM_RUNTIME
-because prior to commit f7a07f42f70a73806fd2f6bf3662fc6907845fe9, the
-hook's logic was:
+The COPYING license file had minor updates in [1] and other license
+files were removed from the source archive. This commit refect those
+changes.
 
-    find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
+[1] https://codeberg.org/oath-toolkit/oath-toolkit/commit/e0fcb3b73d788f0cafdaff0a069e8273d9987777
 
-which was failing if BR2_PACKAGE_VIM_RUNTIME was not enabled, as
-$(TARGET_DIR)/usr/share/vim would not exist.
-
-But since this commit, the hook logic is:
-
-    $(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc/
-
-which obviously won't fail if $(TARGET_DIR)/usr/share/vim doesn't
-exist.
-
-So let's simplify the whole logic.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/vim/vim.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/pipelines/2230445114
+---
+ package/oath-toolkit/oath-toolkit.hash | 13 +++++--------
+ package/oath-toolkit/oath-toolkit.mk   |  8 ++------
+ 2 files changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index a1a484c673..4fe8800bea 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -58,9 +58,6 @@ define VIM_INSTALL_TARGET_CMDS
- 	$(RM) -f $(TARGET_DIR)/usr/bin/{ex,view,rvim,rview,vimdiff}
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
- 		$(VIM_INSTALL_TARGETS)
--endef
--
--define VIM_REMOVE_DOCS
- 	$(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc/
- endef
+diff --git a/package/oath-toolkit/oath-toolkit.hash b/package/oath-toolkit/oath-toolkit.hash
+index a89dd6bb94..d44b7bb742 100644
+--- a/package/oath-toolkit/oath-toolkit.hash
++++ b/package/oath-toolkit/oath-toolkit.hash
+@@ -1,12 +1,9 @@
+ # After checking pgp signature from:
+-# https://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.12.tar.gz.sig
++# https://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.13.tar.gz.sig
+ # using key A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2
+ # From release announce:
+-# https://mail.gnu.org/archive/html/oath-toolkit-help/2024-10/msg00002.html
+-sha1  0bfb6ad29d59628487c9e180c7a43f4ca301e4d1  oath-toolkit-2.6.12.tar.gz
+-sha256  cafdf739b1ec4b276441c6aedae6411434bbd870071f66154b909cc6e2d9e8ba  oath-toolkit-2.6.12.tar.gz
++# https://mail.gnu.org/archive/html/oath-toolkit-help/2025-07/msg00000.html
++sha1  62807099befb8141e429d3e38750772041ea9056  oath-toolkit-2.6.13.tar.gz
++sha256  5b5d82e9a4455206d24fcbd7ee58bf4c79398a2e67997d80bd45ae927586b18b  oath-toolkit-2.6.13.tar.gz
+ # Locally calculated
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  liboath/COPYING
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  oathtool/COPYING
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  pam_oath/COPYING
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/oath-toolkit/oath-toolkit.mk b/package/oath-toolkit/oath-toolkit.mk
+index 5e8fabb05b..37b00a8241 100644
+--- a/package/oath-toolkit/oath-toolkit.mk
++++ b/package/oath-toolkit/oath-toolkit.mk
+@@ -4,14 +4,10 @@
+ #
+ ################################################################################
  
-@@ -77,10 +74,6 @@ endef
- endif
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
- 
--ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
--VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
--endif
--
- HOST_VIM_DEPENDENCIES = host-ncurses
- HOST_VIM_CONF_OPTS = \
- 	--with-tlib=ncurses \
+-OATH_TOOLKIT_VERSION = 2.6.12
++OATH_TOOLKIT_VERSION = 2.6.13
+ OATH_TOOLKIT_SITE = https://download.savannah.nongnu.org/releases/oath-toolkit
+ OATH_TOOLKIT_LICENSE = GPL-3.0+ (tools), LGPL-2.1+ (libraries)
+-OATH_TOOLKIT_LICENSE_FILES = \
+-	COPYING \
+-	liboath/COPYING \
+-	oathtool/COPYING \
+-	pam_oath/COPYING
++OATH_TOOLKIT_LICENSE_FILES = COPYING
+ OATH_TOOLKIT_CPE_ID_VENDOR = nongnu
+ OATH_TOOLKIT_CPE_ID_PRODUCT = oath_toolkit
+ OATH_TOOLKIT_INSTALL_STAGING = YES
 -- 
 2.52.0
 
