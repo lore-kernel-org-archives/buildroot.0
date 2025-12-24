@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08C1AD0D14B
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BAF7D0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D07C240DD7;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CA9280AB2;
 	Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fjPHhs-UJqK1; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CF8E40B16
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808873;
-	bh=FWEmFI9gggVRj9UyTpRqLs7/w14UXS1wIgeX5JJJuvg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AiMoYHg+ovQ2lb0nT2aO0sR0Nx5lTXz0Fa4ZL76QJR7rNpOKRSkfvUOcjh7YfG6Wn
-	 gzobotjmzH9o2Q0tuQgOjRTIVJDoLABTksSedckoecifpr7J8952BwN7o0YK99rWEY
-	 9gLoyXr/UoNXsVp+TDDWOxCvsLSeuHkWp1ee7lHBrSV69SGcjNJPafzcxkg/rKZlX4
-	 mHkeiGQcMB8b2hp8f5Y7Rqu763AQHv8c6TySa5suZtTOV0e10aqOuu/jk6Bmt3pp8S
-	 EDgS8bChAGzugevF+c33Rf+r4ebZ6gkxHBb5vP8vn2RY1ffvNdLGpxZpGqpa9fWeGl
-	 Rf0L0u7vRGojw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CF8E40B16;
-	Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 98803A58
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 803D780EB2
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59b5fXr2pCaF for <buildroot@buildroot.org>;
+ id AXGyw6j_ENRM; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A65881186
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808874;
+	bh=u0y8Z6cDlBgrmJONEwoYjV1WnkOu0SAUpNt9jtZxZJg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=PxI2MQF4Ms/ajtOhg9XeWkbu1QPXT4nRmPA7b39cjh7tAujTpGt0TAN/Vi5nI7/kp
+	 vtLBY6Bsjj5OOSjlkSw3+OKt0FwgHNmMy9H3pYv6plqo1ih0R/+bGNC7hGvCoFjneB
+	 IiW58t78LwZzyuCUSVwR/5bnM2wm/GS6O9tQKW7dFI37PVIiJWuHvxrnti976QstZx
+	 9t+FEgzNgblDoGetBihZwV931nvmGe/QQOPQRXsmrt83tOgzra1oPSu7BZF3Gsa1f1
+	 byzZ1BJ/T2QBmbqNs4+CN1S7l2zfAzd7hgL4XJOXvPK/pqBm0eo6Kwu9yXmJXxR4O6
+	 s6r3yW4ioWeuw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A65881186;
+	Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91AFC9ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 838DC6083D
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bKcGm6NkIm5m for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BED6B80C85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4D3D60643
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BED6B80C85
+ by smtp3.osuosl.org (Postfix) with ESMTP id A4D3D60643
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8FB5883AF; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
+ id 9FC2C881EA; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 10:32:03 +0100
+Date: Wed, 24 Dec 2025 15:13:11 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: ce4465f0401c34a42a32233839b2185c6057e3b8
-X-Git-Newrev: 59d867fd97284bb1482471b2bc7549073bd0e9e7
+X-Git-Oldrev: 808cb9040341715468ad558691afd4228dcb9c56
+X-Git-Newrev: 286173ff2ce5efa4b3d0aeec1e513a350df86d7e
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180110.B8FB5883AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/libfcgi: security
- bump to 2.4.7
+Message-Id: <20260107180110.9FC2C881EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/tzdata: bump to
+ 2025c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59d867fd97284bb1482471b2bc7549073bd0e9e7
+commit: https://git.buildroot.net/buildroot/commit/?id=286173ff2ce5efa4b3d0aeec1e513a350df86d7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-This is a security bump to fix CVE-2025-23016.
+Release Notes:
+https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
 
-See:
-https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.7
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 626bc1f199411df91108565432c496e1fcf0b897)
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5cda56f05e4b258d3ef16f77c454293e28f5fc62)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libfcgi/libfcgi.hash | 2 +-
- package/libfcgi/libfcgi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-index 348b0b6867..be9e3e8db9 100644
---- a/package/libfcgi/libfcgi.hash
-+++ b/package/libfcgi/libfcgi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  39af4fb21a6d695a5f0b1c4fa95776d2725f6bc6c77680943a2ab314acd505c1  libfcgi-2.4.6.tar.gz
-+sha256  e41ddc3a473b555bdc0cbd80703dcb1f4610c1a7700d3b9d3d0c14a416e1074b  libfcgi-2.4.7.tar.gz
- sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-index e0ef6da55c..da84ba6297 100644
---- a/package/libfcgi/libfcgi.mk
-+++ b/package/libfcgi/libfcgi.mk
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index a1629066ce..fcf7bffd24 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/6JVHNHLB6I2WAYTQ75L6KEPEQHFXAJK3/
+-sha512  7d83741f3cae81fac8131994b43c55b6da7328df18b706e5ee40e9b3212bc506e6f8fc90988b18da424ed59eff69bce593f2783b7b5f18eb483a17aeb94258d6  tzdata2025b.tar.gz
++# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
++sha512  1e33f7212fd0ae2ad3c16e68f0c1fc7a6ad26a126b8406c379a5768d79604c6a816054bd0fe3a63228d70cd6a1fc2b1bae2a9f8014e102d3727eb9d21affa1f1  tzdata2025c.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 32607268d8..a7b6dd8f65 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFCGI_VERSION = 2.4.6
-+LIBFCGI_VERSION = 2.4.7
- LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
- LIBFCGI_LICENSE = OML
- LIBFCGI_LICENSE_FILES = LICENSE
+-TZDATA_VERSION = 2025b
++TZDATA_VERSION = 2025c
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_SELINUX_MODULES = tzdata
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
