@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E14E9E8FDA6
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 12:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB4BE8FDA2
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 12:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1F5860842;
-	Fri, 26 Dec 2025 12:25:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9A5280CCA;
+	Fri, 26 Dec 2025 12:45:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zN6ZxXRXDOqq; Fri, 26 Dec 2025 12:25:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zNuKZ8kpqcqk; Fri, 26 Dec 2025 12:45:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C90E260821
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDCDC80BA2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766751930;
-	bh=YTayu1kJcMlO+inbwtC/WXYyVzS32zsUo+IV0j1UO+s=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Vk+YJcv7POEO99a9twYGegOl5IcptSB+wiEbwqLjcg+GbwAHRkCRVw0m4T3+xljzE
-	 EWkAdTYcHh0+p5e79tJkkDekR4/3/heXIVgvzu7LhHXqdNXn/BlFt+3eJgSoeJwce3
-	 8VOGCl8YwdvY+fm6bEC/3OdZEsa3gsNH9akjaXY3isoHG0TSFBRNUOn72/nTjFeBZm
-	 opEGIBOTRDezu8msPfEdesiRzEzqVaPO/rE6bY2tLYuiC5qguD6R+5m01NXiMYA231
-	 Y6isfteGe/znZzF3LrC4XniHdyWCt/UOcu8lfkijWPBRIFdQzH4mM6AUCJ6kzRMkvK
-	 e96nBJZeZaOXw==
+	s=default; t=1766753148;
+	bh=/kN0Y+dxT/qMB1JOPq8bteRURMD/jwzuITnxhVnAeVo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=kPjLVoRWQl370d5LSnHvC1aXfoXfm83h9HlXt+TY1ZpIjXu65Mvi4Fgj1BZEz6mGC
+	 RjIwauhkl5EtHQ0qIjvI99JVRia4+DVA6/vAyXGSpnWlDSZVrFdaYMm8VY2fuThBXJ
+	 /Syd+DlgE7px58trs7bSeDHIV7UZ8zkoaAOmNUEVkIKvvn86mjj6DUVioP/ypnsRf+
+	 qwE7bKiDjn1ymvzd/MQo7tPK06zDba/BAnKjHT7pvsePEReDSOJElKQROeV5QaSuc5
+	 Fia90YOQEgA0zPWxD8/zf0ImutcnDmjGluZXBNmz3flH2wwx/cUScH6+OpnTxywglM
+	 tWp8O0NtIhTzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C90E260821;
-	Fri, 26 Dec 2025 12:25:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 64EDDB9
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 12:25:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDCDC80BA2;
+	Fri, 26 Dec 2025 12:45:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E584EC
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 12:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61F3B4051A
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 12:25:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1621C40512
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 12:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dVeYjXxPThIO for <buildroot@buildroot.org>;
- Fri, 26 Dec 2025 12:25:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 722B540512
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 722B540512
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 722B540512
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 12:25:27 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id EC5EE5FFAA;
- Fri, 26 Dec 2025 13:25:24 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 26 Dec 2025 13:25:24 +0100
-MIME-Version: 1.0
-Date: Fri, 26 Dec 2025 13:25:24 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251223194653.3036119-1-giulio.benetti@benettiengineering.com>
-References: <20251223194653.3036119-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <9763cd00614505ac8a5b47e93170b86f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766751926;
- bh=+DXX0vNgcthYxHgrcGJzijP5NgkvVwEP/GmqPcqS8VM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jpgZpLrdXPC6WTM/ixQUqw9trLayDBUFmNQWI1Y341yeTlDzc/Wy6tYybVO08WV9F
- w4Hkfnqs7sA0hjF3NpIP+NckEGPBCPzYmB6InjhsiNpoW6Ps/sg41lKBNetL3LdFty
- G88MPyJk9s//ExKCELb0GfpuHM0NP2Vm6QfGfmxbPuUrJVfJAZrQXr/7YxB3aXTM2e
- CwcuAhBecHBWrYSYcuJN5St8Kxdl33JdjerGGUsM+jeHZFc2jBmobIfJ88Dt0SZYWb
- 1X1t6EPkDNA2w/C0yOj0ZvM+rT4dDt6wAHgdqpH7QPPdhEyKSLSoL/3ANNUwTb+ptZ
- TWGGLgDZeRKcQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jpgZpLrd
-Subject: Re: [Buildroot] [PATCH] package/dash: bump to version 0.5.13
+ id y3DL3263lp3U for <buildroot@buildroot.org>;
+ Fri, 26 Dec 2025 12:45:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 606154025E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 606154025E
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 12:45:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5D167876E0; Fri, 26 Dec 2025 12:45:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 26 Dec 2025 13:28:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 37c2152ec0676fed293ce9e10bd3071fff6c9df8
+X-Git-Newrev: 996613364a3548df27b1446794fc526168df4800
+X-Patchwork-Hint: ignore
+Message-Id: <20251226124546.5D167876E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dump1090: bump version to 10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,23 +70,104 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/12/2025 20:46, Giulio Benetti wrote:
-> https://git.kernel.org/pub/scm/utils/dash/dash.git/tree/ChangeLog?h=v0.5.13
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=996613364a3548df27b1446794fc526168df4800
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master. Thanks.
-For info, I made few minor changes.  See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/3afac89183899ac0f74737043e581fe65a8aac15
+Drop now upstreamed patch 0001:
+https://github.com/flightaware/dump1090/commit/84d68c628508360c47aa47691ec9d98dc6026ed5
 
-Best regards,
+And rename remaining patches.
 
-Julien.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...patch => 0001-Fix-compilation-with-GCC15.patch} |  0
+ .../0001-swap-size-arguments-to-calloc.patch       | 43 ----------------------
+ package/dump1090/dump1090.hash                     |  2 +-
+ package/dump1090/dump1090.mk                       |  2 +-
+ 4 files changed, 2 insertions(+), 45 deletions(-)
+
+diff --git a/package/dump1090/0002-Fix-compilation-with-GCC15.patch b/package/dump1090/0001-Fix-compilation-with-GCC15.patch
+similarity index 100%
+rename from package/dump1090/0002-Fix-compilation-with-GCC15.patch
+rename to package/dump1090/0001-Fix-compilation-with-GCC15.patch
+diff --git a/package/dump1090/0001-swap-size-arguments-to-calloc.patch b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
+deleted file mode 100644
+index 1c2d502793..0000000000
+--- a/package/dump1090/0001-swap-size-arguments-to-calloc.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From be8f5b7ab1223076ba0086f14aeeb53ace2d4b5c Mon Sep 17 00:00:00 2001
+-From: Jeff Lawson <jeff.lawson@flightaware.com>
+-Date: Tue, 18 Jun 2024 15:58:24 +0000
+-Subject: [PATCH] swap size arguments to calloc
+-
+-fixes #241
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Upstream: https://github.com/flightaware/dump1090/pull/243
+----
+- adaptive.c | 2 +-
+- net_io.c   | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/adaptive.c b/adaptive.c
+-index f16e16c..d656433 100644
+---- a/adaptive.c
+-+++ b/adaptive.c
+-@@ -195,7 +195,7 @@ void adaptive_init()
+-     adaptive_burst_window_remaining = adaptive_samples_per_window;
+-     adaptive_burst_window_counter = 0;
+- 
+--    adaptive_range_radix = calloc(sizeof(unsigned), 65536);
+-+    adaptive_range_radix = calloc(65536, sizeof(unsigned));
+-     adaptive_range_state = RANGE_RESCAN_UP;
+- 
+-     // select and enforce gain limits
+-diff --git a/net_io.c b/net_io.c
+-index bf98028..8abd510 100644
+---- a/net_io.c
+-+++ b/net_io.c
+-@@ -104,7 +104,7 @@ struct net_service *serviceInit(const char *descr, struct net_writer *writer, he
+- {
+-     struct net_service *service;
+- 
+--    if (!(service = calloc(sizeof(*service), 1))) {
+-+    if (!(service = calloc(1, sizeof(*service)))) {
+-         fprintf(stderr, "Out of memory allocating service %s\n", descr);
+-         exit(1);
+-     }
+--- 
+-2.39.2
+-
+diff --git a/package/dump1090/dump1090.hash b/package/dump1090/dump1090.hash
+index a493e76560..0683e6ef62 100644
+--- a/package/dump1090/dump1090.hash
++++ b/package/dump1090/dump1090.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6190622c3625713ec9cff882a9d6f6a51b6d2f83ef20e6e1905a3902c7b08483  dump1090-9.0.tar.gz
++sha256  1135588ea8f3d045601e8ab45702648e339168eee0792b2c4f62fae3d2cc9f3b  dump1090-10.2.tar.gz
+ sha256  804f68c803eb5c127c53ad17c4f4e5033ef158e514bb76950dc7b1773f9ce4b0  LICENSE
+diff --git a/package/dump1090/dump1090.mk b/package/dump1090/dump1090.mk
+index e06babb082..1ecdfca47f 100644
+--- a/package/dump1090/dump1090.mk
++++ b/package/dump1090/dump1090.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DUMP1090_VERSION = 9.0
++DUMP1090_VERSION = 10.2
+ DUMP1090_SITE = $(call github,flightaware,dump1090,v$(DUMP1090_VERSION))
+ DUMP1090_LICENSE = GPL-2.0+
+ DUMP1090_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
