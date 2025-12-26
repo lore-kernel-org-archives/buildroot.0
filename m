@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0462E8FDA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 14:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D32E8FDA2
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 14:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B2B860D5B;
-	Fri, 26 Dec 2025 14:05:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBEBD60D50;
+	Fri, 26 Dec 2025 14:35:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1JffavVmT-y5; Fri, 26 Dec 2025 14:05:01 +0000 (UTC)
+ id cgw8QWDA8jm2; Fri, 26 Dec 2025 14:35:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4287E60C29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26BB7606F6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766757901;
-	bh=NuQJn3g3VO5UDYdR6GevjW4Ql4RM5vbcvC7VpSmxo9E=;
+	s=default; t=1766759700;
+	bh=4CGjrJ4O3CfDxNecMTC0neyqkwwiKDZLb7M1xE4R7M0=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=q5U+w38c/fm78ORSj3tqywCqZ/8AvbSLtdNc4cQQJ7+PRJMxrKgOVmwpOeS0mCKSC
-	 kwkUU1aKq64clHjlcTrqatjrhvMQTU5O7V2HOqc7cJSWi3QCc6dcu9nZWEaJ3d5LYu
-	 K5CY4ohA2uYeNQzLBUU67TyLpSimolP209ATYGsYBFsdRALwRxXoWSePRQ8YX1xteU
-	 ciYHYZcrOuI233BDZ3td6QvRxGrUuce+0iidCgaVOCy3Hd47V+cpXIb3U8F+yHbJMV
-	 U5Be6rOSSfT75vUoNlBZ4aMHT68cw5xv3s/HH8o+glkVH6pw4tsd/fFiNr4w/SLh/b
-	 VaPmRSQIUYCsw==
+	b=reRVpDx7p41ndN572Q3HFWjfYzmTigUsRPIppMhPg9fnbYVqnNwoEU4sJdyE853da
+	 SCgYkTYG7ZbNVUru7Fi8mOQ13bS2IWC6ZDdU7TLJT1vr9uaP8v3EXtZEfek5A6Ryqz
+	 aR0qz6FYoJdCGsgVNUwhoJPzsReo5ordIfTWKu9IgTwVlELgUe+cPVxuSjG10Y27gC
+	 yjKrBWnkeXjf2PfTAaDlBP2dpNkh9sl6FduH983mfL8q9WhK+Bu5TneXUH+hGrS9LH
+	 SgGsckLURWEb1noJR2ss2PWLBNsGSaRxH7+CBm33jYyESj2EeiXC9SL6BWD8CHMx8B
+	 rc8yCiNTnGLRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4287E60C29;
-	Fri, 26 Dec 2025 14:05:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AACF4B9
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 14:04:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26BB7606F6;
+	Fri, 26 Dec 2025 14:35:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16FF7B9
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 14:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C99240565
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 14:04:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14940407C2
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 14:34:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2qaJpmOpM-Jq for <buildroot@buildroot.org>;
- Fri, 26 Dec 2025 14:04:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P11uXFUy827h for <buildroot@buildroot.org>;
+ Fri, 26 Dec 2025 14:34:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
  helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B070040097
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B070040097
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B070040097
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 14:04:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D5CA140763
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5CA140763
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D5CA140763
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 14:34:57 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 9CF2F60132;
- Fri, 26 Dec 2025 15:04:41 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 52C515FFBA;
+ Fri, 26 Dec 2025 15:34:40 +0100 (CET)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 26 Dec 2025 15:04:41 +0100
+ with HTTP (HTTP/1.0 POST); Fri, 26 Dec 2025 15:34:40 +0100
 MIME-Version: 1.0
-Date: Fri, 26 Dec 2025 15:04:41 +0100
+Date: Fri, 26 Dec 2025 15:34:40 +0100
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org, Alexander Clouter
  <alex+buildroot@digriz.org.uk>, Jean Burgat <jeanburgat33@gmail.com>,
@@ -67,29 +67,29 @@ Cc: buildroot@buildroot.org, Alexander Clouter
  <james.knight@collins.com>, Simon Dawson <spdawson@gmail.com>, Romain Naour
  <romain.naour@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Michael
  Vetter <jubalh@iodoru.org>
-In-Reply-To: <20251207144243.3696572-7-bernd@kuhls.net>
+In-Reply-To: <20251207144243.3696572-9-bernd@kuhls.net>
 References: <20251207144243.3696572-1-bernd@kuhls.net>
- <20251207144243.3696572-7-bernd@kuhls.net>
+ <20251207144243.3696572-9-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.12
-Message-ID: <8e2b9201fff9fbe37dd87f7535664c0d@free.fr>
+Message-ID: <7e1872327287e8f538a1edd5f4632b08@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766757896;
- bh=fMrECPoS3DaDNKvOewR3zk/iXlszamLeXrWlDeUzD8I=;
+ d=free.fr; s=smtp-20201208; t=1766759695;
+ bh=hiYCeLniJbRiRSiRlMRIynyAR3ayo/C/9AekGGsQN5o=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=aF/rTic4UGuhr4pOWTUJcZUp4LBvad3jr6u6jSCQNioDw2X1LaziqIh3CLY38Aa1H
- FyY+1/cOm7ZkGNW3+oQrJbKPtwNLKiIoPuMtCTAiHAd5scVPu6JfdcrxzrKmj8soOq
- sYhbUzZifsuQMA5hcEVqFoiFd62GWhj2Tq7b/Nac3HC1kGeXQwDZ8zDfy4YgvznUZz
- pT4OzBCg0xLwrKQcF9840EI6Q0F9mPlAHQn8JnCFryPavgwcbCcVH6/i+oqaab5QnZ
- qqPSydbdMUu8JJMNzTN3VI+KXJ6wd54Kj4ZVay1jO434fR/v7sOKGyD7KtGOl2IEIq
- vlnLM/OYn1dtA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=fbdCK3MCHrfZs5zyHDo16kEGAtTu3GaRbKb+lhbNM36wveWTU+bUCiadZe5OQzj59
+ 7RsA1L3yP05XvR/UD59Y5H0u7QBpIX84pTtHvFYYjL9qLy2JlVAgWSpYk6GHO65iql
+ gpDX/8r1O2w2l2GLRcGYv/pjsMYdU2rFrH8UWZJXib2V43O//xXZN7H6PLCUn50OnF
+ m7858YE1xdO4EdRNNIY9Zs41SZuOltiV9USYpsO9MhH/spk9dEAouSQeLGx8AIftH3
+ /smqa/4XtgGAKM3B0YPNMyTMyg78e6mRw0JPmyh+7U5xAbcsHG+E3ahi3gXMa9dvTK
+ BgWNF8pDtrkXg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aF/rTic4
-Subject: Re: [Buildroot] [PATCH/next 07/33] package/odhcp6c: bump version
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fbdCK3MC
+Subject: Re: [Buildroot] [PATCH/next 09/33] package/piglit: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,52 +113,89 @@ Hi Bernd,
 Thanks for the patch.
 
 On 07/12/2025 15:42, Bernd Kuhls wrote:
+> Disabled vulkan tests added by upstream commit:
+> https://gitlab.freedesktop.org/mesa/piglit/-/commit/2519c330fba55ce6efd0dbee07aa67c703124d4f
+> 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
-[...]
-> diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-> index dd3a9d3e28..20756bb1e8 100644
-> --- a/package/odhcp6c/odhcp6c.mk
-> +++ b/package/odhcp6c/odhcp6c.mk
+>  package/piglit/piglit.hash | 2 +-
+>  package/piglit/piglit.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/piglit/piglit.hash b/package/piglit/piglit.hash
+> index 2c0b6aa52a..b6d3e46908 100644
+> --- a/package/piglit/piglit.hash
+> +++ b/package/piglit/piglit.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated
+> -sha256  
+> ba4d1839038905f3833e9ab23b385913e08d552533dd222cc203c79c10e09918  
+> piglit-2affee53f3ad7a96f5b397a2b6d6408af8a374b0-git4.tar.gz
+> +sha256  
+> b55f4b7747433bffb64a1782d35a081e96224d38e111f9c13d0e69ace67b9464  
+> piglit-3a2ac019d7d4e7cc6a95aafb033c79bec9405d12-git4.tar.gz
+>  sha256  
+> dcc398730859aee7cc1d6aa57f526f8d181b47bb3a49830e85b5723d5bc2c3bc  
+> COPYING
+>  sha256  
+> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  
+> licences/GPL-2
+>  sha256  
+> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  
+> licences/GPL-3
+> diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
+> index 4d17405d10..b6270ab471 100644
+> --- a/package/piglit/piglit.mk
+> +++ b/package/piglit/piglit.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  
 > ################################################################################
 > 
-> -ODHCP6C_VERSION = 53f07e90b7f1da6977143a488dd5cb73a33b233b
-> +ODHCP6C_VERSION = f19dd37fb467c9cf10cad57aefa0d048312d7dfd
+> -PIGLIT_VERSION = 2affee53f3ad7a96f5b397a2b6d6408af8a374b0
+> +PIGLIT_VERSION = 3a2ac019d7d4e7cc6a95aafb033c79bec9405d12
 
-When trying to compile this new version with commands:
+While testing this new version, I found the same issue
+I reported in:
+https://patchwork.ozlabs.org/project/buildroot/patch/20251022-piglit-v1-1-9c1a52af5650@gmail.com/
+
+I've seen that piglit enable X11 by default
+on Linux. Piglit introduced PIGLIT_USE_X11 in:
+https://gitlab.freedesktop.org/mesa/piglit/-/commit/d958b70d1fc5c2ee039363d862b14ca498a50e82
+
+So it might be needed to add -DPIGLIT_USE_X11=ON/OFF in
+the "ifeq ($(BR2_PACKAGE_XORG7),y)" block.
+
+You can reproduce with:
 
 cat >.config <<EOF
 BR2_aarch64=y
 BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_ODHCP6C=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_PIGLIT=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_WESTON=y
+BR2_PACKAGE_PYTHON3=y
 EOF
 make olddefconfig
-make odhcp6c
+make piglit
 
-It fails with error:
+Could you have a look, please?
 
-CMake Error: The following variables are used in this project, but they 
-are set to NOTFOUND.
-Please set them or make sure they are set and tested correctly in the 
-CMake files:
-/buildroot/output/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/ubox_include_dir
-    used as include directory in directory 
-/buildroot/output/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd
-libubox
-
-
-It is probably due to upstream commit:
-https://git.openwrt.org/?p=project/odhcp6c.git;a=commitdiff;h=adc651ffed55d4b538317e50da1a7ec143dbfd1d
-
-Could you have a look please?
-
->  ODHCP6C_SITE = https://git.openwrt.org/project/odhcp6c.git
->  ODHCP6C_SITE_METHOD = git
->  ODHCP6C_LICENSE = GPL-2.0
+>  PIGLIT_SITE = https://gitlab.freedesktop.org/mesa/piglit.git
+>  PIGLIT_SITE_METHOD = git
+>  PIGLIT_LICENSE = MIT (code), \
+> @@ -29,6 +29,7 @@ PIGLIT_DEPENDENCIES = host-pkgconf \
+>  PIGLIT_CONF_OPTS += \
+>  	-DPIGLIT_USE_WAFFLE=ON \
+>  	-DPIGLIT_BUILD_CL_TESTS=OFF \
+> +	-DPIGLIT_BUILD_VK_TESTS=OFF \
+>  	-DPIGLIT_BUILD_WGL_TESTS=OFF \
+>  	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3
+> 
 > --
 > 2.47.3
 
