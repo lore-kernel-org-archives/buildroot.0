@@ -4,60 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F83E8FDAC
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 18:21:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457FFE8FDA7
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 18:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C4FD4086B;
-	Fri, 26 Dec 2025 18:21:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B73D40771;
+	Fri, 26 Dec 2025 18:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nEyfQrtj9vOI; Fri, 26 Dec 2025 18:21:34 +0000 (UTC)
+ id VOj_GOJAceYT; Fri, 26 Dec 2025 18:22:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2868640A53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42DAE40763
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766773294;
-	bh=X+8ha1ZOLGykJ64zuXYf4tC2ieKmA2Ug+Ukvq+kaaho=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=PdBjvGifkPPJ/D7aUOlz/59Zm9WT8BdM6rDJiECF/NQIh8q5m6m3a0z5objrO33cq
-	 YM0XXZKl58DgatalaAuGHgCm/eRlD9fe2Schi8isidnkuuml9tmosD11Rek2O+rlBS
-	 K0EEAeWZm8mwccMVr1MpIt5M2g0MnCt2hVt+6ZXKnagrw6fcBklZ91zJdLwtvYH0p8
-	 InpQ8ZHqudb+vTIUpXpVN8Erex9EJ4ES5WEY9SkqGYBnm6A4FcBX9PNCX5hMCJjcRh
-	 X/ElivNK6HMaRTxbw18OacY9bZwPrf4JTNvTByila8wCRfO9GmmRumKEHOrVJOhqRi
-	 drds8TzZ/GwsQ==
+	s=default; t=1766773341;
+	bh=x0qOwglRd445dqvIz3/mQatevbsfi855zgdI2UsHi3o=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Er8FnoXWCizq7OShJJ4RwgV3sFlFrKzgv2yIuJq0hpBC+WsgifO6aRTr2rmH94vNL
+	 djBD5I5TycKTx28qCG96Ugfny7Q+3Yr0l9P3A0xdeMqX+YGR8WxdSx91XnrezCvaci
+	 Ulyr0peLc+op2kw2QvXAnTWBHg10yMInFGTNH5lqImxfT2L4d509xtrmXTPB3AEzTy
+	 oTVwgCFfgu8xbT8M1XDdUGDOHHcq1TA2YU03iNRlUaHgd7kPLFUUDcm2tREN6nPPOc
+	 YJ+iFJebf3WgTKhdYPzrQZZRg9+E7/w1gPMSj1MRckUESbdieQCTJi+TTtYTFLjQ6m
+	 ayZhEQyxmB7Ow==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2868640A53;
-	Fri, 26 Dec 2025 18:21:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 184CDEC
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:21:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42DAE40763;
+	Fri, 26 Dec 2025 18:22:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E66AEC
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEF5380C68
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:20:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0461B608FE
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m3Kg-bwy824D for <buildroot@buildroot.org>;
- Fri, 26 Dec 2025 18:20:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C524980C24
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C524980C24
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:20:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C31EF81840; Fri, 26 Dec 2025 18:20:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 26 Dec 2025 17:39:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1c3cb5fe01533c965ff2d0f5daa029977981f9f
-X-Git-Newrev: 7f32dd28b5c13c2747b27221480db694c99ac838
-X-Patchwork-Hint: ignore
-Message-Id: <20251226182055.C31EF81840@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-nouveau:
- bump version to 1.0.18
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HCO9KPOsZSMU for <buildroot@buildroot.org>;
+ Fri, 26 Dec 2025 18:22:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F106A608EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F106A608EA
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F106A608EA
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:22:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 3C0D419F59C;
+ Fri, 26 Dec 2025 19:22:00 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 26 Dec 2025 19:22:00 +0100
+MIME-Version: 1.0
+Date: Fri, 26 Dec 2025 19:22:00 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Alexander Clouter
+ <alex+buildroot@digriz.org.uk>, Jean Burgat <jeanburgat33@gmail.com>,
+ Alessandro Partesotti <a.partesotti@gmail.com>, Prabhu Sannachi
+ <prabhu.sannachi@collins.com>, Denis Bodor <lefinnois@lefinnois.net>, James
+ Hilliard <james.hilliard1@gmail.com>, Jianhui Zhao <zhaojh329@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, James Knight
+ <james.knight@collins.com>, Simon Dawson <spdawson@gmail.com>, Romain Naour
+ <romain.naour@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Michael
+ Vetter <jubalh@iodoru.org>
+In-Reply-To: <20251207144243.3696572-1-bernd@kuhls.net>
+References: <20251207144243.3696572-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <1ef29fa4a4a93ad0011cd8c259c665b0@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766773335;
+ bh=gBJ+YyR/l189Ps3yEOom3f3m8c26LTewbiC3W6FGp14=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=mk79hRD1zjBYUYbw4krrPnAh0fUVDgFAK5T+Ek/glvkhuDK1MIiTan+V2KtycZfVO
+ hmv2IhPHumIxsS/x84fbqytQn5ZL8IxViIsqH6YZZI49O29nGicl0S4Bmd7RUxB6BN
+ gJdQ6B1QmARiHmZtLtMvj3bNhoH/6Oe6NspHZWwGtFYSMj9k5Vb5Z7NvdvajvQXtYZ
+ 2wv7mWfzp2CfTK2SoFdl45QBXMfMzowQ5+JsB+AkmVpWyR7+fsHQCMxzaGccHKaiAz
+ 6cUpF58ldVxBZ8AYJGCVb3SAZrGPfOmoeYDM4/+mstzYvbY297yiwT9HekOcSiyNZH
+ XI/9olHZXFabA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=mk79hRD1
+Subject: Re: [Buildroot] [PATCH/next 01/33] package/libstrophe: bump version
+ to 0.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,146 +104,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f32dd28b5c13c2747b27221480db694c99ac838
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd,
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2024-November/003552.html
+On 07/12/2025 15:42, Bernd Kuhls wrote:
+> Added upstream patch to fix build with gcc-15.x.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/6e1/6e176c77a6cb7508b0502c77d78df78ae4602ef9/
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Removed patch which is included in this release.
+I applied this series to master, except patches for odhcp6, piglit and 
+rtptools
+for which I had comments.
 
-Switched tarball to xz.
+Best regards,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                                |  1 -
- ...nouveau-fixup-driver-for-new-X-server-ABI.patch | 68 ----------------------
- .../xdriver_xf86-video-nouveau.hash                |  6 +-
- .../xdriver_xf86-video-nouveau.mk                  |  4 +-
- 4 files changed, 5 insertions(+), 74 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index bb8d5b152f..cae06b629c 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1117,7 +1117,6 @@ package/x11r7/xdriver_xf86-video-imx/0004-Make-video-API-forward-and-backward-co
- package/x11r7/xdriver_xf86-video-imx/0005-xf86-video-imxfb-fix-m4-hardcodded-paths.patch lib_patch.Upstream
- package/x11r7/xdriver_xf86-video-imx/0006-xserver-1.14-compat.patch lib_patch.Upstream
- package/x11r7/xdriver_xf86-video-mach64/0001-cross-compile.patch lib_patch.Upstream
--package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch lib_patch.Upstream
- package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch lib_patch.Upstream
- package/x11r7/xserver_xorg-server/0001-include-misc.h-fix-uClibc-build.patch lib_patch.Upstream
- package/x11r7/xserver_xorg-server/S40xorg Shellcheck lib_sysv.Variables
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch b/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
-deleted file mode 100644
-index 96be4909e7..0000000000
---- a/package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-server-ABI.patch
-+++ /dev/null
-@@ -1,68 +0,0 @@
--From e80e73ced69b15662103d0fd6837db4ce6c6eb5b Mon Sep 17 00:00:00 2001
--From: Dave Airlie <airlied@redhat.com>
--Date: Mon, 13 Jul 2020 09:20:15 +1000
--Subject: [PATCH] nouveau: fixup driver for new X server ABI
--
--Downloaded from upstream commit
--https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/commit/e80e73ced69b15662103d0fd6837db4ce6c6eb5b
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/compat-api.h  | 4 ++++
-- src/nouveau_exa.c | 2 +-
-- src/nv_driver.c   | 6 +++---
-- 3 files changed, 8 insertions(+), 4 deletions(-)
--
--diff --git a/src/compat-api.h b/src/compat-api.h
--index fde2f4b..8a1fcf9 100644
----- a/src/compat-api.h
--+++ b/src/compat-api.h
--@@ -102,4 +102,8 @@
-- 
-- #endif
-- 
--+#if ABI_VIDEODRV_VERSION < SET_ABI_VERSION(25, 2)
--+#define secondary_dst slave_dst
--+#endif
--+
-- #endif
--diff --git a/src/nouveau_exa.c b/src/nouveau_exa.c
--index 55df6f8..db3b112 100644
----- a/src/nouveau_exa.c
--+++ b/src/nouveau_exa.c
--@@ -157,7 +157,7 @@ nouveau_exa_destroy_pixmap(ScreenPtr pScreen, void *priv)
-- 
-- #ifdef NOUVEAU_PIXMAP_SHARING
-- static Bool
---nouveau_exa_share_pixmap_backing(PixmapPtr ppix, ScreenPtr slave, void **handle_p)
--+nouveau_exa_share_pixmap_backing(PixmapPtr ppix, ScreenPtr secondary, void **handle_p)
-- {
-- 	struct nouveau_bo *bo = nouveau_pixmap_bo(ppix);
-- 	struct nouveau_pixmap *nvpix = nouveau_pixmap(ppix);
--diff --git a/src/nv_driver.c b/src/nv_driver.c
--index e72a6b6..f9ab4af 100644
----- a/src/nv_driver.c
--+++ b/src/nv_driver.c
--@@ -559,16 +559,16 @@ redisplay_dirty(ScreenPtr screen, PixmapDirtyUpdatePtr dirty)
-- {
-- 	RegionRec pixregion;
-- 
---	PixmapRegionInit(&pixregion, dirty->slave_dst);
--+	PixmapRegionInit(&pixregion, dirty->secondary_dst);
-- 
---	DamageRegionAppend(&dirty->slave_dst->drawable, &pixregion);
--+	DamageRegionAppend(&dirty->secondary_dst->drawable, &pixregion);
-- #ifdef HAS_DIRTYTRACKING_ROTATION
-- 	PixmapSyncDirtyHelper(dirty);
-- #else
-- 	PixmapSyncDirtyHelper(dirty, &pixregion);
-- #endif
-- 
---	DamageRegionProcessPending(&dirty->slave_dst->drawable);
--+	DamageRegionProcessPending(&dirty->secondary_dst->drawable);
-- 	RegionUninit(&pixregion);
-- }
-- 
---- 
--GitLab
--
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-index 336f29be46..0888eaa3a5 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
--sha256  499322e27a55c8183166bf2dd1e47d085eb834143e0d7036baba8427b90c156b  xf86-video-nouveau-1.0.17.tar.bz2
--sha512  adba58ba5298d1a5b3f9f8540f9ef2cb2e10e47bba8e374103ec2e1f92e915f5f4393ed0021168cd649646e12315135a1efcdf77e8fb1648e1295914d87279b2  xf86-video-nouveau-1.0.17.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2024-November/003552.html
-+sha256  e82ad38e64326b733cc5b892d56f6eb63b07e8920f5ebf05864af080b2c32bfd  xf86-video-nouveau-1.0.18.tar.xz
-+sha512  1330fa72f76a6fdc13e7bfa932627091d2735ddb277f6a24d4fefa79fad5f354c6bb661093f26b33770275deca435c3b018f451a6e6254fe35892c59c13e28dc  xf86-video-nouveau-1.0.18.tar.xz
- 
- # Locally computed
- sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-index e63bc611bf..47bf682176 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.17
--XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.18
-+XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.xz
- XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
- XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE_FILES = COPYING
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
