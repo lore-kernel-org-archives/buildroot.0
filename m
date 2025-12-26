@@ -4,81 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE61E8FDA2
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 15:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCEE9E8FDA2
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 15:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C8B404DA;
-	Fri, 26 Dec 2025 15:45:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92A4840695;
+	Fri, 26 Dec 2025 15:47:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0Mpd7lcPnsa; Fri, 26 Dec 2025 15:45:06 +0000 (UTC)
+ id weno-P9lo-OZ; Fri, 26 Dec 2025 15:47:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 405524059D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B385C40696
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766763906;
-	bh=BJIynC3TEbU8DWWS+RGe2Aa2peFewOfA3QvDR0XP444=;
+	s=default; t=1766764033;
+	bh=+W9g05eOIPUqggSbP7qYlKb4lKYj4MrnTs9U8AFJZk0=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=NZR/OJ+5eapmUMHkYroETYw4xHLHr4U5xPktxFftXXPY1WADD0mb2LGcgdOi9LCR3
-	 PGbsO4GRqjG3yW3Ap+W38VPZuSUwP5rv+CbFnWgNjLIlBjEuHkedFeAijuxnrUA5tD
-	 zuEUQU+kYlK54kbtoopPv/1KrJqDLFUKPRANSYBYKNNHtIn5mcHYMzYaBI3Ub9CePU
-	 0RhIOqlAEI6jmi9N/mcndcvJTL/5hqzqZNb+9d1Aa9ZvgG7TjDJWBqp0C3XEgOf0rE
-	 rnFU9JTJSj8CVDDHh4aVvcje9RoAQfMVrTfFviynTes5iDpX9ddH+naCVz5ejCx1O4
-	 l/wLDQkXSMwVQ==
+	b=EYMr1u9XjYPdSEdFMmUV4fJ2CrPJzqEhpcpl8IOqkVu/6KXDxWgzTuMS8bc82PL1l
+	 sriDpHmVDeOMmlUV/qVTnwOlz00bYdIHH7a6I4RiGoQLXRcOn0Pf4bVE3i01iLc8M/
+	 kFJh0cDGNqNI1iO2m+i719aTRuzJsiRf4kiu63sLlTvpD617yWeA2pc7AiGIfG4WOe
+	 P5pWv43v+H+oGBw8f3s6xsF//AqU3K4ofiR2iYynH9ABlpNWER8o/jaYBPtYXSUvbq
+	 JxLr5PHhrbIt3bQieqpTB7OepK4wYSvMgDjW/FNdNfFrJHWJsxZprSmsGKkwERRQze
+	 1P90OxRNHgWvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 405524059D;
-	Fri, 26 Dec 2025 15:45:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A99F4B9
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:45:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B385C40696;
+	Fri, 26 Dec 2025 15:47:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 49E16B9
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BF1380EEA
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:45:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 362FC401DA
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:47:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HfK7cdQhF6vT for <buildroot@buildroot.org>;
- Fri, 26 Dec 2025 15:45:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H3Gbths4SLiR for <buildroot@buildroot.org>;
+ Fri, 26 Dec 2025 15:47:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7409680EED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7409680EED
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7409680EED
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:45:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 431CF4009A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 431CF4009A
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 431CF4009A
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:47:11 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 0FE69C1D183
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:44:35 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 4F9914E41DD3
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:47:09 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 3B358606E4
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 15:45:00 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 1E420606E4;
+ Fri, 26 Dec 2025 15:47:09 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 42EC1103C8C77; Fri, 26 Dec 2025 16:44:57 +0100 (CET)
+ with ESMTPSA id 3C69C103C8C77; Fri, 26 Dec 2025 16:47:08 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Dec 2025 16:44:48 +0100
-Message-ID: <20251226154448.946753-1-thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Fri, 26 Dec 2025 16:46:51 +0100
+Message-ID: <20251226154652.948817-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766763899; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=UvCpFcVN49jkH8Cc3kVEPDBLaKCUXFj1j9rAnWXTxa8=;
- b=K05NnF85oUzRXxDEShGz6nhFQyxmRAuVR/a+othUmyEt4qJ1C2v3ELUiDA2tej4Dikzoeg
- Ktyar3mfPQiBaIPJzPQoBr2MFkyWOdQPXFyT/bws+v5evGe4zknlioaTcqcsDhgtKkaW6b
- 6jv/A4hIBjKHbGkeOs+MRZh5YoSlcnXALRC9PumvX591HqTNIipomOeKY3/4wRcaz5JYKJ
- HYGZcTv1kr2BnH0Ea0OhnTKRdtQBePh21cV94Y+DM0L6YV3+GGKGZ+EwgpAOHpbUw0lRiK
- kLtnH+Wzl9vGGh16rm/6nK5QRgIPgHIhH8Lsg3sgykWmFNm3gx2mYg6AgT1CEg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1766764028; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=HSsbl0L6iaFLLWZdMHmL3HqXIMLzuHi1MAiaWxvV6ZA=;
+ b=k8TN9OT09gI11NgxRmiYHAQVYmYIKH+PUSzY78dLLnUkzcAdbohBRwxkVUvRBQkBp1pzSO
+ O3gjNjD1WpkxAR5HV5wOUrm4ID5HOiTlNi5PfuyQJmTNPt1hsriMsKRD13sw8izCfNha9x
+ HkE73s0SrNsY45N7lqwfMsaCOjKyCPUt3GERyW682lwIqyEoTvL/vA5aK93tSYHlk5DZNU
+ VLIlwxFELFGAtvAHCqEYoqB+jFxh2UWE9ZiR96TWd1tKxrD7mWX1zeNtiE4u2qwQq1E8bx
+ geg8JZTs6OZB/C51ZnFrtWxjNPFg+SJqSgXaj3m71xosccnMb3OTKS5guuGAWA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=K05NnF85
-Subject: [Buildroot] [PATCH] package/gconf: remove package, broken
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=k8TN9OT0
+Subject: [Buildroot] [PATCH] package/flutter-engine: don't write into $HOME
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,107 +94,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Z2NvbmYgaGFzIG5vdCBzZWVuIGFueSByZWxlYXNlIHNpbmNlIDIwMTMsIGFuZCB0aGUgbGFzdCBj
-b21taXQgaW4KaHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0FyY2hpdmUvZ2NvbmYgaXMgZnJvbSAy
-MDE1LgoKVGhlIHBhY2thZ2UgZXhhbXBsZSBhcHBsaWNhdGlvbiBiYXNpYy1nY29uZi1hcHAgZmFp
-bHMgdG8gYnVpbGQgd2l0aCBhCnJlY2VudCBjb21waWxlciBzdWNoIGFzIEdDQyAxNC54OgoKYmFz
-aWMtZ2NvbmYtYXBwLmM6NDU4OjYwOiBlcnJvcjogcGFzc2luZyBhcmd1bWVudCAxIG9mIOKAmGd0
-a19kaWFsb2dfZ2V0X2NvbnRlbnRfYXJlYeKAmSBmcm9tIGluY29tcGF0aWJsZSBwb2ludGVyIHR5
-cGUgWy1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCgpJdCBpcyBub3QgZW50aXJlbHkgY2xl
-YXIgc2luY2Ugd2hlbiB0aGlzIGJyZWFrYWdlIHRha2VzIHBsYWNlLCBidXQKbW9zdCBsaWtlbHkg
-c2luY2UgR0NDIDE0Lnggd2FzIGludHJvZHVjZWQuIFRoaXMgaXNzdWUgY2FuIGJlCnJlcHJvZHVj
-ZWQgaW5jbHVkaW5nIG9uIDIwMjUuMDIueCB3aXRoIHRoZSBmb2xsb3dpbmcgZGVmY29uZmlnOgoK
-QlIyX2FhcmNoNjQ9eQpCUjJfVE9PTENIQUlOX0VYVEVSTkFMPXkKQlIyX1RPT0xDSEFJTl9FWFRF
-Uk5BTF9CT09UTElOPXkKQlIyX1BBQ0tBR0VfTUVTQTNEPXkKQlIyX1BBQ0tBR0VfTUVTQTNEX0dB
-TExJVU1fRFJJVkVSX1NXUkFTVD15CkJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfRUdMPXkKQlIy
-X1BBQ0tBR0VfTUVTQTNEX09QRU5HTF9FUz15CkJSMl9QQUNLQUdFX0xJQkdUSzM9eQpCUjJfUEFD
-S0FHRV9HQ09ORj15CgpIb3dldmVyLCBmb3IgdGhlIGJ1aWxkIGlzc3VlIHRvIGhhcHBlbiB5b3Ug
-bmVlZCB0byBydW46CgokIG1ha2UgbGliZ3RrMwokIG1ha2UKClNvIHRoYXQgbGliZ3RrMyBnZXRz
-IGJ1aWx0IGJlZm9yZSBnY29uZi4gSW5kZWVkLCB0aGVyZSdzIGEgaGlkZGVuCmRlcGVuZGVuY3kg
-YmV0d2VlbiB0aGUgdHdvLCBhbmQgdGhlIGV4YW1wbGUgcHJvZ3JhbXMgb2YgZ2NvbmYgb25seSBn
-ZXQKYnVpbGQgaWYgbGliZ3RrMyBpcyBidWlsdCBiZWZvcmUuIFdlJ3ZlIGhvd2V2ZXIgZW5jb3Vu
-dGVyZWQgdGhlCnByb2JsZW0gaW4gYSAocmVhbCkgYmlnZ2VyIGJ1aWxkIHdoZXJlIHRoZSBkZXBl
-bmRlbmN5IHJlbGF0aW9uc2hpcCBvZgpwYWNrYWdlcyBoYXZlIGNhdXNlZCBsaWJndGszIHRvIGdl
-dCBidWlsdCBiZWZvcmUgZ2NvbmYuCgpOb3RlIHRoYXQgd2UgY291bGQgcGVyaGFwcyBoYXZlIGZp
-eGVkIHRoZSBwcm9ibGVtIGJ5IGRpc2FibGluZyB0aGUKZXhhbXBsZXMsIGJ1dCBnY29uZiBpcyBh
-bnl3YXkgc28gb2xkIGFuZCBkZXByZWNhdGVkIHRoYXQgaXQgaXNuJ3QKd29ydGggdGhlIGVmZm9y
-dC4KClRoZXJlIGFyZSBubyBrbm93biBhdXRvYnVpbGRlciBpc3N1ZXMuCgpTaWduZWQtb2ZmLWJ5
-OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgotLS0KIENv
-bmZpZy5pbi5sZWdhY3kgICAgICAgICB8ICA3ICsrKysrKysKIERFVkVMT1BFUlMgICAgICAgICAg
-ICAgICB8ICAxIC0KIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICB8ICAxIC0KIHBhY2thZ2UvZ2Nv
-bmYvQ29uZmlnLmluICB8IDIxIC0tLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9nY29uZi9n
-Y29uZi5oYXNoIHwgIDQgLS0tLQogcGFja2FnZS9nY29uZi9nY29uZi5tayAgIHwgMjMgLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA1MCBk
-ZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2djb25mL0NvbmZpZy5pbgog
-ZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ2NvbmYvZ2NvbmYuaGFzaAogZGVsZXRlIG1vZGUg
-MTAwNjQ0IHBhY2thZ2UvZ2NvbmYvZ2NvbmYubWsKCmRpZmYgLS1naXQgYS9Db25maWcuaW4ubGVn
-YWN5IGIvQ29uZmlnLmluLmxlZ2FjeQppbmRleCA1MWY3N2FkMzEyLi5kZGI2ODg2MDI5IDEwMDY0
-NAotLS0gYS9Db25maWcuaW4ubGVnYWN5CisrKyBiL0NvbmZpZy5pbi5sZWdhY3kKQEAgLTE0Niw2
-ICsxNDYsMTMgQEAgZW5kaWYKIAogY29tbWVudCAiTGVnYWN5IG9wdGlvbnMgcmVtb3ZlZCBpbiAy
-MDI2LjAyIgogCitjb25maWcgQlIyX1BBQ0tBR0VfR0NPTkYKKwlib29sICJnY29uZiBwYWNrYWdl
-IHJlbW92ZWQiCisJc2VsZWN0IEJSMl9MRUdBQ1kKKwloZWxwCisJICBnY29uZiB3YXMgbm8gbG9u
-Z2VyIG1haW50YWluZWQgdXBzdHJlYW0sIHNvIGl0IGhhcyBiZWVuCisJICBkcm9wcGVkLgorCiBj
-b25maWcgQlIyX1BBQ0tBR0VfT1BFTkNWM19XSVRIX0ZGTVBFRwogCWJvb2wgIm9wZW5jdjMgZmZt
-cGVnIHN1cHBvcnQgcmVtb3ZlZCIKIAlzZWxlY3QgQlIyX0xFR0FDWQpkaWZmIC0tZ2l0IGEvREVW
-RUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggODY3MWM3MjFiMy4uMjY0ZTA0YzFjMiAxMDA2NDQK
-LS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJTCkBAIC0xNzUxLDcgKzE3NTEsNiBAQCBG
-OglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3pmcy5weQogTjoJSm9zZXBoIEtv
-Z3V0IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgogRjoJcGFja2FnZS9hdC1zcGkyLWNvcmUvCiBG
-OglwYWNrYWdlL2Vhcmx5b29tLwotRjoJcGFja2FnZS9nY29uZi8KIEY6CXBhY2thZ2UvbGlibnNz
-LwogRjoJcGFja2FnZS9sbGFtYS1jcHAvCiBGOglwYWNrYWdlL2xsdm0tcHJvamVjdC9jbGFuZy8K
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KaW5kZXgg
-MmY2NjQ0MjcxYS4uMmFhZjUzODBjYiAxMDA2NDQKLS0tIGEvcGFja2FnZS9Db25maWcuaW4KKysr
-IGIvcGFja2FnZS9Db25maWcuaW4KQEAgLTIxODgsNyArMjE4OCw2IEBAIG1lbnUgIk90aGVyIgog
-CXNvdXJjZSAicGFja2FnZS9mbGF0Y2MvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9mcDE2
-L0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvZnhkaXYvQ29uZmlnLmluIgotCXNvdXJjZSAi
-cGFja2FnZS9nY29uZi9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2dkYWwvQ29uZmlnLmlu
-IgogCXNvdXJjZSAicGFja2FnZS9nZW1tbG93cC9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdl
-L2dmbGFncy9Db25maWcuaW4iCmRpZmYgLS1naXQgYS9wYWNrYWdlL2djb25mL0NvbmZpZy5pbiBi
-L3BhY2thZ2UvZ2NvbmYvQ29uZmlnLmluCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCBh
-MjM3MWIzZjIzLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvZ2NvbmYvQ29uZmlnLmluCisrKyAv
-ZGV2L251bGwKQEAgLTEsMjEgKzAsMCBAQAotY29uZmlnIEJSMl9QQUNLQUdFX0dDT05GCi0JYm9v
-bCAiZ2NvbmYiCi0JZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgZGJ1cywg
-bGliZ2xpYjIKLQlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgZGJ1cywgbGliZ2xpYjIKLQlkZXBl
-bmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBsaWJnbGliMgotCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNf
-TElCUwotCXNlbGVjdCBCUjJfUEFDS0FHRV9EQlVTCi0Jc2VsZWN0IEJSMl9QQUNLQUdFX0RCVVNf
-R0xJQgotCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJHTElCMgotCXNlbGVjdCBCUjJfUEFDS0FHRV9M
-SUJYTUwyCi0JaGVscAotCSAgR0NvbmYgd2FzIGEgc3lzdGVtIHVzZWQgYnkgdGhlIEdOT01FIGRl
-c2t0b3AgZW52aXJvbm1lbnQgZm9yCi0JICBzdG9yaW5nIGNvbmZpZ3VyYXRpb24gc2V0dGluZ3Mg
-Zm9yIHRoZSBkZXNrdG9wIGFuZAotCSAgYXBwbGljYXRpb25zLiBJdCBpcyBzaW1pbGFyIHRvIHRo
-ZSBXaW5kb3dzIFJlZ2lzdHJ5LgotCi0JICBodHRwczovL3Byb2plY3RzLmdub21lLm9yZy9nY29u
-Zi8KLQotY29tbWVudCAiZ2NvbmYgbmVlZHMgYSB0b29sY2hhaW4gdy8gdGhyZWFkcywgd2NoYXIs
-IGR5bmFtaWMgbGlicmFyeSIKLQlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCi0JZGVwZW5kcyBvbiAh
-QlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyB8fCAhQlIyX1VTRV9XQ0hBUiBcCi0JCXx8IEJSMl9T
-VEFUSUNfTElCUwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9nY29uZi9nY29uZi5oYXNoIGIvcGFja2Fn
-ZS9nY29uZi9nY29uZi5oYXNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCBhZDAwNjRm
-YTk5Li4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvZ2NvbmYvZ2NvbmYuaGFzaAorKysgL2Rldi9u
-dWxsCkBAIC0xLDQgKzAsMCBAQAotIyBGcm9tIGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3Nv
-dXJjZXMvR0NvbmYvMy4yL0dDb25mLTMuMi42LnNoYTI1NnN1bQotc2hhMjU2ICAxOTEyYjkxODAz
-YWIwOWE1ZWVkMzRkMzY0YmYwOWZlM2EyYTljOTY3NTFmZGUwM2E0ZTBjZmE1MWEwNGQ3ODRjICBH
-Q29uZi0zLjIuNi50YXIueHoKLSMgTGljZW5zZSBmaWxlcywgbG9jYWxseSBjYWxjdWxhdGVkCi1z
-aGEyNTYgIDk0YjAzZjFhNjBhN2ZkNTAwNzE0OTUzMDYyNmE4OTVhNmVmNWE4YjkzNDJhYmZkNTY4
-NjBjNWYzOTU2ZjVkMjMgIENPUFlJTkcKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ2NvbmYvZ2NvbmYu
-bWsgYi9wYWNrYWdlL2djb25mL2djb25mLm1rCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRl
-eCBiODRmYTk2MDgyLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvZ2NvbmYvZ2NvbmYubWsKKysr
-IC9kZXYvbnVsbApAQCAtMSwyMyArMCwwIEBACi0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwotIwot
-IyBnY29uZgotIwotIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLQotR0NPTkZfVkVSU0lPTiA9IDMu
-Mi42Ci1HQ09ORl9TT1VSQ0UgPSBHQ29uZi0kKEdDT05GX1ZFUlNJT04pLnRhci54egotR0NPTkZf
-U0lURSA9IGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3NvdXJjZXMvR0NvbmYvMy4yCi1HQ09O
-Rl9DT05GX09QVFMgPSAtLWRpc2FibGUtb3JiaXQKLUdDT05GX0RFUEVOREVOQ0lFUyA9IGRidXMg
-ZGJ1cy1nbGliIGxpYmdsaWIyIGxpYnhtbDIgXAotCWhvc3QtaW50bHRvb2wgJChUQVJHRVRfTkxT
-X0RFUEVOREVOQ0lFUykKLUdDT05GX0xJQ0VOU0UgPSBMR1BMLTIuMCsKLUdDT05GX0xJQ0VOU0Vf
-RklMRVMgPSBDT1BZSU5HCi0KLWlmZXEgKCQoQlIyX1BBQ0tBR0VfR09CSkVDVF9JTlRST1NQRUNU
-SU9OKSx5KQotR0NPTkZfQ09ORl9PUFRTICs9IC0tZW5hYmxlLWludHJvc3BlY3Rpb24KLUdDT05G
-X0RFUEVOREVOQ0lFUyArPSBnb2JqZWN0LWludHJvc3BlY3Rpb24KLWVsc2UKLUdDT05GX0NPTkZf
-T1BUUyArPSAtLWRpc2FibGUtaW50cm9zcGVjdGlvbgotZW5kaWYKLQotJChldmFsICQoYXV0b3Rv
-b2xzLXBhY2thZ2UpKQotLSAKMi41Mi4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+gclient.py tries to not only read from $HOME/.config, but actually
+create some directories/files in there. As $HOME can be inaccessible,
+let's override XDG_CONFIG_HOME to tell the depot-tools code to write
+its stuff into $(@D)/dl-tmp instead (which we already use as a scratch
+directory in this package).
+
+Fixes:
+
+>>> flutter-engine 3.29.2 Downloading
+/home/thomas/buildroot/br/output-all/host/share/depot_tools/gclient.py:3367: SyntaxWarning: invalid escape sequence '\s'
+  dot_git_pattern = re.compile('^(\s*)url(\s*)=.*\.git$')
+/home/thomas/buildroot/br/output-all/host/share/depot_tools/gclient_scm.py:436: SyntaxWarning: invalid escape sequence '\.'
+  tokens = re.search('//(.+).googlesource.com/(.+?)(?:\.git)?$',
+Traceback (most recent call last):
+  File "/home/thomas/buildroot/br/output-all/host/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/br-user/.config/depot_tools'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/thomas/buildroot/br/output-all/host/share/depot_tools/gclient.py", line 108, in <module>
+    import gclient_scm
+  File "/home/thomas/buildroot/br/output-all/host/share/depot_tools/gclient_scm.py", line 23, in <module>
+    import gerrit_util
+  File "/home/thomas/buildroot/br/output-all/host/share/depot_tools/gerrit_util.py", line 42, in <module>
+    import metrics
+  File "/home/thomas/buildroot/br/output-all/host/share/depot_tools/metrics.py", line 23, in <module>
+    CONFIG_FILE = utils.depot_tools_config_path('metrics.cfg')
+  File "/home/thomas/buildroot/br/output-all/host/share/depot_tools/utils.py", line 48, in depot_tools_config_path
+    pathlib.Path(config_dir).mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thomas/buildroot/br/output-all/host/lib/python3.13/pathlib/_local.py", line 726, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thomas/buildroot/br/output-all/host/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/home/br-user/.config'
+make[1]: *** [package/pkg-generic.mk:181: /home/thomas/buildroot/br/output-all/build/flutter-engine-3.29.2/.stamp_downloaded] Error 1
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/flutter-engine/flutter-engine.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
+index 1fa59a3863..e1c56ee62b 100644
+--- a/package/flutter-engine/flutter-engine.mk
++++ b/package/flutter-engine/flutter-engine.mk
+@@ -181,6 +181,7 @@ define FLUTTER_ENGINE_GENERATE_TARBALL
+ 	PATH=$(HOST_DIR)/share/depot_tools:$(BR_PATH) \
+ 	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
+ 	PUB_CACHE=$(FLUTTER_SDK_BIN_PUB_CACHE) \
++	XDG_CONFIG_HOME=$(@D)/dl-tmp \
+ 	$(FLUTTER_ENGINE_PKGDIR)/gen-tarball \
+ 		--dot-gclient $(TOPDIR)/$(FLUTTER_ENGINE_PKGDIR)/dot-gclient \
+ 		--jobs $(PARALLEL_JOBS) \
+-- 
+2.52.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
