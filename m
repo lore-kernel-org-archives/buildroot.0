@@ -1,117 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 157E9E8FDAC
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 17:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 775E0E8FDAD
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 17:15:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC7CC81222;
-	Fri, 26 Dec 2025 17:13:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEB1960891;
+	Fri, 26 Dec 2025 17:15:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JjMqu5hWAFLs; Fri, 26 Dec 2025 17:15:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 161AA6083C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766769308;
+	bh=/tyxffh/1OUKxF4lHs/Pwh5oHR1eOpYJtftYY3YzRE4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=OCR0sMhos65X0uIR/9wfTgyHK/Kr5XX5GVjP8z8zWCrj7yflAILDB9HRvOllW/fFK
+	 Qj+vDfP+aTf4Katotfgn4qJQJC6PKkjh5I1WD+FqhaHqQ6GyZ4E1cXpCAHy3vpAlrM
+	 CG9X6thga7oSElqxYZZDcxjwzISLLlMtUel3MoVFWFKzJhsmLiteT4P6eJFl05KqOe
+	 HPUWQ4UxRXCSLy8yq2aIC8AP7bkhRULC9CmKxN944a5q70V0ZLCMY6vMNxmiDVI9t0
+	 hrh0TH/V6hxTdH8c/rwRt1of3ec6rFkANtRHI+ywSW0LWthrsKo2V+tGxKsoNNQgtW
+	 ONTYBYHFVlGzQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 161AA6083C;
+	Fri, 26 Dec 2025 17:15:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B728119
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18C6B81222
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 68bQrENZpdg4; Fri, 26 Dec 2025 17:13:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6AE0812C4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766769202;
-	bh=qzPDx4BMtytm/fTaRQWBX4lTRshVczN6xwzmuuA6Zzs=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=cYTOSSPCgH1zIzsCBUTmSk9uMaM4V9OO/eloZhVhiM/YC3KiQt1rkEw/BnANXB7As
-	 CmrV6A78pTGHZ45VZOL7oSg9IRISjfK8d4JCIpbaRc++zZa6Qx1d7SgTA9ftIvAlVF
-	 vB+LZILGKmB3hPikSwro0TkGNVZr6/rcgw1fXApR3OcBVVpkOSyknWJlf2qsqjTsEJ
-	 B6CQb1Cup1AAXsvKTUpuHhvdi5LzJB9BmmH0v2iGOwxGehq0QZ7zVYB4CTAsKXU04v
-	 FcfsfBs/sv/6FaQoPlCp+x60MPKzJLUlqgydhIRqjKEyjAQEZNe9qg0Np+fRrlZp9V
-	 0G9Y6SzN+AdbA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6AE0812C4;
-	Fri, 26 Dec 2025 17:13:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A314EC
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:13:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6AFB3403EA
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:13:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mlgYMZ5hjRoD for <buildroot@buildroot.org>;
- Fri, 26 Dec 2025 17:13:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E1AA14012B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1AA14012B
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E1AA14012B
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:13:19 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-b79d6a70fc8so1290417866b.0
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 09:13:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766769197; x=1767373997;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=hAXmfwI0JchNS51dGMoYJqtbzw/0yc/GuZ34dx8/g4k=;
- b=msW+yLZDaelUnD41mMBW80KTALO4Vm5OgN001owROM6R4Y9bBBbZ+jQmQFHrR3GjA4
- jbZmwzibuEZrvx+Y+eik2NjS44HbgEMOgkEC0m6Oyqff26u65dCLJ6UcVxhWgiBnnWgx
- cNxhxgi3IB/xO0LOniD7LYZ+eFBDomqKCGEspgJ+ClEILheKxFDtMrF9ZVcPE8vSyqN4
- bpNVgzf0UAIevH2oDNLWAqW7xaGaaQ2RFGioYoxpR2Ff8C5C5krVmm0hpUBH6PaBnZhO
- VBpLw2KVcsqOT7jZ48D2SKuAYCJwt2egaEj1N3ZJX/gEr6tds9r4TaTqJxC4qs1+2e7A
- TkvQ==
-X-Gm-Message-State: AOJu0YyFIHPygnVI9HEDnpUPqNKjD8yow7rRDhOKnnGMFKLlovm4JcCS
- 4MceYZoCuvvlQO0MsZ1iLzruNu/anfocE8OGbTIiTqn+rKIMTm5YnLq4PnjCz5iQtF5+S1GkXgq
- ohRdF
-X-Gm-Gg: AY/fxX4q9aviu9ePyI7dtYitqH5DQaVRuZ21x0HGpJfuwmjunqGMii11MXrIyokAdko
- OcdmLzDm4cBluvVaDF2f93tNXJclajtoj7h02dAyHdD35ujTt6VnEviB2csRiSvN/JAGGpePIuE
- Aqy7Tw4YXXsGivWn21U84Fo0RIvzT/QBId6FGiMklYtm9PLvqIbMZu45bLb8rwpu5wbwD08BGR4
- qVr7ejkyefkXuToVp/8SkaPURmPvY0i5hOwAvYgbbKcQqlM8MgC2XcUunUE3kSp5ummRT2+/PdB
- q8qckMALT2HzZq7N+KV4nvljVdXmMU7xBO34FwK8QtxpqVxm8K3RGHwQV9JsxOk+aUw94uG6Mdf
- 3QKrTjmC5N1FTcEZ85iHbTgPANxT636zBcRc+WGvbyaSxar1AR8pCPwe8RUAi2UL7zHD4y/AOYm
- eBvL1qJkopoxRoCyyRcxs6Fu/sOOdfzmL1BZTTvDi/bZ8jpQYSOuuxKmsLWVur8q+SvRet1OUOX
- msY4iTG6VwkUeOC6TcfB4S4WvbIzQfVMc9bv52pgV4w+jH1HnIQkQTEeCFVbHiDUy6NdRjVLr+P
- K4npe8drTW4=
-X-Google-Smtp-Source: AGHT+IHIPK8MlV0F+nyqsJtwPVS0F7mfUUUuBsFP517Xuhd6kkPDb9c4IjcWaOE9FiouhLrrBmd0vg==
-X-Received: by 2002:a17:907:9713:b0:b7c:532b:cc99 with SMTP id
- a640c23a62f3a-b803719d464mr2632105366b.46.1766769197153; 
- Fri, 26 Dec 2025 09:13:17 -0800 (PST)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-45-45-148.retail.telecomitalia.it. [79.45.45.148])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b8037f09149sm2414690066b.47.2025.12.26.09.13.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Dec 2025 09:13:16 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id PEJOmlrjz_YY for <buildroot@buildroot.org>;
+ Fri, 26 Dec 2025 17:15:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 95F32812C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95F32812C4
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95F32812C4
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:04 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 2E6A7C1D187
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:14:37 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 7573B606E4
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id F36BA1197806F; Fri, 26 Dec 2025 18:15:01 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Danomi Manchego <danomimanchego123@gmail.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 26 Dec 2025 18:13:13 +0100
-Message-ID: <20251226171313.1982585-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 26 Dec 2025 18:14:46 +0100
+Message-ID: <20251226171448.1213664-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251226171448.1213664-1-thomas.petazzoni@bootlin.com>
+References: <20251226171448.1213664-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1766769197; x=1767373997;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hAXmfwI0JchNS51dGMoYJqtbzw/0yc/GuZ34dx8/g4k=;
- b=F5xDhAdB2KGRe50fpqIlwAa6+Fq7oeajR1N04GXNjRni80lK9by/OB/jmNmdUpWFlG
- 6s8pt7BMOqf+mK+ZWFvSEJklcSHnVDWfmTV2HH0rs/MRE+wFvOljeAz7Y2efKqZl5MHz
- Kn7/IIZNeYfSHl6mdglBLar66X7rY5hGla2mo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=F5xDhAdB
-Subject: [Buildroot] [PATCH 1/1] package/xinetd: fix build w/ gcc-14
+ d=bootlin.com; s=dkim; 
+ t=1766769302; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=V1/LAF5LWHZ9bmPzm7jam5R/2gw1qqmk2dXrE+quYik=;
+ b=KzJTLKLfXW74l2fwKgOd2E11sAwfQPSD6jKhOva7vQ6txNYEVhDx0En/OOgdUy+QkvIupO
+ a9l7ndtjQz+2Vx1CYJKQ5wz6pQE/xNjQiAibo84yPWbbn6jMNoIkhb/HLOmGRe63gsTaVA
+ 1McoiOVD1Vlfv/q26GxdZtW9NUTC61nx5tmUWUwILyxFNwAnhUHhLdFaJKhWhC9kDiCtO6
+ vIUsBTuumey7QC1mv4XTQ592XXHsDqUVlmoAny3toZUCids+KAS23hL6jMd/66yUYNFtYb
+ lrKyq+z+a0nR8cmSXOFPqUIZDwiRa9ppkWHFNcJ2Phu4/zYsco9HL1vrPcsWZg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=KzJTLKLf
+Subject: [Buildroot] [PATCH 2/3] package/opencv3: drop support for protobuf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,78 +94,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building xinetd with gcc-14 raises the following error:
+The protobuf support breaks the build, as protobuf includes
+libabseil-cpp headers, which now require C++14. opencv3 doesn't have
+any ENABLE_CXX14 option, so for the time being, disable protobuf
+support until someone bothers enough to fix this up.
 
-cvt.c: In function 'fcvt_r':
-cvt.c:113:9: error: implicit declaration of function 'strx_nprint' [-Wimplicit-function-declaration]
-  113 |     n = strx_nprint (buf, len, "%.*" FLOAT_FMT_FLAG "f", ndigit, value);
-      |
+While we suspect a libabseil-cpp version bump to be responsible for
+the issue, we are not 100% sure. However, the issue is definitely
+present in Buildroot 2025.02.x, as it can be reproduced using the
+following defconfig:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_OPENCV3=y
+BR2_PACKAGE_OPENCV3_LIB_SHAPE=y
+BR2_PACKAGE_OPENCV3_LIB_STITCHING=y
+BR2_PACKAGE_OPENCV3_LIB_SUPERRES=y
+BR2_PACKAGE_OPENCV3_LIB_TS=y
+BR2_PACKAGE_OPENCV3_LIB_VIDEOSTAB=y
+BR2_PACKAGE_OPENCV3_WITH_PROTOBUF=y
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/39432e7746e6bc5224592a7d2f744ca992bd529a/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...libs-src-portable-fix-build-w-gcc-14.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/xinetd/0006-libs-src-portable-fix-build-w-gcc-14.patch
+ Config.in.legacy           |  7 +++++++
+ package/opencv3/Config.in  | 12 ------------
+ package/opencv3/opencv3.mk | 12 +-----------
+ 3 files changed, 8 insertions(+), 23 deletions(-)
 
-diff --git a/package/xinetd/0006-libs-src-portable-fix-build-w-gcc-14.patch b/package/xinetd/0006-libs-src-portable-fix-build-w-gcc-14.patch
-new file mode 100644
-index 000000000000..8bfbcd6d8ddf
---- /dev/null
-+++ b/package/xinetd/0006-libs-src-portable-fix-build-w-gcc-14.patch
-@@ -0,0 +1,46 @@
-+From 499087df7c0aaa01f0f64aa7aa355d2e543665bc Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Wed, 24 Dec 2025 11:36:20 +0100
-+Subject: [PATCH] libs/src/portable: fix build w/ gcc-14
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7c598e0e68..03e0673fba 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
++	bool "opencv3 protobuf support removed"
++	select BR2_LEGACY
++	help
++	  Support for OpenCV 3 protobuf support has been removed as it
++	  was no longer compatible with recent versions of protobuf.
 +
-+Building xinetd with gcc-14 in Buildroot raises the following error:
-+
-+cvt.c: In function 'fcvt_r':
-+cvt.c:113:9: error: implicit declaration of function 'strx_nprint' [-Wimplicit-function-declaration]
-+  113 |     n = strx_nprint (buf, len, "%.*" FLOAT_FMT_FLAG "f", ndigit, value);
-+      |         ^~~~~~~~~~~
-+
-+Including "str.h" header to fix the compiler error would add a
-+build-time dependency of libportable on libstr, creating a circular
-+dependency chhain:
-+
-+  libportable -> libstr -> libsio -> libportable
-+
-+which results in GNU make dropping dependency edges and therefore not
-+fixing the original build error.
-+
-+The commit keeps the existing library layering unchanged while restoring
-+successful builds with modern compilers.
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://github.com/xinetd-org/xinetd/pull/39
-+---
-+ libs/src/portable/cvt.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libs/src/portable/cvt.c b/libs/src/portable/cvt.c
-+index 4bd99fc80c26..4badab1cbd42 100644
-+--- a/libs/src/portable/cvt.c
-++++ b/libs/src/portable/cvt.c
-+@@ -64,6 +64,8 @@
-+ #endif
-+ 
-+ #ifndef HAVE_FCVT
-++int strx_nprint ( char *buf, int len, const char *fmt, ... );
-++
-+ int
-+ APPEND (FUNC_PREFIX, fcvt_r) (FLOAT_TYPE value, 
-+                               int ndigit, 
-+-- 
-+2.43.0
-+
+ config BR2_PACKAGE_LIBDNET_PYTHON
+ 	bool "libdnet python module removed"
+ 	select BR2_LEGACY
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index c4c5d22a54..6c4d4e9c8a 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -278,18 +278,6 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
+ 	help
+ 	  Use shared libpng from the target system.
+ 
+-config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
+-	bool "protobuf support"
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+-	select BR2_PACKAGE_PROTOBUF
+-	help
+-	  Use shared protobuf from the target system.
+-
+-comment "protobuf support needs a toolchain w/ gcc >= 8"
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+-
+ config BR2_PACKAGE_OPENCV3_WITH_TIFF
+ 	bool "tiff support"
+ 	select BR2_PACKAGE_TIFF
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 8a862a47b1..3fcf2543a7 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -223,6 +223,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_OPENEXR=OFF \
+ 	-DWITH_OPENNI2=OFF \
+ 	-DWITH_OPENNI=OFF \
++	-DWITH_PROTOBUF=OFF \
+ 	-DWITH_UNICAP=OFF \
+ 	-DWITH_VA=OFF \
+ 	-DWITH_VA_INTEL=OFF \
+@@ -282,17 +283,6 @@ else
+ OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
+-# protobuf needs c++11 (since 3.6.0)
+-OPENCV3_CONF_OPTS += \
+-	-DENABLE_CXX11=ON \
+-	-DPROTOBUF_UPDATE_FILES=ON \
+-	-DWITH_PROTOBUF=ON
+-OPENCV3_DEPENDENCIES += protobuf
+-else
+-OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
+ OPENCV3_CONF_OPTS += -DWITH_QT=5
+ OPENCV3_DEPENDENCIES += qt5base
 -- 
-2.43.0
+2.52.0
 
 _______________________________________________
 buildroot mailing list
