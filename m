@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8EF3E8FDB0
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 18:21:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC36AE8FDA7
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 18:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE26040762;
-	Fri, 26 Dec 2025 18:21:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A521C40836;
+	Fri, 26 Dec 2025 18:21:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ih4Jvvg2q3OD; Fri, 26 Dec 2025 18:21:15 +0000 (UTC)
+ id V09ktmOr3xtd; Fri, 26 Dec 2025 18:21:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B01040877
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BF3E40904
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766773273;
-	bh=o7M7kpOw/V3mktu/5Ku5GwZSPh8dAhar9q7pQd0q0tU=;
+	s=default; t=1766773276;
+	bh=z+mFEL7v3quSL8779kKaNZdSCWyKi5dBVzBilH8TXiQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DN/XcH2W6oCMDk5Hbhm+RCQgnPasIT9McmBaVZIpb8SWHhhgAW+DSjN+m6+6JCDmk
-	 JtwUHB+WDIGD83nxxRtjT/zzVz213XAbj1UDpzJhh5b+4MR3Ec8MvcWDRo9giDLSR5
-	 LpQgm/6DPsG/znMgZOLo+Bo1q6Sjd7CTgHn9lFXPybjgIZ5BueMsNWfcrJOb3SWMwi
-	 kssBD3fPMi1n6kkRT07AP3slwXYdIC+OyZdqYAJWVd2PZEkgfGfaUeS4V+F+kOdUGf
-	 vz6DeifiTgwsAXvxtErdR4GKeILC85l5m38uBnIZT5ClFOsacc+Z+MamzulYqK9hGD
-	 zLzt0Av0oRtLg==
+	b=XSCqfd54cmR5JWcBHbuKc7B1//rNxmmciNjcssrxfKkhk1tMdul5UbgfTRaRUPvV5
+	 j6Mp4jAlMmaGdpBHcRTdBWl39zAoL+2xwBhdD3xsP7DqzMcWq1nTc40MJw91GMH4wQ
+	 T0COTBwE+Bec3F9C9323qvUHgGmOtJ8yDzbPdH+TMCxQzDs2thpy2UFt53MLcy9+yz
+	 9IKytQ8eOqabH2Cx+aeW5YCGvFRrSoFSBDnkEGKi2FQL4pSpbi99Uc0XtOM8Dhqx2G
+	 HKJMQQHwsF4LyCyf8pNy4klLGg/OP8zbgIQD5UZO5lRtFSVCb2Jo3T9HSFlURA58NU
+	 CqHY+garbbB6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B01040877;
-	Fri, 26 Dec 2025 18:21:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BF3E40904;
+	Fri, 26 Dec 2025 18:21:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id F1730EC
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:21:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D526B9
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3030F80AB0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 508A380BD7
  for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:20:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KZz3DMpcXxNA for <buildroot@buildroot.org>;
+ id LwoiDl7Loj0k for <buildroot@buildroot.org>;
  Fri, 26 Dec 2025 18:20:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68A6A80AAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5754280B79
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68A6A80AAF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5754280B79
  for <buildroot@buildroot.org>; Fri, 26 Dec 2025 18:20:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6473A81840; Fri, 26 Dec 2025 18:20:55 +0000 (UTC)
+ id 541ED83371; Fri, 26 Dec 2025 18:20:55 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 26 Dec 2025 17:39:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8c2ab39950037882a527315425b96f0dbbae215
-X-Git-Newrev: 35b32556477ef30bde9215b76647bc53ab977ec9
+X-Git-Oldrev: e1050a3a50886c72d3ff2416dd8db2fe3c389973
+X-Git-Newrev: a8c2ab39950037882a527315425b96f0dbbae215
 X-Patchwork-Hint: ignore
-Message-Id: <20251226182055.6473A81840@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linknx: bump version to 0.0.1.39
+Message-Id: <20251226182055.541ED83371@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: bump to version 3.0.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,164 +76,138 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35b32556477ef30bde9215b76647bc53ab977ec9
+commit: https://git.buildroot.net/buildroot/commit/?id=a8c2ab39950037882a527315425b96f0dbbae215
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/linknx/linknx/compare/0.0.1.38...0.0.1.39
+Release notes:
+https://code.videolan.org/videolan/vlc/-/blob/3.0.22/NEWS
 
-Removed patches which are included in this release.
+Rebased patch 0005.
 
-Fixes:
-https://autobuild.buildroot.net/results/492/492b46b997758bbe6b8ec8510e5b2e2bad2aa704/
+Removed patch 0011 which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |  2 -
- ...01-configure-ac-tweak-CPPUNIT-conditional.patch | 47 ----------------------
- ...-src-Makefile.am-fix-linking-with-log4cpp.patch | 37 -----------------
- package/linknx/linknx.hash                         |  2 +-
- package/linknx/linknx.mk                           |  4 +-
- 5 files changed, 2 insertions(+), 90 deletions(-)
+ ...0005-Don-t-assume-strerror_l-is-available.patch |  8 ++--
+ ...ive555-fix-build-with-versions-2024.11.28.patch | 47 ----------------------
+ package/vlc/vlc.hash                               |  8 ++--
+ package/vlc/vlc.mk                                 |  2 +-
+ 4 files changed, 9 insertions(+), 56 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0d61d3c69b..1f406c3426 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -622,8 +622,6 @@ package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch lib_patc
- package/libyuv/0001-i386-sse2.patch lib_patch.Upstream
- package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch lib_patch.Upstream
- package/lighttpd/S50lighttpd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
--package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch lib_patch.Upstream
--package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch lib_patch.Upstream
- package/linux-zigbee/0001-test-serial-Remove-test-serial.patch lib_patch.Upstream
- package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch lib_patch.Upstream
- package/linuxptp/S65ptp4l Shellcheck lib_sysv.Indent
-diff --git a/package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch b/package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch
+diff --git a/package/vlc/0005-Don-t-assume-strerror_l-is-available.patch b/package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
+index cd839b7379..e860f56ac4 100644
+--- a/package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
++++ b/package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
+@@ -11,8 +11,8 @@ Fix compile error
+ Code for #else condition was taken from
+ http://patches.osdyson.org/patch/series/view/vlc/2.2.0~rc2-1+dyson2/dyson.patch
+ 
+-[Bernd: rebased for vlc-3.0.6 & 3.0.9.2]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 3.0.22]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  configure.ac      | 2 +-
+  src/posix/error.c | 4 ++++
+@@ -22,13 +22,13 @@ diff --git a/configure.ac b/configure.ac
+ index dfb4c1c329..bfe43512a2 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -590,7 +590,7 @@ dnl Check for system libs needed
++@@ -667,7 +667,7 @@
+  need_libc=false
+  
+  dnl Check for usual libc functions
+ -AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getmntent_r getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale stricmp strnicmp strptime uselocale])
+ +AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getmntent_r getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale strerror_l stricmp strnicmp strptime uselocale])
+- AC_REPLACE_FUNCS([aligned_alloc atof atoll dirfd fdopendir ffsll flockfile fsync getdelim getpid lfind lldiv memrchr nrand48 poll recvmsg rewind sendmsg setenv strcasecmp strcasestr strdup strlcpy strndup strnlen strnstr strsep strtof strtok_r strtoll swab tdestroy tfind timegm timespec_get strverscmp pathconf])
++ AC_REPLACE_FUNCS([aligned_alloc atof atoll dirfd fdopendir flockfile fsync getdelim getpid lfind lldiv memrchr nrand48 poll recvmsg rewind sendmsg setenv strcasecmp strcasestr strdup strlcpy strndup strnlen strnstr strsep strtof strtok_r strtoll swab tdestroy tfind timegm timespec_get strverscmp pathconf])
+  AC_REPLACE_FUNCS([gettimeofday])
+  AC_CHECK_FUNC(fdatasync,,
+ diff --git a/src/posix/error.c b/src/posix/error.c
+diff --git a/package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch b/package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch
 deleted file mode 100644
-index 733e2927dd..0000000000
---- a/package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch
+index 9708f680c9..0000000000
+--- a/package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch
 +++ /dev/null
 @@ -1,47 +0,0 @@
--From 8e7da14647dada5eee8f583b0814bffb31d1b91e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 21 Apr 2019 23:17:34 +0200
--Subject: [PATCH] configure.ac: tweak CPPUNIT conditional
+-From 8befcbfa834b809602db24c9ba7456d8cfc25cdb Mon Sep 17 00:00:00 2001
+-From: Florian Albrechtskirchinger <falbrechtskirchinger@gmail.com>
+-Date: Sun, 2 Mar 2025 08:30:43 +0100
+-Subject: [PATCH] live555: fix build with versions >= 2024.11.28
 -
--Following review of buildroot's patch
--(http://patchwork.ozlabs.org/patch/1088520), tweak CPPUNIT to move call
--to AM_CONDITIONAL outside condition
+-In the 2024.11.28 release (version 1732752000), live555 introduced
+-`EventLoopWatchVariable` as a typedef for `std::atomic<char>`, replacing
+-direct use of `char` in earlier versions. Add a conditional typedef to
+-define it as `char` for older versions, and update `event_rtsp` and
+-`event_data` to use `EventLoopWatchVariable`.
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/linknx/linknx/commit/8e7da14647dada5eee8f583b0814bffb31d1b91e]
+-Upstream: https://code.videolan.org/videolan/vlc/-/commit/8befcbfa834b809602db24c9ba7456d8cfc25cdb
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ----
-- configure.ac | 10 ++++------
-- 1 file changed, 4 insertions(+), 6 deletions(-)
+- modules/access/live555.cpp | 8 ++++++--
+- 1 file changed, 6 insertions(+), 2 deletions(-)
 -
--diff --git a/configure.ac b/configure.ac
--index 51d8ae66..4d9d8efa 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -135,22 +135,20 @@ if test x"$WITH_CPPUNIT" != xno; then
--       AC_DEFINE([HAVE_CPPUNIT], [1], [cppunit])
--       AC_SUBST(CPPUNIT_CFLAGS)
--       AC_SUBST(CPPUNIT_LIBS)
---      AM_CONDITIONAL(CPPUNIT, true)
--+      found_cppunit=yes
--     ],[
--       AC_MSG_RESULT([no])
---      AM_CONDITIONAL(CPPUNIT, false)
--     ])
--   else
--     PKG_CHECK_MODULES(CPPUNIT, $CPPUNITPC >= 1.9.6, [
--       AC_DEFINE([HAVE_CPPUNIT], [1], [cppunit])
--       AC_SUBST(CPPUNIT_CFLAGS)
--       AC_SUBST(CPPUNIT_LIBS)
---      AM_CONDITIONAL([CPPUNIT], true)
---    ],[AM_CONDITIONAL([CPPUNIT], false)])
--+      found_cppunit=yes
--+    ])
--   fi
---else
---  AM_CONDITIONAL([CPPUNIT], false)
-- fi
--+AM_CONDITIONAL([CPPUNIT], [test x"$found_cppunit" = xyes])
+-diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
+-index 461766661e49..cacea3c46952 100644
+---- a/modules/access/live555.cpp
+-+++ b/modules/access/live555.cpp
+-@@ -194,6 +194,10 @@ class RTSPClientVlc;
+- #define CAP_SUBSESSION_PAUSE    (1 << 3)
+- #define CAPS_DEFAULT            CAP_RATE_CONTROL
 - 
-- dnl #########################################################################
-- dnl Check if using log4cpp
-diff --git a/package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch b/package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch
-deleted file mode 100644
-index 4f1a8e4356..0000000000
---- a/package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 048b9ae8f3c07be217f1738c35ab995ab6394453 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 8 Mar 2020 10:02:07 +0100
--Subject: [PATCH] src/Makefile.am: fix linking with log4cpp
+-+#if LIVEMEDIA_LIBRARY_VERSION_INT < 1732752000 // 2024.11.28
+-+typedef char EventLoopWatchVariable;
+-+#endif
+-+
+- struct demux_sys_t
+- {
+-     char            *p_sdp;    /* XXX mallocated */
+-@@ -232,8 +236,8 @@ struct demux_sys_t
+-     bool             b_no_data;     /* if we never received any data */
+-     int              i_no_data_ti;  /* consecutive number of TaskInterrupt */
+- 
+--    char             event_rtsp;
+--    char             event_data;
+-+    EventLoopWatchVariable event_rtsp;
+-+    EventLoopWatchVariable event_data;
+- 
+-     bool             b_get_param;   /* Does the server support GET_PARAMETER */
+-     bool             b_paused;      /* Are we paused? */
+--- 
+-GitLab
 -
--linknx fails to build with log4cpp because LOG4CPP_CFLAGS (which
--contains -pthread) is added to AM_CPPFLAGS (which is not used at link
--time) instead of AM_CXXFLAGS:
--
--/home/buildroot/autobuild/instance-0/output/host/bin/mipsel-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o linknx linknx.o logger.o ruleserver.o objectcontroller.o eibclient.o threads.o timermanager.o persistentstorage.o xmlserver.o smsgateway.o emailgateway.o knxconnection.o services.o suncalc.o luacondition.o ioport.o ../ticpp/libticpp.a  -L/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lpthsem  -L/home/buildroot/autobuild/instance-0/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -llog4cpp     -lm
--/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/liblog4cpp.so: undefined reference to `pthread_key_create'
--
--So move LOG4CPP_CFLAGS to AM_CXXFLAGS
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/linknx/linknx/commit/048b9ae8f3c07be217f1738c35ab995ab6394453]
-----
-- src/Makefile.am | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 6e0dc03b..5065c248 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -6,6 +6,7 @@ else
-- B64_CFLAGS=
-- B64_LIBS=
-- endif
---AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LOG4CPP_CFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
--+AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
--+AM_CXXFLAGS=$(LOG4CPP_CFLAGS)
-- linknx_LDADD=$(top_srcdir)/ticpp/libticpp.a $(LIBICONV) $(B64_LIBS) $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) $(MYSQL_LIBS) $(ESMTP_LIBS) -lm
-- linknx_SOURCES=linknx.cpp logger.cpp ruleserver.cpp objectcontroller.cpp eibclient.c threads.cpp timermanager.cpp  persistentstorage.cpp xmlserver.cpp smsgateway.cpp emailgateway.cpp knxconnection.cpp services.cpp suncalc.cpp  luacondition.cpp ioport.cpp ruleserver.h objectcontroller.h threads.h timermanager.h persistentstorage.h xmlserver.h smsgateway.h emailgateway.h knxconnection.h services.h suncalc.h luacondition.h ioport.h logger.h
-diff --git a/package/linknx/linknx.hash b/package/linknx/linknx.hash
-index 86ec522809..d12d4aa8f2 100644
---- a/package/linknx/linknx.hash
-+++ b/package/linknx/linknx.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  00c53776c2e871295459ede922402d8ad0208367d2364781fdb92ddafad94d3d  linknx-0.0.1.38.tar.gz
-+sha256  d07199875c6e3f90871308989dd7d4240b67ce971d5908cb39592690341f8d0a  linknx-0.0.1.39.tar.gz
- sha256  c03cea027b4b40e4402fabd08557736727ec3d5bc54ad64ab6472de432198cad  LICENSE
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index 683e0c49cb..d67f010093 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -4,13 +4,11 @@
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index b3d9a083b9..6733a870b1 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.21/vlc-3.0.21.tar.xz.sha256
+-sha256  24dbbe1d7dfaeea0994d5def0bbde200177347136dbfe573f5b6a4cee25afbb0  vlc-3.0.21.tar.xz
+-# From https://get.videolan.org/vlc/3.0.21/vlc-3.0.21.tar.xz.sha1
+-sha1  be8557fc2f4be58caebe4a8b1d70f03dc6b95792  vlc-3.0.21.tar.xz
++# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha256
++sha256  e2cc1cf0ae0902a09da5a37c249a8a4e4b5ec4dc095443b8e1493c6a7cc138ea  vlc-3.0.22.tar.xz
++# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha1
++sha1  f9871439cdb281e18a78828c389cf7bf66d47d69  vlc-3.0.22.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index a597616470..81783c99ed 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINKNX_VERSION = 0.0.1.38
-+LINKNX_VERSION = 0.0.1.39
- LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
- LINKNX_LICENSE = GPL-2.0+
- LINKNX_LICENSE_FILES = LICENSE
- LINKNX_INSTALL_STAGING = YES
--# We're patching configure.ac
--LINKNX_AUTORECONF = YES
- LINKNX_CONF_OPTS = \
- 	--without-cppunit \
- 	--without-pth-test \
+-VLC_VERSION = 3.0.21
++VLC_VERSION = 3.0.22
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
