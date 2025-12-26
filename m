@@ -1,86 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 286A1E8FDAC
-	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 17:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5C64E8FDAC
+	for <buildroot@archiver.kernel.org>; Fri, 26 Dec 2025 17:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E35A3404B9;
-	Fri, 26 Dec 2025 17:15:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 973F5812D9;
+	Fri, 26 Dec 2025 17:15:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYrsjIJxXL6J; Fri, 26 Dec 2025 17:15:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9fEMiJkfT5vJ; Fri, 26 Dec 2025 17:15:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C3E940516
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0D0C812C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766769309;
-	bh=X1y+cQ6iuTGbFJruQyjg1Iig6QunP/8a4cNB0E/mfQg=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=q75ck1JpO0f1QfZ8ECYsQWnwarW8a4sw7lALqy03P03uMCRbMLh/f3r++VwHp7bkI
-	 TbLfoZIza7Kgjaduh2kO5nn3A14ADP0ZHAWwdA/r+AuzTq3IY2rrKxGZMEjpCs2OXk
-	 BSqTa5qL53ryzvMGrLCKCoeIhJBxLFoYUXFIrNHOBcD1u4IHE8lThmiMgsLWgQKtTz
-	 hHfG6zlOEQ4nUkCBKyd1h1oPaXr08DlEFmI1PcMtREH1Xo8y6z7ApjONJAX3K3GeWd
-	 lfuCwg2CzP52Woei9wukGQNnAlrDaabRhkRIkkBbv9A5rCy1PX9gxVXzD4jUuMnIBf
-	 fkSi6+bmEZC9w==
+	s=default; t=1766769310;
+	bh=I9/GTtn0FBUc6Ltcbjqv234haSuudnGPiJOHJ1Bkcjg=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=S8j5Ay1lQ41tUrWdPi/8LMf8N3Ent3lLa2yecB/Oz2KmZkpcK1Nbk2xfnwZ7Sw0xi
+	 EDRXQRBZB8PlFDqwuY0At/lU4MivLPS6GCYnMVrxXMOLaFZDrQTR6KYesjHk0uxpqz
+	 ZX+h6nogpHfjIlq7V8RQ0xF/iwmERsc92a6XEVWUIUNSR3Mi886VB3YBeyCMrvTm0/
+	 5mPQl6ks0i2cLK321ojED/izNEgkcWG+ytT0mdijD+0naEyak+DNNrjLq27zVVhDIa
+	 jLZfzFPdzdPbWnw5IR1UOKQjT8HZBuBopIYSwyFgzE5UwhsuJH5QeX2yGncDd7bor6
+	 6DXDwZTZ9htDQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C3E940516;
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0D0C812C4;
 	Fri, 26 Dec 2025 17:15:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 32022119
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3B56EC
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1967E40516
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 999DC6083C
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e7sTBipZyfpC for <buildroot@buildroot.org>;
- Fri, 26 Dec 2025 17:15:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id siMshKWmvyAE for <buildroot@buildroot.org>;
+ Fri, 26 Dec 2025 17:15:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
  helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 96282404B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96282404B9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8AC4260830
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AC4260830
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 96282404B9
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8AC4260830
+ for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:06 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id C9B26C1D186
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:14:36 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 5587AC1D188;
+ Fri, 26 Dec 2025 17:14:39 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E1A35606E4
- for <buildroot@buildroot.org>; Fri, 26 Dec 2025 17:15:01 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 96B3A606E4;
+ Fri, 26 Dec 2025 17:15:04 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 07A8511978051; Fri, 26 Dec 2025 18:15:00 +0100 (CET)
+ with ESMTPSA id CB22E11978070; Fri, 26 Dec 2025 18:15:02 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Dec 2025 18:14:45 +0100
-Message-ID: <20251226171448.1213664-1-thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Date: Fri, 26 Dec 2025 18:14:47 +0100
+Message-ID: <20251226171448.1213664-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251226171448.1213664-1-thomas.petazzoni@bootlin.com>
+References: <20251226171448.1213664-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766769301; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=WFgSho46T6KY9cGrrv9zuowoBRuYoh3YHO+fMNVxnrY=;
- b=dL6IHTSvCQo6OcSiR9WAnckDuXtLCLFKgu/OBB1z5C6Jp+CgGwRm59JIl52SP9h7t5hjVA
- zpp4101fqd8SwREamKpRXIqta2hv8huHpyxugTvcGrQrpPPkfjcC4hZHmgBrkLPN+3lVN8
- VsZ2Thw63tjnKN8bPXtYobyJeNF4ZoTOAmBiHBvOq0vxhTkk3t0GDF/wV0fXPMUKzduRte
- Fcfrx/ncM7m2SjlQhn112gi9k3QaKw8qedGOg83HK6V7PzedawlifSG8OkAg+HKXAF+PPK
- 8cuOHrL/DfZATLlrfKIflJ/GgHZnP2BmUowlviAsKTY7jtTx6EfKtm/saHVeeQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1766769304; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=0rMzZAAhVvk6w46px6xna8nc6IBWDvmYJhcW1sOFW84=;
+ b=M5jhfNCE00Tt0CT507F4rL5s5NeC8Z56mzYLIfhrlN+E2E2yMote4vvG3AxVZcLSiZC/LM
+ zwvvHWNqt1hoBDOGUDoH0yut0z47049eCKhS8xvBY+ZkmowQM7MqD3I359IuCyUYyZi2aw
+ B04QpskGaYs6E7eg+vgXkT+uxSQa/qfQTeFV46CsZ7NRFkWL4TcChQarayf7i7oZbqXQ9v
+ fbmWwyNY0xF17x6jrgzA8OgGi/LxljFqSeK9TiEx7gTXl2tk+ntbl/zCWElS4Kygqo1BrF
+ cT+Vl6ayZZBbVkQkPcbX1Nw6dFrhGVHduhsexh4Z8b2SqK4LP5aBl2MQSkgQig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=dL6IHTSv
-Subject: [Buildroot] [PATCH 1/3] package/opencv3: add patch to fix CMake 4
- build issue
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=M5jhfNCE
+Subject: [Buildroot] [PATCH 3/3] package/opencv3: drop support for ffmpeg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,71 +103,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a small patch to fix CMake 4 build issues. Unfortunately, while
-cmake/OpenCVMinDepVersions.cmake provides a MIN_VER_CMAKE that we
-could pass on the command line, cmake/OpenCVGenPkgconfig.cmake doesn't
-use it, so we anyway have to patch the package.
-
-Since opencv3 is basically unmaintained, there is no point sending
-this patch upstream.
+opencv3's code is not compatible with newer versions of ffmpeg, and
+opencv3 is no longer maintained, so we have no choice but to disable
+its ffmpeg support.
 
 Fixes:
 
-  https://autobuild.buildroot.net/results/cc857993920607958dd817c6a877ed9386c05738/
+  https://autobuild.buildroot.net/results/9ae3911583cccb6362f33cd82e5eaafb059fdc76/
+
+It's not clear which ffmpeg version bump broken the build exactly, but
+this issue is definitely present in 2025.02.x as the following
+defconfig fails to build in a similar way on 2025.02.x:
+
+ BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_PACKAGE_FFMPEG_NONFREE=y
+ # BR2_PACKAGE_FFMPEG_FFMPEG is not set
+ # BR2_PACKAGE_FFMPEG_INDEVS is not set
+ # BR2_PACKAGE_FFMPEG_OUTDEVS is not set
+ BR2_PACKAGE_OPENCV3=y
+ BR2_PACKAGE_OPENCV3_LIB_VIDEOIO=y
+ BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS=y
+ BR2_PACKAGE_OPENCV3_WITH_FFMPEG=y
+ BR2_PACKAGE_OPENCV3_INSTALL_DATA=y
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...inimum-required-CMake-version-to-3.5.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+ Config.in.legacy           | 7 +++++++
+ package/ffmpeg/ffmpeg.mk   | 6 +++---
+ package/opencv3/Config.in  | 9 ---------
+ package/opencv3/opencv3.mk | 8 +-------
+ 4 files changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch b/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
-new file mode 100644
-index 0000000000..46009de302
---- /dev/null
-+++ b/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
-@@ -0,0 +1,41 @@
-+From 3b7311f48ef70127ddad7c7ea9c008fa6af3a9a1 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 25 Dec 2025 23:11:27 +0100
-+Subject: [PATCH] cmake: set minimum required CMake version to 3.5
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 03e0673fba..51f77ad312 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
++	bool "opencv3 ffmpeg support removed"
++	select BR2_LEGACY
++	help
++	  Support for OpenCV 3 ffmpeg support has been removed as it
++	  was no longer compatible with recent versions of ffmpeg.
 +
-+This fixes build with CMake 4.
-+
-+Upstream: N/A, opencv 3.x is no longer maintained
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ cmake/OpenCVGenPkgconfig.cmake   | 2 +-
-+ cmake/OpenCVMinDepVersions.cmake | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
-+index 425c0faa3b..9642a4b983 100644
-+--- a/cmake/OpenCVGenPkgconfig.cmake
-++++ b/cmake/OpenCVGenPkgconfig.cmake
-+@@ -110,7 +110,7 @@ endif()
-+ # =============================================================================
-+ else() # DEFINED CMAKE_HELPER_SCRIPT
-+ 
-+-cmake_minimum_required(VERSION 2.8.12.2)
-++cmake_minimum_required(VERSION 3.5)
-+ cmake_policy(SET CMP0012 NEW)
-+ include("${CMAKE_HELPER_SCRIPT}")
-+ include("${OpenCV_SOURCE_DIR}/cmake/OpenCVUtils.cmake")
-+diff --git a/cmake/OpenCVMinDepVersions.cmake b/cmake/OpenCVMinDepVersions.cmake
-+index e67856bb97..eb7a6d861e 100644
-+--- a/cmake/OpenCVMinDepVersions.cmake
-++++ b/cmake/OpenCVMinDepVersions.cmake
-+@@ -1,5 +1,5 @@
-+ if(NOT DEFINED MIN_VER_CMAKE)
-+-  set(MIN_VER_CMAKE 2.8.12.2)
-++  set(MIN_VER_CMAKE 3.5)
-+ endif()
-+ set(MIN_VER_CUDA 6.5)
-+ set(MIN_VER_PYTHON2 2.7)
-+-- 
-+2.52.0
-+
+ config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
+ 	bool "opencv3 protobuf support removed"
+ 	select BR2_LEGACY
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index cee34eba9e..f3b76f69b5 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -287,11 +287,11 @@ else
+ FFMPEG_CONF_OPTS += --disable-vdpau
+ endif
+ 
+-# To avoid a circular dependency only use opencv if opencv itself does
+-# not depend on ffmpeg.
+-ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),yx)
++ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),y)
+ FFMPEG_CONF_OPTS += --enable-libopencv
+ FFMPEG_DEPENDENCIES += opencv3
++# To avoid a circular dependency only use opencv if opencv itself does
++# not depend on ffmpeg.
+ else ifeq ($(BR2_PACKAGE_OPENCV4_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV4_WITH_FFMPEG),yx)
+ FFMPEG_CONF_OPTS += --enable-libopencv \
+ 	--extra-cflags=-I$(STAGING_DIR)/usr/include/opencv4
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 6c4d4e9c8a..ad8a075729 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -232,15 +232,6 @@ config BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS
+ 
+ comment "3rd party support"
+ 
+-config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
+-	bool "ffmpeg support"
+-	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	select BR2_PACKAGE_BZIP2
+-	select BR2_PACKAGE_FFMPEG
+-	select BR2_PACKAGE_FFMPEG_SWSCALE
+-	help
+-	  Use ffmpeg from the target system.
+-
+ config BR2_PACKAGE_OPENCV3_WITH_GSTREAMER1
+ 	bool "gstreamer-1.x"
+ 	depends on BR2_USE_MMU # gstreamer1 -> libglib2
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3fcf2543a7..9e488bed0c 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -212,6 +212,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_1394=OFF \
+ 	-DWITH_CLP=OFF \
+ 	-DWITH_EIGEN=OFF \
++	-DWITH_FFMPEG=OFF \
+ 	-DWITH_GDAL=OFF \
+ 	-DWITH_GPHOTO2=OFF \
+ 	-DWITH_GSTREAMER_0_10=OFF \
+@@ -232,13 +233,6 @@ OPENCV3_CONF_OPTS += \
+ 
+ OPENCV3_DEPENDENCIES += host-pkgconf zlib
+ 
+-ifeq ($(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),y)
+-OPENCV3_CONF_OPTS += -DWITH_FFMPEG=ON
+-OPENCV3_DEPENDENCIES += ffmpeg bzip2
+-else
+-OPENCV3_CONF_OPTS += -DWITH_FFMPEG=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_GSTREAMER1),y)
+ OPENCV3_CONF_OPTS += -DWITH_GSTREAMER=ON
+ OPENCV3_DEPENDENCIES += gstreamer1 gst1-plugins-base
 -- 
 2.52.0
 
