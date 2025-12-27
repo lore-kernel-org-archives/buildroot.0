@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CD3E9270B
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:38:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EA70E92704
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:38:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD8B2607C8;
-	Sat, 27 Dec 2025 11:38:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43B86607AF;
+	Sat, 27 Dec 2025 11:38:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BqXpXcUTv8p4; Sat, 27 Dec 2025 11:38:05 +0000 (UTC)
+ id GsB0Wf8v-Rq1; Sat, 27 Dec 2025 11:38:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D70FD607A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A15C6078A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766835485;
-	bh=SIjZtVVYGo8cC88mKf+lAqTSoxrFLF0S/z4cD0HU9yE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QEsik4dtJmCOZRICOZVPFR8q3NuKUHImu7lnIkhAHe+2gKdEuGdCEqEaa1D9lBFXU
-	 dqTUBJ8TbT/KRjiwuhqhYF0m4SiPFeaLRXiUAujXrtsu6Ej7Ee+jUZJj8iyDwkjJrh
-	 IZJ+n5P5HV/35ubOfDdZk4jk7+EgoV8JXrslGV4p/1FpSjgwviuPFDVDRio21KjnX7
-	 Y+LpMfbZB7yDgefYBwfVD+aXdOccpsXEABLyE/O791XHM8X7rou4s8mdaPSP5LqeiB
-	 jWBK5cl/BRiPcQlaR3Ef6uCq2pvFtmFWVlHYAfZCTycciakJrZQucbf/r/PW9x+y/I
-	 EVN7XjsCG3g5A==
+	s=default; t=1766835503;
+	bh=vhY5T188JI0G9LBOl5owQuQ10/++dX5u960HcvOQZ1c=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=jDdFeck51yQ7wcUGa89RjUC/w+GD8VVG/p9W6gQzTIy40IVSiFicQNZA6adXfjWPr
+	 qCISJPR7VyMYUwkkZOCAh87c/HFv6mYfVH88DV+Ww0ulUKqxzVkXk8CXea42MfnQVX
+	 Ebz8moPHVfj2mldYdo/htFUTOOGseuQALqioYapJY69mSnIKwKF0OXwR1juyeOMzGN
+	 ZOeJ/3Ne1Tl+JbPxoASQuVXpyMZFrEUHsJqDGkt1QTBa8KBSoNC8j01YZLa8HRZxag
+	 XtxQOIc1SQhKB3THmPgCeh92390q+Tzx6MvoZ9O7/xSN8x0/awbzpJkMeDRdvqBrVn
+	 uCIA98lsxDeXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D70FD607A5;
-	Sat, 27 Dec 2025 11:38:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EF914EC
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A15C6078A;
+	Sat, 27 Dec 2025 11:38:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4A5EEC
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D6FDE80E14
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBBB680E14
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4rlR5Eq3qNs for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1761380E0F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1761380E0F
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0854687718; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 12:36:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5a8811cadeedb265ac38efed0f79c2ef66151a9e
-X-Git-Newrev: 29641d1675756dd82486cff4d5f71321bd89cad2
-X-Patchwork-Hint: ignore
-Message-Id: <20251227113800.0854687718@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cppcms: change upstream to Github,
- bump to 2.0.1
+ id DiDaevXNeq1a for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 11:38:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B845780E0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B845780E0F
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B845780E0F
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:20 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id E6502B0054E;
+ Sat, 27 Dec 2025 12:38:17 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 27 Dec 2025 12:38:17 +0100
+MIME-Version: 1.0
+Date: Sat, 27 Dec 2025 12:38:17 +0100
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251217222539.1989993-1-thomas.petazzoni@bootlin.com>
+References: <20251217222539.1989993-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <ab718d3b7c1aee24e2cf7a78636a1c6b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766835499;
+ bh=sb0DZ30tEuPRN6U6H/WWNnWAkezKyObDGEfJmtQd+rI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=selcLMrW7toobWzy5galHnXpMks+/+xsEJEuVqkYSw15ND26pzX/4MPNzEV5y448U
+ jV6/vs8WNQ5TlowZdPZLbC55uQxeTKue1rZnr9Oa4cBJfYFJbp8qcQOuV8EnSQzpFn
+ LiPzzOEtr2z/njRPcUn2hi01IqeyazfqTJbCjQdT/VNlo/a4LxuMWYAuft3+aFXxyI
+ UVEF+qyrs9JN05EqRKVt0fOIisA4gITpgFfswsN9pFhmEVf3WdE/m13rHvkeVXcdJE
+ VqA09OIg5q+2TpQGUcz7zmRUYEhaFP2D8FEAQ4r9ukTRJPyfCu9j+jgkC/8ODI913P
+ dtVxb7wYn00UQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=selcLMrW
+Subject: Re: [Buildroot] [PATCH 1/3] package/cppcms: add patch to fix build
+ with CMake 4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,80 +95,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29641d1675756dd82486cff4d5f71321bd89cad2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 17/12/2025 23:25, Thomas Petazzoni via buildroot wrote:
+> Fixes:
+> 
+>   
+> https://autobuild.buildroot.net/results/5f0a3a525866519ee12acb9997d217b4a8b870fe/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-cppcms.com now points to a Github page at
-https://github.com/artyom-beilis/cppcms which has a 2.0.1 version, so
-let's use that. The number of differences to 2.0.0.beta2 is very
-small:
-
-$ git log --online v2.0.0.beta2..v2.0.1
-b872972 (tag: v2.0.1, origin/master, origin/HEAD, master) Version to 2.0.1
-a1914f7 (tag: v2.0.0) Replaced system category with one from predating C++11 (v1.2) because std::system_category does not translate WSAGetLastError results
-c4febcc Merge pull request #104 from dreaming-augustin/upstream
-922cd49 Python 3.12 compatibility: wrap regex in r''.
-a11e9d4 Merge branch 'cpp11'
-3000bc6 (origin/1.2_updates) Merge pull request #99 from dreaming-augustin/master
-44e24c7 [#89] cppcms_error fix typo + consistent  messages
-a6d5575 (origin/cpp11) Added backtrace to system error
-b3aef3b Fixed missing include for stripped down build
-463a9a6 Removed IPV6 due to travis limitations
-f8163c6 Merges from cpp11
-31d4fe7 Added verbose log on failure
-90bc996 Added Linux to build matrix - so I have fallback if normal build environment fails
-f78ee39 Added Readme for github
-a737d5d Merged python3 compatibility from master
-0c67544 Support of python 2.7 and python 3
-0d121a7 Python3 compatibility
-2fc7e38 Python3 compatibility
-d745869 python3 fix for tmp_cc
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/cppcms/cppcms.hash | 5 +----
- package/cppcms/cppcms.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
-index a8d04ff36f..8e59f66489 100644
---- a/package/cppcms/cppcms.hash
-+++ b/package/cppcms/cppcms.hash
-@@ -1,8 +1,5 @@
--# From http://sourceforge.net/projects/cppcms/files/cppcms/2.0.0-beta2/
--sha1  746cc5e3f58565d91d9ded6e2616399d60e9d01d  cppcms-2.0.0.beta2.tar.bz2
--md5  ef561d13ee92d2053151cab073feba10  cppcms-2.0.0.beta2.tar.bz2
- # Locally computed:
--sha256  697031c7d141fdd215c6be5090b66e2106a63bb3e52f09ee8120e8efc6c08a21  cppcms-2.0.0.beta2.tar.bz2
-+sha256  4a7a2217b3fa59384650912a7000e016c308b4fa986a3d2562002691e5a9d6e7  cppcms-2.0.1.tar.gz
- sha256  fb7c15ddf590037d4cd18ebd61148a2304b9243369d238a64f599182377e32db  COPYING.TXT
- sha256  3e4012cc5950e05bedfdd2f00ceffe1ef71c46ac8c79f07e237ecb23c773f65f  MIT.TXT
- sha256  d6ce062e5cf4f7e3c536d7d2fee84c882c45245f1848ed3162401f2b29fa2b4b  THIRD_PARTY_SOFTWARE.TXT
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index 8a59990a8d..b39122d12f 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--CPPCMS_VERSION = 2.0.0-beta2
--CPPCMS_SOURCE = cppcms-$(subst -,.,$(CPPCMS_VERSION)).tar.bz2
-+CPPCMS_VERSION = 2.0.1
-+CPPCMS_SITE = $(call github,artyom-beilis,cppcms,v$(CPPCMS_VERSION))
- CPPCMS_LICENSE = MIT, BSL-1.0 (boost), Public Domain (json2.js), Zlib (md5)
- CPPCMS_LICENSE_FILES = COPYING.TXT MIT.TXT THIRD_PARTY_SOFTWARE.TXT
--CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
- CPPCMS_INSTALL_STAGING = YES
- CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
