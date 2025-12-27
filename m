@@ -1,90 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C276BE9271F
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 23:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F9A9E92722
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 23:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C54680EA7;
-	Sat, 27 Dec 2025 23:17:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8CD4607C2;
+	Sat, 27 Dec 2025 23:39:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xL096mf-DNap; Sat, 27 Dec 2025 23:17:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Tzpt5NS6mFCZ; Sat, 27 Dec 2025 23:39:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3275E80EB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC3C607C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766877460;
-	bh=XXnrH50N/Qad4inzpRkCY/Gf1qUiwHrHW9Y6RuTsF0o=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LnZrw/8J2lfVeauiEWTRIxAuk5eGOE2L5Eg+LzM0cqw1MYxjJOSmtUt5bIKO2Yrjd
-	 JO8Y4K0qkjrbT3koZLGDuZI9SLkP8vWLHkPugtOZ8UFPsIN5PhX3ErNy7fFNLzvQJj
-	 +lC5qNy33zPL/Xs4xmTPSGeeXF53v/Wvq4FSXMNRrQ2PL/StFzVrtEabd7kMsCxiSU
-	 6jbzD4IlJibMqca0Kxc29bYe3W24MGEM6C1AqSZVqdUKYYvrXFc6qJjd1zaC5AzpH/
-	 nObVZ9bzhEACzaOzdXa2ibxSmeclJjIjvs/HDzIlf6cVNScW3fZcMSDxaaE+xdgtQl
-	 wvsDzw0Vx7pTg==
+	s=default; t=1766878796;
+	bh=gM7HRRZaanRZfbg14Hp4mMtfAldhAjGsYjUbqc7IwlM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=s7p9mTOa5GvamVuUtnBAD0l+Gps4D1f+koRr/YMtZdV7t1TMBKAtL+CFVGhW/ugpA
+	 dwZnN06ev03+ZlKdZpdhPKxMKfA7LxQUZIb8nCMHkAJXYNHwGlnBxHP/h3RCriNLA9
+	 tIO4iEt8NBL989ittjOrVM07ulOE+8W8obzM0yHZikICamK83SQcc1WnVifZzECIbO
+	 U9nV6kvrsLxAbyh34/UIQGwsEpCFTHXoOBzsRXCEcOdNL9S5OQ04no0ZwFKbOI6q+x
+	 01FBcSpsVF31n6TOLb+fG74zbte/hY/VPpmDzaSWfd1WgMHuhBEvnEHM7QEwCm5OZx
+	 AJ+TaY9k9mRpw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3275E80EB4;
-	Sat, 27 Dec 2025 23:17:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A9FFCD8
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:17:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEC3C607C6;
+	Sat, 27 Dec 2025 23:39:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F34D6D8
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9663340177
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:17:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2121406BC
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3MSZ98Gbak9n for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 23:17:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id onM7L4Y6ncEb for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8399F400F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8399F400F8
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8399F400F8
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:17:37 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id BC7704E41E22
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:17:35 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 8601560725;
- Sat, 27 Dec 2025 23:17:35 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 330EA11978B01; Sun, 28 Dec 2025 00:17:33 +0100 (CET)
-Date: Sun, 28 Dec 2025 00:17:33 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20251228001733.5e16a830@windsurf>
-In-Reply-To: <20251205190034.1839192-1-bernd@kuhls.net>
-References: <20251205190034.1839192-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1766877454; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=CsyRZOUbkTmNcZm08eY08J0CnMyFRpAwY/Ycicrtxa4=;
- b=Q5XSpJi0fdXNaLE4LuNMXGBEZsoM6wdM2WS9eyVc8lAourodsG8w7GOaBJra1Y4XGs6WrN
- cUwhFsNuqxS48CCf0LOq+qIM2T7+35cULy3hDFivWNjspH99AgyN9USvrNaBqbNquDQWCM
- 3vW1TvaUjS8JRcsCkB825ZvXwzjhVrpIWlO+rznW7UFmqCKWPGuoWQY841icxuW47JuA2S
- 3sH1PcYudA56owm44Q6ZcXRXybaZbQkHrq4IlF34PD7o6W/3/3vOUn88jNnG+34ScPKjD2
- JMJbwD1rVdBpPehgrtLXKC/eexuMqJCHcLl6rv7adBcphfv5oF5poHrC0rp46g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=Q5XSpJi0
-Subject: Re: [Buildroot] [PATCH/next 1/4] package/matchbox-lib: bump version
- to 1.14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29DC640678
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29DC640678
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 217B8878FE; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 28 Dec 2025 00:15:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 147236691d82b729f21abd7f6372e36736b5c703
+X-Git-Newrev: 4b33839f12c4638ea148c4ac7ae2e85adf79f936
+X-Patchwork-Hint: ignore
+Message-Id: <20251227233954.217B8878FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/matchbox-lib: switch to gz tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,53 +70,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b33839f12c4638ea148c4ac7ae2e85adf79f936
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  5 Dec 2025 20:00:31 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Switched _SOURCE to .gz, upstream does not provide bz2 tarballs anymore.
 
-> Changelog: https://git.yoctoproject.org/libmatchbox/log/?h=1.14
-> 
-> Switched _SOURCE to .gz, upstream does not provide bz2 tarballs anymore.
-> 
-> Updated license hash due to upstream commit:
-> https://git.yoctoproject.org/libmatchbox/commit/COPYING?h=1.14&id=bd46fea025212dac5e2a218a41f971d4cba92b76
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/66a/66ac5ae4b1cd053122ccebad9f61af02fa5fe7f6/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
 
-I'm afraid your patch series again is not properly organized. You
-continue to mix version bumps with build fixes. This is not good at
-all, as it prevents our LTS maintainers from doing their job. Please
-stop doing this, and provide fixes *then* bumps.
+  https://autobuild.buildroot.net/results/66ac5ae4b1cd053122ccebad9f61af02fa5fe7f6/
 
-So I've changed this series to:
+Co-developed-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/matchbox-lib/matchbox-lib.hash | 2 +-
+ package/matchbox-lib/matchbox-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-- Fix all 3 packages to use a .gz tarball (the issue exists in 2025.02)
-- Fix the build issues, including some more that I discovered
-- Bump matchbox-lib to 1.14
-
-Could you please try to remember about this policy of providing fixes
-separately from bumps?
-
-Of course an exception is when the problem doesn't exist in a
-maintained stable branch, in that case it's fine to provide a bump as a
-fix.
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/matchbox-lib/matchbox-lib.hash b/package/matchbox-lib/matchbox-lib.hash
+index 8144c10258..ecd02f7174 100644
+--- a/package/matchbox-lib/matchbox-lib.hash
++++ b/package/matchbox-lib/matchbox-lib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5c7795e46c24d848a2b960f3b994911165d95e5d5731e39105ee0d808d2373eb  libmatchbox-1.12.tar.bz2
++sha256  648d7e1af82e69b79c0932ff9f85e6781584eada5da8662f70196916dd208f55  libmatchbox-1.12.tar.gz
+ sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
+index 00ca4a0d15..b6e4584052 100644
+--- a/package/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox-lib/matchbox-lib.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MATCHBOX_LIB_VERSION = 1.12
+-MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
++MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.gz
+ MATCHBOX_LIB_SITE = http://git.yoctoproject.org/cgit/cgit.cgi/libmatchbox/snapshot
+ MATCHBOX_LIB_LICENSE = LGPL-2.1+
+ MATCHBOX_LIB_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
