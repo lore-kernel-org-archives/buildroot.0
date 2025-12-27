@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1E26E8FDD8
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0E8E8FDD5
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8A0E6078A;
-	Sat, 27 Dec 2025 11:03:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90CDF4068F;
+	Sat, 27 Dec 2025 11:08:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KOVgDVzd_6Ao; Sat, 27 Dec 2025 11:08:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF32140631
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766833736;
+	bh=JC1vDuftGoIRHfFytRPUQMsM0zZpM6/PKlRrI66/ppA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Q9D5Ab1xjgvfUZhTvP+EYd30/KXH5bdmpO7veUBYfuY+yn+RFQWsrJ/DBWdhiNDOM
+	 hm37jWFdx+7Iu8jlRn6r722nqfH/b9+J341GYt9Y8JDtOOfipqN/yRYfuq59vFajdx
+	 6hPrsrUJ85GjoWKwUu0EwPcJ3/ezvd51HLBZkAu/qvIZUsCy+Iq3xP8W4d0spYP2HR
+	 FNXfxOoJ8Ev37ECJq/0CN4z7k6gnDXnxbBU4HKjjvcSRmZ+r2N7IC1zPPB2PEuvjeQ
+	 35Fj06+OK+DAVCaPJ6oXIirO6xuV4YUROsgl4n/MtQAcCKlVHrjYSedBSiB/mbsHZJ
+	 KzsFm5juxuFtA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF32140631;
+	Sat, 27 Dec 2025 11:08:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 005AF119
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DAE6860663
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cl-oxwPu8XgU; Sat, 27 Dec 2025 11:03:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFC0E60741
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766833430;
-	bh=rwZ8XZNG2cGHQOvotRmSaBGwRDI+uf839j/4KNCEkQU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qAYqcu0UaGH5pJnUabuURNT7RdwiuAggOYstfPohd4bmlc4YMwCn8+4UmwJ4PhvrI
-	 7i3HDatAftzMzckvtVbftyMrlxPztNeyfLm45wtQucV1plDv53sVhVJzYRNrZjPKxb
-	 EZFJsS6fbZlJkG57aRymr5v9K+Fr+pryzKvHjeuZFOrzLaQzzU48pCL20Tg+tWGnGg
-	 w32aXD8g//lOmVDrVK47cWbx7ri30Trjukje4XsLc/XH8MgJ9joTAgCVivdd+m97Uv
-	 niRiI8nv9/wNlJn62fJAhJmVoqx3WfpQCM4ski87PA3qtlD1GcMApj2WKCetcqCQrL
-	 qKZ9XX21JQQdQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFC0E60741;
-	Sat, 27 Dec 2025 11:03:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62D81119
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:03:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5528940062
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:03:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P5A4CzOXUd6v for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 11:03:47 +0000 (UTC)
+ id B71Jba61_4Cm for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EC7D40054
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F4E86060A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EC7D40054
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:03:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F4E86060A
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F066875A0; Sat, 27 Dec 2025 11:03:47 +0000 (UTC)
+ id 26A2387687; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 27 Dec 2025 12:00:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1abaf013dede73cb148a95d4ed708429776033f3
-X-Git-Newrev: 070ba987b1dc43be934bb486d23c92d6a8979298
+X-Git-Oldrev: 070ba987b1dc43be934bb486d23c92d6a8979298
+X-Git-Newrev: b0c4b595e0f8cd7415d1c65facd09bf446140f0e
 X-Patchwork-Hint: ignore
-Message-Id: <20251227110347.4F066875A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcuefile: fix build with CMake 4
+Message-Id: <20251227110854.26A2387687@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/musepack: fix build with CMake 4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,29 +76,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=070ba987b1dc43be934bb486d23c92d6a8979298
+commit: https://git.buildroot.net/buildroot/commit/?id=b0c4b595e0f8cd7415d1c65facd09bf446140f0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-  https://autobuild.buildroot.net/results/b92211c11edcbf4a0c5abe823e0deaa14133ae89/
+No autobuilder issues, as this problem was hidden by the libcuefile
+CMake 4 build issue.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...03-CMakeLists.txt-fix-compat-with-CMake-4.patch | 35 ++++++++++++++++++++++
+ ...eLists.txt-fix-compatibility-with-CMake-4.patch | 35 ++++++++++++++++++++++
  1 file changed, 35 insertions(+)
 
-diff --git a/package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch b/package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch
+diff --git a/package/musepack/0007-CMakeLists.txt-fix-compatibility-with-CMake-4.patch b/package/musepack/0007-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
 new file mode 100644
-index 0000000000..c1858f3fa5
+index 0000000000..ed8988a337
 --- /dev/null
-+++ b/package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch
++++ b/package/musepack/0007-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
 @@ -0,0 +1,35 @@
-+From bf7598c2f5a40d16f16a9649bb6415c3594c0a45 Mon Sep 17 00:00:00 2001
++From 72267961bc3dafecdd6ce1d5bbdffaa6f7120004 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 16 Dec 2025 10:26:49 +0100
-+Subject: [PATCH] CMakeLists.txt: fix compat with CMake 4
++Date: Tue, 16 Dec 2025 10:32:58 +0100
++Subject: [PATCH] CMakeLists.txt: fix compatibility with CMake 4
 +
 +Fixes:
 +
@@ -118,14 +117,14 @@ index 0000000000..c1858f3fa5
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index c1e4a8b..96bf5b4 100755
++index b13f78c..0764198 100755
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
 +@@ -1,4 +1,4 @@
 +-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 ++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
-+ 
-+ project(libcuefile C)
++ cmake_policy(SET CMP0003 NEW)
++ include(TestBigEndian)
 + 
 +-- 
 +2.52.0
