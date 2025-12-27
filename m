@@ -1,83 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDD9CD0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D35D0D14B
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6AE5822D4;
-	Wed,  7 Jan 2026 17:59:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0A2C4099A;
+	Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 09W2EsXBoPh8; Wed,  7 Jan 2026 17:59:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sk37fg1ZSlCA; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB95F81DFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98CFB40A47
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808757;
-	bh=FGXw+IFKdZgvfmjy8yNl07dHC8/xWLQ4u/joov0jdlU=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=ptrnubtbADCQRtpARc25ymlPnR30uVAxy4AEFEd1bH+oHrqA4ooNRHQCk2jvirFHE
-	 OkkBDgUab66WHMJB1F4Ff4IG73K8zUsoyww79p4ygZly+rxmdfDIDdLa2zo6Z0G1KP
-	 MPJANn9a3ORwUnygiJAOS2B1f3uDKMuzvL+eXpGuXXQ35SNXlrEbcubpNsy6Fk6oBA
-	 NqJAtI/mLwhWr6JcJP9BI9kzHUZ50B/fermM5Xkh86ZB2HyXbP8eju+3CQLsouieTg
-	 pll0r+g78MWZhDbOmWpa5YP/rhaHv5uf/vV5nfj4rRFJm/8URxayI13WYMJ8KYQ7X/
-	 7K79T23ifLrBA==
+	s=default; t=1767808872;
+	bh=67aRr2MVGW6jMlHyfvKxfbgw9GUsSnSzLtym6JEL8I4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=b1EoYvq4qJnDrU6nxN4f9UjbFleA+Ds1FyO3G1gnPGMsIsni5ff7IBWhZt6g9hlTd
+	 ebJKnC8GtYDXbzNF6cML/b0nV89u2z1J+9ofousyiXcmhQZtTGzJs1VcvylxxmGteR
+	 HXyoFdkfFefsJqIRGdJDy++v0xDLAUVjqPA0RJySOTVgj5h1OdUo0+xRxUnd3E0SNq
+	 pahur5NWDBvRDtrO9s76WbSfTRzIZtOIGQSH6gMeVlfSRgOe7IW8oPbFc0f9E5//Kw
+	 eAlRJR1Dd3N9VWy3qbr2BgEQYihjvDPt+WLD3KyYF433ijX57zkVoJujqBhBnBaXki
+	 9FGfBRqnmcNZw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB95F81DFF;
-	Wed,  7 Jan 2026 17:59:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 97B749ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:59:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98CFB40A47;
+	Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9AE2AAEB
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A03A40160
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:59:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FDE940A2C
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YsYCPW6wFphn for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:59:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 839AA40128
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 839AA40128
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 839AA40128
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:59:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 90784B97A596; Wed,  7 Jan 2026 18:59:13 +0100 (CET)
-Message-ID: <fd020170-5706-4507-b96c-10a0d419975d@rnout.be>
-Date: Wed, 7 Jan 2026 18:59:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20250825215924.480927-1-giulio.benetti@benettiengineering.com>
- <20250825215924.480927-2-giulio.benetti@benettiengineering.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250825215924.480927-2-giulio.benetti@benettiengineering.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1767808753; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=eJOq9CxBDyG41VJ7LdG0+lM1IBZ3ZNC+5nsh40HmgVQ=;
- b=GTy/GjM9RDa8wJZ9AuNK8Wrc9MSnQTYUmvC10yfDb+jBrn+9k9tNyxFOnNCndevgnyaAKS
- bHTx4Yx3iprhocs6zMqc+8ifhAhyLgTDUGZBQVKQBwEQdkCTze4c+LZLQ/TBUgxxW4zS4Z
- GSxqbfR119hdOvBla5Vaf0FxB7wcVo3MXHG6vVGYEf/eeDC7cJqQ99JttH+uBj2d4QF4ae
- atX24nWy0qExL3qI185jbz41+BVHI+v4BflmwDYxLaB/7rGeOhKNeR0zBikqyro0y2e582
- ZyfOP6msl6/n9jV9/LoucDNXS7+35uq5qMlzszMWOh7iSm0+pXRrmwoQjxtmZA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=GTy/GjM9
-Subject: Re: [Buildroot] [for-next] package/cryptsetup: bump version to 2.8.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cDq6499YYbHA for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C865D408AA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C865D408AA
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C56F587C86; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 27 Dec 2025 16:30:40 +0100
+X-Git-Refname: refs/heads/2025.11.x
+X-Git-Oldrev: 59d867fd97284bb1482471b2bc7549073bd0e9e7
+X-Git-Newrev: cff225bfb39d20f5a077480f8e3d3423d3ae485a
+X-Patchwork-Hint: ignore
+Message-Id: <20260107180110.C56F587C86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/exim: security
+ bump version to 4.99.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,53 +69,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=cff225bfb39d20f5a077480f8e3d3423d3ae485a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
+Release notes:
+https://lists.exim.org/lurker/message/20251217.151548.85d1a2bc.en.html
 
-On 25/08/2025 23:59, Giulio Benetti wrote:
-> For release note, see:
-> https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.1/docs/v2.8.1-ReleaseNotes
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes CVE-2025-67896:
+https://code.exim.org/exim/exim/src/branch/exim-4.99+fixes/doc/doc-txt/exim-security-2025-12-09.1/report.txt
 
-Applied to 2025.02.x. Thanks
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 9a058aa701dda250bea2911c2e5db5199929f551)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->   package/cryptsetup/cryptsetup.hash | 2 +-
->   package/cryptsetup/cryptsetup.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-> index f456451765..bd165f2356 100644
-> --- a/package/cryptsetup/cryptsetup.hash
-> +++ b/package/cryptsetup/cryptsetup.hash
-> @@ -1,5 +1,5 @@
->   # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/sha256sums.asc
-> -sha256  cc9e2d37c25a871cea37520b28d532207b0c1670fb10fc54d68071f63f5243a2  cryptsetup-2.8.0.tar.xz
-> +sha256  2c3379eb76597dcab50911449b013e2697c4bffcc716dbbf0d9b0e8fbbb46fb4  cryptsetup-2.8.1.tar.xz
->   sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
->   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  docs/licenses/COPYING.Apache-2.0
->   sha256  28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5  docs/licenses/COPYING.CC-BY-SA-4.0
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 6d2536957d..ebe9c865b3 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -5,7 +5,7 @@
->   ################################################################################
->   
->   CRYPTSETUP_VERSION_MAJOR = 2.8
-> -CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
-> +CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
->   CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
->   CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
->   CRYPTSETUP_DEPENDENCIES = \
-
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index dd20fb805a..f9a62e0188 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  5df38b042ffa9a9c8d31b20bc8481558070e361b06f657608622a62a327adcba  exim-4.99.tar.xz
++sha256  eae967bd49a5f879933b8c6ec88c30475a1c6646232135f37f05b55dbc4e3447  exim-4.99.1.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  06521aff437dfe99c015606d2cdde76eaf6e4d2f03779b07fbc0e7d06fe0584366cae9c3fa7d73a86c348f0d25336acd06c42bd5b8f18e5a969de9849088e3aa  exim-4.99.tar.xz
++sha512  41a280673b23a79684124dba9ba1db4da57047eefd7bac8560fab3e399659698160386c5369deb4aabdbcba1ba9278fb0a61fc1667dc2745c280b3004d02f45d  exim-4.99.1.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index d9adfb59d5..47fe17b372 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.99
++EXIM_VERSION = 4.99.1
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
