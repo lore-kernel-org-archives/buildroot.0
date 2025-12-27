@@ -4,81 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AB01E8FDCD
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 13:21:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AEEE92712
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 14:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 512F360690;
-	Sat, 27 Dec 2025 13:21:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E802607A6;
+	Sat, 27 Dec 2025 14:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YXxzPJahxPcX; Sat, 27 Dec 2025 13:21:58 +0000 (UTC)
+ id baUb5ztcQKUn; Sat, 27 Dec 2025 14:22:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 879E560711
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FC0660790
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766841718;
-	bh=2UsFqCThD+hPEpuHauyeqkZy2Mc+S6G6YPdbNypv43Q=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Tmipdncl3B3GEReULh9jZLE40jFF8wiYKJZmhnIXUgwV/93KH4f+KxTycc8JRZVgj
-	 tZ7rdGQUYJJHLAu9tpgnTECIy0+mLivwp0b8FkqV8l7PfqV56M8mGxA7dOP29GGuhc
-	 z+kcZNULMkznZAuHm2vlcK0o3jzv1YaxtDATia4y9q3/k/10kdqviym+fN+tRUhTX+
-	 nZsjObsUBXa2sANnIGBufhfGaMEBOzU/on5dyBIHXwxBupHeIPKSBXKi0Wvnp6AvsC
-	 O3QiIWZyLh+3TIyyaT2uBrfDpt2qIreHbgb0tV3KR/R58hfBhCbdfB3L9rYcyho495
-	 6frwEc4+kwKNQ==
+	s=default; t=1766845358;
+	bh=dvC20EqoLaVntTD8YsAVZ6TU4utrFRjuleeDx8mYUvg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kSyhUQVR5YPtYlwQ5YE39I+fsQJhb+4bgkMhYIfr1LpTVdaO8iE6GQxoSBGLNEnCq
+	 U+JPp7h3esUuJ6G9AANNy8q2eyTzmZiThK4W64yC20HN85n1vDxSklR32fJg+6/5O8
+	 sGoFlf4w0o9bVzavynYy5is8HMP+DoN612jo/3SO9VR9D6Peycx6WM0+Dq1VmWY8AX
+	 tmhZlotrLGQoLS/YNPRsUorpReLTKZxpz+iqYcfpriFzQuI/tvKNyampFbLBgmNCYK
+	 HxYN8W7mGOg4+zHuLrx19/vopaj7m2HnR6sB+GlMh2v/mCwvdZqUB+WE9F4Zaos1WX
+	 Z07S1Tud76loQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 879E560711;
-	Sat, 27 Dec 2025 13:21:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 248C9119
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:21:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC0660790;
+	Sat, 27 Dec 2025 14:22:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAB79EC
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C8D640417
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:21:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABE6760790
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GX7CJad8KaEm for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 13:21:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.218;
- helo=smtpcmd01-sp1.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 36E024040D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36E024040D
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 36E024040D
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:21:53 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id ZUEvvLMYiGVgvZUEwvwKtV; Sat, 27 Dec 2025 14:21:50 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 27 Dec 2025 14:21:48 +0100
-Message-ID: <20251227132148.704963-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pbf2EvJnCaFu for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 14:22:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5EC96062F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5EC96062F
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A5EC96062F
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:34 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 62B241A249C
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:32 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3155E60725;
+ Sat, 27 Dec 2025 14:22:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id E23AA1197849E; Sat, 27 Dec 2025 15:22:29 +0100 (CET)
+Date: Sat, 27 Dec 2025 15:22:28 +0100
+To: Trammell Hudson via buildroot <buildroot@buildroot.org>
+Cc: Trammell Hudson <hudson@trmm.net>
+Message-ID: <20251227152228.05407b86@windsurf>
+In-Reply-To: <aP0fooArqo5kwOnV@hachi.swcp.com>
+References: <aP0fWpti-9PiGKxn@hachi.swcp.com> <aP0fg9gNzZ0xspy0@hachi.swcp.com>
+ <aP0fooArqo5kwOnV@hachi.swcp.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfPO47k1Ni35mpKH8Hmdsp+17tkbXkLBdCVPwiMjPN2RVOmjbftduO9/F7d5t00+Kit983tRFdMnLBMzWM3XWhWGwRWFDOmHoZFN6X1tkmo/Y7RIKTLct
- e4zPlxjf9vPXzovMGKOMEQEAQrSSwKuF4QwLBu/viEytX9JhjIN7FFTgUeRxGOcGvsMO+oK/sjqDby+BO+6OqDNMJjy2/aVox7UqpkvFhRJaHfKC8A1C5VCP
- gWBehW4rCwk3Ws7FdxxqXDpwkvMljcWGTQudBVI4Ef0=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1766841710; bh=R16PAkYq77tCwDXL7Gwgqxl+aboUFzhVpnq4lSDhr1k=;
- h=From:To:Subject:Date:MIME-Version;
- b=cesSKGQbdMNamnrDxlOU1ZUOz5qN1U0xi+V1GhfNFf/7EHJIWYUlCC9PSh1IJa2k5
- l8BfkpcdMxewPPFcqcaQufJqUqY/lkCXZMxo0CuDU2fonExrgS/pV0MHsIzfT90Tbs
- 24sQMGLIQu8HaC2x2jlPTJFx3TOA4b8A1a3NAjKHqwStqLeY66Y0x9Nj4WNVZMYXgt
- otQHC5Gun0wG/Q2JO/mezVyg8orxY2KXM/GDEjX06BItxtZsRWRb4S8WZ+uDHD4CAE
- w2FX8+KO4ybUtObf2kJSzisluzEGnPYCbdG1rEcZNaV0Cbcz2HspELmI5DTOQ0J/S+
- +4o01/1++cKzA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1766845351; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=Q50Naozg/N7YBzK+GZt2rdD9hwzMGbodgiuCc+5YaeQ=;
+ b=FuB6BrnKgwETCbvsy+9XBs8Io/6BP5v2ESMi3jleTISthZvnXzC4HirJdH3l4pS/wUSnV2
+ ob19S36oaSUqwgDWG0ISVL8L+EKTq/t6faSGJqSAZMZuXf+LvbQ/+ed3fUsVxJ84E8jm5Q
+ MFjj9SpGlZ8/blK1NTWGayp681lQ6zep5++PGFArHK234IWBOV9zzlcyZK8faJV4j3L1Vy
+ Nqa5p0DeB4pFBNIc/BMFHA2Rw4Cn1nJ/Ubb+sU0ikhSYsDnHwaiN06tfO/Q8KSvZxdioWe
+ /R73B0pLiL/vB2DP3tm1ksB0kytGGh4s+edseweat+zDIGj+0XBC3yz7ZWCXfA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=cesSKGQb
-Subject: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.1
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=FuB6BrnK
+Subject: Re: [Buildroot] [PATCH 2/2] package/shairport-sync: Add support for
+ AirPlay2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,53 +98,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=a768fcc0aafbe50a37d2d06bba23eb6671d3a9b3
+Hello Trammell,
 
-NOTE: Tag v0.5.13.1 has not been emitted.
+Thanks for your patch, which I have applied, after doing some tweaks.
+See below.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/dash/dash.hash | 6 +++---
- package/dash/dash.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Sat, 25 Oct 2025 13:06:10 -0600
+Trammell Hudson via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/package/dash/dash.hash b/package/dash/dash.hash
-index 4697d958a3..df0f6044bf 100644
---- a/package/dash/dash.hash
-+++ b/package/dash/dash.hash
-@@ -1,7 +1,7 @@
--# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.tar.gz.sha512sum
-+# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.1.tar.gz.sha512sum
- # After checking pgp signature
- # using key 9F9D45FE50AE361530983792C7271D0A49B18BA7
--sha512  428de1f65ab77d5fee88bbf4ba8642d77abfda223a4ede423d09db9faa4f0347199b3be841d63b93a7ed68f714ef54ff41b2dc936e4b7ebb19b74499ed4e6a01  dash-0.5.13.tar.gz
-+sha512  6b3d67f76e74853349fe99121b2ee96d32da9863042744e03984eb6a01bf437eee2f2e81fbdd0436090abfecacc2f5589960820c3d0d5f3dd580948d38d5dc1d 260512 dash-0.5.13.1.tar.gz
- # Locally calculated
--sha256  fd8da121e306b27f59330613417b182b8844f11e269531cc4720bf523e3e06d7  dash-0.5.13.tar.gz
-+sha256  d9271bce09c127d9866e25c011582ddc75ab988958a04bc4d8553a3b8f30e370  dash-0.5.13.1.tar.gz
- sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index eb646e1a4f..78effa791c 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DASH_VERSION = 0.5.13
-+DASH_VERSION = 0.5.13.1
- DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
- DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
+> diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+> index 528767ba9c..fddba4a439 100644
+> --- a/package/shairport-sync/Config.in
+> +++ b/package/shairport-sync/Config.in
+> @@ -26,6 +26,21 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
+>  	help
+>  	  Enable audio DSP convolution support.
+>  
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2
+> +	bool "AirPlay2 support"
+> +	select BR2_PACKAGE_NQPTP
+
+Added an indication in a comment that this is a runtime dependency (as
+opposed to a build time dependency).
+
+> +	select BR2_PACKAGE_LIBPLIST
+> +	select BR2_PACKAGE_LIBSODIUM
+> +	select BR2_PACKAGE_LIBGCRYPT
+> +	select BR2_PACKAGE_FFMPEG
+> +	select BR2_PACKAGE_FFMPEG_GPL
+> +	select BR2_PACKAGE_FFMPEG_NONFREE
+
+These two were not needed according to my testing
+(BR2_PACKAGE_FFMPEG_GPL BR2_PACKAGE_FFMPEG_NONFREE).
+
+> +ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2),y)
+> +SHAIRPORT_SYNC_DEPENDENCIES += libplist libsodium libgcrypt ffmpeg util-linux
+
+I've added host-vim in this list because the "xxd" tool is needed on
+the host, and the host-vim package provides it.
+
+Best regards,
+
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
