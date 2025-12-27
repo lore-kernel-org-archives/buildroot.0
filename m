@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C33BD0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C56AD0D14F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E78A34087A;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98DCF80BAC;
 	Wed,  7 Jan 2026 17:46:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bj3kU553276N; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JLET-xyzLlZI; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54D0840896
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 504CA80C44
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808004;
-	bh=WNJdoeIjQdqmwlMC1ykX8nkLwEC1U1eE/sZg8kPvO44=;
+	s=default; t=1767808003;
+	bh=o22GI49BuCI8dWo7WIbFJJ2wsYCdtjovQTMXdlBMskw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=J1hxlqsXT5FxVlhBGRZQYpcJi/0+dxT20VIayfFyYVI3Tx2HkramHGNbGTRyKZK09
-	 twkYsfew8FzF6TyWkv99h6OteDDniaDxnKLOWkiQ1crEkY/MG5tUiXQhbxewBQ3Tye
-	 aJT26i1WqTArQ5uyX33v6b4Ov0EGPxyjHIlQop0PuirKyw+mIyHyn5FUgPa6GUYSA6
-	 f5GfIOFoC0axIiKJOnKjl02yovnAniMBUegjOwxFD7m5D3Pa42fPYsFzuGBenn31so
-	 jrPRtRoR9KZapI2rGZrfkewN9QxBznK/cs7XeilmJOHY+Z14NTou2Zn5qSD2bAZh7E
-	 Y0ti2evmW4ZDw==
+	b=PARnExeHyxZEySVKaAM18L+nXYDvo3gir4JVFWhjCnHe2LOYb58rPMllEhOygzJOD
+	 SfjPE+ESFXgb+cDLRsgSK/3R7jKv7DiFNujWV2zLGgrZ0+syMeUh/hI+ZbRLs9bizI
+	 Rvl1EhUrIXXrfeHsB9+NbakFHARl5gPo97cGEEthnPOWX1GwyMVm2s3+Sw/knZtsjY
+	 /7020eaVgEmBsl1lRAEHCupF4bThZBk1cl6MRY2NScTCv/u57mTT0iYKek27kY75Ka
+	 F8JqAdllYrOgzFKX0NDNRJs39BBgu7lb7zGAxIshA/fiUuEyOCCi+PF+KQPYTtBP30
+	 BGOTCljeBPQ0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54D0840896;
-	Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 54ACEA58
+	by smtp1.osuosl.org (Postfix) with ESMTP id 504CA80C44;
+	Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F5859ED
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47DD140886
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41D7380AD0
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZyQH-t82jKf for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xdu1LrqZL1NV for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A7FD4085E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EC2080A6D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A7FD4085E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7EC2080A6D
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D17688367; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
+ id 7DA8F883AD; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 10:32:01 +0100
+Date: Sat, 27 Dec 2025 16:31:00 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ccd8a00240c8d8a985c0bd24dff806879aab8caa
-X-Git-Newrev: 9e030165a78f99dda2c9585d92e61494d06a2cf0
+X-Git-Oldrev: 853f7344f9633ff48877a34c1dc411a03693cd59
+X-Git-Newrev: eacf7d27f0ace30f5e5a9bf5e00a5e476937987d
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174640.5D17688367@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libfcgi: security
- bump to 2.4.7
+Message-Id: <20260107174640.7DA8F883AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cage: properly
+ propagate wlroots dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e030165a78f99dda2c9585d92e61494d06a2cf0
+commit: https://git.buildroot.net/buildroot/commit/?id=eacf7d27f0ace30f5e5a9bf5e00a5e476937987d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This is a security bump to fix CVE-2025-23016.
+Commit 00fb3a57cbaedb8df43f75f0e891423c1ef7d8c6 added a wlroots ->
+libgbm dependency, but forgot to propagate it to package/cage.
 
-See:
-https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.7
+Fixes:
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+  https://autobuild.buildroot.net/results/dc185c3d4886e9cfd9e6f46b50b864e5b2f28605/
+
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 626bc1f199411df91108565432c496e1fcf0b897)
+(cherry picked from commit 3d7261b27a9cb47c25602061333bea632ad80c2c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libfcgi/libfcgi.hash | 2 +-
- package/libfcgi/libfcgi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cage/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-index 348b0b6867..be9e3e8db9 100644
---- a/package/libfcgi/libfcgi.hash
-+++ b/package/libfcgi/libfcgi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  39af4fb21a6d695a5f0b1c4fa95776d2725f6bc6c77680943a2ab314acd505c1  libfcgi-2.4.6.tar.gz
-+sha256  e41ddc3a473b555bdc0cbd80703dcb1f4610c1a7700d3b9d3d0c14a416e1074b  libfcgi-2.4.7.tar.gz
- sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-index e0ef6da55c..da84ba6297 100644
---- a/package/libfcgi/libfcgi.mk
-+++ b/package/libfcgi/libfcgi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cage/Config.in b/package/cage/Config.in
+index 4f823c768c..95c68732ed 100644
+--- a/package/cage/Config.in
++++ b/package/cage/Config.in
+@@ -1,6 +1,7 @@
+-comment "cage needs udev, EGL and OpenGL ES support"
++comment "cage needs udev, EGL, OpenGL ES and GBM support"
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL || \
+ 		!BR2_PACKAGE_HAS_LIBGLES || \
++		!BR2_PACKAGE_HAS_LIBGBM || \
+ 		!BR2_PACKAGE_HAS_UDEV
  
--LIBFCGI_VERSION = 2.4.6
-+LIBFCGI_VERSION = 2.4.7
- LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
- LIBFCGI_LICENSE = OML
- LIBFCGI_LICENSE_FILES = LICENSE
+ comment "cage needs a toolchain w/ threads, dynamic library"
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_CAGE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
+ 	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
++	depends on BR2_PACKAGE_HAS_LIBGBM # wlroots
+ 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
+ 	select BR2_PACKAGE_WLROOTS
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
