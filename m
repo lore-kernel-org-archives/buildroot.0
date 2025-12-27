@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9058FE8FDCD
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 15:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A3E3E92715
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 15:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34631607AF;
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED9304048E;
 	Sat, 27 Dec 2025 15:53:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u9YlCZCUmZ6i; Sat, 27 Dec 2025 15:53:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dCVwHrT-Siag; Sat, 27 Dec 2025 15:53:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F471607B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A27640498
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766850817;
-	bh=f7b3qy9g6gR4cDFAkWyYiPA8QFQMFFrYDrYAYTWlTG0=;
+	s=default; t=1766850819;
+	bh=/HBZhZpYXqtXzvR9/aj88jQ1waOdUf/vxle1Yo4v+N4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Fldrhyc9+AbiukJD8zgG9Pgn2SNKuUlDA1LPxyyEt5B5LDruPvZZy2VggfTcffeZ5
-	 eb81+d95fgNLHv6OV5Dgn55iXZZacoBZ/wbaSjPDE2X4mMEJVNvZhXHWmz3ldW0EQv
-	 4HKks2kRKSYogOIbGXNk2vZ3BDM/SS3vUoS9Te5NtF6zNJkoxZ/lVpF8SgdqmfN6Z9
-	 LyKYGVMeXFu8q1igBxiwByzJXkhm0AkBjhL4UUBe8bJ+SDhO6yKu9kY8d2TtMGUFS0
-	 KVKorhNyPPYnpYr2dlqQIEtbIkEC1mZ09On624cv2IO37mBaqkETn832FIo10K/pRF
-	 RRBuWb5mDKUgg==
+	b=VPwAdPJ0X+R97lkiQYA3TEqakdh6pSQC2JzxjZg2R7RhTquI26u2YExwzAzbcUzu7
+	 hqIScZaAVGMqX9gFpnfR+A9vZqDKuv5oVr7/8SU/xKlBdrb/xv0mIkSHDFveYbGtVm
+	 YjpaiBcopuDRdjTS8xK3dtW6/Wjnd3Ghps/doiGG+5wovTDKsVAxx7NMYl2JGE1Jym
+	 mzgcPUM3JY9NLpwXd745179EU2fQ3K3VoxWGZ836YbDAR459GiHHFrR3nvbL+eGN3w
+	 8SeNLFZW4ykEjnTA0EBXlBsjOL2u0fJkXjSz06gvWo8/wkB30IQOr+HK7GcKQus79V
+	 osxFERdO82anw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F471607B5;
-	Sat, 27 Dec 2025 15:53:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A27640498;
+	Sat, 27 Dec 2025 15:53:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 222B8D8
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:53:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 32A06D8
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D3CB40290
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC20440292
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nlGFT9BvYTBM for <buildroot@buildroot.org>;
+ id 64dOBWP9g1iD for <buildroot@buildroot.org>;
  Sat, 27 Dec 2025 15:53:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 694C640292
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 412FB4027F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 694C640292
+ by smtp2.osuosl.org (Postfix) with ESMTP id 412FB4027F
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:53:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4630487798; Sat, 27 Dec 2025 15:53:30 +0000 (UTC)
+ id 32A2787794; Sat, 27 Dec 2025 15:53:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 16:53:17 +0100
+Date: Sat, 27 Dec 2025 16:53:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c9ec285796dd5bd7db39f11b74392534b028355
-X-Git-Newrev: 016365cfe3f713541ddebad6d9c8d47973393238
+X-Git-Oldrev: 29e9566a001e7eb42e3bd2aefd54d7fc67a4cb21
+X-Git-Newrev: 2774502344f35b587ea8f1a2f43ec2398c3ebdad
 X-Patchwork-Hint: ignore
-Message-Id: <20251227155330.4630487798@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/upmpdcli: bump version to 1.9.7
+Message-Id: <20251227155330.32A2787794@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnpupnp: bump version to 6.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,7 +76,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=016365cfe3f713541ddebad6d9c8d47973393238
+commit: https://git.buildroot.net/buildroot/commit/?id=2774502344f35b587ea8f1a2f43ec2398c3ebdad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
@@ -85,59 +85,50 @@ https://www.lesbonscomptes.com/upmpdcli/pages/releases.html
 Switched _SITE to https.
 
 Switched build system to meson after autotools were removed in version
-1.8.10:
-https://www.lesbonscomptes.com/upmpdcli/pages/releases.html#_2024_04_03_switching_the_build_tools_from_gnu_autotools_to_meson
+6.1.2.
 
-Remove spotify-related configure option after upstream removed spotify
-support:
-https://www.lesbonscomptes.com/upmpdcli/pages/releases.html#UPMPDCLI-1.7.0
+This bump fixes a gerbera build error introduced to buildroot by the
+gerbera bump to 2.6.1 with buildroot commit
+f8bf78911576672443a8d11eaf99bed4d383acef.
+
+Fixes:
+https://autobuild.buildroot.net/results/b6b/b6bd96cb9dbcaff9351ef156edaec7d1b5290b9e/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/upmpdcli/upmpdcli.hash |  4 ++--
- package/upmpdcli/upmpdcli.mk   | 11 +++--------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ package/libnpupnp/libnpupnp.hash | 4 ++--
+ package/libnpupnp/libnpupnp.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index f585a73d7f..58899e0dd3 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index 15ee26c6d2..9e4f211ecc 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
 @@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.12.tar.gz.sha256:
--sha256  1d7b6ab360c2549a7e3eff4f261471761dd837e18327a3ca29de1981c090ff3b  upmpdcli-1.5.12.tar.gz
-+# From https://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.9.7.tar.gz.sha256
-+sha256  7b10cc35cae9377c542aba3983dfd39e34b4dd5fff64512f54feb87e64cf8609  upmpdcli-1.9.7.tar.gz
+-# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.2.2.tar.gz.sha256
+-sha256  cb3968773d30e2bfc765547df514fdc8927b9a37ecccca2e260ee8b612e756bc  libnpupnp-4.2.2.tar.gz
++# From https://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-6.2.3.tar.gz.sha256
++sha256  563d2a9e4afe603717343dc4667c0b89c6a017008ac6b52262da17a1e4f6bb96  libnpupnp-6.2.3.tar.gz
  
  # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 2f001c51ee..d2d91114f3 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,17 +4,12 @@
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index d7192ec3f1..38b631fe58 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--UPMPDCLI_VERSION = 1.5.12
--UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
-+UPMPDCLI_VERSION = 1.9.7
-+UPMPDCLI_SITE = https://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
- UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
- 
--# Disable spotify plugin which requires dlfcn.h
--ifeq ($(BR2_STATIC_LIBS),y)
--UPMPDCLI_CONF_OPTS += --disable-spotify
--endif
--
- # Upmpdcli only runs if user upmpdcli exists
- define UPMPDCLI_USERS
- 	upmpdcli -1 upmpdcli -1 * - - audio Upmpdcli MPD UPnP Renderer Front-End
-@@ -35,4 +30,4 @@ endef
- 
- UPMPDCLI_POST_INSTALL_TARGET_HOOKS += UPMPDCLI_INSTALL_CONF_FILE
+-LIBNPUPNP_VERSION = 4.2.2
+-LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
++LIBNPUPNP_VERSION = 6.2.3
++LIBNPUPNP_SITE = https://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
+ LIBNPUPNP_INSTALL_STAGING = YES
+ LIBNPUPNP_DEPENDENCIES = expat libcurl libmicrohttpd
  
 -$(eval $(autotools-package))
 +$(eval $(meson-package))
