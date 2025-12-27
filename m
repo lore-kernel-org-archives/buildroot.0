@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0E8E8FDD5
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 956F7E8FDD0
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90CDF4068F;
-	Sat, 27 Dec 2025 11:08:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6602C40674;
+	Sat, 27 Dec 2025 11:10:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KOVgDVzd_6Ao; Sat, 27 Dec 2025 11:08:56 +0000 (UTC)
+ id f5Vo8tLtOwkZ; Sat, 27 Dec 2025 11:10:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF32140631
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D90A640631
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766833736;
-	bh=JC1vDuftGoIRHfFytRPUQMsM0zZpM6/PKlRrI66/ppA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Q9D5Ab1xjgvfUZhTvP+EYd30/KXH5bdmpO7veUBYfuY+yn+RFQWsrJ/DBWdhiNDOM
-	 hm37jWFdx+7Iu8jlRn6r722nqfH/b9+J341GYt9Y8JDtOOfipqN/yRYfuq59vFajdx
-	 6hPrsrUJ85GjoWKwUu0EwPcJ3/ezvd51HLBZkAu/qvIZUsCy+Iq3xP8W4d0spYP2HR
-	 FNXfxOoJ8Ev37ECJq/0CN4z7k6gnDXnxbBU4HKjjvcSRmZ+r2N7IC1zPPB2PEuvjeQ
-	 35Fj06+OK+DAVCaPJ6oXIirO6xuV4YUROsgl4n/MtQAcCKlVHrjYSedBSiB/mbsHZJ
-	 KzsFm5juxuFtA==
+	s=default; t=1766833826;
+	bh=9QO0AzqN/tJeFJJi6yf3Un4hw+tLB6Lysl8fubi42Qs=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=cb23QlVZqh8Abnq36MGnYps+w2QNSYPIjjfPp/A1NnQpgGvYSOYjrNGQ+c2V4+qm8
+	 JHMhydDdgQiDjT4S5gKEoF4bKwLE/km3fnOEWgo/ojaI6QgrRS8xUXi0q4Guwh1lm3
+	 t1iFYhzZunCiGQzN4cDdS7++UgIw4VK/wyS7duwuyDPIYCaz7wBfmuoFBV6k2/5vw9
+	 w8BD3YNpqRGJOxP6zhqOg6DWAzcGoOHSfRywSMTyOMm11Xo27YSie7Z5YfjdyGtk3w
+	 87ke8NOnHvvxhp1r1Poyf1TM4Cml73etbR5bcbucypH89/iu7ogA7FzQ2PJuLCGlga
+	 k3Vl1aCD0Km+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF32140631;
-	Sat, 27 Dec 2025 11:08:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 005AF119
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D90A640631;
+	Sat, 27 Dec 2025 11:10:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1D73EC
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:10:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DAE6860663
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D884380CB7
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:10:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B71Jba61_4Cm for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F4E86060A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F4E86060A
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26A2387687; Sat, 27 Dec 2025 11:08:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 12:00:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 070ba987b1dc43be934bb486d23c92d6a8979298
-X-Git-Newrev: b0c4b595e0f8cd7415d1c65facd09bf446140f0e
-X-Patchwork-Hint: ignore
-Message-Id: <20251227110854.26A2387687@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/musepack: fix build with CMake 4
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vx9jxighoOtx for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 11:10:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 22D5880CAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22D5880CAA
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22D5880CAA
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:10:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 15B97780383;
+ Sat, 27 Dec 2025 12:10:21 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 27 Dec 2025 12:10:21 +0100
+MIME-Version: 1.0
+Date: Sat, 27 Dec 2025 12:10:21 +0100
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251216093447.1377743-1-thomas.petazzoni@bootlin.com>
+References: <20251216093447.1377743-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <9468113e1283b07013e6ba39f05aab21@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766833823;
+ bh=wOs8xgirvsaQhduLEIh/8EgtFJxdnlrUZsMK4+axvDw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=UzciiCwS2RG5qTMQwxEq9tw+dgj45WjhX37o8lkeHV9Ox6+bvzT99tSDAat60hc6Q
+ TiXyDpRXhUllo04pOESu95R7sfa6t2Du27TPKYi+ctrVb6C5OgLrVvtrEiTgXu2ybY
+ OpoH2Opd2nwLk3IDJ8bkMjwu7w8isb3W6AKs//CxrptSM2zrVAg2Oi3WvDPoEg7QNf
+ Y7rcpQxmWdQ2t4GDQjmf0XbLzSNQC7J1pkl5geG7zBUjNsZO7+uyvoyHoPmQP9l8tu
+ WITicHWQ1BTfzwpAX0gxkkRgG49RaKxRbNyTLXbGbYh8vWeScsJ0/t+7WW6ujEutrt
+ Icifc5OyzHC0g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UzciiCwS
+Subject: Re: [Buildroot] [PATCH] package/musepack: fix build with CMake 4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,65 +94,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0c4b595e0f8cd7415d1c65facd09bf446140f0e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/12/2025 10:34, Thomas Petazzoni via buildroot wrote:
+> No autobuilder issues, as this problem was hidden by the libcuefile
+> CMake 4 build issue.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> I would also be totally OK by dropping this package related to
+> libcuefile, and similarly unmaintained.
 
-No autobuilder issues, as this problem was hidden by the libcuefile
-CMake 4 build issue.
+Since you wrote the patch to fix the issue, I applied it to master.
+We will remove it in the next cleanup of unmaintained packages.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...eLists.txt-fix-compatibility-with-CMake-4.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Best regards,
 
-diff --git a/package/musepack/0007-CMakeLists.txt-fix-compatibility-with-CMake-4.patch b/package/musepack/0007-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
-new file mode 100644
-index 0000000000..ed8988a337
---- /dev/null
-+++ b/package/musepack/0007-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
-@@ -0,0 +1,35 @@
-+From 72267961bc3dafecdd6ce1d5bbdffaa6f7120004 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 16 Dec 2025 10:32:58 +0100
-+Subject: [PATCH] CMakeLists.txt: fix compatibility with CMake 4
-+
-+Fixes:
-+
-+CMake Error at CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
-+  Compatibility with CMake < 3.5 has been removed from CMake.
-+
-+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+  to tell CMake that the project requires at least <min> but has been updated
-+  to work with policies introduced by <max> or earlier.
-+
-+  Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+
-+Upstream: N/A, dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index b13f78c..0764198 100755
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
-++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
-+ cmake_policy(SET CMP0003 NEW)
-+ include(TestBigEndian)
-+ 
-+-- 
-+2.52.0
-+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
