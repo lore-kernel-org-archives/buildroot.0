@@ -1,113 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5C9CE92716
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 21:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA0EE92716
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 21:33:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63BBB40631;
-	Sat, 27 Dec 2025 21:22:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C48980E63;
+	Sat, 27 Dec 2025 21:33:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w5aRaXOD9Vud; Sat, 27 Dec 2025 21:22:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v6tA1WcG7axq; Sat, 27 Dec 2025 21:33:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5C9C40633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ACA680F30
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766870577;
-	bh=ANQYm3jGbKPCUc++0IIgHwn0WvT91ifiT/PXnG6rjX4=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=VvqX6cpw2jLjGeJguN1GgVW8xqo1us8aB4LpWqxjU8DrtV9SOObrNSHdjVX6ZiusO
-	 B8M254ZeqIJt78wNb5CBbau4P1/IgcCmFGICGgSOQvTxaDNDxrA2DsFF5LrkhrQ8Yc
-	 lB4A0wtgtr5IcQguJ8CHfKDKJKZTKxOrjDpLrl2tcUWZAZd3Y6NE+F2CcLUs2kPQYB
-	 X05jiwFFTQA50CP6ONOOzocbEquQ+CaYQB45sEBsiz0ydeQXC96mxyPKnxcOlWykim
-	 gR/43Rel1FsDqMNot61AEfPNDbJlQaEf1sMsY7GMy7KNGfKOJSKM+6OoynjHRuERlm
-	 Xp4J20GQ88CPw==
+	s=default; t=1766871195;
+	bh=kHiMAo2REzVXnHgzWygQPJ+V1t8y3BvXCstXUS8j3hY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=lIu4CM7uzZXP5tm+YUMeKZ5seGEe01NvoLTlLcF5njG6bH3KB4PWgzoqLnuHD+jzi
+	 edGuPnB75oj8LC83roFr6xDmwj1s/CkMEcO7Ganlu/eMZPlIfUg/tXHnbtGYxHpldu
+	 bbpFu6yIBgAFnAiziozKkENSB/7xos9K7umg2s9XK1kTEiqL4Xmv4L5sn7SaJNSUvN
+	 gsz2TvUft/+0oFDNKQQ1Jd9n0L/SB2jdRY8MsLHLxn/foEfyJ2KH7tpsTDvuajr2xV
+	 N2ERNfLui265flAEVfrP9Ve4Wk4gZ/kFuidi9f32KfK+fCpvtomf2tc0Hg0vXi9xKz
+	 u5/u17fe7oSog==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5C9C40633;
-	Sat, 27 Dec 2025 21:22:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 80381B9
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:22:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ACA680F30;
+	Sat, 27 Dec 2025 21:33:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98AA2119
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F283403CB
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:22:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 770D480F30
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:33:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hL2lCvmLArjG for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 21:22:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1230; helo=mail-dl1-x1230.google.com;
- envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9C2F9402F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C2F9402F7
-Received: from mail-dl1-x1230.google.com (mail-dl1-x1230.google.com
- [IPv6:2607:f8b0:4864:20::1230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C2F9402F7
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:22:55 +0000 (UTC)
-Received: by mail-dl1-x1230.google.com with SMTP id
- a92af1059eb24-11beb0a7bd6so12134616c88.1
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:22:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766870574; x=1767475374;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xidenS8gktn8EuhTlax+S2s1Rp94TUrovT4aAsN+L18=;
- b=lnlChM4gXAL19zP1fnXoOxNdTA8gx63fdZi2CqImE6W/D5m+j4fucfPs7VEJU6fEOt
- +N63pQS2qbBvE1d3OIN3bUCdy77M7ljrZO2DN3yYdDsVb2fX2vNwRWMsImeN+rJXcSmY
- +ZKOlJVwwS3U9yniJXM/Rhg1KkIyqOFXYubeTG1xwB05ZO80NTqLoOHo1KyH9dST6i8R
- Z146jlns1u+BG6+MaH40EFrPijuHB3aQ7jh+uE4QPPFxVlLhdwRzrlwsIzomwj2jyZLa
- ZF1AviJ9w1f0bPbMziex/h+uJ2prRwWCp3J9WslAZEK8sV/xZczUWfkDAn/OXfJVspR9
- VXcA==
-X-Gm-Message-State: AOJu0Yz9ppctjXAC/xtpYP2BvZZX+axCpVlTe57gDf5agqdkcEKXjSzC
- 2rDyDCGAJyYpozyXsDlDRQ/1bLPMLRBfRbZtEOTif+2UbyoKaZWX6FgVK8ZsOg==
-X-Gm-Gg: AY/fxX5F1F4D1Ba4xqJR0eX0MD1Llylgixk2D0pWgNJyhJCAzik9S08dqfFZtj9AdnG
- lrHPwHAxh1zYJmTjiC8RjntH8fC2n7Kbqcm5psLDuAsvcNcjMJdjl3+cA2M8tkG+QeSO47Enuw1
- Vpbdbrt0dyCOyiuSBfXDV1iUXrFmZUa9sudJuis+ir390R1vDG4GgFGh+NVf3n0mEntaqfPXrVR
- cSIG/bgWtFgr3iI9KCHLEURuGLwadGNZQCAzrUB+KiBPkecqMl6HqPOS8FbomyrpENboA3bPOHu
- WYgI6jgxYUy3mhlxZV14jzGqaC19bnJoks8TSK1+r0MbmivGXEJot01GxKrKOkt22yTAeFdlNTR
- jraSH8O3LLIs+LujwvqR7RB6DvfG3qfCxUe5M/ZTRyenutSswt8JahX+d0oW3MpwKOxVB/zxkuN
- oAYfVtx4TP7TRnH7cy
-X-Google-Smtp-Source: AGHT+IFwmz7eal8zh7xXHvvtWfsedB/7oNsJdBKl5vDP7FSBH0MCrAb0E5boP7gyYUcU5ZNZ6C5E7g==
-X-Received: by 2002:a05:7022:629a:b0:11e:3e9:3e8f with SMTP id
- a92af1059eb24-12171afd96dmr28663942c88.24.1766870573939; 
- Sat, 27 Dec 2025 13:22:53 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61::1001])
- by smtp.gmail.com with ESMTPSA id
- a92af1059eb24-1217254c734sm103676228c88.13.2025.12.27.13.22.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Dec 2025 13:22:53 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b6jaMYFHk7dT for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 21:33:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2FC480E63
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2FC480E63
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:33:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9875F87826; Sat, 27 Dec 2025 21:33:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 27 Dec 2025 18:22:44 -0300
-Message-Id: <20251227212244.3098285-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1766870574; x=1767475374; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xidenS8gktn8EuhTlax+S2s1Rp94TUrovT4aAsN+L18=;
- b=UY5uOtMVhG67Q4yAB23mqz0Rd70SnZL95LT6ksKNAjljQeCH8PMj8TRDKrd0dRGFyi
- kgcTAZs85atMNtGwW247+PGomanTR2U7ejf2EOeiUMs9bTAys23KSh40T9xpj7qvAdx5
- 5DQXvj0EvOyzhBdw6ag+Sy8dfpErFwZ4Ih5hmH70pFPUlKuP/4BH3olCCL0wV39Svcz4
- 5bk335VKje0U0ZOMXB3Lj5NMGlEmnBzMEhyjheQidYNHxF++95npSuXIfkKT5CnZnE3L
- eEzj4ql3oobqbrFAY+4mD82xhO9YHWcaqXcko4SHGTWPOW4dFdM+F1hnapHlkoP/b9t/
- WvjQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UY5uOtMV
-Subject: [Buildroot] [PATCH] package/crucible: disable cgo to fix 32-bit
- build failures
+Date: Sat, 27 Dec 2025 22:29:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 225f8a189987ebddf77abc3a34f782eaf93d06c2
+X-Git-Newrev: d60dc5e6184dd2740fb33f6bc7aa8c6a76b35d7b
+X-Patchwork-Hint: ignore
+Message-Id: <20251227213312.9875F87826@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: bump to version
+ 2025-10-11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,46 +69,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Buildroot autobuilder fails when building crucible on 32-bit
-architectures (notably i386) due to unresolved _cgo_* symbols during
-linking.
+commit: https://git.buildroot.net/buildroot/commit/?id=d60dc5e6184dd2740fb33f6bc7aa8c6a76b35d7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Crucible does not require cgo, and building it with CGO_ENABLED=0
-avoids toolchain and linker issues while producing a fully functional
-binary.
+Drop upstreamed patch.
 
-Disable cgo explicitly to ensure reliable builds across all supported
-architectures.
-
-Fixes:
-
-https://autobuild.buildroot.org/results/0b59fb382f7a1d9c3644da71e7bd53b6a19418ce/build-end.log
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/crucible/crucible.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ .../0001-Fix-build-for-kernel-6.17.patch           | 80 ----------------------
+ package/xr819-xradio/xr819-xradio.hash             |  2 +-
+ package/xr819-xradio/xr819-xradio.mk               |  2 +-
+ 3 files changed, 2 insertions(+), 82 deletions(-)
 
-diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
-index 9b34cc52d950..6f6d1dfab94b 100644
---- a/package/crucible/crucible.mk
-+++ b/package/crucible/crucible.mk
-@@ -10,4 +10,7 @@ CRUCIBLE_LICENSE = BSD-3-Clause
- CRUCIBLE_LICENSE_FILES = LICENSE
- CRUCIBLE_GOMOD = ./cmd/crucible
+diff --git a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch b/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
+deleted file mode 100644
+index 3329016472..0000000000
+--- a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+-From dbf3f744650e05a40fc3df6325fc657e5c23cece Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Fri, 10 Oct 2025 22:18:12 +0200
+-Subject: [PATCH] Fix build for kernel 6.17
+-
+-With commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
+-set_rts_threshold() and config() gain argument radio_idx to get radio
+-index. So let's add that argument according to Linux version >= 6.17.
+-
+-Upstream: https://github.com/fifteenhex/xradio/commit/43992a7e7ed95ff815cf6d8ba81cef1085e50ab9
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- sta.c | 12 ++++++++++--
+- sta.h | 12 ++++++++++--
+- 2 files changed, 20 insertions(+), 4 deletions(-)
+-
+-diff --git a/sta.c b/sta.c
+-index 1203ce9..d769b81 100644
+---- a/sta.c
+-+++ b/sta.c
+-@@ -381,7 +381,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
+- 	return ret;
+- }
+- 
+--int xradio_config(struct ieee80211_hw *dev, u32 changed)
+-+int xradio_config(struct ieee80211_hw *dev,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+		  int radio_idx,
+-+#endif
+-+		  u32 changed)
+- {
+- 	int ret = 0;
+- 	struct xradio_common *hw_priv = dev->priv;
+-@@ -796,7 +800,11 @@ void xradio_wep_key_work(struct work_struct *work)
+- 	wsm_unlock_tx(hw_priv);
+- }
+- 
+--int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value)
+-+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+			     int radio_idx,
+-+#endif
+-+			     u32 value)
+- {
+- 	struct xradio_common *hw_priv = hw->priv;
+- 	int ret = 0;
+-diff --git a/sta.h b/sta.h
+-index 39a023a..de8f837 100644
+---- a/sta.h
+-+++ b/sta.h
+-@@ -42,7 +42,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
+-                             struct ieee80211_vif *vif,
+-                             enum nl80211_iftype new_type,
+-                             bool p2p);
+--int xradio_config(struct ieee80211_hw *dev, u32 changed);
+-+int xradio_config(struct ieee80211_hw *dev,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+		  int radio_idx,
+-+#endif
+-+		  u32 changed);
+- int xradio_change_interface(struct ieee80211_hw *dev,
+-                             struct ieee80211_vif *vif,
+-                             enum nl80211_iftype new_type,
+-@@ -65,7 +69,11 @@ int xradio_get_stats(struct ieee80211_hw *dev,
+- int xradio_get_tx_stats(struct ieee80211_hw *dev,
+- 			struct ieee80211_tx_queue_stats *stats);
+- */
+--int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value);
+-+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+			     int radio_idx,
+-+#endif
+-+			     u32 value);
+- 
+- void xradio_flush(struct ieee80211_hw *hw, struct ieee80211_vif *vif, u32 queues, bool drop);
+- 
+--- 
+-2.47.3
+-
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index fe91d856ec..4032fa307a 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c06dd87948b4a4c1bee070bbc3ce07b8711ec027e78ab9b83ea1c7350472105d  xr819-xradio-d766844ce8307e5902b3ab461f06bf8ad06891dd.tar.gz
++sha256  fce2819322e18d80abba84fa420a55ec6ccea61240fc1a3268880eb84584bea5  xr819-xradio-43992a7e7ed95ff815cf6d8ba81cef1085e50ab9.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index 93fbdacb38..087536ebe7 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Disable cgo to avoid toolchain/linker issues on 32-bit architectures
-+CRUCIBLE_GO_ENV = CGO_ENABLED=0
-+
- $(eval $(golang-package))
--- 
-2.34.1
-
+-XR819_XRADIO_VERSION = d766844ce8307e5902b3ab461f06bf8ad06891dd
++XR819_XRADIO_VERSION = 43992a7e7ed95ff815cf6d8ba81cef1085e50ab9
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
