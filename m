@@ -4,59 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A38EE92714
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 15:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00985E8FDCD
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 15:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B741260670;
-	Sat, 27 Dec 2025 15:55:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B9C060799;
+	Sat, 27 Dec 2025 15:57:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bRICrr6xv4qr; Sat, 27 Dec 2025 15:55:04 +0000 (UTC)
+ id PXF8L5ou4Bw8; Sat, 27 Dec 2025 15:57:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C60760799
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B42F06069A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766850904;
-	bh=1xHvS2y+HettNS/Ey3tVcGQH3YQWFE2xnmTQhogNEhA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fgSYlf0i15KEUEt1uHSgUDXd0qO3PfOpOQoDsXTGxpx5awD5IL9/r+C4mEH5mot1I
-	 YvXhvr5UQ0QlEG5O1hWr/Mpf+Nd6Q8VTRSBQr0AnRE3Ja+d9b96hSvLo2dHSi7Hd15
-	 LIHyaIX5mK+CPopJtKirXCtl3YWBTcVORhMgAnzoUbLrWvSjhE3zuvadRL6gZLlT9C
-	 VOF9N8yufco/JwH7fpqTx6/sGPuR3NNJoDXT+Wgl/vYzUiSSN6H9tWw7TBFF9WAzg2
-	 7JnfnHZ6lJUz7n+uHe8YV6q8+redgjfYEnxqwW0kN+4zpCnqXdK5vEOwnR1HzngaP9
-	 oFGm3O1RZWZgA==
+	s=default; t=1766851030;
+	bh=9euXds7vaTBvyBRQSN8rm5ctifNZ4Ujz8zitb/eDfDA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=jn/j5lbYctKQXaq9mtALjmHw1RDvMxYHNV32tefpNg1DIvw5HtX3lVqP+AGS3UAHW
+	 C9i3SmRB8z53kfGTsR13LHweHkfIe9/j0hgWH/3R5dpi+OBn/InuNj9l7xtexq/UxM
+	 wTFeuIMS37V2ROwSrEugxdMSedb+5gpjxQiB7jCaHfpyIq+4AUKPOOkjnRE7VEMv55
+	 Qd8DE+qHrbG4Ymxf63plt900DTNUSmBdHunZDNDXGjQAG3p9DnXB+iBTkBz+UW2IRX
+	 0ZvUFqPYFF80Elj+ArJBLFUoYfuqvrTnT6em/TkwVHzeZud6iUmQ8Wq6Vvn7FTCsDx
+	 5yEPYmttToDDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C60760799;
-	Sat, 27 Dec 2025 15:55:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E501FD8
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:55:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B42F06069A;
+	Sat, 27 Dec 2025 15:57:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02CB1119
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6BF8606CC
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:55:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAB7F4043B
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:57:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O86PYbwSqA0R for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 15:55:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7fukHC0HSVnE for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 15:57:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAC6960670
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CAC6960670
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:55:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BDE27877A5; Sat, 27 Dec 2025 15:55:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 16:54:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 016365cfe3f713541ddebad6d9c8d47973393238
-X-Git-Newrev: 193df1cbec8b4e18b998494a7dc05c2a06445036
-X-Patchwork-Hint: ignore
-Message-Id: <20251227155500.BDE27877A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libiio: fix python bindings
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 100B84043A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 100B84043A
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 100B84043A
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:57:07 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 9EB9B1A24A0;
+ Sat, 27 Dec 2025 15:57:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 681BF60725;
+ Sat, 27 Dec 2025 15:57:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id BF21F11978559; Sat, 27 Dec 2025 16:57:03 +0100 (CET)
+Date: Sat, 27 Dec 2025 16:57:02 +0100
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>, Paul Cercueil <paul@crapouillou.net>
+Message-ID: <20251227165702.5930b424@windsurf>
+In-Reply-To: <20251222172638.839720-1-buildroot@bubu1.eu>
+References: <20251222172638.839720-1-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1766851024; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=CYA4Z9/JYdXUMaxuteDAk+/z+EmSWdPO32dbk5JuWmk=;
+ b=lD6zvFeZ5irmte3VSlJgcx8vcKaZh6WXuKyh95HvIIHzPQRXHJyLlENsp1XuOmuvKKwmBk
+ yt1C1X9+oXmbhK6chfiv4fqVOzSCVWJEOaW65CnnA7llTnHcbyBaQkAi6Z2HvFaL/+DQ48
+ lgc1C7GSGH3azZkSYYoHhkL8cJ0K2QKkpGnpXwDX0SolKpTJ9hCZrKb6Phr9mKfSZnndLL
+ kSPOHp+5mFmgAXITjHat/bWX3NKmpSFSvOwWKZmQ3ztcijtBEjCOsK2u3qAdCHa6R6UtGh
+ 1yXaL/3ucM1BlLh5f34T/NLwNPksLZ+rgwt7TMohpXqVuESmULeZPbin7zMYig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=lD6zvFeZ
+Subject: Re: [Buildroot] [PATCH 1/2] package/libiio: fix python bindings
  without glibc utils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,78 +98,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=193df1cbec8b4e18b998494a7dc05c2a06445036
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Marcus,
 
-Libiio python bindings use ctypes and specifically the find_library()
-function from there to load the libiio.so shared library. This is not
-working unless glibc utils (specifically ldconfig) is installed to the
-target (alternatively the target would need gcc or binutils, for objdump
-or ld).
+On Mon, 22 Dec 2025 18:26:36 +0100
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-The easy fix here is to just bypass the find_library() machinery
-altogether as it's not needed on a buildroot system.
+> Libiio python bindings use ctypes and specifically the find_library()
+> function from there to load the libiio.so shared library. This is not
+> working unless glibc utils (specifically ldconfig) is installed to the
+> target (alternatively the target would need gcc or binutils, for objdump
+> or ld).
+> 
+> The easy fix here is to just bypass the find_library() machinery
+> altogether as it's not needed on a buildroot system.
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  ...-bindings-python-fix-library-loading.patch | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/libiio/0001-bindings-python-fix-library-loading.patch
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Tested-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-bindings-python-fix-library-loading.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+Thanks, I have applied both patches. However I must admit that for
+PATCH 1/2, I would probably have preferred to backport the on-going PR
+on cpython, which fixes the problem for all cases, not just libiio.
 
-diff --git a/package/libiio/0001-bindings-python-fix-library-loading.patch b/package/libiio/0001-bindings-python-fix-library-loading.patch
-new file mode 100644
-index 0000000000..f8715b4c5b
---- /dev/null
-+++ b/package/libiio/0001-bindings-python-fix-library-loading.patch
-@@ -0,0 +1,41 @@
-+From 4d4d17e2810f793b9f7fd8acad2a3c551dbff2b5 Mon Sep 17 00:00:00 2001
-+From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+Date: Fri, 31 Mar 2023 20:13:07 +0200
-+Subject: [PATCH] bindings: python: fix library loading
-+
-+On Linux the find_library() function requires ld, gcc, objdump
-+or ldconfig on the target, which might not be present on a
-+buildroot system. [1]
-+We do not actually need this function at all, as we know the iio library
-+will be referencable in the system under the name "libiio.so".
-+So instead of kicking of this complicated cross-platform/cross-distro
-+compatible machinery, we just pass in the name of the library we already
-+know.
-+
-+[1] https://docs.python.org/3/library/ctypes.html#finding-shared-libraries
-+
-+Upstream: N/A, buildroot doesn't have to care about different OS's and
-+distro setups, so we can just hardcode the lib name, but we cannot
-+submit that upstream.
-+
-+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-+---
-+ bindings/python/iio.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bindings/python/iio.py b/bindings/python/iio.py
-+index b91260cc..bde17694 100644
-+--- a/bindings/python/iio.py
-++++ b/bindings/python/iio.py
-+@@ -224,7 +224,7 @@ else:
-+     # Non-windows, possibly Posix system
-+     _iiolib = "iio"
-+ 
-+-_lib = _cdll(find_library(_iiolib), use_errno=True, use_last_error=True)
-++_lib = _cdll("libiio.so", use_errno=True, use_last_error=True)
-+ 
-+ _get_backends_count = _lib.iio_get_backends_count
-+ _get_backends_count.restype = c_uint
-+-- 
-+2.25.1
-+
+Reading the discussion on the PR, I think it was improperly presented
+as being needed for "musl", and used only for musl. I would suggest to
+not present it as something musl-specific, but rather something that
+makes the lookup for the C/C++ libraries more portable (and therefore
+probably drop using ldconfig entirely). This would have addressed the
+concern raised on the PR that this is musl specific, and musl is not a
+supported platform, yadayadayada.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
