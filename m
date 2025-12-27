@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 719A0E8FDCC
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 14:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AEEAE8FDCC
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 14:50:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14E6460750;
-	Sat, 27 Dec 2025 14:41:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 125E2405FD;
+	Sat, 27 Dec 2025 14:50:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J8THn-4uA_uT; Sat, 27 Dec 2025 14:50:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37C5A405FF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766847019;
+	bh=XJCNpQKCfbNQYi0sKkNpeIVbZSR2sLwOWsUl76Cww4I=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=cEwTpkwxuxMjCGiUQH5LBl5hEcjXg/24XTjkHktwIDR2+gqBLgeAVP9BUBWEvRHgN
+	 +v8hLmuJR+8CK+bElzGvL5h6G8ktEDoteGFeUc/Gzz7xffFYsRl9JDoiNeE4COFbrG
+	 3Hx0G5wl3OSxeyyFz2bxrp67lxEx4aij5TTBlfVDmNKUomLytX9Rgh7cdWSWaVg8bq
+	 +7OIsEVXgT+GMfbzLr+5mglmmokpgufH6aHZ0o06n+Z04L2TW2Y2HCsmlUr5uRT5V2
+	 ATf6z0Z4XSzoa+mwY5XMwCpLOU2qv4hgu93+kaB3rWXJ1a3ZKN4iZGpX9TfI2EarK4
+	 3wwV34vgXGyPg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37C5A405FF;
+	Sat, 27 Dec 2025 14:50:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBC31D8
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:50:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDBA160768
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:50:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mem2uQOsiV6E; Sat, 27 Dec 2025 14:41:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B17060768
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766846484;
-	bh=4VqGRZ4iMAddmWmLXJRT4FLiofvLaICmJNWxjeQl3mA=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=kYKJSGE+5RwCUP9SzKcobpoAdxn4Lar7yzPgZyTJU7pvKib9NDDBXBOtRZ96KLXEZ
-	 KXpO+Zwm2we86AaxxCkEi8hrVSJmC7imiPSxklcTfd3bPMmjyRMUar4hFe+bIKvwH6
-	 lwDPWcd+Jg4Xdw6piN27QLya66k3JvsikTLIeHQJP30AcrgtoYNfsmRLPiisJs4P7j
-	 vNPPcbC2xYjp7wqimtLyig/zzue3DHG9l68eW8XM+iQDWBLUXxXj51UlI5bdC4+fSD
-	 PultslJRFyxoYK/NZ3yAxcki815OZFUhmCXxtdyWOWyvf2TPVo832k9sOlcPsZ3tg2
-	 HbN5FcaGoJ/dg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B17060768;
-	Sat, 27 Dec 2025 14:41:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id ABB76B9
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:41:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DD2B4024C
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:41:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r9KLzWAOFvn1 for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 14:41:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2542D401EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2542D401EC
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2542D401EC
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:41:19 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:b316:3690:2cad:26d9] (unknown
- [IPv6:2a01:e0a:12:eba0:b316:3690:2cad:26d9])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id C0D3CBFBAB;
- Sat, 27 Dec 2025 15:41:16 +0100 (CET)
-Message-ID: <3deb722d-986c-4163-87e4-9939552c0a36@grenoble.cnrs.fr>
-Date: Sat, 27 Dec 2025 15:41:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20251227130435.135472-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US, fr
-In-Reply-To: <20251227130435.135472-1-giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1766846476;
- bh=Usp2BOdJseiNdfQpwkb3ppoUjISwTnyUho1kYpaMEQ4=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=jZg6wocUVVLlhdYxRtLDQk/Kl9GzUCV+RJvJBe1h+FAOELWijmD3m4BIAuMlGA3mC
- Byfy99A6TYflAETt2RzhXHcfE6q4igV0kgTverNAfiI3h00o/fOeD52K0nWTs9kG5Z
- 29AdhyVjMYc/DGu/fgNtFnN81GOdOL3+IB+fTvEzTKFz5UCgQtr0i0jvddyWIEo/IO
- JNQR+M2SqSkA1MBYaqtaJaN6D5qZDBsNO9sau1Kv6oEuUgLzfyvnnJlEM3/zznfGvd
- HUOceUNgC1iShQyeCLZ89JPgu0qHaMNydbl/vKhOetBE1hJsdMciyNoEYCtcaXgPU1
- AnEsRH1JG1LKg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=jZg6wocU
-Subject: Re: [Buildroot] [PATCH] package/dash: fix build failure due to wchar
+ id IJJdZ-67yU3G for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 14:50:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE43060690
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE43060690
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:50:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ABE068774D; Sat, 27 Dec 2025 14:50:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 27 Dec 2025 15:37:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 29641d1675756dd82486cff4d5f71321bd89cad2
+X-Git-Newrev: a63acfa0a37ef890023f637735f8b9fe2ba8a7aa
+X-Patchwork-Hint: ignore
+Message-Id: <20251227145016.ABE068774D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv3: add patch to fix CMake 4
+ build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,62 +69,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio! Hello everybody!
+commit: https://git.buildroot.net/buildroot/commit/?id=a63acfa0a37ef890023f637735f8b9fe2ba8a7aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2025-12-27, Giulio Benetti wrote:
-> Since commit [1] package dash requires wchat so let's depend on it to
+Add a small patch to fix CMake 4 build issues. Unfortunately, while
+cmake/OpenCVMinDepVersions.cmake provides a MIN_VER_CMAKE that we
+could pass on the command line, cmake/OpenCVGenPkgconfig.cmake doesn't
+use it, so we anyway have to patch the package.
 
-s/wchat/wchar/
+Since opencv3 is basically unmaintained, there is no point sending
+this patch upstream.
 
-> fix build failure.
->
-> [1]:
-> https://git.kernel.org/pub/scm/utils/dash/dash.git/commit/?id=c0674f487c7aec2a3bdf6795cea7e60c9530c360
->
-> Fixes:
-> https://autobuild.buildroot.org/results/e9108ebd9fb8c471add1c5a7f581757175fa5f15/
->
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/dash/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/package/dash/Config.in b/package/dash/Config.in
-> index b816ac7837..fe49a908ed 100644
-> --- a/package/dash/Config.in
-> +++ b/package/dash/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DASH
->  	bool "dash"
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	depends on BR2_USE_WCHAR
->  	help
->  	  DASH is a POSIX-compliant implementation of /bin/sh that
->  	  aims to be as small as possible. It does this without
-> @@ -10,3 +11,8 @@ config BR2_PACKAGE_DASH
->  	  for most tasks.
->  
->  	  http://gondor.apana.org.au/~herbert/dash
-> +
-> +comment "procps-ng needs a toolchain w/ wchar"
+Fixes:
 
-s/procps-ng/dash/
+  https://autobuild.buildroot.net/results/cc857993920607958dd817c6a877ed9386c05738/
 
-Regards,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...set-minimum-required-CMake-version-to-3.5.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Edgar Bonet.
-
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	depends on !BR2_USE_WCHAR
-
+diff --git a/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch b/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+new file mode 100644
+index 0000000000..46009de302
+--- /dev/null
++++ b/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+@@ -0,0 +1,41 @@
++From 3b7311f48ef70127ddad7c7ea9c008fa6af3a9a1 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 25 Dec 2025 23:11:27 +0100
++Subject: [PATCH] cmake: set minimum required CMake version to 3.5
++
++This fixes build with CMake 4.
++
++Upstream: N/A, opencv 3.x is no longer maintained
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ cmake/OpenCVGenPkgconfig.cmake   | 2 +-
++ cmake/OpenCVMinDepVersions.cmake | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
++index 425c0faa3b..9642a4b983 100644
++--- a/cmake/OpenCVGenPkgconfig.cmake
+++++ b/cmake/OpenCVGenPkgconfig.cmake
++@@ -110,7 +110,7 @@ endif()
++ # =============================================================================
++ else() # DEFINED CMAKE_HELPER_SCRIPT
++ 
++-cmake_minimum_required(VERSION 2.8.12.2)
+++cmake_minimum_required(VERSION 3.5)
++ cmake_policy(SET CMP0012 NEW)
++ include("${CMAKE_HELPER_SCRIPT}")
++ include("${OpenCV_SOURCE_DIR}/cmake/OpenCVUtils.cmake")
++diff --git a/cmake/OpenCVMinDepVersions.cmake b/cmake/OpenCVMinDepVersions.cmake
++index e67856bb97..eb7a6d861e 100644
++--- a/cmake/OpenCVMinDepVersions.cmake
+++++ b/cmake/OpenCVMinDepVersions.cmake
++@@ -1,5 +1,5 @@
++ if(NOT DEFINED MIN_VER_CMAKE)
++-  set(MIN_VER_CMAKE 2.8.12.2)
+++  set(MIN_VER_CMAKE 3.5)
++ endif()
++ set(MIN_VER_CUDA 6.5)
++ set(MIN_VER_PYTHON2 2.7)
++-- 
++2.52.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
