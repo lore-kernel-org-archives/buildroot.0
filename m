@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 668EED0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E346FD0D14B
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3ED0B4082D;
-	Wed,  7 Jan 2026 18:01:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B95DC40E9F;
+	Wed,  7 Jan 2026 18:01:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TC_iGVrqDmur; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
+ id D3hc3ZtnNo0j; Wed,  7 Jan 2026 18:01:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84FE940CB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABD1C40A6E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808875;
-	bh=gAbbVQqXeu045BhDf9Hl3RUIDsg8BjpBuDS6gp14sjM=;
+	s=default; t=1767808881;
+	bh=0IgFJ9pwfvjawq2HE7Qz3Bfxl2MHHO/9kopz3cqI7XU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LBE17YlWoipDk6X1R0qbvocvmSkjiT5jM73PT0fucHNAPMQquvuxTMsBG6RRu7l7N
-	 hFUTNcIEsNbpfACv797V7ZazPxTLpBzKWXA5FKjktPgaLNpdc6yrnZOQx5fmCaAkqf
-	 4jh86UvIwC7djV//vkZqEt+sglAqemWbNKjOcwrrRRWhYtuJae9wtsnHzecCQ2qmmb
-	 zvlPSBNpds4JaegXYdLwOjWCikrV4YxQYAvgGfRI/5Fvf5FS5rq4NjnkPrGGFc1AF4
-	 UslMZhaW1BXp2QN+izyTwzs4P/r0JCkuQTLE2kM8+VQj9aytbb8riNYvwto9w+zmAe
-	 nfwMvDEB4xYCg==
+	b=HqBxN6FyXyfmvkxI+z4FE6NnPSHI+C6hOjLbyFPa6JVew/7vrXJGq8NjkOSFDlalM
+	 QmAnMLUk/RgESXI7QG8nafs0wFC8prKpdl/ZTVH7TpdJ+CRoWs5gbs/RI81RmLalYu
+	 MqJ+8140eIz1mciFUPPzR0FcXA45MpgyZ0c3lxuybFyHJtlgG9KxDXxezJ4B/tONn3
+	 rxsUyYiK7M4o2AcKcfY3p/UQ/opVJguCV4oWe5CkKiFDJzksc+pPFwJnqvf5bqDa9t
+	 OJmrRbVKqcQRrnGNbOfW2RUrjrC0ylWw+V0xKbhuK/Ypt5A70H9YUKLQAtMHEBQDnr
+	 LAHWazf6X+wJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84FE940CB7;
-	Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B07AAAF3
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABD1C40A6E;
+	Wed,  7 Jan 2026 18:01:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D9CF25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 941F740160
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3E8F40A38
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hhgDQgT-jqD6 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id twn3U40QxSYs for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3A8F40128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E62EE4090F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3A8F40128
+ by smtp4.osuosl.org (Postfix) with ESMTP id E62EE4090F
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC14A88353; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
+ id E550987C86; Wed,  7 Jan 2026 18:01:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 24 Dec 2025 15:13:19 +0100
+Date: Sat, 27 Dec 2025 17:32:52 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 286173ff2ce5efa4b3d0aeec1e513a350df86d7e
-X-Git-Newrev: ce4465f0401c34a42a32233839b2185c6057e3b8
+X-Git-Oldrev: 656e2d012edbfdbda24b6086c2ddc65cafd591bc
+X-Git-Newrev: 14e37d02782411e1888ae2ad927926979e91f9c8
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180110.AC14A88353@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/zic: bump to 2025c
+Message-Id: <20260107180110.E550987C86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/php: security
+ bump version to 8.4.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,45 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce4465f0401c34a42a32233839b2185c6057e3b8
+commit: https://git.buildroot.net/buildroot/commit/?id=14e37d02782411e1888ae2ad927926979e91f9c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Release notes:
-https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
+https://www.php.net/ChangeLog-8.php#8.4.16
+https://news-web.php.net/php.announce/478
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2dc61b52e8aa81104ad58e2fdb129da4c11c3327)
+Fixes CVE-2025-14177, CVE-2025-14178, CVE-2025-14180 & CVE-2025-67899.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 15258031791d34692d0784545fae7b0456064d22)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/zic/zic.hash | 4 ++--
- package/zic/zic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index b9daccb381..7fe7582f10 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,4 +1,4 @@
--# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/6JVHNHLB6I2WAYTQ75L6KEPEQHFXAJK3/
--sha512  19826b12968c10fc4db7e4b07ba782bfb8590eeebaec6f719d74b92a2e642ab817bd72bceff0015ce52a838edfdb00753b3cd87dd84b35abf2606e5bee445f76  tzcode2025b.tar.gz
-+# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
-+sha512  d14bc0680b9cb33d6526a2c0e483f2abafc2593cfe5fbfe7dcab940aafdc1baaec065dbaa1bb58b03586a8631ffdf43ebb22ff5a70503298b6ea2cf061d82c16  tzcode2025c.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 1abeb2d70e..06d8ebaf15 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0532adeed6..4a9d2e4bb4 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php?source=Y
+-sha256  a060684f614b8344f9b34c334b6ba8db1177555997edb5b1aceab0a4b807da7e  php-8.4.15.tar.xz
++sha256  f66f8f48db34e9e29f7bfd6901178e9cf4a1b163e6e497716dfcb8f88bcfae30  php-8.4.16.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index cd48cd1bd9..7524187649 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZIC_VERSION = 2025b
-+ZIC_VERSION = 2025c
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = https://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+-PHP_VERSION = 8.4.15
++PHP_VERSION = 8.4.16
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
