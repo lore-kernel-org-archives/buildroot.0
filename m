@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB31AE92710
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 20:54:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B186FE9270E
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 20:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA3F1405C2;
-	Sat, 27 Dec 2025 20:54:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8123880EA7;
+	Sat, 27 Dec 2025 20:54:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l2lyecGoadr9; Sat, 27 Dec 2025 20:54:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tDr9W4PdWWDJ; Sat, 27 Dec 2025 20:54:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 225EB405C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09B4280DEF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766868888;
-	bh=I99pq9Mh+I9gXIFvL1QpSdLFAdxMNtoa44BET/C7aAQ=;
+	s=default; t=1766868887;
+	bh=mMKFQO9NPNG/Us+BTmkTexZF9gEqw53dnj5BhHSCtjg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iYqUN/ZEDiK39tSB3dOtDc00XTzKjsPhfUDGmIYOOuRKDplJOpRhPlhfL8p2mMvtx
-	 CPnXdk/MUHIwNZ9OOBT+Oe80l8t36hNCdcEYy3Vdp4cLXwVoy+L81sVvRQHe21l14Q
-	 MrwVwhMwZvicuXUILstfNcJWj8bxfbDG6Ok0lAECRffB6cX2ir1Tgevi7zIsAgj3eb
-	 OOnm3LicyEJfoMawY/tSGsHMS5XreSG3y+WSjdvsNJgyf8cASJtTPyxxPse7eWoDU4
-	 UySRFl4YaGeJlyjsyFfSdsc8ssGrsrE+vMMqaT2S2dtVxfcCiPDccnvhDEXbnipaxN
-	 Vor8QuCrovx9Q==
+	b=M9cTDRJ+Vf57u3BtyAbXm2br9hRRD5gMtBfp78Sf9hUJ/qppTeAw+1Zw6jbQh7CtL
+	 bdq3Yw1BfSNIBwrx5NJzwgJqBUj2RoLgcUiN26qdqQblrS8QkLtQCFhGMtaXgrpnY8
+	 zPKIqEyWeFPUwcDEdmX7y/HSBfGzZ8JvvGHUN4YvXXVnX9ceXojCmtRsC0//bLD+v7
+	 96kJRF3v4ujrhepevTgUuIAQNGu5SNtazGMtxG5A00MrZoeRppDM6lV5oIOXuJAs1v
+	 kR97z3A4IhhUEhF0UX361+JC3B8EPKSdTmZxCcyIWwVNZK4nL3TZ2HKIGgfBzWnf+/
+	 0L81UZAHMJmyA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 225EB405C9;
-	Sat, 27 Dec 2025 20:54:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D784830D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09B4280DEF;
+	Sat, 27 Dec 2025 20:54:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D326D119
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 20:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA32F405C9
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD516403A1
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 20:54:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mN9kNTn6BJDb for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id buB5qa534KUK for <buildroot@buildroot.org>;
  Sat, 27 Dec 2025 20:54:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D97AE405C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D133040167
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D97AE405C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id D133040167
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 20:54:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C9BA687817; Sat, 27 Dec 2025 20:54:44 +0000 (UTC)
+ id BF41287816; Sat, 27 Dec 2025 20:54:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 27 Dec 2025 21:54:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec0872b0e07485703eead4c3febb0402f0d40afe
-X-Git-Newrev: 33479613d437a99dd51f9ac53095d168371f0cbd
+X-Git-Oldrev: 673adebb0c8dc34c5572c7419dd3545ab2981380
+X-Git-Newrev: ec0872b0e07485703eead4c3febb0402f0d40afe
 X-Patchwork-Hint: ignore
-Message-Id: <20251227205444.C9BA687817@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: python-varlink: new
- runtime test
+Message-Id: <20251227205444.BF41287816@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-varlink: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,118 +76,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33479613d437a99dd51f9ac53095d168371f0cbd
+commit: https://git.buildroot.net/buildroot/commit/?id=ec0872b0e07485703eead4c3febb0402f0d40afe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new runtime test for python-varlink.
+There are currently problems in updating the pypi.org release[1], so we
+pull the package from the github generated tarball instead. This in turn
+then requires manually setting the version for setuptools_scm in the
+environment.
 
-As always when we need to start a separate server process inside a test
-case this gets slightly fiddly.
-
-We override the test_run() function to first start the varlink example server,
-then call the packages cli interface to do a varlink call against the
-server. The cli defaults to pretty printing the result, which makes it
-more annoying to compare to the expected result in the test case, so we
-un-prettyprint it with python's builtin json.tool module.
+[1] https://github.com/varlink/python/issues/81
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- .../testing/tests/package/test_python_varlink.py   | 30 ++++++++++++++++++++++
- .../test_python_varlink/org.example.test.varlink   |  5 ++++
- .../test_python_varlink/sample_python_varlink.py   | 24 +++++++++++++++++
- 4 files changed, 60 insertions(+)
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-varlink/Config.in           |  6 ++++++
+ package/python-varlink/python-varlink.hash |  3 +++
+ package/python-varlink/python-varlink.mk   | 15 +++++++++++++++
+ 5 files changed, 26 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0451d8341c..5ffd0e5398 100644
+index a9eb5d9231..0451d8341c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2295,6 +2295,7 @@ F:	support/testing/tests/package/test_python_pydantic_settings.py
- F:	support/testing/tests/package/test_python_ruamel_yaml.py
- F:	support/testing/tests/package/test_python_sdbus_modemmanager.py
- F:	support/testing/tests/package/test_python_tzlocal.py
-+F:	support/testing/tests/package/test_python_varlink/
- F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/test_python_whitenoise.py
- F:	support/testing/tests/package/sample_python_apscheduler.py
-diff --git a/support/testing/tests/package/test_python_varlink.py b/support/testing/tests/package/test_python_varlink.py
+@@ -2283,6 +2283,7 @@ F:	package/python-ruamel-yaml-clib/
+ F:	package/python-typing-inspection/
+ F:	package/python-tzlocal/
+ F:	package/python-sdbus-modemmanager/
++F:	package/python-varlink/
+ F:	package/python-waitress/
+ F:	package/python-whitenoise/
+ F:	support/testing/tests/package/test_python_apscheduler.py
+diff --git a/package/Config.in b/package/Config.in
+index f33c116ec5..499c59a52e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1478,6 +1478,7 @@ menu "External python modules"
+ 	source "package/python-uvicorn/Config.in"
+ 	source "package/python-uvloop/Config.in"
+ 	source "package/python-validators/Config.in"
++	source "package/python-varlink/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-visitor/Config.in"
+ 	source "package/python-waitress/Config.in"
+diff --git a/package/python-varlink/Config.in b/package/python-varlink/Config.in
 new file mode 100644
-index 0000000000..f8595582f5
+index 0000000000..609fa22219
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_varlink.py
-@@ -0,0 +1,30 @@
-+import os
++++ b/package/python-varlink/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_VARLINK
++	bool "python-varlink"
++	help
++	  Python implementation of the Varlink protocol.
 +
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Varlink(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_VARLINK=y
-+        """
-+    sample_scripts = ["tests/package/test_python_varlink/sample_python_varlink.py",
-+                      "tests/package/test_python_varlink/org.example.test.varlink"]
-+
-+    def test_run(self):
-+        self.login()
-+        self.check_sample_scripts_exist()
-+        # we need to supress any output here as otherwise the commnd output parsing
-+        # gets confused for the second command
-+        cmd = "%s %s  > /dev/null 2>&1 &" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
-+
-+        _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+
-+        varlink_cli_call = "-m varlink.cli call 'unix:@test/org.example.test.Ping' '{\"ping\": \"hello\"}'"
-+        unprettyprint = "| python -m json.tool --compact"
-+        cmd = "%s %s %s" % (self.interpreter, varlink_cli_call, unprettyprint)
-+        output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], '{"pong":"hello"}')
-diff --git a/support/testing/tests/package/test_python_varlink/org.example.test.varlink b/support/testing/tests/package/test_python_varlink/org.example.test.varlink
++	  https://github.com/varlink/python
+diff --git a/package/python-varlink/python-varlink.hash b/package/python-varlink/python-varlink.hash
 new file mode 100644
-index 0000000000..c199824e6e
+index 0000000000..5d8dfa9d8e
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_varlink/org.example.test.varlink
-@@ -0,0 +1,5 @@
-+# Example Varlink service
-+interface org.example.test
-+
-+# Returns the same string
-+method Ping(ping: string) -> (pong: string)
-diff --git a/support/testing/tests/package/test_python_varlink/sample_python_varlink.py b/support/testing/tests/package/test_python_varlink/sample_python_varlink.py
++++ b/package/python-varlink/python-varlink.hash
+@@ -0,0 +1,3 @@
++# Locally computed sha256 checksums
++sha256  d31aee370ded51bc2bf8ad375fcd8b4cf3b7587306c0e05cffb45026ea9b9c40  python-varlink-32.1.0.tar.gz
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
+diff --git a/package/python-varlink/python-varlink.mk b/package/python-varlink/python-varlink.mk
 new file mode 100644
-index 0000000000..567d95da80
+index 0000000000..1180cc4cc3
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_varlink/sample_python_varlink.py
-@@ -0,0 +1,24 @@
-+import os
++++ b/package/python-varlink/python-varlink.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-varlink
++#
++################################################################################
 +
-+import varlink
++PYTHON_VARLINK_VERSION = 32.1.0
++PYTHON_VARLINK_SITE = $(call github,varlink,python,$(PYTHON_VARLINK_VERSION))
++PYTHON_VARLINK_SETUP_TYPE = setuptools
++PYTHON_VARLINK_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_VARLINK_LICENSE = Apache-2.0
++PYTHON_VARLINK_LICENSE_FILES = LICENSE.txt
++PYTHON_VARLINK_ENV = SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VARLINK=$(PYTHON_VARLINK_VERSION)
 +
-+service = varlink.Service(interface_dir=os.path.dirname(__file__))
-+
-+
-+class ServiceRequestHandler(varlink.RequestHandler):
-+    service = service
-+
-+
-+@service.interface("org.example.test")
-+class Example:
-+    def Ping(self, ping):
-+        return {"pong": ping}
-+
-+
-+def run_server(address):
-+    with varlink.ThreadingServer(address, ServiceRequestHandler) as server:
-+        print("Listening on", server.server_address)
-+        server.serve_forever()
-+
-+
-+run_server("unix:@test")
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
