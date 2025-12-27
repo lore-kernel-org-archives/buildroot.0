@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA0EE92716
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 21:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29619E92716
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 21:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C48980E63;
-	Sat, 27 Dec 2025 21:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0B1B4065D;
+	Sat, 27 Dec 2025 21:34:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v6tA1WcG7axq; Sat, 27 Dec 2025 21:33:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XZd-HGmNoKE1; Sat, 27 Dec 2025 21:34:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ACA680F30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E0E040638
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766871195;
-	bh=kHiMAo2REzVXnHgzWygQPJ+V1t8y3BvXCstXUS8j3hY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lIu4CM7uzZXP5tm+YUMeKZ5seGEe01NvoLTlLcF5njG6bH3KB4PWgzoqLnuHD+jzi
-	 edGuPnB75oj8LC83roFr6xDmwj1s/CkMEcO7Ganlu/eMZPlIfUg/tXHnbtGYxHpldu
-	 bbpFu6yIBgAFnAiziozKkENSB/7xos9K7umg2s9XK1kTEiqL4Xmv4L5sn7SaJNSUvN
-	 gsz2TvUft/+0oFDNKQQ1Jd9n0L/SB2jdRY8MsLHLxn/foEfyJ2KH7tpsTDvuajr2xV
-	 N2ERNfLui265flAEVfrP9Ve4Wk4gZ/kFuidi9f32KfK+fCpvtomf2tc0Hg0vXi9xKz
-	 u5/u17fe7oSog==
+	s=default; t=1766871276;
+	bh=d7LPRFG+2ocTvg6KVbSbdy4u/A1s5q28Y9lZnk4MbkE=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=joSHxBto2coG0IPOYmiHRubXdkUmkVBJ5FH1UQ4/AcYJNNTd+tBVNaJ/gSUnkCGoE
+	 9fERxnvoqNe0qpyJa9OzAgOEz/uPAP8R+w8GBUDC9s6im/gx2bTqJWkYy+c8sCz1lM
+	 6Td9yM5bTizM2a0GL6W78pTNoqtGFL6XsUtV5hqYj+lLOGEQFxaKcVrJIqrLIGgNwG
+	 8oQbD8P277cjFqCTYOdw4/CWFUQD/DK9nA7gA3/2yjizL3dxZiDwtI6ReeqlbLcjZ0
+	 0/3XAoozbEKNq7CJYMDcRR+u5DhBobFp8721tux6FtRCDQnQLkAvfeNjYklc6bwjT2
+	 SvmT+3j0LfaGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2ACA680F30;
-	Sat, 27 Dec 2025 21:33:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E0E040638;
+	Sat, 27 Dec 2025 21:34:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 98AA2119
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:33:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E522CB9
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 770D480F30
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:33:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D673B80F30
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:34:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b6jaMYFHk7dT for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 21:33:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2FC480E63
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2FC480E63
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:33:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9875F87826; Sat, 27 Dec 2025 21:33:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 22:29:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 225f8a189987ebddf77abc3a34f782eaf93d06c2
-X-Git-Newrev: d60dc5e6184dd2740fb33f6bc7aa8c6a76b35d7b
-X-Patchwork-Hint: ignore
-Message-Id: <20251227213312.9875F87826@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xr819-xradio: bump to version
+ id Xpas5pZ2CmmZ for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 21:34:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CDEEA80E63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDEEA80E63
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CDEEA80E63
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 21:34:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id CD34119F5B2;
+ Sat, 27 Dec 2025 22:34:28 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 27 Dec 2025 22:34:28 +0100
+MIME-Version: 1.0
+Date: Sat, 27 Dec 2025 22:34:28 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Sergey Matyukevich <geomatsi@gmail.com>
+In-Reply-To: <20251012223047.3323531-1-giulio.benetti@benettiengineering.com>
+References: <20251012223047.3323531-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <c7235d0f11e8e508998e0fb3ceca3fac@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766871271;
+ bh=5Cd7ZrsxLMElBy3oEZBJrbxDGKC4245Wr/Md/2XHpLU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=sTQXHXbx2BA82EZLfP2F5AqCwSIC6m0pRzwpxokSK9tmIevJGT+9e9n+Bci75KJHm
+ 1nS/ZZVE9Gb0uyZaZT3zesBiuqBKBklfUVeCpQ22CUXtYCT0QhFJKLJCGoRnRMJ3Gj
+ CbLjNy+ii/EHDFLdEEaz3EPDOXsWU2njS0GbrhH/wDoXKFj4iAPxB6OG0izSpAxowH
+ HKL8d5x2vII2ArYQdDnnZxQkQjPO2ixfXrFMaU35Ml2REdh+98JWMX7AOdD0Wn1Ap7
+ u14qMfuLfGwOuIx96t9XbbQER76oax077a0fZHOw1rBYVEMXZzoES5wb3hqT3I04ft
+ 0ZKRWoO/ChWww==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=sTQXHXbx
+Subject: Re: [Buildroot] [PATCH] package/xr819-xradio: bump to version
  2025-10-11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,134 +96,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d60dc5e6184dd2740fb33f6bc7aa8c6a76b35d7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 00:30, Giulio Benetti wrote:
+> Drop upstreamed patch.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Drop upstreamed patch.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-Fix-build-for-kernel-6.17.patch           | 80 ----------------------
- package/xr819-xradio/xr819-xradio.hash             |  2 +-
- package/xr819-xradio/xr819-xradio.mk               |  2 +-
- 3 files changed, 2 insertions(+), 82 deletions(-)
-
-diff --git a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch b/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
-deleted file mode 100644
-index 3329016472..0000000000
---- a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
-+++ /dev/null
-@@ -1,80 +0,0 @@
--From dbf3f744650e05a40fc3df6325fc657e5c23cece Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Fri, 10 Oct 2025 22:18:12 +0200
--Subject: [PATCH] Fix build for kernel 6.17
--
--With commit:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
--set_rts_threshold() and config() gain argument radio_idx to get radio
--index. So let's add that argument according to Linux version >= 6.17.
--
--Upstream: https://github.com/fifteenhex/xradio/commit/43992a7e7ed95ff815cf6d8ba81cef1085e50ab9
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- sta.c | 12 ++++++++++--
-- sta.h | 12 ++++++++++--
-- 2 files changed, 20 insertions(+), 4 deletions(-)
--
--diff --git a/sta.c b/sta.c
--index 1203ce9..d769b81 100644
----- a/sta.c
--+++ b/sta.c
--@@ -381,7 +381,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
-- 	return ret;
-- }
-- 
---int xradio_config(struct ieee80211_hw *dev, u32 changed)
--+int xradio_config(struct ieee80211_hw *dev,
--+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
--+		  int radio_idx,
--+#endif
--+		  u32 changed)
-- {
-- 	int ret = 0;
-- 	struct xradio_common *hw_priv = dev->priv;
--@@ -796,7 +800,11 @@ void xradio_wep_key_work(struct work_struct *work)
-- 	wsm_unlock_tx(hw_priv);
-- }
-- 
---int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value)
--+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
--+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
--+			     int radio_idx,
--+#endif
--+			     u32 value)
-- {
-- 	struct xradio_common *hw_priv = hw->priv;
-- 	int ret = 0;
--diff --git a/sta.h b/sta.h
--index 39a023a..de8f837 100644
----- a/sta.h
--+++ b/sta.h
--@@ -42,7 +42,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
--                             struct ieee80211_vif *vif,
--                             enum nl80211_iftype new_type,
--                             bool p2p);
---int xradio_config(struct ieee80211_hw *dev, u32 changed);
--+int xradio_config(struct ieee80211_hw *dev,
--+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
--+		  int radio_idx,
--+#endif
--+		  u32 changed);
-- int xradio_change_interface(struct ieee80211_hw *dev,
--                             struct ieee80211_vif *vif,
--                             enum nl80211_iftype new_type,
--@@ -65,7 +69,11 @@ int xradio_get_stats(struct ieee80211_hw *dev,
-- int xradio_get_tx_stats(struct ieee80211_hw *dev,
-- 			struct ieee80211_tx_queue_stats *stats);
-- */
---int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value);
--+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
--+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
--+			     int radio_idx,
--+#endif
--+			     u32 value);
-- 
-- void xradio_flush(struct ieee80211_hw *hw, struct ieee80211_vif *vif, u32 queues, bool drop);
-- 
---- 
--2.47.3
--
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index fe91d856ec..4032fa307a 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  c06dd87948b4a4c1bee070bbc3ce07b8711ec027e78ab9b83ea1c7350472105d  xr819-xradio-d766844ce8307e5902b3ab461f06bf8ad06891dd.tar.gz
-+sha256  fce2819322e18d80abba84fa420a55ec6ccea61240fc1a3268880eb84584bea5  xr819-xradio-43992a7e7ed95ff815cf6d8ba81cef1085e50ab9.tar.gz
- # Locally computed
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index 93fbdacb38..087536ebe7 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XR819_XRADIO_VERSION = d766844ce8307e5902b3ab461f06bf8ad06891dd
-+XR819_XRADIO_VERSION = 43992a7e7ed95ff815cf6d8ba81cef1085e50ab9
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
