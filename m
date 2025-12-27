@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79BF0E92722
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 23:40:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B47FDE92723
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 23:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48C61406A1;
-	Sat, 27 Dec 2025 23:40:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4299C60818;
+	Sat, 27 Dec 2025 23:40:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TwGazPB7HRgQ; Sat, 27 Dec 2025 23:40:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pAz1QQAY70w3; Sat, 27 Dec 2025 23:40:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63BB5406D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6418360812
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766878803;
-	bh=Gd3QJ6JO96O4A27jV6TaoJFvyhJeHKnzr/JlF1fTp3U=;
+	s=default; t=1766878804;
+	bh=Ngu5U4Lc7q77sSdEWWCiEzRNWWyS/miYiX1wg6D+beM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MX218m3k2Y4vWF8hAIDdTgoLGALUYDomp45WN+iBYDGYUYRk3QNpNNyVsGJhmdNph
-	 KgFcrFgrquPlrmuZwqZF+nlmOUaDKKAU37M+LVhMwlWzK0hGKw8ZeaJazcXxrrdlXV
-	 jz2yRT0XvWo/smWJb69jnikYcgYOuEJ8ycXaj5pC63lUkr4jSr91i3Gj6y91RgMjTO
-	 WHrf/IzsNbPMRS1LYGmmN2HaRuMlYFq4LtQk4KdB9QqOWRlXXum2l3Gxx3XIOEhIgd
-	 dtRR1X5erXU85N9Lw5IatwK7wa4cNouq8Z9tZjXxZmozo46ho1Kk3R54kK5nJUCx2F
-	 Zaa+CIaSAQ0dg==
+	b=sE3oDILvUYk8dwDj2aLUge79xsQfKtnaVDLjBSnkL64scd4TROIJp9U++MWuLvqdJ
+	 8VBZPUT++YrEXLseBqvvUuSHEMUZH5hQzlWPnnru+YSUzBu9oSGWmT2nsvH9Eq2moa
+	 UXxdw/1x//A/DdfWJtgyGmOCwIWJhX95SsLrB1BzLYvfz3zl4M8BLA5i71xr8URXyR
+	 wXLlKqHEFtzxO5mhONlKGoSmtbWPMjNMVWH4Gvydz+2AgJW8TaiNvkeZrJVthnE2Bt
+	 vq5YlUMaORJcMPap0eIwzWCJjrepwcIsqlD0tvUustkWqJ13HBfygSpJqQG5KCLQdq
+	 JFeapWnX3tzOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63BB5406D2;
-	Sat, 27 Dec 2025 23:40:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D18430D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6418360812;
+	Sat, 27 Dec 2025 23:40:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41F51471
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BD8E40678
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BEEB80FB7
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YqLJnYlMX9iy for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5K7ZcwB_G05C for <buildroot@buildroot.org>;
  Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B4CB40689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E16F80FB0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B4CB40689
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E16F80FB0
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3ABF387902; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
+ id 66C878790E; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 00:15:21 +0100
+Date: Sun, 28 Dec 2025 00:39:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 446fea34aa5d41976f4b60aaa2ae7b7ad21536ed
-X-Git-Newrev: e235a191dd8bd6d5bdb9434352deae86953cfa49
+X-Git-Oldrev: 289b5aab18d68521c4faac1208066c8947aa6070
+X-Git-Newrev: c3d5f2c25480693bc6915b44b36e99b9febc371b
 X-Patchwork-Hint: ignore
-Message-Id: <20251227233954.3ABF387902@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/matchbox-panel: fix build with GCC
- 14.x
+Message-Id: <20251227233954.66C878790E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: ddrescue: use f-string
+ for test config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,42 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e235a191dd8bd6d5bdb9434352deae86953cfa49
+commit: https://git.buildroot.net/buildroot/commit/?id=c3d5f2c25480693bc6915b44b36e99b9febc371b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No autobuild errors recorded due to download errors with dependencies.
-
-Patch not sent anymore, original project has no updates since 2010:
-https://git.yoctoproject.org/matchbox-panel
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/matchbox-panel/0004-fix-build.patch | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ support/testing/tests/package/test_ddrescue.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/matchbox-panel/0004-fix-build.patch b/package/matchbox-panel/0004-fix-build.patch
-new file mode 100644
-index 0000000000..bed7e84b1f
---- /dev/null
-+++ b/package/matchbox-panel/0004-fix-build.patch
-@@ -0,0 +1,16 @@
-+Description: fix FTBFS with stricter GCC flags
-+
-+Upstream: https://sources.debian.org/src/matchbox-panel/0.9.3%2Bgit20100816-2/debian/patches/fix-build
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+Index: matchbox-panel-0.9.3+git20100816/src/msg.h
-+===================================================================
-+--- matchbox-panel-0.9.3+git20100816.orig/src/msg.h	2020-06-16 16:04:57.000000000 +0100
-++++ matchbox-panel-0.9.3+git20100816/src/msg.h	2024-08-09 11:22:54.986036009 +0100
-+@@ -17,5 +17,6 @@
-+ void msg_handle_events(MBPanel *d, XEvent *e);
-+ void msg_handle_timeouts(MBPanel *d);
-+ void msg_cancel(MBPanel *d, XClientMessageEvent *e);
-++Bool msg_set_timeout (MBPanel *d, struct timeval *tv, struct timeval **tvp);
-+ 
-+ #endif
+diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
+index eb3f63ae53..bd34694737 100644
+--- a/support/testing/tests/package/test_ddrescue.py
++++ b/support/testing/tests/package/test_ddrescue.py
+@@ -10,8 +10,10 @@ class TestDdrescue(infra.basetest.BRTest):
+     #   mapper dm-dust, which are used to simulate a failing storage
+     #   block device.
+     # - lvm2 user space package is needed to configure dm-dust with dmsetup
++    kernel_fragment = \
++        infra.filepath("tests/package/test_ddrescue/linux-ddrescue.fragment")
+     config = \
+-        """
++        f"""
+         BR2_aarch64=y
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+@@ -20,16 +22,14 @@ class TestDdrescue(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.2"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+-        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+         BR2_PACKAGE_DDRESCUE=y
+         BR2_PACKAGE_LVM2=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         BR2_TARGET_ROOTFS_CPIO_GZIP=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+-        """.format(
+-            infra.filepath("tests/package/test_ddrescue/linux-ddrescue.fragment")
+-        )
++        """
+ 
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
