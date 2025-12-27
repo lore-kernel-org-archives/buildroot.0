@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F70DE92724
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 23:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EE50E92723
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 23:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E967B406C4;
-	Sat, 27 Dec 2025 23:40:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E77BD60817;
+	Sat, 27 Dec 2025 23:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6r8tLuHRd0Hh; Sat, 27 Dec 2025 23:40:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NRzj1hSvcaRV; Sat, 27 Dec 2025 23:40:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07FB2406D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0017860843
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766878807;
-	bh=Z/BkOqF4JCB0VHBrOCVi/NiA4BNIMYL7FIN3exNkYMw=;
+	s=default; t=1766878808;
+	bh=JFHZCWpLpePzipQvxIAaPCciji16b6Tmz6hCo9YHqh4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KiXmc8vtSDTykt21vK9+6NaHC7dnMbEBfTqy+qSvxu6gNKqrTcyaQovh7vxz1zFaV
-	 AxDG2patEWi0vw1hn+GsZaZHNWe4WzDjeSYn04SwLxkzpmaPNScrosJeKc+QNmd2Tc
-	 whq6DCT7IUv17uQeNQG3xhxbIHmG+GrNDQoHI/QRvqcZMd6oC4Ye9s+lV6Sr0/rjkb
-	 6ncC2rhEGOOJLnJ5cmV1ogA9NJ/pihtXEEteSbCOzS3SezPZTHf+13pbSKx0LXfRii
-	 Au+thGKMx1Q43Di1IsXPOV+h7oi2t/HZ6Bb1RO41cip4ajMzX6FtS5DzuEGz6njQr5
-	 YFB7xPNxR/BQQ==
+	b=T1txjvC2xXckTEVnvxlnilPe8nuMdpEy/ZN2Ru1YGjJvas1vtS5fk92FWMl88znp+
+	 WX7SrUC/7VHnScnHgo/i9yUCiKLlMGvMzb5aEfVQGTcMwoyW/OFLcwIyL8nwwd13Zw
+	 fs6lkvzP1VmxvpW1FftVWishs/lMutVHV1ctE3GRo9xLcIzlDHQ0IqDYaeOWtQaJ+6
+	 GYiFPcQ3Wbe4TFpgf/VaiURZQJJUK3Spi6gItvZ47n8bwMvTcZvGCxw0m7SqzL58sh
+	 2VKvA+pfJGMwfq5EPaXfiMI1G31JTpVF4IfJEqhDlrBpxJBatm9i1RL8/jMU/8yZ0B
+	 rziYmxNuiLWJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07FB2406D4;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0017860843;
 	Sat, 27 Dec 2025 23:40:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B562119
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A525D8
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1EBF540689
+ by smtp1.osuosl.org (Postfix) with ESMTP id 214F180F54
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oY0VPJyVGOO3 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jWMCyrvmu4NB for <buildroot@buildroot.org>;
  Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 642F5406A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 579C280F90
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 642F5406A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 579C280F90
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42676878FE; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
+ id 3294787901; Sat, 27 Dec 2025 23:39:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 00:15:22 +0100
+Date: Sun, 28 Dec 2025 00:15:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e235a191dd8bd6d5bdb9434352deae86953cfa49
-X-Git-Newrev: d5bb2902ec53070ac2db82f77f45f1e0fc3ab160
+X-Git-Oldrev: c687f2fcf50b5aedfc91f6b2c042405235e58396
+X-Git-Newrev: 446fea34aa5d41976f4b60aaa2ae7b7ad21536ed
 X-Patchwork-Hint: ignore
-Message-Id: <20251227233954.42676878FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/matchbox-panel: add patch fixing
- GCC 14.x build issue
+Message-Id: <20251227233954.3294787901@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/matchbox-keyboard: switch to gz
+ tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,82 +72,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7100609003129853948=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7100609003129853948==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=d5bb2902ec53070ac2db82f77f45f1e0fc3ab160
+commit: https://git.buildroot.net/buildroot/commit/?id=446fea34aa5d41976f4b60aaa2ae7b7ad21536ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Switched _SOURCE to .gz, upstream does not provide bz2 tarballs
+anymore. This means in fact _SOURCE can be dropped, as it's now the
+default value.
 
-mb-applet-launcher.c: In function ‘get_launch_window’:
-mb-applet-launcher.c:269:18: error: implicit declaration of function ‘time’ [-Wimplicit-function-declaration]
-  269 |   time_t stime = time(NULL);
-      |                  ^~~~
+No autobuild errors recorded due to previous download error with
+matchbox-lib.
 
-No autobuilder failures, it was hidden by other failures.
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...s-mb-applet-launcher.c-add-missing-time.h.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/matchbox-keyboard/matchbox-keyboard.hash | 2 +-
+ package/matchbox-keyboard/matchbox-keyboard.mk   | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/matchbox-panel/0005-applets-mb-applet-launcher.c-add-missing-time.h.patch b/package/matchbox-panel/0005-applets-mb-applet-launcher.c-add-missing-time.h.patch
-new file mode 100644
-index 0000000000..999394157d
---- /dev/null
-+++ b/package/matchbox-panel/0005-applets-mb-applet-launcher.c-add-missing-time.h.patch
-@@ -0,0 +1,36 @@
-+From 7608e4f755b1fb3a99c387c58f79b0c4b6aadfbe Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 27 Dec 2025 23:53:23 +0100
-+Subject: [PATCH] applets/mb-applet-launcher.c: add missing <time.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+mb-applet-launcher.c: In function ‘get_launch_window’:
-+mb-applet-launcher.c:269:18: error: implicit declaration of function ‘time’ [-Wimplicit-function-declaration]
-+  269 |   time_t stime = time(NULL);
-+      |                  ^~~~
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: N/A, dead
-+---
-+ applets/mb-applet-launcher.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/applets/mb-applet-launcher.c b/applets/mb-applet-launcher.c
-+index 08a6a10..f7685de 100644
-+--- a/applets/mb-applet-launcher.c
-++++ b/applets/mb-applet-launcher.c
-+@@ -26,6 +26,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <signal.h>
-++#include <time.h>
-+ 
-+ #ifdef USE_LIBSN
-+ #define SN_API_NOT_YET_FROZEN 1
-+-- 
-+2.52.0
-+
-
---===============7100609003129853948==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/matchbox-keyboard/matchbox-keyboard.hash b/package/matchbox-keyboard/matchbox-keyboard.hash
+index 43ace650a4..1cc657edc4 100644
+--- a/package/matchbox-keyboard/matchbox-keyboard.hash
++++ b/package/matchbox-keyboard/matchbox-keyboard.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  44fc6dc6075090d6f8e43f8667cf8a85bed59b7221a5ee81843454c66e352790  matchbox-keyboard-0.1.1.tar.bz2
++sha256  dd3e9494a9499a3bf3017c8c1e6572a4e91deb20e219717db17c0977750b8bcb  matchbox-keyboard-0.1.1.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+ sha256  bba6fd8976fa5c669ddc1378a3d8d49a74263d4d39efb9a90cefb3583a813ecc  applet/applet.c
+diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
+index a1e3c61543..776ee8ee29 100644
+--- a/package/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox-keyboard/matchbox-keyboard.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ MATCHBOX_KEYBOARD_VERSION = 0.1.1
+-MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
+ MATCHBOX_KEYBOARD_SITE = \
+ 	http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/snapshot
+ MATCHBOX_KEYBOARD_LICENSE = LGPL-2.1, GPL-2.0+ (applet.c)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7100609003129853948==--
