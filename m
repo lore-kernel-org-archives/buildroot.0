@@ -4,89 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AEEE92712
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 14:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 719A0E8FDCC
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 14:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E802607A6;
-	Sat, 27 Dec 2025 14:22:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14E6460750;
+	Sat, 27 Dec 2025 14:41:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id baUb5ztcQKUn; Sat, 27 Dec 2025 14:22:38 +0000 (UTC)
+ id Mem2uQOsiV6E; Sat, 27 Dec 2025 14:41:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FC0660790
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B17060768
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766845358;
-	bh=dvC20EqoLaVntTD8YsAVZ6TU4utrFRjuleeDx8mYUvg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kSyhUQVR5YPtYlwQ5YE39I+fsQJhb+4bgkMhYIfr1LpTVdaO8iE6GQxoSBGLNEnCq
-	 U+JPp7h3esUuJ6G9AANNy8q2eyTzmZiThK4W64yC20HN85n1vDxSklR32fJg+6/5O8
-	 sGoFlf4w0o9bVzavynYy5is8HMP+DoN612jo/3SO9VR9D6Peycx6WM0+Dq1VmWY8AX
-	 tmhZlotrLGQoLS/YNPRsUorpReLTKZxpz+iqYcfpriFzQuI/tvKNyampFbLBgmNCYK
-	 HxYN8W7mGOg4+zHuLrx19/vopaj7m2HnR6sB+GlMh2v/mCwvdZqUB+WE9F4Zaos1WX
-	 Z07S1Tud76loQ==
+	s=default; t=1766846484;
+	bh=4VqGRZ4iMAddmWmLXJRT4FLiofvLaICmJNWxjeQl3mA=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=kYKJSGE+5RwCUP9SzKcobpoAdxn4Lar7yzPgZyTJU7pvKib9NDDBXBOtRZ96KLXEZ
+	 KXpO+Zwm2we86AaxxCkEi8hrVSJmC7imiPSxklcTfd3bPMmjyRMUar4hFe+bIKvwH6
+	 lwDPWcd+Jg4Xdw6piN27QLya66k3JvsikTLIeHQJP30AcrgtoYNfsmRLPiisJs4P7j
+	 vNPPcbC2xYjp7wqimtLyig/zzue3DHG9l68eW8XM+iQDWBLUXxXj51UlI5bdC4+fSD
+	 PultslJRFyxoYK/NZ3yAxcki815OZFUhmCXxtdyWOWyvf2TPVo832k9sOlcPsZ3tg2
+	 HbN5FcaGoJ/dg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC0660790;
-	Sat, 27 Dec 2025 14:22:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BAB79EC
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B17060768;
+	Sat, 27 Dec 2025 14:41:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABB76B9
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:41:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABE6760790
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DD2B4024C
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:41:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pbf2EvJnCaFu for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 14:22:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5EC96062F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5EC96062F
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A5EC96062F
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:34 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 62B241A249C
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:22:32 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 3155E60725;
- Sat, 27 Dec 2025 14:22:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E23AA1197849E; Sat, 27 Dec 2025 15:22:29 +0100 (CET)
-Date: Sat, 27 Dec 2025 15:22:28 +0100
-To: Trammell Hudson via buildroot <buildroot@buildroot.org>
-Cc: Trammell Hudson <hudson@trmm.net>
-Message-ID: <20251227152228.05407b86@windsurf>
-In-Reply-To: <aP0fooArqo5kwOnV@hachi.swcp.com>
-References: <aP0fWpti-9PiGKxn@hachi.swcp.com> <aP0fg9gNzZ0xspy0@hachi.swcp.com>
- <aP0fooArqo5kwOnV@hachi.swcp.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r9KLzWAOFvn1 for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 14:41:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
+ envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2542D401EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2542D401EC
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [IPv6:2001:660:530d:201::44])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2542D401EC
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:41:19 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:b316:3690:2cad:26d9] (unknown
+ [IPv6:2a01:e0a:12:eba0:b316:3690:2cad:26d9])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id C0D3CBFBAB;
+ Sat, 27 Dec 2025 15:41:16 +0100 (CET)
+Message-ID: <3deb722d-986c-4163-87e4-9939552c0a36@grenoble.cnrs.fr>
+Date: Sat, 27 Dec 2025 15:41:15 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20251227130435.135472-1-giulio.benetti@benettiengineering.com>
+Content-Language: en-US, fr
+In-Reply-To: <20251227130435.135472-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1766845351; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=Q50Naozg/N7YBzK+GZt2rdD9hwzMGbodgiuCc+5YaeQ=;
- b=FuB6BrnKgwETCbvsy+9XBs8Io/6BP5v2ESMi3jleTISthZvnXzC4HirJdH3l4pS/wUSnV2
- ob19S36oaSUqwgDWG0ISVL8L+EKTq/t6faSGJqSAZMZuXf+LvbQ/+ed3fUsVxJ84E8jm5Q
- MFjj9SpGlZ8/blK1NTWGayp681lQ6zep5++PGFArHK234IWBOV9zzlcyZK8faJV4j3L1Vy
- Nqa5p0DeB4pFBNIc/BMFHA2Rw4Cn1nJ/Ubb+sU0ikhSYsDnHwaiN06tfO/Q8KSvZxdioWe
- /R73B0pLiL/vB2DP3tm1ksB0kytGGh4s+edseweat+zDIGj+0XBC3yz7ZWCXfA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1766846476;
+ bh=Usp2BOdJseiNdfQpwkb3ppoUjISwTnyUho1kYpaMEQ4=;
+ h=Date:Subject:To:References:From:In-Reply-To:From;
+ b=jZg6wocUVVLlhdYxRtLDQk/Kl9GzUCV+RJvJBe1h+FAOELWijmD3m4BIAuMlGA3mC
+ Byfy99A6TYflAETt2RzhXHcfE6q4igV0kgTverNAfiI3h00o/fOeD52K0nWTs9kG5Z
+ 29AdhyVjMYc/DGu/fgNtFnN81GOdOL3+IB+fTvEzTKFz5UCgQtr0i0jvddyWIEo/IO
+ JNQR+M2SqSkA1MBYaqtaJaN6D5qZDBsNO9sau1Kv6oEuUgLzfyvnnJlEM3/zznfGvd
+ HUOceUNgC1iShQyeCLZ89JPgu0qHaMNydbl/vKhOetBE1hJsdMciyNoEYCtcaXgPU1
+ AnEsRH1JG1LKg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=FuB6BrnK
-Subject: Re: [Buildroot] [PATCH 2/2] package/shairport-sync: Add support for
- AirPlay2
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=jZg6wocU
+Subject: Re: [Buildroot] [PATCH] package/dash: fix build failure due to wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,59 +96,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Edgar Bonet via buildroot <buildroot@buildroot.org>
+Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Trammell,
+Hello Giulio! Hello everybody!
 
-Thanks for your patch, which I have applied, after doing some tweaks.
-See below.
+On 2025-12-27, Giulio Benetti wrote:
+> Since commit [1] package dash requires wchat so let's depend on it to
 
-On Sat, 25 Oct 2025 13:06:10 -0600
-Trammell Hudson via buildroot <buildroot@buildroot.org> wrote:
+s/wchat/wchar/
 
-> diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-> index 528767ba9c..fddba4a439 100644
-> --- a/package/shairport-sync/Config.in
-> +++ b/package/shairport-sync/Config.in
-> @@ -26,6 +26,21 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
+> fix build failure.
+>
+> [1]:
+> https://git.kernel.org/pub/scm/utils/dash/dash.git/commit/?id=c0674f487c7aec2a3bdf6795cea7e60c9530c360
+>
+> Fixes:
+> https://autobuild.buildroot.org/results/e9108ebd9fb8c471add1c5a7f581757175fa5f15/
+>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/dash/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/package/dash/Config.in b/package/dash/Config.in
+> index b816ac7837..fe49a908ed 100644
+> --- a/package/dash/Config.in
+> +++ b/package/dash/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DASH
+>  	bool "dash"
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +	depends on BR2_USE_WCHAR
 >  	help
->  	  Enable audio DSP convolution support.
+>  	  DASH is a POSIX-compliant implementation of /bin/sh that
+>  	  aims to be as small as possible. It does this without
+> @@ -10,3 +11,8 @@ config BR2_PACKAGE_DASH
+>  	  for most tasks.
 >  
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2
-> +	bool "AirPlay2 support"
-> +	select BR2_PACKAGE_NQPTP
+>  	  http://gondor.apana.org.au/~herbert/dash
+> +
+> +comment "procps-ng needs a toolchain w/ wchar"
 
-Added an indication in a comment that this is a runtime dependency (as
-opposed to a build time dependency).
+s/procps-ng/dash/
 
-> +	select BR2_PACKAGE_LIBPLIST
-> +	select BR2_PACKAGE_LIBSODIUM
-> +	select BR2_PACKAGE_LIBGCRYPT
-> +	select BR2_PACKAGE_FFMPEG
-> +	select BR2_PACKAGE_FFMPEG_GPL
-> +	select BR2_PACKAGE_FFMPEG_NONFREE
+Regards,
 
-These two were not needed according to my testing
-(BR2_PACKAGE_FFMPEG_GPL BR2_PACKAGE_FFMPEG_NONFREE).
+Edgar Bonet.
 
-> +ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2),y)
-> +SHAIRPORT_SYNC_DEPENDENCIES += libplist libsodium libgcrypt ffmpeg util-linux
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +	depends on !BR2_USE_WCHAR
 
-I've added host-vim in this list because the "xxd" tool is needed on
-the host, and the host-vim package provides it.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
