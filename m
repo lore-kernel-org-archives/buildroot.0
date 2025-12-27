@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 810C8E8FDDD
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:38:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CD3E9270B
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 11:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43DCC607A8;
-	Sat, 27 Dec 2025 11:38:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD8B2607C8;
+	Sat, 27 Dec 2025 11:38:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qlDN4mMG1UZ5; Sat, 27 Dec 2025 11:38:03 +0000 (UTC)
+ id BqXpXcUTv8p4; Sat, 27 Dec 2025 11:38:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6730C60783
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D70FD607A5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766835483;
-	bh=MTOYbZeAtqHn3NWx3KrDcVevt59MFS4Rn8kKbJcoEG0=;
+	s=default; t=1766835485;
+	bh=SIjZtVVYGo8cC88mKf+lAqTSoxrFLF0S/z4cD0HU9yE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HcxoVCmzyeEROi81c/j0bfioM4skhxqUqc4cZEp9Z+qRFaxqPhB3yIiaDX9qQX1/J
-	 8Pn66xkYTkH2FPwW9XVRXZMqw1DimTL4vzgysxtHrvOUcajQTqRM+gRAqjXMHWvGXB
-	 EdCj/pX98KoOG5H0TfTdnP3YdZrP8LSOuXxT4TfrhbtxzSmCa6YCiHL1pXFuPsGAJh
-	 cBQQYZ1GB03k6VImG0Wq+J8ysoBhVXfUtsIldnWM17dj4jikKaQVt3SZA2hFQ1KtrM
-	 3GJNRBfQqyPiihipttSytvloXYb2zCk5r1GooEZeo7hKJH21XeMQhPv9FpcYLQkeg0
-	 2NeX7UxlOtS1A==
+	b=QEsik4dtJmCOZRICOZVPFR8q3NuKUHImu7lnIkhAHe+2gKdEuGdCEqEaa1D9lBFXU
+	 dqTUBJ8TbT/KRjiwuhqhYF0m4SiPFeaLRXiUAujXrtsu6Ej7Ee+jUZJj8iyDwkjJrh
+	 IZJ+n5P5HV/35ubOfDdZk4jk7+EgoV8JXrslGV4p/1FpSjgwviuPFDVDRio21KjnX7
+	 Y+LpMfbZB7yDgefYBwfVD+aXdOccpsXEABLyE/O791XHM8X7rou4s8mdaPSP5LqeiB
+	 jWBK5cl/BRiPcQlaR3Ef6uCq2pvFtmFWVlHYAfZCTycciakJrZQucbf/r/PW9x+y/I
+	 EVN7XjsCG3g5A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6730C60783;
-	Sat, 27 Dec 2025 11:38:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D91B4255
+	by smtp3.osuosl.org (Postfix) with ESMTP id D70FD607A5;
+	Sat, 27 Dec 2025 11:38:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EF914EC
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D734B4060C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6FDE80E14
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKywd_ju6AWu for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y4rlR5Eq3qNs for <buildroot@buildroot.org>;
  Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12E14405FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1761380E0F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12E14405FF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1761380E0F
  for <buildroot@buildroot.org>; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2A5987717; Sat, 27 Dec 2025 11:37:59 +0000 (UTC)
+ id 0854687718; Sat, 27 Dec 2025 11:38:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 12:36:08 +0100
+Date: Sat, 27 Dec 2025 12:36:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa6a81b4d92fb30cc631e9b45b3d0bb8ac3045c4
-X-Git-Newrev: 5a8811cadeedb265ac38efed0f79c2ef66151a9e
+X-Git-Oldrev: 5a8811cadeedb265ac38efed0f79c2ef66151a9e
+X-Git-Newrev: 29641d1675756dd82486cff4d5f71321bd89cad2
 X-Patchwork-Hint: ignore
-Message-Id: <20251227113759.F2A5987717@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cppcms: fix build with recent
- versions of ICU
+Message-Id: <20251227113800.0854687718@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cppcms: change upstream to Github,
+ bump to 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,96 +77,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8811cadeedb265ac38efed0f79c2ef66151a9e
+commit: https://git.buildroot.net/buildroot/commit/?id=29641d1675756dd82486cff4d5f71321bd89cad2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 that
-bumped package/icu to version 77-1, the build of cppcms with ICU
-support enabled fails.
+cppcms.com now points to a Github page at
+https://github.com/artyom-beilis/cppcms which has a 2.0.1 version, so
+let's use that. The number of differences to 2.0.0.beta2 is very
+small:
 
-Indeed, ICU now requires C++17, and while cppcms.mk has some logic to
-get C++ flags using icu-config, the -std=c++17 gets ultimately
-overridden by the built-in -std=c++11 flag encoded in cppcms
-CMakeLists.txt.
-
-To fix this, we have submitted a patch upstream that ensures the
-CMAKE_CXX_FLAGS passed on the command line take precedence over the
-built-in flags defined in cppcms CMakeLists.txt.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/9c34a08ea02499b28093ad3fa184cee10b2883ac/
+$ git log --online v2.0.0.beta2..v2.0.1
+b872972 (tag: v2.0.1, origin/master, origin/HEAD, master) Version to 2.0.1
+a1914f7 (tag: v2.0.0) Replaced system category with one from predating C++11 (v1.2) because std::system_category does not translate WSAGetLastError results
+c4febcc Merge pull request #104 from dreaming-augustin/upstream
+922cd49 Python 3.12 compatibility: wrap regex in r''.
+a11e9d4 Merge branch 'cpp11'
+3000bc6 (origin/1.2_updates) Merge pull request #99 from dreaming-augustin/master
+44e24c7 [#89] cppcms_error fix typo + consistent  messages
+a6d5575 (origin/cpp11) Added backtrace to system error
+b3aef3b Fixed missing include for stripped down build
+463a9a6 Removed IPV6 due to travis limitations
+f8163c6 Merges from cpp11
+31d4fe7 Added verbose log on failure
+90bc996 Added Linux to build matrix - so I have fallback if normal build environment fails
+f78ee39 Added Readme for github
+a737d5d Merged python3 compatibility from master
+0c67544 Support of python 2.7 and python 3
+0d121a7 Python3 compatibility
+2fc7e38 Python3 compatibility
+d745869 python3 fix for tmp_cc
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...txt-allow-flags-passed-on-the-command-lin.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ package/cppcms/cppcms.hash | 5 +----
+ package/cppcms/cppcms.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch b/package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch
-new file mode 100644
-index 0000000000..a6b9526e88
---- /dev/null
-+++ b/package/cppcms/0002-CMakeLists.txt-allow-flags-passed-on-the-command-lin.patch
-@@ -0,0 +1,58 @@
-+From 58faaa72919076e2c847b595a739469243ac9706 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 16 Dec 2025 16:02:41 +0100
-+Subject: [PATCH] CMakeLists.txt: allow flags passed on the command line to win
-+ over built-in flags
-+
-+CMakeLists.txt and booster/CMakeLists.txt define some flags in
-+CXX_FLAGS, and then set CMAKE_CXX_FLAGS in a way that causes the flags
-+in CXX_FLAGS to override the ones passed (for example on the command
-+line through CMAKE_CXX_FLAGS). This prevents the user from overriding
-+those compiler flags in CXX_FLAGS.
-+
-+A specific example is that CXX_FLAGS sets -std=c++11, but with recent
-+version of ICU (such as >= 77-1), -std=c++11 is not enough, passing
-+-std=c++17 is needed. Unfortunately, it cannot be passed through
-+CMAKE_CXX_FLAGS due to the aforementioned problem.
-+
-+This commit allows to resolve this by ensuring that CMAKE_CXX_FLAGS
-+and CMAKE_C_FLAGS win over CXX_FLAGS/C_FLAGS.
-+
-+Upstream: https://github.com/artyom-beilis/cppcms/pull/107
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ CMakeLists.txt         | 4 ++--
-+ booster/CMakeLists.txt | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 826e87f..86693e2 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -141,8 +141,8 @@ elseif(MSVC)
-+ 	set(C_FLAGS "/W3")
-+ endif()
-+ 
-+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
-+-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_FLAGS}")
-++set(CMAKE_CXX_FLAGS "${CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
-++set(CMAKE_C_FLAGS "${C_FLAGS} ${CMAKE_C_FLAGS} ")
-+ 
-+ #############################################################################
-+ #
-+diff --git a/booster/CMakeLists.txt b/booster/CMakeLists.txt
-+index 8f63254..4638f76 100644
-+--- a/booster/CMakeLists.txt
-++++ b/booster/CMakeLists.txt
-+@@ -223,7 +223,7 @@ if(NOT IS_WINDOWS)
-+ 	endif()
-+ endif()
-+ 
-+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
-++set(CMAKE_CXX_FLAGS "${CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
-+ 
-+ #############################################################################
-+ #
-+-- 
-+2.52.0
-+
+diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
+index a8d04ff36f..8e59f66489 100644
+--- a/package/cppcms/cppcms.hash
++++ b/package/cppcms/cppcms.hash
+@@ -1,8 +1,5 @@
+-# From http://sourceforge.net/projects/cppcms/files/cppcms/2.0.0-beta2/
+-sha1  746cc5e3f58565d91d9ded6e2616399d60e9d01d  cppcms-2.0.0.beta2.tar.bz2
+-md5  ef561d13ee92d2053151cab073feba10  cppcms-2.0.0.beta2.tar.bz2
+ # Locally computed:
+-sha256  697031c7d141fdd215c6be5090b66e2106a63bb3e52f09ee8120e8efc6c08a21  cppcms-2.0.0.beta2.tar.bz2
++sha256  4a7a2217b3fa59384650912a7000e016c308b4fa986a3d2562002691e5a9d6e7  cppcms-2.0.1.tar.gz
+ sha256  fb7c15ddf590037d4cd18ebd61148a2304b9243369d238a64f599182377e32db  COPYING.TXT
+ sha256  3e4012cc5950e05bedfdd2f00ceffe1ef71c46ac8c79f07e237ecb23c773f65f  MIT.TXT
+ sha256  d6ce062e5cf4f7e3c536d7d2fee84c882c45245f1848ed3162401f2b29fa2b4b  THIRD_PARTY_SOFTWARE.TXT
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index 8a59990a8d..b39122d12f 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-CPPCMS_VERSION = 2.0.0-beta2
+-CPPCMS_SOURCE = cppcms-$(subst -,.,$(CPPCMS_VERSION)).tar.bz2
++CPPCMS_VERSION = 2.0.1
++CPPCMS_SITE = $(call github,artyom-beilis,cppcms,v$(CPPCMS_VERSION))
+ CPPCMS_LICENSE = MIT, BSL-1.0 (boost), Public Domain (json2.js), Zlib (md5)
+ CPPCMS_LICENSE_FILES = COPYING.TXT MIT.TXT THIRD_PARTY_SOFTWARE.TXT
+-CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+ CPPCMS_INSTALL_STAGING = YES
+ CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
