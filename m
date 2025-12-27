@@ -1,63 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C67D7E8FDCC
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 14:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 425CBE8FDCD
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 15:00:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 984B0606DF;
-	Sat, 27 Dec 2025 14:58:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA9A40633;
+	Sat, 27 Dec 2025 15:00:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nY989eNwbA1s; Sat, 27 Dec 2025 14:58:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z-UwoIzMLWkf; Sat, 27 Dec 2025 15:00:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A35BE60768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1CAD40612
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766847525;
-	bh=0PVvjXZ2efvy7h4G4zTb+qz5DxkiGuFInNVFthWJlGo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JxC6fLom6sKJwt8XcLNCFbeWwYT6YjBUAQtUnBKZcPQMpYq5sFDkIxeLu163yqiJQ
-	 o6EPV/fxFUZfUvlCV0qN01CrJ8h+aW5zk+JJhntf82OY5C/fgClUSl2uWukJ+pKBPh
-	 2ciRznD+edJwxXHwM0d3kYtR34M6fAZjx4nx8m0UOesrLHPx+zP5NFMGgsDXb3pcUW
-	 W7RwXNoJ4F9O+mX6jcqDoiUeEICAFDZ3raf+/g/B1Vf4Ed2jaKXdT+vjJD/Ute/y1f
-	 lGxV+8KdcIr0+IUi3KMQ8Yu8FOgFG9ixpuF0PkLNBrWAPgjG/SZQFQL1x+ZwdHfQaB
-	 +JKzG67Ah8cag==
+	s=default; t=1766847602;
+	bh=a0tEp9oO7gQnfBDwKFfqf5+47gozS4322p1ZDBJTYzA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=bEFWgBX8pazxe0yF4TBgvk6TqASGmq+mMqkUC5arnfeXockJpYYoRD0bcilizSCSC
+	 meoGXg0UJjy0Kq2OuupW7gsEYNH1HmgWe9f4f5svFcbaPZ2tx66ptK5NaZQ1qzRgXB
+	 e45akno6Eiy0GZeEPqdM7vdodzXvvKySxfQkZOUH8yb3DKFsuAHAPCY5MvYNFIv+LP
+	 gB9KRmGDrE72v+94cjVuu9qHFveGUCocQ+fzDkbFe6yE0GWFELKHbYXi5N42LFmamA
+	 inrb38NquqGF0knZ9ADjEjIxqFFV77fI6h8itoZhZg3SVixwdWjHKiFHzJo46A3Gby
+	 cUF8lcyReJ4+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A35BE60768;
-	Sat, 27 Dec 2025 14:58:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1CAD40612;
+	Sat, 27 Dec 2025 15:00:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1646BD8
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:58:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5BF34119
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1B364024C
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:58:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 426194024C
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 15:00:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id csUllKZoVQGU for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 14:58:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id MO5qOG1MH8KG for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 15:00:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D6644020B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D6644020B
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:58:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 097E787757; Sat, 27 Dec 2025 14:58:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 15:58:23 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55d84aa4bdfecd8453b16f5693f36e383b955b10
-X-Git-Newrev: 0e5eef911c9b313fddd9912128bf09d605b5f6ae
-X-Patchwork-Hint: ignore
-Message-Id: <20251227145842.097E787757@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libselinux: allow pip to use
- system-provided packages
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 30F8C4020B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30F8C4020B
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 30F8C4020B
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 14:59:59 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 999A04E41E17;
+ Sat, 27 Dec 2025 14:59:57 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5105E60725;
+ Sat, 27 Dec 2025 14:59:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A723E119784E3; Sat, 27 Dec 2025 15:59:54 +0100 (CET)
+Date: Sat, 27 Dec 2025 15:59:52 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Antoine Tenart <atenart@kernel.org>, Marcus
+ Folkesson <marcus.folkesson@gmail.com>, Julien Olivain <ju.o@free.fr>
+Message-ID: <20251227155952.41c9e50d@windsurf>
+In-Reply-To: <20251217184822.3765937-1-bernd@kuhls.net>
+References: <20251217184822.3765937-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1766847596; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=A2ycuH2MTjGnnBmfmC2LUHhoSW5ZFe2hLVrA+E6CbEg=;
+ b=fPO1cfnvxiJnmf0f9JO/8NuVdMM2wPsUgWQR+l0RPiFxv7Yx81Wh6uw0eij/dUVtDphmeg
+ siLR8TI3J4Txn8HJzmkRf7uuzHDLPWdsJQqTAfzmU8qYfHfiyzfX3kUzxsGbrAD95FJ8Cz
+ 7JBuslMyfCzIVmynv3ekQALKITtJyk6UODGQ0/Nm9R/2wg1MFYrnSAqVP0ueFIPEOyyHd1
+ lxVoH7sCvfNPyPFb816bUR886ah7HyavcafGOPnhcJH565JVLGZdiX2YEB2QOFqIVvtSp7
+ Z6CeMebChbiCYPDViqS6asmB9/2ojTnprB3kGEVsMEVeNGWYELr9ilJ1NR5Peg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=fPO1cfnv
+Subject: Re: [Buildroot] [PATCH 1/1] package/libselinux: host-python3 needs
+ SSL support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,125 +100,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e5eef911c9b313fddd9912128bf09d605b5f6ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Bernd,
 
-Since the bump of pip to version 25.3 in commit
-285097051d4a7dd821f01d15c705867f7e26c635, the build of the Python
-bindings of libselinux is broken for both the host and target
-variants.
+On Wed, 17 Dec 2025 19:48:22 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-For the host variant, because "pip install" no longer finds the
-system-provided setuptools and tries to download setuptools by itself,
-causing build issues because our host-python doesn't have SSL support:
+> Buildroot commit 285097051d4a7dd821f01d15c705867f7e26c635 bumped
+> python-pip to version 25.3, causing build errors when host-python3 was
+> built without SSL support:
 
-  Could not fetch URL https://pypi.org/simple/setuptools/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded with url: /simple/setuptools/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available.")) - skipping
+Following my previous report, I ended up reverting this patch, as it is
+incorrect, and in fact not needed. Instead, I committed your
+"package/libselinux: fix Python build errors" after doing a small fix
+that makes it also work for host-libselinux.
 
-For the target variant, because "pip install" no longer finds the
-sysconfigdata package:
-
-  ModuleNotFoundError: No module named '_sysconfigdata__linux_sparc64-linux-gnu'
-  [end of output]
-
-We fix this by taking a patch from Debian, which is slightly tweaked
-to also cover our host package (the original Debian patch was passing
---no-build-isolation only when DESTDIR was not empty, but in Buildroot
-host packages are built with DESTDIR empty, and we do need
---no-build-isolation).
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/0e9de0c0d8b6ec57eea9f8834f02076b296ba4f1/ (host-libselinux)
-  https://autobuild.buildroot.org/results/1b87c659f1901b0bf33fa4a2ff0ed40b13114bba/ (libselinux)
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Co-Authored-By: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...src-Makefile-build-python-module-without-.patch | 51 ++++++++++++++++++++++
- package/libselinux/libselinux.mk                   |  4 ++
- 2 files changed, 55 insertions(+)
-
-diff --git a/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch b/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-new file mode 100644
-index 0000000000..7f4a76515b
---- /dev/null
-+++ b/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-@@ -0,0 +1,51 @@
-+From 8cfe4535f23a7768ee5efa615d11563a8404777c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-+Date: Mon, 27 Oct 2025 22:40:59 +0100
-+Subject: [PATCH] libselinux/src/Makefile: build python module without
-+ isolation
-+
-+The "pip install" logic in libselinux/src/Makefile tries to get
-+setuptools from the network, which is not correct as during the
-+build/installation, there shouldn't be any network access, or
-+downloading of arbitrary resources from the network.
-+
-+This causes build issues in Debian:
-+
-+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1121121
-+
-+And in Buildroot:
-+
-+  https://autobuild.buildroot.net/results/0e9/0e9de0c0d8b6ec57eea9f8834f02076b296ba4f1/build-end.log
-+
-+To fix this, we use the --no-build-isolation pip install argument so
-+that pip install is allowed to use the system-provided setuptools,
-+instead of wanting to download this one.
-+
-+This patch is derived from
-+https://sources.debian.org/src/libselinux/3.9-4/debian/patches/Build-python-module-without-isolation-Closes-1119155.patch,
-+with the change that --no-build-isolation is passed unconditionally,
-+regardless of whether $(DESTDIR) is empty or not.
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://lore.kernel.org/selinux/20251227143911.1630813-1-thomas.petazzoni@bootlin.com/
-+---
-+ libselinux/src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libselinux/src/Makefile b/libselinux/src/Makefile
-+index e9141bb9..9bc10606 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -197,7 +197,7 @@ ifneq ($(DISABLE_SHARED),y)
-+ endif
-+ 
-+ install-pywrap: pywrap
-+-	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-++	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --no-build-isolation --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-+ 	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
-+ 	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-+ 
-+-- 
-+2.52.0
-+
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 405c4a9f21..a77ee7659a 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -35,8 +35,12 @@ LIBSELINUX_DEPENDENCIES += \
- 	python3 \
- 	python-setuptools \
- 	host-python-pip \
-+	host-python-setuptools \
- 	host-swig
- 
-+LIBSELINUX_MAKE_ENV += \
-+	$(PKG_PYTHON_SETUPTOOLS_ENV)
-+
- LIBSELINUX_MAKE_OPTS += \
- 	$(PKG_PYTHON_SETUPTOOLS_ENV) \
- 	PYTHON=python$(PYTHON3_VERSION_MAJOR)
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
