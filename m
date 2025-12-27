@@ -1,113 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FC1CE8FDCC
-	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 13:06:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AB01E8FDCD
+	for <buildroot@archiver.kernel.org>; Sat, 27 Dec 2025 13:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E462940428;
-	Sat, 27 Dec 2025 13:06:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 512F360690;
+	Sat, 27 Dec 2025 13:21:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YXxzPJahxPcX; Sat, 27 Dec 2025 13:21:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 879E560711
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766841718;
+	bh=2UsFqCThD+hPEpuHauyeqkZy2Mc+S6G6YPdbNypv43Q=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Tmipdncl3B3GEReULh9jZLE40jFF8wiYKJZmhnIXUgwV/93KH4f+KxTycc8JRZVgj
+	 tZ7rdGQUYJJHLAu9tpgnTECIy0+mLivwp0b8FkqV8l7PfqV56M8mGxA7dOP29GGuhc
+	 z+kcZNULMkznZAuHm2vlcK0o3jzv1YaxtDATia4y9q3/k/10kdqviym+fN+tRUhTX+
+	 nZsjObsUBXa2sANnIGBufhfGaMEBOzU/on5dyBIHXwxBupHeIPKSBXKi0Wvnp6AvsC
+	 O3QiIWZyLh+3TIyyaT2uBrfDpt2qIreHbgb0tV3KR/R58hfBhCbdfB3L9rYcyho495
+	 6frwEc4+kwKNQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 879E560711;
+	Sat, 27 Dec 2025 13:21:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 248C9119
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:21:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C8D640417
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:21:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3EaD8GiXO_UW; Sat, 27 Dec 2025 13:06:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19FC74050C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766840782;
-	bh=SfkSLyBiFJyIJbfBfRCZA7s96Ptm9jr3oIkq9pHf83s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=PjHBGgO9rh2SHtJGn8NpjaPHedgNsOoPupXUWgC3duaxJn6K2pRliKRRpbAAd5Uhr
-	 6tCPp5oR60FtiCu00oK/BEmvm4eUj4rFTcEALfzyFrjy6LVxD8OL8vS+JGSoQhXTVS
-	 BKGzSRps/0OWi+h+a20qhggbmLa6mNg4jON99/9JAbpADy69nAR1Kmfo7Gg2ecgzYZ
-	 OndZJgqKXcYoHNY1p8CRXnCRsG3/hjMVAxGKuLTG7MWcnmKDYxvYWSjjwABh1NvI7f
-	 frC8Txc8y6rZJQUr11fYzLEuBGFSE7stPvXPcsMJHDAM5nbYde4rEvBzk6b4ct3bo0
-	 iRFz8SeRh/IjA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19FC74050C;
-	Sat, 27 Dec 2025 13:06:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A9C9119
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:06:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 797B880E49
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:06:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kpk3qpRO2R8Y for <buildroot@buildroot.org>;
- Sat, 27 Dec 2025 13:06:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 676CE80A52
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 676CE80A52
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 676CE80A52
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:06:15 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-477aa218f20so47342735e9.0
- for <buildroot@buildroot.org>; Sat, 27 Dec 2025 05:06:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766840773; x=1767445573;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/cC0ihsgIjkeZ3EWiysYrYQnCOgzXCr3F6CcSEJXdEQ=;
- b=qMJ+n0xdVirRFp6oXSezAQsZoYG0+iT6nPdKwhnE4dVDZDTncynFrcnd6DZ2DYDa0R
- 4zKFLmYTTXEteBYvEnnrQTH3jXSRGW652LLdgpQgFzLFa+a94E843kGDL0CBW1K2n4S6
- ziil1YI5uyrQR9RDkD8PhYd2lHqvulujylWFVuWgWInztFWq5JGV/A5njYR4CLYadzvN
- qb0ApWISq0GYeNmBxIvtYUMICQGDBTsCCz1cE/KJmNbrthl4JKfT95ynhP98FheiQIz3
- my4554QpCzIkXakHz+86gwXYvRT/gGaczuB5KpF2P1xGBVNJcCL5Tq2vSwlGpHeyLydH
- XZNQ==
-X-Gm-Message-State: AOJu0YysSm3PCAVN7ZnkROIA89IzNlyHEujNNZcJt/GAgdkdRGwSVRMG
- PUQAx1V5pB5LwsD47iU6ztYpuUq4ZjRZi1DGJFU5mczjCIongX+fAHAnBtL7eM0s+f4FDPeVXW/
- ggUeYoPQ=
-X-Gm-Gg: AY/fxX6EdsRxw8FoztAxqGI+jelOTOg8Is2yVu6mEoQp6gPJfRKfEne7y7ug69S6IEh
- JSExDVSa1eDFUZTkE3Ch07TTeJz8sG7aUtoEvNqQhFIuU3BSzNv1637zBhRFY6UilUXEM/H0Qig
- Psaa/69Q0s/rFciv2nPeI/fZhTRc8AWvl4WVFCBMpY3NjBxqXLtroFP652TeUzX0rRVLWyLyYPn
- P43CM267h77rkJRrjuACDTj5srxabOqobYOIn3EFmtLmyWJ95hX2Vx/diLpURYjPwdO1RItkgXA
- ipkwqEnEMCtZxvIPxX6pvfEBqr2wio0awOwbJaS7QQ3LOLEDABXkvLnfVtH2dpEI6Qtvq4mrrDk
- 1J7sj4TtZdsciDUXaaQfmrCCkuuqfVnujnqm8rrRt2cR2eJRbG1IKy2J+rJ5WPKj4KrYuDcVpVF
- g7QKRmBNfQfE60dBm6h2m8yc/7kf5CC8YQ901c6siFTcuVFszGPVZg/fZ/cOMmuGOFwYlGe7Zn
-X-Google-Smtp-Source: AGHT+IHmVS4UuU2Z3Tj+Kc4t+ryOm/Puo3htwT2u10gdVlUZPtTyMbsUKb67llV8v9WC5Um8rH1TEg==
-X-Received: by 2002:a05:600c:46c4:b0:471:14af:c715 with SMTP id
- 5b1f17b1804b1-47d19533472mr337785805e9.3.1766840773067; 
- Sat, 27 Dec 2025 05:06:13 -0800 (PST)
-Received: from mindpad (2a01cb0c0115730072a6ccfffe7dafc3.ipv6.abo.wanadoo.fr.
- [2a01:cb0c:115:7300:72a6:ccff:fe7d:afc3])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-47d28bede16sm134369885e9.20.2025.12.27.05.06.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Dec 2025 05:06:12 -0800 (PST)
+ id GX7CJad8KaEm for <buildroot@buildroot.org>;
+ Sat, 27 Dec 2025 13:21:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.218;
+ helo=smtpcmd01-sp1.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 36E024040D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36E024040D
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 36E024040D
+ for <buildroot@buildroot.org>; Sat, 27 Dec 2025 13:21:53 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id ZUEvvLMYiGVgvZUEwvwKtV; Sat, 27 Dec 2025 14:21:50 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 14:06:10 +0100
-Message-ID: <20251227130610.163006-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 27 Dec 2025 14:21:48 +0100
+Message-ID: <20251227132148.704963-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1766840773; x=1767445573; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/cC0ihsgIjkeZ3EWiysYrYQnCOgzXCr3F6CcSEJXdEQ=;
- b=P4s+/Ily+JNDrjLg+zgh8ota3ww3X2JvJ8r4W1wxuKh+T7qrc+msEiE1Svb6ViNjMD
- Uk3yRVJFoJjx2KIfT7gC8/3hDQIQHHj5efzv7TCPxIsXsavnJV3oQXoXZzLd4h6Pz81+
- RiQ/2x1BM8/hSCoc1LR2ODeavldQjtQuSKEdFE0r7m0TmCbRIAMWHaHZDoDzRZHQaco9
- c48AC3WIsG+gobLgxGxoNboxW+KREBWxg+n7MrF13EJ3GJRlKMOq7+nE0IOpbG6PAoCB
- WQktNcLLl+HXRtXaibXqai/M7juPRUJpmu6Cn1S4S8HlTU55ETFCU8GvEbTHBWc1DtwJ
- acmA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-CMAE-Envelope: MS4xfPO47k1Ni35mpKH8Hmdsp+17tkbXkLBdCVPwiMjPN2RVOmjbftduO9/F7d5t00+Kit983tRFdMnLBMzWM3XWhWGwRWFDOmHoZFN6X1tkmo/Y7RIKTLct
+ e4zPlxjf9vPXzovMGKOMEQEAQrSSwKuF4QwLBu/viEytX9JhjIN7FFTgUeRxGOcGvsMO+oK/sjqDby+BO+6OqDNMJjy2/aVox7UqpkvFhRJaHfKC8A1C5VCP
+ gWBehW4rCwk3Ws7FdxxqXDpwkvMljcWGTQudBVI4Ef0=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1766841710; bh=R16PAkYq77tCwDXL7Gwgqxl+aboUFzhVpnq4lSDhr1k=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=cesSKGQbdMNamnrDxlOU1ZUOz5qN1U0xi+V1GhfNFf/7EHJIWYUlCC9PSh1IJa2k5
+ l8BfkpcdMxewPPFcqcaQufJqUqY/lkCXZMxo0CuDU2fonExrgS/pV0MHsIzfT90Tbs
+ 24sQMGLIQu8HaC2x2jlPTJFx3TOA4b8A1a3NAjKHqwStqLeY66Y0x9Nj4WNVZMYXgt
+ otQHC5Gun0wG/Q2JO/mezVyg8orxY2KXM/GDEjX06BItxtZsRWRb4S8WZ+uDHD4CAE
+ w2FX8+KO4ybUtObf2kJSzisluzEGnPYCbdG1rEcZNaV0Cbcz2HspELmI5DTOQ0J/S+
+ +4o01/1++cKzA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=P4s+/Ily
-Subject: [Buildroot] [PATCH 1/1] package/linenoise: add CPE
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=cesSKGQb
+Subject: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,58 +90,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE 'cpe:2.3:a:antirez:linenoise:1.0:*:*:*:*:*:*:*' is valid for the
-package linenoise [1].
+For change log, see:
+https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=a768fcc0aafbe50a37d2d06bba23eb6671d3a9b3
 
-Since the latest version is '1.0' since 2015 the CPE_ID_VERSION is set
-to that version.
+NOTE: Tag v0.5.13.1 has not been emitted.
 
-The CVE that applies on version 1.0 were checked with the 'cve-check'
-script:
-
-```
-echo '{"components": [{"bom-ref": "linenoise", "name": "linenoise", "version": "1.0", "cpe": "cpe:2.3:a:antirez:linenoise:1.0:-:*:*:*:*:*:*"}]}' | support/scripts/cve-check | jq -r '.vulnerabilities[].id'
-```
-
-Only the CVE-2025-9810 exists and that was fixed in [2].
-
-[1] https://nvd.nist.gov/products/cpe/detail/10423C23-6AAA-439E-B723-1FCDEB3A769F
-[2] 3c7cbf97d7 package/linenoise: security bump to version e26268de5e
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/linenoise/linenoise.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/dash/dash.hash | 6 +++---
+ package/dash/dash.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
-index 05f8aa4845..29bed3ce4f 100644
---- a/package/linenoise/linenoise.mk
-+++ b/package/linenoise/linenoise.mk
-@@ -8,10 +8,15 @@ LINENOISE_VERSION = e26268de5e56bfaad773786471844578fe9f7f4b
- LINENOISE_SITE = $(call github,antirez,linenoise,$(LINENOISE_VERSION))
- LINENOISE_LICENSE = BSD-2-Clause
- LINENOISE_LICENSE_FILES = LICENSE
-+LINENOISE_CPE_ID_VENDOR = antirez
-+LINENOISE_CPE_ID_VERSION = 1.0
- LINENOISE_INSTALL_STAGING = YES
- # Static library only, nothing to install on target
- LINENOISE_INSTALL_TARGET = NO
+diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+index 4697d958a3..df0f6044bf 100644
+--- a/package/dash/dash.hash
++++ b/package/dash/dash.hash
+@@ -1,7 +1,7 @@
+-# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.tar.gz.sha512sum
++# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.1.tar.gz.sha512sum
+ # After checking pgp signature
+ # using key 9F9D45FE50AE361530983792C7271D0A49B18BA7
+-sha512  428de1f65ab77d5fee88bbf4ba8642d77abfda223a4ede423d09db9faa4f0347199b3be841d63b93a7ed68f714ef54ff41b2dc936e4b7ebb19b74499ed4e6a01  dash-0.5.13.tar.gz
++sha512  6b3d67f76e74853349fe99121b2ee96d32da9863042744e03984eb6a01bf437eee2f2e81fbdd0436090abfecacc2f5589960820c3d0d5f3dd580948d38d5dc1d 260512 dash-0.5.13.1.tar.gz
+ # Locally calculated
+-sha256  fd8da121e306b27f59330613417b182b8844f11e269531cc4720bf523e3e06d7  dash-0.5.13.tar.gz
++sha256  d9271bce09c127d9866e25c011582ddc75ab988958a04bc4d8553a3b8f30e370  dash-0.5.13.1.tar.gz
+ sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index eb646e1a4f..78effa791c 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Fixed in https://github.com/antirez/linenoise/commit/880b94130ffa5f8236392392b447ff2234b11983
-+LINENOISE_IGNORE_CVES += CVE-2025-9810
-+
- define LINENOISE_BUILD_CMDS
- 	cd $(@D); $(TARGET_CC) $(TARGET_CFLAGS) -c linenoise.c
- 	cd $(@D); $(TARGET_AR) rcu liblinenoise.a linenoise.o
+-DASH_VERSION = 0.5.13
++DASH_VERSION = 0.5.13.1
+ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
 -- 
-2.52.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
