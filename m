@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3054CE784BE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 07:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B3ACE784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 07:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0793A6075E;
-	Sun, 28 Dec 2025 07:52:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42843600CA;
+	Sun, 28 Dec 2025 07:52:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ja79wd3it6NI; Sun, 28 Dec 2025 07:52:21 +0000 (UTC)
+ id ZJEU2Wlly_uc; Sun, 28 Dec 2025 07:52:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AB0660855
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C03C6083E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766908341;
-	bh=3RmbC5EbcDU5SkJf9ZI/crg8h4SON2vIjeAHcvD1wPU=;
+	s=default; t=1766908353;
+	bh=91mJ9dc0XXO4fhkWRYTxJfp81cclXW+jZUAjJIcRTGo=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=jHUyTzhUfIw3DzVqASpw2+RnLzDG5n3VkKHiDOJS+6rJ2hWo3b6BPkXXMhxM2h/gu
-	 GSPY1uaxWGV2V7gbqOAW9d5HFl6G1er4Qx/ku3mMNOy78Uxgx9X4eOY0N3ayvAvIWe
-	 aJ2YyqndMX8OIAkITpy3EAdP5hwd2YpNixTCOYfmVhxhKr1fd1dtPs8SP00ZJ8MpQi
-	 /GF/mo/hzKmpwY+QbIb0tTrlu2UgnYbBfA4e0yKfuihCL4A+WWKDY4m+pH4MPSpY8U
-	 qeOQRlg3FPC2bBLhkwEce9j2sO4D70xHngKx8sGQOJZPnvsMpm5dhhYsP13zkGNwrG
-	 ulKdf5fodH23Q==
+	b=rFUtlO7lqfGkUbSGWOuevT3prDz/xONqUZAT2w2glgEIuAynNPXM0yT3RfKnzcFyM
+	 6d2zA7JkkpHsq8JghhNbh/TMsAVHAxyOenQuPv0283Z1MZOv4dXPRIL4Z1+e9REBda
+	 MTyAOi4BII6Vfc/SzmSMmiWz/lY2Qyn+1w0Uga2vNE7tLGQ20gelqcnB3NGcTQ/sla
+	 rCQYJd21Ik4Hjs87T5uLWnmpDveVN7E1iaEvqG3uJy2ZBbAheE8j/KAfjxw/gd9h2k
+	 gm3EzpIHVN+70ysQfW4a1BypGURqKBKaFpcZffA6SZYTVhkE+FVEMvWs91OKK6eTy4
+	 P1snUebQK2uYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AB0660855;
-	Sun, 28 Dec 2025 07:52:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DEC2BD8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 07:52:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C03C6083E;
+	Sun, 28 Dec 2025 07:52:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F4DF1E1
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 07:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C64514071B
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 07:52:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6670D811EE
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 07:52:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qemYRQAaGttM for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 07:52:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JW8wllQtYcRG for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 07:52:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE966405EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE966405EE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4BA5581196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BA5581196
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE966405EE
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 07:52:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BA5581196
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 07:52:31 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c75a.dip0.t-ipconnect.de [79.214.199.90])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5C4CEA4C2315;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8630DA4C231C;
  Sun, 28 Dec 2025 08:48:38 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35324)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vZlVr-000000004ex-1DMB;
+ (envelope-from <bernd@kuhls.net>) id 1vZlVr-000000004ex-1dKv;
  Sun, 28 Dec 2025 07:48:27 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -63,31 +63,31 @@ Cc: Andreas Ziegler <br025@umbiko.net>,
  Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
  Matt Flax <flatmax@flatmax.org>, Simon Dawson <spdawson@gmail.com>,
  Woodrow Douglass <wdouglass@carnegierobotics.com>
-Date: Sun, 28 Dec 2025 08:48:14 +0100
-Message-ID: <20251228074822.3370464-20-bernd@kuhls.net>
+Date: Sun, 28 Dec 2025 08:48:15 +0100
+Message-ID: <20251228074822.3370464-21-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251228074822.3370464-1-bernd@kuhls.net>
 References: <20251228074822.3370464-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1766908118;
- bh=87RSmrOHkSRM4kyVPwCommjGod+DT6tiimWp1MTxo6Y=;
+ bh=aFSX533GS+M1/6pNc1F0yB9bPlh9tl5XGVIKDCYdhPQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=X+nKC6URllHXXztUiag0waXrxzqtKgHJ4OwwPRqXViZsUHpEhAIOds6Zgv/T/EkOa
- sOiTzoMawgTDhx76bJGH+WyZZL/x0Vg9LpaYLsXs3Vdoq1WzgPujL1N6zHMMcOykqa
- 3mbfy/206kiyFNp71VR0mtBIAjHhGJ7CpmkKbD3yHeQ2T5TnRG35WNojNv05wdAMH6
- suKPxUR7mAIdMnBz6vjbxA0gdtnbyp6n/pYj/Hmk2q3Pv9nnatZHUFic22hy3mMv5m
- SY1B9QgfD15z9x6xVJ8FDR6vobokdV22DUoOXPpqNQjuu7fJreQSWnz4I2guaVbdQ4
- AnRXAKHASly1A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Gncxmo2+yc8U3YsF+BtM8nwHPB3Z0e0chsic55YTQYuG+EkSt+jvDM1csmXmDgily
+ bEO7EEH3unKRt4/NwEfi9Qx2pm6n0LDeh/JAIw01tjSvDEBtpyWJONmWR+UVbnz9pY
+ FQj5Fh9paSpbXvnYlq94+hw1hBKkTNuxfJ5vyT1qjII4bwL2AF0G1+x8x3iafuLUdU
+ APEOIu1rBR2n41KNI3tvYbXA9WVoorDSMvZbLWtKiNjsa5z3olYGhFGhMcyCuxW/gP
+ ELzf0U8kF3FRqH+Z1soGS/SJ+4KLikQfH7SGCIDQ9ibNMOrcYbe8ZrVmmKtRcmGeFf
+ PzH+QHA6tzMeg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=X+nKC6UR
-Subject: [Buildroot] [PATCH v6 19/26] package/python-aioredis: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Gncxmo2+
+Subject: [Buildroot] [PATCH v6 20/26] package/cppdb: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,96 +104,157 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/aio-libs-abandoned/aioredis-py/blob/19be499015a8cf32580e937cbfd711fd48489eca/README.md
+Analysis of https://sourceforge.net/projects/cppcms/files/cppdb:
+last release: Jun 2012
+last bug report: 2015
+last patch: 2022
+
+The package is broken with cmake 4 and no other package depends on it.
+
+There are no known autobuilder failures for this issue.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- Config.in.legacy                             |  8 ++++++++
- package/Config.in                            |  1 -
- package/python-aioredis/Config.in            |  8 --------
- package/python-aioredis/python-aioredis.hash |  5 -----
- package/python-aioredis/python-aioredis.mk   | 14 --------------
- 5 files changed, 8 insertions(+), 28 deletions(-)
- delete mode 100644 package/python-aioredis/Config.in
- delete mode 100644 package/python-aioredis/python-aioredis.hash
- delete mode 100644 package/python-aioredis/python-aioredis.mk
+ .checkpackageignore                           |  1 -
+ package/Config.in                             |  1 -
+ package/cppdb/0001-mysql-library-suffix.patch | 23 --------------
+ package/cppdb/Config.in                       | 20 ------------
+ package/cppdb/cppdb.hash                      |  6 ----
+ package/cppdb/cppdb.mk                        | 31 -------------------
+ 6 files changed, 82 deletions(-)
+ delete mode 100644 package/cppdb/0001-mysql-library-suffix.patch
+ delete mode 100644 package/cppdb/Config.in
+ delete mode 100644 package/cppdb/cppdb.hash
+ delete mode 100644 package/cppdb/cppdb.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d7e51690f4..7c499a943f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_PYTHON_AIOREDIS
-+	bool "python-aioredis has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_PYTHON_REDIS
-+	help
-+	  python-aioredis was abandoned upstream and replaced by
-+	  python-redis
-+
- config BR2_PACKAGE_LIBCUEFILE
- 	bool "libcuefile has been removed"
- 	select BR2_LEGACY
+diff --git a/.checkpackageignore b/.checkpackageignore
+index adb74a1327..c74c58a2d1 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -273,7 +273,6 @@ package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch lib_patch.Upstream
+ package/connman/S45connman lib_sysv.Variables
+ package/copas/0001-Do-not-load-coxpcall-for-LuaJIT.patch lib_patch.Upstream
+ package/coremark-pro/coremark-pro.sh.in Shellcheck
+-package/cppdb/0001-mysql-library-suffix.patch lib_patch.Upstream
+ package/cpulimit/0001-Fix-crash-and-compiler-warnings.patch lib_patch.Upstream
+ package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch lib_patch.Upstream
+ package/cpulimit/0003-Fix-an-infrequent-crash.patch lib_patch.Upstream
 diff --git a/package/Config.in b/package/Config.in
-index 539d9d0179..8b334d28ce 100644
+index 8b334d28ce..df0cded97d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -979,7 +979,6 @@ menu "External python modules"
- 	source "package/python-aiomonitor/Config.in"
- 	source "package/python-aiomqtt/Config.in"
- 	source "package/python-aioprocessing/Config.in"
--	source "package/python-aioredis/Config.in"
- 	source "package/python-aiorwlock/Config.in"
- 	source "package/python-aiosignal/Config.in"
- 	source "package/python-aiosqlite/Config.in"
-diff --git a/package/python-aioredis/Config.in b/package/python-aioredis/Config.in
+@@ -1648,7 +1648,6 @@ endmenu
+ 
+ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+-	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
+ 	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+diff --git a/package/cppdb/0001-mysql-library-suffix.patch b/package/cppdb/0001-mysql-library-suffix.patch
 deleted file mode 100644
-index 46ed2c7a46..0000000000
---- a/package/python-aioredis/Config.in
+index e65e3e26b6..0000000000
+--- a/package/cppdb/0001-mysql-library-suffix.patch
 +++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_PYTHON_AIOREDIS
--	bool "python-aioredis"
--	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
--	select BR2_PACKAGE_PYTHON_HIREDIS # runtime
+@@ -1,23 +0,0 @@
+-Add mysql/ to PATH_SUFFIXES for the library search for mysql.
+-
+-On common distros libmysqlclient* is installed and/or symlinked
+-into /usr/lib.
+-Since we install the libraries into /usr/lib/mysql alone cppdb
+-fails to properly link to it giving runtime errors.
+-
+-Status: https://sourceforge.net/p/cppcms/bugs/135/
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura cppdb-0.3.1.orig/CMakeLists.txt cppdb-0.3.1/CMakeLists.txt
+---- cppdb-0.3.1.orig/CMakeLists.txt	2014-10-17 11:05:57.875429748 -0300
+-+++ cppdb-0.3.1/CMakeLists.txt	2014-10-17 11:12:57.486775484 -0300
+-@@ -196,7 +196,7 @@
+- endif()
+- 
+- if(NOT DISABLE_MYSQL)
+--	find_library(MYSQL_LIB mysqlclient)
+-+	find_library(MYSQL_LIB mysqlclient PATH_SUFFIXES mysql)
+- 	find_path(MYSQL_PATH mysql.h PATH_SUFFIXES mysql)
+- 	if(MYSQL_LIB AND MYSQL_PATH)
+- 		include_directories(${MYSQL_PATH})
+diff --git a/package/cppdb/Config.in b/package/cppdb/Config.in
+deleted file mode 100644
+index 1394c1efd8..0000000000
+--- a/package/cppdb/Config.in
++++ /dev/null
+@@ -1,20 +0,0 @@
+-config BR2_PACKAGE_CPPDB
+-	bool "cppdb"
+-	# dlfcn.h
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# Can be built without them but it's useless
+-	depends on BR2_PACKAGE_MARIADB || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
 -	help
--	  Provides simple and clear interface to Redis based on asyncio.
+-	  CppDB is an SQL connectivity library that is designed to
+-	  provide platform and Database independent connectivity API
+-	  similarly to what JDBC, ODBC and other connectivity libraries
+-	  do.
 -
--	  https://github.com/aio-libs/aioredis
-diff --git a/package/python-aioredis/python-aioredis.hash b/package/python-aioredis/python-aioredis.hash
+-	  http://cppcms.com/sql/cppdb/
+-
+-comment "cppdb needs a toolchain w/ C++, threads, dynamic library"
+-	depends on BR2_PACKAGE_MARIADB || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
+diff --git a/package/cppdb/cppdb.hash b/package/cppdb/cppdb.hash
 deleted file mode 100644
-index 29e6361014..0000000000
---- a/package/python-aioredis/python-aioredis.hash
+index bca9f55959..0000000000
+--- a/package/cppdb/cppdb.hash
 +++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/aioredis/json
--md5  8f3547af83ef4b863b18c19f23166a9d  aioredis-2.0.1.tar.gz
--sha256  eaa51aaf993f2d71f54b70527c440437ba65340588afeb786cd87c55c89cd98e  aioredis-2.0.1.tar.gz
--# Locally computed sha256 checksums
--sha256  183b21f240e41af611c951d01d4f36793d470a82d5fd79efc21f25ae4cf68543  LICENSE
-diff --git a/package/python-aioredis/python-aioredis.mk b/package/python-aioredis/python-aioredis.mk
+@@ -1,6 +0,0 @@
+-# From http://sourceforge.net/projects/cppcms/files/cppdb/0.3.1/
+-md5  129f1d75f46114b79160b93807d5223f  cppdb-0.3.1.tar.bz2
+-sha1  c0410dcc482d71696ac9206044b3a3ac03d31f96  cppdb-0.3.1.tar.bz2
+-# locally computed
+-sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+-sha256  503ed52ef942d44bb26bd47dd5c6765927b198624e4f375e32cc660dfc2a0981  MIT.txt
+diff --git a/package/cppdb/cppdb.mk b/package/cppdb/cppdb.mk
 deleted file mode 100644
-index 798dbd0c3c..0000000000
---- a/package/python-aioredis/python-aioredis.mk
+index d2a901d28b..0000000000
+--- a/package/cppdb/cppdb.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,31 +0,0 @@
 -################################################################################
 -#
--# python-aioredis
+-# cppdb
 -#
 -################################################################################
 -
--PYTHON_AIOREDIS_VERSION = 2.0.1
--PYTHON_AIOREDIS_SOURCE = aioredis-$(PYTHON_AIOREDIS_VERSION).tar.gz
--PYTHON_AIOREDIS_SITE = https://files.pythonhosted.org/packages/2e/cf/9eb144a0b05809ffc5d29045c4b51039000ea275bc1268d0351c9e7dfc06
--PYTHON_AIOREDIS_SETUP_TYPE = setuptools
--PYTHON_AIOREDIS_LICENSE = MIT
--PYTHON_AIOREDIS_LICENSE_FILES = LICENSE
+-CPPDB_VERSION = 0.3.1
+-CPPDB_SOURCE = cppdb-$(CPPDB_VERSION).tar.bz2
+-CPPDB_SITE = http://downloads.sourceforge.net/project/cppcms/cppdb/$(CPPDB_VERSION)
+-CPPDB_INSTALL_STAGING = YES
+-CPPDB_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite)
+-CPPDB_LICENSE = BSL-1.0 or MIT
+-CPPDB_LICENSE_FILES = LICENSE_1_0.txt MIT.txt
 -
--$(eval $(python-package))
+-ifeq ($(BR2_PACKAGE_MARIADB),y)
+-CPPDB_DEPENDENCIES += mariadb
+-else
+-CPPDB_CONF_OPTS += -DDISABLE_MYSQL=ON
+-endif
+-
+-ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+-CPPDB_DEPENDENCIES += postgresql
+-else
+-CPPDB_CONF_OPTS += -DDISABLE_PQ=ON
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SQLITE),)
+-CPPDB_CONF_OPTS += -DDISABLE_SQLITE=ON
+-endif
+-
+-$(eval $(cmake-package))
 -- 
 2.47.3
 
