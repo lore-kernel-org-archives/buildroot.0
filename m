@@ -4,89 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82EC5E784BE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E89B3D3B7E5
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 502A240558;
-	Sun, 28 Dec 2025 22:27:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB8A3406EA;
+	Sun, 28 Dec 2025 22:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2g2YxONYqPDo; Sun, 28 Dec 2025 22:27:53 +0000 (UTC)
+ id QpUFDLbOsIbj; Sun, 28 Dec 2025 22:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 889A640365
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9304740558
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766960873;
-	bh=E/J8vZLSus38gF8phRoAuZTZU0kO1s6L7S7ia0Z96hQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qEUn62bA5hztK1KqigPL1ch7gifaDhNLfiRqY4z9gg0jUvqQegG4Na+Js2mBgEZpS
-	 jQFxfzXxNhvtOaw1RegWPHuvUhavWj7Wi4riTxw7GWuQnaRDqJN/+c/KeJulsqoHKx
-	 OsNbqMUdzWzOB/ZkO0Jz9z8U91XEpJ5Ro3YTRS4UcUrJFG7OuFBFUIWyUBG707pD/p
-	 Onym0HxcOvyCfX4i/WfIT8UGvK7kQ0C/Fbn/pvqGYhu0VjEZFXxIP/rYSE19VOKS0y
-	 K/nMYHxxSopFCec7P/DTopetm4qq2coCmvR+C+JCazUX/+0AsXjoN8XpbMl4I203H3
-	 3AX+OGU47CE4w==
+	s=default; t=1766961329;
+	bh=g/92nWhbhdVmkye1LF6mNnC98i3OEIfUqAf/lj3Y8Sk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=YjBuuIYsbzLyiWAhKYt6d24clkEj/f6SisSIWMAu4RukKWaRXa6xkJPlLDkdh8nE9
+	 aGT0FcsizIsOOXhEJjKrlVQTtRwyIIah3+aQGQ/1HrNkRRV1Xeyg2SmkS2ohLT3MH9
+	 OUJptIInTAfK1R6OU71muloqPPN8r/kWYGMlteCvIM22uCLs7dtxQ7rvKi/NWXzFUY
+	 C5agXR1NHVJUFzfRhS1AUVV4/HJpNM3StB4H6n0TFZT+ii0H42U55fTBjAcqApWWGw
+	 9SWeYu1pNN/tJRyFUe5PgAAUpKm1ao8R+TilD1v+eVhUsOYsvQaVc+3cry52qu6hRo
+	 uXwSvM2uLX1dw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 889A640365;
-	Sun, 28 Dec 2025 22:27:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 924D0B9
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:27:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9304740558;
+	Sun, 28 Dec 2025 22:35:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C912B9
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F67881399
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:27:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 725CA40558
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:35:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70ZiVcvskGQz for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 22:27:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g3NIy_ynkeF3 for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 22:35:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8CFE281396
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CFE281396
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8CFE281396
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:27:51 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id CBEFE4E41E2A
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:27:49 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 9222060725;
- Sun, 28 Dec 2025 22:27:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 58A1F119793AC; Sun, 28 Dec 2025 23:27:48 +0100 (CET)
-Date: Sun, 28 Dec 2025 23:27:47 +0100
-To: "Michael Nosthoff" <buildroot@heine.tech>
-Cc: "Michael Nosthoff via buildroot" <buildroot@buildroot.org>, "Asaf
- Kahlon" <asafka7@gmail.com>
-Message-ID: <20251228232747.6385eade@windsurf>
-In-Reply-To: <9a786142-8290-8202-436a-e0a634f8945f@heine.tech>
-References: <20251209201851.1023802-1-buildroot@heine.tech>
- <20251228145724.309c6fc3@windsurf>
- <9a786142-8290-8202-436a-e0a634f8945f@heine.tech>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1766960868; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=SP6NxsmlFj2740UeTM23JM5d8qvtjbisXVnVygFoBqs=;
- b=sfiQ9AxOoY62XJAF+zPjUwdUP37lOnWVOLTfn/y27mTLqne9IDcMXD9oc7t25km0sqmsrc
- +hm7e0OhylP5im6MYvlRzxPdHTHyg33srH/hoOVT3Pmnu6I9AGBIIoVI257HcwsAOssqns
- oPuI0avAeQXi37X+CvCeYKJQdg7wbPbwsO3oOomVJ0j7kWTbznrJi7gwiRsDm7oBJCM/ww
- nthQmgPySiULA859X/w+jOBnjGHJgYHlm3/sK0SezatbA3PuLFyR3q984rDqugBRu6IH8/
- FTcRr1T0PYJVVak7nPQW7T7I73c0T0QkrX2hOJs1i3jAp+qU/77qJqAsr6OIOA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=sfiQ9AxO
-Subject: Re: [Buildroot] [PATCH 1/4] package/collectd:  fix build with grpc
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB7AE4050F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB7AE4050F
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:35:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A0EC88125F; Sun, 28 Dec 2025 22:35:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 28 Dec 2025 23:31:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 577a2a32af0ef88321cf147b88cfecdbe17c9b4f
+X-Git-Newrev: ee656a4486cecc24dc424e4de62ca6c185432d0b
+X-Patchwork-Hint: ignore
+Message-Id: <20251228223525.A0EC88125F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: fix reinstallation with a
+ patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,33 +69,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ee656a4486cecc24dc424e4de62ca6c185432d0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 28 Dec 2025 15:34:29 +0100
-"Michael Nosthoff" <buildroot@heine.tech> wrote:
+In commit 67e84345c156170fa01103289f1d255a74ad830d ("package/vim: fix
+reinstallation"), we fixed the reinstallation of vim for the target
+package by removing symlinks before calling "make installlinks".
 
-> the "breakage" is introduced in the series which this commit is part
-> of when bumping grpc & abseil. So maybe the title could have been
-> better. I just oriented on the title of the previous commit which
-> bumped collectd to C++14 and is also named so in the collectd repo.
+However, this didn't fix the same problem for the host-vim package.
 
-So you mean that in the current master there is no breakage, and it's
-only the fact that your series is bumping abseil and grpc that some
-breakage will be introduced, and that you therefore fix before the
-version bumps?
+So instead, this commit adds a patch, accepted upstream, that uses "ln
+-sf" instead of "ln -s" to create the symlinks, allowing them to be
+overwriten on reinstallation.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes:
+
+ln: failed to create symbolic link 'view': File exists
+
+on reinstallation of host-vim.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...0001-src-Makefile-create-links-with-ln-sf.patch | 78 ++++++++++++++++++++++
+ package/vim/vim.mk                                 |  1 -
+ 2 files changed, 78 insertions(+), 1 deletion(-)
+
+diff --git a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
+new file mode 100644
+index 0000000000..54d423aacf
+--- /dev/null
++++ b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
+@@ -0,0 +1,78 @@
++From 5686ef63f81fcac2ca6ec6e7160829b295ad4e79 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 28 Dec 2025 15:01:38 +0100
++Subject: [PATCH] src/Makefile: create links with ln -sf
++
++Running "make installlinks" twice towards the same destination
++directory will fail, as symlink will already exist. This is not really
++expected as "make install" is normally expected to work again and
++again towards the same destination directory.
++
++Fix this by using ln -sf.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/vim/vim/commit/6df5360691266b5eca49380e94f3e21fa48e5e0b
++---
++ src/Makefile | 24 ++++++++++++------------
++ 1 file changed, 12 insertions(+), 12 deletions(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index 6fb1eb95e..39f798260 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -2746,40 +2746,40 @@ installvimdiff: $(DEST_BIN)/$(VIMDIFFTARGET)
++ installgvimdiff: $(DEST_BIN)/$(GVIMDIFFTARGET)
++ 
++ $(DEST_BIN)/$(EXTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EXTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EXTARGET)
++ 
++ $(DEST_BIN)/$(VIEWTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIEWTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIEWTARGET)
++ 
++ $(DEST_BIN)/$(GVIMTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMTARGET)
++ 
++ $(DEST_BIN)/$(GVIEWTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIEWTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIEWTARGET)
++ 
++ $(DEST_BIN)/$(RVIMTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIMTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIMTARGET)
++ 
++ $(DEST_BIN)/$(RVIEWTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIEWTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIEWTARGET)
++ 
++ $(DEST_BIN)/$(RGVIMTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIMTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIMTARGET)
++ 
++ $(DEST_BIN)/$(RGVIEWTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIEWTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIEWTARGET)
++ 
++ $(DEST_BIN)/$(VIMDIFFTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIMDIFFTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIMDIFFTARGET)
++ 
++ $(DEST_BIN)/$(GVIMDIFFTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMDIFFTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMDIFFTARGET)
++ 
++ $(DEST_BIN)/$(EVIMTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIMTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIMTARGET)
++ 
++ $(DEST_BIN)/$(EVIEWTARGET): $(DEST_BIN)
++-	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIEWTARGET)
+++	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIEWTARGET)
++ 
++ # Create links for the manual pages with various names to vim.	This is only
++ # done when the links (or manpages with the same name) don't exist yet.
++-- 
++2.52.0
++
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 1e7e1d6a55..fa7d47d67d 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -55,7 +55,6 @@ VIM_INSTALL_TARGETS += installrtbase installmacros
+ endif
+ 
+ define VIM_INSTALL_TARGET_CMDS
+-	$(RM) -f $(TARGET_DIR)/usr/bin/{ex,view,rvim,rview,vimdiff}
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
+ 		$(VIM_INSTALL_TARGETS)
+ 	$(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
