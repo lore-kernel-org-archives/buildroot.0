@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3EF9E784BE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAA1AE784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AC4D80F2F;
-	Sun, 28 Dec 2025 22:46:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FBD9404BE;
+	Sun, 28 Dec 2025 22:51:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oNParfEODr3X; Sun, 28 Dec 2025 22:46:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hI_B7S3IxUf2; Sun, 28 Dec 2025 22:51:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EECB80D30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9903404C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766962017;
-	bh=KVGD9XOgSKPLw2GmnQf2+EBosZ8cy08yc1R1+oMy5gk=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ftPPsnWf4trmlOoGh94PvbU88+eIENuUbSQFMrcrKL6kuNgWstzVhFk4sT9y0OknJ
-	 mDAGQ6KKlZohl7fk5MCIAZjfTIDYxFBYtontf631GDH8bqElWAGRyY8lj5jxKCCzcz
-	 RnB+siOvkixQUdsZWtT6eozZxGQIgMe5rp+lOMwRNkovDdG20TUhfuAPEauB9eZuW9
-	 YCSZkRgM55FcFLUgcP7XSERGrzBouvj5P8pkGjdttauR2rL9+42eXrXoNT2e3sqU8Y
-	 COZMi0MMwLNuWMRa55QydLdDFjP/Dm+ujBj2fThvUNRYzWktiK73Oel8y2lJmaMD7H
-	 psEVf3zg0+NOA==
+	s=default; t=1766962293;
+	bh=fZAT9lCxlocJlXOCgkRZEZwecObHZkuor5N+FH6Uh8s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=TEOOD6KwXVIUmNUoW2+PQdzl0RWN8OygvSTYB6EnB0FWMMlMbX9ILmxjfxg2zbCNu
+	 1I+TmzbSqwxVvAJmT1gh4dRsz1AZG5JGlp2kam3F+eHx5rPvKzbcYUqOMrHQ/jswDw
+	 VIgFe8O8xN/GVem4uh/Dwo34Ol3cllh3zjPmEncYLvOSQzjjS29iNgKi1w268gdye/
+	 ou7leXDlCglcFCfHYcP4gfGHibBb5n+aQcrU5AdjVbPABXW7aGX3grcDmXnU5bPAmF
+	 WeXcTTndkbjsYElw6Ru8Y1aM+LfQVk85VqpiJTaYmJ0LQKSaSeph972yY9Q9qSYdBI
+	 sOGijgHie+6hA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EECB80D30;
-	Sun, 28 Dec 2025 22:46:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71E6CB9
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:46:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9903404C6;
+	Sun, 28 Dec 2025 22:51:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22897D8
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 579A060A5C
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:46:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09423404BA
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WfkeK8BrBgZu for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 22:46:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 21042608FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21042608FA
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 21042608FA
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:46:53 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 2561813F86A;
- Sun, 28 Dec 2025 23:46:51 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 28 Dec 2025 23:46:51 +0100
-MIME-Version: 1.0
-Date: Sun, 28 Dec 2025 23:46:51 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251228210649.3057011-1-thomas.petazzoni@bootlin.com>
-References: <20251228210649.3057011-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <52a2d1c9306c1ac37a81bc525da245d8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1766962012;
- bh=zYMrlVoGN0s+6C8GJ8aaWZEnzqUsc8+0dNH5Ta7AH5g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nb7BVy+SCFA+pZBpRGZ4TQeAPKnpGraGWMuF/tdwLDA2jHe9VHia2bT0PvqGRGC6A
- w3qD9TjdJciGPVscNTeiFFabAOsA3Ng51i+YTzXON3IjiGVktFepXHFDPHHrOyHgjS
- LZ9SmusZU6vpFjTNiO1ws+gFByhT591G16U1NUtjTRDhi+jw67GfYb7RyzQ+qpmPAf
- VQKFcas2D4pb3puvVXWhX3YhA1EK300vuPoUG4w0XkFyiWCueCVSBDlkGpFL9nDRK1
- onFHjfB9UmK8hysp5nBTm7A4PwCwqtCT9gKjQw12cl5yBfELkV5fRXQRwHwCDCWpke
- H3A4c8U2cXWhQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=nb7BVy+S
-Subject: Re: [Buildroot] [PATCH] package/soapy-sdr: add patch to fix CMake
- >= 4 compatibility
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FnXacDHD2FB6 for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 22:51:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 279F740496
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 279F740496
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:51:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 15E8787A09; Sun, 28 Dec 2025 22:51:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 28 Dec 2025 23:48:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 34a1a42ab1ee218a1e99b21217d5f680d07f78b1
+X-Git-Newrev: 4d5e0ccd8fe141c9cbda7137f84c93a834496e0b
+X-Patchwork-Hint: ignore
+Message-Id: <20251228225131.15E8787A09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/odhcp6c: bump version to git
+ f19dd37fb4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,33 +71,92 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/12/2025 22:06, Thomas Petazzoni via buildroot wrote:
-> Fixes:
-> 
-> CMake Error at CMakeLists.txt:4 (cmake_minimum_required):
->   Compatibility with CMake < 3.5 has been removed from CMake.
-> 
->   Update the VERSION argument <min> value.  Or, use the <min>...<max> 
-> syntax
->   to tell CMake that the project requires at least <min> but has been 
-> updated
->   to work with policies introduced by <max> or earlier.
-> 
->   Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.net/results/074098fef4f8a5e89a4f04efbdd1f545f4616772/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=4d5e0ccd8fe141c9cbda7137f84c93a834496e0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Due to upstream commit
+https://git.openwrt.org/?p=project/odhcp6c.git;a=commitdiff;h=adc651ffed55d4b538317e50da1a7ec143dbfd1d
+libubox is a mandatory dependency.
+
+Fixes:
+https://autobuild.buildroot.net/results/22d/22da3760982b80d5ccba1bef1ca9c90e9b2292d8/
+(cmake 4 build error which does not exist in a maintained stable branch)
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add git commit id in commit title]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/odhcp6c/Config.in    |  8 ++++++++
+ package/odhcp6c/odhcp6c.hash |  2 +-
+ package/odhcp6c/odhcp6c.mk   | 10 ++--------
+ 3 files changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/package/odhcp6c/Config.in b/package/odhcp6c/Config.in
+index ca3a2f6424..83b38755c3 100644
+--- a/package/odhcp6c/Config.in
++++ b/package/odhcp6c/Config.in
+@@ -1,8 +1,16 @@
+ config BR2_PACKAGE_ODHCP6C
+ 	bool "odhcp6c"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # libubox
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
++	select BR2_PACKAGE_LIBUBOX
+ 	help
+ 	  odhcp6c is a minimal DHCPv6 and RA-client for use in
+ 	  embedded Linux systems, especially routers.
+ 
+ 	  https://git.openwrt.org/project/odhcp6c.git
++
++comment "odhcp6c needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
+index f1641d7101..86c9c659c4 100644
+--- a/package/odhcp6c/odhcp6c.hash
++++ b/package/odhcp6c/odhcp6c.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c5cadd71a72e94df6b664d3e9f0b1eeffa779ba9624ab35b6a93c7172fe378a0  odhcp6c-53f07e90b7f1da6977143a488dd5cb73a33b233b-git4.tar.gz
++sha256  e9cfddfcc12c4ca0bf8d8211bb72c7018c0e0f8da6903d680da122b4ce551c56  odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd-git4.tar.gz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
+index dd3a9d3e28..92688b7237 100644
+--- a/package/odhcp6c/odhcp6c.mk
++++ b/package/odhcp6c/odhcp6c.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-ODHCP6C_VERSION = 53f07e90b7f1da6977143a488dd5cb73a33b233b
++ODHCP6C_VERSION = f19dd37fb467c9cf10cad57aefa0d048312d7dfd
+ ODHCP6C_SITE = https://git.openwrt.org/project/odhcp6c.git
+ ODHCP6C_SITE_METHOD = git
+ ODHCP6C_LICENSE = GPL-2.0
+ ODHCP6C_LICENSE_FILES = COPYING
++ODHCP6C_DEPENDENCIES = libubox
+ 
+ define ODHCP6C_INSTALL_SCRIPT
+ 	$(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
+@@ -17,11 +18,4 @@ endef
+ 
+ ODHCP6C_POST_INSTALL_TARGET_HOOKS += ODHCP6C_INSTALL_SCRIPT
+ 
+-ifeq ($(BR2_PACKAGE_LIBUBOX),y)
+-ODHCP6C_CONF_OPTS += -DUSE_LIBUBOX=1
+-ODHCP6C_DEPENDENCIES += libubox
+-else
+-ODHCP6C_CONF_OPTS += -DUSE_LIBUBOX=0
+-endif
+-
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
