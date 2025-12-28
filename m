@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA4B0D3B7E5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE461E784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DFB54074C;
-	Sun, 28 Dec 2025 22:07:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8C6540760;
+	Sun, 28 Dec 2025 22:07:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ko1r29xPyIh; Sun, 28 Dec 2025 22:07:05 +0000 (UTC)
+ id rkYkYGX1L5S3; Sun, 28 Dec 2025 22:07:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A84E140760
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B87EE404D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766959625;
-	bh=GQ522NzOiHWIG7f11HQ7U8b+xKw/bxty15PvlS+qnkk=;
+	s=default; t=1766959626;
+	bh=/S1gIgRTdPNrwRfqqAPyllOAjJBuW9xDXFCjvHjwJk4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pfF6GeFaN5YmYIYfxuqKHEFeGmwBKgueMYChBmMMaFX+5A39FUlrus9oEbr1LJrrM
-	 lf+fl8c9wD9o/FxPOngcXOeCa/BwrgVzs3XeobHRg0LY3b4RPrGhMnU+FpW/Hli/d5
-	 T/LIbg1xJOY8YCDA4Q74r1tZL+jAzn8k2E6UVA5YLNFiOCVnJr7yG4S4mRvnnZ6T4a
-	 c/e9nXFxb0faNWlNvDcrGPPnTSMNpf632ZrYvEvwgI0FJ7YjfSdgvlmyfp75l6kK9E
-	 ZAwy/TJuCDkCuBWIHGGQlO9oVxlUZ+XdmwY3MCjWB34bv+W7HmD/MkkIbqhib4l4lg
-	 qN4O7mjTRusxA==
+	b=jvltAg/9MkWxp2mDkTt6kHBPFKsEOi0cb2AtEiZvsxCMdIXy1v9FloU1NTDAAPzA2
+	 buAtBUH1relfIXkT/aHjU+KcuuuAKSgWa+sYB5/TKB+mq/NU9JcQCkNJdHLrkicNbB
+	 Jacy6fx0Py1h/Q+8L5XPEwsCupsmhDVO30DvScEUzDFRcjsb4m7CtH5rsbLIs1+N7F
+	 Djw+DIYiA4Rj7+Ljvug8Y/O5O4FEiv72rY6+v7wEkvvWBbhTeTYqT4lcVs7IvMHggA
+	 W/VVqBGod4A6frCQmZ1qza2wpCV8RlMBYHRWzu5cuoarDTYrdVHpjWTYGIE9fukswR
+	 5ogJ1aV0cge8Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A84E140760;
-	Sun, 28 Dec 2025 22:07:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0FA3D8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B87EE404D7;
+	Sun, 28 Dec 2025 22:07:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 171FDD8
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACF3840215
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3DCC80DE6
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q3LbG1p0Lnho for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l9w29i4S6e5u for <buildroot@buildroot.org>;
  Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3B2C402F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 046F380DF7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3B2C402F0
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 046F380DF7
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1B4E8781C; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
+ id 0280A85F80; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 23:02:29 +0100
+Date: Sun, 28 Dec 2025 23:02:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 56be4052484dfb6e053b5ed79c807fedbbf26806
-X-Git-Newrev: 92f633b6a76c456e3270054024e328c2c4f4df34
+X-Git-Oldrev: 50922517f7c3f8c35f1683aab10c33e95f79fe29
+X-Git-Newrev: 46f8497e1c92c29a2f1d9889b897d948b496ef92
 X-Patchwork-Hint: ignore
-Message-Id: <20251228220645.D1B4E8781C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyfatfs: add md5 hash
+Message-Id: <20251228220646.0280A85F80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyqrcode: update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,7 +76,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92f633b6a76c456e3270054024e328c2c4f4df34
+commit: https://git.buildroot.net/buildroot/commit/?id=46f8497e1c92c29a2f1d9889b897d948b496ef92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Updated package as computed by scanpypi.
@@ -84,21 +84,35 @@ Updated package as computed by scanpypi.
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyfatfs/python-pyfatfs.hash | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/python-pyqrcode/python-pyqrcode.hash | 4 ++--
+ package/python-pyqrcode/python-pyqrcode.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyfatfs/python-pyfatfs.hash b/package/python-pyfatfs/python-pyfatfs.hash
-index 05e940779e..58f02ed7a0 100644
---- a/package/python-pyfatfs/python-pyfatfs.hash
-+++ b/package/python-pyfatfs/python-pyfatfs.hash
-@@ -1,4 +1,5 @@
--# From https://pypi.org/project/pyfatfs/#pyfatfs-1.1.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyfatfs/json
-+md5  df7f61cdec5567ec16956cbae14514e0  pyfatfs-1.1.0.tar.gz
- sha256  9725ccd0a4da1c09c27358abbf10f08c043ac84210af576803e087f51a2b30e0  pyfatfs-1.1.0.tar.gz
--# Locally calculated
-+# Locally computed sha256 checksums
- sha256  df8f053d3cbf23fe7002e6a34b06580653a74d40dc2e54f3b717a963ea9b70cb  LICENSE
+diff --git a/package/python-pyqrcode/python-pyqrcode.hash b/package/python-pyqrcode/python-pyqrcode.hash
+index c946ba9d9b..9c1dfce294 100644
+--- a/package/python-pyqrcode/python-pyqrcode.hash
++++ b/package/python-pyqrcode/python-pyqrcode.hash
+@@ -1,5 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pyqrcode/json
++# md5, sha256 from https://pypi.org/pypi/pyqrcode/json
+ md5  371f29f4b03bd2830c6e0319258b1259  PyQRCode-1.2.1.tar.gz
+-# Locally computed
+ sha256  fdbf7634733e56b72e27f9bce46e4550b75a3a2c420414035cae9d9d26b234d5  PyQRCode-1.2.1.tar.gz
++# Locally computed
+ sha256  bef0c3595451da5132dea99e288fb5dafcbc469e0643f993a4ba0a69980f5ec9  setup.py
+diff --git a/package/python-pyqrcode/python-pyqrcode.mk b/package/python-pyqrcode/python-pyqrcode.mk
+index f3eac5a3c0..6dfe1afa6d 100644
+--- a/package/python-pyqrcode/python-pyqrcode.mk
++++ b/package/python-pyqrcode/python-pyqrcode.mk
+@@ -6,7 +6,7 @@
+ 
+ PYTHON_PYQRCODE_VERSION = 1.2.1
+ PYTHON_PYQRCODE_SOURCE = PyQRCode-$(PYTHON_PYQRCODE_VERSION).tar.gz
+-PYTHON_PYQRCODE_SITE = https://pypi.python.org/packages/37/61/f07226075c347897937d4086ef8e55f0a62ae535e28069884ac68d979316
++PYTHON_PYQRCODE_SITE = https://files.pythonhosted.org/packages/37/61/f07226075c347897937d4086ef8e55f0a62ae535e28069884ac68d979316
+ PYTHON_PYQRCODE_SETUP_TYPE = setuptools
+ PYTHON_PYQRCODE_LICENSE = BSD-3-Clause
+ PYTHON_PYQRCODE_LICENSE_FILES = setup.py
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
