@@ -1,67 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26D1BD3B7E5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13FA1E784BE
 	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 21:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9542140342;
-	Sun, 28 Dec 2025 21:11:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D18B880C00;
+	Sun, 28 Dec 2025 21:11:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q7yY34o6LBP2; Sun, 28 Dec 2025 21:11:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o3t88WgocCmj; Sun, 28 Dec 2025 21:11:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94F6140465
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 046DD80C40
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766956266;
-	bh=c8Zs0Kn5VoDcKTuNMgTU9a3QlP2f3QMaamNQL4gQxds=;
+	s=default; t=1766956269;
+	bh=W5gNZPZBFfctMSrvSfFvbeukDhGsYPiREX7X24T2cwY=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=c37DqZhtrkyWqitw72Pv/7XAl44DkQ8H+dyeb6B0sHIhBU6rlhvWyeVbw0zU+N9uh
-	 5ar136GHz0Sx2juZJD79ImU7vOyISakadyMo0VG0siSlKuOh8cAk475guPDKHLvfn3
-	 V5qhrCEKZHgGt0Q+XpN00jMg8AmWhh68+Zt15gXFQ/GpzrNtDxJlJiQI+ABNIKY2mR
-	 Y6pZk2+Fx/HviB2ubzEJOlricmrW/GL7rOWkvZ0tMtKrTNO9TupeOBedjw278upy7d
-	 l9jndp22LDgC8KtwHoywvDQSVqHJjJEXJ3JTnD8LjPhV0zSoRZAXax2Y8x/o3UBsiC
-	 gPVPrg9wz1Zgg==
+	b=Un0NBP9Rr6azYblxmrvitBh1mIo3o1bnl+xiwW2y8KjYQXwaN4sA1oxroBDe5NsGx
+	 62BIyaWsVHJOdYq2HxyJSmk8AlTJcY+lfkzyxwNpvTYIDZduG8QCe4AKQEewjz6o5t
+	 eW4mMIcQuesfK7hM8N3IRCPr25G7ue7cgexgIu313l/tPYXI+uCjRGzI5thQ0CYNjY
+	 46RN3RNhrJwTeEl4f0CB3a7eQLAzt6zt5MPuIzpyAvVC3uukqsSZmzaLUQrKYMH1bj
+	 vTUG+Sh3Tt2UguIcZ0JINeCvscTlGJLSyfzRBsP7dEsfMRlpMttgSmSOaCrsZZcYmL
+	 EmsmK7JMZcLPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94F6140465;
-	Sun, 28 Dec 2025 21:11:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F7D9B9
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 046DD80C40;
+	Sun, 28 Dec 2025 21:11:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1680D8
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4263F401D7
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C32CF80B37
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3XRSOGi-j3FG for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 21:11:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bluaQzFrdz2z for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 21:11:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3221E4007C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3221E4007C
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3221E4007C
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B209580B54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B209580B54
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B209580B54
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:03 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 7AA921A24C3
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:00 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 7A3374E41E0D
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:01 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 4B67360725;
- Sun, 28 Dec 2025 21:11:00 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 4F4D060725;
+ Sun, 28 Dec 2025 21:11:01 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 539BC119792C9; Sun, 28 Dec 2025 22:10:59 +0100 (CET)
+ with ESMTPSA id A1949119792CA; Sun, 28 Dec 2025 22:11:00 +0100 (CET)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 28 Dec 2025 22:10:41 +0100
-Message-ID: <20251228211045.3059593-3-thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Dec 2025 22:10:42 +0100
+Message-ID: <20251228211045.3059593-4-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251228211045.3059593-1-thomas.petazzoni@bootlin.com>
 References: <20251228211045.3059593-1-thomas.petazzoni@bootlin.com>
@@ -69,22 +69,22 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766956259; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1766956260; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=BUzsqpFQOBqX33PmD/YRf7XQdfC0yjSDxrJQ50CyxY4=;
- b=abH0IidZHplDHDFZdJE+fU0J3aYG3JrrYszAU1hbCTY+ts9ahEiS5Bo2/ll0RTLlSnKHyR
- Y2zZ45N9Pvi7grbXf32eu3DsgMJduVsx1Z1yX18O71FZNM3Fqm8K3i+NreS95Anz41Mwds
- vHRXFcwC7CqvU11BKVLfHp4aA1k6sqPO4gTp89GLdid98xSyu54BRV+Lf0wBS602RUQwfG
- DTN2Aqp+7DrcdJu7nIGrO1kSMrveyO2RNIXl4IfqLUpTw8TWXzxkQ8rQy26VFKJen/ddD2
- PAQdkhySX2RyCdQjSls9qqtHn8FxoS3SgW2Zuh/ORiLsAJP2BAMTkeMI0HNn3g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=5k+de1YvwD012mk7iKUX6vs04ozxeThuaaA48Jk8OoQ=;
+ b=LLkzNGbjbYZ3Gvj1dg43kOTP/R4XgDxJ3ln27hGD7J/8BYGnE0Eq14mM4GxvAM0V//zvKz
+ YEEW2QB57tZyiDiAazU+V62FW3wH8PM1Bn1fczo8QtpJ67YZr5I2zknf/M46mAXcge9FR9
+ nkpezPMTsrEgd7X2clch6cXp0mtNma1ChuZ9rOiOhX8gblTw8HiwC44FA7s+vz6GENeWKx
+ xz5DIBoRa1m6o7F7BSeT41e3XgcHByb7S3sYHSiSBS7l0EFbcKJVyM7shsqDQhTSEFG9he
+ 8WV3PMtn0kL1SOZ3GCUnpsXRMsGYGHRJ6TlRz3ZHwU6OPxYocVLri8cyEZ3ZRQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=abH0IidZ
-Subject: [Buildroot] [PATCH 3/5] package/qt5/qt5webkit: add patch to fix
- missing <cstdint> include
+ header.a=rsa-sha256 header.s=dkim header.b=LLkzNGbj
+Subject: [Buildroot] [PATCH 4/5] package/qt5/qt5webkit: fix gcc >= 14.x
+ build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,65 +98,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SXQgaXMgbm90IGNsZWFyIHdoaWNoIGNoYW5nZSBpbnRyb2R1Y2UgdGhpcyBicmVha2FnZSwgYnV0
-IHdlIHN1c3BlY3QKaXQgaXMgcmVsYXRlZCB0byBHQ0MgMTQueC4gSW4gYW55IGNhc2UsIHRoZSBm
-aXggZG9lcyBubyBoYXJtIGFuZCBpcwpnb29kIHRvIGJhY2twb3J0IHRvIDIwMjUuMDIueC4KCkZp
-eGVzOgoKL2hvbWUvdGhvbWFzL2J1aWxkcm9vdC9ici9vdXRwdXQtYWxsL2J1aWxkL3F0NXdlYmtp
-dC01LjIxMi4wLWFscGhhNC9Tb3VyY2UvVGhpcmRQYXJ0eS9BTkdMRS9zcmMvY29tbW9uL21hdGh1
-dGlsLmg6NTc1Ojg6IGVycm9yOiDigJh1aW50MzJfdOKAmSBkb2VzIG5vdCBuYW1lIGEgdHlwZQog
-IDU3NSB8IGlubGluZSB1aW50MzJfdCBSb3RMKHVpbnQzMl90IHgsIGludDhfdCByKQogICAgICB8
-ICAgICAgICBefn5+fn5+fgovaG9tZS90aG9tYXMvYnVpbGRyb290L2JyL291dHB1dC1hbGwvYnVp
-bGQvcXQ1d2Via2l0LTUuMjEyLjAtYWxwaGE0L1NvdXJjZS9UaGlyZFBhcnR5L0FOR0xFL3NyYy9j
-b21tb24vbWF0aHV0aWwuaDoxOToxOiBub3RlOiDigJh1aW50MzJfdOKAmSBpcyBkZWZpbmVkIGlu
-IGhlYWRlciDigJg8Y3N0ZGludD7igJk7IHRoaXMgaXMgcHJvYmFibHkgZml4YWJsZSBieSBhZGRp
-bmcg4oCYI2luY2x1ZGUgPGNzdGRpbnQ+4oCZCiAgIDE4IHwgI2luY2x1ZGUgPHN0ZGxpYi5oPgog
-ICsrKyB8KyNpbmNsdWRlIDxjc3RkaW50PgogICAxOSB8CgpTaWduZWQtb2ZmLWJ5OiBUaG9tYXMg
-UGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgotLS0KIC4uLnktQU5HTEUt
-c3JjLWNvbW1vbi1tYXRodXRpbC5oLWluY2x1ZC5wYXRjaCB8IDQ1ICsrKysrKysrKysrKysrKysr
-KysKIDEgZmlsZSBjaGFuZ2VkLCA0NSBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9xdDUvcXQ1d2Via2l0LzAwMTItU291cmNlLVRoaXJkUGFydHktQU5HTEUtc3JjLWNv
-bW1vbi1tYXRodXRpbC5oLWluY2x1ZC5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0
-NXdlYmtpdC8wMDEyLVNvdXJjZS1UaGlyZFBhcnR5LUFOR0xFLXNyYy1jb21tb24tbWF0aHV0aWwu
-aC1pbmNsdWQucGF0Y2ggYi9wYWNrYWdlL3F0NS9xdDV3ZWJraXQvMDAxMi1Tb3VyY2UtVGhpcmRQ
-YXJ0eS1BTkdMRS1zcmMtY29tbW9uLW1hdGh1dGlsLmgtaW5jbHVkLnBhdGNoCm5ldyBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmU1MzAyNGE0YmQKLS0tIC9kZXYvbnVsbAorKysg
-Yi9wYWNrYWdlL3F0NS9xdDV3ZWJraXQvMDAxMi1Tb3VyY2UtVGhpcmRQYXJ0eS1BTkdMRS1zcmMt
-Y29tbW9uLW1hdGh1dGlsLmgtaW5jbHVkLnBhdGNoCkBAIC0wLDAgKzEsNDUgQEAKK0Zyb20gMDVj
-NWFlYzcyMmViZDc1MGVjMzQwNDQ0NGY5NDUxNTRjMjY2YjYyZCBNb24gU2VwIDE3IDAwOjAwOjAw
-IDIwMDEKK0Zyb206IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5j
-b20+CitEYXRlOiBTdW4sIDI4IERlYyAyMDI1IDE1OjUxOjI2ICswMTAwCitTdWJqZWN0OiBbUEFU
-Q0hdIFNvdXJjZS9UaGlyZFBhcnR5L0FOR0xFL3NyYy9jb21tb24vbWF0aHV0aWwuaDogaW5jbHVk
-ZQorIG1pc3NpbmcgaGVhZGVyCitNSU1FLVZlcnNpb246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0
-L3BsYWluOyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisK
-K0ZpeGVzOgorCisvaG9tZS90aG9tYXMvYnVpbGRyb290L2JyL291dHB1dC1hbGwvYnVpbGQvcXQ1
-d2Via2l0LTUuMjEyLjAtYWxwaGE0L1NvdXJjZS9UaGlyZFBhcnR5L0FOR0xFL3NyYy9jb21tb24v
-bWF0aHV0aWwuaDo1NzU6ODogZXJyb3I6IOKAmHVpbnQzMl904oCZIGRvZXMgbm90IG5hbWUgYSB0
-eXBlCisgIDU3NSB8IGlubGluZSB1aW50MzJfdCBSb3RMKHVpbnQzMl90IHgsIGludDhfdCByKQor
-ICAgICAgfCAgICAgICAgXn5+fn5+fn4KKy9ob21lL3Rob21hcy9idWlsZHJvb3QvYnIvb3V0cHV0
-LWFsbC9idWlsZC9xdDV3ZWJraXQtNS4yMTIuMC1hbHBoYTQvU291cmNlL1RoaXJkUGFydHkvQU5H
-TEUvc3JjL2NvbW1vbi9tYXRodXRpbC5oOjE5OjE6IG5vdGU6IOKAmHVpbnQzMl904oCZIGlzIGRl
-ZmluZWQgaW4gaGVhZGVyIOKAmDxjc3RkaW50PuKAmTsgdGhpcyBpcyBwcm9iYWJseSBmaXhhYmxl
-IGJ5IGFkZGluZyDigJgjaW5jbHVkZSA8Y3N0ZGludD7igJkKKyAgIDE4IHwgI2luY2x1ZGUgPHN0
-ZGxpYi5oPgorICArKysgfCsjaW5jbHVkZSA8Y3N0ZGludD4KKyAgIDE5IHwKKworVGFrZW4gZnJv
-bSBGZWRvcmEsIGFsc28gdXNlZCBvbiBBcmNoIExpbnV4OgorCisgIGh0dHBzOi8vc3JjLmZlZG9y
-YXByb2plY3Qub3JnL3JwbXMvcXQ1LXF0d2Via2l0L3Jhdy9yYXdoaWRlL2YvcXR3ZWJraXQtY3N0
-ZGludC5wYXRjaAorICBodHRwczovL2F1ci5hcmNobGludXgub3JnL3BhY2thZ2VzL3F0NS13ZWJr
-aXQKKworVXBzdHJlYW06IGRlYWQsIE4vQQorU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9u
-aSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KKy0tLQorIFNvdXJjZS9UaGlyZFBhcnR5
-L0FOR0xFL3NyYy9jb21tb24vbWF0aHV0aWwuaCB8IDEgKworIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
-c2VydGlvbigrKQorCitkaWZmIC0tZ2l0IGEvU291cmNlL1RoaXJkUGFydHkvQU5HTEUvc3JjL2Nv
-bW1vbi9tYXRodXRpbC5oIGIvU291cmNlL1RoaXJkUGFydHkvQU5HTEUvc3JjL2NvbW1vbi9tYXRo
-dXRpbC5oCitpbmRleCA3OTU5ZGE4YmRjYmMuLmM4NmFmZDYxZTEwMyAxMDA2NDQKKy0tLSBhL1Nv
-dXJjZS9UaGlyZFBhcnR5L0FOR0xFL3NyYy9jb21tb24vbWF0aHV0aWwuaAorKysrIGIvU291cmNl
-L1RoaXJkUGFydHkvQU5HTEUvc3JjL2NvbW1vbi9tYXRodXRpbC5oCitAQCAtMTYsNiArMTYsNyBA
-QAorICNpbmNsdWRlIDxhbGdvcml0aG0+CisgI2luY2x1ZGUgPHN0cmluZy5oPgorICNpbmNsdWRl
-IDxzdGRsaWIuaD4KKysjaW5jbHVkZSA8Y3N0ZGludD4KKyAKKyBuYW1lc3BhY2UgZ2wKKyB7Cist
-LSAKKzIuNTIuMAorCi0tIAoyLjUyLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+Add another patch from Fedora, also used in Arch Linux to fix a gcc >=
+14.x build issue:
+
+build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
+  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
+      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
+condition for static assertion
+ 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...age-csp-ContentSecurityPolicy.cpp-fi.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
+
+diff --git a/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
+new file mode 100644
+index 0000000000..ab6137dd28
+--- /dev/null
++++ b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
+@@ -0,0 +1,45 @@
++From 286e0280a55949d62b2163d68c827539c141d487 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 28 Dec 2025 18:35:45 +0100
++Subject: [PATCH] Source/WebCore/page/csp/ContentSecurityPolicy.cpp: fix build
++ with gcc >= 14.x
++
++Fixes:
++
++/home/thomas/buildroot/br/output-all/build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
++  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
++      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
++/home/thomas/buildroot/br/output-all/host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
++condition for static assertion
++ 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
++      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
++
++Patch used in Fedora and Arch Linux:
++
++  https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/rawhide/f/qtwebkit-fix-build-gcc14.patch
++  https://aur.archlinux.org/packages/qt5-webkit
++
++Upstream: dead
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ Source/WebCore/page/csp/ContentSecurityPolicy.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
++index 9e726d5fe10c..989a59a6122f 100644
++--- a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
+++++ b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
++@@ -231,8 +231,9 @@ bool isAllowedByAllWithHashFromContent(const CSPDirectiveListVector& policies, c
++         auto cryptoDigest = CryptoDigest::create(toCryptoDigestAlgorithm(algorithm));
++         cryptoDigest->addBytes(contentCString.data(), contentCString.length());
++         Vector<uint8_t> digest = cryptoDigest->computeHash();
+++        ContentSecurityPolicyHash hash = std::make_pair(algorithm, digest);
++         for (auto& policy : policies) {
++-            if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
+++            if ((policy.get()->*allowed)(hash))
++                 return true;
++         }
++     }
++-- 
++2.52.0
++
+-- 
+2.52.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
