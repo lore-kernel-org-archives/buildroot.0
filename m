@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAFE7D3B7E5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38DDCE784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A3DA40565;
-	Sun, 28 Dec 2025 22:06:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06C8880DEA;
+	Sun, 28 Dec 2025 22:06:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gdf9w3_OJikd; Sun, 28 Dec 2025 22:06:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c7S1YhFXvNMW; Sun, 28 Dec 2025 22:06:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7993404D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 247F980E40
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766959607;
-	bh=UvvTE1ivTxjA53Zi/E0UsuwZXgx43CCEF5mvJ7rkGA8=;
+	s=default; t=1766959610;
+	bh=U9K/6qqAO77wf6bM9sjrRn+ZvXMyISTWbrarcTygazs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a2YgZC+0bh5Eazz2Gru0MNCSojMsSLPLnDcSz0xvPqGm8TxV68uM9xx371zOS4k6m
-	 pCOw37Ecrxsg3DtFE6Sb+kCFVBl2yONKHya2YY16qK2UIZf68eV4e8V0UqRJlBg0ni
-	 c0i5oWSfdQV6vC4HflqX2TGrFZWQKdkiANMtzewm54Vknwp15oOUWeozY6QilGT89W
-	 jhX1SQp5id/28OZml5co05xpMEUXpgIi3OdXPiv3Ys9hHz/MR8T3biD2J6GW6rR38E
-	 egZR2sv6oi72QhLbMqK+0aqjcGI3NRzDHkqWRNWW3MX4JXs4Httgla1pQanEtU0Miw
-	 VqJ1fwC5MiQAQ==
+	b=XKY+c9y+7Qq+tkw+zxt1dGc34YRoVqxQa1+Zh/Z+H/5CIg5INgF/FMAMZ/RfP5x0S
+	 4b/NcvLl4wqyFGplgQgxdox2g0x5jNOw2WINsqVXV7Zx5St3q2ZbbUpvyZB598B/rB
+	 mL6ilX566hsQkI2kIbzuLfp0DFQ/AuB/gdURV3gdmjI9qxk2bvTV4cOZ9e+QMM8OVp
+	 ePGgvLjekB/emLcRHgi7//X1/2ynpI2+NpX0ZaXlvRSoFKzQj9Bra0opJIkYmh43hy
+	 qchwl8mcvmnctYuI/L7XWMxBNg8VnG92IIeIX+Sm5A8p3GyipP/o5BnPWHIx9mkjBH
+	 7tjYMuln+35Mw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7993404D7;
-	Sun, 28 Dec 2025 22:06:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D4FF1D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 247F980E40;
+	Sun, 28 Dec 2025 22:06:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC2C6D8
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C773140558
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE80D80DF1
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kW-K7GE3nfQC for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IMzzkj1-Oy-Q for <buildroot@buildroot.org>;
  Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F234404A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E4D480DC7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F234404A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E4D480DC7
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D42384898; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
+ id 272628776E; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 23:01:43 +0100
+Date: Sun, 28 Dec 2025 23:01:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c8c8e01fa4ea1eb0fc1370e1e52f8dcec12e1f5
-X-Git-Newrev: 39a123b9ec3392a16304f270210714841c91cd0b
+X-Git-Oldrev: 4adcc7cac31c71f44d50c3db39db8b19c2b41f0d
+X-Git-Newrev: 30379483bbb3e935f6cb7f986e9366b0ec2e9b98
 X-Patchwork-Hint: ignore
-Message-Id: <20251228220645.0D42384898@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-characteristic: add md5
- hash, update SITE
+Message-Id: <20251228220645.272628776E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-crccheck: add md5 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,7 +76,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a123b9ec3392a16304f270210714841c91cd0b
+commit: https://git.buildroot.net/buildroot/commit/?id=30379483bbb3e935f6cb7f986e9366b0ec2e9b98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Updated package as computed by scanpypi.
@@ -85,35 +84,21 @@ Updated package as computed by scanpypi.
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-characteristic/python-characteristic.hash | 4 ++--
- package/python-characteristic/python-characteristic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-crccheck/python-crccheck.hash | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
-index c91017d707..84304818c6 100644
---- a/package/python-characteristic/python-characteristic.hash
-+++ b/package/python-characteristic/python-characteristic.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913
-+# md5, sha256 from https://pypi.org/pypi/characteristic/json
- md5  b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
--# Locally computed
- sha256  ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+diff --git a/package/python-crccheck/python-crccheck.hash b/package/python-crccheck/python-crccheck.hash
+index 3fb58a7299..b8fb4e3312 100644
+--- a/package/python-crccheck/python-crccheck.hash
++++ b/package/python-crccheck/python-crccheck.hash
+@@ -1,4 +1,5 @@
+-# From https://pypi.org/project/crccheck/#crccheck-1.3.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/crccheck/json
++md5  b70543709102d2edb9159a9b26366706  crccheck-1.3.1.tar.gz
+ sha256  1544c0110bf0a697d875d4f29dc40d7079f9d4d402a9317383f55f90ca72563a  crccheck-1.3.1.tar.gz
+-# Locally calculated
 +# Locally computed sha256 checksums
- sha256  0af91b662f8428b28f5e517b049a0bb9feeb59b1adaa5c9418c1579f9485107c  LICENSE
-diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
-index 7ea8d95cd4..dd081eacef 100644
---- a/package/python-characteristic/python-characteristic.mk
-+++ b/package/python-characteristic/python-characteristic.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_CHARACTERISTIC_VERSION = 14.3.0
- PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
--PYTHON_CHARACTERISTIC_SITE = https://pypi.python.org/packages/source/c/characteristic
-+PYTHON_CHARACTERISTIC_SITE = https://files.pythonhosted.org/packages/dc/66/54b7a4758ea44fbc93895c7745060005272560fb2c356f2a6f7448ef9a80
- PYTHON_CHARACTERISTIC_LICENSE = MIT
- PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
- PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
+ sha256  1237ab8ea60caa782d77d9d2ac0cdccd765475e3848b0b91b5751d3f299e9d31  LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
