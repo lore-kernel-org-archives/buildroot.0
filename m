@@ -1,91 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 494E9D3B7E5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 18:56:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF9AE9272A
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 18:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18C5A40566;
-	Sun, 28 Dec 2025 18:56:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 469378131B;
+	Sun, 28 Dec 2025 18:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r6OBGFbmyR6k; Sun, 28 Dec 2025 18:56:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SFX4xRQLXIo3; Sun, 28 Dec 2025 18:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E0EA405C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 630BD8131D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766948209;
-	bh=VB8Qkvqlf3c0k5DyTLMWmr09ECC4E3CfMbbNyD6iCvE=;
+	s=default; t=1766948211;
+	bh=HiI97zp8HhleqzDViaeqrv0JN9GjU18q3NtSq8b1w2A=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=fucKPAXW48ZwGzvJ6uk2Xwy65VmSPJAQF22ifSrv6fcohotOND0quh7BZHohDbkQz
-	 neQ85JWbE7V2VuwVH/7wAbe9yvxATMPiPajVf5iQCeZS+TROFkehy8uid6wNetfAo6
-	 lh0lkavFcaI0zQtAkg+CpumDsiSTjYVZ9y7SolTvQL9ls0KluNEZgR4oHnl4r1zsQs
-	 Alhme7Cmb7Q3+lo1eZgkpl7Vd+4GIIUg4fPnY5X72IENzoVKzfyOkfHBR763jrffNu
-	 n5cN75t/iaBSmuQxonA6vIIxkGXezBuRwdaxN26q9xbhHByvNkIKpVKHAu7cTfq2nd
-	 c6+X+HF8jE4Sg==
+	b=A+LdRGXIToCGITylsPBOtK6wqgjGFYBp+ZI7u9Afq/TOCgKqKfzLxmtqa3pK0dmIy
+	 DCcMx7OAKLPCyDX9l+ucNMHTFblAFDRyVZke6xOaPjM5m5U+gQJScZGPcK8UxH00td
+	 V9iO6YGJI5UfoAAPcIL+xVm4Gnx6cSJutlAXCIEStOMqc1E9QzJVkDBmvRdNCvWtnc
+	 e1ORdLDkmdezEcfbYFZ21MAGiHEItY0WQBaBsqsfdfZb7gBXkUJm21knXwm8CBbrQq
+	 sTeMBfGv5U01+oRqr0JZuO7c09KdwirdRai7czvGVTrSF1BXomgBJiy/3jIWQoJrLN
+	 nJCQUxwI0yUrQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E0EA405C3;
-	Sun, 28 Dec 2025 18:56:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E1A03B9
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 18:56:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 630BD8131D;
+	Sun, 28 Dec 2025 18:56:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E79B1E1
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 18:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D062B400D8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 18:56:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 346D6608EE
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 18:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y2yS24Gh_KfE for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 18:56:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AWCU-33NR4O5 for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 18:56:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C9D8F40077
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9D8F40077
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C9D8F40077
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 18:56:43 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-4779a4fc95aso45380885e9.1
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 10:56:43 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D687160702
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D687160702
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D687160702
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 18:56:44 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4775e891b5eso34462475e9.2
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 10:56:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766948201; x=1767553001;
+ d=1e100.net; s=20230601; t=1766948203; x=1767553003;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=kPl2DB6a3Z8B5Kj0s/pUgtCheAOb3IcqG00lSda0tz8=;
- b=DZ5cArR/EbNqYHv8nRLGW07Hebf8gzdBTvOw+beAr07SIvvqyZfweQgM0UbCwYjsuo
- 1+Gf0Bm9Tmq9c48f9fHX6JmkUDtwyje7ICKyxQsaOJrTuv65JOya9aqTnVtOr6HrYSiN
- 6dKEmQdGFCyH3fOuqgrao/yttdQ4+/EDID4/twbM67FcWYBJSiENNNm9KZCgfcsUOE/j
- E8NqSeeJ3iB+Y1Gv0eJJhf7YcIuhEkLCQtCs6Kc9EUTLA2sGPkEFHg2FPH121riXyWNQ
- sBQbwe5QZWjajk7UOaMPryV7TR2+oG4idYYnuqla1+zakJRWyME/BKXp5S/M/q/w9M4B
- 5phQ==
-X-Gm-Message-State: AOJu0Yxg8Da0Yu2T7ETXZ6B/c0zfMAllYvG15WsJxWDriPVuM43HC6IZ
- Sb1r3ogmYxLduBXY3dS/0IGx0zazguTn5WNHd+xvVHoK1+N9euXEHv3yV9gtI+gn7MzqKXCHAS1
- isVXRrZo=
-X-Gm-Gg: AY/fxX7T9l99TGZNlnbcP00Acr1RCeDPpyRmIw2lVua7UT0mb6xm6ce9ynpkZ3P7Rtu
- BwADFbScGaO8rCtnWtWdQgRO2hvHEfys/hb6xKIb1YOt+7yur+DeCeNvW48QvA6BIISM55DvKaG
- Iz2opdCZ3CxGGTOwe+2GvX4VNgkEs0hHQkkbK5Jsj7o9FO1YGNgtlrrLkEN342acYPD+7EBoZSl
- VuHkts1wwp8CeUX/L1Fh7IdFXBQOzBBRvf8qCoxW2vN7Wt/be6MnMbKEBiD+3BzTUZ1g5sxDoD7
- Jnxnt7V2do1CtIifZYhvI/FXHTH1DPppSJP8NmHhBpdvYA9h7Cj4IMc30cQ+78Zwm9gj4UDxX3f
- 1vIBDQF2zuhL9ASWkvHWxytA3dn7/57t0YM4JzIffqI4VlqcL8cElEzUoQyLLGSsvks2T6xWLM/
- 4JHnAx+e7Qz/1UP7kmP6uCb/6iLaKvzQsc4GF27r8jv9wuPJHCDAzDxuKKSXwY4yZH77S8WQCQs
- SCyg7xtJIA=
-X-Google-Smtp-Source: AGHT+IG7fY9yhWW2V5SBYOXhtWMNfx4hLhJck+2RN+1a6WvMFS5IwJqGdP8RbB32xBwDZBcV4V59ng==
-X-Received: by 2002:a05:6000:2889:b0:42f:b6ea:5e4 with SMTP id
- ffacd0b85a97d-432448ca347mr43366077f8f.28.1766948201225; 
- Sun, 28 Dec 2025 10:56:41 -0800 (PST)
+ bh=C3Gpozkbb2WIRMOI2AKTcfJvuejZTd8rugpcn4TfNPY=;
+ b=Fn5bGqlwEuE4XRl2gEdC68sGl7i6LlpsoQhY1H7FdKnyClykVRVzAgYdqLTZQvGRqT
+ PvLtEnhMGCKITwn5Cl5jA6IPqb6BsxNILiBai4HiVg8qxkWgap8tCiakN/5hJcQEO/9x
+ DyzDDyPJDAq1qxPLc5/97ArNdCADKwNXAj6vsXw4TdGM9wRkUEb/LykyVDmNwFmxBAPw
+ NvEHoWorg2zUKChlXOrGYBsuE8b2GxTvJSlCpp5SddALW4BEjypoEeEwDKoObCkSrwSt
+ 78Ggt1UAgPMbbrJFqdM2w9y/cvpcofFPi7K4wh6Cf8YyU8CYAjSurdDg1IuYK+gk0lGE
+ qJAQ==
+X-Gm-Message-State: AOJu0Yx2LUK3W4wNyK4bKToK0LCZS1rNoCGsai099rAclDJ/auyF01Kj
+ zPHFs2h9SmPSN6f/eZa+bUMMefMYMk5lHNssX3CnJIdZHlqhsZgZIUAN7mXNGS52RdhrOdhHAbA
+ QtkFqxtw=
+X-Gm-Gg: AY/fxX4vo++2vAVLg9ZjVnYWfTXNfqq+eus/weGXl3M08wmoJHBCNIocDpEElCVvZ4w
+ vV2940pce7BqxvXv99OWLLZofY36DFH+gsz/0ySSEnY852y9AnZdVck5qt+oLwF/OhL8StiMHfX
+ GB2aVuoeGhcrT1OzBWFWgrX+yXhezrnoixjl/yFuQBLen9845tQ/gfGl2QDZl1QBqpFnED1tvAb
+ TIDMCTiLRS0Ywr1LV3L3pVlYetFeKyhac3ymFHowkJe4ldm/C/kJc8smPBMI+DYm1o0Fd97PAWw
+ rqOZ540z0LuZ7Q92tafk4ob1J1XPmlWjUlFTHTbIo9Nge2QuCOUSZC50XZ3kgxjz2cal9Lsw3Nb
+ 0zSHzbGflk+z/51E2T82uyem12z8Oe06y6DQ9PtF/AWavlac65spwRrKITOqtatJUgRwedVuhHw
+ 2A2vYdZ7D+avl2pJaw6hxT4A/MVNl3gIvtsYX7RML7umbsIuroRJyK+RxmB9GC5BS+B9zeA55M
+X-Google-Smtp-Source: AGHT+IHG0PK7Y86XSrN234+nYRsYgI2swAMTQUjx3n0rfsDjR4xI4g0FZbphGkEtM6BbiH/OqXdY2Q==
+X-Received: by 2002:a05:600c:4fd3:b0:477:9cdb:e337 with SMTP id
+ 5b1f17b1804b1-47d19532e14mr275767705e9.7.1766948202604; 
+ Sun, 28 Dec 2025 10:56:42 -0800 (PST)
 Received: from mindpad (2a01cb0c0115730072a6ccfffe7dafc3.ipv6.abo.wanadoo.fr.
  [2a01:cb0c:115:7300:72a6:ccff:fe7d:afc3])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43277b82a58sm24426954f8f.6.2025.12.28.10.56.40
+ ffacd0b85a97d-43277b82a58sm24426954f8f.6.2025.12.28.10.56.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 28 Dec 2025 10:56:40 -0800 (PST)
+ Sun, 28 Dec 2025 10:56:42 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
  Bernd Kuhls <bernd@kuhls.net>,
@@ -93,32 +92,33 @@ Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
  Grzegorz Blach <grzegorz@blach.pl>, Karoly Kasza <kaszak@gmail.com>,
  =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Dec 2025 19:56:29 +0100
-Message-ID: <20251228185637.58072-4-thomas.perale@mind.be>
+Date: Sun, 28 Dec 2025 19:56:31 +0100
+Message-ID: <20251228185637.58072-6-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251228185637.58072-1-thomas.perale@mind.be>
 References: <20251228185637.58072-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1766948201; x=1767553001; darn=buildroot.org;
+ d=mind.be; s=google; t=1766948203; x=1767553003; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=kPl2DB6a3Z8B5Kj0s/pUgtCheAOb3IcqG00lSda0tz8=;
- b=KSvnnyoIzvQs0Ysttguf8wepCq4E5KyIzOgUlMwEpsdwqCY2vf71F9tYZZUgMEbuaN
- 57xq142J7WPe0dIZMTAoClSqHIo8x0G6GDi7kIzVh212oK8ErRIpjPR2MDmr/HBLoPf+
- WN3Jdyox9ch4zrRyG4zxOCFPq1xt3zCFp/c6/fp0RygvpvcbSlMN4Fuue8wGmBN4wYhF
- KX5QhQ8E96htUQtWS0s4fuIW+KpA8UieUbK7hAw8y0ENLR1PYzv6rqG7LeOHh479+6yz
- G/U9HcJFj8IsF+WBInaNjAcH8grAcAtwFasHdDmh9O3pUFnDB6haKzE2RBAq+NVIXSQr
- Wt3g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=C3Gpozkbb2WIRMOI2AKTcfJvuejZTd8rugpcn4TfNPY=;
+ b=C5K0bhYYqnLFx/QHkB42HmdLB9USo/txSgRbMahpHAJ2kFq60jVT/FhUeZZAD75Y+G
+ p+MOWRSMH8j/J9vtyLyKELzSHVDe1ncR/ym6DZp/aisGOLvdrR3mqEf0j/ddRCpr3HHH
+ f38twab5MgSbLB4P7gfTg+M9E72dfQvBOaXfrh2VVQGGDQxN/LuDsTgL168/+mAa9nqf
+ 350lPA0oe0JBImkiguw83pbp48TXY2/WqmDpMfz9mMLvDpj9Ii44zkE6o7r/gsRuEBfh
+ XJ8lhW9qB09ZteIVP+CW/sV/sY+9FqbjpC6mlB5exGaZ5/GR9O5t/31jYxzlIvb8kMBU
+ T6tw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KSvnnyoI
-Subject: [Buildroot] [PATCH 04/10] package/openvmtools: add CVE trailer in
- patch
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=C5K0bhYY
+Subject: [Buildroot] [PATCH 06/10] package/graphicsmagick: add CVE trailer
+ in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,34 +146,34 @@ This patch adds the relevant information to the patch header.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...13-Properly-check-authorization-on-incoming-guestOps-re.patch | 1 +
- .../0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch           | 1 +
+ ...0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch | 1 +
+ ...0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch | 1 +
  2 files changed, 2 insertions(+)
 
-diff --git a/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch b/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch
-index 91e379b9a6..c257e77504 100644
---- a/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch
-+++ b/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch
-@@ -7,6 +7,7 @@ Subject: [PATCH] Properly check authorization on incoming guestOps requests
- Fix public pipe request checks.  Only a SessionRequest type should
- be accepted on the public pipe.
+diff --git a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
+index 275738a71a..56122e466e 100644
+--- a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
++++ b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
+@@ -6,6 +6,7 @@
+ # Parent  db3ff8d00c28c38895e1600a28706ce251dac570
+ ReadJXLImage(): Apply image dimension resource limits. Addresses oss-fuzz Issue 69728
  
-+CVE: CVE-2022-31676
- Upstream: https://github.com/vmware/open-vm-tools/blob/CVE-2022-31676.patch/1205-Properly-check-authorization-on-incoming-guestOps-re.patch
- Signed-off-by: Stefan Agner <stefan@agner.ch>
- ---
-diff --git a/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch b/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
-index f47fabb71b..48962857ba 100644
---- a/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
-+++ b/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
-@@ -19,6 +19,7 @@ The 2025 Broadcom copyright information update is not part of this
- patch set to allow the patch to be easily applied to previous
- open-vm-tools source releases.
- 
-+CVE: CVE-2025-22247
- Upstream: https://github.com/vmware/blob/CVE-2025-22247.patch/CVE-2025-22247-1100-1225-VGAuth-updates.patch
++CVE: CVE-2025-27795
+ Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/9bbae7314e3c3b19b830591010ed90bb136b9c42
  Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
+ [Peter: drop ChangeLog/version changes]
+diff --git a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
+index d1cc795b4c..004594523c 100644
+--- a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
++++ b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
+@@ -6,6 +6,7 @@
+ # Parent  036a1376a2a6dc9504c5148249cbd8feaef72de6
+ ReadJXLImage(): pixel_format.num_channels needs to be 2 for grayscale matte.
+ 
++CVE: CVE-2025-32460
+ Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/8e56520435df50f618a03f2721a39a70a515f1cb
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ [Peter: drop ChangeLog/version changes]
 -- 
 2.52.0
 
