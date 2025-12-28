@@ -1,67 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13FA1E784BE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 21:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7467FE8FDBE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 21:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D18B880C00;
-	Sun, 28 Dec 2025 21:11:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1A7740376;
+	Sun, 28 Dec 2025 21:11:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o3t88WgocCmj; Sun, 28 Dec 2025 21:11:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t3_R62lQqZVw; Sun, 28 Dec 2025 21:11:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 046DD80C40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 188D4404BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766956269;
-	bh=W5gNZPZBFfctMSrvSfFvbeukDhGsYPiREX7X24T2cwY=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Un0NBP9Rr6azYblxmrvitBh1mIo3o1bnl+xiwW2y8KjYQXwaN4sA1oxroBDe5NsGx
-	 62BIyaWsVHJOdYq2HxyJSmk8AlTJcY+lfkzyxwNpvTYIDZduG8QCe4AKQEewjz6o5t
-	 eW4mMIcQuesfK7hM8N3IRCPr25G7ue7cgexgIu313l/tPYXI+uCjRGzI5thQ0CYNjY
-	 46RN3RNhrJwTeEl4f0CB3a7eQLAzt6zt5MPuIzpyAvVC3uukqsSZmzaLUQrKYMH1bj
-	 vTUG+Sh3Tt2UguIcZ0JINeCvscTlGJLSyfzRBsP7dEsfMRlpMttgSmSOaCrsZZcYmL
-	 EmsmK7JMZcLPw==
+	s=default; t=1766956270;
+	bh=v+Q20PoJFoELViYn9WJLo2Tm8Gz6ywWtOcTv8qEB4Ec=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=QcDdDOpd0J7z6oZMKQ2KtcmcO2DE7flW+HpOuXGXO9iKgGwlUEMw+GlpqJmsqgjrR
+	 BigEvOUwYTil9SPSzu+kQhNficZeLgeNSQIccSB4HZeJNR/vEfAERC2GchpYMuk17U
+	 vvg0ZRXwmDQlX25rbG73NPaaCLzNOW5wBe3bQYJ6mP3tRwGpp/C/68JPNtXYFAV4oP
+	 ULmFkr7BmBGbFO3qt4poih7bsSzvlPfSu7F9JtaC1AEa/P9TSI3/6YETSWhHd34BIH
+	 Ck1tyExsj4RbXXtpBXga7QLfvPwVktw1dFS6aMXgg7tbWHjWKZVuUEW2Evh8FZy4D8
+	 V3scsV54wRw6A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 046DD80C40;
-	Sun, 28 Dec 2025 21:11:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E1680D8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 188D4404BD;
+	Sun, 28 Dec 2025 21:11:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3D36D8
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C32CF80B37
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C442360A77
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bluaQzFrdz2z for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 21:11:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7e1Oa-wBgKwH for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 21:11:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B209580B54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B209580B54
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B209580B54
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BC10F60A71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC10F60A71
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BC10F60A71
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:05 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 7A3374E41E0D
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:11:01 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 212BFC1D70C
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:10:38 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 4F4D060725;
- Sun, 28 Dec 2025 21:11:01 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 88DD760725;
+ Sun, 28 Dec 2025 21:11:03 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A1949119792CA; Sun, 28 Dec 2025 22:11:00 +0100 (CET)
+ with ESMTPSA id A6A4C119792C6; Sun, 28 Dec 2025 22:11:01 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 28 Dec 2025 22:10:42 +0100
-Message-ID: <20251228211045.3059593-4-thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Dec 2025 22:10:43 +0100
+Message-ID: <20251228211045.3059593-5-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251228211045.3059593-1-thomas.petazzoni@bootlin.com>
 References: <20251228211045.3059593-1-thomas.petazzoni@bootlin.com>
@@ -69,22 +67,22 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766956260; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1766956262; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=5k+de1YvwD012mk7iKUX6vs04ozxeThuaaA48Jk8OoQ=;
- b=LLkzNGbjbYZ3Gvj1dg43kOTP/R4XgDxJ3ln27hGD7J/8BYGnE0Eq14mM4GxvAM0V//zvKz
- YEEW2QB57tZyiDiAazU+V62FW3wH8PM1Bn1fczo8QtpJ67YZr5I2zknf/M46mAXcge9FR9
- nkpezPMTsrEgd7X2clch6cXp0mtNma1ChuZ9rOiOhX8gblTw8HiwC44FA7s+vz6GENeWKx
- xz5DIBoRa1m6o7F7BSeT41e3XgcHByb7S3sYHSiSBS7l0EFbcKJVyM7shsqDQhTSEFG9he
- 8WV3PMtn0kL1SOZ3GCUnpsXRMsGYGHRJ6TlRz3ZHwU6OPxYocVLri8cyEZ3ZRQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=/PIlNAmQ8Y+vd98e9B78wY/nwGfo1oonLOGuJdibYoY=;
+ b=h+tZfs2go7HDeN97Jf2DLoWrZ6kXPu1bbcadSmmL8YVIMy2wF44W7bDDTomwak/NI5Ur0l
+ ciszFqeRbiI0uA0aSO0AKHQq82nnATbByMOwgaePpxbKHVdgvTklxrUR4cCk3Oo1LclSNa
+ 1Ts7qCR4js0P0HpC0TTGQGx1snYDHGWp7fUyZa+3jd9Ftq0WzpMBJA/Qub/4RGRN1VZrC3
+ 7fBiwsbT6MxvyMBRIKTyuK+GLYYrkPDwaFtLa30+iCOIQVPes05r3PW+syXgdrSjgqui2J
+ i1FexQzn5Y65JqKe+K93nHf/RBJMbWMKkmd9rdzPpFklcGEOV+vPYwuK/pP/yQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=LLkzNGbj
-Subject: [Buildroot] [PATCH 4/5] package/qt5/qt5webkit: fix gcc >= 14.x
- build issue
+ header.a=rsa-sha256 header.s=dkim header.b=h+tZfs2g
+Subject: [Buildroot] [PATCH 5/5] package/python-pyqt5: disable qt5webkit
+ module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,79 +96,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add another patch from Fedora, also used in Arch Linux to fix a gcc >=
-14.x build issue:
+Due to issues in the installation of qt5webkit, building the
+corresponding Python binding fails:
 
-build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
-  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
-condition for static assertion
- 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
-      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+Project ERROR: Unknown module(s) in QT: webkit
+Error: /home/thomas/buildroot/br/output-all/host/bin/qmake failed to create a
+makefile from PyQt5.pro.
+make[1]: *** [package/pkg-generic.mk:263: /home/thomas/buildroot/br/output-all/build/python-pyqt5-5.15.6/.stamp_configured] Error 1
+make: *** [Makefile:83: _all] Error 2
+
+https://lore.kernel.org/buildroot/20220929181350.1026033-1-thomas.ballasi@savoirfairelinux.com/
+was an attempt at fixing it, but this patch doesn't work and looks
+weird.
+
+So for the time being, disable the Webkit module in python-pyqt5. This
+issue has indeed been around for as far as 2022.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/b9d69d21e734aa62a6e0b4d4124c2bcfc027ebe4/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...age-csp-ContentSecurityPolicy.cpp-fi.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
+ package/python-pyqt5/python-pyqt5.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
-new file mode 100644
-index 0000000000..ab6137dd28
---- /dev/null
-+++ b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
-@@ -0,0 +1,45 @@
-+From 286e0280a55949d62b2163d68c827539c141d487 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 28 Dec 2025 18:35:45 +0100
-+Subject: [PATCH] Source/WebCore/page/csp/ContentSecurityPolicy.cpp: fix build
-+ with gcc >= 14.x
-+
-+Fixes:
-+
-+/home/thomas/buildroot/br/output-all/build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
-+  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-+      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-+/home/thomas/buildroot/br/output-all/host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
-+condition for static assertion
-+ 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
-+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Patch used in Fedora and Arch Linux:
-+
-+  https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/rawhide/f/qtwebkit-fix-build-gcc14.patch
-+  https://aur.archlinux.org/packages/qt5-webkit
-+
-+Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Source/WebCore/page/csp/ContentSecurityPolicy.cpp | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-+index 9e726d5fe10c..989a59a6122f 100644
-+--- a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-++++ b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-+@@ -231,8 +231,9 @@ bool isAllowedByAllWithHashFromContent(const CSPDirectiveListVector& policies, c
-+         auto cryptoDigest = CryptoDigest::create(toCryptoDigestAlgorithm(algorithm));
-+         cryptoDigest->addBytes(contentCString.data(), contentCString.length());
-+         Vector<uint8_t> digest = cryptoDigest->computeHash();
-++        ContentSecurityPolicyHash hash = std::make_pair(algorithm, digest);
-+         for (auto& policy : policies) {
-+-            if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-++            if ((policy.get()->*allowed)(hash))
-+                 return true;
-+         }
-+     }
-+-- 
-+2.52.0
-+
+diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+index bee0c529ca..1ab9cea4ad 100644
+--- a/package/python-pyqt5/python-pyqt5.mk
++++ b/package/python-pyqt5/python-pyqt5.mk
+@@ -91,13 +91,6 @@ PYTHON_PYQT5_DEPENDENCIES += qt5webchannel
+ PYTHON_PYQT5_MODULES += QtWebChannel
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5WEBKIT),y)
+-PYTHON_PYQT5_DEPENDENCIES += qt5webkit
+-PYTHON_PYQT5_MODULES += \
+-	QtWebKit \
+-	$(if $(BR2_PACKAGE_QT5BASE_WIDGETS),QtWebKitWidgets)
+-endif
+-
+ ifeq ($(BR2_PACKAGE_QT5WEBSOCKETS),y)
+ PYTHON_PYQT5_DEPENDENCIES += qt5websockets
+ PYTHON_PYQT5_MODULES += QtWebSockets
 -- 
 2.52.0
 
