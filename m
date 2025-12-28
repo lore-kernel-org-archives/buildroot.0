@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23311E8FDBE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13C49E784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:07:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0E1F80E33;
-	Sun, 28 Dec 2025 22:07:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE56640790;
+	Sun, 28 Dec 2025 22:07:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jR8aLgGRzWsh; Sun, 28 Dec 2025 22:07:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F8674077F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1766959629;
+	bh=OmpJl0+4qb/US7KVOs6ulyiStPOazszjPe+HMR8u00w=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=B/beW0U5NCey4g+HtUQmRGm+MRvnqhH+wMQC/BmsMBAIvkG+YuMoRQfHDPK876el0
+	 mOm7la157ltUwIyfrwoWTnT1CCKsnk0COpCaVZCTg882L91Q0DhuMLdIBjYRIEJ8Ew
+	 ILCqD+jffpOHH7WMpx5YSlVExCw1biHOvRlW7MRNODu7H814HG8iAZOKog/t9ePFJl
+	 94MRuEJYHgW3gcKU41u5EV5Z00B2hZ37GccFppwGY9jxZG036vx1eW4MT3ea/zDOFU
+	 bFGDBROVTxvxRaDgjL+zJyS0gEPQ6BNrKfNMtMVc3415snpAxNtkHpbDfIXSQUVm0T
+	 zD8rFwCDIjgeQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F8674077F;
+	Sun, 28 Dec 2025 22:07:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01D6830D
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB97E80DF7
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ik-YpQ5ywXDH; Sun, 28 Dec 2025 22:07:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20F97814C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766959628;
-	bh=1W9Xr6LEdWfAyeJ77ADvkkew9wt+XhoV+lwNg46mx2Q=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jD5bMvJLRzVidbFQJacf3R+jjUhXKKMauGcTGC/klYfElfbR+YE2JqeBylTDYNsaB
-	 hp59YE9WRBg23/8opHpB4lohjdJIed9gEKJvz64f7wEt066D4Xlv3fS9T1uCQjlHZJ
-	 khIAvVh+R8ffq6cMsxwvZBvanVIKlbIBdrHa/mujOexDosoJvNyisCsY2V1XXvgJCE
-	 ztzjRWbfwV+DS/Pser0wV+MXemFtWg3nH3CYbE4MbaXN8img6nfZ1KCsGA5SXeK66k
-	 TpaaII2aWT06WV+CnxC/XFNHYa1XFPHMH/ZoAKRLuKaI8P71H87kvZitcg9rcSlqzu
-	 iVqA+RffDflLA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20F97814C6;
-	Sun, 28 Dec 2025 22:07:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EF8CE1E1
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB89E402F0
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H2JJc50azZKq for <buildroot@buildroot.org>;
+ id YJ2mAonhuTyO for <buildroot@buildroot.org>;
  Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F53240055
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A56780DFB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F53240055
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A56780DFB
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D4778781C; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
+ id 18E7787950; Sun, 28 Dec 2025 22:06:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 23:02:39 +0100
+Date: Sun, 28 Dec 2025 23:02:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 46f8497e1c92c29a2f1d9889b897d948b496ef92
-X-Git-Newrev: 2952d38125d2f8f0229d7daa450f7d961d3417e1
+X-Git-Oldrev: 2952d38125d2f8f0229d7daa450f7d961d3417e1
+X-Git-Newrev: d0900ca523fe5a32832351520d504619650d269c
 X-Patchwork-Hint: ignore
-Message-Id: <20251228220646.0D4778781C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pysendfile: update tarball
+Message-Id: <20251228220646.18E7787950@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pysnmp-mibs: update tarball
  URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,7 +77,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2952d38125d2f8f0229d7daa450f7d961d3417e1
+commit: https://git.buildroot.net/buildroot/commit/?id=d0900ca523fe5a32832351520d504619650d269c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Updated package as computed by scanpypi.
@@ -85,36 +85,35 @@ Updated package as computed by scanpypi.
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pysendfile/python-pysendfile.hash | 6 ++++--
- package/python-pysendfile/python-pysendfile.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/python-pysnmp-mibs/python-pysnmp-mibs.hash | 4 ++--
+ package/python-pysnmp-mibs/python-pysnmp-mibs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pysendfile/python-pysendfile.hash b/package/python-pysendfile/python-pysendfile.hash
-index d1aff6aed2..2b5b8a9714 100644
---- a/package/python-pysendfile/python-pysendfile.hash
-+++ b/package/python-pysendfile/python-pysendfile.hash
-@@ -1,3 +1,5 @@
--# Locally computed:
--sha256  f4ca8a7f0be67e3d710c0633dd9aadab6881203c31cb9eb9be4f10361ad3f937  python-pysendfile-2.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pysendfile/json
-+md5  e7b301eddd703ab74a48c59a8fda1f97  pysendfile-2.0.1.tar.gz
-+sha256  510a414b270986fba3c79cb76d90a4c910c701bfb43ff983a5d4e92846050e17  pysendfile-2.0.1.tar.gz
+diff --git a/package/python-pysnmp-mibs/python-pysnmp-mibs.hash b/package/python-pysnmp-mibs/python-pysnmp-mibs.hash
+index 52a507f4b3..4744963185 100644
+--- a/package/python-pysnmp-mibs/python-pysnmp-mibs.hash
++++ b/package/python-pysnmp-mibs/python-pysnmp-mibs.hash
+@@ -1,5 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pysnmp-mibs/json
++# md5, sha256 from https://pypi.org/pypi/pysnmp-mibs/json
+ md5  01845c4595d87d3c3485c0449616cbda  pysnmp-mibs-0.1.6.tar.gz
+-# Locally computed
+ sha256  00fa321ca598e8a14c0ad98702bf10fb5e9d57b7d06bb99dc818fea07683720c  pysnmp-mibs-0.1.6.tar.gz
 +# Locally computed sha256 checksums
- sha256  259f433563cfe0296c84c00381c600e82e0ab1b617ce20fe6e7f555a2b95af26  LICENSE
-diff --git a/package/python-pysendfile/python-pysendfile.mk b/package/python-pysendfile/python-pysendfile.mk
-index bb8f057d3d..6c2d06e367 100644
---- a/package/python-pysendfile/python-pysendfile.mk
-+++ b/package/python-pysendfile/python-pysendfile.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+ sha256  361eda483f7fac1f8cca4e16c340fa07a1cad2bf1200577a01075745233b406c  LICENSE.txt
+diff --git a/package/python-pysnmp-mibs/python-pysnmp-mibs.mk b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
+index 9772b78c91..eb9119a352 100644
+--- a/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
++++ b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
+@@ -6,7 +6,7 @@
  
- PYTHON_PYSENDFILE_VERSION = 2.0.1
--PYTHON_PYSENDFILE_SITE = $(call github,giampaolo,pysendfile,release-$(PYTHON_PYSENDFILE_VERSION))
-+PYTHON_PYSENDFILE_SOURCE = pysendfile-$(PYTHON_PYSENDFILE_VERSION).tar.gz
-+PYTHON_PYSENDFILE_SITE = https://files.pythonhosted.org/packages/cd/3f/4aa268afd0252f06b3b487c296a066a01ddd4222a46b7a3748599c8fc8c3
- PYTHON_PYSENDFILE_SETUP_TYPE = setuptools
- PYTHON_PYSENDFILE_LICENSE = MIT
- PYTHON_PYSENDFILE_LICENSE_FILES = LICENSE
+ PYTHON_PYSNMP_MIBS_VERSION = 0.1.6
+ PYTHON_PYSNMP_MIBS_SOURCE = pysnmp-mibs-$(PYTHON_PYSNMP_MIBS_VERSION).tar.gz
+-PYTHON_PYSNMP_MIBS_SITE = https://pypi.python.org/packages/bf/7c/99ab192af934ed5d41ceef92a1b949b41652f29b46241b902ffec55642f4
++PYTHON_PYSNMP_MIBS_SITE = https://files.pythonhosted.org/packages/bf/7c/99ab192af934ed5d41ceef92a1b949b41652f29b46241b902ffec55642f4
+ PYTHON_PYSNMP_MIBS_SETUP_TYPE = setuptools
+ PYTHON_PYSNMP_MIBS_LICENSE = BSD-3-Clause
+ PYTHON_PYSNMP_MIBS_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
