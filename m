@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F2B2E8FDBE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED307D3B7E5
 	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AE0881516;
+	by smtp4.osuosl.org (Postfix) with ESMTP id A580C4078A;
 	Sun, 28 Dec 2025 22:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6KAt60QwYR8Y; Sun, 28 Dec 2025 22:07:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pieb3ATlPhr4; Sun, 28 Dec 2025 22:07:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57CD580DF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 203A840770
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766959631;
-	bh=k6KtrFGEvew1vZIktwdTx6xKyn1ni4Kq0wvou8eYl1w=;
+	s=default; t=1766959630;
+	bh=QBQ5Bgt4lNMRBcU/QdLUjukgney54nh0nE7RDBXv7Qw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RblkMmXVmPCPmz8SEKILVgOyIKfd7C6G56gVMi7tSFLOo7qoMQVP6AIf3RoCJ0rgA
-	 IJxJe2C8biyxrFI/ahLXM4b2fo3x1FYf0ypknEtcQxkf51qYKgkfHjltVgoP/2y5tW
-	 GIEHOKgcE5uGlbvrZLIp0leK0r07Ic7pTP9hoh78n1UjpMwQJ33u9ylU9KlQXKEkQm
-	 2PF6lIds1W8vcg8YErjwCxkSUglvKNQ5VwVNi8iKeOzEI4tiSvYoWY6RLM2J7CDnSL
-	 ul0mFts47KLBIlhUPH91LuVRyA80n2ekKzl7N/SPDKz8zsYexfuohqLDNq+PPKhSGH
-	 WiF1wXpSuuG/A==
+	b=oXm0mgZVddgrrUyv1Jm5UIbeiWGFlZXAxr7d1AZgxiiB5yhubWP2WONzh8gm/vo7x
+	 lVqb+VjxM9Vy6sO9wWS9DDIerX85iZQu0XhH/g4CfUTh9mIKvSq93OADJpWlvc9QM9
+	 bG4M3IVuDPHVD+vXEY1N7IcydYzfg/5jqyvLelo4I6ocqGpMN9TOJRy+eMdN/B4jiy
+	 aKIbsF+0sg4RKUYOIhng9Ezl/eMWfY/K1SSZRkJ0nlPztWhlpvbBqTU5ALboKP05xb
+	 7m8jenf3z2sWOPpp4bXwBchjRoL5/rTexwW7nElbKBoNGuGWg5kol8UP+6pvAhCFBu
+	 LCCoBVOloobCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57CD580DF0;
-	Sun, 28 Dec 2025 22:07:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FA2F30D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 203A840770;
+	Sun, 28 Dec 2025 22:07:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AFF9D8
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A77880E33
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FD6C40055
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1y2qyQSy1V2M for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yzOQg7e_I6Dg for <buildroot@buildroot.org>;
  Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C50F880DF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DFD4401FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C50F880DF0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DFD4401FF
  for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2C6E85F80; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
+ id 9C3B785C36; Sun, 28 Dec 2025 22:06:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 23:02:26 +0100
+Date: Sun, 28 Dec 2025 23:02:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 424a55cffd663fcc281d6391d21bcbd09fa40ce7
-X-Git-Newrev: 56be4052484dfb6e053b5ed79c807fedbbf26806
+X-Git-Oldrev: 5d76be1c041938acee9650cbb777f3880865f629
+X-Git-Newrev: 8132e84e0491da912df51e18c35d5fab981a2bce
 X-Patchwork-Hint: ignore
-Message-Id: <20251228220645.C2C6E85F80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyasyncore: update tarball
- URL
+Message-Id: <20251228220645.9C3B785C36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-minimalmodbus: add md5 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,31 +76,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56be4052484dfb6e053b5ed79c807fedbbf26806
+commit: https://git.buildroot.net/buildroot/commit/?id=8132e84e0491da912df51e18c35d5fab981a2bce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Updated package as computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyasyncore/python-pyasyncore.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-minimalmodbus/python-minimalmodbus.hash | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyasyncore/python-pyasyncore.mk b/package/python-pyasyncore/python-pyasyncore.mk
-index 4b1e3c98b6..d86ac2cad8 100644
---- a/package/python-pyasyncore/python-pyasyncore.mk
-+++ b/package/python-pyasyncore/python-pyasyncore.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_PYASYNCORE_VERSION = 1.0.4
- PYTHON_PYASYNCORE_SOURCE = pyasyncore-$(PYTHON_PYASYNCORE_VERSION).tar.gz
--PYTHON_PYASYNCORE_SITE = https://github.com/simonrob/pyasyncore/releases/download/v$(PYTHON_PYASYNCORE_VERSION)
-+PYTHON_PYASYNCORE_SITE = https://files.pythonhosted.org/packages/25/6e/956e2bc9b47e3310cd524036f506b779a77788c2a1eb732e544240ad346f
- PYTHON_PYASYNCORE_SETUP_TYPE = setuptools
- PYTHON_PYASYNCORE_LICENSE = PSF-2.0
- PYTHON_PYASYNCORE_LICENSE_FILES = LICENSE
+diff --git a/package/python-minimalmodbus/python-minimalmodbus.hash b/package/python-minimalmodbus/python-minimalmodbus.hash
+index 635090fae7..ee688e49d3 100644
+--- a/package/python-minimalmodbus/python-minimalmodbus.hash
++++ b/package/python-minimalmodbus/python-minimalmodbus.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/project/minimalmodbus
++# md5, sha256 from https://pypi.org/pypi/minimalmodbus/json
++md5  a981b31df61c7dd9fa04d0def72f8486  minimalmodbus-2.1.1.tar.gz
+ sha256  c3f5a56e107d537e4bb420f7e735841ab2939c8ca6fb528f5fe4124571315b64  minimalmodbus-2.1.1.tar.gz
+-# Hash for license file
++# Locally computed sha256 checksums
+ sha256  abe787d472ae2069e935c84eb13fd770518dfb08b92d5f190f3cd7ff6d1f6f32  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
