@@ -4,118 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58154D3B7E5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 21:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F35E8FDBE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 21:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E6E64047E;
-	Sun, 28 Dec 2025 21:30:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 403B640540;
+	Sun, 28 Dec 2025 21:37:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gMSJprQYWgc1; Sun, 28 Dec 2025 21:30:14 +0000 (UTC)
+ id ZhzMLeH6Skgt; Sun, 28 Dec 2025 21:37:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C925404B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4877E404D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766957414;
-	bh=ipMQ7TO9NGbeI251C1UbpncfwrabL9LiYaP2eMNDdVE=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=JEJoNGUztt+xxufEShOqAXJCLyEfLZlREK0GHyhWEio370N23NTfyvqzAL9L64xo2
-	 OHt1ZkYZasYDWuGNkGmstPSE3/a03g/w2sLxdqvCwcvgD5maBrAMvIZwRALneTW9qP
-	 Cl7+IeeB4t8zK5cNwXweR5gQhWcmXRazxtwC/Xm0ACKy8s9v5POw3bXMVgV/ATfv82
-	 +8kJddO2GJooFX0bCXhNPwvOHe5kU/3AeoI7smqVrhIQ85tl2z0ajxfjAPCMZiBfig
-	 L9wJlwxnLs1hFGAaFKLicff36y1y251s3KVJxHjfpFh4zxBHk1f2rPLd5p31L5LE/g
-	 I7HQ9UHK88GjQ==
+	s=default; t=1766957838;
+	bh=lZ5UZumwbmBXqliB26hGmn9L9DbfLEsKNjnc7/qDtGc=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Ufcn9r+j12I8Cac8HCQVjQKKkGqYDkSCQdWDb2KxmAx5FZEEY6L0hq0X3ZSmAyq/V
+	 x1VwFHOYAArfdpNmD6i0nax0AYnUgWtzUcJC/n2Vn3MbCmqwGB4FUnI4BfgFBN/D1b
+	 IjK0/Bv33JjjegZzivvMZk5/f82ZyGn/ZhM5N2NbFozjUW0DrlF9HFhVhNxjSoc48N
+	 g609hOFirvl68ALkLEP5+yn1y4GAYhItb6WPsPj05GmoWqeWDPwvyNwLmIoJMv5glz
+	 x445hLU4hXaaDfyboqh18+4PYB0SVIYT/VwxE7It4H1m9tLnNALBIpfnIlvIiquvo8
+	 AZCDghpmEVDLg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C925404B8;
-	Sun, 28 Dec 2025 21:30:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FA7BD8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:30:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4877E404D3;
+	Sun, 28 Dec 2025 21:37:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAAAE1E1
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9096D404B8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:30:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7BBC80F7B
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:37:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SdFv517tyfFg for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 21:30:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id djKI0x5vAXqH for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 21:37:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 768FC4047E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 768FC4047E
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 768FC4047E
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:30:11 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-42fb03c3cf2so4316386f8f.1
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 13:30:11 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::334; helo=mail-ot1-x334.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9E8080CD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9E8080CD7
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
+ [IPv6:2607:f8b0:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E9E8080CD7
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 21:37:15 +0000 (UTC)
+Received: by mail-ot1-x334.google.com with SMTP id
+ 46e09a7af769-7cac8231d4eso5322008a34.2
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 13:37:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766957409; x=1767562209;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fp8xjFtr0jypOEjngaCdg6pi6BKT2fjqgLwBnF6vLZM=;
- b=FQtD+jGh1WvTDztia1t4i7R+EgSZBkwvDQAq8KC9O2hFSpnMs7eDhzNT8kLSndrj3y
- AbVlWzb/MOSBMzOVp19xOYuL5s6q0nZ+RKnOQLO2ncuqV7bFCF11l9QBuTZg3HPwY6dr
- N8kqVE8S8ObmxPMxFRbJdVdBM6JeufIe3pAurr/K4TiuBpicIYl93/9NaC69dYKbsumr
- 5oW3l2HK2HHYBCI4edRpLjx/xCwlKEaAZwa1Bzy3Zn7Zzh4WGUSxpBuDm1eiuRuKbnUi
- RzZO9esoML4p7yLhD/Ambs5DX+Yjfc+4xxrEAHO8Lx3fK4/3E842A6RgoGjqve0fR0th
- u5sg==
-X-Gm-Message-State: AOJu0Yzi2v7U608SL+pSIzUSvda2MWNVU0zmj/sa8nDlzjB1zVCC4zfV
- DQoWzM0MDkmrjnvOXMi1eLIC/QuwymJhfMMPSDvg7kLsgZiFFKkgern4MsrQd/CyoO0zUbuSs8b
- etG5C8+E=
-X-Gm-Gg: AY/fxX4lJz8hZcYo1NwiJXVpVks7hZ1j48S7Dj3kHTAtSui+JgYm624cfiURnJyZiCE
- 8zOioA8hg5dhpkpZwbbqfOQGzr26bpJShCfOuuRT/bZOalJ3I42rm+NrSYpGjzMxPZLNYnl8KCJ
- mED3QtGq91WmyoYncns2thoCqJsVYoOxGlfk9AVTU3rNlzdh8aEb2AIpnY1uGBGEVPkeUjHv7s2
- jLKmLqMBl/4vmcRkQBt42hEV3UKNs+Dr9BInUfTQ84QVcrLbWzoFNvTpNIbK/UklqPJ5aiGrYWi
- QtoXAtmtrvvj/NF9llpoimILiUlyQntGkAQnAzCrrd1cC2DhqPM5KO54wPI2v8IuMuV1B09L9Nv
- 8LaA36cT1fEP9aPyT7/IC6VMT0JTS2KFjc2/G9OI3O/dSOql4DEOBdS23pnwIIAmu6gAaKi2p37
- 9nLTqfhKImAGnQC8Mr238Ho0dn+ZPaQAj6UH7/hhIQ4RHw8kfI/7qkzy1FDFIUkEP1LLLzYKa1W
- mpy7dza5uA02OWfm2/tna6iHrzIU+UQhDVsEx0mK4+VlXvRtM8Q
-X-Google-Smtp-Source: AGHT+IETk6tRW2cJIkBSrT/JcLmlLtT/szS9fVVTHkBBbWVIdIhtPj/QIE270NiKUI59spxoXUN7qw==
-X-Received: by 2002:a05:6000:144c:b0:430:ff81:2965 with SMTP id
- ffacd0b85a97d-4324e50bb11mr36088342f8f.49.1766957408875; 
- Sun, 28 Dec 2025 13:30:08 -0800 (PST)
-Received: from ?IPV6:2a01:cb0c:115:7300:72a6:ccff:fe7d:afc3?
- (2a01cb0c0115730072a6ccfffe7dafc3.ipv6.abo.wanadoo.fr.
- [2a01:cb0c:115:7300:72a6:ccff:fe7d:afc3])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4324e9ba877sm58211572f8f.0.2025.12.28.13.30.08
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 28 Dec 2025 13:30:08 -0800 (PST)
-Message-ID: <8231d40f-c111-45dc-9cbd-d418dd476db7@mind.be>
-Date: Sun, 28 Dec 2025 22:30:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+ d=1e100.net; s=20230601; t=1766957835; x=1767562635;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=QK7qOYQai7he2rSQyt1dhofkUN7O538xaqufoJ5CSXE=;
+ b=fYnNhVtWmrPa2nN40ZvG5iYRGkpxctQo4zKGwf5vFhxz032tackCDQ6emtPben+dto
+ aRmLAQrMFSw6NRDbRegrTNj6qC/XM93JN1lZfVHjLzPC6tFEV9IubU3hxvPbkvUbr/bv
+ E+om6NdebX56gKICk3pnu/se4AtHsPAyhPyOOcxlr3p3J2O36bX9VnouGu62ezlxANzn
+ FIpm8EPSZvuI8w8a+xnqFe62YqdJGVR/VHcBP35XkBVg55CbkDWYutuWsTKgMAZcrcor
+ C30gUATSFk815cF4kFYCvaF+kKQtQILsW69k5RJWwlXbVZPINjfzUtQcIePwCvIwFwHI
+ r0+w==
+X-Gm-Message-State: AOJu0Yy+s4veMKkobwZ/54j9P7iD+PGLzxoPY85zWeiWR1zPgV75h8PZ
+ xjGGLTS6CmA1IBrO1yh+RZQE0FdQeK/IvXx4LtMRzC5dLSNJNnFT+orUIEgVvBp+Mrk=
+X-Gm-Gg: AY/fxX7oXDKES6xXeIFMUy/i1bXtENX6ZGSdkMCCmbdBsCmFdEWIE7X56/EDya9V74U
+ GIpQK6sSZQdAGWJTFUt3Pxc63AYfGkCYIVoVz+hOfGIkdd+4a9ma/DZVUr3NwN1WkW1c+BZFBrB
+ nizVKnZP6HF6zApBarb2xllh6yB7AOUOIH4PaE2Z27MGkp8oHEhBoTrOLDQ1ktETIezszqkG483
+ y2swWNPX9B5q4fmoA3b1ohWtosxOzsAIODTQqxhDJm/RnfqYctFguan219VzjiZcIjL2FrlYdLI
+ Yp3f1PpgpI3cPfqreKyGSeEIJV0NgcmWaVGcoxUbZQbB3kPY1pYEaytI71ipFJzuWB+q503WWkD
+ 3VmiVH4aTyaXM8IFIu0gAJ/nEfYUeygpMYuYnTUN2UEYXWGIP9B0dfWuUbiwCZV9OKQTB6eanDO
+ vc9KSnEjT5jw39u6Ukdppq04Cp2Ey86G+6O5Cv+mfxpWbAqV9YoB0wKSJr7xHRKOOgeyitfi+QK
+ 3SKngvY0cIvgNuwl2i5UfTLtTiXYXLCF90KYJHxKcmQ75ea50puoJU=
+X-Google-Smtp-Source: AGHT+IGBJ58BM6L5Pkby4854uocQW6F0ZqDZcTsLTsErbtdODCMEmrq/eAHD7eLhbNzFfErPk8nSEA==
+X-Received: by 2002:a05:6830:44a4:b0:7b4:1768:ff3b with SMTP id
+ 46e09a7af769-7cc66a7f734mr15863901a34.22.1766957834660; 
+ Sun, 28 Dec 2025 13:37:14 -0800 (PST)
+Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
+ [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
+ 46e09a7af769-7cc6680358asm20003855a34.30.2025.12.28.13.37.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 28 Dec 2025 13:37:14 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-References: <20251228181840.37501-1-thomas.perale@mind.be>
-Content-Language: en-US
-In-Reply-To: <20251228181840.37501-1-thomas.perale@mind.be>
+Cc: Christian Stewart <christian@aperture.us>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 28 Dec 2025 14:37:08 -0700
+Message-ID: <20251228213710.2591716-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1766957409; x=1767562209; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
- :subject:date:message-id:reply-to;
- bh=fp8xjFtr0jypOEjngaCdg6pi6BKT2fjqgLwBnF6vLZM=;
- b=NbKxNduN3+M+chLbQh1/5iynxIOV9El3Hi3mDPrdYtk7Mz1kCewcnyhGKt+JHUK9sN
- 5+ISd6+KyJdC6aDFtEWXjuo58MKfY4DO66/gkIxDhvpndOOf6dIvfOUtOuiKGCIU7ptL
- RGib2SKM5tpQi07Trv52CV1DQC+tPXC/MZBlTaN2f7z2e0jzKpGxmgXGlqWhnc4JlUVd
- UQjNSGf+mm/p4Qoc6qYElYWTqfhzr6vhPDDvc2TW822LGHX/nWoOinwoq52mvbrgi/+E
- U9GGEjs2qE/9U2nTvmX1PMW4MSlfa7z/sIUPu71XcRyVxlrLc8AEWx2jHYf5NdvzHfxE
- YmHw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NbKxNduN
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-django: security bump to
- 5.1.15
+ d=gmail.com; s=20230601; t=1766957835; x=1767562635; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=QK7qOYQai7he2rSQyt1dhofkUN7O538xaqufoJ5CSXE=;
+ b=Xa6KcgbeS0Rr8AwND1Zpi8JS4ZO1qHin2FKijpMKuRpeM0qLzNJYRMGIHpTQOStvjc
+ eP9M8v+Dtnmwr/6aGA6+QoGNvUTET28Qsgm+v4EJxCKrQLyaG91SjLdsZdhtj545LtWq
+ tyEjnhG/EK1oUivccL5TL4C/6gN6Z/z0xET8M2bbAG88SMoRazqeKs9+hBMp/2Kk4pCS
+ Q9+e+JyLBm+9V0XZ+uq+uHpxOqDHTHVQfIbevOgsi5YRFKDzuTpRqtXjz0NAob4X6+xr
+ 2KrYG+Vn8GdOfz3sDP4n7dvi7C6wbALYFKpGUSEONOvGqRpbKrnRrbt5Yj7p0eYNi7by
+ DzVQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Xa6Kcgbe
+Subject: [Buildroot] [PATCH v6 1/3] package/pkg-golang.mk: use golang
+ toolchain default GOPROXY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,72 +121,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The title forgot to mention it targets only 2025.02.x
+This change sets the default GOPROXY value to match Go's built-in
+default of "https://proxy.golang.org,direct" which provides several
+benefits:
 
-On 12/28/25 7:18 PM, Thomas Perale wrote:
-> For more details on the version bump, see the release note:
->   - https://docs.djangoproject.com/en/dev/releases/5.1.15/
->
-> Fixes the following security issue:
->
-> - CVE-2025-13372:
->
-> Potential SQL injection in FilteredRelation column aliases on
-> PostgreSQL.
->
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-13372
->
-> - CVE-2025-64460:
->
-> Potential denial-of-service vulnerability in XML Deserializer.
->
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-64460
->
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> ---
->   package/python-django/python-django.hash | 4 ++--
->   package/python-django/python-django.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-> index 97e568ea14..0c9b70959f 100644
-> --- a/package/python-django/python-django.hash
-> +++ b/package/python-django/python-django.hash
-> @@ -1,6 +1,6 @@
->   # md5, sha256 from https://pypi.org/pypi/django/json
-> -md5  b0c6556282e4ef15209b34b09604b9a1  django-5.1.14.tar.gz
-> -sha256  b98409fb31fdd6e8c3a6ba2eef3415cc5c0020057b43b21ba7af6eff5f014831  django-5.1.14.tar.gz
-> +md5  232748d1f2d6d1074f873dde91f7d75b  django-5.1.15.tar.gz
-> +sha256  46a356b5ff867bece73fc6365e081f21c569973403ee7e9b9a0316f27d0eb947  django-5.1.15.tar.gz
->   # Locally computed sha256 checksums
->   sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
->   sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-> index fc5494cd80..32821e19a0 100644
-> --- a/package/python-django/python-django.mk
-> +++ b/package/python-django/python-django.mk
-> @@ -4,10 +4,10 @@
->   #
->   ################################################################################
->   
-> -PYTHON_DJANGO_VERSION = 5.1.14
-> +PYTHON_DJANGO_VERSION = 5.1.15
->   PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
->   # The official Django site has an unpractical URL
-> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/6e/f9/284077f0e61f633e5279518a9ac5924ade4bef12bc841174ca48c57f2438
-> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/45/1ac68964193cfcc0b0912a0f68025d5bdb54f71ba7b8716e85b959874bd0
->   PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
->   PYTHON_DJANGO_LICENSE_FILES = LICENSE \
->   	django/contrib/gis/measure.py \
+- Avoid package breakages due to missing module sources
+- Better alignment with upstream Go toolchain defaults
+- Faster downloads via the proxy compared to direct Git clones
+- Maintains reproducible builds through Go's module checksum validation
+
+The default value from the toolchain can be read with "go env GOPROXY"
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/pkg-golang.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index ffd50adecc..26da7be71b 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -101,7 +101,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+ $(2)_DOWNLOAD_POST_PROCESS = go
+ $(2)_DL_ENV += \
+ 	$$(HOST_GO_COMMON_ENV) \
+-	GOPROXY=direct \
++	GOPROXY="https://proxy.golang.org,direct" \
+ 	$$($(2)_GO_ENV)
+ 
+ # If building in a sub directory, do the vendoring in there
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
