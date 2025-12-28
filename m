@@ -4,93 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B1CDE784BE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C18E784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 22:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2B604038A;
-	Sun, 28 Dec 2025 22:17:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5A1540675;
+	Sun, 28 Dec 2025 22:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RMC9hpUxm1zU; Sun, 28 Dec 2025 22:17:10 +0000 (UTC)
+ id nAlPuTabBlwx; Sun, 28 Dec 2025 22:18:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB1BF40382
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABE2A40565
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766960230;
-	bh=uFQTMzpggbqnbJ/G0QMYObmiufAA220G0gP8DzsKz7Y=;
+	s=default; t=1766960292;
+	bh=TR4uVDCpl7wytDYvPhqaOy6LaalWjc8aveDdOjxlo0M=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pcZFpoNDk13EBBuTR+PeDlErjnrr2Rqnh9ZqrkhfcNa976opZ0Erhjcz1IE8NR7ch
-	 JIEuQTK/yMkYFHmWeBFbkpwjE5ld9fx2BtaY9TJXhpYe1rGKya1QzyTBtO9GUPh+an
-	 RZlWxJKh65ESVCIsA1X2MYFqTJMLzIXd9h9yYKWxCgTafrxoK6oLaK6o4T0s6PplGA
-	 9P8Qa1SfZb2XHwdJcOdTqZODiSfQ6q4NLBjjUKFUquJK83LbYecBUrCnuTCuwXtAqh
-	 R1Ba12X56mJtRT0F1wI2S8snVSRSyIsqA26yFWId0DdxCjwGHbkMm5dbqr8RzRlEfr
-	 sP/5vaKNEVO9g==
+	b=oA/iPgBZJg364HXVS923mCpJ8Fey1DeIogyeq6LM4Ibg64Skv7jysBMzbjuCwKUWX
+	 odNFOM8rFu+9ZaDgFn/d7IvO+emANnCmuVwDQPBTP+XKRo5Xco6s6L3IyKjf5UO+zR
+	 MW5fi6wXJOlzV66VuMbiJ6Z4WsgacEO8nW+MeHRkGUo1vqvVaJIodXIqefX/ZAMaDk
+	 XO2/iVURU/cQvAWQjEFAnmgNPj6nBedDuQZzBbA73TxZN0VJ+N6+usiArNYdYV7kAo
+	 knyWaEUnAOiMjklkM71nSmvEFV71QyvKhAxirzngN5yCU3uTrVwJnMzSqITnayvNj9
+	 s1RoN2tBCc3uw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB1BF40382;
-	Sun, 28 Dec 2025 22:17:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 829A3D8
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:17:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABE2A40565;
+	Sun, 28 Dec 2025 22:18:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F237D8
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74E4840382
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:17:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1508060A5C
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HpFeJafwQsv6 for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 22:17:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eocbmg2zYOSN for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 22:18:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 879B04037C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 879B04037C
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 879B04037C
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:17:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 18C0860A59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18C0860A59
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 18C0860A59
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 22:18:09 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 8A1ADC1D70C;
- Sun, 28 Dec 2025 22:16:38 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id CE6B84E41E2A;
+ Sun, 28 Dec 2025 22:18:07 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E837D60725;
- Sun, 28 Dec 2025 22:17:03 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A285460725;
+ Sun, 28 Dec 2025 22:18:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 84CDA11979262; Sun, 28 Dec 2025 23:16:58 +0100 (CET)
-Date: Sun, 28 Dec 2025 23:16:57 +0100
+ with ESMTPSA id 847D511979262; Sun, 28 Dec 2025 23:18:06 +0100 (CET)
+Date: Sun, 28 Dec 2025 23:18:05 +0100
 To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>, Ludovic Desroches
- <ludovic.desroches@microchip.com>, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, Mauro Condarelli <mc5686@mclink.it>, James
- Hilliard <james.hilliard1@gmail.com>, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <20251228231657.2b00d585@windsurf>
-In-Reply-To: <20251221223441.185169-1-bernd@kuhls.net>
-References: <20251221223441.185169-1-bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Andreas Ziegler <br025@umbiko.net>
+Message-ID: <20251228231805.26edf574@windsurf>
+In-Reply-To: <20251217220525.3815471-1-bernd@kuhls.net>
+References: <20251217220525.3815471-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1766960223; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1766960287; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=f6boBmJiSAZX/V15H3plzAuoFxDY1nt4A0VvaNj59e0=;
- b=mAq/2kdeKetpQXc1DNW3jHtVO2cDjGoIvTkDhBy/AjU+FQyAfsrWtO3A3FwsntotX1ywvy
- 3nVKI48OzJ4tLUUL/4FCR9E+s9bbhy0XeKjzPBVNRPgx86pZGJwoAqSQGLzI0nPjqCTQ5s
- 8Ait/HbkHEBrGnssU4h9pJiemGpXV6hZSk46R1SWFKE9d+L2xbqZL4SPyV6lsejR2VqDd+
- EWAixRRRHh1IUNokFKHvg0uw0xp6koTM2ecYN9nr4FqgasSVbBQqJT9vM/yV9cXc9gpO2O
- lpLvinAeWQNPh8JpQG5pzS46omawOCeu0T8r5vy9ctZHwNttKfRjSuTK/XPC8A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=wjtTdYUbB3j8lTVSHCT3rVdc0ULB2JMbCWKjR/GzZjI=;
+ b=ckAnRPfF7btmdjuc0HydJh/JRoTGVq+dJTaS1S99hHcM2V/sJAxVq+sb9MUMQvJsq6Bo8k
+ z2KXZZrk48yiHQg/Lyn8/XwONNfVpi7QGs6PjLMwWupqwJ1KyXztwTHvQOyYLanDgRhf37
+ dkzm8cF6sUxDPtxUyADLBKLp/Ylkgn43/pj+mVUnJpl/PbQLWmutsH3mdVF5Zspc4+7w+k
+ htFeN59lYHvMAhdNalNxr+8uqixahac8wzYI/f/euVoVRjCesjJEYQ6LafEEIM5IVf+m8I
+ Err+TKRgbITNO0Ai/nEYoNDZaPIaMxLRDFB9Wum1QRlIwK+QVZvJdvMuktPUcA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=mAq/2kde
-Subject: Re: [Buildroot] [PATCH v2 01/23] package/python-characteristic: add
- md5 hash, update SITE
+ header.s=dkim header.b=ckAnRPfF
+Subject: Re: [Buildroot] [PATCH v3 1/2] package/libid3tag: bump version to
+ 0.16.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,18 +104,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 21 Dec 2025 23:34:19 +0100
+On Wed, 17 Dec 2025 23:05:24 +0100
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Updated package as computed by scanpypi.
+> Switched to maintained fork also used by Debian:
+> https://codeberg.org/tenacityteam/libid3tag/commit/7dce7b492406becd08c2691bf949e086b127fb58
+> https://tracker.debian.org/news/1573712/accepted-libid3tag-0163-1-source-into-unstable/
+> 
+> Removed Debian patchset which is included in this release and contains
+> fixes for CVEs mentioned in LIBID3TAG_IGNORE_CVES:
+> 
+> - 10_utf16.dpatch
+>   https://codeberg.org/tenacityteam/libid3tag/commit/2a0f4df1544e3e124622e2e87a117395d40a1d57
+> 
+> - 11_unknown_encoding.patch
+>   https://codeberg.org/tenacityteam/libid3tag/commit/68777efc16d05aa5bb25fa50ff796c2e23e42054
+> 
+> Switched build system to CMake:
+> https://codeberg.org/tenacityteam/libid3tag/commit/cb746b9f216d3016825715df473bfa8807e007f5
+> due to autoconf removal:
+> https://codeberg.org/tenacityteam/libid3tag/commit/2ceebdf3b82f149125b679b0002348426f51dc43
+> and added upstream commit to fix build with CMake 4.x.
+> 
+> Removed id3tag.pc which is now provided by the build system.
+> 
+> Also removed the host-gperf dependency which was needed by autoreconf,
+> see buildroot commit 7ecd0e4edf9f42795ef70097a8f205b2aaa67a6d for
+> details.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Reviewed-by: Andreas Ziegler <br025@umbiko.net>
+> Tested-by : Andreas Ziegler <br025@umbiko.net>
 > ---
->  package/python-characteristic/python-characteristic.hash | 4 ++--
->  package/python-characteristic/python-characteristic.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> v2: added upstream commit to fix build with CMake 4.x
+> v3: removed id3tag.pc (Andreas Ziegler)
 
-Thanks, series applied!
+Thanks, both applied!
 
 Thomas
 -- 
