@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F84EE784BE
-	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 23:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B4EEE784BE
+	for <buildroot@archiver.kernel.org>; Sun, 28 Dec 2025 23:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D20E814BC;
-	Sun, 28 Dec 2025 23:37:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48619814C4;
+	Sun, 28 Dec 2025 23:38:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJ6b8MrFLW6w; Sun, 28 Dec 2025 23:37:37 +0000 (UTC)
+ id hMADNgxmeD5s; Sun, 28 Dec 2025 23:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE813814BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BD85814B1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766965057;
-	bh=NCAlXCUwODOhwV54f9NU4QcFfIfE0DcIUIBO6yyg16U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Lv5mUY3w5BZZwYrBL1CEPsN1kVBlbiMiYf731xsMxIg04g1PBrRNiqi/dU+i+6y3w
-	 +Gk43zMCYVPqrqDBBbkp98bYEBNQqznj2HGwoOx839RqvCqtciPUdCWTgjQPbEpp77
-	 oqBY6GvWrribSUsIsOObr5SL94Z5DTlN5d96NVkEGSpJVyEqmaTqTHiI3vJYH9PZIM
-	 U5WYj9pM3fMHkm9mvGB5hVg+49VtuguryjuEd8JLbBj5QVVi30pNo631IJqHGAKN3M
-	 ZWWcoRZn2e5Va9E0bTbeCfoKWxBCpl2lODh9HumsFw8K84wePAbeGtNp0ZmC9J9a+I
-	 1SgHEMA8c6dMg==
+	s=default; t=1766965134;
+	bh=LhdB95zCmfViwD1WX6ypdt8+7m3YuIyGpQh4tOnimwk=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=p+8JFG7bEjxsX3B6epPpkbH087eAQ3zCzcO4eYe3BetWbYrKmTd0MDbbCRr6O5vIf
+	 yz9TTDmHibf9iKH1Su8DjAAcg5fp4T3raTfc3HP+pDOraVlwEwM7cd0kPvOE2F6D7r
+	 AIejh/ZEzUJDCmTfBCTPdD7sC/sqMHev9ERY5KraTfSyHwihSoLihl0cPglSkDLPj+
+	 Xw/7J9EGk3W1vuZxbCauFy9Gkl/flWCLVppRcmPRvfmMRdnZzJN6yecg1woDTXBAfK
+	 T2pQ33/+5DOYCZIxOU3aQdT30JY3MAhHk/9IP64L2zTcbWrkPQJBi0FYMILrTMDhph
+	 47wz/URVxrw5A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE813814BA;
-	Sun, 28 Dec 2025 23:37:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F1076B9
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 23:37:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BD85814B1;
+	Sun, 28 Dec 2025 23:38:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB8CD1E1
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 23:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D77F4814BA
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 23:37:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD1CF60A8F
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 23:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2qo5DvqEo4VH for <buildroot@buildroot.org>;
- Sun, 28 Dec 2025 23:37:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C920814B1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C920814B1
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 23:37:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2719187A35; Sun, 28 Dec 2025 23:37:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 00:32:16 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d5e0ccd8fe141c9cbda7137f84c93a834496e0b
-X-Git-Newrev: 8892bb2b384aba54c9b7b99287067b9150f91ade
-X-Patchwork-Hint: ignore
-Message-Id: <20251228233734.2719187A35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 12.3.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wY5bU1IPAjRS for <buildroot@buildroot.org>;
+ Sun, 28 Dec 2025 23:38:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF34060A8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF34060A8B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF34060A8B
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 23:38:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id D8F422003AE;
+ Mon, 29 Dec 2025 00:38:48 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 29 Dec 2025 00:38:48 +0100
+MIME-Version: 1.0
+Date: Mon, 29 Dec 2025 00:38:48 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251228223653.2130377-2-giulio.benetti@benettiengineering.com>
+References: <20251228223653.2130377-1-giulio.benetti@benettiengineering.com>
+ <20251228223653.2130377-2-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <5f2bd93685497838fbb38a5a016b49b3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1766965130;
+ bh=2BxiHE/qmhnSRlnty6068rMcVxhyTh4t5KOQ8Th3pkM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rTWKIWw19cjACQZ9Ff+4N6N9wOARd07LFrQ7uBuA69eOLRNwx9flocokH7hu+TfhJ
+ yFdd64ON+Ng9ZQsMVMwOCQ5SLPzd3/tE4TmyZa41kmqNo4ILIarLBQgFLvfCVkTHsQ
+ htIDhY0ImaOKjCQPYqkIrkBrlwxRBkPCa39HY/ljKVc6r5/LDKbSI4ePImf8GmvL5v
+ xgjrv4rKxtVYNB/hLlBp4ulQElnPuwdKmxMqI5ZTl0ei9kTL8+wA542t9MbMsEz9+0
+ kRVzCrmGNcglSpk172XjvlL4Ugzrl6jyVja89NYrkHiUwoT8No37IToMoOrxcjQ02R
+ kxQBCXfN//DCQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rTWKIWw1
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 12.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,47 +95,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8892bb2b384aba54c9b7b99287067b9150f91ade
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 28/12/2025 23:36, Giulio Benetti wrote:
+> Release notes:
+> https://github.com/harfbuzz/harfbuzz/releases/tag/12.3.0
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Release notes:
-https://github.com/harfbuzz/harfbuzz/releases/tag/12.3.0
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index dbe10255ec..cb5b63507c 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ecb603aa426a8b24665718667bda64a84c1504db7454ee4cadbd362eea64e545  harfbuzz-12.2.0.tar.xz
-+sha256  8660ebd3c27d9407fc8433b5d172bafba5f0317cb0bb4339f28e5370c93d42b7  harfbuzz-12.3.0.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 268e4ac5d0..5aed4e31f9 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 12.2.0
-+HARFBUZZ_VERSION = 12.3.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
