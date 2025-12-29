@@ -4,82 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52D16E92FC4
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 18:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E97E92FDA
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 20:47:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B32F8089D;
-	Mon, 29 Dec 2025 18:59:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0DCC81E03;
+	Mon, 29 Dec 2025 20:47:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0RhlOuKb_noZ; Mon, 29 Dec 2025 18:59:24 +0000 (UTC)
+ id o1_cnjLFrtSy; Mon, 29 Dec 2025 20:47:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7039481DE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92CAF81DFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767034764;
-	bh=nHZv12462cA7rsJrHiTMmdjMIHW0OoFvmUi3Xwpfc7o=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=emKNxaohSx+338YbKtvTo51YahCMeElWeT0HOmKCVOYxBqEcNBI0eGWD0D3oyWJ5t
-	 QK2e+3qmVyk2IUNRz1yJg46yrpnFbI6y3cuXPz1e184tXc84RC7+BLmb8Fbqd42A8M
-	 87aYAEKuEY8Q1tXoips+odwEDLHfXkp1p0bnWmwx2wQwXj6cdHez5cVKnNb6gvHLfl
-	 lpJi0A22k4+eQ4KIgV1V/LZbvMosxN9iK4X5YIZF1VbZb6KOVUFtJuL38oYddVwdkN
-	 RSti5qTnHhc/+X2o1D3WrJ2rF7hYMusc0Httg51ANKZk/e/k/w88xVIjIcTWQKxyov
-	 /jMw6z/uY8aZg==
+	s=default; t=1767041231;
+	bh=7qhyLp/3qt53ODk+LD0zIjL3Uqzk75cwceVZB+eFHzk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ihNZB6VILZ61Ug6TP8wFJWvlBCuXiEueZg1lKizrrJi5VeDTuc1kIxSxMU+I1AJH4
+	 qHXyvsHO4nJHmXj6ub4hnKV7+8T9F7t16fNso/KlW+ErzcYXE8KPMAociUlRM3///6
+	 XAA/ASBy61JnRtnJxJJ64CPjriQXKC1+EfyDVH7p95gSHKBY+bmT3N9++mfbjs3vcg
+	 ce9qkzaHHXDSchNJZhIbxp2LjbxN6E99JNtq1MZecWFIHrmS1isqDTde5/tMeTcmjb
+	 NXHm2mCQxzllEZRlqIg7JjjiD15d2OVQ3TUEFW1RRiqmRHz7OPrjo/5Hb2EPE42H6N
+	 pE+PmJzAbRttA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7039481DE6;
-	Mon, 29 Dec 2025 18:59:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EE5B1B9
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 18:59:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92CAF81DFB;
+	Mon, 29 Dec 2025 20:47:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27BED177
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 20:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D514D81DE6
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 18:59:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25588407AD
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 20:47:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FUNqf5SXPfRh for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 18:59:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EC8B481470
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC8B481470
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC8B481470
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 18:59:21 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C62FA4C06F6;
- Mon, 29 Dec 2025 19:59:19 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37952)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vaISc-000000004Qa-3UAl;
- Mon, 29 Dec 2025 18:59:19 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MW8SOrHd9BWh for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 20:47:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67E0F40792
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67E0F40792
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 20:47:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5767D87BAB; Mon, 29 Dec 2025 20:47:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Dec 2025 19:59:19 +0100
-Message-ID: <20251229185919.4176115-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767034759;
- bh=blLqMg/a8KCaEJ2EMoOxgr258EHMziIMOmnjAjAKBPk=;
- h=From:To:Cc:Subject:Date:From;
- b=azUlyanTbjmh83PRqra9uGcV4ZJ7RWMB5OexsFk9oTIrfCghfM2c14LzW6HBSsqMF
- yr6v45xsmRtm34AsT9zYUGr04GuseQOolRK7/rGraR130GUxv4HHvyusD14drc082z
- PEC7l6r99GDiOnrJn0XWZZMOZiAfDR3xJfBDzdfuU8K0f6Y4uTQ6tMQe98zym96lKq
- zXlIRs0Iz0SkDOgHlFv9CZ4FBNEP1w9nVfWA/L6v6Y7D67suBHM2JdRUj1JC5qNXek
- pmmGmBkPN9wPJayxkbU2auvmccRnvs0ATLv3hfuRn3utMR6Gw8dN9HgY2ARCVD/AY6
- wAnxGJAa5gkQA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=azUlyanT
-Subject: [Buildroot] [PATCH 1/1] package/libupnp: disable blocking-tcp
+Date: Mon, 29 Dec 2025 21:24:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f784c823ef8357aa36828342f83d5fd59995937e
+X-Git-Newrev: 10419e76c6b70d79884b9da6361bdd5281068120
+X-Patchwork-Hint: ignore
+Message-Id: <20251229204709.5767D87BAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/piglit: bump version to git
+ 62d499d63d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,38 +69,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Suggested by Gerbera:
-https://github.com/gerbera/gerbera/commit/fcf31472239705e7d28af81cbe326f8f416f7f7d
+commit: https://git.buildroot.net/buildroot/commit/?id=10419e76c6b70d79884b9da6361bdd5281068120
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CMake Warning at CMakeLists.txt:583 (message):
-  !! It is strongly recommended to build libupnp with --disable-blocking-tcp-connections !!
-  Without this option non-responsive control points can cause libupnp to hang.
+Disabled vulkan tests added by upstream commit:
+https://gitlab.freedesktop.org/mesa/piglit/-/commit/2519c330fba55ce6efd0dbee07aa67c703124d4f
+
+Added X11-related configure options due to upstream commit:
+https://gitlab.freedesktop.org/mesa/piglit/-/commit/d958b70d1fc5c2ee039363d862b14ca498a50e82
+
+Added configure options to fix build errors without libdrm and with
+libegl/libgles enabled but without X11.
+These build errors were not seen before due to other build errors
+unfixed since the bump of python3 to 3.10 with buildroot commit
+25b1fc2898d68ddf2674b14c738045875fc5a2dc:
+https://patchwork.ozlabs.org/project/buildroot/patch/20230723074303.603364-1-bernd@kuhls.net/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien:
+ - add back commit log comments from v2 patch
+ - add git commit id in commit log title
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libupnp/libupnp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/piglit/piglit.hash |  2 +-
+ package/piglit/piglit.mk   | 15 +++++++++++++--
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index f29275d2b5..cfa1136db3 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -17,6 +17,7 @@ LIBUPNP_DEPENDENCIES = host-pkgconf
+diff --git a/package/piglit/piglit.hash b/package/piglit/piglit.hash
+index 2c0b6aa52a..a778401253 100644
+--- a/package/piglit/piglit.hash
++++ b/package/piglit/piglit.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  ba4d1839038905f3833e9ab23b385913e08d552533dd222cc203c79c10e09918  piglit-2affee53f3ad7a96f5b397a2b6d6408af8a374b0-git4.tar.gz
++sha256  0553524e1bfce646771560805cbe523204c59dcee20dc58bb9baa87134a50ea1  piglit-62d499d63d2b8b29a67efd9d93ed9b6a94d4950e-git4.tar.gz
+ sha256  dcc398730859aee7cc1d6aa57f526f8d181b47bb3a49830e85b5723d5bc2c3bc  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licences/GPL-2
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  licences/GPL-3
+diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
+index 4d17405d10..619f29204f 100644
+--- a/package/piglit/piglit.mk
++++ b/package/piglit/piglit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Bind the internal miniserver socket with reuseaddr to allow clean restarts.
- LIBUPNP_CONF_OPTS += \
-+	--disable-blocking-tcp-connections \
- 	--disable-samples \
- 	--enable-reuseaddr
+-PIGLIT_VERSION = 2affee53f3ad7a96f5b397a2b6d6408af8a374b0
++PIGLIT_VERSION = 62d499d63d2b8b29a67efd9d93ed9b6a94d4950e
+ PIGLIT_SITE = https://gitlab.freedesktop.org/mesa/piglit.git
+ PIGLIT_SITE_METHOD = git
+ PIGLIT_LICENSE = MIT (code), \
+@@ -29,16 +29,27 @@ PIGLIT_DEPENDENCIES = host-pkgconf \
+ PIGLIT_CONF_OPTS += \
+ 	-DPIGLIT_USE_WAFFLE=ON \
+ 	-DPIGLIT_BUILD_CL_TESTS=OFF \
++	-DPIGLIT_BUILD_VK_TESTS=OFF \
+ 	-DPIGLIT_BUILD_WGL_TESTS=OFF \
+ 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3
  
--- 
-2.47.3
-
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ # libxcb for xcb-dri2
++PIGLIT_CONF_OPTS += -DPIGLIT_USE_X11=ON
+ PIGLIT_DEPENDENCIES += \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+ 	xorgproto \
+ 	$(if $(BR2_PACKAGE_LIBXCB),libxcb)
++else
++PIGLIT_CONF_OPTS += -DPIGLIT_USE_X11=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBXCB),yy)
++PIGLIT_DEPENDENCIES += libdrm
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_DMA_BUF_TESTS=ON
++else
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_DMA_BUF_TESTS=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+@@ -54,7 +65,7 @@ else
+ PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLX_TESTS=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
++ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yyy)
+ PIGLIT_DEPENDENCIES += libegl
+ PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLES1_TESTS=ON \
+ 	-DPIGLIT_BUILD_GLES2_TESTS=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
