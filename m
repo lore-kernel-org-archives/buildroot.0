@@ -1,88 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF575E8FDB1
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 11:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA0B1D3B7E5
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 11:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B15B46074A;
-	Mon, 29 Dec 2025 11:25:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD34F40282;
+	Mon, 29 Dec 2025 11:25:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wywTt-JaiYE2; Mon, 29 Dec 2025 11:25:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T1HY5EIF9qmU; Mon, 29 Dec 2025 11:25:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8CE960802
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE8CD401F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767007548;
-	bh=33VtJUg4yerREcJzGqCJinYOzclZh085TUCMYkaqj2E=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1767007558;
+	bh=hkVL0M/gf5ydNE030oMmmOOwZRvz5NI/p+5Ngotpsvs=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=g7/bY31TRtOO+N1w+y0dsHwFia1/8T4rlnPJ5NlZRpAgwsyTYKLhPUr0HYTY7T4mH
-	 Yi056001Q2KD2DcxJaAmWzRsLEsCJ9cF3GQ7whXkt4jAwwyizgVTiV2WmVVE9aPfmK
-	 WtItpCMpH+xAorTSJT1ZABtdBrN3yYw46SY0qIxtknibjF7fZlYFOHGenVW/QrP8ZD
-	 dXeC3Jr4/eb3X4oTpkb6pDsJGF03rlVcXnJ7EOG3+rSXjM78bgrU3qN50PrmEJG0tz
-	 Z+flXhfSAS72Zz5KoQu/qaXFkT9x6pBhm7T2L+1x+gVIFjbb3A6hc6pC9YVaajbjWD
-	 PzsTG0KPLZClA==
+	 From:Reply-To:From;
+	b=iA0CW95PMY3zNy5gBOqvh5YHM2nGtfwFYKPbyf4UA6lbTKBYEtVkbfnolQwj2kJhx
+	 dDjov+co3wMbUk++2XqKUt4lUS0/Fsl/hUqd/my5N7iMiLoOdIDh8uRMRa1pd8lu/p
+	 SI8I6Hbw2HUYJl3SEeLSzTUHchdlV6JTignSJeVIGTX3HSbuTuT4ndjpa897Tru7Hu
+	 YWzJSXWo5mc3eJcFsYPYhjzG4peeVSduUmUF37P1fmnQhh4JRrrpCbsbC2hoTJG1Y0
+	 JBH+BDayW0Qla2BFxCHAR66482cdWVGxZXN21v0QRz5MWLdHDPdpI88IzhgpyeNi3H
+	 FNE7e9GqRTRWQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8CE960802;
-	Mon, 29 Dec 2025 11:25:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE8CD401F7;
+	Mon, 29 Dec 2025 11:25:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D7348B9
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 22E82D8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE06840459
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20C0740459
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ylyJsn4mqsOq for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 11:25:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3E32A400CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E32A400CE
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3E32A400CE
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:45 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 84F5BA4C246B;
- Mon, 29 Dec 2025 12:25:19 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44552)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vaBNG-0000000055A-3em2;
- Mon, 29 Dec 2025 11:25:19 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 12:25:17 +0100
-Message-ID: <20251229112518.2317328-3-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251229112518.2317328-1-bernd@kuhls.net>
-References: <20251229112518.2317328-1-bernd@kuhls.net>
+ id PrIkat2PNchh for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 11:25:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 38539400CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38539400CE
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 38539400CE
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:55 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id AB9032003CA;
+ Mon, 29 Dec 2025 12:25:51 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 29 Dec 2025 12:25:51 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767007519;
- bh=+RsDDZXQpwjajstLQ5TuuOiW3a6QC44brJebEaDCZUY=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=aInzZflSYw1IvrWiKBj1+Y4igVEcYxIVYa1kdPkEDYqgw3oAXNbh3s8hajheXNeS2
- C73TQdyTd3axQUJqNhBA1QHtlubiMPGBwBCRbA295jVNLI9uOk5M92/N341fUeQfCV
- Clr2lPN/N95wvqpVPpLWxBcpP6ODqraYwvOYTxGW640XAvHLezMvLCN4flgJxoWZrn
- zQlv9Tn7CQsKzCMV3rNCtYn14B0g1RJVdOGO7515agX+0I7OCttxh9QxNRIIH2+Gy0
- NmF9m0ZUCXqp39p0t36R8gK+Fixt9LOAkP5+Ev9CHFJPTW5vz0k0edNGmkWuplEjQY
- KxdFmtA4nwpLg==
+Date: Mon, 29 Dec 2025 12:25:51 +0100
+To: Alexander Shirokov <shirokovalexs@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250802083139.17758-1-shirokovalexs@gmail.com>
+References: <20250802083139.17758-1-shirokovalexs@gmail.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <8a616ce8c8500bc8c5adde0480b91ce4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767007552;
+ bh=DB4l2KLdNblVJ9wAiGHQLeJotrX7bhDA74/Sz76i5yU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Fmg03dJYZnlF4wVgy3wnnJXlSfAg1nkJKbPE7nCNDi5e+AQs4m//7Q9rV4kLn4bLv
+ OkfWcYQa5HLI18v1URa0xGhx59xlTXrSqvBu9bWpPB98m+fO8nBYdWjQplV7+f4i30
+ ESnfNzhHX0hL8lIlIPqlRgJB6UDhaqRR+cLRJtU392xmdgJAMUj2iUgKg3iXYZqKUn
+ 0ePrfvb390qwL0Flahk8Y5wEqEptDFTa4WbakOjXGZfaKK6UXFBCy1baJ0fdKWAIOA
+ 6LUyJok6SMsK8nblAWE5aEov0D93HxUFxbU+e03YUrgjweJC5mWcgDx2/s1ilN1odZ
+ 3XPejDhXR9IIQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=aInzZflS
-Subject: [Buildroot] [PATCH v2 3/3] package/python-scipy: bump version to
- 1.16.3
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Fmg03dJY
+Subject: Re: [Buildroot] [v1,1/1] package/aichat:new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,112 +92,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Depends on python-numpy >= 2.0.0:
-https://github.com/scipy/scipy/blob/v1.16.3/pyproject.toml#L41
-https://github.com/scipy/scipy/commit/a3e2bb639b156b01964cda1edca971521c6f39ff
+On 02/08/2025 10:31, Alexander Shirokov wrote:
+> AIChat helps seamlessly integrate different LLM models, providing 
+> access
+> via the CLI and network. It can serve as a gateway to heterogeneous and
+> distributed LLMs.
+> 
+> Handy features like roles, macros, and sessions help simplify 
+> repetitive
+> tasks and reuse of existing solutions. Features like playgrounds and
+> arenas help to explore and compare models.
+> 
+> https://github.com/sigoden/AIChat
+> 
+> Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
 
-Updated license hash due to copyright year bumps:
-https://github.com/scipy/scipy/commits/v1.16.3/LICENSE.txt
-
-qhull license file was moved upstream:
-https://github.com/scipy/scipy/commit/6d699dded4423e4ff9ac97eff9f4912ed24964fa
-https://github.com/scipy/scipy/commit/96423e5279a4cdf698eedea6f0795ab57cf5a860
-
-Updated numpy path in PYTHON_SCIPY_MESON_EXTRA_PROPERTIES following
-upstream commit:
-https://github.com/numpy/numpy/commit/923f219077c8aa3ad7d3792d8c06cba010b70252
-
-Test was successful:
-
-$ utils/docker-run support/testing/run-tests -j33    -k -d dl -o output_folder tests.package.test_python_scipy.TestPythonPy3SciPy
-09:59:22 TestPythonPy3SciPy                       Starting
-09:59:23 TestPythonPy3SciPy                       Building
-10:10:09 TestPythonPy3SciPy                       Building done
-Downloading to /home/bernd/buildroot/dl/tmpw1frnmf9
-Renaming from /home/bernd/buildroot/dl/tmpw1frnmf9 to /home/bernd/buildroot/dl/kernel-versatile-5.10.202
-Downloading to /home/bernd/buildroot/dl/tmpiip1lach
-Renaming from /home/bernd/buildroot/dl/tmpiip1lach to /home/bernd/buildroot/dl/versatile-pb-5.10.202.dtb
-10:10:24 TestPythonPy3SciPy                       Cleaning up
-.
-----------------------------------------------------------------------
-Ran 1 test in 661.922s
-
-OK
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: unchanged
-
- package/python-scipy/python-scipy.hash | 8 ++++----
- package/python-scipy/python-scipy.mk   | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-index bee5d698a0..16c3af029d 100644
---- a/package/python-scipy/python-scipy.hash
-+++ b/package/python-scipy/python-scipy.hash
-@@ -1,10 +1,10 @@
- # md5, sha256 from https://pypi.org/pypi/scipy/json
--md5  0e8eea0f7c4fe7d8102366230c96d66d  scipy-1.11.4.tar.gz
--sha256  90a2b78e7f5733b9de748f589f09225013685f9b218275257f8a8168ededaeaa  scipy-1.11.4.tar.gz
-+md5  db334c9cae4eeb9f306c342b3744d653  scipy-1.16.3.tar.gz
-+sha256  01e87659402762f43bd2fee13370553a17ada367d42e7487800bf2916535aecb  scipy-1.16.3.tar.gz
- # Locally computed sha256 checksums
--sha256  5517022426a56179540ee6eace15fd723ef8fdb83b2900fed2152dd2e2f972a2  LICENSE.txt
-+sha256  221e59f5e910fd7f94e44f0dac77436a11338c285c6346232e4a850a50da0e94  LICENSE.txt
- sha256  606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
- sha256  3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
- sha256  f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/_dsolve/SuperLU/License.txt
- sha256  0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/_eigen/arpack/ARPACK/COPYING
--sha256  34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb  scipy/spatial/qhull_src/COPYING.txt
-+sha256  106d55c931fd6a84822e5345d900273d059f1c27310d02567ccb313c5d18c55d  scipy/spatial/COPYING_QHULL.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-index 6626826e33..4d8d7b398e 100644
---- a/package/python-scipy/python-scipy.mk
-+++ b/package/python-scipy/python-scipy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SCIPY_VERSION = 1.11.4
-+PYTHON_SCIPY_VERSION = 1.16.3
- PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
--PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/6e/1f/91144ba78dccea567a6466262922786ffc97be1e9b06ed9574ef0edc11e1
-+PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/0a/ca/d8ace4f98322d01abcd52d381134344bf7b431eba7ed8b42bdea5a3c2ac9
- PYTHON_SCIPY_LICENSE = \
- 	BSD-3-Clause, \
- 	BSD-2-Clause, \
-@@ -20,7 +20,7 @@ PYTHON_SCIPY_LICENSE_FILES = \
- 	scipy/optimize/tnc/LICENSE \
- 	scipy/sparse/linalg/_dsolve/SuperLU/License.txt \
- 	scipy/sparse/linalg/_eigen/arpack/ARPACK/COPYING \
--	scipy/spatial/qhull_src/COPYING.txt
-+	scipy/spatial/COPYING_QHULL.txt
- PYTHON_SCIPY_CPE_ID_VENDOR = scipy
- PYTHON_SCIPY_CPE_ID_PRODUCT = scipy
- PYTHON_SCIPY_DEPENDENCIES += \
-@@ -42,6 +42,6 @@ PYTHON_SCIPY_CONF_ENV += \
- PYTHON_SCIPY_CONF_OPTS = -Dblas=openblas -Dlapack=lapack
- 
- PYTHON_SCIPY_MESON_EXTRA_PROPERTIES = \
--	numpy-include-dir='$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include'
-+	numpy-include-dir='$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/_core/include'
- 
- $(eval $(meson-package))
--- 
-2.47.3
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
