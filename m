@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4AFFE92724
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 14:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 257D5E92734
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 14:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A29B460AF6;
-	Mon, 29 Dec 2025 14:34:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06C2760AF9;
+	Mon, 29 Dec 2025 14:55:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JBFXRh3Muib7; Mon, 29 Dec 2025 14:34:50 +0000 (UTC)
+ id 55-QACj3SjrL; Mon, 29 Dec 2025 14:55:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBC3560887
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5CAE60823
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767018890;
-	bh=SGhCtxCls0ovq+vfsZ4OaZKmGR8jrOl9N9mzrbnV5m0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Pm/xdiPc8DMT09dKZrVXq+djlIc0+6MHOI6Wrp25EnDnwsAL7GNpYDnTy3Rxszr9D
-	 nR5wuxUphUAbZtjXi/NgXBG7pFJ8gu+DE6Ra421TuC6MUSOPKVFUyblEPez2PmK6Ag
-	 ixLCCsbjR/E2aIXmuyVcDbyKQQiElf72h69fyyozikRsLpWQxS4x0/mLPBeUMf/3mo
-	 iEwQ4PXk+YGT6aqh0Gej1J+H6b/rrAqrRRARVKI9Jn5kWi7iCbj8KfxLNUAZqob4Ao
-	 R5SWv3HqgHcGj3NwYZIqIx7+7ToB1k05qmddLYPg7KHXNLwd+jReMZtliwlrS9Jy0E
-	 2qmlZc3uls1BQ==
+	s=default; t=1767020143;
+	bh=KxWAdgrA+3tS/U+dLEDZaTn3rceaazKYV5WKUafN7X0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=luYyv5ERpQPK3kkgDMrwPkgFY9+47W0FrZctCVYt+L8PwOTUqSVDqm7S7e5Q2y/1B
+	 W+fVfN3EA8w8pKyZLXzJjHuNOL04uingetdlgvI44bkduKxiTcdmFXvDl1xbJ+wELp
+	 Mkam2aeZxFqVM0jh/0bxxZnKGEeyES4zUdfPvUF7tjdba+7u9M1QcQpomRBJSg1xdu
+	 b2EofhF+B2RQFgbfpygVYtZtfK9bZXh1wwDT2v4rUELCzlx2RnPb2hWmKF+PpimP+7
+	 9hw0v7DlHOQfX5xrHvKzPTFl/9unpv79P7D/cbCoN+iYx2udonqW/KNQv0sYClLuhZ
+	 OfGyCVrtZrYqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBC3560887;
-	Mon, 29 Dec 2025 14:34:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CDD29D8
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:34:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5CAE60823;
+	Mon, 29 Dec 2025 14:55:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D26BF177
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C046F407E3
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:34:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B858360823
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sX7xJpC_oIir for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 14:34:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA13E407DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA13E407DD
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA13E407DD
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:34:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 3278D19F5C3;
- Mon, 29 Dec 2025 15:34:44 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 29 Dec 2025 15:34:44 +0100
-MIME-Version: 1.0
-Date: Mon, 29 Dec 2025 15:34:44 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
-In-Reply-To: <20251229105411.47443-1-dario.binacchi@amarulasolutions.com>
-References: <20251229105411.47443-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <c8778ae2006bf377fcd54fa1d0fd71d2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767018886;
- bh=OnXY3NM+T2qM6inyCwN4bqXjwyDXhXN6YLuP0FxTbwY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=V0NpuNBd/eMyt2H7LDv2IUyt6DwAWB5gZfgaI66zN/TGxcrAQUhzed2FRvVUmCZfc
- eGUfuU9AC6cX/sgiH4Xgrm8jx6XVSgGICJCPeThlrRpXRyfBAqfBbJrqUUVKpPAO1y
- J6V0TGkw8U7hDxThH+LpKbRdql3EoTb6/xRdaEdm3c7rsdFNzmRVsiJygp2VTD164T
- vM74+Vd/q8glbWytDRI6mwXj0vFCBSIKeuXEGgIW+5Qr/uQzdA3nupuUGUb2x6pryk
- XbOHFEaQl5KCGgwXUKk470mSKjGkVF/skSfCK5PPd5GSsJEV97ZjHMN+absCLhdv7V
- Nwx5/2yNY+CUA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=V0NpuNBd
-Subject: Re: [Buildroot] [PATCH 1/1] package/cmocka: bump to version 2.0.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w1t-EZGJv3wB for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 14:55:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06AD1607DB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06AD1607DB
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:55:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EB25487B52; Mon, 29 Dec 2025 14:55:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 29 Dec 2025 15:42:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 259073938b149383c4c1e66bfe62e0616a0e8855
+X-Git-Newrev: bfca06b350fa3c0a48af38f89ccfc04c70c3f946
+X-Patchwork-Hint: ignore
+Message-Id: <20251229145541.EB25487B52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpg123: bump version to 1.33.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,24 +70,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/12/2025 11:54, Dario Binacchi wrote:
-> Release notes:
-> https://gitlab.com/cmocka/cmocka/-/tags/cmocka-2.0.1
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=bfca06b350fa3c0a48af38f89ccfc04c70c3f946
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
-For info, I changed the link to the change log in the commit log:
-https://gitlab.com/buildroot.org/buildroot/-/commit/259073938b149383c4c1e66bfe62e0616a0e8855
+Release notes: https://www.mpg123.org/cgi-bin/news.cgi
 
-Best regards,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mpg123/mpg123.hash | 6 +++---
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Julien.
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 2fc0061476..eed62fa538 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.33.3/
+-sha1  41dd15e29668a8e1372d31f327c8962a8ef6b595  mpg123-1.33.3.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.33.4/
++sha1  30cf7f77bd1704448db89af6a6d75904572c4dcb  mpg123-1.33.4.tar.bz2
+ # Locally calculated
+-sha256  6a0c6472dd156e213c2068f40115ebbb73978c2d873e66bae2a250e2d2198d26  mpg123-1.33.3.tar.bz2
++sha256  3ae8c9ff80a97bfc0e22e89fbcd74687eca4fc1db315b12607f27f01cb5a47d9  mpg123-1.33.4.tar.bz2
+ # License file
+ sha256  c22482728a634a8dfdb4ff72a96d4c1ed64cd8f3e79335c401751ac591609366  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 5e55d33b72..2f04e0f979 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.33.3
++MPG123_VERSION = 1.33.4
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = https://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
