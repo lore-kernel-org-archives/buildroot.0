@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB86E8FDB1
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 13:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C498FD3B7E5
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 13:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C467E8133F;
-	Mon, 29 Dec 2025 13:11:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 762F040473;
+	Mon, 29 Dec 2025 13:56:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SzrLsAt4LZ_h; Mon, 29 Dec 2025 13:11:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wLI_ruSsnKCb; Mon, 29 Dec 2025 13:56:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E762F819B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A259C404A8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767013907;
-	bh=o+6EfWfIhQHeQSKmMvGN/sxpP7bMMCJnydWz83KXdmo=;
+	s=default; t=1767016614;
+	bh=u4r3TmMts6SNiqq38K4ybikNYvLSlutsb6Aqci0S4cE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UygL+VRD5AcXdDqwQUQK16H2cR0dlulG6XMsQJP5jAcTgIj7m/C6D2P+CIW5K6pCq
-	 75Tqee3jx95E9O05LA1RCuT2KrIWEUufHau7ywF+m3i9C1sSEDvatDm1oBiywSliXc
-	 EwQ+vwxS9HKt810RnD0ctn7jAyoD/xLsvLoSPeXpd1NCFUxphxEjNg4ofkNFjm7PWB
-	 VoUiVFE18OAB3kftYap44MS9eXYQS+a1KRrMDm/Q0ZGFat7oXITcwuXWo1E+zyEwEN
-	 b6rGcteAycMQSCW2ap23ITX1jFATcfyQlMq5WvKgm8BmMGcSmcuRhZ7QD/KhaKiA9f
-	 6RjeOgF/ZFBeQ==
+	b=FYz7GuXJfUXGCZ34QQ+LfjeQhJ6Rm6GKiPYDP8p7NSfjTqbvcHMW1DW+YijBB0dBo
+	 FzBJATdrzmO2J4rKOM32KsG3OYvIIx6gng2c31ywcx3F+KgwTXmDAMvAMR2ezn5UIe
+	 OIxqzunWLw1qOpnbD16hwpZhzC8QE+gpSI7o2fmb0m7hFqcZMeQsR9coB9bSfWgjMD
+	 Q8iG1u1DpQmrEow0SsHt4ANMUdCUUklv3UuqearHMo83zHpCIl9P0/av79b+iXvQxx
+	 seNQ803LnDKsF0XUVR3UocQOVjWvDV60Demv0QGcQLTdIzAqv5LwSTtSNV08wR26o0
+	 NZyJCUlE/7dyg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E762F819B4;
-	Mon, 29 Dec 2025 13:11:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 63EA1B9
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:11:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A259C404A8;
+	Mon, 29 Dec 2025 13:56:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97FD2B9
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E14A4049F
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:11:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7DECA60854
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FodzLf4qEg3G for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 13:11:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mBk7q4gEe8A1 for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 13:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6473C40373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 793BA605A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6473C40373
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:11:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 793BA605A8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:56:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5661186FE0; Mon, 29 Dec 2025 13:11:44 +0000 (UTC)
+ id 694DD87A78; Mon, 29 Dec 2025 13:56:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 14:11:31 +0100
+Date: Mon, 29 Dec 2025 14:48:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dc9fc60ca12bad99183663f266c278540057f15e
-X-Git-Newrev: 47ba1f6fb35131121d1d0840c9782d6b37788780
+X-Git-Oldrev: 47ba1f6fb35131121d1d0840c9782d6b37788780
+X-Git-Newrev: 121a740ea7e7e19135b41f24ac539d37cb37b0cc
 X-Patchwork-Hint: ignore
-Message-Id: <20251229131144.5661186FE0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libid3tag: fix build without c++
+Message-Id: <20251229135651.694DD87A78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uuu: bump to version 1.5.243
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,69 +68,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47ba1f6fb35131121d1d0840c9782d6b37788780
+commit: https://git.buildroot.net/buildroot/commit/?id=121a740ea7e7e19135b41f24ac539d37cb37b0cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot commit 82094b802877c1128b21b978466641373f283666 bumped the
-package to 0.16.3 switching the build system to CMake causing build
-errors when the toolchain lacks c++.
+Release notes:
+https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.243
 
-Fixes:
-https://autobuild.buildroot.net/results/02d/02db8c1a1b461fa3b5b5932e5b48c77be50b68af/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libid3tag/0002-CMake-Disable-c.patch | 33 ++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/uuu/uuu.hash | 2 +-
+ package/uuu/uuu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libid3tag/0002-CMake-Disable-c.patch b/package/libid3tag/0002-CMake-Disable-c.patch
-new file mode 100644
-index 0000000000..151084b3b2
---- /dev/null
-+++ b/package/libid3tag/0002-CMake-Disable-c.patch
-@@ -0,0 +1,33 @@
-+From b3b045a762ee35fab0e13d1837b9b407da47e59e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Mon, 29 Dec 2025 13:31:43 +0100
-+Subject: [PATCH] CMake: Disable c++
-+
-+https://cmake.org/cmake/help/latest/command/project.html
-+"By default C and CXX are enabled if no language options are given."
-+
-+libid3tag only contains C code. This fix allows the build with
-+toolchains containing no c++ compiler like some buildroot toolchains:
-+https://autobuild.buildroot.net/results/02d/02db8c1a1b461fa3b5b5932e5b48c77be50b68af/build-end.log
-+
-+Upstream: https://codeberg.org/tenacityteam/libid3tag/pulls/26
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f71b245..0c2f13e 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 3.10)
-+-project(id3tag VERSION 0.16.3)
-++project(id3tag VERSION 0.16.3 LANGUAGES C)
-+ 
-+ option(BUILD_SHARED_LIBS "Build dynamic library" ON)
-+ 
-+-- 
-+2.47.3
-+
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index fa691255ee..274cf8fad2 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  4eab6647c9e75e5900ee8981c80750b26493fe54d99708989c0e7ce08067484e  uuu_source-uuu_1.5.239.tar.gz
++sha256  dee3be0f337c631bf93232f5ea42440f07782ce005c9219a14731d66bbe83658  uuu_source-uuu_1.5.243.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 6ee06dab88..74e2448777 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UUU_VERSION = 1.5.239
++UUU_VERSION = 1.5.243
+ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
