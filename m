@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAB3E9272B
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 14:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDA5D3B7E5
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 14:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D683E407F8;
-	Mon, 29 Dec 2025 14:07:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A0B260B0C;
+	Mon, 29 Dec 2025 14:07:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MnqC0-WCfNv0; Mon, 29 Dec 2025 14:07:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IjYl0lSxGqjN; Mon, 29 Dec 2025 14:07:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F4CA407F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FCEA60B17
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767017274;
-	bh=96dtazkhP/SFshscQHaRKNoAEBg+43FFz2DP7BpcrXM=;
+	s=default; t=1767017275;
+	bh=Py73zjVJOev87Y/sezBsGRQImoWkNLK4febSRUb5Jug=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LjXGPZi9FvRuB0fM6E5cU8bIQ+PRqLzy2Mmgs7sw1wNkDBk7pJAtnpYm5XVRS3S8t
-	 ZXW6sF50uE1WYlPP36CVgzvAw/10ShwNiSR8XyGmY1uC+C2GTSTdJXkrBGKns4WDNH
-	 ZrSDx4MZUIJwAhx0AYLroiO8lBvIg1QUvcki4IpToDhC9yOHTFCgZMx/rGvGN3FVb4
-	 73KlTP3MTZIF7En2q6NAlHiUnLw8r/6KRX0Uf5026+mywxShtlOpwCaU0UQ5nHkJ/o
-	 Kt/HICUeIEbyiz6HZ+2Zjf/nb6tN1T3euLxSHflEW0hzX82nUOVKu08gncQhWYnLCH
-	 32bd4O/a142IQ==
+	b=W8WscMvmkbuu3NVDcO+rsa6PbDnaAv6EB0535r9LEs8DMH0/qyYX+dsSV2VRaqzx1
+	 LpsKcxrrNygHSESNTtf2XvuPMnfsqNaWUqEOVbGsWRm85KPsV2sj7SjkaU41nZp+aF
+	 ZvN7E0voVIU5eNUGWkO96OsC5bHRdmMSTZkgtleXoR7OmjkmSJZ5Z8YwdC9lAttzNs
+	 hv+pLhnPh5DFJJ+vlcT/RvmFjLiviXBi/kO3XkOQNEMcFD5c3lIq7hW8S40UIQo3xg
+	 +ED8ny0YioXxCTqApGTWMMpsDisilpaCxEwFOjizYuhcs2oyTeTapBb4EBYsip/EBG
+	 tPRZObdxigM8Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F4CA407F5;
-	Mon, 29 Dec 2025 14:07:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A18B71E1
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FCEA60B17;
+	Mon, 29 Dec 2025 14:07:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28078177
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7826A40259
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4ECD080F79
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Csm04BUNvdUX for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SlUyANlF4lxz for <buildroot@buildroot.org>;
  Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3BCF404FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCAB780F01
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3BCF404FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCAB780F01
  for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2CBA87B48; Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
+ id BA70D87B4D; Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 15:06:18 +0100
+Date: Mon, 29 Dec 2025 15:06:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba51d53019bbc6f862b87389a90695a3dbe0670c
-X-Git-Newrev: 9265e6973593240104c8f9e2a675c01c6c8e37a3
+X-Git-Oldrev: c9b63b439c06c6bf485ff17dcf4477caded2d40e
+X-Git-Newrev: ba51d53019bbc6f862b87389a90695a3dbe0670c
 X-Patchwork-Hint: ignore
-Message-Id: <20251229140743.C2CBA87B48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtomcrypt: add CVE trailer in
+Message-Id: <20251229140743.BA70D87B4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libconfuse: add CVE trailer in
  patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,34 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9265e6973593240104c8f9e2a675c01c6c8e37a3
+commit: https://git.buildroot.net/buildroot/commit/?id=ba51d53019bbc6f862b87389a90695a3dbe0670c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since Buildroot commit [1] the patches that fixes a security
 vulnerability needs to reference the fixed vulnerability.
 
-This patch adds the relevant information to the patch header.
+This patch adds the relevant information to the patch header
+and adds the `Upstream` trailer.
 
 [1] 1167d0ff3d docs/manual: mention CVE trailer
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtomcrypt/0001-fix-CVE-2019-17362.patch | 1 +
- 1 file changed, 1 insertion(+)
+ .checkpackageignore                                                   | 1 -
+ .../0001-Fix-163-unterminated-username-used-with-getpwnam.patch       | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libtomcrypt/0001-fix-CVE-2019-17362.patch b/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
-index 91e2145853..adf5020049 100644
---- a/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
-+++ b/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
-@@ -6,6 +6,7 @@ Subject: [PATCH] Fixes #507
- Fix a vulnerability in der_decode_utf8_string as specified here:
- https://github.com/libtom/libtomcrypt/issues/507
+diff --git a/.checkpackageignore b/.checkpackageignore
+index c8bc36efe7..9674128894 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -528,7 +528,6 @@ package/libb64/0002-Initialize-C++-objects.patch lib_patch.Upstream
+ package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch lib_patch.Upstream
+ package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
+ package/libcgicc/0001-disable-documentation-option.patch lib_patch.Sob lib_patch.Upstream
+-package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch lib_patch.Upstream
+ package/libcuefile/0001-fix-static-link.patch lib_patch.Upstream
+ package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch lib_patch.Upstream
+ package/libdnet/0001-python-makefile.patch lib_patch.Upstream
+diff --git a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
+index 9ff3f5ec1c..44e15468ac 100644
+--- a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
++++ b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
+@@ -5,8 +5,8 @@ Subject: [PATCH] Fix #163: unterminated username used with getpwnam()
  
-+CVE: CVE-2019-17362
- [for import into Buildroot]
- Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
  
+-[Retrieved (and backported) from:
+-https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b]
++CVE: CVE-2022-40320
++Upstream: https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  src/confuse.c | 10 ++++++----
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
