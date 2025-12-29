@@ -4,115 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 522A4D3B7E5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 09:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2180EE8FDB1
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 09:34:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2642A4080E;
-	Mon, 29 Dec 2025 09:07:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7E744079B;
+	Mon, 29 Dec 2025 09:34:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ixvFTkAh1rGf; Mon, 29 Dec 2025 09:07:48 +0000 (UTC)
+ id erXyXKSIwqQx; Mon, 29 Dec 2025 09:34:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57FFD407F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6EAA4079D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766999268;
-	bh=8iPALeE4asQRXgfsgzZb5SYD4IqXtugestmQ9tI+LqU=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	s=default; t=1767000864;
+	bh=VuOQ16YJtE0DltEUzIc/YbZrueOORYiPkGrxz72C0yY=;
+	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=HiRxSPYETe8ne97AVVcwiZTeOB32Sj/Ecy7vmO3ndq+C9KPyU9HGmJqXcOhJFcTW3
-	 KF69h+bUkOeMZbb/C12dyGxvVQUAsaSkKXBhCqG4nVa5pP+4Xco2LOh9XV4+PLBVOJ
-	 cs7ZN05O+ZL0S34DVgKwDr/WmEjm0opy7MvOCXtMUTvXRZ7MM56PYZ0UpOS5xjOAro
-	 AagCnHwbzFo2roOb0dYOdoEYi0WtOCdCdZgBIvz5/42GYh1clJ7BbJuCeAhWeoL2ub
-	 bHnevgzNUz8aYs/r8Y+0VjwOk875Gi9FbMOhEPx91g1fpNdgkMf9HDNu+YqH7iJy7W
-	 9Xd4PkQLxaJwA==
+	b=DsiHxKCfBd0FpzKD/fX/q6AbAMQagnTnr11ilgdjtXwlpSi59FYOe5E/xrOsXjS/m
+	 sI5LaXjIdDtsGoFvOTc2l/IfoucaKvYSDf4O788u0436rLZzTaWh4pAJRHz2xVAKOf
+	 GdzCxMRtKs9k/sMQPYlUarHz1EbXcdvIgDK9tDa7AUNGbTOeGgsoGU2PR0HWwL/ukc
+	 nds2spIZjlOkqw3cr3E5V1R1TYyDLQIvR5BHiWvYhzBGxrDAh+P8ntJPU6Oyc02RHa
+	 w3ujrQLYjPYxUCgvk+uJPQhiZgp0FajKSXPFuEI4bB+L75G0sugDzLTTap3fQkp8OU
+	 NaFqj7V2C/8eg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57FFD407F7;
-	Mon, 29 Dec 2025 09:07:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 358F81E1
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:07:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6EAA4079D;
+	Mon, 29 Dec 2025 09:34:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A0FF1E1
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11A7B407DD
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:07:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C4A481773
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:34:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QsUdPRuKTHcJ for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 09:07:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E9799407ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9799407ED
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E9799407ED
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:07:40 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-477619f8ae5so53414045e9.3
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 01:07:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766999259; x=1767604059;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=xEhpcuTqBAFtKFOLLwSbviBXygy5wglykqAK3wpK76w=;
- b=GfMI9dqUZee235+dhBtBy77qylJXuoxcXhGMQ9PuHzrh5FN8phQ16xcl7X5p2j5LU4
- R1sNWHdPDlwWMs/BxfDz0/0RD2oN8OFzmfKuWnj+/EaOQ0OluS8rx+kw9KExqKH82G9v
- JIIhf4E6eJ4vlxXx+X1eUs6dsL8uQ8nUFNAPpGC3KvuW2oejPA9fLt9/POdzvtfkR833
- qT1LlSYCZYfypvuWX/aeTslYgCORxUlSZkNjTWOZc9ET2g/IzDDIipvpUd3HTn4ysg6m
- KNnztZYMkfFYBk9i4RhU8I7ZOcy8vGBuX1W2vjhpW7YvljWotPZ744rXeiLm0sSIzz03
- V6iQ==
-X-Gm-Message-State: AOJu0YwkOF5DgxzkZxeDAdVcuwzAy0tyuXq3MDtL6Z/Xcn4HjvupgAvN
- O4dXIV1Q6SQJ8kx0urdq59hPNLq/ilt4yCTEiw6UTdSUsJ2OiiPBRGmb3yG9aFY7wTQdQSgUHmi
- IUFDko1s=
-X-Gm-Gg: AY/fxX64PVgFFKmCwZaN+MbQ4IOXn77aQh8Zdgg3QPYe3mNIhHz4X0ZfaD76FzZlnml
- LK4izoYU8SwjIUfhHlKPcOs9cULDzmy6MXTX1bzNJ00NhyCRFUntDIEfp3uEbYK3wKXzFWZ4MR7
- 5TzMBMExX7dcSYSeFfwchO8axAHkF7GYixU/oYVmw4u/t2PR2TZEYa7i/sU4tO1dxNlxWkq/4J/
- zXt6nPKZn3D24UNrF99Y3qyrxfYs2dKFOUyL79EtHT3qetmRsddUcdvbTEgLqFnhzR2LvAO6FTR
- hNMDoV1KjXpHV84w/Rk6nRyFfIiLmg1L6jWlTUrGEKIMnGkUbFmjULjqe0iHTTmozB00o1PNdOY
- upLeF1V9t/Izpgf0VVm3Sfkcbs9xAmLN0Q66nIlgzTqZoOxkUniXFWT7CMpWiQzNIblRuCBg2Og
- kXGXBGI+8bSCDMTx1dpVhIlIChb11kVe3ZtYjCbJUNzD/oGfkewYiypYbB3NfkztCkRjvHLKhG7
- A==
-X-Google-Smtp-Source: AGHT+IHIdjkN8Uu9UZ2unoADVQaCOChzBWpioGIKiHtBStnkoczeBrAh1v608nyxYRYgVskm1G2f3g==
-X-Received: by 2002:a05:600c:4506:b0:477:79f8:daa8 with SMTP id
- 5b1f17b1804b1-47d1957da6cmr357546965e9.17.1766999258726; 
- Mon, 29 Dec 2025 01:07:38 -0800 (PST)
-Received: from mindpad (2a01cb0c0115730072a6ccfffe7dafc3.ipv6.abo.wanadoo.fr.
- [2a01:cb0c:115:7300:72a6:ccff:fe7d:afc3])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-47d193d4f09sm538910175e9.12.2025.12.29.01.07.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Dec 2025 01:07:38 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 10:07:19 +0100
-Message-ID: <20251229090719.13291-14-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251229090719.13291-1-thomas.perale@mind.be>
-References: <20251229090719.13291-1-thomas.perale@mind.be>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8xfHp1gAkwnd for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 09:34:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.41;
+ helo=smtpcmd0641.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE67A81780
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE67A81780
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE67A81780
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:34:19 +0000 (UTC)
+Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id a9dovokjPdarQa9dov14vu; Mon, 29 Dec 2025 10:34:16 +0100
+Message-ID: <64832874-8fc4-46ce-a4cc-86a2f555ac09@benettiengineering.com>
+Date: Mon, 29 Dec 2025 10:34:16 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1766999259; x=1767604059; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xEhpcuTqBAFtKFOLLwSbviBXygy5wglykqAK3wpK76w=;
- b=YfuHBfxs4qaoMm4n2V6bCjJHYNCdiXOKnbXD1x3gClxj58K8FYiM8dqdU1lE7KpaA5
- xXvavt/9RO6BZ6T6XanMBh4GzD3GB6VpaRdTq4dGd+Et/N4cafTwqx0RVVj0i+2dPPoz
- LTt471aas8j+aJBlWL1boA0TshVC3VrYApIMAAZ7yKbTV2XVu8P4NY2wi3aYSqUqADkA
- Z05qThjbHYONpf8bNQYGasV8pM07z+RQ3Ne+cbuwI4jFHOMoghg2Fpr6CqYiSsokfAo2
- vaY8AodnMPBa8tjAcD3zVpcikuQF5E437gncGpCYLTeWAr7aoSyiDyIncSNwE1csdFKi
- hTbg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YfuHBfxs
-Subject: [Buildroot] [PATCH 14/14] package/mupdf: add CVE-2024-2425{8,
- 9} to IGNORE_CVES
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, Edgar Bonet <bonet@grenoble.cnrs.fr>
+References: <20251227194400.1108440-1-giulio.benetti@benettiengineering.com>
+ <500fe026dc7e732e4c924ff46526fe70@free.fr>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <500fe026dc7e732e4c924ff46526fe70@free.fr>
+X-CMAE-Envelope: MS4xfFlITQjLMaP6QYaq8y0PRqTtP8F0SZ89KUV9gNF4lLOfSOuJDIq/T6JKWKGwLCjyvUTw6dh3Vx2nzs3yJJFDtoaHmt5DbZ6m+FQDPlZygyKI07ZWAPq6
+ 6BujrNN3dPofR1NtW1Cl9FH31pY2UjHH9Y0D3Wt9voy6T4t5DflF19zZv8N1Rj7+U2fAIKjimbADIht3+fQ3HHJk7+QHrAXBQG19ECzPTN/jqzJM8n4jr0xj
+ x+MNTr/9iJfLkhFfBhVGA7yJX1CUYTQZWEkGTCqDsWU=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1767000856; bh=sAUD4E53UmgIlcBv8xAF8zWOAo5dHp4fcCOVSHhSDWI=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=EUgPmbHoGRSVIzyIOYnXCqrfrn6CcGeJGHT8Umr4LzuWS6a23PgeJarVzEZNmZchP
+ IiJMsR3O7Mq3Q1Orhv4pyixbwMqQLBYkSz2aEY272VHL+S8M425hjKCq7Jcq+DJbvA
+ ZR1LoeCQXGKyyiA2nWW7plmkwexkU/mzjV+oXOgR4llDt6RsXAOF3y/NdjHcEm9HKD
+ 8Fum0GqRCtpUGsSF1Zk7h7RClilFuo/sBipN3BfydC1hNzPICNIqX2Vth/wxu+87AZ
+ UFyboEznnezEfvLWSG/fDlxkNMEAgEkSsMbmMKMKWjTCToxE5gfDdTbSg80xMVnSDs
+ jPGG2HxTEGmFA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=EUgPmbHo
+Subject: Re: [Buildroot] [PATCH v2] package/dash: fix build failure due to
+ wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,56 +95,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Bernd Kuhls <bernd@kuhls.net>, Gilles Talis <gilles.talis@gmail.com>,
- Martin Kepplinger <martink@posteo.de>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Joachim Wiberg <troglobit@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit [1] removed the IGNORE_CVES entries for
-CVE-2024-24258 & CVE-2024-24259 because they referenced a patches no
-longer existing.
-
-Those IGNORE_CVES entries are still required because the CVEs reference
-the exact mupdf version Buildroot is using.
-
-Re-introduce those IGNORE_CVES entries with an updated comment instead.
-
-[1] f2e442a14d package/mupdf: remove stale IGNORE_CVES
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/mupdf/mupdf.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index 9eecb84232..57501ab954 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -21,6 +21,12 @@ MUPDF_DEPENDENCIES = \
- 	lcms2 openjpeg \
- 	zlib
- 
-+# Fix is in libfreeglut, but CVE applied to mupdf 1.23.9.
-+# Buildroot libfreeglut is >3.4.0 then is not affected.
-+MUPDF_IGNORE_CVES = \
-+	CVE-2024-24258 \
-+	CVE-2024-24259
-+
- # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
- # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
- MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
--- 
-2.52.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSnVsaWVuLAoKT24gMjkvMTIvMjAyNSAwMDoyNSwgSnVsaWVuIE9saXZhaW4gd3JvdGU6Cj4g
+SGkgR2l1bGlvLAo+IAo+IFRoYW5rcyBmb3IgdGhlIHVwZGF0ZWQgcGF0Y2guCj4gCj4gT24gMjcv
+MTIvMjAyNSAyMDo0NCwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IFNpbmNlIGNvbW1pdCBbMV0g
+cGFja2FnZSBkYXNoIHJlcXVpcmVzIHdjaGFyIHNvIGxldCdzIGRlcGVuZCBvbiBpdCB0bwo+PiBm
+aXggYnVpbGQgZmFpbHVyZS4KPj4KPj4gWzFdOgo+PiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1
+Yi9zY20vdXRpbHMvZGFzaC9kYXNoLmdpdC9jb21taXQvPyAKPj4gaWQ9YzA2NzRmNDg3YzdhZWMy
+YTNiZGY2Nzk1Y2VhN2U2MGM5NTMwYzM2MAo+Pgo+PiBGaXhlczoKPj4gaHR0cHM6Ly9hdXRvYnVp
+bGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLyAKPj4gZTkxMDhlYmQ5ZmI4YzQ3MWFkZDFjNWE3ZjU4
+MTc1NzE3NWZhNWYxNS8KPj4KPj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxp
+by5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4+IC0tLQo+PiBWMS0+VjI6Cj4+ICog
+Zml4ZWQgY29tbWl0IGxvZyBhbmQgQ29uZmlnLmluIGNvbW1lbnQgYXMgc3VnZ2VzdGVkIGJ5IEVk
+Z2FyIEJvbmV0Cj4+IC0tLQo+PiDCoHBhY2thZ2UvZGFzaC9Db25maWcuaW4gfCA2ICsrKysrKwo+
+PiDCoDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykKPj4KPj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZGFzaC9Db25maWcuaW4gYi9wYWNrYWdlL2Rhc2gvQ29uZmlnLmluCj4+IGluZGV4IGI4
+MTZhYzc4MzcuLjM1NzNhNDBhYTMgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvZGFzaC9Db25maWcu
+aW4KPj4gKysrIGIvcGFja2FnZS9kYXNoL0NvbmZpZy5pbgo+PiBAQCAtMiw2ICsyLDcgQEAgY29u
+ZmlnIEJSMl9QQUNLQUdFX0RBU0gKPj4gwqDCoMKgwqAgYm9vbCAiZGFzaCIKPj4gwqDCoMKgwqAg
+ZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZvcmsoKQo+PiDCoMKgwqDCoCBkZXBlbmRzIG9uIEJS
+Ml9QQUNLQUdFX0JVU1lCT1hfU0hPV19PVEhFUlMKPj4gK8KgwqDCoCBkZXBlbmRzIG9uIEJSMl9V
+U0VfV0NIQVIKPiAKPiBUaGUgZGFzaCBwYWNrYWdlIGlzIHNlbGVjdGVkIGhlcmU6Cj4gaHR0cHM6
+Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vYmxvYi8yMDI1LjExL3N5c3Rl
+bS8gCj4gQ29uZmlnLmluI0w0MTcKPiBTbyB0aGlzIG5ldyBkZXBlbmRlbmN5IHNob3VsZCBhbHNv
+IGJlIHByb3BhZ2F0ZWQgdGhlcmUuCgpqdXN0IHVwZGF0ZWQKCj4gVGhpcyBpbnRyb2R1Y2UgYSBu
+ZXcgcHJvYmxlbToKPiBEYXNoIGlzIGN1cnJlbnRseSB0aGUgZGVmYXVsdCBzaGVsbCB3aGVuIEJ1
+c3lib3ggaXMgbm90IHNlbGVjdGVkLgo+IFNlZToKPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRy
+b290Lm9yZy9idWlsZHJvb3QvLS9ibG9iLzIwMjUuMTEvc3lzdGVtLyAKPiBDb25maWcuaW4jTDQw
+MgoKSSBzZWUsCgo+IFRoaXMgY3JlYXRlcyBhIG5ldyBjb3JuZXIgY2FzZTogd2hpY2ggc2hlbGwg
+c2hvdWxkIHdlIHNlbGVjdCBieSBkZWZhdWx0Cj4gd2hlbiBCdXN5Ym94IGlzIG5vdCBzZWxlY3Rl
+ZCBhbmQgdGhlIHRvb2xjaGFpbiBkb2VzIG5vdCBzdXBwb3J0IHdjaGFyLgo+IAo+IFdlIGNvdWxk
+LCBmb3IgZXhhbXBsZSwgc3dpdGNoIHRvIGFub3RoZXIgc2hlbGwgc3VwcG9ydGluZyB0aGF0IGNh
+c2UKPiAoZS5nLiBCYXNoKSwgb3IgZm9yY2UgQnVzeWJveCBzaGVsbCBpbiB0aGF0IHNwZWNpZmlj
+IGNhc2UuIEkgd291bGQKPiBiZSBoYXBweSB0byBoYXZlIHN1Z2dlc3Rpb25zIGZyb20gb3RoZXIg
+bWFpbnRhaW5lcnMvdXNlcnMgb24gdGhhdAo+IHRvcGljLgoKSSdkIHBlcnNvbmFsbHkgZ28gd2l0
+aCBCYXNoLiBJIGFkZCB0aGlzIGNoYW5nZSB0byB0aGUgdjMgcGF0Y2ggdG9vLgoKQmVzdCByZWdh
+cmRzCkdpdWxpbwoKPiAKPj4gwqDCoMKgwqAgaGVscAo+PiDCoMKgwqDCoMKgwqAgREFTSCBpcyBh
+IFBPU0lYLWNvbXBsaWFudCBpbXBsZW1lbnRhdGlvbiBvZiAvYmluL3NoIHRoYXQKPj4gwqDCoMKg
+wqDCoMKgIGFpbXMgdG8gYmUgYXMgc21hbGwgYXMgcG9zc2libGUuIEl0IGRvZXMgdGhpcyB3aXRo
+b3V0Cj4+IEBAIC0xMCwzICsxMSw4IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9EQVNICj4+IMKgwqDC
+oMKgwqDCoCBmb3IgbW9zdCB0YXNrcy4KPj4KPj4gwqDCoMKgwqDCoMKgIGh0dHA6Ly9nb25kb3Iu
+YXBhbmEub3JnLmF1L35oZXJiZXJ0L2Rhc2gKPj4gKwo+PiArY29tbWVudCAiZGFzaCBuZWVkcyBh
+IHRvb2xjaGFpbiB3LyB3Y2hhciIKPj4gK8KgwqDCoCBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4+
+ICvCoMKgwqAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9CVVNZQk9YX1NIT1dfT1RIRVJTCj4+ICvC
+oMKgwqAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUgo+PiAtLSAKPj4gMi40Ny4zCj4gCj4gQmVz
+dCByZWdhcmRzLAo+IAo+IEp1bGllbi4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
