@@ -4,121 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B83BE92FC5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 17:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E994FE9273E
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 17:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E37B560A8F;
-	Mon, 29 Dec 2025 17:34:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E79B60B00;
+	Mon, 29 Dec 2025 17:52:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M2yOCyw4theG; Mon, 29 Dec 2025 17:34:23 +0000 (UTC)
+ id HhJ8IvoZtmKe; Mon, 29 Dec 2025 17:52:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8906608F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDAD560AF1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767029663;
-	bh=pbX6/16W+lumzHORSBdrG5ZGSC0fSNP5OZc0Coh3eiQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=P8QVNHGio27PsfLpY46f5q0O4F3HOKbOpikbXXvTkPsR/xnJBBt5XPQGDBLw7ibpE
-	 NjUl1mJd8mecfJATRRrkAH+6n9FtzdFYtl5+DQygOTysLVjV37LwgWxX1YzAtEaGFF
-	 VPH6QFNptXU+nY65aDrOH8+9ryTM4e4za92a1UVscmR2Mkgdje1qQ2Fe1FnSdLhiV0
-	 uFxL72r+z8KIC/1QKRS3k8tK8vWVJuXIyK5yxlylscmQCrWXV4WI973wLjsjl3jcQP
-	 c6ptbkKAWT8st1s8Zf54O5ul63ceR5H7okWRmGs36m0kwpNbZ40FAsoW1m3BYsRREy
-	 dcVeBz+AWbbRw==
+	s=default; t=1767030729;
+	bh=RIgqcMZ5e1K+tNMoeQ4zQ+Az1pIBH7u8SKU9z6QRnHM=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Es9nKF0CGhS+RTLdKYcrN8VX2pahKtYEQ2sWGD16gLluJA4mKGpv/TEdUw89KcpqA
+	 /wg1dFhFB/n/xpI1J8wIxOieaiBTIv7QSGnJ1wMYu7PiDuQ/F8I3hF+jE+scjFC5Of
+	 CWfJ2FxdCY5kROBADlm0rbMdeUoSfFqCIgxkF5K9bw1bti9TX7bybL5MuZ8ALm+x8e
+	 NmYlnasa3lVm0bxo5uW9Lpk6s0kmosC3p2FT3H3+bfmh8OSrS5XKD/oJ4rM7wFDoGu
+	 mNG2dGtNT9vP2N5oGcQdCFLxn9FeEo33Ah55t6ivsX8UKZOrc+oeJKNTplHK5QAKQC
+	 6sCQxRnxU+HpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8906608F1;
-	Mon, 29 Dec 2025 17:34:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 53BA2D8
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:34:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDAD560AF1;
+	Mon, 29 Dec 2025 17:52:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 204DAD8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44FD6404F5
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:34:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11BC480EBC
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:52:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oKE0i18O8EXa for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 17:34:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 48114400BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48114400BA
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 48114400BA
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:34:20 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-47774d3536dso74115595e9.0
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 09:34:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767029658; x=1767634458;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=J1GOuCVWk8NTJkCgQoDwIZgPItUOcy7ErLLL1hhpdDo=;
- b=LaMWCv/2Bg/TLtOIcrBnJhma2r+RzCv/Hj4qQERGrbHkhJKWeFycW1StHllcepy2VY
- eCBjKzdRniQ41q81AdJwt3K+HF1XdQsZxw6inMigccHoRApMSkwaU/63v9Jxk70C21hj
- 77hr8NMey+dWrEPSmNykcJS124YpctnslSFUJAqasyiFwL62JwID5ZdYzTO9tBueIY1p
- iry0rH/oEnjWlcdluI4kXI/IJSVBat/hi5KJJ/1kj75yIf5sgBy+ZOikAHN87WBVmPlr
- xN2r3fpnQWodvg9KzMV1QFXQypwKE0DWCF5+0u2+szHiEyWyW4Nn9rR86G5Uni7lpcHH
- D0eg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXbLrq9JLvA45eTzjlcVFIcASB5kPnhK9FO+dGSW72QFyLV9Xtj5k9+hhUhxXWFw7h1un9qRHS12I8=@buildroot.org
-X-Gm-Message-State: AOJu0YybR4k+6S45l5qVQlW9RyPRVvRFwp8OG/B9ngrtE9S2ud6ipjj3
- fhwWdEw+wEoJr6qVqVXNJIcZPhmg5vRYuGsm7dyP/SXKYrrEwbeuBpudRi6XJ6B6uyU=
-X-Gm-Gg: AY/fxX4GHr6C1akVhiuw0VCU25ZdSeY5iznh2CUat0Vl3nm0O8nqSKBk21hXmQ4uvvS
- nZHhB1mnTxavGNKC6VSbKMRGF5LR9+wDcVvpxp8d5nWWD1WjsOAyX/lvmPEyEvLkw7hVbuoiqTQ
- 1ybkVixU1FkWLSZmz5TSlc160zjv9/WiQKAQA97AH4tRs5DUugBSJ6hOP2qet/KZdGTNHNh9O81
- wM9nqOm2khFl8i78Lq7qhD9AT7/vX5s7d2RBsTgGH83y1GYPua6CaAmqxpkfrHSaFDXgRNJe8Fj
- cpjxgQ8bye6NHP+n3C0X5mwYObnzzE5c5T/G0PQKGOkwfLaylcJZOVwWaBdTturk0faFd4UGkqh
- SR9S99f/2I8I7CUAqyZLmvC7R4kfiTwvr4bJ2y81ePlxLjYjF17NUuYdXN47RkhUpoAMDX29Sij
- 2tHyE=
-X-Google-Smtp-Source: AGHT+IEc7THRAxMoCpjPinZntGcknkD/ng9LxkHYT7wCZZszr1sCPEWh4nKvhMMgPC2dlweZeOEB0Q==
-X-Received: by 2002:a05:600c:608e:b0:46f:a2ba:581f with SMTP id
- 5b1f17b1804b1-47d18be1812mr395364085e9.16.1767029658363; 
- Mon, 29 Dec 2025 09:34:18 -0800 (PST)
-Received: from arch ([79.132.229.12]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-47be272eaf8sm594980135e9.5.2025.12.29.09.34.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Dec 2025 09:34:16 -0800 (PST)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Thomas Perale via buildroot <buildroot@buildroot.org>,
- =?UTF-8?B?UmFwaGHDq2wgTcOpbG90?= =?UTF-8?B?dGU=?= <raphael.melotte@mind.be>,
- Bernd Kuhls <bernd@kuhls.net>, Gilles Talis <gilles.talis@gmail.com>,
- Martin Kepplinger <martink@posteo.de>,
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CqgAld_GOL8a for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 17:52:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96CFA8183D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96CFA8183D
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96CFA8183D
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:52:02 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EF921A4C2496;
+ Mon, 29 Dec 2025 18:51:58 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38202)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vaHPS-0000000012P-0TCs;
+ Mon, 29 Dec 2025 17:51:58 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Andreas Ziegler <br025@umbiko.net>,
  Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Joachim Wiberg <troglobit@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>
-Date: Mon, 29 Dec 2025 18:34:15 +0100
-Message-ID: <20251229173415.61171-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251229151259.37dfa7e8@windsurf>
-References: <20251229151259.37dfa7e8@windsurf>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Matt Flax <flatmax@flatmax.org>, Romain Naour <romain.naour@gmail.com>,
+ Simon Dawson <spdawson@gmail.com>,
+ Woodrow Douglass <wdouglass@carnegierobotics.com>
+Date: Mon, 29 Dec 2025 18:51:28 +0100
+Message-ID: <20251229175158.3548903-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1767029658; x=1767634458; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=J1GOuCVWk8NTJkCgQoDwIZgPItUOcy7ErLLL1hhpdDo=;
- b=Ldr9v7jtQ4JBHpE1EDHWRtfCUhVy/dxZFhjPEr+BXZ+eOvh7DSypLGWcPVBuVsabRk
- ZC1JG62RUK+gzKpfBAzDcYPYk54EDoYPyGbr2J/MX26QQNKg431c+K3eFlpe0l2veLQ+
- AQdi6oSxdHXAvSzA9ZPBkenexp0IDVYE7l7kJe4L5pTKx8Y2Lg94tJdtEhgBvL3S9lXK
- wJMfrsbk59WOcytMOEhAG2ebYqZG/V2/LvCBAghyKCBHmXgWZqZss2IHZ/XYx3u3k8bN
- pklyubQ9f7B8kZCKXQmDq1ld8jCtYZxDE9OS9bi7M7Ml7YF96w3Trb1esDHLECr5MIg0
- Gc6Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Ldr9v7jt
-Subject: Re: [Buildroot] [PATCH 01/14] package/sox: add CVE trailer in
- patches
+ d=kuhls.net; 
+ s=kas202511301023; t=1767030719;
+ bh=EMWpsei2CgViCm68scea9ZK1KX0WxhobAmkYmR6xdko=;
+ h=From:To:Cc:Subject:Date:From;
+ b=LZFUQCMGT6T1CXnw2Q95B0+1NfHfV7jxJIXH29VmpuK6oMRAczHGPujTj9HuGCWyh
+ 3hqZmr547VeJsnnMwEMD3qqUtJNTYk8PFeUlF8+hPX6C0BWxBrq/MswiTDtfs2kBvM
+ LfzH7hmIv1xcnO8OBj+VZSeON3z39xeTFNyUsbDYj3+CSPL1dzdwYByU6Oqml3e76r
+ AlhLDFx0POlCNKgPq+cJ3J1K5s7Xu0epAdysNd2sXKW10IYoFmnW2h7DIatkmARwXp
+ ly2z3TfuqiGW6N3iXcZzq6feQDudSbgBjil/y5HNKFy8kDa55JRClOasF4Ds/CObGx
+ TCMlEjEdHW6Og==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=LZFUQCMG
+Subject: [Buildroot] [PATCH v7 00/29] Remove packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,8 +98,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -139,66 +105,300 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi,
 
-In reply of:
-> Hello Thomas,
-> 
-> On Mon, 29 Dec 2025 10:07:06 +0100
-> Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > Since Buildroot commit [1] the patches that fixes a security
-> > vulnerability needs to reference the fixed vulnerability.
-> > 
-> > This patch adds the relevant information to the patches header.
-> > 
-> > [1] 1167d0ff3d docs/manual: mention CVE trailer
-> > 
-> > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> > ---
-> >  ...voc-word-width-should-never-be-0-to-avoid-division-b.patch | 2 ++
-> >  package/sox/0007-hcom-validate-dictsize.patch                 | 4 ++++
-> >  package/sox/0008-phere-avoid-integer-underflow.patch          | 1 +
-> >  ...formats-aiff-reject-implausibly-large-number-of-chan.patch | 2 ++
-> >  package/sox/0010-formats-reject-implausible-rate.patch        | 1 +
-> >  ...CVE-2023-32627-Filter-null-sampling-rate-in-VOC-code.patch | 1 +
-> >  6 files changed, 11 insertions(+)
-> 
-> Series applied, thanks!
-> 
-> Two notes:
-> 
-> - When you add the Upstream: header, make sure to update the
->   .checkpackageignore file as well. You can run "make check-package",
->   or have a Git commit hook that checks it for you.
-> 
-> - Also, when you add the Upstream: header, if there's already the same
->   information in the patch, but in a non-machine parseable form, drop
->   this additional info. For example in this series:
-> 
-> +CVE: CVE-2021-42260
-> +Upstream: https://sourceforge.net/p/tinyxml/git/merge-requests/1
->  [Retrieved (and backported) from:
->  https://sourceforge.net/p/tinyxml/git/merge-requests/1]
-> 
->   You should drop the [Retrieved (and backported) from  ...], because
->   that information is now provided by the Upstream: tag.
+this series removes broken packages, see commit logs for individual
+reasons.
 
-Thanks for giving it a look. I will take your notes into account.
+Regards, Bernd
 
-PERALE Thomas
+v7: rebased
+    added removal of libfreeimage:
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/793070.html
+v6: rebased
+    added removal of OpenCV3:
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/792788.html
+v5: rebased on top of series "support/testing: ddrescue: use dmsetup
+    from lvm2": https://patchwork.ozlabs.org/project/buildroot/list/?series=486059
+    (Julien)
+v4: rebased
+    added python-aioredis & cppdb, the latter suggested by Thomas:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20251217223317.1993455-1-thomas.petazzoni-LDxbnhwyfcJBDgjK7y7TUQ-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org/
+    added links to newly detected autobuilder failures
+v3: added musepack & libcuefile as suggested by Thomas:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20251216092915.1354213-1-thomas.petazzoni-LDxbnhwyfcJBDgjK7y7TUQ-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org/
+    https://patchwork.ozlabs.org/project/buildroot/patch/20251216093447.1377743-1-thomas.petazzoni-LDxbnhwyfcJBDgjK7y7TUQ-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org/
 
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Bernd Kuhls (29):
+  package/libnids: remove package
+  package/dmraid: remove package
+  package/libmhash: remove package
+  package/connman-gtk: remove package
+  package/hawktracer: remove package
+  package/let-me-create: remove package
+  package/libcgi: remove package
+  package/libiqrf: remove package
+  package/libuwsc: remove package
+  package/alure: remove package
+  package/openpowerlink: remove package
+  package/opentracing-cpp: remove package
+  package/qjson: remove package
+  package/sconeserver: remove package
+  package/taskd: remove package
+  package/racehound: remove package
+  package/musepack: remove package
+  package/libcuefile: remove package
+  package/python-aioredis: remove package
+  package/cppdb: remove package
+  package/ffmpeg: remove optional dependency to opencv3
+  package/freeswitch: remove optional dependency to opencv3
+  package/gtkiostream: remove optional dependency to opencv3
+  package/mjpg-streamer: remove optional dependency to opencv3
+  package/vlc: remove optional dependency to opencv3
+  package/opencv3: remove package
+  package/ogre: remove dependency to libfreeimage
+  package/cegui: remove dependency to libfreeimage
+  package/libfreeimage: remove package
 
+ .checkpackageignore                           |  24 --
+ Config.in.legacy                              | 134 +++++++
+ DEVELOPERS                                    |  19 -
+ package/Config.in                             |  22 --
+ package/alure/Config.in                       |  56 ---
+ package/alure/alure.hash                      |   3 -
+ package/alure/alure.mk                        |  65 ----
+ package/cegui/cegui.mk                        |   8 +-
+ package/connman-gtk/Config.in                 |  22 --
+ package/connman-gtk/connman-gtk.hash          |   3 -
+ package/connman-gtk/connman-gtk.mk            |  17 -
+ package/cppdb/0001-mysql-library-suffix.patch |  23 --
+ package/cppdb/Config.in                       |  20 -
+ package/cppdb/cppdb.hash                      |   6 -
+ package/cppdb/cppdb.mk                        |  31 --
+ .../0001-fix-compilation-under-musl.patch     |  47 ---
+ package/dmraid/Config.in                      |  19 -
+ package/dmraid/S20dmraid                      |  29 --
+ package/dmraid/dmraid.hash                    |   5 -
+ package/dmraid/dmraid.mk                      |  25 --
+ package/ffmpeg/ffmpeg.mk                      |   5 +-
+ package/freeswitch/Config.in                  |   6 +-
+ package/freeswitch/freeswitch.mk              |   7 +-
+ package/gstreamer1/gst1-plugins-bad/Config.in |   4 -
+ .../gst1-plugins-bad/gst1-plugins-bad.mk      |   8 +-
+ package/gtkiostream/gtkiostream.mk            |   4 -
+ package/hawktracer/Config.in                  |  25 --
+ package/hawktracer/hawktracer.hash            |   3 -
+ package/hawktracer/hawktracer.mk              |  48 ---
+ .../0001-fix-build-with-musl-C-library.patch  |  38 --
+ package/let-me-create/Config.in               |  27 --
+ package/let-me-create/let-me-create.hash      |   3 -
+ package/let-me-create/let-me-create.mk        |  26 --
+ ...-CMakeLists.txt-honour-BUILD_TESTING.patch |  44 ---
+ package/libcgi/Config.in                      |  11 -
+ package/libcgi/libcgi.hash                    |   8 -
+ package/libcgi/libcgi.mk                      |  14 -
+ package/libcuefile/0001-fix-static-link.patch |  25 --
+ .../0002-libcuefile-fedora-c99.patch          |  27 --
+ ...akeLists.txt-fix-compat-with-CMake-4.patch |  35 --
+ package/libcuefile/Config.in                  |   6 -
+ package/libcuefile/libcuefile.hash            |   7 -
+ package/libcuefile/libcuefile.mk              |  25 --
+ .../libfreeimage/0001-no-root-install.patch   |  20 -
+ package/libfreeimage/0002-fix-cpuid-x86.patch |  67 ----
+ .../libfreeimage/0003-fix-big-endian-os.patch |  64 ----
+ .../0004-fixed-C-11-warnings.patch            |  94 -----
+ .../0005-jxrlib-ftbfs-with-GCC-14.patch       |  40 --
+ ...BFS-fix-for-function-prototype-error.patch |  29 --
+ .../0007-CVE-2019-12211_2019-12213.patch      | 188 ----------
+ .../libfreeimage/0008-CVE-2020-24292.patch    |  17 -
+ .../libfreeimage/0009-CVE-2020-24293.patch    |  18 -
+ .../libfreeimage/0010-CVE-2020-24295.patch    |  25 --
+ .../libfreeimage/0011-CVE-2021-33367.patch    |  23 --
+ .../libfreeimage/0012-CVE-2021-40263.patch    |  18 -
+ .../libfreeimage/0013-CVE-2021-40266.patch    |  18 -
+ .../libfreeimage/0014-CVE-2023-47995.patch    |  18 -
+ .../libfreeimage/0015-CVE-2023-47997.patch    |  20 -
+ package/libfreeimage/Config.in                |  18 -
+ package/libfreeimage/libfreeimage.hash        |   9 -
+ package/libfreeimage/libfreeimage.mk          |  62 ---
+ ...tic-library-and-find-required-thread.patch |  45 ---
+ .../libiqrf/0002-use-only-c-language.patch    |  29 --
+ package/libiqrf/Config.in                     |  16 -
+ package/libiqrf/libiqrf.hash                  |   3 -
+ package/libiqrf/libiqrf.mk                    |  14 -
+ package/libmhash/Config.in                    |   9 -
+ package/libmhash/libmhash.hash                |   3 -
+ package/libmhash/libmhash.mk                  |  14 -
+ .../libnids/0001-libpcap-use-pkg-config.patch |  48 ---
+ package/libnids/Config.in                     |  14 -
+ package/libnids/libnids.hash                  |   3 -
+ package/libnids/libnids.mk                    |  43 ---
+ ...001-CMakeLists.txt-add-BUILD_EXAMPLE.patch |  34 --
+ .../libuwsc/0002-fix-bad-indentation.patch    |  26 --
+ .../0003-src-ssl.c-fix-wolfssl-build.patch    |  37 --
+ package/libuwsc/Config.in                     |   8 -
+ package/libuwsc/libuwsc.hash                  |   3 -
+ package/libuwsc/libuwsc.mk                    |  53 ---
+ package/mjpg-streamer/mjpg-streamer.mk        |  11 +-
+ package/mpd/Config.in                         |   9 -
+ package/mpd/mpd.mk                            |   8 +-
+ package/musepack/0001-shared.patch            |  24 --
+ ...andard-CMake-flag-to-drive-the-share.patch |  43 ---
+ ...-include-fpu-control-with-glibc-only.patch |  26 --
+ .../musepack/0004-missing-sys-select.patch    |  21 --
+ .../musepack/0005-fix-build-with-gcc-10.patch |  30 --
+ .../musepack/0006-incompatible-pointers.patch |  47 ---
+ package/musepack/Config.in                    |  12 -
+ package/musepack/musepack.hash                |   7 -
+ package/musepack/musepack.mk                  |  16 -
+ package/ogre/Config.in                        |   2 -
+ package/ogre/ogre.mk                          |   1 -
+ ...inimum-required-CMake-version-to-3.5.patch |  41 --
+ package/opencv3/Config.in                     | 312 ---------------
+ package/opencv3/opencv3.hash                  |   3 -
+ package/opencv3/opencv3.mk                    | 354 ------------------
+ package/opencv4/Config.in                     |   1 -
+ ...-stack-libraries-to-lib-subdirectory.patch | 167 ---------
+ ...002-cmake-install-oplk-headers-files.patch |  32 --
+ .../0003-Add-top-level-CMakeLists.txt.patch   | 201 ----------
+ package/openpowerlink/Config.in               | 129 -------
+ package/openpowerlink/openpowerlink.hash      |   6 -
+ package/openpowerlink/openpowerlink.mk        | 153 --------
+ package/opentracing-cpp/Config.in             |  18 -
+ package/opentracing-cpp/opentracing-cpp.hash  |   3 -
+ package/opentracing-cpp/opentracing-cpp.mk    |  28 --
+ package/python-aioredis/Config.in             |   8 -
+ package/python-aioredis/python-aioredis.hash  |   5 -
+ package/python-aioredis/python-aioredis.mk    |  14 -
+ package/qjson/Config.in                       |   8 -
+ package/qjson/qjson.hash                      |   3 -
+ package/qjson/qjson.mk                        |  14 -
+ ...ll-path-lib-instead-of-usr-lib-prefi.patch |  26 --
+ package/racehound/Config.in                   |  35 --
+ package/racehound/racehound.hash              |   3 -
+ package/racehound/racehound.mk                |  27 --
+ package/sconeserver/Config.in                 |  96 -----
+ package/sconeserver/sconeserver.hash          |   3 -
+ package/sconeserver/sconeserver.mk            |  93 -----
+ ...makedefine-HAVE_GET_CURRENT_DIR_NAME.patch |  28 --
+ ...rrect-variables-for-GnuTLS-detection.patch |  32 --
+ ...eLists-use-pkg-config-uuid-detection.patch |  40 --
+ package/taskd/Config.in                       |  18 -
+ package/taskd/taskd.hash                      |   5 -
+ package/taskd/taskd.mk                        |  13 -
+ package/vlc/Config.in                         |   6 -
+ package/vlc/vlc.mk                            |  16 +-
+ 128 files changed, 145 insertions(+), 4187 deletions(-)
+ delete mode 100644 package/alure/Config.in
+ delete mode 100644 package/alure/alure.hash
+ delete mode 100644 package/alure/alure.mk
+ delete mode 100644 package/connman-gtk/Config.in
+ delete mode 100644 package/connman-gtk/connman-gtk.hash
+ delete mode 100644 package/connman-gtk/connman-gtk.mk
+ delete mode 100644 package/cppdb/0001-mysql-library-suffix.patch
+ delete mode 100644 package/cppdb/Config.in
+ delete mode 100644 package/cppdb/cppdb.hash
+ delete mode 100644 package/cppdb/cppdb.mk
+ delete mode 100644 package/dmraid/0001-fix-compilation-under-musl.patch
+ delete mode 100644 package/dmraid/Config.in
+ delete mode 100644 package/dmraid/S20dmraid
+ delete mode 100644 package/dmraid/dmraid.hash
+ delete mode 100644 package/dmraid/dmraid.mk
+ delete mode 100644 package/hawktracer/Config.in
+ delete mode 100644 package/hawktracer/hawktracer.hash
+ delete mode 100644 package/hawktracer/hawktracer.mk
+ delete mode 100644 package/let-me-create/0001-fix-build-with-musl-C-library.patch
+ delete mode 100644 package/let-me-create/Config.in
+ delete mode 100644 package/let-me-create/let-me-create.hash
+ delete mode 100644 package/let-me-create/let-me-create.mk
+ delete mode 100644 package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
+ delete mode 100644 package/libcgi/Config.in
+ delete mode 100644 package/libcgi/libcgi.hash
+ delete mode 100644 package/libcgi/libcgi.mk
+ delete mode 100644 package/libcuefile/0001-fix-static-link.patch
+ delete mode 100644 package/libcuefile/0002-libcuefile-fedora-c99.patch
+ delete mode 100644 package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch
+ delete mode 100644 package/libcuefile/Config.in
+ delete mode 100644 package/libcuefile/libcuefile.hash
+ delete mode 100644 package/libcuefile/libcuefile.mk
+ delete mode 100644 package/libfreeimage/0001-no-root-install.patch
+ delete mode 100644 package/libfreeimage/0002-fix-cpuid-x86.patch
+ delete mode 100644 package/libfreeimage/0003-fix-big-endian-os.patch
+ delete mode 100644 package/libfreeimage/0004-fixed-C-11-warnings.patch
+ delete mode 100644 package/libfreeimage/0005-jxrlib-ftbfs-with-GCC-14.patch
+ delete mode 100644 package/libfreeimage/0006-FTBFS-fix-for-function-prototype-error.patch
+ delete mode 100644 package/libfreeimage/0007-CVE-2019-12211_2019-12213.patch
+ delete mode 100644 package/libfreeimage/0008-CVE-2020-24292.patch
+ delete mode 100644 package/libfreeimage/0009-CVE-2020-24293.patch
+ delete mode 100644 package/libfreeimage/0010-CVE-2020-24295.patch
+ delete mode 100644 package/libfreeimage/0011-CVE-2021-33367.patch
+ delete mode 100644 package/libfreeimage/0012-CVE-2021-40263.patch
+ delete mode 100644 package/libfreeimage/0013-CVE-2021-40266.patch
+ delete mode 100644 package/libfreeimage/0014-CVE-2023-47995.patch
+ delete mode 100644 package/libfreeimage/0015-CVE-2023-47997.patch
+ delete mode 100644 package/libfreeimage/Config.in
+ delete mode 100644 package/libfreeimage/libfreeimage.hash
+ delete mode 100644 package/libfreeimage/libfreeimage.mk
+ delete mode 100644 package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+ delete mode 100644 package/libiqrf/0002-use-only-c-language.patch
+ delete mode 100644 package/libiqrf/Config.in
+ delete mode 100644 package/libiqrf/libiqrf.hash
+ delete mode 100644 package/libiqrf/libiqrf.mk
+ delete mode 100644 package/libmhash/Config.in
+ delete mode 100644 package/libmhash/libmhash.hash
+ delete mode 100644 package/libmhash/libmhash.mk
+ delete mode 100644 package/libnids/0001-libpcap-use-pkg-config.patch
+ delete mode 100644 package/libnids/Config.in
+ delete mode 100644 package/libnids/libnids.hash
+ delete mode 100644 package/libnids/libnids.mk
+ delete mode 100644 package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+ delete mode 100644 package/libuwsc/0002-fix-bad-indentation.patch
+ delete mode 100644 package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+ delete mode 100644 package/libuwsc/Config.in
+ delete mode 100644 package/libuwsc/libuwsc.hash
+ delete mode 100644 package/libuwsc/libuwsc.mk
+ delete mode 100644 package/musepack/0001-shared.patch
+ delete mode 100644 package/musepack/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+ delete mode 100644 package/musepack/0003-include-fpu-control-with-glibc-only.patch
+ delete mode 100644 package/musepack/0004-missing-sys-select.patch
+ delete mode 100644 package/musepack/0005-fix-build-with-gcc-10.patch
+ delete mode 100644 package/musepack/0006-incompatible-pointers.patch
+ delete mode 100644 package/musepack/Config.in
+ delete mode 100644 package/musepack/musepack.hash
+ delete mode 100644 package/musepack/musepack.mk
+ delete mode 100644 package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+ delete mode 100644 package/opencv3/Config.in
+ delete mode 100644 package/opencv3/opencv3.hash
+ delete mode 100644 package/opencv3/opencv3.mk
+ delete mode 100644 package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
+ delete mode 100644 package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
+ delete mode 100644 package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
+ delete mode 100644 package/openpowerlink/Config.in
+ delete mode 100644 package/openpowerlink/openpowerlink.hash
+ delete mode 100644 package/openpowerlink/openpowerlink.mk
+ delete mode 100644 package/opentracing-cpp/Config.in
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.mk
+ delete mode 100644 package/python-aioredis/Config.in
+ delete mode 100644 package/python-aioredis/python-aioredis.hash
+ delete mode 100644 package/python-aioredis/python-aioredis.mk
+ delete mode 100644 package/qjson/Config.in
+ delete mode 100644 package/qjson/qjson.hash
+ delete mode 100644 package/qjson/qjson.mk
+ delete mode 100644 package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
+ delete mode 100644 package/racehound/Config.in
+ delete mode 100644 package/racehound/racehound.hash
+ delete mode 100644 package/racehound/racehound.mk
+ delete mode 100644 package/sconeserver/Config.in
+ delete mode 100644 package/sconeserver/sconeserver.hash
+ delete mode 100644 package/sconeserver/sconeserver.mk
+ delete mode 100644 package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
+ delete mode 100644 package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch
+ delete mode 100644 package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch
+ delete mode 100644 package/taskd/Config.in
+ delete mode 100644 package/taskd/taskd.hash
+ delete mode 100644 package/taskd/taskd.mk
+
+-- 
+2.47.3
 
 _______________________________________________
 buildroot mailing list
