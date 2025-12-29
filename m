@@ -4,89 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7D39E92733
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 16:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 158BFE92733
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 17:03:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9A9F80B6E;
-	Mon, 29 Dec 2025 16:55:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5022816FD;
+	Mon, 29 Dec 2025 17:03:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DULoVCGwhpUj; Mon, 29 Dec 2025 16:55:58 +0000 (UTC)
+ id qaMK9bE9ysHa; Mon, 29 Dec 2025 17:03:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33B988067F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7864817AE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767027358;
-	bh=suwLrqTZs3/6IXWv5Ti5aTg/IByUB4dvZQP0mqyy2Qo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=L43p2EiwafexvyWkdXvY9mf23pnws7OHC29Hu4kkEhYSInxNF/qZJvUgBlC6G+hdz
-	 cHn2OyeFWwFqwG/7Xr9tJdK+ySMPMB9bLXyhC1KN8eu17aZX0YBJuVUoB36J5/V6H8
-	 pgKlJdJo5tSE5L5T24PG/xSxaT4N7VMh/x8QJZAbsGFlueIjPYB0HM7KSZZQW9tfjY
-	 8tW4dXDEOU7RSs6Rpdg45V4tFIWgQkwXud+pMZKj8dVfItFmjeX2MCodb9iVYSUA0b
-	 wDNdCql+6OzXBfF6GLEBf7EECrOo/Y5dr2xFzN1DS5MA7UacTJbG/eya8Mck1RBvsi
-	 zERQag6MUMqUA==
+	s=default; t=1767027819;
+	bh=Fc17VEZAsCNgr4HalmxG3tDonvZO0UDjszyLV/VFJOo=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=TEl7ddRM5WOeIZnMaLDLEKPBaQhDwEkGpcKDyFOIhyn3K1Z3B6EzprPYVsNTTS0qt
+	 6OMod8l7sEO8LCdl+5FjyVA/G0yF9cJkRonVh2dGDByCDF/mlywvGRI1figUreoxKI
+	 B9h1JR7we4fEeIXOhwUNfweft7Wck4VL+Xptb2AcZ0s0z6v1emdgQ51Vt+KYbiwxHc
+	 Gv0gsSHOcrTYskCGLvAQ4Yj/wl1i+ndkwBa8qzu+2VQf4OureAt/lxFUeHpuid+PrE
+	 CZqVPKGz64RKPRRwR3g+Alj6QfBlWYdpftg4J5EYX9CymsUM0a9lrq3OvcKor7Yu0b
+	 RUAp6MU7Do2ag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33B988067F;
-	Mon, 29 Dec 2025 16:55:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 02E47177
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 16:55:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7864817AE;
+	Mon, 29 Dec 2025 17:03:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55B0B177
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E90454036E
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 16:55:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B1C960A68
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:03:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XXxIZ3dk79bL for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 16:55:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uXlbQLbV9e5n for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 17:03:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.101;
+ helo=smtpdh16-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B1B5403D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B1B5403D8
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0B1B5403D8
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 16:55:55 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 14B5B1A2444;
- Mon, 29 Dec 2025 16:55:54 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id D78F260725;
- Mon, 29 Dec 2025 16:55:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 47C3C113B0691; Mon, 29 Dec 2025 17:55:51 +0100 (CET)
-Date: Mon, 29 Dec 2025 17:55:49 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Christian
- Stewart <christian@aperture.us>, Marcus Folkesson
- <marcus.folkesson@gmail.com>
-Message-ID: <20251229175549.0e48a830@windsurf>
-In-Reply-To: <20250926100609.4158676-1-dario.binacchi@amarulasolutions.com>
-References: <20250926100609.4158676-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4350960A58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4350960A58
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4350960A58
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:03:34 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id aGeavlS5d3pJ0aGeavUOQ9; Mon, 29 Dec 2025 18:03:32 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 29 Dec 2025 18:03:31 +0100
+Message-ID: <20251229170331.1299723-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767027353; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=GZm5Mr/7ndOHm/fqh5L/cFIPb2ew0ePX4zJIqHS+iZU=;
- b=BiNaUs99u0tfy1dmfdzD71HElH7ivlQZjcjFbz6YL/mJOi9ihpSeKLVF6v68BHJtF7TW5o
- xBXYDvlQ7/CgyylFVZ/7mGsEmHxhK42kVNeoxX+CyF48ZwI+/nwgFp/yDP6/CWqD/IXtvM
- lLrlsncZuOsIoblVziQUn2zy57Zsh1mtwudufecaCXYIoALV6rwdws059P2qQmcf3rqtAX
- JtYpZuOCHpIfgl208Ah4nG3uS2GaKDVlPfDi27f7MryfcGsOAGLnMaXI8Ze7RuYSHYwqiJ
- HgdOvxwR2mNzC83pt13vwLIl1ehdRL6+IgSab+rHamFhWBrXrRiXMXI8QbslBg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=BiNaUs99
-Subject: Re: [Buildroot] [PATCH 1/6] package/embiggen-disk: fix
- EMBIGGEN_DISK_VERSION
+X-CMAE-Envelope: MS4xfM2ZyKjU6Mm101KJpsJ8rO6vzMm0d88Y02R48ihW9xy7pCbnZkrRCci4QH7Vq9RzMdh7Q7STakyoBmF1d/T6V8ubHrtrcjBjrphMcQpyGSB+TjE6Por9
+ +EUngD5j2PeH/fWvZRaU+advsY2goe/4o7Ayo4bmMvaJQG8qjuoiyVVKWt3Wb82rBPZKdxz1Anhnoh+QBONJ56dMBK98N8QXla/Fz2dZr3AegDPFTznI9f7Y
+ tz9755KClUdLozRvQPrFRHzf27OJayXY48YhJhSZOPpBpwgRNY8bulNzFmgu4ptIaOcPkv3tNCZT1dhjFTvobA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1767027812; bh=1bFsqHj6Y+uxCXH+14FivUKoc7fUzKQL/JYJo9PiH+k=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=FCISc1ERhyzUnA6uvZ8NeqGmUDno6LAvr6bIpvKacsx6EQY67jRB+NofiTBgG8rce
+ R7jC1SL7btVpT9tNodeQflBl21nY9z0yqX0h6qrmSfykKeSQEpAmth1CVgBBq9Pe54
+ kGf8iH0xj48KCoCSIgO7WBV9BTsp9VrF5VVXnTYnBg0elHbxARuVCOzxQ8FN6d9wyx
+ OCDnFTqROxhaDtkBjJACg78Xi/YbQ51yhMy1xUC93ljlpPJ0cyn6SfcIrWeBWt74IK
+ UqobsAaL06q16XTlzqmajGYIjRZxI7ZfDf7qFovweCnGwX5jbwZUrs3qqYRWborn0U
+ L9dS6X/UhVx2A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=FCISc1ER
+Subject: [Buildroot] [PATCH] package/libnss: fix Makefile ifndef
+ FREEBL_NO_DEPEND
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,32 +92,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Sep 2025 12:06:04 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+NSS Makefile build system is pretty weak if used with parallel build. In
+this case what happens is that 'ifndef FREEBL_NO_DEPEND' appears in
+lib/freebl/manifest.mn and coreconf/Linux.mk. When parallel building
+variable FREEBL_NO_DEPEND gets defined if not defined to 1, but in the
+2 occurences we end up having on variable set to 1 and 1 still not
+defined. This results in:
+`
+/home/giuliobenetti/br-reproduce/3e046c996825447f48377f7c4361b5db26b84f95/output/host/lib/gcc/arm-buildroot-linux-musleabi/14.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: Linux2.6_arm_arm-buildroot-linux-musleabi-gcc.br_real_glibc_PTH_DBG.OBJ/Linux_SINGLE_SHLIB/lowhash_vector.o: in function `loader_GetOriginalPathname':
+lowhash_vector.c:(.text.loader_GetOriginalPathname+0x68): undefined reference to `PR_SetError'
+collect2: error: ld returned 1 exit status
+`
+So let's pass FREEBL_NO_DEPEND=1 when building to define that variable
+instead to let NSS Makefile to calculate it.
 
-> Make EMBIGGEN_DISK_VERSION compliant with release-monitoring.org.
-> 
-> Fixes: 4ae18c511a2a7e8b0b6cd7a2961ba4c0e395fe2a
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  package/embiggen-disk/embiggen-disk.hash | 2 +-
->  package/embiggen-disk/embiggen-disk.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+https://autobuild.buildroot.net/results/ad4/ad40536728303c56d1d0968e38ac36da12cca416//
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/libnss.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index b6be6dbc8c..db71c0018d 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -57,7 +57,8 @@ LIBNSS_BUILD_VARS = \
+ 	OS_ARCH="Linux" \
+ 	OS_RELEASE="2.6" \
+ 	OS_TEST=$(BR2_PACKAGE_LIBNSS_ARCH) \
+-	NSS_ENABLE_WERROR=0
++	NSS_ENABLE_WERROR=0 \
++	FREEBL_NO_DEPEND=1
+ 
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+ # Disable Altivec if not supported
+@@ -136,7 +137,8 @@ HOST_LIBNSS_BUILD_VARS = \
+ 	NSS_USE_SYSTEM_SQLITE=1 \
+ 	SQLITE_INCLUDE_DIR=$(HOST_DIR)/include \
+ 	ZLIB_INCLUDE_DIR=$(HOST_DIR)/include \
+-	NSS_ENABLE_WERROR=0
++	NSS_ENABLE_WERROR=0 \
++	FREEBL_NO_DEPEND=1
+ 
+ HOST_LIBNSS_DEPENDENCIES = host-libnspr host-sqlite host-zlib
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
