@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A1B3E92724
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 14:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A644BE9272B
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 14:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C714403B9;
-	Mon, 29 Dec 2025 14:07:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7712E60AFC;
+	Mon, 29 Dec 2025 14:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LmRVEUGRQRGX; Mon, 29 Dec 2025 14:07:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1OxwJMVqUEBo; Mon, 29 Dec 2025 14:07:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CCF5407F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B4E560B24
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767017277;
-	bh=1PLjbp65hE2eiUvfCvnNa35Km2XMmRuWmUcWF0HrJIU=;
+	s=default; t=1767017278;
+	bh=7R65d5XDzvUmTA1LtNpOlwWHUvvaGQ2uQ4bi5H0v+VM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iW7YgKWub6KB1jak96BqJrXKLmVuFhDmwE6OfVKhAe6Y34qPH6AR0FMI51Eav7Zrh
-	 hN/0jHR4egj6D8AAvGs7x3EA0Y19A/OuVXsKMTDoqAxUrl8j3LlLhjnNx6mDjGzljU
-	 QYY/fsOLTI7Mg4yUSllrrkCd28D4VH+zvmBurOmvdqJ7o2foh1TdFpQUbgxkJHkE/x
-	 hpwHfkTGLDfTMACKiV9kDSN0vPnnyw2TG3B4o6Zg0AJxKcWbpfArhyySspl2KNudsP
-	 0dPd9Odh0bHoFomFyYL698miNT+hQ0yT1r0OPgJsiU022KS5+VBPv3MrdxzOrSiq4N
-	 M37zGgtSOOI0Q==
+	b=mkr9ojkcFNdB5y72LhXrFv2RiKBpGyMborkoSjkcxx7qlQE7OTYJYrmcgS25gyF3N
+	 72Edt5lMlM/Oxd3ireiI6xRXFlD2Bf1wfUC30b/XjOKo1io3TQqZ6gsQzOl95HQrEW
+	 VwbC0+wIcQYFs5P4p8tnCizKrtPIHpQN4sM9pyAg+eOtx09C3iCYkrZBtG8zc43tiz
+	 2uLgFkRg0v/WoUDUUOIwQEmVB8ucefMv2f343RySSvbdzcN0n8A4TrRZfGKo3AutF1
+	 kd7Tw7bwjCCOUI6Or6eCFIMISMB8Ioo8eQWgtCSNPBk588rgEngP1PqmXzoc02k5d8
+	 EOSBJRvpvzFKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CCF5407F6;
-	Mon, 29 Dec 2025 14:07:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 919BBB9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B4E560B24;
+	Mon, 29 Dec 2025 14:07:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3C091E1
  for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7C2D403FE
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 967CC404FC
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VNh-n4pb24t3 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hu6apWixygHR for <buildroot@buildroot.org>;
  Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C8F7403B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC176405A5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C8F7403B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC176405A5
  for <buildroot@buildroot.org>; Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8874887B4A; Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
+ id DB59687B4C; Mon, 29 Dec 2025 14:07:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 15:06:12 +0100
+Date: Mon, 29 Dec 2025 15:06:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6244163284a05ae38a819abcb7b65e03b04102dd
-X-Git-Newrev: 7b8c58ae03f87e047c14585b16de19c66b8344c8
+X-Git-Oldrev: d372b654a45882f641ff65a4acf7126e66c35487
+X-Git-Newrev: f276648692b898aed8b32d4887a8372209b3cd2c
 X-Patchwork-Hint: ignore
-Message-Id: <20251229140743.8874887B4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tinyxml: add CVE trailer in patch
+Message-Id: <20251229140743.DB59687B4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pixman: fix patch reference in
+ IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,51 +77,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b8c58ae03f87e047c14585b16de19c66b8344c8
+commit: https://git.buildroot.net/buildroot/commit/?id=f276648692b898aed8b32d4887a8372209b3cd2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+Since Buildroot commit [1] the
+`0001-Disable-tests.patch` patch reference
+was removed in favour of a build argument that disable the tests.
 
-This patch adds the relevant information to the patch header
-and adds the `Upstream` trailer.
+This update the reference in IGNORE_CVES accordingly.
 
-[1] 1167d0ff3d docs/manual: mention CVE trailer
+[1] ba2fb599cd package/pixman: bump to version 0.44.2
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                                   | 1 -
- .../tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch  | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/pixman/pixman.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index cae06b629c..b0ebd9c49e 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1018,7 +1018,6 @@ package/ti-utils/0001-plt.h-fix-build-with-gcc-10.patch lib_patch.Upstream
- package/tinyalsa/0001-include-time.h-before-asound.h.patch lib_patch.Upstream
- package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch lib_patch.Upstream
- package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch lib_patch.Upstream
--package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch lib_patch.Upstream
- package/transmission/S92transmission Shellcheck lib_sysv.ConsecutiveEmptyLines lib_sysv.Indent lib_sysv.Variables
- package/triggerhappy/S10triggerhappy Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/trousers/0001-Check-if-the-compiler-understands-pie-and-relro-options.patch lib_patch.Upstream
-diff --git a/package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch b/package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
-index ea0f6476c8..1da613c205 100644
---- a/package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
-+++ b/package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
-@@ -8,8 +8,8 @@ by two non-zero bytes. In case of malformed input (0xef should be
- the start byte of a three byte character) this leads to an infinite
- loop. (CVE-2021-42260)
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 87d973230f..63d9ccd10b 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -26,11 +26,10 @@ PIXMAN_CONF_OPTS = \
+ 	-Dlibpng=disabled \
+ 	-Dtests=disabled
  
--[Retrieved (and backported) from:
--https://sourceforge.net/p/tinyxml/git/merge-requests/1]
-+CVE: CVE-2021-42260
-+Upstream: https://sourceforge.net/p/tinyxml/git/merge-requests/1
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  tinyxmlparser.cpp | 6 ++++++
+-# Affects only tests, and we don't build tests (see
+-# 0001-Disable-tests.patch). See
+-# https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
+-# "not sure why NVD keeps assigning CVEs like this. This is just a
+-# test executable".
++# Affects only tests, and we don't build tests.
++# See https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
++# "not sure why NVD keeps assigning CVEs like this. This is just a test
++# executable".
+ PIXMAN_IGNORE_CVES += CVE-2023-37769
+ 
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
