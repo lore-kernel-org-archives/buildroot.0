@@ -1,95 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC2B8E92FCA
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 17:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8010AE9273E
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 17:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8196C81BCF;
-	Mon, 29 Dec 2025 17:55:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0oYIurl_01s7; Mon, 29 Dec 2025 17:55:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 275CB811D1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767030907;
-	bh=pFwIGVnuPB2JpHj12Mx2sMIxKnUfte7uT6Oeeyn21zw=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=dgiTNRvPcJH2I8ZI2MaeopWnDuftUkagiY1QY1TuIRrTictpTJKfJeEVnoAMUch3X
-	 +TaBi+jOyUfs3an2OEarGwwkVoAzpr7yL56egDr+msUasZyo3/8s7p6n2HREOO1EYz
-	 qXLq39xL2PyAx9Xk3CjoLmtpTMF4hiBzX2u+vLruufdL1sqxtsPrYfISQ1qRZ86a9S
-	 9wHJOXJkqqoYrMKutjaf7KwdIQQv1WIHXILE/X/bLmfpHqHKsfbi3epZOBHPCQEflF
-	 MqOIKSbv2/R9UZO9CFPdx1hlrCY+cWAwAzteQEx9o7szMVqxYwLu0yiGus8An81KG/
-	 jvpW3LXb6XaEw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 275CB811D1;
-	Mon, 29 Dec 2025 17:55:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5EE44177
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:55:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 440E560B25
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:55:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55AEA60B3F;
+	Mon, 29 Dec 2025 17:55:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FHLWadzgnDPl for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 17:55:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2DFAD60B1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DFAD60B1E
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2DFAD60B1E
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:55:05 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7B5F3A4C25A7;
- Mon, 29 Dec 2025 18:52:10 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38202)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vaHPW-0000000012P-3pfi;
- Mon, 29 Dec 2025 17:52:03 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Andreas Ziegler <br025@umbiko.net>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Matt Flax <flatmax@flatmax.org>, Romain Naour <romain.naour@gmail.com>,
- Simon Dawson <spdawson@gmail.com>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Jan Heylen <jan.heylen@nokia.com>
-Date: Mon, 29 Dec 2025 18:51:40 +0100
-Message-ID: <20251229175158.3548903-13-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251229175158.3548903-1-bernd@kuhls.net>
-References: <20251229175158.3548903-1-bernd@kuhls.net>
+ id a3XcycK74Bk7; Mon, 29 Dec 2025 17:55:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B91560B1E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767030910;
+	bh=ABSTzy7dSoXhNpVy+JPTwEVFpo+rerPDQ7vhzdxB9N8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=IWDZvnLiMCH/9Om2/y89NQc7PI9gQyGvBVgS5lX5kYEgbDpscCvizchMMEc4n4Lmf
+	 7ePA35qY61g8ZS0Kf9rnuUy0IafU6U6f7JufrY2GtJVzCHtKr0Nd7kG4N+OQnm6JM/
+	 cO9t02FyL3EsRgyM42Smy+Kwig7QG4dGblkL6Pl+PDQXAuFey73YpC4TugGL0L7AlW
+	 cSyZSZ0W0vktEwsbJtx/q3SzPX7xAIExaArg+AkdrpRV35+iJsuExE1dU1nDX9ntHn
+	 H4SkMafmSkrS17wZBKWWImW9dDbig6uW61arZHwTwO6l34SsQHmo2umdcmFW3dYBuV
+	 qp+q2Vc9lIeFQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B91560B1E;
+	Mon, 29 Dec 2025 17:55:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07B35D8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:55:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECF62407CF
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:55:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VWVPFSC2ecMA for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 17:55:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4482C4074C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4482C4074C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4482C4074C
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 17:55:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 1E504B00548;
+ Mon, 29 Dec 2025 18:55:00 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 29 Dec 2025 18:55:00 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767030730;
- bh=uJbxGnn31JHGJKtjayF+w3D9wTmv/WQJWZAKIZ3l880=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=L+TBxmF1QqvBh4TIuyCYnqjXYXD9nv2nmFTOwwOrwvrgGFnpnZlL7uU+JbuAusCm4
- NQQAab1W9bCwllOffzeWlNA+sDy5uWc2hb/FGnPBwTwqfhSjCVd9nnjMLFgt79fXvA
- UQViggt+PsVmaEK6WLAn5hpNHyhu93sW1piFD+jBZc5TBlOwitoW6bg5jNdLzxddB0
- OTThig2/7+xZC+qlxNi5CpdKzXtGqXpsn3caYzzGBdYsH9/yGBYnP8RdapSci7CnKY
- QbmvHVfgnJNzfJmjk7fn1kQ+XobdNWQchv52YzXpss7robpoox0+KfiZymMao6RRJt
- QVixL7tW8gAiA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=L+TBxmF1
-Subject: [Buildroot] [PATCH v7 12/29] package/opentracing-cpp: remove package
+Date: Mon, 29 Dec 2025 18:55:00 +0100
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Olivier Benjamin <olivier.benjamin@bootlin.com>
+In-Reply-To: <20250709-perf_libtraceevent-v2-1-3ea54fbe6b5b@bootlin.com>
+References: <20250709-perf_libtraceevent-v2-0-3ea54fbe6b5b@bootlin.com>
+ <20250709-perf_libtraceevent-v2-1-3ea54fbe6b5b@bootlin.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <58ab9bd80f3725f6a6a923c98cde5480@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767030904;
+ bh=BdwXgMBu5fuRPJ7/BlcPjFAmurZ9cD9Uz93Q1U55nX0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=V6DTiGn+pIZL63pGAWGK6Pz9TNlucSL40LaoQeDtEP74X+eMiEu05vou5HboLn9kG
+ QcO/ebbaikqeYOpxfq005FUUuGWN7O1WuxDFTJJ7kidk9HrsbLwo+iNMMwF4sd7OgV
+ uAmvp1FbXZeo1tHD4doSktaa4HVIWKlChQPVin/bcj4/+gD0Qaj1c1Mbbh/jmDfofS
+ WYi1glJqMpKqAUZEVlC7j0Fqj/lkDtSHSDFVAJR7ApdGZJ3bfbs0/q28+6xuHXAe2u
+ UtdGlxp0PeIHeL1m9HIept+R5z0puRiokDBpGg9UCInG4VOcMEMc+t5NnK5nVMayPr
+ 8z3qtBHxZgVLQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=V6DTiGn+
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/linux-tools: perf: build
+ with libtraceevent support when it is selected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,146 +96,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Quoting https://github.com/opentracing/opentracing-cpp
-"This library is DEPRECATED!"
-https://github.com/opentracing/specification/issues/163
-https://github.com/opentracing/opentracing.io/pull/460
-
-The package is broken with cmake 4 and no other package depends on it.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Jan Heylen <jan.heylen@nokia.com>
----
- Config.in.legacy                             |  6 +++++
- DEVELOPERS                                   |  3 ---
- package/Config.in                            |  1 -
- package/opentracing-cpp/Config.in            | 18 -------------
- package/opentracing-cpp/opentracing-cpp.hash |  3 ---
- package/opentracing-cpp/opentracing-cpp.mk   | 28 --------------------
- 6 files changed, 6 insertions(+), 53 deletions(-)
- delete mode 100644 package/opentracing-cpp/Config.in
- delete mode 100644 package/opentracing-cpp/opentracing-cpp.hash
- delete mode 100644 package/opentracing-cpp/opentracing-cpp.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0f945389a0..50678dfae0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_OPENTRACING_CPP
-+	bool "opentracing-cpp has been removed"
-+	select BR2_LEGACY
-+	help
-+	  opentracing-cpp was deprecated upstream and has been removed
-+
- config BR2_PACKAGE_OPENPOWERLINK
- 	bool "openpowerlink has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e157e98f79..9775c85556 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1564,9 +1564,6 @@ N:	Jan Havran <havran.jan@email.cz>
- F:	board/pine64/pinecube/
- F:	configs/pine64_pinecube_defconfig
- 
--N:	Jan Heylen <jan.heylen@nokia.com>
--F:	package/opentracing-cpp/
--
- N:	Jan Kraval <jan.kraval@gmail.com>
- F:	board/orangepi/orangepi-lite
- F:	configs/orangepi_lite_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index 5e5d10874d..8e32818e6a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1954,7 +1954,6 @@ menu "Logging"
- 	source "package/log4cpp/Config.in"
- 	source "package/log4cxx/Config.in"
- 	source "package/log4qt/Config.in"
--	source "package/opentracing-cpp/Config.in"
- 	source "package/spdlog/Config.in"
- 	source "package/ulog/Config.in"
- 	source "package/zlog/Config.in"
-diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
-deleted file mode 100644
-index ff3067b7d1..0000000000
---- a/package/opentracing-cpp/Config.in
-+++ /dev/null
-@@ -1,18 +0,0 @@
--config BR2_PACKAGE_OPENTRACING_CPP
--	bool "opentracing-cpp"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
--	help
--	  OpenTracing API for C++
--
--	  http://opentracing.io
--
--comment "opentracing-cpp needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--
--comment "opentracing-cpp needs exception_ptr"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
-deleted file mode 100644
-index 8cfaf5fd47..0000000000
---- a/package/opentracing-cpp/opentracing-cpp.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  5b170042da4d1c4c231df6594da120875429d5231e9baa5179822ee8d1054ac3  opentracing-cpp-1.6.0.tar.gz
--sha256  076d03156735d5ff2df2ea0f8b12351ef65e5e9222b5c8c6a35101dadb41e717  LICENSE
-diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
-deleted file mode 100644
-index 12ce40fbed..0000000000
---- a/package/opentracing-cpp/opentracing-cpp.mk
-+++ /dev/null
-@@ -1,28 +0,0 @@
--################################################################################
--#
--# opentracing-cpp
--#
--################################################################################
--
--OPENTRACING_CPP_VERSION = 1.6.0
--OPENTRACING_CPP_SITE = \
--	$(call github,opentracing,opentracing-cpp,v$(OPENTRACING_CPP_VERSION))
--OPENTRACING_CPP_LICENSE = Apache-2.0
--OPENTRACING_CPP_LICENSE_FILES = LICENSE
--
--OPENTRACING_CPP_INSTALL_STAGING = YES
--
--# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
--# although BUILD_STATIC_LIBS=ON is default, make it explicit,
--# cmake and static/shared libs is confusing enough already.
--ifeq ($(BR2_STATIC_LIBS),y)
--OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
--endif
--
--OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
--
--$(eval $(cmake-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMDkvMDcvMjAyNSAxNzowNCwgQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
+Cj4gV2hlbiB0cnlpbmcgdG8gcGVyZm9ybSBhIGN1c3RvbSB1cHJvYmUgcmVjb3JkaW5nIG9uIGEg
+dGFyZ2V0IHdpdGggcGVyZgo+IGJ1aWx0IGJ5IGJ1aWxkcm9vdCwgdGhlIHJlY29yZGluZyBzdGVw
+IGZhaWxzIGFzIHBlcmYgY2FuIG5vdCByZWNvcmQKPiB1cHJvYmVzIHdpdGhvdXQgbGlidHJhY2Vl
+dmVudCBzdXBwb3J0Ogo+IAo+ICAgJCBwZXJmIHByb2JlIC14IGxpbmtlZF9saXN0IGluc2VydF9u
+YW1lIGluZGV4Cj4gICBUYXJnZXQgcHJvZ3JhbSBpcyBjb21waWxlZCB3aXRob3V0IG9wdGltaXph
+dGlvbi4gU2tpcHBpbmcgcHJvbG9ndWUuCj4gICBQcm9iZSBvbiBhZGRyZXNzIDB4ODA4IHRvIGZv
+cmNlIHByb2JpbmcgYXQgdGhlIGZ1bmN0aW9uIGVudHJ5Lgo+IAo+ICAgQWRkZWQgbmV3IGV2ZW50
+Ogo+ICAgICBwcm9iZV9saW5rZWRfbGlzdDppbnNlcnRfbmFtZSAob24gaW5zZXJ0X25hbWUgaW4g
+Cj4gL3Jvb3QvZ2RiL2xpbmtlZF9saXN0IHdpdGggaW5kZXgpCj4gCj4gICBwZXJmIGlzIG5vdCBs
+aW5rZWQgd2l0aCBsaWJ0cmFjZWV2ZW50LCB0byB1c2UgdGhlIG5ldyBwcm9iZSB5b3UgY2FuIAo+
+IHVzZSB0cmFjZWZzOgo+IAo+ICAgICAgICAgICBjZCAvc3lzL2tlcm5lbC90cmFjaW5nLwo+ICAg
+ICAgICAgICBlY2hvIDEgPiBldmVudHMvcHJvYmVfbGlua2VkX2xpc3QvaW5zZXJ0X25hbWUvZW5h
+YmxlCj4gICAgICAgICAgIGVjaG8gMSA+IHRyYWNpbmdfb24KPiAgICAgICAgICAgY2F0IHRyYWNl
+X3BpcGUKPiAgICAgICAgICAgQmVmb3JlIHJlbW92aW5nIHRoZSBwcm9iZSwgZWNobyAwID4gCj4g
+ZXZlbnRzL3Byb2JlX2xpbmtlZF9saXN0L2luc2VydF9uYW1lL2VuYWJsZQo+ICAgJCBwZXJmIHJl
+Y29yZCAtZSBwcm9iZV9saW5rZWRfbGlzdDppbnNlcnRfbmFtZSAuL2xpbmtlZF9saXN0Cj4gICBl
+dmVudCBzeW50YXggZXJyb3I6ICdwcm9iZV9saW5rZWRfbGlzdDppbnNlcnRfbmFtZScKPiAgICAg
+ICAgICAgICAgICAgICAgICAgIFxfX18gdW5zdXBwb3J0ZWQgdHJhY2Vwb2ludAo+IAo+ICAgbGli
+dHJhY2VldmVudCBpcyBuZWNlc3NhcnkgZm9yIHRyYWNlcG9pbnQgc3VwcG9ydAo+ICAgUnVuICdw
+ZXJmIGxpc3QnIGZvciBhIGxpc3Qgb2YgdmFsaWQgZXZlbnRzCj4gCj4gICAgVXNhZ2U6IHBlcmYg
+cmVjb3JkIFs8b3B0aW9ucz5dIFs8Y29tbWFuZD5dCj4gICAgICAgb3I6IHBlcmYgcmVjb3JkIFs8
+b3B0aW9ucz5dIC0tIDxjb21tYW5kPiBbPG9wdGlvbnM+XQo+IAo+ICAgICAgIC1lLCAtLWV2ZW50
+IDxldmVudD4gICBldmVudCBzZWxlY3Rvci4gdXNlICdwZXJmIGxpc3QnIHRvIGxpc3QgCj4gYXZh
+aWxhYmxlIGV2ZW50cwo+IAo+IGxpYnRyYWNlZXZlbnQgc3VwcG9ydCBmb3IgcGVyZiBoYXMgYmVl
+biBkaXNhYmxlZCB3aXRoIGNvbW1pdAo+IGI0YWI0NWE1YzFkYiAoInBhY2thZ2UvbGludXgtdG9v
+bHM6IGRpc2FibGUgbGlidHJhY2V2ZW50IGRldGVjdGlvbiIpCj4gYmVjYXVzZSB0aGVyZSB3YXMg
+bm8gbGlidHJhY2VldmVudCBwYWNrYWdlIGluIGJ1aWxkcm9vdCB0byByZXBsYWNlIHRoZQo+IGZv
+cm1lciBsaWJ0cmFjZWV2ZW50IHJlbW92ZWQgZnJvbSB0aGUga2VybmVsIHNvdXJjZXMuIFNpbmNl
+IHRoZW4sIAo+IGNvbW1pdAo+IDE0NzRmMWIzNGIxNyAoInBhY2thZ2UvbGlidHJhY2VldmVudDog
+bmV3IHBhY2thZ2UiKSBoYXMgaW50cm9kdWNlZCBhCj4gbGlidHJhY2VldmVudCBwYWNrYWdlLiBX
+ZSBjYW4gdGhlbiBleHBvc2UgYWdhaW4gdGhlIHBvc3NpYmlsaXR5IHRvIAo+IGJ1aWxkCj4gcGVy
+ZiB3aXRoIGxpYnRyYWNlZXZlbnQgc3VwcG9ydC4KPiAKPiBNYWtlIGJ1aWxkcm9vdCBwZXJmIG1h
+a2VmaWxlIGRldGVjdCBpZiBsaWJ0cmFjZWV2ZW50IHBhY2thZ2UgaGFzIGJlZW4KPiBlbmFibGVk
+LCBhbmQgaWYgc28sIGFsbG93IHRvIGJ1aWxkIHBlcmYgd2l0aCBsaWJ0cmFjZWV2ZW50IHN1cHBv
+cnQuCj4gCj4gU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBi
+b290bGluLmNvbT4KClNlcmllcyBhcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
