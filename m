@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA0B1D3B7E5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 11:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D2B5D3B7E5
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 12:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD34F40282;
-	Mon, 29 Dec 2025 11:25:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE68180FA4;
+	Mon, 29 Dec 2025 12:16:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6z2QpqsQayoi; Mon, 29 Dec 2025 12:16:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0F9280FB0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767010577;
+	bh=idVplPLyQ7T5xLsTjzQdP/I3gzbl30VYohRg6eLokEA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mLRQMBdiKXHGV2+uxdtegZ863USLS7ht3f2BBomHMz9fK4d4NND0zOPSQmTQurd2G
+	 Zd4wYNrJQvjtuRg7p7QfklXOfhwusucXhWNalmWYbJvanrS6Q28xTW3XUlIRsm0ncR
+	 TzPaJ0iLAsb/z0NgNVPqehMNiduLepEm8mkTwPuQXcZt2mSxSOw32kVe90AEpx859o
+	 DGrCDvXz6wJQnGPEG6mztASwxZr/QwwgqPhGNtViZd8Lu4j33g++Lm7LRke/AF5DCV
+	 AEJ409sT4LXuhTaBO4cfWcHSOwRysCkURoKy1+BhiWywH3LyG/bt2ZlgAWGTT3im+g
+	 Q3vfMAr3cZ40Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0F9280FB0;
+	Mon, 29 Dec 2025 12:16:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A477D8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 12:16:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E584E40422
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 12:16:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T1HY5EIF9qmU; Mon, 29 Dec 2025 11:25:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE8CD401F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767007558;
-	bh=hkVL0M/gf5ydNE030oMmmOOwZRvz5NI/p+5Ngotpsvs=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=iA0CW95PMY3zNy5gBOqvh5YHM2nGtfwFYKPbyf4UA6lbTKBYEtVkbfnolQwj2kJhx
-	 dDjov+co3wMbUk++2XqKUt4lUS0/Fsl/hUqd/my5N7iMiLoOdIDh8uRMRa1pd8lu/p
-	 SI8I6Hbw2HUYJl3SEeLSzTUHchdlV6JTignSJeVIGTX3HSbuTuT4ndjpa897Tru7Hu
-	 YWzJSXWo5mc3eJcFsYPYhjzG4peeVSduUmUF37P1fmnQhh4JRrrpCbsbC2hoTJG1Y0
-	 JBH+BDayW0Qla2BFxCHAR66482cdWVGxZXN21v0QRz5MWLdHDPdpI88IzhgpyeNi3H
-	 FNE7e9GqRTRWQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE8CD401F7;
-	Mon, 29 Dec 2025 11:25:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 22E82D8
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20C0740459
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PrIkat2PNchh for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 11:25:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 38539400CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38539400CE
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 38539400CE
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id AB9032003CA;
- Mon, 29 Dec 2025 12:25:51 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 29 Dec 2025 12:25:51 +0100
-MIME-Version: 1.0
-Date: Mon, 29 Dec 2025 12:25:51 +0100
-To: Alexander Shirokov <shirokovalexs@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250802083139.17758-1-shirokovalexs@gmail.com>
-References: <20250802083139.17758-1-shirokovalexs@gmail.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <8a616ce8c8500bc8c5adde0480b91ce4@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767007552;
- bh=DB4l2KLdNblVJ9wAiGHQLeJotrX7bhDA74/Sz76i5yU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Fmg03dJYZnlF4wVgy3wnnJXlSfAg1nkJKbPE7nCNDi5e+AQs4m//7Q9rV4kLn4bLv
- OkfWcYQa5HLI18v1URa0xGhx59xlTXrSqvBu9bWpPB98m+fO8nBYdWjQplV7+f4i30
- ESnfNzhHX0hL8lIlIPqlRgJB6UDhaqRR+cLRJtU392xmdgJAMUj2iUgKg3iXYZqKUn
- 0ePrfvb390qwL0Flahk8Y5wEqEptDFTa4WbakOjXGZfaKK6UXFBCy1baJ0fdKWAIOA
- 6LUyJok6SMsK8nblAWE5aEov0D93HxUFxbU+e03YUrgjweJC5mWcgDx2/s1ilN1odZ
- 3XPejDhXR9IIQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Fmg03dJY
-Subject: Re: [Buildroot] [v1,1/1] package/aichat:new package
+ id APFM97dFfDhb for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 12:16:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3012940421
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3012940421
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 12:16:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 27E3C87A88; Mon, 29 Dec 2025 12:16:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 29 Dec 2025 13:13:46 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2e1d51533cc0c28d5fd86edd90adce250ade5b18
+X-Git-Newrev: dc9fc60ca12bad99183663f266c278540057f15e
+X-Patchwork-Hint: ignore
+Message-Id: <20251229121615.27E3C87A88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pocketpy: bump to version 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,27 +70,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/08/2025 10:31, Alexander Shirokov wrote:
-> AIChat helps seamlessly integrate different LLM models, providing 
-> access
-> via the CLI and network. It can serve as a gateway to heterogeneous and
-> distributed LLMs.
-> 
-> Handy features like roles, macros, and sessions help simplify 
-> repetitive
-> tasks and reuse of existing solutions. Features like playgrounds and
-> arenas help to explore and compare models.
-> 
-> https://github.com/sigoden/AIChat
-> 
-> Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=dc9fc60ca12bad99183663f266c278540057f15e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://github.com/pocketpy/pocketpy/releases/tag/v2.1.6
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/pocketpy/pocketpy.hash | 2 +-
+ package/pocketpy/pocketpy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
+index 2541e845a9..9f0fb868f4 100644
+--- a/package/pocketpy/pocketpy.hash
++++ b/package/pocketpy/pocketpy.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  eb7e8d9285d3848c2bc108b41fed4c49ea47df6b0018362319d2736a6f5821e1  pocketpy-2.1.5.tar.gz
++sha256  b0e4ee0ffcc6111f67a405c6418f5539caa0ab0368adb2027af23fbf17de88a6  pocketpy-2.1.6.tar.gz
+ sha256  9dab6fe9086f93847540387be578edc94b6b280004db5ed7c850ccf8f086fd66  LICENSE
+diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
+index b171840890..06aa0faca0 100644
+--- a/package/pocketpy/pocketpy.mk
++++ b/package/pocketpy/pocketpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POCKETPY_VERSION = 2.1.5
++POCKETPY_VERSION = 2.1.6
+ POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
+ POCKETPY_LICENSE = MIT
+ POCKETPY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
