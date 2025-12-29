@@ -1,114 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAA9AE92FE0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1AF7E92FE1
 	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 21:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 664154057E;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C2EE80BCA;
 	Mon, 29 Dec 2025 21:22:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J4fPtPJr567z; Mon, 29 Dec 2025 21:22:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wNdJbYp4fnLz; Mon, 29 Dec 2025 21:22:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F735406A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 564A580BC2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767043322;
-	bh=f7c9XKy3fY6G9Vn8HJNgN0S1U+QqNaJiL94IQxawm9g=;
+	s=default; t=1767043321;
+	bh=bOAQeufRH+TshPUxlBV7/AEkRSAajpCjMlNkTsNjzbs=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=Z2bbJ2DijpqEqHcTRE74U0JAZ5zNXEacfCMMs28P0ggNbHmwnOKWmRGtyc8K3ND2D
-	 C/7Og36nQWT2ognnYR/j6HpY83yh2gIRyw0nG5annnO7C5aXcEpz25okVFybb+QtJ4
-	 As2q54UpLuAvGqzLf4OSRYYG/G3ylj7m1uf09dHjDe5EwCF5Tu31l6OfJIGxrW0L+T
-	 xaIZ79rEHeVmqaCcMFkol4IqPFRuSBCrDGvxijteIgmNFsjIcEDID5sjVoeCt9vQbz
-	 PpYyF7m97mnHuPP99rgmY6Xfx4/nG/epQpyDOGbkGr8ODJTbE5Ke/dWCjYHxY0dVRw
-	 1i3ogC9k2O7Sw==
+	b=Np7nO1UVZjuFhxT3g+mCbFKbrCJspHO8Vn5ES1ZPURwyxcy7Tgqr7K6Sx/6lzms0/
+	 sZKpdyNYY41MSd3gb2ahbTQ3lvLD+ja/tByi5Blcea9ERAWuz3+m98b5OqdW6PPQHn
+	 PCxXEu5lU+0QGYqXKulmhT1mZ9oqL/V6aZ2bTscVgPyokXnGxFrsunoZHR6g959uWW
+	 8oQuno5i6t4iYwz8GoYQLcJQpKTLPk5a7goN41VCtMkaCg2VQHgVUSYgXlUho1g9xJ
+	 /pFU3ykwRuHCyJ3jFFQakuUsztrvvrjy6K3+WHrXwaJXKHF+c5546qNIo7onJ8T/4x
+	 p9DNVhJN5o7fg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F735406A0;
-	Mon, 29 Dec 2025 21:22:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 564A580BC2;
+	Mon, 29 Dec 2025 21:22:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C047177
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FE1A35B
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E19360AF4
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 520A760AEA
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:21:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vs7DhzhTImNQ for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 21:21:59 +0000 (UTC)
+ id IpsOj3xx3nzj for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 21:21:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BC93860AE5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC93860AE5
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC93860AE5
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:21:58 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-47a8195e515so58275995e9.0
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:21:58 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AAADC60AE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAADC60AE5
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AAADC60AE5
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:21:56 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-477770019e4so79497085e9.3
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:21:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767043316; x=1767648116;
+ d=1e100.net; s=20230601; t=1767043314; x=1767648114;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=9/pxrI428UW5KdmLADWva+sDgfT1O7FAc8xSHkpQLlo=;
- b=fU7BLrzj1d2nZ4RuR8C/g5K5MYC80w7xphp5DovLuOcFDsWLFTw/+YXErXJbjx7K9V
- 8XNz2xhbFXVyDkOK1AsncvWZ5Q2WTaNze8N1uSeGENutd6skTOyuk+G91modKnnvGAwh
- 6vpkVN2PpGfgRh41noPhoI/MXqUNeFvcX2VTqJX3lCieYm1FsyjWJA7C4mEcNSDdOD6f
- IU2FTQtpZC+tr/JviOfM5LC6nNT6i/+vMnLiB4wAGxv2WZs3Cr9XJcCnzuOHv63HEguS
- iSiswDtQ2vIY0Ud/+U69TmjzRhtd1rpLV6LGYhl9LagWtxWWFfVnhjh0dUuNDBIXXMnr
- gKfQ==
-X-Gm-Message-State: AOJu0YxsOvRzL5v8KmwbyyIhFfYmUsSaSgKI8eIsVy5tJHODw1FOpD46
- GSZx2Oz00QfwLaBLYidqxguEC1rvE+jvMTE3qNMsUF62jmK4g/8GHQHh/RtqeuMZn0evPpyqhuB
- d+BOymzE=
-X-Gm-Gg: AY/fxX6f/0NAeOfE4kTHWrYFEzw5EFfoqoX6Yg+bXOj12lFWBFSZRi9smM1u0YOqeML
- khyABqmPOm2kc8eCDXMfI7onaELP0roeZlHaTVmu2d1pOwpptsC0NxzutJPIfMD6/Tuutk52icJ
- r36HJot7XbbDMyX3HhAUAK6nOxXbgTB5PFwrRM4IcO4Olo13aCjk6xg/uASUfEeBv7aCluGip8i
- rtUMF7/Ir8EJdjRNOQtrIcno4/L1rYQnCw24efn25cRs9NrEzVirk+qHkpPLQs5mr8OeBSaiYh+
- zg4ruUoWHmdEyVfiJm7lsxyWV2gj5qZUF8gtoER/SgevbFiqUebnpB/ImoM0lrTAKz/BH+jKEjY
- f0N8oPsq/Jeml0tNRYmg28FI4mCDoL8KF0fcdZ0VtouaWujnsXRZQce3cIv5mOUeZsMNP7AlkMk
- yBy9Q=
-X-Google-Smtp-Source: AGHT+IHf9yHmYsPi86n6FyyKpdhvtDi30l3S7THoQfzro1JAI6cyRkwddpHUZQpbOHI5wGMSvOCZWA==
-X-Received: by 2002:a05:600c:4e90:b0:45d:f81d:eae7 with SMTP id
- 5b1f17b1804b1-47d19593896mr366610675e9.28.1767043316123; 
- Mon, 29 Dec 2025 13:21:56 -0800 (PST)
-Received: from arch ([79.132.229.12]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-47d193cbe58sm556813195e9.9.2025.12.29.13.21.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ bh=ZkZMToTM6EU9AFVav3hVrFO4z3/UIPH+1vE5NSOjdB4=;
+ b=h9a4p65pdlBnFFWIuqF+DBJVGX2a1B+WmNTjJH+JMDmXimMiYfsE0ZGMXfcfClsujA
+ zgtVmc7DfMlfHYPTXtBeYLxtRaddDM+e3dkMSTL+ADT9gIJ47mijNZ1PaeQmk+YLngIs
+ s/IsmMI48L2MlXUTTFcfdG/Tj0KU9GhmKbvcpWZooW4imeEIjBc6lCACNDeZUc9i+AkJ
+ PbqZG7zPl9y++fam7MdAzGDTXXq9/rO8bcYNg3EU7nu9vfJ/jCxD1qLXmoMT+lx4LfwW
+ NllLnAAoY8EhQb+uxZDhCA8+4ereEY6djmU/a9xPCxMZPmQyIemhSVtQa674rT1grzhT
+ iDTw==
+X-Gm-Message-State: AOJu0Yx+a+rUmautG7Ag69FMQLo90OFTjCeJpDTIuMDKj54YALiq5+d5
+ pI+KFDXvcUs+2y8YKA0a6Rfex0ijHo6GKzuPusE8wdo9pRz1yyc6hEC51nQA3trjSi4Y/r+DfaG
+ gt7gFfls=
+X-Gm-Gg: AY/fxX50ceMfh+7a92Wn8fUd+Hn3Q2hwKY6fiMJVoznKj4C2+iAX1DeeGSUeJl9PmfT
+ /x9hEMZf1nt4oxHlMxvbA2BGtWRT48v77NocoJkOKanJJWccoCaUDlCSBaRRJacWBXTJwSk7Ydf
+ meo2Ns/v7wZK0B8iJGw2X7P5VrdNOz4S/lsZJbn1BlIhfMPo1Ax7zdPRZVUOtIqeY1i7JhpD7pD
+ j1LPNtzVYWy7k6SqWqfxpyikUMjeGHLhgBiNGRZEyG3yCcfdRbxYKrIfKbjxn1ys2gp9tP/kBls
+ FyjF0u8BxLs5WINGCLcsWPAmoSyd3uEj6+lXVvUwN+T95uacvaj6e+HF3WuKPs3dkEVlxodPbyT
+ QDRgt+1XAGCyXOoywrsPGWaVMfyuYI0XT9WOh09shw1AJ53POqtNrqAekNfrq7lbosbr1A6/Rmy
+ Dx7Co=
+X-Google-Smtp-Source: AGHT+IEi8lQ5WCM+lTOvsvLiyCCYEYlc4YePVtcHAYaoC1ZGO41I35xIkUK2duMVUlOIm0cRwfkHXQ==
+X-Received: by 2002:a05:600c:470e:b0:477:9cdb:e32e with SMTP id
+ 5b1f17b1804b1-47d19549856mr381878005e9.9.1767043314070; 
  Mon, 29 Dec 2025 13:21:54 -0800 (PST)
+Received: from arch ([79.132.229.12]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-47d193cbe58sm556813195e9.9.2025.12.29.13.21.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 29 Dec 2025 13:21:52 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 22:21:36 +0100
-Message-ID: <20251229212149.167902-4-thomas.perale@mind.be>
+Date: Mon, 29 Dec 2025 22:21:35 +0100
+Message-ID: <20251229212149.167902-3-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251229212149.167902-1-thomas.perale@mind.be>
 References: <20251229212149.167902-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1767043316; x=1767648116; darn=buildroot.org;
+ d=mind.be; s=google; t=1767043314; x=1767648114; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9/pxrI428UW5KdmLADWva+sDgfT1O7FAc8xSHkpQLlo=;
- b=Cw7otyhBmxKjWIMvNOOaBc4npSwcke7uFzZtpXTQ2rY1gq96u5mT4OmXBOMhO+pJnV
- Q3cRaeBtXeMRt24czpjiTMnDPWMqYWzMOq+zy1zlG8fSRfxPYVORi+NpCpJZFo/OAW21
- q1ww9ZBec+ecor5ALR6DKu8unKHda4Qm08XyX+SB7XZUkG7MIo8wpOBxVTkjrDcWzXGy
- 9OOwGERGj76UJ7o70MpWiZnAYnReU8hP0y4VvWfcheCGhi0I2XrwjGGXIXp5sQ2axoHV
- gomb6vYuywAOsVtZTwxR6JoCI9VRYHj4aEvGBZCytb4EZvRZ6SNNnlB50fOq0MI5Z2zE
- 7VEw==
+ bh=ZkZMToTM6EU9AFVav3hVrFO4z3/UIPH+1vE5NSOjdB4=;
+ b=FgmaZRn+qsFcvssmH4j5QzoK2sFplET4EqIvwgJ5a8+hXVq5Fw6VJBNVLoIygd7Rtp
+ PV/sX3MjGGseVkmt/WXypUUDRD3TDb0kUjSXaAu4rDZUstkXJZQWiPy424Z3WfcO8cQo
+ OwJ/JZj/hJ64o7wovFg09V3+csoV+ZLtWcyl8Y8eqyw7lgoX/51InWwmkHmtQ3pkaQVh
+ z4/dNjQGFVpUQ0FPhXr1STck8OEgIQRxV+Q/LMDUAzFPPD1jJxjmY5UIB0DsOGOrjzZh
+ Xcn942/4CUVmQwuE5CPwMm9eG3Hl2HE3K1F/O5HuROjvbmsDdDiwOR2vWTIDvYVIcl3a
+ sjaA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Cw7otyhB
-Subject: [Buildroot] [PATCH 03/15] package/patch: add CVE trailer in patches
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=FgmaZRn+
+Subject: [Buildroot] [PATCH 02/15] package/shellinabox: add CVE trailer in
+ patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,87 +138,31 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Since Buildroot commit [1] the patches that fixes a security
 vulnerability needs to reference the fixed vulnerability.
 
-This patch adds the relevant information to the patches header as well
-as the `Upstream` trailer.
+This patch adds the relevant information to the patch header
+and adds the `Upstream` trailer.
 
 [1] 1167d0ff3d docs/manual: mention CVE trailer
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../patch/0001-Fix-segfault-with-mangled-rename-patch.patch | 4 ++--
- ...x-arbitrary-command-execution-in-ed-style-patches-.patch | 4 ++--
- ...0004-Invoke-ed-directly-instead-of-using-the-shell.patch | 6 ++++--
- ...t-follow-symlinks-unless--follow-symlinks-is-given.patch | 5 +++--
- 4 files changed, 11 insertions(+), 8 deletions(-)
+ ...02-CVE-2018-16789-fix-for-broken-multipart-form-data.patch | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch b/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch
-index 19a67573c4..1b8d954025 100644
---- a/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch
-+++ b/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch
-@@ -7,10 +7,10 @@ http://savannah.gnu.org/bugs/?53132
- * src/pch.c (intuit_diff_type): Ensure that two filenames are specified
- for renames and copies (fix the existing check).
+diff --git a/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch b/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
+index 4b15f419e3..5067833056 100644
+--- a/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
++++ b/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
+@@ -4,7 +4,9 @@ Date: Fri, 26 Oct 2018 11:51:15 +0200
+ Subject: [PATCH] fix for broken multipart/form-data
  
-+CVE: CVE-2018-6951
-+Upstream: https://cgit.git.savannah.gnu.org/cgit/patch.git/commit/?id=f290f48a621867084884bfff87f8093c15195e6a
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- ---
--Patch status: upstream commit f290f48a6218
--
-  src/pch.c | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
- 
-diff --git a/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch b/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch
-index b44bdd0fac..18497c153b 100644
---- a/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch
-+++ b/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch
-@@ -10,11 +10,11 @@ instead of rejecting them and carrying on.
- * tests/ed-style: New test case.
- * tests/Makefile.am (TESTS): Add test case.
- 
-+CVE: CVE-2018-1000156
-+Upstream: https://cgit.git.savannah.gnu.org/cgit/patch.git/commit/?id=123eaff0d5d1aebe128295959435b9ca5909c26d
- [baruch: drop test hunks to avoid autoreconf]
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- ---
--Upstream status: commit 123eaff0d5d1
--
-  src/pch.c         | 91 ++++++++++++++++++++++++++++++++++++++++---------------
-  tests/Makefile.am |  1 +
-  tests/ed-style    | 41 +++++++++++++++++++++++++
-diff --git a/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch b/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch
-index ae64d58b93..7ede9300e4 100644
---- a/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch
-+++ b/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch
-@@ -5,8 +5,10 @@ Subject: Invoke ed directly instead of using the shell
- 
- * src/pch.c (do_ed_script): Invoke ed directly instead of using a shell
- command to avoid quoting vulnerabilities.
--[Retrieved from:
--https://git.savannah.gnu.org/cgit/patch.git/commit/?id=3fcd042d26d70856e826a42b5f93dc4854d80bf0]
+ Malformed multipart/form-data payload results in infinite loop and thus denial of service
+-[Upstream status: https://github.com/shellinabox/shellinabox/pull/446]
 +
-+CVE: CVE-2018-20969
-+CVE: CVE-2019-13638
-+Upstream: https://git.savannah.gnu.org/cgit/patch.git/commit/?id=3fcd042d26d70856e826a42b5f93dc4854d80bf0
++CVE: CVE-2018-16789
++Upstream: https://github.com/shellinabox/shellinabox/pull/446
  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  ---
-  src/pch.c | 6 ++----
-diff --git a/package/patch/0005-Don-t-follow-symlinks-unless--follow-symlinks-is-given.patch b/package/patch/0005-Don-t-follow-symlinks-unless--follow-symlinks-is-given.patch
-index e07ae0c670..c0e63081e2 100644
---- a/package/patch/0005-Don-t-follow-symlinks-unless--follow-symlinks-is-given.patch
-+++ b/package/patch/0005-Don-t-follow-symlinks-unless--follow-symlinks-is-given.patch
-@@ -9,8 +9,9 @@ the O_NOFOLLOW flag to avoid following symlinks.  So far, we were only doing
- that consistently for input files.
- * src/util.c (create_backup): When creating empty backup files, (re)create them
- with O_CREAT | O_EXCL to avoid following symlinks in that case as well.
--[Retrieved from:
--https://git.savannah.gnu.org/cgit/patch.git/commit/?id=dce4683cbbe107a95f1f0d45fabc304acfb5d71a]
-+
-+CVE: CVE-2019-13636
-+Upstream: https://git.savannah.gnu.org/cgit/patch.git/commit/?id=dce4683cbbe107a95f1f0d45fabc304acfb5d71a
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  src/inp.c  | 12 ++++++++++--
+  libhttp/url.c | 3 +++
 -- 
 2.52.0
 
