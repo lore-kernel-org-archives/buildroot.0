@@ -4,111 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A969FE784BE
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 00:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A50D3B7E5
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 01:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 371798146D;
-	Mon, 29 Dec 2025 00:59:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D72381468;
+	Mon, 29 Dec 2025 01:07:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gYz3KONjDp1P; Mon, 29 Dec 2025 00:59:04 +0000 (UTC)
+ id HvPa4KqMFO3d; Mon, 29 Dec 2025 01:07:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA0408144A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D2718146A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1766969944;
-	bh=grTusUT/KG01LPx9b/+cjksfDj0VpCb+6OukTg6hz+s=;
+	s=default; t=1766970453;
+	bh=wIvSKTsLYspuCoT7iRhwMyYmojXxCX3EcoefI7axfDM=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=bx6LGIpqjHN1VqKEdv+wZlwHzXjF9Sh5OMziRoYgI1U5KWKbnI2PijWyO6Wk5+T1U
-	 kwrahRk6et9OqDzyfO80VM2gwenZvvr9+pMTKWcln0SUAXHFHG/zlML0y3RmWO0Vyr
-	 gTG9sa/cikHetIMpz7X0ML7LWz36oD/PjWS1cNuGM3pJNMVBRyaRoaKLcxrVMBxWWQ
-	 8ZeEK+U8yMIWRFq36MiN2DgdKO6oKZrqZ3EKIXObu7up59+SScPcNhTfr5S6w/rFAd
-	 KYa/AcH75SYqQbJNSbsJyzNvUPiEoYaF44aq8Kz2UH0470E+/RKV60BN/4U6GiVMFK
-	 a8Khf2hxsYtEg==
+	b=i7MgnVv/ldljAdm16kSoLekbjr0bbi+3pjwhDKs493ZzmSbqsrYWwLZjgoaqtP20j
+	 tWj/fQ9xOHSmMDJMezBFxcPWchJN8tYVI8KjZc/9jI8GimigZtBKWrRhIXwF6sf5gG
+	 uE700R8fVNeZHlS4S/D62QKSAuGXUAYOw9nzArJmkcMaBUV+LmsGK2SRJr0At1jICu
+	 c5H++XAmrje/DBm+vRTLwo/zGwGfdaG0TKt9LAMoRBBn/qPrc+fnyeSJLkn77yaorZ
+	 DvSg+816d9VNC6fM0naLZ7L435j0/VdMPZJufxQjWkVSWLFOexbo9WGDnAZb/FEHQy
+	 kAA3O74iUnQIA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA0408144A;
-	Mon, 29 Dec 2025 00:59:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DB83BD8
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 00:59:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D2718146A;
+	Mon, 29 Dec 2025 01:07:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D18ED8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 01:07:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C184260A38
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 00:59:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DFBA8146A
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 01:07:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xgObTmxAeoGB for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 00:59:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rH3CQsYGfWNA for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 01:07:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::229; helo=mail-oi1-x229.google.com;
+ client-ip=2607:f8b0:4864:20::232; helo=mail-oi1-x232.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 323A0608F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 323A0608F0
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
- [IPv6:2607:f8b0:4864:20::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 323A0608F0
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 00:59:01 +0000 (UTC)
-Received: by mail-oi1-x229.google.com with SMTP id
- 5614622812f47-455af5758fdso5658155b6e.1
- for <buildroot@buildroot.org>; Sun, 28 Dec 2025 16:59:01 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 91E4881468
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91E4881468
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
+ [IPv6:2607:f8b0:4864:20::232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 91E4881468
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 01:07:31 +0000 (UTC)
+Received: by mail-oi1-x232.google.com with SMTP id
+ 5614622812f47-4537407477aso5507234b6e.1
+ for <buildroot@buildroot.org>; Sun, 28 Dec 2025 17:07:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1766969941; x=1767574741;
+ d=1e100.net; s=20230601; t=1766970450; x=1767575250;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=GVQxYHSPncLc63CHvLgMrJGAtHrrH1G9PZyE4inqfsU=;
- b=O6JbKsDyTXsER1xhUAIHSZJp0Os41z2xTyhvledD0vqrspWo5Zzjn2OpLcOE/ACWUO
- GzYAimGZY6JnBU6ZymWfETz4k1SK+PCGKQbur3jZ9JexkMuac45Y3rB0m2we8NjbA6av
- +AE07ami4KT613CGsK8qBmYRrQgwUY2HgODo6s+rIAKLi9jaB3SEomWcWO9kWkRmjJMr
- GbNMYyu28f07Ut1IqREZkhnWRYdAsILhNj3DTNjtjNdJXF9mNBZI9NJsqoDgQdjC+KrG
- i8SvAFQ0amc9l4iXuqgauuM13FXFjJx6cG0JUzmK4nLX5rDcJ3b9R84jNSx+081mQLcc
- 2odw==
-X-Gm-Message-State: AOJu0Yy8UNVqe8jKxHdn/v/XJUQAzeKqMVfkMnlqBLv5S4FzOGoB3PHJ
- Mp3A17bGdacStygoeCpL+fB1/EkkqT7KPQj6L9rA7pgJ6hFVwGQ+Saxtsmxj/+qjSjc=
-X-Gm-Gg: AY/fxX5l+Wn2+zfaKhrkOIHriW4XFwllO/2OHhPKS40aB49vlRfm3UNllObdaF+2LCp
- /qbyRJMyZ27i3Sfefb4tOIXvWDzdZm4SL6a3s/fqRk9clxB7tQQspQ1o5W9IUIs+lq20cqjiNEe
- ie8hvDeNS7i5jNIhFolL7pLRDxFarsIb7kTrcrTt21qtwOtakyCTUHNdaM7PPtgq1bYn4d8n2qP
- ymXmNKdFp/e1rHAcAT64gUM3C7HXCbItxgOUdrzyWQj+0xGwa0DI4QGk8OuxJv8xCndulXgNHLt
- i7+pBc4VUmEiZxUwATA5/9e8hHTEoCpDvR1hFVlNWcW+QUQE7xIHKICeAzHA+VoR65648F0Tr7M
- jO80JXFyXgpKxfEUpdPa6Jxho38V3eOf0yvVi8jHL59qaTz59wwhTlcwONpDZdEQeVvr1IZsKIG
- fJiJ5WkQ7LGX8FfyqPsRtPWUgBEy6K+V/b8bmCXXQxLY9eqgYRrVn64CMHiR05/QS5Vh4TyT7Mq
- pTGb6RrStTXDWp2sY6uioBucL+1GvL8ooxn7GgMSkoHGcOtUbi3btI=
-X-Google-Smtp-Source: AGHT+IHiih7uqs9E2W/jirGfnsVV+F98pngLSIHSVWI1u77VYtAGL6jM2R0OraTMUtdyP/iylpsU9g==
-X-Received: by 2002:a05:6808:6708:b0:44f:6a32:535e with SMTP id
- 5614622812f47-457b20eb6d2mr14216973b6e.10.1766969940708; 
- Sun, 28 Dec 2025 16:59:00 -0800 (PST)
+ bh=fRl6kePOI4GfEu8qyiiq+pV2cnrdj9NbHMa/kiTVjJc=;
+ b=hcJyRRa9uD2miIuMZPJLPaozHBR77DzGFrfwt5o99+hvhs4K1oA+LXnc7n1iQxA7jM
+ NUhvNPWzGjPntJBLHA+NBgBRLIDCyYMShrha+SZZziaT+d6e83Y5B/9EixULyUHl7bty
+ 7otZq0c57YTImwnzLK6rR0o2wu20GlimomwtPdc7wmeMVV5CN4OJC2dYQhcBJvXiLoxg
+ v3A19QPj4RVG/nB0WzJH4LKeCyh7ZY07e+58cqmE9TAEWQSMxOKt8KAGHteZ2wsUJk/C
+ O8hRL4n2CagMT0fZs5J8QufHTEj0/JKShS2WM5ABzwmu5NlGLKswII8Y8HV54UGzUvDT
+ 738Q==
+X-Gm-Message-State: AOJu0YydRhBIYuzTfGvwZyiGAESn2ujjO4Z8iuWpjE2cRsY7EHjzK6xH
+ dQlxUx4jdKpvCrLoOiP1MJopS68mIcegLxDnWXXe1lb9XG+Tmy7VSc96VhsbQR/i
+X-Gm-Gg: AY/fxX77+VcQfjAb6ZUUeIR6a+bw9+MAJCzM1snZHysmDWxhBHAlbi2qf6mVRY8zwVX
+ GeXGKwhTEQwAmYXqHEYKVhNe713FXN3GwEzS6QiDJ5BwlDYeppKwGcDkvGhsrU8n9NV3LoN1P6t
+ rcc12Bt6lA0ddBmfZ0E7CuxpUqByXB2LZ6eUE765v8N1vDBwtBcj25pJQNYljOc2QyCd+P6crS1
+ +tzz0TIZ7IR4b+z5HCmeCfcwZrTf7IWwawajbXkyeSJuCQUJR/oajRPVoCTAuuioanz9qlkP+PQ
+ I2WScj7Hu3VFRgRA1J8IXhLrZN0NcIbOR7CoYcCsE4g3N4EqpVqlVx7VEtFHuHCs/hLxQBSTJXx
+ xmMyqcGaQ3MZF7Bv/0B4ONT77x0xzFCZjd+rB1HmvroYwfE9q8KU++nXXsmEcGSBOkMHUCOxLKV
+ l5Hse7GTyvWZHH0Xbxlpj6BR3QKKvSlN9aWBJZsv8IQ9h7TgILv7UwVA8IXhdqmuFJonyaMWH5e
+ Ur+XT8QoveE1eL5qmKHlI5QgwvIbnJechMKXhcPBU1ghYMlI4uL2A7QqxOtISjvJg==
+X-Google-Smtp-Source: AGHT+IEnEMBg6dE4RVScL5BKZF4z3rE1kUXZ9f34c/KH3f4aj/NpCXweSaQL03lmulG3GEc/vlj0vA==
+X-Received: by 2002:a05:6808:17a8:b0:44d:aa6b:a59a with SMTP id
+ 5614622812f47-457b20187a4mr15258131b6e.10.1766970450255; 
+ Sun, 28 Dec 2025 17:07:30 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 5614622812f47-457b3f1db46sm12733211b6e.21.2025.12.28.16.59.00
+ 5614622812f47-457b3edb23esm13369485b6e.19.2025.12.28.17.07.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 28 Dec 2025 16:59:00 -0800 (PST)
+ Sun, 28 Dec 2025 17:07:29 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Dec 2025 17:58:49 -0700
-Message-ID: <20251229005849.3125827-1-james.hilliard1@gmail.com>
+Date: Sun, 28 Dec 2025 18:07:18 -0700
+Message-ID: <20251229010718.3139818-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1766969941; x=1767574741; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1766970450; x=1767575250; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GVQxYHSPncLc63CHvLgMrJGAtHrrH1G9PZyE4inqfsU=;
- b=EMqCIpHJ10RLLII/y3Xifp7ePIfNf/SJ3DmcYF5hCHWZ8gaGWtjZW/RYmVtn276D3w
- f0K9Qxy5tKXkaQJPNzYEj9cl8UTK0Sc582CTwDbh3STM25ufDUsqeokBp78hJ6+w8rlB
- 5L5SHV+vEsP/ay9/SlNclc4tc0Yhb3jxPVc6DnBTSJK+q0cn3qPCyVtVXu3D7E1W5JG0
- nG8SLvEYP320ZIqbecwslZ89F276n2kkFcCywO5ynnaGBNP7E+bBjSU1zKvQMV6lxPrp
- SI+F3LBDBwnXo7A+onMokDvpot61kkCPbBxjRBReV1Yly/eq/0nve1XPBsS+rvHkrMMi
- k++Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=fRl6kePOI4GfEu8qyiiq+pV2cnrdj9NbHMa/kiTVjJc=;
+ b=IB1PIQLhhDnterH1Ie0hqy1o4rd/2P6WBwpLBfRk8iGbchZXbIEIS7RKB9htB3qR+b
+ z9ifXh+zistf4X0cRNJgJ1ZtvXuc+F9Wnx7fiWT50E9bZ+AyB50jnK5eMbSpKKH1hL4s
+ VFV1u1nbBZqijfnV7OPLm+ay+Sts1i7f9CHc4iNcf+un/OuuPHvf0WzkZK3Mv+nF85yz
+ UC+H0qT5yK63THdKg8PuHEiYapq0PCYzZm7pRycf3nPUiuvXBQuRPO2chjguMf7IE7T7
+ +ChKG6/QCguSyO2z5ZGRfkMU8tPK3h5jhm5ID934xj8WwvKcXE+WDG3ZrKL+se9ZWZpf
+ xugQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=EMqCIpHJ
-Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to version
- 2.48.0
+ header.s=20230601 header.b=IB1PIQLh
+Subject: [Buildroot] [PATCH 1/1] package/python-tornado: bump to version
+ 6.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,8 +120,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -129,38 +128,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ package/python-tornado/python-tornado.hash | 4 ++--
+ package/python-tornado/python-tornado.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 3d049e8153..10a54a5387 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index 0c8e401ff0..53972feb09 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5  682375882fdb40251c22250d48036468  sentry_sdk-2.47.0.tar.gz
--sha256  8218891d5e41b4ea8d61d2aed62ed10c80e39d9f2959d6f939efbf056857e050  sentry_sdk-2.47.0.tar.gz
-+md5  bb7b7afd707b67117b53658abad8e1b2  sentry_sdk-2.48.0.tar.gz
-+sha256  5213190977ff7fdff8a58b722fb807f8d5524a80488626ebeda1b5676c0c1473  sentry_sdk-2.48.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tornado/json
+-md5  dbf1f706f0a1efd9ed3dad8d82b7e865  tornado-6.5.2.tar.gz
+-sha256  ab53c8f9a0fa351e2c0741284e06c7a45da86afb544133201c5cc8578eb076a0  tornado-6.5.2.tar.gz
++md5  bf697c5e3cfb0a572192abf062e83e32  tornado-6.5.4.tar.gz
++sha256  a22fa9047405d03260b483980635f0b041989d8bcc9a313f8fe18b411d84b1d7  tornado-6.5.4.tar.gz
  # Locally computed sha256 checksums
- sha256  2a140d660f462812fa290bc740d04633126c5ec45d84b79b569e127b0eeddd0b  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index 6714cac6b8..216f4999e7 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index 800a5d775d..ab2dd3a334 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 2.47.0
-+PYTHON_SENTRY_SDK_VERSION = 2.48.0
- PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/4a/2a/d225cbf87b6c8ecce5664db7bcecb82c317e448e3b24a2dcdaacb18ca9a7
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/40/f0/0e9dc590513d5e742d7799e2038df3a05167cba084c6ca4f3cdd75b55164
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = MIT
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-PYTHON_TORNADO_VERSION = 6.5.2
++PYTHON_TORNADO_VERSION = 6.5.4
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/09/ce/1eb500eae19f4648281bb2186927bb062d2438c2e5093d1360391afd2f90
++PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/37/1d/0a336abf618272d53f62ebe274f712e213f5a03c0b2339575430b8362ef2
+ PYTHON_TORNADO_LICENSE = Apache-2.0
+ PYTHON_TORNADO_LICENSE_FILES = LICENSE
+ PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
 -- 
 2.43.0
 
