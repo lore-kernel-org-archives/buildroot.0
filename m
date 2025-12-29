@@ -1,62 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A33DD3B7E5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 11:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEBB7E8FDB1
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 11:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2F028174F;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A1E040510;
 	Mon, 29 Dec 2025 11:25:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pqMeYNLcDR6B; Mon, 29 Dec 2025 11:25:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ebT2tkxsWV-i; Mon, 29 Dec 2025 11:25:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D363981756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E885A404FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767007537;
-	bh=nHMlpYxIsx4Mav33siASb+B7i/HSDsAenGNfqlJ+3GM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EacUdlZ5NjQcR25FbIQtlD8BtABrjnlOCyLz41hp2IbqjLGlVhmBkp6xmFJAtI0Fg
-	 sFebSBL/9z4yd9E8HjuX5TmAHDpRj+Md+/j3TOn2Brt5uX1VOBwOLChHrs6a17ZZWN
-	 KNOTmk8Fq83tXePUI9BcCFRq5K2O0isXGSRn+PrG6+RGSDs3PV35x3MXwi7kKl62kj
-	 tHyBG/pE5TxHfaa+RD7Zjp3RPpopdLGuno3x/NhggvJkCFEybyEUqdmA+keqDS+TQu
-	 wWMPwEjpGDk9O1acii8R5vF84lUvQGpG/yT6yv/4y2Iym+Jq+bo+k4J9MJlPpF6fqI
-	 xZKpxTu92DB/Q==
+	s=default; t=1767007536;
+	bh=WwBGJiqVn/Dbg2q9ItUeecKV19XwllJ5AGpH3QFEM6w=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=YOtP+7PRko1u78UvWa+3kIm1pzf2YH3O9OZ9wQ71AR2H3+DlRQZMgSVcb/IyVZ6q+
+	 OpT3Ch5jtwmoLoy87pbnf8TjyIz4mHEAk8lNwrBi66vaT5YOWOyHW2UdqaLeIH/yun
+	 2M8o7nc6hnW635hZeoZ5wyzbKn1cCpJ9YsWzyNf9edSLMR36ZZ/uvxAqa0NhcJi+nO
+	 akQTvY9ri/tvuOgOX6w7F6MPacpD+9kWvVwwsSw83n7itHp3vtgrWt3nf5XXPb/BnM
+	 Jhlop5osFtqnof11X7kpErHnawmKj1g/2X7a6eM4d4s+8ORS2EFrfhrFdeqSplAztM
+	 ydK4Bwb/4jC3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D363981756;
-	Mon, 29 Dec 2025 11:25:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D0B83D8
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E885A404FF;
+	Mon, 29 Dec 2025 11:25:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D114D8
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE38660802
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F2C540459
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wjWx89lY3ZaS for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 11:25:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B1F56074A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B1F56074A
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0638F87A6D; Mon, 29 Dec 2025 11:25:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JnZl_EqrXmgJ for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 11:25:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3CDF0400CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CDF0400CE
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3CDF0400CE
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 11:25:33 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6A066A4C244C;
+ Mon, 29 Dec 2025 12:25:19 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44552)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vaBNG-0000000055A-3Oqg;
+ Mon, 29 Dec 2025 11:25:19 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 11:56:23 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd295e5ba3fd68373da4e83837cd65266c978928
-X-Git-Newrev: 2e1d51533cc0c28d5fd86edd90adce250ade5b18
-X-Patchwork-Hint: ignore
-Message-Id: <20251229112536.0638F87A6D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/aichat: new package
+Date: Mon, 29 Dec 2025 12:25:16 +0100
+Message-ID: <20251229112518.2317328-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251229112518.2317328-1-bernd@kuhls.net>
+References: <20251229112518.2317328-1-bernd@kuhls.net>
+MIME-Version: 1.0
+X-Spamd-Bar: /
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1767007519;
+ bh=fPv2tVNbVXEweP9IJhBnww+RoV1Aid9Z9+IV4Qkv4NA=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=stIZWk8LkKZnAv7O7zKVSf6J0rgJuEKcugcMkt0RGBbktm64zZvAzstWLuIA93x5v
+ PjHaI1GdngwU4UQHALQQZv+CE/JkUVPyFlgoUZbOlLaRlvqPOmzLJo7zOabf5l8ur2
+ 2UeUqPXhG1MOgaT9ov9do3sY0RTSWyx9sEYMGjbK5DYV3x+hw/SwE17QZdSIk3LzEZ
+ Z/QjATwZKSP9Au+uJg22Qavj0WBeuTDYrXv48ULEdRu+AYZ8xtWk1Kztq58v/gg0tn
+ obZPNsxDXRS1nR05FoDvvY9St4qwC9NtFVDHJpuYFuJ+e55xK9jA0oz79O/2ILegli
+ MiEJQS89Wtikg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=stIZWk8L
+Subject: [Buildroot] [PATCH v2 2/3] package/opencv4: update numpy include
+ path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,117 +94,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
+Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e1d51533cc0c28d5fd86edd90adce250ade5b18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Needed after bump of python-numpy to 2.4.0 due to upstream commit
+https://github.com/numpy/numpy/commit/923f219077c8aa3ad7d3792d8c06cba010b70252
 
-AIChat helps seamlessly integrate different LLM models, providing access
-via the CLI and network. It can serve as a gateway to heterogeneous and
-distributed LLMs.
-
-Handy features like roles, macros, and sessions help simplify repetitive
-tasks and reuse of existing solutions. Features like playgrounds and
-arenas help to explore and compare models.
-
-https://github.com/sigoden/AIChat
-
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
-[Julien:
- - select BR2_PACKAGE_HOST_RUSTC instead of "depends on"
- - add Apache-2.0 license (package is dual licensed)
- - add LICENSE-APACHE license hash
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- DEVELOPERS                 |  3 +++
- package/Config.in          |  1 +
- package/aichat/Config.in   | 15 +++++++++++++++
- package/aichat/aichat.hash |  4 ++++
- package/aichat/aichat.mk   | 12 ++++++++++++
- 5 files changed, 35 insertions(+)
+v2: new patch added to series
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b4c9b6e618..ffc14ced6f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -129,6 +129,9 @@ F:	package/openpgm/
- N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
- F:	package/libest/
- 
-+N:	Alexander Shirokov <shirokovalexs@gmail.com>
-+F:	package/aichat/
-+
- N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
- F:	package/mini-snmpd/
- 
-diff --git a/package/Config.in b/package/Config.in
-index cd8765bbcf..b2e8229d5d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -164,6 +164,7 @@ menu "Debugging, profiling and benchmark"
- endmenu
- 
- menu "Development tools"
-+	source "package/aichat/Config.in"
- 	source "package/avocado/Config.in"
- 	source "package/bats-core/Config.in"
- 	source "package/binutils/Config.in"
-diff --git a/package/aichat/Config.in b/package/aichat/Config.in
-new file mode 100644
-index 0000000000..e1bd177076
---- /dev/null
-+++ b/package/aichat/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_AICHAT
-+	bool "aichat"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  AIChat helps seamlessly integrate different LLM models,
-+	  providing access via the CLI and network. It can serve
-+	  as a gateway to heterogeneous and distributed LLMs.
-+
-+	  Handy features like roles, macros, and sessions help
-+	  simplify repetitive tasks and reuse of existing solutions.
-+	  Features like playgrounds and arenas help to explore and
-+	  compare models.
-+
-+	  https://github.com/sigoden/aichat
-diff --git a/package/aichat/aichat.hash b/package/aichat/aichat.hash
-new file mode 100644
-index 0000000000..43e96381ed
---- /dev/null
-+++ b/package/aichat/aichat.hash
-@@ -0,0 +1,4 @@
-+# Locally generated
-+sha256  214af28357dd2b7543120fd23b81614c986ea62d69fade6d80259cb7a42eafdd  aichat-0.30.0-cargo4.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
-+sha256  5af431a6a9869052e2be4e71ccd731c7efe45dca47eaca84d4d1fb38f134cb79  LICENSE-MIT
-diff --git a/package/aichat/aichat.mk b/package/aichat/aichat.mk
-new file mode 100644
-index 0000000000..a1d1514d57
---- /dev/null
-+++ b/package/aichat/aichat.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# aichat
-+#
-+################################################################################
-+
-+AICHAT_VERSION = 0.30.0
-+AICHAT_SITE = $(call github,sigoden,aichat,v$(AICHAT_VERSION))
-+AICHAT_LICENSE = Apache-2.0 or MIT
-+AICHAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+
-+$(eval $(cargo-package))
+ package/opencv4/opencv4.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index 9691eb78e8..ff4a1efc94 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -400,7 +400,7 @@ OPENCV4_CONF_OPTS += \
+ 	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/bin/python3 \
+ 	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR).so \
+-	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
++	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/_core/include \
+ 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+ 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+ OPENCV4_DEPENDENCIES += python3
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
