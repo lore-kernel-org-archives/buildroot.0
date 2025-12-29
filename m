@@ -4,82 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F18F6D3B7E5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 12:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A539E8FDB1
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 13:04:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86303407AD;
-	Mon, 29 Dec 2025 12:38:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E70940596;
+	Mon, 29 Dec 2025 13:04:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RMtVz7X3QFuU; Mon, 29 Dec 2025 12:38:13 +0000 (UTC)
+ id uwf5qm8UIYma; Mon, 29 Dec 2025 13:04:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A6FF407A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CFC7407A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767011893;
-	bh=LfQ+zB3HDTlk4Kf/VOipZFZmvwvMkpWCR+ijYXjRR/M=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=dG9JP9B+GuavG9++ZxvEyAl1sUDeEWMdXtrIWftdG/OzDjMgckr4uqgIPu+T8M8d+
-	 R5gXPH0iH+uCS0XoZsCecs3bJVmJnc/GIBalGyyTqwZv8CKk2UzLKL1oeP6nUi7IHw
-	 RltuaEMLZ1rY5n6IO/u4iqaiOTvvVm/qvj7EJls7qPqs9xR4/p7iim0ap5fYtKU9OF
-	 TWmfYXbX3RaIh3FUZDm6YHbdXJojdD9bde+ViQYg/SVv7qfUJKEBMN3mJoeX+raFzy
-	 13gK0fZD3awTj51P2xZ9uIJBUT4S/mtT16hZguWQzKJl8MLmZXSMxyo0qLUCkUZr+u
-	 pOd25cpN2ATrg==
+	s=default; t=1767013479;
+	bh=f0SXsLALaOF0N4gjMnvo83aZS4xAcK1s2dYTnfyQ0BY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=XG0tXpGYy2k18mKRsV02fEzo+Zy6MZxt3Sk93acfv6iFvyVY8fm/p3L68AAwdNYYx
+	 9sDpj0QofAOctq91vSP+79xC5+zLaI6KLbuJ3cT9YNAXCdLx97miCa019jn8BpzPDt
+	 NRIhFpPKKAfAAZvioiKIK5W1gTsl0ByR26zMBKXGz3jCjc2dc6wuQMAgUk4/qRnU+k
+	 cpjvPY6MWYzZx0Pa3a1Fg5xZqngXF7qR/U9a8dqBsBvgKrTBGN8tBp/wjQAN9b0Nfw
+	 U5GILQmV6wBLT7QbmiJM+nrXsTNR1jxe7QaQEG8uMD2kS3ksDpRDXv+1D1pz77mV4z
+	 mbFoSIgBMtzuA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A6FF407A5;
-	Mon, 29 Dec 2025 12:38:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0652B177
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 12:38:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CFC7407A6;
+	Mon, 29 Dec 2025 13:04:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E1F3177
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:04:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC908407A5
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 12:38:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85A2A407A6
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:04:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ftHiZhoFaI7 for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 12:38:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6BC1A4079D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BC1A4079D
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6BC1A4079D
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 12:38:09 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 53653A4C0DEE
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:38:07 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38128)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vaCVi-000000001If-36sL
- for buildroot@buildroot.org; Mon, 29 Dec 2025 12:38:07 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 13:38:06 +0100
-Message-ID: <20251229123806.2862367-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id q0cQoxRNK5uN for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 13:04:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5860840596
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5860840596
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5860840596
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:04:35 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id E88804E41E4E
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:04:32 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id BD25560725;
+ Mon, 29 Dec 2025 13:04:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 3F9A2113B050D; Mon, 29 Dec 2025 14:04:28 +0100 (CET)
+Date: Mon, 29 Dec 2025 14:04:22 +0100
+To: Frank Chung <uuidxx@163.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20251229140422.72afe362@windsurf>
+In-Reply-To: <824933a6-3d08-46cd-8ab4-add609401a60@163.com>
+References: <824933a6-3d08-46cd-8ab4-add609401a60@163.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767011887;
- bh=gQQ8Hnt/LNRbfstVRbB/eaCcg7aIVyH4wULjW6lo4Yg=;
- h=From:To:Subject:Date:From;
- b=df1uBsVSSiIEAbzcv48W6SQnINckgfhuTNwz52PkxhcRa4hBRNOqy2FKwO31nK2/+
- Slpb5VElSLnGozG9BBDMm/oKGIv0YRHc+QsDRy2Y0U3u+LGw+yWb634qAFIRNrlJfo
- 1ObqbC2xSdDpgEOIwbHuruqo0K5y1+AT2U+akvRoxlIvc6LlI38rJAMij/+n04mywN
- /GFIxWdFCRHf7t0f9NDOhfM+BdioK6IofZ7goDH3ZJU+tHuAonEACJutj6xofbxd+5
- TPnRQ2Vj/Uy43KTOuQ2NQ5LYJclmhn7Lvkd8eR6LUEBPkgqvSQ1XVm9ay+8Az5hJNJ
- g5dCr9We+EC6w==
+ d=bootlin.com; s=dkim; 
+ t=1767013472; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=hulL5iwmA5yuEXDsmAfnVU5Kdpdsw+wzGdktevoVVZY=;
+ b=qYYrfuKdBHCqpIYkzALOVSD9ovXnE9QWvQ2qsJUy2EM2ocV339qWnLi0l3BEUXWs5hHpqd
+ X33USMn/xAeaizd4YJzf2xyL89crTSjqiguBOBor3w+bS2VF31t4PfKB7ypmMzk0XB92B9
+ ZPSKfwijGVNqv7MWn7oi5dcJxLP6mqNvgApA88YrlcLxYsdFzEnsZgXWd9fHLhEXEGwpPQ
+ DyNRCbcGvDgYCkj/ER2DvG67pJYvmESfGQjzt2ZkaJvs9f/QDF1hMh4hDdyEM0cdktw3qz
+ mjVkUDufw9lBI/WUsiYZEapNPUnUsSwXz/QC9wBWcwfqXxvj/P9cy8KbQsE7sg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=df1uBsVS
-Subject: [Buildroot] [PATCH 1/1] package/libid3tag: fix build without c++
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=qYYrfuKd
+Subject: Re: [Buildroot] [PATCH 1/1] package/rund: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,66 +96,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 82094b802877c1128b21b978466641373f283666 bumped the
-package to 0.16.3 switching the build system to CMake causing build
-errors when the toolchain lacks c++.
+Hello Frank,
 
-Fixes:
-https://autobuild.buildroot.net/results/02d/02db8c1a1b461fa3b5b5932e5b48c77be50b68af/
+Thanks for your patch!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/libid3tag/0002-CMake-Disable-c.patch | 33 ++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/libid3tag/0002-CMake-Disable-c.patch
+On Mon, 29 Dec 2025 18:25:20 +0800
+Frank Chung <uuidxx@163.com> wrote:
 
-diff --git a/package/libid3tag/0002-CMake-Disable-c.patch b/package/libid3tag/0002-CMake-Disable-c.patch
-new file mode 100644
-index 0000000000..151084b3b2
---- /dev/null
-+++ b/package/libid3tag/0002-CMake-Disable-c.patch
-@@ -0,0 +1,33 @@
-+From b3b045a762ee35fab0e13d1837b9b407da47e59e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Mon, 29 Dec 2025 13:31:43 +0100
-+Subject: [PATCH] CMake: Disable c++
-+
-+https://cmake.org/cmake/help/latest/command/project.html
-+"By default C and CXX are enabled if no language options are given."
-+
-+libid3tag only contains C code. This fix allows the build with
-+toolchains containing no c++ compiler like some buildroot toolchains:
-+https://autobuild.buildroot.net/results/02d/02db8c1a1b461fa3b5b5932e5b48c77be50b68af/build-end.log
-+
-+Upstream: https://codeberg.org/tenacityteam/libid3tag/pulls/26
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f71b245..0c2f13e 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 3.10)
-+-project(id3tag VERSION 0.16.3)
-++project(id3tag VERSION 0.16.3 LANGUAGES C)
-+ 
-+ option(BUILD_SHARED_LIBS "Build dynamic library" ON)
-+ 
-+-- 
-+2.47.3
-+
+>  From 0166d724f0d1309ff6615c087d90d822e8f95fb0 Mon Sep 17 00:00:00 2001
+> From: Frank Chung <uuidxx@163.com>
+> Date: Mon, 29 Dec 2025 18:23:14 +0800
+> Subject: [PATCH 1/1] package/rund: add new package
+
+It seems like your git setup is not quite correct, as this should
+appear here. Can you use "git send-email" to send your patch?
+
+> diff --git a/package/rund/Config.in b/package/rund/Config.in
+> new file mode 100644
+> index 0000000000..f21bd7a11a
+> --- /dev/null
+> +++ b/package/rund/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_RUND
+> +	bool "rund"
+
+It has really no dependencies on specific toolchain features? Could you
+test your package with ./utils/test-pkg to verify this?
+
+> +	help
+> +		A lightweight daemonizer and process supervisor.
+> +
+> +		https://github.com/cyberxnomad/rund
+
+Indentation for the help text is one tab + 2 spaces.
+
+You can also run "make check-package" to verify trivial coding style
+issues.
+
+This project seems very new. Is this your project? Who uses this? I'm
+just questioning the popularity and whether it makes sense to have this
+in Buildroot at all?
+
+> diff --git a/package/rund/rund.hash b/package/rund/rund.hash
+> new file mode 100644
+> index 0000000000..214774661e
+> --- /dev/null
+> +++ b/package/rund/rund.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256 
+> 701127ac5b90e02ba4a670ab7534db9f2a6678e8f0f9ff13efbfbbe1414fb066 
+> rund-0.1.0.tar.gz
+> +sha256 
+> 81100abfee87ff6bf6ba4b49ede1f81ee04cda31000b143cb75ab98e2845d8e0  LICENSE
+
+These lines are wrapped, probably by your e-mail client. If you use
+"git send-email", it will fix this.
+
+Thanks!
+
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
