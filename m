@@ -4,111 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03A81E92FDE
-	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 21:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56028E92FE0
+	for <buildroot@archiver.kernel.org>; Mon, 29 Dec 2025 21:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE7BD407E1;
-	Mon, 29 Dec 2025 21:22:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A8C7407F5;
+	Mon, 29 Dec 2025 21:22:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hRv8aCpcMvSo; Mon, 29 Dec 2025 21:22:12 +0000 (UTC)
+ id S7smoIVu1ljm; Mon, 29 Dec 2025 21:22:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3AF74064F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7899405A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767043332;
-	bh=fEd8iZmAktiHMH9IwggY7iOoHvb9NPTBZNfgpLEmsxU=;
+	s=default; t=1767043335;
+	bh=Y0eo/3ojADmXUCbHdt40V1U3i9xxGEqDBEostxaiw3M=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=hzVXnzohmJ7DqxyLCqdqAu238DWQ571IHBAdgeT6Jc6Al5bjPTGtNJYcBpzUvVs8p
-	 LkEezK9fToLuPwbdNHGAbE6yUtyGN151Q0DfIQaJBipgZlk96no3maKxG8d+19VWMc
-	 PazxFWunhBw4iRy+sLyZv1mcwxEM5c7bVesB9aNGpLhfVBkcL+BE9hqtJBWNxnaUQu
-	 20SAsbtV4ZYL8qlKjVAo64QSOCOGuXPfB9WBq7tM9M00pmhGHSvPHfuvWUIWz3zbNq
-	 TCBxucho7idnSJl2ACti+oGK2vHW1PjTgRy/b5buYgNzUM+7gGMwQR9Bu7HRMi99zo
-	 loRu5z3xTgy8A==
+	b=ZgIyFg/KYxYe063l4VKCFwE2y45VbUdJWTXYmLnLEEpH1c4c/x1uMbptCWVNY3YaP
+	 K15CbHfFd3TXZFDGrUmUOodP8SoOaFJXd7EwxaheI1Tp46D/dFXebpKKJKQfJufCUt
+	 t9vQ79PoLYPkz1pjY9e1trOIiqx1RbBQjO/mJtsWOOuNgPpIGbsMYmEkY0p7wE6NnB
+	 FAEOEFYrTQaEBQXAdwEJNzrpnmvL78RCa0U3pCGunXX0CQADFoww2UW599m+UbM61r
+	 GQMl1zYMo6cNb7v69ArTfScPfHL2LN7ot9Kw7dXsUleK/f3zJKmP0dUd8CXrr1xpX3
+	 UuhyZzt2HFo8A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3AF74064F;
-	Mon, 29 Dec 2025 21:22:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D299177
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7899405A6;
+	Mon, 29 Dec 2025 21:22:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD31935B
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EBCB4005B
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEBD560AFB
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aoj3QjCEUEVq for <buildroot@buildroot.org>;
- Mon, 29 Dec 2025 21:22:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c_CGxKnvBKZk for <buildroot@buildroot.org>;
+ Mon, 29 Dec 2025 21:22:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 36A584002C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36A584002C
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 36A584002C
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:08 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-47a95efd2ceso85715765e9.2
- for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:22:07 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A54A460AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A54A460AF4
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A54A460AF4
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 21:22:12 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-47d1d8a49f5so45101605e9.3
+ for <buildroot@buildroot.org>; Mon, 29 Dec 2025 13:22:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767043326; x=1767648126;
+ d=1e100.net; s=20230601; t=1767043330; x=1767648130;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=bVMV5AeFY2GJsS0O1pqUTkcDcw4JurAK58mD6piTRXM=;
- b=Go9l3zK78M4dK+MrCVxC1RnEv6Mc7911UCJdniJQtNoilPnEeGAhxJrsOCxHQ784JG
- CxsvgpkaiT1Bf5aHxMnWVxt1ivPH3g/B3hWtdjSOs2+JIqV2c4DV6cZJppqor39xJIEz
- TX9fMjcno9UTZRkEaDX9lJ17K2kjFiSYQF1OgCVBlrIhIeGrfh6iZMnqtVa5hl0VBl9I
- BluA3HROpEdxHvQQUD4woIWWjd4XMYDGER+yxcbpY+y7KtdM8XRXn4nNQfl/2QpL24qr
- xeY425qzd2N19uiW1AFHMQYsAdMyxEqdCD9i7fzPzmXNqWSnyGn1v2rvpJPS9lw5cC2O
- pDuw==
-X-Gm-Message-State: AOJu0YznyszsSe/rzrHYT3dBt8rIPNp08nDvF4FYM9cc8eI+jzpRaVtW
- JzNZdcR407D3hDt28ETGp6HzOcnCWynbUxCDNOw7kWNV07A9Rwl9hbqPUhTK5006OhjPhulC3kj
- V1kO18iE=
-X-Gm-Gg: AY/fxX4BpVC3FTdXmPfiRFyeWZGf2sDtg+FCMxTKXDRfBe/7YJ3fIYTCcspHXEFZlOZ
- pQgr6nTwbYoFkiw0ByiFH1rOlmDKBo+VuwVpIJT+2VBMnS7eqC83f6x/N/bIqxK4Dcn7NVx/LZE
- UR032YPTkkfiudyUmc5LK403sMa035eOcvJ7lmAt2RV1VrD7smg+pG0piEBa3jwE8TIdtJaBbhq
- lkgCzUCtR3Q6UcupMoaCTyUKAP2Mts+4Zct34izw0J+y/dgGBzXdn5V2YFTUfZyeTrloNwcDRSn
- hiqroAfGNyqNh2ADzJWoMAy+OiEglLpaLt/ZPC+TAPX+9NuCwqEb8/6fUFRhPbvY7czK5VYdvy2
- /VEnyKBcWsjccWJ9fZRo4lP8o5vqKrasxFygscHS+4Ndzc+xN+EoTRPntHzb0zoTGOJlU6Oh99I
- x/Rdw=
-X-Google-Smtp-Source: AGHT+IGwThVEmgi3Ispk0j3JBWx3llvKorvscBXKPET4qlSQTOAiJxcwR8OWLyMrMJgwwNeRb1ilEw==
-X-Received: by 2002:a05:600c:3b0e:b0:477:b0b9:3129 with SMTP id
- 5b1f17b1804b1-47d1955b7d1mr358426505e9.3.1767043326075; 
- Mon, 29 Dec 2025 13:22:06 -0800 (PST)
+ bh=9nHjh80G3vRxZ6gt1XG3LXgCp8ttsHHQz1JW2giDcv4=;
+ b=E1wDYsiPMvp/ug2y89pfkFZnjHkzayWHLj/YSVgh3eTFH1wKC4h48GaIdA5o+/hZOT
+ 4DvaTc0qJP8MIE3uMDJzMZwqAEYwU5c1kcl0Bf2T3n6jcfBxwaU/7S++thL9vuPxk1L/
+ RaeFaGTNdDnfMtxupzk4M9maee7ZMY5v1SzqoUqmXsWDTcsycKGpq26VCt75p+1koAnp
+ zYPRuFObMlxoBy56b6vyF6XS68nr0ixADzH06dtHxo/uN9yObkg/aJeAQg1wR3LTAbxf
+ 6ohWYGXUVF23RrRRf8VUNaYIH35b8RlRx+6VtwkXvzMpoeOsvK3zAJl+DOhTDfrZpn4O
+ qRnw==
+X-Gm-Message-State: AOJu0Yw8wFkvkPWeGbMKlYaVv5avFIqMuQCObtbIIBA5bZYsRovFVkg5
+ yRg6IjEHwpt3sqzDK5eodNtxL/xotcS4JlOIvmIQPCmji0GOh4pjceuTqZ26yKFn6hY7F2IeJgD
+ sDZa2AZk=
+X-Gm-Gg: AY/fxX5kYw00XZsRq/1d2JBF0TvZtGCXRdcGxvWKHTajpbcTmkYXiS9edlkWYW/SA+S
+ nfqFvilrJl1MtmYH1vdrho3mbBsIXjl7wYofP8pwn45CJ7AuTvYt4lUAgWVYApy8u5/+lgZz6UV
+ lzeD7dUGXi+ala+woBoCwNw/86ZHB6hlLucjYJzTw1oggS96RWcEWjAB42DYC5RvCAP/EtHAi8u
+ r1RxqcM3xf4eZs+7phGs46o+9A70cmKB11020ujNosc26wIEqCxriXZ9wiTUxmwwfv5323XDohh
+ BUfeiD7uA0PeSjOGmhtpf7O1UBD9mKQRPiCP2uOR32W6U0oRPWgmGdoZ+Bl6HbIomrDfbrX8gYq
+ lE07GX2cayoSKwAJNbr/9tZ8urK46ALwHPyAGlYBM71mrV3443nmX1sfVI06hnd1kGNzjYAVr3u
+ 5aenY=
+X-Google-Smtp-Source: AGHT+IHl73xHX1qzsk0qw6iW3fMunHQpcjVFAY0YFh5N+DWD+6Di3Du5sPO54A/jBO5nxG/awaajZA==
+X-Received: by 2002:a05:600c:540e:b0:479:2651:3f9c with SMTP id
+ 5b1f17b1804b1-47d1955794dmr323133385e9.14.1767043330575; 
+ Mon, 29 Dec 2025 13:22:10 -0800 (PST)
 Received: from arch ([79.132.229.12]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-47d193cbe58sm556813195e9.9.2025.12.29.13.22.04
+ 5b1f17b1804b1-47d193cbe58sm556813195e9.9.2025.12.29.13.22.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Dec 2025 13:22:05 -0800 (PST)
+ Mon, 29 Dec 2025 13:22:06 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Mon, 29 Dec 2025 22:21:42 +0100
-Message-ID: <20251229212149.167902-10-thomas.perale@mind.be>
+Date: Mon, 29 Dec 2025 22:21:43 +0100
+Message-ID: <20251229212149.167902-11-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251229212149.167902-1-thomas.perale@mind.be>
 References: <20251229212149.167902-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1767043326; x=1767648126; darn=buildroot.org;
+ d=mind.be; s=google; t=1767043330; x=1767648130; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=bVMV5AeFY2GJsS0O1pqUTkcDcw4JurAK58mD6piTRXM=;
- b=PPaI5i39My6fbQphU5RvPP2tqTe5VADxv8cbdft70ZwEpcxkcgSRTaon8y+Ikkjrt8
- 6Gw5rvVkX1Vql5NwtkWKqK8pPZqtfcSiBxxWtLQjapY0cbNC8NSMMQ5EFr7acCpeCnh8
- QU0oj/5giRrXzQEjCbFd6hVWcjYnW6abLy2hGepeT5p22TBiwk7E3GHx3l6KkmVnLudg
- 7odwlaf2/Rh4AltW+dZ1fe0X5wGjdjW9VXGAckBkrLAUxy2AbOR5GYhL9hDOm+PqXMbN
- UTDRYd61Bljr6VZeEIyJ8VTgoUCS9Xn2VQG3I87oWHtTkNTGO/VdlZksB2Wg/MTtDzof
- W5vA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=9nHjh80G3vRxZ6gt1XG3LXgCp8ttsHHQz1JW2giDcv4=;
+ b=bYqUap8gRmmR0mDfeUq8cc0kV1KxKL4IGmgTN6mvuo2RWD+gNtWvSf/ua01PftIpi6
+ +rMrTdNKknQrm5npdINVOq5o7fg02dQhkZHLAeS7Dlj5B/MO22L3S12mO6rbdgkNWTul
+ HKuVqAL/gZrB9vCi+bl0teV6EUyksLmT0N4tAxmc480LHXV0iWLWgYZ0FVrFrtrr+yxI
+ IEtO7WjcnMLkrZHGKPewRCGu9MZ3LgZJ0QLw4I6Iwfxfhag7X+J5WEZXgZzk70eYNz34
+ YZ92TkYOnNzArVRcg6c42bzV+fF/2UVTXLCs9wdvlib5Ts5Wl1o+Q8w+JFK6SfToVMCG
+ RrhQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PPaI5i39
-Subject: [Buildroot] [PATCH 09/15] package/libcurl: remove stale IGNORE_CVES
+ header.a=rsa-sha256 header.s=google header.b=bYqUap8g
+Subject: [Buildroot] [PATCH 10/15] boot/grub2: remove stale IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,34 +136,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Since Buildroot commit [1] the CVEs are no longer matched to CPEs with
 versions using '-'.
 
-The CVE-2024-32928 introduced in [2] is then no longer matched to the
-libcurl package.
+The IGNORE_CVES entries introduced in [2][3][4] are then no longer
+matched to the grub2 package.
 
 For more information, see the explanation in commit [1].
 
 [1] 35f376d88e support/scripts/cve.py: fix CPE matching
-[2] 7e739d49b2 package/libcurl: ignore CVE-2024-32928
+[2] 2495630383 boot/grub2: ignore CVE-2024-1048
+[3] e2f46ed03d boot/grub2: ignore CVE-2023-4001
+[4] a490687571 boot/grub2: ignore the last 3 remaining CVEs
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libcurl/libcurl.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ boot/grub2/grub2.mk | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 9e32c38d97..6924631735 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -25,10 +25,6 @@ LIBCURL_CONF_OPTS = \
- 	--disable-ldap \
- 	--disable-ldaps
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index f543c53cd8..fdf274d9aa 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -15,17 +15,6 @@ HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk \
+ 	$(BR2_PYTHON3_HOST_DEPENDENCY)
+ GRUB2_INSTALL_IMAGES = YES
  
--# Only affects Nest products.
--# https://nvd.nist.gov/vuln/detail/CVE-2024-32928
--LIBCURL_IGNORE_CVES += CVE-2024-32928
+-# CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
+-# doesn't exist upstream, but is added by the Redhat/Fedora
+-# packaging. Not applicable to Buildroot.
+-GRUB2_IGNORE_CVES += CVE-2019-14865
+-# vulnerability is specific to the Redhat distribution, affects a
+-# downstream change from Redhat related to password authentication
+-GRUB2_IGNORE_CVES += CVE-2023-4001
+-# vulnerability is specific to the Redhat distribution, affects the
+-# grub2-set-bootflag tool, which doesn't exist upstream
+-GRUB2_IGNORE_CVES += CVE-2024-1048
 -
- # threaded resolver cannot be used with c-ares
- # https://github.com/curl/curl/commit/d364f1347f05c53eea5d25a15b4ad8a62ecc85b8
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_PACKAGE_C_ARES),yx)
+ # 0004-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch (yes, two
+ # CVEs are fixed by this patch)
+ GRUB2_IGNORE_CVES += CVE-2024-45782
 -- 
 2.52.0
 
