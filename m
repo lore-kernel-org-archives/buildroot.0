@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A62AAE95A7E
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F5E9E95A6C
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7ABC760B8D;
-	Tue, 30 Dec 2025 11:14:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D974960B52;
+	Tue, 30 Dec 2025 11:14:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L7dewr9gqdh4; Tue, 30 Dec 2025 11:14:56 +0000 (UTC)
+ id IAzNkRncOSVv; Tue, 30 Dec 2025 11:14:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECEA960B7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FDFA60B89
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767093296;
-	bh=/4zNVxSi5krs8oAOWGNawBaV6ZvYGrf8kjlmcrxww2s=;
+	s=default; t=1767093297;
+	bh=0++jzxWAkHPHj21JPJfF59j/LtXyJWGwxnrLTEiAmcI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Gq2dU8+8js7FbbVAX5T9Jsw87CrB3xlk5gspgCjr5lISm4gKvS3510BFP9MJ+TrDg
-	 MJ0a/hvvO9Ru5euaWRJ94tHcIURdS/aS0vFli6CU6IRreRt2R5SDSekMXVJc3hJHIa
-	 9qkEofZD1GPyRARHSqmG4KDQ8zHcJOonxEjAN5D0VmtzvguPeaQLxjP2ldib5DhN+t
-	 y0htkbsvpjvYidCDN0Isb+n83Z+XC9N1jxQScvPkLPKjD4cf2hGb1GmWE+TKxixEtp
-	 pE40Njpk683vSbTJbpo1O+NNbglp2XWnbOeC+wBlszsjuBSjUO2svIJBCg0KjFxp2H
-	 XiIWIWB2MXe2g==
+	b=IzOd+qg9KpGaG6SlIzrPoTpNYaviCcH3qIK3TR6TbpP27yYySnwwZ05A10ZZr4Bbt
+	 y5b2bs8EB3c6KFLuM4PqpW4/rINpI6hYftjOWQ+xDfyrLSa07owBGGWynGUnIoOrwY
+	 GRvKU5vGmGSr4uD+BmDSHNLCUIn5+5EoBbfFw1xT3oiliWvmD8ksV2aSB7Eem9I2ep
+	 6J1xbdY7rChQJhzOotFPPJNBJhbSQZhuFk1u+smNKVuIHdm3Yqb8tyGWZtl8FxfK4E
+	 8gCHzy3RDkKov/SisWPvoXP+OQQTii69SEF6gOPkgNkxZun/J9sGDOb7QU6i1jbonf
+	 kdL4kyE9/0+DQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECEA960B7C;
-	Tue, 30 Dec 2025 11:14:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 598F1177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FDFA60B89;
+	Tue, 30 Dec 2025 11:14:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2545135B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A969140273
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12925809A7
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ascFUG7YbJFp for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p_5dd3gug5HD for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B29304026B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D95780AF3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B29304026B
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D95780AF3
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3D0E87C28; Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
+ id 2C7A786324; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 12:01:37 +0100
+Date: Tue, 30 Dec 2025 12:01:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 48c1e7cc6da96b12c8c8eb59c49cb917b0ae1a43
-X-Git-Newrev: e3a1340e2db759dfaec680ba3727a15e95ab3755
+X-Git-Oldrev: 554ba0d95edeb0d181c4dd0c43962160f065f3c1
+X-Git-Newrev: b0980aaea0461db01027dc173060bd9dd20110c4
 X-Patchwork-Hint: ignore
-Message-Id: <20251230111444.A3D0E87C28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnids: remove package
+Message-Id: <20251230111445.2C7A786324@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/alure: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,219 +76,220 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3a1340e2db759dfaec680ba3727a15e95ab3755
+commit: https://git.buildroot.net/buildroot/commit/?id=b0980aaea0461db01027dc173060bd9dd20110c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Analysis of https://github.com/MITRECND/libnids:
-"This repository was archived by the owner on May 20, 2025."
-last commit: Dec 2020
-last bug report: Jul 2024
-last patch sent upstream: Jan 2024
+Analysis of https://github.com/kcat/alure:
+last commit: Feb 2020
+last bug report: Oct 2020
+last pull request: 0 open
 
-The package is broken with gcc 15.x and no other package depends on it.
+The package is broken with cmake 4 and no other package depends on it.
+
+The upstream site kcat.strangesoft.net has no DNS record anymore, the
+main site strangesoft.net serves content unrelated to alure.
+
+Although the cmake error is easy to fix we remove this unsupported
+package instead.
 
 Fixes:
-https://autobuild.buildroot.net/results/f22/f22c8954894ab9ca57df07571726140c5bf3499a/
+https://autobuild.buildroot.net/results/d5a/d5a275f2d282c9dd2e3053667c79be11d48e918d/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                               |  1 -
- Config.in.legacy                                  |  6 +++
- DEVELOPERS                                        |  1 -
- package/Config.in                                 |  1 -
- package/libnids/0001-libpcap-use-pkg-config.patch | 48 -----------------------
- package/libnids/Config.in                         | 14 -------
- package/libnids/libnids.hash                      |  3 --
- package/libnids/libnids.mk                        | 43 --------------------
- 8 files changed, 6 insertions(+), 111 deletions(-)
+ Config.in.legacy         |  6 +++++
+ DEVELOPERS               |  1 -
+ package/Config.in        |  1 -
+ package/alure/Config.in  | 56 -----------------------------------------
+ package/alure/alure.hash |  3 ---
+ package/alure/alure.mk   | 65 ------------------------------------------------
+ 6 files changed, 6 insertions(+), 126 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1e255f80e1..0d0bbcaf2d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -574,7 +574,6 @@ package/libmpeg2/0003-fix-arm-detection.patch lib_patch.Upstream
- package/libmpeg2/0004-fix-sparc.patch lib_patch.Upstream
- package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch lib_patch.Upstream
- package/libnfc/0001-autotools-make-example-build-optional.patch lib_patch.Upstream
--package/libnids/0001-libpcap-use-pkg-config.patch lib_patch.Upstream
- package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch lib_patch.Upstream
- package/libodb-mysql/0001-fix-syntax-issue-while-checking-ldflags.patch lib_patch.Upstream
- package/libodb-mysql/0002-mariadb-FTBFS-fix.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 329336fa2a..4ed11ff095 100644
+index 7ff34b6801..4e27af0f00 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBNIDS
-+	bool "libnids has been removed"
++config BR2_PACKAGE_ALURE
++	bool "alure has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libnids is unmaintained and has been removed
++	  alure is unmaintained and has been removed
 +
- config BR2_TARGET_S500_BOOTLOADER
- 	bool "s500-bootloader"
+ config BR2_PACKAGE_LIBUWSC
+ 	bool "libuwsc has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ffc14ced6f..b9750d25b6 100644
+index ab68fd2b2c..df13cc37d0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1378,7 +1378,6 @@ N:	Guillaume Chaye <guillaume.chaye@zeetim.com>
- F:	package/sane-airscan/
- 
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
--F:	package/libnids/
- F:	package/libxcrypt/
- F:	package/liquid-dsp/
- F:	package/mbw/
+@@ -2906,7 +2906,6 @@ F:	configs/qemu_*
+ F:	configs/am574x_idk_defconfig
+ F:	configs/beagleboneai64_defconfig
+ F:	configs/beagley_ai_defconfig
+-F:	package/alure/
+ F:	package/aubio/
+ F:	package/bcc/
+ F:	package/binutils/
 diff --git a/package/Config.in b/package/Config.in
-index b2e8229d5d..3059b144e2 100644
+index bef6ae7b22..7a7f80f37b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2075,7 +2075,6 @@ menu "Networking"
- 	source "package/libnfnetlink/Config.in"
- 	source "package/libnftnl/Config.in"
- 	source "package/libnice/Config.in"
--	source "package/libnids/Config.in"
- 	source "package/libnl/Config.in"
- 	source "package/libnpupnp/Config.in"
- 	source "package/liboping/Config.in"
-diff --git a/package/libnids/0001-libpcap-use-pkg-config.patch b/package/libnids/0001-libpcap-use-pkg-config.patch
+@@ -1536,7 +1536,6 @@ menu "Libraries"
+ menu "Audio/Sound"
+ 	source "package/alsa-lib/Config.in"
+ 	source "package/alsa-plugins/Config.in"
+-	source "package/alure/Config.in"
+ 	source "package/aubio/Config.in"
+ 	source "package/bcg729/Config.in"
+ 	source "package/caps/Config.in"
+diff --git a/package/alure/Config.in b/package/alure/Config.in
 deleted file mode 100644
-index 8f8df478d1..0000000000
---- a/package/libnids/0001-libpcap-use-pkg-config.patch
+index c831bba913..0000000000
+--- a/package/alure/Config.in
 +++ /dev/null
-@@ -1,48 +0,0 @@
--configure.in: use pkg-config for libpcap detection
--
--The detection of libpcap was based in ${prefix}, which doesn't make
--sense in a cross-compilation context and can cause host leakage into
--the target build.
--
--So instead, let's use pkg-config to detect libpcap, since it is anyway
--already use in this configure.in to detect libglib.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--
--Index: b/configure.in
--===================================================================
----- a/configure.in
--+++ b/configure.in
--@@ -75,25 +75,13 @@
--      fi
--      ;;
--   esac ],
---[ if test -f ${prefix}/include/pcap.h; then
---     PCAP_CFLAGS="-I${prefix}/include"
---     PCAPLIB="-L${exec_prefix}/lib -lpcap"
---  elif test -f /usr/include/pcap/pcap.h; then
---     PCAP_CFLAGS="-I/usr/include/pcap"
---     PCAPLIB="-lpcap"
---  else
---	TMP=$LIBS
---	LIBS="-lpcap $LIBS"
---	AC_TRY_LINK([#include <pcap.h>], pcap_open_offline("",""),
---	LIBPCAP_FOUND=1,LIBPCAP_FOUND=0)
---	LIBS=$TMP
---	if test $LIBPCAP_FOUND = 1 ; then
---		PCAPLIB="-lpcap"
---	else
---		AC_ERROR(libpcap not found)
---	fi
---  fi
---  AC_MSG_RESULT(yes) ]
--+[
--+    PKG_PROG_PKG_CONFIG
--+    PKG_CHECK_MODULES(LIBPCAP, libpcap)
--+    AC_MSG_RESULT(yes)
--+    PCAP_CFLAGS=${LIBPCAP_CFLAGS}
--+    PCAPLIB=${LIBPCAP_LIBS}
--+]
-- )
-- AC_SUBST(PCAP_CFLAGS)
-- AC_SUBST(PCAPLIB)
-diff --git a/package/libnids/Config.in b/package/libnids/Config.in
-deleted file mode 100644
-index 30528f4d07..0000000000
---- a/package/libnids/Config.in
-+++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_LIBNIDS
--	bool "libnids"
--	select BR2_PACKAGE_LIBPCAP
+@@ -1,56 +0,0 @@
+-config BR2_PACKAGE_ALURE
+-	bool "alure"
+-	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # openal
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+-	depends on BR2_USE_WCHAR # use wchar_t
+-	select BR2_PACKAGE_OPENAL
 -	help
--	  Libnids is an implementation of an E-component of Network
--	  Intrusion Detection System.
+-	  Alure is a C++ 3D audio API. It uses OpenAL for audio
+-	  rendering, and provides common higher-level features such as
+-	  file loading and decoding, buffer caching, background
+-	  streaming, and source management for virtually unlimited
+-	  sound source handles.
 -
--	  libnids watches all local network traffic, and provides
--	  convenient information on them to perform further analysis.
+-	  https://kcat.strangesoft.net/alure.html
 -
--	  Libnids offers IP defragmentation, TCP stream assembly, TCP
--	  port scan detection.
+-if BR2_PACKAGE_ALURE
 -
--	  http://libnids.sourceforge.net/
-diff --git a/package/libnids/libnids.hash b/package/libnids/libnids.hash
+-config BR2_PACKAGE_ALURE_FLAC_DECODER
+-	bool "flac decoder"
+-	help
+-	  Enables the built-in FLAC decoder.
+-
+-config BR2_PACKAGE_ALURE_MINIMP3_DECODER
+-	bool "minimp3 decoder"
+-	help
+-	  Enables the built-in minimp3 decoder.
+-
+-config BR2_PACKAGE_ALURE_OPUS_DECODER
+-	bool "opus decoder"
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_OPUS
+-	help
+-	  Enables the built-in libopusfile decoder.
+-
+-config BR2_PACKAGE_ALURE_SNDFILE_DECODER
+-	bool "sndfile decoder"
+-	select BR2_PACKAGE_LIBSNDFILE
+-	help
+-	  Enables the built-in libsndfile decoder.
+-
+-config BR2_PACKAGE_ALURE_VORBIS_DECODER
+-	bool "vorbis decoder"
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_LIBVORBIS
+-	help
+-	  Enables the built-in libvorbis decoder.
+-
+-endif
+-
+-comment "alure needs a toolchain w/ C++, gcc >= 9, NPTL, wchar"
+-	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/alure/alure.hash b/package/alure/alure.hash
 deleted file mode 100644
-index e51dbf151c..0000000000
---- a/package/libnids/libnids.hash
+index 0d4c36c4ae..0000000000
+--- a/package/alure/alure.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  3f3e9f99a83cd37bc74af83d415c5e3a7505f5b190dfaf456b0849e0054f6733  libnids-1.26.tar.gz
--sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+-# Locally computed
+-sha256  9b808e5b5a54d156348221dc86704c7831115047d5238691e6088f8c4814b2ca  alure-14beed2a86d5a36030e907b21c46614d505f07cd.tar.gz
+-sha256  7331ddc67daaf1a283c81e8dc17bac8dc40f54ed3fab3d3964616f4bd502a0a3  LICENSE
+diff --git a/package/alure/alure.mk b/package/alure/alure.mk
 deleted file mode 100644
-index 712630bac8..0000000000
---- a/package/libnids/libnids.mk
+index fe27bfd12b..0000000000
+--- a/package/alure/alure.mk
 +++ /dev/null
-@@ -1,43 +0,0 @@
+@@ -1,65 +0,0 @@
 -################################################################################
 -#
--# libnids
+-# alure
 -#
 -################################################################################
 -
--LIBNIDS_VERSION = 1.26
--LIBNIDS_SITE = $(call github,MITRECND,libnids,$(LIBNIDS_VERSION))
--LIBNIDS_LICENSE = GPL-2.0
--LIBNIDS_LICENSE_FILES = COPYING
--LIBNIDS_CPE_ID_VALID = YES
--LIBNIDS_INSTALL_STAGING = YES
--LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
--LIBNIDS_AUTORECONF = YES
+-ALURE_VERSION = 14beed2a86d5a36030e907b21c46614d505f07cd
+-ALURE_SITE = $(call github,kcat,alure,$(ALURE_VERSION))
+-ALURE_LICENSE = Zlib, Public Domain (src/decoders/dr_flac.h)
+-ALURE_LICENSE_FILES = LICENSE
+-ALURE_INSTALL_STAGING = YES
 -
--# disable libnet if not available
--# Tests in configure.in expect --with-libnet=$build_dir
--# not an installation patch like in our context.
--# We use with-libnet=yes to skip the unusual paths tests.
--# But 'LNETLIB' gets left out, so we need to define it ourselves.
--ifeq ($(BR2_PACKAGE_LIBNET),y)
--LIBNIDS_DEPENDENCIES += libnet
--LIBNIDS_CONF_OPTS += --enable-libnet --with-libnet=yes LNETLIB=-lnet
+-ALURE_DEPENDENCIES = openal
+-
+-# Disabling alure examples removes the dependencies on physfs and dump
+-# libraries. Enable at least one built-in decoder (wave).
+-ALURE_CONF_OPTS = -DALURE_INSTALL=ON \
+-	-DALURE_BUILD_EXAMPLES=OFF \
+-	-DALURE_ENABLE_WAVE=ON
+-
+-ifeq ($(BR2_PACKAGE_ALURE_FLAC_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=ON
 -else
--LIBNIDS_CONF_OPTS += --disable-libnet
+-ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=OFF
 -endif
 -
--# disable libglib2 if not available
--# The test in configure.in is flawed: passing --enable-libglib would also
--# disable it. Only when neither is passed will the autodetection test be
--# executed.
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--LIBNIDS_DEPENDENCIES += libglib2
+-ifeq ($(BR2_PACKAGE_ALURE_MINIMP3_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=ON
 -else
--LIBNIDS_CONF_OPTS += --disable-libglib
+-ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=OFF
 -endif
 -
--# hand-written Makefile.in, not using automake, needs a custom
--# variable for the installation path.
--LIBNIDS_INSTALL_STAGING_OPTS = install_prefix=$(STAGING_DIR) install
--LIBNIDS_INSTALL_TARGET_OPTS = install_prefix=$(TARGET_DIR) install
+-ifeq ($(BR2_PACKAGE_ALURE_OPUS_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=ON
+-ALURE_DEPENDENCIES += libogg opus
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=OFF
+-endif
 -
--$(eval $(autotools-package))
+-ifeq ($(BR2_PACKAGE_ALURE_SNDFILE_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=ON
+-ALURE_DEPENDENCIES += libsndfile
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_VORBIS_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=ON
+-ALURE_DEPENDENCIES += libogg libvorbis
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=OFF
+-endif
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=OFF \
+-	-DALURE_BUILD_STATIC=ON
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
+-	-DALURE_BUILD_STATIC=ON
+-else
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
+-	-DALURE_BUILD_STATIC=OFF
+-endif
+-
+-$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
