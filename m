@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17DF3EE4998
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 449FEEE4990
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DACBE60C2C;
-	Tue, 30 Dec 2025 18:13:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D52E60BD5;
+	Tue, 30 Dec 2025 18:13:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aal_ggwdPIgX; Tue, 30 Dec 2025 18:12:58 +0000 (UTC)
+ id Lg9Fw-sYG7QV; Tue, 30 Dec 2025 18:12:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DBA760C21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7432A60C29
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767118378;
-	bh=aj7XAIxk+1x/i7w7YmOXtpUjge4azctnoD2cMmsHpzY=;
+	s=default; t=1767118379;
+	bh=CiE5ZS2vrtK8Qi/cbCvOjIbgg3UMvi4B3tWiyJZo8Ms=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=H7yzPRN3+i4np1c8TD+NepDQ+7eMsZAkJtkGtuBDRjdM/7sFxzyKI8p9KI8+BITqA
-	 6/aGbQLMhJ50IDWxhNZ15+6IpdmOJDFkfxqnAvGobgiJ/fLbVk0k3dHANfQx4QOrxK
-	 k8WhPTKSyYxbgIxQpg117AEZ7HW27/MNvtWACbQViVPrHGEFQ8D45xtO8mVGCxqYWD
-	 xYcGWRvztATDuS+d266fmx/BF4MscMsM3WLCQwsPXqD1501iYMz9HReLzgewfclKl7
-	 LSvcLRdg+MO+7skKUPq9tU74ZmPj7jD6edQErOkea1CLDhqFc+YsXH+4UvD8hW+s5p
-	 +30evRYu2hrYA==
+	b=OURbMqf74zglvgOwOoeQDMF9zW5AXizn5QoG31zJ8pIbywMxfJ9QJYk7VYfIaQy1L
+	 74NrmcOgxNvBQV4+hBMGWkNpqVP7S0hMKP4SxE9o08vCVpqSdngvFuimTTKAQXva/l
+	 SMQlIjG97sdX2rLgfp88siuEJ9B4S/3l80EbMFavXdS5xK1nzRYwLnXiFuWl4K3yzz
+	 MT7Tl/rlnC0kqGQpoA+y8jLkiy9rC9oklZhnUoQeXTAZqWfTSQPXnMDlVNjQS2A7Oo
+	 z0kzin/SyREpaG7K2ZnwFOOvRIKtwaHfgR7f8FMO01q3Y0xj66xuUNwQdhJl2Cz5YQ
+	 pDAi/31bbhzlw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DBA760C21;
-	Tue, 30 Dec 2025 18:12:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7432A60C29;
+	Tue, 30 Dec 2025 18:12:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02DF1177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 017DB277
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3557E403B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id C69F8407E8
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DQd03kKdWyhi for <buildroot@buildroot.org>;
+ id f2tljyPio1YS for <buildroot@buildroot.org>;
  Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E77C4062F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 994CE406E7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E77C4062F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 994CE406E7
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D70887C3E; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
+ id 9710587C40; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 19:12:17 +0100
+Date: Tue, 30 Dec 2025 19:12:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28309d0a58ea2c898ee37fa3982c81c3fc380121
-X-Git-Newrev: 1c9ae47194d1fa69b804793ba0921ff24eee7a20
+X-Git-Oldrev: e644b58f51e09a5227146a7b394bff607e69cd7c
+X-Git-Newrev: 2577977e751bb8a5b36d31f87440d59e82537608
 X-Patchwork-Hint: ignore
-Message-Id: <20251230181235.6D70887C3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv3: remove package
+Message-Id: <20251230181235.9710587C40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libfreeimage: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,804 +71,972 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1893354430549028422=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c9ae47194d1fa69b804793ba0921ff24eee7a20
+--===============1893354430549028422==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=2577977e751bb8a5b36d31f87440d59e82537608
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenCV3 is unmaintained.
+The last release dates back to 2018 and security issues remain unfixed
+upstream so we remove this package for security reasons:
+https://lists.buildroot.org/pipermail/buildroot/2025-December/793070.html
 
+Cc: Rémi Rérolle <remi.rerolle@gmail.com>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ .checkpackageignore                                |   4 -
  Config.in.legacy                                   |   6 +
+ DEVELOPERS                                         |   3 -
  package/Config.in                                  |   1 -
- ...set-minimum-required-CMake-version-to-3.5.patch |  41 ---
- package/opencv3/Config.in                          | 312 ------------------
- package/opencv3/opencv3.hash                       |   3 -
- package/opencv3/opencv3.mk                         | 354 ---------------------
- package/opencv4/Config.in                          |   1 -
- 7 files changed, 6 insertions(+), 712 deletions(-)
+ package/libfreeimage/0001-no-root-install.patch    |  20 ---
+ package/libfreeimage/0002-fix-cpuid-x86.patch      |  67 --------
+ package/libfreeimage/0003-fix-big-endian-os.patch  |  64 -------
+ .../libfreeimage/0004-fixed-C-11-warnings.patch    |  94 -----------
+ .../0005-jxrlib-ftbfs-with-GCC-14.patch            |  40 -----
+ ...06-FTBFS-fix-for-function-prototype-error.patch |  29 ----
+ .../0007-CVE-2019-12211_2019-12213.patch           | 188 ---------------------
+ package/libfreeimage/0008-CVE-2020-24292.patch     |  17 --
+ package/libfreeimage/0009-CVE-2020-24293.patch     |  18 --
+ package/libfreeimage/0010-CVE-2020-24295.patch     |  25 ---
+ package/libfreeimage/0011-CVE-2021-33367.patch     |  23 ---
+ package/libfreeimage/0012-CVE-2021-40263.patch     |  18 --
+ package/libfreeimage/0013-CVE-2021-40266.patch     |  18 --
+ package/libfreeimage/0014-CVE-2023-47995.patch     |  18 --
+ package/libfreeimage/0015-CVE-2023-47997.patch     |  20 ---
+ package/libfreeimage/Config.in                     |  18 --
+ package/libfreeimage/libfreeimage.hash             |   9 -
+ package/libfreeimage/libfreeimage.mk               |  62 -------
+ 22 files changed, 6 insertions(+), 756 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 99b6841b39..7b08791dcb 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -531,10 +531,6 @@ package/libedit/0001-check-bsd-functions-in-libbsd.patch lib_patch.Upstream
+ package/libevent/0001-Don-t-define-BIO_get_init-for-LibreSSL-3-5.patch lib_patch.Upstream
+ package/libffi/0001-Fix-use-of-compact-eh-frames-on-MIPS.patch lib_patch.Upstream
+ package/libfm/0001-modules-fix-cross-compilation.patch lib_patch.Upstream
+-package/libfreeimage/0001-no-root-install.patch lib_patch.Upstream
+-package/libfreeimage/0002-fix-cpuid-x86.patch lib_patch.Upstream
+-package/libfreeimage/0003-fix-big-endian-os.patch lib_patch.Upstream
+-package/libfreeimage/0004-fixed-C-11-warnings.patch lib_patch.Upstream
+ package/libftdi/0001-pkgconfig_libusb.patch lib_patch.Sob lib_patch.Upstream
+ package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch lib_patch.Sob lib_patch.Upstream
+ package/libfuse/0001-fix-aarch64-build.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 1d8ed9698d..a1ec2033a2 100644
+index a1ec2033a2..258fc30968 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_OPENCV3
-+	bool "opencv3"
++config BR2_PACKAGE_LIBFREEIMAGE
++	bool "libfreeimage"
 +	select BR2_LEGACY
 +	help
-+	  opencv3 is unmaintained and has been removed
++	  libfreeimage is unmaintained and has been removed
 +
- config BR2_PACKAGE_VLC_OPENCV3_BACKEND
- 	bool "opencv3 support in vlc has been removed"
+ config BR2_PACKAGE_OPENCV3
+ 	bool "opencv3"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 477fb5a72d..85453ae16e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2847,9 +2847,6 @@ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/freescale-imx/
+ F:	package/paho-mqtt-cpp/
+ 
+-N:	Rémi Rérolle <remi.rerolle@gmail.com>
+-F:	package/libfreeimage/
+-
+ N:	Renaud Aubin <root@renaud.io>
+ F:	package/libhttpparser/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index c92a642dcb..77667a41a0 100644
+index 77667a41a0..0e36923bf3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1774,7 +1774,6 @@ menu "Graphics"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencl-headers/Config.in"
- 	source "package/opencl-icd-loader/Config.in"
--	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
- 	source "package/opencv4-contrib/Config.in"
- 	source "package/opengl/Config.in"
-diff --git a/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch b/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+@@ -1746,7 +1746,6 @@ menu "Graphics"
+ 	source "package/libfm/Config.in"
+ 	source "package/libfm-extra/Config.in"
+ 	source "package/libfreeglut/Config.in"
+-	source "package/libfreeimage/Config.in"
+ 	source "package/libgdiplus/Config.in"
+ 	source "package/libgeotiff/Config.in"
+ 	source "package/libglew/Config.in"
+diff --git a/package/libfreeimage/0001-no-root-install.patch b/package/libfreeimage/0001-no-root-install.patch
 deleted file mode 100644
-index 46009de302..0000000000
---- a/package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+index 54756d8e9e..0000000000
+--- a/package/libfreeimage/0001-no-root-install.patch
 +++ /dev/null
-@@ -1,41 +0,0 @@
--From 3b7311f48ef70127ddad7c7ea9c008fa6af3a9a1 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 25 Dec 2025 23:11:27 +0100
--Subject: [PATCH] cmake: set minimum required CMake version to 3.5
+@@ -1,20 +0,0 @@
+-Makefile.gnu: allow non-root install by not enforcing root ownserhip
 -
--This fixes build with CMake 4.
+-Signed-off-by: Rémi Rérolle <remi.rerolle@gmail.com>
 -
--Upstream: N/A, opencv 3.x is no longer maintained
+-diff -ruN a/Makefile.gnu b/Makefile.gnu
+---- a/Makefile.gnu	2015-04-09 16:34:02.315316841 +0200
+-+++ b/Makefile.gnu	2015-04-09 16:34:28.875483201 +0200
+-@@ -71,9 +71,9 @@
+- 
+- install:
+- 	install -d $(INCDIR) $(INSTALLDIR)
+--	install -m 644 -o root -g root $(HEADER) $(INCDIR)
+--	install -m 644 -o root -g root $(STATICLIB) $(INSTALLDIR)
+--	install -m 755 -o root -g root $(SHAREDLIB) $(INSTALLDIR)
+-+	install -m 644 $(HEADER) $(INCDIR)
+-+	install -m 644 $(STATICLIB) $(INSTALLDIR)
+-+	install -m 755 $(SHAREDLIB) $(INSTALLDIR)
+- 	ln -sf $(SHAREDLIB) $(INSTALLDIR)/$(VERLIBNAME)
+- 	ln -sf $(VERLIBNAME) $(INSTALLDIR)/$(LIBNAME)	
+- #	ldconfig
+diff --git a/package/libfreeimage/0002-fix-cpuid-x86.patch b/package/libfreeimage/0002-fix-cpuid-x86.patch
+deleted file mode 100644
+index 98b0e9c6e3..0000000000
+--- a/package/libfreeimage/0002-fix-cpuid-x86.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-Fix build issue caused by invalid register usage on x86
+-
+-Patch taken from https://github.com/openexr/openexr/issues/128.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
+-===================================================================
+---- a/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
+-+++ b/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
+-@@ -40,21 +40,19 @@
+- 
+- namespace {
+- #if defined(IMF_HAVE_SSE2) &&  defined(__GNUC__)
+--
+-+#include <cpuid.h>
+-     // Helper functions for gcc + SSE enabled
+--    void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
+-+    void cpuid(unsigned int n, unsigned int &eax, unsigned int &ebx,
+-+					unsigned int &ecx, unsigned int &edx)
+-     {
+--        __asm__ __volatile__ (
+--            "cpuid"
+--            : /* Output  */ "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) 
+--            : /* Input   */ "a"(n)
+--            : /* Clobber */);
+-+		__get_cpuid(n, &eax, &ebx, &ecx, &edx);
+-     }
+- 
+- #else // IMF_HAVE_SSE2 && __GNUC__
+- 
+-     // Helper functions for generic compiler - all disabled
+--    void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
+-+    void cpuid(unsigned int n, unsigned int &eax, unsigned int &ebx,
+-+					unsigned int &ecx, unsigned int &edx)
+-     {
+-         eax = ebx = ecx = edx = 0;
+-     }
+-@@ -64,7 +62,7 @@
+- 
+- #ifdef OPENEXR_IMF_HAVE_GCC_INLINE_ASM_AVX
+- 
+--    void xgetbv(int n, int &eax, int &edx)
+-+    void xgetbv(unsigned int n, unsigned int &eax, unsigned int &edx)
+-     {
+-         __asm__ __volatile__ (
+-             "xgetbv"
+-@@ -75,7 +73,7 @@
+- 
+- #else //  OPENEXR_IMF_HAVE_GCC_INLINE_ASM_AVX
+- 
+--    void xgetbv(int n, int &eax, int &edx)
+-+    void xgetbv(unsigned int n, unsigned int &eax, unsigned int &edx)
+-     {
+-         eax = edx = 0;
+-     }
+-@@ -94,8 +92,8 @@
+-     f16c(false)
+- {
+-     bool osxsave = false;
+--    int  max     = 0;
+--    int  eax, ebx, ecx, edx;
+-+    unsigned int  max     = 0;
+-+    unsigned int  eax, ebx, ecx, edx;
+- 
+-     cpuid(0, max, ebx, ecx, edx);
+-     if (max > 0)
+diff --git a/package/libfreeimage/0003-fix-big-endian-os.patch b/package/libfreeimage/0003-fix-big-endian-os.patch
+deleted file mode 100644
+index e0d4e921ca..0000000000
+--- a/package/libfreeimage/0003-fix-big-endian-os.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-fixed PluginBMP, PluginDDS for compilation under Big Endian OS
+-
+-Downloaded from upstream commit:
+-https://sourceforge.net/p/freeimage/svn/1809/
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr FreeImage.orig/Source/FreeImage/PluginBMP.cpp FreeImage/Source/FreeImage/PluginBMP.cpp
+---- FreeImage.orig/Source/FreeImage/PluginBMP.cpp	2016-06-15 12:35:30.000000000 +0200
+-+++ FreeImage/Source/FreeImage/PluginBMP.cpp	2019-08-31 16:00:27.813378612 +0200
+-@@ -518,7 +518,7 @@
+- 				io->read_proc(FreeImage_GetPalette(dib), used_colors * sizeof(RGBQUAD), 1, handle);
+- #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
+- 				RGBQUAD *pal = FreeImage_GetPalette(dib);
+--				for(int i = 0; i < used_colors; i++) {
+-+				for(unsigned int i = 0; i < used_colors; i++) {
+- 					INPLACESWAP(pal[i].rgbRed, pal[i].rgbBlue);
+- 				}
+- #endif
+-@@ -1419,7 +1419,7 @@
+- 
+- 			free(buffer);
+- #ifdef FREEIMAGE_BIGENDIAN
+--		} else if (bpp == 16) {
+-+		} else if (dst_bpp == 16) {
+- 			int padding = dst_pitch - dst_width * sizeof(WORD);
+- 			WORD pad = 0;
+- 			WORD pixel;
+-@@ -1440,7 +1440,7 @@
+- 			}
+- #endif
+- #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
+--		} else if (bpp == 24) {
+-+		} else if (dst_bpp == 24) {
+- 			int padding = dst_pitch - dst_width * sizeof(FILE_BGR);
+- 			DWORD pad = 0;
+- 			FILE_BGR bgr;
+-@@ -1461,7 +1461,7 @@
+- 					}
+- 				}
+- 			}
+--		} else if (bpp == 32) {
+-+		} else if (dst_bpp == 32) {
+- 			FILE_BGRA bgra;
+- 			for(unsigned y = 0; y < dst_height; y++) {
+- 				BYTE *line = FreeImage_GetScanLine(dib, y);
+-diff -uNr FreeImage.orig/Source/FreeImage/PluginDDS.cpp FreeImage/Source/FreeImage/PluginDDS.cpp
+---- FreeImage.orig/Source/FreeImage/PluginDDS.cpp	2018-07-31 17:04:58.000000000 +0200
+-+++ FreeImage/Source/FreeImage/PluginDDS.cpp	2019-08-31 16:00:39.213465120 +0200
+-@@ -356,14 +356,6 @@
+- 	for(int i=0; i<11; i++) {
+- 		SwapLong(&header->surfaceDesc.dwReserved1[i]);
+- 	}
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwSize);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwFlags);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwFourCC);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwRGBBitCount);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwRBitMask);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwGBitMask);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwBBitMask);
+--	SwapLong(&header->surfaceDesc.ddpfPixelFormat.dwRGBAlphaBitMask);
+- 	SwapLong(&header->surfaceDesc.ddsCaps.dwCaps1);
+- 	SwapLong(&header->surfaceDesc.ddsCaps.dwCaps2);
+- 	SwapLong(&header->surfaceDesc.ddsCaps.dwReserved[0]);
+diff --git a/package/libfreeimage/0004-fixed-C-11-warnings.patch b/package/libfreeimage/0004-fixed-C-11-warnings.patch
+deleted file mode 100644
+index cf9c47303a..0000000000
+--- a/package/libfreeimage/0004-fixed-C-11-warnings.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-fixed C++11 warnings
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from: https://sourceforge.net/p/freeimage/svn/1896]
+-
+-Index: trunk/Source/FreeImage/CacheFile.cpp
+-===================================================================
+---- trunk/Source/FreeImage/CacheFile.cpp	(révision 1895)
+-+++ trunk/Source/FreeImage/CacheFile.cpp	(révision 1896)
+-@@ -147,10 +147,14 @@
+- 				m_current_block->data = new BYTE[BLOCK_SIZE];
+- 
+- 				fseek(m_file, m_current_block->nr * BLOCK_SIZE, SEEK_SET);
+--				fread(m_current_block->data, BLOCK_SIZE, 1, m_file);
+--
+--				m_page_cache_mem.splice(m_page_cache_mem.begin(), m_page_cache_disk, it->second);
+--				m_page_map[nr] = m_page_cache_mem.begin();
+-+				if (fread(m_current_block->data, BLOCK_SIZE, 1, m_file) == 1) {
+-+					m_page_cache_mem.splice(m_page_cache_mem.begin(), m_page_cache_disk, it->second);
+-+					m_page_map[nr] = m_page_cache_mem.begin();
+-+				}
+-+				else {
+-+					FreeImage_OutputMessageProc(FIF_UNKNOWN, "Failed to lock a block in CacheFile");
+-+					return NULL;
+-+				}
+- 			}
+- 
+- 			// if the memory cache size is too large, swap an item to disc
+-Index: trunk/Source/FreeImage/MultiPage.cpp
+-===================================================================
+---- trunk/Source/FreeImage/MultiPage.cpp	(révision 1895)
+-+++ trunk/Source/FreeImage/MultiPage.cpp	(révision 1896)
+-@@ -271,8 +271,8 @@
+- 					}
+- 				}
+- 
+--				std::auto_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
+--				std::auto_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
+-+				std::unique_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
+-+				std::unique_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
+- 				header->m_filename = filename;
+- 				// io is default
+- 				header->node = node;
+-@@ -339,8 +339,8 @@
+- 				PluginNode *node = list->FindNodeFromFIF(fif);
+- 			
+- 				if (node) {
+--					std::auto_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
+--					std::auto_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
+-+					std::unique_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
+-+					std::unique_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
+- 					header->io = *io;
+- 					header->node = node;
+- 					header->fif = fif;
+-Index: trunk/Source/FreeImage/PSDParser.cpp
+-===================================================================
+---- trunk/Source/FreeImage/PSDParser.cpp	(révision 1895)
+-+++ trunk/Source/FreeImage/PSDParser.cpp	(révision 1896)
+-@@ -97,7 +97,7 @@
+- template <int N>
+- class PSDGetValue {
+- public:
+--	static inline int get(const BYTE * iprBuffer) {} // error
+-+	static inline int get(const BYTE * iprBuffer) { return -1; } // error
+- };
+- 
+- template <>
+-Index: trunk/Source/FreeImage/PluginPSD.cpp
+-===================================================================
+---- trunk/Source/FreeImage/PluginPSD.cpp	(révision 1895)
+-+++ trunk/Source/FreeImage/PluginPSD.cpp	(révision 1896)
+-@@ -127,7 +127,7 @@
+- static BOOL DLL_CALLCONV
+- Save(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void *data) {
+- 	if(!handle) {
+--		return NULL;
+-+		return FALSE;
+- 	}
+- 	try {
+- 		psdParser parser;
+-Index: trunk/Source/FreeImage/PluginHDR.cpp
+-===================================================================
+---- trunk/Source/FreeImage/PluginHDR.cpp	(révision 1895)
+-+++ trunk/Source/FreeImage/PluginHDR.cpp	(révision 1896)
+-@@ -244,7 +244,8 @@
+- 		}
+- 		else if((buf[0] == '#') && (buf[1] == 0x20)) {
+- 			header_info->valid |= RGBE_VALID_COMMENT;
+--			strcpy(header_info->comment, buf);
+-+			strncpy(header_info->comment, buf, HDR_MAXLINE - 1);
+-+			header_info->comment[HDR_MAXLINE - 1] = '\0';
+- 		}
+- 	}
+- 	if(!bHeaderFound || !bFormatFound) {
+diff --git a/package/libfreeimage/0005-jxrlib-ftbfs-with-GCC-14.patch b/package/libfreeimage/0005-jxrlib-ftbfs-with-GCC-14.patch
+deleted file mode 100644
+index c13a8dc26f..0000000000
+--- a/package/libfreeimage/0005-jxrlib-ftbfs-with-GCC-14.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 11383a017e8d040f1376c964d2b8769108204f0b Mon Sep 17 00:00:00 2001
+-From: YOKOTA Hiroshi <yokota.hgml@gmail.com>
+-Date: Thu, 25 Jul 2024 15:03:31 +0900
+-Subject: [PATCH] jxrlib: ftbfs with GCC-14
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Bug-Debian: https://bugs.debian.org/1075105
+-
+-_byteswap_ulong() is defined in image/sys/strcodec.c
+-
+-Upstream: Bug submitted at https://sourceforge.net/p/freeimage/bugs/389/
+-[Thomas: patch taken from https://sources.debian.org/patches/jxrlib/1.2~git20170615.f752187-5.3/0013-jxrlib-ftbfs-with-GCC-14.patch/]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-----
+-/usr/bin/cc -DDISABLE_PERF_MEASUREMENT -D__ANSI__ -Djpegxr_EXPORTS -I"/<<PKGBUILDDIR>>/common/include" -I"/<<PKGBUILDDIR>>/image/sys" -I"/<<PKGBUILDDIR>>/jxrgluelib" -I"/<<PKGBUILDDIR>>/jxrtestlib" -g -O2 -Werror=implicit-function-declaration -ffile-prefix-map=/<<PKGBUILDDIR>>=. -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -Wall -Wextra -Wdate-time -D_FORTIFY_SOURCE=2 -fPIC -w -MD -MT CMakeFiles/jpegxr.dir/image/encode/strenc.c.o -MF CMakeFiles/jpegxr.dir/image/encode/strenc.c.o.d -o CMakeFiles/jpegxr.dir/image/encode/strenc.c.o -c "/<<PKGBUILDDIR>>/image/encode/strenc.c"
+-/<<PKGBUILDDIR>>/image/decode/segdec.c: In function ‘_load4’:
+-/<<PKGBUILDDIR>>/image/decode/segdec.c:68:12: error: implicit declaration of function ‘_byteswap_ulong’ [-Wimplicit-function-declaration]
+-   68 |     return _byteswap_ulong(v);
+-      |            ^~~~~~~~~~~~~~~
+----
+- Source/LibJXR/image/decode/segdec.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Source/LibJXR/image/decode/segdec.c b/Source/LibJXR/image/decode/segdec.c
+-index 1299458..8050355 100644
+---- a/Source/LibJXR/image/decode/segdec.c
+-+++ b/Source/LibJXR/image/decode/segdec.c
+-@@ -63,6 +63,7 @@ static U32 _FORCEINLINE _load4(void* pv)
+-     v |= ((U32)((U16 *) pv)[1]) << 16;
+-     return _byteswap_ulong(v);
+- #else // _M_IA64
+-+    U32 _byteswap_ulong(U32 bits); // from image/sys/strcodec.c
+-     return _byteswap_ulong(*(U32*)pv);
+- #endif // _M_IA64
+- #endif // _BIG__ENDIAN_
+--- 
+-2.51.0
+-
+diff --git a/package/libfreeimage/0006-FTBFS-fix-for-function-prototype-error.patch b/package/libfreeimage/0006-FTBFS-fix-for-function-prototype-error.patch
+deleted file mode 100644
+index bdda376467..0000000000
+--- a/package/libfreeimage/0006-FTBFS-fix-for-function-prototype-error.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 7b59b3757521d82406771cc47127aa70ffb26f3f Mon Sep 17 00:00:00 2001
+-From: YOKOTA Hiroshi <yokota.hgml@gmail.com>
+-Date: Thu, 25 Jul 2024 16:01:01 +0900
+-Subject: [PATCH] FTBFS fix for function prototype error
+-
+-Bug-Debian: https://bugs.debian.org/1075105
+-
+-Upstream: Bug submitted at https://sourceforge.net/p/freeimage/bugs/389/
+-[Thomas: patch taken from https://sources.debian.org/patches/jxrlib/1.2~git20170615.f752187-5.3/0015-FTBFS-fix-for-function-prototype-error.patch/]
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- cmake/OpenCVGenPkgconfig.cmake   | 2 +-
-- cmake/OpenCVMinDepVersions.cmake | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
+- Source/LibJXR/jxrgluelib/JXRGlueJxr.c | 1 +
+- 1 file changed, 1 insertion(+)
 -
--diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
--index 425c0faa3b..9642a4b983 100644
----- a/cmake/OpenCVGenPkgconfig.cmake
--+++ b/cmake/OpenCVGenPkgconfig.cmake
--@@ -110,7 +110,7 @@ endif()
-- # =============================================================================
-- else() # DEFINED CMAKE_HELPER_SCRIPT
+-diff --git a/Source/LibJXR/jxrgluelib/JXRGlueJxr.c b/Source/LibJXR/jxrgluelib/JXRGlueJxr.c
+-index 2bf085a..182fc7f 100644
+---- a/Source/LibJXR/jxrgluelib/JXRGlueJxr.c
+-+++ b/Source/LibJXR/jxrgluelib/JXRGlueJxr.c
+-@@ -28,6 +28,7 @@
+- //*@@@---@@@@******************************************************************
+- #include <limits.h>
+- #include <JXRGlue.h>
+-+#include <wchar.h>
 - 
---cmake_minimum_required(VERSION 2.8.12.2)
--+cmake_minimum_required(VERSION 3.5)
-- cmake_policy(SET CMP0012 NEW)
-- include("${CMAKE_HELPER_SCRIPT}")
-- include("${OpenCV_SOURCE_DIR}/cmake/OpenCVUtils.cmake")
--diff --git a/cmake/OpenCVMinDepVersions.cmake b/cmake/OpenCVMinDepVersions.cmake
--index e67856bb97..eb7a6d861e 100644
----- a/cmake/OpenCVMinDepVersions.cmake
--+++ b/cmake/OpenCVMinDepVersions.cmake
--@@ -1,5 +1,5 @@
-- if(NOT DEFINED MIN_VER_CMAKE)
---  set(MIN_VER_CMAKE 2.8.12.2)
--+  set(MIN_VER_CMAKE 3.5)
-- endif()
-- set(MIN_VER_CUDA 6.5)
-- set(MIN_VER_PYTHON2 2.7)
+- 
+- static const char szHDPhotoFormat[] = "<dc:format>image/vnd.ms-photo</dc:format>";
 --- 
--2.52.0
+-2.51.0
 -
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+diff --git a/package/libfreeimage/0007-CVE-2019-12211_2019-12213.patch b/package/libfreeimage/0007-CVE-2019-12211_2019-12213.patch
 deleted file mode 100644
-index ad8a075729..0000000000
---- a/package/opencv3/Config.in
+index de1419b546..0000000000
+--- a/package/libfreeimage/0007-CVE-2019-12211_2019-12213.patch
 +++ /dev/null
-@@ -1,312 +0,0 @@
--menuconfig BR2_PACKAGE_OPENCV3
--	bool "opencv3"
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+@@ -1,188 +0,0 @@
+-CVE: CVE-2019-12211
+-CVE: CVE-2019-12213
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/78980acf39f02b88e70f27e37e5a191c9a9ead47/f/CVE-2019-12211_2019-12213.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PluginTIFF.cpp b/Source/FreeImage/PluginTIFF.cpp
+---- a/Source/FreeImage/PluginTIFF.cpp
+-+++ b/Source/FreeImage/PluginTIFF.cpp
+-@@ -122,9 +122,14 @@ static void ReadThumbnail(FreeImageIO *i
+- static int s_format_id;
+- 
+- typedef struct {
+-+	//! FreeImage IO functions
+-     FreeImageIO *io;
+-+	//! FreeImage handle
+- 	fi_handle handle;
+-+	//! LibTIFF handle
+- 	TIFF *tif;
+-+	//! Count the number of thumbnails already read (used to avoid recursion on loading)
+-+	unsigned thumbnailCount;
+- } fi_TIFFIO;
+- 
+- // ----------------------------------------------------------
+-@@ -184,10 +189,8 @@ Open a TIFF file descriptor for reading
+- */
+- TIFF *
+- TIFFFdOpen(thandle_t handle, const char *name, const char *mode) {
+--	TIFF *tif;
+--	
+- 	// Open the file; the callback will set everything up
+--	tif = TIFFClientOpen(name, mode, handle,
+-+	TIFF *tif = TIFFClientOpen(name, mode, handle,
+- 	    _tiffReadProc, _tiffWriteProc, _tiffSeekProc, _tiffCloseProc,
+- 	    _tiffSizeProc, _tiffMapProc, _tiffUnmapProc);
+- 
+-@@ -460,12 +463,10 @@ CreateImageType(BOOL header_only, FREE_I
+- 			}
+- 			
+- 		}
+--		else {
+--
+--			dib = FreeImage_AllocateHeader(header_only, width, height, MIN(bpp, 32), FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK);
+-+		else if (bpp <= 32) {
+-+			dib = FreeImage_AllocateHeader(header_only, width, height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK);
+- 		}
+- 
+--
+- 	} else {
+- 		// other bitmap types
+- 		
+-@@ -1050,9 +1051,12 @@ static void * DLL_CALLCONV
+- Open(FreeImageIO *io, fi_handle handle, BOOL read) {
+- 	// wrapper for TIFF I/O
+- 	fi_TIFFIO *fio = (fi_TIFFIO*)malloc(sizeof(fi_TIFFIO));
+--	if(!fio) return NULL;
+-+	if (!fio) {
+-+		return NULL;
+-+	}
+- 	fio->io = io;
+- 	fio->handle = handle;
+-+	fio->thumbnailCount = 0;
+- 
+- 	if (read) {
+- 		fio->tif = TIFFFdOpen((thandle_t)fio, "", "r");
+-@@ -1108,6 +1112,27 @@ check for uncommon bitspersample values
+- */
+- static BOOL 
+- IsValidBitsPerSample(uint16 photometric, uint16 bitspersample, uint16 samplesperpixel) {
+-+	// get the pixel depth in bits
+-+	const uint16 pixel_depth = bitspersample * samplesperpixel;
+-+
+-+	// check for a supported pixel depth
+-+	switch (pixel_depth) {
+-+		case 1:
+-+		case 4:
+-+		case 8:
+-+		case 16:
+-+		case 24:
+-+		case 32:
+-+		case 48:
+-+		case 64:
+-+		case 96:
+-+		case 128:
+-+			// OK, go on
+-+			break;
+-+		default:
+-+			// unsupported pixel depth
+-+			return FALSE;
+-+	}
+- 
+- 	switch(bitspersample) {
+- 		case 1:
+-@@ -1148,6 +1173,8 @@ IsValidBitsPerSample(uint16 photometric,
+- 		default:
+- 			return FALSE;
+- 	}
+-+
+-+	return FALSE;
+- }
+- 
+- static TIFFLoadMethod  
+-@@ -1237,15 +1264,30 @@ Read embedded thumbnail
+- static void 
+- ReadThumbnail(FreeImageIO *io, fi_handle handle, void *data, TIFF *tiff, FIBITMAP *dib) {
+- 	FIBITMAP* thumbnail = NULL;
+--	
+-+
+-+	fi_TIFFIO *fio = (fi_TIFFIO*)data;
+-+
+-+	/*
+-+	Thumbnail loading can cause recursions because of the way
+-+	functions TIFFLastDirectory and TIFFSetSubDirectory are working.
+-+	We use here a hack to count the number of times the ReadThumbnail function was called.
+-+	We only allow one call, check for this
+-+	*/
+-+	if (fio->thumbnailCount > 0) {
+-+		return;
+-+	}
+-+	else {
+-+		// update the thumbnail count (used to avoid recursion)
+-+		fio->thumbnailCount++;
+-+	}
+-+
+- 	// read exif thumbnail (IFD 1) ...
+- 	
+--	/*
+--	// this code can cause unwanted recursion causing an overflow, it is thus disabled until we have a better solution
+--	// do we really need to read a thumbnail from the Exif segment ? knowing that TIFF store the thumbnail in the subIFD ...
+--	// 
+- 	toff_t exif_offset = 0;
+- 	if(TIFFGetField(tiff, TIFFTAG_EXIFIFD, &exif_offset)) {
+-+
+-+		// this code can cause unwanted recursion causing an overflow, because of the way TIFFLastDirectory work
+-+		// => this is checked using
+- 		
+- 		if(!TIFFLastDirectory(tiff)) {
+- 			// save current position
+-@@ -1256,15 +1298,15 @@ ReadThumbnail(FreeImageIO *io, fi_handle
+- 			int page = 1;
+- 			int flags = TIFF_DEFAULT;
+- 			thumbnail = Load(io, handle, page, flags, data);
+-+
+- 			// store the thumbnail (remember to release it before return)
+- 			FreeImage_SetThumbnail(dib, thumbnail);
+--			
+-+
+- 			// restore current position
+- 			io->seek_proc(handle, tell_pos, SEEK_SET);
+- 			TIFFSetDirectory(tiff, cur_dir);
+- 		}
+- 	}
+--	*/
+- 	
+- 	// ... or read the first subIFD
+- 	
+-@@ -1281,11 +1323,14 @@ ReadThumbnail(FreeImageIO *io, fi_handle
+- 				const long tell_pos = io->tell_proc(handle);
+- 				const uint16 cur_dir = TIFFCurrentDirectory(tiff);
+- 				
+-+                // this code can cause unwanted recursion causing an overflow, because of the way TIFFSetSubDirectory work
+-+
+- 				if(TIFFSetSubDirectory(tiff, subIFD_offsets[0])) {
+- 					// load the thumbnail
+- 					int page = -1; 
+- 					int flags = TIFF_DEFAULT;
+- 					thumbnail = Load(io, handle, page, flags, data);
+-+
+- 					// store the thumbnail (remember to release it before return)
+- 					FreeImage_SetThumbnail(dib, thumbnail);
+- 				}
+-@@ -2041,7 +2086,7 @@ Load(FreeImageIO *io, fi_handle handle,
+- 				}
+- 
+- 				// calculate src line and dst pitch
+--				int dst_pitch = FreeImage_GetPitch(dib);
+-+				unsigned dst_pitch = FreeImage_GetPitch(dib);
+- 				uint32 tileRowSize = (uint32)TIFFTileRowSize(tif);
+- 				uint32 imageRowSize = (uint32)TIFFScanlineSize(tif);
+- 
+-@@ -2071,7 +2116,7 @@ Load(FreeImageIO *io, fi_handle handle,
+- 						BYTE *src_bits = tileBuffer;
+- 						BYTE *dst_bits = bits + rowSize;
+- 						for(int k = 0; k < nrows; k++) {
+--							memcpy(dst_bits, src_bits, src_line);
+-+							memcpy(dst_bits, src_bits, MIN(dst_pitch, src_line));
+- 							src_bits += tileRowSize;
+- 							dst_bits -= dst_pitch;
+- 						}
+diff --git a/package/libfreeimage/0008-CVE-2020-24292.patch b/package/libfreeimage/0008-CVE-2020-24292.patch
+deleted file mode 100644
+index 780f93640e..0000000000
+--- a/package/libfreeimage/0008-CVE-2020-24292.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-CVE: CVE-2020-24292
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2020-24292.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PluginICO.cpp b/Source/FreeImage/PluginICO.cpp
+---- a/Source/FreeImage/PluginICO.cpp
+-+++ b/Source/FreeImage/PluginICO.cpp
+-@@ -301,6 +301,9 @@ LoadStandardIcon(FreeImageIO *io, fi_han
+- 	int width  = bmih.biWidth;
+- 	int height = bmih.biHeight / 2; // height == xor + and mask
+- 	unsigned bit_count = bmih.biBitCount;
+-+	if (bit_count != 1 && bit_count != 2 && bit_count != 4 && bit_count != 8 && bit_count != 16 && bit_count != 24 && bit_count != 32) {
+-+	  return NULL;
+-+	}
+- 	unsigned line   = CalculateLine(width, bit_count);
+- 	unsigned pitch  = CalculatePitch(line);
+- 
+diff --git a/package/libfreeimage/0009-CVE-2020-24293.patch b/package/libfreeimage/0009-CVE-2020-24293.patch
+deleted file mode 100644
+index 16466e881a..0000000000
+--- a/package/libfreeimage/0009-CVE-2020-24293.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-CVE: CVE-2020-24293
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2020-24293.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PSDParser.cpp b/Source/FreeImage/PSDParser.cpp
+---- a/Source/FreeImage/PSDParser.cpp
+-+++ b/Source/FreeImage/PSDParser.cpp
+-@@ -780,6 +780,10 @@ int psdThumbnail::Read(FreeImageIO *io,
+- 		FreeImage_Unload(_dib);
+- 	}
+- 
+-+	if (_WidthBytes != _Width * _BitPerPixel / 8) {
+-+	  throw "Invalid PSD image";
+-+	}
+-+
+- 	if(_Format == 1) {
+- 		// kJpegRGB thumbnail image
+- 		_dib = FreeImage_LoadFromHandle(FIF_JPEG, io, handle);
+diff --git a/package/libfreeimage/0010-CVE-2020-24295.patch b/package/libfreeimage/0010-CVE-2020-24295.patch
+deleted file mode 100644
+index 295791a26e..0000000000
+--- a/package/libfreeimage/0010-CVE-2020-24295.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-CVE: CVE-2020-24295
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2020-24295.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PSDParser.cpp b/Source/FreeImage/PSDParser.cpp
+---- a/Source/FreeImage/PSDParser.cpp
+-+++ b/Source/FreeImage/PSDParser.cpp
+-@@ -1466,6 +1466,7 @@ FIBITMAP* psdParser::ReadImageData(FreeI
+- 	const unsigned dstBpp =  (depth == 1) ? 1 : FreeImage_GetBPP(bitmap)/8;
+- 	const unsigned dstLineSize = FreeImage_GetPitch(bitmap);
+- 	BYTE* const dst_first_line = FreeImage_GetScanLine(bitmap, nHeight - 1);//<*** flipped
+-+	const unsigned dst_buffer_size = dstLineSize * nHeight;
+- 
+- 	BYTE* line_start = new BYTE[lineSize]; //< fileline cache
+- 
+-@@ -1481,6 +1482,9 @@ FIBITMAP* psdParser::ReadImageData(FreeI
+- 				const unsigned channelOffset = GetChannelOffset(bitmap, c) * bytes;
+- 
+- 				BYTE* dst_line_start = dst_first_line + channelOffset;
+-+				if (channelOffset + lineSize > dst_buffer_size) {
+-+					throw "Invalid PSD image";
+-+				}
+- 				for(unsigned h = 0; h < nHeight; ++h, dst_line_start -= dstLineSize) {//<*** flipped
+- 					io->read_proc(line_start, lineSize, 1, handle);
+- 					ReadImageLine(dst_line_start, line_start, lineSize, dstBpp, bytes);
+diff --git a/package/libfreeimage/0011-CVE-2021-33367.patch b/package/libfreeimage/0011-CVE-2021-33367.patch
+deleted file mode 100644
+index 2c77766b8a..0000000000
+--- a/package/libfreeimage/0011-CVE-2021-33367.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-CVE: CVE-2021-33367
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2021-33367.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/Metadata/Exif.cpp b/Source/Metadata/Exif.cpp
+---- a/Source/Metadata/Exif.cpp
+-+++ b/Source/Metadata/Exif.cpp
+-@@ -719,8 +719,13 @@ jpeg_read_exif_dir(FIBITMAP *dib, const
+- 	//
+- 
+- 	const WORD entriesCount0th = ReadUint16(msb_order, ifd0th);
+--	
+--	DWORD next_offset = ReadUint32(msb_order, DIR_ENTRY_ADDR(ifd0th, entriesCount0th));
+-+
+-+	const BYTE* de_addr = DIR_ENTRY_ADDR(ifd0th, entriesCount0th);
+-+	if(de_addr+4 >= (BYTE*)(dwLength + ifd0th - tiffp)) {
+-+		return TRUE; //< no thumbnail
+-+	}
+-+
+-+	DWORD next_offset = ReadUint32(msb_order, de_addr);
+- 	if((next_offset == 0) || (next_offset >= dwLength)) {
+- 		return TRUE; //< no thumbnail
+- 	}
+diff --git a/package/libfreeimage/0012-CVE-2021-40263.patch b/package/libfreeimage/0012-CVE-2021-40263.patch
+deleted file mode 100644
+index e5b6e68c8a..0000000000
+--- a/package/libfreeimage/0012-CVE-2021-40263.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-CVE: CVE-2021-40263
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2021-40263.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PluginTIFF.cpp b/Source/FreeImage/PluginTIFF.cpp
+---- a/Source/FreeImage/PluginTIFF.cpp
+-+++ b/Source/FreeImage/PluginTIFF.cpp
+-@@ -2090,6 +2090,10 @@ Load(FreeImageIO *io, fi_handle handle,
+- 				uint32 tileRowSize = (uint32)TIFFTileRowSize(tif);
+- 				uint32 imageRowSize = (uint32)TIFFScanlineSize(tif);
+- 
+-+				if (width / tileWidth * tileRowSize * 8 > bitspersample * samplesperpixel * width) {
+-+				  free(tileBuffer);
+-+				  throw "Corrupted tiled TIFF file";
+-+				}
+- 
+- 				// In the tiff file the lines are saved from up to down 
+- 				// In a DIB the lines must be saved from down to up
+diff --git a/package/libfreeimage/0013-CVE-2021-40266.patch b/package/libfreeimage/0013-CVE-2021-40266.patch
+deleted file mode 100644
+index 0bd49ba3f8..0000000000
+--- a/package/libfreeimage/0013-CVE-2021-40266.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-CVE: CVE-2021-40266
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2021-40266.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PluginTIFF.cpp b/Source/FreeImage/PluginTIFF.cpp
+---- a/Source/FreeImage/PluginTIFF.cpp
+-+++ b/Source/FreeImage/PluginTIFF.cpp
+-@@ -366,6 +366,10 @@ static void
+- ReadPalette(TIFF *tiff, uint16 photometric, uint16 bitspersample, FIBITMAP *dib) {
+- 	RGBQUAD *pal = FreeImage_GetPalette(dib);
+- 
+-+	if (!pal) {
+-+	  return;
+-+	}
+-+
+- 	switch(photometric) {
+- 		case PHOTOMETRIC_MINISBLACK:	// bitmap and greyscale image types
+- 		case PHOTOMETRIC_MINISWHITE:
+diff --git a/package/libfreeimage/0014-CVE-2023-47995.patch b/package/libfreeimage/0014-CVE-2023-47995.patch
+deleted file mode 100644
+index 48456c3650..0000000000
+--- a/package/libfreeimage/0014-CVE-2023-47995.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-CVE: CVE-2023-47995
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2023-47995.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PluginJPEG.cpp b/Source/FreeImage/PluginJPEG.cpp
+---- a/Source/FreeImage/PluginJPEG.cpp
+-+++ b/Source/FreeImage/PluginJPEG.cpp
+-@@ -1196,6 +1196,10 @@ Load(FreeImageIO *io, fi_handle handle,
+- 
+- 			jpeg_read_header(&cinfo, TRUE);
+- 
+-+			if (cinfo.image_width > JPEG_MAX_DIMENSION || cinfo.image_height > JPEG_MAX_DIMENSION) {
+-+				throw FI_MSG_ERROR_DIB_MEMORY;
+-+			}
+-+
+- 			// step 4: set parameters for decompression
+- 
+- 			unsigned int scale_denom = 1;		// fraction by which to scale image
+diff --git a/package/libfreeimage/0015-CVE-2023-47997.patch b/package/libfreeimage/0015-CVE-2023-47997.patch
+deleted file mode 100644
+index 05278d39b8..0000000000
+--- a/package/libfreeimage/0015-CVE-2023-47997.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-CVE: CVE-2023-47997
+-Upstream: https://src.fedoraproject.org/rpms/freeimage/raw/rawhide/f/CVE-2023-47997.patch
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+-diff -rupN a/Source/FreeImage/PluginTIFF.cpp b/Source/FreeImage/PluginTIFF.cpp
+---- a/Source/FreeImage/PluginTIFF.cpp
+-+++ b/Source/FreeImage/PluginTIFF.cpp
+-@@ -1444,6 +1444,12 @@ Load(FreeImageIO *io, fi_handle handle,
+- 				(int)bitspersample, (int)samplesperpixel, (int)photometric);
+- 			throw (char*)NULL;
+- 		}
+-+		if (planar_config == PLANARCONFIG_SEPARATE && bitspersample < 8) {
+-+			FreeImage_OutputMessageProc(s_format_id,
+-+				"Unable to handle this format: bitspersample = 8, TIFFTAG_PLANARCONFIG = PLANARCONFIG_SEPARATE"
+-+			);
+-+			throw (char*)NULL;
+-+		}
+- 
+- 		// ---------------------------------------------------------------------------------
+- 
+diff --git a/package/libfreeimage/Config.in b/package/libfreeimage/Config.in
+deleted file mode 100644
+index 9bffd035b7..0000000000
+--- a/package/libfreeimage/Config.in
++++ /dev/null
+@@ -1,18 +0,0 @@
+-config BR2_PACKAGE_LIBFREEIMAGE
+-	bool "libfreeimage"
 -	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_STATIC_LIBS
 -	depends on BR2_USE_WCHAR
--	depends on !BR2_STATIC_LIBS # include dlfcn.h
--	select BR2_PACKAGE_ZLIB
+-	# compiler issue: "Error: invalid register number `63'"
+-	depends on !BR2_arc
 -	help
--	  OpenCV (Open Source Computer Vision) is a library of
--	  programming functions for real time computer vision.
+-	  FreeImage is an Open Source library project for developers who
+-	  would like to support popular graphics image formats like PNG,
+-	  BMP, JPEG, TIFF and others as needed by today's multimedia
+-	  applications.
 -
--	  Note that the opencv_core module and the opencv_hal library
--	  are always built and installed, not matter which other
--	  modules are enabled below.
+-	  http://freeimage.sourceforge.net
 -
--	  http://opencv.org/
--
--if BR2_PACKAGE_OPENCV3
--
--comment "OpenCV modules"
--
--config BR2_PACKAGE_OPENCV3_LIB_CALIB3D
--	bool "calib3d"
--	select BR2_PACKAGE_OPENCV3_LIB_FEATURES2D
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	help
--	  Include opencv_calib3d (camera calibration and 3d
--	  reconstruction) module into the OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_FEATURES2D
--	bool "features2d"
--	select BR2_PACKAGE_OPENCV3_LIB_FLANN
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_ML
--	help
--	  Include opencv_features2d (2d features framework) module
--	  into the OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_FLANN
--	bool "flann"
--	# opencv_core dependency is already enabled
--	help
--	  Include opencv_flann (clustering and search in
--	  multi-dimensional spaces) module into the OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_HIGHGUI
--	bool "highgui"
--	select BR2_PACKAGE_OPENCV3_LIB_IMGCODECS
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_VIDEOIO
--	help
--	  Include opencv_highgui (high-level gui and media i/o) module
--	  into the OpenCV build.
--
--if BR2_PACKAGE_OPENCV3_LIB_HIGHGUI
--
--choice
--	prompt "gui toolkit"
--	help
--	  GUI toolkit to be used by the opencv_highgui module.
--
--config BR2_PACKAGE_OPENCV3_GUI_NONE
--	bool "none"
--
--config BR2_PACKAGE_OPENCV3_WITH_GTK3
--	bool "gtk3"
--	depends on BR2_PACKAGE_LIBGTK3
--
--comment "gtk3 support needs libgtk3"
--	depends on BR2_USE_MMU # libgtk3 -> glib2
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_PACKAGE_LIBGTK3
--
--config BR2_PACKAGE_OPENCV3_WITH_QT5
--	bool "qt5"
--	depends on BR2_PACKAGE_QT5
--	select BR2_PACKAGE_QT5BASE_CONCURRENT
--	select BR2_PACKAGE_QT5BASE_GUI
--	select BR2_PACKAGE_QT5BASE_WIDGETS
--	help
--	  Use Qt5 with base, concurrent, test, gui and widgets
--	  components, as GUI toolkit.
--
--comment "qt5 support needs qt5"
--	depends on !BR2_PACKAGE_QT5
--
--endchoice
--
--config BR2_PACKAGE_OPENCV3_WITH_OPENGL
--	bool "opengl support"
--	# OpenGL support done using Qt5OpenGL, so depends on WITH_QT5
--	depends on BR2_PACKAGE_OPENCV3_WITH_QT5
--	# OpenGL support requires Qt5OpenGL with GL support, not GLES
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
--	depends on BR2_PACKAGE_HAS_LIBGL
--	select BR2_PACKAGE_QT5BASE_OPENGL
--	help
--	  Enable OpenGL for UI.
--
--comment "opengl support needs an OpenGL provider"
--	depends on BR2_PACKAGE_OPENCV3_WITH_QT5
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
--		!BR2_PACKAGE_HAS_LIBGL
--
--endif # BR2_PACKAGE_OPENCV3_LIB_HIGHGUI
--
--config BR2_PACKAGE_OPENCV3_LIB_IMGCODECS
--	bool "imgcodecs"
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	help
--	  Include opencv_imgcodecs (image codecs) module into the
--	  OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	bool "imgproc"
--	# opencv_core dependency is already enabled
--	help
--	  Include opencv_imgproc (image processing) module into the
--	  OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_ML
--	bool "ml"
--	# opencv_core dependency is already enabled
--	help
--	  Include opencv_ml (machine learning) module into the OpenCV
--	  build.
--
--config BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
--	bool "objdetect"
--	# opencv_core dependency is already enabled
--	select BR2_PACKAGE_OPENCV3_LIB_CALIB3D
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_ML
--	help
--	  Include opencv_objdetect (object detection) module into the
--	  OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_PHOTO
--	bool "photo"
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	help
--	  Include opencv_photo (computational photography) module into
--	  the OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_PYTHON
--	bool "python"
--	depends on BR2_PACKAGE_PYTHON3
--	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # python-numpy
--	select BR2_PACKAGE_PYTHON_NUMPY
--	help
--	  Include opencv_python module into the OpenCV build.  No
--	  python example is installed.
--
--comment "python support needs a glibc or musl toolchain w/ gcc >= 9"
--	depends on BR2_PACKAGE_PYTHON3
--	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
--		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
--
--config BR2_PACKAGE_OPENCV3_LIB_SHAPE
--	bool "shape"
--	# opencv_core dependency is already enabled
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_VIDEO
--	help
--	  Include opencv_shape (shape descriptors and matchers) module
--	  into the OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_STITCHING
--	bool "stitching"
--	select BR2_PACKAGE_OPENCV3_LIB_CALIB3D
--	select BR2_PACKAGE_OPENCV3_LIB_FEATURES2D
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
--	help
--	  Include opencv_stitching (images stitching) module into the
--	  OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_SUPERRES
--	bool "superres"
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_VIDEO
--	help
--	  Include opencv_superres (super resolution) module into the
--	  OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_TS
--	bool "ts"
--	# opencv_core dependency is already enabled
--	select BR2_PACKAGE_OPENCV3_LIB_HIGHGUI
--	select BR2_PACKAGE_OPENCV3_LIB_IMGCODECS
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_VIDEOIO
--	help
--	  Include opencv_ts (test) module into the OpenCV build.
--
--config BR2_PACKAGE_OPENCV3_LIB_VIDEOIO
--	bool "videoio"
--	select BR2_PACKAGE_OPENCV3_LIB_IMGCODECS
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	help
--	  Include opencv_videoio (media i/o) module into the OpenCV
--	  build.
--
--config BR2_PACKAGE_OPENCV3_LIB_VIDEO
--	bool "video"
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	help
--	  Include opencv_video (video analysis) module into the OpenCV
--	  build.
--
--config BR2_PACKAGE_OPENCV3_LIB_VIDEOSTAB
--	bool "videostab"
--	select BR2_PACKAGE_OPENCV3_LIB_CALIB3D
--	select BR2_PACKAGE_OPENCV3_LIB_FEATURES2D
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_PHOTO
--	select BR2_PACKAGE_OPENCV3_LIB_VIDEO
--	help
--	  Include opencv_videostab (video stabilization) module into
--	  the OpenCV build.
--
--comment "Test sets"
--config BR2_PACKAGE_OPENCV3_BUILD_TESTS
--	bool "build tests"
--
--config BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS
--	bool "build performance tests"
--
--comment "3rd party support"
--
--config BR2_PACKAGE_OPENCV3_WITH_GSTREAMER1
--	bool "gstreamer-1.x"
--	depends on BR2_USE_MMU # gstreamer1 -> libglib2
--	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2
--	select BR2_PACKAGE_GSTREAMER1
--	select BR2_PACKAGE_GST1_PLUGINS_BASE
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
--	help
--	  Enable gstreamer support.
--
--comment "gstreamer support needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
--
--config BR2_PACKAGE_OPENCV3_WITH_JASPER
--	bool "jpeg2000 support"
--	select BR2_PACKAGE_JASPER
--	help
--	  Enable jpeg2000 support.
--
--	  Note: this does not use the libjasper bundled with opencv,
--	  but uses the libjasper package installed system-wide by
--	  Buildroot.
--
--config BR2_PACKAGE_OPENCV3_WITH_JPEG
--	bool "jpeg support"
--	select BR2_PACKAGE_JPEG
--	help
--	  Use shared libjpeg from the target system.
--
--config BR2_PACKAGE_OPENCV3_WITH_PNG
--	bool "png support"
--	select BR2_PACKAGE_LIBPNG
--	help
--	  Use shared libpng from the target system.
--
--config BR2_PACKAGE_OPENCV3_WITH_TIFF
--	bool "tiff support"
--	select BR2_PACKAGE_TIFF
--	help
--	  Use shared libtiff from the target system.
--
--config BR2_PACKAGE_OPENCV3_WITH_V4L
--	bool "v4l support"
--	help
--	  Enable Video 4 Linux support.
--
--	  If the package libv4l is enabled, its support is
--	  automatically enabled.
--
--config BR2_PACKAGE_OPENCV3_WITH_WEBP
--	bool "webp support"
--	select BR2_PACKAGE_WEBP
--	help
--	  Enable WebP support.
--
--	  Use shared libwebp from the target system.
--
--comment "Install options"
--
--config BR2_PACKAGE_OPENCV3_INSTALL_DATA
--	bool "install extra data"
--	help
--	  Install various data that is used by cv libraries and/or
--	  demo applications, specifically for haarcascades and
--	  lbpcascades features.
--
--	  For further information: see OpenCV documentation.
--
--endif # BR2_PACKAGE_OPENCV3
--
--comment "opencv3 needs a toolchain w/ C++, NPTL, wchar, dynamic library"
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		BR2_STATIC_LIBS
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+-comment "libfreeimage needs a toolchain w/ C++, dynamic library, wchar"
+-	depends on !BR2_arc
+-	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/libfreeimage/libfreeimage.hash b/package/libfreeimage/libfreeimage.hash
 deleted file mode 100644
-index b378e7050f..0000000000
---- a/package/opencv3/opencv3.hash
+index 388f3bb52d..0000000000
+--- a/package/libfreeimage/libfreeimage.hash
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  b9eda448a08ba7b10bfd5bd45697056569ebdf7a02070947e1c1f3e8e69280cd  opencv3-3.4.20.tar.gz
--sha256  3f221dbe2ca9228d6470990ed28e55957e8506335df4620539c4db0dd27a6b4c  LICENSE
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+@@ -1,9 +0,0 @@
+-# From https://sourceforge.net/projects/freeimage/files/Source%20Distribution/3.18.0/
+-md5  f8ba138a3be233a3eed9c456e42e2578  FreeImage3180.zip
+-sha1  38daa9d8f1bca2330a2eaa42ec66fbe6ede7dce9  FreeImage3180.zip
+-
+-# Locally computed
+-sha256  f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd  FreeImage3180.zip
+-sha256  d51615a1a47f1ddbb027920d60d3fc30a00e1284c795a47857883e641349fadf  license-gplv2.txt
+-sha256  084be110e3e8757d8e6945cda1fbc7e5073bbe688dc19b92c0d8440155d8e282  license-gplv3.txt
+-sha256  0bb9a3123297c73ae6e19c70459fb0e58f313f67ca63176fd43f8e77668b8243  license-fi.txt
+diff --git a/package/libfreeimage/libfreeimage.mk b/package/libfreeimage/libfreeimage.mk
 deleted file mode 100644
-index 9e488bed0c..0000000000
---- a/package/opencv3/opencv3.mk
+index 86362bc1c4..0000000000
+--- a/package/libfreeimage/libfreeimage.mk
 +++ /dev/null
-@@ -1,354 +0,0 @@
+@@ -1,62 +0,0 @@
 -################################################################################
 -#
--# opencv3
+-# libfreeimage
 -#
 -################################################################################
 -
--OPENCV3_VERSION = 3.4.20
--OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
--OPENCV3_INSTALL_STAGING = YES
--OPENCV3_LICENSE = BSD-3-Clause
--OPENCV3_LICENSE_FILES = LICENSE
--OPENCV3_CPE_ID_VENDOR = opencv
--OPENCV3_CPE_ID_PRODUCT = opencv
--OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
+-LIBFREEIMAGE_VERSION = 3.18.0
+-LIBFREEIMAGE_SITE = http://downloads.sourceforge.net/freeimage
+-LIBFREEIMAGE_SOURCE = FreeImage$(subst .,,$(LIBFREEIMAGE_VERSION)).zip
+-LIBFREEIMAGE_LICENSE = GPL-2.0 or GPL-3.0 or FreeImage Public License
+-LIBFREEIMAGE_LICENSE_FILES = license-gplv2.txt license-gplv3.txt license-fi.txt
+-LIBFREEIMAGE_CPE_ID_VENDOR = freeimage_project
+-LIBFREEIMAGE_CPE_ID_PRODUCT = freeimage
+-LIBFREEIMAGE_INSTALL_STAGING = YES
 -
--OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
+-# 0007-CVE-2019-12211_2019-12213.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2019-12211 CVE-2019-12213
 -
--# Uses __atomic_fetch_add_4
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--OPENCV3_CXXFLAGS += -latomic
--endif
+-# 0008-CVE-2020-24292.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2020-24292
 -
--# Fix c++11 build with missing std::exception_ptr
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
--OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
--endif
+-# 0009-CVE-2020-24293.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2020-24293
 -
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
--OPENCV3_CXXFLAGS += -O0
--endif
+-# 0010-CVE-2020-24295.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2020-24295
 -
--# OpenCV component options
--OPENCV3_CONF_OPTS += \
--	-DCMAKE_CXX_FLAGS="$(OPENCV3_CXXFLAGS)" \
--	-DBUILD_DOCS=OFF \
--	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),ON,OFF) \
--	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_TESTS),ON,OFF) \
--	-DBUILD_WITH_DEBUG_INFO=OFF \
--	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF \
--	-DOPENCV_ENABLE_PKG_CONFIG=ON
+-# 0011-CVE-2021-33367.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2021-33367
 -
--ifeq ($(BR2_PACKAGE_OPENCV3_BUILD_TESTS)$(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),)
--OPENCV3_CONF_OPTS += -DINSTALL_TEST=OFF
--else
--OPENCV3_CONF_OPTS += -DINSTALL_TEST=ON
--endif
+-# 0012-CVE-2021-40263.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2021-40263
 -
--# OpenCV build options
--OPENCV3_CONF_OPTS += \
--	-DBUILD_WITH_STATIC_CRT=OFF \
--	-DENABLE_CCACHE=OFF \
--	-DENABLE_COVERAGE=OFF \
--	-DENABLE_FAST_MATH=ON \
--	-DENABLE_IMPL_COLLECTION=OFF \
--	-DENABLE_NOISY_WARNINGS=OFF \
--	-DENABLE_OMIT_FRAME_POINTER=ON \
--	-DENABLE_PRECOMPILED_HEADERS=OFF \
--	-DENABLE_PROFILING=OFF \
--	-DOPENCV_WARNINGS_ARE_ERRORS=OFF
+-# 0013-CVE-2021-40266.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2021-40266
 -
--# OpenCV link options
--OPENCV3_CONF_OPTS += \
--	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF \
--	-DCMAKE_SKIP_RPATH=OFF \
--	-DCMAKE_USE_RELATIVE_PATHS=OFF
+-# 0014-CVE-2023-47995.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2023-47995
 -
--# OpenCV packaging options:
--OPENCV3_CONF_OPTS += \
--	-DBUILD_PACKAGE=OFF \
--	-DENABLE_SOLUTION_FOLDERS=OFF \
--	-DINSTALL_CREATE_DISTRIB=OFF
+-# 0016-CVE-2023-47997.patch
+-LIBFREEIMAGE_IGNORE_CVES += CVE-2023-47997
 -
--# OpenCV module selection
--# * Modules on:
--#   - core: if not set, opencv does not build anything
--#   - hal: core's dependency
--# * Modules off:
--#   - android*: android stuff
--#   - apps: programs for training classifiers
--#   - java: java bindings
--#   - viz: missing VTK dependency
--#   - world: all-in-one module
--#
--# * Contrib modules from [1] are disabled:
--#   - opencv_contrib package is not available in Buildroot;
--#   - OPENCV3_EXTRA_MODULES_PATH is not set.
--#
--# [1] https://github.com/Itseez/opencv_contrib
--OPENCV3_CONF_OPTS += \
--	-DBUILD_opencv_androidcamera=OFF \
--	-DBUILD_opencv_apps=OFF \
--	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV3_LIB_CALIB3D),ON,OFF) \
--	-DBUILD_opencv_core=ON \
--	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV3_LIB_FEATURES2D),ON,OFF) \
--	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV3_LIB_FLANN),ON,OFF) \
--	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI),ON,OFF) \
--	-DBUILD_opencv_imgcodecs=$(if $(BR2_PACKAGE_OPENCV3_LIB_IMGCODECS),ON,OFF) \
--	-DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),ON,OFF) \
--	-DBUILD_opencv_java=OFF \
--	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV3_LIB_ML),ON,OFF) \
--	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV3_LIB_OBJDETECT),ON,OFF) \
--	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV3_LIB_PHOTO),ON,OFF) \
--	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV3_LIB_SHAPE),ON,OFF) \
--	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV3_LIB_STITCHING),ON,OFF) \
--	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV3_LIB_SUPERRES),ON,OFF) \
--	-DBUILD_opencv_ts=$(if $(BR2_PACKAGE_OPENCV3_LIB_TS),ON,OFF) \
--	-DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV3_LIB_VIDEO),ON,OFF) \
--	-DBUILD_opencv_videoio=$(if $(BR2_PACKAGE_OPENCV3_LIB_VIDEOIO),ON,OFF) \
--	-DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV3_LIB_VIDEOSTAB),ON,OFF) \
--	-DBUILD_opencv_viz=OFF \
--	-DBUILD_opencv_world=OFF
--
--# Hardware support options.
--#
--# * PowerPC and VFPv3 support are turned off since their only effects
--#   are altering CFLAGS, adding '-mcpu=G3 -mtune=G5' or '-mfpu=vfpv3'
--#   to them, which is already handled by Buildroot.
--# * NEON logic is needed as it is not only used to add CFLAGS, but
--#   also to enable additional NEON code.
--OPENCV3_CONF_OPTS += \
--	-DENABLE_POWERPC=OFF \
--	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
--	-DENABLE_VFPV3=OFF
--
--# Cuda stuff
--OPENCV3_CONF_OPTS += \
--	-DBUILD_CUDA_STUBS=OFF \
--	-DBUILD_opencv_cudaarithm=OFF \
--	-DBUILD_opencv_cudabgsegm=OFF \
--	-DBUILD_opencv_cudacodec=OFF \
--	-DBUILD_opencv_cudafeatures2d=OFF \
--	-DBUILD_opencv_cudafilters=OFF \
--	-DBUILD_opencv_cudaimgproc=OFF \
--	-DBUILD_opencv_cudalegacy=OFF \
--	-DBUILD_opencv_cudaobjdetect=OFF \
--	-DBUILD_opencv_cudaoptflow=OFF \
--	-DBUILD_opencv_cudastereo=OFF \
--	-DBUILD_opencv_cudawarping=OFF \
--	-DBUILD_opencv_cudev=OFF \
--	-DWITH_CUBLAS=OFF \
--	-DWITH_CUDA=OFF \
--	-DWITH_CUFFT=OFF
--
--# NVidia stuff
--OPENCV3_CONF_OPTS += -DWITH_NVCUVID=OFF
--
--# AMD stuff
--OPENCV3_CONF_OPTS += \
--	-DWITH_OPENCLAMDBLAS=OFF \
--	-DWITH_OPENCLAMDFFT=OFF
--
--# Intel stuff
--OPENCV3_CONF_OPTS += \
--	-DBUILD_WITH_DYNAMIC_IPP=OFF \
--	-DWITH_INTELPERC=OFF \
--	-DWITH_IPP=OFF \
--	-DWITH_IPP_A=OFF \
--	-DWITH_TBB=OFF
--
--# Smartek stuff
--OPENCV3_CONF_OPTS += -DWITH_GIGEAPI=OFF
--
--# Prosilica stuff
--OPENCV3_CONF_OPTS += -DWITH_PVAPI=OFF
--
--# Ximea stuff
--OPENCV3_CONF_OPTS += -DWITH_XIMEA=OFF
--
--# Non-Linux support (Android options) must remain OFF:
--OPENCV3_CONF_OPTS += \
--	-DANDROID=OFF \
--	-DBUILD_ANDROID_CAMERA_WRAPPER=OFF \
--	-DBUILD_ANDROID_EXAMPLES=OFF \
--	-DBUILD_ANDROID_SERVICE=OFF \
--	-DBUILD_FAT_JAVA_LIB=OFF \
--	-DINSTALL_ANDROID_EXAMPLES=OFF \
--	-DWITH_ANDROID_CAMERA=OFF
--
--# Non-Linux support (Mac OSX options) must remain OFF:
--OPENCV3_CONF_OPTS += \
--	-DWITH_AVFOUNDATION=OFF \
--	-DWITH_CARBON=OFF \
--	-DWITH_QUICKTIME=OFF
--
--# Non-Linux support (Windows options) must remain OFF:
--OPENCV3_CONF_OPTS += \
--	-DWITH_CSTRIPES=OFF \
--	-DWITH_DSHOW=OFF \
--	-DWITH_MSMF=OFF \
--	-DWITH_VFW=OFF \
--	-DWITH_VIDEOINPUT=OFF \
--	-DWITH_WIN32UI=OFF
--
--# Software/3rd-party support options:
--# - disable all examples
--OPENCV3_CONF_OPTS += \
--	-DBUILD_EXAMPLES=OFF \
--	-DBUILD_JASPER=OFF \
--	-DBUILD_JPEG=OFF \
--	-DBUILD_OPENEXR=OFF \
--	-DBUILD_PNG=OFF \
--	-DBUILD_PROTOBUF=OFF \
--	-DBUILD_TIFF=OFF \
--	-DBUILD_ZLIB=OFF \
--	-DINSTALL_C_EXAMPLES=OFF \
--	-DINSTALL_PYTHON_EXAMPLES=OFF \
--	-DINSTALL_TO_MANGLED_PATHS=OFF
--
--# Disabled features (mostly because they are not available in Buildroot), but
--# - eigen: OpenCV does not use it, not take any benefit from it.
--OPENCV3_CONF_OPTS += \
--	-DWITH_1394=OFF \
--	-DWITH_CLP=OFF \
--	-DWITH_EIGEN=OFF \
--	-DWITH_FFMPEG=OFF \
--	-DWITH_GDAL=OFF \
--	-DWITH_GPHOTO2=OFF \
--	-DWITH_GSTREAMER_0_10=OFF \
--	-DWITH_GTK_2_X=OFF \
--	-DWITH_LAPACK=OFF \
--	-DWITH_MATLAB=OFF \
--	-DWITH_OPENCL=OFF \
--	-DWITH_OPENCL_SVM=OFF \
--	-DWITH_OPENEXR=OFF \
--	-DWITH_OPENNI2=OFF \
--	-DWITH_OPENNI=OFF \
--	-DWITH_PROTOBUF=OFF \
--	-DWITH_UNICAP=OFF \
--	-DWITH_VA=OFF \
--	-DWITH_VA_INTEL=OFF \
--	-DWITH_VTK=OFF \
--	-DWITH_XINE=OFF
--
--OPENCV3_DEPENDENCIES += host-pkgconf zlib
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_GSTREAMER1),y)
--OPENCV3_CONF_OPTS += -DWITH_GSTREAMER=ON
--OPENCV3_DEPENDENCIES += gstreamer1 gst1-plugins-base
--else
--OPENCV3_CONF_OPTS += -DWITH_GSTREAMER=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_GTK3),y)
--OPENCV3_CONF_OPTS += -DWITH_GTK=ON
--OPENCV3_DEPENDENCIES += libgtk3
--else
--OPENCV3_CONF_OPTS += -DWITH_GTK=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_JASPER),y)
--OPENCV3_CONF_OPTS += -DWITH_JASPER=ON
--OPENCV3_DEPENDENCIES += jasper
--else
--OPENCV3_CONF_OPTS += -DWITH_JASPER=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_JPEG),y)
--OPENCV3_CONF_OPTS += -DWITH_JPEG=ON
--OPENCV3_DEPENDENCIES += jpeg
--else
--OPENCV3_CONF_OPTS += -DWITH_JPEG=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_OPENGL),y)
--OPENCV3_CONF_OPTS += -DWITH_OPENGL=ON
--OPENCV3_DEPENDENCIES += libgl
--else
--OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
--endif
--
--OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF)
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PNG),y)
--OPENCV3_CONF_OPTS += -DWITH_PNG=ON
--OPENCV3_DEPENDENCIES += libpng
--else
--OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
--OPENCV3_CONF_OPTS += -DWITH_QT=5
--OPENCV3_DEPENDENCIES += qt5base
--else
--OPENCV3_CONF_OPTS += -DWITH_QT=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_TIFF),y)
--OPENCV3_CONF_OPTS += -DWITH_TIFF=ON
--OPENCV3_DEPENDENCIES += tiff
--else
--OPENCV3_CONF_OPTS += -DWITH_TIFF=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_V4L),y)
--OPENCV3_CONF_OPTS += \
--	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF) \
--	-DWITH_V4L=ON
--OPENCV3_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
--else
--OPENCV3_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_WEBP),y)
--OPENCV3_CONF_OPTS += -DWITH_WEBP=ON
--OPENCV3_DEPENDENCIES += webp
--else
--OPENCV3_CONF_OPTS += -DWITH_WEBP=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_LIB_PYTHON),y)
--OPENCV3_CONF_OPTS += \
--	-DBUILD_opencv_python2=OFF \
--	-DBUILD_opencv_python3=ON \
--	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/bin/python3 \
--	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
--	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR).so \
--	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
--	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
--	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
--OPENCV3_DEPENDENCIES += python3
--OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
--OPENCV3_CONF_ENV += $(PKG_PYTHON_SETUPTOOLS_ENV)
--OPENCV3_DEPENDENCIES += python-numpy
--else
--OPENCV3_CONF_OPTS += \
--	-DBUILD_opencv_python2=OFF \
--	-DBUILD_opencv_python3=OFF
--endif
--
--# Installation hooks:
--define OPENCV3_CLEAN_INSTALL_LICENSE
--	$(RM) -fr $(TARGET_DIR)/usr/share/licenses/opencv3
+-define LIBFREEIMAGE_EXTRACT_CMDS
+-	$(UNZIP) $(LIBFREEIMAGE_DL_DIR)/$(LIBFREEIMAGE_SOURCE) -d $(@D)
+-	mv $(@D)/FreeImage/* $(@D)
+-	rmdir $(@D)/FreeImage
 -endef
--OPENCV3_POST_INSTALL_TARGET_HOOKS += OPENCV3_CLEAN_INSTALL_LICENSE
 -
--define OPENCV3_CLEAN_INSTALL_CMAKE
--	$(RM) -f $(TARGET_DIR)/usr/share/OpenCV/OpenCV*.cmake
+-define LIBFREEIMAGE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+-		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" $(MAKE) -C $(@D)
 -endef
--OPENCV3_POST_INSTALL_TARGET_HOOKS += OPENCV3_CLEAN_INSTALL_CMAKE
 -
--define OPENCV3_CLEAN_INSTALL_VALGRIND
--	$(RM) -f $(TARGET_DIR)/usr/share/OpenCV/valgrind*
+-define LIBFREEIMAGE_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
 -endef
--OPENCV3_POST_INSTALL_TARGET_HOOKS += OPENCV3_CLEAN_INSTALL_VALGRIND
 -
--ifneq ($(BR2_PACKAGE_OPENCV3_INSTALL_DATA),y)
--define OPENCV3_CLEAN_INSTALL_DATA
--	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/haarcascades \
--		$(TARGET_DIR)/usr/share/OpenCV/lbpcascades
+-define LIBFREEIMAGE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
 -endef
--OPENCV3_POST_INSTALL_TARGET_HOOKS += OPENCV3_CLEAN_INSTALL_DATA
--endif
 -
--$(eval $(cmake-package))
-diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
-index a553411e1a..a7f5592122 100644
---- a/package/opencv4/Config.in
-+++ b/package/opencv4/Config.in
-@@ -6,7 +6,6 @@ menuconfig BR2_PACKAGE_OPENCV4
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # include dlfcn.h
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
--	depends on !BR2_PACKAGE_OPENCV3
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  OpenCV (Open Source Computer Vision) is a library of
+-$(eval $(generic-package))
+
+--===============1893354430549028422==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1893354430549028422==--
