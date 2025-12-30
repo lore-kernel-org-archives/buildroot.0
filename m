@@ -1,92 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9A62E95A8D
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 13:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B17FE95A8B
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 13:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEDF760BB5;
-	Tue, 30 Dec 2025 13:05:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 500D181E7A;
+	Tue, 30 Dec 2025 13:05:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z7Ihq6mvgrVG; Tue, 30 Dec 2025 13:04:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id INAmaTPNXFH8; Tue, 30 Dec 2025 13:05:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8760060B7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BD0F81E32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767099899;
-	bh=KlkoPwc4pM6c7FGGlMsmgYNmXSoHfRkqog+q4+iZzBA=;
+	s=default; t=1767099910;
+	bh=NzC6SFdDe2mIOXj/20vy4p9NVuJiUmDwHVZo54krCLY=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=dxDp3NAiG3kXF1EUC1UtTY2SQ8ruYtCe7AqapI8ZulQT0RS6zl0zOtbF+fkIRJNxM
-	 dGLLwHirxYj4otXRv8hFA3KaDw7Ce3ZIPuG/lLKvB4pOEDqrwBkqsQJ3voU6Ef/OrV
-	 pz/UIlQNMPuR+Zme+XgC1E/tRg+9XPq8x5S24R4/mEWahKSqey6duH0JAMjkyViFMx
-	 bnorbXveUEzy8AqKCXgtlL+U00d8WwC4NdZHSGHsmTQQ4h8WjqYUnfRpfpHightR/m
-	 ZH5DA6Tr/rrL9QQEtsNt6+CBxQvZN6qUelb8oopUj4HTLrT0PxDJyAL02XTHlbMBbL
-	 XCZKLV5gbN8Cg==
+	b=FD3wumyuGFb8xzWheUohpkZqT1lr+Y/CAMnHY1Y4r9nkxHlHkehHAgFQSvTNiq9N6
+	 KmTbjoB8ogS2IlEEhKo5ln34OECYpwvvn61O6YeTGqjUkpdqjuHEVUfyFFKvPBZGKk
+	 rq89Fxo84ghka2xaX/CERIInyEx72QjKngkTxzo8erwuFYS7QiUTJf4kKmcNWhe9bI
+	 ZJMBPJIlnEW4lzPHYwbFpuWLkzy2YmQbfQ3DbGSdEZsEtiUIf5r0hWKNkR+WhaPZGO
+	 D3yeP/HE3SeKnII6sfhE3C52rnAhDzpBThe9VEHuTJp6Q/lyA3t7PRMF3UOB5S3qWO
+	 yUpt0mwn0+56w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8760060B7D;
-	Tue, 30 Dec 2025 13:04:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E787AD8
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:04:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BD0F81E32;
+	Tue, 30 Dec 2025 13:05:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 148AC177
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE15F40796
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:04:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 943064013B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2p47vce2M-8Y for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 13:04:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rDLhQ_elxonb for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 13:05:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F06544077B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06544077B
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F06544077B
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:04:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 93223403B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93223403B2
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 93223403B2
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:05:07 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 381181A2533;
- Tue, 30 Dec 2025 13:04:55 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id C69604E41E84
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:05:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0E0216072C;
- Tue, 30 Dec 2025 13:04:55 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 9B83D6072C;
+ Tue, 30 Dec 2025 13:05:05 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id B967B113B0643; Tue, 30 Dec 2025 14:04:53 +0100 (CET)
-Date: Tue, 30 Dec 2025 14:03:27 +0100
+ with ESMTPSA id 7D18A113B0643; Tue, 30 Dec 2025 14:05:04 +0100 (CET)
+Date: Tue, 30 Dec 2025 14:03:38 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Julien Olivain <ju.o@free.fr>, Mauro Condarelli
- <mc5686@mclink.it>
-Message-ID: <20251230140327.3c5d6f66@windsurf>
-In-Reply-To: <20251228234350.2887246-2-james.hilliard1@gmail.com>
-References: <20251228234350.2887246-1-james.hilliard1@gmail.com>
- <20251228234350.2887246-2-james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20251230140338.325c5485@windsurf>
+In-Reply-To: <20251229000325.2949510-1-james.hilliard1@gmail.com>
+References: <20251229000325.2949510-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767099894; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1767099905; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=wmgmhygZXXzM2cTfkM/yd8uai1wYc/l960ApAl/YnDQ=;
- b=dfigHmWPqZcu42MZ4pfTzQCarEXOgHy/x/aAAcOtZWq/CO8SGN9C35ZuSAvGiuofCqb/Xm
- 9+R6M/5GJa6FJOtDctRTYfy+E2njyPssc4ZFwY01ZTvVYTpkGs+Mp5FUN7ySfhLV1apJcK
- G4aEm8GTpQhNdwganA1w+HU0OpLUePAYwg0+J/KgUdQX7Xa4VVTsVN5u1YLDodk1vn5OI3
- ss5ziAdWGz6RSXcZBC/CU9w4WRUvZOx6C2RliDPChMI9geDc6Qmuue11uHIyU7VROvNWeE
- 2D3KC69eeHvFHwL5ET6rUu5hDohEbORWqELJ4TcuUQ5WY72f6Dr0CqM99rdxNQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=3uLqLcElWyFxbo5Fi1J7lJhKjVpJUQgfYYmqA3ecW2M=;
+ b=kbH7BVXF2I2e/QFtZB2qDxkqusOug3AgtcWCbivteJsbdqT7vH1eIwNOnraQaiMJOjy/Qd
+ PYNtgH24mWHx0j0drpozAhIHozr3IwCwU1t7EKIKvq69ani3sWc7QFjnPOyGZeV4tADVDJ
+ Kx4NTia2kCZUSFzZPktmw32lRSrcw5nBt8qb6XEC8UNobTHUlFY83B3nIPAQ1GMGA8+Vty
+ 3eo76eRiOlSoA8qeXjddbzUGsb1Q9fgdHZGyQ8pPPJ5KRgLlotyt/Zrfu9sPqEfcsztaXf
+ U8DOq2i1yxBmbUlF1/Wd7EI+8pmrbsD3qTH96QtnkrIVzulrxBO5YYVDPyEGvA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=dfigHmWP
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-autobahn: bump to
- version 25.12.2
+ header.a=rsa-sha256 header.s=dkim header.b=kbH7BVXF
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
+ version 46.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,52 +103,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
-
-On Sun, 28 Dec 2025 16:43:50 -0700
+On Sun, 28 Dec 2025 17:03:25 -0700
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-> index 527416a3cd..ada62e1e3b 100644
-> --- a/package/python-autobahn/Config.in
-> +++ b/package/python-autobahn/Config.in
-> @@ -1,38 +1,42 @@
->  config BR2_PACKAGE_PYTHON_AUTOBAHN
->  	bool "python-autobahn"
-> +	depends on BR2_INSTALL_LIBSTDCPP # python-ujson
->  	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
-> +	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
->  	select BR2_PACKAGE_PYTHON_CFFI # runtime
->  	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
->  	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
-> +	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
->  	select BR2_PACKAGE_PYTHON_TXAIO # runtime
-> +	select BR2_PACKAGE_PYTHON_UBJSON # runtime
-> +	select BR2_PACKAGE_PYTHON_UJSON # runtime
->  	help
->  	  WebSocket client and server library, WAMP real-time
->  	  framework.
->  
->  	  https://pypi.python.org/pypi/autobahn
->  
-> -if BR2_PACKAGE_PYTHON_AUTOBAHN
-> +comment "python-autobahn needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
+> Drop PYTHON_CRYPTOGRAPHY_CARGO_MANIFEST_PATH as package now provides
+> manifest in default path.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-cryptography/python-cryptography.hash | 2 +-
+>  package/python-cryptography/python-cryptography.mk   | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
-This lacked:
-
-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-
-and also, you shouldn't put the comment between the main option and the
-sub-options, as it breaks the indentation of the sub-options in
-menuconfig. The comment should be *after* the sub-options.
-
-Applied with this issue fixed.
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
