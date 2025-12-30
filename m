@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64661E95A77
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50727E95A79
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CFA560A3D;
-	Tue, 30 Dec 2025 11:47:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iXshayLW3Xr9; Tue, 30 Dec 2025 11:47:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10CEF60A66
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767095223;
-	bh=e5t9MQ3znorQFFqE0D9I3OhAGLGq2giOxTGsjoAYZKk=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Bi1TlVyeIhL/hPD1+ATDOydgY3R5Ie7E98a7uUKbM39ebpw08AIhGy8FeTS27M3Dj
-	 lKJozht9cJ5w+LYWiVkOUJzyANnBOhePefiG6WQHzckisCDmHAMwLW7nJJaJaR5Y/o
-	 naP/lvsVi2iyG1HggfJE1UgcoX6POcYcmkKPZAwclzg2I2d0phSt8eZq53WR4miUjp
-	 kfQLT1dTHmkJkvNyK7r1nhIfFhoMFCw9uAATegp4cXmB0baRGCqHM2C9l92cZhipOu
-	 X811b0RxLjGKzgAZKD9MtU6aB1T9iILfCMlM5wvV1oVUxoAbzxp9iDhZweNa6VVaUd
-	 ciXVuYKRP1JAg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10CEF60A66;
-	Tue, 30 Dec 2025 11:47:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B9DAD8
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:47:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DEE640813
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:47:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 291474080D;
+	Tue, 30 Dec 2025 11:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oT73L3eHTfoM for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 11:47:01 +0000 (UTC)
+ id JaebttX2z6Rx; Tue, 30 Dec 2025 11:47:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D7AB40811
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767095236;
+	bh=Rhptft4VV6w3ktWCrjDQFMv1SoA5/+VOgMCb7xUL/pI=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=SVP4JUTiqHHQhW+rPMaZ5lopxcSV7zYfPOGYYMN3/cS3bn4d1fDskL24JvY2E1QMb
+	 6sRxkaDB8Q5e+SEeHO12FSC/Oo01Qql/pmTrdH4b+FLyXadMPmV7vKykH1rjIdeOsA
+	 GnWRS6RrAOITUTCMIIrjIh5fqykf7JK2Ii8Tl48+rg4XUHfoO02p+m1tetlOsl72v5
+	 kiTbLbCEBx3UIdAGkrUNcqAmSbdbTx0lARvBD5Jh5ePJ2ElupX9wOpvE0HnXUOpD8c
+	 lYkPJmC8ykisirCNiwoi4UMW6gqRUz8VfsH1WZGTquXR0PrdTka9zRLUBkNA9p28i9
+	 7j6Gse8NTDSbw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D7AB40811;
+	Tue, 30 Dec 2025 11:47:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F02C35B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:47:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D22A8136D
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:47:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u-aCgNd3qujv for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 11:47:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2B23D40826
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B23D40826
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ACBC381368
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACBC381368
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2B23D40826
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:47:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACBC381368
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:47:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8D614A4C2A7B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B4B7AA4C2A7D;
  Tue, 30 Dec 2025 12:46:31 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:54702)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vaYBK-000000003Vt-3Q9l;
+ (envelope-from <bernd@kuhls.net>) id 1vaYBL-000000003Vt-04ey;
  Tue, 30 Dec 2025 11:46:31 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -63,10 +63,9 @@ Cc: Andreas Ziegler <br025@umbiko.net>,
  Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
  Matt Flax <flatmax@flatmax.org>, Romain Naour <romain.naour@gmail.com>,
  Simon Dawson <spdawson@gmail.com>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Ben Boeckel <mathstuf@gmail.com>
-Date: Tue, 30 Dec 2025 12:45:26 +0100
-Message-ID: <20251230114545.2236640-6-bernd@kuhls.net>
+ Woodrow Douglass <wdouglass@carnegierobotics.com>
+Date: Tue, 30 Dec 2025 12:45:27 +0100
+Message-ID: <20251230114545.2236640-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251230114545.2236640-1-bernd@kuhls.net>
 References: <20251230114545.2236640-1-bernd@kuhls.net>
@@ -75,22 +74,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1767095191;
- bh=x0TwEpu5AI1y6jlCZ9DiRRjjC2mN5IL1EOS2a/rvz4Q=;
+ bh=cQkgSdVDIqo+e2Xvv5eFCgl9I7y8ggh6nxpdo08Tsnw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=rm04/aXF5Du63mkcWwDLaL79uMu2zdJ0fNZvbYdVH7VXYqlHso1tk64cA7tNHRD1I
- FFkNnFnEwu3WwTTtqBiWmBXVgB6ZQ3wb/vOMxSAIcHDBPaactj94+LytP3geoaxL/V
- U7t4ujfTsRq814UYBTvXhF+uKtEULKgf/lHF/5zBw7UbCirMARq/LZS+Ud87QLOHzx
- tDPTxTtuERv8S9Gk12NvyBsXojL8ZyVQ2TmZOBKUmlxGUBbCsLmfwagi+kyI0MCEAN
- /YiyaF3GXnzeC5XtZXpJYdV33i2IgjP5UpBR6MCePN6AGkuVbG9shSl3gkP2OqXMwi
- 5gmCupMp1pz1Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=OLGaSNNxArGZ9bi0X2Fo1GrYR4idBUDhRK6xlIJ13Wao5/viLDuaaUJUr/ctZeAaz
+ CFF0nKgqo/qxiuuEDcsmTQs8Px67vfp/rE9NB12E77JpINdrwrkw0B77na/pCfrjVz
+ EXSnNrTRH740pI2jQ4TTycThxVRBAPeD6hrtRKwEo1M1s1dXKt+6mkiMTyz1tE/5C5
+ 5ISXB2WMpq/lH0h9fg1fwPlUKz9m2rYtwDS1J4U6Bp2GohcPRHVkM4KOLN+k7xFzN5
+ zpNmYYjGTAxQXNFjSJ3yeQq7qZ+LiXE9DsTOmD2lfuWH+mq4SjC5j8+j8qExn77Orm
+ XyaBTCM/PITtg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=rm04/aXF
-Subject: [Buildroot] [PATCH v9 05/19] package/taskd: remove package
+ header.s=kas202511301023 header.b=OLGaSNNx
+Subject: [Buildroot] [PATCH v9 06/19] package/racehound: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,186 +101,198 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9naXRodWIuY29tL0dvdGhlbmJ1cmdCaXRGYWN0b3J5L3Rhc2tzZXJ2ZXIvY29tbWl0
-L2U3MTE2MzY2NTE4MWEyNzU4OWM1MjEyNmM1NDJlMTQyNmY1NWQ0ZWIKVGhlIHBhY2thZ2UgImlz
-IG5vIGxvbmdlciBhY3RpdmVseSBkZXZlbG9wZWQuIgoKaHR0cHM6Ly9naXRodWIuY29tL0dvdGhl
-bmJ1cmdCaXRGYWN0b3J5L3Rhc2tzZXJ2ZXIgc2hvd3MgdGhpcyBub3RlOgoiVGhpcyByZXBvc2l0
-b3J5IHdhcyBhcmNoaXZlZCBieSB0aGUgb3duZXIgb24gSnVsIDQsIDIwMjQuCiBJdCBpcyBub3cg
-cmVhZC1vbmx5LiIKClRoZSBwYWNrYWdlIGlzIGJyb2tlbiB3aXRoIGNtYWtlIDQgYW5kIG5vIG90
-aGVyIHBhY2thZ2UgZGVwZW5kcyBvbiBpdC4KClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxi
-ZXJuZEBrdWhscy5uZXQ+CkNjOiBCZW4gQm9lY2tlbCA8bWF0aHN0dWZAZ21haWwuY29tPgotLS0K
-IC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAzIC0tCiBD
-b25maWcuaW4ubGVnYWN5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgOCArKystCiBE
-RVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMyAtLQogcGFj
-a2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgLQogLi4ubWFr
-ZWRlZmluZS1IQVZFX0dFVF9DVVJSRU5UX0RJUl9OQU1FLnBhdGNoIHwgMjggLS0tLS0tLS0tLS0t
-LQogLi4ucnJlY3QtdmFyaWFibGVzLWZvci1HbnVUTFMtZGV0ZWN0aW9uLnBhdGNoIHwgMzIgLS0t
-LS0tLS0tLS0tLS0tCiAuLi5lTGlzdHMtdXNlLXBrZy1jb25maWctdXVpZC1kZXRlY3Rpb24ucGF0
-Y2ggfCA0MCAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNrYWdlL3Rhc2tkL0NvbmZpZy5pbiAgICAg
-ICAgICAgICAgICAgICAgICAgfCAxOCAtLS0tLS0tLS0KIHBhY2thZ2UvdGFza2QvdGFza2QuaGFz
-aCAgICAgICAgICAgICAgICAgICAgICB8ICA1IC0tLQogcGFja2FnZS90YXNrZC90YXNrZC5tayAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgMTMgLS0tLS0tCiAxMCBmaWxlcyBjaGFuZ2VkLCA3IGlu
-c2VydGlvbnMoKyksIDE0NCBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L3Rhc2tkLzAwMDEtRml4LW1pc3NpbmctY21ha2VkZWZpbmUtSEFWRV9HRVRfQ1VSUkVOVF9ESVJf
-TkFNRS5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdGFza2QvMDAwMi1Vc2UtY29y
-cmVjdC12YXJpYWJsZXMtZm9yLUdudVRMUy1kZXRlY3Rpb24ucGF0Y2gKIGRlbGV0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL3Rhc2tkLzAwMDMtQ01ha2VMaXN0cy11c2UtcGtnLWNvbmZpZy11dWlkLWRl
-dGVjdGlvbi5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdGFza2QvQ29uZmlnLmlu
-CiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS90YXNrZC90YXNrZC5oYXNoCiBkZWxldGUgbW9k
-ZSAxMDA2NDQgcGFja2FnZS90YXNrZC90YXNrZC5tawoKZGlmZiAtLWdpdCBhLy5jaGVja3BhY2th
-Z2VpZ25vcmUgYi8uY2hlY2twYWNrYWdlaWdub3JlCmluZGV4IGM1NzllNTlmYzkuLjdkNDU2ZDMy
-YTYgMTAwNjQ0Ci0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKKysrIGIvLmNoZWNrcGFja2FnZWln
-bm9yZQpAQCAtOTg0LDkgKzk4NCw2IEBAIHBhY2thZ2Uvc3d1cGRhdGUvc3d1cGRhdGUuc2ggU2hl
-bGxjaGVjawogcGFja2FnZS9zeXN2aW5pdC8wMDAxLU1ha2VmaWxlLWRpc2FibGUtc3RhY2stcHJv
-dGVjdG9yLXN0cm9uZy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvdGFyLzAwMDEt
-bGliLWdldHJhbmRvbS5jLWZpeC1idWlsZC13aXRoLXVjbGliYy0xLjAuMzUucGF0Y2ggbGliX3Bh
-dGNoLlVwc3RyZWFtCiBwYWNrYWdlL3RhcmdldGNsaS1mYi9TNTB0YXJnZXQgU2hlbGxjaGVjayBs
-aWJfc3lzdi5WYXJpYWJsZXMKLXBhY2thZ2UvdGFza2QvMDAwMS1GaXgtbWlzc2luZy1jbWFrZWRl
-ZmluZS1IQVZFX0dFVF9DVVJSRU5UX0RJUl9OQU1FLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQot
-cGFja2FnZS90YXNrZC8wMDAyLVVzZS1jb3JyZWN0LXZhcmlhYmxlcy1mb3ItR251VExTLWRldGVj
-dGlvbi5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KLXBhY2thZ2UvdGFza2QvMDAwMy1DTWFrZUxp
-c3RzLXVzZS1wa2ctY29uZmlnLXV1aWQtZGV0ZWN0aW9uLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVh
-bQogcGFja2FnZS90Y2YtYWdlbnQvUzU1dGNmLWFnZW50IFNoZWxsY2hlY2sgbGliX3N5c3YuVmFy
-aWFibGVzCiBwYWNrYWdlL3RmdHBkL1M4MHRmdHBkLWhwYSBTaGVsbGNoZWNrIGxpYl9zeXN2Lklu
-ZGVudCBsaWJfc3lzdi5WYXJpYWJsZXMKIHBhY2thZ2UvdGktZ2Z4LzAwMDEtbmV3Y2xrYXBpLnBh
-dGNoIGxpYl9wYXRjaC5VcHN0cmVhbQpkaWZmIC0tZ2l0IGEvQ29uZmlnLmluLmxlZ2FjeSBiL0Nv
-bmZpZy5pbi5sZWdhY3kKaW5kZXggMDRlYjhkNjJiOS4uYWNjOGVkZjk2MyAxMDA2NDQKLS0tIGEv
-Q29uZmlnLmluLmxlZ2FjeQorKysgYi9Db25maWcuaW4ubGVnYWN5CkBAIC0xNDYsMTEgKzE0Niwx
-NyBAQCBlbmRpZgogCiBjb21tZW50ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjYuMDIi
-CiAKK2NvbmZpZyBCUjJfUEFDS0FHRV9UQVNLRAorCWJvb2wgInRhc2tkIGhhcyBiZWVuIHJlbW92
-ZWQiCisJc2VsZWN0IEJSMl9MRUdBQ1kKKwloZWxwCisJICB0YXNrZCB3YXMgZGVwcmVjYXRlZCB1
-cHN0cmVhbSBhbmQgaGFzIGJlZW4gcmVtb3ZlZAorCiBjb25maWcgQlIyX1BBQ0tBR0VfU0NPTkVT
-RVJWRVIKIAlib29sICJzY29uZXNlcnZlciBoYXMgYmVlbiByZW1vdmVkIgogCXNlbGVjdCBCUjJf
-TEVHQUNZCiAJaGVscAotCSAgc2NvbmVzZXJ2ZXIgd2FzIGRlcHJlY2F0ZWQgdXBzdHJlYW0gYW5k
-IGhhcyBiZWVuIHJlbW92ZWQKKwkgIHNjb25lc2VydmVyIGlzIHVubWFpbnRhaW5lZCBhbmQgaGFz
-IGJlZW4gcmVtb3ZlZAogCiBjb25maWcgQlIyX1BBQ0tBR0VfUUpTT04KIAlib29sICJxanNvbiBo
-YXMgYmVlbiByZW1vdmVkIgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5k
-ZXggMzdiODkwNDc1MS4uNDc3ZmI1YTcyZCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9E
-RVZFTE9QRVJTCkBAIC0zNDcsOSArMzQ3LDYgQEAgRjoJcGFja2FnZS91aHViY3RsLwogTjoJQmF4
-aWNoZSBTdSA8YmF4aWNoZUBnbWFpbC5jb20+CiBGOglwYWNrYWdlL3F0Ni9xdDZtdWx0aW1lZGlh
-LwogCi1OOglCZW4gQm9lY2tlbCA8bWF0aHN0dWZAZ21haWwuY29tPgotRjoJcGFja2FnZS90YXNr
-ZC8KLQogTjoJQmVuamFtaW4gS2FtYXRoIDxrYW1hdGguYmVuQGdtYWlsLmNvbT4KIEY6CXBhY2th
-Z2UvbGFwYWNrLwogCmRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29u
-ZmlnLmluCmluZGV4IDdhYTNkOWU1MWYuLjRlYmNmM2ZmY2MgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uv
-Q29uZmlnLmluCisrKyBiL3BhY2thZ2UvQ29uZmlnLmluCkBAIC0yNDAxLDcgKzI0MDEsNiBAQCBt
-ZW51ICJNaXNjZWxsYW5lb3VzIgogCXNvdXJjZSAicGFja2FnZS9zaGFyZWQtbWltZS1pbmZvL0Nv
-bmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2Uvc25vb3plL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBh
-Y2thZ2Uvc3Vud2FpdC9Db25maWcuaW4iCi0Jc291cmNlICJwYWNrYWdlL3Rhc2tkL0NvbmZpZy5p
-biIKIAlzb3VyY2UgInBhY2thZ2Uvd2luZS9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3ht
-cmlnL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UveHV0aWxfdXRpbC1tYWNyb3MvQ29uZmln
-LmluIgpkaWZmIC0tZ2l0IGEvcGFja2FnZS90YXNrZC8wMDAxLUZpeC1taXNzaW5nLWNtYWtlZGVm
-aW5lLUhBVkVfR0VUX0NVUlJFTlRfRElSX05BTUUucGF0Y2ggYi9wYWNrYWdlL3Rhc2tkLzAwMDEt
-Rml4LW1pc3NpbmctY21ha2VkZWZpbmUtSEFWRV9HRVRfQ1VSUkVOVF9ESVJfTkFNRS5wYXRjaApk
-ZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggOTYwYzcxYjllYS4uMDAwMDAwMDAwMAotLS0g
-YS9wYWNrYWdlL3Rhc2tkLzAwMDEtRml4LW1pc3NpbmctY21ha2VkZWZpbmUtSEFWRV9HRVRfQ1VS
-UkVOVF9ESVJfTkFNRS5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDI4ICswLDAgQEAKLUZyb20g
-YjA2N2FiOWJmNjY3YmI5MjU3YmI5ZWVhYTZiZjI1ZjlhMWExN2YwNiBNb24gU2VwIDE3IDAwOjAw
-OjAwIDIwMDEKLUZyb206ID0/VVRGLTg/cT9KPUMzPUI2cmc9MjBLcmF1c2U/PSA8am9lcmcua3Jh
-dXNlQGVtYmVkZGVkLnJvY2tzPgotRGF0ZTogRnJpLCA2IE1heSAyMDE2IDIzOjM1OjQyICswMjAw
-Ci1TdWJqZWN0OiBbUEFUQ0hdIEZpeCBtaXNzaW5nIGNtYWtlZGVmaW5lIEhBVkVfR0VUX0NVUlJF
-TlRfRElSX05BTUUKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50LVR5cGU6IHRleHQvcGxhaW47
-IGNoYXJzZXQ9VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKLQotU2lnbmVk
-LW9mZi1ieTogSsO2cmcgS3JhdXNlIDxqb2VyZy5rcmF1c2VAZW1iZWRkZWQucm9ja3M+Ci0tLS0K
-LSBjbWFrZS5oLmluIHwgMSArCi0gMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCi0KLWRp
-ZmYgLS1naXQgYS9jbWFrZS5oLmluIGIvY21ha2UuaC5pbgotaW5kZXggNDEyNGNlOS4uMGI4Zjlk
-MCAxMDA2NDQKLS0tLSBhL2NtYWtlLmguaW4KLSsrKyBiL2NtYWtlLmguaW4KLUBAIC01MSw2ICs1
-MSw3IEBACi0gI2NtYWtlZGVmaW5lIEhBVkVfU1RfQklSVEhUSU1FCi0gCi0gLyogRnVuY3Rpb25z
-ICovCi0rI2NtYWtlZGVmaW5lIEhBVkVfR0VUX0NVUlJFTlRfRElSX05BTUUKLSAjY21ha2VkZWZp
-bmUgSEFWRV9USU1FR00KLSAjY21ha2VkZWZpbmUgSEFWRV9VVUlEX1VOUEFSU0VfTE9XRVIKLSAK
-LS0tIAotMi44LjIKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS90YXNrZC8wMDAyLVVzZS1jb3JyZWN0
-LXZhcmlhYmxlcy1mb3ItR251VExTLWRldGVjdGlvbi5wYXRjaCBiL3BhY2thZ2UvdGFza2QvMDAw
-Mi1Vc2UtY29ycmVjdC12YXJpYWJsZXMtZm9yLUdudVRMUy1kZXRlY3Rpb24ucGF0Y2gKZGVsZXRl
-ZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGYyMzY1ZWEyOTguLjAwMDAwMDAwMDAKLS0tIGEvcGFj
-a2FnZS90YXNrZC8wMDAyLVVzZS1jb3JyZWN0LXZhcmlhYmxlcy1mb3ItR251VExTLWRldGVjdGlv
-bi5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDMyICswLDAgQEAKLUZyb20gODhmZWU1YzZlYjIy
-NzFkM2RlNmI5ODc4Y2QyOWEwNDk0OTk5YWExOCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZy
-b206ICJBcm5vdXQgVmFuZGVjYXBwZWxsZSAoRXNzZW5zaXVtL01pbmQpIiA8YXJub3V0QG1pbmQu
-YmU+Ci1EYXRlOiBTdW4sIDIwIE5vdiAyMDE2IDIzOjQ2OjQ1ICswMTAwCi1TdWJqZWN0OiBbUEFU
-Q0hdIFVzZSBjb3JyZWN0IHZhcmlhYmxlcyBmb3IgR251VExTIGRldGVjdGlvbgotCi1BdCBsZWFz
-dCB3aXRoIHJlY2VudCBDTWFrZSwgaXQgc2VlbXMgdGhlIHZhcmlhYmxlcyBjcmVhdGVkIGJ5Ci1m
-aW5kX3BhY2thZ2UgKEdudVRMUykgYXJlIGNhbGxlZCBQQ19HTlVUTFNfSU5DTFVERV9ESVJTIGFu
-ZAotUENfR05VVExTX0xJQlJBUklFUy4KLQotU2lnbmVkLW9mZi1ieTogQXJub3V0IFZhbmRlY2Fw
-cGVsbGUgKEVzc2Vuc2l1bS9NaW5kKSA8YXJub3V0QG1pbmQuYmU+Ci0tLS0KLSBDTWFrZUxpc3Rz
-LnR4dCB8IDQgKystLQotIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRp
-b25zKC0pCi0KLWRpZmYgLS1naXQgYS9DTWFrZUxpc3RzLnR4dCBiL0NNYWtlTGlzdHMudHh0Ci1p
-bmRleCBkODEyNWQ5Li5jY2Y4MjdiIDEwMDY0NAotLS0tIGEvQ01ha2VMaXN0cy50eHQKLSsrKyBi
-L0NNYWtlTGlzdHMudHh0Ci1AQCAtMTEwLDggKzExMCw4IEBAIG1lc3NhZ2UgKCItLSBMb29raW5n
-IGZvciBHbnVUTFMiKQotIGZpbmRfcGFja2FnZSAoR251VExTIFJFUVVJUkVEKQotIGlmIChHTlVU
-TFNfRk9VTkQpCi0gICBzZXQgKEhBVkVfTElCR05VVExTIHRydWUpCi0tICBzZXQgKFRBU0tEX0lO
-Q0xVREVfRElSUyAke1RBU0tEX0lOQ0xVREVfRElSU30gJHtHTlVUTFNfSU5DTFVERV9ESVJ9KQot
-LSAgc2V0IChUQVNLRF9MSUJSQVJJRVMgICAgJHtUQVNLRF9MSUJSQVJJRVN9ICAgICR7R05VVExT
-X0xJQlJBUklFU30pCi0rICBzZXQgKFRBU0tEX0lOQ0xVREVfRElSUyAke1RBU0tEX0lOQ0xVREVf
-RElSU30gJHtQQ19HTlVUTFNfSU5DTFVERV9ESVJTfSkKLSsgIHNldCAoVEFTS0RfTElCUkFSSUVT
-ICAgICR7VEFTS0RfTElCUkFSSUVTfSAgICAke1BDX0dOVVRMU19MSUJSQVJJRVN9KQotIGVuZGlm
-IChHTlVUTFNfRk9VTkQpCi0gCi0gbWVzc2FnZSAoIi0tIExvb2tpbmcgZm9yIGxpYnV1aWQiKQot
-LS0gCi0yLjEwLjIKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS90YXNrZC8wMDAzLUNNYWtlTGlzdHMt
-dXNlLXBrZy1jb25maWctdXVpZC1kZXRlY3Rpb24ucGF0Y2ggYi9wYWNrYWdlL3Rhc2tkLzAwMDMt
-Q01ha2VMaXN0cy11c2UtcGtnLWNvbmZpZy11dWlkLWRldGVjdGlvbi5wYXRjaApkZWxldGVkIGZp
-bGUgbW9kZSAxMDA2NDQKaW5kZXggMzQxMzlmZWY3NC4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdl
-L3Rhc2tkLzAwMDMtQ01ha2VMaXN0cy11c2UtcGtnLWNvbmZpZy11dWlkLWRldGVjdGlvbi5wYXRj
-aAorKysgL2Rldi9udWxsCkBAIC0xLDQwICswLDAgQEAKLUNNYWtlTGlzdHMudHh0OiB1c2UgcGtn
-LWNvbmZpZyB0byBkZXRlY3QgdXVpZCB3aGVuIHBvc3NpYmxlCi0KLUluIG9yZGVyIHRvIHRha2Ug
-aW50byBhY2NvdW50IHRoZSBsaWJyYXJpZXMgdXNlZCBieSBsaWJ1dWlkIHdoZW4KLWJ1aWxkaW5n
-IHN0YXRpY2FsbHksIHVzaW5nIHBrZy1jb25maWcgaXMgcmVjb21tZW5kZWQuIFRoaXMgcGF0Y2gK
-LXRoZXJlZm9yZSBpbXByb3ZlcyB0aGUgQ01ha2VMaXN0cy50eHQgdG8gdXNlIHBrZy1jb25maWcg
-dG8gZGV0ZWN0Ci1saWJ1dWlkIHdoZW4gcGtnLWNvbmZpZyBpcyBhdmFpbGFibGUuCi0KLVNpZ25l
-ZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAZnJlZS1lbGVjdHJv
-bnMuY29tPgotCi1JbmRleDogYi9DTWFrZUxpc3RzLnR4dAotPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQotLS0tIGEvQ01h
-a2VMaXN0cy50eHQKLSsrKyBiL0NNYWtlTGlzdHMudHh0Ci1AQCAtNiw2ICs2LDcgQEAKLSAKLSBp
-bmNsdWRlIChDaGVja0Z1bmN0aW9uRXhpc3RzKQotIGluY2x1ZGUgKENoZWNrU3RydWN0SGFzTWVt
-YmVyKQotK2luY2x1ZGUgKEZpbmRQa2dDb25maWcpCi0gCi0gc2V0IChIQVZFX0NNQUtFIHRydWUp
-Ci0gCi1AQCAtMTE5LDggKzEyMCwxNiBAQAotICAgIyBBcHBsZSBhbmQgRnJlZUJTRCBpbmNsdWRl
-IHRoZSB1dWlkIGZ1bmN0aW9ucyBpbiB0aGVpciBsaWJjLCByYXRoZXIgdGhhbiBsaWJ1dWlkCi0g
-ICBjaGVja19mdW5jdGlvbl9leGlzdHMgKHV1aWRfdW5wYXJzZV9sb3dlciBIQVZFX1VVSURfVU5Q
-QVJTRV9MT1dFUikKLSBlbHNlIChEQVJXSU4gT1IgRlJFRUJTRCkKLS0gIGZpbmRfcGF0aCAgICAo
-VVVJRF9JTkNMVURFX0RJUiAgIHV1aWQvdXVpZC5oKQotLSAgZmluZF9saWJyYXJ5IChVVUlEX0xJ
-QlJBUlkgTkFNRVMgdXVpZCkKLSsgIGlmKFBLR19DT05GSUdfRk9VTkQpCi0rICAgIHBrZ19jaGVj
-a19tb2R1bGVzKFBDX1VVSUQgdXVpZCkKLSsgICAgaWYoUENfVVVJRF9GT1VORCkKLSsgICAgICBz
-ZXQgKFVVSURfSU5DTFVERV9ESVIgJHtQQ19VVUlEX0lOQ0xVREVfRElSU30pCi0rICAgICAgc2V0
-IChVVUlEX0xJQlJBUlkgJHtQQ19VVUlEX0xJQlJBUklFU30pCi0rICAgIGVuZGlmKFBDX1VVSURf
-Rk9VTkQpCi0rICBlbHNlKFBLR19DT05GSUdfRk9VTkQpCi0rICAgIGZpbmRfcGF0aCAgICAoVVVJ
-RF9JTkNMVURFX0RJUiAgIHV1aWQvdXVpZC5oKQotKyAgICBmaW5kX2xpYnJhcnkgKFVVSURfTElC
-UkFSWSBOQU1FUyB1dWlkKQotKyAgZW5kaWYoUEtHX0NPTkZJR19GT1VORCkKLSAgIGlmIChVVUlE
-X0lOQ0xVREVfRElSIEFORCBVVUlEX0xJQlJBUlkpCi0gICAgIHNldCAoVEFTS0RfSU5DTFVERV9E
-SVJTICR7VEFTS0RfSU5DTFVERV9ESVJTfSAke1VVSURfSU5DTFVERV9ESVJ9KQotICAgICBzZXQg
-KFRBU0tEX0xJQlJBUklFUyAgICAke1RBU0tEX0xJQlJBUklFU30gICAgJHtVVUlEX0xJQlJBUll9
-KQpkaWZmIC0tZ2l0IGEvcGFja2FnZS90YXNrZC9Db25maWcuaW4gYi9wYWNrYWdlL3Rhc2tkL0Nv
-bmZpZy5pbgpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMTlkMTIzZmI1OS4uMDAwMDAw
-MDAwMAotLS0gYS9wYWNrYWdlL3Rhc2tkL0NvbmZpZy5pbgorKysgL2Rldi9udWxsCkBAIC0xLDE4
-ICswLDAgQEAKLWNvbmZpZyBCUjJfUEFDS0FHRV9UQVNLRAotCWJvb2wgInRhc2tkIgotCWRlcGVu
-ZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIGdudXRscwotCWRlcGVuZHMgb24gQlIyX1VTRV9XQ0hB
-UiAjIGdudXRscwotCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBmb3JrKCkKLQlkZXBlbmRzIG9u
-IEJSMl9JTlNUQUxMX0xJQlNURENQUAotCXNlbGVjdCBCUjJfUEFDS0FHRV9HTlVUTFMKLQlzZWxl
-Y3QgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWAotCXNlbGVjdCBCUjJfUEFDS0FHRV9VVElMX0xJTlVY
-X0xJQlVVSUQKLQloZWxwCi0JICBUYXNrIG1hbmFnZW1lbnQgc3luY2hyb25pemF0aW9uIGRhZW1v
-bi4KLQotCSAgaHR0cDovL3Rhc2t3YXJyaW9yLm9yZy8KLQotY29tbWVudCAidGFza2QgbmVlZHMg
-YSB0b29sY2hhaW4gdy8gQysrLCB3Y2hhciwgZHluYW1pYyBsaWJyYXJ5IgotCWRlcGVuZHMgb24g
-QlIyX1VTRV9NTVUKLQlkZXBlbmRzIG9uICFCUjJfVVNFX1dDSEFSIHx8ICFCUjJfSU5TVEFMTF9M
-SUJTVERDUFAgfHwgXAotCQlCUjJfU1RBVElDX0xJQlMKZGlmZiAtLWdpdCBhL3BhY2thZ2UvdGFz
-a2QvdGFza2QuaGFzaCBiL3BhY2thZ2UvdGFza2QvdGFza2QuaGFzaApkZWxldGVkIGZpbGUgbW9k
-ZSAxMDA2NDQKaW5kZXggZDNmOGJiMjUwZS4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL3Rhc2tk
-L3Rhc2tkLmhhc2gKKysrIC9kZXYvbnVsbApAQCAtMSw1ICswLDAgQEAKLSMgRnJvbSBodHRwOi8v
-dGFza3dhcnJpb3Iub3JnL2Rvd25sb2FkLwotc2hhMSAgZGVkMzM5ZGVlZWU2NTI3N2U0NzEyZjcx
-YTkxNTk1MDJmOGIyMGI1MiAgdGFza2QtMS4xLjAudGFyLmd6Ci0jIExvY2FsbHkgY2FsY3VsYXRl
-ZAotc2hhMjU2ICA3Yjg0ODhlNjg3OTcxYWU1NjcyOWZmNGUyZTUyMDlmZjg4MDZjZjhjZDU3NzE4
-YmZkN2U1MjFiZTEzMDYyMWI0ICB0YXNrZC0xLjEuMC50YXIuZ3oKLXNoYTI1NiAgODRkMWE4YzJl
-NmUzMDY4NjRmZjM1MDg1N2EzNmI2Yzc0NzU2ZTYxZTJlYWU2ODIyY2YyZmE4ODIxMjcyMGY2OCAg
-Q09QWUlORwpkaWZmIC0tZ2l0IGEvcGFja2FnZS90YXNrZC90YXNrZC5tayBiL3BhY2thZ2UvdGFz
-a2QvdGFza2QubWsKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGIxOWJlNjg5MTIuLjAw
-MDAwMDAwMDAKLS0tIGEvcGFja2FnZS90YXNrZC90YXNrZC5taworKysgL2Rldi9udWxsCkBAIC0x
-LDEzICswLDAgQEAKLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCi0jCi0jIHRhc2tkCi0jCi0jIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIwotCi1UQVNLRF9WRVJTSU9OID0gMS4xLjAKLVRBU0tEX1NJVEUg
-PSBodHRwOi8vdGFza3dhcnJpb3Iub3JnL2Rvd25sb2FkCi1UQVNLRF9MSUNFTlNFID0gTUlUCi1U
-QVNLRF9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwotVEFTS0RfREVQRU5ERU5DSUVTID0gZ251dGxz
-IHV0aWwtbGludXggaG9zdC1wa2djb25mCi0KLSQoZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQotLSAK
-Mi40Ny4zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Analysis of https://github.com/kmrov/racehound:
+last commit: Jul 2017
+last bug report: 0 open
+last pull request: 0 open
+
+Analysis of https://github.com/euspectre/racehound (another fork)
+last commit: Jan 2022
+last bug report: Jul 2017
+last pull request: 0 open
+
+The package is broken with cmake 4 and no other package depends on it.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .checkpackageignore                           |  1 -
+ Config.in.legacy                              |  6 ++++
+ package/Config.in                             |  1 -
+ ...ll-path-lib-instead-of-usr-lib-prefi.patch | 26 --------------
+ package/racehound/Config.in                   | 35 -------------------
+ package/racehound/racehound.hash              |  3 --
+ package/racehound/racehound.mk                | 27 --------------
+ 7 files changed, 6 insertions(+), 93 deletions(-)
+ delete mode 100644 package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
+ delete mode 100644 package/racehound/Config.in
+ delete mode 100644 package/racehound/racehound.hash
+ delete mode 100644 package/racehound/racehound.mk
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 7d456d32a6..8e930ca397 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -878,7 +878,6 @@ package/qt5/qt5webkit/0004-Remove-invalid-g_object-declarations-to-fix-build-wi.
+ package/qt5/qt5webkit/0005-Add-support-for-ARC-processors.patch lib_patch.Upstream
+ package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch lib_patch.Upstream
+ package/qt5cinex/0001-Fix-execution-problem-with-Qt5.3.patch lib_patch.Upstream
+-package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch lib_patch.Upstream
+ package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch lib_patch.Upstream
+ package/read-edid/0001-Fix-install-file-list.patch lib_patch.Upstream
+ package/read-edid/0002-Fix-compiler-check.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index acc8edf963..0b73fe5149 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_RACEHOUND
++	bool "racehound has been removed"
++	select BR2_LEGACY
++	help
++	  racehound is unmaintained and has been removed
++
+ config BR2_PACKAGE_TASKD
+ 	bool "taskd has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 4ebcf3ffcc..aab02ba475 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -141,7 +141,6 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/poke/Config.in"
+ 	source "package/ptm2human/Config.in"
+ 	source "package/pv/Config.in"
+-	source "package/racehound/Config.in"
+ 	source "package/rt-tests/Config.in"
+ 	source "package/rwmem/Config.in"
+ 	source "package/sentry-native/Config.in"
+diff --git a/package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch b/package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
+deleted file mode 100644
+index 6cac55d3eb..0000000000
+--- a/package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 4f8ed39ddaf17c7dd4ddbdb88e67097f00c98173 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 16 Jul 2015 23:11:25 +0200
+-Subject: [PATCH] Fix module install path (/lib instead of /usr/lib prefix)
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- cmake/modules/path_prefixes.cmake | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/cmake/modules/path_prefixes.cmake b/cmake/modules/path_prefixes.cmake
+-index 3cb1fe2..9dc50a4 100644
+---- a/cmake/modules/path_prefixes.cmake
+-+++ b/cmake/modules/path_prefixes.cmake
+-@@ -113,7 +113,7 @@ set(RH_INSTALL_PREFIX_DOC
+- # Set derivative prefixes
+- 
+- # additional, 1
+--set(RH_INSTALL_PREFIX_KMODULE "${RH_INSTALL_PREFIX_LIB}/modules/${KBUILD_VERSION_STRING}/misc")
+-+set(RH_INSTALL_PREFIX_KMODULE "/lib/modules/${KBUILD_VERSION_STRING}/misc")
+- # Another variant
+- #"${RH_INSTALL_PREFIX_LIB}/modules/${KBUILD_VERSION_STRING}/extra")
+- # additional, 2
+--- 
+-2.1.4
+-
+diff --git a/package/racehound/Config.in b/package/racehound/Config.in
+deleted file mode 100644
+index 757743f79b..0000000000
+--- a/package/racehound/Config.in
++++ /dev/null
+@@ -1,35 +0,0 @@
+-config BR2_PACKAGE_RACEHOUND
+-	bool "racehound"
+-	depends on BR2_LINUX_KERNEL
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_WCHAR # elfutils
+-	depends on !BR2_STATIC_LIBS # elfutils
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
+-	# only x86/x86_64 supported
+-	depends on BR2_i386 || BR2_x86_64
+-	select BR2_PACKAGE_ELFUTILS
+-	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+-	help
+-	  RaceHound can be used to detect data races in the Linux
+-	  kernel on x86.
+-
+-	  RaceHound needs the following kernel configurations enabled:
+-	  - CONFIG_X86_32 or CONFIG_X86_64
+-	  - CONFIG_MODULES
+-	  - CONFIG_MODULE_UNLOAD
+-	  - CONFIG_SYSFS
+-	  - CONFIG_DEBUG_FS
+-	  - CONFIG_KALLSYMS
+-	  - CONFIG_KALLSYMS_ALL
+-	  - CONFIG_KPROBES
+-
+-	  https://github.com/kmrov/racehound
+-
+-comment "racehound needs an Linux kernel >= 3.14 to be built"
+-	depends on !BR2_LINUX_KERNEL
+-	depends on BR2_i386 || BR2_x86_64
+-
+-comment "racehound needs a toolchain w/ C++, wchar, dynamic library, threads"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/racehound/racehound.hash b/package/racehound/racehound.hash
+deleted file mode 100644
+index fc64243047..0000000000
+--- a/package/racehound/racehound.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# locally computed
+-sha256  935bc4a7c7b645dee5b905f6e97d0db3f0ac4f48e71d15f4e3982811017ac43c  racehound-f09f06fcc3c77c8c5541be3ba5be80aa8148ce0c.tar.gz
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
+deleted file mode 100644
+index 93ce5c8e57..0000000000
+--- a/package/racehound/racehound.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# racehound
+-#
+-################################################################################
+-
+-RACEHOUND_VERSION = f09f06fcc3c77c8c5541be3ba5be80aa8148ce0c
+-RACEHOUND_SITE = $(call github,kmrov,racehound,$(RACEHOUND_VERSION))
+-RACEHOUND_LICENSE = GPL-2.0
+-RACEHOUND_LICENSE_FILES = LICENSE
+-RACEHOUND_SUPPORTS_IN_SOURCE_BUILD = NO
+-
+-RACEHOUND_DEPENDENCIES = elfutils linux
+-
+-# override auto detection (uses host parameters, not cross compile
+-# ready)
+-RACEHOUND_CONF_OPTS += \
+-	-DKERNEL_VERSION_OK=YES \
+-	-DMODULE_BUILD_SUPPORTED=YES \
+-	-DKERNEL_CONFIG_OK=YES \
+-	-DKBUILD_BUILD_DIR=$(LINUX_DIR) \
+-	-DKBUILD_VERSION_STRING=$(LINUX_VERSION_PROBED)
+-
+-# cross compile environment for linux kernel module
+-RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
+-
+-$(eval $(cmake-package))
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
