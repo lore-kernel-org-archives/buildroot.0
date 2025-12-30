@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CB52EE4990
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31BAEEE4992
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB71D406E7;
-	Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE8E660BAA;
+	Tue, 30 Dec 2025 18:12:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Be0HU4qYoiwZ; Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5jVWegdJXtu1; Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC3244043E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFF9460B85
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767118356;
-	bh=xOP5PhePiIMqKSito5wOzSXkQCyRnDrKVsxtO8C2nGc=;
+	s=default; t=1767118357;
+	bh=DRB01+rGs+WiZt6v6mn5fG4nAmPKL906zvhSkq/OeL0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=C/lxQmR+uQPNH4a1H7fRSdHnkrztXAkEbCxnDuHpq4bNB/G5RtSEEmTrFQHfG+hWn
-	 oNoMgruZpjPYD2VGR7nR4G0rBYOAZGiJ4RSqD7OZ1VHLeuMUqBoxLL7wu6yd2Lb0Hw
-	 v1D+z9mFF9t8pS1SbRHxppplQQur4lE3qrRVklCIiZH7ftBOyczMkkpmlYA6CX1Bhj
-	 J0A54WcYZ1asYzn6WiEMg5qm1EQ3todzR11j6KYPEo00hq5mg8MF1t57sSjUHNppDG
-	 cVXAxtWJ/Ycit2DiAeolLs2KP4V+MUGWMjHNcCmiZwNrv0RGsjc1OwC0CEc3nqOAua
-	 V2aefc9iISbyg==
+	b=Dy082R6Shv/hEdezMYlmvVYYy15dcKtzyH5l7bmzwoEgFBL6VyQ1ixOIFjPFzCgwb
+	 E1mErbs2j1ChdfRMOmZ3RdvAI7T+PqmOlIb7mM0sRPNzT1p9dJujXoDryP6k7NBtmb
+	 fSOncPX9dhDryGkhxW66oOO+wCZILG8Lbw5PnETIWth8WPhPLWrmF88/MhL1uUBVmX
+	 R2KagG/Q1s4lFst6gKU6/ITQlw7OKDqH1xw/X3UuzVY7bWyaVrNnyCUxcycMRMQPrz
+	 JC/WRguTEMcOG5EimXXO/YpSmbQMWywML4eEPTv4ARDPMH08hDRhoMKV99ERetF6oS
+	 dLd+le2/m8o2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC3244043E;
-	Tue, 30 Dec 2025 18:12:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C094C177
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFF9460B85;
+	Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E8238177
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A78C3407D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA12D4042E
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YG6WRoOObn8w for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9XajrSYhdu5X for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9595403B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22AA403F3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9595403B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id F22AA403F3
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C857C87C40; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
+ id D521487C44; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 19:12:07 +0100
+Date: Tue, 30 Dec 2025 19:12:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebabcd6263bff13d2a809349c6a044191efc60b9
-X-Git-Newrev: f3c150c78556d0cae299a28fa2b677821bc82606
+X-Git-Oldrev: f3c150c78556d0cae299a28fa2b677821bc82606
+X-Git-Newrev: 9f9e324091d195a9b1034c652796d4a2fe7a1a4b
 X-Patchwork-Hint: ignore
-Message-Id: <20251230181234.C857C87C40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qjson: remove package
+Message-Id: <20251230181234.D521487C44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sconeserver: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,112 +76,277 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3c150c78556d0cae299a28fa2b677821bc82606
+commit: https://git.buildroot.net/buildroot/commit/?id=9f9e324091d195a9b1034c652796d4a2fe7a1a4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/flavio/qjson/commit/6d188cb199a5248889689bd92b757cf0c17cfa27
-"This project is archived. QJson was originally created when Qt3 and Qt4
- lacked robust JSON support.
-
- Since Qt5, JSON support is included in the native Qt library SDK, making
- this project obsolete."
+Analysis of https://github.com/sconemad/sconeserver:
+last non-buildroot related commit: Aug 2019
+last bug report: 0 open
+last pull request: 1 open (buildroot-related)
 
 The package is broken with cmake 4 and no other package depends on it.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Cc: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy         |  6 ++++++
- DEVELOPERS               |  1 -
- package/Config.in        |  1 -
- package/qjson/Config.in  |  8 --------
- package/qjson/qjson.hash |  3 ---
- package/qjson/qjson.mk   | 14 --------------
- 6 files changed, 6 insertions(+), 27 deletions(-)
+ Config.in.legacy                     |  6 +++
+ DEVELOPERS                           |  1 -
+ package/Config.in                    |  1 -
+ package/sconeserver/Config.in        | 96 ------------------------------------
+ package/sconeserver/sconeserver.hash |  3 --
+ package/sconeserver/sconeserver.mk   | 93 ----------------------------------
+ 6 files changed, 6 insertions(+), 194 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index a0dad6461d..3e402e3161 100644
+index 3e402e3161..fc5979c926 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_QJSON
-+	bool "qjson has been removed"
++config BR2_PACKAGE_SCONESERVER
++	bool "sconeserver has been removed"
 +	select BR2_LEGACY
 +	help
-+	  qjson was deprecated upstream and has been removed
++	  sconeserver is unmaintained and has been removed
 +
- config BR2_PACKAGE_OPENTRACING_CPP
- 	bool "opentracing-cpp has been removed"
+ config BR2_PACKAGE_QJSON
+ 	bool "qjson has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9775c85556..f71fdc7a3a 100644
+index f71fdc7a3a..37b8904751 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3550,7 +3550,6 @@ F:	package/libusb/
- F:	package/libusb-compat/
- F:	package/proj/
- F:	package/python-iniparse/
--F:	package/qjson/
- F:	package/qt6/qt6core5compat/
- F:	package/quazip/
- F:	package/shapelib/
+@@ -3071,7 +3071,6 @@ F:	package/neard/
+ F:	package/neardal/
+ F:	package/owl-linux/
+ F:	package/rapidjson/
+-F:	package/sconeserver/
+ F:	package/sound-theme-borealis/
+ F:	package/sound-theme-freedesktop/
+ F:	package/vlc/
 diff --git a/package/Config.in b/package/Config.in
-index 857266c8f8..02f9f00ecd 100644
+index 02f9f00ecd..42ae5aae4d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -383,7 +383,6 @@ comment "QT libraries and helper libraries"
- 	source "package/grantlee/Config.in"
- 	source "package/kf5/Config.in"
- 	source "package/qextserialport/Config.in"
--	source "package/qjson/Config.in"
- 	source "package/quazip/Config.in"
- 	source "package/qwt/Config.in"
- 	source "package/simple-mail/Config.in"
-diff --git a/package/qjson/Config.in b/package/qjson/Config.in
+@@ -2634,7 +2634,6 @@ endif
+ 	source "package/s6-dns/Config.in"
+ 	source "package/s6-networking/Config.in"
+ 	source "package/samba4/Config.in"
+-	source "package/sconeserver/Config.in"
+ 	source "package/ser2net/Config.in"
+ 	source "package/shadowsocks-libev/Config.in"
+ 	source "package/shairport-sync/Config.in"
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
 deleted file mode 100644
-index adb06cddc0..0000000000
---- a/package/qjson/Config.in
+index d1a8a031be..0000000000
+--- a/package/sconeserver/Config.in
 +++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_QJSON
--	bool "qjson"
--	depends on BR2_PACKAGE_QT5
+@@ -1,96 +0,0 @@
+-menuconfig BR2_PACKAGE_SCONESERVER
+-	bool "sconeserver"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on !BR2_STATIC_LIBS # dlopen()
+-	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+-	select BR2_PACKAGE_PCRE
+-	select BR2_PACKAGE_ZLIB
 -	help
--	  QJson is a Qt-based library that maps JSON data to
--	  QVariant objects and vice versa.
+-	  Sconeserver is a modular, object-orientated and extremely
+-	  versatile network server framework for GNU/Linux and
+-	  UNIX-like platforms.
 -
--	  http://qjson.sourceforge.net
-diff --git a/package/qjson/qjson.hash b/package/qjson/qjson.hash
+-	  http://www.sconemad.com/sconeserver/
+-
+-if BR2_PACKAGE_SCONESERVER
+-
+-comment "Sconeserver modules"
+-
+-config BR2_PACKAGE_SCONESERVER_BLUETOOTH
+-	bool "bluetooth"
+-	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
+-	depends on BR2_USE_MMU # bluez5_utils -> dbus
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez5_utils -> dbus, libglib2
+-	depends on !BR2_STATIC_LIBS # bluez5_utils
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
+-	select BR2_PACKAGE_BLUEZ5_UTILS
+-	help
+-	  Bluetooth module for Sconeserver
+-
+-comment "bluetooth support needs a toolchain w/ wchar, threads, dynamic library, headers >= 3.4"
+-	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+-
+-config BR2_PACKAGE_SCONESERVER_EXAMPLES
+-	bool "examples"
+-	help
+-	  Example modules for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
+-	bool "http::sconesite"
+-	select BR2_PACKAGE_LIBXML2
+-	help
+-	  http::sconesite module for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_LOCATION
+-	bool "location"
+-	depends on BR2_USE_MMU # gpsd
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
+-	depends on !BR2_STATIC_LIBS # gpsd
+-	select BR2_PACKAGE_GPSD
+-	help
+-	  Location module for Sconeserver
+-
+-comment "location support needs a toolchain w/ theads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-config BR2_PACKAGE_SCONESERVER_MATHS
+-	bool "maths"
+-	select BR2_PACKAGE_MPFR
+-	help
+-	  Mathematics module for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_MYSQL
+-	bool "mysql"
+-	depends on BR2_USE_MMU # mysql
+-	select BR2_PACKAGE_MARIADB
+-	help
+-	  MySQL module for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_RSS
+-	bool "rss"
+-	select BR2_PACKAGE_LIBXML2
+-	help
+-	  RSS module for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_SQLITE
+-	bool "sqlite"
+-	select BR2_PACKAGE_SQLITE
+-	help
+-	  SQLite module for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_TESTBUILDER
+-	bool "testbuilder"
+-	help
+-	  Testbuilder module for Sconeserver
+-
+-endif # BR2_PACKAGE_SCONESERVER
+-
+-comment "sconeserver needs a toolchain with dynamic library, C++, NPTL"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+-		|| BR2_STATIC_LIBS
+diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
 deleted file mode 100644
-index ab22350e61..0000000000
---- a/package/qjson/qjson.hash
+index ba86e44ae7..0000000000
+--- a/package/sconeserver/sconeserver.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# locally computed
--sha256  e812617477f3c2bb990561767a4cd8b1d3803a52018d4878da302529552610d4  qjson-0.9.0.tar.gz
--sha256  758a0cd48d2bec59cbd04ab616737b7aa0cdceac87508adbc9468715ac90722b  COPYING.lib
-diff --git a/package/qjson/qjson.mk b/package/qjson/qjson.mk
+-# Locally computed
+-sha256  47552b20579678e49150abe071d9eb55cf23bd13f7f6e4fa085d0612bf6a3431  sconeserver-8d1935919a2013358993a8e9dfa992cbde56e503.tar.gz
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
 deleted file mode 100644
-index 718d6622a8..0000000000
---- a/package/qjson/qjson.mk
+index bb0da12d4c..0000000000
+--- a/package/sconeserver/sconeserver.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,93 +0,0 @@
 -################################################################################
 -#
--# qjson
+-# sconeserver
 -#
 -################################################################################
 -
--QJSON_VERSION = 0.9.0
--QJSON_SITE = $(call github,flavio,qjson,$(QJSON_VERSION))
--QJSON_INSTALL_STAGING = YES
--QJSON_DEPENDENCIES = qt5base
--QJSON_LICENSE = LGPL-2.1
--QJSON_LICENSE_FILES = COPYING.lib
+-SCONESERVER_VERSION = 8d1935919a2013358993a8e9dfa992cbde56e503
+-SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+-SCONESERVER_LICENSE = GPL-2.0+
+-SCONESERVER_LICENSE_FILES = COPYING
+-SCONESERVER_DEPENDENCIES = \
+-	host-pkgconf \
+-	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+-	pcre \
+-	zlib
+-# disable image as it fails to build with ImageMagick
+-# disable markdown module because its git submodule cmark
+-# https://github.com/sconemad/sconeserver/tree/master/markdown
+-# has no cross-compile support provided by the sconeserver build system
+-SCONESERVER_CONF_OPTS += \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
+-	-DWITH_IMAGE=OFF \
+-	-DWITH_MARKDOWN=OFF
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-SCONESERVER_DEPENDENCIES += openssl
+-SCONESERVER_CONF_OPTS += -DWITH_SSL=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_SSL=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_BLUETOOTH),y)
+-SCONESERVER_DEPENDENCIES += bluez5_utils
+-SCONESERVER_CONF_OPTS += -DWITH_BLUETOOTH=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_BLUETOOTH=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_EXAMPLES),y)
+-SCONESERVER_CONF_OPTS += -DWITH_EXAMPLES=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_EXAMPLES=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),y)
+-SCONESERVER_DEPENDENCIES += libxml2
+-SCONESERVER_CONF_OPTS += -DWITH_SCONESITE=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_SCONESITE=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
+-SCONESERVER_DEPENDENCIES += gpsd
+-SCONESERVER_CONF_OPTS += -DWITH_LOCATION=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_LOCATION=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
+-SCONESERVER_DEPENDENCIES += mpfr
+-SCONESERVER_CONF_OPTS += -DWITH_MATHS=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_MATHS=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
+-SCONESERVER_DEPENDENCIES += mariadb
+-SCONESERVER_CONF_OPTS += -DWITH_MYSQL=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_MYSQL=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_RSS),y)
+-SCONESERVER_DEPENDENCIES += libxml2
+-SCONESERVER_CONF_OPTS += -DWITH_RSS=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_RSS=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_SQLITE),y)
+-SCONESERVER_DEPENDENCIES += sqlite
+-SCONESERVER_CONF_OPTS += -DWITH_SQLITE=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_SQLITE=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
+-SCONESERVER_CONF_OPTS += -DWITH_TESTBUILDER=ON
+-else
+-SCONESERVER_CONF_OPTS += -DWITH_TESTBUILDER=OFF
+-endif
 -
 -$(eval $(cmake-package))
 _______________________________________________
