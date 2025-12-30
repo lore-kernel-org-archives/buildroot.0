@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39888EE4998
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 628A3EE4999
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BDC260B63;
-	Tue, 30 Dec 2025 18:12:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C0B060C0F;
+	Tue, 30 Dec 2025 18:12:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qBYuaehpNSMR; Tue, 30 Dec 2025 18:12:52 +0000 (UTC)
+ id hCiW_sTGlyCX; Tue, 30 Dec 2025 18:12:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E03360BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 457FA60C05
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767118372;
-	bh=zvFIxyWP6M+WQxDJoWe9SiP0hSPKl8TcCdr9N4UHj3Q=;
+	s=default; t=1767118374;
+	bh=SZB2Yx8MN6aigJrj99iqy+xrW6F4QBClMOriahV0dsQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZYbAmijPd/RZhn37pUtc8W6vCF79wNamwf4chR64uheBaX2LxP3dF4zD0Ldkqhz7l
-	 g5xrfvcLuLT4ato1yySVknU+UJM9cmOZIpV9pYP8QS3Rk3wWWgJqHoRi04sHpGZESZ
-	 rBuCVxBvHJr7c0Nwe1yj8ezpaRPuP3xZkJ1thKnoHVfvjzhwSFufkAK+9n4h7fx916
-	 gSRSQ4eqUWRTcH8jDkcCjHh3Ae1aQrXdtMiOD0+7jl4TWagieA78/SSf02nA7dOgY0
-	 nUmbp3xP8EFgynHQcm6Xoar8WqFv8MFNiMdTLE8jgp2zJFKRsQd5alieMUBhzDvEkQ
-	 ZZNOEy9bXdriA==
+	b=eJ+286ONL6XYu2NQua7F66+1kx2R/WedmfNNfP3BncLv0j/99bECSJC6hivNekRFJ
+	 cjW6JhY20C19w7cAhp3sVob7YtF9z5dDS0pYF0duIGTw98t34B9edc2pz3VBBIPbrC
+	 2becGJf9XTbZTWDLGEJMccazih7YYEx0oi7Ojvc1QQfu9oB93Wbt92x82hQ9jwd2r9
+	 DCCvRZ+HTmNcINUEV9rG4ypGBBwKxKOY9TUOm/4AdKCesj9kiryLK9B1YWUr+krM+v
+	 47hXFnOQYrpR8SWWROvszQfyJetM9ML1OnzNZc/wFEXyPc+lzHDgUGacyUWrAybq38
+	 lFG1JpB6D2oFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E03360BE0;
-	Tue, 30 Dec 2025 18:12:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5EDC6177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 457FA60C05;
+	Tue, 30 Dec 2025 18:12:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 024FF277
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A86560B63
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B472403F4
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QOdrUdi0j-Mv for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7tTXbn6vJbmH for <buildroot@buildroot.org>;
  Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 554A660B85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D63A4043E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 554A660B85
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D63A4043E
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 54DEF87C3F; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
+ id 4BA6287C3E; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 19:12:16 +0100
+Date: Tue, 30 Dec 2025 19:12:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f306a3e82f6dce6bb22b313b8818d9c84beece03
-X-Git-Newrev: 6ab3c9ea1885329c8f3fa53731bb0d1db15a3a9a
+X-Git-Oldrev: a6db6af9ffa7134b1f132dfd07dd53e7138e86b6
+X-Git-Newrev: f306a3e82f6dce6bb22b313b8818d9c84beece03
 X-Patchwork-Hint: ignore
-Message-Id: <20251230181235.54DEF87C3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mjpg-streamer: remove optional
+Message-Id: <20251230181235.4BA6287C3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gtkiostream: remove optional
  dependency to opencv3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,49 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ab3c9ea1885329c8f3fa53731bb0d1db15a3a9a
+commit: https://git.buildroot.net/buildroot/commit/?id=f306a3e82f6dce6bb22b313b8818d9c84beece03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 OpenCV3 is unmaintained and will be removed from buildroot.
 
-The package does not support OpenCV4:
-https://github.com/jacksonliam/mjpg-streamer/commit/216c090707ffd71fdf86b0c5b182954846e01bd4
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mjpg-streamer/mjpg-streamer.mk | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ package/gtkiostream/gtkiostream.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index 5e52b45b01..e5f12d9d88 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -10,6 +10,7 @@ MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
- MJPG_STREAMER_LICENSE = GPL-2.0+
- MJPG_STREAMER_LICENSE_FILES = $(MJPG_STREAMER_SUBDIR)/LICENSE
- MJPG_STREAMER_DEPENDENCIES = jpeg
-+MJPG_STREAMER_CONF_OPTS = -DPLUGIN_INPUT_OPENCV=OFF
- 
- ifeq ($(BR2_PACKAGE_LIBGPHOTO2),y)
- MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_PTP2=ON
-@@ -22,16 +23,6 @@ ifeq ($(BR2_PACKAGE_LIBV4L),y)
- MJPG_STREAMER_DEPENDENCIES += libv4l
+diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
+index c748c7a000..250e47a0a4 100644
+--- a/package/gtkiostream/gtkiostream.mk
++++ b/package/gtkiostream/gtkiostream.mk
+@@ -47,10 +47,6 @@ ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
+ GTKIOSTREAM_DEPENDENCIES += libwebsockets
  endif
  
--ifeq ($(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI)$(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)$(BR2_PACKAGE_OPENCV3_LIB_VIDEOIO),yyy)
--MJPG_STREAMER_CONF_OPTS += \
--	-DPLUGIN_INPUT_OPENCV=ON \
--	-DPLUGIN_CVFILTER_CPP=OFF \
--	-DPLUGIN_CVFILTER_PY=OFF
--MJPG_STREAMER_DEPENDENCIES += host-pkgconf opencv3
--else
--MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_OPENCV=OFF
+-ifeq ($(BR2_PACKAGE_OPENCV3),y)
+-GTKIOSTREAM_DEPENDENCIES += opencv3
 -endif
 -
- ifeq ($(BR2_PACKAGE_PROTOBUF_C)$(BR2_PACKAGE_ZEROMQ),yy)
- MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_ZMQSERVER=ON
- MJPG_STREAMER_DEPENDENCIES += host-pkgconf protobuf-c zeromq
+ ifeq ($(BR2_PACKAGE_SOX),y)
+ GTKIOSTREAM_DEPENDENCIES += sox
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
