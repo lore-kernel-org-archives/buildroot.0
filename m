@@ -4,60 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C226EE01F6
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 21:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AFB6EE49B4
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 21:45:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 567626080C;
-	Tue, 30 Dec 2025 21:43:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6F8960A53;
+	Tue, 30 Dec 2025 21:45:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f1GVUPXtKPe7; Tue, 30 Dec 2025 21:43:13 +0000 (UTC)
+ id 0iVYwxeUa9Z9; Tue, 30 Dec 2025 21:45:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C29960881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A553E60881
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767130993;
-	bh=BmJtw4nBJ1W5IU1AfHFSRc0XOkafIBgKsvFklHEzxxM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DOxPpnR/HfXqou8QNRp0rgguaK/YzLQgK1Ofqf+iEItq/Wk42Mzu6KH1ctkSxx9Bu
-	 Rs3dBMEKlJx+TMRf07W+DxOoEY1mlSKH0YIiKDaYNiRGKkGj6hpflZsJLSk6QRaV1q
-	 Xid+o81xNS52H2qXfa7n7XmNQxzeRCgiYKESTZ9q79QGK42xk/Tu8NlTc8VzpKG6SV
-	 CNq2z23bIzhbI0NjsPqfShMpkYGqSlaH2MXQ3U8H85Jwohysn8hpfNoowBf9DVW7hL
-	 HGT4jd4d1Cu3b+gOYRRVvzN3rOhv5IxA5Zv+nLYr2dMiU/DLX9YjQgH7irfObc29N/
-	 owpvdNp3i5i7g==
+	s=default; t=1767131112;
+	bh=2acgs5Pgc8xVaLzMLuFWeZAIAydCnB9j419j/ObGxMs=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=OzpttoohYDj5kO0HWig7a3Wt0FIL4xhT4A1kMdNBL+aAgN+L1LPWpV7dD86ky8MkP
+	 fPwMNMkNbVIBH14MOsW4Y7e7tLepLGmoG1AkLSMtdufyTUKF43HpSywkj1CEOZVx3X
+	 KP96t7POEZH6RzwcTHqR10P/PakkZY4HgtYI9OQ9qL8c000tb/qtAG0nsRG5fP8RSU
+	 QvLa7Mkx4c8sWrU2j6VwNyO1YlbOev6anJlsrSQoFf6DAYjBGC2yedXB5cs0z6Cder
+	 asrbooUZV369F2AsuBGuecgDH7+Ih/k0hTajImxcoQH/dDoAbPVeLHqD5NK3DZUpgN
+	 bJxh3PtWLgn7w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C29960881;
-	Tue, 30 Dec 2025 21:43:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BCADD8
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:43:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A553E60881;
+	Tue, 30 Dec 2025 21:45:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6301C177
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61D0A402B1
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:43:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4986E405B5
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:45:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UEPta-gLBuEO for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 21:43:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB5844024F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB5844024F
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:43:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B73687C90; Tue, 30 Dec 2025 21:43:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 22:22:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 244f01ae45103dc8fbdbd66617baa9658a720b30
-X-Git-Newrev: d3c02bca133ef6ca4f8a9abacebd1ed1580f471d
-X-Patchwork-Hint: ignore
-Message-Id: <20251230214311.9B73687C90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beaglebone: Switch to Bootlin
- glibc stable toolchain
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AjNdExsYnU6a for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 21:45:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5DCD74055A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCD74055A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5DCD74055A
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:45:10 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 3FCE313F8A2;
+ Tue, 30 Dec 2025 22:45:02 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 30 Dec 2025 22:45:02 +0100
+MIME-Version: 1.0
+Date: Tue, 30 Dec 2025 22:45:02 +0100
+To: Kory Maincent <kory.maincent@bootlin.com>
+Cc: buildroot@buildroot.org, Lothar Felten <lothar.felten@gmail.com>,
+ Bajjuri Praneeth <praneeth@ti.com>, thomas.petazzoni@bootlin.com, Fabrice
+ Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20251216151449.395253-2-kory.maincent@bootlin.com>
+References: <20251216151449.395253-1-kory.maincent@bootlin.com>
+ <20251216151449.395253-2-kory.maincent@bootlin.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <0bd25fae68ba496d4f70b1590af2eb5d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767131107;
+ bh=sXKUb3gYeClw4gvv1i/hQvrk5TsMqFGdg79aSDaynD0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Hu3VT/2lD+OImSr3qM/YtBa/bg1S0KPKzAfTSRt3vxmOZ2hjpPX+8AFeYVEW3Luat
+ t7r5raMeNsxXWAHRtyF5ChwkLqR+TaU8cNCmYT4g9eXrWpRJa56sRV6+dmmKWGFb0n
+ 0BBXau4zt6U9VMcyFa4xHP4tH0PzeyiPRczkhZAf07oDH4IoxRNHg8ZxLAvmshaHxd
+ VlHf2SBKmT3VmLOlhOJSJMaM3XEVlO9puIr0tR1c0RePjitRzerlCe8YYnun1W12wN
+ i4MlohSNk6s6fJawZ3rksTWkm0/KBneYQVZJ6FcVPt0dnGi5c9bwX79FG96oqaaBpG
+ sGUQHSs83P3Fg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Hu3VT/2l
+Subject: Re: [Buildroot] [PATCH v3 1/5] configs/beaglebone: Switch to
+ Bootlin glibc stable toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,40 +99,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3c02bca133ef6ca4f8a9abacebd1ed1580f471d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/12/2025 16:14, Kory Maincent via buildroot wrote:
+> From: "Kory Maincent (TI.com)" <kory.maincent@bootlin.com>
+> 
+> Switch to Bootlin glibc stable toolchain as requested by the 2024
+> Buildroot meeting report:
+> https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+> 
+> Signed-off-by: Kory Maincent (TI.com) <kory.maincent@bootlin.com>
 
-Switch to Bootlin glibc stable toolchain as requested by the 2024
-Buildroot meeting report:
-https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+Patch (only) applied to master.
+I left the rest of the series opened, since there is comments.
 
-Signed-off-by: Kory Maincent (TI.com) <kory.maincent@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/beaglebone_defconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Best regards,
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 86bf6bce9a..8a8f618e40 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a8=y
- BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/beagleboard/beaglebone/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
