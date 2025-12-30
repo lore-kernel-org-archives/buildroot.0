@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24978EE4988
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 16:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B5E0EE4982
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 16:19:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C40928080B;
-	Tue, 30 Dec 2025 16:14:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58BC681C46;
+	Tue, 30 Dec 2025 16:19:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PquCX2xDp-5c; Tue, 30 Dec 2025 16:14:09 +0000 (UTC)
+ id s6On-9fVqc2c; Tue, 30 Dec 2025 16:19:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D598981222
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85F2481D35
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767111248;
-	bh=aK5a6TewaJ3dARj70bHEYK8HZr0sVBYJbcD6XQQkkvw=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	s=default; t=1767111589;
+	bh=PDLZZkXTHW0lNkwbgxkCDspVCSm0JMPoYw0PRaNqW14=;
+	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=eRfHkqlbruY+MSDHulPHoO2kz5osmpNae8GFC91E73cYdcZeUsphhofuZOVm4mENI
-	 /kjzjFdPRHDYZ5FUxIHqyaFsSQuleWIRfEm65o7Y0ZyI/9ycouO7t/MXcJVnISjwgV
-	 dM4X32pEHbatmiusc9UFlIiMjiqVN6SkMW+lSWnH00ftx8fXX5ZbqeSqw5g4dTDJnI
-	 AH+1Jmz5HrsHz8JSCSwOSknMms41MyMF/e7+Z99j4N5SMCucSY3ZzuqSNoCWX/WW4R
-	 uM+poWG/iVvfMpcd0Y9cAq9qOaxb5ptBBgPRkJAp3Osmk9irj1c/Z/RFRYRA0OBemt
-	 7fJAEeNYfajKQ==
+	b=bfxVLphMYcwj5q6mlI9BJ6KHaiMomdINMYHTetgs/TGxKfWCQh4CIoy8TZrY7jcDv
+	 dmfLHpVB3te2oJTeJ5YfMIAd2scN48EOsM6nZ4GG//u2+X0etQdCXAfU4xXkrYOx1y
+	 NccPv9JlJex75SBA2dovsk9ueNOJNjg4gzN99i5L4hnf8rleH6kvWjcdjrxFLjQn+0
+	 yFXhnMTSmYgfByPBfZ1dDYEzf9sLSIqLzfeOiUCdIDnh2SXxBfsxNm/m8brMOM7piN
+	 Ywibd3zLLeeQJTsMKE4UiqmZx8D1tZHt1rL1/xyiCRyLLdSbww+EgQLG5gces6Ozr4
+	 fOwDQqkOmmwCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D598981222;
-	Tue, 30 Dec 2025 16:14:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E659177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 16:14:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85F2481D35;
+	Tue, 30 Dec 2025 16:19:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 403C4277
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 16:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B7334003A
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 16:14:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3257181C46
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 16:19:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhmBOSn7pixA for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 16:14:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4yoXdEJm5h3u for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 16:19:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
  helo=smtpcmd12131.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10FF94033D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10FF94033D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C3A10807B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3A10807B7
 Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 10FF94033D
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 16:14:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C3A10807B7
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 16:19:45 +0000 (UTC)
 Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id acMFvTYB2P2aDacMFvOCJt; Tue, 30 Dec 2025 17:14:03 +0100
-Message-ID: <0852bcdb-6a55-4275-be44-2ab7cf4474c1@benettiengineering.com>
-Date: Tue, 30 Dec 2025 17:14:02 +0100
+ id acRYvTbHkP2aDacRYvOEQ4; Tue, 30 Dec 2025 17:19:43 +0100
+Message-ID: <768cf8fb-7f94-4081-81e0-08d8192f834d@benettiengineering.com>
+Date: Tue, 30 Dec 2025 17:19:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Nigel Wang <asd617140123@gmail.com>, buildroot@buildroot.org
-Cc: thomas.petazzoni@free-electrons.com
-References: <20240328074752.148829-1-asd617140123@gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20251220170623.155785-1-bernd@kuhls.net>
 Content-Language: en-US
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20240328074752.148829-1-asd617140123@gmail.com>
-X-CMAE-Envelope: MS4xfIcChZ1U+GvLVMhEENot3MAAGnim4EVYmT3fnCBsFT5uTQMmHc+cpz65p1c7ab+29596h3i746DtwuNJe7RA1YiPFKIhF/bU0y6+kIOzN+uLctM+GBmD
- mggVslLi7qmqdrvhjndt0FW07zw3l6PNUmhEjh8ZZDRW6ectrOgb7N55H9d2mXBNi58DxLblN2bQui6224a9EA2UXv+aUx4bSUuBG2Z8IttE0qV1HYdlPPGs
- gcv9huxQH1PqyEamXATRy+qf+FFixUN/c62c2kmBmumEacnSeu349u5mvWhkf2Uq5sFLMQmzEC1rb4UKOj/Q8Q==
+In-Reply-To: <20251220170623.155785-1-bernd@kuhls.net>
+X-CMAE-Envelope: MS4xfN57xjUKnN2rj67usApZJQ8jwGtX6E3LEnkV5PFfzQPMqaTr4MKKC1DHowCuKdh7HzJeLQvUXuGJfSxf7OBYS1R7eqSBKLpucrED0SY6R5ur5lFyR+eo
+ 7R7VnYAwtIyAO2MebNHWqwX0H4uFwr2qYqATtoHxFtn6NuuRTG7qfyDW30vl4dQpWEzE4BnfsWhEAwm53xxAsNpukYuXBNN/1HIYSymG0K3Ub592aoytv9CG
+ 4z5eLhVyFu9c8xuuo1cLpg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1767111243; bh=Q/x3sNVrYrlgZgG9v+iA8G+flxOJPQBSoEbAtrtdY2s=;
+ t=1767111583; bh=FIFVasGhMPnEzghnK/wYY/G+wkpLXiJys+ZwuJnV2YU=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=iVKiCH141bqD3hatQjvQXr7QM05+aoHptLErboJxSJuzOyTyh2coxLt5iS5zuKb9N
- LmayOk0aP9T06pvwlHSK+P1aFY3lySSwS3xVq/4FpvizuuFP/gK8H9fiBLzq+7Zoyt
- /XCS0pLZybPOCRbVVcOZI7tj39CWyV1c/mDXXd5kkKVFo5XuaZ+R4n981efQfVl7T7
- bYyiSKmd6+kIdVLeS4076a/UsZj0lGFMZggS327ZCA0NojOVuBT1b8QCyihDRjAhqJ
- KCcYxo7a9YPhNHRq1iYJenGjoETd95dGm1+BWpIXTH0+89Crok5LERCh5pW96jLiln
- TPi0W+RIyW3Ug==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=gQK87UgXH8dRYBpv5FVbDEKMpVqahxysge2Skv2jTIiflYlnJjEqPZrlqDFxwjjjK
+ L+eU8b8myVp25S20b6rJHno8iraCMJ14LS5rcOku709u2G8dLDBP0pKCj2HlIC8uby
+ WfwyatlbuXJb1MuS3fMKA7n9MCBDuG/S0Fya4pd4voVuhO1zx+V5CubnnRcUJ57dC+
+ fGsWgJamo/p5i7uVYP9zDr9sdlL0q1x7IkZFM1VBshvKgkoNxp71tjFYWlRZyWf4aa
+ K0Is5Fk0fHL+7mJ63eQzUfZ04W447u9KNzVTWGzqZrHpGaai17yqOCwPhHenyGB46p
+ e82Symc8+wKUw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=iVKiCH14
-Subject: Re: [Buildroot] [PATCH v3 1/1] board/cubietech/cubieboard4 : Add
- config file for cubieboard4.
+ header.s=a1 header.b=gQK87UgX
+Subject: Re: [Buildroot] [PATCH 1/4] package/util-linux: Remove -lpthread
+ from uuid.pc for non-threaded builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,204 +98,54 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Nigel, All,
+Hi Bernd,
 
-9 months passed and this patch is still in backlog.
-I ask you if you can bump Linux and Uboot versions and send V4.
-I also ask you if you're still interested in mantaining it.
+thanks for this patchset,
 
-I ask Maintainers: after doing so it's possible to commit this patch?
+On 20/12/2025 18:06, Bernd Kuhls wrote:
+> Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped
+> util-linux from version 2.40.2 to 2.41.1.
+> 
+> Upstream release 2.40.3 contains
+> https://github.com/util-linux/util-linux/commit/e143539d30fd18afb3ba6d3c6e50a260d4219895
+> which unconditionally adds -lpthread to uuid.pc causing build errors for
+> other packages using non-threaded toolchains like erofs-utils.
+> 
+> Upstream was notified:
+> https://github.com/util-linux/util-linux/issues/3210#issuecomment-3477915953
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/582/5827995db2a805e0c8a04fde8498eff6f28aa6d8/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Thanks in advance
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
 Best regards
 Giulio
 
-On 28/03/2024 08:47, Nigel Wang wrote:
-> From: nigel_wang <asd617140123@gmail.com>
-> 
-> add Cubieboard4 board support.
-> 
-> - SOC: Allwinner A80.
-> - DRAM: 2GiB DDR3 @ 672MHZ.
-> - NAND: 8GBeMMC
-> - Power: DC 5V.
-> - Wifi: 80211 b/g/n. (module is AP6330)
-> Reference: https://hirokun.jp/AP6330.pdf
-> - Ethernet: RTL8211E
-> 
-> The detail of board: https://linux-sunxi.org/Cubietech_Cubieboard4
-> 
-> Board support package includes the following components:
-> - mainline Linux Kernel 6.6.8
-> - mainline U-boot 2021.10.
-> 
-> Signed-off-by: Nigel Wang <asd617140123@gmail.com>
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> [Build Tested]
-> Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
-> v2 -> v3
-> * Added my name in DEVELOPERS.
-> * Added BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y in cubieboard4_defconfig.
-> v1 -> v2
-> * Add BR2_cortex_a15_a7=y in buildroot defconfig.
-> * Bump linux version to 6.6.8
-> * Using sunxi_defconfig in kernel.
-> * Using "make savedefconfig" to save defconfig.
-> * Remove boot.cmd.
-> ---
->   DEVELOPERS                                |  4 +++
->   board/cubietech/cubieboard4/extlinux.conf |  5 +++
->   board/cubietech/cubieboard4/genimage.cfg  | 38 +++++++++++++++++++++
->   board/cubietech/cubieboard4/post-image.sh | 18 ++++++++++
->   configs/cubieboard4_defconfig             | 41 +++++++++++++++++++++++
->   5 files changed, 106 insertions(+)
->   create mode 100644 board/cubietech/cubieboard4/extlinux.conf
->   create mode 100644 board/cubietech/cubieboard4/genimage.cfg
->   create mode 100755 board/cubietech/cubieboard4/post-image.sh
->   create mode 100644 configs/cubieboard4_defconfig
+>   package/util-linux/util-linux.mk | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
-> --
-> 2.34.1
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 313fc16b9d..c70707c8ec 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3362,3 +3362,7 @@ F:	package/quazip/
->   F:	package/shapelib/
->   F:	package/simple-mail/
->   F:	package/tinc/
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 16d086f333..8c98d80adf 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -37,6 +37,13 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
+>   
+>   UTIL_LINUX_CPE_ID_VENDOR = kernel
+>   
+> +define UTIL_LINUX_POST_EXTRACT_FIXUP
+> +	$(SED) 's/-lpthread//' $(@D)/libuuid/uuid.pc.in
+> +endef
+> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +UTIL_LINUX_POST_EXTRACT_HOOKS += UTIL_LINUX_POST_EXTRACT_FIXUP
+> +endif
 > +
-> +N:	Maintainer Nigel Wang <asd617140123@gmail.com>
-> +F:	board/cubietech/cubieboard4/
-> +F:	configs/cubieboard4_defconfig
-> diff --git a/board/cubietech/cubieboard4/extlinux.conf b/board/cubietech/cubieboard4/extlinux.conf
-> new file mode 100644
-> index 0000000000..a003337d36
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard4/extlinux.conf
-> @@ -0,0 +1,5 @@
-> +label linux
-> +    kernel /zImage
-> +    devicetree /sun9i-a80-cubieboard4.dtb
-> +    append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-> +
-> diff --git a/board/cubietech/cubieboard4/genimage.cfg b/board/cubietech/cubieboard4/genimage.cfg
-> new file mode 100644
-> index 0000000000..f1dee13923
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard4/genimage.cfg
-> @@ -0,0 +1,38 @@
-> +# Minimal SD card image for the Cubieboard2
-> +# Based in the Orange Pi genimage.cfg
-> +
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"sun9i-a80-cubieboard4.dtb",
-> +			"extlinux"
-> +		}
-> +	}
-> +
-> +	size = 8M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		in-partition-table = "no"
-> +		image = "u-boot-sunxi-with-spl.bin"
-> +		offset = 8K
-> +		size = 1016K # 1MB - 8KB
-> +	}
-> +
-> +	partition boot {
-> +		partition-type = 0xC
-> +		bootable = "true"
-> +		image = "boot.vfat"
-> +	}
-> +
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext4"
-> +		size = 512M
-> +	}
-> +}
-> diff --git a/board/cubietech/cubieboard4/post-image.sh b/board/cubietech/cubieboard4/post-image.sh
-> new file mode 100755
-> index 0000000000..e37b960a4d
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard4/post-image.sh
-> @@ -0,0 +1,18 @@
-> +#!/bin/sh
-> +
-> +BOARD_DIR="$(dirname "$0")"
-> +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-> +
-> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> +
-> +rm -rf "${GENIMAGE_TMP}"
-> +
-> +genimage                           \
-> +	--rootpath "${TARGET_DIR}"     \
-> +	--tmppath "${GENIMAGE_TMP}"    \
-> +	--inputpath "${BINARIES_DIR}"  \
-> +	--outputpath "${BINARIES_DIR}" \
-> +	--config "${GENIMAGE_CFG}"
-> +
-> +exit $?
-> diff --git a/configs/cubieboard4_defconfig b/configs/cubieboard4_defconfig
-> new file mode 100644
-> index 0000000000..e3df5025c8
-> --- /dev/null
-> +++ b/configs/cubieboard4_defconfig
-> @@ -0,0 +1,41 @@
-> +# Architecture
-> +BR2_arm=y
-> +BR2_cortex_a15_a7=y
-> +BR2_ARM_FPU_NEON_VFPV4=y
-> +
-> +# System
-> +BR2_TARGET_GENERIC_HOSTNAME="Cubieboard4"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard4!"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard4/post-image.sh"
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.8"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun9i-a80-cubieboard4"
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard4"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +# Linux headers same as kernel, a 6.6 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+>   UTIL_LINUX_INSTALL_STAGING = YES
+>   UTIL_LINUX_DEPENDENCIES = \
+>   	host-pkgconf \
 
 _______________________________________________
 buildroot mailing list
