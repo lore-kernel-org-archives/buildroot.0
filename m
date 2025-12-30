@@ -1,114 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2AFFE94109
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 08:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C1AE94120
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 08:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8549F81339;
-	Tue, 30 Dec 2025 08:19:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HSQqqn0ArMdm; Tue, 30 Dec 2025 08:19:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A5D381335
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767082773;
-	bh=ppCsXpA66VKYVci18MatcD0+24c96SrJsNXG5Jk+nR4=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=p5hGS7os2EjC/3TZVEu3x9SDjW9j0SXn2KNwsgb3JqjzUo2ctSqJhEP9l2GfibB3P
-	 R82CvpO0EqCP1pmoM494DvDP81Rh4NhgltNOweemlazsdvM1rqBnm33WvOCj5rjrrQ
-	 11MuvA3hQxeOQtBvw/kmv/yfwZDCN4WR1u5OG/XdPApfRwVV81A5lD+OspsWjhAgux
-	 Jf+Dz6LHdHTw7c4t7z4lbIGT3XfiQYOwy+8tqNy+gMMJLfwI6vwhHvjuy6/tQOteB/
-	 B9C8BCWfsHMUP0ZSudYCK900HAgQvzyqBhEYj+1ixPGHOX/3RhTFAI2nTO2fSLWPLB
-	 NHD7RlM/L7WyQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A5D381335;
-	Tue, 30 Dec 2025 08:19:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 822A0177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 08:19:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 710D160868
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 08:19:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F53960791;
+	Tue, 30 Dec 2025 08:19:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6mdhpKQ9zn3v for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 08:19:27 +0000 (UTC)
+ id 5QrdPJz7digE; Tue, 30 Dec 2025 08:19:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66BA4607A5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767082776;
+	bh=Hzy2mZB3TBe4mvD5vmtQHpXCmnsVYqaZhcr+QLzOVjU=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=mw4RMpyxnY+2Zr+tW4uawEVQBF8zSz+mYrb7ig4okC9zB07iSZfKXox+sgAzY039o
+	 a/AUc85SF8vsyT15wlhDa+X9x92Of18/Llte4eZfKsiOgujaddCpHtI3FoyNakUIc9
+	 eU2OsOQoVrQF1O4nk33hpExg8McYCVikO2KLIOWmWjsd218VMDaeGCh/7/CO6xwsPL
+	 hAGlKot6CDLlPP9S+uWdO9MzCxHKyXV0/sFsmCvrzug+K2aPtKRKtFqQZEebpDPt+C
+	 7iTypci2VAYUVkNKnOMWN8xicOMoFRbEYfqNO5P4wkSjH2DyaWhooiunOxVkH70DiP
+	 ZPqtMuxFdXlIw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66BA4607A5;
+	Tue, 30 Dec 2025 08:19:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3EF6D8
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 08:19:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB7C24076E
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 08:19:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KrsYiNtvqu-R for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 08:19:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 42B0B60791
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42B0B60791
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 42B0B60791
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 08:19:27 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-477aa218f20so59403085e9.0
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 00:19:27 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2CCB40408
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2CCB40408
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B2CCB40408
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 08:19:31 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-47795f6f5c0so52071065e9.1
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 00:19:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767082765; x=1767687565;
+ d=1e100.net; s=20230601; t=1767082769; x=1767687569;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=d/bFg3driysLUQVhr+XwGzX+qJLSPYXGCbmSlRuAuq0=;
- b=mk6du+JeXjlwh61F5QJt08GMvmLWdKALiLkgRatnNJtsv3jO4u1GnBro+PDC5T1DhI
- 7UdZAASRpNjj0R79P8+ELe3RqC4BVZPZRApzqomu5vLNZEAnhAgURjwbxR2FU4ofqfuE
- UuqR6V44MNQMJD76tq/OP/JG7Rgoq7gru1juOdyB0CNP1qUEgYX9mzBVTw97me6Ck1mg
- 2jW81J0VkROl3k/mQyYS03YT1uYroJzOBVPhsmD5taTeWzJwKJfQREP6Ej/GnjS3iGZ0
- qLs6nzW54xbOSdvo6bp7KSd2HmgQ/kyMu3OuRQqnd6xNK+17yIijavEkOKSghuzHwhi5
- fo3w==
-X-Gm-Message-State: AOJu0YyImMC1XGLmv5k7I2CRBPe3n0pgDq5pUCChI/AGhI3VYAKSAjz9
- 8n/NTOMLq9oYLtOfscbuCdk2CQb7A56W7WBbx1ofQtzUqqg98P3tiwf4skX0t43i49Q3CPO+8WX
- rmjYvyDI=
-X-Gm-Gg: AY/fxX5fEIjzOUNBOW+z8V3tL1ONwTMznkBkBLe8iY75PwiYe4FwDQO6lAkkEIq0UXQ
- bS4decm74gEScxFKQ+blGT5PKt1ACs7fO6AQN4ZHmrNLcJln3hz2DTZlifFsP62uus8ONBLjE6s
- 0dEb633bHowJXdKHWuXA8Yp7MBs1q5Dpzp879ADNojIPL51rv6IpYtjoFqzG4aloLgn49CnunOn
- oqVciX2zeeuxMxgFKpKn3vzyvaW768/lnJnT17HxRv8fImI5n+AFQxHpTbz2jACcAmPafldKlA3
- 6lq6DOaW2/fgHbZkkW4p2lo/HBW6gGo2weQjj+da6+SnQ6HBxDbwZ1SV8dB9O9uXE7Y2CRGx0aO
- yxLMkPYqPD0oNSb6yUAoZibcXzKPF5C2g5CfPfJG2ZvGFH0F3S7IC07uY9D+MOGSYfhwYnR5AXT
- ViN8E=
-X-Google-Smtp-Source: AGHT+IGbXDamtdLM7tSNDVeEGIAULoQHdPoat1mLZJIlRGjyNIwMSyUhFkLG0WU8rdIKVmhAt3mngA==
-X-Received: by 2002:a05:600c:1d1d:b0:477:a21c:2066 with SMTP id
- 5b1f17b1804b1-47d19532f48mr337997785e9.5.1767082765078; 
- Tue, 30 Dec 2025 00:19:25 -0800 (PST)
+ bh=V0N306Q5j0BN8YTyvCjRdNCOsZVJ4XtAUUPQAdbvHog=;
+ b=Ue/BaCcHx9zihvGmR5vtNckLbKerozoITdIWhXZfIyBMo9qrLgvr6qYtg0z0uJBdfB
+ cC5RDzv/P+pfAaMT5nTgH+3G18RCndG81qMQIyViuz0Q5UmfgGdqBZZXNaC/HHVC23M0
+ +PmDntODaKKUWwjb+/UtMdzloc65GjabckhBEdMITqgFWQBGSey+8L5iiTsVYmFCNetb
+ enc9aEAWL3cOXLYRXxJniY1MDuypFYYXxkhrkZ78XpGHS3wEKwC19M3jbiyXdM6PK5J/
+ mwRw3hbNsvh1tA77S7xUdAHO96ZL0h2+p/U8ObO7WZ2qnwpFm0biBsf0clkVNtQng3VD
+ RQIw==
+X-Gm-Message-State: AOJu0YxwtxdI0eHQ4xBW5T664LUKWVgHOltBw6c1kOlNVcwacYmNnZ9E
+ yh3XtOH4fSmz/JNVkDAZYmtQ6zzsXtmsvbUPWmD6UX4rJxt4ujQ+EfLTQUiCAZ3eCcLjrHt0xq0
+ hKxDT+uk=
+X-Gm-Gg: AY/fxX61UbXNZYsCmR18bS0d/Gwhu8WnppnmmGb/gYX342Zivwuskscd0oAGDf484eh
+ vEyVYDfC7QuGlFEFF8+QytDrLRArHx8BxC0j+n39+2BLSUA147fGZGr5Sg3lzPe5ReqNaBUg3oU
+ y74uS+HzXIJqu25CCYEKSs0DFf6B2CG83syCYx8/HXPgnrCZMLhRzne+KOJhbfAhaDWHCI8y/YY
+ OYS6EPNv+pN03ob5EMaS46XVEQ50rtwlhzSzi1e86/VTPiaQ0utcK9IEFpQ+yWiEfsoHHfsBcct
+ vPZUg9ijj9J2oznrheGiwJk/VY/DuDQ3vNbmduEKkw3vGRlQ1NEmgvO8Thz6lmQOZj4Bgwvjg6f
+ bxUdK+KZmvTNw/jdyJvEJGg67HE/HjxN/eIZsrVaMN5rpMKnd6b8w7u0flnxS/Qoi8IECmmpSwS
+ B84Cg=
+X-Google-Smtp-Source: AGHT+IHhZ4mFXtiisWNqoX99Wq4ZZIdFVcqVatoAVdHTtIyaIOSrTlLIW0pj2f1II2HLdk0ydZyXGw==
+X-Received: by 2002:a05:600c:46cb:b0:477:7f4a:44b4 with SMTP id
+ 5b1f17b1804b1-47d1953b78cmr408592895e9.1.1767082769524; 
+ Tue, 30 Dec 2025 00:19:29 -0800 (PST)
 Received: from arch ([79.132.229.12]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4324eab2ebfsm66328773f8f.40.2025.12.30.00.19.24
+ ffacd0b85a97d-4324eab2ebfsm66328773f8f.40.2025.12.30.00.19.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 Dec 2025 00:19:24 -0800 (PST)
+ Tue, 30 Dec 2025 00:19:28 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 09:19:07 +0100
-Message-ID: <20251230081917.18676-6-thomas.perale@mind.be>
+Date: Tue, 30 Dec 2025 09:19:09 +0100
+Message-ID: <20251230081917.18676-8-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251230081917.18676-1-thomas.perale@mind.be>
 References: <20251230081917.18676-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1767082765; x=1767687565; darn=buildroot.org;
+ d=mind.be; s=google; t=1767082769; x=1767687569; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=d/bFg3driysLUQVhr+XwGzX+qJLSPYXGCbmSlRuAuq0=;
- b=CKr9ESkLa/Q4MUMRrKBql00NVKnmMfU3lxyoQdvY4b3WTFQ2Vp3TuK+17cKJPEiAyH
- Upa8nD9Q0KwdprwWKwzksljKet8rAtvuxts9QNMpwQlNnJ4YeMgeSbTA4EyKVXhS+ZQ9
- 7+iFYXnF8K0bZldSS9fw/G2MhQVnW53h19118MCeAsy1GFZL76U7Z9ojffFU2c5RBHKI
- xwX8mCn9lPDenPypYtqXsqeedMl9C6ILBkXvo6prk3oC5Rc9s2UBDxvNoDRe5ti2vjib
- zPoHhAIehwDp1rcCFphtcOuidV9U0QbEHNpTp1X/Xlbd327synn0bAnU10KfOfxL1VaC
- siSA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=V0N306Q5j0BN8YTyvCjRdNCOsZVJ4XtAUUPQAdbvHog=;
+ b=O0hU3BqoKrXXi7ErGmLWjjfSxE7rqVn1hom1gcWswWh++hV/baAbR4iXHgcBFQqsVY
+ JOHhbmiKoBklmLXLJJBa8MZ32hlYN9PEgXmtg/irGZugp5a5JyPIgYw3tXVpIyXA3mQa
+ xHQWYacbKRqypwfFJNvVPQVZ563bth5YWCV8pjpiXHEaAY9fksZ/rLiet3ZN6asE01Nk
+ byrYf66b/OVoMBjF9/e8HkIpUDnAXv4yyOREP2Mc+SddLOkGydeFQU0xDhmOeV1HFrN3
+ v16bzMsZGJIYwjYHsrLvxSeifZSIdAjwErEUQlHcsXRmKhJEw++2951N1RFhecyRB4oF
+ ggjw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CKr9ESkL
-Subject: [Buildroot] [PATCH v2 05/15] package/rsyslog: remove stale
+ header.a=rsa-sha256 header.s=google header.b=O0hU3Bqo
+Subject: [Buildroot] [PATCH v2 07/15] package/pixman: remove stale
  IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -137,7 +137,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Since Buildroot commit [1] the CVEs are no longer matched to CPEs with
 versions using '-'.
 
-The CVE-2015-3243 is then no longer matched to the rsyslog package.
+The CVE-2023-37769 is then no longer matched to the pixman package.
 
 For more information, see the explanation in commit [1].
 
@@ -145,24 +145,26 @@ For more information, see the explanation in commit [1].
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/rsyslog/rsyslog.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/pixman/pixman.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 69128afbac..dedecdc572 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -9,10 +9,6 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_CPE_ID_VENDOR = rsyslog
--# rsyslog uses weak permissions for generating log files.
--# Ignoring this CVE as Buildroot normally doesn't have local users and a build
--# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
--RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 63d9ccd10b..d02bb0a260 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -26,12 +26,6 @@ PIXMAN_CONF_OPTS = \
+ 	-Dlibpng=disabled \
+ 	-Dtests=disabled
  
+-# Affects only tests, and we don't build tests.
+-# See https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
+-# "not sure why NVD keeps assigning CVEs like this. This is just a test
+-# executable".
+-PIXMAN_IGNORE_CVES += CVE-2023-37769
+-
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ PIXMAN_CONF_OPTS += -Dmmx=enabled
+ else
 -- 
 2.52.0
 
