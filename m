@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9035CE95A8C
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 12:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DB6E95A86
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 13:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3363381BB0;
-	Tue, 30 Dec 2025 12:50:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sf8kQyNZwtJG; Tue, 30 Dec 2025 12:50:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67D1B81BCF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767099002;
-	bh=l5phGjW2+tAbVWb9myowV88NTsvQHhfXz4qlrCbAg4Q=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=PGTUlovwgDRpBTez0fmT+cB2fuKjH0QeIaCz+ImAN2hDCukfdAsXD0OJaIj/gZ81E
-	 diTV0y0d4+4rxxPK4xGhVo9bZ5EcrLLYRshq63/kxvf9trQGBTciNJjuky37OXIpkL
-	 xqs8jPB1F0+OuKQH9wVs0Q4juEM87bUz98aCKmrsuP4WeB8gSuVECldCcXrWQjRRF3
-	 sofEUBd+6iD6BuPU2ZTWJVTlp0khojvdXFi23WOVTSReSgEV2whGQpEs22qBHvlTqk
-	 fbZzjBX5COk+K/HIXkNs2gHnLghPts4ozVElUtn4wllbpxlLZ/TyBwQ0ifL8oEbPpW
-	 7irJx2q6BDC3Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67D1B81BCF;
-	Tue, 30 Dec 2025 12:50:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 43B8F372
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 12:50:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A31360879
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 12:50:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85F2A60B15;
+	Tue, 30 Dec 2025 13:00:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Z6CvZFcsOJH for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 12:49:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id zhrsk47_ACjD; Tue, 30 Dec 2025 13:00:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93B8F60B55
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767099628;
+	bh=rtB5mO2xcdi1Uo7PHlmmeuKYBCDONOA6WRHUA7WccdY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LYtmsEbl9sjcTjVxanmP0W+Qk9gDYs4HEPoG2OEzYJTfh6srxkEB9zK6Z7JmCYGv3
+	 8nlwPnuOMhaavE5g5Xzybq0jGM/eIbi45JYySPSPxgK7C2uwmeBnfpNfLktPr1fQEy
+	 s5MkdG7HQXnXepRYS6L3gUIjmy58AwZqJZQdqPZ4NobeooDjS5o9rMH8fYYdbiJXx7
+	 p4UHhFC9bo8W7WMDkbLESAsSv83Y+w5WuSHt4BrI1tFMLZe29tJoF/btUDkkOzEBhl
+	 tr2vR6I5PSX4ENXCAVPOOJLjWcypPSuR+0Rk6ZlDvKyPDbKZjePu2oMuYbGLPKKXHV
+	 WLOiep/foQe3A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93B8F60B55;
+	Tue, 30 Dec 2025 13:00:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE766177
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:00:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0C8D40611
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:00:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ovApt0hdAayj for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 13:00:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3C24260699
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C24260699
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3C24260699
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 12:49:58 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id AE9F44E41E82;
- Tue, 30 Dec 2025 12:49:56 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6E0DC6072C;
- Tue, 30 Dec 2025 12:49:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 77F78113B0392; Tue, 30 Dec 2025 13:49:49 +0100 (CET)
-Date: Tue, 30 Dec 2025 13:49:46 +0100
-To: Francois Perrad via buildroot <buildroot@buildroot.org>
-Message-ID: <20251230134946.3d737c29@windsurf>
-In-Reply-To: <20251212084954.76257-1-francois.perrad@gadz.org>
-References: <20251212084954.76257-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767098995; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=X9jGYVmVJxjL9Z+WqM2P6MDuFW3LJU5tLEczg+ZmYUM=;
- b=YfCgta/tK+OFwRjhaPILpLcYkjTAC59+oR2CGKIECnIoINyPizApufZarKgP7coDIPOiSl
- 89zGIDqgfvHIBFLbeww/jBdgRMAwn9/s8Vykw9BX7fTFHloZaoYO41Ui8swfhFBgoZ3AX9
- TaxyMBquh3JsHyxKW5725+9aSkKucQqcSTyknKJU/ajfQN0hs2UHB+xTI/eDYVzNdYafLs
- vzEXZNYiP247Z5lqeWsXN7qZ7Ps3U2JOqtEsEsvIWbe4cUlXns9/+8uCRWcst8g6oVbgbj
- /hBJjV0KuTKWzmbL91uwJAH+bwWzz4ePY/ABtcmFOu4uJNgOTu6rFzXOgSALyw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=YfCgta/t
-Subject: Re: [Buildroot] [PATCH] package/ficl: downgrade to version 3.03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C83C4013F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C83C4013F
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 13:00:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2CA6F87A70; Tue, 30 Dec 2025 13:00:26 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 30 Dec 2025 13:44:14 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 063e25de6f418cee8082c5398e546b4842ee435c
+X-Git-Newrev: c68927229646820dbd0d2a5653811662623a5ae1
+X-Patchwork-Hint: ignore
+Message-Id: <20251230130026.2CA6F87A70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tortoise-orm: bump to
+ version 0.25.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,30 +71,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRnJhbsOnb2lzLAoKVGhhbmtzIGZvciB0aGUgcGF0Y2guCgpPbiBGcmksIDEyIERlYyAy
-MDI1IDA5OjQ5OjUzICswMTAwCkZyYW5jb2lzIFBlcnJhZCB2aWEgYnVpbGRyb290IDxidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2ZpY2wvMDAw
-MS1taXNzaW5nLWluY2x1ZGUucGF0Y2ggYi9wYWNrYWdlL2ZpY2wvMDAwMS1taXNzaW5nLWluY2x1
-ZGUucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMC4uYTUyMDg5
-NjIzCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvZmljbC8wMDAxLW1pc3NpbmctaW5j
-bHVkZS5wYXRjaAo+IEBAIC0wLDAgKzEsMjYgQEAKPiArRnJvbSA4N2M3OGVlYTJjNGFjNjljMDk5
-NDdjOGU0OWY4ZTg2Njg2NDAwNzFjIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBG
-cmFuY29pcyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4KPiArRGF0ZTogU3VuLCA3
-IERlYyAyMDI1IDEwOjE1OjI3ICswMTAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gbWlzc2luZyBpbmNs
-dWRlCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBGcmFuY29pcyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJh
-ZEBnYWR6Lm9yZz4KPiArVXBzdHJlYW06IHVwc3RyZWFtIGlzIGRlYWQKCkFjY29yZGluZyB0byB0
-aGUgbGluawpodHRwczovL3NvdXJjZWZvcmdlLm5ldC9wL2ZpY2wvbmV3cy8yMDI1LzA3L2ZpY2w0
-LWlzLXJldGlyaW5nLyB5b3UKcG9zdGVkLCB1cHN0cmVhbSBmb3IgdmVyc2lvbiAzLnggaXMgbm90
-IGRlYWQuIFNvIHdoeSBkb24ndCB5b3Ugc3VibWl0CnRoaXMgcGF0Y2g/CgpJZiB1cHN0cmVhbSBp
-cyByZWFsbHkgZGVhZCwgc2hvdWxkIHdlIHJlbW92ZSB0aGlzIHBhY2thZ2UgaW5zdGVhZD8KClRo
-YW5rcyEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9v
-dGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpo
-dHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=c68927229646820dbd0d2a5653811662623a5ae1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Migrate from poetry to pdm pep517 build backend.
+
+Add new python-anyio runtime dependency.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-tortoise-orm/Config.in                | 1 +
+ package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
+ package/python-tortoise-orm/python-tortoise-orm.mk   | 7 ++++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/package/python-tortoise-orm/Config.in b/package/python-tortoise-orm/Config.in
+index 62b1a5a86e..57cebc6489 100644
+--- a/package/python-tortoise-orm/Config.in
++++ b/package/python-tortoise-orm/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TORTOISE_ORM
+ 	bool "python-tortoise-orm"
+ 	select BR2_PACKAGE_PYTHON_AIOSQLITE # runtime
++	select BR2_PACKAGE_PYTHON_ANYIO # runtime
+ 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
+ 	select BR2_PACKAGE_PYTHON_PYPIKA_TORTOISE # runtime
+ 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
+index 8e99e815df..6e1f46dd6f 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.hash
++++ b/package/python-tortoise-orm/python-tortoise-orm.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
+-md5  ef8df163a207f40230c618efa18ca32b  tortoise_orm-0.25.1.tar.gz
+-sha256  4d5bfd13d5750935ffe636a6b25597c5c8f51c47e5b72d7509d712eda1a239fe  tortoise_orm-0.25.1.tar.gz
++md5  b3dab10562c6574232334e954666f3eb  tortoise_orm-0.25.3.tar.gz
++sha256  b6dedd388393624628ec46228c93df361533ceb3925986fa2d1d22debc838a7d  tortoise_orm-0.25.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
+index 32327bae38..3a380710a0 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.mk
++++ b/package/python-tortoise-orm/python-tortoise-orm.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TORTOISE_ORM_VERSION = 0.25.1
++PYTHON_TORTOISE_ORM_VERSION = 0.25.3
+ PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
+-PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/d7/9b/de966810021fa773fead258efd8deea2bb73bb12479e27f288bd8ceb8763
+-PYTHON_TORTOISE_ORM_SETUP_TYPE = poetry
++PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/dd/be/0fdfcd8295f4f02a280f33bdda99c3edba450f9a212149232f2fbb6afa96
++PYTHON_TORTOISE_ORM_SETUP_TYPE = pep517
+ PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
+ PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
++PYTHON_TORTOISE_ORM_DEPENDENCIES = host-python-pdm-backend
+ 
+ $(eval $(python-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
