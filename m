@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7457FE95A79
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63436E95A79
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CEDE60B52;
-	Tue, 30 Dec 2025 11:48:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DBFF40866;
+	Tue, 30 Dec 2025 11:49:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1QNvKugBYz-L; Tue, 30 Dec 2025 11:48:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zMIujzX9qyxP; Tue, 30 Dec 2025 11:49:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7641E60B39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71D0D40861
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767095333;
-	bh=vBKd4gdWXbLIY8QpMmbUWOevfOak3Sp8hAQQAAyGqdk=;
+	s=default; t=1767095345;
+	bh=tzWxfDSvWDU9tuwKtUaoMQQVKnBx8XNmyiFJPjJdo3k=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=DbAmaWzOz6TLgG3aGL6SXplUthvaSEmR5DKb+Pungl8Lbz2yo07ZWRWl+MF7D5MYB
-	 dPY8UwOX/tagKhAoPRK0za+IMDwQrtMTkK3DEqIVnMGyeQljK4KffMSBStlEVx+qEk
-	 SV+GX+MQzVlxoJEOGWgYE4ul1hQsZZWgD8EDvFLrZERTqvvlAPx01wQAuhg3vtghf1
-	 okjbRQDQ90ZqNOXYMjY4BANXE/RZjx2+8c+QoRwfztluRM8YQfygjeroFYkcW0qxdg
-	 PTuefpWAme/DsDpeNn8+ErTgYWlKSP9Kl3sYIYQT1LGmO0QU/ibbS/r1B2CuDN4bvR
-	 EVAu4FnfYyIfA==
+	b=QeICK7uPsfk/kukhZAOZz0Dt3Wfj70eA2Q71sA1Aw8yJIQpCjv17zBFM7vjITxZA5
+	 PNNYxcBShTvfGzuA/CJoUkdx5TZmDntFJhGtDKwlYVDuzcVYlKeB93cDJEixlp6amP
+	 NbU+MeP/2011drx5sZJx+ch59ecTZY8iMnhybkxClCNmu7fGhTLDfSWjbNx/rHYG2K
+	 4iZBROjNmYQ6DGNmgSCWx9YLwioxQ8b/zf8+iM3WMAZElzS5/A7uFUD4MufngUiA4p
+	 nA8MsjgA/9ovkqoXoDDv43RV8Z0bfr5vM88vJnGJJOkdervG2mUGi37A1M6VoJclUM
+	 k4sDRy5MGaSmw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7641E60B39;
-	Tue, 30 Dec 2025 11:48:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AE22C35B
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:48:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71D0D40861;
+	Tue, 30 Dec 2025 11:49:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A748235B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A01C360B39
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:48:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 995F760AA4
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:49:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W85q1nfAPF_G for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 11:48:50 +0000 (UTC)
+ id Klqss8phIgEn for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 11:49:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 959E760ABA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 959E760ABA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85908608BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85908608BB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 959E760ABA
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:48:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85908608BB
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:49:02 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 657B1A4C2AA7;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9A795A4C2AB7;
  Tue, 30 Dec 2025 12:46:39 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:54702)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vaYBM-000000003Vt-0zzY;
+ (envelope-from <bernd@kuhls.net>) id 1vaYBL-000000003Vt-44Tf;
  Tue, 30 Dec 2025 11:46:32 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -64,8 +64,8 @@ Cc: Andreas Ziegler <br025@umbiko.net>,
  Matt Flax <flatmax@flatmax.org>, Romain Naour <romain.naour@gmail.com>,
  Simon Dawson <spdawson@gmail.com>,
  Woodrow Douglass <wdouglass@carnegierobotics.com>
-Date: Tue, 30 Dec 2025 12:45:36 +0100
-Message-ID: <20251230114545.2236640-16-bernd@kuhls.net>
+Date: Tue, 30 Dec 2025 12:45:32 +0100
+Message-ID: <20251230114545.2236640-12-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251230114545.2236640-1-bernd@kuhls.net>
 References: <20251230114545.2236640-1-bernd@kuhls.net>
@@ -74,21 +74,21 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1767095199;
- bh=55T7F2E5zPIkDBnMfwQgy6O2mg+Wi+v4LpsoAgvOORk=;
+ bh=50XQJoP89Plvw4VfZOkBuidMAl+MWq8e3RC8//UWV1c=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=UlZc3UrGk0a1ziPH1crWHUJV63V5DbUEsjcDzcfMMAZqDiwEf2befP/erfPQOhqww
- Q9NZORfCzabSNyjhE0VMdqVzins+QvwIfbbXCTc9Ri6nLuOUXE+a2o+dfzpj9TkAx/
- 2ye5rcOgxkt+9pbfv88uzcBkgxdGay74GhLbYBGq4Xyyt64LOa6c6/YQLRLdheIalH
- vHxNtsrcvAMuUvsOCdMo/9BWlQW5DuaIwlC2KFpY0v/ZsxBc6wkao18HkHOoG73A+j
- WkBOmwq7a6+b96/9nx1DNrT6QW5ZqJv4bY96WZAun3k2OhKpj/a9vPzUWI4DRI+xKZ
- 5iI7GFW2Hn9ZQ==
+ b=HvqDXDH05h4CXRm+eFuAYKHWE4+/moeecdh3zuxp0ZQEEyMImVNGL9Y+xqBiA2iRu
+ LFBYaz6sQWeIw70+CfFMUbU7Gagg7MbtJOPoZ7nlpuC8DKfnz8kTmDlBZwdR5hRSQ1
+ pIs9WpxXRYNvSYs896MVUu5fk1W92XzL8yaK6p1k1evzb6+xtjEfiTQGpQmGH3fzcE
+ JXPb4oCjAL3ZlZaH6wdTEBZhcBZ6Rxlhl/cdqCVI/wvCle4xuL4jPvScPr1vxoB08g
+ XOhSsSGiKQs0mqz4q0jb8Pr3bNjSFMH/KFlbTADKAM2m3Yuj5h/FxKacrkpQ4J4lC5
+ qnrJxUUsAVO2w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=UlZc3UrG
-Subject: [Buildroot] [PATCH v9 15/19] package/vlc: remove optional
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=HvqDXDH0
+Subject: [Buildroot] [PATCH v9 11/19] package/ffmpeg: remove optional
  dependency to opencv3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -108,65 +108,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 OpenCV3 is unmaintained and will be removed from buildroot.
 
-The package does not support OpenCV4:
-https://code.videolan.org/videolan/vlc/-/merge_requests/927
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/vlc/Config.in | 6 ------
- package/vlc/vlc.mk    | 8 +-------
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ package/ffmpeg/ffmpeg.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 964b7660af..d2c1934f37 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_VLC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
--	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
- 	select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB
- 	help
- 	  VLC is a free and open source cross-platform multimedia player
-@@ -18,11 +17,6 @@ config BR2_PACKAGE_VLC
- 
- 	  http://www.videolan.org/vlc/
- 
--config BR2_PACKAGE_VLC_OPENCV3_BACKEND
--	bool
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
--
- comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, gcc >= 4.9, headers >= 3.7"
- 	depends on !BR2_RISCV_32
- 	depends on BR2_USE_MMU
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 2a83b66c92..9091a7e7fa 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -72,6 +72,7 @@ VLC_CONF_OPTS += \
- 	--disable-mtp \
- 	--disable-mpc \
- 	--disable-notify \
-+	--disable-opencv \
- 	--disable-projectm \
- 	--disable-schroedinger \
- 	--disable-shine \
-@@ -211,13 +212,6 @@ else
- VLC_CONF_OPTS += --disable-gles2
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 983a87eb2e..6e4ccd5b8b 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -297,12 +297,9 @@ else
+ FFMPEG_CONF_OPTS += --disable-mmal --disable-omx --disable-omx-rpi
  endif
  
--ifeq ($(BR2_PACKAGE_OPENCV3),y)
--VLC_CONF_OPTS += --enable-opencv
--VLC_DEPENDENCIES += opencv3
--else
--VLC_CONF_OPTS += --disable-opencv
--endif
--
- ifeq ($(BR2_PACKAGE_OPUS),y)
- VLC_CONF_OPTS += --enable-opus
- VLC_DEPENDENCIES += libvorbis opus
+-ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),y)
+-FFMPEG_CONF_OPTS += --enable-libopencv
+-FFMPEG_DEPENDENCIES += opencv3
+ # To avoid a circular dependency only use opencv if opencv itself does
+ # not depend on ffmpeg.
+-else ifeq ($(BR2_PACKAGE_OPENCV4_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV4_WITH_FFMPEG),yx)
++ifeq ($(BR2_PACKAGE_OPENCV4_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV4_WITH_FFMPEG),yx)
+ FFMPEG_CONF_OPTS += --enable-libopencv \
+ 	--extra-cflags=-I$(STAGING_DIR)/usr/include/opencv4
+ FFMPEG_DEPENDENCIES += opencv4
 -- 
 2.47.3
 
