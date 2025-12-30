@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFC90EE4999
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 19:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D670EEE01F6
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 21:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CA4760861;
-	Tue, 30 Dec 2025 19:57:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6991060A6B;
+	Tue, 30 Dec 2025 21:06:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zi0kJuXijG7b; Tue, 30 Dec 2025 19:57:29 +0000 (UTC)
+ id ONEwfboxvfz3; Tue, 30 Dec 2025 21:06:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53DE260AFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F6A360793
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767124649;
-	bh=eahRgEM7WM04WsEIzdjh8YkK1HspejhtJF5OiLTsKlM=;
+	s=default; t=1767128784;
+	bh=ytvFQv+BGoU5Gd5MNa1ipFwzYs1ORSUTmNZyO3oXN9M=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JLKEJ5VelOnYMTey0LCnBatAKX6BRkVf7Y+jguH9tdUyjJv4dGSVfW5Oi/SwyQyt+
-	 kv6cuiyGDAxPwpmz/kBdYSCER8oMtvEPRGIG8r266L5UAtzrq74aAiE/6OihyRw9i2
-	 qEctG7gyxcmsaQee5JZW6QV7t412LTmvRaTvS5eT1uRX1ArBBjGVnyx0IaGDWqZyP5
-	 7aosbP/CBTFVi65Nz5TzyTm1O0OSC5AQTaWAEMqWfd5NqnqsgslEj/HzXYDj/F9yHd
-	 B/qSDow0iPPe7rIMhPU0Oq6DFggId5m6UmoLrdV4A+VpihREB8wPPbjZ4xLDEked9t
-	 wH8AnsM0HbIOw==
+	b=VpijCDroyx1SwxlA16Inhs/0lCrvSnvPRkMn3yw5NC3jnKjpnniQa7IU0HnlA2yqH
+	 r4Z+7WUsrYs36+X9y0NH6BCk3PHtOBOOl8luiGI9Q9tPT4B7vf93y2meJxM6j3pRdJ
+	 gYSkO14OoYwx8CefhNZxkRDYuo+L7f3IRVwbhOSje8o+Lewq0yH4INIrSJ2aTcbvHh
+	 gugC5T4EdNFsMkHAgT6t9cQA/dXeH1CI1K4aO5Zmdo9Xw+o4R9Otf7628W9VFX7uL6
+	 6QmK5fX7EAWnzZNjUQsOADZEe1V+ZN5HWVw4WfTD85ZPUTYsCk2lRSJktDNdJJJEa0
+	 dNsbtsN6iInLg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53DE260AFB;
-	Tue, 30 Dec 2025 19:57:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F6A360793;
+	Tue, 30 Dec 2025 21:06:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 35F5DD8
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 19:57:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 37DD0438
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C4A24040E
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 19:57:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB9FB400D2
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:06:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gjwI70hAUk1W for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 19:57:26 +0000 (UTC)
+ id HBKuLoIwF0dJ for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 21:06:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B6A040099
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E97A240099
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B6A040099
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 19:57:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E97A240099
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 21:06:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 150C087C82; Tue, 30 Dec 2025 19:57:26 +0000 (UTC)
+ id D939787CA6; Tue, 30 Dec 2025 21:06:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 20:56:44 +0100
+Date: Tue, 30 Dec 2025 21:51:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2577977e751bb8a5b36d31f87440d59e82537608
-X-Git-Newrev: 7b8892e900aadbdac61d530739b11af407462540
+X-Git-Oldrev: 31fd1e4a36681421400a2c1290464eafbcf3c731
+X-Git-Newrev: 0ad3afa1916d33d7e60e4385582cf8e73d1e6719
 X-Patchwork-Hint: ignore
-Message-Id: <20251230195726.150C087C82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rasdaemon: new package
+Message-Id: <20251230210621.D939787CA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5webkit: fix build with ICU
+ >= 76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,283 +69,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8802011460294901364=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b8892e900aadbdac61d530739b11af407462540
+--===============8802011460294901364==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0ad3afa1916d33d7e60e4385582cf8e73d1e6719
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rasdaemon is a tool that aims at replacing edac-tool and provide a way
-to collect all hardware error events reported by the Linux kernel in a
-common framework.
+Since the bump of ICU from ICU 73 to ICU 77 in commit
+dcee99507c6767230fd1faeeefe95f5662eb03a3, the build of qt5webkit fails
+with:
 
-This commit adds a new package to support rasdaemon in the 'Hardware
-handling' section. It depends on libtraceevent to detect the ftrace
-events generated by the kernel. There is currently a build issue when
-sqlite isn't availaible while it's supposed to be an optional
-dependency. This build issue is fixed by patch 0001 (which has been
-also submitted to the rasdaemon project itself).
+/home/thomas/buildroot/br/output-all/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/unicode/char16ptr.h:271:38: error: ‘enable_if_t’ in namespace ‘std’ does not name a template type
+  271 | template<typename T, typename = std::enable_if_t<std::is_same_v<T, UChar>>>
+      |                                      ^~~~~~~~~~~
 
-Support for the PCIe AER events is optionnal and implies a dependency on
-pciutils so also add a dedicated 'sub-option' to enable it.
+We taken two patches from Arch Linux, one which is a partial upstream
+backport, and another which was submitted upstream, to address this
+build issue.
 
-Add a SYSV init script to start / stop the daemon
-
-Add myself to the DEVELOPERS file.
-
-Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...aemon-fix-build-when-sqlite-isn-t-enabled.patch | 46 ++++++++++++++++
- package/rasdaemon/Config.in                        | 26 +++++++++
- package/rasdaemon/S95rasdaemon                     | 63 ++++++++++++++++++++++
- package/rasdaemon/rasdaemon.hash                   |  3 ++
- package/rasdaemon/rasdaemon.mk                     | 40 ++++++++++++++
- 7 files changed, 182 insertions(+)
+ ...wtf-Platform.h-fix-build-with-newer-versi.patch | 40 ++++++++++++++++++++++
+ ...U-C-header-only-APIs-introduced-in-ICU-76.patch | 28 +++++++++++++++
+ 2 files changed, 68 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 85453ae16e..1e8706d159 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -344,6 +344,9 @@ F:	package/tcpdump/
- F:	package/ti-uim/
- F:	package/uhubctl/
- 
-+N:	Bastien Curutchet <bastien.curutchet@bootlin.com>
-+F:	package/rasdaemon/
-+
- N:	Baxiche Su <baxiche@gmail.com>
- F:	package/qt6/qt6multimedia/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 0e36923bf3..a23f382fde 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -581,6 +581,7 @@ endmenu
- 	source "package/pru-software-support/Config.in"
- 	source "package/pulseview/Config.in"
- 	source "package/qoriq-cadence-dp-firmware/Config.in"
-+	source "package/rasdaemon/Config.in"
- 	source "package/raspi-gpio/Config.in"
- 	source "package/rdma-core/Config.in"
- 	source "package/read-edid/Config.in"
-diff --git a/package/rasdaemon/0001-rasdaemon-fix-build-when-sqlite-isn-t-enabled.patch b/package/rasdaemon/0001-rasdaemon-fix-build-when-sqlite-isn-t-enabled.patch
+diff --git a/package/qt5/qt5webkit/0010-Source-WTF-wtf-Platform.h-fix-build-with-newer-versi.patch b/package/qt5/qt5webkit/0010-Source-WTF-wtf-Platform.h-fix-build-with-newer-versi.patch
 new file mode 100644
-index 0000000000..2dccbec55f
+index 0000000000..4656289870
 --- /dev/null
-+++ b/package/rasdaemon/0001-rasdaemon-fix-build-when-sqlite-isn-t-enabled.patch
-@@ -0,0 +1,46 @@
-+From 8eaf25c30554c7cc457406ce5895b8087904cb2b Mon Sep 17 00:00:00 2001
-+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-+Date: Wed, 17 Dec 2025 11:38:52 +0100
-+Subject: [PATCH] rasdaemon: fix build when sqlite isn't enabled
++++ b/package/qt5/qt5webkit/0010-Source-WTF-wtf-Platform.h-fix-build-with-newer-versi.patch
+@@ -0,0 +1,40 @@
++From 30a9270a3fe9157a532e52458ee47b0f3fcc2f97 Mon Sep 17 00:00:00 2001
++From: Konstantin Tokarev <annulen@yandex.ru>
++Date: Mon, 27 May 2024 23:23:11 +0300
++Subject: [PATCH] Source/WTF/wtf/Platform.h: fix build with newer
++ versions of ICU
 +
-+Build without SQLite enabled through --enable-sqlite3 still fails if
-+sqlite isn't available:
-+>   CC       rasdaemon-rasdaemon.o
-+> In file included from rasdaemon.c:17:
-+> ras-record.h:11:10: fatal error: sqlite3.h: No such file or directory
-+>    11 | #include <sqlite3.h>
-+>       |          ^~~~~~~~~~~
-+> compilation terminated.
++Partial backport of r260554 (79fe19caf)
 +
-+Include the sqlite header only if the SQLite feature is enabled.
++In particular, we need -DU_SHOW_CPLUSPLUS_API=0 to avoid compilation
++errors in C++ parts of ICU headers which we are not using anyway.
 +
-+Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
-+Upstream: https://github.com/mchehab/rasdaemon/pull/234
++Change-Id: Ib45c74e3caad148fbd778d0c07330127f7dab5ec
++Taken from: https://github.com/archlinux/aur/blob/qt5-webkit/qt5-webkit-icu75.patch
++Upstream: part of https://github.com/qtwebkit/qtwebkit/commit/79fe19caf
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ ras-record.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ Source/WTF/wtf/Platform.h | 7 +++++++
++ 1 file changed, 7 insertions(+)
 +
-+diff --git a/ras-record.h b/ras-record.h
-+index 21edcd6..cb03f4e 100644
-+--- a/ras-record.h
-++++ b/ras-record.h
-+@@ -8,7 +8,6 @@
-+ #ifndef __RAS_RECORD_H
-+ #define __RAS_RECORD_H
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index 5717f3ea1664..dfed4a13dd2b 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -1125,6 +1125,13 @@
++ #define ENABLE_PLATFORM_FONT_LOOKUP 1
++ #endif
 + 
-+-#include <sqlite3.h>
-+ #include <fcntl.h>
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+@@ -320,6 +319,8 @@ struct ras_cxl_memory_sparing_event;
-+ 
-+ #ifdef HAVE_SQLITE3
-+ 
-++#include <sqlite3.h>
+++/* FIXME: This does not belong in Platform.h and should instead be included in another mechanism (compiler option, prefix header, config.h, etc) */
+++/* ICU configuration. Some of these match ICU defaults on some platforms, but we would like them consistently set everywhere we build WebKit. */
+++#define U_SHOW_CPLUSPLUS_API 0
+++#ifdef __cplusplus
+++#define UCHAR_TYPE char16_t
+++#endif
 ++
-+ struct sqlite3_priv {
-+ 	sqlite3		*db;
-+ 	sqlite3_stmt	*stmt_mc_event;
++ #if COMPILER(MSVC)
++ #undef __STDC_LIMIT_MACROS
++ #define __STDC_LIMIT_MACROS
 +-- 
 +2.52.0
 +
-diff --git a/package/rasdaemon/Config.in b/package/rasdaemon/Config.in
+diff --git a/package/qt5/qt5webkit/0011-Disable-ICU-C-header-only-APIs-introduced-in-ICU-76.patch b/package/qt5/qt5webkit/0011-Disable-ICU-C-header-only-APIs-introduced-in-ICU-76.patch
 new file mode 100644
-index 0000000000..64ae4a8263
+index 0000000000..17dfc7e7e0
 --- /dev/null
-+++ b/package/rasdaemon/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_RASDAEMON
-+	bool "rasdaemon"
-+	depends on !BR2_STATIC_LIBS # libtraceevent
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBTRACEEVENT
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	help
-+	  rasdaemon is a tool that collects all hardware error events
-+	  reported by the Linux Kernel from several sources (EDAC, MCE
-+	  PCI, ...) into one common framework.
++++ b/package/qt5/qt5webkit/0011-Disable-ICU-C-header-only-APIs-introduced-in-ICU-76.patch
+@@ -0,0 +1,28 @@
++From bf253b37ebf3fd99fa3cc46bd737a88defa8914e Mon Sep 17 00:00:00 2001
++From: Dmitry Shachnev <mitya57@gmail.com>
++Date: Thu, 9 Jan 2025 14:18:31 +0300
++Subject: [PATCH] Disable ICU C++ header-only APIs, introduced in ICU 76
 +
-+	  https://github.com/mchehab/rasdaemon
++They require C++17 which we do not have, but we do not need them anyway.
 +
-+if BR2_PACKAGE_RASDAEMON
++Upstream: https://github.com/qtwebkit/qtwebkit/pull/1107
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ Source/WTF/wtf/Platform.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+config BR2_PACKAGE_RASDAEMON_AER
-+	bool "Enable AER support"
-+	select BR2_PACKAGE_PCIUTILS
-+	help
-+	  Enable handling of AER (Advanced Error Reporting) events on
-+	  PCIe
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index dfed4a13dd2b..6ba6c3972aee 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -1128,6 +1128,7 @@
++ /* FIXME: This does not belong in Platform.h and should instead be included in another mechanism (compiler option, prefix header, config.h, etc) */
++ /* ICU configuration. Some of these match ICU defaults on some platforms, but we would like them consistently set everywhere we build WebKit. */
++ #define U_SHOW_CPLUSPLUS_API 0
+++#define U_SHOW_CPLUSPLUS_HEADER_API 0
++ #ifdef __cplusplus
++ #define UCHAR_TYPE char16_t
++ #endif
++-- 
++2.52.0
 +
-+endif
-+
-+comment "rasdaemon needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/rasdaemon/S95rasdaemon b/package/rasdaemon/S95rasdaemon
-new file mode 100644
-index 0000000000..390ff9c902
---- /dev/null
-+++ b/package/rasdaemon/S95rasdaemon
-@@ -0,0 +1,63 @@
-+#!/bin/sh
-+#
-+# S95rasdaemon	Starts Rasdaemon.
-+#
-+# shellcheck disable=SC2317 # functions are called via variable
-+
-+DAEMON="rasdaemon"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+start() {
-+	printf "Starting %s: " "$DAEMON"
-+
-+	if ! grep -q debugfs /proc/mounts ; then
-+		echo "FAIL : debugfs is missing"
-+		return 1
-+	fi
-+
-+	start-stop-daemon --start --pidfile "$PIDFILE" --make-pidfile \
-+		--background --exec "/usr/sbin/$DAEMON" -- -f
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf "Stopping %s: " "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/sbin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+reload() {
-+	restart
-+}
-+
-+case "$1" in
-+	start|stop|reload|restart)
-+		"$1"
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|reload|restart}"
-+		exit 1
-+esac
-diff --git a/package/rasdaemon/rasdaemon.hash b/package/rasdaemon/rasdaemon.hash
-new file mode 100644
-index 0000000000..e1b600a489
---- /dev/null
-+++ b/package/rasdaemon/rasdaemon.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  7e12459f9477036491ac2b1e4c07cc3e8efea6dcd30525a263ab1f83910b773a  rasdaemon-0.8.4.tar.gz
-+sha256  39bc367cd7cd291d217447632b28a74be414a52b142b1875ac8789184aeca7b2  COPYING
-diff --git a/package/rasdaemon/rasdaemon.mk b/package/rasdaemon/rasdaemon.mk
-new file mode 100644
-index 0000000000..a6f53a7b6a
---- /dev/null
-+++ b/package/rasdaemon/rasdaemon.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# rasdaemon
-+#
-+################################################################################
-+
-+RASDAEMON_VERSION = 0.8.4
-+RASDAEMON_SITE = $(call github,mchehab,rasdaemon,v$(RASDAEMON_VERSION))
-+RASDAEMON_LICENSE = GPL-2.0+
-+RASDAEMON_LICENSE_FILES = COPYING
-+RASDAEMON_AUTORECONF = YES
-+
-+RASDAEMON_DEPENDENCIES = libtraceevent
-+# rasdaemon uses argp.h which is not provided by uclibc or musl by default.
-+# Use the argp-standalone package to provide this.
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+RASDAEMON_DEPENDENCIES += argp-standalone
-+RASDAEMON_CONF_ENV += LIBS="-largp"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLITE),y)
-+RASDAEMON_CONF_OPTS += --enable-sqlite3
-+RASDAEMON_DEPENDENCIES += sqlite
-+else
-+RASDAEMON_CONF_OPTS += --disable-sqlite3
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RASDAEMON_AER),y)
-+RASDAEMON_DEPENDENCIES += pciutils
-+RASDAEMON_CONF_OPTS += --enable-aer
-+else
-+RASDAEMON_CONF_OPTS += --disable-aer
-+endif
-+
-+define RASDAEMON_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/rasdaemon/S95rasdaemon \
-+		$(TARGET_DIR)/etc/init.d/S95rasdaemon
-+endef
-+
-+$(eval $(autotools-package))
+
+--===============8802011460294901364==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8802011460294901364==--
