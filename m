@@ -4,82 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5E11EE57C2
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 22:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0438EE49B4
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 22:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 044E760AF4;
-	Tue, 30 Dec 2025 22:20:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 813166080C;
+	Tue, 30 Dec 2025 22:26:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 94xjJMqP4Q-j; Tue, 30 Dec 2025 22:20:40 +0000 (UTC)
+ id TYI3cDh6QnIz; Tue, 30 Dec 2025 22:26:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC717606CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 993EF608DC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767133239;
-	bh=tbAFSPjbSyU/hUDTQVTG7xjRtGwZdCNEY9JYuEl2zEw=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=JbXsbmBDuVjDyjdhqOiWtMvqwbUJMwPxmuOWAu2pP5gyBKPn1Fij5Lno/xpfH8EPX
-	 kL4uHSpvKbJ2vMODhsi+8v7mVlz+13nfc5Ke6soFWDEbvov5QjmOvwj8UhaTGeULOi
-	 98Kw6Wt+seXsZMvUDzgtj6BY71l3weFohIAnhioX5pMMsafJ+MiXiaePGSzwgjMjAB
-	 i5fLCQG4XCf4B9KW4+ayeAjR7Y4EMia966vAFSXGJX95RAcNZs5ftBpHVxNRclVXrg
-	 DGdnIhUtuMxOT9cascevTX8qAecDNuuEgog40P6aSqbryxUtKLQr2pcKXIeeotTV1B
-	 AxXyJBuzX2oOw==
+	s=default; t=1767133589;
+	bh=A3d6S0B3oFuY9wVIV3GSSbCng3MuxWZPH2F7WI2XR7Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=oXuO4DzWP3S+ldfy6TC2D/OaFhKabL7q5UZOToy1sBGPlwCP6G2vJTEMhqI7IHiXO
+	 ZM+PbJM+Oyv/R/tzxPrgp8oG6hkWDolPBKLPwemWImDd0WMnhvw6PekEOZ+16PHT7x
+	 2KSub2NbpyFInz8KhY/qdm+LMgY/rrgWE6wb1f7nJ9kH60HPqfgNLdhB0HjYPPIGe5
+	 KPcoJ0BP9rg/zu6yXO7y4ebVhJqgQFEXGEou4jd+UNevddll4GirxsE2356vxQ1hjO
+	 fC8JbWd3TdjtUicO9He/CDnxLvUHcnk9OLR+eNFtYQ4AoM5kUj+BlCwOlz22Xu/3UL
+	 uSUpc/uzv/cew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC717606CE;
-	Tue, 30 Dec 2025 22:20:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 01999277
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 22:20:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 993EF608DC;
+	Tue, 30 Dec 2025 22:26:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4B83177
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 22:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E773880FB1
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 22:20:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B1166080C
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 22:26:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O7M_7KZay7E4 for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 22:20:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.117;
- helo=smtpcmd03117.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D731680CCA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D731680CCA
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D731680CCA
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 22:20:34 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id ai4tvG2bxgRm2ai4uvccF7; Tue, 30 Dec 2025 23:20:32 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J0lmfKZbnxKS for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 22:26:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C82B60608
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C82B60608
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 22:26:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 332F787D46; Tue, 30 Dec 2025 22:26:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Alexander Dahl <post@lespocky.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 30 Dec 2025 23:20:30 +0100
-Message-ID: <20251230222031.3626500-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfAZEQdJQCp2qSMHu14cIqbhcYPQ6YmURAokkD68sSNHTd4cbcfbobUF7RYGdpt+8pIH6vxHNXbaOCQvweysKw/fL4f+pKaxZKmB8P0SwKrZKU4hlK3MG
- OKG+6rIAH+dLUWVOGrjhck0TeYDc4R1VX1CTt2sWWLDJY9BllKuKsJSejCtWpV11mRm8ZB6JkmM+bfgVS3Ea/a/pPIWIBebtp8V75xjkyvQl+i9UH9SLSW4y
- IgawseGXpEZ+cXIL8A/0adkNYpMEOzB6Lh0kYWxjfT6nIpIIzqJMBgLKLr4DwB0R1sSq4EQxD+S9nlkncyD5Dg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1767133232; bh=JBG8MiUOFJFkMYaXmvDYb/cR00qow3YLihK8BfGvpR8=;
- h=From:To:Subject:Date:MIME-Version;
- b=k4YClknvvnhiM7ny22JoQJTw+gpcS8inTGp8YU16mMLjMAfs010OA6ECp16ftwAAd
- C68UP/ctW33YHn98Cqo2rvo3T2TYKSlQf2rPKPYAdEnAr1dmuBwLEkOaD0g9yEDDr8
- OidmKCAkHAhWMhbz0/ZjWzOIaJ8qZHx/zaCxbnlzY29zro9gHdAgxpiPlnc392aw7I
- oR9p0eNrB/WDyk65kAi6GdGU2k+RcU3OMLC2WN5EjOOP4GRjN8KxmH5qc5Ktoxh0zT
- 97J7sBB9Gnyoj0LYdeR/2MSeemp5JvAfd5Haup5pwWztliPUfn4ugEI3xEDsDxnU3U
- Vnp09+hQWLXcw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=k4YClknv
-Subject: [Buildroot] [PATCH] package/putty: bump to version 0.83
+Date: Tue, 30 Dec 2025 23:22:28 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f78163431c4ea5a7d8aa083639fc5435d8d64957
+X-Git-Newrev: f53a1af56b8cedda58038413cbb9e621ab01705a
+X-Patchwork-Hint: ignore
+Message-Id: <20251230222625.332F787D46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-firmware: drop support for
+ vcdbg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,54 +69,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============9039115913566911172=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
+--===============9039115913566911172==
+Content-Type: text/plain
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=f53a1af56b8cedda58038413cbb9e621ab01705a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This tool has been removed from upstream rpi-firmware, so drop the
+corresponding option and logic in rpi-firmware.mk.
+
+The tool has been removed by upstream commit
+d1fcc26038186aecc1501a0b749833300afba801 ("opt: Remove builds of
+deprectated userland tools").
+
+It is Buildorot commit
+28e6953ba84d39a6074aee439a64ef86b109dcf0 ("package/rpi-firmware: bump
+version to 5476720") that did a bump to a version of rpi-firmware that
+no longer provided vcdbg.
+
+Cc: Köry Maincent <kory.maincent@bootlin.com>
+Cc: Gaël PORTAY <gael.portay@rtone.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/putty/putty.hash | 10 +++++-----
- package/putty/putty.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Config.in.legacy                     |  6 ++++++
+ package/rpi-firmware/Config.in       | 12 ------------
+ package/rpi-firmware/rpi-firmware.mk | 20 --------------------
+ 3 files changed, 6 insertions(+), 32 deletions(-)
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 30b749c47b..33a9666bc2 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
--sha1  8c88d871855d3730a0473bb1cb1006654e73b680  putty-0.81.tar.gz
--sha256  cb8b00a94f453494e345a3df281d7a3ed26bb0dd7e36264f145206f8857639fe  putty-0.81.tar.gz
--sha512  d86f2fd0e126b18275d58cf64334b3b27c450899a1c2be2502de9faa2ef58f7fc8efc5d45f25c8395623f1e21917aa02407343bb2fee44c4c00b9f81267d5ecd  putty-0.81.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.83/{sha1,sha256,sha512}sums
-+sha1  f9fd9ab5e3849bf8c22b218cdb7697dcdd1d8c9e  putty-0.83.tar.gz
-+sha256  718777c13d63d0dff91fe03162bc2a05b4dfc8b0827634cd60b51cefdff631c6  putty-0.83.tar.gz
-+sha512  4781616b7e9c5a779a54e6a8486513e0aa947d4a36e9dbfd4ffc0d32981a5ad4868cddbde0363467236ed67c43f990408a9326d10354954be716a270d587c0a6  putty-0.83.tar.gz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index cd5c7ed2a1..719f99c06f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- # Locally calculated
--sha256  e0410341c5e45f7479c28d79298edbf615589cdfc115b2d69683d4ccd0425ce0  LICENCE
-+sha256  c18aac5045fd30bff639b07884be44cb8c68eef16efe8c5e18deda1f58cacdfb  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index ec65991f41..9071fea208 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2026.02"
  
--PUTTY_VERSION = 0.81
-+PUTTY_VERSION = 0.83
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
--- 
-2.47.3
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
++	bool "rpi-firmware vcdbg option removed"
++	select BR2_LEGACY
++	help
++	  rpi-firmware upstream has dropped the vcdbg tool
++
+ config BR2_PACKAGE_LIBDNET_PYTHON
+ 	bool "libdnet python module removed"
+ 	select BR2_LEGACY
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index f99c116ca2..4dda33a713 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -100,16 +100,4 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	  overlays, to support HATs (Hardware Attached on Top, add-on
+ 	  modules).
+ 
+-config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+-	bool "vcdbg"
+-	depends on BR2_arm # prebuilt arm binary, rpi-userland
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
+-	help
+-	  Install vcdbg, to help debug communication with the GPU.
+-
+-comment "vcdbg needs a glibc toolchain w/ C++"
+-	depends on BR2_arm
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
+-
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 3318e9a0c1..83d0808990 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -62,26 +62,6 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ endef
+ endif
+ 
+-# Install prebuilt libraries if RPI_USERLAND not enabled
+-ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-define RPI_FIRMWARE_INSTALL_TARGET_LIB
+-	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libvcos.so \
+-		$(TARGET_DIR)/usr/lib/libvcos.so
+-	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libdebug_sym.so \
+-		$(TARGET_DIR)/usr/lib/libdebug_sym.so
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+-define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
+-		$(TARGET_DIR)/usr/sbin/vcdbg
+-	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libelftoolchain.so \
+-		$(TARGET_DIR)/usr/lib/libelftoolchain.so
+-	$(RPI_FIRMWARE_INSTALL_TARGET_LIB)
+-endef
+-endif # INSTALL_VCDBG
+-
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(RPI_FIRMWARE_INSTALL_BIN)
+ 	$(RPI_FIRMWARE_INSTALL_CONFIG)
+
+--===============9039115913566911172==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9039115913566911172==--
