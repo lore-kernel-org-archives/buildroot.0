@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1990EE95A77
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F7CCE95A6C
 	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E756F4060B;
-	Tue, 30 Dec 2025 11:14:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7473A60B5A;
+	Tue, 30 Dec 2025 11:14:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BsUKPiSoDc9O; Tue, 30 Dec 2025 11:14:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lPk1LHq3JQDb; Tue, 30 Dec 2025 11:14:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09FF4407FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 443E260B5C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767093295;
-	bh=Z52HzcyzczmB8bZnbSRNtoz3ljLAeHOMQ/7Q9bS8WnA=;
+	s=default; t=1767093293;
+	bh=MYGZyqTlQr/UjQxsZxnPowT55uS9rodPSSsVT7fABfw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=n6EOBIprpzZ24EdcpfVTyXgsMAHpGoZQNmrj4ZFsr9vqUJnjI24iafg0Y+j/eZBhV
-	 P06THEG3R9L4JwC6BYH1uxcop0JeJheG5kmkeumisKbvWUwg65dy47xC5ecubW7IZl
-	 dJvApG51ufODdZfXXmWzQTW4g0JPXUTQ3DwLIfi0/trkLe1m+yMdrkbw/6QSUiPIxy
-	 ksdH+407qqqaPh+vmiBP36H405oI8eoQ+jN/YcW+UmWUwZ4GePjGi7ftK68AHdZ52S
-	 M2WkGt3rcL+/uSUR58pUHzIO3nUUKqNvPCz/zTYWt3NjQ6RKMQsx+uMXDuRt3UlogO
-	 0EhE8gd+kcC9A==
+	b=gdv1iqhYYH8LUIos6kDFxQ/zs3pGkDTSyWiBbGDEJm8gftcriqzr1tjsbr3tvHh+G
+	 pWVerD1MRNoL6LNn1a1oLZbWTjNshDKAE/cuQXp269CnLVOD8/QOrsWm9BDd8zgfuc
+	 bpLGUSdvyFtVhJ0HsMXbjzzTfYkwRVoZjhUbhuDJMx5FJJxxLsYVPFXRAUS0ZzeNKi
+	 cApMRq3FovEQquAW0jST3roIzc2lAd3BY/pQVJjj9mrzeYbm2M7wmlmKCskfbeviDx
+	 thQeRcPJZHB1RxNRhC6iho9t3hC05wheNn3b3WzXnSoe9zKKFULIZJjxbL4M/TX6OY
+	 yHGcOYvZHXv+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09FF4407FA;
-	Tue, 30 Dec 2025 11:14:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 170EB177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 078D68097E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 443E260B5C;
+	Tue, 30 Dec 2025 11:14:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B81C335B
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5C9460619
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id clEgkb4TsDhT for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jeS1PMDBEsOz for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12A6F809A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D336A606B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12A6F809A7
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D336A606B1
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11C0A86324; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+ id D211786324; Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 12:01:54 +0100
+Date: Tue, 30 Dec 2025 12:01:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9211ff06dfdb9bd1fdd74b5786bf75885a6da6ab
-X-Git-Newrev: fbbaf33179313b5ec2de2b03b81b638a98c7c7a9
+X-Git-Oldrev: 758aed66583fc45daf7b5725cc5340576e311474
+X-Git-Newrev: 3a2dafb467307035362028f171dc283d54d03153
 X-Patchwork-Hint: ignore
-Message-Id: <20251230111445.11C0A86324@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libiqrf: remove package
+Message-Id: <20251230111444.D211786324@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/connman-gtk: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,209 +76,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbbaf33179313b5ec2de2b03b81b638a98c7c7a9
+commit: https://git.buildroot.net/buildroot/commit/?id=3a2dafb467307035362028f171dc283d54d03153
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fails to build with cmake 4.
+Analysis of https://github.com/jgke/connman-gtk:
+marked as read-only: Oct 2021
+last commit: Jun 2018
+last bug report: Oct 2021
+last pull request: Apr 2020
 
-The package is a library without any reverse dependencies and no active
-development since 2013.
+The package is broken with gcc 15.x and no other package depends on it.
 
 Fixes:
-https://autobuild.buildroot.net/results/cb5/cb50e158446e83249fc54e54e5a63ccf36e3be96/
+https://autobuild.buildroot.net/results/54d/54d8cc10e4d017deabf8664898a2d09e3a115f66/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  2 -
- Config.in.legacy                                   |  6 +++
- package/Config.in                                  |  1 -
- ...e-static-library-and-find-required-thread.patch | 45 ----------------------
- package/libiqrf/0002-use-only-c-language.patch     | 29 --------------
- package/libiqrf/Config.in                          | 16 --------
- package/libiqrf/libiqrf.hash                       |  3 --
- package/libiqrf/libiqrf.mk                         | 14 -------
- 8 files changed, 6 insertions(+), 110 deletions(-)
+ Config.in.legacy                     |  6 ++++++
+ package/Config.in                    |  1 -
+ package/connman-gtk/Config.in        | 22 ----------------------
+ package/connman-gtk/connman-gtk.hash |  3 ---
+ package/connman-gtk/connman-gtk.mk   | 17 -----------------
+ 5 files changed, 6 insertions(+), 43 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index c4bc3e5c02..b1d350bc52 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -547,8 +547,6 @@ package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch l
- package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
- package/libgtk3/0001-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch lib_patch.Upstream
- package/libhdhomerun/0001-dont-strip.patch lib_patch.Upstream
--package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch lib_patch.Upstream
--package/libiqrf/0002-use-only-c-language.patch lib_patch.Upstream
- package/libjson/0001-fix-broken-makefile.patch lib_patch.Upstream
- package/libks/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
- package/liblinear/0001-build-static-lib.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 3ce540561f..5987e9777c 100644
+index cc0b264ba4..94d1c4ea08 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBIQRF
-+	bool "libiqrf has been removed"
++config BR2_PACKAGE_CONNMAN_GTK
++	bool "connman-gtk has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libiqrf is unmaintained and has been removed
++	  connman-gtk is unmaintained and has been removed
 +
- config BR2_PACKAGE_LIBCGI
- 	bool "libcgi has been removed"
+ config BR2_PACKAGE_LIBMHASH
+ 	bool "libmhash has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 58905f4759..22b6b7fab4 100644
+index 2617020fe6..06e3782e87 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1836,7 +1836,6 @@ menu "Hardware handling"
- 	source "package/libgudev/Config.in"
- 	source "package/libiio/Config.in"
- 	source "package/libinput/Config.in"
--	source "package/libiqrf/Config.in"
- 	source "package/libllcp/Config.in"
- 	source "package/libmbim/Config.in"
- 	source "package/libnfc/Config.in"
-diff --git a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch b/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+@@ -2461,7 +2461,6 @@ endif
+ 	source "package/civetweb/Config.in"
+ 	source "package/cloudflared/Config.in"
+ 	source "package/connman/Config.in"
+-	source "package/connman-gtk/Config.in"
+ 	source "package/conntrack-tools/Config.in"
+ 	source "package/corkscrew/Config.in"
+ 	source "package/crda/Config.in"
+diff --git a/package/connman-gtk/Config.in b/package/connman-gtk/Config.in
 deleted file mode 100644
-index 7f460c131e..0000000000
---- a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+index 467bf7ec88..0000000000
+--- a/package/connman-gtk/Config.in
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 46660112b76664473cc98b8ae6c863fd27c27d2d Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Fri, 29 Aug 2014 23:40:59 +0200
--Subject: [PATCH] cmake: handle static library and find required thread
-- module
+@@ -1,22 +0,0 @@
+-comment "connman-gtk needs libgtk3 and a glibc or uClibc toolchain w/ wchar, threads, resolver, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_PACKAGE_LIBGTK3 || \
+-		BR2_TOOLCHAIN_USES_MUSL
 -
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- CMakeLists.txt     | 2 ++
-- src/CMakeLists.txt | 4 +++-
-- 2 files changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 79f644c..7779a2a 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -6,7 +6,9 @@ enable_testing()
-- # use local module (for Findlibusb-1.0.cmake)
-- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-- 
--+find_package(Threads REQUIRED)
-- find_package(libusb-1.0 REQUIRED)
--+
-- if (NOT LIBUSB_1_FOUND)
-- 	message(FATAL_ERROR "libusb-1.0 not installed. (try apt-get install libusb-1.0-0-dev)")
-- endif (NOT LIBUSB_1_FOUND)
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 149d198..0597ccd 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -18,8 +18,10 @@ set (iqrf_sources
-- 
-- include_directories ("${LIBUSB_1_INCLUDE_DIRS}")
-- 
---add_library(iqrf SHARED ${iqrf_sources} ${iqrf_headers})
--+add_library(iqrf ${iqrf_sources} ${iqrf_headers})
--+
-- target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES})
--+target_link_libraries(iqrf ${CMAKE_THREAD_LIBS_INIT})
-- 
-- set_target_properties(iqrf PROPERTIES
-- 	VERSION "${iqrf_version_major}.${iqrf_version_minor}"
---- 
--2.1.0
--
-diff --git a/package/libiqrf/0002-use-only-c-language.patch b/package/libiqrf/0002-use-only-c-language.patch
-deleted file mode 100644
-index 2f1c23c28b..0000000000
---- a/package/libiqrf/0002-use-only-c-language.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Use only the C language
--
--libirqf is written completely in C, but by default, CMake assumes that
--both C and C++ are used, and therefore verifies that a C++ compiler is
--installed. This may not necessarily be the case for a C-only package
--in Buildroot.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/src/CMakeLists.txt
--===================================================================
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -1,5 +1,3 @@
---project(iqrf)
---
-- set (iqrf_version_major 0)
-- set (iqrf_version_minor 1)
-- set (iqrf_version_patch 2)
--Index: b/CMakeLists.txt
--===================================================================
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,3 +1,5 @@
--+project(iqrf C)
--+
-- cmake_minimum_required(VERSION 2.8.1)
-- enable_testing()
-- 
-diff --git a/package/libiqrf/Config.in b/package/libiqrf/Config.in
-deleted file mode 100644
-index d86a7fd0ec..0000000000
---- a/package/libiqrf/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_LIBIQRF
--	bool "libiqrf"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
--	select BR2_PACKAGE_LIBUSB
+-config BR2_PACKAGE_CONNMAN_GTK
+-	bool "connman-gtk"
+-	depends on BR2_USE_WCHAR # libglib2, connman
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, connman
+-	depends on BR2_USE_MMU # libglib2
+-	depends on !BR2_STATIC_LIBS # connman
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # connman
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # connman
+-	depends on BR2_PACKAGE_LIBGTK3
+-	select BR2_PACKAGE_CONNMAN
+-	select BR2_PACKAGE_LIBGLIB2
 -	help
--	  This library implement specific protocol
--	  which is used for communicating with iqrf devices
--	  (http://iqrf.org) over usb. For usb access is used
--	  libusb library.
+-	  GTK GUI for ConnMan.
 -
--	  https://github.com/nandra/libiqrf
--
--comment "libiqrf needs a toolchain w/ threads, gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libiqrf/libiqrf.hash b/package/libiqrf/libiqrf.hash
+-	  https://github.com/jgke/connman-gtk
+diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
 deleted file mode 100644
-index df749def17..0000000000
---- a/package/libiqrf/libiqrf.hash
+index 72e2fcaaa5..0000000000
+--- a/package/connman-gtk/connman-gtk.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  8111031dd9dd6093a1927eb32dd7476fe22cfee9190043aa8e4c88003c104b16  libiqrf-0.1.2.tar.gz
--sha256  11e0700d7c23604d86fa1e7c54c7caa778d79eeb0035be8f80b5a552224ef015  src/iqrf.c
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+-sha256  49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca  connman-gtk-1.1.1.tar.bz2
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/connman-gtk/connman-gtk.mk b/package/connman-gtk/connman-gtk.mk
 deleted file mode 100644
-index 3f4e3e8498..0000000000
---- a/package/libiqrf/libiqrf.mk
+index 0ea49198e6..0000000000
+--- a/package/connman-gtk/connman-gtk.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,17 +0,0 @@
 -################################################################################
 -#
--# libiqrf
+-# connman-gtk
 -#
 -################################################################################
 -
--LIBIQRF_VERSION = 0.1.2
--LIBIQRF_SITE = $(call github,nandra,libiqrf,v$(LIBIQRF_VERSION))
--LIBIQRF_INSTALL_STAGING = YES
--LIBIQRF_DEPENDENCIES = libusb
--LIBIQRF_LICENSE = LGPL-2.1+
--LIBIQRF_LICENSE_FILES = src/iqrf.c
+-CONNMAN_GTK_VERSION = 1.1.1
+-CONNMAN_GTK_SITE = https://github.com/jgke/connman-gtk/releases/download/v$(CONNMAN_GTK_VERSION)
+-CONNMAN_GTK_SOURCE = connman-gtk-$(CONNMAN_GTK_VERSION).tar.bz2
+-CONNMAN_GTK_INSTALL_STAGING = YES
+-CONNMAN_GTK_DEPENDENCIES = host-intltool connman libglib2 libgtk3 \
+-	$(TARGET_NLS_DEPENDENCIES)
+-CONNMAN_GTK_LICENSE = GPL-2.0+
+-CONNMAN_GTK_LICENSE_FILES = COPYING
+-CONNMAN_GTK_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
 -
--$(eval $(cmake-package))
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
