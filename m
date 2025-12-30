@@ -1,94 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5E2DE95A6C
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:08:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A3D2E95A6C
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FCF4600BB;
-	Tue, 30 Dec 2025 11:08:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DXHw4xcomqON; Tue, 30 Dec 2025 11:08:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAD80608A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767092936;
-	bh=2xFkxXIVmSKQ/DfJmY+AW1/IIxKrtaJPiiidGn2c7uc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CLijpsAQ6tnMmvWBQG87gRFzyeCBj5YGnxLk0OclzG6PPwnQMxkleEB6fH+akS72v
-	 CJS1z7IMK3Uxrny+se7SkWMcYqRGOuYKpEKSmJ830ud3+LkddsdQIpPmoPSs/m0Njh
-	 IXGTIGbZZbSHu25y0cfREOR76cgMCR8HH5fSucvHjQPS1VPHeoBR8/C6CG07hJ2YYS
-	 J/mLWPcxKkHjAkhxnvVyomUkJtGGdSLDfrShBVDMU60e1B5GayTPflWcNU/sxsTHpE
-	 DGufEVhgGm3MpSKXHPhVWCIvqQKA05T7RJ0ttkPJp77OKBunkkwB9GW0BsUO5CZtkV
-	 gT5f9203a8OnA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAD80608A0;
-	Tue, 30 Dec 2025 11:08:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 04821177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:08:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAABA40561
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:08:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CCCB407AD;
+	Tue, 30 Dec 2025 11:14:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZsoVSBcgC_MH for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 11:08:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id LzbDNy768t5W; Tue, 30 Dec 2025 11:14:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 283AE40519
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767093286;
+	bh=VEzwHp9eGXggXTJdNg45ySnc+x2T6NVeFYdyXnfok6E=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=rhh3a3TeYTIL8dmhTy5DMRL+3aVnKcwOUBw2bDpwiKPBWJuskvy3kvsrtJEaR0N90
+	 3BQxJX5GefcmT3hgJbjTfSvwKJdld3jBE49ywS/JOh21El3TJK3C5AuKU67jKwa27I
+	 SdVLl8GlBhL0llNZhPAr8xcHfF82PHxBy3iRP4iZTR3m4iqt3SPkd+cQfdJpmbUI0o
+	 qqtLdhE6B+4wiDdFk1hCywAntlBEG/WfZqBZWftrrWGp0YNoAO1LfSRfRunvMpXAe7
+	 gXQwRYSu1rYk1qLfox3SENGMW6ESOI5GQEy1fmHTpbG+s+cneNX0rJbI9/3f+6oLZZ
+	 DKLquLITdWedQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 283AE40519;
+	Tue, 30 Dec 2025 11:14:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FBF335B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 525684039B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VSVMxkPGRMoV for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 038C340502
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 038C340502
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 038C340502
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:08:54 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 895A51A252F;
- Tue, 30 Dec 2025 11:08:52 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5683D6072C;
- Tue, 30 Dec 2025 11:08:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6DB6A113B02AE; Tue, 30 Dec 2025 12:08:49 +0100 (CET)
-Date: Tue, 30 Dec 2025 12:08:47 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Andreas Ziegler <br025@umbiko.net>, Angelo
- Compagnucci <angelo.compagnucci@gmail.com>, Fabrice Fontaine
- <fontaine.fabrice@gmail.com>, Mahyar Koshkouei
- <mahyar.koshkouei@gmail.com>, Matt Flax <flatmax@flatmax.org>, Romain Naour
- <romain.naour@gmail.com>, Simon Dawson <spdawson@gmail.com>, Woodrow
- Douglass <wdouglass@carnegierobotics.com>
-Message-ID: <20251230120847.22375487@windsurf>
-In-Reply-To: <20251229175938.3549882-1-bernd@kuhls.net>
-References: <20251229175938.3549882-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767092931; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=wVcVDUXozMSm+KpK8uDbSozt1VCWTMzLP3WKm3MzpPA=;
- b=PmvIIIDL8hb6NqjMSWzr0vyFF+nbW797MLcnQgyqRcmFcLjxZ7Iw1VZwxAxxHcnW/xeK1K
- qp8TIju+uCAVvXDZJSHR0qoPQTjDJ7MV46wOL2H1mQwz8LJ1cISueRtV3yYMtZfl3ZAkjR
- kOeF3tr5ciC9q8FZg1vTfbhJme0PEpQT5M475vn6kyLfEW9Fa6Eicf3WylYCr1QjiSrNv4
- yPwz9dm5g28V9i6T9C202JpW9vfOcIHvtLlkmD5xSOEyrVjMwUKfPiiv4wfLicGrpewsgJ
- bOKvaTbcJTdX7Z3XQ0WpUyA8NfFT9D2v5TR0YS4EFBIVH4WBuTdlEHwwhOYALw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=PmvIIIDL
-Subject: Re: [Buildroot] [PATCH v8 00/29] Remove packages
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96F57400E6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96F57400E6
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 93B5D87C27; Tue, 30 Dec 2025 11:14:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 30 Dec 2025 11:57:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 60fa1d6981093c77c29bd1074dca8b898c0f3fea
+X-Git-Newrev: 48c1e7cc6da96b12c8c8eb59c49cb917b0ae1a43
+X-Patchwork-Hint: ignore
+Message-Id: <20251230111444.93B5D87C27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libupnp: disable blocking-tcp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,76 +70,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=48c1e7cc6da96b12c8c8eb59c49cb917b0ae1a43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 29 Dec 2025 18:59:08 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Suggested by Gerbera:
+https://github.com/gerbera/gerbera/commit/fcf31472239705e7d28af81cbe326f8f416f7f7d
 
-> Bernd Kuhls (29):
->   package/libnids: remove package
->   package/dmraid: remove package
->   package/libmhash: remove package
->   package/connman-gtk: remove package
->   package/hawktracer: remove package
->   package/let-me-create: remove package
->   package/libcgi: remove package
->   package/libiqrf: remove package
->   package/libuwsc: remove package
->   package/alure: remove package
+CMake Warning at CMakeLists.txt:583 (message):
+  !! It is strongly recommended to build libupnp with --disable-blocking-tcp-connections !!
+  Without this option non-responsive control points can cause libupnp to hang.
 
-I've applied up to this point.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libupnp/libupnp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
->   package/openpowerlink: remove package
-
-This one causes warnings:
-
-Config.in.legacy:6025: BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE not referenced but has a comment stating it is
-Config.in.legacy:6035: BR2_PACKAGE_OPENPOWERLINK_LIBPCAP not referenced but has a comment stating it is
-
->   package/opentracing-cpp: remove package
->   package/qjson: remove package
->   package/sconeserver: remove package
->   package/taskd: remove package
->   package/racehound: remove package
-
-This one:
-
-WARNING: .checkpackageignore:881: ignored file package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch is missing
-
->   package/musepack: remove package
->   package/libcuefile: remove package
-
-This one doesn't apply on the latest master.
-
->   package/python-aioredis: remove package
->   package/cppdb: remove package
->   package/ffmpeg: remove optional dependency to opencv3
->   package/freeswitch: remove optional dependency to opencv3
->   package/gtkiostream: remove optional dependency to opencv3
->   package/mjpg-streamer: remove optional dependency to opencv3
->   package/vlc: remove optional dependency to opencv3
->   package/opencv3: remove package
-
-I'm happy to apply up to this point once the above issues are fixed.
-
->   package/ogre: remove dependency to libfreeimage
->   package/cegui: remove dependency to libfreeimage
->   package/libfreeimage: remove package
-
-For this one, I suggested to drop libfreeimage, so of course I'm fine
-with it, but "ogre" is still relevant and maintained upstream. Is it
-still using libfreeimage in its latest version?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index f29275d2b5..cfa1136db3 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -17,6 +17,7 @@ LIBUPNP_DEPENDENCIES = host-pkgconf
+ 
+ # Bind the internal miniserver socket with reuseaddr to allow clean restarts.
+ LIBUPNP_CONF_OPTS += \
++	--disable-blocking-tcp-connections \
+ 	--disable-samples \
+ 	--enable-reuseaddr
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
