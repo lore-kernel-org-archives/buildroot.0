@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D808EE4992
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EF73EE4990
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1F8B60BD6;
-	Tue, 30 Dec 2025 18:12:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0103160BF2;
+	Tue, 30 Dec 2025 18:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XP0TRpuZZFEg; Tue, 30 Dec 2025 18:12:50 +0000 (UTC)
+ id ZIOmsYSrYJHV; Tue, 30 Dec 2025 18:12:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C55260BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1450E60BC1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767118370;
-	bh=SirIaSwdB70GpvpuxLtM9JS7cMFq5hC4i3ESShJdvYY=;
+	s=default; t=1767118368;
+	bh=2+anRLgjAiSklejR9QErIUqhTdDYq+3pD2/RTt3SkKE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WJep7WnIYj5DZEsM+lJK+gJChfK+NHVJ6pS7OESQhKzVSIVLd1AM+Xe27JSidtiDe
-	 xy8+GzAo7Gkr6wwjJs62K+MsqnWKljqW4kcdRkS7VjYV0EEbzjIUojpOJertO8kMPp
-	 IRN6LM+/5DNVQ6KvVITWSYJEscQyBcdOVID15tHz+LKzLdcaW7U44NDzmmDct85qNM
-	 uVp3toRbmtlpEUbI/+HCfFQlm7OiX5SNG9pAsBFZJD/IYGv5Kdy5+M+JAs3deCEo3e
-	 Yu65BD8VHq2Zs/FEuk4QsGzFCITpfhYH4rrdlMSbZrXIGqsgnN0cXG7BW7SVZz6I4t
-	 kGyFvRMa9yG7g==
+	b=hs1+hqB+N/cg7xObwpxe1w1s1RgGLkC2wt3K1te4HBuZJtXdYC3Cf0L0Zag4xTXr9
+	 NccXXvw0jyfmiX0MWeCavofM/0+c2xyxxe7tga2b+czTRj/pzBe0FhUA4AJiMXsFAG
+	 2S0w1O268TGMq/UhQEJOpCUjZqHVtE/ZO2rJWriwlUeo0sDEjQgjIbx2UUUkKz3Ws7
+	 NDjbLAthaxz3XpsMenMtGVLtwz270DjvkfLp901CCPZ5GhpHWbKmuD1vwL1ux6aQtP
+	 n7AmjQOYyNhH1zClA3ha/1W/m/3Q8hqZSkefBns0IdUjtEKqN5PvtnZZZt2YE4SA/T
+	 92IOkRyMmirgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C55260BE0;
-	Tue, 30 Dec 2025 18:12:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1450E60BC1;
+	Tue, 30 Dec 2025 18:12:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1231B177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0975635B
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E466403B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B50C403B8
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOnZT8ojN7m4 for <buildroot@buildroot.org>;
+ id MjM3FUbedP2p for <buildroot@buildroot.org>;
  Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1793F4041F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0218403F4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1793F4041F
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0218403F4
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 168C287C3E; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
+ id E2A3C87C3E; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 19:12:11 +0100
+Date: Tue, 30 Dec 2025 19:12:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c2645a3312f4d913c4df299b8bad2b0fa89a11da
-X-Git-Newrev: 05ca9bfcdb2db1e5d28031d6c5c9ade751e8224b
+X-Git-Oldrev: 9f9e324091d195a9b1034c652796d4a2fe7a1a4b
+X-Git-Newrev: b318a0c22b4ac3cb9b8cd19d85a779a403feb0c4
 X-Patchwork-Hint: ignore
-Message-Id: <20251230181235.168C287C3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcuefile: remove package
+Message-Id: <20251230181234.E2A3C87C3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/taskd: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,235 +71,280 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4735358535134785858=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05ca9bfcdb2db1e5d28031d6c5c9ade751e8224b
+--===============4735358535134785858==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b318a0c22b4ac3cb9b8cd19d85a779a403feb0c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Last release 2011: https://www.musepack.net/index.php?pg=src
+https://github.com/GothenburgBitFactory/taskserver/commit/e71163665181a27589c52126c542e1426f55d4eb
+The package "is no longer actively developed."
 
-Please note that patch 0003 contains crlf line endings.
+https://github.com/GothenburgBitFactory/taskserver shows this note:
+"This repository was archived by the owner on Jul 4, 2024.
+ It is now read-only."
+
+The package is broken with cmake 4 and no other package depends on it.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: Ben Boeckel <mathstuf@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
+ .checkpackageignore                                |  3 --
  Config.in.legacy                                   |  6 ++++
+ DEVELOPERS                                         |  3 --
  package/Config.in                                  |  1 -
- package/libcuefile/0001-fix-static-link.patch      | 25 ----------------
- .../libcuefile/0002-libcuefile-fedora-c99.patch    | 27 -----------------
- ...03-CMakeLists.txt-fix-compat-with-CMake-4.patch | 35 ----------------------
- package/libcuefile/Config.in                       |  6 ----
- package/libcuefile/libcuefile.hash                 |  7 -----
- package/libcuefile/libcuefile.mk                   | 25 ----------------
- 9 files changed, 6 insertions(+), 127 deletions(-)
+ ...ing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch | 28 ---------------
+ ...se-correct-variables-for-GnuTLS-detection.patch | 32 -----------------
+ ...-CMakeLists-use-pkg-config-uuid-detection.patch | 40 ----------------------
+ package/taskd/Config.in                            | 18 ----------
+ package/taskd/taskd.hash                           |  5 ---
+ package/taskd/taskd.mk                             | 13 -------
+ 10 files changed, 6 insertions(+), 143 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index c48a0a5b18..a23fbf64a2 100644
+index a2710cdd3e..a80e89c168 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -523,7 +523,6 @@ package/libb64/0001-Integer-overflows.patch lib_patch.Upstream
- package/libb64/0002-Initialize-C++-objects.patch lib_patch.Upstream
- package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch lib_patch.Upstream
- package/libcgicc/0001-disable-documentation-option.patch lib_patch.Sob lib_patch.Upstream
--package/libcuefile/0001-fix-static-link.patch lib_patch.Upstream
- package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch lib_patch.Upstream
- package/libdnet/0001-python-makefile.patch lib_patch.Upstream
- package/libdrm/0001-tests-meson.build-disable-nouveau-tests-for-static-b.patch lib_patch.Upstream
+@@ -983,9 +983,6 @@ package/swupdate/swupdate.sh Shellcheck
+ package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch lib_patch.Upstream
+ package/tar/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/targetcli-fb/S50target Shellcheck lib_sysv.Variables
+-package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch lib_patch.Upstream
+-package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch lib_patch.Upstream
+-package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch lib_patch.Upstream
+ package/tcf-agent/S55tcf-agent Shellcheck lib_sysv.Variables
+ package/tftpd/S80tftpd-hpa Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/ti-gfx/0001-newclkapi.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 28c90b32d1..44351cf3ca 100644
+index fc5979c926..acc8edf963 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBCUEFILE
-+	bool "libcuefile has been removed"
++config BR2_PACKAGE_TASKD
++	bool "taskd has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libcuefile is unmaintained and has been removed
++	  taskd was deprecated upstream and has been removed
 +
- config BR2_PACKAGE_MPD_MUSEPACK
- 	bool "musepack support in mpd has been removed"
+ config BR2_PACKAGE_SCONESERVER
+ 	bool "sconeserver has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 37b8904751..477fb5a72d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -347,9 +347,6 @@ F:	package/uhubctl/
+ N:	Baxiche Su <baxiche@gmail.com>
+ F:	package/qt6/qt6multimedia/
+ 
+-N:	Ben Boeckel <mathstuf@gmail.com>
+-F:	package/taskd/
+-
+ N:	Benjamin Kamath <kamath.ben@gmail.com>
+ F:	package/lapack/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index e54a5e0fa5..0b11a7df48 100644
+index 42ae5aae4d..ab24e84531 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1547,7 +1547,6 @@ menu "Audio/Sound"
- 	source "package/libcdio-paranoia/Config.in"
- 	source "package/libcodec2/Config.in"
- 	source "package/libcue/Config.in"
--	source "package/libcuefile/Config.in"
- 	source "package/libg7221/Config.in"
- 	source "package/libgsm/Config.in"
- 	source "package/libid3tag/Config.in"
-diff --git a/package/libcuefile/0001-fix-static-link.patch b/package/libcuefile/0001-fix-static-link.patch
+@@ -2402,7 +2402,6 @@ menu "Miscellaneous"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/snooze/Config.in"
+ 	source "package/sunwait/Config.in"
+-	source "package/taskd/Config.in"
+ 	source "package/wine/Config.in"
+ 	source "package/xmrig/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+diff --git a/package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch b/package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
 deleted file mode 100644
-index 6eb58909fd..0000000000
---- a/package/libcuefile/0001-fix-static-link.patch
+index 960c71b9ea..0000000000
+--- a/package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
 +++ /dev/null
-@@ -1,25 +0,0 @@
--Fix static only build
+@@ -1,28 +0,0 @@
+-From b067ab9bf667bb9257bb9eeaa6bf25f9a1a17f06 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Fri, 6 May 2016 23:35:42 +0200
+-Subject: [PATCH] Fix missing cmakedefine HAVE_GET_CURRENT_DIR_NAME
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--Make sure to build the shared library only if BUILD_SHARED_LIBS is
--ON. Normally, CMake takes care of this automatically, but libcuefile
--wants to build both the shared and static variants, so the normal
--logic of CMake doesn't apply.
+-Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
+----
+- cmake.h.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/cmake.h.in b/cmake.h.in
+-index 4124ce9..0b8f9d0 100644
+---- a/cmake.h.in
+-+++ b/cmake.h.in
+-@@ -51,6 +51,7 @@
+- #cmakedefine HAVE_ST_BIRTHTIME
+- 
+- /* Functions */
+-+#cmakedefine HAVE_GET_CURRENT_DIR_NAME
+- #cmakedefine HAVE_TIMEGM
+- #cmakedefine HAVE_UUID_UNPARSE_LOWER
+- 
+--- 
+-2.8.2
+-
+diff --git a/package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch b/package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch
+deleted file mode 100644
+index f2365ea298..0000000000
+--- a/package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 88fee5c6eb2271d3de6b9878cd29a0494999aa18 Mon Sep 17 00:00:00 2001
+-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+-Date: Sun, 20 Nov 2016 23:46:45 +0100
+-Subject: [PATCH] Use correct variables for GnuTLS detection
+-
+-At least with recent CMake, it seems the variables created by
+-find_package (GnuTLS) are called PC_GNUTLS_INCLUDE_DIRS and
+-PC_GNUTLS_LIBRARIES.
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index d8125d9..ccf827b 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -110,8 +110,8 @@ message ("-- Looking for GnuTLS")
+- find_package (GnuTLS REQUIRED)
+- if (GNUTLS_FOUND)
+-   set (HAVE_LIBGNUTLS true)
+--  set (TASKD_INCLUDE_DIRS ${TASKD_INCLUDE_DIRS} ${GNUTLS_INCLUDE_DIR})
+--  set (TASKD_LIBRARIES    ${TASKD_LIBRARIES}    ${GNUTLS_LIBRARIES})
+-+  set (TASKD_INCLUDE_DIRS ${TASKD_INCLUDE_DIRS} ${PC_GNUTLS_INCLUDE_DIRS})
+-+  set (TASKD_LIBRARIES    ${TASKD_LIBRARIES}    ${PC_GNUTLS_LIBRARIES})
+- endif (GNUTLS_FOUND)
+- 
+- message ("-- Looking for libuuid")
+--- 
+-2.10.2
+-
+diff --git a/package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch b/package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch
+deleted file mode 100644
+index 34139fef74..0000000000
+--- a/package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-CMakeLists.txt: use pkg-config to detect uuid when possible
+-
+-In order to take into account the libraries used by libuuid when
+-building statically, using pkg-config is recommended. This patch
+-therefore improves the CMakeLists.txt to use pkg-config to detect
+-libuuid when pkg-config is available.
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -
--Index: b/src/CMakeLists.txt
+-Index: b/CMakeLists.txt
 -===================================================================
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -4,7 +4,11 @@
-- add_library(cuefile-static STATIC cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
-- set_target_properties(cuefile-static PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1)
-- 
--+if (BUILD_SHARED_LIBS)
-- add_library(cuefile-shared SHARED cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
-- set_target_properties(cuefile-shared PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1 VERSION 0.0.0 SOVERSION 0)
-- 
-- install(TARGETS cuefile-static cuefile-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
--+else (BUILD_SHARED_LIBS)
--+install(TARGETS cuefile-static LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
--+endif (BUILD_SHARED_LIBS)
-diff --git a/package/libcuefile/0002-libcuefile-fedora-c99.patch b/package/libcuefile/0002-libcuefile-fedora-c99.patch
-deleted file mode 100644
-index 3f76dd315c..0000000000
---- a/package/libcuefile/0002-libcuefile-fedora-c99.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 7dd8752f5aa2dccbaccb4c28a23f659df3bc0d19 Mon Sep 17 00:00:00 2001
--From: DJ Delorie <dj@redhat.com>
--Date: Thu, 27 Apr 2023 17:24:58 -0400
--Subject: [PATCH] Fix C99 compatibility issue
--
--Related to:
--
--  <https://fedoraproject.org/wiki/Changes/PortingToModernC>
--  <https://fedoraproject.org/wiki/Toolchain/PortingToModernC>
--
--See Also https://bugzilla.redhat.com/show_bug.cgi?id=2190307
--Signed-off-by: DJ Delorie <dj@redhat.com>
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Upstream: https://src.fedoraproject.org/rpms/libcuefile/blob/7dd8752f5aa2dccbaccb4c28a23f659df3bc0d19/f/libcuefile-fedora-c99.patch
-----
--diff -rup a/src/cue_parse.c b/src/cue_parse.c
----- a/src/cue_parse.c	2011-06-18 07:28:43.000000000 -0400
--+++ b/src/cue_parse.c	2023-04-27 16:10:13.314263314 -0400
--@@ -1513,6 +1513,8 @@ void yyerror (char *s)
-- 	fprintf(stderr, "%d: %s\n", cue_lineno, s);
-- }
-- 
--+void cue_delete_buffer(void);
--+
-- Cd *cue_parse (FILE *fp)
-- {
-- 	cue_yyin = fp;
-diff --git a/package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch b/package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch
-deleted file mode 100644
-index c1858f3fa5..0000000000
---- a/package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From bf7598c2f5a40d16f16a9649bb6415c3594c0a45 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Tue, 16 Dec 2025 10:26:49 +0100
--Subject: [PATCH] CMakeLists.txt: fix compat with CMake 4
--
--Fixes:
--
--CMake Error at CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
--  Compatibility with CMake < 3.5 has been removed from CMake.
--
--  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
--  to tell CMake that the project requires at least <min> but has been updated
--  to work with policies introduced by <max> or earlier.
--
--  Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
--
--Upstream: N/A, dead
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index c1e4a8b..96bf5b4 100755
 ---- a/CMakeLists.txt
 -+++ b/CMakeLists.txt
--@@ -1,4 +1,4 @@
---CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
--+CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+-@@ -6,6 +6,7 @@
 - 
-- project(libcuefile C)
+- include (CheckFunctionExists)
+- include (CheckStructHasMember)
+-+include (FindPkgConfig)
 - 
---- 
--2.52.0
--
-diff --git a/package/libcuefile/Config.in b/package/libcuefile/Config.in
+- set (HAVE_CMAKE true)
+- 
+-@@ -119,8 +120,16 @@
+-   # Apple and FreeBSD include the uuid functions in their libc, rather than libuuid
+-   check_function_exists (uuid_unparse_lower HAVE_UUID_UNPARSE_LOWER)
+- else (DARWIN OR FREEBSD)
+--  find_path    (UUID_INCLUDE_DIR   uuid/uuid.h)
+--  find_library (UUID_LIBRARY NAMES uuid)
+-+  if(PKG_CONFIG_FOUND)
+-+    pkg_check_modules(PC_UUID uuid)
+-+    if(PC_UUID_FOUND)
+-+      set (UUID_INCLUDE_DIR ${PC_UUID_INCLUDE_DIRS})
+-+      set (UUID_LIBRARY ${PC_UUID_LIBRARIES})
+-+    endif(PC_UUID_FOUND)
+-+  else(PKG_CONFIG_FOUND)
+-+    find_path    (UUID_INCLUDE_DIR   uuid/uuid.h)
+-+    find_library (UUID_LIBRARY NAMES uuid)
+-+  endif(PKG_CONFIG_FOUND)
+-   if (UUID_INCLUDE_DIR AND UUID_LIBRARY)
+-     set (TASKD_INCLUDE_DIRS ${TASKD_INCLUDE_DIRS} ${UUID_INCLUDE_DIR})
+-     set (TASKD_LIBRARIES    ${TASKD_LIBRARIES}    ${UUID_LIBRARY})
+diff --git a/package/taskd/Config.in b/package/taskd/Config.in
 deleted file mode 100644
-index 416b3e1495..0000000000
---- a/package/libcuefile/Config.in
+index 19d123fb59..0000000000
+--- a/package/taskd/Config.in
 +++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_LIBCUEFILE
--	bool "libcuefile"
+@@ -1,18 +0,0 @@
+-config BR2_PACKAGE_TASKD
+-	bool "taskd"
+-	depends on !BR2_STATIC_LIBS # gnutls
+-	depends on BR2_USE_WCHAR # gnutls
+-	depends on BR2_USE_MMU # fork()
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_GNUTLS
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
 -	help
--	  Cue File library from Musepack
+-	  Task management synchronization daemon.
 -
--	  http://www.musepack.net/
-diff --git a/package/libcuefile/libcuefile.hash b/package/libcuefile/libcuefile.hash
-deleted file mode 100644
-index 2f737af0dc..0000000000
---- a/package/libcuefile/libcuefile.hash
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# From https://www.musepack.net/index.php?pg=src
--md5  1a6ac52e1080fd54f0f59372345f1e4e  libcuefile_r475.tar.gz
--# Calculated based on the hash above
--sha256  b681ca6772b3f64010d24de57361faecf426ee6182f5969fcf29b3f649133fe7  libcuefile_r475.tar.gz
+-	  http://taskwarrior.org/
 -
--# Hash for license file:
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/libcuefile/libcuefile.mk b/package/libcuefile/libcuefile.mk
+-comment "taskd needs a toolchain w/ C++, wchar, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		BR2_STATIC_LIBS
+diff --git a/package/taskd/taskd.hash b/package/taskd/taskd.hash
 deleted file mode 100644
-index 891c1eec37..0000000000
---- a/package/libcuefile/libcuefile.mk
+index d3f8bb250e..0000000000
+--- a/package/taskd/taskd.hash
 +++ /dev/null
-@@ -1,25 +0,0 @@
+@@ -1,5 +0,0 @@
+-# From http://taskwarrior.org/download/
+-sha1  ded339deeee65277e4712f71a9159502f8b20b52  taskd-1.1.0.tar.gz
+-# Locally calculated
+-sha256  7b8488e687971ae56729ff4e2e5209ff8806cf8cd57718bfd7e521be130621b4  taskd-1.1.0.tar.gz
+-sha256  84d1a8c2e6e306864ff350857a36b6c74756e61e2eae6822cf2fa88212720f68  COPYING
+diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
+deleted file mode 100644
+index b19be68912..0000000000
+--- a/package/taskd/taskd.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
 -################################################################################
 -#
--# libcuefile
+-# taskd
 -#
 -################################################################################
 -
--LIBCUEFILE_VERSION = 475
--LIBCUEFILE_SITE = http://files.musepack.net/source
--LIBCUEFILE_SOURCE = libcuefile_r$(LIBCUEFILE_VERSION).tar.gz
--LIBCUEFILE_INSTALL_STAGING = YES
--LIBCUEFILE_LICENSE = GPL-2.0+
--LIBCUEFILE_LICENSE_FILES = COPYING
--
--define LIBCUEFILE_INSTALL_STAGING_INCLUDES
--	cp -r $(@D)/include $(STAGING_DIR)/usr
--endef
--
--define LIBCUEFILE_INSTALL_TARGET_INCLUDES
--	cp -r $(@D)/include $(TARGET_DIR)/usr
--endef
--
--LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
--LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
+-TASKD_VERSION = 1.1.0
+-TASKD_SITE = http://taskwarrior.org/download
+-TASKD_LICENSE = MIT
+-TASKD_LICENSE_FILES = COPYING
+-TASKD_DEPENDENCIES = gnutls util-linux host-pkgconf
 -
 -$(eval $(cmake-package))
+
+--===============4735358535134785858==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4735358535134785858==--
