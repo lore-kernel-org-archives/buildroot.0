@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D99B7E95A79
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 10:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1A47E95A74
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 10:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEED760B98;
-	Tue, 30 Dec 2025 10:57:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA3B407F0;
+	Tue, 30 Dec 2025 10:57:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YDi-cS2F_GxE; Tue, 30 Dec 2025 10:57:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAxUxuoy16IS; Tue, 30 Dec 2025 10:57:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD1E360B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBB6F407FB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767092271;
-	bh=3OuS3QNytOwFB3yNRTlDAolJ2NzxzXQ+Uq7tvoHEnKw=;
+	s=default; t=1767092273;
+	bh=zcmfxZWXyViNcwrWV3dwXx+ef0bc6DNSfLcqksRq7v8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VnH37XbRkcWbhd4+zp0c+GSniZl9uDUMS+CNA+2jAujnXBkrtuDP0fp4LFyrZTer+
-	 HnA9pOxOQ/QiI2JJWzY8WBo/RIpxsAGyKpaZG4pEXY0fkGnZWLTsI+MOvDLyDk20Zs
-	 3hi+FSYHncAEwMzcIKzfY+JOBuyk4PoC6DXkjrHbzC4RxX9A9xCLWMXPCS2ypk5/Dn
-	 tT37hY267p+LfFgehQhM9p8QdMwL2TWn2zc1cBF5cGrRvm5DZ0TtUgl14z3wn8QW9+
-	 l17u1jEZ5LGORWTyAtE2t7GhbzbSKUzPrnkEe+ExVH3N4ZDLBaBK4H5lKaxsVYR121
-	 mFPqj0WGnszjg==
+	b=Z3vJ3fsAwMCkVnJDpr0CKJHGkkeodvT4xJMq/zuFDj9V1z+P6UgSJ0w6AmKtix6VE
+	 vF+jtpkE1HsaAgzm8gfKY2KqXJd+P8GBC/ZfcegccKvjpHfXUDx+7023VfUGKYHwVW
+	 JSXTUadBxaiTz9Gbi/WWaplNEh7SeKCSmhpSRJrdqAqyvPI29cQH6IaJc3J02XIU7G
+	 xH7uzrl4r+T8osjcV2G/GpGfzA8lXpl88sKs2ePL1e6AiF6qvjzNmNODw543KWvH+E
+	 MAb1goyBevuLoHRWq5D76gXwJN6RUH0aEx+8WkUHofAcJJpqidUZder01UkkZUZ0av
+	 jdBoNngJsWGwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD1E360B73;
-	Tue, 30 Dec 2025 10:57:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 02019177
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBB6F407FB;
+	Tue, 30 Dec 2025 10:57:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD99E35B
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCAC060AC6
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1068402EA
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VlqBkPwfiYQs for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3hvUpacIL16F for <buildroot@buildroot.org>;
  Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92E07607E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 753034026B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92E07607E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 753034026B
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83C3B87BD2; Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
+ id 4C8CB87BD1; Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 11:54:01 +0100
+Date: Tue, 30 Dec 2025 11:53:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 237cd294b7bbe7c42e621042bef4756724d2c233
-X-Git-Newrev: 1e48fde1cbe62cbb486eaa0ea99d85762ebc74f3
+X-Git-Oldrev: 0729cf0832bcdf4e1a25e1de8c557953cc2cb44e
+X-Git-Newrev: 7a8524a70173953e3a8a11456d25ec3fea347153
 X-Patchwork-Hint: ignore
-Message-Id: <20251230105734.83C3B87BD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsyslog: remove stale IGNORE_CVES
+Message-Id: <20251230105734.4C8CB87BD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xinetd: add CVE trailer in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,39 +76,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e48fde1cbe62cbb486eaa0ea99d85762ebc74f3
+commit: https://git.buildroot.net/buildroot/commit/?id=7a8524a70173953e3a8a11456d25ec3fea347153
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since Buildroot commit [1] the CVEs are no longer matched to CPEs with
-versions using '-'.
+Since Buildroot commit [1] the patches that fixes a security
+vulnerability needs to reference the fixed vulnerability.
 
-The CVE-2015-3243 is then no longer matched to the rsyslog package.
+This patch adds the relevant information to the patch header
+and adds the `Upstream` trailer.
 
-For more information, see the explanation in commit [1].
-
-[1] 35f376d88e support/scripts/cve.py: fix CPE matching
+[1] 1167d0ff3d docs/manual: mention CVE trailer
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rsyslog/rsyslog.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ .checkpackageignore                                                     | 1 -
+ .../0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch     | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 69128afbac..dedecdc572 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -9,10 +9,6 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_CPE_ID_VENDOR = rsyslog
--# rsyslog uses weak permissions for generating log files.
--# Ignoring this CVE as Buildroot normally doesn't have local users and a build
--# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
--RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 3e274f391f..4df0438291 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1124,7 +1124,6 @@ package/xinetd/0001-ar.patch lib_patch.Upstream
+ package/xinetd/0002-destdir.patch lib_patch.Upstream
+ package/xinetd/0003-rpc-fix.patch lib_patch.Upstream
+ package/xinetd/0004-configure-rlim_t.patch lib_patch.Upstream
+-package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch lib_patch.Upstream
+ package/xl2tp/xl2tpd lib_shellscript.TrailingSpace
+ package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch lib_patch.Upstream
+ package/yajl/0001-Let-the-shared-and-the-static-library-have-the-same-.patch lib_patch.Upstream
+diff --git a/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+index bb2ee1fc9a..c99879b478 100644
+--- a/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
++++ b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+@@ -6,6 +6,8 @@ Subject: [PATCH] CVE-2013-4342: xinetd: ignores user and group directives for
  
+ Originally reported to Debian in 2005 <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=324678> and rediscovered <https://bugzilla.redhat.com/show_bug.cgi?id=1006100>, xinetd would execute TCPMUX services without dropping privilege to match the service configuration allowing the service to run with same privilege as the xinetd process (root).
+ 
++CVE: CVE-2013-4342
++Upstream: https://github.com/xinetd-org/xinetd/commit/e7c1ba41f4f86b436fb82b0d55cd5d387bd4ecc4
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+  xinetd/builtins.c | 2 +-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
