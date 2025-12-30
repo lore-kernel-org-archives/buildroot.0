@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31BAEEE4992
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D34EE4992
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 18:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE8E660BAA;
-	Tue, 30 Dec 2025 18:12:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F659403F4;
+	Tue, 30 Dec 2025 18:12:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jVWegdJXtu1; Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Y7MQMJymXWx; Tue, 30 Dec 2025 18:12:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFF9460B85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A64E403B8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767118357;
-	bh=DRB01+rGs+WiZt6v6mn5fG4nAmPKL906zvhSkq/OeL0=;
+	s=default; t=1767118361;
+	bh=iwvPrK9uFGCIWlcLmeNBJMJrNQIuSAHvnqLBsbbjrFo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Dy082R6Shv/hEdezMYlmvVYYy15dcKtzyH5l7bmzwoEgFBL6VyQ1ixOIFjPFzCgwb
-	 E1mErbs2j1ChdfRMOmZ3RdvAI7T+PqmOlIb7mM0sRPNzT1p9dJujXoDryP6k7NBtmb
-	 fSOncPX9dhDryGkhxW66oOO+wCZILG8Lbw5PnETIWth8WPhPLWrmF88/MhL1uUBVmX
-	 R2KagG/Q1s4lFst6gKU6/ITQlw7OKDqH1xw/X3UuzVY7bWyaVrNnyCUxcycMRMQPrz
-	 JC/WRguTEMcOG5EimXXO/YpSmbQMWywML4eEPTv4ARDPMH08hDRhoMKV99ERetF6oS
-	 dLd+le2/m8o2A==
+	b=VZK/BECRbuwU+8lw0QnBoNpENFYf1MZY0Mfw5q4PvtlwiajiqSau1a9rCmM2smyeT
+	 xdc1W+2LURzSpXuXAhgIqnem0puO2bo9oYXJ5bglwwjs+8HyP6LbtOQKwcKYXG17oL
+	 0kp6rl3q0/05A4K1ip39lMaNtknSmpgH5ShIrOO/NaOag6op3zQ9puh0xDcKYCtVQ4
+	 6rAJ22YKdmcbOoad2iPVe+BXtvtQeENDTafxCcHaKTOo7xLClOj0JaRKhrG5nAR13+
+	 RmXPGlPHG6Nz1y+dZYmmWNnwgPFqhceEsFLM55cZB1agthjUIzdvP9xxqIVOBjiFMs
+	 2bAv5R3upmosg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFF9460B85;
-	Tue, 30 Dec 2025 18:12:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E8238177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A64E403B8;
+	Tue, 30 Dec 2025 18:12:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A19A277
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA12D4042E
+ by smtp4.osuosl.org (Postfix) with ESMTP id CAFDB403B0
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9XajrSYhdu5X for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ubs5jcuhxghX for <buildroot@buildroot.org>;
  Tue, 30 Dec 2025 18:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22AA403F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1AC3403B8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F22AA403F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1AC3403B8
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D521487C44; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
+ id BB78187C3F; Tue, 30 Dec 2025 18:12:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 19:12:08 +0100
+Date: Tue, 30 Dec 2025 19:12:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3c150c78556d0cae299a28fa2b677821bc82606
-X-Git-Newrev: 9f9e324091d195a9b1034c652796d4a2fe7a1a4b
+X-Git-Oldrev: 1b2b1a18da53c7dabeb81e3a126537f6ff76fe01
+X-Git-Newrev: ebabcd6263bff13d2a809349c6a044191efc60b9
 X-Patchwork-Hint: ignore
-Message-Id: <20251230181234.D521487C44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sconeserver: remove package
+Message-Id: <20251230181234.BB78187C3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opentracing-cpp: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,277 +76,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f9e324091d195a9b1034c652796d4a2fe7a1a4b
+commit: https://git.buildroot.net/buildroot/commit/?id=ebabcd6263bff13d2a809349c6a044191efc60b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Analysis of https://github.com/sconemad/sconeserver:
-last non-buildroot related commit: Aug 2019
-last bug report: 0 open
-last pull request: 1 open (buildroot-related)
+Quoting https://github.com/opentracing/opentracing-cpp
+"This library is DEPRECATED!"
+https://github.com/opentracing/specification/issues/163
+https://github.com/opentracing/opentracing.io/pull/460
 
 The package is broken with cmake 4 and no other package depends on it.
 
+Fixes:
+
+  https://autobuild.buildroot.net/results/cbc80ffb0dc4d4407bb788cec05d13ae37d1eff4/
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Simon Dawson <spdawson@gmail.com>
+Cc: Jan Heylen <jan.heylen@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                     |  6 +++
- DEVELOPERS                           |  1 -
- package/Config.in                    |  1 -
- package/sconeserver/Config.in        | 96 ------------------------------------
- package/sconeserver/sconeserver.hash |  3 --
- package/sconeserver/sconeserver.mk   | 93 ----------------------------------
- 6 files changed, 6 insertions(+), 194 deletions(-)
+ Config.in.legacy                             |  6 ++++++
+ DEVELOPERS                                   |  3 ---
+ package/Config.in                            |  1 -
+ package/opentracing-cpp/Config.in            | 18 ------------------
+ package/opentracing-cpp/opentracing-cpp.hash |  3 ---
+ package/opentracing-cpp/opentracing-cpp.mk   | 28 ----------------------------
+ 6 files changed, 6 insertions(+), 53 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 3e402e3161..fc5979c926 100644
+index 8e6c4a37e8..a0dad6461d 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_SCONESERVER
-+	bool "sconeserver has been removed"
++config BR2_PACKAGE_OPENTRACING_CPP
++	bool "opentracing-cpp has been removed"
 +	select BR2_LEGACY
 +	help
-+	  sconeserver is unmaintained and has been removed
++	  opentracing-cpp was deprecated upstream and has been removed
 +
- config BR2_PACKAGE_QJSON
- 	bool "qjson has been removed"
+ config BR2_PACKAGE_OPENPOWERLINK
+ 	bool "openpowerlink has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f71fdc7a3a..37b8904751 100644
+index e157e98f79..9775c85556 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3071,7 +3071,6 @@ F:	package/neard/
- F:	package/neardal/
- F:	package/owl-linux/
- F:	package/rapidjson/
--F:	package/sconeserver/
- F:	package/sound-theme-borealis/
- F:	package/sound-theme-freedesktop/
- F:	package/vlc/
+@@ -1564,9 +1564,6 @@ N:	Jan Havran <havran.jan@email.cz>
+ F:	board/pine64/pinecube/
+ F:	configs/pine64_pinecube_defconfig
+ 
+-N:	Jan Heylen <jan.heylen@nokia.com>
+-F:	package/opentracing-cpp/
+-
+ N:	Jan Kraval <jan.kraval@gmail.com>
+ F:	board/orangepi/orangepi-lite
+ F:	configs/orangepi_lite_defconfig
 diff --git a/package/Config.in b/package/Config.in
-index 02f9f00ecd..42ae5aae4d 100644
+index 330216fcf0..857266c8f8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2634,7 +2634,6 @@ endif
- 	source "package/s6-dns/Config.in"
- 	source "package/s6-networking/Config.in"
- 	source "package/samba4/Config.in"
--	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
- 	source "package/shadowsocks-libev/Config.in"
- 	source "package/shairport-sync/Config.in"
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+@@ -1955,7 +1955,6 @@ menu "Logging"
+ 	source "package/log4cpp/Config.in"
+ 	source "package/log4cxx/Config.in"
+ 	source "package/log4qt/Config.in"
+-	source "package/opentracing-cpp/Config.in"
+ 	source "package/spdlog/Config.in"
+ 	source "package/ulog/Config.in"
+ 	source "package/zlog/Config.in"
+diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
 deleted file mode 100644
-index d1a8a031be..0000000000
---- a/package/sconeserver/Config.in
+index ff3067b7d1..0000000000
+--- a/package/opentracing-cpp/Config.in
 +++ /dev/null
-@@ -1,96 +0,0 @@
--menuconfig BR2_PACKAGE_SCONESERVER
--	bool "sconeserver"
+@@ -1,18 +0,0 @@
+-config BR2_PACKAGE_OPENTRACING_CPP
+-	bool "opentracing-cpp"
 -	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on !BR2_STATIC_LIBS # dlopen()
--	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
--	select BR2_PACKAGE_PCRE
--	select BR2_PACKAGE_ZLIB
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
 -	help
--	  Sconeserver is a modular, object-orientated and extremely
--	  versatile network server framework for GNU/Linux and
--	  UNIX-like platforms.
+-	  OpenTracing API for C++
 -
--	  http://www.sconemad.com/sconeserver/
+-	  http://opentracing.io
 -
--if BR2_PACKAGE_SCONESERVER
+-comment "opentracing-cpp needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 -
--comment "Sconeserver modules"
--
--config BR2_PACKAGE_SCONESERVER_BLUETOOTH
--	bool "bluetooth"
--	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
--	depends on BR2_USE_MMU # bluez5_utils -> dbus
--	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez5_utils -> dbus, libglib2
--	depends on !BR2_STATIC_LIBS # bluez5_utils
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
--	select BR2_PACKAGE_BLUEZ5_UTILS
--	help
--	  Bluetooth module for Sconeserver
--
--comment "bluetooth support needs a toolchain w/ wchar, threads, dynamic library, headers >= 3.4"
--	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
--
--config BR2_PACKAGE_SCONESERVER_EXAMPLES
--	bool "examples"
--	help
--	  Example modules for Sconeserver
--
--config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
--	bool "http::sconesite"
--	select BR2_PACKAGE_LIBXML2
--	help
--	  http::sconesite module for Sconeserver
--
--config BR2_PACKAGE_SCONESERVER_LOCATION
--	bool "location"
--	depends on BR2_USE_MMU # gpsd
--	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
--	depends on !BR2_STATIC_LIBS # gpsd
--	select BR2_PACKAGE_GPSD
--	help
--	  Location module for Sconeserver
--
--comment "location support needs a toolchain w/ theads, dynamic library"
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
--
--config BR2_PACKAGE_SCONESERVER_MATHS
--	bool "maths"
--	select BR2_PACKAGE_MPFR
--	help
--	  Mathematics module for Sconeserver
--
--config BR2_PACKAGE_SCONESERVER_MYSQL
--	bool "mysql"
--	depends on BR2_USE_MMU # mysql
--	select BR2_PACKAGE_MARIADB
--	help
--	  MySQL module for Sconeserver
--
--config BR2_PACKAGE_SCONESERVER_RSS
--	bool "rss"
--	select BR2_PACKAGE_LIBXML2
--	help
--	  RSS module for Sconeserver
--
--config BR2_PACKAGE_SCONESERVER_SQLITE
--	bool "sqlite"
--	select BR2_PACKAGE_SQLITE
--	help
--	  SQLite module for Sconeserver
--
--config BR2_PACKAGE_SCONESERVER_TESTBUILDER
--	bool "testbuilder"
--	help
--	  Testbuilder module for Sconeserver
--
--endif # BR2_PACKAGE_SCONESERVER
--
--comment "sconeserver needs a toolchain with dynamic library, C++, NPTL"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
--		|| BR2_STATIC_LIBS
-diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
+-comment "opentracing-cpp needs exception_ptr"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
 deleted file mode 100644
-index ba86e44ae7..0000000000
---- a/package/sconeserver/sconeserver.hash
+index 8cfaf5fd47..0000000000
+--- a/package/opentracing-cpp/opentracing-cpp.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally computed
--sha256  47552b20579678e49150abe071d9eb55cf23bd13f7f6e4fa085d0612bf6a3431  sconeserver-8d1935919a2013358993a8e9dfa992cbde56e503.tar.gz
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+-# Locally calculated
+-sha256  5b170042da4d1c4c231df6594da120875429d5231e9baa5179822ee8d1054ac3  opentracing-cpp-1.6.0.tar.gz
+-sha256  076d03156735d5ff2df2ea0f8b12351ef65e5e9222b5c8c6a35101dadb41e717  LICENSE
+diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
 deleted file mode 100644
-index bb0da12d4c..0000000000
---- a/package/sconeserver/sconeserver.mk
+index 12ce40fbed..0000000000
+--- a/package/opentracing-cpp/opentracing-cpp.mk
 +++ /dev/null
-@@ -1,93 +0,0 @@
+@@ -1,28 +0,0 @@
 -################################################################################
 -#
--# sconeserver
+-# opentracing-cpp
 -#
 -################################################################################
 -
--SCONESERVER_VERSION = 8d1935919a2013358993a8e9dfa992cbde56e503
--SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
--SCONESERVER_LICENSE = GPL-2.0+
--SCONESERVER_LICENSE_FILES = COPYING
--SCONESERVER_DEPENDENCIES = \
--	host-pkgconf \
--	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
--	pcre \
--	zlib
--# disable image as it fails to build with ImageMagick
--# disable markdown module because its git submodule cmark
--# https://github.com/sconemad/sconeserver/tree/master/markdown
--# has no cross-compile support provided by the sconeserver build system
--SCONESERVER_CONF_OPTS += \
--	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
--	-DWITH_IMAGE=OFF \
--	-DWITH_MARKDOWN=OFF
+-OPENTRACING_CPP_VERSION = 1.6.0
+-OPENTRACING_CPP_SITE = \
+-	$(call github,opentracing,opentracing-cpp,v$(OPENTRACING_CPP_VERSION))
+-OPENTRACING_CPP_LICENSE = Apache-2.0
+-OPENTRACING_CPP_LICENSE_FILES = LICENSE
 -
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SCONESERVER_DEPENDENCIES += openssl
--SCONESERVER_CONF_OPTS += -DWITH_SSL=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_SSL=OFF
+-OPENTRACING_CPP_INSTALL_STAGING = YES
+-
+-# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+-# although BUILD_STATIC_LIBS=ON is default, make it explicit,
+-# cmake and static/shared libs is confusing enough already.
+-ifeq ($(BR2_STATIC_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
 -endif
 -
--ifeq ($(BR2_PACKAGE_SCONESERVER_BLUETOOTH),y)
--SCONESERVER_DEPENDENCIES += bluez5_utils
--SCONESERVER_CONF_OPTS += -DWITH_BLUETOOTH=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_BLUETOOTH=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_EXAMPLES),y)
--SCONESERVER_CONF_OPTS += -DWITH_EXAMPLES=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_EXAMPLES=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),y)
--SCONESERVER_DEPENDENCIES += libxml2
--SCONESERVER_CONF_OPTS += -DWITH_SCONESITE=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_SCONESITE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
--SCONESERVER_DEPENDENCIES += gpsd
--SCONESERVER_CONF_OPTS += -DWITH_LOCATION=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_LOCATION=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
--SCONESERVER_DEPENDENCIES += mpfr
--SCONESERVER_CONF_OPTS += -DWITH_MATHS=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_MATHS=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
--SCONESERVER_DEPENDENCIES += mariadb
--SCONESERVER_CONF_OPTS += -DWITH_MYSQL=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_MYSQL=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_RSS),y)
--SCONESERVER_DEPENDENCIES += libxml2
--SCONESERVER_CONF_OPTS += -DWITH_RSS=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_RSS=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_SQLITE),y)
--SCONESERVER_DEPENDENCIES += sqlite
--SCONESERVER_CONF_OPTS += -DWITH_SQLITE=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_SQLITE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
--SCONESERVER_CONF_OPTS += -DWITH_TESTBUILDER=ON
--else
--SCONESERVER_CONF_OPTS += -DWITH_TESTBUILDER=OFF
--endif
+-OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
 -
 -$(eval $(cmake-package))
 _______________________________________________
