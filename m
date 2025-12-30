@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA15E95A74
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 10:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5539E95A77
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 10:57:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D39DC4038D;
-	Tue, 30 Dec 2025 10:57:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B882060ABA;
+	Tue, 30 Dec 2025 10:57:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id woHBUqXr-SxF; Tue, 30 Dec 2025 10:57:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jkL5grY_rcDr; Tue, 30 Dec 2025 10:57:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FDE640390
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C30E4607E6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767092259;
-	bh=tJ+0cg5crefcW23W5ykFG9Gh1LLGS7wztYPkwA0fu7I=;
+	s=default; t=1767092257;
+	bh=hc8XmsruDq4P8IDOzGOoSBNFqvH5/TRTUN9C67NFzjA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DADsC3j/5VsKGCR9IvQb7iKyng2XToBAuNo5WFHuNwHWuAIhgL+TuG8PYX57nrBcw
-	 5BwKbA1G5qRnEKKMNUY0H056KP+XTDU+JvnArJ6AXu1s7sFwPlGRAZwsAmBDC2mM1M
-	 2vNzj8f2fVue5FLqPifcneK13wfszzp+FTMOzeUuiNdhp3BiZuVXtdWQUeBJQ0h05L
-	 oFojPZGYMMHRjC1NJMtGzJ2LrhNVK5CzHWQ42iMNXpbo6O3K+ELEK6wdI01XKdZ5Tx
-	 AotGLAVMvqjAAa9zoyz/6EiWX4FfcQgQVu37vQOvtS98cjo/uA7hXRz8wwSR8uThQf
-	 JqnIsuAi3O8Nw==
+	b=ghGJsLc+HUi48Df6Z6ZqhOphJhQPJ3VvlsuvWUq1rnJwn99go4qVFtQkil3STPtj8
+	 4S3SxoY7/mET9i9bb2OZbf+ZcySNEAZJmYiRthXALfj5wK/KhP9qkU82lPZNrLHC2T
+	 e5ts8GlBo5ro2XtQJkr+ABntivD9dSgtiRKr6KaaEhzy01Ol1S3W7ZkS4Zk3KsFaRr
+	 ymkm8r8o1HS7bhR+bictTgyHUGDaqoi+2TVRNDOoFMnMl1bC4T2v3OB9qhErGNBHQR
+	 eIodT27xrhk2zFDLvYmcpDeMijsjx8lB/Y9Z6ffdSNi3RtH6f77bYRhtcrTPgzOjqN
+	 kZomRifVINvpw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FDE640390;
-	Tue, 30 Dec 2025 10:57:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6160E372
+	by smtp3.osuosl.org (Postfix) with ESMTP id C30E4607E6;
+	Tue, 30 Dec 2025 10:57:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E299177
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 487F740386
+ by smtp1.osuosl.org (Postfix) with ESMTP id 458848129B
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xFvr8caTX1RF for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XppMTEX2Hd1R for <buildroot@buildroot.org>;
  Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA9DA40360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1406811C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA9DA40360
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1406811C1
  for <buildroot@buildroot.org>; Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AD8C87BD8; Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
+ id 8FA8487BD7; Tue, 30 Dec 2025 10:57:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 11:54:05 +0100
+Date: Tue, 30 Dec 2025 11:54:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1ca8ca4ba4814dfa11e840cc94341d966a6e911
-X-Git-Newrev: 5043af53edea237dab1d5334b263cc9245d44404
+X-Git-Oldrev: 1e48fde1cbe62cbb486eaa0ea99d85762ebc74f3
+X-Git-Newrev: b1ca8ca4ba4814dfa11e840cc94341d966a6e911
 X-Patchwork-Hint: ignore
-Message-Id: <20251230105734.9AD8C87BD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pixman: remove stale IGNORE_CVES
+Message-Id: <20251230105734.8FA8487BD7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: remove stale
+ IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,41 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5043af53edea237dab1d5334b263cc9245d44404
+commit: https://git.buildroot.net/buildroot/commit/?id=b1ca8ca4ba4814dfa11e840cc94341d966a6e911
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since Buildroot commit [1] the CVEs are no longer matched to CPEs with
 versions using '-'.
 
-The CVE-2023-37769 is then no longer matched to the pixman package.
+The CVE-2017-8806 is then no longer matched to the postgresql package.
 
 For more information, see the explanation in commit [1].
 
 [1] 35f376d88e support/scripts/cve.py: fix CPE matching
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pixman/pixman.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/postgresql/postgresql.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 63d9ccd10b..d02bb0a260 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -26,12 +26,6 @@ PIXMAN_CONF_OPTS = \
- 	-Dlibpng=disabled \
- 	-Dtests=disabled
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 78d7cef4f6..38403b0f45 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -28,10 +28,6 @@ POSTGRESQL_DEPENDENCIES = \
+ 	host-bison \
+ 	host-flex
  
--# Affects only tests, and we don't build tests.
--# See https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
--# "not sure why NVD keeps assigning CVEs like this. This is just a test
--# executable".
--PIXMAN_IGNORE_CVES += CVE-2023-37769
+-# CVE-2017-8806 is related to postgresql-common package
+-# It is false positive for postgresql
+-POSTGRESQL_IGNORE_CVES += CVE-2017-8806
 -
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- PIXMAN_CONF_OPTS += -Dmmx=enabled
- else
+ ifeq ($(BR2_PACKAGE_POSTGRESQL_FULL),y)
+ POSTGRESQL_NINJA_OPTS += world
+ POSTGRESQL_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-world
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
