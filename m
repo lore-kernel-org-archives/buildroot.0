@@ -4,59 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 170C4E95A77
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18619E95A77
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 11:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3C4F60B50;
-	Tue, 30 Dec 2025 11:15:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C892660AA4;
+	Tue, 30 Dec 2025 11:46:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qg5upNSaHeWm; Tue, 30 Dec 2025 11:15:02 +0000 (UTC)
+ id ZlutnnGakTaE; Tue, 30 Dec 2025 11:46:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 947B060BAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA137605C5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767093302;
-	bh=xCZX6TCoi/jjJM8myW+Rh5SfEhP3EZqyxcG9v2dPViY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TNGcrgERZ9/ySM+6zgzqayWhOdlpBe4Zh71BIxhF6UgqlB9jP0JlhywQDQmkFLuFl
-	 ELLd3u/dstwb8JZ5LUsDpTMrKiGfYCdwrQL6b7llIGKGtp+KCMQiHm8/wawq5JUTkd
-	 fjCM+O9dge43nSqQmzOW5uYOX+9bmvckErqwLiKiSIJqmKIGe/zQeFd2GcC/aOWEja
-	 ZmqPYuwko/LU2cxBlCBRKl49VDbgtrcWpV46gUuYRsGn7PTF1957wCN5Ap2bmxWdOx
-	 o4Ey5I9gB4RI/yZirAVc9JtaZ+WGNsdV0417/7nuKiRSXAVj6LE25zCjiuhbd7ih/f
-	 IIcdVr23AXi7Q==
+	s=default; t=1767095163;
+	bh=rXjN3Ak4tp85qcWm+L5JniKTTS/lO+yw79Bvs3Sj2Fg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=argfJ3FOWmd8EUiEHdqLXLKYE7lZNKJeH0OJ5+kSrTxnnLEqTLapVgYd4xH97KQlm
+	 gIyo8HV4yVLesdH36a0C7Z+uIhsvqsnhywKNcRkRJQTPyX0hdbj//U32MIX5FVQXij
+	 XL8h4mf2AZLY/I4cKPjl+jPfwgrhpHE/rs0tCmhFxKyuKUke3Jy7oRCs/nPt9CffVO
+	 sf1mumdLxzRfjym3X9TDsJRtzrCtCH39RJLNElBemYJc2OURs/e0wA3Wsj0/9KYTPy
+	 RHDuOcIXrm1a3Fs1RV9OzdG4mfnThAz89NZara7kRK+V7jsSHMLdSQmQCP6jSDilr7
+	 9725piNNLmuNQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 947B060BAC;
-	Tue, 30 Dec 2025 11:15:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA137605C5;
+	Tue, 30 Dec 2025 11:46:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CBA5177
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D55ABD8
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32F9D4030E
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC0DB402EA
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0CkGeUfqiei5 for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2089D40369
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2089D40369
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FD5487C26; Tue, 30 Dec 2025 11:14:45 +0000 (UTC)
+ id 4XaB7thIHIJu for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 11:46:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1EE1400A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1EE1400A1
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F1EE1400A1
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 11:45:59 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 92628A4C1172;
+ Tue, 30 Dec 2025 12:45:56 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54702)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vaYAb-000000003Vt-02wi;
+ Tue, 30 Dec 2025 11:45:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 30 Dec 2025 12:01:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fbbaf33179313b5ec2de2b03b81b638a98c7c7a9
-X-Git-Newrev: 554ba0d95edeb0d181c4dd0c43962160f065f3c1
-X-Patchwork-Hint: ignore
-Message-Id: <20251230111445.1FD5487C26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libuwsc: remove package
+Cc: Andreas Ziegler <br025@umbiko.net>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Matt Flax <flatmax@flatmax.org>, Romain Naour <romain.naour@gmail.com>,
+ Simon Dawson <spdawson@gmail.com>,
+ Woodrow Douglass <wdouglass@carnegierobotics.com>
+Date: Tue, 30 Dec 2025 12:45:21 +0100
+Message-ID: <20251230114545.2236640-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: -
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1767095156;
+ bh=CZlbQ98F0w3TbJExnzHhQUQ/KWe+NNVRwKEs+l2j7Yo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Ir7BIpFB0m6WRAPTyJ+sqA2eW8KyYl9r4d8QkVYM9d75vgEYVckPW6TUQDV2C+JPD
+ /YY+r4aFnhQfnSd9DMmuNIeagc3p5qC4zaXp+2UEWXEY0TE1sn3N4JtSlAJEEEDOqZ
+ rJ57qdfOY6XGbJ328wh2GcykY57Cb+hEabaUDuHJBbEVZKLa1GEGEOp8aq6lMFmyGC
+ qSoK+7QTE0aB+/BrhMws3eT2lc8Z0MKIw8syuSq5cv66o3WjMQkYDTXbqVYwCNUtYG
+ 6vgYQ1BsiMDa9Mejul0HxGkUeQXfFjs/3ku6mN/ON1lVlYe+3oMXLXuuUSsdFT9HpO
+ rsR5bQeVFKipQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Ir7BIpFB
+Subject: [Buildroot] [PATCH v9 00/19] Remove packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,278 +98,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=554ba0d95edeb0d181c4dd0c43962160f065f3c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Fails to build with cmake 4.
+this series removes broken packages, see commit logs for individual
+reasons.
 
-The package is a library without any reverse dependencies and no active
-development since 2021.
+Regards, Bernd
 
-Fixes:
-https://autobuild.buildroot.net/results/f6b/f6b0c136703e0cf38c052e6a6a3ef91cdcb797a0/
+v9: rebased
+    openpowerlink: Removed comments from Config.in.legacy (Thomas)
+        (I hope the fix is correct, I could not reproduce the problem)
+    racehound: removed remaining .checkpackageignore entry (Thomas)
+    libcuefile: added comment that patch 0003 contains crlf (Thomas)
+v8: added Config.in.legacy entry for libfreeimage
+v7: rebased
+    added removal of libfreeimage:
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/793070.html
+v6: rebased
+    added removal of OpenCV3:
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/792788.html
+v5: rebased on top of series "support/testing: ddrescue: use dmsetup
+    from lvm2": https://patchwork.ozlabs.org/project/buildroot/list/?series=486059
+    (Julien)
+v4: rebased
+    added python-aioredis & cppdb, the latter suggested by Thomas:
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/792185.html
+    added links to newly detected autobuilder failures
+v3: added musepack & libcuefile as suggested by Thomas:
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/792023.html
+    https://lists.buildroot.org/pipermail/buildroot/2025-December/792021.html
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy                                   |  6 +++
- DEVELOPERS                                         |  1 -
- package/Config.in                                  |  1 -
- .../0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch    | 34 --------------
- package/libuwsc/0002-fix-bad-indentation.patch     | 26 -----------
- .../libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch | 37 ---------------
- package/libuwsc/Config.in                          |  8 ----
- package/libuwsc/libuwsc.hash                       |  3 --
- package/libuwsc/libuwsc.mk                         | 53 ----------------------
- 9 files changed, 6 insertions(+), 163 deletions(-)
+Bernd Kuhls (19):
+  package/openpowerlink: remove package
+  package/opentracing-cpp: remove package
+  package/qjson: remove package
+  package/sconeserver: remove package
+  package/taskd: remove package
+  package/racehound: remove package
+  package/musepack: remove package
+  package/libcuefile: remove package
+  package/python-aioredis: remove package
+  package/cppdb: remove package
+  package/ffmpeg: remove optional dependency to opencv3
+  package/freeswitch: remove optional dependency to opencv3
+  package/gtkiostream: remove optional dependency to opencv3
+  package/mjpg-streamer: remove optional dependency to opencv3
+  package/vlc: remove optional dependency to opencv3
+  package/opencv3: remove package
+  package/ogre: remove dependency to libfreeimage
+  package/cegui: remove dependency to libfreeimage
+  package/libfreeimage: remove package
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5987e9777c..7ff34b6801 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_LIBUWSC
-+	bool "libuwsc has been removed"
-+	select BR2_LEGACY
-+	help
-+	  libuwsc is unmaintained and has been removed
-+
- config BR2_PACKAGE_LIBIQRF
- 	bool "libiqrf has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 60efaf33b7..ab68fd2b2c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1633,7 +1633,6 @@ F:	package/qt6/
- 
- N:	Jianhui Zhao <zhaojh329@gmail.com>
- F:	package/libuhttpd/
--F:	package/libuwsc/
- F:	package/rtty/
- 
- N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
-diff --git a/package/Config.in b/package/Config.in
-index 22b6b7fab4..bef6ae7b22 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2097,7 +2097,6 @@ menu "Networking"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
- 	source "package/libutp/Config.in"
--	source "package/libuwsc/Config.in"
- 	source "package/libvncserver/Config.in"
- 	source "package/libwebsockets/Config.in"
- 	source "package/libyang/Config.in"
-diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-deleted file mode 100644
-index 87f343a9d9..0000000000
---- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From bb71b21eb9407479ad729b3c858b0fc350fae335 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 21 Feb 2021 19:39:59 +0100
--Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
--
--Allow the user to disable example
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- CMakeLists.txt | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 110d933..c52ab79 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 2.8)
-- 
-- project(libuwsc C)
-- 
--+option(BUILD_EXAMPLE "Build example" ON)
--+
-- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-- 
-- add_subdirectory(src)
---add_subdirectory(example)
--+if(BUILD_EXAMPLE)
--+    add_subdirectory(example)
--+endif()
---- 
--2.25.1
--
-diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
-deleted file mode 100644
-index 77cae92cf2..0000000000
---- a/package/libuwsc/0002-fix-bad-indentation.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 8cb416140741a596235b8acc46b2b119b13ebfab Mon Sep 17 00:00:00 2001
--From: Rosen Penev <rosenp@gmail.com>
--Date: Tue, 6 Jul 2021 21:01:52 -0700
--Subject: [PATCH] fix bad indentation
--
--Fixes error with GCC11.
--
--Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/lua/uwsc_lua.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/lua/uwsc_lua.c b/src/lua/uwsc_lua.c
--index de6932e..84689fe 100644
----- a/src/lua/uwsc_lua.c
--+++ b/src/lua/uwsc_lua.c
--@@ -178,7 +178,7 @@ static int uwsc_lua_on(lua_State *L)
--     else
--         luaL_argcheck(L, false, 2, "available event name: open message error close");
-- 
---	return 0;
--+    return 0;
-- }
-- 
-- static int __uwsc_lua_send(lua_State *L, int op)
-diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
-deleted file mode 100644
-index 4c652a63c2..0000000000
---- a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jan 2024 16:44:13 +0100
--Subject: [PATCH] src/ssl.c: fix wolfssl build
--
--wolfssl/options.h must also be included by clients to avoid the
--following build failure because OPENSSL_ALL won't be defined:
--
--/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
--   62 |     SSL_CTX *ctx;
--      |     ^~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: N/A (already fixed by
--https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
-----
-- src/ssl.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/ssl.c b/src/ssl.c
--index 3640022..6a3d250 100644
----- a/src/ssl.c
--+++ b/src/ssl.c
--@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
-- #include <openssl/err.h>
-- #elif UWSC_HAVE_WOLFSSL
-- #define WC_NO_HARDEN
--+#include <wolfssl/options.h>
-- #include <wolfssl/openssl/ssl.h>
-- #include <wolfssl/openssl/err.h>
-- #endif
---- 
--2.43.0
--
-diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
-deleted file mode 100644
-index ae99b6d2dc..0000000000
---- a/package/libuwsc/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_LIBUWSC
--	bool "libuwsc"
--	select BR2_PACKAGE_LIBEV
--	help
--	  A Lightweight and fully asynchronous WebSocket client
--	  library based on libev.
--
--	  https://github.com/zhaojh329/libuwsc
-diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
-deleted file mode 100644
-index f99dfb4c5d..0000000000
---- a/package/libuwsc/libuwsc.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  a06b7324671e181ffe3165e93e6f94c7ac1380f69e32a52e80c8da7016acd60d  libuwsc-3.3.5.tar.gz
--sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
-deleted file mode 100644
-index 051ea411fa..0000000000
---- a/package/libuwsc/libuwsc.mk
-+++ /dev/null
-@@ -1,53 +0,0 @@
--################################################################################
--#
--# libuwsc
--#
--################################################################################
--
--LIBUWSC_VERSION = 3.3.5
--LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
--LIBUWSC_LICENSE = MIT
--LIBUWSC_LICENSE_FILES = LICENSE
--LIBUWSC_INSTALL_STAGING = YES
--LIBUWSC_DEPENDENCIES = libev
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBUWSC_DEPENDENCIES += openssl
--LIBUWSC_CONF_OPTS += \
--	-DUWSC_SSL_SUPPORT=ON \
--	-DUWSC_USE_MBEDTLS=OFF \
--	-DUWSC_USE_OPENSSL=ON \
--	-DUWSC_USE_WOLFSSL=OFF
--else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
--LIBUWSC_DEPENDENCIES += wolfssl
--LIBUWSC_CONF_OPTS += \
--	-DUWSC_SSL_SUPPORT=ON \
--	-DUWSC_USE_MBEDTLS=OFF \
--	-DUWSC_USE_OPENSSL=OFF \
--	-DUWSC_USE_WOLFSSL=ON
--else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--LIBUWSC_DEPENDENCIES += mbedtls
--LIBUWSC_CONF_OPTS += \
--	-DUWSC_SSL_SUPPORT=ON \
--	-DUWSC_USE_MBEDTLS=ON \
--	-DUWSC_USE_OPENSSL=OFF \
--	-DUWSC_USE_WOLFSSL=OFF
--else
--LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LUA):$(BR2_STATIC_LIBS),y:)
--LIBUWSC_DEPENDENCIES += lua
--LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
--else
--LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=OFF
--endif
--
--# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
--ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
--endif
--
--$(eval $(cmake-package))
+ .checkpackageignore                           |  18 -
+ Config.in.legacy                              |  84 ++++-
+ DEVELOPERS                                    |  12 -
+ package/Config.in                             |  12 -
+ package/cegui/cegui.mk                        |   8 +-
+ package/cppdb/0001-mysql-library-suffix.patch |  23 --
+ package/cppdb/Config.in                       |  20 -
+ package/cppdb/cppdb.hash                      |   6 -
+ package/cppdb/cppdb.mk                        |  31 --
+ package/ffmpeg/ffmpeg.mk                      |   5 +-
+ package/freeswitch/Config.in                  |   6 +-
+ package/freeswitch/freeswitch.mk              |   7 +-
+ package/gstreamer1/gst1-plugins-bad/Config.in |   4 -
+ .../gst1-plugins-bad/gst1-plugins-bad.mk      |   8 +-
+ package/gtkiostream/gtkiostream.mk            |   4 -
+ package/libcuefile/0001-fix-static-link.patch |  25 --
+ .../0002-libcuefile-fedora-c99.patch          |  27 --
+ ...akeLists.txt-fix-compat-with-CMake-4.patch |  35 --
+ package/libcuefile/Config.in                  |   6 -
+ package/libcuefile/libcuefile.hash            |   7 -
+ package/libcuefile/libcuefile.mk              |  25 --
+ .../libfreeimage/0001-no-root-install.patch   |  20 -
+ package/libfreeimage/0002-fix-cpuid-x86.patch |  67 ----
+ .../libfreeimage/0003-fix-big-endian-os.patch |  64 ----
+ .../0004-fixed-C-11-warnings.patch            |  94 -----
+ .../0005-jxrlib-ftbfs-with-GCC-14.patch       |  40 --
+ ...BFS-fix-for-function-prototype-error.patch |  29 --
+ .../0007-CVE-2019-12211_2019-12213.patch      | 188 ----------
+ .../libfreeimage/0008-CVE-2020-24292.patch    |  17 -
+ .../libfreeimage/0009-CVE-2020-24293.patch    |  18 -
+ .../libfreeimage/0010-CVE-2020-24295.patch    |  25 --
+ .../libfreeimage/0011-CVE-2021-33367.patch    |  23 --
+ .../libfreeimage/0012-CVE-2021-40263.patch    |  18 -
+ .../libfreeimage/0013-CVE-2021-40266.patch    |  18 -
+ .../libfreeimage/0014-CVE-2023-47995.patch    |  18 -
+ .../libfreeimage/0015-CVE-2023-47997.patch    |  20 -
+ package/libfreeimage/Config.in                |  18 -
+ package/libfreeimage/libfreeimage.hash        |   9 -
+ package/libfreeimage/libfreeimage.mk          |  62 ---
+ package/mjpg-streamer/mjpg-streamer.mk        |  11 +-
+ package/mpd/Config.in                         |   9 -
+ package/mpd/mpd.mk                            |   8 +-
+ package/musepack/0001-shared.patch            |  24 --
+ ...andard-CMake-flag-to-drive-the-share.patch |  43 ---
+ ...-include-fpu-control-with-glibc-only.patch |  26 --
+ .../musepack/0004-missing-sys-select.patch    |  21 --
+ .../musepack/0005-fix-build-with-gcc-10.patch |  30 --
+ .../musepack/0006-incompatible-pointers.patch |  47 ---
+ package/musepack/Config.in                    |  12 -
+ package/musepack/musepack.hash                |   7 -
+ package/musepack/musepack.mk                  |  16 -
+ package/ogre/Config.in                        |   2 -
+ package/ogre/ogre.mk                          |   1 -
+ ...inimum-required-CMake-version-to-3.5.patch |  41 --
+ package/opencv3/Config.in                     | 312 ---------------
+ package/opencv3/opencv3.hash                  |   3 -
+ package/opencv3/opencv3.mk                    | 354 ------------------
+ package/opencv4/Config.in                     |   1 -
+ ...-stack-libraries-to-lib-subdirectory.patch | 167 ---------
+ ...002-cmake-install-oplk-headers-files.patch |  32 --
+ .../0003-Add-top-level-CMakeLists.txt.patch   | 201 ----------
+ package/openpowerlink/Config.in               | 129 -------
+ package/openpowerlink/openpowerlink.hash      |   6 -
+ package/openpowerlink/openpowerlink.mk        | 153 --------
+ package/opentracing-cpp/Config.in             |  18 -
+ package/opentracing-cpp/opentracing-cpp.hash  |   3 -
+ package/opentracing-cpp/opentracing-cpp.mk    |  28 --
+ package/python-aioredis/Config.in             |   8 -
+ package/python-aioredis/python-aioredis.hash  |   5 -
+ package/python-aioredis/python-aioredis.mk    |  14 -
+ package/qjson/Config.in                       |   8 -
+ package/qjson/qjson.hash                      |   3 -
+ package/qjson/qjson.mk                        |  14 -
+ ...ll-path-lib-instead-of-usr-lib-prefi.patch |  26 --
+ package/racehound/Config.in                   |  35 --
+ package/racehound/racehound.hash              |   3 -
+ package/racehound/racehound.mk                |  27 --
+ package/sconeserver/Config.in                 |  96 -----
+ package/sconeserver/sconeserver.hash          |   3 -
+ package/sconeserver/sconeserver.mk            |  93 -----
+ ...makedefine-HAVE_GET_CURRENT_DIR_NAME.patch |  28 --
+ ...rrect-variables-for-GnuTLS-detection.patch |  32 --
+ ...eLists-use-pkg-config-uuid-detection.patch |  40 --
+ package/taskd/Config.in                       |  18 -
+ package/taskd/taskd.hash                      |   5 -
+ package/taskd/taskd.mk                        |  13 -
+ package/vlc/Config.in                         |   6 -
+ package/vlc/vlc.mk                            |  16 +-
+ 88 files changed, 91 insertions(+), 3228 deletions(-)
+ delete mode 100644 package/cppdb/0001-mysql-library-suffix.patch
+ delete mode 100644 package/cppdb/Config.in
+ delete mode 100644 package/cppdb/cppdb.hash
+ delete mode 100644 package/cppdb/cppdb.mk
+ delete mode 100644 package/libcuefile/0001-fix-static-link.patch
+ delete mode 100644 package/libcuefile/0002-libcuefile-fedora-c99.patch
+ delete mode 100644 package/libcuefile/0003-CMakeLists.txt-fix-compat-with-CMake-4.patch
+ delete mode 100644 package/libcuefile/Config.in
+ delete mode 100644 package/libcuefile/libcuefile.hash
+ delete mode 100644 package/libcuefile/libcuefile.mk
+ delete mode 100644 package/libfreeimage/0001-no-root-install.patch
+ delete mode 100644 package/libfreeimage/0002-fix-cpuid-x86.patch
+ delete mode 100644 package/libfreeimage/0003-fix-big-endian-os.patch
+ delete mode 100644 package/libfreeimage/0004-fixed-C-11-warnings.patch
+ delete mode 100644 package/libfreeimage/0005-jxrlib-ftbfs-with-GCC-14.patch
+ delete mode 100644 package/libfreeimage/0006-FTBFS-fix-for-function-prototype-error.patch
+ delete mode 100644 package/libfreeimage/0007-CVE-2019-12211_2019-12213.patch
+ delete mode 100644 package/libfreeimage/0008-CVE-2020-24292.patch
+ delete mode 100644 package/libfreeimage/0009-CVE-2020-24293.patch
+ delete mode 100644 package/libfreeimage/0010-CVE-2020-24295.patch
+ delete mode 100644 package/libfreeimage/0011-CVE-2021-33367.patch
+ delete mode 100644 package/libfreeimage/0012-CVE-2021-40263.patch
+ delete mode 100644 package/libfreeimage/0013-CVE-2021-40266.patch
+ delete mode 100644 package/libfreeimage/0014-CVE-2023-47995.patch
+ delete mode 100644 package/libfreeimage/0015-CVE-2023-47997.patch
+ delete mode 100644 package/libfreeimage/Config.in
+ delete mode 100644 package/libfreeimage/libfreeimage.hash
+ delete mode 100644 package/libfreeimage/libfreeimage.mk
+ delete mode 100644 package/musepack/0001-shared.patch
+ delete mode 100644 package/musepack/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+ delete mode 100644 package/musepack/0003-include-fpu-control-with-glibc-only.patch
+ delete mode 100644 package/musepack/0004-missing-sys-select.patch
+ delete mode 100644 package/musepack/0005-fix-build-with-gcc-10.patch
+ delete mode 100644 package/musepack/0006-incompatible-pointers.patch
+ delete mode 100644 package/musepack/Config.in
+ delete mode 100644 package/musepack/musepack.hash
+ delete mode 100644 package/musepack/musepack.mk
+ delete mode 100644 package/opencv3/0001-cmake-set-minimum-required-CMake-version-to-3.5.patch
+ delete mode 100644 package/opencv3/Config.in
+ delete mode 100644 package/opencv3/opencv3.hash
+ delete mode 100644 package/opencv3/opencv3.mk
+ delete mode 100644 package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
+ delete mode 100644 package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
+ delete mode 100644 package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
+ delete mode 100644 package/openpowerlink/Config.in
+ delete mode 100644 package/openpowerlink/openpowerlink.hash
+ delete mode 100644 package/openpowerlink/openpowerlink.mk
+ delete mode 100644 package/opentracing-cpp/Config.in
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ delete mode 100644 package/opentracing-cpp/opentracing-cpp.mk
+ delete mode 100644 package/python-aioredis/Config.in
+ delete mode 100644 package/python-aioredis/python-aioredis.hash
+ delete mode 100644 package/python-aioredis/python-aioredis.mk
+ delete mode 100644 package/qjson/Config.in
+ delete mode 100644 package/qjson/qjson.hash
+ delete mode 100644 package/qjson/qjson.mk
+ delete mode 100644 package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
+ delete mode 100644 package/racehound/Config.in
+ delete mode 100644 package/racehound/racehound.hash
+ delete mode 100644 package/racehound/racehound.mk
+ delete mode 100644 package/sconeserver/Config.in
+ delete mode 100644 package/sconeserver/sconeserver.hash
+ delete mode 100644 package/sconeserver/sconeserver.mk
+ delete mode 100644 package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
+ delete mode 100644 package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch
+ delete mode 100644 package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch
+ delete mode 100644 package/taskd/Config.in
+ delete mode 100644 package/taskd/taskd.hash
+ delete mode 100644 package/taskd/taskd.mk
+
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
