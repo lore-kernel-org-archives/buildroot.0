@@ -1,88 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A00EE498E
-	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 17:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F48DEE4990
+	for <buildroot@archiver.kernel.org>; Tue, 30 Dec 2025 17:40:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E00660714;
-	Tue, 30 Dec 2025 17:22:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF2A78176B;
+	Tue, 30 Dec 2025 17:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WYLMuKXcItWS; Tue, 30 Dec 2025 17:22:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1r4-EIRDfeqn; Tue, 30 Dec 2025 17:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66ECE608EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0911816F3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767115325;
-	bh=6z96oWhJIA9xIezAPN6s6OdyO5bKTH/SRIa+Ev7yndY=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WDJs2o8EoCQBMELGvwrSxiUoDxxofnNbEoOJI7kEXKZFKPqHxtenlxaOL/vw4Zx/U
-	 rW78GvjDU6voSl3eBpvhzhxqgTA4iwAD5Sqn0yQT/gpiD9ccsQDXI4c0X1wLUinYjj
-	 AbcrnchHeuIDYjsH4THfZ/+3dRvn/kOz9Ux0oYfjc/I7/MVZTMHqX7u9nqkdDr4XNI
-	 gp20LfZI+eIPS1QqkqV6c36dgFVc79lbfZ9GW8Flc2UzKgyabTdu5L12rcGqlo/Ebd
-	 Kb9n5xo/EnA1vnTlc8nCic0ma5rAT8XMcvUTV5NcoYxe37ZD2vopzGrEUVo5Jz1Nn0
-	 2MHG240YSFIXA==
+	s=default; t=1767116430;
+	bh=h152GB/NspO0jPyKWv//l/CawrfWFXxDGTZ2KpTfYRg=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=ZPRR2BSRS7kPJuL8bsV3R3cdZA0tPwso3Evn0wjkI1H+PgFr0BCIxnzJrOGfwbzOk
+	 emw6UFzt/bflMQm5l3Evy4z7X75ItBXXd+3JXVxtDmKQo+RQVfyJSCe0oTFPupV8js
+	 SmM2DFrb3BfuHNk+HIfVcYYoSr2CpSyDE5F/QzAoaCXxsyizTrG80H3Wb/szRxMAc8
+	 sT2LM8tCgUhUUUhNTiKTHVUyme9EIBYPRoZB6xjlqO0w+aRfa5zb+laUiYWHgr1NQn
+	 hoIOCNaTuaiWbaS+9jSdUMF4MklRGbL5KJKyPUxkv7TemrhZ1xWO3lzfphvRN3DFEs
+	 5j1uTSNFDUV4w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66ECE608EB;
-	Tue, 30 Dec 2025 17:22:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 52DC9D8
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 17:22:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0911816F3;
+	Tue, 30 Dec 2025 17:40:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF731277
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 17:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 448224035C
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 17:22:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5B72816F3
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 17:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7fQGZ2XumSzE for <buildroot@buildroot.org>;
- Tue, 30 Dec 2025 17:22:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3D4FC400DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D4FC400DA
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3D4FC400DA
- for <buildroot@buildroot.org>; Tue, 30 Dec 2025 17:22:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 59F922003C8;
- Tue, 30 Dec 2025 18:21:55 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 30 Dec 2025 18:21:55 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qwe_alM_Ov29 for <buildroot@buildroot.org>;
+ Tue, 30 Dec 2025 17:40:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::32c; helo=mail-ot1-x32c.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECBE4816DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBE4816DF
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECBE4816DF
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 17:40:26 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ 46e09a7af769-7c76f65feb5so7612230a34.0
+ for <buildroot@buildroot.org>; Tue, 30 Dec 2025 09:40:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1767116425; x=1767721225;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=he3nslelI8T5ISs+ediGxrm/fgMdwAAbmMzG/hE6v9A=;
+ b=CVH9GuMbQ84785glwm//jlZneMe1fqQVhh3zJzueICsmaYJi/tiuR1cm8QQItXicLW
+ z0jtGJzFPc49oK+oOo8vjk1ZwRv9ZDV+dP0HOCxWYrN7Th+tOcXq/fyBGdsXtC3qM3xR
+ 5NfedIjtoNPus6ReHFPN4YkaTQAvzQoqAz8OACHN+wg7pR99N9hQISTutyIP0IbL+2v5
+ 3NopOlpeB+7jfJktGVTYoG4DmFyTaIa/B2/OT8vOih+5QF0ukAHRuBholpNIAL72nfe5
+ 5TI1FAIMBVvphkx93pYJXryiD07VFzMfUubvPc/civxltFIKNuP7jVTAJ+3p51uoJQ+O
+ B1mA==
+X-Gm-Message-State: AOJu0YygFWkq1H83ePjq5ZHghg3nPsIzM9j7KOCJzd3rnckDqWEEw2uP
+ ube7bq6PQjJpxlVxhT1OCan1jPPziJzKa3nJD5u/G51aMSCpTsnC953N/WQjZMlXsj8=
+X-Gm-Gg: AY/fxX7byR35ftv3CpR5mU5dFpAg3a8EzMbvcrfVth3XebSR/xH2CnX8XljLQv6arBs
+ L+URu9t4RFEw5agh1JdVHm569s9XDFAze0HKIKeIFyScSQmYZUaG27TPU4yz5WnLkut/yfEgV4T
+ YGX9TJUMZ5z434Dz3HYdhMKnGhNZbvhncSPoo7+yttRvhAg7hhm3M2wzw+1jJntcbcF1m8DYzv2
+ rvfdwa6KdovW9twCFIHBlR3lkwnrDKxagp55tdhobjobAYEtsELlxzzM3dSDJsz5EZMEBXD4pCj
+ j71YEZuYVGjyvga4TGkXBnE4j+dJq7xTxyfNYLvllRQnlKxiLDOlQH+7lCpgOuAxBOocWplqcLh
+ o6H0dI7is+XpnNw87Vj+TJoba6Zpa5h45eB6p4ul0zeeu/bl7doLWXujtCHxIrMJv46y1ja2MlE
+ 2qZVrlZ6LiqtLlTFj6ZHmUvY/ktaHs2qHUcl+3moY4JU5AKkThgTharpfjxXr/B/eO99+ZTqS3b
+ UlGhfmPQc20OX6T+BZQnGZ+faZq13F1sSk7DcAY5Mp5lm/DvBXFT+A=
+X-Google-Smtp-Source: AGHT+IFGZg26LLGvUwGFlEyA1zCOlrRRyeeZ68qs5g0D3hWnN2sVmokg2jKVpPJXlDWqmRmrc9fDpQ==
+X-Received: by 2002:a05:6830:905:b0:7c7:261:6745 with SMTP id
+ 46e09a7af769-7cc668ae21fmr21304607a34.8.1767116425540; 
+ Tue, 30 Dec 2025 09:40:25 -0800 (PST)
+Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
+ [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
+ 46e09a7af769-7cc667d6b04sm23025051a34.16.2025.12.30.09.40.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 30 Dec 2025 09:40:25 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 30 Dec 2025 10:40:21 -0700
+Message-ID: <20251230174022.1945745-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Tue, 30 Dec 2025 18:21:55 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: brvs2022@outlook.com, buildroot@buildroot.org, Romain Naour
- <romain.naour@gmail.com>
-In-Reply-To: <20251230141201.33e6e44f@windsurf>
-References: <MA4P292MB00676659A30D80724F77DB70CBA1A@MA4P292MB0067.ESPP292.PROD.OUTLOOK.COM>
- <20251230141201.33e6e44f@windsurf>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <70c64c2ca980b0d4b9b1bb5fe74d0675@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767115318;
- bh=uyEJwa3OrufqwLmxJhw1Fxs1QGOVw0Fexmm1wyvHMKs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iXtnZ0qaj0LABf07ThL0WCe++pO5+4zkKj0NXlfgl3CJH9Ek5T+1JDzZeOKH+4XeR
- /PR9RHKctkj+miC9+UIjkMvck8GwOf/RD5DhXCPMirN8vDErLFGHF837bgwXvH6Y8T
- L8YpygMCLxcOEPVcmy7YNXxf5SoigytjAd13mM0ArIxtNofNJK1ziugSVg4pfzmiDU
- 4t+3Ib9G4rFxZPGE5nJTmvhfy4iipbgSlmD2t1Xng9KMKwb9pdbiKzKp6XqUEV012j
- qX40Dhk3v2/hwbbCf6B7u0nLhm1R/H5mVLrckk3KAbhAZHhIelyqmwdpYG35wkR+vn
- uu1VjeQntiQLA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iXtnZ0qa
-Subject: Re: [Buildroot] [PATCH] arch/x86: add support for x86_64 x32 ABI
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1767116425; x=1767721225; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=he3nslelI8T5ISs+ediGxrm/fgMdwAAbmMzG/hE6v9A=;
+ b=HGh9l8pYGjwmvUJo5wmT8IuIYfRPnwca7O8zQnY8uoKgt6LQoEm9sc6DJwoW6OkJBd
+ UhKw7M9rEfehEd5A4je2Xbe6jV+4gp6jEeYQsjFhlUnrVzdJGNpZLmgLf0I7Js5jDMnW
+ 6+XxkXxtKfZgu8EUXssee1hZOGpdvPlrzczsPLBW2MYABdMSUTCVR3utNf78p0/7Ux3Q
+ 1YGpCpKEiG6N+SG0Gez70GhJmb8ApbBy2XF9+wVMBJTAZrEika+sLnxNs4b/raMZZghS
+ kyqsE118Fl266yJE7SVeTIpuIk67iABFCphAE5sV7jT9OscfAkeft8VHyeAXghim/YVM
+ o80Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=HGh9l8pY
+Subject: [Buildroot] [PATCH 1/2] package/python-propcache: skip dependency
+ check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,51 +120,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+The python-propcache package specifies an unnecessarily strict cython
+version, disable the check so that we can update cython.
 
-On 30/12/2025 14:12, Thomas Petazzoni via buildroot wrote:
-> Hello Trevor,
-> 
-> Thanks for your patch!
-> 
-> On Thu, 11 Dec 2025 09:58:29 +0000
-> "brvs2022@outlook.com" <brvs2022@outlook.com> wrote:
-[...]
->> Add support for the x86_64 x32 ABI, which uses the 64-bit x86
->> instruction set while keeping 32-bit pointers and size types.
-> 
-> Is this still maintained/support in upstream gcc/glibc? I have vague
-> memories of discussions about dropping support for x32, but maybe my
-> memory is wrong.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-propcache/python-propcache.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-You may refer to this lkml thread [1] from December 2018.
-Kernel CONFIG_X86_X32_ABI is apparently still there, as of
-v6.18.2 [2]. It also seems Kernel and glibc are still receiving
-patches for x32 from time to time (e.g. [3] [4]).
+diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
+index 88d1f2cfba..d1f659498e 100644
+--- a/package/python-propcache/python-propcache.mk
++++ b/package/python-propcache/python-propcache.mk
+@@ -10,6 +10,7 @@ PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/9e/da/e9fc233cf6
+ PYTHON_PROPCACHE_SETUP_TYPE = setuptools
+ PYTHON_PROPCACHE_LICENSE = Apache-2.0
+ PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
++PYTHON_PROPCACHE_BUILD_OPTS = --skip-dependency-check
+ PYTHON_PROPCACHE_DEPENDENCIES = \
+ 	host-python-cython \
+ 	host-python-expandvars
+-- 
+2.43.0
 
-So even if it's a "niche" use-case, I believe it can still be a
-candidate to be included in Buildroot (because x32 is still supported
-in current and upcoming versions of upstream kernel/gcc/libc).
-
-Best regards,
-
-Julien.
-
-[1] 
-https://lore.kernel.org/lkml/CALCETrXoRAibsbWa9nfbDrt0iEuebMnCMhSFg-d9W-J2g8mDjw@mail.gmail.com/
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/x86/Kconfig?h=v6.18.2#n3140
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=2883f01ec37dd8668e7222dfdb5980c86fdfe277
-[4] 
-https://sourceware.org/git/?p=glibc.git;a=history;f=sysdeps/unix/sysv/linux/x86_64/x32
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
