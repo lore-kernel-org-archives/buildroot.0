@@ -4,89 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86BB1EE57FA
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 09:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75B85EE6428
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 11:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21D51817AB;
-	Wed, 31 Dec 2025 09:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFD0681E0D;
+	Wed, 31 Dec 2025 11:19:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6nOn39coU_JM; Wed, 31 Dec 2025 09:48:16 +0000 (UTC)
+ id Ba4LeG3DPbGw; Wed, 31 Dec 2025 11:18:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FF4F816D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9729581E03
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767174496;
-	bh=/hjXF1/mx7cbAosMr4bnn8sPdSLX+oAfV8iL6DZlvoI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=C8Vjn8CLDpZL/JMFVX9NAIh1gosfXJSH2icJ8NlyysoT49jK1VUw7OUJfsE46ThP3
-	 y9BoC+hHGjkHyIbizTgOFFTIrmhweuZBb1PxadYLeJBCLaZeGoCPBSkjODKsnFs2OG
-	 c87CJdKT7/51Zn0W4cvvE2wKeSy8MHp2YtpvkRcgB90aSf1PdAr9NyRBh6TFRF6rzX
-	 wQbNOEGyHp4AmFL3UIxjphNge4AhyL/PGln2jzw3KDnLHxadXs3S7gYlgNx6yU3HNy
-	 MOedJBSOIh9uzCWxbP5/0GyR+c55P7c9/BcLKSMVTl2ZjdBeuJdafYa+/xzflLsKns
-	 NMvRY2Mt7hM7Q==
+	s=default; t=1767179939;
+	bh=q4HUmBbkYXt8vpc/9epBBovxfFGVHlYgBApNw+PIprI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Mlgp1bkdnmCi90EHQV9Hd8PYR6M2h+Sgbg9XJQnr/GltBZpYvOgMJxx6IrZvQFfAR
+	 0Y6DS40vkTvV98rKyc7e68TS9ndAnI1knjjLIq8tV7kz++P3zsjn7GXVfxNmoX59eO
+	 VoUozmGElfTk494uQZM3tF6WcOHrLPaadje40qninqvUQ54CbbtdlpFxjNEtqs7xfM
+	 X/ecQVZGnCH3RCd0ySuvthCeDHG/bkUPlpEPvPEt+Wm3wX5BSsMaCyxUz2jkPVCaZ8
+	 Y9HajdTuRIDwgR7wAkJo9NPM/RkR224+9c6CDqd8t9GfJjUHoGAdA0ImVmgeCg/urc
+	 hZM/xfoBfyaRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FF4F816D8;
-	Wed, 31 Dec 2025 09:48:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 51A6CD8
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 09:48:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9729581E03;
+	Wed, 31 Dec 2025 11:18:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EB21177
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E6EA60A61
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 09:48:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 457C04048D
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:18:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 874_5SifKfer for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 09:48:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r2Aba_BPQiPu for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 11:18:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6968A60A5F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6968A60A5F
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6968A60A5F
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 09:48:14 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 59B411A255E
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 09:48:12 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 2C34560744;
- Wed, 31 Dec 2025 09:48:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 701FD113B0757; Wed, 31 Dec 2025 10:48:10 +0100 (CET)
-Date: Wed, 31 Dec 2025 10:48:00 +0100
-To: Bastien Curutchet via buildroot <buildroot@buildroot.org>
-Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>, Fiona Klute
- <fiona.klute@gmx.de>
-Message-ID: <20251231104800.115fbed6@windsurf>
-In-Reply-To: <20251219-rasdaemon-v4-2-2cdc992de787@bootlin.com>
-References: <20251219-rasdaemon-v4-0-2cdc992de787@bootlin.com>
- <20251219-rasdaemon-v4-2-2cdc992de787@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767174491; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=62g4ZlZc6w0EIFcBWK6+bY3KtOrvGzcz8PuR8+06P3g=;
- b=mp+wMiWJsARCgzayXbq9xURpX/KvEcLK+ZYqv25+4E/U5WdtlxgkbeXS3hk4fB6kPA5MOP
- wXGEtbYQ61+1aeAOrEnJ75Ck56wmXh7ITlimxeZsx8DTQrEHgV+gRhJZr2jBdz84HBKLq8
- 4iApLrg1O81cgjOdMYvX24GcevrBvoRvMibzGdgd7j7DyQ1FCy8XOYnzVFhKbbmwVlZ0DJ
- jArC66Zo1JTRvdK6M9y58WD00r1ETvd/1gpwNG2XyxE4cX/tHg76TB1GvoKTTRImLZ5EE7
- iS6mICpEvvfFGef1BqwDJoYcOnkJw0yvxGq+gSStewaeyionXjiCIjz2Ye4PiA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=mp+wMiWJ
-Subject: Re: [Buildroot] [PATCH v4 2/2] support/testing: add rasdaemon tests
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44449403E0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44449403E0
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:18:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2AE6D83917; Wed, 31 Dec 2025 11:18:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 31 Dec 2025 12:16:59 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 02d76e151227f1b4955ce231bdc7d74d15766a96
+X-Git-Newrev: cb79eee7fe6f5e8e5e31474dba47dc054fabfa02
+X-Patchwork-Hint: ignore
+Message-Id: <20251231111857.2AE6D83917@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxshmfence: set
+ shared-memory-dir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,59 +69,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bastien,
+commit: https://git.buildroot.net/buildroot/commit/?id=cb79eee7fe6f5e8e5e31474dba47dc054fabfa02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 19 Dec 2025 17:30:16 +0100
-Bastien Curutchet via buildroot <buildroot@buildroot.org> wrote:
+libxshmfence has multiple paths available for the shared memory
+directory, as some distros [0] opt to mount their tmpfs in a
+non-standard location such as /run/shm rather than /dev/shm.
 
-> Rasdaemon was added in previous patch.
-> 
-> Add a test_rasdaemon that allows to test it.
-> Test is done on x86. It first checks the daemon's version, then mounts
-> debugfs and finally ensures that the init script allows to
-> start/restart/stop the daemon.
-> 
-> Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
+The default value of 'auto' will set this path to whatever the host is
+using, leaking host configuration into the target. See [1].
 
-I've applied, after doing some changes, see below.
+With X configurations that depend on shared memory files for futexes,
+(muvm [2] is a notable example), this results in applications silently
+breaking during presentation with a blank window, as the configured
+path doesn't have the required tmpfs mount.
 
+Set this path explicitly to avoid situations where the host context
+leaks into the package build, causing feature breakage.
 
-> +class TestRasdaemon(infra.basetest.BRTest):
-> +    config = f"""
-> +        BR2_x86_64=y
-> +        BR2_x86_corei7=y
-> +        BR2_INIT_SYSV=y
+[0] https://wiki.ubuntu.com/OneiricOcelot/ReleaseNotes?action=show&redirect=OneiricOcelot%2FTechnicalOverview#Upgrades
+[1] https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/libxshmfence-1.3.3/configure.ac#L144
+[2] https://github.com/AsahiLinux/muvm
 
-This was not needed, the default init system (Busybox) is fine.
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+[Julien:
+ - add link to shared memory dir detection code in commit log
+ - replace "+=" by "=" in _CONF_OPTS
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.59"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_rasdaemon/linux-debugfs.fragment")}"
-
-This kernel wouldn't build as host-libelf and host-openssl were
-missing, so I've added:
-
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-
-Applied with those changes; Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index b8c9ebfe97..fff79c5145 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -12,4 +12,7 @@ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
+ XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
+ XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xorgproto
+ 
++# default 'auto' leaks context from host
++XLIB_LIBXSHMFENCE_CONF_OPTS = --with-shared-memory-dir=/dev/shm
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
