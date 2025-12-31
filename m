@@ -1,62 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0564EEB565
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 17:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 725CFEE645E
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 17:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EDD78133C;
-	Wed, 31 Dec 2025 17:03:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N5FS2E9yI4FS; Wed, 31 Dec 2025 17:03:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A14FF81221
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767200617;
-	bh=Rt8B/mqi1GGRUUj527CmtSO1C6Rhjbe9A5Qo8ljkwc8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=V60eoeUesy7WR4Lp7+/gxM0CwddU/ElxTWvqzFa0NTn8DS0n9hlTPaZAtigEA25q2
-	 J+IcKSdoSvt0nnfARz3XBU9TS+1oFd5kNofdeNO0YzDSILeG9uQifkUBPw3VV+/i35
-	 l/XDS/s2heLdT1YUsKYH2hLRhw0vlauXFoNR3u/fPjUojexrFZHgJqgpPZjfix+hgB
-	 YYGGO1iJogET3xhVU2VdOs3so5IuzMlvzKIrLkaGgmlmwLhEbpi6mtMLH5U1RuT49z
-	 lu6Zq3DbNPq0nLcFDcE2EdiVQJhp8BUkm6gW40yg6tR1qnQGtpUNkIZ1yjkpvfqygQ
-	 7WEBnjtiBvtUQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A14FF81221;
-	Wed, 31 Dec 2025 17:03:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B228249
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:03:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5A3160AFF
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:03:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C439260B18;
+	Wed, 31 Dec 2025 17:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MEFlFTnvPmfT for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 17:03:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id kO3TpLp7WXuA; Wed, 31 Dec 2025 17:07:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18E1A608DF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767200874;
+	bh=0zFrSXNbWCfsodRmmXDQUIHJww/6mzT7retE2BMuS1Q=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Jdc437SHVbNzIsAmm+rYJi5UrXYxCukQ+TMwz6X9lgSxFGNw0t+hTlnphXSHf3hCh
+	 k1Z/LsjW8Z04EmWdGIir/aOyh/E5nUBhP6YqJZ9QH14EiTLDKGIThp7+LM+8WE6Qiy
+	 xms4ly1SeKDBFDNm2ZRxZ/i1ixjEvkqq4CpscsTeP+vKV2ao4sWBJJ3NO+eRNtcfN+
+	 1AGPBHXOP3EEQuDdxp0+rdAfkKJWwfCpNeXPggOokcIZHa+37p+aTRyE1yrUrPenZy
+	 fRqiFK+Qt+8MJW0dpgAlZjXnw6yZ9o9up8W9XGQhD2HLoUD60Y+2A19D2QbwUisiVm
+	 3mkYLV42ImC/w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18E1A608DF;
+	Wed, 31 Dec 2025 17:07:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 123E7249
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:07:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC66F400A7
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:07:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S3nRjvWGen31 for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 17:07:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A91260AF4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A91260AF4
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:03:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB70186023; Wed, 31 Dec 2025 17:03:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 14:51:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5c6552cd60b82cbfac6918de296772b2f37c35a1
-X-Git-Newrev: 60e12203b123a63a2c86ced4760d287095b85eae
-X-Patchwork-Hint: ignore
-Message-Id: <20251231170334.EB70186023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/utfcpp: bump version to 4.0.9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C2E984009A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2E984009A
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C2E984009A
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:07:49 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 45E7A4E41EB8
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 17:07:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 06E7260744;
+ Wed, 31 Dec 2025 17:07:47 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0A3D9113B076A; Wed, 31 Dec 2025 18:07:45 +0100 (CET)
+Date: Wed, 31 Dec 2025 18:07:44 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20251231180744.15d36a19@windsurf>
+In-Reply-To: <20251230140951.1558531-1-bernd@kuhls.net>
+References: <20251230140951.1558531-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1767200866; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=7NIz71TDWnbJkTHSR+ZD7nChK+Tpt1b5kgfA5GG+AB0=;
+ b=qS4MNqX5czie5Wp0bb5jStmLZ1zfaN3L63il4o7d+SyxJ4YFSjexbyepRbfbyzGZZYixWB
+ TZGxPX0nO3/Z6/jwalLWQP/4Ip5picsb1hl5/iPCT2LlsrPs91ulrEJslei1Bnu52MjhZb
+ BtPyZbfJZqr/Ef7CNXQRXnnglge1E4pimYWTkCg17+2QdmH7OxAWQ9N/ynOQJYSryqvYw6
+ pltbz3FSSY44hZe0XO4AbHgOEpKOaq8KCjnoghhpT5Lu2VUCueWIR8kd0Ymm64QO2T5VoQ
+ iHmjS+1hK9sSvrni7S1Xc5rjlvH7a1K1giGsP4vmDe6IHrLhB3MfrtiXeW/rlw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=qS4MNqX5
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/utfcpp: bump version to 4.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,46 +98,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60e12203b123a63a2c86ced4760d287095b85eae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 30 Dec 2025 15:09:51 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Release notes: https://github.com/nemtrif/utfcpp/releases/tag/v4.0.9
+> Release notes: https://github.com/nemtrif/utfcpp/releases/tag/v4.0.9
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> v2: upstream renamed tag 4.09 to 4.0.9 (Thomas):
+>     https://github.com/nemtrif/utfcpp/issues/135
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/utfcpp/utfcpp.hash | 2 +-
- package/utfcpp/utfcpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/utfcpp/utfcpp.hash b/package/utfcpp/utfcpp.hash
-index d995899165..4b43eb330b 100644
---- a/package/utfcpp/utfcpp.hash
-+++ b/package/utfcpp/utfcpp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f808b26d8c3a59def27fea207182ece77a8930bd121a69f80d328ecf3cfef925  utfcpp-4.0.8.tar.gz
-+sha256  397a9a2a6ed5238f854f490b0177b840abc6b62571ec3e07baa0bb94d3f14d5a  utfcpp-4.0.9.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
-diff --git a/package/utfcpp/utfcpp.mk b/package/utfcpp/utfcpp.mk
-index 4e17364e0b..72a590eeb3 100644
---- a/package/utfcpp/utfcpp.mk
-+++ b/package/utfcpp/utfcpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UTFCPP_VERSION = 4.0.8
-+UTFCPP_VERSION = 4.0.9
- UTFCPP_SITE = $(call github,nemtrif,utfcpp,v$(UTFCPP_VERSION))
- UTFCPP_LICENSE = BSL-1.0
- UTFCPP_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
