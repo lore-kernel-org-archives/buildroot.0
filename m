@@ -1,114 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47178EE645E
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 19:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FFC6EEB56D
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 19:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0727E40216;
-	Wed, 31 Dec 2025 19:21:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C011780CFE;
+	Wed, 31 Dec 2025 19:52:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sd1VdsXyvOZd; Wed, 31 Dec 2025 19:52:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40EB780CFF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767210769;
+	bh=I7sKL6dbphkd3nf6MM2uFwgHXhcL++FNrk7ZDuNVagA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=HyCFJPODqzw5z7Jo0aS34Qcu+X0GMUwI+aAZ51/ui3L5oZTOrON+feRfBp7m/I2o+
+	 AEKQ+y30O6IX2ak88gYUTZHR5eNGbioVt70QdZcXJelxdz6of63b0cxyQQOaC+6j5C
+	 oMyPLIIYhii/CyhCgOGrcFwzxDxnqfxJBAdd5GPuwI+MCGTq7gLMQnXFxQQ49+NcoS
+	 aNVDlwNq1dRyxzW/Rt8tOlGMgyVNrYk3dpGNtaSRuObKC/u77qQNcW7Fh8aSpOksq/
+	 53HauiW4RGXf3HRN5uO0e4kPmSUMPfGoH2alDlbsXjHGpf9nYjR6/n8elDF9JZhmtv
+	 T43iZ5m/XsmBw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40EB780CFF;
+	Wed, 31 Dec 2025 19:52:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9595A249
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 19:52:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8818B4059D
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 19:52:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z4V7u9qx78xr; Wed, 31 Dec 2025 19:21:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CAB240253
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767208871;
-	bh=LNgiqy8WjUBx5z95tcYRdsJfu0TFXHokwvBNszcg1+A=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=MItHJ70DGg1oO1g1bjRUQjqEuee1mYHiIKKBNFxOjh+L3efoqJsw3TA6cLFwdQQfo
-	 7Hcgr3arigvqmYw64mMB4YEIlPgmFKe6h2k+SmdkelVeXgHqkZk6DoT7/xM0jjHVZ2
-	 bDjWG71pH2M9lNqeuSg9/OyvdtWs7uZKokndH76X0ZtA02geggOqLA1PptcUKCTiyp
-	 o7s2njRh0A9mny+lm6wOP3ZF+B2Le3HuCiFPK9eeRM2S+8kgYR+S8wn8bzFWc2wPTX
-	 kgo4C6Jg/BpTJ+HYNpYil4zpsSvNXUMzUOgsEDhXXqS3maKTEx8CZaNcVS4zpR7yCH
-	 v03i7YmX6HT0Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CAB240253;
-	Wed, 31 Dec 2025 19:21:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E4E9AD8
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 19:21:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5F696063C
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 19:21:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LnUWkXy3GkKB for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 19:21:09 +0000 (UTC)
+ id 7UezbWoaQgSr for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 19:52:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32d; helo=mail-ot1-x32d.google.com;
+ client-ip=2607:f8b0:4864:20::329; helo=mail-ot1-x329.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E645560614
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E645560614
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com
- [IPv6:2607:f8b0:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E645560614
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 19:21:08 +0000 (UTC)
-Received: by mail-ot1-x32d.google.com with SMTP id
- 46e09a7af769-7c75a5cb752so7790601a34.2
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:21:08 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 90DAF4059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90DAF4059A
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
+ [IPv6:2607:f8b0:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 90DAF4059A
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 19:52:46 +0000 (UTC)
+Received: by mail-ot1-x329.google.com with SMTP id
+ 46e09a7af769-7ce0ef9d4eeso610106a34.1
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:52:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767208867; x=1767813667;
+ d=1e100.net; s=20230601; t=1767210765; x=1767815565;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vdQFqEceicefc3aL+loDGq3ZxC3lTc7aTC1z+CQ1e3I=;
- b=TvbwlihlnTWZZOB6JQVg7znExtn3xHzWuZb52R58xUHB3auQ5E2GrZBf1HfRKiujSO
- +IRgooPHW8tw4Nai1WIdToxEZPOuL2iyax8x5K/OLOPQQW/YVhbMawKY5WwcIbn2tZcE
- qUr9+Ei0hQXfOhHFjwm4J4C9elzbmTVcSZXdzma/NqEBrZATRXT8DypUaGEC8LKFrJ/l
- 8UM6VWnxHnWv7Q7CvEIauk6Mo3v3ZDl4N4QdztZNuPIfpDvXIRE9IvW1890Au3qQgYf4
- 5CguWLkxw7znVPUsGMDPlDiM0/T2NEG1jiEk63LTiDwLHSe8xano+AgkNXwP3Cip8HDg
- V7Ng==
-X-Gm-Message-State: AOJu0YzUemzxB01a9+ZQcnvI/IHxd2LTmqPYuxcfqubgoQSoBCKVHHKd
- sqPk5GtWMsdf1KAggOos7G3VuM/Og2maH6tYayTW/YRfgUQqK9PqYPLapJ+/Jf0KOvQ=
-X-Gm-Gg: AY/fxX7MRFixSDaj3ahhuBmLFE+BoVm3FIPwc8+f4T5jFfaCJD09P9aJQS9pO4sgXwY
- phGtz4bs/qqj3mDS1TZ9lF7TATU7ul0JoCCKVEIpSZnPTtn8zFD8dkNWD3NaCVX1c+w72nu/bzW
- MTAsXjZcdDVaRCq45LcbI/HXfEhjWYGWiAcHiyclrD1bX1SzwEYwAmnxQolhfo+B5NKUyfzy0+T
- Pi9Ofjwii5eNguvOPa4qpOt9aD1j37MTdoGRV+oRNXXtdcLBlDHWruyOV0FLH4ilvUDCRi53jAs
- 3MMokTYRZsqijHOOkPGuYrROhrr54QZzLJnkXs+10Xnx62qP/CBLr8iMDP5uWMdFyuIdO8ce/dM
- +m5uAP6oVJz+D3W60S+deEiAYQq8pBjXk5LAM2qAQTgIctzyDjeBPi6lnHDhgDB8ywNkSzwiqni
- dSpdP8VJ/nlosqG+bvkoCb9xFJT0/0hBm3q1oON3BBt22fg9O/zJQxUbZnSBQW1CuPd3q+OYHO5
- 64nlx4VN2yYBGL5t3baGyLAG/2iQ8vHIAdD1DkDGap6X4OAdh8pe4A=
-X-Google-Smtp-Source: AGHT+IHjKpfs+M8d+cRvSHMPkmZBZV6r2UOaS+OkxCd7NqV61GfxkP+7fxRETYU/xsV93UtBkpIuqA==
-X-Received: by 2002:a4a:e3d3:0:b0:659:9a49:8f6f with SMTP id
- 006d021491bc7-65d0ea9b17emr11617571eaf.52.1767208867520; 
- Wed, 31 Dec 2025 11:21:07 -0800 (PST)
+ bh=JlZDG2h3FzAeOBnU1meDuw3E50fVW+7pqhPylnH45BA=;
+ b=qryZqy3hSXd2iIUlOq9MqcXBctHjuXnYdjAr9kZWLrTF3mDNGSyt75LaNNyad5AWM2
+ C3tei4+dWSMaqH/ZGuAsrg/W3rxqJkpIcBrWBUhKu714ebPBNn2R6aa0btSOMVgHbYUc
+ 8YgvJX95TdOnI9IbkRXQzcHas9aofuEULD5fztV1IjPwMoV32lOxOEKTtJB1TqHuzgIi
+ Y85cOQz1rxZZyv0+Pv03vcCH+AISnitiw1WgKOH0qac/jm5CUK6et79/u1EnAu7uOL/S
+ 3ueQLB+lJ8SQ80pn74Mf+Mf8A9Wej7sqs8y+UbKL7gf4MLTPHBUCw4dwEf0OHbHujtSA
+ QRlQ==
+X-Gm-Message-State: AOJu0YxZJmnx8zvEXWg2vElgGV/YFkx+CBkTfzmp8zgbVugX+2skvFKQ
+ jUz7E7MxjbaBiyGW6a/qdqCCHES/RY04yJgu4FflVH11VmnUKFFnOIJFZmXv/Xw4Li8=
+X-Gm-Gg: AY/fxX7C/yN0q8UFwDy3W4DbyAv3Stcw+sI9dNbctsEHC/ZdZjl0mDsH3YfvvWYClY3
+ qj0JoS+eqeSi8XNEfIK4AvJIWglpwlHAbURzPDg6SWKhDwXrka9uEBMsb3okPZXLwUhFAqlFs7i
+ FJ1ta7i7OlwL9RX2uKjeJSqevIgJTI0eJ1u4lilJUamwbDqaUTzTLmA4I2swqi4xW3/RR3l/6ho
+ 8zGasE6fW2fJszf8Njzv9nLzsH18yEJMbZcGMHjcpfmelqZbQAyS0Y6OOt5wVFBPWdYaVmYGsx9
+ zz8/8lMDtoUnriaJmjL0RSV7++7reWZgaKHEfNeEwqIbLRsTRRLqotDHgWx1hpc8lw4USe6Tug7
+ SR6Aloatg9dKyEml8AxmpbLvoM+v8l37v1TnIcQbN70/jqRJA4KDhnkscnTfc/Kj+EHZi/XGw1d
+ iHXnOd0bTYOdCU+FdgurIlSFYJiBW6ONPJtwPuTJACaZsiNVOiI8pskW4NPoNB5qckKBppF+uqT
+ y5eqq3KfHmZTroGoPeWGJSxomxtyupLbN/s9XHIIJlFXzc8gjrHuf0=
+X-Google-Smtp-Source: AGHT+IEVZwkXTGTDoQvcI0UD96DeasH3aj1kaIb5oq09usPBZAehWUA70HvqrGF/t0Q2J7Yl0bLgCw==
+X-Received: by 2002:a05:6830:3496:b0:7c7:162:e0c7 with SMTP id
+ 46e09a7af769-7cc668e953dmr19136727a34.6.1767210765087; 
+ Wed, 31 Dec 2025 11:52:45 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 006d021491bc7-65d0f46c775sm21353665eaf.5.2025.12.31.11.21.07
+ 46e09a7af769-7cc667d7f1dsm24854006a34.15.2025.12.31.11.52.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Dec 2025 11:21:07 -0800 (PST)
+ Wed, 31 Dec 2025 11:52:44 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 12:21:04 -0700
-Message-ID: <20251231192104.4004301-1-james.hilliard1@gmail.com>
+Date: Wed, 31 Dec 2025 12:52:42 -0700
+Message-ID: <20251231195242.4045046-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767208867; x=1767813667; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767210765; x=1767815565; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vdQFqEceicefc3aL+loDGq3ZxC3lTc7aTC1z+CQ1e3I=;
- b=ZDX2zMxF9Bb+1/rGcDtmhXywS1jEzi7UHw6ZPwFyr0cDQKH8/bEbozeD80pKiBbSIQ
- PFYoYUB1ip8SQl5Df0hOQ2qVylWGhOv5IkJMYnm7oyH4VPW7ydHMwsO43pIhysaSA2ga
- sm76G92Iqzn0gCErlCIxPREbhrypyucqV4xGfMdMezFjoYBsnxfB4fXT7INgg20cDeDU
- a4dfbKUaemF+DLoGYme3tfBpaWOAFqltD7MjzPbl/2RjcwtWkTCd4zfGrDS96aIPMoyg
- NyM0Z1azd8SO+DTcNOPITdUErNEmC7Sjw21c/+bo/yhWdwUGK9tdMYFIkBacAJXqjT03
- vbnw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=JlZDG2h3FzAeOBnU1meDuw3E50fVW+7pqhPylnH45BA=;
+ b=SIdjgRVsi8uKHPDaQAQpl9vAqdheMkXAoU7x9tQI5HJyDhgtGExWhmPCuRRZ0/o4qN
+ ACNH9R4gc6XGjPGB/4pmpEaraF+3odZyeOsUUioBLIWNNzYMiot20dRi+xsITJDIZVSW
+ dl6fzyRiGT7F8MgvwlE9WYCMR17PKAQK23yBblwz9RTxkSNaDxNbQX9Ni1E8gZmmyH4U
+ jx2oDVcnxYwt7uoQ6MT8CP7wnB8Rouqbr2DqxHK9kVDCQnrNNG2d4U2IodwRRhN/UoS+
+ fcvPyEByAMkHYFEKR3X9qYkUnr17AgZkadxtKMsV/PomH7zJxvR4yTlolE26twDTY4vY
+ Tmhg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ZDX2zMxF
-Subject: [Buildroot] [PATCH v2 1/1] package/python-soupsieve: bump to
- version 2.8.1
+ header.s=20230601 header.b=SIdjgRVs
+Subject: [Buildroot] [PATCH 1/1] package/python-socketio: bump to version
+ 5.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,41 +128,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v1 -> v2:
-  - add missing hash file
----
- package/python-soupsieve/python-soupsieve.hash | 4 ++--
- package/python-soupsieve/python-soupsieve.mk   | 4 ++--
+ package/python-socketio/python-socketio.hash | 4 ++--
+ package/python-socketio/python-socketio.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-soupsieve/python-soupsieve.hash b/package/python-soupsieve/python-soupsieve.hash
-index 8dbcd237f7..be9bc3402b 100644
---- a/package/python-soupsieve/python-soupsieve.hash
-+++ b/package/python-soupsieve/python-soupsieve.hash
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index 3535c00819..11c6557077 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/soupsieve/json
--md5  111f637c4017009883667bea09b0a442  soupsieve-2.8.tar.gz
--sha256  e2dd4a40a628cb5f28f6d4b0db8800b8f581b65bb380b97de22ba5ca8d72572f  soupsieve-2.8.tar.gz
-+md5  ec2c755903968868cb307512203ef3c5  soupsieve-2.8.1.tar.gz
-+sha256  4cf733bc50fa805f5df4b8ef4740fc0e0fa6218cf3006269afd3f9d6d80fd350  soupsieve-2.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/python-socketio/json
+-md5  fa264f1d5086cda8df1e01e7feb4a09c  python_socketio-5.12.1.tar.gz
+-sha256  0299ff1f470b676c09c1bfab1dead25405077d227b2c13cf217a34dadc68ba9c  python_socketio-5.12.1.tar.gz
++md5  2020f7a9aa9fc74786ff2bdc8b48a68f  python_socketio-5.16.0.tar.gz
++sha256  f79403c7f1ba8b84460aa8fe4c671414c8145b21a501b46b676f3740286356fd  python_socketio-5.16.0.tar.gz
  # Locally computed sha256 checksums
- sha256  571d0dafef795a196a0bbc3ac9b160a06b3cad41c320fecd98da3e26a8c81971  LICENSE.md
-diff --git a/package/python-soupsieve/python-soupsieve.mk b/package/python-soupsieve/python-soupsieve.mk
-index cec1b63b19..34fec5218a 100644
---- a/package/python-soupsieve/python-soupsieve.mk
-+++ b/package/python-soupsieve/python-soupsieve.mk
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index b07e6a689c..2c6b581c1e 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SOUPSIEVE_VERSION = 2.8
-+PYTHON_SOUPSIEVE_VERSION = 2.8.1
- PYTHON_SOUPSIEVE_SOURCE = soupsieve-$(PYTHON_SOUPSIEVE_VERSION).tar.gz
--PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/6d/e6/21ccce3262dd4889aa3332e5a119a3491a95e8f60939870a3a035aabac0d
-+PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/89/23/adf3796d740536d63a6fbda113d07e60c734b6ed5d3058d1e47fc0495e47
- PYTHON_SOUPSIEVE_SETUP_TYPE = hatch
- PYTHON_SOUPSIEVE_LICENSE = MIT
- PYTHON_SOUPSIEVE_LICENSE_FILES = LICENSE.md
+-PYTHON_SOCKETIO_VERSION = 5.12.1
++PYTHON_SOCKETIO_VERSION = 5.16.0
+ PYTHON_SOCKETIO_SOURCE = python_socketio-$(PYTHON_SOCKETIO_VERSION).tar.gz
+-PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ce/d0/40ed38076e8aee94785d546d3e3a1cae393da5806a8530be877187e2875f
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/b8/55/5d8af5884283b58e4405580bcd84af1d898c457173c708736e065f10ca4a
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
