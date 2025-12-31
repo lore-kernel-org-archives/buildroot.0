@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85CB2EE6425
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 11:20:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86537EE642B
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 11:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50D8A81E0D;
-	Wed, 31 Dec 2025 11:20:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4066040386;
+	Wed, 31 Dec 2025 11:51:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4FIgiU5mS-qF; Wed, 31 Dec 2025 11:20:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xbKYCATQq6zS; Wed, 31 Dec 2025 11:51:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14E8D81E03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 614774039C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767180027;
-	bh=gkCS4rPmNu/Lqf8XvQwEIhIb6z2ZL2eeHeDPi8a/fjI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=QL+psNzx6TP9hgBbsFfg0jLY3T0qBkBiGVN3lC4MoHvcTSnbDu8qvhOiaTR9bxB7u
-	 FxGVGpvGMycfzobl9lD8VdmzipjwRpDn9N0qabMDd9QcgVcgT8w1s3TydcL6MOhEaa
-	 piEdC+hmihPpxEcS+ZmbnyrK8NwUGeqhrr4FuuXFfPPiwg6OL0BLHVUR4V8uexwU+H
-	 aVpyjXrY8ECTP75QLgJy9+4MLg8oH3RE5KbsYU3a/aOmWFucYbtracLJd+DvX13N5a
-	 GHHKKUkZPoiuSQYnaCArpqhMM8xI2BsowjXLP6C6esOmL2BxMLj5ER5BaVYVfTUQzO
-	 PoS2Es6Lsx1lg==
+	s=default; t=1767181892;
+	bh=0F/2mknpH1aDSKleL1EQyz29T+FdjfvzpIJoTCcbLrc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=dkoAHLh2uWwgGKTG3PMn+h31lUxqrzKJXaPQ/0K7UDgEBQWe3UBJFqWrv+MkwoIDD
+	 x/xJn3EIyN6ivbfyuzKWKJ84x7E9ivIp4qX/15prhGZkHbpNndOa+mM7xDODDFcl/i
+	 sTElioi3Y9SA0S/xITuwNfxBwFH+ZS3Z7pyb/PfNnVg8cCOjg+oTuiXfuc4VRxK9Ef
+	 ahRo9+HYOKfqV+eMIRxKJT/gucUrfQLANd8qWWE+BpFGjsk8TffMhqdZ6hyfe6dQJp
+	 CFbM/O1GxwenrB0AJwDGsPRQvOpTEoyV6Cn4I4r1IUzq9y3smxcxSbt0vCaOkecBsG
+	 vrtytjs+9s4Ww==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14E8D81E03;
-	Wed, 31 Dec 2025 11:20:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F644177
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:20:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 614774039C;
+	Wed, 31 Dec 2025 11:51:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 698EC177
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 565DC81E03
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:20:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50B5D401E0
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HuqWi2cgcMqP for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 11:20:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E4DC081DF9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4DC081DF9
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E4DC081DF9
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:20:23 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 68CA313F8A2;
- Wed, 31 Dec 2025 12:20:19 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 31 Dec 2025 12:20:19 +0100
-MIME-Version: 1.0
-Date: Wed, 31 Dec 2025 12:20:19 +0100
-To: Joseph Kogut <joseph.kogut@gmail.com>
-Cc: buildroot@buildroot.org, aford173@gmail.com
-In-Reply-To: <20251230-libxshmfence-shared-memory-dir-v1-1-03a64fed2269@gmail.com>
-References: <20251230-libxshmfence-shared-memory-dir-v1-1-03a64fed2269@gmail.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <42aa6cea67ccddabf4d8a9b528ec3a69@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767180021;
- bh=+Tt4AUYuSWpmJkxvdu/P07gKAFAHfbnGiM/OUfN8SPw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=m41do9aVHB9tV1pkRwJ1dBLbFadudndYAfQVh6nXcw+tImckzsmCfKqpivwgKATkc
- VWCMcaRc5L4rUopArl/h6SkyzeKw5ffaVc5wsF9TLWKFjjyO6q+3AhkR36VY6ea4n7
- QGxinsA96rRj+TH9JED+MhWawjNQts9PYAHIAjM6iR9RgeILgBsPwBPN/uQab5q6m3
- jLz7eA0HBwYrepkjTbzLCEa1YYa5XQ7KS1J7o+y9p2m5DOmmAo5P+dxKOpa6XhzLlV
- TnioBOToDZh5UgxL0wjGrnSFG0Jyq+fgRqcp1K0LANp3tIYkpKrwxCwrA8uzQnY2Ay
- x9uEW1miwvriA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=m41do9aV
-Subject: Re: [Buildroot] [PATCH] package/x11r7/xlib_libxshmfence: set
- shared-memory-dir
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TRs79yyF6M0K for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 11:51:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 940564006B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 940564006B
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 11:51:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7D0CC87DAC; Wed, 31 Dec 2025 11:51:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 31 Dec 2025 12:25:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cb79eee7fe6f5e8e5e31474dba47dc054fabfa02
+X-Git-Newrev: 6131b31fbdd0575b9ac543d7e106ea1a64f9a62a
+X-Patchwork-Hint: ignore
+Message-Id: <20251231115129.7D0CC87DAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/putty: bump to version 0.83
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,39 +70,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/12/2025 19:54, Joseph Kogut wrote:
-> libxshmfence has multiple paths available for the shared memory
-> directory, as some distros [0] opt to mount their tmpfs in a
-> non-standard location such as /run/shm rather than /dev/shm.
-> 
-> The default value of 'auto' will set this path to whatever the host is
-> using, leaking host configuration into the target.
-> 
-> With X configurations that depend on shared memory files for futexes,
-> (muvm [1] is a notable example), this results in applications silently
-> breaking during presentation with a blank window, as the configured
-> path doesn't have the required tmpfs mount.
-> 
-> Set this path explicitly to avoid situations where the host context
-> leaks into the package build, causing feature breakage.
-> 
-> [0] 
-> https://wiki.ubuntu.com/OneiricOcelot/ReleaseNotes?action=show&redirect=OneiricOcelot%2FTechnicalOverview#Upgrades
-> [1] https://github.com/AsahiLinux/muvm
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=6131b31fbdd0575b9ac543d7e106ea1a64f9a62a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, with a small change. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/cb79eee7fe6f5e8e5e31474dba47dc054fabfa02
+Release notes:
+https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
 
-Best regards,
+This commit updates the LICENSE file hash, after a year update.
 
-Julien.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: add commit log comment about LICENSE file hash update]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/putty/putty.hash | 10 +++++-----
+ package/putty/putty.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 30b749c47b..33a9666bc2 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
+-sha1  8c88d871855d3730a0473bb1cb1006654e73b680  putty-0.81.tar.gz
+-sha256  cb8b00a94f453494e345a3df281d7a3ed26bb0dd7e36264f145206f8857639fe  putty-0.81.tar.gz
+-sha512  d86f2fd0e126b18275d58cf64334b3b27c450899a1c2be2502de9faa2ef58f7fc8efc5d45f25c8395623f1e21917aa02407343bb2fee44c4c00b9f81267d5ecd  putty-0.81.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.83/{sha1,sha256,sha512}sums
++sha1  f9fd9ab5e3849bf8c22b218cdb7697dcdd1d8c9e  putty-0.83.tar.gz
++sha256  718777c13d63d0dff91fe03162bc2a05b4dfc8b0827634cd60b51cefdff631c6  putty-0.83.tar.gz
++sha512  4781616b7e9c5a779a54e6a8486513e0aa947d4a36e9dbfd4ffc0d32981a5ad4868cddbde0363467236ed67c43f990408a9326d10354954be716a270d587c0a6  putty-0.83.tar.gz
+ 
+ # Locally calculated
+-sha256  e0410341c5e45f7479c28d79298edbf615589cdfc115b2d69683d4ccd0425ce0  LICENCE
++sha256  c18aac5045fd30bff639b07884be44cb8c68eef16efe8c5e18deda1f58cacdfb  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index ec65991f41..9071fea208 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PUTTY_VERSION = 0.81
++PUTTY_VERSION = 0.83
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
