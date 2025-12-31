@@ -4,110 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72620EE6441
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 21:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDD5EE644A
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 21:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CD1D80DE6;
-	Wed, 31 Dec 2025 21:35:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86D9181164;
+	Wed, 31 Dec 2025 21:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9bfUIr9WegAz; Wed, 31 Dec 2025 21:35:08 +0000 (UTC)
+ id rYMoV4rd28CR; Wed, 31 Dec 2025 21:52:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5676180EB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9DF581166
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767216908;
-	bh=fdnlWsXaoCJ4cnTbgU2YkxpI5LkWVRimJ1XXpsNgx7o=;
+	s=default; t=1767217935;
+	bh=jmFVIomXSSlPMcEw0hpJlK7JuCPe8B0rBoamMDvpK5k=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=ErcLuXhtLuLZ+mCY0RR6CcOii/bitbzdcw9BduyKUHl9/aqk977ujSGgqjszwyN6u
-	 ZzRvWXI/CN4XRowDIqkCjxoPn1c8YD3my2k0dAWTI3hBvRkCwiCnzussPdr3cflvOc
-	 v/IO29uv5LenzPZmfFcTSFh+fXUKYNea0n8FKpUEzGFxygtvybIsMiqzbl/x5r8pV4
-	 BvV0TPU7e8Te5PTd9k9SQNsRbLcCDbFQMHRHRTi7brfkTdZS5f9mPlUmmloUGCUawk
-	 pqrDDglRmodc5i5v8EaiM+nIzQp3luf2jaLGhwioydBHwFIXUoWN+eRZCjFAaUzrcQ
-	 A7KkdRjnEx7kQ==
+	b=c5X+P0NI8I8EAIV1QI+TEc8CoOk54J6MoLMLCYHLw+hpJ3D/QkYDYlJMNsSzufusV
+	 EeiAfUHe5pwQHnp9MqjHzNzewdPQcW9a493Kq7Uo/7a0jKtDZUhL8xz5XzuvfA1CnN
+	 Qci8PYLTNEWd9ycL6VH2szrFfuMBV1tiPAkUfGCVB8g3RvN4Aq1TTL0q8PHr1LyY/a
+	 HoLVR43p3fFcbwGw6o19fkmWDZOKwMuaTpVlahB8zOU5hXL94qRNFEU+49Nr5eS0aW
+	 lhxAh+Urmh32ukELYC1nlgJ/ifSkxQIpLLWzC0sRpXLFgz716dPhI0r0mkLfdMiyHC
+	 QzmDEq7Cf/O3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5676180EB6;
-	Wed, 31 Dec 2025 21:35:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 31B1AD8
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:35:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9DF581166;
+	Wed, 31 Dec 2025 21:52:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 730F9249
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:52:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EBE540331
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:35:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59BCB404DB
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:52:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DDVKY7bsVdzh for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 21:35:06 +0000 (UTC)
+ id Tz-958HcC9eW for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 21:52:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::334; helo=mail-ot1-x334.google.com;
+ client-ip=2001:4860:4864:20::2e; helo=mail-oa1-x2e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 56400404DB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56400404DB
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
- [IPv6:2607:f8b0:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56400404DB
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:35:06 +0000 (UTC)
-Received: by mail-ot1-x334.google.com with SMTP id
- 46e09a7af769-7c75a5cb752so7840218a34.2
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 13:35:06 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2FD9C404D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FD9C404D7
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
+ [IPv6:2001:4860:4864:20::2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2FD9C404D7
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:52:13 +0000 (UTC)
+Received: by mail-oa1-x2e.google.com with SMTP id
+ 586e51a60fabf-3f0ec55ce57so7835272fac.2
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 13:52:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767216905; x=1767821705;
+ d=1e100.net; s=20230601; t=1767217932; x=1767822732;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KAXhT9rFz+Kmg7bc7YORoAaPIE+UJB5umZMMsor+M5Y=;
- b=lEPR3wHV57RIzeKjzQa9CLLbMK3fIDaGFRYNV9NsDa4Ze7cT8Cv8usUDJM4/3WI+JZ
- xZ1wbyKWqEA0p7X36WZLJen2D1J0Hd4XkQGTy+WjmhHfaSdBPLwiYNnQ4jWvj29rgQjh
- PAFJ8pwE7cJm6ymGNLcduw+VepUvwR5ehrOvkGCHs9HMGampCpFOrZ4o9YdPK/y1mzc3
- NOjSyj6jqyw/v3gSZ9CictmhvfdMmgmlYTx+ZCDNyJvrrJAt4uA67Lh0tf8hsPmXR1R4
- ffgMtd/dkdxaI3eTTSF43GOp3uPfdOfhMvT8uuPU3A00qr7gb/CZcEyhu/CxmE14WUJc
- QcDA==
-X-Gm-Message-State: AOJu0YxqFcKTgQShgQ7/TbwXiJNQZEdxM5R18DooxTplSpCxd12V88pD
- W917HBIGBnfaLLTl1VVzP7CPwVVMEQf4Q35RzjbRFK2UFqDuBdesKcuT8HByafOBbAk=
-X-Gm-Gg: AY/fxX4YuLUQUxa+ybYgVavgyVRWJ7DZO/5JdBHeW/uHYvooe85ftI5Nd2ju5TF7vwb
- JD4h2BqB6ntiLDXCLX+TRzfrx0XWkVmQgf2NmvOwc3Wd4gojmoFU6HrET/+C3heprd8LwOQotGV
- zmzk1+9/9OEtVYV1LV9zWqeUaRvaIY9sKpjYd5IOgI+nIl6Q7Dt/3piTtwJJQqleVMNrZEuJkqT
- /6pB8FiB0NiC9MVgj9VYgWKovFQOHg84dlVUtTySywCGEpKDYkqscxJSLGd2MKQYyFC4ZR4atGh
- nlEbsmneCVGcn4N2+ftLAxTA9NjFb1VcXo6f8uuVhjTpFpXH6xX0eo6SDedGy1KB/SEVuzOCgt5
- H49KIz4g/wiqgEOUTP3jneUTpn/3Z6WEQEILhaz0NYUYgK4tsF5aFdDjZ+vPj1qCxp37jY5jkpv
- wwx+8K97pgmFAaP8IAlsB5rHGXe83RilmO3B16XPiLrKzVA4/89bwzbr9/+IUnl/YWp7GGRIzxj
- 0BV08nm+UpBqGsC2Qtz0CWYIe3kpEh+qvmm9HYbVB1JmU7D7YMy1XQ=
-X-Google-Smtp-Source: AGHT+IFpQLqkSggkY5QkPhgco1ICHkGic2Doa5oowWmVjPrXAav6LIjbeYm6+yiJwtNiiDUEnPmIpQ==
-X-Received: by 2002:a05:6830:2e04:b0:7c7:82b9:471b with SMTP id
- 46e09a7af769-7cc66a5c245mr18975919a34.38.1767216904823; 
- Wed, 31 Dec 2025 13:35:04 -0800 (PST)
+ bh=Rx8Vo++DSCAhbp2pc6NykP3EyqzMdDFj0c6e5h8h+dQ=;
+ b=keHe1xXy2ivYQewZ5/kbiNeOkPXrvr36vyE7LRNLl6hhgCsasTedatTNsrJcVZoj5y
+ tEpEH7CttnnmE2TK7oWbx3ohr8Z7U0TfNwGVZAfgCuYU1ymt2iRWwWt/OlqUrMCnwDKl
+ 7FZYBM5q4EL+y2t4EddoxMJu6nZ9Zxs5FUbsU/Q+v4dXvANSwOJpyh+YA/0qREZalRii
+ 0K39a/9g41oXRcuvsc6CgsYaEAXu743UR17bXGkZIMiWPqmp5pIcJREiT9RXleAmvG0f
+ 45Rhb0tjrQjNOmWkdXlTY4qvE5xFkBWchSpdNQMzZItkN9u3RLEAbKMdHyEGxM4JS+X1
+ smbA==
+X-Gm-Message-State: AOJu0Yydk3RdH6VXRidX93Ejy1tPU6S58JGDT4lxKjyovwIKhlij2j9C
+ lIHA7w2N/vrxLrQkVtVxV0Zl6svY++Iyo1reHBaKsbWNVs0O24Sp+rfUkXDPOYKMkKw=
+X-Gm-Gg: AY/fxX4NYrTna+obi6KRe06bSOQAhplllUSr+CyjJDSKGSrGwG4gV8oJ+hbCeulzOHZ
+ PXYbbFn6Ih1ti7hEOG5uk7K7nLOVaG0tJsLRreSi7Z2HuPWJB47Kbu6w4EUy3KKAz/Dn6bsxOA5
+ dN7rDE/6seDrgW3Md/yQav69m8jWVdkMugGohOMWtfEwUBhCWy1wY9Txt16A6qhSLYqW8m5KZt6
+ HH2wZyDb7rXkwpJ9uUXKam3FlSQ1lQPcVkLxv7UcD79OX8MyQUR4/2RxPj12ZJwbrXRkJ90Lhr2
+ o31YcC99E1wiL438iXDc7avZBT9mZAZtB8HHDJXrKLbL2C3FYcxunCcLTAomIVFVuFw6YAIxZw8
+ 9zzAKd3WXXKtqyFfnLOHXo2345jPkmvNA+5ColTNlTPx5YntfmVQer3Snb4UNtsH7//QVevGWel
+ eEpy/2lhHDV3tYuwo/RBKewbRQG5pjsjTU3B44wwmMSY/fgYEOJDykvpQL5UJODil00ba2/AAGR
+ shoiyk0VIDRcLf1THC1lxlT9qmQGRYbJ+9lWr12387e/fb61SdTeKY=
+X-Google-Smtp-Source: AGHT+IEECWciYLBQhvUIIoowdu+Ky5LqLEqZBK4hvzHPAWuUlpAtY7FOyQ+W4Rey+24xvZuZ50/cOw==
+X-Received: by 2002:a05:6870:d687:b0:3ec:4183:7487 with SMTP id
+ 586e51a60fabf-3fda58956a4mr14505876fac.49.1767217931792; 
+ Wed, 31 Dec 2025 13:52:11 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7cc667285f9sm25543539a34.5.2025.12.31.13.35.04
+ 586e51a60fabf-3fdaa8d44fdsm22359505fac.3.2025.12.31.13.52.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Dec 2025 13:35:04 -0800 (PST)
+ Wed, 31 Dec 2025 13:52:11 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 14:35:03 -0700
-Message-ID: <20251231213503.10450-1-james.hilliard1@gmail.com>
+Date: Wed, 31 Dec 2025 14:52:09 -0700
+Message-ID: <20251231215209.210254-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767216905; x=1767821705; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767217932; x=1767822732; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KAXhT9rFz+Kmg7bc7YORoAaPIE+UJB5umZMMsor+M5Y=;
- b=hLbFDJKnGrXO4yEAg2bSK3GXiTN6iz0WHf/rfWjNs9Z+m/6bBl0qbPIp7oqyZpCr5i
- aBZ3qKX0nzBfQ+BoFAw6dmAdk515PE29+dh7iQD2i9VFBQABRJt+/QeGTkHTA9gtNJtA
- x21jO6a2z1+7Y19hJUr2poiyqqTIAHUknEGmOylvVzOEaDQL1VZ0kw9CLzWILu2OTN2K
- fHkx1n1KWpb+qdmhsMYtueEt3R13282Ata6+dTAYhtP+hYPp9UaTNdellwjpSNd+rvQP
- 5amNH/MSDOOtuRbGX/W1/yxJtSzZPs1FAl12edBbRMcCquKUEi4RNa3pizmjMwmER8Wd
- XJbg==
+ bh=Rx8Vo++DSCAhbp2pc6NykP3EyqzMdDFj0c6e5h8h+dQ=;
+ b=cm//4V93fNCMGaM2o8lJlppgdcJuWGcwdmf6L/cjDyxpLu7dszcmTXZ0fghBkHxWU2
+ 25ov4vtj8OkAkmKSiDV1HmsHpNGOJKzunnu5NW0awsGE+4Q0Alx0XcyI4EWRBxXyLWec
+ xlKpN/uwypJx4bhEjizt3p54D18GqWzyiF/JhV7s+OyOZpa7hcQW1wqhQ4g+3vLZ164F
+ p6e2giMmvAoipdE6hUDL5TvHO+uQcIVkRvGaaWv1iSGKc5ujsfRjMQx4Ohgokhx7SA2S
+ gaIwrl61mnsTP62wIed4s5YP6O/8Xi1BkOH9bN9ZCAzx3NB5Hwfl9Pb0xG2kaM2V5aG5
+ +sUA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=hLbFDJKn
-Subject: [Buildroot] [PATCH 1/1] package/python-pysmi: bump to version 1.6.2
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=cm//4V93
+Subject: [Buildroot] [PATCH 1/1] package/python-pyparted: bump to version
+ 3.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,48 +125,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate from poetry to flit build backend.
-
-License hash changed due to year update:
-https://github.com/lextudio/pysmi/commit/fdd7fe3d201b1d451eaecb858354a0e1bf9fd04f
+License file renamed with no content changes:
+https://github.com/dcantrell/pyparted/commit/78876337d9e0037fc8034f839c2b918a99d05e3b
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pysmi/python-pysmi.hash | 6 +++---
- package/python-pysmi/python-pysmi.mk   | 6 +++---
+ package/python-pyparted/python-pyparted.hash | 6 +++---
+ package/python-pyparted/python-pyparted.mk   | 6 +++---
  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pysmi/python-pysmi.hash b/package/python-pysmi/python-pysmi.hash
-index 30043f1b95..856f59baaf 100644
---- a/package/python-pysmi/python-pysmi.hash
-+++ b/package/python-pysmi/python-pysmi.hash
+diff --git a/package/python-pyparted/python-pyparted.hash b/package/python-pyparted/python-pyparted.hash
+index a13276ce79..421fe26309 100644
+--- a/package/python-pyparted/python-pyparted.hash
++++ b/package/python-pyparted/python-pyparted.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysmi/json
--md5  187efbaa8ebb5d6d880906bab0116ef8  pysmi-1.5.9.tar.gz
--sha256  f6dfda838e3cba133169f1ff57f71a2841815d43db2e5c619b6e5db3b8560707  pysmi-1.5.9.tar.gz
-+md5  406818a9bb351e665e2eb9e9352a57fe  pysmi-1.6.2.tar.gz
-+sha256  abed01673113886d10f0f336426859238fc13b5383c7e28e13dbcd5af0443ba1  pysmi-1.6.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyparted/json
+-md5  97df779564210100ea3e4eda0d33f7b9  pyparted-3.12.0.tar.gz
+-sha256  da985e116beb733371feb605b174db9eec8bd0eedffc8f739f8e603f51b521e7  pyparted-3.12.0.tar.gz
++md5  70f1346ab01fb752d38c181a285a64d0  pyparted-3.13.0.tar.gz
++sha256  443b59eb9ac63b8ca87094e02376646e172c7ea075f955f105889ca3485b06fd  pyparted-3.13.0.tar.gz
  # Locally computed sha256 checksums
--sha256  bc211b99a3eb46f3b1f64f8152dffc869d3bc4bffed82545732ef9e34628513b  LICENSE.rst
-+sha256  ba934e538c4116c2d9209c14256778b9a8a246234a3bd9256c62f396187e80d4  LICENSE.rst
-diff --git a/package/python-pysmi/python-pysmi.mk b/package/python-pysmi/python-pysmi.mk
-index 454cd11447..2288f04e88 100644
---- a/package/python-pysmi/python-pysmi.mk
-+++ b/package/python-pysmi/python-pysmi.mk
-@@ -4,10 +4,10 @@
+-sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  LICENSE
+diff --git a/package/python-pyparted/python-pyparted.mk b/package/python-pyparted/python-pyparted.mk
+index 5e12995e2e..e8b15fecf7 100644
+--- a/package/python-pyparted/python-pyparted.mk
++++ b/package/python-pyparted/python-pyparted.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYSMI_VERSION = 1.5.9
-+PYTHON_PYSMI_VERSION = 1.6.2
- PYTHON_PYSMI_SOURCE = pysmi-$(PYTHON_PYSMI_VERSION).tar.gz
--PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/be/b0/19085322fc24f6b4a7bbc151643641c391b8b8d9aa4fd0e40d8178b2a5f5
--PYTHON_PYSMI_SETUP_TYPE = poetry
-+PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/a7/80/917111aaa4bf931bbd4d9a6c89864de2304b79cba8ce49639a6440ecd5ba
-+PYTHON_PYSMI_SETUP_TYPE = flit
- PYTHON_PYSMI_LICENSE = BSD-2-Clause
- PYTHON_PYSMI_LICENSE_FILES = LICENSE.rst
+-PYTHON_PYPARTED_VERSION = 3.12.0
++PYTHON_PYPARTED_VERSION = 3.13.0
+ PYTHON_PYPARTED_SOURCE = pyparted-$(PYTHON_PYPARTED_VERSION).tar.gz
+-PYTHON_PYPARTED_SITE = https://files.pythonhosted.org/packages/c2/d0/d32aa5758d6567eef620075f5c84f475c93bb1bf8da9d17051ce3ef055db
++PYTHON_PYPARTED_SITE = https://files.pythonhosted.org/packages/e7/53/b02306f89dc3eaf949659e8814545cde575867bc0175f60361809af7f71a
+ PYTHON_PYPARTED_SETUP_TYPE = setuptools
+ PYTHON_PYPARTED_LICENSE = GPL-2.0+
+-PYTHON_PYPARTED_LICENSE_FILES = COPYING
++PYTHON_PYPARTED_LICENSE_FILES = LICENSE
+ PYTHON_PYPARTED_DEPENDENCIES = parted
  
+ $(eval $(python-package))
 -- 
 2.43.0
 
