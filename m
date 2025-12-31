@@ -4,109 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9A65EE644A
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 22:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871FCEEB571
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 22:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76746608B0;
-	Wed, 31 Dec 2025 22:08:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A99A8608BA;
+	Wed, 31 Dec 2025 22:18:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rxmuMuRPN_Nq; Wed, 31 Dec 2025 22:08:54 +0000 (UTC)
+ id i0M__90yxvjb; Wed, 31 Dec 2025 22:18:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A63AE60867
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC7B960871
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767218934;
-	bh=Yix9TsgpXcze260MsxuVWt604Hvs+5ooIMtlFG9RzDw=;
+	s=default; t=1767219521;
+	bh=F/Bh3SdXi0WADpIjvP5QM7U3Q3Y/rPpH8dHjGpkopis=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=PZE9i00LGtz/lMqLx2NeI/6mqbyjajj1OB/EOdy9VkVJDGsnR+o4/+XK+CnKruWrH
-	 eRpLTUtuMFQtGhJG1B0iXQAxx5FNhJASp23ODBzq1fLyhehLO19NQWXoHwDFDkPH/u
-	 LJvpWzhxPyw2t/moneMpxTMXL9TG68MSHJTJG5IljYN9YW8S+IIcwv7/9Z1hS5L99q
-	 OLmxtM/2qjkm9Yq596Kf/GeXsaPVYVzTXu8KpGMD1AAQPzUl7brvPr/2V1URfhhbxU
-	 PsYqgmGP+815O50OoniuNY0H/hAyQP1pNOnsBRVo9KJkhWj5XPsMrHcoA5VSWYOVvP
-	 fG5IUUw1UOrZw==
+	b=DiYRS7rzm9rHmb/TCCi1j2x/RK4Y+D2z7VSzEPxeJDLssoQ+ReB7DxCwLqNFdco2q
+	 2q9GRszm069FYA+a6KYwZHifo46c7cg4nDPp+ePUzkKM/IGWWuACt8fk5bml25r3oC
+	 YSgd5lvtk8/9bZUFwwtprQn5lkxZHES0J3v5cJ55xF2NcfAsxREzaUPp0AKFZaHXJY
+	 XYUeYj5LUf4bYgmFzoKQTnw4oQkPvfr+xlVVBD1sd6wHx4Fqsr7kqrkuExNKu2Bmj6
+	 ulizynOP9ovmB5din6zkeT2nzyXz6wVpZW2H4yiamyPLzVuQogLYRjyNOEZna6wJHd
+	 sl+EkpzmYzpLA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A63AE60867;
-	Wed, 31 Dec 2025 22:08:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 22AE7277
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:08:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC7B960871;
+	Wed, 31 Dec 2025 22:18:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1ADBD8
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1517F40447
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:08:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2E3260871
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:18:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IeXLDNlrH_Pt for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 22:08:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KqX2hi6zo-Sy for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 22:18:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::230; helo=mail-oi1-x230.google.com;
+ client-ip=2001:4860:4864:20::2b; helo=mail-oa1-x2b.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 655AA4003D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 655AA4003D
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 655AA4003D
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:08:52 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id
- 5614622812f47-45391956bfcso8840588b6e.3
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 14:08:52 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A82C86086B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A82C86086B
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
+ [IPv6:2001:4860:4864:20::2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A82C86086B
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:18:38 +0000 (UTC)
+Received: by mail-oa1-x2b.google.com with SMTP id
+ 586e51a60fabf-3fa139e5d90so3786224fac.3
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 14:18:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767218931; x=1767823731;
+ d=1e100.net; s=20230601; t=1767219517; x=1767824317;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=xhXXbRhRGIB6u/mMHGbvIm0ygCYVPvV+tCFUHaDj8Kc=;
- b=kXxGnFTrCHsmTxm9uBL63GDouKG/gnPasBbst8qvA8qodQ39sb31EWG9PDEdKt1Ge9
- aHcY+cbtZn0iwHtbcXPlwCm1koyzEwbR5ARkjN00Y47DPM+0wVsbvC5Y1kTnVwJEzf04
- 8HJ4noZoLgKANkQVYhtx0txEUAcRFPpO9iXlF2agFD4ycNOQ0KfGjde4auVybwdGyETD
- jWtOURZiP1DmhfHPG8Lby4f0whWz9JMrsS3P5b69waeV/irCmVV1+zy0KPczhAnwwKnz
- 4M9Xoo2EzbHLEjkF/ynIp4eJCCAwYjnjNB7ikp1IUAeO53RZgpb4CAqWD+er8WnF84OM
- Yu9Q==
-X-Gm-Message-State: AOJu0Yw9HcYNSLrOiIajt6Ciuf0xW5PXMcJSCBANFnVYMEkJVrld/ZoQ
- WJVG8CsEYG1P5ohZ+AHQAximoKf2p5DNWvvk2/JL3FrZEKN+psS68m0/iEswhbb8++k=
-X-Gm-Gg: AY/fxX7pwg7YGGBkVyu8p/0iSRuS9iM1BQ/FIyLrlOcMzPhYtxIEsaDOeQZRwB+Y2A5
- cUu4yk3YjM8YjsTTJkSukzxRBw9vivBAvCfty2LpEK9WTb7l0DH1kYp4J1GH30AMfsXdxVPolAa
- 9EWldsie5pVP4g7r1QkAj4TtaFHWkSOJhqYsgFMrtcgPX7m1Qrux0ub/Jo+fuNNLJDpzKvuFQd7
- qA7BDvlplW3w4S1ZmJwVySnN8NRBJWNnRkiAfc/kO2eirUZk+IPRXKVIj0LF5hXfSDmZjhwi6Gb
- +vzJTPaC+qY2C+RYJQgPMNeGq9kdE4hKJtV284IGi9cPZ3A8vPrWR36S1tjNrsJUbXnlNHMHolh
- ZZbKku4NtW4ccIiKcgrkGWYrLc3gpUSfnJVj7jYxvfnIoJYzRJLkSjOpv0HMaqiLVdxosyMJaLB
- chxNVq5Eq/Qx5U6HuC/jaKSNmtsrQ+rbOL3aOiulpCIIJQAgndL/DlyagKRRAZSu4sQFVIJ16Wv
- 00+9Wy7CwgbCCE56WHiYe/kXNaX1HhuEcppOiz95pEcMtdiXMiatSk=
-X-Google-Smtp-Source: AGHT+IEKIsY+zpQASpwexZeyxfaBtrrnB/yG0dLlfvV/Q9ltzqA/e1f8Cb2g03m+EgVAgHCX6oWIcA==
-X-Received: by 2002:a05:6808:1882:b0:450:c776:876f with SMTP id
- 5614622812f47-457b22410ccmr15677745b6e.54.1767218931069; 
- Wed, 31 Dec 2025 14:08:51 -0800 (PST)
+ bh=HOteebmH1j8Ysb5aNj7RR4mnWW52D2Gi7SBfUY0ZnZY=;
+ b=Y3KZSBmSwvD5BiRlUfsoPQwomFvZFKo9w/ixOVJ/5rv1dH9xI8VhO4DpDoTlHm/NUk
+ ybZiRjECNT33CImtxTqORn9W/O0ynOxvaiIozgWipdNYXGAJX/KGwUTAt1HSFhn4RMV8
+ vFYiqNqFv0FWOR40KTej5Hjr+1IWIxfcOhbpT1kvyjtvzTR7+RigTThDchHAbd9erxQB
+ IMD35ye+DDHrdrKVvhOF+2bhLKb2l3sHHlkkDnWGuBgtGNhoz/7DRHCW2cV/lLLRngP2
+ SteKK+p0x9pgMMWCCFP3Z/TwHq5ux/pbYNvttuGFOH60nOLgEXxBfeq5ZMx9tWXpGgW+
+ KC4Q==
+X-Gm-Message-State: AOJu0YyEUDX4PDdCF6JoRr8dvWewP5/EIMoNlWX5xE18o5w8oP0wbY4O
+ sIfcSHYKuxNYUn+DF1S7AE+dCR0NysnezRev9JKnYDNcbSKVKy33lrI4JDh+kQrZqIE=
+X-Gm-Gg: AY/fxX6HVXY5FIBUtl+T11wC5u2I+pdyXJBHtqOrkNS46HciP2WbspLcneOZJQTlTTf
+ Co0pG/jq09GK4cuhCQPAhacSWN/bFz1Nj81vrRaCrgS1c0QYoAJum8zQYqJH6UnZpn3xEspUgoP
+ eKK7tgrubFBO088v/c+UW2TVtcixsigAria7ftcoBsbVBrdivZXJ2609psbVRaxZ8Cw6Jo+dtAS
+ 65Le2wMtPQvveOThJy0K+ZTNoXtRHuu8XFVjFTJyYL9MbxwxKLLq/pKFQj2yzRWjglPDwAjRCw3
+ jA06KujzWujCLAviK0zpbMR8ctHSdbGO6BbwFsrSlth8mro9q8PGKunkPdIImS99x3K0tUQ0zQP
+ n7cbp3kzAgEoQfhkqHGT1MZ6t8uXKjb2F6iXm9Wt9L5eWwaTEJ+50TuuVzQClL6A8O7d+88Rtpw
+ p/+yRh7haYA5G8/XwvnECJlBwTzM26ycJOyykUydfiWmi+lVIk9PJ4cmvPC1HJsCW8iNK+TxgxL
+ 34hTAKObb+OHXoH+kOA90tHFgWu/UYKIafb94gSuV54GsQ/X4kLrLR4C49qjn2mqA==
+X-Google-Smtp-Source: AGHT+IEeLOne1ohL8oymydz2lQl185TcAUM2svMP8X3RK9gXnpWUAHRUW32fQlEujpVB+FFwfbyGhA==
+X-Received: by 2002:a05:6820:f028:b0:659:9a49:8dd5 with SMTP id
+ 006d021491bc7-65d0ea47292mr16233660eaf.23.1767219517258; 
+ Wed, 31 Dec 2025 14:18:37 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 5614622812f47-457b4c463e5sm18227254b6e.4.2025.12.31.14.08.50
+ 006d021491bc7-65d0f3f8807sm22831692eaf.3.2025.12.31.14.18.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Dec 2025 14:08:50 -0800 (PST)
+ Wed, 31 Dec 2025 14:18:36 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 15:08:47 -0700
-Message-ID: <20251231220847.250630-1-james.hilliard1@gmail.com>
+Date: Wed, 31 Dec 2025 15:18:34 -0700
+Message-ID: <20251231221834.347467-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767218931; x=1767823731; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767219517; x=1767824317; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xhXXbRhRGIB6u/mMHGbvIm0ygCYVPvV+tCFUHaDj8Kc=;
- b=eQoaFwNxEku0/4avLlTVydRiaff7uL4RG4ca2diUK9h8HiMNlDh+AlTKia8bc5WbUL
- 69k49/xuwR/Z8wHXMHDymhNyHCt4d/ccb9Is+UME2/TM5+wE9I9lYaX8et45X3J55jtd
- 7jxfPY0R3gMtPus43PfGUIgtNmyaRFXOnjngfhizJ1EgnlMRFNSWpL3IB1NwOEDdN68p
- cPNN1WMIoLXzwtoNH0vbjqsj/xRpK7OaZ0Qp5qhB9l/OA44Yaw5+iWN6Dt2kc9uowRFu
- JDKD3nHMiYKOEXMPmTcRmN4Z+p1rySG2IosMeKH9yJmTVAHHGnOnoVcdJU2MQp0U8P1n
- nxMw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=HOteebmH1j8Ysb5aNj7RR4mnWW52D2Gi7SBfUY0ZnZY=;
+ b=V8mi6P6hElmRDTrXOro7MypwqfQWYgYWLmIrLjxwsuRa/ePeSjMTcrCE/hpJh4KuEc
+ 0uvic9WaqP4I7dyO3KnrnQ9Dr7jPRVSgyi74uoQDBYEF9bkZoUTZVfyRYk//7XWsLVT2
+ o5I+hxex7F0+cgAxG+o7MurG/pIH+Ru8Fpo59mFlgbTl0lYqOOVHAA3/1ESUPF38UvON
+ JIJ1irCP0vDH70s27Mhkr2kpQ7U1ol2UR0x2JRGk/AawIz2gLKtvAjuomUpTlYHlTOun
+ hPqUfMZoqewfkdZfvYpn1pSMEnpsJ6sCZu7PFlm3ih7ztAo7a/7vn2LBIMPSO/Z8rWzA
+ 2XOg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eQoaFwNx
-Subject: [Buildroot] [PATCH 1/1] package/python-pybind: bump to version 3.0.1
+ header.a=rsa-sha256 header.s=20230601 header.b=V8mi6P6h
+Subject: [Buildroot] [PATCH 1/1] package/python-pyalsa: bump to version
+ 1.2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,8 +119,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Guillaume William Brs <guillaume.bressaix@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -127,33 +127,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pybind/python-pybind.hash | 2 +-
- package/python-pybind/python-pybind.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyalsa/python-pyalsa.hash | 4 ++--
+ package/python-pyalsa/python-pyalsa.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
-index a046181a9b..1a54a89da0 100644
---- a/package/python-pybind/python-pybind.hash
-+++ b/package/python-pybind/python-pybind.hash
+diff --git a/package/python-pyalsa/python-pyalsa.hash b/package/python-pyalsa/python-pyalsa.hash
+index 206107d29a..89e50bda7f 100644
+--- a/package/python-pyalsa/python-pyalsa.hash
++++ b/package/python-pyalsa/python-pyalsa.hash
 @@ -1,4 +1,4 @@
- # Locally calculated
--sha256  e08cb87f4773da97fa7b5f035de8763abc656d87d5773e62f6da0587d1f0ec20  python-pybind-2.13.6.tar.gz
-+sha256  741633da746b7c738bb71f1854f957b9da660bcd2dce68d71949037f0969d0ca  python-pybind-3.0.1.tar.gz
- # License files, locally calculated
- sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index 8d815ac38f..7282c058f6 100644
---- a/package/python-pybind/python-pybind.mk
-+++ b/package/python-pybind/python-pybind.mk
+ # Locally computed, after checking pgp signature from:
+-# https://www.alsa-project.org/files/pub/pyalsa/pyalsa-1.2.12.tar.bz2.sig
++# https://www.alsa-project.org/files/pub/pyalsa/pyalsa-1.2.14.tar.bz2.sig
+ # with key F04DF50737AC1A884C4B3D718380596DA6E59C91
+-sha256  8abeaf41e5f48f617a52d1078932da89ab303d4a1d8f9919f947bdb1b7d03f50  pyalsa-1.2.12.tar.bz2
++sha256  4603736f40648684196fb826c97704c93ca80b32ec17d066b3276a9ed1a30939  pyalsa-1.2.14.tar.bz2
+diff --git a/package/python-pyalsa/python-pyalsa.mk b/package/python-pyalsa/python-pyalsa.mk
+index 19d2c91d23..4128ca089d 100644
+--- a/package/python-pyalsa/python-pyalsa.mk
++++ b/package/python-pyalsa/python-pyalsa.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYBIND_VERSION = 2.13.6
-+PYTHON_PYBIND_VERSION = 3.0.1
- PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
- PYTHON_PYBIND_LICENSE = BSD-3-Clause
- PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-PYTHON_PYALSA_VERSION = 1.2.12
++PYTHON_PYALSA_VERSION = 1.2.14
+ PYTHON_PYALSA_SOURCE = pyalsa-$(PYTHON_PYALSA_VERSION).tar.bz2
+ PYTHON_PYALSA_SITE = https://www.alsa-project.org/files/pub/pyalsa
+ PYTHON_PYALSA_SETUP_TYPE = setuptools
 -- 
 2.43.0
 
