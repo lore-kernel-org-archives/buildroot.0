@@ -4,110 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD52EE57C5
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 20:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B48F7EE645A
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 20:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F1F780B7E;
-	Wed, 31 Dec 2025 20:26:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AFA280E66;
+	Wed, 31 Dec 2025 20:32:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 89JvXdgEmLvb; Wed, 31 Dec 2025 20:26:36 +0000 (UTC)
+ id PseNopO8coyo; Wed, 31 Dec 2025 20:32:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B84180AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70FBC80E4F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767212796;
-	bh=oBJSP+3iAKQVGboCADKTViYXE/ZuwU9YzZPqOLW8IA4=;
+	s=default; t=1767213174;
+	bh=0gspEPgKawPJgQsH7D1hnJ2k23bcoYdcLpZcFu8Suyo=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=cgpW9AxVfcKS3+KE5HsJo+9b9zhCwwGWwxqETIY/F10LbA495VdxXvBG+QbqrPSou
-	 BYTYmy84sacaVmqAdbPQhPnL7tuyQ2ge6IQ14To/QdLWX6OFNI5b1fd4TZrWzqe6I3
-	 QNndSg9n5/n61m//evRw71Zjs6RUPb74N4CKpc9HZ6LFmokOSjvd+VF54cHnGtO7t0
-	 Gu2m0MfzJWSnHjJoB++eIZL69e/FjwEqQNMa8ITu/EgG1pWbOA3yCGPkNqtpBJXWwg
-	 SpQJM4zaG+y+wS9wQchbdTLttXxz+obs0A4vdm6bh80Gc849WF/hl1szCWGI0sxf4n
-	 +9I6c7MNCUvlg==
+	b=UNhGuWTUrKO6/kNs7HW/qaPmsmLdpY8OisDBUx7baI0lYf+budBeo7G338u6zCq/N
+	 EsiYt+s7qY3KZGoeBjxZDOtn54p7YNz/MCB2aVcmemCB/ft4QvzcCD2jmXFxCsC7Zd
+	 LkSEFP01wCO/uhUXhAWpwiDbEh9mMgykHypVmxUOS9cWTLTYuj5bCAqkx2kj5P+p9D
+	 OqFLILR2fEWwvBxyt12dgKucc21HdS8TOKEmAomp2R5ZIuoVP9o3dUbqyLlQYKd8En
+	 3PPCsBFAboasd3N4V/AwtWeVtHk+Y8DUR70sZqyXADEAuLXRAMmMZAjOLHrdUfxdva
+	 GwihP5E9vyCfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B84180AAD;
-	Wed, 31 Dec 2025 20:26:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 56BEC249
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 20:26:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70FBC80E4F;
+	Wed, 31 Dec 2025 20:32:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47A35249
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 20:32:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53EB5403A6
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 20:26:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 397C14024E
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 20:32:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8s9R9cKUpeZ3 for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 20:26:33 +0000 (UTC)
+ id YdHuK3mPO5iP for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 20:32:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::2a; helo=mail-oa1-x2a.google.com;
+ client-ip=2001:4860:4864:20::34; helo=mail-oa1-x34.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 709924024E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 709924024E
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
- [IPv6:2001:4860:4864:20::2a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 709924024E
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 20:26:33 +0000 (UTC)
-Received: by mail-oa1-x2a.google.com with SMTP id
- 586e51a60fabf-3ec5df386acso7889653fac.1
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 12:26:33 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 58B6840176
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58B6840176
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com
+ [IPv6:2001:4860:4864:20::34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 58B6840176
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 20:32:52 +0000 (UTC)
+Received: by mail-oa1-x34.google.com with SMTP id
+ 586e51a60fabf-3ec6c10a295so4426239fac.0
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 12:32:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767212792; x=1767817592;
+ d=1e100.net; s=20230601; t=1767213171; x=1767817971;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3YHFV2GAU9KVoe6O3Nzzzk7g/ePNBk+NVx1vvImmjBE=;
- b=dktHPuQpgpAc92ZhcW60RZtBIaLTMkOffIhDTaMB1e9geJxdDkcA3YUl7ML/eiLBqv
- 29j8NtfZy5ylhyppZY3vNKQuQbKhBx5NHBIDe4AFAdS8h8Cv7xKvR2Nz9sdLuYbYEFw/
- dUlbAynL7jaG/FjuSUgiwXAePmpAeLwE+yk0s4TIAmYLLgs5tsLwD/KPayzqv9+q0Qgb
- vo0Jy/dT5U4zrFN7dEsmvlHpKB6MJ1VBKPTPkngHxQCZ7KenYMi+REjwVYNrweSDbMSE
- wdKBirgPyaBStQwxuYewbfaqjb79uHqqDhOydxhCdxAIKD6okFNuKlx47F210wAOY7JJ
- kHLA==
-X-Gm-Message-State: AOJu0Yw1W9N1CHipNzdI0ioEPPCkHYLREbv4zfaSSERycdIGemG6BQDx
- d/YkbVJsejUT1hWsl08/Ut3MRwEfv3JPoUTAM1X2HUS6FvsxfqWxh9pn9sbhxSgimiw=
-X-Gm-Gg: AY/fxX7LHt4PWXqQpSFOskwQqU28IeefI2+hbdzSMoEpd5jQB+wpyynSKvgcAQJEvj8
- hd/rBN1SkPO8Z2j1WbA63nb/NubQkWe6fEsQT30Wj6I1Loj+cFKEvWSecFzmMqkusQxlMle7aUU
- 0p5bPqinKG0B9neKuj4+emNShgts/BPFGvH8V9mAtDROYYD7h5jIVt+O0IJ40OBxtdsOBMAKDIF
- m5Jx28yUkkdKvxDXWR5rADxfzxKyVht6buw7mdKSZ5RA1MmHZYR3s29GekirvswBXsrqFrcgIYC
- rkIs04Bp7LeaZiF9v80OqCoBmIPqF0f4Mv90xukeeIhK6QqTqG9Hu1XkMw2phrz5p5msqV9ethK
- LIkKamj1tOTjYHGvRJuUNYfXV+9DmJAXtY5sL6M6ZHIxKlLO9Rgl3dNCCFkwm5mz8V2Z3h/9tA2
- rDlRvtkVUBd61R1+m283aAuCt71scCGMsTJuaaFlD4gSWNysgUexqvczNCQYEvVs/VyKbEX+NKB
- RUG4ttqxFXFGA6f2NIOtBsIVzSInKxiQe2c6iRaes8r/g0KOdrP2yA=
-X-Google-Smtp-Source: AGHT+IFnqK1hkTFDoyvRtBVln8qHriVo0KES6cy/vQeSnzePsMV61UaD05rKoNOE/umqkDi2m4O1mA==
-X-Received: by 2002:a05:6871:3607:b0:3f5:4172:17 with SMTP id
- 586e51a60fabf-3fda5481b05mr21583526fac.56.1767212791881; 
- Wed, 31 Dec 2025 12:26:31 -0800 (PST)
+ bh=VtXUTci0ZK4EY9cSltvam3Xt0m3SMX5Li71STX0R2as=;
+ b=Qg9uP6L7yPp8unhB5yKQJAF94A7hEMo7ph0QiojeLjBG2OuVtexuJeYsS+GVvzuCML
+ Ncjrdzchs8nL4R9UUeAZjgTtHS7i9lGxsHiQHDj+5auuwY1fma+E6ASEWbgNezEtzR7v
+ t0YFm1l8TDcN6hzzByNhtsmUM4Nsrsjqe659pq2qaEOUhXOIPxQDOvVR2tn8T3yLx+BT
+ ZgbYBnmuE9O/cgb1N1U4jbhmr+5f5Uqgkxxrm8t0UNCg5MfhqNbN+uveGfw4tMRokvlB
+ QJJBGWLvZ9y2YSRvuflGg+M6dQHiVNlZMGIEx8t32A1xXGJyJ8M867XR26kWh+Xi9105
+ FDHw==
+X-Gm-Message-State: AOJu0YwZvnNo9N1aaZ5QLPi1nvv67tiW0WG3JYOH+ud4qyigwopzZNCD
+ GS50cTP2KtcxTOPusIS3oi2B2Y7jwPBCrd9/maNCMPYmkg1xN1vTMQLufahk+2xbGY0=
+X-Gm-Gg: AY/fxX7U//CxCSMqbDffypn9+RiSal3BWEZ9FlQ3ch56Yo0iC4KXVMaCs1r6HcZIsa5
+ c9OV3+KX60klhc56MnTrjVxgUDCV1c+loOWQtn4145IvlObdhdYTNhBoC9XMSl7cRTduBSbOCnW
+ eKixBqFKzLr0J7AcoL3SFeZeNdn3h5zkG93GyKxeI3HVFxVi5jh17dVLoIl5yZt7uidLIsrF2i+
+ rzid4x9TqbEpuqiGtq4F55gAV6rIihIA0LueUt5uaRNDGAUPYuklVBIEvpfCh1t1AQz41tEmP7y
+ OeQeeoORfZ+8cANAw4iJIlvawt97dfVGRt378aWMEbBES57R2kldb1u5W2xkBkzOMgIGrVwNm4n
+ 4lz/j1/tr4s2arj3TSdMZ4v3I+CWs1/nPP5uRfjBBKoPzW7yEUwuuF92wSs5WFIwMRGWjVwbS9k
+ FDXLizRpXwjeHh+ZuCH9mzfTv071MDJFP/bkxFdMMZJysSPH9D6EX6ZI4DB5RYtknsvnmyQWVTF
+ MlsxVX0TSyrHdmT4ICqmGXV8+0Hn8WMuHlCWLhB8UIYFH3aqFlixDw=
+X-Google-Smtp-Source: AGHT+IFRSwBSQC7v83ON1LHoM1ow9LnRu7kokt2ndSQseAXiBSmJbwVCaIdaJLjIrBW/bmWbd2ShjA==
+X-Received: by 2002:a05:6870:970b:b0:3e8:9706:eb4b with SMTP id
+ 586e51a60fabf-3fda581b7camr16829738fac.33.1767213170950; 
+ Wed, 31 Dec 2025 12:32:50 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 586e51a60fabf-3fdaa8d366esm22801504fac.5.2025.12.31.12.26.31
+ 586e51a60fabf-3fdaac129c7sm20990869fac.21.2025.12.31.12.32.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Dec 2025 12:26:31 -0800 (PST)
+ Wed, 31 Dec 2025 12:32:50 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 13:26:28 -0700
-Message-ID: <20251231202628.4099815-1-james.hilliard1@gmail.com>
+Date: Wed, 31 Dec 2025 13:32:48 -0700
+Message-ID: <20251231203248.4109970-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767212792; x=1767817592; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767213171; x=1767817971; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3YHFV2GAU9KVoe6O3Nzzzk7g/ePNBk+NVx1vvImmjBE=;
- b=NI1oNl24MqHQrdFkkIQRaJHUMdliuMPQAtPDW2uPtgKxDXmzXxUg2pYOvZppSgwv4w
- X9ejUEZQTPxAgrZbKTcQxU2G2Y6/NJGZ54LbxvB2E8DqZEkFk/3BWjmnI+vd0gxJe4fJ
- 3iYRWFxsLphQ869JvRHfEjgY2eZuGT8puOEF+X/5EX5G8yv8SkpgZFA/pUO01g1T3fQV
- 50yzhZtCQA5U+tfhtZ5V71I69YF0SYVS98dtZHz4u9QdqqJ7nLtFBx1/S/cHjZjmk3XH
- 2ElgzVkVOEG5IZvtg2bQaG55SwUbQRFXDRkS0MRa6DEW03XxS4BwZXwazWZKyNHqjUlM
- JaFg==
+ bh=VtXUTci0ZK4EY9cSltvam3Xt0m3SMX5Li71STX0R2as=;
+ b=fJUFSj/0WUmaiYfybwKEmJ8SCiDzl+rpxnrxaom1aej08P00y5W39iZ5p+BqqVeS+/
+ gFKfrxzDOwdIZi8dnTl8SCU3g5EWUuPTEaHNsYq9dgynwf2sDHk87x1fDnRdIHbDGBSw
+ bgvG8dOCy+pglaxnnbNToysDTecQlK1W9NaIJ1eHX/ArMwE5LWP1uR77g+zZgwLyPaFi
+ 0Ma3mSdV6+dU4Gn+fn7AALglxKHegAUcePC7zEfhIGh3bBG/7gjSN5Zxeqe+YfoO5aNN
+ VagjaNPXMFIDc8yKxTSZVQpxiaBYTyaKjUOuEyBdRnjtDCq//bJXCjh5I8gSv6Jzc79E
+ 6pnQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NI1oNl24
-Subject: [Buildroot] [PATCH 1/1] package/python-ruamel-yaml: bump to version
- 0.19.0
+ header.a=rsa-sha256 header.s=20230601 header.b=fJUFSj/0
+Subject: [Buildroot] [PATCH 1/1] package/python-ruamel-yaml-clib: bump to
+ version 0.2.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,7 +119,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -127,39 +127,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-ruamel-yaml/python-ruamel-yaml.hash | 4 ++--
- package/python-ruamel-yaml/python-ruamel-yaml.mk   | 6 +++---
+ .../python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash    | 4 ++--
+ package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk  | 6 +++---
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.hash b/package/python-ruamel-yaml/python-ruamel-yaml.hash
-index db511b90fa..5f7c758070 100644
---- a/package/python-ruamel-yaml/python-ruamel-yaml.hash
-+++ b/package/python-ruamel-yaml/python-ruamel-yaml.hash
+diff --git a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash
+index fdafa0b28c..262c3522e8 100644
+--- a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash
++++ b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ruamel-yaml/json
--md5  ebfbf2a54d9a5b768bc849f4b2c43efc  ruamel.yaml-0.18.16.tar.gz
--sha256  a6e587512f3c998b2225d68aa1f35111c29fad14aed561a26e73fab729ec5e5a  ruamel.yaml-0.18.16.tar.gz
-+md5  6966b2f273bdb08cf679f521fa0da4c2  ruamel_yaml-0.19.0.tar.gz
-+sha256  ff19233e1eb3e9301e7a3d437847713e361a80faace167639327efbe8c0e5f95  ruamel_yaml-0.19.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/ruamel-yaml-clib/json
+-md5  70ca03596450ed0ad19393620c51a4c2  ruamel.yaml.clib-0.2.14.tar.gz
+-sha256  803f5044b13602d58ea378576dd75aa759f52116a0232608e8fdada4da33752e  ruamel.yaml.clib-0.2.14.tar.gz
++md5  1fc58bc3b04ac2871cb30ce29a117b40  ruamel_yaml_clib-0.2.15.tar.gz
++sha256  46e4cc8c43ef6a94885f72512094e482114a8a706d3c555a34ed4b0d20200600  ruamel_yaml_clib-0.2.15.tar.gz
  # Locally computed sha256 checksums
- sha256  0ce9ad6a9d4f0829296a72c77d07795dd67f42751e2922be56c051d39ae1c011  LICENSE
-diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.mk b/package/python-ruamel-yaml/python-ruamel-yaml.mk
-index aaabee7be5..b1f7a3e039 100644
---- a/package/python-ruamel-yaml/python-ruamel-yaml.mk
-+++ b/package/python-ruamel-yaml/python-ruamel-yaml.mk
+ sha256  f8ad7efe71dde909f2d694f7dc69470d3dbe07c001c0b30c6bd9951e472077fa  LICENSE
+diff --git a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk
+index b44bbf5187..0eb34e169f 100644
+--- a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk
++++ b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_RUAMEL_YAML_VERSION = 0.18.16
--PYTHON_RUAMEL_YAML_SOURCE = ruamel.yaml-$(PYTHON_RUAMEL_YAML_VERSION).tar.gz
--PYTHON_RUAMEL_YAML_SITE = https://files.pythonhosted.org/packages/9f/c7/ee630b29e04a672ecfc9b63227c87fd7a37eb67c1bf30fe95376437f897c
-+PYTHON_RUAMEL_YAML_VERSION = 0.19.0
-+PYTHON_RUAMEL_YAML_SOURCE = ruamel_yaml-$(PYTHON_RUAMEL_YAML_VERSION).tar.gz
-+PYTHON_RUAMEL_YAML_SITE = https://files.pythonhosted.org/packages/0c/5d/8a1de57b5a11245c61c906d422cd1e66b6778e134a1c68823a451be5759c
- PYTHON_RUAMEL_YAML_SETUP_TYPE = setuptools
- PYTHON_RUAMEL_YAML_LICENSE = MIT
- PYTHON_RUAMEL_YAML_LICENSE_FILES = LICENSE
+-PYTHON_RUAMEL_YAML_CLIB_VERSION = 0.2.14
+-PYTHON_RUAMEL_YAML_CLIB_SOURCE = ruamel.yaml.clib-$(PYTHON_RUAMEL_YAML_CLIB_VERSION).tar.gz
+-PYTHON_RUAMEL_YAML_CLIB_SITE = https://files.pythonhosted.org/packages/d8/e9/39ec4d4b3f91188fad1842748f67d4e749c77c37e353c4e545052ee8e893
++PYTHON_RUAMEL_YAML_CLIB_VERSION = 0.2.15
++PYTHON_RUAMEL_YAML_CLIB_SOURCE = ruamel_yaml_clib-$(PYTHON_RUAMEL_YAML_CLIB_VERSION).tar.gz
++PYTHON_RUAMEL_YAML_CLIB_SITE = https://files.pythonhosted.org/packages/ea/97/60fda20e2fb54b83a61ae14648b0817c8f5d84a3821e40bfbdae1437026a
+ PYTHON_RUAMEL_YAML_CLIB_SETUP_TYPE = setuptools
+ PYTHON_RUAMEL_YAML_CLIB_LICENSE = MIT
+ PYTHON_RUAMEL_YAML_CLIB_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
