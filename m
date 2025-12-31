@@ -1,114 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB13EE6441
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 21:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50745EE6441
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 21:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EA6240696;
-	Wed, 31 Dec 2025 21:09:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C76C81236;
+	Wed, 31 Dec 2025 21:13:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 46pD3C6dtv9V; Wed, 31 Dec 2025 21:09:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mcWH1qtJKo2e; Wed, 31 Dec 2025 21:13:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20EAE40591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02A4081210
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767215378;
-	bh=FnciNGpiP0w2GdaTGtAYUd24pL5HIcToqh0h30Ra9u4=;
+	s=default; t=1767215608;
+	bh=pnYxQQCftBqWvReA2sDCmRBMUyL+9vUBHSqqBoBMgJk=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=IDCeKNOs8T1Ohtyjt2O9ly1BeO2stO8xjPQGMSzawGhgHpNkrgSYT2mENBzXJf+75
-	 4u6rY2EIl7oqv7xxPneehZJcQyLtpeOsUk5lRglYmG3m6ET5xLc0VN3M5DUwATX77X
-	 nziON4vPBQpgPNJOwtGw8rvb10620XtFmvm+8+HQ5LmuA/BLCXGPdoRlEb6V/ZXIpF
-	 uw5rJOoMuqFzcj7e8hlJXlHBG7Dqk7jWTUghIcVHWOOtcJSKFufOcMfkm18lDA/h3S
-	 4ih4GYmDOdUL6hcONmz6MgPBLBJ9Gq2+QW8tptyJCzscgW1vsq/CMQAKu3VirQbGBP
-	 9Ue0WB/eijWng==
+	b=GZFlbO01OdFBYfo3r9H8KlBDWiwiJJYBf1r5w4Wd1YcX7pWqtj4xaAUpVVIkxk1V3
+	 XrjlTA1ccbsB8UqnDB9fz5NA2XuJiQW2aTQZksg/B03p3sTeVGAI8FdOxzSMxHRNDC
+	 uQoFDEIL63XYL4fFRXocTTrooxKoURaIlG9fuk2/Di9QLq1RKeDLuGbaIxHmvMKOWU
+	 Vi7VxIRfgFCqHjb3NXdAFf/7KvmedfypEkgo90jItGeLnGhT0a90mxfjkVEyG5Aedx
+	 Vyoldnmb+tCjWWJf7SP4LfSfb/Vf/vsxUfocZoW8KgEdIT5aNLMhGLvrl4LmRggeaZ
+	 5DZ1XTvSSP32w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20EAE40591;
-	Wed, 31 Dec 2025 21:09:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 180A2249
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:09:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02A4081210;
+	Wed, 31 Dec 2025 21:13:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78F78249
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F266A40176
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:09:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F97281210
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:13:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VPBwtA2a_srm for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 21:09:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iG9asm0OQWIJ for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 21:13:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::336; helo=mail-ot1-x336.google.com;
+ client-ip=2607:f8b0:4864:20::32c; helo=mail-ot1-x32c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1618D400D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1618D400D7
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
- [IPv6:2607:f8b0:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1618D400D7
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:09:35 +0000 (UTC)
-Received: by mail-ot1-x336.google.com with SMTP id
- 46e09a7af769-7cdf7529bb2so2538188a34.2
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 13:09:35 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E84881208
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E84881208
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E84881208
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:13:26 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ 46e09a7af769-7c6cc366884so5314401a34.1
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 13:13:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767215375; x=1767820175;
+ d=1e100.net; s=20230601; t=1767215605; x=1767820405;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LlBPbII46T/yHVLLymJ83+PTg+lHieRhvNSHXbmC5/0=;
- b=qbyBQ9L15LZ0YdHxNjoKhm6UH5k2EiXKJlM3ji589pDrK4G5LQp+8atot4aOTvshb9
- 7QoScRD9OK+4Or5qOSGGydYeCgtLUqjA1TCtyEQNc5r4rH1/pdnA6WDOqwNrqRFtbgsl
- 1erfVik5rzAL9VnERRIwsA2X5Kdvvjy2UnTxQFQGRO9ZUfUGCNWYUde7+pMprLrKI6bw
- pTA3Io2ru+DZTqeE1CCJgM9/Ws40ZhCjMuNuWanbwBjHGvNafIIwdbgfUgMKh3jvRwiE
- MRmLkSyQnain2VkNCyYpPy/Zi1q09tKF6sOQTNjjZ47eZUTyVFpONiJ0ebDWslRWH4XC
- KivQ==
-X-Gm-Message-State: AOJu0Yy4fAWKG4DLvhRvKvrundGDQLkGtCzcnjSESDFUTprvPs93MTB1
- mpMyFpPK/VArFkwvVxhH3Oe7yh2UcVEMAdYGWLrp4DwioKya2Ns0eWkr9oQpicq2jds=
-X-Gm-Gg: AY/fxX5ZkusM6j/B2hOCJU6svsTa9LrcD6v5VanzevODWrtVdj1Bg8CXW5/I9tOsXDC
- 1JQiGZ9viDo0zUMb6wNJ4idMCntxsJWBVPj2zYJx6cjW8JmF2mEwWDmvEzxr1rPFXhQBQWTGOQ5
- 5aAQDqwJoGPRKZ6LndDh/trOp9onu9uwNUEMkNscKK/YDdW0w1G+CeSlXictTjXFK0rC2R9i4vB
- fCr88bHiV0qobD4I1nkGnS8TgRWB4FSCezDuOMNUnIQt1JoDk+B4vtmXdHJLW/hOLv+f7tCAzhY
- nCl/JI4o0l3k16zAdCAuiKTeiRpW2HsgBEIY32jyySd7mWsFrO9YmhAfMnHeCssGzZt3VU8zIF5
- dSskWxfMbfJ7221bfxD+YBvZcBbFAR17e1AZQTVNuXpjvT0y+FEAvEXUH/WJ5z/z7/rRdocKtcu
- w/it2C0EewA0x4bKvJDsrMBRKHwbMR8oKchunHP9A7r+T0zHgAWBemqnHmn3S6ig9LfOcgsN8zk
- 12NeutEbkkqrOWAb48J0h8STwakoYHH0wAGT8PpJLq9rieV9TNJv3M=
-X-Google-Smtp-Source: AGHT+IEC/RUx/qy3KQuO62B7tObpZRnUKUKQvZZbi1pzHcdlXLLPle5DwlwDg/QWwS1YTFneCJNuCw==
-X-Received: by 2002:a05:6830:4127:b0:7c7:cf5:8110 with SMTP id
- 46e09a7af769-7cc66aadb46mr23557663a34.17.1767215374666; 
- Wed, 31 Dec 2025 13:09:34 -0800 (PST)
+ bh=SzkkXtzmBjbllGx8YomtGiWYEvg8+RdPfigTUDoBXQE=;
+ b=RlTV80D+NG2dVUXWT+jtJ7M9aJ0U4wnpRO54hIfbtuNR44aoP99Mntn96WLUxILqWs
+ b64yX5YUyEqqq3L5jY/X3Q1Aj2YR+39QFFTpkEeL0x8wZxC+oRXB8Wghf1lUxi2WLWV0
+ ax28ZKl3yD5W6iz1AORZzfQuOPp52bofaGB6NvIpunKcRIl4rMQ9amLsyXVRV+8FqxAM
+ +Rc4trj8k0w4LXzNHlCflzQL0wqbdWyv1k/Pvb+BJ8LYpg5GcsNHsXYPaLh3k4r+TeYt
+ Gc56B8/GURo1ZKoaBY/vx7XfV2k7b3LZTnHsgJ6rTyxUh2W9e26S003izoVZJK0VRhgv
+ Kltg==
+X-Gm-Message-State: AOJu0YwaCA6QeJbdXVzIfyFNMGCTNf12mHyI+5AmCWrE9b/pzlGK2fr4
+ aEKu+TD6n+JuIGTZ+T8ue+DpKKhk/pABNJltG1IjJD+CjSQuJl4LB0KXCcvi2WfWR2s=
+X-Gm-Gg: AY/fxX4N13C2IZBO/Fnx4YNaefg9gHSBAw1ACjgZLrROUq+Uy6tj6jO+AU3PHFPgwY/
+ g1VpidtJ13HXfPpizVG/lu7IQLLdPsYQw8g48G0whvFkhiRjAwoe6HSNgb049+Fe8EM9/8EbFC+
+ BQO1127o/UTunQbg2BAvJe58dwocKdzDqA+iq/P9mqMSaAAc2eAK0PQs+k0AucUG3HW5Fgi79B5
+ 3NFCaKXa6+U4mOXb+W+VHUxINKWIM+i+Uttk9H3PbNKvWgh1puk8PveS5gh4XQ54wMD8EaBT1C3
+ YQWGkJyBgPUhSfrc0uG+atfY0BpXVQQ3sxQO9FlrFCgRfXMzWNVuH4FdkDE2T7vAs3V2Jox9KFB
+ QAKYbCZat9B+sDOVjFQS+VXLo9CN5f11vYwuYMfSdEEDkI9/4N+9WQSPDmgEoTXhNpA/PSfN0dV
+ Bx2EZ81Sk/5ojV752ZhQ8wCh6Ex/jHVkw49bYum3KWqcFnbh9Sv1xr+a1CRsE8/P30+FOzwI2Da
+ 7hkjDkB8hVe6Zo2QvhLntMwJoMR0sVlsdPzKClByGdwz2O+WXOqCdw=
+X-Google-Smtp-Source: AGHT+IFoERYwk3C/u0kHkvzV2MB4lGgHM0I6c8C8qso7NoU8TtCrIRCxMkfuHox6yld3TYI2ImkdEg==
+X-Received: by 2002:a9d:53c6:0:b0:7c7:e3b:488a with SMTP id
+ 46e09a7af769-7cc66a12ef4mr15576641a34.30.1767215605199; 
+ Wed, 31 Dec 2025 13:13:25 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7cc667d572asm25206172a34.14.2025.12.31.13.09.34
+ 46e09a7af769-7cc667f9201sm25088773a34.26.2025.12.31.13.13.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Dec 2025 13:09:34 -0800 (PST)
+ Wed, 31 Dec 2025 13:13:24 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 14:09:31 -0700
-Message-ID: <20251231210932.4168952-1-james.hilliard1@gmail.com>
+Date: Wed, 31 Dec 2025 14:13:22 -0700
+Message-ID: <20251231211323.4175261-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767215374; x=1767820174; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767215605; x=1767820405; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LlBPbII46T/yHVLLymJ83+PTg+lHieRhvNSHXbmC5/0=;
- b=lZ1PVigWPKBYjwlmOCos64OmlxxkwbPoUvbdXkU08bWgSM+1xWqoy1sLhX4YYq/YLm
- qLmO8Pk+kHoz/Gs3TVDwRCzn1MKlFDnfW+K+kDkMhbip+l/GFAn3OTqZKLguDGWPTBYY
- RsNsTkSrGNdZDAQk1bIxP5sZVOHXnS+X5TAT0eMb87pe9d1HyPvAE8cwIMDOuqABfYUj
- FP9HB3UdFjShTNKKWQ2cdeKW6rpMYvGFmJGzv2cCziKzY/RpmJQWMIaFZIv5dbVWa4gI
- vkYAlqSIAoAQ7P6yMvMCr4ZSa0o5CcVeiF8R0K3ykvLjXOnaI1w0nRrlKJ1oHj+5wnC0
- bsNA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=SzkkXtzmBjbllGx8YomtGiWYEvg8+RdPfigTUDoBXQE=;
+ b=KzImwxiZA0eGbKpCYA2HIC5qU1dfl5vsUfym6hb79KqD5T2zYgKQZ/Oe0XrHTohdGG
+ 8FglEqJ+zWvdEnEO+Vpka+d4fg+TaBbTt/xBOzlXSrx8m5WYVDfMCDaII7AtDX1GTzfI
+ 5F9ZUSCugrBCjbGfS7AApQa7tkY71yCx8AOr6jDOhbc6N+Ld3n7j4SeWpDusGJjubY4q
+ 1gNF889fKY3+DrtHH3cG9arAVC99fQ6DNzFBm7YZZY3XStZyxAjxp7QJIstx8T944bSH
+ X9WxTLkLQ4ZmQ/o3W+1S3bV3Q5FrZrQS0m2/3GAvrR++IabiFcyLgKPwF9e72YvPxWKJ
+ h8ug==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=lZ1PVigW
-Subject: [Buildroot] [PATCH 1/1] package/python-reedsolo: bump to version
- 2.0.13
+ header.s=20230601 header.b=KzImwxiZ
+Subject: [Buildroot] [PATCH 1/1] package/python-pytest-asyncio: bump to
+ version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,52 +120,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable optimized cython build.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-reedsolo/python-reedsolo.hash | 4 ++--
- package/python-reedsolo/python-reedsolo.mk   | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-reedsolo/python-reedsolo.hash b/package/python-reedsolo/python-reedsolo.hash
-index c1729f0aeb..61d435d4c0 100644
---- a/package/python-reedsolo/python-reedsolo.hash
-+++ b/package/python-reedsolo/python-reedsolo.hash
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index a9b33e0ebc..fbd141d76c 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/reedsolo/json
--md5  5bbd7741f915ad67b6d425f93ab9d103  reedsolo-1.7.0.tar.gz
--sha256  c1359f02742751afe0f1c0de9f0772cc113835aa2855d2db420ea24393c87732  reedsolo-1.7.0.tar.gz
-+md5  640de80afdaaf856eaaf31091e349a44  reedsolo-2.0.13.tar.gz
-+sha256  71b4121c6860a55899435c552051a19d5f023c50358be4b1c0fa0c6e2f4ac717  reedsolo-2.0.13.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  84f54204d53c46291c412bce27562480  pytest_asyncio-1.0.0.tar.gz
+-sha256  d15463d13f4456e1ead2594520216b225a16f781e144f8fdf6c5bb4667c48b3f  pytest_asyncio-1.0.0.tar.gz
++md5  f9bf0eed023c7b6bb1d68ebea82d0398  pytest_asyncio-1.3.0.tar.gz
++sha256  d7f52f36d231b80ee124cd216ffb19369aa168fc10095013c6b014a34d3ee9e5  pytest_asyncio-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  2da9536c23b72bac15603bb1f8dbf269dc68ecfbc35a75f8d0aa9cb209ba0934  LICENSE
-diff --git a/package/python-reedsolo/python-reedsolo.mk b/package/python-reedsolo/python-reedsolo.mk
-index 66e85fb40a..f5eea7eaa4 100644
---- a/package/python-reedsolo/python-reedsolo.mk
-+++ b/package/python-reedsolo/python-reedsolo.mk
-@@ -4,11 +4,13 @@
+ sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index f8d1e87e64..da0bbfeb81 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REEDSOLO_VERSION = 1.7.0
-+PYTHON_REEDSOLO_VERSION = 2.0.13
- PYTHON_REEDSOLO_SOURCE = reedsolo-$(PYTHON_REEDSOLO_VERSION).tar.gz
--PYTHON_REEDSOLO_SITE = https://files.pythonhosted.org/packages/f7/61/a67338cbecf370d464e71b10e9a31355f909d6937c3a8d6b17dd5d5beb5e
-+PYTHON_REEDSOLO_SITE = https://files.pythonhosted.org/packages/57/5b/ead15a5d182553f9d7832851a954b7f0d662d710972b0d1c479fd11a3ebd
- PYTHON_REEDSOLO_SETUP_TYPE = setuptools
- PYTHON_REEDSOLO_LICENSE = MIT-0, Unlicense
- PYTHON_REEDSOLO_LICENSE_FILES = LICENSE
-+PYTHON_REEDSOLO_DEPENDENCIES = host-python-cython
-+PYTHON_REEDSOLO_BUILD_OPTS = -C--build-option=--cythonize
- 
- $(eval $(python-package))
+-PYTHON_PYTEST_ASYNCIO_VERSION = 1.0.0
++PYTHON_PYTEST_ASYNCIO_VERSION = 1.3.0
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest_asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/d0/d4/14f53324cb1a6381bef29d698987625d80052bb33932d8e7cbf9b337b17c
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/90/2c/8af215c0f776415f3590cac4f9086ccefd6fd463befeae41cd4d3f193e5a
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
