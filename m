@@ -4,111 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C9D9EE6441
-	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 21:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D5C9EE644A
+	for <buildroot@archiver.kernel.org>; Wed, 31 Dec 2025 22:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CAFCB80E61;
-	Wed, 31 Dec 2025 21:56:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42288807F2;
+	Wed, 31 Dec 2025 22:05:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D6ynyacU3k4s; Wed, 31 Dec 2025 21:56:17 +0000 (UTC)
+ id cxZm9EPOV9VY; Wed, 31 Dec 2025 22:05:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14EFF80E2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55C49811B7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767218177;
-	bh=cVusdxhhNKz1d5TmNoQ/wICggVyo9VVePLipQYC12a4=;
+	s=default; t=1767218711;
+	bh=8eyDYw1jFtAI5cB4Q128NgmW4MqDpYJGeUDTmhYdK+0=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=EuSQMMzBBuOLgR8ZvBZDwvHlkFKM7p9uikEG6zSJORAKzhpbBAWhJzaN9TvwWxFb9
-	 3c5sS70TGVAm91a2Ay3eujUXI/JI1poOr5Flu54ThUpv0qHnglDJQI3l0SFe74QQsZ
-	 GQaJd/7MxjM42OKpkDZsYq4m/wAaBdsuf140PaTTWfVFGIWUpQyG+zN+nyYqzmmInh
-	 HPsoWMQ7AkaCNJiSnWjc1FKUcQ9jtPl4/T2/r+tACt5CgZZlH5cQwgrx608TkTkw4P
-	 JOU2K4gKDGHumXN12rEg3FliwwL9PgWwYrml130HEVoeacr7j9oilTrDsdGxyynwNg
-	 Q31QSuvAEFqMA==
+	b=sZKT+175uV6GGpG/yOh9u5jVeuuuu54rdU5sa9daEVTH4tOvTxrPpdNxYw1zuh0mf
+	 X2rCH267kblXdy+ewnu2CNeuoWW58MqXL3NXfxk++8pJiMLUaVkW4fbsim8+w8qHK7
+	 pohpiiOMyh/cpZNkXofK4kTfHBaX6SYp1UN4GAoWWq6fAzT3gHkSWOf2P/JcS9QNzT
+	 gs+VrW494QNOsJrZCNSxGw4L/2ZGD5xF7wviYXZ7aRe2T6FGxYAgdRo/15HMHRYZ/2
+	 +zQ3ZyJwesJZAWfeWStcoQ/Cm8eUQPCGDsiWsidr1lWdiJjgQuh1+4XTL19u+GbpGs
+	 28RU6TNJnzaPA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14EFF80E2C;
-	Wed, 31 Dec 2025 21:56:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 516EA249
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:56:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55C49811B7;
+	Wed, 31 Dec 2025 22:05:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E324CD8
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4269160618
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:56:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C957240447
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:05:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3pjMXTuKZKuS for <buildroot@buildroot.org>;
- Wed, 31 Dec 2025 21:56:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ex1Yy5Uixs7v for <buildroot@buildroot.org>;
+ Wed, 31 Dec 2025 22:05:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::35; helo=mail-oa1-x35.google.com;
+ client-ip=2607:f8b0:4864:20::32c; helo=mail-ot1-x32c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A3A560612
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A3A560612
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com
- [IPv6:2001:4860:4864:20::35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A3A560612
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 21:56:15 +0000 (UTC)
-Received: by mail-oa1-x35.google.com with SMTP id
- 586e51a60fabf-3f5aaa0c8d7so7962115fac.3
- for <buildroot@buildroot.org>; Wed, 31 Dec 2025 13:56:15 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA21740234
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA21740234
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EA21740234
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 22:05:08 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ 46e09a7af769-7c765f41346so4837486a34.3
+ for <buildroot@buildroot.org>; Wed, 31 Dec 2025 14:05:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767218174; x=1767822974;
+ d=1e100.net; s=20230601; t=1767218708; x=1767823508;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3E5lAkVpZuMlBoOpnm9jvZ3yTqq5NxVDNDdiDkjQ7Xg=;
- b=i17tPMyee4IOz8A9CP6YQOauppAYsRGA5dDfL8QEufjVHeevwJK+vJXRf6rAY2WEKa
- 04OzbUL5WTqt9gLD09Ks5eunL7exykilYQsZ2Mhm3pBaLkPPtzYG1Ed+ApbSB4fqQ4q0
- am2goWWUhMdD6h06K+zZXIXmfzgWbhT66Ly2dgJgamGGtMrbBn9I7sgJMhwQ73O/kb1u
- OhcvTDx2vPckeqXpJ6jl9CRmaazXxeCtWcOyLxoIUFEyJTnL6hTFaWs+FqSynZFavYLw
- nUTAccjIMNE8q2OU41ChJBxjcMLDCwFsSxldKR9SZfUaup+ke7ZpbAdf9IEznbNxIPtH
- 5hqw==
-X-Gm-Message-State: AOJu0Yyyitd1+2nr75XoHt3typpZ+QR4T0+igp/ZE5h7r4of4iNcYWcn
- /KsijkxP8OQhw8pxCd/7XUiq0Pr0t5ZY6OzRIKaELZbmW3a5Z40WbgLfNOxh7YUr0u4=
-X-Gm-Gg: AY/fxX4hUxh1+qxmk3EgFd0EbXZ3cxm30XXhzwJTqKLOxNSkuDWROOFlfx3zAb51D9f
- cau1bFZwT601zDrHYRit9Klrbg12zkelGO2WNnSTb28TB/lt2IYPADdtDWF4CA5HwlagERuOdQy
- 5llWfIJOMk41SKFUWXfoY2ljAS+LytTFAISPDNZymAVaMUBmhbprFbmjvKq6tH1Q64JFiR9UpVK
- uZgwmiTD4I8lKailbwiyOlDY5sxoV/EX1fevsT2+rCXwTK49M+VYeCTSKtCkNfR24o+qTWJZCEp
- CIVwb4LTqrWMD8/+TEQ1qlfKUAydBK0TYP9bIQMmexk+6OBsv2W6Mk0ul5V48H8j91rlOHJIIAd
- fE52B4zEhynOOo90z/PI9s/Ws1FrupQP/FRSKcp10FX1xFkPfFJ88ihL5dErmitnHeSCxiOXPUJ
- CsZjTo+UVEpO+Ud5EO53/tbBw3i0s1HwPVMeG1jwsRSJyd9CKUCnrNo0nnE1UtTuNZIExI3DwG2
- Rl6nf79t9aU4OJa8yMatD6GiUYjecRRFIZyz1iRtnVO5hTL5nSiluQNXBAknUS8+g==
-X-Google-Smtp-Source: AGHT+IEH4kakxLXFNB/c+1f8cdnfFu6/hZ0V7WLnt/HCLMH51NQyL6IChToAD1rw+Bw7neI0veOQTQ==
-X-Received: by 2002:a05:6870:8452:b0:3f9:ff05:438 with SMTP id
- 586e51a60fabf-3fda56c99ccmr16367672fac.24.1767218173833; 
- Wed, 31 Dec 2025 13:56:13 -0800 (PST)
+ bh=K1zzxE/8oz7lqEdhVTpNLldqw43zJXzh3zIb6xqCE00=;
+ b=K8C5dUdrgsocizAFZGgUDNyL4ryWzO0YCipzAy9iILk1zG3qFkP1/YXjc59DKN7TTd
+ wCY9nKnODJyAFoI95LUJG8pZThbrrfL+ii1GBN7d7TEoTazczgEKQTkUg33QUOVoNOwo
+ mmEVq7MWl4LMtAH3s9o13dkT4NsoyQyTHAT8M688IERPl+aO5Fn5AMhN9D04qVj8Q2Pg
+ GpG8wiqogOCahK1x+b73rocz+Mzgqd8u0aoE3TXNMWhs8UPbPhacZddsKPb+uhs4+kIA
+ ZtF6yyiXS/SUMlyQeoEScFop6eEaf1NdQTFxSSUWIOgNHc3gPF2lWQgJQDPVZEIZyEjL
+ NzNQ==
+X-Gm-Message-State: AOJu0Yz2vd8/BnHuVrt+Z9ocjHyWTXdbK2uFrLCPaGj2dkzPAgPgTgX4
+ dkROJiNTpfjhNesF/qi0gmnR7L9avk9M6isRZWnwes7RkOzx+AWkaq27qRQA8UuYvZw=
+X-Gm-Gg: AY/fxX5lliSLE/4GkCpSH6YwCBrOskPLOHzjMkqJggJtcAcb339xCDB3MVvkgCYWG9n
+ dPWb/ZeqU5Ftalks6Q7N9qsfPMKAoTSG6k5xOmOiMc3Xkjvr6Ou+lwmwKQY1k6ml8ZbjbTwLnmO
+ MFugIva310nC9lR0svcI9rrmcS9d5Uvo0S9Ju5whyQVe5OgpjEgq9RL6ld1tgIGzkWDZyh9Vw4f
+ ANydSnr2ueuwgUKw2XWhF+Vf0PTeuD+9EOEFr6b5Budg1L6/fytXkytz93Ju7/c+cBvK9aQRp7M
+ SA5M0xKIPb9gyxt7wC0gYBqo88FSorpBo4RE/iSJBdzzcwHj+er3Aod0Vl5eNNCYWD4CdW2HVac
+ PcsukKhGNI5NCa6g2P01R5IeQH+DMKmQasBnr2nxMEM8r/qJ42dJueld+HqB+/riAKfhTZT+q6+
+ 2+TROu/SwE3lpHlBNsCIY74eX8XRv8CgJ1YgRNdQFI0xm+Lp7MnjMYuM20LGPGKaGQgzpJhO8EB
+ m1nDbYavj3X8CXVL+1AvEJeNx4RYIlPwCM+NYNikbQmhBQqyq8+sAY=
+X-Google-Smtp-Source: AGHT+IEng39rNqarFcQiRNLGq/pRjHFccFmK/ar2Xi6d8Ys+NQri3xo8jUuSe4hF06FBJw7WW1W/xg==
+X-Received: by 2002:a05:6830:4c08:b0:7c7:65f4:1120 with SMTP id
+ 46e09a7af769-7cc66a6f068mr21903530a34.23.1767218707678; 
+ Wed, 31 Dec 2025 14:05:07 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 586e51a60fabf-3fdaab5d61bsm23476154fac.12.2025.12.31.13.56.13
+ 586e51a60fabf-3fdaab5ccb9sm22895882fac.10.2025.12.31.14.05.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Dec 2025 13:56:13 -0800 (PST)
+ Wed, 31 Dec 2025 14:05:07 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Dec 2025 14:56:11 -0700
-Message-ID: <20251231215611.217812-1-james.hilliard1@gmail.com>
+Date: Wed, 31 Dec 2025 15:05:05 -0700
+Message-ID: <20251231220505.243655-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767218174; x=1767822974; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767218708; x=1767823508; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3E5lAkVpZuMlBoOpnm9jvZ3yTqq5NxVDNDdiDkjQ7Xg=;
- b=l3kXiAyMflINihgvRKDe/UVFjp8uxyZBjl5FOx8Jpjcc2bgrIFdKF3Jjzoge2QfPfs
- A7KCiiAZAoXIgwsZk7P7AeKV1I6U/qmHb+zzrFABvbPaoRyL+AtQYvlyOF0TrEvu8Gaf
- 9fkhEJ/h/uKK3sre/OR3sr9pWhkjr8wYpC8kwZo5s1z2LRl4bxAlZ0Hmg8dsZN+AHKir
- s6ztOzBHQX5ZuHEcw965OaaK4IO9gLeIQyMCcsHujO+NFanRmWJZ5BpflyhOigqLBEIw
- ww+j5JvilhZf2+HQ+ELqZWj5pqWwTImrdDXp+X/lf1D2Ce8at/nCBTnIrpimG32sqWUT
- 9XOg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=K1zzxE/8oz7lqEdhVTpNLldqw43zJXzh3zIb6xqCE00=;
+ b=f5dCgG4MxScQCnfTulHWoycfEVPvht3lFBGNqoZ9URA9w6rB6E8aNrh7ltUca5HAlk
+ rawTJJL5OOUZKC0bONaDD5M23WiuyFDN/Yg/vdifnPbfxGIOPC137JYDBWpBqkAjb7/2
+ lH27QKQqYBTHbCspO2EVY+1kRjd6SuCvs1/raCIRLmmHwaXMGjTnwXYdOtwrUDSpYAgi
+ GtsauNO5KtQkRxoz+a0ya/A4t0Y+QGvJjV61XaFm2AaMaGflof706bo3WCKiMfSysroA
+ uuazACCMQ0NiJfVG2EQ8XqfvFd0mj0Cuww45ruPXZWrnYHdbC4JsYvTxB8lLOeyc6UQt
+ gB4w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=l3kXiAyM
-Subject: [Buildroot] [PATCH 1/1] package/python-pyparsing: bump to version
- 3.3.1
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=f5dCgG4M
+Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
+ 5.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,44 +125,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to line with date being added:
-https://github.com/pyparsing/pyparsing/commit/9223660f41e8fffa1c2668e8564d443085396f66
+Add dependency on c-ares and set env variable to ensure it's used.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 6 +++---
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pycares/Config.in           | 1 +
+ package/python-pycares/python-pycares.hash | 4 ++--
+ package/python-pycares/python-pycares.mk   | 7 ++++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index d3323e173c..b5cfebef68 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
+diff --git a/package/python-pycares/Config.in b/package/python-pycares/Config.in
+index 889e0943be..e58f922ad3 100644
+--- a/package/python-pycares/Config.in
++++ b/package/python-pycares/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYCARES
+ 	bool "python-pycares"
++	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+ 	help
+ 	  Python interface for c-ares.
+diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
+index 179288f694..c77915987b 100644
+--- a/package/python-pycares/python-pycares.hash
++++ b/package/python-pycares/python-pycares.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  49f6a72433130541fd92c56b110061d2  pyparsing-3.2.5.tar.gz
--sha256  2df8d5b7b2802ef88e8d016a2eb9c7aeaa923529cd251ed0fe4608275d4105b6  pyparsing-3.2.5.tar.gz
-+md5  2b7937d58eb818a33687e3ddef860638  pyparsing-3.3.1.tar.gz
-+sha256  47fad0f17ac1e2cad3de3b458570fbc9b03560aa029ed5e16ee5554da9a2251c  pyparsing-3.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pycares/json
+-md5  230e5133767e84f5d99c93dd07fea611  pycares-4.11.0.tar.gz
+-sha256  c863d9003ca0ce7df26429007859afd2a621d3276ed9fef154a9123db9252557  pycares-4.11.0.tar.gz
++md5  577c064ebf4b84fbd53890b4c0f86f5a  pycares-5.0.0.tar.gz
++sha256  62e38a6cce0f3dbfe6dfcccba10526255b3823a2a040b313afef7aa9b039ce03  pycares-5.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-+sha256  a5425f9dc14ac74d4c5f0b679e941f2442e32cca7452a4418d5b1a49893ebe4e  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 5d478a18c2..743e361b59 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -4,9 +4,9 @@
+ sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
+diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
+index 0f42bc591b..0cb1eeda6f 100644
+--- a/package/python-pycares/python-pycares.mk
++++ b/package/python-pycares/python-pycares.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 3.2.5
-+PYTHON_PYPARSING_VERSION = 3.3.1
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/f2/a5/181488fc2b9d093e3972d2a472855aae8a03f000592dbfce716a512b3359
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/33/c1/1d9de9aeaa1b89b0186e5fe23294ff6517fce1bc69149185577cd31016b2
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = flit
+-PYTHON_PYCARES_VERSION = 4.11.0
++PYTHON_PYCARES_VERSION = 5.0.0
+ PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
+-PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/8d/ad/9d1e96486d2eb5a2672c4d9a2dd372d015b8d7a332c6ac2722c4c8e6bbbf
++PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/59/5d/b50bdc30026f350f1c4b0c4fb6b7543598f2bcc370308c5148c7019d9886
+ PYTHON_PYCARES_SETUP_TYPE = setuptools
+ PYTHON_PYCARES_LICENSE = MIT
+ PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-PYTHON_PYCARES_DEPENDENCIES = host-python-cffi
++PYTHON_PYCARES_DEPENDENCIES = c-ares host-python-cffi
++PYTHON_PYCARES_ENV = PYCARES_USE_SYSTEM_LIB=1
+ 
+ $(eval $(python-package))
 -- 
 2.43.0
 
