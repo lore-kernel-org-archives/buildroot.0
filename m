@@ -1,90 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D19EED626
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 17:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9334EED626
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 17:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 262E8810CE;
-	Thu,  1 Jan 2026 17:34:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DG5y2Igg-lc1; Thu,  1 Jan 2026 17:34:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 728A18109E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767288849;
-	bh=JJOtIAw182z4HjnV4Inen1saNL8YVusHQNFed9+AC+0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=QCSKBY/B0W7t9Id6TshVe20W4wAF923X5vQ0uS+dM+nHnUC2lI0ZOaAPHdK3RbQ15
-	 7t3+CRydd3Mi67CB3FwXwj+LWJBRcMeFmKtnRY+KDzuhVtj60+MG2cxB97a6lH5hlQ
-	 Wkyz/kdarnM5TY7k0q6fjZeAmLd88xql/5JITAb04fDw2umLH1kRMh9nI3tNigBlYa
-	 49gJY7eQLFXRxFAyOX+0YyKC2wDjiuCK7olM8MBFVIbKyISKQzO4pEQ1uLah76Xlg9
-	 UQZc5LeS4T+eYcC2nXIeprcss0lqxDgbRbFQ4+pic4zqh8nGlGZySOhQCLsVzsBPzQ
-	 Bn5Kx0r744Ftw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 728A18109E;
-	Thu,  1 Jan 2026 17:34:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B2DD019D
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:34:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 998F840539
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:34:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86A0E40210;
+	Thu,  1 Jan 2026 17:36:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QNwCo_FXS8QB for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 17:34:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C61E94047A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C61E94047A
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C61E94047A
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:34:06 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 67FF84E41EDE
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:34:04 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 27A2E60749;
- Thu,  1 Jan 2026 17:34:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2E14A113B0712; Thu,  1 Jan 2026 18:34:02 +0100 (CET)
-Date: Thu, 1 Jan 2026 18:34:01 +0100
-To: Alexander Shirokov <shirokovalexs@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20260101183401.6d399150@windsurf>
-In-Reply-To: <20250923102642.304379-1-shirokovalexs@gmail.com>
-References: <20250728131926.848832-1-shirokovalexs@gmail.com>
- <20250923102642.304379-1-shirokovalexs@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+ id hGSyPDYblZ8Z; Thu,  1 Jan 2026 17:36:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF27240235
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767288971;
+	bh=EOIq+knoDs+ya/+Lb0MxmjOrtqUayKxsSxtKVAFdEW4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=bYMA3QzhcKmEOJjDos8qPVI3usdCtANBakC2lTBe58tw3+YCnZNwBOT1ktgNapdEf
+	 w1DKf7tF6l5QkHpXG7UE0WNV5twtAq3Ta8MlZaNwVrbIawF3Oj/r6SIsPgoOqolNlG
+	 4LYEy5DAvIjoNuMJohal/YKXHEkuvUvttHBoqa8EksP0QRe9QipNGd8l/pELbHDoNO
+	 fwLKAvSO8fH7x1RwLbHSZR7GGWI4Rv/CamdOVZBrsQaZ+qmbh8GvbdwJ/lyprHbEMs
+	 kjAiW8FSpZMJXgPl/936VLG8c0HqUU86iiD5sdynKubwcSMLVJS57f2b6ieF1+5uam
+	 ekY1LT/Dr3IMw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF27240235;
+	Thu,  1 Jan 2026 17:36:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBCF2206
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:36:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB786605BB
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:36:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nKnLG3FlEJfP for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 17:36:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 285EB60586
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 285EB60586
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 285EB60586
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:36:08 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a01f5.dip0.t-ipconnect.de [91.58.1.245])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7A0EDA4C2F95
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 18:36:05 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52358)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vbMai-00000000128-3Wfu
+ for buildroot@buildroot.org; Thu, 01 Jan 2026 17:36:05 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu,  1 Jan 2026 18:36:05 +0100
+Message-ID: <20260101173605.3921942-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767288843; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=hdgoO3tPjnfdT3uUQuTr0tlxzXGWxpmg3JbeAI5PGMA=;
- b=VOKWykMuOT778ObAvEKO17f1C2Hm+Arow0vNJtNRymkrvRul5lHApchT37FYwuY0dcCAw9
- 5N69NkCCl8JcC127PQE18JL58YNRsyULEBlKk3KI+wGrgimtt8yHUxun82ax6b9xAxAtMi
- IVHGkQOlbTQNWRVQYo+TotAlCNnyspbVXwMX5xQ9IUVUhkhhFjV0MVco9rAKUlwdF/Sspj
- gS0LSndwztKzQ5JtT4Ctlx3KwzkdeL+Q/GU2UmLiVQ1Io0NPD7nB+DnSYi5PFgrqI6+gxY
- sOGT/DW+qgi2GZ0K999/bgAzKxM5GMA/Vlprke+psI6bIBfiZAMPV/jwBJPPeQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=VOKWykMu
-Subject: Re: [Buildroot] [v4,1/1] package/zellij: new package
+ d=kuhls.net; 
+ s=kas202511301023; t=1767288965;
+ bh=BFNcZqAwxmG7BTxyXnmX/0SOrF01Jy2022SjBOPo114=;
+ h=From:To:Subject:Date:From;
+ b=iYM4N3hjLhcUHr2aiKEm8QHc1+dlnCEIr+DD1UKl2HHLRV6QkAc2Vq2YJRyZwzxtG
+ 5SzdTMEoZeGUs38k1DMTOHOo4ZYgRQwyi/0vCqCoxnbJeDL6QTzwIuJ/BmkuVs1PZq
+ rlz72sw7l1jQTsuxLtz6Pb/+B2vbuZSy0i4J9K/e1Jk1qX4cKYjlIFODRnRqDWbxEw
+ lL4lIL7gqdf/DJ9bVxmkiq1RNg6+WC8+7p+no9qo5jro/VepA33XINMoAE1H7jBJz4
+ ODgXlNRGh9L+653gYHQ++va3bQJvjBBgZ0IgOcwIFYQelQ+Ff7oVI2AfXADJbvlx4U
+ rjrP2YREDltEw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=iYM4N3hj
+Subject: [Buildroot] [PATCH v2 1/1] package/vorbis-tools: Fix build with gcc
+ 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,50 +92,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexander,
+Fixes:
+https://autobuild.buildroot.net/results/135/13520e3cbf6b6d169985f4d1378c2a1baab852e0/
 
-Sorry for the delay!
+The build error can be reproduced by this minimal defconfig:
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_PACKAGE_VORBIS_TOOLS=y
 
-On Tue, 23 Sep 2025 12:26:42 +0200
-Alexander Shirokov <shirokovalexs@gmail.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: added minimal defconfig (Thomas)
 
-> An advanced terminal multiplexer with batteries included. Supports
-> layouts, floating and stacked panes, plugins, and customization.
-> Provides rich functionality out of the box.
-> 
-> Zellij is aimed at developers, operations-oriented users, and anyone who
-> loves the terminal.
-> 
-> https://github.com/zellij-org/zellij
-> 
-> Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+ .../0001-utf8-Fix-build-with-gcc-14.x.patch   | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/vorbis-tools/0001-utf8-Fix-build-with-gcc-14.x.patch
 
-I've finally applied your patch, with one fix:
-
-> +ZELLIJ_VERSION = 0.43.1
-> +ZELLIJ_SITE = $(call github,zellij-org,zellij,v$(ZELLIJ_VERSION))
-> +ZELLIJ_LICENSE = MIT
-> +ZELLIJ_LICENSE_FILES = LICENSE
-
-This file does not exist: it's LICENSE.md.
-
-Make sure to test "make legal-info" with your package enabled to detect
-this kind of issue.
-
-Thanks again for your contribution!
-
-Thomas
+diff --git a/package/vorbis-tools/0001-utf8-Fix-build-with-gcc-14.x.patch b/package/vorbis-tools/0001-utf8-Fix-build-with-gcc-14.x.patch
+new file mode 100644
+index 0000000000..fa941ab2b4
+--- /dev/null
++++ b/package/vorbis-tools/0001-utf8-Fix-build-with-gcc-14.x.patch
+@@ -0,0 +1,36 @@
++From c7548e71b6a3b228b83cfbe7cbec6e23c74dbc8f Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 2 Nov 2025 10:05:50 +0100
++Subject: [PATCH] utf8: Fix build with gcc 14.x
++
++Build error was detected by buildroot autobuilders:
++https://autobuild.buildroot.net/results/135/13520e3cbf6b6d169985f4d1378c2a1baab852e0/
++
++utf8.c: In function 'convert_buffer':
++utf8.c:271:9: error: implicit declaration of function 'charset_convert' [-Wimplicit-function-declaration]
++  271 |   ret = charset_convert(fromcode, tocode, from, fromlen, to, tolen);
++
++Include charset.h which contains the declaration of charset_convert().
++
++Upstream: https://gitlab.xiph.org/xiph/vorbis-tools/-/issues/2334
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ share/utf8.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/share/utf8.c b/share/utf8.c
++index e1199bc..1e6965f 100644
++--- a/share/utf8.c
+++++ b/share/utf8.c
++@@ -28,6 +28,7 @@
++ #include <stdlib.h>
++ #include <string.h>
++ 
+++#include "charset.h"
++ #include "utf8.h"
++ 
++ 
++-- 
++2.47.3
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
