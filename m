@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D0D2EEB57C
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 17:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D253EEB57C
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 17:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A674F812C7;
-	Thu,  1 Jan 2026 17:23:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27B7381098;
+	Thu,  1 Jan 2026 17:33:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1FdpaNpbklbP; Thu,  1 Jan 2026 17:23:18 +0000 (UTC)
+ id JvOPcUglWokx; Thu,  1 Jan 2026 17:33:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82775812BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20C148109E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767288198;
-	bh=hppUGSWRa7ZtTBR47gqiQRqUqQtVp8yIiAlNZSoFpSQ=;
+	s=default; t=1767288799;
+	bh=Lkm+shmlSrQHSq/N2p77J/35pC3j9swjgj2/LWMsALU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WPH0RBpke8DZ1IkrrgsvbXV6VvddWjB2TbWtIYIeMphlWqDXvE2iW5fR/DM4CHm97
-	 Zsc4TLTW7hnAGyCZOk5jUXatvPU2x1ppSWMknrTqNhB0jJArVvHRLHScoV1jy+H3gL
-	 jL4vYBJVCUrvkk8UMSVZeVd6fooeHa8lVlWt9I1LN1gNhSfQi2zFq159JhVxHJQdZA
-	 yZOpo3NrxCKHIyASM+HhGHx2Y5bMAZUW6sdIe03Iet5h7yIjj4Rtbrcm8xA3+mfoS+
-	 ioogskGlQ2AMIirKTG5GTxPj0u/p6AcX4Agu4GpXmW/QJbxD2CmypZo+SugyCF1H8Q
-	 FYvbSg0e5jJrg==
+	b=N2/ST0coEPB8DpPOxr4RmSG6R8/8cYg6P5a7h6hx+f6wxstQuoqlsO3oZyV1Q/cLk
+	 v/O0z3HZsr+nLLn/XC0WUUYi8WQuT8yZxiOh0a4Pp2imUzfBiA7DMq2CGQNf8hCnI3
+	 hbzIRxH3rvHfquXHDFsPJi8sAPmxNor1zJql5SvvurciTemNHsfScxEyw3puI6mJJ4
+	 13GSmPsqOptwOdZMwltIbxazLkQJPV3+hFq2YrJdMwPoyvYZa2oiexpk11B6YUxmFz
+	 YTeh2CSI2Aqkd+0Ex5jac6JQDLrbddqdNpILB65BcIOS1D5yd+qVBzC2fzqDXpThkf
+	 CQbcQJRRrwh0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82775812BD;
-	Thu,  1 Jan 2026 17:23:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AD4BB351
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:23:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20C148109E;
+	Thu,  1 Jan 2026 17:33:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 587C5206
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9362060685
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:23:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 494668109E
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:33:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8TzdJGXkAalz for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 17:23:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XN40FG_r5qwk for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 17:33:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1E0D6067D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CE6E81098
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1E0D6067D
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:23:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CE6E81098
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 17:33:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB27E87E3A; Thu,  1 Jan 2026 17:23:15 +0000 (UTC)
+ id 65A5F87E4B; Thu,  1 Jan 2026 17:33:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 18:23:01 +0100
+Date: Thu, 1 Jan 2026 18:32:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33178c538541be224e49b5f548bd5404de3912fa
-X-Git-Newrev: 04ca5dc2cd3844b24a75d382c9374c27fc136415
+X-Git-Oldrev: 04ca5dc2cd3844b24a75d382c9374c27fc136415
+X-Git-Newrev: 68cc4d296e9f08275152d128f3de6cd6d45ba922
 X-Patchwork-Hint: ignore
-Message-Id: <20260101172315.CB27E87E3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cpulimit: correct function
- signature to use named parmeters
+Message-Id: <20260101173317.65A5F87E4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zellij: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +76,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04ca5dc2cd3844b24a75d382c9374c27fc136415
+commit: https://git.buildroot.net/buildroot/commit/?id=68cc4d296e9f08275152d128f3de6cd6d45ba922
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update 0005-Correct-loop-function-signature.patch to include a named
-parameter otherwise the following compiler warning turned error is
-triggered:
+An advanced terminal multiplexer with batteries included. Supports
+layouts, floating and stacked panes, plugins, and customization.
+Provides rich functionality out of the box.
 
-busy.c:6:1: error: parameter name omitted
- void *loop(void *)
- ^~~~
+Zellij is aimed at developers, operations-oriented users, and anyone who
+loves the terminal.
 
-Interestingly, this builds with GCC > 10.x, but fails fails with GCC
-<= 10.
+https://github.com/zellij-org/zellij
 
-Fixes: https://autobuild.buildroot.org/results/8592e4eb5959124acc885a1cbc2f9d24fb7bcbd1
-Fixes: https://autobuild.buildroot.org/results/cf12d080ddd7a2398a79be430d935071ca3250a3/
-Fixes: e63181bc0056 ("package/cpulimit: Backport fix for function signature")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cpulimit/0005-Correct-loop-function-signature.patch | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/zellij/Config.in   | 17 +++++++++++++++++
+ package/zellij/zellij.hash |  3 +++
+ package/zellij/zellij.mk   | 12 ++++++++++++
+ 5 files changed, 34 insertions(+)
 
-diff --git a/package/cpulimit/0005-Correct-loop-function-signature.patch b/package/cpulimit/0005-Correct-loop-function-signature.patch
-index 5b7f4a01dd..5b44ab9782 100644
---- a/package/cpulimit/0005-Correct-loop-function-signature.patch
-+++ b/package/cpulimit/0005-Correct-loop-function-signature.patch
-@@ -1,4 +1,4 @@
--From 74e95c96e8d82e4e374f86142972fcf4305fe1f2 Mon Sep 17 00:00:00 2001
-+From e94b6dd7b3ca884f72f02879fd85792a3aee961d Mon Sep 17 00:00:00 2001
- From: Florian Fainelli <f.fainelli@gmail.com>
- Date: Wed, 2 Jul 2025 20:47:58 -0700
- Subject: [PATCH] Correct loop function signature
-@@ -23,7 +23,7 @@ Upstream: https://github.com/opsengine/cpulimit/pull/127
-  1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 75ade2965f..718bb7ecf2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -89,6 +89,7 @@ F:	package/cpp-httplib/
+ N:	Alexander Shirokov <shirokovalexs@gmail.com>
+ F:	package/broot/
+ F:	package/nnn/
++F:	package/zellij/
  
- diff --git a/tests/busy.c b/tests/busy.c
--index b3afb7cd853b..93f0bcce67a8 100644
-+index b3afb7cd853b..8acbcd82e04f 100644
- --- a/tests/busy.c
- +++ b/tests/busy.c
- @@ -3,7 +3,7 @@
-@@ -31,7 +31,7 @@ index b3afb7cd853b..93f0bcce67a8 100644
-  #include <unistd.h>
-  
- -void *loop()
--+void *loop(void *)
-++void *loop(void *unused)
-  {
-  	while(1);
-  }
+ N:	Alessandro Partesotti <a.partesotti@gmail.com>
+ F:	package/oatpp/
+diff --git a/package/Config.in b/package/Config.in
+index b88ae859fb..28d8bf2ca0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2792,6 +2792,7 @@ comment "Utilities"
+ 	source "package/xmlstarlet/Config.in"
+ 	source "package/xxhash/Config.in"
+ 	source "package/ytree/Config.in"
++	source "package/zellij/Config.in"
+ 	source "package/zoxide/Config.in"
+ endmenu
+ 
+diff --git a/package/zellij/Config.in b/package/zellij/Config.in
+new file mode 100644
+index 0000000000..7de6074435
+--- /dev/null
++++ b/package/zellij/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_ZELLIJ
++	bool "zellij"
++	# Zellij uses the cranelift crate which has architecure
++	# dependencies. Specify them explicitly. See details here:
++	# https://docs.rs/cranelift-codegen/0.122.0/cranelift_codegen/
++	depends on BR2_x86_64 || BR2_x86_i686 || BR2_aarch64
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  An advanced terminal multiplexer with batteries included.
++	  Supports layouts, floating and stacked panes, plugins, and
++	  customization. Provides rich functionality out of the box.
++
++	  Zellij is aimed at developers, operations-oriented users,
++	  and anyone who loves the terminal.
++
++	  https://github.com/zellij-org/zellij
+diff --git a/package/zellij/zellij.hash b/package/zellij/zellij.hash
+new file mode 100644
+index 0000000000..6a8c5a5857
+--- /dev/null
++++ b/package/zellij/zellij.hash
+@@ -0,0 +1,3 @@
++# Locally generated
++sha256  248cb15f4853079dbc02962f2d41db8e1108c5b7b369bbf6feb484d8b1a5be5d  zellij-0.43.1-cargo4.tar.gz
++sha256  9aa6c363b18a48eeecbffe13ff390c76ede2c90eb37ba17dfbbaffc42892d87d  LICENSE.md
+diff --git a/package/zellij/zellij.mk b/package/zellij/zellij.mk
+new file mode 100644
+index 0000000000..2ddefc6049
+--- /dev/null
++++ b/package/zellij/zellij.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# zellij
++#
++################################################################################
++
++ZELLIJ_VERSION = 0.43.1
++ZELLIJ_SITE = $(call github,zellij-org,zellij,v$(ZELLIJ_VERSION))
++ZELLIJ_LICENSE = MIT
++ZELLIJ_LICENSE_FILES = LICENSE.md
++
++$(eval $(cargo-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
