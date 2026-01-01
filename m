@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD00EEEB57F
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 09:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E17C5EEB57D
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 09:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0CC81E16;
-	Thu,  1 Jan 2026 09:42:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BADE64081E;
+	Thu,  1 Jan 2026 09:43:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5aYbzt-UKT8X; Thu,  1 Jan 2026 09:42:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7k8WfMHbhn6M; Thu,  1 Jan 2026 09:43:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AF3D81E5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2FE540859
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767260578;
-	bh=M/JEV9WLYQuHewpSdvg9EiJR1Kcsc8xvSwNX2MNKeAE=;
+	s=default; t=1767260580;
+	bh=tvodYUnA1DRH+nqfKBmTxgowlOTkb506k7ij0nuNg/w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jb9uHbnZzLWmUBY41EVy3PjSHt8WuxATHseAvlo3mMwQB7kcQuLpCYSW4TEicPFl3
-	 7pg8l77sLDOnucG+0Y36/abnn6aSJBvRZdNUGKiCV2WkxYR9qPkKZCdDqknFJpqYgp
-	 de52umnG/JNKl4/BxgxA8wJ4FgpViBReuaikzxgkNTYraNsRinrhDMCtcgTghgVl0+
-	 wUWqoqSYzzSqyOkAVL3CjG1frxFZjX9byD9gVNHMAOdnOp7oPlqq8ndiiXSn2jNToG
-	 1Ty1eJyvlhgGDXxnJec8u0Om8ocpYP8Pp2S+8d26q/VLX7IhPAS/c/37+a95lAiJ35
-	 tHziRfmRcFSvA==
+	b=grdJeFiMSeDQ6kWFj49Qizmo5aBlDs46jbfEG1fqC3pISZcdxB9AcRIFGLK/F6KMq
+	 ycCdEIY8xpg/+f3qx2CC/tpvQgHpcdq114GhY8pxIK0RuR1PFL72LbK0ZP9MU2XI4x
+	 /bu4jB7srpSLrCWLssKvaUM97YDvPrMK0WObPiWHcW1ZtX/GqBuu33XK1V2KT7zYXi
+	 gVefcIv8Mc3BwcmQCbBPwl7lFjK6YEi4IrGQt5RpBHVWN5WBKn2d2t1XjfJyfiRpXx
+	 Vmbmt06wgYm91g6kj5ySv6nM9LIbHxz1imMzKxF8x/Exh5jD3juqs1CAS8QEIEtrnp
+	 K+JJb8xKZJUPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AF3D81E5C;
-	Thu,  1 Jan 2026 09:42:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2FE540859;
+	Thu,  1 Jan 2026 09:42:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EDE4351
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D3B2351
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0F6158156C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B13381584
  for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S203Fz1TMN22 for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 09:42:34 +0000 (UTC)
+ id hHsFX4v2GD3J for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5610581584
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E09A814BD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5610581584
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E09A814BD
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 545BB86FB6; Thu,  1 Jan 2026 09:42:33 +0000 (UTC)
+ id 8CC6486FB6; Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 10:33:33 +0100
+Date: Thu, 1 Jan 2026 10:32:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d3f9eaf88cbe9eb5d5443b402e6ada061896ebd
-X-Git-Newrev: 2d19a0b332dc17c18533b8d909986c235bc4648b
+X-Git-Oldrev: 9a964cf5134bbe9cea00f53c6e99a69b6e331834
+X-Git-Newrev: c2176a9af0af2179847106b50f6a532cff4bdb6b
 X-Patchwork-Hint: ignore
-Message-Id: <20260101094233.545BB86FB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
- 33.2
+Message-Id: <20260101094232.8CC6486FB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-socketio: bump to version
+ 5.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,96 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d19a0b332dc17c18533b8d909986c235bc4648b
+commit: https://git.buildroot.net/buildroot/commit/?id=c2176a9af0af2179847106b50f6a532cff4bdb6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We need to set -Dprotobuf_BUILD_LIBUPB=ON for host-protobuf now
-as some libupb headers now appear to be required.
-
-Also set the new -Dprotobuf_LOCAL_DEPENDENCIES_ONLY=ON option
-to ensure cmake doesn't try to download dependencies.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 6 ++++--
- package/python-protobuf/python-protobuf.hash | 4 ++--
- package/python-protobuf/python-protobuf.mk   | 4 ++--
- 4 files changed, 9 insertions(+), 7 deletions(-)
+ package/python-socketio/python-socketio.hash | 4 ++--
+ package/python-socketio/python-socketio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 98159ad897..db91cf296b 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e  protobuf-29.3.tar.gz
-+sha256  6b6599b54c88d75904b7471f5ca34a725fa0af92e134dd1a32d5b395aa4b4ca8  protobuf-33.2.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 4540443702..e2158216c4 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 29.3
-+PROTOBUF_VERSION = 33.2
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
-@@ -26,6 +26,7 @@ PROTOBUF_CONF_OPTS = \
- 	-Dprotobuf_BUILD_TESTS=OFF \
- 	-Dprotobuf_DISABLE_RTTI=OFF \
- 	-Dprotobuf_INSTALL=ON \
-+	-Dprotobuf_LOCAL_DEPENDENCIES_ONLY=ON \
- 	-DWITH_PROTOC=$(HOST_DIR)/bin/protoc
- 
- HOST_PROTOBUF_DEPENDENCIES = host-libabseil-cpp
-@@ -34,12 +35,13 @@ HOST_PROTOBUF_CONF_OPTS = \
- 	-Dprotobuf_ALLOW_CCACHE=ON \
- 	-Dprotobuf_BUILD_CONFORMANCE=OFF \
- 	-Dprotobuf_BUILD_LIBPROTOC=ON \
--	-Dprotobuf_BUILD_LIBUPB=OFF \
-+	-Dprotobuf_BUILD_LIBUPB=ON \
- 	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
- 	-Dprotobuf_BUILD_PROTOC_BINARIES=ON \
- 	-Dprotobuf_BUILD_TESTS=OFF \
- 	-Dprotobuf_DISABLE_RTTI=OFF \
- 	-Dprotobuf_INSTALL=ON \
-+	-Dprotobuf_LOCAL_DEPENDENCIES_ONLY=ON \
- 	-Dprotobuf_WITH_ZLIB=OFF
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 1e1833980c..fdfbc4b4f1 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index 3535c00819..11c6557077 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/protobuf/json
--md5  26ee22a630b0dbfce4de03adc5600fbc  protobuf-5.29.3.tar.gz
--sha256  5da0f41edaf117bde316404bad1a486cb4ededf8e4a54891296f648e8e076620  protobuf-5.29.3.tar.gz
-+md5  59060f8bb01846579e5c8d95917ad925  protobuf-6.33.2.tar.gz
-+sha256  56dc370c91fbb8ac85bc13582c9e373569668a290aa2e66a590c2a0d35ddb9e4  protobuf-6.33.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/python-socketio/json
+-md5  fa264f1d5086cda8df1e01e7feb4a09c  python_socketio-5.12.1.tar.gz
+-sha256  0299ff1f470b676c09c1bfab1dead25405077d227b2c13cf217a34dadc68ba9c  python_socketio-5.12.1.tar.gz
++md5  2020f7a9aa9fc74786ff2bdc8b48a68f  python_socketio-5.16.0.tar.gz
++sha256  f79403c7f1ba8b84460aa8fe4c671414c8145b21a501b46b676f3740286356fd  python_socketio-5.16.0.tar.gz
  # Locally computed sha256 checksums
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index 898a133d37..8db9a2f621 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -5,8 +5,8 @@
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index b07e6a689c..2c6b581c1e 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
--PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
--PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/f7/d1/e0a911544ca9993e0f17ce6d3cc0932752356c1b0a834397f28e63479344
-+PYTHON_PROTOBUF_SOURCE = protobuf-6.$(PYTHON_PROTOBUF_VERSION).tar.gz
-+PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/34/44/e49ecff446afeec9d1a66d6bbf9adc21e3c7cea7803a920ca3773379d4f6
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
- PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
- PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+-PYTHON_SOCKETIO_VERSION = 5.12.1
++PYTHON_SOCKETIO_VERSION = 5.16.0
+ PYTHON_SOCKETIO_SOURCE = python_socketio-$(PYTHON_SOCKETIO_VERSION).tar.gz
+-PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ce/d0/40ed38076e8aee94785d546d3e3a1cae393da5806a8530be877187e2875f
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/b8/55/5d8af5884283b58e4405580bcd84af1d898c457173c708736e065f10ca4a
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
