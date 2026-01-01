@@ -1,62 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6846BEED615
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 16:32:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 864AFEEB57C
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 16:33:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25AF440794;
-	Thu,  1 Jan 2026 16:32:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xRQ-isVh5IMM; Thu,  1 Jan 2026 16:32:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE59407D4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767285168;
-	bh=E0xDf4OhQCvbSJkSvYIV0b7SwE+58Ni8TPtYgcLwOqQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pE3kFQMiTqfFo9yhUJgheIF6Jy7bt0qRFvbSCED/JjX6f+uL/kknjvtBOkPNOEnNC
-	 W+OrwnHG1oGuu+hhz6a4LJRija5oXRR043AhAA+WFxSiZgxeKrAqP3irJSboOWd0oC
-	 PlCs/1jQq6U4cV/lBmH/K0bR5Bgmqdj7zhR+Qjc8u0y6ldDNUPFHOfFB6Knn7LOExI
-	 M9kyr5wpXKP4siDNw1zLQHrN/1xVSdMWommJF4Q/9stL4mPVdWopeFLjU8BdfYWWve
-	 o3BQu4iSAvAbfmuOcOMitIkpFx6AAuf4E4faKPnugep5Iew/vtLWND84qjpGXEKxZ7
-	 3Wa7J5ITsTnOg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CE59407D4;
-	Thu,  1 Jan 2026 16:32:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 46CE9351
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:32:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4433680B7F
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:32:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EEF380B87;
+	Thu,  1 Jan 2026 16:33:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fTe8fs9gyidO for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 16:32:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id hZkRh4NfzoOK; Thu,  1 Jan 2026 16:33:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B5288117C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767285191;
+	bh=GB/EZarqshIBzRwGDvxCYJbs+tCVWv60BjCzeYVQepg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=IBtA2XEnMUL7L1+7PWg6Y/AegkppAND+T2Mvybtw2VChJGyElg0zHqPK3osS7xfz8
+	 C2q0KR4wsmjND2wZVG1UpsMwlzwWQ3YWo64AOKaunL81Hy2D/qqH7beEqh/VezGCQT
+	 g2f3SowY2w+xNplfzueBDiuavkuJw2Z6x6m2UkiSJa2/o2iHqjTlloPINZlqLJ1gNO
+	 6I00mozXH9qYQRU7vpQcHhjP8py009/Az5hroWHzeHJQ+wS8Mprk57pyTpXDlC2iLm
+	 W7r4t8o9Ezvc0wqh5JsLIbC7DSAwFoIvfHTFlzcKtwgd/V+I31mFO4JRoRkw76G9w0
+	 D3E4AQ/9CaTqQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B5288117C;
+	Thu,  1 Jan 2026 16:33:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5A3F351
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:33:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBD9C607DC
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:33:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tPRe0m5zmMpO for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 16:33:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53DC680B55
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 53DC680B55
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:32:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F2C287E2D; Thu,  1 Jan 2026 16:32:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 17:31:58 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73254947809797a3c2c0e421ead477fbe833d807
-X-Git-Newrev: 340858ae4e005f7f2ad5312c16fb75492d010499
-X-Patchwork-Hint: ignore
-Message-Id: <20260101163246.4F2C287E2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libplacebo: fix license
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AC86C6078A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC86C6078A
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AC86C6078A
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:33:08 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 9342AC1C39C;
+ Thu,  1 Jan 2026 16:32:37 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 205E160749;
+ Thu,  1 Jan 2026 16:33:03 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 79ABF113B0777; Thu,  1 Jan 2026 17:33:01 +0100 (CET)
+Date: Thu, 1 Jan 2026 17:33:00 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Message-ID: <20260101173300.3e146572@windsurf>
+In-Reply-To: <20251003143043.641856-2-bernd@kuhls.net>
+References: <20251003143043.641856-1-bernd@kuhls.net>
+ <20251003143043.641856-2-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1767285182; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=TCdyaX4SQsMPeXKGH78GQ0ERkncFmmvNfdIs3tSaeVI=;
+ b=sMIEqtPkCmGdhAgN6r7OPD41Mqo58bldxWFTIop+j4TLA2NaTERraoZZky+JmBsBy8iqL9
+ Ho33I9th+RTqXavnN+644JrkmbLf8/IafaEnwxbD173mYcy9wSOsgd9WQHPjLYGKT35Kzt
+ 3PHogd4RV0iYLxIQAwBnmxcI77PY8gw+OPxxd0a3J8YBUAhu7he82vsGb8w5lr85AiZVwd
+ RWkqSEuD5Q/f9xUyUWVRTMaBbTVtVPH0vOmMvRaSsfNEGD1TXqedOCKkspV7kaOEDT8p8Y
+ 3TYwOLdAdFQOfnjpdGIk6IUioOFQy6o/1tds/Y+8n+R8IvzvaKgTj/Z0okIgaA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=sMIEqtPk
+Subject: Re: [Buildroot] [PATCH 2/2] package/mpv: bump version to 0.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,36 +100,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=340858ae4e005f7f2ad5312c16fb75492d010499
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The license is actually LGPL-2.1+.
+On Fri,  3 Oct 2025 16:30:43 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Fixes: 006aab8d64d2179d77df9a696b3fd8636f541640 ("package/libplacebo: add libplacebo package")
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libplacebo/libplacebo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Added upstream patch to fix build with ffmpeg 8.0.
+> 
+> Added dependency to libplacebo:
+> https://github.com/mpv-player/mpv/commit/f5ca11e12bc55d14bd6895b619c4abfd470c6452
+> 
+> Added optional dependency to libdisplay-info when libdrm is enabled:
+> https://github.com/mpv-player/mpv/commit/a4d9bdd262b808d0c8663d28023ff21fef862803
+> 
+> Removed rpi-specific code:
+> https://github.com/mpv-player/mpv/commit/343a5fd345a84572ea5693a805119067d5b0fbc8
+> 
+> Removed configure options for atomic support:
+> https://github.com/mpv-player/mpv/commit/2fa695c3f9d4164344228ef4083e87369de3bb33
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  ...mpilation-after-deprecated-definitio.patch | 39 +++++++++++++++++++
+>  package/mpv/Config.in                         | 12 ++++--
+>  package/mpv/mpv.hash                          |  4 +-
+>  package/mpv/mpv.mk                            | 22 +++--------
+>  4 files changed, 55 insertions(+), 22 deletions(-)
+>  create mode 100644 package/mpv/0001-demux_mkv-fix-compilation-after-deprecated-definitio.patch
 
-diff --git a/package/libplacebo/libplacebo.mk b/package/libplacebo/libplacebo.mk
-index 67bf0f00fb..ee5a4cc2c2 100644
---- a/package/libplacebo/libplacebo.mk
-+++ b/package/libplacebo/libplacebo.mk
-@@ -8,7 +8,7 @@ LIBPLACEBO_VERSION = v7.351.0
- LIBPLACEBO_SITE = https://code.videolan.org/videolan/libplacebo.git
- LIBPLACEBO_SITE_METHOD = git
- LIBPLACEBO_GIT_SUBMODULES = YES
--LIBPLACEBO_LICENSE = LGPL-2.1
-+LIBPLACEBO_LICENSE = LGPL-2.1+
- LIBPLACEBO_LICENSE_FILES = LICENSE
- LIBPLACEBO_INSTALL_STAGING = YES
- 
+Applied to master after fixing the conflict caused by the recent
+removal of rpi-userland.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
