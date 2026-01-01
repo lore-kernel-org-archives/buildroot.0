@@ -1,81 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15530EEB57C
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 16:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0225BEED60F
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 16:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF2734039E;
-	Thu,  1 Jan 2026 16:36:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TBiPVIuKVsR7; Thu,  1 Jan 2026 16:36:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E855C40270
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767285371;
-	bh=+jXiBCcXNnCMcHJjbkEqBQvhnsMTqwGxOxrBF/0DZPI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=dvwrrrTwQQ1SyE255rZXK7NZwuqg+WVmrIqFTtcwtklVKnFU1gOXQ1NcLHCvwHQcn
-	 FakvKiNEJI0/uvQNMv1D8OJSVv4wIukhjC1zTckPAHyNq7fK7YmLxqQS5ZXHAZPai9
-	 NX6Vl4w94ksKUyaJfAjVkxDDggfj6VtWP0/UD9uf1Oi8nUit+e/e2rh3m9p7j+3P6X
-	 OKXVJEilIWSN8iR02lcF89bGg2R3lclRElMQr7fRmZCEvHs0T1mTR54VwA7FiCALb8
-	 dHeJqPRQ+7+ewDJrQ/iKkKqZ5ji1AHaa8xOZbn23M2vleUTnHdPEIxEfhRRBkfyXkF
-	 DUz+lQos6u4Xw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E855C40270;
-	Thu,  1 Jan 2026 16:36:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DF254351
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:36:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1D6F80CEB
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:36:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFA4F80D6A;
+	Thu,  1 Jan 2026 16:36:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S_w5GBdJ0wQ1 for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 16:36:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=pkerbrat@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C00A880CDF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C00A880CDF
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C00A880CDF
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:36:07 +0000 (UTC)
-Received: from sejong (unknown [82.64.130.240])
- (Authenticated sender: pkerbrat@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id EFD6FB00548;
- Thu,  1 Jan 2026 17:36:03 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>,
- Pierre-Yves Kerbrat <pkerbrat@free.fr>
-Date: Thu,  1 Jan 2026 17:35:45 +0100
-Message-ID: <20260101163545.1848514-1-pkerbrat@free.fr>
-X-Mailer: git-send-email 2.51.0
+ id w2k-Kkd0eOfw; Thu,  1 Jan 2026 16:36:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB45E80D6C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767285399;
+	bh=4o2Eht7aYBvNwxlF+ppWpazhMvYkc0uW63jr/sd22CU=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=pVodE15Dlv0WavnFCq7BzGe4/38RvyzGqx7Uhr2WlTerWzlGPL4oLWq9FOUpdmxWS
+	 iDNGN2EGFbgd7FWkBHu1+3YKFixfae4sj8DdnZNptm3FZyouwdkfWgUTUsV1DPJ3C0
+	 2rQtgvyafSOLJIAZplP8XQ58c/uh0jKUVIIja8dma4wjTKobjj5dVhZxtFfoKIyuX3
+	 nYRbqdKvJBa5ndrqL1sFkuiX4k6KMmfPBh73Npt7P6sLjJYh4san9kUAgFTd3NNZyZ
+	 ky/f9/1dflSvGq53AOdQgykVeFHta70moeN/WFaXBbRUe78nHrO2cH8O5DB4SO8WKG
+	 zpO5+AeEs9KbA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB45E80D6C;
+	Thu,  1 Jan 2026 16:36:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB9B119D
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:36:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E57F40273
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:36:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TPqpiszvbOwO for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 16:36:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A076A40259
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A076A40259
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A076A40259
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 16:36:37 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id DD4681A25A2;
+ Thu,  1 Jan 2026 16:36:34 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A48E560749;
+ Thu,  1 Jan 2026 16:36:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 7C476113B0777; Thu,  1 Jan 2026 17:36:31 +0100 (CET)
+Date: Thu, 1 Jan 2026 17:36:30 +0100
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <20260101173630.10079d1b@windsurf>
+In-Reply-To: <20251019064503.2583945-1-thomas@devoogdt.com>
+References: <CACXRmJitiNM=oBYeGc2C40vP=wRYaaYJjiGMN7siwTWJ=vWPwQ@mail.gmail.com>
+ <20251019064503.2583945-1-thomas@devoogdt.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767285366;
- bh=UnDBNc3jhQcELRnLIT8rzyD2lw664ZG50SIUYgrheq4=;
- h=From:To:Cc:Subject:Date:From;
- b=rbDE4NSeYHUV22s2mZgKYRbi+JPJXtgbfSPisp7FfESjhDgQqD6/XrM8fDvTEuPtA
- wXe21t+XIHlavi9cMLYImF/GdnFZ+IB6ZFgTRwJMXOj43GjzDaT5aPi29Sr0UDKa6k
- ErmYMQiUJf3LKFyQ+AKfhk/ry4xsjlFfBMteE6TuabY7SPXL1SPlBtWen5/27fRDZp
- BgbOaW3EGguDYUYCXpd5whtzJ0CZfNmmclA7GpCH3NraxphvU2CjJYJwjQKgbNGBKm
- CL355v0KzhSDJUdJT3L/Q+OwnbaaX6sBQnvpUPnlR9nvLnSYd0UkbeSbJHjc3dyd+d
- zKM8m5AIHE8OQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1767285394; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=FG3b+14tHZK6aZs0spqBWURRXkDQl+oFZWp01UzyXzo=;
+ b=IjevSVs/MryRmS9VcPzhaf/bpjA6/8Hl46Edik4YLMRip9skXOIuOo7I9cwvkqhPPyAhTB
+ OwarZgOaRjF/nvZt6+vLC5QSlyhpkzZJh+nrFRfVaZjD8EwbRkVFU3Hf/GNHcrpPZfub8H
+ 2ZrTRgyICZvsvIINDAH1u/aVzHTYcMPASGC729y4H5VA3k6bsCr90Bu57Ryuato2pz+YNj
+ rHyK88RXQQWcPnhqgC0DIcppKT3PAH+zHY5mni7mBmN2cuzOmnnCjfIkzNCTSybchL2e9k
+ zza9Gl0e67kpUyGUVqaSonNff8sK7CqQvfLmhdlXMFJMY1AbuwmYw4qEHLLcjQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=rbDE4NSe
-Subject: [Buildroot] [PATCH] package/stress-ng: bump to 0.20.00
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=IjevSVs/
+Subject: Re: [Buildroot] [PATCH v6 1/3] package/pkg-cargo: add support to
+ bundle a custom Cargo.lock file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,100 +97,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Pierre-Yves Kerbrat via buildroot <buildroot@buildroot.org>
-Reply-To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: eric.le.bihan.dev@free.fr, Julien Olivain <ju.o@free.fr>,
+ buildroot@buildroot.org, Romain Naour <romain.naour@smile.fr>,
+ guillaume.chaye@zeetim.com, fontaine.fabrice@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed unnecessary patch after merge of
-https://github.com/ColinIanKing/stress-ng/commit/05353c7a9d0439e250f82ef9fc5643149811bb24
+Hello Thomas,
 
-Changelog:
-https://github.com/ColinIanKing/stress-ng/releases/tag/V0.20.00
+Adding Buildroot maintainers in Cc.
 
-Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
----
- ...01-stress-pthread-fix-non-NPTL-build.patch | 42 -------------------
- package/stress-ng/stress-ng.hash              |  2 +-
- package/stress-ng/stress-ng.mk                |  2 +-
- 3 files changed, 2 insertions(+), 44 deletions(-)
- delete mode 100644 package/stress-ng/0001-stress-pthread-fix-non-NPTL-build.patch
+On Sun, 19 Oct 2025 08:45:01 +0200
+Thomas Devoogdt <thomas@devoogdt.com> wrote:
 
-diff --git a/package/stress-ng/0001-stress-pthread-fix-non-NPTL-build.patch b/package/stress-ng/0001-stress-pthread-fix-non-NPTL-build.patch
-deleted file mode 100644
-index 518296fdc4f6..000000000000
---- a/package/stress-ng/0001-stress-pthread-fix-non-NPTL-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 73d1f5ed2167fca8a1cbfb85f4da123f00e524a1 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sun, 30 Nov 2025 11:36:10 +0100
--Subject: [PATCH] stress-pthread: fix non-NPTL build
--
--https://github.com/ColinIanKing/stress-ng/commit/15b26e33daaf36acd5eeceaaf6fc954f46792a8b
--added the usage of attr without using HAVE_PTHREAD_ATTR_SETSTACK for
--toolchains without NPTL support.
--
--This patch fixes build errors detected by buildroot autobuilders:
--https://autobuild.buildroot.net/results/d4f/d4fadef213455b1776d93e30e51ffe09fb1879c5/build-end.log
--
--stress-pthread.c: In function 'stress_pthread':
--stress-pthread.c:567:81: error: 'attr' undeclared (first use in this function)
--  567 |                         pthreads[i].ret = pthread_create(&pthreads[i].pthread, &attr,
--
--Upstream: https://github.com/ColinIanKing/stress-ng/pull/593
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- stress-pthread.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/stress-pthread.c b/stress-pthread.c
--index aafcf0f0a..8605b7a1d 100644
----- a/stress-pthread.c
--+++ b/stress-pthread.c
--@@ -564,7 +564,11 @@ static int stress_pthread(stress_args_t *args)
-- 
-- 			pthreads[i].t_create = stress_time_now();
-- 			pthreads[i].t_run = pthreads[i].t_create;
--+#if defined(HAVE_PTHREAD_ATTR_SETSTACK)
-- 			pthreads[i].ret = pthread_create(&pthreads[i].pthread, &attr,
--+#else
--+			pthreads[i].ret = pthread_create(&pthreads[i].pthread, NULL,
--+#endif
-- 				stress_pthread_func, (void *)&pargs);
-- 			if (UNLIKELY(pthreads[i].ret)) {
-- 				/* Out of resources, don't try any more */
---- 
--2.47.3
--
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index dbe5f60a2508..f91aa760546b 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  054953145d7de36725a54636ea68975bb9ada06b4769878d25e556fab5804513  stress-ng-0.19.06.tar.gz
-+sha256  fe9e5161ac186c6ada22963251ff701fe3275fac2c5b87bdb59c4cab08aaeaae  stress-ng-0.20.00.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 7240e3e3214a..32ac21b54065 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.19.06
-+STRESS_NG_VERSION = 0.20.00
- STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
+> E.g. https://github.com/lu-zero/cargo-c/releases/tag/v0.10.15
+> 
+> Cargo-c releases a separate Cargo.lock file, but doesn't bundle
+> one in its normal .tar.gz code source target.
+> 
+> We can't use extra downloads/patches/... as cargo is a vendored
+> package, which is done quite early in the chain.
+> 
+> This patch allows us to define a custom Cargo.lock source.
+> Both a local bundled file and remote (only wget) file can be linked.
+> 
+> Usage:
+> 
+> <PKG>_CARGO_LOCK_FILE = <PKG>_PKGDIR/Cargo.lock
+> 
+> <PKG>_CARGO_LOCK_FILE = https://.../Cargo.lock
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+
+Thanks for this patch.
+
+I understand the need, but I am wondering if we shouldn't craft a more
+generic solution, such as providing the ability to apply patches
+*before* the vendoring step. This would allow many more things than
+just adding the Cargo.lock in this case: it would allow to fix issues
+that exist prior to vendoring, which is something that has already
+popped up a few times (I don't remember if it was for Cargo packages or
+Go packages though).
+
+The one thing I'm not sure about is (of course) naming. Should we have
+something like *.patch-prevendoring ? Or a dedicated variable in the
+.mk file ? Or what other convention ?
+
+Feedback from the other maintainers on this topic?
+
+Thomas
 -- 
-2.51.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
