@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24EA5EEB57E
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 09:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A3FEEEB57D
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 09:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EED734086E;
-	Thu,  1 Jan 2026 09:43:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JKqVjGh8DrTV; Thu,  1 Jan 2026 09:43:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F8434086F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767260587;
-	bh=LYx9NGuAHsX0bper6TZrhiKJQ/QjgXcyCJBMMsI43Qg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Yqbp1bceDpUmounN19hJdgzkCx3ljyynKUiRciNlZ1lq6l6Ww+gtQSiTDQTZwjP9k
-	 KxlFQZVNIx5pjKhVbv1cHP932cd6bAYlXFbNOrin4MRwfAT177o7DSP5k3iOP3126E
-	 xREsKt4nYa2Bwoa526wMwq95f2xkoIjbSUrEMITd4ypN1+XJk+2aCMm7YjlzCwwzXP
-	 q961Wl19xLhNODxNO8y4M/m+ZXrLJBzcIzpv9G62n5zNWwZmXG7SNF9eNQVGEs/Pov
-	 0nrfd69QGNU3L7wpeTBebZfOZMkBQY3Wzb4Gg8aoiG4u6FjlLLSvLKbZaPeQh+gxqr
-	 MVYHhWz8MeAUQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F8434086F;
-	Thu,  1 Jan 2026 09:43:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FE22206
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4BC381511
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBA4081EC6;
+	Thu,  1 Jan 2026 09:43:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2MF7EVXij8DC for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 09:42:33 +0000 (UTC)
+ id DaciDKu4ZvFG; Thu,  1 Jan 2026 09:43:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0412E81EFD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767260588;
+	bh=vMVe5w5XC8jV8/XLtIQmV77qkAwgWGdUX7GtNTIMn/M=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=KGELMJR8i/FffiLE2FA2p3FHguBigl1Tr50cF+lF8ZRoTluaJV24vhImuQ73wLawe
+	 rTOdAETY73bxkFb9hqMdMZUJq/VAIUYbNtutVtuE4kvKFv8P0pyCeeYsAQn+/sfVvV
+	 lM1Llwwu4v6feboqKu51SPOymT3Lf7IcseD5taKUaevtTv2fMay3oM3eMgEJjYpU6u
+	 Bi/WOTUpF8KYomPe/wjz38AldVVc93s44BdjOkhZ6Elmz/Sbj+rpDLx1yY4+fwxmbM
+	 weqFa6zrIyenvhqpUjG817pIA9dctuJvT/XQ/ZYJ6idVslXQHhlbGq3eM9fyAuX3Q6
+	 K3U8S3tLiFZwA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0412E81EFD;
+	Thu,  1 Jan 2026 09:43:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D406351
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BEA88154D
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OtP9psfAlUT2 for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 016A481545
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 758018144D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 016A481545
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 758018144D
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3A7887CDE; Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
+ id 7394486FB6; Thu,  1 Jan 2026 09:42:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 10:33:13 +0100
+Date: Thu, 1 Jan 2026 10:32:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4a5d35a5f0b35b8f2dd11e5aa4de6411b414e77
-X-Git-Newrev: 902e711f105f335da2c92d4578b81640f835c077
+X-Git-Oldrev: 2e16d67445fc12267f8e1634320998586a449eeb
+X-Git-Newrev: 13e9170610821ae9bb6481f6bff81f173bed635c
 X-Patchwork-Hint: ignore
-Message-Id: <20260101094232.F3A7887CDE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyparted: bump to version
- 3.13.0
+Message-Id: <20260101094232.7394486FB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
+ 2.0.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,52 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=902e711f105f335da2c92d4578b81640f835c077
+commit: https://git.buildroot.net/buildroot/commit/?id=13e9170610821ae9bb6481f6bff81f173bed635c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License file renamed with no content changes:
-https://github.com/dcantrell/pyparted/commit/78876337d9e0037fc8034f839c2b918a99d05e3b
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyparted/python-pyparted.hash | 6 +++---
- package/python-pyparted/python-pyparted.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyparted/python-pyparted.hash b/package/python-pyparted/python-pyparted.hash
-index a13276ce79..421fe26309 100644
---- a/package/python-pyparted/python-pyparted.hash
-+++ b/package/python-pyparted/python-pyparted.hash
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index 6b7351f6ce..cfc42fd77d 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparted/json
--md5  97df779564210100ea3e4eda0d33f7b9  pyparted-3.12.0.tar.gz
--sha256  da985e116beb733371feb605b174db9eec8bd0eedffc8f739f8e603f51b521e7  pyparted-3.12.0.tar.gz
-+md5  70f1346ab01fb752d38c181a285a64d0  pyparted-3.13.0.tar.gz
-+sha256  443b59eb9ac63b8ca87094e02376646e172c7ea075f955f105889ca3485b06fd  pyparted-3.13.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
+-md5  7659edd862c2b507f9fc4b466d319a4d  sqlalchemy-2.0.44.tar.gz
+-sha256  0ae7454e1ab1d780aee69fd2aae7d6b8670a581d8847f2d1e0f7ddfbf47e5a22  sqlalchemy-2.0.44.tar.gz
++md5  9df94d7a8629cf43d2190d5e511fa47f  sqlalchemy-2.0.45.tar.gz
++sha256  1632a4bda8d2d25703fdad6363058d882541bdaaee0e5e3ddfa0cd3229efce88  sqlalchemy-2.0.45.tar.gz
  # Locally computed sha256 checksums
--sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  LICENSE
-diff --git a/package/python-pyparted/python-pyparted.mk b/package/python-pyparted/python-pyparted.mk
-index 5e12995e2e..e8b15fecf7 100644
---- a/package/python-pyparted/python-pyparted.mk
-+++ b/package/python-pyparted/python-pyparted.mk
-@@ -4,12 +4,12 @@
+ sha256  9821720b58d4a565b61321007a8ad43ab6991a3959e66cd5db4dd9eae69c7dfc  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index 0a7371188e..cf5440a715 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARTED_VERSION = 3.12.0
-+PYTHON_PYPARTED_VERSION = 3.13.0
- PYTHON_PYPARTED_SOURCE = pyparted-$(PYTHON_PYPARTED_VERSION).tar.gz
--PYTHON_PYPARTED_SITE = https://files.pythonhosted.org/packages/c2/d0/d32aa5758d6567eef620075f5c84f475c93bb1bf8da9d17051ce3ef055db
-+PYTHON_PYPARTED_SITE = https://files.pythonhosted.org/packages/e7/53/b02306f89dc3eaf949659e8814545cde575867bc0175f60361809af7f71a
- PYTHON_PYPARTED_SETUP_TYPE = setuptools
- PYTHON_PYPARTED_LICENSE = GPL-2.0+
--PYTHON_PYPARTED_LICENSE_FILES = COPYING
-+PYTHON_PYPARTED_LICENSE_FILES = LICENSE
- PYTHON_PYPARTED_DEPENDENCIES = parted
- 
- $(eval $(python-package))
+-PYTHON_SQLALCHEMY_VERSION = 2.0.44
++PYTHON_SQLALCHEMY_VERSION = 2.0.45
+ PYTHON_SQLALCHEMY_SOURCE = sqlalchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/f0/f2/840d7b9496825333f532d2e3976b8eadbf52034178aac53630d09fe6e1ef
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/be/f9/5e4491e5ccf42f5d9cfc663741d261b3e6e1683ae7812114e7636409fcc6
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
