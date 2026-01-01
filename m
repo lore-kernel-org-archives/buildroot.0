@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D1FEEE25C
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 21:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B751FA3723
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 21:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43DE581099;
-	Thu,  1 Jan 2026 21:53:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60DF24051F;
+	Thu,  1 Jan 2026 21:53:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MnN2AMFk4niW; Thu,  1 Jan 2026 21:53:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id diXysKHB_sPM; Thu,  1 Jan 2026 21:53:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3986D81065
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CFFD4073B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767304386;
-	bh=arH5pzl/LZ0WN/Avai/bKUc8AeamFwcEnVSxkjzUgAk=;
+	s=default; t=1767304387;
+	bh=kfOVlIQata0VJtnoNRkF/TwUbWqhnNNGXlq/y+1Sxu0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Lr6gAaJGCjOWpKDLlBYdzZvopFA2c62G0S8gdFdmV60rQfW/HL5HwXZJO01mOFvg5
-	 87o8wiy5nfFrBc+QUd3ZHmqjEHvnq5UDo2sL3w2hnsOLXObGxIWKQ3eX2KUXq+xdzK
-	 jrHL2aZFgz3j3xo9UhemN8zykUF5EN2oCyGDN6tKCvnO/+1r0z50kbi5aVpjPKX7Ue
-	 3Zs/0aONqPKjtcy6p+HVsT6lq/4nW+4YNeWXVUVPj3kZaD2/ZzNbHsAZFc2weP3w0f
-	 1hGsMzY4RLa9sLBn8EEviP6cgNW+LNYJhLfqrhhrl3DOW6MZaW6wvkADxOH2FmM6d+
-	 Gvi5zEarejcaQ==
+	b=A1z4RtoA2OYCMvsuLl2aUV+/69vYbRX0tWt7D+gxzjoUy8YvNZHx1cOkkW7n3JziB
+	 nbIpNj5vCPamm76k01itdoSvfUYdioU4CCyODnDYe4LB7iww0BdrygqCR9zKiQYbOj
+	 tjUhCR74DpgKtwnku5l0DZ2Z7++tCsBxNA0U9wKkDt75fEcmFAJvA/CKFgD3WSJPWs
+	 GSIbbaD4kHarnt2sB3Z3RAdwZYtkq1pclhD5HO9u2ZW346w6VfVAJUuoELwhOUrmy7
+	 XIHjXiiZLWVjpGaO4y1vnQL2ioNt43P3fd/GWSiBUCxwNxw2fCBbiPsBmyqJa8WN0P
+	 r5tv7PQ1ndA3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3986D81065;
-	Thu,  1 Jan 2026 21:53:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CFFD4073B;
+	Thu,  1 Jan 2026 21:53:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EA99119D
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E30619D
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2BDB60686
+ by smtp3.osuosl.org (Postfix) with ESMTP id D95D86071C
  for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fsTTxqJtglRD for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 21:52:52 +0000 (UTC)
+ id Zn7gMpn3-FXY for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAB106071C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4A5760718
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAB106071C
+ by smtp3.osuosl.org (Postfix) with ESMTP id D4A5760718
  for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E940487E6F; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
+ id D2FE887E4C; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 22:51:46 +0100
+Date: Thu, 1 Jan 2026 22:51:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2cb1c572285297f1d6ea71828c39250a4240ca37
-X-Git-Newrev: 9038a4e06dfe3e3b6f35d31324b973111fe39b26
+X-Git-Oldrev: d7865718235f9bbe4c52f26a547327f04b4153db
+X-Git-Newrev: 2cb1c572285297f1d6ea71828c39250a4240ca37
 X-Patchwork-Hint: ignore
-Message-Id: <20260101215251.E940487E6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jsmin: remove package
+Message-Id: <20260101215251.D2FE887E4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vuejs: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,153 +76,191 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9038a4e06dfe3e3b6f35d31324b973111fe39b26
+commit: https://git.buildroot.net/buildroot/commit/?id=2cb1c572285297f1d6ea71828c39250a4240ca37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is no longer maintained and better alternative to minify
-JavaScript exists since.
+Because the way JavaScript project development is working the chances that your
+project is using the same version of the buildroot package, and you provide
+this library from `/var/www` to your users is actually really low ...
+
+If you want to bundle JavaScript libraries in your project you should probably
+either use a cdn, handle the package version and location of your choice in
+your external or overlay, or just bundle it in your assets from a NPM workflow
+to benefit from some minifications from your bundler.
+
+Historically many of those JavaScript libraries were added in the 2010 eras
+where it could make sense for them to be part of Buildroot.
+
+Most of them are also way outdated/not maintained.
 
 For more informations see https://elinux.org/Buildroot:DeveloperDaysELCE2025
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy             | 14 ++++++++++++++
- package/Config.in            |  1 -
- package/Config.in.host       |  1 -
- package/jsmin/Config.in      | 11 -----------
- package/jsmin/Config.in.host | 11 -----------
- package/jsmin/jsmin.hash     |  3 ---
- package/jsmin/jsmin.mk       | 29 -----------------------------
- 7 files changed, 14 insertions(+), 56 deletions(-)
+ Config.in.legacy                       | 12 ++++++++++++
+ DEVELOPERS                             |  3 ---
+ package/Config.in                      |  5 -----
+ package/vuejs-router/Config.in         |  6 ------
+ package/vuejs-router/vuejs-router.hash |  3 ---
+ package/vuejs-router/vuejs-router.mk   | 19 -------------------
+ package/vuejs/Config.in                |  6 ------
+ package/vuejs/vuejs.hash               |  3 ---
+ package/vuejs/vuejs.mk                 | 19 -------------------
+ 9 files changed, 12 insertions(+), 64 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index ebfbf5e0a3..ce7a475838 100644
+index b12fa51cb2..ebfbf5e0a3 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,20 @@ endif
+@@ -146,6 +146,18 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_HOST_JSMIN
-+	bool "host-jsmin has been removed"
++config BR2_PACKAGE_VUEJS_ROUTER
++	bool "vuejs-router has been removed"
 +	select BR2_LEGACY
 +	help
-+	  JSMin is no longer maintained and better alternative
-+	  exists since then.
++	  JS libraries are no longer part of Buildroot packages.
 +
-+config BR2_PACKAGE_JSMIN
-+	bool "jsmin has been removed"
++config BR2_PACKAGE_VUEJS
++	bool "vuejs has been removed"
 +	select BR2_LEGACY
 +	help
-+	  JSMin is no longer maintained and better alternative
-+	  exists since then.
++	  JS libraries are no longer part of Buildroot packages.
 +
- config BR2_PACKAGE_VUEJS_ROUTER
- 	bool "vuejs-router has been removed"
+ config BR2_PACKAGE_VIS_NETWORK
+ 	bool "vis-network has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8a7db1b921..a06ebe73e5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1713,7 +1713,6 @@ F:	package/erlang-p1-zlib/
+ F:	package/erlang-stun/
+ F:	package/erlang-xmpp/
+ F:	package/nginx-dav-ext/
+-F:	package/vuejs/
+ 
+ N:	John Stile <johns@msli.com>
+ F:	package/dhcpcd/
+@@ -3177,8 +3176,6 @@ F:	configs/pine64_star64_defconfig
+ 
+ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
+-F:	package/vuejs/
+-F:	package/vuejs-router/
+ 
+ N:	Thomas Devoogdt <thomas@devoogdt.com>
+ F:	package/fluent-bit/
 diff --git a/package/Config.in b/package/Config.in
-index 5ade9c4614..643072b71e 100644
+index 0620ce1602..5ade9c4614 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1868,7 +1868,6 @@ endmenu
- 
+@@ -1869,11 +1869,6 @@ endmenu
  menu "Javascript"
  	source "package/duktape/Config.in"
--	source "package/jsmin/Config.in"
+ 	source "package/jsmin/Config.in"
+-	source "package/vuejs/Config.in"
+-if BR2_PACKAGE_VUEJS
+-comment "External Vue.js plugins"
+-	source "package/vuejs-router/Config.in"
+-endif
  endmenu
  
  menu "JSON/XML"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 6357eec265..1c5ab506f5 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -57,7 +57,6 @@ menu "Host utilities"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jh71xx-tools/Config.in.host"
- 	source "package/jq/Config.in.host"
--	source "package/jsmin/Config.in.host"
- 	source "package/kmod/Config.in.host"
- 	source "package/libp11/Config.in.host"
- 	source "package/llvm-project/lld/Config.in.host"
-diff --git a/package/jsmin/Config.in b/package/jsmin/Config.in
+diff --git a/package/vuejs-router/Config.in b/package/vuejs-router/Config.in
 deleted file mode 100644
-index d0948b8914..0000000000
---- a/package/jsmin/Config.in
+index ac79b3ea61..0000000000
+--- a/package/vuejs-router/Config.in
 +++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_JSMIN
--	bool "jsmin"
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_VUEJS_ROUTER
+-	bool "vuejs-router"
 -	help
--	  JSMin is a filter which removes comments and unnecessary
--	  whitespace from JavaScript files. It typically reduces
--	  filesize by half, resulting in faster downloads. It also
--	  encourages a more expressive programming style because it
--	  eliminates the download cost of clean, literate
--	  self-documentation.
+-	  The official router for Vue.js.
 -
--	  http://www.crockford.com/javascript/jsmin.html
-diff --git a/package/jsmin/Config.in.host b/package/jsmin/Config.in.host
+-	  http://router.vuejs.org
+diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
 deleted file mode 100644
-index 25ec9bb859..0000000000
---- a/package/jsmin/Config.in.host
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_HOST_JSMIN
--	bool "host jsmin"
--	help
--	  JSMin is a filter which removes comments and unnecessary
--	  whitespace from JavaScript files. It typically reduces
--	  filesize by half, resulting in faster downloads. It also
--	  encourages a more expressive programming style because it
--	  eliminates the download cost of clean, literate
--	  self-documentation.
--
--	  http://www.crockford.com/javascript/jsmin.html
-diff --git a/package/jsmin/jsmin.hash b/package/jsmin/jsmin.hash
-deleted file mode 100644
-index cc4490557b..0000000000
---- a/package/jsmin/jsmin.hash
+index 299ca61649..0000000000
+--- a/package/vuejs-router/vuejs-router.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  aae127bf7291a7b2592f36599e5ed6c6423eac7abe0cd5992f82d6d46fe9ed2d  jsmin-1bf6ce5f74a9f8752ac7f5d115b8d7ccb31cfe1b.tar.gz
--sha256  b420f61778af09534adc836a5086f5625b8499124051c50baefa218e7c03a58c  jsmin.c
-diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
+-# Locally computed
+-sha256  093fee5133cf82e75d25940d86f58a4e3f194b74262205ff5c1926aed53339c4  vue-router-4.5.1.tgz
+-sha256  91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2  LICENSE
+diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
 deleted file mode 100644
-index 84c39a7b42..0000000000
---- a/package/jsmin/jsmin.mk
+index a6d9df6dc2..0000000000
+--- a/package/vuejs-router/vuejs-router.mk
 +++ /dev/null
-@@ -1,29 +0,0 @@
+@@ -1,19 +0,0 @@
 -################################################################################
 -#
--# jsmin
+-# vuejs-router
 -#
 -################################################################################
 -
--JSMIN_VERSION = 1bf6ce5f74a9f8752ac7f5d115b8d7ccb31cfe1b
--JSMIN_SITE = $(call github,douglascrockford,JSMin,$(JSMIN_VERSION))
--JSMIN_LICENSE = MIT
--JSMIN_LICENSE_FILES = jsmin.c
+-VUEJS_ROUTER_VERSION = 4.5.1
+-VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
+-VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
+-VUEJS_ROUTER_LICENSE = MIT
+-VUEJS_ROUTER_LICENSE_FILES = LICENSE
 -
--define JSMIN_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
--endef
--
--define JSMIN_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/jsmin $(TARGET_DIR)/usr/bin/jsmin
--endef
--
--define HOST_JSMIN_BUILD_CMDS
--	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
--endef
--
--define HOST_JSMIN_INSTALL_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/jsmin $(HOST_DIR)/bin/jsmin
+-# Install .prod.js as .js
+-define VUEJS_ROUTER_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 644 -D $(@D)/dist/vue-router.global.prod.js \
+-		$(TARGET_DIR)/var/www/vue-router.js
 -endef
 -
 -$(eval $(generic-package))
--$(eval $(host-generic-package))
+diff --git a/package/vuejs/Config.in b/package/vuejs/Config.in
+deleted file mode 100644
+index 6456d288f9..0000000000
+--- a/package/vuejs/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_VUEJS
+-	bool "vuejs"
+-	help
+-	  VueJS web application framework.
+-
+-	  http://vuejs.org
+diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
+deleted file mode 100644
+index 894eaa4874..0000000000
+--- a/package/vuejs/vuejs.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  afddbe7bb09a00bb23e738c2a5354819bf662955fd4a06abc630a3d1acc41a8b  vue-3.5.16.tgz
+-sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
+diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
+deleted file mode 100644
+index 8f5c002548..0000000000
+--- a/package/vuejs/vuejs.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-################################################################################
+-#
+-# vuejs
+-#
+-################################################################################
+-
+-VUEJS_VERSION = 3.5.16
+-VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
+-VUEJS_SITE = https://registry.npmjs.org/vue/-
+-VUEJS_LICENSE = MIT
+-VUEJS_LICENSE_FILES = LICENSE
+-
+-# Install .prod.js as .js
+-define VUEJS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 644 -D $(@D)/dist/vue.global.prod.js \
+-		$(TARGET_DIR)/var/www/vue.js
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
