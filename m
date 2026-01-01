@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64EEAEED603
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AC48EED60F
 	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 15:07:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C5676078D;
-	Thu,  1 Jan 2026 15:07:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id brNlnwJdhB-Y; Thu,  1 Jan 2026 15:07:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8EBA60AA1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767280076;
-	bh=9QhNoqeNrXr35YLswWKV/wfLaHm+kAtVZeCUwq5eEGY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OD6qhh4+dxF0hSvv+53IexnxXmyd1SLCfIwhtadDOU0A+QgnsoCqN4u8xWasJuO9f
-	 4w1BRZa5FfLiV3zb2tk61Pne30joQE+IHYEEuOsi0CeCH2p+EHqnxgZbM3ER1YZb1y
-	 F8ZDpWqDmILOHbsIeMJDVZ7A80kqs2pH4UhFhgdhIcQ5wceKqpuy1WFdknG3mcGyaO
-	 LWpkb77vkdDxWvT4NdK9WAOWNL76L41LZvIBcUBfWfGSmT/Rhg51+f18WvWfLPEU0g
-	 o0Tk1QuUgJzX7/+O/Zcdld+LakMLFSkL/OeT0Qix5Jy6ZZ6diRKAlZ2X2S72d83M8O
-	 ySIjRbEon0IOg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8EBA60AA1;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BBAB40776;
 	Thu,  1 Jan 2026 15:07:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 743E0351
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 15:07:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BFAB4070C
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 15:07:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hNuVxAhGLwNj for <buildroot@buildroot.org>;
+ id NqiNcw0QGhym; Thu,  1 Jan 2026 15:07:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 131C1407FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767280075;
+	bh=jFizQY1D9mDNiaDST7aYp207Md1tzIwnRbR5rNeN6bE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ZD87yT8VXpqGcar3qN5pYgynYFJmzJKMiRIvIge7giUtzvkHYGCqXF0lezWF0XMU0
+	 1TlsCaUISqz5yQ8/lAGpxhocBAAJP0Tob0zbwBwnV/MQagSEOgr/FHCikOeJ7yXL0i
+	 LHwNfZ8p8NVXo4xlPooQns4Gqi2xLrOMem0PYjFA9hp0A9RN2ldinzL2hcvtOl0vtz
+	 6GBTDK/e5ltIsLyopAqJ4iF0DnmxO8Wzsn0fjqt+VWh3J5Bw/5TdMplguNSmy45/MR
+	 QvZw89zDf3emzyJHJKCT1PGJ7q9XMKkLpnhAGaXW2pvz5hc3GNH4MiggMqLyPFj2bJ
+	 vunDHFoi2Znrg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 131C1407FA;
+	Thu,  1 Jan 2026 15:07:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78F0D438
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 15:07:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F7B160786
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 15:07:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Of4heX5KzV7b for <buildroot@buildroot.org>;
  Thu,  1 Jan 2026 15:07:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B4D040703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97BB760781
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B4D040703
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97BB760781
  for <buildroot@buildroot.org>; Thu,  1 Jan 2026 15:07:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7600C87DCF; Thu,  1 Jan 2026 15:07:51 +0000 (UTC)
+ id 8938B87DD1; Thu,  1 Jan 2026 15:07:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 15:33:49 +0100
+Date: Thu, 1 Jan 2026 15:49:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 63d0611b0c4eeb7ac7c4f07defca637d566043b1
-X-Git-Newrev: c2cf998b8d610b9894467e0a6e4e57397e99ed34
+X-Git-Oldrev: 25b5ecf30bd652c8164359d1eaee4dfd3d2ea44d
+X-Git-Newrev: 486801db070e201b68220c347812fedd8225eb8c
 X-Patchwork-Hint: ignore
-Message-Id: <20260101150751.7600C87DCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liburcu: bump version to 0.15.5
+Message-Id: <20260101150751.8938B87DD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lttng-tools: bump to version 2.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,71 +71,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4120502835366867475=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2cf998b8d610b9894467e0a6e4e57397e99ed34
+--===============4120502835366867475==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=486801db070e201b68220c347812fedd8225eb8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://git.lttng.org/?p=userspace-rcu.git;a=blob;f=ChangeLog;h=4833f6a67efb4cf0c4e56c9e4153b3ded6d89d34;hb=refs/heads/stable-0.15
+The changelog for lttng-tools 2.14.0 can be found here:
 
-Added MIT license and updated other license files and hashes due to
-upstream commits:
-https://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=29b2b11ef53eee2848dd06fba8c49003e17c539f
-https://git.lttng.org/?p=userspace-rcu.git;a=commit;h=d001c88633f6a58e94eb73f4814976d13f61bd77
+  https://git.lttng.org/?p=lttng-tools.git;a=blob;f=ChangeLog;h=fc88591423cc856360172165418e8ef7159ab24e;hb=refs/heads/stable-2.14
 
+Signed-off-by: Devin Steffler <devin.buildroot@gmail.com>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Bernd: bumped to 2.14.0, added patch 0002 to fix musl build, updated
+ link to changelog]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liburcu/liburcu.hash | 12 ++++++------
- package/liburcu/liburcu.mk   |  8 ++++++--
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ ....cpp-Remove-the-scope-resolution-operator.patch | 48 ++++++++++++++++++++++
+ package/lttng-tools/lttng-tools.hash               |  4 +-
+ package/lttng-tools/lttng-tools.mk                 |  2 +-
+ 3 files changed, 51 insertions(+), 3 deletions(-)
 
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index a78b196ef6..5b5947f6b8 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,8 +1,8 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.14.0.tar.bz2.sha256
--sha256  ca43bf261d4d392cff20dfae440836603bf009fce24fdc9b2697d837a2239d4f  userspace-rcu-0.14.0.tar.bz2
-+# From https://lttng.org/files/urcu/userspace-rcu-0.15.5.tar.bz2.sha256
-+sha256  b2f787a8a83512c32599e71cdabcc5131464947b82014896bd11413b2d782de1  userspace-rcu-0.15.5.tar.bz2
+diff --git a/package/lttng-tools/0002-Fix-eventfd.cpp-Remove-the-scope-resolution-operator.patch b/package/lttng-tools/0002-Fix-eventfd.cpp-Remove-the-scope-resolution-operator.patch
+new file mode 100644
+index 0000000000..d4b46d3a5a
+--- /dev/null
++++ b/package/lttng-tools/0002-Fix-eventfd.cpp-Remove-the-scope-resolution-operator.patch
+@@ -0,0 +1,48 @@
++From d94d2b90c5148c4d83f1424b6e984044f2d8191f Mon Sep 17 00:00:00 2001
++From: Mingli Yu <mingli.yu@windriver.com>
++Date: Thu, 24 Jul 2025 14:35:51 +0800
++Subject: [PATCH] Fix: eventfd.cpp: Remove the scope resolution operator
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf8
++Content-Transfer-Encoding: 8bit
++
++Remove the scope resolution operator :: to fix the below build failure
++with musl.
++ | ../../../sources/lttng-tools-2.14.0/src/common/eventfd.cpp:18:31: error: expected id-expression before numeric constant
++ |    18 |                 int flags = ::EFD_CLOEXEC;
++ |       |                               ^~~~~~~~~~~
++ | ../../../sources/lttng-tools-2.14.0/src/common/eventfd.cpp:21:36: error: expected id-expression before numeric constant
++ |    21 |                         flags |= ::EFD_SEMAPHORE;
++ |       |                                    ^~~~~~~~~~~~~
++
++Signed-off-by: Mingli Yu <mingli.yu@windriver.com>
++Signed-off-by: JÃ©rÃ©mie Galarneau <jeremie.galarneau@efficios.com>
++Change-Id: I405f6f15a25f7e6b7f0676093091a9e8a384739d
++
++Upstream: https://git.lttng.org/?p=lttng-tools.git;a=commitdiff;h=d94d2b90c5148c4d83f1424b6e984044f2d8191f
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/common/eventfd.cpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/common/eventfd.cpp b/src/common/eventfd.cpp
++index d331bbe40..447520f25 100644
++--- a/src/common/eventfd.cpp
+++++ b/src/common/eventfd.cpp
++@@ -15,10 +15,10 @@
++ 
++ lttng::eventfd::eventfd(bool use_semaphore_semantics, std::uint64_t initial_value) :
++ 	file_descriptor([use_semaphore_semantics, initial_value]() {
++-		int flags = ::EFD_CLOEXEC;
+++		int flags = EFD_CLOEXEC;
++ 
++ 		if (use_semaphore_semantics) {
++-			flags |= ::EFD_SEMAPHORE;
+++			flags |= EFD_SEMAPHORE;
++ 		}
++ 
++ 		const auto raw_fd = ::eventfd(initial_value, flags);
++-- 
++2.47.3
++
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index b48904d0b9..a181cd6dc0 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,5 +1,5 @@
+-# From https://lttng.org/files/lttng-tools/lttng-tools-2.13.8.tar.bz2.sha256
+-sha256  b1e959579b260790930b20f3c7aa7cefb8a40e0de80d4a777c2bf78c6b353dc1  lttng-tools-2.13.8.tar.bz2
++# From https://lttng.org/files/lttng-tools/lttng-tools-2.14.0.tar.bz2.sha256
++sha256  d8c39c26cec13b7bd82551cd52a22efc358b888e36ebcf9c1b60ef1c3a3c2fd3  lttng-tools-2.14.0.tar.bz2
  
- # Hash for license files
--sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
--sha256  8ef8121eddd2fc0779d94331a1d0f1ead9c796343d845e564cd8c8c4ae3d6f6e  lgpl-relicensing.txt
--sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
--sha256  e8c070cb093be4b2eaf938a5f1c11621163b2d9cfa2790460cf925d81e442fa7  LICENSE
-+sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
-+sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-or-later.txt
-+sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
-+sha256  5f968522edc611ac568371336609170b00dca5159211a87d2e136b837222826b  LICENSE.md
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index bb5e2c0ec7..656dfb2408 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,11 +4,15 @@
+ # Locally computed
+ sha256  068e55c7dbe597400199aee75ac5e71bdb2ca88c4c9a4cfa8e1fbc61f933eda5  LICENSE
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index add1f12a8c..9a66ede669 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBURCU_VERSION = 0.14.0
-+LIBURCU_VERSION = 0.15.5
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
--LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
-+LIBURCU_LICENSE_FILES = \
-+	LICENSES/GPL-2.0-or-later.txt \
-+	LICENSES/LGPL-2.1-or-later.txt \
-+	LICENSES/MIT.txt \
-+	LICENSE.md
- 
- LIBURCU_INSTALL_STAGING = YES
- 
+-LTTNG_TOOLS_VERSION = 2.13.8
++LTTNG_TOOLS_VERSION = 2.14.0
+ LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_INSTALL_STAGING = YES
+
+--===============4120502835366867475==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4120502835366867475==--
