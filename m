@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41160EEE25C
-	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 21:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2BEBFA3723
+	for <buildroot@archiver.kernel.org>; Thu,  1 Jan 2026 21:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB5B4405E1;
-	Thu,  1 Jan 2026 21:52:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF0360762;
+	Thu,  1 Jan 2026 21:52:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L60I_ZWLyCxX; Thu,  1 Jan 2026 21:52:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BEWtcPvHXes6; Thu,  1 Jan 2026 21:52:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02FF740528
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F364C60686
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767304374;
-	bh=Jj+TZ8SIMGlT5OlFzc1OgSlnUdUhnPYZ0ICr3396W3o=;
+	s=default; t=1767304375;
+	bh=YSlqy8dLgl2lJd8pMpFSMY/RcFfZG8fs6RHP8x34HzI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aQuPhW9zFduj/8TNXpcyyUgEWwlF6RIg1n3rmDZENkvQK2dd0u7Osf+mSS4s2Vpyv
-	 ZSdXclGgXpz6R9sq8Lef3YIR230T6SY0XbSb98eLLHEYXTBO37Fmuc7dDA5Abnj26L
-	 5h6UoyXkuv6P/b+1mAI0tvbc7bYNdUigKkiswN93s8if0PymhO9XH4nvH8nFitB/pY
-	 2C6uUd3XafyGZ9m1igb/5feVGmIOKkSbZa9d94yuCNZzRGfRWqRVnGBBtFwJlDsIpJ
-	 FYr+FuN0FTRGDFh58PRjJyckOwzQGSlkEW87c4IucH03nj4LvO58UH44rrRjbmGOwc
-	 XSP87EbKZiTGA==
+	b=Kez4EkBgsLwdekezvaNOUIm6X8ySM+p1VTR52Du9xVbxJ4WJWXRUpYZsCaYwY4GU8
+	 mfDqRYGhDY5bV5EaT4TSP+0CubAvi98x3Dwqhoirw+GkVQO8zhEcdWkFxpJNViqYUl
+	 kPSplbkvRwmmBqRuJ19sBGKdN1eWRYKbXaRxosgiJQBTgKrQdtTOO3jSQ+VmwtGejE
+	 OFBpu6g6CyImI4qa1IXioEPFyxcdmdo2H3jJnEkmyU7tBgX2Lwlmf9eHQnkzIiDEQp
+	 wlaS4oIG1SqlMbtDs2G5XSWzVsdQ5U9C6xuB5Sz9jeTqmcZfzM36yL9KilsnWSolAU
+	 YZ8JkwWy0GnBQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02FF740528;
+	by smtp3.osuosl.org (Postfix) with ESMTP id F364C60686;
 	Thu,  1 Jan 2026 21:52:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CEECD438
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C3A919D
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5BA040392
+ by smtp1.osuosl.org (Postfix) with ESMTP id E7ABB80F1B
  for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zLdbECI65CS9 for <buildroot@buildroot.org>;
- Thu,  1 Jan 2026 21:52:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ld3wcVpCxzow for <buildroot@buildroot.org>;
+ Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDE0740387
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FD3F80F19
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDE0740387
- for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1FD3F80F19
+ for <buildroot@buildroot.org>; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B757787F14; Thu,  1 Jan 2026 21:52:50 +0000 (UTC)
+ id 1DE7E87E6F; Thu,  1 Jan 2026 21:52:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Jan 2026 22:51:32 +0100
+Date: Thu, 1 Jan 2026 22:51:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ca4d9af913c8f88abda8a0f216fc7eb642b1648e
-X-Git-Newrev: 7b6d47d78889cf825d489ae6feaed2d82fc2a1ed
+X-Git-Oldrev: bca9164bd49d89de42a3963792ee3d860797268a
+X-Git-Newrev: de970ee7838d775b1b85070a4078f3cb2c19feec
 X-Patchwork-Hint: ignore
-Message-Id: <20260101215250.B757787F14@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bootstrap: remove package
+Message-Id: <20260101215251.1DE7E87E6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flot: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,7 +76,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b6d47d78889cf825d489ae6feaed2d82fc2a1ed
+commit: https://git.buildroot.net/buildroot/commit/?id=de970ee7838d775b1b85070a4078f3cb2c19feec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Because the way JavaScript project development is working the chances that your
@@ -98,108 +98,191 @@ For more informations see https://elinux.org/Buildroot:DeveloperDaysELCE2025
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                 |  6 ++++++
- DEVELOPERS                       |  1 -
- package/Config.in                |  1 -
- package/bootstrap/Config.in      |  7 -------
- package/bootstrap/bootstrap.hash |  3 ---
- package/bootstrap/bootstrap.mk   | 28 ----------------------------
- 6 files changed, 6 insertions(+), 40 deletions(-)
+ Config.in.legacy       |  6 ++++
+ package/Config.in      |  1 -
+ package/flot/Config.in | 97 --------------------------------------------------
+ package/flot/flot.hash |  3 --
+ package/flot/flot.mk   | 34 ------------------
+ 5 files changed, 6 insertions(+), 135 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 10c35610b9..b380f256af 100644
+index 35604b87fe..ddd837389a 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_BOOTSTRAP
-+	bool "bootstrap has been removed"
++config BR2_PACKAGE_FLOT
++	bool "flot has been removed"
 +	select BR2_LEGACY
 +	help
 +	  JS libraries are no longer part of Buildroot packages.
 +
- config BR2_PACKAGE_SOFTETHER
- 	bool "softether has been removed"
+ config BR2_PACKAGE_EXPLORERCANVAS
+ 	bool "explorercanvas has been removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 718bb7ecf2..bc5f1aa7af 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3482,7 +3482,6 @@ F:	package/acl/
- F:	package/attr/
- F:	package/avrdude/
- F:	package/boost/
--F:	package/bootstrap/
- F:	package/cannelloni/
- F:	package/can-utils/
- F:	package/circus/
 diff --git a/package/Config.in b/package/Config.in
-index 500725d1d4..86e82960a7 100644
+index 37c04685fa..97552c6b79 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1867,7 +1867,6 @@ menu "Hardware handling"
- endmenu
+@@ -1868,7 +1868,6 @@ endmenu
  
  menu "Javascript"
--	source "package/bootstrap/Config.in"
- 	source "package/chartjs/Config.in"
- 	source "package/datatables/Config.in"
- 	source "package/datatables-buttons/Config.in"
-diff --git a/package/bootstrap/Config.in b/package/bootstrap/Config.in
+ 	source "package/duktape/Config.in"
+-	source "package/flot/Config.in"
+ 	source "package/forge/Config.in"
+ 	source "package/jquery/Config.in"
+ if BR2_PACKAGE_JQUERY
+diff --git a/package/flot/Config.in b/package/flot/Config.in
 deleted file mode 100644
-index 743d8a324a..0000000000
---- a/package/bootstrap/Config.in
+index 404487202c..0000000000
+--- a/package/flot/Config.in
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_BOOTSTRAP
--	bool "bootstrap"
+@@ -1,97 +0,0 @@
+-config BR2_PACKAGE_FLOT
+-	bool "flot"
+-	select BR2_PACKAGE_JQUERY
 -	help
--	  Bootstrap is the most popular HTML, CSS, and JS framework
--	  for developing responsive, mobile first projects on the web.
+-	  Flot is a pure Javascript plotting library for jQuery. It
+-	  produces graphical plots of arbitrary datasets on-the-fly
+-	  client-side.
 -
--	  http://getbootstrap.com
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
+-	  The focus is on simple usage (all settings are optional),
+-	  attractive looks and interactive features like zooming and
+-	  mouse tracking.
+-
+-	  The plugin works with Internet Explorer 6+, Firefox 2.x+,
+-	  Safari 3.0+, Opera 9.5+ and Konqueror 4.x+ with the HTML
+-	  canvas tag.
+-
+-	  http://www.flotcharts.org/
+-
+-if BR2_PACKAGE_FLOT
+-
+-comment "flot plugins"
+-
+-config BR2_PACKAGE_FLOT_CANVAS
+-	bool "canvas"
+-	help
+-	  Flot plugin to render axis tick labels directly to the canvas
+-
+-config BR2_PACKAGE_FLOT_CATEGORIES
+-	bool "categories"
+-	help
+-	  Flot plugin for plotting textual data or categories
+-
+-config BR2_PACKAGE_FLOT_CROSSHAIR
+-	bool "crosshair"
+-	help
+-	  Flot plugin for showing crosshairs when the mouse hovers
+-	  over the plot
+-
+-config BR2_PACKAGE_FLOT_ERRORBARS
+-	bool "errorbars"
+-	help
+-	  Flot plugin for plotting error bars
+-
+-config BR2_PACKAGE_FLOT_FILLBETWEEN
+-	bool "fillbetween"
+-	help
+-	  Flot plugin for computing bottoms for filled line and bar
+-	  charts
+-
+-config BR2_PACKAGE_FLOT_IMAGE
+-	bool "image"
+-	help
+-	  Flot plugin for plotting images
+-
+-config BR2_PACKAGE_FLOT_NAVIGATE
+-	bool "navigate"
+-	help
+-	  Flot plugin for adding panning and zooming capabilities to a
+-	  plot
+-
+-config BR2_PACKAGE_FLOT_PIE
+-	bool "pie"
+-	help
+-	  Flot plugin for rendering pie charts
+-
+-config BR2_PACKAGE_FLOT_RESIZE
+-	bool "resize"
+-	help
+-	  Flot plugin for automatically redrawing plots when the
+-	  placeholder size changes.
+-
+-config BR2_PACKAGE_FLOT_SELECTION
+-	bool "selection"
+-	help
+-	  Flot plugin for selecting regions
+-
+-config BR2_PACKAGE_FLOT_STACK
+-	bool "stack"
+-	help
+-	  Flot plugin for stacking data sets
+-
+-config BR2_PACKAGE_FLOT_SYMBOL
+-	bool "symbol"
+-	help
+-	  Flot plugin that adds some extra symbols for plotting points
+-
+-config BR2_PACKAGE_FLOT_THRESHOLD
+-	bool "threshold"
+-	help
+-	  Flot plugin for thresholding data
+-
+-config BR2_PACKAGE_FLOT_TIME
+-	bool "time"
+-	help
+-	  Flot plugin for handling time axes
+-
+-endif
+diff --git a/package/flot/flot.hash b/package/flot/flot.hash
 deleted file mode 100644
-index a9602f7e49..0000000000
---- a/package/bootstrap/bootstrap.hash
+index fb7a331975..0000000000
+--- a/package/flot/flot.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally computed:
--sha256  888ffd30b7e192381e2f6a948ca04669fdcc2ccc2ba016de00d38c8e30793323  bootstrap-4.3.1-dist.zip
--sha256  35fbb6dc3891aacaf1ffa07abec2344fdbc454aab533a2a03bcf93577eb7837b  css/bootstrap.css
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
+-# Locally calculated
+-sha256  ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21  flot-0.8.3.tar.gz
+-sha256  52cb566b16d84314b92b91361ed072eaaf166e8d3dfa3d0fd3577613925f205c  LICENSE.txt
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
 deleted file mode 100644
-index eba1244ad3..0000000000
---- a/package/bootstrap/bootstrap.mk
+index 58e3ff1276..0000000000
+--- a/package/flot/flot.mk
 +++ /dev/null
-@@ -1,28 +0,0 @@
+@@ -1,34 +0,0 @@
 -################################################################################
 -#
--# bootstrap
+-# flot
 -#
 -################################################################################
 -
--BOOTSTRAP_VERSION = 4.3.1
--BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
--BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
--BOOTSTRAP_LICENSE = MIT
--BOOTSTRAP_LICENSE_FILES = css/bootstrap.css
--BOOTSTRAP_CPE_ID_VENDOR = getbootstrap
+-FLOT_VERSION = 0.8.3
+-FLOT_SITE = http://www.flotcharts.org/downloads
+-FLOT_LICENSE = MIT
+-FLOT_LICENSE_FILES = LICENSE.txt
+-FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
+-	$(if $(BR2_PACKAGE_FLOT_CANVAS),canvas) \
+-	$(if $(BR2_PACKAGE_FLOT_CATEGORIES),categories) \
+-	$(if $(BR2_PACKAGE_FLOT_CROSSHAIR),crosshair) \
+-	$(if $(BR2_PACKAGE_FLOT_ERRORBARS),errorbars) \
+-	$(if $(BR2_PACKAGE_FLOT_FILLBETWEEN),fillbetween) \
+-	$(if $(BR2_PACKAGE_FLOT_IMAGE),image) \
+-	$(if $(BR2_PACKAGE_FLOT_NAVIGATE),navigate) \
+-	$(if $(BR2_PACKAGE_FLOT_PIE),pie) \
+-	$(if $(BR2_PACKAGE_FLOT_RESIZE),resize) \
+-	$(if $(BR2_PACKAGE_FLOT_SELECTION),selection) \
+-	$(if $(BR2_PACKAGE_FLOT_STACK),stack) \
+-	$(if $(BR2_PACKAGE_FLOT_SYMBOL),symbol) \
+-	$(if $(BR2_PACKAGE_FLOT_THRESHOLD),threshold) \
+-	$(if $(BR2_PACKAGE_FLOT_TIME),time) \
+-	)
 -
--define BOOTSTRAP_EXTRACT_CMDS
--	$(UNZIP) $(BOOTSTRAP_DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
--	mv $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist/* $(@D)
--endef
--
--define BOOTSTRAP_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
--		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
--	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css.map \
--		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css.map
--	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
--		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
+-define FLOT_INSTALL_TARGET_CMDS
+-	for i in $(FLOT_FILES); do \
+-		$(INSTALL) -m 0644 -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js || exit 1; \
+-	done
 -endef
 -
 -$(eval $(generic-package))
