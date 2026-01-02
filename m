@@ -1,114 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26B04FA3755
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32227FA3750
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2F14809D1;
-	Fri,  2 Jan 2026 22:36:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EED7D407D8;
+	Fri,  2 Jan 2026 22:39:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pTy3dHkV7yvg; Fri,  2 Jan 2026 22:36:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iEhTklKXeJgL; Fri,  2 Jan 2026 22:39:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C9C58098A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2735B40851
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767393360;
-	bh=iR/MJGekt7gPjdJQG2C2zTX7afukZesQyQeRnCtUIEw=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=i3DUPYl0DRxTRaHAeGAQgCFyrO4jxRkyYWBWmZX1+O3LXCGQlgHlTq9ot7ZcClvF/
-	 +wAZWV4KiQkwyhQJXwNPDtWx+rYvOW/Y1ongwfzmkPIjzt4fhA9SPWulzbraI7dVZO
-	 FMkOzwfZ3XTf6T0B6JPM2zYoAjBxpMZUMtlpKoQiZQ4fropq5/N+GDDll7qcmjKll1
-	 yZ8sayhus0fIx+t+yRH2yjiQL7KoW8miKDF7z4t6oKInEtS77BaJmoV/91z3uyC+6q
-	 vkkSJy5VI5amtyqOYixxtVaRaJ9G/OafxzbcTF/1FQxh8hG7Q/qkimA6L5JeHEYIHe
-	 6OXm4i+21dCZg==
+	s=default; t=1767393552;
+	bh=4ej7PfbMsY2f11STMjwzBoSfcJX/hNFutPAsABTVefA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=UyNx7PCwI3kUylkh3bSSRXEVxgWf18rLnzXQ17RPxRthuGnFvPqyaxsJmLBVuc0QH
+	 nEQQqA9wMd06hZkKCE1v51Q+A2VwyFFYnnLcEax0acSCjy3xipiTnR7oSAgFkMzHgF
+	 qybJzLLRisrTjYLuZBVchdNfqiecWRdSyWi3uv26cdLi4WX2P8cfUf1bWN43r04n3C
+	 6bklBlmkzCgAszbom7oGo7BL/rq/kBfLL0CsMMwdNc451YC0DGyfObSVZstbzfMxKu
+	 0Ipj53ymUMoeKwxzBGBII2wxhCAyJwHKqTcJtUpWHknRGJRvhqXhTlC8U77dOuOAXa
+	 BTadM073l1oBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C9C58098A;
-	Fri,  2 Jan 2026 22:36:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DC5DC19D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:35:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2735B40851;
+	Fri,  2 Jan 2026 22:39:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5850C249
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA6EF8098A
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:35:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D8E1608FD
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:39:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tsTWdo0XrYhT for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 22:35:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::336; helo=mail-ot1-x336.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0D3398097B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D3398097B
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
- [IPv6:2607:f8b0:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0D3398097B
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:35:57 +0000 (UTC)
-Received: by mail-ot1-x336.google.com with SMTP id
- 46e09a7af769-7cae2330765so210884a34.0
- for <buildroot@buildroot.org>; Fri, 02 Jan 2026 14:35:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767393356; x=1767998156;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ObgTNlvcTY1hvHaORu/s4cbw6a8pnW+glHuEFCfWYQw=;
- b=ZX7n/21DhpI8PByVMnr1mQqBIUbe430W1NEHiJo+kvGviKuPaj/zMh7ZV3Lw9KUFXD
- nDXTyXG4qVmzP3WMwdvhGdNRj24T1FfShPq0jcW4NSd3wDAvERcVF0aHhSG4xLPj+k9Q
- Y2Et92Ks7vCgUsJN9UbB039LI6G3IECVGSzEMZPdyZPEhcLj5W4WCtloU55UCopEtMLP
- TxU1qH42dqEeeGqVpCLkX84vbvgAQOy1R0FbkGfTPS63PZfPXQQxfCWMScu6ddPaQQy8
- uS2YPMUi3hchRVChlvfYTRJi86gx5jIj6jOKUnTu/wh1gb1BvJSiFuhv4OC370c3+pNq
- C3rw==
-X-Gm-Message-State: AOJu0YwZOcSwFvztWibqWf1oYcIRnmK0PrgPd0PrfQTBmbS4E3sJn6BV
- bWO1WSE8zVl3u67emhqRC5SrOfe14UJ8X7UtAc78MwndF5SH6+2G2gBjq7c/xJSbUHQ=
-X-Gm-Gg: AY/fxX6OGU0ktGicOfZk/+lK/R2GSehrfT+eb+F+agQ0QGfDVbblWT4bRmzKONCNhkS
- j00DeeCcEhAyvujGsnEpTK7outgC+vAoCxGs4PZ7rpVxKH1utA+ilgKdAjnFz39OR/4AW2EOqpV
- 9SVV9IhFK0sB1EHB2bcqjEPCfU1wTdy2Xh+EabxaUrzNjpW/cgF50bbAXLPcJ6lidLkLCThyYAY
- f3S3mi6evSDBnSsbiiHMD1czYXOej3Vbg7CU9VE62AwXemry2vjh9lSdfUfPF/wGE8mWOj28Ojn
- 4anE4qM52vDCIkQotkL/x3GXbHqUOvKgiLo0DEfxxlgT78Qnv80TT4fjua7lDhTFdmvTEvBPNpm
- quvDZIyEF0u+M3eCHvvEoAZbqjwJmO3p47xJQNrkH+IZqLXzrAUO0tyYhwmLx4RXiHnF06oxpFG
- wjD9mQK39XLuFVy19iVOBLxPcouE2p8FE91VPPPxjNGev0u5jAOpHKK4Xkb3LVFFWzjf1/GRqgU
- m5Axs/kHzlGgDgXItrDl9TXF0IOzCpOtuuPDqik7j4hSN8z5+0e7nnqRbNpAxU64g==
-X-Google-Smtp-Source: AGHT+IHqJ7tRvqNwGbPFLJl4jQgXE91Jr3xhlHd5G0hK1C/9X17rjNaRgl+sPXeMZInxNSqrKT1Rhw==
-X-Received: by 2002:a05:6830:2b09:b0:7c7:6a56:cfb5 with SMTP id
- 46e09a7af769-7ce2bfe49bamr629599a34.11.1767393356591; 
- Fri, 02 Jan 2026 14:35:56 -0800 (PST)
-Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
- [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7cc667ebea3sm28914891a34.22.2026.01.02.14.35.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Jan 2026 14:35:56 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 15:35:54 -0700
-Message-ID: <20260102223554.481649-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ACGol16d2X4v for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 22:39:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3CE7E608F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CE7E608F2
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3CE7E608F2
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:39:08 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 104564E41F05
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:39:07 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D1A4F606C7;
+ Fri,  2 Jan 2026 22:39:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id BE3FA113B023D; Fri,  2 Jan 2026 23:39:05 +0100 (CET)
+Date: Fri, 2 Jan 2026 23:39:04 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20260102233904.426f2e8b@windsurf>
+In-Reply-To: <20251125210759.333290-1-bernd@kuhls.net>
+References: <20251125210759.333290-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767393356; x=1767998156; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ObgTNlvcTY1hvHaORu/s4cbw6a8pnW+glHuEFCfWYQw=;
- b=myT/EJF4YoV+bSOv/8TjqMXz4g/rGKg7DutJxZIxWT5n9j78bfK5xAGXvFnkzmYzut
- p7Driq4IBp4K9Ez4ZX8vLl62yLxLjD/Dh3wtc7cR9lOqrVOSYGORcPGjddgrE/a66mdV
- cKX7btdODnZ64PysmZcC20iSiLi7gFGyNagB3SdPzIetHYnISHVQpEQFF8OsOM6cRA3B
- pzkCDoeAue6je13zwBICpaOCAWQIan6ojL2+niKFsIv7eL4/fGdyCuDF/OMkHBCr4dc6
- SR/LJyTzzPmVaeNRQ4OU49XiHsf1BnTqaEQ6Rk6zVZJsbWueavXdCwJuZnUDU+e29u5h
- dwLg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=myT/EJF4
-Subject: [Buildroot] [PATCH 1/1] package/python-jaraco-functools: bump to
- version 4.4.0
+ d=bootlin.com; s=dkim; 
+ t=1767393546; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=0D4WffPGNWHnhyMg0PIdVXQguBZG4b5SibWWMzcspaU=;
+ b=luTx4TFb8mH/rTl+p7aRnZx1wtla1YeqXbfOANA5yfabRUH0eD9Ydjsh/aOkm/Vd8BgsNr
+ clX8BwQmHJONwU5bdXw9I2KFdLpDwScX5V0pKEvktRXIWUVn2rhp6uWOY/8QNd1tMe3Ehc
+ BAJ1alRnOtA77+y4UmFdMyyhPF3710vX+X0LxQcnMjsZcpXPc4EsnwLW4202jGuc39iF3f
+ nEeHtczKjI9s6VUKrPTqoWc2Wuv49J7r7cF23ERn5Wjz8oNhMSATOpbVXSDsGZ/+I9bOKv
+ xKpKevTBwAEC6yMd9r8fIId8Jcz2a12ctvSJgcIXwSv8KYmb4DTUZUusVTTFgg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=luTx4TFb
+Subject: Re: [Buildroot] [PATCH 1/1] package/cairo: Fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,62 +95,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to move to license file autogeneration:
-https://github.com/jaraco/jaraco.functools/commit/9a81db3c77bc106017dcd4b0853a5a94f43ae33c
-https://github.com/jaraco/jaraco.functools/commit/d2b8d7750f78e870def98c4e04053af4acc86e29
+Hello Bernd,
 
-Add new python-coherent-licensed build dependency.
+On Tue, 25 Nov 2025 22:07:59 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- .../python-jaraco-functools/python-jaraco-functools.hash  | 6 +++---
- .../python-jaraco-functools/python-jaraco-functools.mk    | 8 +++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+> Fixes:
+> https://autobuild.buildroot.net/results/0e9/0e962c66e1e96b5899e87c13ace824379adc09f9/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-diff --git a/package/python-jaraco-functools/python-jaraco-functools.hash b/package/python-jaraco-functools/python-jaraco-functools.hash
-index 69edc2384b..f43efcfd84 100644
---- a/package/python-jaraco-functools/python-jaraco-functools.hash
-+++ b/package/python-jaraco-functools/python-jaraco-functools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jaraco.functools/json
--md5  b8a8d165da986efa1966abd91c45348e  jaraco_functools-4.1.0.tar.gz
--sha256  70f7e0e2ae076498e212562325e805204fc092d7b4c17e0e86c959e249701a9d  jaraco_functools-4.1.0.tar.gz
-+md5  501918900674199182b1bfa39db200b6  jaraco_functools-4.4.0.tar.gz
-+sha256  da21933b0417b89515562656547a77b4931f98176eb173644c0d35032a33d6bb  jaraco_functools-4.4.0.tar.gz
- # Locally computed sha256 checksums
--sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-+sha256  5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d  LICENSE
-diff --git a/package/python-jaraco-functools/python-jaraco-functools.mk b/package/python-jaraco-functools/python-jaraco-functools.mk
-index e72a062fa8..397d5122bf 100644
---- a/package/python-jaraco-functools/python-jaraco-functools.mk
-+++ b/package/python-jaraco-functools/python-jaraco-functools.mk
-@@ -4,12 +4,14 @@
- #
- ################################################################################
- 
--PYTHON_JARACO_FUNCTOOLS_VERSION = 4.1.0
-+PYTHON_JARACO_FUNCTOOLS_VERSION = 4.4.0
- PYTHON_JARACO_FUNCTOOLS_SOURCE = jaraco_functools-$(PYTHON_JARACO_FUNCTOOLS_VERSION).tar.gz
--PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/ab/23/9894b3df5d0a6eb44611c36aec777823fc2e07740dabbd0b810e19594013
-+PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/0f/27/056e0638a86749374d6f57d0b0db39f29509cce9313cf91bdc0ac4d91084
- PYTHON_JARACO_FUNCTOOLS_LICENSE = MIT
- PYTHON_JARACO_FUNCTOOLS_LICENSE_FILES = LICENSE
- PYTHON_JARACO_FUNCTOOLS_SETUP_TYPE = setuptools
--PYTHON_JARACO_FUNCTOOLS_DEPENDENCIES = host-python-setuptools-scm
-+PYTHON_JARACO_FUNCTOOLS_DEPENDENCIES = \
-+	host-python-coherent-licensed \
-+	host-python-setuptools-scm
- 
- $(eval $(python-package))
+In the spirit of recent discussions, could you respin this patch with a
+more specific description, by doing some actual testing: what was the
+last GCC version that built cairo successfully, and with which GCC
+version did it start failing.
+
+> ---
+>  .../0001-Wincompatible-pointer-types.patch    | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/cairo/0001-Wincompatible-pointer-types.patch
+> 
+> diff --git a/package/cairo/0001-Wincompatible-pointer-types.patch b/package/cairo/0001-Wincompatible-pointer-types.patch
+> new file mode 100644
+> index 0000000000..79f0347538
+> --- /dev/null
+> +++ b/package/cairo/0001-Wincompatible-pointer-types.patch
+> @@ -0,0 +1,38 @@
+> +Fix build with newer gcc
+> +
+> +Downloaded from
+> +https://github.com/LibreOffice/core/blob/master/external/cairo/cairo/Wincompatible-pointer-types.patch.0
+
+This link doesn't work anymore, because you pointed to the master
+branch, from which this patch has probably been removed.
+
+> +
+> +Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/issues/921
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Cairo is using Git as its version control-system, so this patch should
+be Git-formatted.
+
+I see this hasn't been fixed upstream, while Cairo is widely used and
+well-maintained. Why only us are hitting the issue? Not Fedora, Arch,
+etc. who use bleeding-edge GCC compilers? Presumably the upstream Cairo
+developers are also using an up-to-date distro, so why didn't they fix
+the issue?
+
+Is the issue perhaps happening only with a certain C library? Or maybe
+it isn't gcc version related after all, or?
+
+Thomas
 -- 
-2.43.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
