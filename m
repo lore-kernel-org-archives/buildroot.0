@@ -1,62 +1,121 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC7AAFA3752
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC314FA3752
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A02248116F;
-	Fri,  2 Jan 2026 15:47:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0F3460DC2;
+	Fri,  2 Jan 2026 15:48:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NZn2jw6r9ZmB; Fri,  2 Jan 2026 15:47:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oFaLzg39GjUM; Fri,  2 Jan 2026 15:48:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B039581178
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0009460BF7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767368840;
-	bh=2J7nQTz1VoYO92E5qo+fSg4Fh3GwYzSfciVwi6LFlkg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CvGDSC3o+FLjlf5yxs5UaLenWJrtu9nW1SrISmwQ9PrghR88njMdEDUbXzGZ8DF5L
-	 hE2VJAT5b+9cYRNMLyf4qSr0mH7zq6q1M/9lJglLNhxj3XVF00KVMRhuFB2CVXrbca
-	 YlXRLENZQiuINmQQ9yWy56ra8ACf8Vz0Sr4rnVPdd35XXttUVFWurHcMzpuhcHeBS/
-	 CyOvnMRvItpkAMWFM/Km1vle1h3aNeLu1tso1zvgd5a3lH2b9Mn756opWxRDc4BE1Q
-	 ksTgkuSqR2YD0b+1nu3hdr/G74C5pdgq1D59d2yKnGTsoQ/TxdHazQEmquHjWnBFtu
-	 VFNYeM5LEQc5A==
+	s=default; t=1767368927;
+	bh=eaU1YF4YHUyYzSe3JpIpxA47dV4iyysROhZtdx5ICs8=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=bmhiJsnHtwIqNuCsZr1lah6CDYQbMf0kGaby+efSuTOExFgQC7Teh9BejZoQfxI54
+	 b003PWTT5Hky5EjBqKkmC7E7J5xPveD/nRBVno0zGp5IwSZnGh5NstB9xAYrzDtF8y
+	 HtJBsYBEaQ7qGIjgKaq11nDaFqM71S+D8LyanI351RBzslVj2EXErGFML0mJtWXQJ7
+	 aYLOpe9Xl3XQ47h4xpQUM0JE0pg6xqPkmqJWgoa8kQM33UVBS8oIQcUj0SCtmtSZ3t
+	 cQhuLa0peEb3hDjg8jnWObUtxBUV08cQdvb96VGZ+TR0NTwNpdTM7PYcu6/dHLcN5I
+	 Hay1r6MhC4N2g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B039581178;
-	Fri,  2 Jan 2026 15:47:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 26D14D7
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:47:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0009460BF7;
+	Fri,  2 Jan 2026 15:48:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAE70351
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:48:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18AC44078B
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:47:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B78BC406E0
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:48:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4vdaCl2YUO2 for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 15:47:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ACD940470
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3ACD940470
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:47:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2DA2C87F66; Fri,  2 Jan 2026 15:47:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Jan 2026 16:46:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f11279d81eab1b88d3a505cf9dea05b9569a496f
-X-Git-Newrev: cf383d3e13e7963eca8e1c3aefe2512e9b5ef81c
-X-Patchwork-Hint: ignore
-Message-Id: <20260102154718.2DA2C87F66@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/atf: fix non-threaded build
+ id wvpZ6GAuGLwe for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 15:48:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CDEA8406B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDEA8406B3
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CDEA8406B3
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:48:43 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-47774d3536dso558625e9.0
+ for <buildroot@buildroot.org>; Fri, 02 Jan 2026 07:48:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1767368921; x=1767973721;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=73QVji0tTwRqzfwpzXUxSV+QGSmjgjC0v8PYboP9eV8=;
+ b=pAj4xRyVWlxw1s60UUG059PPtzMbBCJbXlNyQwv/yZVjloqgQSGauJgNfp26JqcQVq
+ Bv196XoYKevWLs2hxUwCjiWz2EjLZx8ZJ/xzzT6uEG3ta70zfC6RBqsHOTytt41BuTDC
+ YgEYy8e9WU/uYeK2/FONK5mz4scTvxpVWK0PtgzMgS3bwlBQ3t0sz0Kop8dxcTV0NdEQ
+ aAo/tZlsXnv9Leusx1MZ3ieMJQBTA8MWSlKj7todV+4tiGnl1BP/J5YojufkIKUpbSRo
+ CsvxH/CQWmpoqU8+DrIUIZfuPlPmV/EkZ8OgCxZuRT9Qqx6JIqzMbGH8ppzcIrfJF2Fa
+ rIXQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCV3UiKH4xWoRNMO9sbLX9qM6ie+03W9/XQrb54lVSplzXfqjCK+vqJUKBMLaLOldeP324xoMuOppBk=@buildroot.org
+X-Gm-Message-State: AOJu0YwWzpQU6wAkUHZpwWldp/Q/DiYrbsZWN0iOK5z0WLvzbXWTn+BW
+ SNnObCsZJXnX4OZXatXaGZ/H++BfhqXTldT4PoVFizSVL1l7hW9CveutTSIMH+2b7SXEB7oWcP0
+ jZYDHGmA=
+X-Gm-Gg: AY/fxX4eFZUpb3SduKHAxx6yQBXLzw5tuYf0TnD4OHOnLULNf96bj3U3n/C8gJdoepN
+ scjfCFKWpoLK4UfQMhD46I3rjkiTxrP+Evh1iRBEGkDh2zhw977jVp114qIlbyqplJkSN6XoOKm
+ 8bSdTNtQAYa15juUW+5DhCESd7P3fGl7gnXQ3StOdy+CzMbkqGssQ+GCrfdOjcXCEf3zTAxSKKW
+ 4Yb/jkqFZcf6gDB0rmqVBmx5EPtEaDyzNWy8bmL57D6zCLAHVl/SsX16cpv67mb73SzyHsYiEN1
+ Pq/OHBaXLnrIQZrH06L5EiuNkJbI3zd+5uLz53gWbJDX6qw/p1YRe8fLUqtd10e9HCiBlDvgy3E
+ 7jLVE/BZ9iy1nPeyPuLRGAnPvWbF1nC328k15O32URf8vgePVb3kz1njI6YyqvNhNhh96LW5K6Q
+ 4zQjv2uCaVqJNIftehFjDEgtwGAYAHV7KwpaJi9k73XNEtzA==
+X-Google-Smtp-Source: AGHT+IG4KuEHESDWB+SOp/iArgU3hKmE1IyRZK22p0F225OlzHjYVFm+nTWMVPMfLG6JEGbzhi3OgA==
+X-Received: by 2002:a05:600c:848d:b0:471:665:e688 with SMTP id
+ 5b1f17b1804b1-47d6ba8f45fmr3239755e9.17.1767368921560; 
+ Fri, 02 Jan 2026 07:48:41 -0800 (PST)
+Received: from arch (94.105.116.200.dyn.edpnet.net. [94.105.116.200])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-47d193621c8sm745934945e9.7.2026.01.02.07.48.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 02 Jan 2026 07:48:41 -0800 (PST)
+To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  2 Jan 2026 16:48:40 +0100
+Message-ID: <20260102154840.708055-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260102150757.1480511-1-fabien.lehoussel@smile.fr>
+References: <20260102150757.1480511-1-fabien.lehoussel@smile.fr>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1767368921; x=1767973721; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=73QVji0tTwRqzfwpzXUxSV+QGSmjgjC0v8PYboP9eV8=;
+ b=CtGPO+NOVU6QJ0KbZD6tzwmYdLH/ZS4vYb2Ym6zxtePvAQkTi+EhWeErfsFdy211Pc
+ NB4n8xGeSqKZP2goHGB1jG6b/7WpW2oB6YiJc8G0zvo+qnTWYpo9Xd10MZ9vTrIukECj
+ StvPJy6TnMKzeoBL2rYgknoYqPujwPFh7hWXVqUehv/qTqyJcI/RsmCnEW1yiq24G+KT
+ 0MBQ5KXGtv4YRvX0zcDh1h+vvIRfjA5p++nOFc0Bt1M4+mJHssqTeMVQJ6en4LFLWrK6
+ 9D1aD1jUtxs3N8xm8cZEvmcSH/mecbSyqO7mjoRrK3Xl8AatE3pv+JSmHEULO59t6pMv
+ v04g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=CtGPO+NO
+Subject: Re: [Buildroot] [PATCH 1/5] utils/generate-cyclonedx: update
+ package filtering for SBOM generation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,86 +127,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf383d3e13e7963eca8e1c3aefe2512e9b5ef81c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In reply of:
+> - Filter packages to include only those with external download sources (i.e., not bundled within Buildroot).
+> - Remove virtual package handling from dependency analysis.
+> 
+> Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 
-Buildroot commit d6c3257e931ed256e3ebcd78938f6146bba8586f bumped the
-package from 0.21 to 0.23. Upstream release 0.22 includes commit
-https://github.com/freebsd/atf/commit/d7c7c53c0626ab59a62aa4efcf05323b3621baa9
-which uses CLOCK_MONOTONIC without including time.h.
+Hi Fabien,
 
-Fixes:
-https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/
+Thanks for your submissions.
 
-Two minimal defconfigs to reproduce the build error:
+Regarding this change could you be more specific in the commit message on why
+this is needed. What are the packages that aren't in the final SBOM when
+applying this change and why we don't want them in the final SBOM ?
 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_ATF=y
+I think you want to remove the 'skeleton' packages from the final SBOM right ?
 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_GCC_VERSION_13_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_ATF=y
+You can provide a analysis over the entire Buildroot packages by changing a
+single line in `Makefile`:
 
-All defconfigs of the build errors recorded by the buildroot autobuilders
-contain BR2_PTHREADS_NONE=y.
+```
+diff --git a/Makefile b/Makefile
+index d2257ed3a3..0735f39d68 100644
+--- a/Makefile
++++ b/Makefile
+@@ -920,7 +920,7 @@ show-info:
+ 	@:
+ 	$(info $(call clean-json, \
+ 			{ $(foreach p, \
+-				$(sort $(foreach i,$(PACKAGES) $(TARGETS_ROOTFS), \
++				$(sort $(foreach i,$(PACKAGES_ALL) $(TARGETS_ROOTFS), \
+ 						$(i) \
+ 						$($(call UPPERCASE,$(i))_FINAL_RECURSIVE_DEPENDENCIES) \
+ 					) \
+```
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../atf/0001-atf-check.cpp-include-time.h.patch    | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Regards,
+PERALE Thomas
 
-diff --git a/package/atf/0001-atf-check.cpp-include-time.h.patch b/package/atf/0001-atf-check.cpp-include-time.h.patch
-new file mode 100644
-index 0000000000..359172c0e6
---- /dev/null
-+++ b/package/atf/0001-atf-check.cpp-include-time.h.patch
-@@ -0,0 +1,33 @@
-+From 67e7d350a15aff88c151b1fc838dac83d35be955 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 22 Nov 2025 23:47:41 +0100
-+Subject: [PATCH] atf-check.cpp: include time.h
-+
-+Fixes build error with gcc 14 as reported by the buildroot autobuilders:
-+https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/build-end.log
-+
-+atf-sh/atf-check.cpp: In function 'useconds_t get_monotonic_useconds()':
-+atf-sh/atf-check.cpp:183:24: error: 'CLOCK_MONOTONIC' was not declared in this scope
-+
-+Upstream: https://github.com/freebsd/atf/commit/67e7d350a15aff88c151b1fc838dac83d35be955
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ atf-sh/atf-check.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/atf-sh/atf-check.cpp b/atf-sh/atf-check.cpp
-+index 1354e3a..94da413 100644
-+--- a/atf-sh/atf-check.cpp
-++++ b/atf-sh/atf-check.cpp
-+@@ -30,6 +30,7 @@ extern "C" {
-+ #include <limits.h>
-+ #include <signal.h>
-+ #include <stdint.h>
-++#include <time.h>
-+ #include <unistd.h>
-+ }
-+ 
-+-- 
-+2.47.3
-+
+> ---
+>  utils/generate-cyclonedx | 23 +++++++++--------------
+>  1 file changed, 9 insertions(+), 14 deletions(-)
+> 
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index a103b7b707..29c73f3616 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -280,7 +280,7 @@ def cyclonedx_component(name, comp):
+>          **({
+>              "version": comp["version"],
+>              **(cyclonedx_licenses(comp["licenses"]) if "licenses" in comp else {}),
+> -        } if not comp["virtual"] else {}),
+> +        } if "version" in comp else {}),
+>          **({
+>              "cpe": comp["cpe-id"],
+>          } if "cpe-id" in comp else {}),
+> @@ -337,12 +337,10 @@ def cyclonedx_vulnerabilities(show_info_dict):
+>      } for cve, components in cves.items()]
+>  
+>  
+> -def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+> +def br2_parse_deps_recursively(ref, show_info_dict, deps=[]):
+>      """Parse dependencies from the show-info output. This function will
+>      recursively collect all dependencies, and return a list where each dependency
+>      is stated at most once.
+> -    The dependency on virtual package will collect the final dependency without
+> -    including the virtual one.
+>  
+>      Args:
+>          ref (str): The identifier of the package for which the dependencies have
+> @@ -359,9 +357,8 @@ def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+>      """
+>      for dep in show_info_dict.get(ref, {}).get("dependencies", []):
+>          if dep not in deps:
+> -            if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
+> -                deps.append(dep)
+> -            br2_parse_deps_recursively(dep, show_info_dict, virtual, deps)
+> +            deps.append(dep)
+> +            br2_parse_deps_recursively(dep, show_info_dict, deps)
+>  
+>      return deps
+>  
+> @@ -376,8 +373,6 @@ def main():
+>                          default=(None if sys.stdin.isatty() else sys.stdin))
+>      parser.add_argument("-o", "--out-file", nargs="?", type=argparse.FileType("w"),
+>                          default=sys.stdout)
+> -    parser.add_argument("--virtual", default=False, action='store_true',
+> -                        help="This option includes virtual packages to the CycloneDX output")
+>      parser.add_argument("--project-name", type=str, default="buildroot",
+>                          help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
+>      parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
+> @@ -391,10 +386,10 @@ def main():
+>  
+>      show_info_dict = json.load(args.in_file)
+>  
+> -    # Remove rootfs and virtual packages if not explicitly included
+> -    # from the cli arguments
+> +    # Keep only packages with at least one download source defined
+> +    # (packages with _SITE variable in Buildroot makefile).
+>      filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
+> -                               if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
+> +                                if (len(v.get('downloads', [])) > 0)}
+>  
+>      cyclonedx_dict = {
+>          "bomFormat": "CycloneDX",
+> @@ -429,10 +424,10 @@ def main():
+>          ],
+>          "dependencies": [
+>              cyclonedx_dependency("buildroot", list(filtered_show_info_dict)),
+> -            *[cyclonedx_dependency(ref, br2_parse_deps_recursively(ref, show_info_dict, args.virtual))
+> +            *[cyclonedx_dependency(ref, br2_parse_deps_recursively(ref, filtered_show_info_dict))
+>                for ref in filtered_show_info_dict],
+>          ],
+> -        "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
+> +        "vulnerabilities": cyclonedx_vulnerabilities(filtered_show_info_dict),
+>      }
+>  
+>      args.out_file.write(json.dumps(cyclonedx_dict, indent=2))
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
