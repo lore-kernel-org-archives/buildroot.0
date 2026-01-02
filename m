@@ -4,89 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE102FA374B
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B196AFA3729
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:24:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F67781046;
-	Fri,  2 Jan 2026 15:23:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FBB881096;
+	Fri,  2 Jan 2026 15:24:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D1QbtRVSFYSU; Fri,  2 Jan 2026 15:23:57 +0000 (UTC)
+ id HKNbN4Jy2csO; Fri,  2 Jan 2026 15:24:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D2B880F7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E97681046
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767367437;
-	bh=9oHLPZwpc+SuLwMISOg8efmZ+9NjHHZRG+AJhxXfZHE=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=A/xon6VfSiKZALQgTu6qyZJvaIFA+B3qR5GHOMMnkfGWkNFawu4BiNdUc/pGwHeEY
-	 ry+1ocWtZjkRyPebUVR0o65Vdvannv7zi3I4WmS0HFHR6n7vPJsL3hq9JLVioWF7LQ
-	 7ivy9U7gmQB0zTVblJJantb1adm56HMn5kxgyXbhQApwMsAOSfP4kNQ+Q0lcb3sAGY
-	 PjmFUTqYt5fVz5do016B4Qn8n0X4x2aoYEMJvn1ev4882Zvs/gCJNrjQbFnnWJJH9E
-	 HnECrtNmolizMKPTf6beA+2CH8uX9JOSryGGxdXrIhXM3GRFauK2zkswo50h57HdTi
-	 Cgy6IBeys8gXQ==
+	s=default; t=1767367457;
+	bh=v2wvRMRare3YLV22Kg83WC+K/7wbUUOmcjE4kbQHo+A=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=nfNlpAUZyXZNCv4qImDhdw3sjsHIFC6hEY2XmAVwEOJ80xMSiSKC3s5YwyYJUKonV
+	 8fYQvJLLG9LHuPEGumd41ZeIMl/OAp6TEG+gQEA74Q/mae2a2N2jEzz7b7O7zrUQK1
+	 GqmkD2CV6vEitCAFIWlLmnhvLk3SIwfS6Vfo50f8CvPaxRDNwyALrcEyvEZp0ITghr
+	 Vwo6EusOFuhIVT5p+vlZa6hvX/YT9zzOC0P2Ljilg2U4iCROzdiu9c7GNUiavm5FY9
+	 Jvnh1ge3FIRiOfwAki4Bl/pQkszZHcJJ51ws3dsKvqme9ERUosICxeo9wkHbHabU6g
+	 uwx/tLdMK1ipA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D2B880F7B;
-	Fri,  2 Jan 2026 15:23:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B456D7
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:23:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E97681046;
+	Fri,  2 Jan 2026 15:24:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6BBF19D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:24:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11ACB80F7B
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:23:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8903400C2
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:24:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nDVzxQT-jirw for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 15:23:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sIdXq2cAtIWi for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 15:24:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E959A80EC4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E959A80EC4
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E959A80EC4
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:23:54 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id CE3461A25D4
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:23:51 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 9ACF2606C7;
- Fri,  2 Jan 2026 15:23:51 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7A50A113B0726; Fri,  2 Jan 2026 16:23:50 +0100 (CET)
-Date: Fri, 2 Jan 2026 16:23:49 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Dario Binacchi
- <dario.binacchi@amarulasolutions.com>
-Message-ID: <20260102162349.668c65ad@windsurf>
-In-Reply-To: <20260102145407.917492-2-bernd@kuhls.net>
-References: <20260102145407.917492-1-bernd@kuhls.net>
- <20260102145407.917492-2-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767367431; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=MUur/mapJBM8N+ivfITZOfOxT188XXFc8N7AEG+kPMc=;
- b=dp7f4eUliirpEWXH8JqKAQ/U3a4sXXhZtERHOLjuGNJ1nizFARmMtnyCErUhg4ch9Cs8St
- iR7XcuysYCNFCfXQrlxO154vx9BzRaJWSs4Nkr/T46NAbbEtUxiXbnTccymyULANa+O+tT
- BmN+qK7B3jt1G1JdsqQGJi/UpI6aXpwQvK5BFUA4+JAYvvwB1kS+yjZgce37vYXUeMi4yD
- XxdyUyK8BRTNZq1QOrYhgrCL+9Ll117N/5Lg4YgG1EqGId5m1iLHmwEgDdCeTp8uvVZFv0
- X2vGQFYRe/M3vQ3AYnOZ0dSfhfTesLqWSaCdUc+smwo/9pwuaektdPKK5CjUSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=dp7f4eUl
-Subject: Re: [Buildroot] [PATCH 2/2] package/atf: fix build with newer gcc
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0397A400C1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0397A400C1
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:24:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E7B9387F15; Fri,  2 Jan 2026 15:24:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Jan 2026 16:24:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b30d95335172b6873f8695bc69b40bd1f6e55c4c
+X-Git-Newrev: 9d334c4abf4dadfab73d6bc7cdc171bca1ad5dcc
+X-Patchwork-Hint: ignore
+Message-Id: <20260102152414.E7B9387F15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/atf: update project URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,48 +70,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=9d334c4abf4dadfab73d6bc7cdc171bca1ad5dcc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  2 Jan 2026 15:54:07 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+The old URL redirects to the new URL.
 
-> Buildroot commit d6c3257e931ed256e3ebcd78938f6146bba8586f bumped the
-> package from 0.21 to 0.23. Upstream release 0.22 includes commit
-> https://github.com/freebsd/atf/commit/d7c7c53c0626ab59a62aa4efcf05323b3621baa9
-> which uses CLOCK_MONOTONIC without including time.h.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/
-> 
-> Minimal defconfig to reproduce the build error:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-> BR2_PTHREADS_NONE=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_ATF=y
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/atf/Config.in | 2 +-
+ package/atf/atf.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the additional analysis, it makes more sense.
-
-However, how is this related to "newer gcc" then? If the code uses
-CLOCK_MONOTONIC, without including <time.h>, it's going to fail
-regardless of the gcc version.
-
-Did you test a build with an older gcc (13.x is still supported for
-example) ? I assume it will also fail to build without your patch,
-meaning that the problem is not gcc version related.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/atf/Config.in b/package/atf/Config.in
+index 43a5d4f2c9..800b488945 100644
+--- a/package/atf/Config.in
++++ b/package/atf/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_ATF
+ 	  ATF, or Automated Testing Framework, is a collection of
+ 	  libraries to write test programs in C, C++ and POSIX shell.
+ 
+-	  https://github.com/jmmv/atf
++	  https://github.com/freebsd/atf
+ 
+ comment "atf needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/atf/atf.mk b/package/atf/atf.mk
+index 27c25c8b27..91d2fb5567 100644
+--- a/package/atf/atf.mk
++++ b/package/atf/atf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ATF_VERSION = 0.23
+-ATF_SITE = https://github.com/jmmv/atf/releases/download/atf-$(ATF_VERSION)
++ATF_SITE = https://github.com/freebsd/atf/releases/download/atf-$(ATF_VERSION)
+ ATF_INSTALL_STAGING = YES
+ ATF_LICENSE = BSD-2-Clause, BSD-3-Clause
+ ATF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
