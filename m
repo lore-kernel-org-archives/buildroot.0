@@ -4,88 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63972FA3755
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 20:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F2EAFA3758
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 20:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B5ED8142B;
-	Fri,  2 Jan 2026 20:52:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55B068142B;
+	Fri,  2 Jan 2026 20:53:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z0wbW0MNWLv1; Fri,  2 Jan 2026 20:52:47 +0000 (UTC)
+ id R3yJwU87BBhm; Fri,  2 Jan 2026 20:53:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F786813AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B45688125E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767387167;
-	bh=6ckegocqbs4KK7/rPFufuB0cN4krPfoc4EOIagKhxUA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=PGbnLHNaMKn5BYzYK24e08wXxiXAOCZNH1nXq9ZUbfkmC2ak/x5zSD96I2/fIiAkz
-	 R3z5E3R8wyOVP83K05677AwcRD1Z45isJJBtjLGXxFPOZ+OIcNL8+M2a3mGQsZcBqX
-	 r1jvjDusMdtY5u9LwXWDR3w0QiijKwt90mr+QozAAmO/WB/Z0hT2Rfz7gKzj5XdsFM
-	 pyRZpSq7/BC86hTHCMEwFBILCpxWEjruphnflbMFMb/yiwKmb+m5UAiZTpmo+6b6su
-	 i0oaIFRMVuXMgYJK1wJB5SBpRsKnA0ldaCdiHQpK5kmryBboaMBqTeuJ7D7bWFJDxx
-	 IP508OjKXJW8A==
+	s=default; t=1767387210;
+	bh=5O47qPLIXGRaaxX1zGwPgZ7zP0g/xVe0xY19NpaENLI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=JXYlBJCsanwsmbRXDp3JwBovtWiRH8ErnkXqwZz+chtV3D+aC+oVpqUvQh+d4Usz2
+	 S6vtsHnOFQPQ+30KwHTrl7o4kqS/9yGH6YZCLOrvMdryeASYD1+wG6IPhdh8Z67/2z
+	 /A9cQ/7Nb8DZudDxFu5VmaQo7Pqk+GHlmguhwTeSUo3E9uwHQWSdKdTP1+p6YvipzM
+	 DARxYwCNrD6N/k1ti4okwrHH0dqi6uHioRnPXcnKJ9s0islcKNfcK5Sk/raTBfXry/
+	 G6JjiYd/JQMx51une4IUWML2Dfr44zAWJWHelw1DFcAHMQlK3FMdiTMk0M/3tRCnwd
+	 CXB1jiICKld3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F786813AA;
-	Fri,  2 Jan 2026 20:52:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CD48202
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:52:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B45688125E;
+	Fri,  2 Jan 2026 20:53:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D02FC202
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 633E96089F
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:52:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE0B740888
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:53:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NiuBDyIzE_7G for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 20:52:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DTU6bS_aEqmg for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 20:53:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 80E4460841
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E4460841
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 80E4460841
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:52:45 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id E0B354E41F02;
- Fri,  2 Jan 2026 20:52:42 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id AF2A0606C7;
- Fri,  2 Jan 2026 20:52:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id ECCE1113B0443; Fri,  2 Jan 2026 21:52:41 +0100 (CET)
-Date: Fri, 2 Jan 2026 21:52:41 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20260102215241.0cc8c098@windsurf>
-In-Reply-To: <20260102175032.1918906-1-bernd@kuhls.net>
-References: <20260102175032.1918906-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767387162; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=Dq2iz77bC+r7jOFWP6qEiHlq5D/kQ7KLZpgele64+Lo=;
- b=Tt1ZzcDAUBLGxjTXQKo9ap5hWVggLLMInDpPqgJCkTcuFiACRsE6GjHx38wSeDnHJ1hkeU
- mU74qcTmc0PB0Hkg/RgdqMwh6d4uJASTXxupJEUDKvT0bH7Q3jZptmWA5F80uKq8vDXny9
- ACa3el7xZ/CIum4kNHFIrMz9JiCkjMGS1Eqn70zltRRtAmqBYQAa3OX1YfkFUA0eIZ5PWp
- E5wowaMim5+4eoDn8pvUbSfbFvXeYiMuo1IZq3iARB/FmBoOoGF2jxDgz926jdQSX6Z8vj
- av/dGzSaGHJOeSjQFT54wECeN1jykhNHJcrBiRfGIswU1dIltwxKONW1ohVdqw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=Tt1ZzcDA
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcorrect: fix build with
- cmake 4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED0BB4068F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED0BB4068F
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:53:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DD9DF88098; Fri,  2 Jan 2026 20:53:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Jan 2026 21:51:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8ba59c12e9190772bfbf25374fe6a66611b43a79
+X-Git-Newrev: 675f31751f2683a1c36e168c3e66aba56c5cb045
+X-Patchwork-Hint: ignore
+Message-Id: <20260102205328.DD9DF88098@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcorrect: fix build with cmake 4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,30 +70,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  2 Jan 2026 18:50:32 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=675f31751f2683a1c36e168c3e66aba56c5cb045
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> https://autobuild.buildroot.net/results/44b/44b881a3455ff6a77f29532f25c12c40c34ceac4/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-> Patch 0001 was originally added by
-> https://patchwork.ozlabs.org/project/buildroot/patch/20251203215723.2323032-11-bernd@kuhls.net/
-> but was not part of buildroot commit 1a9e812d24c4e609c65e3dc39813e0c61b20966f
+Fixes:
+https://autobuild.buildroot.net/results/44b/44b881a3455ff6a77f29532f25c12c40c34ceac4/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ped-cmake_minimum_required-to-Version-3.5.patch | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcorrect/0001-bumped-cmake_minimum_required-to-Version-3.5.patch b/package/libcorrect/0001-bumped-cmake_minimum_required-to-Version-3.5.patch
+new file mode 100644
+index 0000000000..95e76ee43f
+--- /dev/null
++++ b/package/libcorrect/0001-bumped-cmake_minimum_required-to-Version-3.5.patch
+@@ -0,0 +1,24 @@
++From 8e779493cd1597b8a9c50ff48f97d4e5d10f96d6 Mon Sep 17 00:00:00 2001
++From: Tobias Wellnitz <tobias@dh1tw.de>
++Date: Sat, 27 Sep 2025 23:51:48 +0200
++Subject: [PATCH] bumped cmake_minimum_required to Version 3.5
++
++Modern Cmake versions require cmake_mininum_required to be at least Version 3.5
++
++Upstream: https://github.com/quiet/libcorrect/pull/50
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2e8e07e..67ea044 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 2.8)
+++cmake_minimum_required(VERSION 3.5)
++ project(Correct C)
++ include(CheckLibraryExists)
++ include(CheckIncludeFiles)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
