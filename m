@@ -4,89 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A8EEED628
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89E79FA3728
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 18:25:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B634060B68;
-	Fri,  2 Jan 2026 17:56:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD81D60B05;
+	Fri,  2 Jan 2026 18:24:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LkgnwnWm_XvC; Fri,  2 Jan 2026 17:56:56 +0000 (UTC)
+ id DMfMoQE6aFH8; Fri,  2 Jan 2026 18:24:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFE1960B61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92505608CA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767376616;
-	bh=qBIcswToEjubh4ENTeaIbJCRMXN+CVQtOVpNUisEzDU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WGPzX7W06gRSl5nVf87zGWXGToa1sC9a+xsvqtYXRhfBOKhtf3Gek/nwgOAw8a7j5
-	 HFIhkq86Ox3iEDbRBruOzzcIv6ex/IH6xCuMNjFwkFkFH3P+ivfjpnMuWkOiBkItYM
-	 0JQSHrl8Y3Pg00erAm6MB3frN0MBGz0cE7i9VDUeZy6EUG/sVPVWrpByDr+F5S9wa/
-	 ox8hSRTzPLNFgvYbfVKLntQi5MOcJF2+NDyFkm8bi5ZGxUs1n5smzSffy7H4ypvCL+
-	 5tH9t/V0qFTheMjMMyJBgwkXpK/qA3tKLikLIAfKPjL9WW+JzYfJO47CxejH3JKOsJ
-	 Y7uf7lFPfhEqQ==
+	s=default; t=1767378297;
+	bh=4C/pcu6GUtPaUDPhU0PH1YPLra2N9ZhgV49e8EZ+T/c=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=IGp0VgHyQoFfqiysLfbxx9A1zOr5Yp9Z7OYPmpk6pKJIjYPdlDACsDB/87EssLHM4
+	 u+2NRKRK/nKlihLDRLtjqdHm1DFZq+DUpik/xFG5k8GGhfYqBxQtCMJNNbcBWSTIcU
+	 WQzFWAXJqYE1K7+IZ0O6EWd7ZUVokl6C4jE9OiH0ZwB+WtYNl3Gr/1cLhYD9YQ/Nod
+	 /wlp0oewLZ+DSIIddSyc3tdJolgwlSK6Jc6JwyODuZ/bw1ySq7zDcMZzvnCjSWcTG6
+	 3VkcPb8PBmFhPNvwEaDsfbeT/3Cay4DKWd6VSw/79X5KUfYkBYEL/SplMvvzC0WRxw
+	 qOuM+WKtNCw1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFE1960B61;
-	Fri,  2 Jan 2026 17:56:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 56805D7
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:56:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92505608CA;
+	Fri,  2 Jan 2026 18:24:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 284D4351
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 18:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 492DC80D5E
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:56:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2001340205
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 18:24:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4HoZYKFKfco4 for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 17:56:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3915580D50
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3915580D50
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3915580D50
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:56:54 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 730881A25DC
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:56:52 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 47C9A606C7;
- Fri,  2 Jan 2026 17:56:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 98F11113B0445; Fri,  2 Jan 2026 18:56:50 +0100 (CET)
-Date: Fri, 2 Jan 2026 18:56:49 +0100
-To: Philip Molloy <philip@philipmolloy.com>
-Cc: buildroot@buildroot.org, Michael Hennerich
- <michael.hennerich@analog.com>, Philip Molloy <philip.molloy@analog.com>
-Message-ID: <20260102185649.494188cb@windsurf>
-In-Reply-To: <20250908115200.3295727-3-philip@philipmolloy.com>
-References: <20250908115200.3295727-1-philip@philipmolloy.com>
- <20250908115200.3295727-3-philip@philipmolloy.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YnJlgzaI8UcI for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 18:24:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 275D8400B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 275D8400B7
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 275D8400B7
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 18:24:55 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-64b9230f564so14755968a12.1
+ for <buildroot@buildroot.org>; Fri, 02 Jan 2026 10:24:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1767378294; x=1767983094;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=bKLf9zYwrGliTExgirt5HVQM5OmCAm8T76Yhr1e0xmw=;
+ b=Xp/DIz21+plfWU5McBVVbDclQOcKmNRDlBnyaW/QJt/4V3ldIyjnr9SOBdFHj+ihQn
+ XgBb5eQvi+gbEZSUjW/P16YSI2JQyueiP3VnuYWQ/h5D8SW2G/dqFWnUwibeK87lRF0l
+ ziYGZEOTrCBIA74Xjg+wNpIDr4LMIJzxqW93DihB9du8ubWUGTvUhCFY3aWw1mvxXTRi
+ 7ajFYk2ne1YINYBQ/MIyHtzIK415UE4lg1dkah/B4njk3hHMVA57JcFI9S57Fi0n5rVg
+ 2Q8JXOwb07F8NrJie1NPHEBoUxX0xm772cDT41ldxj2JecbClVPpcfWUxQtm4Z4Youw/
+ 0G9Q==
+X-Gm-Message-State: AOJu0YyO1IlouU1hy2a3Wa/K399EqpZEisPH8zgoq0JyFE0Vlo7aA6Ex
+ aZL9ayIrMdzySUNgZavWj7Rkai8ra2Gk7lXM6U58G6ROIU8om6iOreh7ib8Qt+sRPyjYiZmdQCy
+ xGgiX
+X-Gm-Gg: AY/fxX6TuKFeEia9JV9UoXBJdzRdXF3sUeb7zls2xkAfPLfltq1UKbyh06ssQZMsHA/
+ LKcdxRqSsRWGF2XSLPMry0hV5Jk0xaUMivoA/7k7+uePL5IzJ3bm9wKReCUDv/hCAKPS3f1zzAb
+ 2x5AKNvG5n5hHOIHbKcNT0SZsKxH9iwhBZGU6rFy2Ef3iw2N1Xk8/WWAf5132wh1N8G5fuje7ns
+ Rl+JUK4XOpliRzqkKY7JzYPaZO9eS/IBmsILKKPmXk1DyzMmD3HKBuOl+9LqZ8kcpuqgOYk8DPy
+ RxIIlrLMorePR8fyDlBAx85bPEazdAmQXhnxalLQhUHTWFONv0OGI2Tpf4iA2a751no9+nX8Alv
+ YAuyRIqvQ2Z4zd/504m4vqXapjkLJ9UBw9FOO+EmEBKSXz17GKTI6t48cEwBGeysmizNNFAjTG+
+ 74JHDWGo2rXGnKokhdBiyC2eJ5BwUtdfnNXNJlCUanQWQu8nZi5YHN2GpM+pN0h5OaGJjfAa/zl
+ 75Gstk8ITFRYqfnyNVDkfaJ7ar6SxM1iu3UoqCgnefdKZM2UdJLc3Em2E9LR+BLYhGqq7E3uEyx
+ wby7L/2gTMY=
+X-Google-Smtp-Source: AGHT+IEMi4sIJo0peBszCDyJndX7hDRLGUidt0ea3JFGd0wteMLFWNDjAC9lH2/Xi5jF/TcC6NXM9Q==
+X-Received: by 2002:a05:6402:4311:b0:64b:3b80:a902 with SMTP id
+ 4fb4d7f45d1cf-64b8ea5fea3mr38008584a12.5.1767378293654; 
+ Fri, 02 Jan 2026 10:24:53 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-95-248-31-95.retail.telecomitalia.it. [95.248.31.95])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-64b90f53c51sm45296375a12.3.2026.01.02.10.24.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 02 Jan 2026 10:24:52 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-amarula@amarulasolutions.com
+Date: Fri,  2 Jan 2026 19:24:36 +0100
+Message-ID: <20260102182445.365668-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767376611; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=6gHwS9Fko22EWkKtAPkqWT/CEu8yam0ijKB7K4WLfyM=;
- b=wH5emy3CMnHs57PyAebHETHAhCsbsftlTEGnNqu3SdqlT26v8f1Qhr7DK2gvv0U43eTVxT
- KBwE5rhr2eR/8MlOKsKml4DOZoG6bzPKtMHBipNradkOgtjLS/Gsyc1JwN8rehrZRgdGYj
- ROCpkFw3oVhQk+VOuHF+HqZEzRFWtpGe4sCxmvgKSSeuwcY+Xkeq4xQ7W0N8r5Tl4OEDyG
- /uhqyyjeIhdrQHImt/dEJAmiDUVQruKdzKcTJKc5+75qVLFil8qOszjN2azcfMS/y+aJLC
- or6hNZn4c1RMYcE/kRSopdrts8QpbfkHRsMlzbBMU/AfiqWnpJnfAX6nq6ZMaw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=wH5emy3C
-Subject: Re: [Buildroot] [PATCH v3 2/2] boot/uboot: add ADSP LDR binary
- format
+ d=amarulasolutions.com; s=google; t=1767378294; x=1767983094;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bKLf9zYwrGliTExgirt5HVQM5OmCAm8T76Yhr1e0xmw=;
+ b=Tdoz+wGAtDPAakyUFpHTFgSwmpILkHa1FMPVbN2v65j2G8e0dp00AUWu64CkGf2xpy
+ RzItPEDcf0iezHMi7GRRW6VqgKt96MB3/IlptGzTt/E/LWK5i62kJCQDgeLGWkbbdLDb
+ TGoiDh0hj2aGX+unNAWPcanXlZ5ZIr0NGFae8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=Tdoz+wGA
+Subject: [Buildroot] [PATCH v3 1/2] package/jsoncpp: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,31 +125,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 08 Sep 2025 11:52:07 +0000
-Philip Molloy <philip@philipmolloy.com> wrote:
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-> From: Philip Molloy <philip.molloy@analog.com>
-> 
-> Signed-off-by: Philip Molloy <philip.molloy@analog.com>
-> ---
->  boot/uboot/Config.in | 8 ++++++++
->  boot/uboot/uboot.mk  | 5 +++++
->  2 files changed, 13 insertions(+)
+---
 
-Applied to master, thanks.
+no changes since v1
 
-Thomas
+ package/jsoncpp/jsoncpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 9915907ea8cf..319944abb7d6 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -11,5 +11,7 @@ JSONCPP_LICENSE_FILES = LICENSE
+ JSONCPP_CPE_ID_VALID = YES
+ JSONCPP_INSTALL_STAGING = YES
+ JSONCPP_CONF_OPTS = -Dtests=false
++HOST_JSONCPP_CONF_OPTS = -Dtests=false
+ 
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
