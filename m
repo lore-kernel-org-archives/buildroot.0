@@ -1,85 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A305EED628
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69537FA3728
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47A9F80DDE;
-	Fri,  2 Jan 2026 17:26:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01B6440881;
+	Fri,  2 Jan 2026 17:27:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9_dncdAYVvEH; Fri,  2 Jan 2026 17:26:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yX1wAW-42XZ6; Fri,  2 Jan 2026 17:27:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E86E680D06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED25F40844
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767374805;
-	bh=BnTz+1cpsUaTI9uftWjYP3Xua1jNUaL9xRDU+hlnG5M=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=TulXzzWBLkjpRGBX0w7xHZatfKVip269RP0WELo062VR8kS4PiOICDDv1iMyCARpy
-	 cHX7peV9veSPsV6RoTfsKmwNTcMGAv0gd3k742TLM3WgUJQxxeWcFZPbXRB70aTnCc
-	 96I2eZURWSTwoBOYE/Oug+a6ikfbNqOQN5gcVJCsLgzX+MGutqSqVP7PrHkk5I1X03
-	 x4Z6U73AZCgqmQp87+xEocGI7F+Q1OKuCfdyNhsmcx6n1lilFJO/n9a3Y0R/Zkx67b
-	 t72W4VUt1BbIWbnzeQUkojnDDaAiK1iG0vF1rSMRD670jIvLer836+8sng109FA+KX
-	 DbCDYwBPoymXw==
+	s=default; t=1767374831;
+	bh=TBNd5ajwmSChE68Ehu09Qb5RJsGTkA5YYngfJvukoZs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=VUP26hJa/2fj7NIKNEcLM0thTDN3s9M8cW6iiw0ErMpszRL0gg5iPb6pTAzjKzAOr
+	 NPhgEJQlGaKeLHks713jurxYVT4TNn7XkZ1DxjIhwf3U0C/wQ51wha3rA8rOBSlV1l
+	 7iCQAXr69w7TBgpVkilcwmbiNnL153JdqxdcHHim0oM/pk8ee5hW6mtGsc+sRQMcfV
+	 /Zz4/+Qfe47Zk702QF8Id+ok6hBMan5o1G3QV3cjcEPpS29JdufwG1cijDSOvB8SmH
+	 91BXW4ZxKC0wtrlvEGtrz9uKQzZ5k7w2lAPyhfk0pHdCsVDVl3bxbbv85t+ewrS9rf
+	 oHzpTm2SZeXxw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E86E680D06;
-	Fri,  2 Jan 2026 17:26:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED25F40844;
+	Fri,  2 Jan 2026 17:27:10 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1216019D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:26:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B15C119D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC5CA60AD4
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:26:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97CD460AD4
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:27:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id no6vB8XxBalM for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 17:26:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1DD7160661
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DD7160661
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1DD7160661
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:26:41 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 16D38A4C2EBF
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 18:26:40 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58056)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vbiv9-000000000r0-33le
- for buildroot@buildroot.org; Fri, 02 Jan 2026 17:26:39 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 1iy0AYwAkC6h for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 17:27:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B523160661
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B523160661
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:27:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A23988803A; Fri,  2 Jan 2026 17:27:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 18:26:39 +0100
-Message-ID: <20260102172639.1908616-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767374800;
- bh=rAlePCbm8qbyp+8Gz/ccPn/9qy7J2yqgQodx3P7tB50=;
- h=From:To:Subject:Date:From;
- b=P/17cquJJP1tc9XX8ipRXd79VeuokHz3LxBBX6PChwRWhR4CpGjyebS18MWyaOwiS
- n95ytDMKjdk2LSdru9v5GIjm4ejBOnNfZq9T+SOtkUBe+aFe0Gsl7eEqExIMernovk
- rrxVGTVZAiVLBff1E2rCJRQFibTu73M82MGR9inyq/jhTLuIzzrkwCUZPWVfh0ZvOF
- mFBJbOcMNHcVhYyn4rYFZ5RdEVqbx6Zt6R52+TapCJkGGg7kJAqL4EKcnDkIU4r9TK
- UaTPo26JeHjypFTVrtEMlVEoTTVweiJD+CkeuqCaq8kLQoukmB81vpseJ2zwuUwJtq
- A4QKK5wLykCxg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=P/17cquJ
-Subject: [Buildroot] [PATCH 1/1] package/xerces: fix build with recent
- versions of ICU
+Date: Fri, 2 Jan 2026 18:26:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fbb5c740589bd3a969a8de56d6e816706405606a
+X-Git-Newrev: 6019df8f99cb30efd6263b93753bd8bc46874b48
+X-Patchwork-Hint: ignore
+Message-Id: <20260102172708.A23988803A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: override BL31
+ environment variable error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,80 +69,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 that
-bumped package/icu to version 77-1, the build of xerces with ICU
-support enabled fails:
+commit: https://git.buildroot.net/buildroot/commit/?id=6019df8f99cb30efd6263b93753bd8bc46874b48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In file included from /home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/uset.h:38,
-                 from /home/bernd/buildroot/output/build/xerces-3.3.0/src/xercesc/util/regx/RangeToken.cpp:40:
-/home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/char16ptr.h:271:55:
- error: 'is_same_v' is not a member of 'std'; did you mean 'is_same'?
+When building the arm-trusted-firmware, if the host environment has a value
+configured in the BL31 variable such as the following:
 
-Indeed, ICU now requires C++17. Instead of using a patch from Gentoo[1]
-we use a backported upstream commit, limited to CMakeLists.txt, to raise
-the c++ version.
+export BL31=/tmp/bl31.elf
 
-The build error was not recorded yet by the autobuilders but can be
-reproduced with this defconfig:
+This will cause the build of the bl31.elf to be skipped leading to the
+following build error:
 
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_XERCES=y
-BR2_PACKAGE_ICU=y
+make[1]: Nothing to be done for 'bl31'.
+And then:
+readelf: Error: './output/build/arm-trusted-firmware-custom/build/versal/release/bl31/bl31.elf': No such file
 
-[1] https://bugs.gentoo.org/931105
+To fix this, clear the BL31 variable in the MAKE_OPTS, so that building the
+arm-trusted-firmware will build regardless of the host environment.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-C++17-C++14-or-C++11-when-available.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch b/package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch
-new file mode 100644
-index 0000000000..96dc5b2326
---- /dev/null
-+++ b/package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch
-@@ -0,0 +1,32 @@
-+From 6883e346fa88f48022edf84328a09a4653b8c2fe Mon Sep 17 00:00:00 2001
-+From: Roger Leigh <rleigh@codelibre.net>
-+Date: Sat, 10 Mar 2018 21:27:27 +0000
-+Subject: [PATCH] XERCESC-2141: Enable C++17, C++14 or C++11 when available
-+
-+Upstream: https://github.com/apache/xerces-c/commit/6883e346fa88f48022edf84328a09a4653b8c2fe
-+
-+[Bernd: rebased for version 3.3.0, limited to CMakeLists.txt]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt              |   4 +-
-+ configure.ac                |   9 +
-+ m4/ax_cxx_compile_stdcxx.m4 | 982 ++++++++++++++++++++++++++++++++++++
-+ 3 files changed, 993 insertions(+), 2 deletions(-)
-+ create mode 100644 m4/ax_cxx_compile_stdcxx.m4
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 4254f89bb..f5cdb55cc 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -32,9 +32,9 @@ if (POLICY CMP0067)
-+ 
-+ cmake_minimum_required(VERSION 3.12.0)
-+ 
-+-# Try C++14, then fall back to C++11 and C++98.  Used for feature tests
-++# Try C++17, then fall back to C++14, C++11 then C++98.  Used for feature tests
-+ # for optional features.
-+-set(CMAKE_CXX_STANDARD 14)
-++set(CMAKE_CXX_STANDARD 17)
-+ 
-+ # Use folders (for IDE project grouping)
-+ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
--- 
-2.47.3
-
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index dca16d3960..f5b1e5030e 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -162,6 +162,8 @@ endif
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
++# Avoid BL31 environment variable from polluting the build
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL31=
+ endif
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
