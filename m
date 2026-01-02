@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C072FA374B
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41E8FFA374B
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:27:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1005560808;
-	Fri,  2 Jan 2026 15:27:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1160F6083C;
+	Fri,  2 Jan 2026 15:27:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MHqK6bGrvnwN; Fri,  2 Jan 2026 15:27:08 +0000 (UTC)
+ id e1-zOa8ga2Xz; Fri,  2 Jan 2026 15:27:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E259607FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72888605C3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767367628;
-	bh=OG7zxn6EyWFntmys9rnveAjFoo72s3znhY0ytm8cRZo=;
+	s=default; t=1767367638;
+	bh=XuDmzc1iYAvyLVPRCzSZ6W5q/gDiVbNNETLg2XKikHc=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=ayywgCMFFtSaA2SPF9/1m9PyWKWSGAiXkJ3c76tje1DB8aAGfJbJIrRi/3Rl0r6XD
-	 hEENv/RauJ4XscDuDWuR1Zj7xyn4jo4O6yesF59jphVjLd24+k92C4IIOqhL3bMusw
-	 Lpi9OFBvvLH9dFSc6nFfMui9mqUxa0JvaUnKUzVxP+f74LEpdJnXHJkWEBBQgPbSM6
-	 3y0S90yAbkYVvDG36DgPNdLkD+z+WxbL7pNVMkyjnAIZ/ErbXQJiTC6VXJENN52b7f
-	 Lbo6/tvDkslLsqeAzzXj8qvHTkkk7uNf2X7Zugbj20VQn3//REJXSdCKmxBf0ZnhsS
-	 9xC6jX3htv3eg==
+	b=JIVUAZUvLIXie6iD/6u4eBbNhKPdKWFdV+1k90MwuXEqygtJdmh7rvi0i3Zq0DcrC
+	 9EdwyR/VSWID3oRKNmfdPmXTIA+zny4QkuFIHQQxbJUAruYPRerw22648BMid2oXJF
+	 Dq6JYtsXa2YEU4w1JimnYgAfcbV8hiSVRgyS/b6+xQLA4Bvyin2BKvlUFquDDhgLE+
+	 TAWLbBUJ6t9Z8+4iwchgy1CrS3iBE6nmHGWGr+jwQcuuU1s2aAloL5JcQFpM+U66G6
+	 yWWDeokxarLdc9+wpCJ3fNnvzXUZnTq3md80v4fiEQ2whrJwVoJgS5p/sSDSd+8Mr+
+	 AtvQeEhFiv3Yg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E259607FD;
-	Fri,  2 Jan 2026 15:27:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5896BD7
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72888605C3;
+	Fri,  2 Jan 2026 15:27:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A76AD7
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FAEC40437
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 008876084D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zI5F5Ah1rft8 for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 15:27:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t6Xfr-BALDeT for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 15:27:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3822540488
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3822540488
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE3CB600C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE3CB600C4
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3822540488
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EE3CB600C4
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:15 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 39B35A4C3246;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 47439A4C3248;
  Fri,  2 Jan 2026 16:26:37 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:37006)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vbh2y-000000004IY-3KO3;
+ (envelope-from <bernd@kuhls.net>) id 1vbh2y-000000004IY-3mDI;
  Fri, 02 Jan 2026 15:26:36 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 16:26:31 +0100
-Message-ID: <20260102152635.924052-3-bernd@kuhls.net>
+Date: Fri,  2 Jan 2026 16:26:32 +0100
+Message-ID: <20260102152635.924052-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260102152635.924052-1-bernd@kuhls.net>
 References: <20260102152635.924052-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1767367597;
- bh=mmsJMUK8D3+r/zAy2uB1Kk+72bX45OHfiuYRJbdGV/k=;
+ bh=kXCHX8y/cpvaCfLYz32WsCFP8gbQ35RjQMdNcKHsaKQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=g31AaYuspIRuv80LciV73VFHQnEEXmMQs1UcaucGQuiQevZzArawzEbwiiw8n+BXB
- 1fnMp0HD6PB7wjwU1GDCSS99mbeeEQ2b8nGVoW7cAwMZmDqR8cE9ZZTZvL6RDP91eR
- LtMcw/f47tzFxZn3mVEyOoFw3OoYXt5y00Tn2YwtGb4xFWyyhgM+RkC+bpWhX4vKzj
- ccqS402v5TPhwZLJ8oEXEYrMdtJBM3OCKR3xmNEWwbvYNruCMfkGyi6W8CdLRo/h63
- qR0hptP1PP22VMtvtNC4T54f/NWIBWy1sLxUReMQ7TCJBt/ALjHEmkFRjM3b+wej3+
- yQN2OILVbXJQg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=uNo77BMafeMMVZ2hFyB+AQ2hWb8dltmVhgUZRNAbx/PC0tRgyEvnEoBNfV/+KvOk2
+ 7Fo9D014rdg7QjQOsF2OJdk8iSEyTCNCDc/vy9qaFjYxmQdtRQ+gqMrLmOl658GoWm
+ vQ1s68z8pekuUnetDUYiQOMCRf2fvrxAG2YeYyD+x0a1jdInblZCt0pXP4STC+hZZ3
+ /Zx4eLTd+3RnEsYNe097AxX5yXYnHIyXFxEk3qIurU0FSV/z+5JsQkJciyUMQEGnAO
+ DrBd7sMqDXZNO2kLg7dB8EPy6KagIMpRPcDJImjc3sm+DnORHvSECYP20pCxK1l4nt
+ BWT0kQE/rAMbg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=g31AaYus
-Subject: [Buildroot] [PATCH v3 2/6] package/python-scipy: bump version to
- 1.16.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=uNo77BMa
+Subject: [Buildroot] [PATCH v3 3/6] package/python-web2py: bump version to
+ 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,96 +106,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Depends on python-numpy >= 2.0.0:
-https://github.com/scipy/scipy/blob/v1.16.3/pyproject.toml#L41
-https://github.com/scipy/scipy/commit/a3e2bb639b156b01964cda1edca971521c6f39ff
-
-Updated license hash due to copyright year bumps:
-https://github.com/scipy/scipy/commits/v1.16.3/LICENSE.txt
-
-qhull license file was moved upstream:
-https://github.com/scipy/scipy/commit/6d699dded4423e4ff9ac97eff9f4912ed24964fa
-https://github.com/scipy/scipy/commit/96423e5279a4cdf698eedea6f0795ab57cf5a860
-
-Updated numpy path in PYTHON_SCIPY_MESON_EXTRA_PROPERTIES following
-upstream commit:
-https://github.com/numpy/numpy/commit/923f219077c8aa3ad7d3792d8c06cba010b70252
-
-Test was successful:
-
-$ utils/docker-run support/testing/run-tests -j33    -k -d dl -o output_folder tests.package.test_python_scipy.TestPythonPy3SciPy
-09:59:22 TestPythonPy3SciPy                       Starting
-09:59:23 TestPythonPy3SciPy                       Building
-10:10:09 TestPythonPy3SciPy                       Building done
-Downloading to /home/bernd/buildroot/dl/tmpw1frnmf9
-Renaming from /home/bernd/buildroot/dl/tmpw1frnmf9 to /home/bernd/buildroot/dl/kernel-versatile-5.10.202
-Downloading to /home/bernd/buildroot/dl/tmpiip1lach
-Renaming from /home/bernd/buildroot/dl/tmpiip1lach to /home/bernd/buildroot/dl/versatile-pb-5.10.202.dtb
-10:10:24 TestPythonPy3SciPy                       Cleaning up
-.
-----------------------------------------------------------------------
-Ran 1 test in 661.922s
-
-OK
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-scipy/python-scipy.hash | 8 ++++----
- package/python-scipy/python-scipy.mk   | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-index bee5d698a0..16c3af029d 100644
---- a/package/python-scipy/python-scipy.hash
-+++ b/package/python-scipy/python-scipy.hash
-@@ -1,10 +1,10 @@
- # md5, sha256 from https://pypi.org/pypi/scipy/json
--md5  0e8eea0f7c4fe7d8102366230c96d66d  scipy-1.11.4.tar.gz
--sha256  90a2b78e7f5733b9de748f589f09225013685f9b218275257f8a8168ededaeaa  scipy-1.11.4.tar.gz
-+md5  db334c9cae4eeb9f306c342b3744d653  scipy-1.16.3.tar.gz
-+sha256  01e87659402762f43bd2fee13370553a17ada367d42e7487800bf2916535aecb  scipy-1.16.3.tar.gz
- # Locally computed sha256 checksums
--sha256  5517022426a56179540ee6eace15fd723ef8fdb83b2900fed2152dd2e2f972a2  LICENSE.txt
-+sha256  221e59f5e910fd7f94e44f0dac77436a11338c285c6346232e4a850a50da0e94  LICENSE.txt
- sha256  606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
- sha256  3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
- sha256  f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/_dsolve/SuperLU/License.txt
- sha256  0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/_eigen/arpack/ARPACK/COPYING
--sha256  34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb  scipy/spatial/qhull_src/COPYING.txt
-+sha256  106d55c931fd6a84822e5345d900273d059f1c27310d02567ccb313c5d18c55d  scipy/spatial/COPYING_QHULL.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-index 6626826e33..4d8d7b398e 100644
---- a/package/python-scipy/python-scipy.mk
-+++ b/package/python-scipy/python-scipy.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index 098f8dc490..b100a1fec8 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  12669396396044f68a3f0ae9c44137f1a3b327c26e963f52b5e8b2bb20c51561  python-web2py-v3.0.11-git4.tar.gz
++sha256  b22b5c2db862cdef9e0feace1c8841741a14eb5e735b674d6ce2bd5c7f4cac64  python-web2py-v3.1.1-git4.tar.gz
+ sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE.web2py.txt
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 9e1de5c932..5b473698a6 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SCIPY_VERSION = 1.11.4
-+PYTHON_SCIPY_VERSION = 1.16.3
- PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
--PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/6e/1f/91144ba78dccea567a6466262922786ffc97be1e9b06ed9574ef0edc11e1
-+PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/0a/ca/d8ace4f98322d01abcd52d381134344bf7b431eba7ed8b42bdea5a3c2ac9
- PYTHON_SCIPY_LICENSE = \
- 	BSD-3-Clause, \
- 	BSD-2-Clause, \
-@@ -20,7 +20,7 @@ PYTHON_SCIPY_LICENSE_FILES = \
- 	scipy/optimize/tnc/LICENSE \
- 	scipy/sparse/linalg/_dsolve/SuperLU/License.txt \
- 	scipy/sparse/linalg/_eigen/arpack/ARPACK/COPYING \
--	scipy/spatial/qhull_src/COPYING.txt
-+	scipy/spatial/COPYING_QHULL.txt
- PYTHON_SCIPY_CPE_ID_VENDOR = scipy
- PYTHON_SCIPY_CPE_ID_PRODUCT = scipy
- PYTHON_SCIPY_DEPENDENCIES += \
-@@ -42,6 +42,6 @@ PYTHON_SCIPY_CONF_ENV += \
- PYTHON_SCIPY_CONF_OPTS = -Dblas=openblas -Dlapack=lapack
- 
- PYTHON_SCIPY_MESON_EXTRA_PROPERTIES = \
--	numpy-include-dir='$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include'
-+	numpy-include-dir='$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/_core/include'
- 
- $(eval $(meson-package))
+-PYTHON_WEB2PY_VERSION = v3.0.11
++PYTHON_WEB2PY_VERSION = v3.1.1
+ PYTHON_WEB2PY_SITE = https://github.com/web2py/web2py.git
+ PYTHON_WEB2PY_SITE_METHOD = git
+ PYTHON_WEB2PY_GIT_SUBMODULES = YES
 -- 
 2.47.3
 
