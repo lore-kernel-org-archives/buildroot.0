@@ -1,86 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A06FFA3753
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:43:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6237EEED628
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB61F60D9B;
-	Fri,  2 Jan 2026 15:43:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BAF982F51;
+	Fri,  2 Jan 2026 15:43:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CfMClrfXHYEI; Fri,  2 Jan 2026 15:43:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NswIG6rXba0b; Fri,  2 Jan 2026 15:43:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD9060D9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1410581E03
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767368627;
-	bh=5X5Vd/W5HdOp/FqjXw0hDIG5G0ft7NtrypegJaELkXQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=F0IgepgMamqGkob5UjusCJjs5lqJCrpQPOZcgKLpfUQDhcRSj12YsHJLvnqr0C1dy
-	 LO/N2m38Sk22KEC6RNZFvNp6txMF9+Myn2pGQ1uQO98LckNdNAxOx/CrRWDlK0a36z
-	 MDkm/dbfxIWiQFvAd66+v+Am74u1ImrU+MTiX7vvLipKD5F7TiNssEmCciVoThdp+n
-	 zpdw3vx8s/9Membl4+QeG/M0dBHO0b11nEostFJmienvYO/uGuFKfynblGjRR0zeTy
-	 YVYp/ZWJWG9+JuG5CCVDJOGoUdf5waNhBt8xX4gNfVSeUf/Gl0iKCtTsWTZj6A4C1Z
-	 /TkexfonkUgqg==
+	s=default; t=1767368634;
+	bh=11AvO8RFmxrDh8PCZnF8O67BZ7pPwbaaGoTAWtnJKJQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ajRDTH/VE0QhX/YQT1/ox4IUIFOHU8Krc12kLsdcnxAW9Jpab+AOQmAjqrGggCVkA
+	 BWL4ly7M3p3eJBlWcwUI4T4+Zv+kd/l4b+qyE++C9qodquNtupOOXNZVyTNSYwN6N+
+	 UyTA3C+rOWx7aOwDtxHRaopMWG4BNsn6amTt+363XaaeReMN8QMfIPZy97fYOvx+bx
+	 gmxO/7AjBSjru/joyl06VDW033xRbNlpu/j187FRZn/9UfLUA0PQRWr1sJELSl9H4D
+	 7DeZnUjFev8o1yOeQs58RXLM0gs4ow5T/4qyvr+PzGgKrcCM5VL0VTP5L9nXDiAjpD
+	 JSfZoyz65wuQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDD9060D9F;
-	Fri,  2 Jan 2026 15:43:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BFB3351
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:43:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1410581E03;
+	Fri,  2 Jan 2026 15:43:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D5D7351
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E4BE4083D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:43:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5431C407B9
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:43:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id spiW0tlkY_48 for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 15:43:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 91B2F40AE5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91B2F40AE5
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 91B2F40AE5
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:43:44 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AA183A4C2A3F;
- Fri,  2 Jan 2026 16:43:42 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45948)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vbhJW-000000007c7-1FgG;
- Fri, 02 Jan 2026 15:43:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  2 Jan 2026 16:43:42 +0100
-Message-ID: <20260102154342.1180158-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id nm_KOY0n3t_z for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 15:43:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4123840753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4123840753
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4123840753
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:43:51 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 63BD74E41EFE;
+ Fri,  2 Jan 2026 15:43:49 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 34DAF606C7;
+ Fri,  2 Jan 2026 15:43:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id D6549113B072F; Fri,  2 Jan 2026 16:43:47 +0100 (CET)
+Date: Fri, 2 Jan 2026 16:43:45 +0100
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Buildroot Development <buildroot@buildroot.org>, Peter Seiderer
+ <ps.report@gmx.net>
+Message-ID: <20260102164345.51d40b46@windsurf>
+In-Reply-To: <20250920074707.584930-6-bagasdotme@gmail.com>
+References: <20250920074707.584930-4-bagasdotme@gmail.com>
+ <20250920074707.584930-6-bagasdotme@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767368622;
- bh=rFlL3x2pjCpsXLjO4+GTdSEGApYKkgl5hglkzFC4NS4=;
- h=From:To:Cc:Subject:Date:From;
- b=rufzwTKVJqXjncAFcA+2Hujolagbvatu/WiSZXQlkTpbHplcRb/qW/2bpCrhT5c1D
- TGw+tV+2h7gost8gkmM43I4sbWazGXcXjEsauD9eE52UVpZBYnW8hKdDOC2ayMkuWz
- v6ahIfYrttqaeZ3lGj44xkft11p9+RnsKJJEmYBgjz0A5UBlN+t6ojiq+zmTyYUJ62
- oP17vnORVV9xXCCo4dkBUBmVDMjd2STJTMdfJ9/rhqCq5RTCusKwZsF4I2DQMT2IG5
- 9LAXpbX99d/lYLfiTB8L9777hyKXQTyTqHte0K52qozBk4pofPwtqVwVx9q2VlmG6E
- 6w75wYJRVoebg==
+ d=bootlin.com; s=dkim; 
+ t=1767368628; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=0EzC24tiFiBo2bDwPXMGCL/oIPxxgngycQzJm74JGLs=;
+ b=KJC5fQAqONSawlld7gy7likxAC17ZeLSBzxPtxsFFTOv24Y2tUzZzD+5Gkh7qR+LkcCj1m
+ lq2KTr5EPEfdjDk9ueCve3JLoUrSm+YKRiNjW1i1iswj+hh5fBhXClazhYDJWZrNBwRYay
+ ycHFI08SL+xYrJo+gFAbTH7Ve2WaeQ6Ugah3fIQLnwa/1tnM8rKCde3/tLeoRGPbLkAY+E
+ TpZWJPpdK7gDpQrl3+nvkixwbb8soYjoB1uFDusap+e7wvfKH5qFhYqDxrq1fQ/NAS2/gJ
+ wlAgGIvOECpAW1tZ95kbzBL1ewINps9WjcCt22vdzwcPlbtDFI1AfT/N7EuLjA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=rufzwTKV
-Subject: [Buildroot] [PATCH v2 1/1] package/atf: fix non-threaded build
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=KJC5fQAq
+Subject: Re: [Buildroot] [PATCH 2/2] package/ncurses: Also build termlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,85 +97,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit d6c3257e931ed256e3ebcd78938f6146bba8586f bumped the
-package from 0.21 to 0.23. Upstream release 0.22 includes commit
-https://github.com/freebsd/atf/commit/d7c7c53c0626ab59a62aa4efcf05323b3621baa9
-which uses CLOCK_MONOTONIC without including time.h.
+Hello,
 
-Fixes:
-https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/
+Thanks for your patch!
 
-Two minimal defconfigs to reproduce the build error:
+On Sat, 20 Sep 2025 14:47:10 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_ATF=y
+> As a side effect of readline fix in previous commit, building host-gdb
+> fails with undefined reference to ncurses error:
+> 
+>   CXX    init.o
+>   CXXLD  gdb
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `tgoto@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `UP@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `tgetent@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `tgetnum@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `PC@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `tgetstr@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `tgetflag@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `BC@NCURSES6_TINFO_5.0.19991023'
+> /usr/bin/ld: /home/bagas/repo/buildroot/output/host/lib/libreadline.so: undefined reference to `tputs@NCURSES6_TINFO_5.0.19991023'
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [Makefile:2232: gdb] Error 1
 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_GCC_VERSION_13_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_ATF=y
+Since host-gdb builds fine for most people, there must be something
+specific to your environment. Could you provide the details of your
+host distribution + the exact Buildroot version + minimal Buildroot
+defconfig that exhibits the issue so that people can reproduce ?
 
-All defconfigs of the build errors recorded by the buildroot autobuilders
-contain BR2_PTHREADS_NONE=y.
+To be honest, I don't pretend to fully grasp the interactions between
+readline, ncurses, termlib, etc. So if you want patches to be merged,
+they need to come with detailed and convincing explanations :-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: updated subject, build error is unrelated to gcc version (Thomas)
+Thanks a lot!
 
- .../0001-atf-check.cpp-include-time.h.patch   | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/atf/0001-atf-check.cpp-include-time.h.patch
-
-diff --git a/package/atf/0001-atf-check.cpp-include-time.h.patch b/package/atf/0001-atf-check.cpp-include-time.h.patch
-new file mode 100644
-index 0000000000..359172c0e6
---- /dev/null
-+++ b/package/atf/0001-atf-check.cpp-include-time.h.patch
-@@ -0,0 +1,33 @@
-+From 67e7d350a15aff88c151b1fc838dac83d35be955 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 22 Nov 2025 23:47:41 +0100
-+Subject: [PATCH] atf-check.cpp: include time.h
-+
-+Fixes build error with gcc 14 as reported by the buildroot autobuilders:
-+https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/build-end.log
-+
-+atf-sh/atf-check.cpp: In function 'useconds_t get_monotonic_useconds()':
-+atf-sh/atf-check.cpp:183:24: error: 'CLOCK_MONOTONIC' was not declared in this scope
-+
-+Upstream: https://github.com/freebsd/atf/commit/67e7d350a15aff88c151b1fc838dac83d35be955
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ atf-sh/atf-check.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/atf-sh/atf-check.cpp b/atf-sh/atf-check.cpp
-+index 1354e3a..94da413 100644
-+--- a/atf-sh/atf-check.cpp
-++++ b/atf-sh/atf-check.cpp
-+@@ -30,6 +30,7 @@ extern "C" {
-+ #include <limits.h>
-+ #include <signal.h>
-+ #include <stdint.h>
-++#include <time.h>
-+ #include <unistd.h>
-+ }
-+ 
-+-- 
-+2.47.3
-+
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
