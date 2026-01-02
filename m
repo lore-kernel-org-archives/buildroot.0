@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07822FA3742
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 12:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18288FA3748
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 13:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF234406E3;
-	Fri,  2 Jan 2026 12:39:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC534405E5;
+	Fri,  2 Jan 2026 13:37:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJkcicx7TsWX; Fri,  2 Jan 2026 12:39:11 +0000 (UTC)
+ id DJBh2848W2Cm; Fri,  2 Jan 2026 13:37:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC450405DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B516740500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767357549;
-	bh=dK4HXCqlE6GR2OiH5hzQHHjcpbz5Bt7HczArCKU5V+M=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=oCTAfMPkCAWRzmHyr9vvcB0/Ir2mcg/3mAcFBoBG5lFtLNWJMNExt2QJCC4uoe80r
-	 JSrhK21eUddkLvvPahpiah7fRVo0hSVIpMRaiKjiX4Uj9CLKoTKQxvtws9+jiqemaT
-	 DuZGv1fb1aBOnhHIOYE4cm8A6fZmIUhbji1jYIFXQYE4drHSfqtanAOG65frng/hId
-	 7TZGljtrk1mE/Y+lRbeKH2sGakZolehhypv5m/RlFqJkja+tNoDqZXSOM2Hnb/ErwY
-	 +S9nGMO1pNCmJ8dYjD/uQnbxIVH5uQvRfcczU68Qv/hf1FVJ1zW8QEzwMadEqO/FWn
-	 QJyj1Esb/6kpQ==
+	s=default; t=1767361040;
+	bh=Q0h9ezih5ClMBKbL3YlxujJ5kSoZ4Ea67Fuu8tLO2rQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Cf5M9BBCHi1WG6/6Mv81b0PyCLr7V/e+HhklpeUxkm9P85dvqZyyfIrUAXjOPUo88
+	 iVZUo/xYM10XH1l4bBxw8rMC757EICNtuS5Qo0ztY2reOvXnHsnas6VWrwlLskOJAS
+	 HegMc9rhufNxSbhoHKzdDv4ojyYy9uVq8OcyN+gTUMCawJJolhu7UAIc6L8SKIS51p
+	 P5gU1hdD6hlRMjUueiPRhU6MEvcGG2l13YqzH21FHf11Rx8njifiS5r3VSAuZshB5g
+	 kQCH7hUWvdJw/cS1wfqh1HNvQNKnN/cMHX1e2BdoXIXGc7mvd2z5sLNguRN4ZX7pFz
+	 5HqQ7aG0JXjqg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC450405DE;
-	Fri,  2 Jan 2026 12:39:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C471D19D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 12:39:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B516740500;
+	Fri,  2 Jan 2026 13:37:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33FEFD7
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 13:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB0ED403D2
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 12:39:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2676D40500
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 13:37:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rp3ritNw7M-j for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 12:39:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B188540087
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B188540087
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B188540087
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 12:39:06 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id C3B66B0053E;
- Fri,  2 Jan 2026 13:39:02 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 02 Jan 2026 13:39:02 +0100
-MIME-Version: 1.0
-Date: Fri, 02 Jan 2026 13:39:02 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-In-Reply-To: <20260101192150.1714696-1-bernd@kuhls.net>
-References: <20260101192150.1714696-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <00895b0916ef00066cf9b1e6df653590@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767357545;
- bh=jcj7feaX8otdkMLXkY4xFSXvAS8CPAqLTQo8zmkGS3g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=owOO0pt8m3rhyui/jBxY/99I1b2DejXnHOupHtrxGr489Dt6N0EEEufh5C+37WfLa
- FhX/MOd8rMReRMfB2BsDI86ki/DqoKzqNJpI8K0s+kqt3iGCAw0Te9gciJG80Qdf2V
- jXOP7KsyMHlncTCknS+bl3Q19Lgit8x10m3N1CNjWNDnNPCmxyw+Ly4KQR4ZtJwBy8
- JiVcoG+P6lTlR1nNDGVQwgLetIZ9V3x7YDxAFNtp+Lpm9LRIVzBmvBEkUTSNnXotWR
- anuAKgSQR71tr1Yniu4+5X4Fx3+tlMQ7m0JIIvoQ1Gdj5qk7B7TJuYKJBKhobQzuGn
- opZYAMQHIzivg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=owOO0pt8
-Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 6.1.4
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FN6alRhOPO6m for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 13:37:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 657A0404EF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 657A0404EF
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 13:37:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5E35B87E75; Fri,  2 Jan 2026 13:37:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Jan 2026 13:43:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0c4d501e815b6aab7b26c7d61bd63865f9c46a98
+X-Git-Newrev: b30d95335172b6873f8695bc69b40bd1f6e55c4c
+X-Patchwork-Hint: ignore
+Message-Id: <20260102133718.5E35B87E75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/imlib2: bump to 1.12.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,17 +70,84 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/01/2026 20:21, Bernd Kuhls wrote:
-> https://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=0b3937cd1ab60b206a8bca8be5253b053e042161;hb=34277e12e80031c7f89494ba543684bc1dd0be8f
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=b30d95335172b6873f8695bc69b40bd1f6e55c4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Since 1.7.5:
+- imlib2-config is dropped. pkgconfig is used since.
+- release tarballs are delivered in .xz instead of .bz2
+
+Changelog:
+https://git.enlightenment.org/old/legacy-imlib2/src/tag/v1.12.5/ChangeLog
+
+Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+[Julien: reorder hashes]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/imlib2/imlib2.hash | 10 ++++++----
+ package/imlib2/imlib2.mk   | 12 ++----------
+ 2 files changed, 8 insertions(+), 14 deletions(-)
+
+diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
+index 690d836c2e..6c316b5d0b 100644
+--- a/package/imlib2/imlib2.hash
++++ b/package/imlib2/imlib2.hash
+@@ -1,8 +1,10 @@
+-# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.7.3/
+-md5  1e79055a0b8fe27d208b6f8bb1bde60c  imlib2-1.7.3.tar.bz2
+-sha1  3d55965f946d0b2754a84c8e57c78ddc227252c6  imlib2-1.7.3.tar.bz2
++# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.5/
++md5  c81c9f91d92ecbd87cf652f867ec5d74  imlib2-1.12.5.tar.xz
++sha1  055778fca4639962290426c37d909c1a6a4c8e1c  imlib2-1.12.5.tar.xz
++
++# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.5/imlib2-1.12.5.sha256
++sha256  fa2315f28379b430a6e6605b4284b07be06a3ef422d4f5e1c9bb24714c4cf6dd  imlib2-1.12.5.tar.xz
+ 
+ # Locally computed
+-sha256  158d0b8c20bc11221af9e77a64a116fca7051b03cdea2c4f31d31f469382f997  imlib2-1.7.3.tar.bz2
+ sha256  fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
+ sha256  8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index 89b4769f92..5ad89289a4 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-IMLIB2_VERSION = 1.7.3
+-IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
++IMLIB2_VERSION = 1.12.5
++IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.xz
+ IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
+ IMLIB2_LICENSE = Imlib2
+ IMLIB2_LICENSE_FILES = COPYING COPYING-PLAIN
+@@ -14,7 +14,6 @@ IMLIB2_CPE_ID_VENDOR = enlightenment
+ IMLIB2_INSTALL_STAGING = YES
+ IMLIB2_DEPENDENCIES = host-pkgconf freetype
+ IMLIB2_CONF_OPTS = --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
+-IMLIB2_CONFIG_SCRIPTS = imlib2-config
+ 
+ ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
+ IMLIB2_CONF_OPTS += --with-x
+@@ -58,11 +57,4 @@ else
+ IMLIB2_CONF_OPTS += --without-id3
+ endif
+ 
+-# drop -L<dir> from linker flags
+-define IMLIB2_FIXUP_IMLIB2_CONFIG
+-	$(SED) 's/-L[^ ]*//g' $(STAGING_DIR)/usr/bin/imlib2-config
+-endef
+-
+-IMLIB2_POST_INSTALL_STAGING_HOOKS += IMLIB2_FIXUP_IMLIB2_CONFIG
+-
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
