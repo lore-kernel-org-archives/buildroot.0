@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D480CD0D155
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36535D0D156
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE50F412ED;
-	Wed,  7 Jan 2026 18:01:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE031412F8;
+	Wed,  7 Jan 2026 18:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FCSkKIUzEsoB; Wed,  7 Jan 2026 18:01:42 +0000 (UTC)
+ id GD7BREjxmERN; Wed,  7 Jan 2026 18:01:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10BFA40B6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 422DD412C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808902;
-	bh=LJOFRDFTqd+Ll39azhVSfgJUJpxEQUCngtWgXV6Wb9k=;
+	s=default; t=1767808903;
+	bh=/ZsHaJhVeK/WZ2nWvfBbBKVpZc3EbQPj/sbQl1h0N9s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LL4HDoiZpD89r1K01/TJpT01laHbjhoCx37ZEIU7BYRXLOvLdPWSg2xARzynkipYn
-	 xpBsF0pdCblu4dQ+W3i8GZNPIJd0fQTlOOnXjNn8w9sw6CJFZMxXGIs5EZ2B3Q7meN
-	 C1M0/4ee4FumX6RjSPloA70qtiYE2GJvSHJlWAA2JHrhv3hrhiizeCjl4y4xmREQ21
-	 Vo+SrljGJ3gDaI8pkdEVBoRD4Fbino8zdy80z0dGbY3EKS9uMdapelkcJcVt+8WX6e
-	 ObusaWDMweNkW+qIyYssMh4UC4QTLXWedr8qyi8k50JvwNd621XUV4Kh8FgfXhBqiA
-	 aautlOeL4UNfQ==
+	b=hcFbO7EHMGxjNvZD/W/29+ljLRx/4DifQh+t+yAah61lX4gCbuovf7YEWBmFLUGuU
+	 2SzV1tOEZFcK9hqSTCcJyS+hyciNL2FCZWpHu73rU0lvBMFkJ+Cng45yT6MzQFh8A/
+	 2LdRJFUTd6cjLn8TPpWW0GNu1wTyHDgNFUsEzYZ7j4v9VOUbRMI92Mgx6u5MTGczeB
+	 peOFgB6qx9OXJtBUPsoudQVxgANQ3nhRxDmboZQXdP9ZegzSagrcbGIFmFmqOmMzbF
+	 f29G28nqdEVQMickjIVIKAJWd8KY5PDilaGvoq9qqL+N8ZcUHsH0BWf4iSf5aZE4FB
+	 EL/mL0pVgV4KA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10BFA40B6D;
-	Wed,  7 Jan 2026 18:01:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3287A25B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 422DD412C4;
+	Wed,  7 Jan 2026 18:01:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CD5425B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D2F9607D9
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5986A80EA5
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9QRe3dYVC8kL for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V_F3aSGPUXKE for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72CD760843
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66ABD80E98
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72CD760843
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66ABD80E98
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 723C987C86; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+ id 6502E883AF; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:51:29 +0100
+Date: Fri, 2 Jan 2026 18:22:27 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 79b670f497cf1fb6153554f73827a701ae3bc244
-X-Git-Newrev: 3a2608c47a889c27e2e8a3be7893c67794b6861c
+X-Git-Oldrev: ca0f992fe9d74fa570fb23ffbeb7a9438e5683df
+X-Git-Newrev: 9a315994a635c1c88a71e83e70a8baaca1ff4325
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180112.723C987C86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/libselinux: allow
- pip to use system-provided packages
+Message-Id: <20260107180111.6502E883AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/libmbus: bump
+ version to 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,121 +77,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a2608c47a889c27e2e8a3be7893c67794b6861c
+commit: https://git.buildroot.net/buildroot/commit/?id=9a315994a635c1c88a71e83e70a8baaca1ff4325
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Since the bump of pip to version 25.3 in commit
-285097051d4a7dd821f01d15c705867f7e26c635, the build of the Python
-bindings of libselinux is broken for both the host and target
-variants.
+Release notes:
+https://github.com/rscada/libmbus/blob/0.9.0/release_notes.txt
 
-For the host variant, because "pip install" no longer finds the
-system-provided setuptools and tries to download setuptools by itself,
-causing build issues because our host-python doesn't have SSL support:
+Downloading the source tarball is broken since at least Oct 30th, 2024
+as reported by the buildroot autobuilders:
+https://autobuild.buildroot.net/?reason=libmbus-0.8.0&step=50&start=50
 
-  Could not fetch URL https://pypi.org/simple/setuptools/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries exceeded with url: /simple/setuptools/ (Caused by SSLError("Can't connect to HTTPS URL because the SSL module is not available.")) - skipping
+Switching to the github helper provides the correct source code but the
+tarball downloaded has a different hash. A quick search did not provide
+alternative download locations for the original tarball
+libmbus-0.8.0.tar.gz.
 
-For the target variant, because "pip install" no longer finds the
-sysconfigdata package:
+To solve the broken build we do not only switch _SITE to github but also
+bump the package to 0.9.0 and add autoreconf which needs two directories
+being created in _POST_PATCH_HOOKS. One missing directory was already
+reported upstream: https://github.com/rscada/libmbus/issues/179
 
-  ModuleNotFoundError: No module named '_sysconfigdata__linux_sparc64-linux-gnu'
-  [end of output]
-
-We fix this by taking a patch from Debian, which is slightly tweaked
-to also cover our host package (the original Debian patch was passing
---no-build-isolation only when DESTDIR was not empty, but in Buildroot
-host packages are built with DESTDIR empty, and we do need
---no-build-isolation).
+Updated license hash due to upstream commit:
+https://github.com/rscada/libmbus/commit/ab8919136d3cabb943b1cbdd4d6e2f7eea4b8f3f
 
 Fixes:
-
-  https://autobuild.buildroot.net/results/0e9de0c0d8b6ec57eea9f8834f02076b296ba4f1/ (host-libselinux)
-  https://autobuild.buildroot.org/results/1b87c659f1901b0bf33fa4a2ff0ed40b13114bba/ (libselinux)
+https://autobuild.buildroot.net/results/91a/91a82dc73bf87cf1969cd6a2ddea1809ab9a1613/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Co-Authored-By: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0e5eef911c9b313fddd9912128bf09d605b5f6ae)
+[Julien: change release notes url to use tag]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit e42b3de3b1ccd41ef1907a791a7d3792d201c0be)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...src-Makefile-build-python-module-without-.patch | 51 ++++++++++++++++++++++
- package/libselinux/libselinux.mk                   |  4 ++
- 2 files changed, 55 insertions(+)
+ package/libmbus/libmbus.hash |  4 ++--
+ package/libmbus/libmbus.mk   | 12 ++++++++++--
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch b/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-new file mode 100644
-index 0000000000..7f4a76515b
---- /dev/null
-+++ b/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-@@ -0,0 +1,51 @@
-+From 8cfe4535f23a7768ee5efa615d11563a8404777c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-+Date: Mon, 27 Oct 2025 22:40:59 +0100
-+Subject: [PATCH] libselinux/src/Makefile: build python module without
-+ isolation
-+
-+The "pip install" logic in libselinux/src/Makefile tries to get
-+setuptools from the network, which is not correct as during the
-+build/installation, there shouldn't be any network access, or
-+downloading of arbitrary resources from the network.
-+
-+This causes build issues in Debian:
-+
-+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1121121
-+
-+And in Buildroot:
-+
-+  https://autobuild.buildroot.net/results/0e9/0e9de0c0d8b6ec57eea9f8834f02076b296ba4f1/build-end.log
-+
-+To fix this, we use the --no-build-isolation pip install argument so
-+that pip install is allowed to use the system-provided setuptools,
-+instead of wanting to download this one.
-+
-+This patch is derived from
-+https://sources.debian.org/src/libselinux/3.9-4/debian/patches/Build-python-module-without-isolation-Closes-1119155.patch,
-+with the change that --no-build-isolation is passed unconditionally,
-+regardless of whether $(DESTDIR) is empty or not.
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://lore.kernel.org/selinux/20251227143911.1630813-1-thomas.petazzoni@bootlin.com/
-+---
-+ libselinux/src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libselinux/src/Makefile b/libselinux/src/Makefile
-+index e9141bb9..9bc10606 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -197,7 +197,7 @@ ifneq ($(DISABLE_SHARED),y)
-+ endif
-+ 
-+ install-pywrap: pywrap
-+-	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-++	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --no-build-isolation --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-+ 	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
-+ 	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-+ 
-+-- 
-+2.52.0
-+
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 405c4a9f21..a77ee7659a 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -35,8 +35,12 @@ LIBSELINUX_DEPENDENCIES += \
- 	python3 \
- 	python-setuptools \
- 	host-python-pip \
-+	host-python-setuptools \
- 	host-swig
+diff --git a/package/libmbus/libmbus.hash b/package/libmbus/libmbus.hash
+index 493bab5820..212ae9ddef 100644
+--- a/package/libmbus/libmbus.hash
++++ b/package/libmbus/libmbus.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9fca42592da0ba75df66c6f885a4dbfa916d23e65e3d1ce6e38d940d2a2719a4  libmbus-0.8.0.tar.gz
+-sha256  ea171a4ae443eca7186f564db2c3cc8b84c1ac343f227f92cd52ec6a948f4a74  COPYING
++sha256  89fadb9074f5f719b2988cf30af1f8ced3e40f9f499b5b9047f8f33f876cce2d  libmbus-0.9.0.tar.gz
++sha256  034b36d855501ea9c5588f4753335d08757149a02faf1d61baa9a6d861be4e3a  COPYING
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+index 61f797b5b9..65287b083d 100644
+--- a/package/libmbus/libmbus.mk
++++ b/package/libmbus/libmbus.mk
+@@ -4,10 +4,18 @@
+ #
+ ################################################################################
  
-+LIBSELINUX_MAKE_ENV += \
-+	$(PKG_PYTHON_SETUPTOOLS_ENV)
-+
- LIBSELINUX_MAKE_OPTS += \
- 	$(PKG_PYTHON_SETUPTOOLS_ENV) \
- 	PYTHON=python$(PYTHON3_VERSION_MAJOR)
+-LIBMBUS_VERSION = 0.8.0
+-LIBMBUS_SITE = http://www.rscada.se/public-dist
++LIBMBUS_VERSION = 0.9.0
++LIBMBUS_SITE = $(call github,rscada,libmbus,$(LIBMBUS_VERSION))
+ LIBMBUS_INSTALL_STAGING = YES
+ LIBMBUS_LICENSE = BSD-3-Clause
+ LIBMBUS_LICENSE_FILES = COPYING
++# github tarball does not include configure
++LIBMBUS_AUTORECONF = YES
++# Autoreconf is missing some directories
++define LIBMBUS_CREATE_DIRS
++	mkdir -p $(@D)/libltdl
++	mkdir -p $(@D)/m4
++endef
++LIBMBUS_POST_PATCH_HOOKS += LIBMBUS_CREATE_DIRS
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
