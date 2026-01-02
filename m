@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4F30FA3728
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2E89FA3754
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AD7480BF5;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37CC940865;
 	Fri,  2 Jan 2026 17:06:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k1riqJABPHv1; Fri,  2 Jan 2026 17:06:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 725C780C1F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767373595;
-	bh=ytQKkjdClK7Nv3dXjD2W/u5BtWTbZlvwxbStge0GD10=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mLckdrCNhyxrQ6QXrdksquYCnG8F1JE3NlfFJoXnVZlsyoGy25o7cBzyxCNCbuL3N
-	 1xDIWvsnQKp3gvra7cMRX3k2mMcYB1xNovTpi495pkfQHki14z6L6pmggXUGAEx6Gi
-	 Y0RqTTSHAsGAimhSDktJni9MLv/xFDI0VQvky98vLzcDDQTzxTEt1GXJVjgekwZb0c
-	 4y3u1Z55f0yM9bxEbvRpXZE7s/q/sYoHrIOT/DTDWRFUN+6dosbipiKz6IUT+kpejV
-	 C7J128mkYcktL3OgQKUe6mS7NEuoStxszZfpm+fS3DiIAHv0W7Bi+de7/nHdL8JrV4
-	 rENl4Ac0XNM5g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 725C780C1F;
-	Fri,  2 Jan 2026 17:06:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D9C7519D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BEE49403F3
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id obwMawU70-Qn for <buildroot@buildroot.org>;
+ id G-MYGS-cWPAZ; Fri,  2 Jan 2026 17:06:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 112A0404C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767373594;
+	bh=BPr/E+7Ft3uojyNN47VU+FwdMY9zXTypK0LJS8fDbfU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=P0djFMSxxZaShK8zowB7OTtooWBjtfGwfr6Ja/U3zawKC2VVFOLN61cczmiTOJTYU
+	 YrGMRremmyCB6iTCx55NmzYoib318wGYgBJmFvIxDpGQkOpSiVA8N9qVA3UhCPq7S5
+	 4cqbaNZEZyeuoudJT/sjr2whAru4VkAy+QSwBPYT1z7LlRosfLWq5c760zR/QMdJVg
+	 UFaoU7yf4yN+UTR5tu91aGhFRDVF9YuHatGChmWFLR6GMjyraCYGfc23uRTZRCdhzL
+	 MLBxPPPYTv/nmKcPpFFjW3JqbGwBRryvEkZmqIUQeDwIE1PaT1CqXK8IcyJKWey7jj
+	 LWWi5TL5YVJng==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 112A0404C3;
+	Fri,  2 Jan 2026 17:06:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BDF87440
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A4CCF60A7F
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hd9_OTGFGHHW for <buildroot@buildroot.org>;
  Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0378040227
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFD66607DA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0378040227
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFD66607DA
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E76A387FC3; Fri,  2 Jan 2026 17:06:30 +0000 (UTC)
+ id D8B2187FBD; Fri,  2 Jan 2026 17:06:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 Jan 2026 18:06:09 +0100
+Date: Fri, 2 Jan 2026 18:06:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0c865ee1e8b8a5a79dd1be86bfc5a8859b943ee
-X-Git-Newrev: 98a4635d87efaf054cbd10cabcdbdee4153a5b4f
+X-Git-Oldrev: cf383d3e13e7963eca8e1c3aefe2512e9b5ef81c
+X-Git-Newrev: f0c865ee1e8b8a5a79dd1be86bfc5a8859b943ee
 X-Patchwork-Hint: ignore
-Message-Id: <20260102170630.E76A387FC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board: microchip: mpfs_icicle: update to
- support production silicon
+Message-Id: <20260102170630.D8B2187FBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/microchip_mpfs_icicle: bump Linux
+ and U-Boot, add hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,134 +77,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98a4635d87efaf054cbd10cabcdbdee4153a5b4f
+commit: https://git.buildroot.net/buildroot/commit/?id=f0c865ee1e8b8a5a79dd1be86bfc5a8859b943ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the introduction of the production silicon Icicle Kit comes the
-need to support multiple board device trees. The HSS puts a minimal dtb
-in it's payload's ancillary-data immediately after U-Boot in memory.
-CONFIG_OF_BOARD will use this dtb that the HSS carries with the bare
-minimum of nodes enabled. It allows for firmware to provide the address
-of the devicetree in memory using the `a1` register.
-Use the device tree compatible from the hart software services to
-essentially "detect" which board is in use and therefore select the
-appropiate device tree for the board.
-Add a fdt production node to the .its referencing the production Icicle
-Kit DTB with appropriate attributes. Introduce matching configuration
-entries to enable selection of the production Icicle kit FDT blob for
-the MPFS Icicle Production Silicon board.
-Update the configuration names to match the device tree compatibles for
-each board configuration. With these updates, change image node and
-configuration node names with more appropriate names.
+Following Microchip's Linux 2025.07 release, update the assets to the
+latest versions, this includes a Linux version bump and addditional
+U-Boot drivers and functionality. Update the Linux headers to support
+the updated v6.12 kernel. Update the corresponding package hashes.
 
 Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/microchip/mpfs_icicle/mpfs_icicle.its        | 36 +++++++++++++++++-----
- board/microchip/mpfs_icicle/uboot-env.txt          | 21 +++++++------
- .../mpfs_icicle/uboot-fragment-rootfs.config       |  1 +
- 3 files changed, 42 insertions(+), 16 deletions(-)
+ board/microchip/mpfs_icicle/patches/linux/linux.hash | 2 +-
+ board/microchip/mpfs_icicle/patches/uboot/uboot.hash | 2 +-
+ configs/microchip_mpfs_icicle_defconfig              | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/microchip/mpfs_icicle/mpfs_icicle.its b/board/microchip/mpfs_icicle/mpfs_icicle.its
-index a62b079fa1..2f89a6ee2f 100644
---- a/board/microchip/mpfs_icicle/mpfs_icicle.its
-+++ b/board/microchip/mpfs_icicle/mpfs_icicle.its
-@@ -24,7 +24,7 @@
- 					algo = "sha256";
- 				};
- 			};
--			base_fdt {
-+			fdt-mpfs-icicle-kit.dtb {
- 				description = "Flattened Device Tree blob";
- 				data = /incbin/("./mpfs-icicle-kit.dtb");
- 				type = "flat_dt";
-@@ -35,19 +35,41 @@
- 					algo = "sha256";
- 				};
- 			};
-+			fdt-mpfs-icicle-kit-prod.dtb {
-+				description = "Flattened Device Tree blob";
-+				data = /incbin/("./mpfs-icicle-kit-prod.dtb");
-+				type = "flat_dt";
-+				arch = "riscv";
-+				compression = "none";
-+				load = <0x8a000000>;
-+				hash-1 {
-+					algo = "sha256";
-+				};
-+			};
- 		};
- 
- 		configurations {
--			default = "kernel_dtb";
--			kernel_dtb {
-+			default = "conf-microchip,mpfs-icicle-kit-prod";
-+			conf-microchip,mpfs-icicle-kit {
- 				description = "1 Linux kernel, FDT blob";
- 				kernel = "kernel";
--				fdt = "base_fdt";
-+				fdt = "fdt-mpfs-icicle-kit.dtb";
- 			};
- 
--			base_dtb {
-+			conf-microchip,mpfs-icicle-kit-prod {
-+				description = "1 Linux kernel, FDT blob";
-+				kernel = "kernel";
-+				fdt = "fdt-mpfs-icicle-kit-prod.dtb";
-+			};
-+
-+			conf-microchip,fdt-mpfs-icicle-kit.dtb {
- 				description = "Base FDT blob for MPFS Icicle board";
--				fdt = "base_fdt";
-+				fdt = "fdt-mpfs-icicle-kit.dtb";
-+			};
-+
-+			conf-microchip,fdt-mpfs-icicle-kit-prod.dtb {
-+				description = "Base FDT blob for MPFS Icicle Production board";
-+				fdt = "fdt-mpfs-icicle-kit-prod.dtb";
- 			};
- 		};
--};
-+};
-\ No newline at end of file
-diff --git a/board/microchip/mpfs_icicle/uboot-env.txt b/board/microchip/mpfs_icicle/uboot-env.txt
-index 8a655085ed..befbfa2006 100644
---- a/board/microchip/mpfs_icicle/uboot-env.txt
-+++ b/board/microchip/mpfs_icicle/uboot-env.txt
-@@ -5,12 +5,15 @@
- setenv fdt_high 0xffffffffffffffff
- setenv initrd_high 0xffffffffffffffff
- 
--load mmc 0:${distro_bootpart} ${scriptaddr} mpfs_icicle.itb;
--bootm start ${scriptaddr}#kernel_dtb;
--bootm loados ${scriptaddr};
--# Try to load a ramdisk if available inside fitImage
--bootm ramdisk;
--bootm prep;
--fdt set /soc/ethernet@20112000 mac-address ${icicle_mac_addr0};
--fdt set /soc/ethernet@20110000 mac-address ${icicle_mac_addr1};
--bootm go;
-+fdt addr ${fdtcontroladdr}
-+fdt get value board_compatible / compatible 1
-+
-+setenv fitconf conf-${board_compatible}
-+
-+load mmc 0:${distro_bootpart} ${scriptaddr} mpfs_icicle.itb
-+bootm start ${scriptaddr}#${fitconf}
-+bootm loados ${scriptaddr}
-+bootm ramdisk
-+bootm prep
-+run design_overlays
-+bootm go
-diff --git a/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config b/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
-index e2a5eb9438..47f4c35ea4 100644
---- a/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
-+++ b/board/microchip/mpfs_icicle/uboot-fragment-rootfs.config
-@@ -1,3 +1,4 @@
- CONFIG_USE_BOOTARGS=y
- CONFIG_BOOTARGS="root=/dev/mmcblk0p3 rootwait uio_pdrv_genirq.of_id=generic-uio"
- CONFIG_MPFS_PRIORITISE_QSPI_BOOT=n
-+CONFIG_OF_BOARD=y
+diff --git a/board/microchip/mpfs_icicle/patches/linux/linux.hash b/board/microchip/mpfs_icicle/patches/linux/linux.hash
+index 416a8b1550..d0e2d5693c 100644
+--- a/board/microchip/mpfs_icicle/patches/linux/linux.hash
++++ b/board/microchip/mpfs_icicle/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  dcb7b41fd363729675c34545fcb514d5a94dbb3714ee10f527a26ca7716c2579  linux-linux4microchip+fpga-2024.06.tar.gz
++sha256  7789cc2844cb9633aa8c146e194c9ad3482bf06ace707d66d0ca6039ed16833d  linux-linux4microchip+fpga-2025.07.tar.gz
+diff --git a/board/microchip/mpfs_icicle/patches/uboot/uboot.hash b/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
+index 2628d4b4fd..0adbe15710 100644
+--- a/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
++++ b/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  d461c45a9c5acd019776cdcf8ab2b571315282a880dd6580431f7dd5bfac3889  uboot-linux4microchip+fpga-2024.06.tar.gz
++sha256  8dab9abc2861d95e609cd62a44b4687d03dc13eae6487fd1ae1ded6398ddb0cd  uboot-linux4microchip+fpga-2025.07.tar.gz
+diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
+index 4337ac34b4..4d465016c7 100644
+--- a/configs/microchip_mpfs_icicle_defconfig
++++ b/configs/microchip_mpfs_icicle_defconfig
+@@ -1,13 +1,13 @@
+ BR2_riscv=y
+ BR2_RISCV_ISA_RVC=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/microchip/mpfs_icicle/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2024.06)/linux-linux4microchip+fpga-2024.06.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2025.07)/linux-linux4microchip+fpga-2025.07.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2024.06)/uboot-linux4microchip+fpga-2024.06.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2025.07)/uboot-linux4microchip+fpga-2025.07.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="microchip_mpfs_icicle"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/uboot-fragment-rootfs.config"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
