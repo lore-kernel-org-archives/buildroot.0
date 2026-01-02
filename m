@@ -4,87 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7EABFA3755
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 20:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0899EFA3758
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 20:55:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DA76815CA;
-	Fri,  2 Jan 2026 20:54:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D00028176F;
+	Fri,  2 Jan 2026 20:55:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OZv4ihwNwMKM; Fri,  2 Jan 2026 20:54:37 +0000 (UTC)
+ id dadQVbK1WdW0; Fri,  2 Jan 2026 20:55:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA873816DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E5A814B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767387277;
-	bh=7g75ROv7XBaiQ81R25lQF9WVqgn9qnSyR97JfgUMV9Q=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=sgzBYXiFuKlrLm1HnhWyWwQ8CZdvgULGB7wyMJx3icKIzRGdTLgWvxIwaGgnRQ0mJ
-	 IP7osofrFeayYBaTPXKGcrVRNrz3QSgjLpk1KHOfIpqB3pxU48f9XaCHz9IWYNC7pn
-	 X1UJBmLHJXJYwFtOopcjAtX6QYGg516BK3w1T+ZiO+ZrbEHvNvtmJyN2xL56mvJzXp
-	 zrK9+Mdr2/Yca0pjNv52cNT9u8ZUxReUnt/taAPm/kFjkiAXiPjIezX5Mmd19BN5Uu
-	 6wwnkU5NNBfUKqb4Q3hKOab7mlTWwIoJ+9lAMaRYGoI1ToJumM37crHhXaj/89XdyZ
-	 sRG0Cjfc8reZA==
+	s=default; t=1767387308;
+	bh=c3pDyaig5OArA0neDDO1Nj3RGqiJjkxOz/GIukYHxiM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ZPCV1kSyqJpL/gI53gyFd6d+OP5QA5CYOy8dFMTiPzEcid3srl4mzVfNtdUNlc05Z
+	 DrRqnlf4KZckFxg+tp0/nfRH5EHbYJMDTpXlVReGCyg4OCiRAQnOZS4JO++R6eugdF
+	 Ro63THG/QF+p4/VP/2RV3wWd0BDgoGX8rN5b5+UNDU9A+4DlJxELY3OWJ0nVrRorVW
+	 6uj7lIVTLoho9/ph5hObMcle0r0WwqN6lfneEwzwGwpvc90oQAM8oM+wGKLof5FgKZ
+	 jWuF1gXLJlWSims609tbongbf8Dq0mm4wByK9dD6omCq5MltHoJ+/q57zRz9Iso2LW
+	 ZC62TPrUTEO4w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA873816DF;
-	Fri,  2 Jan 2026 20:54:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2E5A814B5;
+	Fri,  2 Jan 2026 20:55:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BC5D202
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:54:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B519A19D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D143608FD
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:54:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A761B608FD
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:55:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EDBVPdfIxtQG for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 20:54:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id nSSb-aDWkxvs for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 275EB60906
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 275EB60906
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 275EB60906
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:54:34 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 8E5D1C1C3BC
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:54:06 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5DE80606C7;
- Fri,  2 Jan 2026 20:54:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id B5D3E113B023D; Fri,  2 Jan 2026 21:54:31 +0100 (CET)
-Date: Fri, 2 Jan 2026 21:54:30 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20260102215430.58ec8b88@windsurf>
-In-Reply-To: <20260102204741.19542-1-james.hilliard1@gmail.com>
-References: <20260102204741.19542-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767387272; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=8NAK5o08mWuiXgx1dX5DxBFh3xwmoKTo0vcaLGQsrRo=;
- b=VF6/gFoPsqfJ4k2F9PtWDOYyvD7gTJy+br4EXnZnMVH8fm29VYNgaqXShWH0d9qxJRb4iY
- ancuWlzXF+UFHI22cQNypQ4tJRurDfmr+4UHdD56mPHho3qxPLuHDRVmJu26F8s1ogWeTW
- U+bbT9oJWxaCG0btxRUQK/xS16oXK4VDpi/kT9si4nT/6oU4f1AFcvlIcEmjEvyAtDax6P
- 4k2vePWANlMkzAaj58I/RQfd83t+r02rKOsWR+Q7nAmVmVDpFOEqmGGYKcYmG5nUDVQ5QX
- jYqSrbW0p7e020yqx0JsI9oYZn4gxw7Rjk1U3jVhKtvlQnJlYagFUNIy4jlhAA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=VF6/gFoP
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-portend: bump to version
- 3.2.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D7E9608F7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D7E9608F7
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7EB2688058; Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Jan 2026 21:52:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 675f31751f2683a1c36e168c3e66aba56c5cb045
+X-Git-Newrev: ce8409fda58d7799463645b981043adccf4ec7a6
+X-Patchwork-Hint: ignore
+Message-Id: <20260102205504.7EB2688058@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pynacl: bump to version
+ 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,33 +71,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  2 Jan 2026 13:47:41 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ce8409fda58d7799463645b981043adccf4ec7a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> License hash changed due to move to license file autogeneration:
-> https://github.com/jaraco/portend/commit/9a81db3c77bc106017dcd4b0853a5a94f43ae33c
-> https://github.com/jaraco/portend/commit/d2b8d7750f78e870def98c4e04053af4acc86e29
-> 
-> Add new python-coherent-licensed build dependency.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-portend/python-portend.hash | 6 +++---
->  package/python-portend/python-portend.mk   | 8 +++++---
->  2 files changed, 8 insertions(+), 6 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pynacl/python-pynacl.hash | 4 ++--
+ package/python-pynacl/python-pynacl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
+index de54fdeafb..0a76de10dc 100644
+--- a/package/python-pynacl/python-pynacl.hash
++++ b/package/python-pynacl/python-pynacl.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pynacl/json
+-md5  0225d0ec3dfe729ee2a52a52ffc81d09  pynacl-1.6.1.tar.gz
+-sha256  8d361dac0309f2b6ad33b349a56cd163c98430d409fa503b10b70b3ad66eaa1d  pynacl-1.6.1.tar.gz
++md5  4443a25f6c2f27fa47962a75b1ecb968  pynacl-1.6.2.tar.gz
++sha256  018494d6d696ae03c7e656e5e74cdfd8ea1326962cc401bcf018f1ed8436811c  pynacl-1.6.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  d3174ad63e721d4c9dccb8ad4320848992d314369bc46319720b5802c9153fe9  LICENSE
+diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
+index a3d7dd98d8..38484717f6 100644
+--- a/package/python-pynacl/python-pynacl.mk
++++ b/package/python-pynacl/python-pynacl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYNACL_VERSION = 1.6.1
++PYTHON_PYNACL_VERSION = 1.6.2
+ PYTHON_PYNACL_SOURCE = pynacl-$(PYTHON_PYNACL_VERSION).tar.gz
+-PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/b2/46/aeca065d227e2265125aea590c9c47fbf5786128c9400ee0eb7c88931f06
++PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/d9/9a/4019b524b03a13438637b11538c82781a5eda427394380381af8f04f467a
+ PYTHON_PYNACL_LICENSE = Apache-2.0
+ PYTHON_PYNACL_LICENSE_FILES = LICENSE
+ PYTHON_PYNACL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
