@@ -1,88 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8F2EFA3741
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 14:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CF55FA374B
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 14:12:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8064C40629;
-	Fri,  2 Jan 2026 14:09:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02C0780F95;
+	Fri,  2 Jan 2026 14:12:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UhRWG1OXcu8u; Fri,  2 Jan 2026 14:09:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pw8O61lrFTKz; Fri,  2 Jan 2026 14:12:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0EA940631
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0CC880F63
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767362970;
-	bh=6r5KOLqsA7PDpG8JmNY2ll+HTHK/Gyl5XOlDsoJclHA=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=SLUc6916d/4STS6hh0ojTpUy5kUaupQRSCNKhx4jc+SNfacg0Rr1hMeh6A8rtp1mj
-	 uDBMB2ZsjMvZ2G8B7StS7c2OHx0SFiiXHRHm6uBZSH8Vlxl7fyUwxcqfAwuZfVRDsa
-	 xfJK2qtJqh0OX28kih8Xs+zqXfdymRxtdjQwlYSirwcigpudAKB43pzNG36ZCec1/H
-	 KrBMKiyWgqXb1pKo3pNA+ig28vwBOW2XtIQQHYiHGn6Qhpi+giKKu9UT+p33st8rDF
-	 tOC9bO6zUdzKBYNm1k7cZA1LY297w/6MKnQB90UkHjR9K4cA6mr9eZnfg2oTbcp/Fl
-	 cKiqiDqcwc6jA==
+	s=default; t=1767363120;
+	bh=SDtPEL++kF5EUDGG+jAsksdTN3sML8iZMrEu9zHg/Hg=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=OJ/F4VRFkaYYjBMkWuUnkpdRtvsjABi204hR758Raw6nJ90EWbU8tTtkbOL/V6CR+
+	 gaF7Yutyg2cW8qZpyUK9YNk5Jm3ooTKjab8x3VlbIu7ZP02LC3CbsSmDZ/WHWfQZio
+	 NZ7a5OQb9Hils9g12FSYBizbyB6CwdOULAnh3hH/r6tuJgmiT76IcI8HbM0NonnX77
+	 10uGn12uz0amYhZrRQ8/+gi6eZQl0GmGhe38Is1K6gHQja+joHH7nPmHmPcTIAjCBL
+	 6T0y42gJPGeKh7vIFaCq6G+57sxCSkVGlSzTjKcfIrmXTLLfd16nbDpxWIV9sS2L72
+	 Rr5XiPAmWwRPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0EA940631;
-	Fri,  2 Jan 2026 14:09:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 570BA351
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 14:09:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0CC880F63;
+	Fri,  2 Jan 2026 14:12:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 996CD351
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 14:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DB0440631
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 14:09:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B81C80F63
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 14:11:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kmiuIa0BJUuv for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 14:09:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dz-p2Pu6nw8R for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 14:11:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3121340629
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3121340629
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 81B0480EF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81B0480EF9
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3121340629
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 14:09:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 81B0480EF9
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 14:11:57 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B522AA4C3246;
- Fri,  2 Jan 2026 15:08:14 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40334)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8B104A4C2A6E
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:11:55 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41026)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vbfp2-000000006rb-2xwU;
- Fri, 02 Jan 2026 14:08:08 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vbfsh-000000007Xm-0sj2
+ for buildroot@buildroot.org; Fri, 02 Jan 2026 14:11:55 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 15:08:03 +0100
-Message-ID: <20260102140805.166641-6-bernd@kuhls.net>
+Date: Fri,  2 Jan 2026 15:11:54 +0100
+Message-ID: <20260102141155.167197-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260102140805.166641-1-bernd@kuhls.net>
-References: <20260102140805.166641-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1767362894;
- bh=SIMDBjdpPw53wWLltQEOAKbzv6jUFhQwhTAdctwfiaE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Z0bBY3y8CXtlK5jelEEZlLn6awc68bCi04jXBokIOsW/WIQnE3A667P6SpiDpZEY+
- /D79GBq+3lhT1or3h3Kda877/5CYwAqJ/sSSNRoOS1SK98FZHK6AX5pSXHIttPuNT7
- 7kHYMu/5zixVKTpaR7DtQigtUBZLP+aHVsBOL/PvWPM3GHa4l1I0HpVyYDoGRHtjJc
- LHlLFgVf91WzKx9jeOmgV9JaehPFevtyHUDTontpxkdsag2OOn1LeeQ5bxf6jQMlj3
- 5nlTTJFX9xKbPJNhOWdCZXByWHXk7tKFL0HnVq0GASe+Pyzt1DJOIAAxS5B5S76nJ8
- VwQXD6tMeOqcw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202511301023; t=1767363115;
+ bh=vfCyKvUXa996TG1hWE3qHBEw0e38u0xHLJU+e+I4PHU=;
+ h=From:To:Subject:Date:From;
+ b=gIVHpiUMc0r9X4Puoog6ub2c0agErobQMSpTyWEf/SMOLKSwt81IpDoaMmTVQz1M2
+ Sw6h5rcb3fYkvgNHRu3LtBFY3AI2LWdVYiQAw33DTmjvJizYxG94YxSmzQRaSr+JTC
+ bqlKNvCt39/IUkjWhaF67HzHt0vvHs57BSb6i1A732R/cUHDOkwFjYqODdYrK9YRiO
+ 3nFswDS/3tvgLALmBu0s/0/9TxvBDTAw5/42lbi5IETziJNE+kad7BASxumw976tKT
+ T936FLIQNqRLHPUwK5+s01H+EkgavIs3zeK/Tjel1NrUtEqVef1QS32YMbqgIIDA+x
+ LLVY+qQd+sGZg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Z0bBY3y8
-Subject: [Buildroot] [PATCH v2 5/6] package/python-html5lib: fix build with
- python 3.14
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=gIVHpiUM
+Subject: [Buildroot] [PATCH 1/1] package/ncurses: bump to version
+ 6.6-20251231
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,72 +91,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Guillaume William Brs <guillaume.bressaix@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://github.com/ThomasDickey/ncurses-snapshots/blob/v6_6_20251231/NEWS
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...y-fix-version-parsing-on-Python-3.14.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
+ package/ncurses/ncurses.hash | 2 +-
+ package/ncurses/ncurses.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch b/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
-new file mode 100644
-index 0000000000..0147aa1418
---- /dev/null
-+++ b/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
-@@ -0,0 +1,42 @@
-+From b90dafff1bf342d34d539098013d0b9f318c7641 Mon Sep 17 00:00:00 2001
-+From: Andrew Sukach <andrew@sukach.org>
-+Date: Fri, 12 Sep 2025 21:53:31 -0700
-+Subject: [PATCH] `setup.py`: fix version parsing on Python 3.14 (ast.Str
-+ removed)
-+
-+Python 3.14 removes the ast.Str node type. String literals now appear
-+as ast.Constant(value=str).
-+Update the AST check to accept both ast.Str (for older Pythons) and
-+ast.Constant with a string value (for Python 3.8+), allowing html5lib to
-+build successfully on Python 3.14 while remaining compatible with older
-+version.
-+
-+Upstream: https://github.com/html5lib/html5lib-python/pull/589
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ setup.py | 11 ++++++++---
-+ 1 file changed, 8 insertions(+), 3 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 30ee0575..42ab6f67 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -92,9 +92,14 @@ def default_environment():
-+     for a in assignments:
-+         if (len(a.targets) == 1 and
-+                 isinstance(a.targets[0], ast.Name) and
-+-                a.targets[0].id == "__version__" and
-+-                isinstance(a.value, ast.Str)):
-+-            version = a.value.s
-++                a.targets[0].id == "__version__"):
-++            if hasattr(ast, "Str") and isinstance(a.value, ast.Str):
-++                version = a.value.s
-++            elif (hasattr(ast, "Constant")
-++                  and isinstance(a.value, ast.Constant)
-++                  and isinstance(a.value.value, str)):
-++                version = a.value.value
-++assert version is not None
-+ 
-+ setup(name='html5lib',
-+       version=version,
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index 7369e3cd64..fe9bdbe915 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  fc3871f051e941a637488c07c81d984f731003e65c0f78353606e18296011aac  ncurses-6.5-20250720.tar.gz
++sha256  9796dfb0e790bac2a994a86df83adddc1a96021cbc02c44c4f2ea886069bd91d  ncurses-6.6-20251231.tar.gz
+ # Locally computed
+ sha256  708999f95527e1ffa670c6fce288c6c600cb477dd04afcc1171422b3dd4ee226  COPYING
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 864f62b57c..5e2077500a 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # When there is no snapshost yet for a new version, set it to the empty string
+-NCURSES_VERSION_MAJOR = 6.5
+-NCURSES_SNAPSHOT_DATE = 20250720
++NCURSES_VERSION_MAJOR = 6.6
++NCURSES_SNAPSHOT_DATE = 20251231
+ NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
+ NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
+ NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
 -- 
 2.47.3
 
