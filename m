@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09E53FA3751
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77899FA3758
 	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:01:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D123180BB1;
-	Fri,  2 Jan 2026 22:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 469B240851;
+	Fri,  2 Jan 2026 22:01:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uoGdQ7Fpzipx; Fri,  2 Jan 2026 22:01:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZkwrFA4UZUXI; Fri,  2 Jan 2026 22:01:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9B3280ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D55D401B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767391273;
-	bh=P/RRg7Qs9D4UEZeRByNPCImTtpzQtF0MhrocMsEsvtE=;
+	s=default; t=1767391274;
+	bh=BQv+M2iTPf9BskQX76gd7BVlLGT/mHCWgdtRBTgFFRU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=T9xT/scjGUhIr0Cm9azOUyX9qN/xR8rm8k+ohkQH5fGegRPUBjZ/TA0YkAHZr2+n+
-	 En49vPuEI1IejOBR/jNqFeGE6khnxeIgyrYaVXssEPWiG8+wP9pSiwi0eAO1nODxjR
-	 UE2aRRnOQguaIzNHmtkVFIncNaEgaIzv/pD8ej8R3TiLVxOQz4AJJKOutiPozh9LQV
-	 oor56dyIuDhho2UCuv+9RM9JC+3jyAowoBcsoJkCO2VX+k7w3KGpOofam4OGOWklaL
-	 qJ1WIw+9cF65u0pCoyyGzYlEFSdg9DPTxVyk73g+/NHkUwNJf0XOoFxsG+IfSGatAD
-	 61/K1toMZp5dw==
+	b=IABE/cafU6TN7exn1YbJS8vekYdppZdmAHjdk9mjU2dX0tAtMKJtNqNjofzU0xtS8
+	 7MEJkH5UljhTSLHkcZX3/SyFlxHenkCMPTo1Pc/0ycNvDK7NucenrqnuC0fqtT9Ven
+	 qlzix/Px5y23YM566E1k5FcTHachCyuPDE/gio012+6iICCmIZUk7R2FKJE1SdVilX
+	 jokRhRB9AtdisLyV6LJkMmAkklfHeCJUq+8sHkzCIQdiVGpJfTZ2FGTvFL2F58n34s
+	 igMsIJuPcp5WLSSR0CllGjy10JtxnmDJXQGQqnSqiJYR143C9LaJggHCndI+pMO78A
+	 rD11QjUi4adKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9B3280ADE;
-	Fri,  2 Jan 2026 22:01:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 38C2419D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D55D401B9;
+	Fri,  2 Jan 2026 22:01:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F37219D
  for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:01:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 335A960625
+ by smtp2.osuosl.org (Postfix) with ESMTP id 438D540072
  for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:01:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FWBpgEp-4xGF for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nKqWTSLgnRxM for <buildroot@buildroot.org>;
  Fri,  2 Jan 2026 22:01:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A1D460633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D5B54009C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A1D460633
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D5B54009C
  for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:01:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68D8E80E31; Fri,  2 Jan 2026 22:01:05 +0000 (UTC)
+ id 7EF4B81738; Fri,  2 Jan 2026 22:01:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 Jan 2026 23:00:02 +0100
+Date: Fri, 2 Jan 2026 23:00:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c53d5ef5c6179a742d5057a3266d046b3e5f9962
-X-Git-Newrev: d492ff7912c20626c190d5b455edb7777058e3fc
+X-Git-Oldrev: d492ff7912c20626c190d5b455edb7777058e3fc
+X-Git-Newrev: ec9a136c22ffcf173cd0fca2af2ff1afbc072266
 X-Patchwork-Hint: ignore
-Message-Id: <20260102220105.68D8E80E31@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-logbook: bump to version
- 1.9.2
+Message-Id: <20260102220105.7EF4B81738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-libusb1: bump to version
+ 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,68 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d492ff7912c20626c190d5b455edb7777058e3fc
+commit: https://git.buildroot.net/buildroot/commit/?id=ec9a136c22ffcf173cd0fca2af2ff1afbc072266
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Migrate from setuptools cython based build to setuptools-rust.
-
-Add new python-typing-extensions runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-logbook/Config.in           |  2 ++
- package/python-logbook/python-logbook.hash |  5 ++---
- package/python-logbook/python-logbook.mk   | 10 +++++-----
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ package/python-libusb1/python-libusb1.hash | 4 ++--
+ package/python-libusb1/python-libusb1.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-logbook/Config.in b/package/python-logbook/Config.in
-index 99996b6517..8950ee234a 100644
---- a/package/python-logbook/Config.in
-+++ b/package/python-logbook/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PYTHON_LOGBOOK
- 	bool "python-logbook"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_PYTHON3_ZLIB
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
- 	  A logging replacement for Python.
- 
-diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
-index 361ea9921e..de75a97e72 100644
---- a/package/python-logbook/python-logbook.hash
-+++ b/package/python-logbook/python-logbook.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/logbook/json
--md5  d15918a5745349eefab327661454527d  logbook-1.8.0.tar.gz
--sha256  487fa41539787bfa21a51fabd7f3ae8ae7f9e6679bb3e241d0f5f18a2fc37e9c  logbook-1.8.0.tar.gz
-+# Locally calculated after vendoring
-+sha256  1533f03ef76a4d646b14dd00e9982d6ef5d5dc86f134c9bbc1cd98b55fbf566f  python-logbook-1.9.2-cargo4.tar.gz
+diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
+index cf270a2d3d..a933e98416 100644
+--- a/package/python-libusb1/python-libusb1.hash
++++ b/package/python-libusb1/python-libusb1.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/libusb1/json
+-md5  617502b66841e601c28c668c20c1d843  libusb1-3.2.0.tar.gz
+-sha256  a11a6095e718cd49418a96329314da271cca6be7b4317a142724523371ac8961  libusb1-3.2.0.tar.gz
++md5  f4973afe56c872eb2b8e7a930f566bb4  libusb1-3.3.1.tar.gz
++sha256  3951d360f2daf0e0eacf839e15d2d1d2f4f5e7830231eb3188eeffef2dd17bad  libusb1-3.3.1.tar.gz
  # Locally computed sha256 checksums
- sha256  2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
-diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
-index f6ccc1aac6..2bcd48bc2f 100644
---- a/package/python-logbook/python-logbook.mk
-+++ b/package/python-logbook/python-logbook.mk
-@@ -4,12 +4,12 @@
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
+index 7d68377f51..10a727a7a9 100644
+--- a/package/python-libusb1/python-libusb1.mk
++++ b/package/python-libusb1/python-libusb1.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LOGBOOK_VERSION = 1.8.0
--PYTHON_LOGBOOK_SOURCE = logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
--PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/c3/a2/fafcc4ce7bad34093150e14f9ed179aa53e3e60a5c46e840547bdae26674
--PYTHON_LOGBOOK_SETUP_TYPE = setuptools
-+PYTHON_LOGBOOK_VERSION = 1.9.2
-+PYTHON_LOGBOOK_SOURCE_PYPI = logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
-+PYTHON_LOGBOOK_SITE_PYPI = https://files.pythonhosted.org/packages/f2/cf/e39c249003caaa7f84e2b00c11c7423892d525f8136ff349f9914914a744
-+PYTHON_LOGBOOK_SITE = $(PYTHON_LOGBOOK_SITE_PYPI)/$(PYTHON_LOGBOOK_SOURCE_PYPI)?buildroot-path=filename
-+PYTHON_LOGBOOK_SETUP_TYPE = setuptools-rust
- PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
- PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
--PYTHON_LOGBOOK_DEPENDENCIES = host-python-cython
- 
- $(eval $(python-package))
+-PYTHON_LIBUSB1_VERSION = 3.2.0
++PYTHON_LIBUSB1_VERSION = 3.3.1
+ PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
+-PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/d9/b7/9e833af6cb52fa2aece1c6a1378667ca0172bead14f63ffccc3cb9862df3
++PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/a2/7f/c59ad56d1bca8fa4321d1bb77ba4687775751a4deceec14943a44da18ca0
+ PYTHON_LIBUSB1_SETUP_TYPE = setuptools
+ PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
+ PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
