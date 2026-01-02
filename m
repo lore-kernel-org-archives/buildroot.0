@@ -4,110 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15DAFA3758
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 23:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B577FA3727
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 23:08:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05BB4408B4;
-	Fri,  2 Jan 2026 23:04:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16A1B40819;
+	Fri,  2 Jan 2026 23:08:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 570kCrGClgQf; Fri,  2 Jan 2026 23:04:33 +0000 (UTC)
+ id 6ewS1nA-2svc; Fri,  2 Jan 2026 23:08:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE35340825
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A01E4081E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767395073;
-	bh=kFotWTObLij+YrhYFbhPUNMVTOT2tcGE81kQxDuN73A=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=bmXh1vxoZMmjr7LexaL/ztHJfBtYWJVWQ2zCCT9GcPYJyO3BpldeYM6+qSdRAX/yg
-	 zCwX+0eJvx5YuMRSELkCO3xadAiLW4CPLbs5X8ZPrSqJ++xS5dxfOhfnTDqZox2ax6
-	 7vUY5m1BgpuXDOLpugUUOZPZnw2+1eDvm/Qb87SYV3hut2oYis6L82S/2WmqzIg/CW
-	 y/QDDz+6b0oLjhKrUUCFvutXymTcGc289mgoDo75kQMMSG24sguN7MU0g1/qXI9fsW
-	 kp3TrCqcqeO1vVN75MTftjb8v6CMbIZkhWI1Zyb9qFpZHHuiO9rxK/8uaNRrnRrrd8
-	 paPF/pH79lTig==
+	s=default; t=1767395324;
+	bh=WVfFsxOjV4wIPiolVK1KSglb364RE/AZSITgqLFnYOg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=bMQYteThToOo/r5E6AKWZXJdxWErBtPC5nsRckucG0SLaBTA3tLHQ8gdo9ZJaaqvc
+	 kyDc/8zkxgLXRBqLwoYPk8Pj4Lx5eCqqzFHt/vZoseq7m7wM5YMrZSQ/rTZDOiM0A2
+	 OJ6NXxj8Wm7pC14goMVK0NaAB4nXGuHj49wyMn+Hfvfg8g7Dr7DnlmUO1HM/5eSXvU
+	 txi1Q2PWpBgUg6BmaLy1MkO0dRLhWbf1hmn58qw8pmtK5iOiZ5YlIRWIDNOPAuU9Hc
+	 /6bkwn0qArfzabVcyo4/HvtqfKkYmi4K2baC8+K9xP83igaCyINitXii/Cy0dM7nTS
+	 S5roslcdAYP9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE35340825;
-	Fri,  2 Jan 2026 23:04:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 68F54440
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 23:04:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A01E4081E;
+	Fri,  2 Jan 2026 23:08:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D4DA249
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 23:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FA3040072
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 23:04:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F349260765
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 23:08:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VR3IZuCyB_2I for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 23:04:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::2d; helo=mail-oa1-x2d.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 561F840024
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 561F840024
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com
- [IPv6:2001:4860:4864:20::2d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 561F840024
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 23:04:31 +0000 (UTC)
-Received: by mail-oa1-x2d.google.com with SMTP id
- 586e51a60fabf-3e83c40e9dfso8274064fac.1
- for <buildroot@buildroot.org>; Fri, 02 Jan 2026 15:04:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767395070; x=1767999870;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+u9AwZ6LQHr9CKefKSqF+9bbvNaslcnG/hSoMEhw1cU=;
- b=lojtWLQ4AbIMnG3wIR2+fky/yH9A3WUhUwNv5tCl2rtBfuRLHRiD9O42iVEeLT0mte
- CdYFEFjo2lsDslkPEVPfwwp/oPCZIF3m8ONOUL1DR0fJkuH7WncpgKjsdsI6rjFJe9LZ
- tmJy5I2YnNWSYDn4sbRoBI7cJCZRBdvZSKujh0UJWjX8GOldddlL09D7MAw71RTuf9+i
- RbXvGah/VTBx9QCY+NEdh/2PRXkeEMsuvKoNIj7jA4BFUw2fhplAorlZnv86mdlW49lr
- RFrLhadYem12hU8K2CXOLpJej7/Y2mBv2vWPFFE4HpOcgMd+5jC83foHsBzjwpaEnrHc
- MuBA==
-X-Gm-Message-State: AOJu0YypfewpohXr7tXjmJgkG+dctVuFSKgDiEOlA9iGa9p4RJ4kF+iJ
- CTTmoEZXU/pkYkaUc7JIJnxZaIIP9ba7r9V6aRFEErSwuGswB5UWJHxts0uqoIV9RUc=
-X-Gm-Gg: AY/fxX7Jkuqgcdwx8NtxvHcf16Ytd9ZgGss/OFrd/pjOkjMgJhf9oDxuCgd2QdCYAYr
- HHSxZJtC5OMDHxRMalPUwA4+T38c6KvY4Jc/cmpy8o7nNgOzqnZQvK4v4QO3OzNtvOWhZkWNO0s
- n7qIbVoPWkhyPfLrDLDx+FRL/Wz2x218rKjALMrYE2qJhR+EjKh5QALBEQJAI6KPShOUe4AlhtG
- t1MJdmP9AbrEtQtEO7eeoJJrIEuNJsqGum/bTMYP4t17trkDLLRtjN/Pep9oNJcjgkVmVRkE1Zf
- 04jlGgQpIFATkCXw7LzUuc0bYwXQxigwuzgJ9whesjCD8nkeu40+/buoD/BbqK3EBYPi6pngY9f
- +9aLI094UxtBtDrxPuyV5MGKGm8u841FJYOW/RfT/2IfbzuLzJo8RaWYlY3FBJIIUKO8WmJpZvU
- VlE5/2vLxLbBDPtdQK+kon203V25XYPc1sQT5PzVp2WW3s2FwFebkPcfRry3c0B1KJn6DNq59Ta
- fF2QrKLiIQhGmTySYrZ9SB7yV8fRy4uiysqGXMrQfDDKjvdpNnMMTs=
-X-Google-Smtp-Source: AGHT+IHA72Ace7Ys4pDR9G41G5+G7+6vpOI1iO0ikKg10i4O2O+maR5aspIHRnRfDvyVjRmZtqfSrQ==
-X-Received: by 2002:a05:6871:6d0d:b0:3ec:3a39:f50b with SMTP id
- 586e51a60fabf-3fda5674705mr22377081fac.14.1767395069853; 
- Fri, 02 Jan 2026 15:04:29 -0800 (PST)
-Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
- [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 586e51a60fabf-3fdaa8d44fdsm25628666fac.3.2026.01.02.15.04.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Jan 2026 15:04:29 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wQ3rOCuq6SUX for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 23:08:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E02DD6069D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E02DD6069D
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E02DD6069D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 23:08:41 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 93159A4C1FBD;
+ Sat,  3 Jan 2026 00:08:39 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57268)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vboG7-000000002Xx-0wKO;
+ Fri, 02 Jan 2026 23:08:39 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 16:04:25 -0700
-Message-ID: <20260102230426.531850-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Jan 2026 00:08:39 +0100
+Message-ID: <20260102230839.4010498-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767395070; x=1767999870; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+u9AwZ6LQHr9CKefKSqF+9bbvNaslcnG/hSoMEhw1cU=;
- b=HK3f4Ixx4eJHmhE+YhxzqBTO/EJ36dNw8OiDlrZr3nlaFw5li/xCW7vLilTWYLOqOS
- kObdrOnz9Rz+SgVSDj5KZlVhXBJq8LSbzu7O2BfnBszsQ8hI4wLnlsEB+vwFPrMXvI3V
- UW27F/3swZmK963fERL5/ZETE/6Oh+g9PHJCqe+t45Io7A/1raLNnelFjxd+f23yatBk
- LGtWM726dpAGKTWFlmSEnV7xyYLq2aiiklKM6Iz9E/7LkEc31mFgTAXTfcYoepYYLYUT
- 4fIf6IlaArKcGchkSBHXzEGbMCYga3K4RirHl9M8OnrKkpLtnNcMVArkfxrVkqMRsIVs
- VZBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1767395319;
+ bh=JnVFtrHwsNPQB2cE9t9cGhsV5hMPWWkRBZJmHnyPgvU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=LaEMuI4jItt89I+AljVwt7Mc1iCEWXQ+MtUCJmn/13cqJFnI61hl9EvI/leFX3WYF
+ q1teO6KwgueJV3z+4EkOXnAk+AzNEoIPsmiO2rzicBsxvCiZXk01oE2DAd3b+7h9H7
+ JincUnfzSBligHgmYVlWJOS8/SL5i0NwOB/8K3ox1+OIHOA3UsogZiggEuU1N8hEx8
+ UPnM1H6MwGd7kCjIyJYbLtcGqXWK2U0HaErgN7FoQmfGg4yVuxbHey2nX6plKlyM8N
+ g8cui2xmfOS4AuZ7ETetZzJjxIboYNqrSuFGS+ZhKQlXyNc08CnfQDHevZh1kfvwQw
+ a1l0bfwZmsOaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HK3f4Ixx
-Subject: [Buildroot] [PATCH 1/2] package/python-ipython-pygments-lexers: new
- package
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=LaEMuI4j
+Subject: [Buildroot] [PATCH v2 1/1] package/cairo: Fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,82 +91,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Philippe Proulx <eeppeliteloop@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/Config.in                                  |  1 +
- package/python-ipython-pygments-lexers/Config.in   |  6 ++++++
- .../python-ipython-pygments-lexers.hash            |  5 +++++
- .../python-ipython-pygments-lexers.mk              | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-ipython-pygments-lexers/Config.in
- create mode 100644 package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.hash
- create mode 100644 package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.mk
+Buildroot commit 29888ab35e047099d239f266b7b565cd4023503e bumped cairo
+to version 1.18.2.
 
-diff --git a/package/Config.in b/package/Config.in
-index f5f1f6a741..def3db0e50 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1176,6 +1176,7 @@ menu "External python modules"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
- 	source "package/python-ipython-genutils/Config.in"
-+	source "package/python-ipython-pygments-lexers/Config.in"
- 	source "package/python-iso8601/Config.in"
- 	source "package/python-iterable-io/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-diff --git a/package/python-ipython-pygments-lexers/Config.in b/package/python-ipython-pygments-lexers/Config.in
+This version includes commit
+https://gitlab.freedesktop.org/cairo/cairo/-/commit/87f7c60bf7c20079c34cfc54e4db05920d14db56
+"Add support for C11 atomics"
+
+which causes build errors:
+
+../src/cairo-image-source.c: In function '_pixman_transparent_image':
+../src/cairo-image-source.c:89:40: error: passing argument 1 of '_cairo_atomic_ptr_cmpxchg_impl'
+ from incompatible pointer type [-Wincompatible-pointer-types]
+   89 |         if (_cairo_atomic_ptr_cmpxchg (&__pixman_transparent_image,
+
+Fixes:
+1.18.2: https://autobuild.buildroot.net/results/5d4/5d4cd38d71008f385f92577b07f21dcfc3c19b38/
+1.18.4: https://autobuild.buildroot.net/results/0e9/0e962c66e1e96b5899e87c13ace824379adc09f9/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: updated patch description, git-formatted patch and pointed source
+    URL to versioned git tree
+
+ ...ilence-some-Wincompatible-pointer-ty.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch
+
+diff --git a/package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch b/package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch
 new file mode 100644
-index 0000000000..8b3a9fdb35
+index 0000000000..95f7924f12
 --- /dev/null
-+++ b/package/python-ipython-pygments-lexers/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_IPYTHON_PYGMENTS_LEXERS
-+	bool "python-ipython-pygments-lexers"
-+	select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
-+	help
-+	  Defines a variety of Pygments lexers for highlighting
-+	  IPython code.
-diff --git a/package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.hash b/package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.hash
-new file mode 100644
-index 0000000000..90c69fa626
---- /dev/null
-+++ b/package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/ipython-pygments-lexers/json
-+md5  a8d51d899ed01e1cb6773657cf88f734  ipython_pygments_lexers-1.1.1.tar.gz
-+sha256  09c0138009e56b6854f9535736f4171d855c8c08a563a0dcd8022f78355c7e81  ipython_pygments_lexers-1.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b1d0dbc0fa79774d34b8e2d0aec91d50d8caf05f7b40fc22c3010a4bd9ad2bf9  LICENSE
-diff --git a/package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.mk b/package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.mk
-new file mode 100644
-index 0000000000..e86284b265
---- /dev/null
-+++ b/package/python-ipython-pygments-lexers/python-ipython-pygments-lexers.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-ipython-pygments-lexers
-+#
-+################################################################################
++++ b/package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch
+@@ -0,0 +1,49 @@
++From 78258169cf0c380754804b5835203a199ba8efab Mon Sep 17 00:00:00 2001
++From: Stephan Bergmann <stephan.bergmann@collabora.com>
++Date: Mon, 22 Sep 2025 17:08:36 +0200
++Subject: [PATCH] external/cairo: Silence some -Wincompatible-pointer-types
 +
-+PYTHON_IPYTHON_PYGMENTS_LEXERS_VERSION = 1.1.1
-+PYTHON_IPYTHON_PYGMENTS_LEXERS_SOURCE = ipython_pygments_lexers-$(PYTHON_IPYTHON_PYGMENTS_LEXERS_VERSION).tar.gz
-+PYTHON_IPYTHON_PYGMENTS_LEXERS_SITE = https://files.pythonhosted.org/packages/ef/4c/5dd1d8af08107f88c7f741ead7a40854b8ac24ddf9ae850afbcf698aa552
-+PYTHON_IPYTHON_PYGMENTS_LEXERS_SETUP_TYPE = flit
-+PYTHON_IPYTHON_PYGMENTS_LEXERS_LICENSE = BSD-3-Clause
-+PYTHON_IPYTHON_PYGMENTS_LEXERS_LICENSE_FILES = LICENSE
++Downloaded from
++https://github.com/LibreOffice/core/blob/36e0812a01ae5b94a1bb7549b0db20812d0f821a/external/cairo/cairo/Wincompatible-pointer-types.patch.0
 +
-+$(eval $(python-package))
++Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/issues/921
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/cairo-image-source.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/cairo-image-source.c b/src/cairo-image-source.c
++index eaf72e2cc..05ffa5660 100644
++--- a/src/cairo-image-source.c
+++++ b/src/cairo-image-source.c
++@@ -86,7 +86,7 @@ _pixman_transparent_image (void)
++ 	if (unlikely (image == NULL))
++ 	    return NULL;
++ 
++-	if (_cairo_atomic_ptr_cmpxchg (&__pixman_transparent_image,
+++	if (_cairo_atomic_ptr_cmpxchg ((cairo_atomic_intptr_t *) &__pixman_transparent_image,
++ 				       NULL, image))
++ 	{
++ 	    pixman_image_ref (image);
++@@ -118,7 +118,7 @@ _pixman_black_image (void)
++ 	if (unlikely (image == NULL))
++ 	    return NULL;
++ 
++-	if (_cairo_atomic_ptr_cmpxchg (&__pixman_black_image,
+++	if (_cairo_atomic_ptr_cmpxchg ((cairo_atomic_intptr_t *) &__pixman_black_image,
++ 				       NULL, image))
++ 	{
++ 	    pixman_image_ref (image);
++@@ -150,7 +150,7 @@ _pixman_white_image (void)
++ 	if (unlikely (image == NULL))
++ 	    return NULL;
++ 
++-	if (_cairo_atomic_ptr_cmpxchg (&__pixman_white_image,
+++	if (_cairo_atomic_ptr_cmpxchg ((cairo_atomic_intptr_t *) &__pixman_white_image,
++ 				       NULL, image))
++ 	{
++ 	    pixman_image_ref (image);
++-- 
++2.47.3
++
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
