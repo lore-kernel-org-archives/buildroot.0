@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0899EFA3758
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 20:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2879EFA3755
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 20:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D00028176F;
-	Fri,  2 Jan 2026 20:55:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 976D681D11;
+	Fri,  2 Jan 2026 20:55:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dadQVbK1WdW0; Fri,  2 Jan 2026 20:55:08 +0000 (UTC)
+ id TpnXT65DZ1fQ; Fri,  2 Jan 2026 20:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E5A814B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C920818C0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767387308;
-	bh=c3pDyaig5OArA0neDDO1Nj3RGqiJjkxOz/GIukYHxiM=;
+	s=default; t=1767387309;
+	bh=LDV17YYf2/68voSQzkfrxdKN/S+54uNOE56XHZUgRwU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZPCV1kSyqJpL/gI53gyFd6d+OP5QA5CYOy8dFMTiPzEcid3srl4mzVfNtdUNlc05Z
-	 DrRqnlf4KZckFxg+tp0/nfRH5EHbYJMDTpXlVReGCyg4OCiRAQnOZS4JO++R6eugdF
-	 Ro63THG/QF+p4/VP/2RV3wWd0BDgoGX8rN5b5+UNDU9A+4DlJxELY3OWJ0nVrRorVW
-	 6uj7lIVTLoho9/ph5hObMcle0r0WwqN6lfneEwzwGwpvc90oQAM8oM+wGKLof5FgKZ
-	 jWuF1gXLJlWSims609tbongbf8Dq0mm4wByK9dD6omCq5MltHoJ+/q57zRz9Iso2LW
-	 ZC62TPrUTEO4w==
+	b=WDicZdqroN0qes79Hork9xxKgkUpqViOCGR3ETwlveo3Xf1UgYVANtcP897ZCSQpH
+	 QLiBdAqePVtwrpO87dyZ4G2c4i0//4rqqOjy2cykXrIllFF670ZxxBISc1qMSiqU6B
+	 fAzJ+MjKk0/deNgCS/EFzr1VDx5v3QubHB9gADHjPO+clck3wB2YmPJPpFtjBjydHU
+	 cfiKQ3ViMgZRLDQjkDt9jhi92tnsAcprmxAV09pXFQkcU+KLoeeg2tQIHnK43AZHv1
+	 WgZ4FtZQjWRwMrCQFuwtmV9ajoKwQPfxCzt8s14hEBsF9+GklbIJ9dIFE5hFQbrHGP
+	 HTJwsaJkHZr9Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2E5A814B5;
-	Fri,  2 Jan 2026 20:55:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B519A19D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C920818C0;
+	Fri,  2 Jan 2026 20:55:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFE29202
  for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A761B608FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6F2D4088A
  for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:55:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nSSb-aDWkxvs for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oEKD4H3HFBVu for <buildroot@buildroot.org>;
  Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D7E9608F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A59FF4068F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D7E9608F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id A59FF4068F
  for <buildroot@buildroot.org>; Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EB2688058; Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
+ id 8CE598804F; Fri,  2 Jan 2026 20:55:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 Jan 2026 21:52:27 +0100
+Date: Fri, 2 Jan 2026 21:52:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 675f31751f2683a1c36e168c3e66aba56c5cb045
-X-Git-Newrev: ce8409fda58d7799463645b981043adccf4ec7a6
+X-Git-Oldrev: ce8409fda58d7799463645b981043adccf4ec7a6
+X-Git-Newrev: 26f07744752f027e6eb7a1734ceca03ae8ea8587
 X-Patchwork-Hint: ignore
-Message-Id: <20260102205504.7EB2688058@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pynacl: bump to version
- 1.6.2
+Message-Id: <20260102205504.8CE598804F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pycares: bump to version
+ 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,44 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce8409fda58d7799463645b981043adccf4ec7a6
+commit: https://git.buildroot.net/buildroot/commit/?id=26f07744752f027e6eb7a1734ceca03ae8ea8587
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pynacl/python-pynacl.hash | 4 ++--
- package/python-pynacl/python-pynacl.mk   | 4 ++--
+ package/python-pycares/python-pycares.hash | 4 ++--
+ package/python-pycares/python-pycares.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
-index de54fdeafb..0a76de10dc 100644
---- a/package/python-pynacl/python-pynacl.hash
-+++ b/package/python-pynacl/python-pynacl.hash
+diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
+index c77915987b..321434e299 100644
+--- a/package/python-pycares/python-pycares.hash
++++ b/package/python-pycares/python-pycares.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pynacl/json
--md5  0225d0ec3dfe729ee2a52a52ffc81d09  pynacl-1.6.1.tar.gz
--sha256  8d361dac0309f2b6ad33b349a56cd163c98430d409fa503b10b70b3ad66eaa1d  pynacl-1.6.1.tar.gz
-+md5  4443a25f6c2f27fa47962a75b1ecb968  pynacl-1.6.2.tar.gz
-+sha256  018494d6d696ae03c7e656e5e74cdfd8ea1326962cc401bcf018f1ed8436811c  pynacl-1.6.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pycares/json
+-md5  577c064ebf4b84fbd53890b4c0f86f5a  pycares-5.0.0.tar.gz
+-sha256  62e38a6cce0f3dbfe6dfcccba10526255b3823a2a040b313afef7aa9b039ce03  pycares-5.0.0.tar.gz
++md5  36560432e7ebf6e9746080ca2ca7cf0f  pycares-5.0.1.tar.gz
++sha256  5a3c249c830432631439815f9a818463416f2a8cbdb1e988e78757de9ae75081  pycares-5.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  d3174ad63e721d4c9dccb8ad4320848992d314369bc46319720b5802c9153fe9  LICENSE
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
-index a3d7dd98d8..38484717f6 100644
---- a/package/python-pynacl/python-pynacl.mk
-+++ b/package/python-pynacl/python-pynacl.mk
+ sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
+diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
+index 0cb1eeda6f..cb645e60f0 100644
+--- a/package/python-pycares/python-pycares.mk
++++ b/package/python-pycares/python-pycares.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYNACL_VERSION = 1.6.1
-+PYTHON_PYNACL_VERSION = 1.6.2
- PYTHON_PYNACL_SOURCE = pynacl-$(PYTHON_PYNACL_VERSION).tar.gz
--PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/b2/46/aeca065d227e2265125aea590c9c47fbf5786128c9400ee0eb7c88931f06
-+PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/d9/9a/4019b524b03a13438637b11538c82781a5eda427394380381af8f04f467a
- PYTHON_PYNACL_LICENSE = Apache-2.0
- PYTHON_PYNACL_LICENSE_FILES = LICENSE
- PYTHON_PYNACL_SETUP_TYPE = setuptools
+-PYTHON_PYCARES_VERSION = 5.0.0
++PYTHON_PYCARES_VERSION = 5.0.1
+ PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
+-PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/59/5d/b50bdc30026f350f1c4b0c4fb6b7543598f2bcc370308c5148c7019d9886
++PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/df/a0/9c823651872e6a0face3f0311de2a40c8bbcb9c8dcb15680bd019ac56ac7
+ PYTHON_PYCARES_SETUP_TYPE = setuptools
+ PYTHON_PYCARES_LICENSE = MIT
+ PYTHON_PYCARES_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
