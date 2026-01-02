@@ -4,89 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA564EED628
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ACE8FA3752
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF5D760DB6;
-	Fri,  2 Jan 2026 15:44:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 532FB60586;
+	Fri,  2 Jan 2026 15:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EshqC9TlecZB; Fri,  2 Jan 2026 15:44:55 +0000 (UTC)
+ id S8vdj_8xCv_c; Fri,  2 Jan 2026 15:46:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AFCC60BB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6491860596
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767368695;
-	bh=jWW6zsZSBSmk89daRAqf0EcRzNt+gKjNcOc5nYWdMTg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Lg3MERylNltKWx2WWC7uwRzc3cJQZFxwkskuEugVwNXZHYQSS1prZNCPjv1vcWYsM
-	 BR8lTJc4cH/p9TNu1oG1pGAWnWkKAUbp/l2tqyI1qPtEaEycquqwOug4X5jTaYzldY
-	 bFzz8WXgLI95QBcwAMt39Jtl/tsNaIC4i0Jgc+lerxDp2wZXPxhU9pYfFbbImRag5a
-	 nU0FnzkpzWikXwGFZCm5UG+Y7vNeq6nOLb+AUgnEs44HhmlUr5awgbt49MfnDIEUFm
-	 BmaIhlKJGyuTGftW9OOGTxAq8Ui7gGKcCX51LK6uo1+cNkHNu5fOhuHEOz60B5AiZZ
-	 nifIcPjNQEQMw==
+	s=default; t=1767368760;
+	bh=6z+Evs4hmqoR3WzR3jbg0Q9C2HWa7adp3gf3ctDkGY8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=OVk/dZoe5O7pIU3mohNbjH4h3YiCDZpzoZ/GTReYQgWO+Yt49rJoVME+uv+Rfph6T
+	 enrATicvPQUwLgD64fQhJjsaoSremrastQVNsmn/tDkl2ZelIfV6Tfn2x49GCOC08q
+	 V7qUDxHgbH4o6jXKiyIjd2A3ypdVaw+lBtSRnANC91q8ZKNL1ZYNGxUuzasjoAvHn/
+	 QMvMTW6itesp9Tpv3cNYrqEacmHnlcXIuM4APWDUrBb+UzcLpv38XoymfngAyq/pd/
+	 OtOxnue6jNuBaJ2xeOit2pGRDxlp5hFqGqw42bEW1huqWnEHY0NrOYH7uQviffjfZM
+	 OY0Uhr6kwW8Rg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AFCC60BB5;
-	Fri,  2 Jan 2026 15:44:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DC290351
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:44:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6491860596;
+	Fri,  2 Jan 2026 15:46:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 66FC5D7
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDF6460BB5
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:44:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5953E80C1F
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:45:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qyI0qkPQ4LrH for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 15:44:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N9KSwOhslhbI for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 15:45:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB540608E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB540608E4
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CB540608E4
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:44:52 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 60F45C1C3B6;
- Fri,  2 Jan 2026 15:44:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 17AC8606C7;
- Fri,  2 Jan 2026 15:44:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 732B3113B071B; Fri,  2 Jan 2026 16:44:48 +0100 (CET)
-Date: Fri, 2 Jan 2026 16:44:46 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Jesse Van Gavere <jesseevg@gmail.com>, Roy
- Kollen Svendsen <roykollensvendsen@gmail.com>,
- linux-amarula@amarulasolutions.com
-Message-ID: <20260102164446.698d64e7@windsurf>
-In-Reply-To: <20250909144713.569514-1-dario.binacchi@amarulasolutions.com>
-References: <20250909144713.569514-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767368689; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=xOPuA5r6zX+JcjzGCGxSbE3TiLsr5/xAsL2++dUSiyc=;
- b=BBnLd9NjA4IWCfhmV+MxjWCDPMaQbP3tTjN1/nNvsZXe0AJoE23M+z5AOugMl0phn+fUjf
- KQy+o1DhQ8ED4KTfvfwVV47pga2x3iLq4g25cksCHCVIySZgnHequ9YrR3LDbtMEgyJej6
- D6i+3Xa1WS0k76B7+uYHsCz2gNcfJ6rBJ54juhxS1b78xHzufW8cZLlOAZJC6amkwfgQ+7
- +CkjL5W8p7LRNwJIZ7AOmQuRhmC1XsMQYKmm94Iz8OnKCNFnqMSIzncPvU5TXEEf9pTL4/
- /OCHksbJWz3tZblqHhqZXb0My+OvpYqHDWDGAFIYohlRwR5xJ/+6WnTIcS/S3g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=BBnLd9Nj
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6base: use
- QT6BASE_CONF_OPTS for Vulkan
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AFFE80C17
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7AFFE80C17
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:45:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6D2EB87F24; Fri,  2 Jan 2026 15:45:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Jan 2026 16:45:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 451e735aa06b2bd986418118923ea7590a5b83a7
+X-Git-Newrev: f11279d81eab1b88d3a505cf9dea05b9569a496f
+X-Patchwork-Hint: ignore
+Message-Id: <20260102154558.6D2EB87F24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcnano-binaries: bump version to
+ 6.4.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,32 +71,71 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  9 Sep 2025 16:47:13 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f11279d81eab1b88d3a505cf9dea05b9569a496f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The Vulkan option was appended to QT6BASE_CONFIGURE_OPTS instead of
-> QT6BASE_CONF_OPTS, which is the variable actually used during CMake
-> configuration. This prevented the feature from being enabled/disabled
-> as expected.
-> 
-> Fixes: 1c27f3a12d77b ("package/qt6base: add vulkan option")
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  package/qt6/qt6base/qt6base.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Update to the latest version of the gcnano-binaries blobs, which are
+compatible with the last v6.6-stm32mp-r2 kernel from the
+STMicroelectronics BSP.
 
-Applied to master, thanks.
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcnano-binaries/gcnano-binaries.hash |  2 +-
+ package/gcnano-binaries/gcnano-binaries.mk   | 11 ++++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
+index d3c64d44a3..f1c8b48b0d 100644
+--- a/package/gcnano-binaries/gcnano-binaries.hash
++++ b/package/gcnano-binaries/gcnano-binaries.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4c7454ac44c9e3ead20a978a5c009e8489fa90ce5cf291be31016a7f497bea26  gcnano-binaries-bbaae49a0e4859ed53f898a250269c8a237261bc.tar.gz
++sha256  b4cb4c1e8a39c131fe52781038fea8ae33120eee41eaddb3feb329c4b2205068  gcnano-binaries-7c181cacf89f918039e64934fdc33fe817a052cd.tar.gz
+ sha256  29c78804b097b5cfee0e802bef9f60348a635640eadd8a91b7ce82ddf17fbf5a  EULA
+diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
+index 03912ea585..f171c03059 100644
+--- a/package/gcnano-binaries/gcnano-binaries.mk
++++ b/package/gcnano-binaries/gcnano-binaries.mk
+@@ -4,17 +4,18 @@
+ #
+ ################################################################################
+ 
+-GCNANO_BINARIES_LIB_VERSION = 6.4.15
++GCNANO_BINARIES_LIB_VERSION = 6.4.21
+ GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION)
+ 
+ GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
+-GCNANO_BINARIES_VERSION = bbaae49a0e4859ed53f898a250269c8a237261bc
++GCNANO_BINARIES_VERSION = 7c181cacf89f918039e64934fdc33fe817a052cd
++GCNANO_BINARIES_USERLAND_DATE_VERSION = 20250226
+ ifeq ($(BR2_arm),y)
+-GCNANO_BINARIES_USERLAND_VERSION = stm32mp1-$(GCNANO_BINARIES_LIB_VERSION)-20240206
++GCNANO_BINARIES_USERLAND_VERSION = stm32mp1-$(GCNANO_BINARIES_LIB_VERSION)-$(GCNANO_BINARIES_USERLAND_DATE_VERSION)
+ GCNANO_BINARIES_ARCH_TYPE = arm
+ GCNANO_BINARIES_SOC_PLATFORM = st-mp1
+ else
+-GCNANO_BINARIES_USERLAND_VERSION = stm32mp2-$(GCNANO_BINARIES_LIB_VERSION)-20240517
++GCNANO_BINARIES_USERLAND_VERSION = stm32mp2-$(GCNANO_BINARIES_LIB_VERSION)-$(GCNANO_BINARIES_USERLAND_DATE_VERSION)
+ GCNANO_BINARIES_ARCH_TYPE = arm64
+ GCNANO_BINARIES_SOC_PLATFORM = st-mp2
+ endif
+@@ -68,7 +69,7 @@ define GCNANO_BINARIES_INSTALL
+ 	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/include/* $(1)/usr/include/
+ 	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/pkgconfig/ ; \
+ 	for file in *.pc ; do \
+-		sed -e "s|#PREFIX#|/usr|" -e "s|#VERSION#|23.0.3|" $$file > $$file.temp ; \
++		sed -e "s|#PREFIX#|/usr|" -e "s|#VERSION#|24.0.7|" $$file > $$file.temp ; \
+ 		$(INSTALL) -D -m 0644 $$file.temp $(1)/usr/lib/pkgconfig/$$file ; \
+ 	done
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
