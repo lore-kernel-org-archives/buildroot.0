@@ -1,63 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2E89FA3754
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 754D3FA3753
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 17:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37CC940865;
-	Fri,  2 Jan 2026 17:06:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4994280F35;
+	Fri,  2 Jan 2026 17:06:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-MYGS-cWPAZ; Fri,  2 Jan 2026 17:06:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pscUiVLEL393; Fri,  2 Jan 2026 17:06:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 112A0404C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C33B580D41
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767373594;
-	bh=BPr/E+7Ft3uojyNN47VU+FwdMY9zXTypK0LJS8fDbfU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=P0djFMSxxZaShK8zowB7OTtooWBjtfGwfr6Ja/U3zawKC2VVFOLN61cczmiTOJTYU
-	 YrGMRremmyCB6iTCx55NmzYoib318wGYgBJmFvIxDpGQkOpSiVA8N9qVA3UhCPq7S5
-	 4cqbaNZEZyeuoudJT/sjr2whAru4VkAy+QSwBPYT1z7LlRosfLWq5c760zR/QMdJVg
-	 UFaoU7yf4yN+UTR5tu91aGhFRDVF9YuHatGChmWFLR6GMjyraCYGfc23uRTZRCdhzL
-	 MLBxPPPYTv/nmKcPpFFjW3JqbGwBRryvEkZmqIUQeDwIE1PaT1CqXK8IcyJKWey7jj
-	 LWWi5TL5YVJng==
+	s=default; t=1767373601;
+	bh=ItM0fJ5qQmoZVGFwMtt4bRl6MtDsE2sFnB/o+f1ybcQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=dDfKLpQDH4hxtI2lEoPqSdfV2x0S9nqG/gmF6PsFYUw4jDpYDuUT1o/GFC0HNdqhG
+	 xglR46Ajs2YdGM/Ki543TWbG/s3vnI0ASFxgf8gI3B6FjL7/i+IqSSUtk1F2Mp6qdk
+	 8S5sNj9KtZIiYJQX1EC/FeDo3A33ljkJKLVvQlndijn0ISDTiuCqIf0t4gzJ1uY/xt
+	 EZKVLVOO7kL6xy+pJGh6WC0fiMwXjG8XTu0mO0FOJDFXzYxHFa96j8gGG3tri82tFE
+	 Sh7b8XuOgHuZ7IZFrPWMY9CyLe7ueVhftLLuVXkzhwF9x2L4XHpYZpBaDwLr7vLhMD
+	 5F8duNODuLcpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 112A0404C3;
-	Fri,  2 Jan 2026 17:06:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BDF87440
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C33B580D41;
+	Fri,  2 Jan 2026 17:06:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6DDF3351
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4CCF60A7F
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FF3160A7F
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hd9_OTGFGHHW for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 17:06:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id U6dAzXOhhJxW for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 17:06:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFD66607DA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFD66607DA
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8B2187FBD; Fri,  2 Jan 2026 17:06:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Jan 2026 18:06:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf383d3e13e7963eca8e1c3aefe2512e9b5ef81c
-X-Git-Newrev: f0c865ee1e8b8a5a79dd1be86bfc5a8859b943ee
-X-Patchwork-Hint: ignore
-Message-Id: <20260102170630.D8B2187FBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/microchip_mpfs_icicle: bump Linux
- and U-Boot, add hashes
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 92C84607DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C84607DA
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92C84607DA
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 17:06:39 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 5B7211A25D6;
+ Fri,  2 Jan 2026 17:06:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 30E24606C7;
+ Fri,  2 Jan 2026 17:06:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id AF553113B0718; Fri,  2 Jan 2026 18:06:34 +0100 (CET)
+Date: Fri, 2 Jan 2026 18:06:33 +0100
+To: Jamie Gibbons via buildroot <buildroot@buildroot.org>
+Cc: Jamie Gibbons <jamie.gibbons@microchip.com>, Ludovic Desroches
+ <ludovic.desroches@microchip.com>, Nicolas Ferre
+ <nicolas.ferre@microchip.com>, Conor Dooley <Conor.Dooley@microchip.com>,
+ Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>
+Message-ID: <20260102180633.13a4ad1c@windsurf>
+In-Reply-To: <20250814121637.3775660-1-jamie.gibbons@microchip.com>
+References: <20250814121637.3775660-1-jamie.gibbons@microchip.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1767373595; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=MRU93EzcmtVXfJ78She1B987I7gPh+Np2Vfvo2ymH0s=;
+ b=G5ggqrXkZfFIYj1ZAu4EDu3plcWsSYMTQWxGF/dHVL/7OxlROx7AY+MYB0536dym1nIWcW
+ HAAOnNihepBS6ufvAaTFOgu4ill823UCxOADPEXHfubaxNlMBzrz/mHjBcixZJ0haBKL6b
+ C1B/fG4jSoo03YSAEQYHhEHM/bcAZ5jg3HxRQG+spHGOidXPHKaRTeUtsd3nHCYqwL094S
+ VkK2fk2V5caJbDCz54uj54PYE1DRJFTMrEiV0mDxi+YncuUG6PhmbEQPkrddzkuuEb1exe
+ +I9avOxddWP1eZMFRaUJrsePWrkLn0+4wjEa9MsD43fqhAHXdcVcm8otzcCA/g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=G5ggqrXk
+Subject: Re: [Buildroot] [PATCH 0/3] Add MPFS Icicle kit with Production
+ Silicon support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,73 +101,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0c865ee1e8b8a5a79dd1be86bfc5a8859b943ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 14 Aug 2025 13:16:34 +0100
+Jamie Gibbons via buildroot <buildroot@buildroot.org> wrote:
 
-Following Microchip's Linux 2025.07 release, update the assets to the
-latest versions, this includes a Linux version bump and addditional
-U-Boot drivers and functionality. Update the Linux headers to support
-the updated v6.12 kernel. Update the corresponding package hashes.
+> Jamie Gibbons (3):
+>   configs/microchip_mpfs_icicle: bump Linux and U-Boot, add hashes
+>   board: microchip: mpfs_icicle: update to support production silicon
+>   configs/microchip_mpfs_icicle: add support for production silicon
+>     Icicle kit
 
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/microchip/mpfs_icicle/patches/linux/linux.hash | 2 +-
- board/microchip/mpfs_icicle/patches/uboot/uboot.hash | 2 +-
- configs/microchip_mpfs_icicle_defconfig              | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Sorry for the delay, series applied!
 
-diff --git a/board/microchip/mpfs_icicle/patches/linux/linux.hash b/board/microchip/mpfs_icicle/patches/linux/linux.hash
-index 416a8b1550..d0e2d5693c 100644
---- a/board/microchip/mpfs_icicle/patches/linux/linux.hash
-+++ b/board/microchip/mpfs_icicle/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  dcb7b41fd363729675c34545fcb514d5a94dbb3714ee10f527a26ca7716c2579  linux-linux4microchip+fpga-2024.06.tar.gz
-+sha256  7789cc2844cb9633aa8c146e194c9ad3482bf06ace707d66d0ca6039ed16833d  linux-linux4microchip+fpga-2025.07.tar.gz
-diff --git a/board/microchip/mpfs_icicle/patches/uboot/uboot.hash b/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
-index 2628d4b4fd..0adbe15710 100644
---- a/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
-+++ b/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  d461c45a9c5acd019776cdcf8ab2b571315282a880dd6580431f7dd5bfac3889  uboot-linux4microchip+fpga-2024.06.tar.gz
-+sha256  8dab9abc2861d95e609cd62a44b4687d03dc13eae6487fd1ae1ded6398ddb0cd  uboot-linux4microchip+fpga-2025.07.tar.gz
-diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
-index 4337ac34b4..4d465016c7 100644
---- a/configs/microchip_mpfs_icicle_defconfig
-+++ b/configs/microchip_mpfs_icicle_defconfig
-@@ -1,13 +1,13 @@
- BR2_riscv=y
- BR2_RISCV_ISA_RVC=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/microchip/mpfs_icicle/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2024.06)/linux-linux4microchip+fpga-2024.06.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2025.07)/linux-linux4microchip+fpga-2025.07.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2024.06)/uboot-linux4microchip+fpga-2024.06.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2025.07)/uboot-linux4microchip+fpga-2025.07.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="microchip_mpfs_icicle"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/uboot-fragment-rootfs.config"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
