@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41E8FFA374B
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89662FA3729
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 15:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1160F6083C;
-	Fri,  2 Jan 2026 15:27:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F5A9810DF;
+	Fri,  2 Jan 2026 15:27:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e1-zOa8ga2Xz; Fri,  2 Jan 2026 15:27:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pr7w5BPnmoW7; Fri,  2 Jan 2026 15:27:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72888605C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CFA0810A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767367638;
-	bh=XuDmzc1iYAvyLVPRCzSZ6W5q/gDiVbNNETLg2XKikHc=;
+	s=default; t=1767367650;
+	bh=6r5KOLqsA7PDpG8JmNY2ll+HTHK/Gyl5XOlDsoJclHA=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JIVUAZUvLIXie6iD/6u4eBbNhKPdKWFdV+1k90MwuXEqygtJdmh7rvi0i3Zq0DcrC
-	 9EdwyR/VSWID3oRKNmfdPmXTIA+zny4QkuFIHQQxbJUAruYPRerw22648BMid2oXJF
-	 Dq6JYtsXa2YEU4w1JimnYgAfcbV8hiSVRgyS/b6+xQLA4Bvyin2BKvlUFquDDhgLE+
-	 TAWLbBUJ6t9Z8+4iwchgy1CrS3iBE6nmHGWGr+jwQcuuU1s2aAloL5JcQFpM+U66G6
-	 yWWDeokxarLdc9+wpCJ3fNnvzXUZnTq3md80v4fiEQ2whrJwVoJgS5p/sSDSd+8Mr+
-	 AtvQeEhFiv3Yg==
+	b=QLl4TgCnPBCyaa2B4PDYiKSwMR8pCUAcIi97hPn/Nv66tQiY0ntliR5kav7EXv2j4
+	 EnVCng9GBDCL6dOOhKA6Kmq5Gpzts61zmlHxMwNsFPFCZb+yIxUjrGs8WiNCfnRzi/
+	 xXk/ZbQBEb9hC/TCroBOxiWicIWDVNtRPazWEgtuptPPWQ8Hdaiw1muRihZr0qOK3F
+	 gtNU7c1gL2eUfX2toR/zStOTiUcpyh7o5MXJTc6TvrcAw0NHC9d/CBsW1wsK62Q8ej
+	 hKrQ4URRoDeo6wY8JaMgSANWKd0uFg4b0aLOPrmjynpISQaLbdd6J3uXkDL5m3EWKf
+	 PIYyuJscuak1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72888605C3;
-	Fri,  2 Jan 2026 15:27:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A76AD7
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CFA0810A6;
+	Fri,  2 Jan 2026 15:27:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D18019D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 008876084D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E77984041B
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t6Xfr-BALDeT for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 15:27:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ki7h8z9x0IJU for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 15:27:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE3CB600C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE3CB600C4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D2E7B400C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2E7B400C1
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EE3CB600C4
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2E7B400C1
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 15:27:27 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 47439A4C3248;
- Fri,  2 Jan 2026 16:26:37 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3EC6DA4C2CA3;
+ Fri,  2 Jan 2026 16:26:41 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:37006)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vbh2y-000000004IY-3mDI;
- Fri, 02 Jan 2026 15:26:36 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vbh2z-000000004IY-07l9;
+ Fri, 02 Jan 2026 15:26:37 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 16:26:32 +0100
-Message-ID: <20260102152635.924052-4-bernd@kuhls.net>
+Date: Fri,  2 Jan 2026 16:26:34 +0100
+Message-ID: <20260102152635.924052-6-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260102152635.924052-1-bernd@kuhls.net>
 References: <20260102152635.924052-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1767367597;
- bh=kXCHX8y/cpvaCfLYz32WsCFP8gbQ35RjQMdNcKHsaKQ=;
+ s=kas202511301023; t=1767367601;
+ bh=SIMDBjdpPw53wWLltQEOAKbzv6jUFhQwhTAdctwfiaE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=uNo77BMafeMMVZ2hFyB+AQ2hWb8dltmVhgUZRNAbx/PC0tRgyEvnEoBNfV/+KvOk2
- 7Fo9D014rdg7QjQOsF2OJdk8iSEyTCNCDc/vy9qaFjYxmQdtRQ+gqMrLmOl658GoWm
- vQ1s68z8pekuUnetDUYiQOMCRf2fvrxAG2YeYyD+x0a1jdInblZCt0pXP4STC+hZZ3
- /Zx4eLTd+3RnEsYNe097AxX5yXYnHIyXFxEk3qIurU0FSV/z+5JsQkJciyUMQEGnAO
- DrBd7sMqDXZNO2kLg7dB8EPy6KagIMpRPcDJImjc3sm+DnORHvSECYP20pCxK1l4nt
- BWT0kQE/rAMbg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=n+6Kd3ZMNDnnxeyKo/0SzLb3sIfH4ImfwoMfmBVhJMP8HnFhTAA+w4HdCkU0xcyft
+ H4gUWYrkgkolAemRYGaUC9XYde/uwRTegm3S0/jgWyOx6F0Q0kHaPhqXZf3F79O0Va
+ ROXZfdAF6As+l0jS1X7oUE9jAz/HxniRF2rQs4Lt9DhDSpWF4WTeptcrpuFBsk7QbZ
+ Tih7WcZ1RTJm/t4e18kbIGjwQ4S43XLPH02Pm/fuWutzNZEZV5gIT+WssVIpB6FHT2
+ uJOPNdhNG6u7EKvQ+evIGU4uuNEmTeXNRUvJWdCB546l6Swa8EgG1MYeRFx6kLeXmq
+ HsoswYij2x4+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=uNo77BMa
-Subject: [Buildroot] [PATCH v3 3/6] package/python-web2py: bump version to
- 3.1.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=n+6Kd3ZM
+Subject: [Buildroot] [PATCH v3 5/6] package/python-html5lib: fix build with
+ python 3.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,32 +108,58 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-web2py/python-web2py.hash | 2 +-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...y-fix-version-parsing-on-Python-3.14.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index 098f8dc490..b100a1fec8 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  12669396396044f68a3f0ae9c44137f1a3b327c26e963f52b5e8b2bb20c51561  python-web2py-v3.0.11-git4.tar.gz
-+sha256  b22b5c2db862cdef9e0feace1c8841741a14eb5e735b674d6ce2bd5c7f4cac64  python-web2py-v3.1.1-git4.tar.gz
- sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE.web2py.txt
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 9e1de5c932..5b473698a6 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_WEB2PY_VERSION = v3.0.11
-+PYTHON_WEB2PY_VERSION = v3.1.1
- PYTHON_WEB2PY_SITE = https://github.com/web2py/web2py.git
- PYTHON_WEB2PY_SITE_METHOD = git
- PYTHON_WEB2PY_GIT_SUBMODULES = YES
+diff --git a/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch b/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
+new file mode 100644
+index 0000000000..0147aa1418
+--- /dev/null
++++ b/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
+@@ -0,0 +1,42 @@
++From b90dafff1bf342d34d539098013d0b9f318c7641 Mon Sep 17 00:00:00 2001
++From: Andrew Sukach <andrew@sukach.org>
++Date: Fri, 12 Sep 2025 21:53:31 -0700
++Subject: [PATCH] `setup.py`: fix version parsing on Python 3.14 (ast.Str
++ removed)
++
++Python 3.14 removes the ast.Str node type. String literals now appear
++as ast.Constant(value=str).
++Update the AST check to accept both ast.Str (for older Pythons) and
++ast.Constant with a string value (for Python 3.8+), allowing html5lib to
++build successfully on Python 3.14 while remaining compatible with older
++version.
++
++Upstream: https://github.com/html5lib/html5lib-python/pull/589
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ setup.py | 11 ++++++++---
++ 1 file changed, 8 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 30ee0575..42ab6f67 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -92,9 +92,14 @@ def default_environment():
++     for a in assignments:
++         if (len(a.targets) == 1 and
++                 isinstance(a.targets[0], ast.Name) and
++-                a.targets[0].id == "__version__" and
++-                isinstance(a.value, ast.Str)):
++-            version = a.value.s
+++                a.targets[0].id == "__version__"):
+++            if hasattr(ast, "Str") and isinstance(a.value, ast.Str):
+++                version = a.value.s
+++            elif (hasattr(ast, "Constant")
+++                  and isinstance(a.value, ast.Constant)
+++                  and isinstance(a.value.value, str)):
+++                version = a.value.value
+++assert version is not None
++ 
++ setup(name='html5lib',
++       version=version,
 -- 
 2.47.3
 
