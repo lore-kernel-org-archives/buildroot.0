@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5AAFA3755
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E051FA3751
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0028280AA6;
-	Fri,  2 Jan 2026 22:23:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEF0040851;
+	Fri,  2 Jan 2026 22:24:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KrvznkESFw3o; Fri,  2 Jan 2026 22:23:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6RrJKUel-kbG; Fri,  2 Jan 2026 22:24:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2815481F43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 729EB4074F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767392585;
-	bh=bv7XX9diX69L+OiGChnUQrRVDawAOm6sNRx5+eqrrbk=;
+	s=default; t=1767392670;
+	bh=vG3VpGxXu5kZ/JuXg6pNrbkxUt6QK4KWD4yrq2h8Q80=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IHZ6TX4U3shLtZYg+8Y/VnJnDxkhWAp6x+JZUrcRGt3u99/SpR1VVcNTstv8ZBY9U
-	 PuWe6BZ49QxL4N44tDpOu8dPzS+79MCrmFtrvRFNv5+LmxaGWUlQaxnjDyU7W5X63o
-	 RO5TlVfaZuoQDsXOSWtt6vAw7MGxMxBxQ+zTJWBHhTG31+JFYZCqZd8ZtqlWD+iAC9
-	 2ZEq6nE7AOJR7UyWspOKSqd4r7qLQPe7BJLmTVLDAo8zpjaqS5NtMq2+kVly/F4BCJ
-	 PtVx5O6ww/+wky2Demn+R2gw10FE/nYXhhd7/44rUN2iWw+uFshutzyq3Qk69Qdc78
-	 v5LM6/ib+mIKA==
+	b=XdRjPX6wsc5CdKhQUWH+e79YOzePTK9JMMWInlABOlVcQnIaGQpsGA/LRJ3PE5Anh
+	 f1iHHWu3Qls6D11J12O9XSh1uBiUDd1mwzV2ujgnmjS+vAW4i30b8yRKFbfWax/z8z
+	 X3CXM25fHxnjAxiAzmyMI7vAxkojTyzQ4brPwxLthcxnV+LVgpKoqD5/3YaSClG7HX
+	 kpG/Zfgtgjo4r3KRhheTEEsfQw0sIoRUDkGBzt6fixuko0/7ZlqG1FGino9NdnQYZE
+	 9draSDl7WAComs0E608pYU6f5krO1YaEpU60lN0rjEPzIqJu1GsRF5aSNm5//KYsVj
+	 uiEk998Ai1K3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2815481F43;
-	Fri,  2 Jan 2026 22:23:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F39B19D
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:23:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 729EB4074F;
+	Fri,  2 Jan 2026 22:24:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F63619D
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:24:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9EBF81F43
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:23:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3562C608F2
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:24:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XbxGss9j_HRF for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 22:23:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x0UIJ3kJkeZi for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 22:24:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1E3481F1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56C0F608D4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1E3481F1A
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:23:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56C0F608D4
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:24:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E74087FB5; Fri,  2 Jan 2026 22:23:02 +0000 (UTC)
+ id 49C5E87FCE; Fri,  2 Jan 2026 22:24:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 Jan 2026 23:11:23 +0100
+Date: Fri, 2 Jan 2026 23:23:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec9a136c22ffcf173cd0fca2af2ff1afbc072266
-X-Git-Newrev: 2a972212b43100dadbe9c2337264849f3b51552d
+X-Git-Oldrev: 2a972212b43100dadbe9c2337264849f3b51552d
+X-Git-Newrev: df13b0f38f40ea5ee1ff297b24f76399e5138b40
 X-Patchwork-Hint: ignore
-Message-Id: <20260102222302.8E74087FB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-restool: new package
+Message-Id: <20260102222428.49C5E87FCE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-restool: fix license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,122 +76,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a972212b43100dadbe9c2337264849f3b51552d
+commit: https://git.buildroot.net/buildroot/commit/?id=df13b0f38f40ea5ee1ff297b24f76399e5138b40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introduce a package for the restool program, which permits the user to
-modify the network configuration of the DPAA2 subsystem and create one
-that is adequate to their use case.
+In Buildroot, we don't use the official SPDX code GPL-2.0-or-later,
+but GPL-2.0+.
 
-We integrate the master branch, which is effectively the
-lf-6.12.20-2.0.0 release tag, plus some extra fixups specifically made
-for the Buildroot integration:
-- commit b44748ed0bb3 ("Avoid use of non-portable __WORDSIZE when
-  defining BITS_PER_LONG")
-- commit b4a734f3512b ("restool: fix format string for 64 bit time_t in
-  parse_obj_command()")
-
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
+Fixes: 2a972212b43100dadbe9c2337264849f3b51552d package/qoriq-restool: new package
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/qoriq-restool/Config.in          | 21 +++++++++++++++++++++
- package/qoriq-restool/qoriq-restool.hash |  3 +++
- package/qoriq-restool/qoriq-restool.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
+ package/qoriq-restool/qoriq-restool.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f448c3b582..62867225eb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3405,6 +3405,7 @@ F:	package/qoriq-ddr-phy-binary/
- F:	package/qoriq-firmware-inphi/
- F:	package/qoriq-mc-binary/
- F:	package/qoriq-mc-utils/
-+F:	package/qoriq-restool/
- 
- N:	Volkov Viacheslav <sv99@inbox.ru>
- F:	package/v4l2grab/
-diff --git a/package/Config.in b/package/Config.in
-index 2b9e31ebb3..f5f1f6a741 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -445,6 +445,7 @@ menu "Firmware"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/qoriq-mc-binary/Config.in"
- 	source "package/qoriq-mc-utils/Config.in"
-+	source "package/qoriq-restool/Config.in"
- 	source "package/rcw-smarc-sal28/Config.in"
- 	source "package/rpi-firmware/Config.in"
- 	source "package/sunxi-boards/Config.in"
-diff --git a/package/qoriq-restool/Config.in b/package/qoriq-restool/Config.in
-new file mode 100644
-index 0000000000..600c2c958d
---- /dev/null
-+++ b/package/qoriq-restool/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_QORIQ_RESTOOL
-+	bool "qoriq-restool"
-+	depends on BR2_aarch64 || BR2_aarch64_be
-+	help
-+	  The DPAA2 architecture in Layerscape SoCs consists of
-+	  networking resources that can be assembled into various
-+	  nuggets of functionality, called "objects" (DPMAC, DPNI,
-+	  DPDMUX, DPSW etc), by the Management Complex (MC) firmware.
-+
-+	  The MC firmware reads a file called Data Path Layout (DPL)
-+	  which describes the set of networking objects it should
-+	  create statically, at boot time.
-+
-+	  The restool program is able to talk to the Management
-+	  Complex at runtime and permits the dynamic reconfiguration
-+	  of networking objects, as well as saving the current
-+	  configuration into a new DPL file. Without the restool
-+	  program, the only possible networking configuration is
-+	  that specified in the boot-time DPL file.
-+
-+	  https://github.com/nxp-qoriq/restool
-diff --git a/package/qoriq-restool/qoriq-restool.hash b/package/qoriq-restool/qoriq-restool.hash
-new file mode 100644
-index 0000000000..72a34473f2
---- /dev/null
-+++ b/package/qoriq-restool/qoriq-restool.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  2879f14c9dd810e92d4c51c7f1a3e6705a5a585c2445e507f63e39872ac6237d  qoriq-restool-lf-6.12.20-2.0.0-3-gb44748e.tar.gz
-+sha256  ddc794a75f11c3bd01015f16b9776064a894015e7a1603541283ccbc2e1c3a40  LICENSE
 diff --git a/package/qoriq-restool/qoriq-restool.mk b/package/qoriq-restool/qoriq-restool.mk
-new file mode 100644
-index 0000000000..4dd62a83dd
---- /dev/null
+index 4dd62a83dd..79e87ef1dd 100644
+--- a/package/qoriq-restool/qoriq-restool.mk
 +++ b/package/qoriq-restool/qoriq-restool.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# qoriq-restool
-+#
-+################################################################################
-+
-+QORIQ_RESTOOL_VERSION = lf-6.12.20-2.0.0-3-gb44748e
-+QORIQ_RESTOOL_SITE = $(call github,nxp-qoriq,restool,$(QORIQ_RESTOOL_VERSION))
-+QORIQ_RESTOOL_LICENSE = BSD-3-Clause or GPL-2.0-or-later
-+QORIQ_RESTOOL_LICENSE_FILES = LICENSE
-+
-+define QORIQ_RESTOOL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)" \
-+		CROSS_COMPILE="$(TARGET_CROSS)"
-+endef
-+
-+define QORIQ_RESTOOL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		MANPAGE="" DESTDIR=$(TARGET_DIR) \
-+		prefix=/usr install
-+endef
-+
-+$(eval $(generic-package))
+@@ -6,7 +6,7 @@
+ 
+ QORIQ_RESTOOL_VERSION = lf-6.12.20-2.0.0-3-gb44748e
+ QORIQ_RESTOOL_SITE = $(call github,nxp-qoriq,restool,$(QORIQ_RESTOOL_VERSION))
+-QORIQ_RESTOOL_LICENSE = BSD-3-Clause or GPL-2.0-or-later
++QORIQ_RESTOOL_LICENSE = BSD-3-Clause or GPL-2.0+
+ QORIQ_RESTOOL_LICENSE_FILES = LICENSE
+ 
+ define QORIQ_RESTOOL_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
