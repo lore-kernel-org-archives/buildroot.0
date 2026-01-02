@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A1A3FA3751
-	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8133CFA3755
+	for <buildroot@archiver.kernel.org>; Fri,  2 Jan 2026 22:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6017281F1A;
-	Fri,  2 Jan 2026 22:25:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 593CD81F11;
+	Fri,  2 Jan 2026 22:27:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OWKPyeqwqnvz; Fri,  2 Jan 2026 22:25:35 +0000 (UTC)
+ id 2s2n25JNKXJX; Fri,  2 Jan 2026 22:27:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EF5481F1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78B7281F1A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767392735;
-	bh=KB75rc4tYNqSbk04nieOz6Pu8uMM7XLudLPj90Vtdzg=;
+	s=default; t=1767392856;
+	bh=KoY/zZb7XNouRLBz89s5phyjY0Jcp4sx4sjxN3sMYsQ=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=eGVqL1HuAUvVSBtAU0ZNRMrmxXQwFvl9XBMNQyQITgbaXeMv4YMfEpc5RvIDWadrX
-	 Uq/Yw5daNG/n+e5nIVl8sqWjhJu0K3qrXGpHaumI+jJtNXie6GhtsMHwDOwOxTBkNr
-	 pohlbad+HEoEZLjb5GEwst3X8wWsfTobFETYT01w/ySdR53mQARwskK8h8A6d+CRzJ
-	 bftyB2BUVI9rkr2ruYB/1YSiq308R2lqt5UIw1VrcRAgsW2cD6Pa0tCi/TX8QhGZFC
-	 GB9CYmoWLfeNHaFCcNT2ZW6wFEfKqhULP8XWPeEZYlzfHM7baD94IuZclkTJhNi7Yf
-	 0o+7OY8IxmK5Q==
+	b=SAje2hIOODVsK4Fwsuv4H3TF8tlYX2HN5+m0enJHV3ieUKJg5UfUExGXPU5IkL9Wn
+	 Hnxwl2nai9JSD86E5Z8tYKv2gE1EuJfo7s9PdAkwhw9F9a/gv/cVmIMDVNPCdljHXj
+	 G77l2gObGZC3wkU27SsT7V445i/RdApJvcR+neuOezo9tYiZRJ/qVHSXp76KSI5cBK
+	 bI1YLjs44ONty6LSu1vOeayMh70fo4bQou303GlUqSNrMmts9QFwfc5qEqSTyP0uGU
+	 09LWUHnA82KJq0BgBfYk7w2ib/RLH3GNaUzhKWtOcN+P2V8AytVSo3L4Te7nZp02mY
+	 T6dq+5IX//Ebg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7EF5481F1F;
-	Fri,  2 Jan 2026 22:25:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 75041249
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:25:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78B7281F1A;
+	Fri,  2 Jan 2026 22:27:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8217A249
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:27:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7055C608F2
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:25:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 737DB400AA
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:27:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZTQJ_E1HqzgW for <buildroot@buildroot.org>;
- Fri,  2 Jan 2026 22:25:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7u0XF6lQB_IQ for <buildroot@buildroot.org>;
+ Fri,  2 Jan 2026 22:27:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8467C608D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8467C608D4
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8467C608D4
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:25:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DCC3D40072
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCC3D40072
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DCC3D40072
+ for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:27:33 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 98224C1C3BE
- for <buildroot@buildroot.org>; Fri,  2 Jan 2026 22:25:04 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 18A904E41F05;
+ Fri,  2 Jan 2026 22:27:32 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 37BEF606C7;
- Fri,  2 Jan 2026 22:25:30 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id DFC72606C7;
+ Fri,  2 Jan 2026 22:27:31 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0D253113B023D; Fri,  2 Jan 2026 23:25:28 +0100 (CET)
-Date: Fri, 2 Jan 2026 23:25:27 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20260102232527.0d0779b2@windsurf>
-In-Reply-To: <20260102222022.3464952-1-bernd@kuhls.net>
-References: <20260102222022.3464952-1-bernd@kuhls.net>
+ with ESMTPSA id 6DD4A113B023D; Fri,  2 Jan 2026 23:27:27 +0100 (CET)
+Date: Fri, 2 Jan 2026 23:27:25 +0100
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: buildroot@buildroot.org, Brandon Maier <Brandon.Maier@collins.com>,
+ Ioana Ciornei <ciorneiioana@gmail.com>, Romain Naour
+ <romain.naour@smile.fr>, Vincent Jardin <vjardin@free.fr>, Julien Olivain
+ <ju.o@free.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
+Message-ID: <20260102232725.178d3918@windsurf>
+In-Reply-To: <20250830173313.164981-2-olteanv@gmail.com>
+References: <20250830173313.164981-1-olteanv@gmail.com>
+ <20250830173313.164981-2-olteanv@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767392729; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1767392851; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=fr7/S96zqVYsEh/8OgcMFUnEedGSthdEkEGMnEOaYpg=;
- b=zNuqGenSyw4ppPG3SqWmpYc83r/XGdWtrn2TWLrL7Rd0auHEVmAK/TRlZySqUaEioY8Y5i
- 8tTL7xjsMpQeaVvHGuwvfcUJGPk4EJ/natD82e+wJ+lXwaLvQLBp5vv0QTEBL7Fvt+9wbW
- ReaZjTzUUul8uzos/t/tDzm9zoR6MOZD0yVLFscFW5O9eCNPYfcWG1xdae1hvFsDSAaxSH
- xXa6ocuj8GrydHS8tS/PMUCRQSP7onGjGNzspnZLCp92KpG0RFGDNcEmOz59G1R69goeRq
- Ir6GFMpzho4EQaAuFPXm3fCzzYDmJW9+ROFhTensCVgdCJFng28G/agm39HDgQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=UPmdcuJgi5tqhHqK1YgCdfjSVO2Vq4S3hY6YgQB43/8=;
+ b=pD0g0ByRlFmBWQFxQNg+ibZmw+vLbDkeDG1qav/Fy8AqAPsiWcapj+h+jbzRRkBP9csaFj
+ 7cwjNjzcpUeb8emt/ZXOzdPQCjZztd2i6oFJdHb9bU0fhhvqoU0hGnG6PV5BGa/OOM0ANG
+ 2RgQJGbCaObldFrxV+mmM6cUHQH1E5KOvWp60CbYBV6f7oJd4ExwHmQBfCIh1RhEbmy3Wk
+ pK0xecWhRbPUqDOqWLVzlBjBYll31V2L0qqpLUMDEsz5ridycW2+4sHNIfeTXLVPqCyrs7
+ 75NdYHTtTc55bFpRb3ZbF7TA2Cm/n4iMnVOFVpZcR+T8dzWSh8k38tD2hgyKVA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=zNuqGenS
-Subject: Re: [Buildroot] [PATCH RFC 1/1] Config.in: remove experimental
- status of per-package SDK and target
+ header.a=rsa-sha256 header.s=dkim header.b=pD0g0ByR
+Subject: Re: [Buildroot] [PATCH v4 1/2] package/qoriq-restool: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,24 +106,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+Hello,
 
-On Fri,  2 Jan 2026 23:20:22 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Sat, 30 Aug 2025 20:33:12 +0300
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-> The last buildroot commit mentioning "per-pack" dates back to 2024:
+> Introduce a package for the restool program, which permits the user to
+> modify the network configuration of the DPAA2 subsystem and create one
+> that is adequate to their use case.
 > 
-> $ LC_ALL=C git log --graph --pretty=format:'%h - %d %s (%cr) <%an>' --abbrev-commit -- | grep per-pack | head -n 1
-> * aa3ba97554 -  package/mender-grubenv: Fix per-package building (1 year, 3 months ago) <Adam Duskett>
+> We integrate the master branch, which is effectively the
+> lf-6.12.20-2.0.0 release tag, plus some extra fixups specifically made
+> for the Buildroot integration:
+> - commit b44748ed0bb3 ("Avoid use of non-portable __WORDSIZE when
+>   defining BITS_PER_LONG")
+> - commit b4a734f3512b ("restool: fix format string for 64 bit time_t in
+>   parse_obj_command()")
 > 
-> so it should be safe to say that enabling BR2_PER_PACKAGE_DIRECTORIES
-> is not considered experimental anymore.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+> Reviewed-by: Vincent Jardin <vjardin@free.fr>
 
-There are actually a few things that are still broken. For example
-"make <foo>-reconfigure", "make <foo>-rebuild" and "make
-<foo>-reinstall" are broken with per-package directories.
+Thanks, I've applied, with minor tweaks.
+
+> +	  The restool program is able to talk to the Management
+> +	  Complex at runtime and permits the dynamic reconfiguration
+> +	  of networking objects, as well as saving the current
+> +	  configuration into a new DPL file. Without the restool
+> +	  program, the only possible networking configuration is
+> +	  that specified in the boot-time DPL file.
+> +
+> +	  https://github.com/nxp-qoriq/restool
+> +	  # sign in required
+> +	  https://www.nxp.com/webapp/Download?colCode=DPAA2UM
+
+Dropped this last link as we want a reachable project homepage as the
+last element of the help text.
+
+> diff --git a/package/qoriq-restool/qoriq-restool.mk b/package/qoriq-restool/qoriq-restool.mk
+> new file mode 100644
+> index 000000000000..52a622f70e03
+> --- /dev/null
+> +++ b/package/qoriq-restool/qoriq-restool.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# qoriq-restool
+> +#
+> +################################################################################
+> +
+> +QORIQ_RESTOOL_VERSION = lf-6.12.20-2.0.0-3-gb44748e
+> +QORIQ_RESTOOL_SITE = $(call github,nxp-qoriq,restool,$(QORIQ_RESTOOL_VERSION))
+> +QORIQ_RESTOOL_LICENSE = BSD-3-Clause or GPL-2.0-or-later
+
+s/GPL-2.0-or-later/GPL-2.0+/
+
+because yeah we don't use exactly SPDX in Buildroot (maybe we should,
+but for the time being, let's be consistent).
+
+> +QORIQ_RESTOOL_LICENSE_FILES = LICENSE
+> +
+> +QORIQ_RESTOOL_MAKE_OPTS = \
+> +	CC="$(TARGET_CC)" \
+> +	CROSS_COMPILE="$(TARGET_CROSS)"
+> +
+> +define QORIQ_RESTOOL_BUILD_CMDS
+> +	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE) $(QORIQ_RESTOOL_MAKE_OPTS)
+
+Changed to:
+
++define QORIQ_RESTOOL_BUILD_CMDS
++       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++               CC="$(TARGET_CC)" \
++               CROSS_COMPILE="$(TARGET_CROSS)"
++endef
+
+> +endef
+> +
+> +define QORIQ_RESTOOL_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) MANPAGE="" $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
+> +		prefix=/usr install
+
+Reformatted to:
+
++define QORIQ_RESTOOL_INSTALL_TARGET_CMDS
++       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++               MANPAGE="" DESTDIR=$(TARGET_DIR) \
++               prefix=/usr install
++endef
+
+Just for consistency between both.
+
+Thanks!
 
 Thomas
 -- 
