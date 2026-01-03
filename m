@@ -1,105 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F9DFC6174
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 08:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BED2CFC6167
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 09:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABC9A60752;
-	Sat,  3 Jan 2026 08:40:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DB5740690;
+	Sat,  3 Jan 2026 09:45:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E2aMpb-iJyl0; Sat,  3 Jan 2026 08:40:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GuSdqCVaa0gm; Sat,  3 Jan 2026 09:45:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEF5860756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EBE0406A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767429622;
-	bh=NXwac5mIlsGqVtfPznIE+TzJ7w0mpo/aJfKVsc3MVFU=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Kz1aV2nVwjaFmtCeNqiVILK48Df2NR+yb+dLdMlWcK99R3RJqSemSymUL7gFA4Xpa
-	 8R8AYlDkSrtcDPK42+FLx+Du28VJm0YR2zybNRUSUoluE3PSOoOtpfegk30MGBb91h
-	 WZdqgS/Eyko9aiiO4NUHCtM7xZWS/j/z68CD0yro8j4bhppO5+iIUD9SgHCLHXJOpT
-	 aPXsuJB5tpIL6c2z2TaWsu/ECw6MihDunLM4ZVKa341J8G+o2urFwsSKqHNQAq6p/+
-	 CGCr5XwiG95zA+MorBAx0HikggNYLIty0jCmv4JoyV8jzjlwyV1d64OgnTDLsZLACh
-	 PZ4jRhn4rFfCw==
+	s=default; t=1767433526;
+	bh=35MPglByKy6wA7C1fqgjWIlm2xQx6L4LKL3ueGP7v70=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=lLBzX9Aq0mXo9w/0RmPjkkiqiYr0QGihNOr8Wiyc0vopSq5qGjtmIjKFctPMty8AZ
+	 y7D5spbkbIn6crTDt0XLjgp6Mxt2mJveLpGsvnJrBHPMFxq9CjhGQzOTFLJQVrXr8g
+	 R4kMHyVdumzXLYTnnJC2POXMEDbpAckEkc3DdCJ9gQ9hIEk9Kbb/j6hJfsyDH9Ld4/
+	 IAtDgJZ7dkmtg5cfhsdxnBgB8pGFfXnukfDUot/bmqNHeltdWsj0pcDsE6jWJ1SzJS
+	 yJioUnsZL38MRc2qdTIIcG5S69i+nOSTW6SMlLHbswE13hqbWZqY8lFk9JI/YWCswQ
+	 r+MPs/dtEFWZw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEF5860756;
-	Sat,  3 Jan 2026 08:40:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 483DD249
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 08:40:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EBE0406A9;
+	Sat,  3 Jan 2026 09:45:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4437F440
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 09:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A63860756
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 08:40:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34BF04004E
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 09:45:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rOp6aC9HJQRn for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 08:40:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.44;
- helo=mail-ej1-f44.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 195F260752
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 195F260752
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com
- [209.85.218.44])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 195F260752
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 08:40:19 +0000 (UTC)
-Received: by mail-ej1-f44.google.com with SMTP id
- a640c23a62f3a-b7633027cb2so2289513566b.1
- for <buildroot@buildroot.org>; Sat, 03 Jan 2026 00:40:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767429617; x=1768034417;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=MbSrBuZoJ+FgR0qzJvdb/LF3LfYAWxmonUoawK1AABk=;
- b=KpnQb1CGbv7yKCOqsydg8uSry2wRGJkpZYiK9Rs1A0uxO+qUse9hLNw7htNO1uoqgu
- huQNjZsjqHrWKulLvp6dbqncZ4QT/t+1lmYQCAd7y6Mw7tm+AbBY5Uf99S/f5zlDk5/c
- VCeBLpTTGWjsXQmstJug4S0rbAuk2LP5VF0A8g+6p6bJLIR052VvQqV/s0MqLCvwSDUv
- It3P0MRndvpzvdUD8brZ7vwwziYjMmJCo0lk1omE0JLxR/eGzn5du9gqjB04SQTdoz7s
- TynXd8DIRT2kMhP2zMpdMIOZzG/hhLTzdQc+n/78oCMUjwOzPkDOU2itIndaBQHz277D
- Z1xA==
-X-Gm-Message-State: AOJu0YwufCGXp1342LEZRu0eT15vjinvou6Iq9FG3BNW76eCFre14ohT
- VbTYsU5Gooc0+UhHa2LEOGADIIGPDBc45RvlhZkze30PJAA/JBfJ/nLzWofMmM1R
-X-Gm-Gg: AY/fxX4WZSTf1/EgliYcWzYjZ6VQW/FNKzFAHpEebf8hSIJyGe9njnJrqpmyOSqqCGR
- xrOCRZo/llcFpB1zRq+UqIEiTS/sznrj3tde1+0dwD/xHz+1Bl0gl9KHor5N+NQLBM4jPiYG9bh
- lqqqc7TM+KvZ7KUqrwdhIhYVLJgHqhDoxu5Eu05J6zf94cVx+mJ0sWMkGDDPWP+oifserrLTZ8f
- O93OaxI+wAxrNSK/8qusfc2xIe2nDINnyDpvPtBElb9SeDBykAJaloGn3OSW3mLhZFFcjaLwZFr
- nviyoDMc0Y3GY3i4jDZhB+mz+PbydNn5Z6lfB0tbMJxP1lQ7RxxCU66B+akJQCRZgqO5CBjgmKT
- Uaq/5InYTSFl+32eDzn4//FKrMaqH1K1bXMG+vqFORal3zENcLRqysjzAt5t6MT5ciTAKWYFuvv
- 19Gb7qoSjtXhh7xLnYLXpzZE78L4DOPor6LfCcG4F5v4pTY3UWBFpI1ILj77I=
-X-Google-Smtp-Source: AGHT+IGpK3i+VlcRU1IQDxCVUHU6Gfblf4Eozxk0ntZWl+ryWiSm5pymepLFstJeKHfm6lnKWNHC7g==
-X-Received: by 2002:a17:907:60d3:b0:b71:29f7:47dd with SMTP id
- a640c23a62f3a-b80371d5017mr4550879466b.46.1767429617259; 
- Sat, 03 Jan 2026 00:40:17 -0800 (PST)
-Received: from localhost.localdomain
- ([2a02:a03f:eb5f:fa00:21fc:5b5e:13d0:2b7b])
- by smtp.googlemail.com with ESMTPSA id
- a640c23a62f3a-b8037de0deesm4845317566b.37.2026.01.03.00.40.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Jan 2026 00:40:16 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jj5F0Rbd7K25 for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 09:45:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 548C040235
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 548C040235
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 548C040235
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 09:45:21 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A4BADA4C130A
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 10:45:18 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56170)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vbyC4-0000000077H-39u4
+ for buildroot@buildroot.org; Sat, 03 Jan 2026 09:45:18 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: bernd@kuhls.net, romain.naour@gmail.com, thomas.devoogdt@barco.com,
- thomas.petazzoni@bootlin.com, thomas@devoogdt.com
-Date: Sat,  3 Jan 2026 09:40:02 +0100
-Message-ID: <20260103084002.2045193-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260103084002.2045193-1-thomas@devoogdt.com>
-References: <20251226101445.2b29f439@windsurf>
- <20260103084002.2045193-1-thomas@devoogdt.com>
+Date: Sat,  3 Jan 2026 10:45:06 +0100
+Message-ID: <20260103094508.1212757-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2 2/2] package/mesa3d: fix compilation with
- host-llvm enabled
+X-Spamd-Bar: ++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1767433518;
+ bh=eiI+p7x+sdKCnG4Ih5xZZlT05eNLFS0BK+eq6JuiES8=;
+ h=From:To:Subject:Date:From;
+ b=SSM37Ug2cOzi3zitzjzZr+S1O6WzFYZ8P2NeF97bvsVkG+JOUfZ3HBxVeacoB2gZJ
+ mjAFxbWKrAUPPHEzmlH31sWDZdSUzSnUkd7m4BZJk/Ic31HG4zB1KRTTB9zMibdAp5
+ kRk30Wi/brRVZbSKMkn/r+jQjDNvoLO5NaO6Dqrbbe3yzRD0cP3uZ9EZ6DPPTyDGBc
+ TBDz5W3+s9gQVCaNswtp5Y7+Rekce20EL28Ag7/KxeVWvfjnPZBnhADuZ8CKxmZMpL
+ 8S2llkKn+6d0X960RR+30y4gkOeC2p3clWEnAzsC5QUw4H8EYopZdM1lUfM7fwzCqh
+ jevewPnoX5Nag==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=SSM37Ug2
+Subject: [Buildroot] [PATCH 1/3] package/spandsp: fix build with gcc-14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,57 +96,145 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Added upstream patch to fix build error.
+The build error does not occur with gcc-13.x.
 
-Meson's custom LLVM parser uses llvm-config with a default search path of
-/usr/bin, causing it to detect the host system's llvm-config (version 18.1.3)
-instead of the buildroot-compiled one. This forces all LLVM-related packages to
-match version 18.1.3, but since the host system lacks llvmspirvlib, the build
-fails. This patch forces Meson to use the buildroot-compiled llvm-config.
-
-Note that LLVM_CONFIG is a CMake option, not a Meson one. This is because
-Meson has custom dependency resolution logic for LLVM (see
-https://mesonbuild.com/Dependencies.html#llvm). The EXTRA_BINARIES mechanism
-cannot be used here, as it only applies to cross-compilation scenarios, which
-does not apply to host-mesa3d builds.
+The first build error of this kind was recorded 2024-08-23:
+https://autobuild.buildroot.net/results/492/4927e93e40ec8bcda107f4bc3d8aa83024deb674/
 
 Fixes:
+https://autobuild.buildroot.net/results/48a/48af80bdda62ca70d73bc01e0939f548c3736c0d/
 
-  llvm-config found: YES (/usr/bin/llvm-config-18) 18.1.3
-  Run-time dependency LLVM (modules: bitwriter, core, coverage, engine, executionengine, instcombine, irreader, libdriver, linker, lto, mcdisassembler, mcjit, native, option, scalaropts, target, transformutils, all-targets, coroutines, frontenddriver, frontendhlsl, lto, windowsdriver) found: YES 18.1.3
-  Dependency LLVMSPIRVLib found: NO. Found 15.0.0.0 but need: '>= 18.1' ; matched: '>= 15.0.0.0', '< 18.2'
-  Run-time dependency llvmspirvlib found: NO (tried cmake)
-
-  output/build/host-mesa3d-25.0.6/meson.build:1882:21: ERROR: Dependency lookup for LLVMSPIRVLib with method 'pkgconfig' failed: Invalid version, need 'LLVMSPIRVLib' ['>= 18.1'] found '15.0.0.0'.
-
-  A full log can be found at /home/thomas/buildroot/output/build/host-mesa3d-25.0.6/buildroot-build/meson-logs/meson-log.txt
-  make[1]: *** [package/pkg-generic.mk:263: /home/thomas/buildroot/output/build/host-mesa3d-25.0.6/.stamp_configured] Error 1
-  make: *** [Makefile:83: _all] Error 2
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v2: Moved patch to the generic host-mesa3d section.
-    Also updated the git message wrt LLVM_CONFIG option.
----
- package/mesa3d/mesa3d.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...es-to-address-V.17-fixed-point-issue.patch | 116 ++++++++++++++++++
+ 1 file changed, 116 insertions(+)
+ create mode 100644 package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 09b098628ab..da380b3b389 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -292,6 +292,9 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION),y)
- HOST_MESA3D_TOOLS += imagination
- endif
- 
-+HOST_MESA3D_CONF_ENV = \
-+	LLVM_CONFIG="$(HOST_DIR)/bin/llvm-config"
+diff --git a/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
+new file mode 100644
+index 0000000000..39aaa5a5d4
+--- /dev/null
++++ b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
+@@ -0,0 +1,116 @@
++From 239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b Mon Sep 17 00:00:00 2001
++From: Steve Underwood <steveu@coppice.org>
++Date: Fri, 18 Aug 2023 01:24:21 +0100
++Subject: [PATCH] Changes to address V.17 fixed point issue.
 +
- HOST_MESA3D_CONF_OPTS = \
- 	-Dglvnd=disabled \
- 	-Dgallium-drivers=$(subst $(space),$(comma),$(HOST_MESA3D_GALLIUM_DRIVERS-y)) \
++Upstream: https://github.com/freeswitch/spandsp/commit/239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/spandsp/private/v17rx.h |  2 +-
++ src/v17rx.c                 | 30 +++++++++++++++++++-----------
++ 2 files changed, 20 insertions(+), 12 deletions(-)
++
++diff --git a/src/spandsp/private/v17rx.h b/src/spandsp/private/v17rx.h
++index 8ea7a9fe..8613b5a5 100644
++--- a/src/spandsp/private/v17rx.h
+++++ b/src/spandsp/private/v17rx.h
++@@ -97,7 +97,7 @@ struct v17_rx_state_s
++ 
++     /*! \brief A measure of how much mismatch there is between the real constellation,
++         and the decoded symbol positions. */
++-    int32_t training_error;
+++    int64_t training_error;
++ 
++     /*! \brief The proportional part of the carrier tracking filter. */
++     int32_t carrier_track_p;
++diff --git a/src/v17rx.c b/src/v17rx.c
++index a823dad2..295d26a9 100644
++--- a/src/v17rx.c
+++++ b/src/v17rx.c
++@@ -64,6 +64,10 @@
++ #include "spandsp/dds.h"
++ #include "spandsp/complex_filters.h"
++ 
+++#if defined(SPANDSP_USE_FIXED_POINT)
+++#define SPANDSP_USE_FIXED_POINTx
+++#endif
+++
++ #include "spandsp/v29rx.h"
++ #include "spandsp/v17tx.h"
++ #include "spandsp/v17rx.h"
++@@ -389,7 +393,7 @@ static __inline__ void put_bit(v17_rx_state_t *s, int bit)
++ /*- End of function --------------------------------------------------------*/
++ 
++ #if defined(SPANDSP_USE_FIXED_POINTx)
++-static __inline__ uint32_t dist_sq(const complexi16_t *x, const complexi16_t *y)
+++static __inline__ uint32_t dist_sq(const complexi32_t *x, const complexi32_t *y)
++ {
++     return (int32_t) (x->re - y->re)*(x->re - y->re) + (int32_t) (x->im - y->im)*(x->im - y->im);
++ }
++@@ -954,11 +958,12 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
++         else if (s->training_count >= V17_TRAINING_SEG_2_LEN)
++         {
++ #if defined(SPANDSP_USE_FIXED_POINTx)
++-            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %d\n", s->training_error);
+++            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %ld\n", s->training_error);
+++            if (s->training_error < (int64_t) FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
++ #else
++             span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %f\n", s->training_error);
++-#endif
++             if (s->training_error < FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
+++#endif
++             {
++                 s->training_error = FP_SCALE(0.0f);
++                 s->training_count = 0;
++@@ -1055,19 +1060,20 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
++         /*endif*/
++         if (++s->training_count >= V17_TRAINING_SHORT_SEG_2_LEN)
++         {
+++            /* TODO: This was increased by a factor of 10 after studying real world failures.
+++                     However, it is not clear why this is an improvement, If something gives
+++                     a huge training error, surely it shouldn't decode too well? */
++ #if defined(SPANDSP_USE_FIXED_POINTx)
++             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %d\n", s->training_error);
++             s->carrier_track_i = 100;
++             s->carrier_track_p = 500000;
+++            if (s->training_error < (int64_t) (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
++ #else
++             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %f\n", s->training_error);
++             s->carrier_track_i = 100.0f;
++             s->carrier_track_p = 500000.0f;
++-#endif
++-            /* TODO: This was increased by a factor of 10 after studying real world failures.
++-                     However, it is not clear why this is an improvement, If something gives
++-                     a huge training error, surely it shouldn't decode too well? */
++             if (s->training_error < (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
+++#endif
++             {
++                 s->training_count = 0;
++                 if (s->bits_per_symbol == 2)
++@@ -1136,11 +1142,13 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
++ #endif
++         if (++s->training_count >= V17_TRAINING_SEG_4_LEN)
++         {
++-            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
++-            {
++ #if defined(SPANDSP_USE_FIXED_POINTx)
++-                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %d)\n", s->bit_rate, s->training_error);
+++            if (s->training_error < (int64_t) V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
+++            {
+++                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %ld)\n", s->bit_rate, s->training_error);
++ #else
+++            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
+++            {
++                 span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %f)\n", s->bit_rate, s->training_error);
++ #endif
++                 /* We are up and running */
++@@ -1157,7 +1165,7 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
++             {
++                 /* Training has failed. Park this modem. */
++ #if defined(SPANDSP_USE_FIXED_POINTx)
++-                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %d)\n", s->training_error);
+++                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %ld)\n", s->training_error);
++ #else
++                 span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %f)\n", s->training_error);
++ #endif
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
