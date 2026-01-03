@@ -1,94 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D627AFC6179
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 13:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 864C5FC617F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 14:13:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE8E360AC8;
-	Sat,  3 Jan 2026 13:27:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4800408D0;
+	Sat,  3 Jan 2026 14:13:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0Fm-DVHrFPkO; Sat,  3 Jan 2026 14:13:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7F1740639
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767449584;
+	bh=xpE9ylJ2UvnVdZWl1C3NAhCC7StuqLkTjlSQpZS0L0A=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HsJDH3S4iv/VhDEW6hH5v+9xKGXyPzvGV+6MCgQzdkk8x2n9VsJV54iwqpka5IHlv
+	 Bd9tLJDGMGKN3+OhexIb0IPWlOnKoJXWFKZmXxVUIY+CGjp05Yo/21Feye2qZr19ds
+	 MNK7iUTceasgwuer1IAUI365oKpuRt74YCDisj4XiTirAvaw8neH0gKvDGMrTqmPRU
+	 l6nQqUWwjkn0HuBHThNKqPi0cTcOpcS52oQhBjI31TK2QnV/Sfy1Y0YG0wS66E44I1
+	 fMt4KvB2WYGu0kZXNk7jPY1GOkZmVsblUjG9Y4xJHi+sB/hOE5EZTTzhuFK3HhuwiG
+	 V7d+Uz3y3j6pw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7F1740639;
+	Sat,  3 Jan 2026 14:13:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95942249
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:13:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8679560873
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:13:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ylp3gN5L8-YK; Sat,  3 Jan 2026 13:27:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5FFC6072F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767446819;
-	bh=rLhK4T5qWf1UCooAJZZXr5xyxFA/dtkgmZPKVHNX4QQ=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Bb8zQkuGkZyEyFWwrVXAcE/SUt+nU7S7bN/wV1QSyzmz4+hJnh/9SJlX1VDnqC2m9
-	 KBuIA8RS0dBrD9chfLeTriYjtz76qqsmWtpuoW66LSiaULqpq4UNyDYru+niIbhS9x
-	 vHzav3MOteqSCCWfMfWCqSuYEIrcCjriw6POjiZ/1Nw9G1OsAMjE2tg93cjkeTBYf3
-	 VPxf0loyUe4xsDmQhOYNVAg3SuqcJD5nmuVOXu3Jb3B2FNhXObqlBrrFJFAm5vQB9+
-	 Vd6ivXtHnEmIWH0Os4cnjTND0HMPNy6yrtCkRw6gz9cTfUlHNGidY5b5wrrbPFi2Js
-	 3169MMX7UTibg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5FFC6072F;
-	Sat,  3 Jan 2026 13:26:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62ACC440
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 13:26:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 493CC40520
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 13:26:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CvaS5i2cQJ6p for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 13:26:57 +0000 (UTC)
+ id 1a3KyDU0j4Wx for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 14:13:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2D1274026C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D1274026C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 928B160860
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 928B160860
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2D1274026C
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 13:26:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 928B160860
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:13:02 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 54C01A4C332D;
- Sat,  3 Jan 2026 14:25:59 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51748)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B26BEA4C1108;
+ Sat,  3 Jan 2026 15:13:00 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47332)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vc1dh-000000000rJ-3mKs;
- Sat, 03 Jan 2026 13:25:53 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vc2NI-000000000jE-1WaJ;
+ Sat, 03 Jan 2026 14:13:00 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jarkko Sakkinen <jarkko@kernel.org>, Petr Vorel <petr.vorel@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  3 Jan 2026 14:25:51 +0100
-Message-ID: <20260103132552.3979708-5-bernd@kuhls.net>
+Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Sat,  3 Jan 2026 15:13:00 +0100
+Message-ID: <20260103141300.460719-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260103132552.3979708-1-bernd@kuhls.net>
-References: <20260103132552.3979708-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Spam: Yes
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1767446759;
- bh=PbXYw0Q1a6UfiiLJsXqjppmSJYOyZ0p5EO8/7OauWn4=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=DGQb8vOzocBT3KoKiQlNu9ph9xUMa44XgiNtuzAWEdg2X7+7eCDXmfjizRM6J22P1
- nfPgtI0MiW/xeAc+ThLaZ/UPVqEIOgOw/7rIq4jRYziFieYb+7xEeM0ghW0Dvxh9TJ
- mgUMtR9iqpQCcsheCW1znsudZYKkOSAxbrRnxqb/63BRkb+v+xZoOr+i8Epy2Ne/Xh
- RiFokqb489ecjkxc2xojqrCUXuy40kUkXqkfQDAi/2jol4t1JvzIvMVwf873MIDrDw
- UxcAZSSfxf8ONXuPk7QMCuQOS10g0VvwcncwqNH5SMWPlxbvv9feex94VixLU4SHUQ
- YbB+f25gsCQZw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202511301023; t=1767449580;
+ bh=0UxGeKmzZrmckvtakpHXpmq2YMNUJrW0MyAa2vkmBFA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GwR2V4d9hjEzjJgRX1v0JC/xKuYeoYdLdmaQT+tWLti/tduRT9sR/q5JoCS7H30Ey
+ qibAr4CSHSNVYBgtvc6gSfJQWBfIEPzVv0bDXNB//9hTHQUVUqWNNuHZ3d8D70QPEj
+ 5U1Yhs5wNh7eXNkzPwduRqR76WM5G+RTCTQwbZoTZe4bUH2JToc9qQkL+mOK1C218D
+ qL4/7guTnBvj7+mE1XsVGc1s4jrRcP4rB5NIvmZl5OGIqwhQOVx5V/6eQx4v/KgyRZ
+ FVxFQU+5PNC+jV5jVfzNXiRypy90CMPMMR1U2vtJ7jkxP8+8+0amaYTiM3k2o8SDl1
+ hn20wxeTdnOgQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=DGQb8vOz
-Subject: [Buildroot] [PATCH v4 4/5] package/quota: fix build failure due to
- missing BR2_PACKAGE_LIBTIRPC_RPCDB
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=GwR2V4d9
+Subject: [Buildroot] [PATCH 1/1] package/cfm: fix build with cmake 4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,41 +96,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Package quota requires libtirpc rpcdb option enabled with non-glibc
-toolchains since the bump of libtirpc to version 1.3.7 with buildroot
-commit 3f3d6e43de9b4aac7df8545fd811171256f878d3 which includes upstream
-commit:
-https://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=7cea8ad66aecc21e6caae330b5d31075af399193
-
-These build errors, caused by the forementioned upstream commit, only
-occur with non-glibc toolchains:
-https://patchwork.yoctoproject.org/comment/30091/
-"but I believe it breaks the build with musl"
-as shown by our autobuilders:
-
-https://autobuild.buildroot.net/?reason=quota-4.10
-
 Fixes:
-https://autobuild.buildroot.net/results/fb0/fb0adbb7687d8db4228e2fc1ce7a7272486fd3ef/
-"svc_socket.c:(.text+0x2c): undefined reference to `getrpcbynumber'"
+https://autobuild.buildroot.net/results/d01/d01d8fe3a63128246ce242de450b016b4ef13baa/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/quota/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...01-CMakeLists-fix-build-with-cmake-4.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch
 
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index 051a765570..0b7b5b8946 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_LIBTIRPC_RPCDB if BR2_PACKAGE_LIBTIRPC
- 	help
- 	  Implementation of the disk quota system.
- 
+diff --git a/package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch b/package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch
+new file mode 100644
+index 0000000000..1219a98056
+--- /dev/null
++++ b/package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch
+@@ -0,0 +1,33 @@
++From d2a823ef01396cd148074a99ccbbf1ca1115b24d Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 3 Jan 2026 14:56:38 +0100
++Subject: [PATCH] CMakeLists: fix build with cmake 4
++
++Using CMake 4 the build is broken:
++
++CMake Error at CMakeLists.txt:6 (cmake_minimum_required):
++  Compatibility with CMake < 3.5 has been removed from CMake.
++
++Upstream: https://github.com/microchip-ung/cfm/pull/1
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 5de2e0a..378e98d 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -3,7 +3,7 @@
++ 
++ project (cfm C)
++ 
++-cmake_minimum_required(VERSION 2.6)
+++cmake_minimum_required(VERSION 3.5)
++ 
++ ## libnl ################################################
++ find_path(LibNL_INCLUDE_DIR netlink/netlink.h
++-- 
++2.47.3
++
 -- 
 2.47.3
 
