@@ -4,110 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AC0DFC6182
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 19:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C1AFC6182
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 20:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 265A44066E;
-	Sat,  3 Jan 2026 19:52:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5E70404D0;
+	Sat,  3 Jan 2026 20:02:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id la1glEmHomHx; Sat,  3 Jan 2026 19:52:42 +0000 (UTC)
+ id FfT5hDW54sgH; Sat,  3 Jan 2026 20:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17ECA4058E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC8074057D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767469962;
-	bh=U/yCcI/kYFu8QfwwfWTLga/oGOe0A9ZLfbU+3ESMmqc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=VEiE0R3uk7eV2UpoYIfvyMbjEPR0m4Pc20QBpAybHHxXQigv4wHEtB2icAg4mevt8
-	 2lRfwRy9c4gc3NogyiVdbWjlsz3NBrCFnz4K0BLG5ZNk2nyHGJmNJ/CvSJozNlU9db
-	 xPB/KpdRpgRdA2IhpD/PUEiJRaoLO1m4SuKQ6pdubvsNMRUL0kVSnyjL+NObvjYP6e
-	 SiVrWoJfNpyFfWI5GWnx+VcTROdS+R3H7yCaUDY3HFwN/LCqrTzxrio17+pl/0YKLA
-	 fzGuxlcYmZ2kD9fKLEa/FnS5B4f+cqvSOEqQLNl4q4Kz9a3chUvOzy3L2u/EXR4bf0
-	 gMeoBcV6nfjng==
+	s=default; t=1767470561;
+	bh=dNo72iW2lCD4ZeZ2+varIq0MHoQcZUwKbrvAoDKzPdM=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=YXVNU7KvKs8Vu3nLAiq6cxIj8JynknGKukFrjozcluFf++tEQVkBCT06o9zSAgD9x
+	 SWAZDoDikQI6QBIDqK55jHr/3yWgqljFuaroKVOy+NGeVAlaKgiUAsqmFzJFuYeVtA
+	 XEHAitxsYyX81O0jVNJ/fEjWuCzHGXy0AgfkvQqJ7JsshsncdeUCoRwwaAnbtyTBz6
+	 6/U3vpOf3ODxlib4ceZStzklQsIf2Gxdlq1oWk7LBZs0ZjcK0khDU5TMJugr5lyYQ4
+	 NwVLvlca/ikP/jPCsqnGKybFelhVyvCCtyoaJMr6/nYJ1YgYICCiRRFxMgITdMJcK6
+	 6uDFmRL484nSw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17ECA4058E;
-	Sat,  3 Jan 2026 19:52:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D9E1E249
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 19:52:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC8074057D;
+	Sat,  3 Jan 2026 20:02:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D799F249
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 20:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDAE2400AC
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 19:52:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDF6D4057D
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 20:02:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zCJkCPjiWyVy for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 19:52:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::33; helo=mail-oa1-x33.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E6D1A40098
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6D1A40098
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com
- [IPv6:2001:4860:4864:20::33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E6D1A40098
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 19:52:39 +0000 (UTC)
-Received: by mail-oa1-x33.google.com with SMTP id
- 586e51a60fabf-3ec47e4c20eso7989233fac.1
- for <buildroot@buildroot.org>; Sat, 03 Jan 2026 11:52:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767469957; x=1768074757;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=hLTfH9rrE4w7Neia2FqUby6CblRIOuh2BBilyeYGG1c=;
- b=PdH2Jp3fI4RudoPfnjUUWmRw6Q47whBQzxwLChI+6H1fl5upzXJJaqARwEHGZ46wti
- EQYFjr4atvXxK+EAAuX0fxYaUwHRbk5TCjdlyuxBkJsIR3cA9iOb1PBKFgGr9Aa/jRqS
- k1ljVK5uGS+gvMqeVDRdb3w9GxkUTojTz41sCjvkxFREpqfxz6Tm8HvisuSVUtOa64c6
- oeqpZSbWXUCRuAvxY2OPjQhQ2EBTb43wh5rIVdOUcEgMIWYCsJFH9NzTNpYH2dhk94ux
- Qi3qMCwMcewyVVul1GO1+QTVZGuHSPeb3O6y7lKgashtS9gPqglWALgdaNIxoeV2pRaV
- toAA==
-X-Gm-Message-State: AOJu0Yxgxxsd/KiZY6hik/q9EwpQxmoHUMmMxpCXdEj1a0XRo05BBwfj
- 8zZE2d3Hq1JMaAJEeoxVR9cGToDR6IQHMQtnw+pZUK79xbrbY0cdDLuAutQmpZI6
-X-Gm-Gg: AY/fxX5szPjNLakg+oiUaLBZEyVR7uevsKQZBMXzMK+7Q764pZr/8PK/1ERIyZrtY7e
- qvq32X2X31pLL6+kZKywdL2kqSDWnNcM7jAdqE6w6Bx87ClPRuhlLIORp04BzgXT09ntDhsVPj9
- /oqMlQi/HlyYp8cZq7nrMQsc4nUVIKdBwYh1fhX9vyoYfGWzzfdhGfM6iZvkOp360QM5975wVFc
- IAc4PvQUQACwnJpYJhfXLtDai3U08FZD0xTzEz+xHZ+uZc279JB9HMfJwWjGlnZ1TzCuD/K8pPU
- h+0RtZQuQucw0488lrpWOHYhstXs7ipRQLVkqd9GnXwk/7vt+Grj6HIEhjhjlA7R6NJMLLJ3UJb
- U0mNuv59bHhxmcsDC5putyvNiByYJKW5OWvCA9ZwHxWdXrvoHHLXZ7WizO5Bs91YwYDHYMXrsrG
- HMdKv6VXlkCbf6vsftR266yp027uthFg7Cx0Ci406jslwYUT48sTL4/evQF1tnif4g67c/lqV3k
- qJdBziJEgofGzk/SnMrtwCyMpVzgzI3Nm5ywpJugLeBMIcFqyinmtY=
-X-Google-Smtp-Source: AGHT+IHsLe0SdTW1Ul4g3JoV3x3iroktnijytB9H4xOTp1TrHha8ohHklNDks4yadM9eWTvY1QCtkg==
-X-Received: by 2002:a05:6820:2916:b0:659:9a49:9024 with SMTP id
- 006d021491bc7-65d0eaff132mr15800440eaf.81.1767469957569; 
- Sat, 03 Jan 2026 11:52:37 -0800 (PST)
-Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
- [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 006d021491bc7-65d0f3f9d15sm28116109eaf.4.2026.01.03.11.52.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Jan 2026 11:52:37 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wJIsHs5IaNQw for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 20:02:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B15D4404D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B15D4404D0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B15D4404D0
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 20:02:37 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 196EF19F5A5;
+ Sat,  3 Jan 2026 21:02:34 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Sat,  3 Jan 2026 12:52:35 -0700
-Message-ID: <20260103195235.2281048-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sat,  3 Jan 2026 21:02:29 +0100
+Message-ID: <20260103200229.246015-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767469957; x=1768074757; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hLTfH9rrE4w7Neia2FqUby6CblRIOuh2BBilyeYGG1c=;
- b=VuFuvB/t4uEoGivAlVVTw7NNOFJdJjHUFisHQ42SWYXncUkVSRfCpY+TU3SNv/vX5O
- +VdDf8vRE53vVTG1wfmYLS+TqebffSO05tSqOZH4pBzKYXyv/unMSBa08MoFqxLdJ3mq
- hJ4e5YO0eJrwJzIAZRJ31hCtxVzmop1PrctWBOJmz09gFg2JtTjoqSKpNobxw+eGEY3I
- nkWtnK96brumkv6N1Sub705EqBc27owbxrtcyIIh82NOozx+K9H4vMU+f7rMZ//29wCD
- sS8R870jjYCoFfhxvfwlBp+RNlDC5nu+Qme9ZLvZOLxWDakRr8ftu5ar8iy4pGuRr36V
- JJBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VuFuvB/t
-Subject: [Buildroot] [PATCH 1/1] package/python-filelock: bump to version
- 3.20.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767470555;
+ bh=QUw7VY4qrxcT6vadPnKbqX/nRCyInp6Lj17f7qOXhnA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Pyd/1NmFz0tbLzjZWZCLGYqQkC73Mz9SX31yv3MXSDZR/W3l3WbiYrrw3YIADNFy3
+ lY8bmHVh77VwEhLNRYLLkwwIP8EZNb/BsCO4Waedfw4cr6yMQxsiVEi9ximHPxRpFE
+ J6EbE+yTWS4tZFP8SGVt/LymMcWTVFJMABtRTZ08CV30YH0l1ctZSN7twsrQmuAe/Y
+ +8+Nz2JwatpeWM4nYAabz51CCcR4z5NANG5ljOEnMl7JQt3f0D92dUr+fAIorfxnoO
+ koL105SXffYSC+lHoqaZtFg28eflQwqmbTR3JSiuHrOgw3LmAx//3ImhUOpqRrwYyF
+ 4cSA5edcXLa9w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Pyd/1NmF
+Subject: [Buildroot] [PATCH 1/1] package/gnupg2: bump to version 2.4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,48 +86,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-filelock/python-filelock.hash | 4 ++--
- package/python-filelock/python-filelock.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+For release note, see:
+https://dev.gnupg.org/T8001
 
-diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
-index 30bd3b1c97..64930ad418 100644
---- a/package/python-filelock/python-filelock.hash
-+++ b/package/python-filelock/python-filelock.hash
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/12595598071
+---
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 01060f897b..ee37e6a3af 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/filelock/json
--md5  273703b56caed22470cda2a528182fef  filelock-3.20.1.tar.gz
--sha256  b8360948b351b80f420878d8516519a2204b07aefcdcfd24912a5d33127f188c  filelock-3.20.1.tar.gz
-+md5  c422db4828e34fcadac68449fafd5cb2  filelock-3.20.2.tar.gz
-+sha256  a2241ff4ddde2a7cebddf78e39832509cb045d18ec1a09d7248d6bfc6bfbbe64  filelock-3.20.2.tar.gz
- # Locally computed sha256 checksums
- sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
-diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-index ec958869a0..83699377e1 100644
---- a/package/python-filelock/python-filelock.mk
-+++ b/package/python-filelock/python-filelock.mk
-@@ -4,9 +4,9 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  c704085aa7cc131a67edd0b7c0c90e5c35ee4adb  gnupg-2.4.8.tar.bz2
+-sha256  b58c80d79b04d3243ff49c1c3fc6b5f83138eb3784689563bcdd060595318616  gnupg-2.4.8.tar.bz2
++sha1  d4b76a8de78631b64b8c6f3725ed28dede40bdb4  gnupg-2.4.9.tar.bz2
++sha256  dd17ab2e9a04fd79d39d853f599cbc852062ddb9ab52a4ddeb4176fd8b302964  gnupg-2.4.9.tar.bz2
+ # Locally calculated
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index debf15ef63..d083ea850a 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FILELOCK_VERSION = 3.20.1
-+PYTHON_FILELOCK_VERSION = 3.20.2
- PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
--PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/a7/23/ce7a1126827cedeb958fc043d61745754464eb56c5937c35bbf2b8e26f34
-+PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/c1/e0/a75dbe4bca1e7d41307323dad5ea2efdd95408f74ab2de8bd7dba9b51a1a
- PYTHON_FILELOCK_SETUP_TYPE = hatch
- PYTHON_FILELOCK_LICENSE = Public Domain
- PYTHON_FILELOCK_LICENSE_FILES = LICENSE
+-GNUPG2_VERSION = 2.4.8
++GNUPG2_VERSION = 2.4.9
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
-2.43.0
+2.52.0
 
 _______________________________________________
 buildroot mailing list
