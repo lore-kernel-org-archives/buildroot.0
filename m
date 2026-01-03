@@ -4,88 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD7CCFC617F
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 14:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 873EFFC617E
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 15:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C3FD60AD3;
-	Sat,  3 Jan 2026 14:37:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2638E607DF;
+	Sat,  3 Jan 2026 15:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yjx3D0GjUpeo; Sat,  3 Jan 2026 14:37:47 +0000 (UTC)
+ id 7rApJzI2P9g2; Sat,  3 Jan 2026 15:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6585560ACD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 375DB6083F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767451067;
-	bh=CDhtC0N2nOEwAsiZz7jFAblboqCmSOx9OtCnT/BTMgI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LLhZOlSC2dPa6PmjNsS8ASz1fcerKLdLSktHdPEfBPgJCYWEoONGS7RC11ATn1cIN
-	 veSI4pKO8EoULOjqIUsgMJQ3ETbI6A8HCITKLwgBu909pkoks9FVvTybBJuQ4F1Etg
-	 FhTSM0f0ZiUmPcEXZRvUHDrjsWi6AwSV5YRWs7B3zXC3km2nEF9+c568J9dJJzc61i
-	 UAWd07+RBCnhSfV+61jS9EF1qMGBvOCGvAopKGIf/LB8y5mLz7M7oHxjNnOU7TVRHZ
-	 GCkR5iG//B2E+VXNptC1MoovgM4cv00+F2jtJN3QcOBrp/MAlgD/jb6yQQX7ljzGfJ
-	 pdi6az361CjqQ==
+	s=default; t=1767453715;
+	bh=wEWuqaN5oBCEB1YpOHs2SCjVuSBddXlLIBYgWr6tVa0=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=VkEe+ANYXPYlDPTAHryEVIZR7OBEDnXttxenBZ5wztfOjDY6purlrdzTCPN/0HS/b
+	 v0Cebtt+CCTzeKobN2e2ay7q+iLIHH+3tLnBXrUj4uQrAWj09knJrmBtr3RHEIk6wn
+	 KbPTw4ndCnmean36s3FbJ7JMM8FGglRsqfAIo26cSCHXEyqVDIH0p+LFUOAfBxwCB9
+	 hxm2+fufqJqxPh+HYgKBD5GcgEcyNSGbUTMwquStlS1vHgqKG6WwvaR46MhviSVDBN
+	 mUwoQQQUOStXL9OlCmZMJeBaEMQuERAUU9YE5fvH3E8i56/JddQDtvZDAX2s8zmAq6
+	 hsSLE/8AfyMQg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6585560ACD;
-	Sat,  3 Jan 2026 14:37:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 29282249
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 375DB6083F;
+	Sat,  3 Jan 2026 15:21:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C1A8249
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22BF360ACD
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E4F440177
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:21:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sboEfHbq213N for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 14:37:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA07E60AA6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA07E60AA6
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA07E60AA6
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:44 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id B52294E41F2C
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:41 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 757DB6072B;
- Sat,  3 Jan 2026 14:37:41 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1038E113B023E; Sat,  3 Jan 2026 15:37:38 +0100 (CET)
-Date: Sat, 3 Jan 2026 15:37:36 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20260103153736.5f32717b@windsurf>
-In-Reply-To: <20260102172639.1908616-1-bernd@kuhls.net>
-References: <20260102172639.1908616-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZrbuNyzZDVYl for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 15:21:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3DCD540067
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DCD540067
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3DCD540067
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:21:52 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 75468A4C327E;
+ Sat,  3 Jan 2026 16:21:50 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35110)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vc3Ru-000000004Pu-0HtH;
+ Sat, 03 Jan 2026 15:21:50 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Mario Lang <mlang@blind.guru>
+Date: Sat,  3 Jan 2026 16:21:50 +0100
+Message-ID: <20260103152150.1127812-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767451060; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=go+Rp+AmHIJ53hg05+wsIIohTL6wUvBmurPzr+/f6SA=;
- b=yEJwBX47vjkaSE3WubhXYG8MxiQ9ekr1n/shWs3FnbqpfkvTJ8IchmfOdl8Mms2CEPKbNg
- oixEUvXLCJRAVqvKtfUVXPH8Z4/0R7kXr5++4/lOT5DbjwBEnKb+3gGmn1D+5lxocqVwV4
- c67xFE/JWJizmTadOsBosqZp7rEim8bi6vsWI49M4CImCELBt0p+k/2daWggtF9kc7klQw
- QGCkt553eFdUwo5NJxtSHuXfjp1WhpkInbLcqf05qa5jkoOEHlITSXpltrrIuIcBWnfSMv
- HVjU/Icd0izrLc6szSegq5ibMS0m2ZrrsKE2rNjQkienBSTa3f7iX6rfd+v1og==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=yEJwBX47
-Subject: Re: [Buildroot] [PATCH 1/1] package/xerces: fix build with recent
- versions of ICU
+ d=kuhls.net; 
+ s=kas202511301023; t=1767453710;
+ bh=IbIryT1u1CoT7hmcI2hYSSdeQCeTL1O5ZOkf0BIJDRg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Ed+AA+uG2Vuiy0rsH3rZFZt8ZkMN6PVByDuScZZL6WuL6H3BFCFL0c9uLJVqlKP3R
+ /QL6+bvFtpIIYSQutce2J3ocpBp49wZjTLU+pWKH0T9xyUvj4QiS95lGcSL3IC5smg
+ 53vyuBJjs8C0cd67AMLXOT38LsLQnBn5s7m+qN5dfepNXA481PXpXyn9d4CSXKlVDU
+ 6FYI2xXE0XARgycf9dt9tcJEEB5VCimFF2W4jkbelMY5+PsIVmQpXJAppJ65weRZWl
+ pv3PS3xcCgnM1bzteNO8dSUht2u2B4LbK5iLlGbBDlga8SGMccVALFUPPCoT1qv2pA
+ 8CV7RX9Cs5Wbw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Ed+AA+uG
+Subject: [Buildroot] [PATCH 1/1] package/brltty: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,56 +91,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+Fixes:
+https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da/
 
-On Fri,  2 Jan 2026 18:26:39 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+The build error was not introduced by the recent bump to 6.8. The oldest
+build error with the previous brltty version 6.6 used in buildroot dates
+back to 2023:
+https://autobuild.buildroot.net/results/78a/78a7fe6edfb84c2b15fff32aa475c975ecd5bdbc/
 
-> Since Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 that
-> bumped package/icu to version 77-1, the build of xerces with ICU
-> support enabled fails:
-> 
-> In file included from /home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/uset.h:38,
->                  from /home/bernd/buildroot/output/build/xerces-3.3.0/src/xercesc/util/regx/RangeToken.cpp:40:
-> /home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/char16ptr.h:271:55:
->  error: 'is_same_v' is not a member of 'std'; did you mean 'is_same'?
-> 
-> Indeed, ICU now requires C++17. Instead of using a patch from Gentoo[1]
-> we use a backported upstream commit, limited to CMakeLists.txt, to raise
-> the c++ version.
-> 
-> The build error was not recorded yet by the autobuilders but can be
-> reproduced with this defconfig:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XERCES=y
-> BR2_PACKAGE_ICU=y
-> 
-> [1] https://bugs.gentoo.org/931105
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+and with brltty 6.4 to 2022:
+https://autobuild.buildroot.net/results/a5b/a5b338ce9865fc7afaecd9b671e6a8f290548374/
 
-Thanks for the patch!
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .../0004-check-for-functions-inb-outb.patch   | 98 +++++++++++++++++++
+ package/brltty/brltty.mk                      |  1 +
+ 2 files changed, 99 insertions(+)
+ create mode 100644 package/brltty/0004-check-for-functions-inb-outb.patch
 
-Does this mean that xerces now needs some
-BR2_TOOLCHAIN_GCC_AT_LEAST_xyz dependency to make sure we have a C++
-compiler that supports C++17 ?
-
-Or maybe ICU needs this? Right now it only depends on gcc >= 4.9, with
-a comment saying "C++11". Is gcc 4.9 really sufficient?
-
-Thomas
+diff --git a/package/brltty/0004-check-for-functions-inb-outb.patch b/package/brltty/0004-check-for-functions-inb-outb.patch
+new file mode 100644
+index 0000000000..275f17ae3c
+--- /dev/null
++++ b/package/brltty/0004-check-for-functions-inb-outb.patch
+@@ -0,0 +1,98 @@
++From 876bdd3153c791a51422a43403143ff10acb6e82 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 3 Jan 2026 15:35:48 +0100
++Subject: [PATCH] check for functions inb & outb
++
++Musl C library provides sys/io.h but inb and outb are missing on some
++archs. This patch adds a configure check ported from sane-backends:
++https://github.com/solanoalves/sane-backend/blob/059b97962ecb1b1ab068f524988d16c5b55bbd29/configure.ac#L314
++to fix build errors detected by buildroot autobuilders:
++https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da//build-end.log
++
++./ports_glibc.c: In function 'readPort1':
++./ports_glibc.c:54:10: error: implicit declaration of function 'inb' [-Wimplicit-function-declaration]
++   54 |   return inb(port);
++      |          ^~~
++./ports_glibc.c: In function 'writePort1':
++./ports_glibc.c:63:3: error: implicit declaration of function 'outb' [-Wimplicit-function-declaration]
++   63 |   outb(value, port);
++      |   ^~~~
++
++Upstream: https://github.com/brltty/brltty/pull/510
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Programs/ports_glibc.c |  4 ++--
++ config.h.in            |  3 +++
++ configure.ac           | 19 +++++++++++++++++++
++ 3 files changed, 24 insertions(+), 2 deletions(-)
++
++diff --git a/Programs/ports_glibc.c b/Programs/ports_glibc.c
++index 4233f9ea0..4a57f626d 100644
++--- a/Programs/ports_glibc.c
+++++ b/Programs/ports_glibc.c
++@@ -50,7 +50,7 @@ disablePorts (unsigned short int base, unsigned short int count) {
++ 
++ unsigned char
++ readPort1 (unsigned short int port) {
++-#ifdef HAVE_SYS_IO_H
+++#ifdef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
++   return inb(port);
++ #else /* HAVE_SYS_IO_H */
++   return 0;
++@@ -59,7 +59,7 @@ readPort1 (unsigned short int port) {
++ 
++ void
++ writePort1 (unsigned short int port, unsigned char value) {
++-#ifdef HAVE_SYS_IO_H
+++#ifdef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
++   outb(value, port);
++ #endif /* HAVE_SYS_IO_H */
++ }
++diff --git a/config.h.in b/config.h.in
++index 537d3af92..edea70cea 100644
++--- a/config.h.in
+++++ b/config.h.in
++@@ -331,6 +331,9 @@ extern "C" {
++ /* Define this if the header file sys/io.h exists. */
++ #undef HAVE_SYS_IO_H
++ 
+++/* Define to 1 if you have the <sys/io.h> providing inb,outb. */
+++#undef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
+++
++ /* Define this if the header file sys/modem.h exists. */
++ #undef HAVE_SYS_MODEM_H
++ 
++diff --git a/configure.ac b/configure.ac
++index b78d482f6..0a2a70dd0 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -961,6 +961,25 @@ AC_CHECK_FUNCS([shmget shm_open])
++ AC_CHECK_FUNCS([getpeereid getpeerucred getzoneid])
++ AC_CHECK_FUNCS([mempcpy wmempcpy])
++ 
+++dnl sys/io.h might provide ioperm but not inb,outb (like for
+++dnl non i386/x32/x86_64 with musl libc)
+++if test "${ac_cv_header_sys_io_h}" = "yes"; then
+++  AC_MSG_CHECKING([for inb,outb (provided by sys/io.h)])
+++  AC_LINK_IFELSE(
+++    [AC_LANG_PROGRAM([[#include <sys/io.h>]],
+++      [[inb(0);outb(0,0);]])],
+++    [AC_MSG_RESULT([yes])
+++      brltty_cv_have_sys_io_h_with_inb_outb="yes"],
+++    [AC_MSG_RESULT([no])
+++      brltty_cv_have_sys_io_h_with_inb_outb="no"
+++      AC_MSG_WARN([sys/io.h does not provide inb,outb (non i386/x32/x86_64 arch?)])])
+++  if test "$brltty_cv_have_sys_io_h_with_inb_outb" = "yes"; then
+++    AC_DEFINE(BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB, 1, [Define to 1 if you have the <sys/io.h> providing inb,outb.])
+++  fi
+++else
+++  brltty_cv_have_sys_io_h_with_inb_outb="no"
+++fi
+++
++ case "${host_os}"
++ in
++    cygwin*|mingw*)
++-- 
++2.47.3
++
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 5e24288cbb..4952210121 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -40,6 +40,7 @@ BRLTTY_CONF_OPTS = \
+ # Autoreconf is needed because we're patching configure.ac in
+ # 0001-Fix-linking-error-on-mips64el and
+ # 0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.
++# 0004-check-for-functions-inb-outb.patch
+ # However, a plain autoreconf doesn't work, because this package
+ # is only autoconf-based.
+ define BRLTTY_AUTOCONF
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
