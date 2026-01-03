@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 873EFFC617E
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 15:21:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7EDCFC6175
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 15:49:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2638E607DF;
-	Sat,  3 Jan 2026 15:21:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BDA7816FA;
+	Sat,  3 Jan 2026 15:49:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tS-i-YuOqoCl; Sat,  3 Jan 2026 15:49:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EBF481549
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767455351;
+	bh=UFasTdddq1EYAJX1mJUaFhRwDgNZaP9F+5sCnsdkbq8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=f9JddcbT33c8zyUVR7e4rtTcLa71pScIHrhlp9eQXl7K/bFs0PACckpy6kB1TTali
+	 F36/gq++VctV6irXacrFLrNr2a6I7d6Nm4vR8cWqPXe1AnfPOrCg4dn/3gbhDd58Yl
+	 +yTp3kI8xTASSy/pCn3AlzDHPhx5aJw+yMkSuaFrpUUJ13fFZ8+0bk2nVz8siqmIvy
+	 f83aHgtRG1vityG6SODOcxdZusBaqcaS6uAunWf6YjK6hsZQhhzdp6aJmvETGb1eHU
+	 PGVp2uQyPHDqVODPhTmtKmsv30L3no0sXxdy1b80p06USVD69ePVhf7BlwFz7cacE3
+	 CbjC337E/m7Ag==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EBF481549;
+	Sat,  3 Jan 2026 15:49:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3FF7351
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:49:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0CBA60AA5
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:49:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7rApJzI2P9g2; Sat,  3 Jan 2026 15:21:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 375DB6083F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767453715;
-	bh=wEWuqaN5oBCEB1YpOHs2SCjVuSBddXlLIBYgWr6tVa0=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=VkEe+ANYXPYlDPTAHryEVIZR7OBEDnXttxenBZ5wztfOjDY6purlrdzTCPN/0HS/b
-	 v0Cebtt+CCTzeKobN2e2ay7q+iLIHH+3tLnBXrUj4uQrAWj09knJrmBtr3RHEIk6wn
-	 KbPTw4ndCnmean36s3FbJ7JMM8FGglRsqfAIo26cSCHXEyqVDIH0p+LFUOAfBxwCB9
-	 hxm2+fufqJqxPh+HYgKBD5GcgEcyNSGbUTMwquStlS1vHgqKG6WwvaR46MhviSVDBN
-	 mUwoQQQUOStXL9OlCmZMJeBaEMQuERAUU9YE5fvH3E8i56/JddQDtvZDAX2s8zmAq6
-	 hsSLE/8AfyMQg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 375DB6083F;
-	Sat,  3 Jan 2026 15:21:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C1A8249
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:21:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E4F440177
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:21:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrbuNyzZDVYl for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 15:21:53 +0000 (UTC)
+ id aAH82YCaEg6K for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 15:49:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3DCD540067
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DCD540067
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9EFF160A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EFF160A95
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3DCD540067
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:21:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9EFF160A95
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 15:49:07 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 75468A4C327E;
- Sat,  3 Jan 2026 16:21:50 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35110)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 12477A4C30BE;
+ Sat,  3 Jan 2026 16:49:05 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59886)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vc3Ru-000000004Pu-0HtH;
- Sat, 03 Jan 2026 15:21:50 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vc3sG-000000000oO-1zKh;
+ Sat, 03 Jan 2026 15:49:04 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Mario Lang <mlang@blind.guru>
-Date: Sat,  3 Jan 2026 16:21:50 +0100
-Message-ID: <20260103152150.1127812-1-bernd@kuhls.net>
+Date: Sat,  3 Jan 2026 16:49:04 +0100
+Message-ID: <20260103154904.1130572-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1767453710;
- bh=IbIryT1u1CoT7hmcI2hYSSdeQCeTL1O5ZOkf0BIJDRg=;
+ s=kas202511301023; t=1767455345;
+ bh=e43irGcID2JbqDHP0MyqzdSHES2k76UqkyXG4BEI3BM=;
  h=From:To:Cc:Subject:Date:From;
- b=Ed+AA+uG2Vuiy0rsH3rZFZt8ZkMN6PVByDuScZZL6WuL6H3BFCFL0c9uLJVqlKP3R
- /QL6+bvFtpIIYSQutce2J3ocpBp49wZjTLU+pWKH0T9xyUvj4QiS95lGcSL3IC5smg
- 53vyuBJjs8C0cd67AMLXOT38LsLQnBn5s7m+qN5dfepNXA481PXpXyn9d4CSXKlVDU
- 6FYI2xXE0XARgycf9dt9tcJEEB5VCimFF2W4jkbelMY5+PsIVmQpXJAppJ65weRZWl
- pv3PS3xcCgnM1bzteNO8dSUht2u2B4LbK5iLlGbBDlga8SGMccVALFUPPCoT1qv2pA
- 8CV7RX9Cs5Wbw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=UrP7HbVFkHt4gEmKeBbwO5cUX/azACKg/IoO/8uvq/0qTcN8cwhYBXQx0mk+MIFRd
+ BK/E4fWWsjGqWZFvVuTrRUDk0DELtdnjja0VFHXXohdd5VXL4/Lkxzd7NAIn1vAJAa
+ R4it/e1mbAeWO3IS4d+rANla4HZMqKe7BKzrBmi/qxRm39tteP42xAU/aJAs6Jf0+x
+ 1WcTzvKYeZh8m1x8kTNMk4FLXysY1ETGZcqjLXuWnhd7nex/pAYb5J/mO/oDUsgg8l
+ WdOSnSQxIttr+WIiEda08Tntqse24DiMd2Rf3nY6/YT7i9W9ymmajyim1Aot57xQa8
+ IrVWVl3M1l4Yg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Ed+AA+uG
-Subject: [Buildroot] [PATCH 1/1] package/brltty: fix musl build
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=UrP7HbVF
+Subject: [Buildroot] [PATCH 1/1] package/icu: needs C++17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,145 +91,382 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Oufella?=
+ <jerome.oufella@savoirfairelinux.com>,
+ Adrian Perez de Castro <aperez@igalia.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da/
+Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 bumped icu from
+version 73-2 to 77-1.
 
-The build error was not introduced by the recent bump to 6.8. The oldest
-build error with the previous brltty version 6.6 used in buildroot dates
-back to 2023:
-https://autobuild.buildroot.net/results/78a/78a7fe6edfb84c2b15fff32aa475c975ecd5bdbc/
+Upstream raised the minimum C++ requirement to C++17 in version 75-1:
 
-and with brltty 6.4 to 2022:
-https://autobuild.buildroot.net/results/a5b/a5b338ce9865fc7afaecd9b671e6a8f290548374/
+https://github.com/unicode-org/icu/releases/tag/release-75-1
+https://icu.unicode.org/download/75
+"C++ code now requires C++17 [...]"
+
+This commit switches the minimum gcc version to 7.
+
+No autobuilder errors were recorded which relate to the gcc version used.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0004-check-for-functions-inb-outb.patch   | 98 +++++++++++++++++++
- package/brltty/brltty.mk                      |  1 +
- 2 files changed, 99 insertions(+)
- create mode 100644 package/brltty/0004-check-for-functions-inb-outb.patch
+ package/cppcms/Config.in               | 10 +++++-----
+ package/icu/Config.in                  | 10 +++++-----
+ package/php/Config.ext                 | 10 +++++-----
+ package/python-mwscrape2slob/Config.in | 10 +++++-----
+ package/python-pyicu/Config.in         | 10 +++++-----
+ package/python-slob/Config.in          | 10 +++++-----
+ package/qt-webkit-kiosk/Config.in      | 10 +++++-----
+ package/qt5/qt5base/Config.in          | 10 +++++-----
+ package/qt5/qt5webengine/Config.in     |  6 +++---
+ package/qt5/qt5webkit/Config.in        | 10 +++++-----
+ package/webkitgtk/Config.in            |  6 +++---
+ package/wpewebkit/Config.in            |  6 +++---
+ 12 files changed, 54 insertions(+), 54 deletions(-)
 
-diff --git a/package/brltty/0004-check-for-functions-inb-outb.patch b/package/brltty/0004-check-for-functions-inb-outb.patch
-new file mode 100644
-index 0000000000..275f17ae3c
---- /dev/null
-+++ b/package/brltty/0004-check-for-functions-inb-outb.patch
-@@ -0,0 +1,98 @@
-+From 876bdd3153c791a51422a43403143ff10acb6e82 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 3 Jan 2026 15:35:48 +0100
-+Subject: [PATCH] check for functions inb & outb
-+
-+Musl C library provides sys/io.h but inb and outb are missing on some
-+archs. This patch adds a configure check ported from sane-backends:
-+https://github.com/solanoalves/sane-backend/blob/059b97962ecb1b1ab068f524988d16c5b55bbd29/configure.ac#L314
-+to fix build errors detected by buildroot autobuilders:
-+https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da//build-end.log
-+
-+./ports_glibc.c: In function 'readPort1':
-+./ports_glibc.c:54:10: error: implicit declaration of function 'inb' [-Wimplicit-function-declaration]
-+   54 |   return inb(port);
-+      |          ^~~
-+./ports_glibc.c: In function 'writePort1':
-+./ports_glibc.c:63:3: error: implicit declaration of function 'outb' [-Wimplicit-function-declaration]
-+   63 |   outb(value, port);
-+      |   ^~~~
-+
-+Upstream: https://github.com/brltty/brltty/pull/510
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Programs/ports_glibc.c |  4 ++--
-+ config.h.in            |  3 +++
-+ configure.ac           | 19 +++++++++++++++++++
-+ 3 files changed, 24 insertions(+), 2 deletions(-)
-+
-+diff --git a/Programs/ports_glibc.c b/Programs/ports_glibc.c
-+index 4233f9ea0..4a57f626d 100644
-+--- a/Programs/ports_glibc.c
-++++ b/Programs/ports_glibc.c
-+@@ -50,7 +50,7 @@ disablePorts (unsigned short int base, unsigned short int count) {
-+ 
-+ unsigned char
-+ readPort1 (unsigned short int port) {
-+-#ifdef HAVE_SYS_IO_H
-++#ifdef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
-+   return inb(port);
-+ #else /* HAVE_SYS_IO_H */
-+   return 0;
-+@@ -59,7 +59,7 @@ readPort1 (unsigned short int port) {
-+ 
-+ void
-+ writePort1 (unsigned short int port, unsigned char value) {
-+-#ifdef HAVE_SYS_IO_H
-++#ifdef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
-+   outb(value, port);
-+ #endif /* HAVE_SYS_IO_H */
-+ }
-+diff --git a/config.h.in b/config.h.in
-+index 537d3af92..edea70cea 100644
-+--- a/config.h.in
-++++ b/config.h.in
-+@@ -331,6 +331,9 @@ extern "C" {
-+ /* Define this if the header file sys/io.h exists. */
-+ #undef HAVE_SYS_IO_H
-+ 
-++/* Define to 1 if you have the <sys/io.h> providing inb,outb. */
-++#undef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
-++
-+ /* Define this if the header file sys/modem.h exists. */
-+ #undef HAVE_SYS_MODEM_H
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index b78d482f6..0a2a70dd0 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -961,6 +961,25 @@ AC_CHECK_FUNCS([shmget shm_open])
-+ AC_CHECK_FUNCS([getpeereid getpeerucred getzoneid])
-+ AC_CHECK_FUNCS([mempcpy wmempcpy])
-+ 
-++dnl sys/io.h might provide ioperm but not inb,outb (like for
-++dnl non i386/x32/x86_64 with musl libc)
-++if test "${ac_cv_header_sys_io_h}" = "yes"; then
-++  AC_MSG_CHECKING([for inb,outb (provided by sys/io.h)])
-++  AC_LINK_IFELSE(
-++    [AC_LANG_PROGRAM([[#include <sys/io.h>]],
-++      [[inb(0);outb(0,0);]])],
-++    [AC_MSG_RESULT([yes])
-++      brltty_cv_have_sys_io_h_with_inb_outb="yes"],
-++    [AC_MSG_RESULT([no])
-++      brltty_cv_have_sys_io_h_with_inb_outb="no"
-++      AC_MSG_WARN([sys/io.h does not provide inb,outb (non i386/x32/x86_64 arch?)])])
-++  if test "$brltty_cv_have_sys_io_h_with_inb_outb" = "yes"; then
-++    AC_DEFINE(BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB, 1, [Define to 1 if you have the <sys/io.h> providing inb,outb.])
-++  fi
-++else
-++  brltty_cv_have_sys_io_h_with_inb_outb="no"
-++fi
-++
-+ case "${host_os}"
-+ in
-+    cygwin*|mingw*)
-+-- 
-+2.47.3
-+
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 5e24288cbb..4952210121 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -40,6 +40,7 @@ BRLTTY_CONF_OPTS = \
- # Autoreconf is needed because we're patching configure.ac in
- # 0001-Fix-linking-error-on-mips64el and
- # 0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.
-+# 0004-check-for-functions-inb-outb.patch
- # However, a plain autoreconf doesn't work, because this package
- # is only autoconf-based.
- define BRLTTY_AUTOCONF
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 6c0bff934c..48266e00c1 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -24,17 +24,17 @@ if BR2_PACKAGE_CPPCMS
+ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Using ICU allows advanced localization features into CppCMS,
+ 	  in another hand ICU is heavier than iconv.
+ 
+-comment "icu support needs a toolchain w/ gcc >= 4.9, host gcc >= 4.9"
++comment "icu support needs a toolchain w/ gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 
+ endif
+ 
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index 4ed662e887..542acc4187 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_ICU
+ 	bool "icu"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11 PR56019
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11 PR56019
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# icu does some funky things by generating by itself an ELF
+ 	# file, and it cannot easily be changed to generate FLAT
+@@ -27,9 +27,9 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
+ 
+ endif
+ 
+-comment "icu needs a toolchain w/ C++, wchar, threads, gcc >= 4.9, host gcc >= 4.9"
++comment "icu needs a toolchain w/ C++, wchar, threads, gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 8cf4a7d160..e6f29cdf4c 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -231,10 +231,10 @@ config BR2_PACKAGE_PHP_EXT_ICONV
+ 
+ config BR2_PACKAGE_PHP_EXT_INTL
+ 	bool "intl"
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
+ 	depends on !BR2_STATIC_LIBS
+@@ -242,12 +242,12 @@ config BR2_PACKAGE_PHP_EXT_INTL
+ 	help
+ 	  Internationalization support
+ 
+-comment "intl support needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
++comment "intl support needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_PHP_EXT_MBSTRING
+ 	bool "mbstring"
+diff --git a/package/python-mwscrape2slob/Config.in b/package/python-mwscrape2slob/Config.in
+index 6ced253451..940ff48059 100644
+--- a/package/python-mwscrape2slob/Config.in
++++ b/package/python-mwscrape2slob/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
+ 	bool "python-mwscrape2slob"
+ 	depends on !BR2_BINFMT_FLAT # python-slob -> python-pyicu -> icu
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # python-slob -> python-pyicu -> icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # python-slob -> python-pyicu -> icu
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-slob -> python-pyicu -> icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-slob -> python-pyicu -> icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # python-slob -> python-pyicu -> icu
+ 	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
+ 	select BR2_PACKAGE_PYTHON_CSSSELECT # runtime
+ 	select BR2_PACKAGE_PYTHON_CSSUTILS # runtime
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
+ 
+ 	  https://github.com/itkach/mwscrape2slob
+ 
+-comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
++comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/python-pyicu/Config.in b/package/python-pyicu/Config.in
+index cbd75c0119..34655d4565 100644
+--- a/package/python-pyicu/Config.in
++++ b/package/python-pyicu/Config.in
+@@ -1,17 +1,17 @@
+ config BR2_PACKAGE_PYTHON_PYICU
+ 	bool "python-pyicu"
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
+ 	depends on BR2_INSTALL_LIBSTDCPP # icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Python extension wrapping the ICU C++ API.
+ 
+ 	  https://gitlab.pyicu.org/main/pyicu
+ 
+-comment "python-pyicu needs a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
++comment "python-pyicu needs a toolchain w/ C++, gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/python-slob/Config.in b/package/python-slob/Config.in
+index c06f544534..293dd67de2 100644
+--- a/package/python-slob/Config.in
++++ b/package/python-slob/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_PYTHON_SLOB
+ 	bool "python-slob"
+ 	depends on !BR2_BINFMT_FLAT # python-pyicu -> icu
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # python-pyicu -> icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # python-pyicu -> icu
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-pyicu -> icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-pyicu -> icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # python-pyicu -> icu
+ 	select BR2_PACKAGE_PYTHON_PYICU # runtime
+ 	# although optional, it is used as default compression
+ 	select BR2_PACKAGE_PYTHON3_XZ # runtime
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_PYTHON_SLOB
+ 
+ 	  https://github.com/itkach/slob
+ 
+-comment "python-slob needs a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
++comment "python-slob needs a toolchain w/ C++, gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+index 80f8e7c464..2df1f4da39 100644
+--- a/package/qt-webkit-kiosk/Config.in
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -3,8 +3,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_STATIC_LIBS # qt5webkit
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5webkit -> icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # qt5webkit -> icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # qt5webkit -> icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # qt5webkit -> icu
+ 	depends on !BR2_BINFMT_FLAT # qt5webkit -> icu
+ 	depends on !BR2_MIPS_SOFT_FLOAT # qt5webkit
+ 	select BR2_PACKAGE_OPENSSL
+@@ -26,9 +26,9 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
+ 
+ endif
+ 
+-comment "qt-webkit-kiosk needs a toolchain w/ dynamic library, gcc >= 4.9, host gcc >= 4.9"
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++comment "qt-webkit-kiosk needs a toolchain w/ dynamic library, gcc >= 7, host gcc >= 7"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_MIPS_SOFT_FLOAT
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 8f14540eb4..dfaa798bd4 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -290,17 +290,17 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ config BR2_PACKAGE_QT5BASE_ICU
+ 	bool "Enable ICU support"
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  This option enables ICU support in Qt5. This is for example
+ 	  needed for Qt5Webkit.
+ 
+-comment "icu support needs a toolchain w/ gcc >= 4.9, host gcc >= 4.9"
++comment "icu support needs a toolchain w/ gcc >= 7, host gcc >= 7"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_QT5BASE_TSLIB
+ 	bool "Enable Tslib support"
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 6179591399..0dd1483c57 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -10,10 +10,10 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # qt5base-icu
+ 	depends on BR2_USE_MMU # libglib2, qt5base-dbus
+ 
+-comment "qt5webengine needs udev /dev management and a glibc toolchain w/ host gcc >= 4.9, threads, wchar"
++comment "qt5webengine needs udev /dev management and a glibc toolchain w/ host gcc >= 7, threads, wchar"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9 || \
++		!BR2_HOST_GCC_AT_LEAST_7 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 
+ comment "qt5webengine needs an OpenGL and EGL-capable backend"
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	bool "qt5webengine"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # qt5base-icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 9b84ac5f96..52e5606534 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -3,8 +3,8 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on BR2_INSTALL_LIBSTDCPP # leveldb
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # icu
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # leveldb
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	# assumes a FPU is available on MIPS
+@@ -50,9 +50,9 @@ config BR2_PACKAGE_QT5WEBKIT
+ 
+ 	  https://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
+ 
+-comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 4.9, host gcc >= 4.9"
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 7, host gcc >= 7"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_MIPS_SOFT_FLOAT
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 7827dc6218..3a4c3ed792 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -16,14 +16,14 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 or libgtk4 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 or libgtk4 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 7"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on (!BR2_PACKAGE_LIBGTK3 && !BR2_PACKAGE_LIBGTK4) || \
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9
++		!BR2_HOST_GCC_AT_LEAST_7
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WEBKITGTK
+@@ -31,7 +31,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 5cbba43792..73ba4e6bdf 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -16,13 +16,13 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
++comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 7"
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_11 \
+-		|| !BR2_HOST_GCC_AT_LEAST_4_9
++		|| !BR2_HOST_GCC_AT_LEAST_7
+ 
+ comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+@@ -33,7 +33,7 @@ config BR2_PACKAGE_WPEWEBKIT
+ 	bool "wpewebkit"
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
++	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
 -- 
 2.47.3
 
