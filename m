@@ -1,112 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78008FA3727
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 01:21:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6330CFC6166
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 01:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64F3E809B2;
-	Sat,  3 Jan 2026 01:21:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC42A40868;
+	Sat,  3 Jan 2026 01:23:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GpR-_iKpmVPS; Sat,  3 Jan 2026 01:21:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G_rOklMtHFAZ; Sat,  3 Jan 2026 01:23:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C60108098C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E6DA40838
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767403264;
-	bh=qE1O567N0U/N6wC1MWKS3CrGYC6tStO6PEgRIhT2Y2Q=;
+	s=default; t=1767403428;
+	bh=071DV3cif1l7ukaxl8Hi1HQwHBfaIiLH0gqyvpRxYN0=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=SEA2zDhAhFEpE5h+qZQThtfQUNwaWRocdUdvm06KOucF2eqXbqhGjGlzZhSRk+o/q
-	 FVYS2/hAvv/GssUFLiQ5bmSB4qvPJP3KG0ZdQpHJqMG1Kx1GwsQlOVqF5IahPbqoNd
-	 okWBvmEiTocaV8hluOxPTF74nAPeaqkf+4qR/45HODjwPm2uTdsZr6XQoK8+aEulYC
-	 SHOUwv6P6T9/f3gidKTDynETPxGD7SAsw+PmHjiZWu9TcHWwcW0/NZElNWn2A8GJWT
-	 olZfGb+63aMSzCF55+92OK5DhUUSP0J+E1xIA5aI0ZVtyu0E3yKpAs4T67j2Ll3Oym
-	 ixbwG4wKCYU0Q==
+	b=sSo9pKK9qb2LTS04WnUoqTAO/u7TImXBa5aIV7kycNjaPkswDWk0yFDNVD50kY2Wk
+	 9rRGEDjP0CdbWTHEs7h+ZJz9JtNH6rHm1UjaTnJl9ox46xX/ceQsnwOqfP5uxvvikU
+	 PQWDsInQplhSnaYp1kH+uLsG3oc0Q5YRO3Dev+cfM60vQf+/4R+fw2gMyEiwpwAjrj
+	 kucO21Xzn2WDq2+5l2zy7724wCfPdI6AnMQFpW2g9XFzVLubWujybN4yJ8OVworDys
+	 vi84B7wHxeMZeT73u/k/LKwlSWLlJ9Cf4UfThmVWcWuHX9SiYV+msGoLQw0iM8ohP5
+	 Y0sICCG+KW0Fg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C60108098C;
-	Sat,  3 Jan 2026 01:21:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EF8CE351
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 01:21:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E6DA40838;
+	Sat,  3 Jan 2026 01:23:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77516351
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 01:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5C2E6067A
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 01:21:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5DFF1402CE
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 01:23:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I1pkg5yxvhS2 for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 01:21:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JpNW87BIoapc for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 01:23:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::331; helo=mail-ot1-x331.google.com;
+ client-ip=2607:f8b0:4864:20::22a; helo=mail-oi1-x22a.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 088F6605D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 088F6605D4
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
- [IPv6:2607:f8b0:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 088F6605D4
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 01:21:02 +0000 (UTC)
-Received: by mail-ot1-x331.google.com with SMTP id
- 46e09a7af769-7c6d3676455so5680231a34.2
- for <buildroot@buildroot.org>; Fri, 02 Jan 2026 17:21:02 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3932640024
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3932640024
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
+ [IPv6:2607:f8b0:4864:20::22a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3932640024
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 01:23:42 +0000 (UTC)
+Received: by mail-oi1-x22a.google.com with SMTP id
+ 5614622812f47-4507605e19aso8403240b6e.2
+ for <buildroot@buildroot.org>; Fri, 02 Jan 2026 17:23:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767403261; x=1768008061;
+ d=1e100.net; s=20230601; t=1767403422; x=1768008222;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jIr6AdFBs6QXhZKClzidpgchH6o4Mnj7bnPWFaGssnI=;
- b=ZFi7nm1NDuY0nCHf9JeqcISd6kDsoxkThgGaaWDcDpE6hVD+dy1c5Q4wCtrrQWELXh
- r0LSJ0e2iY3hPC/CcWO3vPi/ic1ri4XggA0Mt7TPNQojLJ3xghraGGN9n2aEihVEjmYT
- ZZL5cvgJBYfuUWr8oST4xiR9pBWAh7/0KvbP5Ub6GMSdu358pFQuhR/7HgjtxdFSM+T2
- An0DsbJSd/bL5VwNpF0y+LUyUqNKyBWMmZ8EnWHYoMTtYGwhea1PuhiKv8Cqa8ZzlXoT
- DlSgNPCMZfSgiWKJJ4in49DYkCFbsIQAntAwvPJGCnE4R0pLADc7kOPIv2NiYBLVPXYR
- IIew==
-X-Gm-Message-State: AOJu0Yxdw/VMKlTTcmvi7DkdF00BCDqbAMvVum2CFUKwr/77mbPMpL7j
- 0c7l0C1/hQ6do5qqN+ZftSFv/W8wco+0wr5JYNwpVQbCUN9jAeHw6pMbdoNjnkDD7ZY=
-X-Gm-Gg: AY/fxX5JikTogKriX86K3T274XpCHGgZjwCB01vyTKfjHTb3s7AgM2pylxme19Yejir
- SJDrFBlHvpWXRoaHDlmroocAKnZJ/vjMpAE11K/iafuLVwEwmiZ0/oBdl06zW0ll9PAqBER3cwN
- s9t1HnzDp1sMdJg/tTQFUeLgLmkX3Ig9PKFnvO7grkClYfhv9L+AoNwZmTqYsY+tF9nl5nNdqJG
- saQXLUE92HdHXTFglc7zkrwT/PhF5fskJaZ8k0+UbeH5GYHdGQ46ZDUXQ9VyJb4sa7sX8DWo+RK
- lNmq48Y1EiWiltyMkk5gVsgyXtPSE6WPv8H4MRBbCakf+YLk/iSos3i0f5xc2xdrbexrLWT2oIo
- Ed4H24cNLbM/jEfkUV0ncxLKq0Wbsgjpa8/P0X+ApykC/hR1RSBdjRX+1CYhgKJlh2qZeZ63bFi
- CWZnDentPjRRp0YCRZA6/zmRdzQC7mWx4LELueJ83/7jhByRDhgA/5coODNmLJ7+nW911O5XM9m
- L8LaNFcirbvU/QzDqf+R1ek5ENjS/mKEwDzdAtgFqE7x1HnGvk3McA=
-X-Google-Smtp-Source: AGHT+IFft1wEnzpTKhPggbs8Dfnso23SaIGxnHczLWfxfsRo3FXIFme2xES6xaeYyMFKTIaQtEl96g==
-X-Received: by 2002:a05:6830:91a:b0:7c7:63ec:b697 with SMTP id
- 46e09a7af769-7cc6690bda3mr24496835a34.23.1767403261507; 
- Fri, 02 Jan 2026 17:21:01 -0800 (PST)
+ bh=PXrILU4igaNTMkBr3uLwZhkNdARhV0ByDPnjqg2M3H4=;
+ b=jNk19xWKO+9DeFO+IOkbDPFKhOdW6YQiJXoKLtLWOSfnFyXPOsWFiPQWoW4kHneiLL
+ q7hMAFY0iTgSdwXI3GOkCm6YU9db6/n/TM0UjxfBXvv6qeT2jctpnGpNVvcCC7IBAMF1
+ QJzpQtBgWJWD143xNMj/k3tGlEn9kYOiQBBf3focbAm1/yrsUzEl1iW4BTROMnUWOxyt
+ ZB07XRzagIlMCM171bcXTWMTfMpqs51+OUl0n3IkjucmdXlH/FH+N+RtnaPW0vZuM5+F
+ Lfsi8rGTs6Q0wj6KFrvzfc8x0wmjiPF6ZU3HtxmghlfndQ9v0GwsJ4aPbc2N4hKv1u9C
+ xNsg==
+X-Gm-Message-State: AOJu0YxZC27xODMIGGliTBD0u7RYCIUBd20NwhntgkWcnj4/MaBYAzyQ
+ XKBJdq/2VmqGy2+PWo+3W+eLykAaY7t/K2OIoUEyke/0hxXZVQEqDFqlUW0krWy3WdA=
+X-Gm-Gg: AY/fxX57/2Ee+QglVKI63sIvERZTT1ea8LFbpDzNlKbqQKk26eapqxMvwtqQPlw+p2a
+ HxorhtBTJandTXGJ6Wz/hwjbyTSCR+nA4hclGnbKQ4n4VCKBpdY0AF+g87JTfV7B2f9HOnTRYx8
+ ivZW7abOoQe7g9A6XXAwGGCdR7hOJvHPM0AhxETE797Pa4QKmpGAKK+cSF4a+fMn6J/pA9XBnBr
+ pOrmMeJYpqt/qk4qFSLzzU/B71pTUyvasCz+7KoiCFgy1WpOR7D/gjmCfEv8t2DZ/Ue6xf5oi02
+ NjgnM6MRaB5mTF+jkJivbcysfefMBh05cvM/DPSYWm5Zv1o/BsvNjkWNnp6JxTgNUIWnLbeRsF4
+ 1k9CvqbNtJ2kbI0mZ4pwVrhkrW8P8l+uEk8sN0pm2kvGX5iXpzZXhhHq8Fs3IlLnmmcApCi2uA/
+ PGkvXDRMemAV8BxDVUsupl1JIcrDvb6MN5ybJpq8ySBBw1eNQVrjHD6r3z71FMLvptO+pFKB3UN
+ v0bVN3dKoDV+PM/E42Mf5B7vj9O4M830Xc1dxiZLNENr6fB97xQvXc=
+X-Google-Smtp-Source: AGHT+IGOKm8kk7s89VlqBodZ/JADxAw1C2Muiim9XHrIutPsnaxq4vUpKKsQ1vljVjoac+nm6KLZIw==
+X-Received: by 2002:a05:6808:1991:b0:43f:7dee:4693 with SMTP id
+ 5614622812f47-457b1fc1e9amr18603046b6e.14.1767403421878; 
+ Fri, 02 Jan 2026 17:23:41 -0800 (PST)
 Received: from james-x399.tailafd1a.ts.net (71-33-156-49.hlrn.qwest.net.
  [71.33.156.49]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7cdf600885asm12565240a34.21.2026.01.02.17.21.00
+ 586e51a60fabf-3fdaab5d61bsm27047349fac.12.2026.01.02.17.23.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Jan 2026 17:21:01 -0800 (PST)
+ Fri, 02 Jan 2026 17:23:41 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  2 Jan 2026 18:20:58 -0700
-Message-ID: <20260103012058.745351-1-james.hilliard1@gmail.com>
+Date: Fri,  2 Jan 2026 18:23:39 -0700
+Message-ID: <20260103012339.750123-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767403261; x=1768008061; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1767403422; x=1768008222; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jIr6AdFBs6QXhZKClzidpgchH6o4Mnj7bnPWFaGssnI=;
- b=Db/TYOrtZMXne2v7iY/+dfuOocfvEFxC96GehKzUukkKvRbVXgbsmDPI5at1685B1e
- ye149PIB1YCNAVAg3MNl9MmLQbNF09ZSXbX13+FBAct3O95pMo7w2i8NeFtIWfDI29jG
- qHpCHWTuZQLYe9/2g2QsyX4FiiroZbOqJnL86CmIjCfmTk06na7PhIgbI7CEBTfSV15y
- HxFEbxxAi5CreYRkvLLOQpiMaU6CZYb+5Q84Q8U3oYhJ2Is5Ou0DNuwWZPkCzlZVBKSF
- Qti3wmYMRoWFjK3EenFgP1T+WDavJvC5OQuXxR+t6xy8Jwg8ODFXQrFyinqT+Dx20ds9
- CGzw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=PXrILU4igaNTMkBr3uLwZhkNdARhV0ByDPnjqg2M3H4=;
+ b=coNqhBpa36eRnCiF2TetiZwQqN0lq4mJv0gxGiH7TG1T9kkF8sTuNBRbMFpHLHJ0g/
+ 35OVvgbbE3uTjENAp25b+oV8izvgwNlX4v42zOcIDYMhRffBjkD6jd1gQl2nEDq4vUOn
+ rf91pIC2wirCo535tULtfYrLunxDXZ84H3Vjom4/FegSc3IDgNL4ufhoLHMHsZtsEP+e
+ VK2yJHZCNZKz7odi79JBrHzGHpQYr4yifFLME8RKX05beAAKF0GgSLCYvEYIHuthdQX9
+ BfLkCkqlrEXiirN6RkZiZW+NVN3ygX4QqE2BEfTrQl7Ud6zn5/vzjSMohfe9wpAfWRiP
+ AbKg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Db/TYOrt
-Subject: [Buildroot] [PATCH 1/1] package/python-cbor2: bump to version 5.8.0
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=coNqhBpa
+Subject: [Buildroot] [PATCH 1/1] package/python-bottle: bump to version
+ 0.13.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,38 +128,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cbor2/python-cbor2.hash | 4 ++--
- package/python-cbor2/python-cbor2.mk   | 4 ++--
+ package/python-bottle/python-bottle.hash | 4 ++--
+ package/python-bottle/python-bottle.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
-index 54c297bdb4..2c72626637 100644
---- a/package/python-cbor2/python-cbor2.hash
-+++ b/package/python-cbor2/python-cbor2.hash
+diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+index 3ea1f71ca6..722eccba94 100644
+--- a/package/python-bottle/python-bottle.hash
++++ b/package/python-bottle/python-bottle.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cbor2/json
--md5  9f5b82e0ca69926b4eb9dc145b82c524  cbor2-5.7.1.tar.gz
--sha256  7a405a1d7c8230ee9acf240aad48ae947ef584e8af05f169f3c1bde8f01f8b71  cbor2-5.7.1.tar.gz
-+md5  43d53d2eedc711252f5f66b1e05389a5  cbor2-5.8.0.tar.gz
-+sha256  b19c35fcae9688ac01ef75bad5db27300c2537eb4ee00ed07e05d8456a0d4931  cbor2-5.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bottle/json
+-md5  3564bf7c5e348d6dee6dd13a89dd9330  bottle-0.13.2.tar.gz
+-sha256  e53803b9d298c7d343d00ba7d27b0059415f04b9f6f40b8d58b5bf914ba9d348  bottle-0.13.2.tar.gz
++md5  a8dd2700b477b86a38510a2a31d07c78  bottle-0.13.4.tar.gz
++sha256  787e78327e12b227938de02248333d788cfe45987edca735f8f88e03472c3f47  bottle-0.13.4.tar.gz
  # Locally computed sha256 checksums
- sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
-diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-index 65873d77ca..6f8bc31996 100644
---- a/package/python-cbor2/python-cbor2.mk
-+++ b/package/python-cbor2/python-cbor2.mk
+ sha256  af150257b1f7cce92b6207854f2e8f90ea9ae52d7cac758d13a47bd12e2a2443  LICENSE
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index d6469b11d0..01a73514ad 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CBOR2_VERSION = 5.7.1
-+PYTHON_CBOR2_VERSION = 5.8.0
- PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
--PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/a2/b8/c0f6a7d46f816cb18b1fda61a2fe648abe16039f1ff93ea720a6e9fb3cee
-+PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/d9/8e/8b4fdde28e42ffcd741a37f4ffa9fb59cd4fe01625b544dfcfd9ccb54f01
- PYTHON_CBOR2_SETUP_TYPE = setuptools
- PYTHON_CBOR2_LICENSE = MIT
- PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
+-PYTHON_BOTTLE_VERSION = 0.13.2
++PYTHON_BOTTLE_VERSION = 0.13.4
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+-PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/1b/fb/97839b95c2a2ea1ca91877a846988f90f4ca16ee42c0bb79e079171c0c06
++PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/7a/71/cca6167c06d00c81375fd668719df245864076d284f7cb46a694cbeb5454
+ PYTHON_BOTTLE_LICENSE = MIT
+ PYTHON_BOTTLE_LICENSE_FILES = LICENSE
+ PYTHON_BOTTLE_CPE_ID_VENDOR = bottlepy
 -- 
 2.43.0
 
