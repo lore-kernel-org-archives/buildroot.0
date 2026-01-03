@@ -1,85 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 864C5FC617F
-	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 14:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD7CCFC617F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Jan 2026 14:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4800408D0;
-	Sat,  3 Jan 2026 14:13:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Fm-DVHrFPkO; Sat,  3 Jan 2026 14:13:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7F1740639
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767449584;
-	bh=xpE9ylJ2UvnVdZWl1C3NAhCC7StuqLkTjlSQpZS0L0A=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=HsJDH3S4iv/VhDEW6hH5v+9xKGXyPzvGV+6MCgQzdkk8x2n9VsJV54iwqpka5IHlv
-	 Bd9tLJDGMGKN3+OhexIb0IPWlOnKoJXWFKZmXxVUIY+CGjp05Yo/21Feye2qZr19ds
-	 MNK7iUTceasgwuer1IAUI365oKpuRt74YCDisj4XiTirAvaw8neH0gKvDGMrTqmPRU
-	 l6nQqUWwjkn0HuBHThNKqPi0cTcOpcS52oQhBjI31TK2QnV/Sfy1Y0YG0wS66E44I1
-	 fMt4KvB2WYGu0kZXNk7jPY1GOkZmVsblUjG9Y4xJHi+sB/hOE5EZTTzhuFK3HhuwiG
-	 V7d+Uz3y3j6pw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7F1740639;
-	Sat,  3 Jan 2026 14:13:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 95942249
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:13:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8679560873
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:13:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C3FD60AD3;
+	Sat,  3 Jan 2026 14:37:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1a3KyDU0j4Wx for <buildroot@buildroot.org>;
- Sat,  3 Jan 2026 14:13:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 928B160860
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 928B160860
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 928B160860
- for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:13:02 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B26BEA4C1108;
- Sat,  3 Jan 2026 15:13:00 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47332)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vc2NI-000000000jE-1WaJ;
- Sat, 03 Jan 2026 14:13:00 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Sat,  3 Jan 2026 15:13:00 +0100
-Message-ID: <20260103141300.460719-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id yjx3D0GjUpeo; Sat,  3 Jan 2026 14:37:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6585560ACD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767451067;
+	bh=CDhtC0N2nOEwAsiZz7jFAblboqCmSOx9OtCnT/BTMgI=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LLhZOlSC2dPa6PmjNsS8ASz1fcerKLdLSktHdPEfBPgJCYWEoONGS7RC11ATn1cIN
+	 veSI4pKO8EoULOjqIUsgMJQ3ETbI6A8HCITKLwgBu909pkoks9FVvTybBJuQ4F1Etg
+	 FhTSM0f0ZiUmPcEXZRvUHDrjsWi6AwSV5YRWs7B3zXC3km2nEF9+c568J9dJJzc61i
+	 UAWd07+RBCnhSfV+61jS9EF1qMGBvOCGvAopKGIf/LB8y5mLz7M7oHxjNnOU7TVRHZ
+	 GCkR5iG//B2E+VXNptC1MoovgM4cv00+F2jtJN3QcOBrp/MAlgD/jb6yQQX7ljzGfJ
+	 pdi6az361CjqQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6585560ACD;
+	Sat,  3 Jan 2026 14:37:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29282249
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22BF360ACD
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sboEfHbq213N for <buildroot@buildroot.org>;
+ Sat,  3 Jan 2026 14:37:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA07E60AA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA07E60AA6
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EA07E60AA6
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:44 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id B52294E41F2C
+ for <buildroot@buildroot.org>; Sat,  3 Jan 2026 14:37:41 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 757DB6072B;
+ Sat,  3 Jan 2026 14:37:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 1038E113B023E; Sat,  3 Jan 2026 15:37:38 +0100 (CET)
+Date: Sat, 3 Jan 2026 15:37:36 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20260103153736.5f32717b@windsurf>
+In-Reply-To: <20260102172639.1908616-1-bernd@kuhls.net>
+References: <20260102172639.1908616-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767449580;
- bh=0UxGeKmzZrmckvtakpHXpmq2YMNUJrW0MyAa2vkmBFA=;
- h=From:To:Cc:Subject:Date:From;
- b=GwR2V4d9hjEzjJgRX1v0JC/xKuYeoYdLdmaQT+tWLti/tduRT9sR/q5JoCS7H30Ey
- qibAr4CSHSNVYBgtvc6gSfJQWBfIEPzVv0bDXNB//9hTHQUVUqWNNuHZ3d8D70QPEj
- 5U1Yhs5wNh7eXNkzPwduRqR76WM5G+RTCTQwbZoTZe4bUH2JToc9qQkL+mOK1C218D
- qL4/7guTnBvj7+mE1XsVGc1s4jrRcP4rB5NIvmZl5OGIqwhQOVx5V/6eQx4v/KgyRZ
- FVxFQU+5PNC+jV5jVfzNXiRypy90CMPMMR1U2vtJ7jkxP8+8+0amaYTiM3k2o8SDl1
- hn20wxeTdnOgQ==
+ d=bootlin.com; s=dkim; 
+ t=1767451060; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=go+Rp+AmHIJ53hg05+wsIIohTL6wUvBmurPzr+/f6SA=;
+ b=yEJwBX47vjkaSE3WubhXYG8MxiQ9ekr1n/shWs3FnbqpfkvTJ8IchmfOdl8Mms2CEPKbNg
+ oixEUvXLCJRAVqvKtfUVXPH8Z4/0R7kXr5++4/lOT5DbjwBEnKb+3gGmn1D+5lxocqVwV4
+ c67xFE/JWJizmTadOsBosqZp7rEim8bi6vsWI49M4CImCELBt0p+k/2daWggtF9kc7klQw
+ QGCkt553eFdUwo5NJxtSHuXfjp1WhpkInbLcqf05qa5jkoOEHlITSXpltrrIuIcBWnfSMv
+ HVjU/Icd0izrLc6szSegq5ibMS0m2ZrrsKE2rNjQkienBSTa3f7iX6rfd+v1og==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=GwR2V4d9
-Subject: [Buildroot] [PATCH 1/1] package/cfm: fix build with cmake 4
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=yEJwBX47
+Subject: Re: [Buildroot] [PATCH 1/1] package/xerces: fix build with recent
+ versions of ICU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,62 +97,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/d01/d01d8fe3a63128246ce242de450b016b4ef13baa/
+Hello Bernd,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- ...01-CMakeLists-fix-build-with-cmake-4.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch
+On Fri,  2 Jan 2026 18:26:39 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-diff --git a/package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch b/package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch
-new file mode 100644
-index 0000000000..1219a98056
---- /dev/null
-+++ b/package/cfm/0001-CMakeLists-fix-build-with-cmake-4.patch
-@@ -0,0 +1,33 @@
-+From d2a823ef01396cd148074a99ccbbf1ca1115b24d Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 3 Jan 2026 14:56:38 +0100
-+Subject: [PATCH] CMakeLists: fix build with cmake 4
-+
-+Using CMake 4 the build is broken:
-+
-+CMake Error at CMakeLists.txt:6 (cmake_minimum_required):
-+  Compatibility with CMake < 3.5 has been removed from CMake.
-+
-+Upstream: https://github.com/microchip-ung/cfm/pull/1
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 5de2e0a..378e98d 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -3,7 +3,7 @@
-+ 
-+ project (cfm C)
-+ 
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ ## libnl ################################################
-+ find_path(LibNL_INCLUDE_DIR netlink/netlink.h
-+-- 
-+2.47.3
-+
+> Since Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 that
+> bumped package/icu to version 77-1, the build of xerces with ICU
+> support enabled fails:
+> 
+> In file included from /home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/uset.h:38,
+>                  from /home/bernd/buildroot/output/build/xerces-3.3.0/src/xercesc/util/regx/RangeToken.cpp:40:
+> /home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/char16ptr.h:271:55:
+>  error: 'is_same_v' is not a member of 'std'; did you mean 'is_same'?
+> 
+> Indeed, ICU now requires C++17. Instead of using a patch from Gentoo[1]
+> we use a backported upstream commit, limited to CMakeLists.txt, to raise
+> the c++ version.
+> 
+> The build error was not recorded yet by the autobuilders but can be
+> reproduced with this defconfig:
+> 
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_XERCES=y
+> BR2_PACKAGE_ICU=y
+> 
+> [1] https://bugs.gentoo.org/931105
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Thanks for the patch!
+
+Does this mean that xerces now needs some
+BR2_TOOLCHAIN_GCC_AT_LEAST_xyz dependency to make sure we have a C++
+compiler that supports C++17 ?
+
+Or maybe ICU needs this? Right now it only depends on gcc >= 4.9, with
+a comment saying "C++11". Is gcc 4.9 really sufficient?
+
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
