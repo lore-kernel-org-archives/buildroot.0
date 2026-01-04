@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE84DC2A076
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C817C2A06C
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:06:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D261405B0;
-	Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0748460889;
+	Sun,  4 Jan 2026 13:06:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PHShF0PXewV0; Sun,  4 Jan 2026 13:06:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5WAHMlVFn36R; Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F703404C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76B5960847
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767532003;
-	bh=MLNiedeWlindPFFDQtAIAJW53NLolPZXYAStAAkafHg=;
+	s=default; t=1767532004;
+	bh=WmJZoYZ92xAja2XO++tHNxs1wLEA7Bx/xFB8wXLpY2U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HyggygIFBcMqOmYh0Ex0xG7PkUge2CDZbmYZ/JpJ6rFKk2ZvK+qpPoMTamJho1eUw
-	 ZtCRJ/0J561t5qwWCI5K4xzHk7melL03jFW0j/u3IhHDniXkIKclOinYX7MvIao+sd
-	 18paX8Q9RHBiXcOC4bPpzn2jWswD8etItJF2v92tHKWS4/Xr7VUkyYZXlWblL6vbNE
-	 S9QUkpSCOtTqyzIMfz3SIgsHEaIxhe/TbSvKn1YtC2irtbrIuMuYXgD5QGeNwt/FS0
-	 bsBNzIGVpqdEAaFL5eklz0cj7BlIrWC6VApLlGNJUl/rgrZylrkm/pKLr8bd3rHZim
-	 +X0sl6nUcEuEA==
+	b=W48ywKAve6HIK7qwu3QHxUyYS4HaCRkB0558AmR13HTi2apOmDwL3K6xfIFjluc8s
+	 E20Ix828xuhTbYznWkdEHMFYSTLPIxAlmTqDTiJr3dcuQGA4PKoVUpnHZ7z7gqEc9Y
+	 lCQyzLPMKoci8nI6u68PWFEz5tWeEqBhbl/6du7Z++ZVx4M7U5YnO0a16NL/ozglUz
+	 dJrA39sUOsJsmvxd8zvhFCi5o1F3gUPppr1dNOVKq5Krp6Ah7VoOxnJ7JjNgSR/KFS
+	 VbRrOD5KobzpH0QXpOELdmEKvOqDoz7zImL24hWZ21vcTDLsuyjaNZ74IOl+BFXukD
+	 aTF2E/C2ZkNyQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F703404C3;
-	Sun,  4 Jan 2026 13:06:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76B5960847;
+	Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CB622DF
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CD872DF
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF80A405A1
+ by smtp4.osuosl.org (Postfix) with ESMTP id D44D1405A6
  for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rI5SNr32LI0S for <buildroot@buildroot.org>;
+ id eqZNRjjIUJK4 for <buildroot@buildroot.org>;
  Sun,  4 Jan 2026 13:06:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB73403A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFC0B40500
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FB73403A8
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFC0B40500
  for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E23280E53; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
+ id BD68388244; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 4 Jan 2026 14:00:19 +0100
+Date: Sun, 4 Jan 2026 14:00:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7571ee4a3697106b8938a83116a6e305dffbc3aa
-X-Git-Newrev: d0034ff96531b8993ed591323e37d0c1dec4de48
+X-Git-Oldrev: 64a288e33c076300bacfdf1aa3e955a7da86ad65
+X-Git-Newrev: 7d3d5c68a2a3783acdbe2eb6a19fa15760038e3d
 X-Patchwork-Hint: ignore
-Message-Id: <20260104130636.8E23280E53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgtk4: add missing dependency
- for BR2_PACKAGE_LIBGTK4_GSTREAMER
+Message-Id: <20260104130636.BD68388244@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/shairport-sync: propagate
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0034ff96531b8993ed591323e37d0c1dec4de48
+commit: https://git.buildroot.net/buildroot/commit/?id=7d3d5c68a2a3783acdbe2eb6a19fa15760038e3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Back when the libgtk4 package was introduced in commit
-faf2a1d2abfbff79fc0603def835066587144420, its
-BR2_PACKAGE_LIBGTK4_GSTREAMER option did not properly propagate the
-dependencies of BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL, causing the
-following Config.in warning:
+In commit
+1abaf013dede73cb148a95d4ed708429776033f3 ("package/shairport-sync: add
+support for AirPlay2"), a new option was added, selecting various
+packages, without properly propagating their dependencies, causing
+Config.in warnings such as:
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-  Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BASE [=y] && (BR2_PACKAGE_HAS_LIBGL [=n] || BR2_PACKAGE_HAS_LIBGLES [=n])
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_LIBGCRYPT
+  Depends on [n]: BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS [=n]
   Selected by [y]:
-  - BR2_PACKAGE_LIBGTK4_GSTREAMER [=y] && BR2_PACKAGE_LIBGTK4 [=y]
+  - BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2 [=y] && BR2_PACKAGE_SHAIRPORT_SYNC [=y]
 
-Fix that by properly propagating the dependency.
+This commit fixes this mistake.
 
-Fixes: faf2a1d2abfbff79fc0603def835066587144420 ("package/libgtk4: new package")
+Fixes: 1abaf013dede73cb148a95d4ed708429776033f3 ("package/shairport-sync: add support for AirPlay2")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libgtk4/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/shairport-sync/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
-index 259226e0e4..6d871b8517 100644
---- a/package/libgtk4/Config.in
-+++ b/package/libgtk4/Config.in
-@@ -87,6 +87,7 @@ config BR2_PACKAGE_LIBGTK4_X11
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index 89d9c9feb0..dad88e9982 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -28,6 +28,9 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
  
- config BR2_PACKAGE_LIBGTK4_GSTREAMER
- 	bool "gstreamer support"
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-@@ -94,6 +95,9 @@ config BR2_PACKAGE_LIBGTK4_GSTREAMER
- 	help
- 	  Enable gstreamer support.
- 
-+comment "gstreamer support needs an OpenGL or OpenGL ES backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
-+
- config BR2_PACKAGE_LIBGTK4_DEMO
- 	bool "Install libgtk4 demo/example programs"
- 	select BR2_PACKAGE_SHARED_MIME_INFO
+ config BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2
+ 	bool "AirPlay2 support"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
++	depends on BR2_USE_MMU # nqptp
++	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
+ 	select BR2_PACKAGE_NQPTP # runtime
+ 	select BR2_PACKAGE_LIBPLIST
+ 	select BR2_PACKAGE_LIBSODIUM
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
