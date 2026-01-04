@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C817C2A06C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94874C2A062
 	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:06:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0748460889;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58D92405AA;
 	Sun,  4 Jan 2026 13:06:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5WAHMlVFn36R; Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76B5960847
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767532004;
-	bh=WmJZoYZ92xAja2XO++tHNxs1wLEA7Bx/xFB8wXLpY2U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=W48ywKAve6HIK7qwu3QHxUyYS4HaCRkB0558AmR13HTi2apOmDwL3K6xfIFjluc8s
-	 E20Ix828xuhTbYznWkdEHMFYSTLPIxAlmTqDTiJr3dcuQGA4PKoVUpnHZ7z7gqEc9Y
-	 lCQyzLPMKoci8nI6u68PWFEz5tWeEqBhbl/6du7Z++ZVx4M7U5YnO0a16NL/ozglUz
-	 dJrA39sUOsJsmvxd8zvhFCi5o1F3gUPppr1dNOVKq5Krp6Ah7VoOxnJ7JjNgSR/KFS
-	 VbRrOD5KobzpH0QXpOELdmEKvOqDoz7zImL24hWZ21vcTDLsuyjaNZ74IOl+BFXukD
-	 aTF2E/C2ZkNyQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76B5960847;
-	Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CD872DF
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D44D1405A6
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eqZNRjjIUJK4 for <buildroot@buildroot.org>;
+ id B6VQJISBmzxd; Sun,  4 Jan 2026 13:06:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B424405B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767532005;
+	bh=+GtycLtI6i1HB/Z3Rs7wceSpFP1CVaLrxMCHJDa1Yc4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IlqdBBLeCEoRwz5wfBzX0GNDGYhtOcaXClNTC7QKe0BttTkZtuL0H4sap7+ecF96y
+	 IFmFU4ej+U1Wt0u2q2T5a5SVVcL9yY2KGJr3QGlP3kWSIv3jb3JBhYNganxE2ISQLE
+	 zdLY0rcl0bpFJ8jP1hXQaMeCtcb57s78/Z4uHoGe3OXqEy62Ff5bVWfbz94Ygp7d9T
+	 36hUtMPx53asi7LKz5Nrv949dwZI9lbJOs3fHVXO1qWFgvM88oXeeeP/1FXKgsRppy
+	 l4KYUj40FFl2BuoHR8oAyaWCy/m60yL99VoWIoy9FM3mJ7DwfPCf3FLznrWns9E9vK
+	 noChaZD1YWtoA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B424405B1;
+	Sun,  4 Jan 2026 13:06:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ED68249
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EECA40353
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jj0QBlpc1Rgq for <buildroot@buildroot.org>;
  Sun,  4 Jan 2026 13:06:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFC0B40500
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACEEC404C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFC0B40500
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACEEC404C3
  for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD68388244; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
+ id ABA2680E53; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 4 Jan 2026 14:00:23 +0100
+Date: Sun, 4 Jan 2026 14:00:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64a288e33c076300bacfdf1aa3e955a7da86ad65
-X-Git-Newrev: 7d3d5c68a2a3783acdbe2eb6a19fa15760038e3d
+X-Git-Oldrev: 65fcceed89baf36a0ed9290aeb1f94bf94e5c921
+X-Git-Newrev: 64a288e33c076300bacfdf1aa3e955a7da86ad65
 X-Patchwork-Hint: ignore
-Message-Id: <20260104130636.BD68388244@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shairport-sync: propagate
+Message-Id: <20260104130636.ABA2680E53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-dbd-mysql: add missing
  dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,43 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d3d5c68a2a3783acdbe2eb6a19fa15760038e3d
+commit: https://git.buildroot.net/buildroot/commit/?id=64a288e33c076300bacfdf1aa3e955a7da86ad65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit
-1abaf013dede73cb148a95d4ed708429776033f3 ("package/shairport-sync: add
-support for AirPlay2"), a new option was added, selecting various
-packages, without properly propagating their dependencies, causing
-Config.in warnings such as:
+Since commit 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 ("package/mysql:
+drop virtual package"), we no longer have mysql as a virtual package,
+and therefore perl-dbd-mysql directly selects mariadb. However,
+mariadb as stricter dependencies than what the mysql virtual package
+had, and this commit forgot to properly propagate those dependencies,
+causing a Config.in warning:
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_LIBGCRYPT
-  Depends on [n]: BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS [=n]
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_MARIADB
+  Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && (BR2_TOOLCHAIN_HAS_ATOMIC [=y] || BR2_TOOLCHAIN_HAS_SYNC_8 [=n]) && BR2_USE_WCHAR [=n]
   Selected by [y]:
-  - BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2 [=y] && BR2_PACKAGE_SHAIRPORT_SYNC [=y]
+  - BR2_PACKAGE_PERL_DBD_MYSQL [=y] && BR2_PACKAGE_PERL [=y] && !BR2_STATIC_LIBS [=n] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
 
-This commit fixes this mistake.
-
-Fixes: 1abaf013dede73cb148a95d4ed708429776033f3 ("package/shairport-sync: add support for AirPlay2")
+Fixes: 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 ("package/mysql: drop virtual package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/shairport-sync/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/perl-dbd-mysql/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index 89d9c9feb0..dad88e9982 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -28,6 +28,9 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
+diff --git a/package/perl-dbd-mysql/Config.in b/package/perl-dbd-mysql/Config.in
+index b430e44027..cd75c9d18b 100644
+--- a/package/perl-dbd-mysql/Config.in
++++ b/package/perl-dbd-mysql/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP # mariadb
+ 	depends on BR2_USE_MMU # mariadb
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mariadb
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mariadb
++	depends on BR2_USE_WCHAR # mariadb
+ 	select BR2_PACKAGE_MARIADB
+ 	select BR2_PACKAGE_PERL_DBI # runtime
+ 	help
+@@ -11,7 +13,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
  
- config BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2
- 	bool "AirPlay2 support"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
-+	depends on BR2_USE_MMU # nqptp
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
- 	select BR2_PACKAGE_NQPTP # runtime
- 	select BR2_PACKAGE_LIBPLIST
- 	select BR2_PACKAGE_LIBSODIUM
+ 	  http://dbi.perl.org/
+ 
+-comment "perl-dbd-mysql needs a toolchain w/ dynamic library, C++, threads"
++comment "perl-dbd-mysql needs a toolchain w/ dynamic library, wchar, C++, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
