@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 544D0C2A06C
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 11:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E3DCC2A074
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 11:19:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 204E8404EF;
-	Sun,  4 Jan 2026 11:18:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5675D80E73;
+	Sun,  4 Jan 2026 11:19:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4xtVjv3H_Sfp; Sun,  4 Jan 2026 11:18:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9YhLKFu4VWbT; Sun,  4 Jan 2026 11:19:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 413AF40584
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F42E80E45
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767525509;
-	bh=OSz3ncr092E9zCF4NI5PU20VXolw9nrcTD75205VB9M=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=M+zPDyCAmSGqku8eUCeiCbZQPw89sWH0j8TKubUig8SdtyGPcqDcLlk0GX+dgjH4d
-	 Cxfn9rAZ2VY67IJnMu0dxYlE6sE+KvYeZOmPz6u16BQXBOOG/1X+mkZOEfIUsTupAP
-	 GXgVaPhyEMckUFGyegPgVB5ELlSHjZGPYROWaVFvuZ1v5a+abuY0qK81LAL0kVJhcI
-	 oGD4d986NIK36VJce0eru1ucab6eIagXpfW+yAz85Fxvh1B81P6yiRQqEFyYbQWbFp
-	 v/xdYBOurNklc/r7NZ5yA2z/bRLeifoql5W0PyU61eriSbcoMyjXconvwRLRrPG6cz
-	 r0fyZTJUB0cWw==
+	s=default; t=1767525541;
+	bh=08AyXfdGPkUmxf9xt9yV3LFFdx+GOYtfca3m9c6QIrs=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=r05WA29/zOu+bl08PHMrPJ96JQkua/dyTSVZY5RwUB6RkHgkOG0VatDl/pmRdI6Vv
+	 eMsc/Abl7j32xOJKxLhrS1uLvbNBlqhjy5kIu3B1DcIJAkRb19nmSjzx4YponQW1YZ
+	 DnLRS3qSEC1LDIC9KTaTXKDri+BLIV5HsXZgNG7R09moZ8t4/MoMtTQXeYRMK9vOrN
+	 DnxWzS3/ao1o0Lxrm4llvHUAu6nNI1J0IDdWEYUdG7QFm80e+UbXApi4pFMoRrc1rO
+	 z8wz/L++vBFoQcSSmjhdXJ4umFN8E9RFO3684WK2kH+NGvoqb9KUeBRKES1BZtw7EI
+	 UcS040lH84QBg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 413AF40584;
-	Sun,  4 Jan 2026 11:18:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B8ABA37A
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 11:18:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F42E80E45;
+	Sun,  4 Jan 2026 11:19:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97B82249
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 11:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AAEED6062E
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 11:18:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7EACC80E45
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 11:19:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vEDdbTqezwox for <buildroot@buildroot.org>;
- Sun,  4 Jan 2026 11:18:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E91C560625
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E91C560625
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 11:18:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D9F1E881AC; Sun,  4 Jan 2026 11:18:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 4 Jan 2026 12:02:20 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1c21d39cb3133c8ebf769355a34c97ef2133c5f0
-X-Git-Newrev: cf2ce6de553e04bbf428000ceb50173ed278ad66
-X-Patchwork-Hint: ignore
-Message-Id: <20260104111826.D9F1E881AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ipython: bump to version
- 9.8.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 92ftA-oOFqbn for <buildroot@buildroot.org>;
+ Sun,  4 Jan 2026 11:19:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C0A4880E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0A4880E42
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C0A4880E42
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 11:18:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 98854B00565;
+ Sun,  4 Jan 2026 12:18:54 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 04 Jan 2026 12:18:54 +0100
+MIME-Version: 1.0
+Date: Sun, 04 Jan 2026 12:18:54 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Philippe Proulx <eeppeliteloop@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260102230426.531850-1-james.hilliard1@gmail.com>
+References: <20260102230426.531850-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <519b3ae80dac0c5bcfd1f81da487540d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767525537;
+ bh=gSm/9IxU7cvGpldQwUDMg3m8AJVQs+7eQPw0hkCDtKs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=usV1oQBUi4olSGesKPVyOTcWr+sLkqSyIsmmYXdgtVLQGJapBn9IFy8oDIbGQ7LLe
+ 6/Wo5G0LRW66oRZ5ip0zgKkOrlndcCghOmWiu3+Xh3X1gPYCAN8KRIWKEAkwdKF9tH
+ FvyE7fCBYg4mgXHgofHF7onJqaMCzccupuaDF7zwVzHT1O8qamxBJfKHdz06RvQkwc
+ hJ3W+aVrufa5y0Tw7Bd8WYuGgMh9ZQHjUNzpd/JnS4jGo1lR0Gg8OwcxY89/EB9FG1
+ 8zLrrtyIvgOuy9S3kFJPaZkw/9AtEMBgeHGI1cD+t94vIyIX67x7HCZnICbCWyz9j6
+ WOrEL8Am3U9YA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=usV1oQBU
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-ipython-pygments-lexers:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,72 +96,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf2ce6de553e04bbf428000ceb50173ed278ad66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/01/2026 00:04, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Add new python-ipython-pygments-lexers runtime dependency.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-ipython/Config.in           | 3 ++-
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-ipython/Config.in b/package/python-ipython/Config.in
-index 8ab5516910..32c1f9a64e 100644
---- a/package/python-ipython/Config.in
-+++ b/package/python-ipython/Config.in
-@@ -2,11 +2,12 @@ config BR2_PACKAGE_PYTHON_IPYTHON
- 	bool "python-ipython"
- 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_DECORATOR # runtime
-+	select BR2_PACKAGE_PYTHON_IPYTHON_PYGMENTS_LEXERS # runtime
- 	select BR2_PACKAGE_PYTHON_JEDI # runtime
- 	select BR2_PACKAGE_PYTHON_MATPLOTLIB_INLINE # runtime
-+	select BR2_PACKAGE_PYTHON_PEXPECT # runtime
- 	select BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT # runtime
- 	select BR2_PACKAGE_PYTHON_PYGMENTS  # runtime
--	select BR2_PACKAGE_PYTHON_PEXPECT # runtime
- 	select BR2_PACKAGE_PYTHON_STACK_DATA # runtime
- 	select BR2_PACKAGE_PYTHON_TRAITLETS  # runtime
- 	help
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index 8186b5c09d..022975d976 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  5c629ec6cc81a8d5eecea3956e670d54  ipython-8.31.0.tar.gz
--sha256  b6a2274606bec6166405ff05e54932ed6e5cfecaca1fc05f2cacde7bb074d70b  ipython-8.31.0.tar.gz
-+md5  777fdd0c2ec7b2fd1062071056cda377  ipython-9.8.0.tar.gz
-+sha256  8e4ce129a627eb9dd221c41b1d2cdaed4ef7c9da8c17c63f6f578fe231141f83  ipython-9.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 2bc4b54ef7..8af5b3c312 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_IPYTHON_VERSION = 8.31.0
-+PYTHON_IPYTHON_VERSION = 9.8.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/01/35/6f90fdddff7a08b7b715fccbd2427b5212c9525cd043d26fdc45bee0708d
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/12/51/a703c030f4928646d390b4971af4938a1b10c9dfce694f0d99a0bb073cb2
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
