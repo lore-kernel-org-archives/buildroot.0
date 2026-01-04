@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A025CC2A06C
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 10:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9590FC2A074
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 10:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C49B60728;
-	Sun,  4 Jan 2026 10:46:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A11180845;
+	Sun,  4 Jan 2026 10:46:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zltdw1q-lhLh; Sun,  4 Jan 2026 10:46:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ulRAvrFV3dHo; Sun,  4 Jan 2026 10:46:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D22F606F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86EC380CB6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767523601;
-	bh=3sftqgBHgRmfr8nrdnOeUKMGt9hDT+pwP12tkPMfCno=;
+	s=default; t=1767523609;
+	bh=bPdR7xSGsAXvGP3s48uS+JvEquPkKLD31q4VQ0lTM5Y=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ZfUlDhPvMOWLlV9MgYiUnNU2wvHI9LPzMSFOTrHvNjb68NRqhFrAhgWHo2wlElwc8
-	 M+xmT4WXjp24/qip6nAGnPZB7GNkO0sB1T8w4jh4fBoAV6X66fIsMPVmrhQm0cBy0C
-	 RaKPrcEo2FkWFCgB3nX2n1gKjFiValJ/635jzygg+0MJHwFyaIZdvJu8JmK1PHbPJG
-	 xKWMe/6d1lhb/0tJMJbaLMT68hLqY2nN8ZVdKNCceBsnObmwl9Wk1xI9LShH2JFlHp
-	 HTh5uWZbfsbQPShEFU+AjSF4m676cU/n3mMja1nshsMxhZWvB8EZEtoFjx+CFM3Hjb
-	 YSmqaZ+TFhjfw==
+	b=SC6Ozb1+tWSzMRHhStx5+RP2tgMN3FvteDyL+ln8+X0zekfJyAaqLcw3Enoq6jLIk
+	 GCmGH0EXpKibeI38R0Gg1bjuDIDPp8EXE1sqLh4yb1nhL4dWeFM7Qx0Wmbnop9ctd6
+	 gh8pZQs8Gv2+/I9v8RBiF+eVctQbtKmPX885UUKBWhIV5FFgKF+HMwqiwrYN2RC1Us
+	 RAHvUR2iivn4eW9lBwyNYrjFikerXuQK+GfQ8ipymxGFDdXiCQ3xNDHLWRY9CLlwRQ
+	 6mfMZjERhZe1hHpUAyY6a9m9nYZ5AZ2k8+QVxnMaBUAn6BVKeUOYYqaRTbs61bDHY/
+	 iyLsTejFqfJ7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D22F606F0;
-	Sun,  4 Jan 2026 10:46:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86EC380CB6;
+	Sun,  4 Jan 2026 10:46:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6EC0249
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 10:46:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 894B42DF
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 10:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D46C54030B
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 10:46:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70A244030B
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 10:46:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GbwoUMG8Y-DI for <buildroot@buildroot.org>;
- Sun,  4 Jan 2026 10:46:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id w73l_QG1YmfR for <buildroot@buildroot.org>;
+ Sun,  4 Jan 2026 10:46:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D02554011C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D02554011C
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D02554011C
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 10:46:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 92AA04011C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92AA04011C
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 92AA04011C
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 10:46:47 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id B3EA31A261E;
- Sun,  4 Jan 2026 10:46:35 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 42B424E41F46;
+ Sun,  4 Jan 2026 10:46:45 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 8372D6072B;
- Sun,  4 Jan 2026 10:46:35 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 0ACD06072B;
+ Sun,  4 Jan 2026 10:46:45 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9C024113B0449; Sun,  4 Jan 2026 11:46:33 +0100 (CET)
-Date: Sun, 4 Jan 2026 11:46:32 +0100
+ with ESMTPSA id E914A113B0449; Sun,  4 Jan 2026 11:46:43 +0100 (CET)
+Date: Sun, 4 Jan 2026 11:46:43 +0100
 To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20260104114632.4276340a@windsurf>
-In-Reply-To: <20260104104338.2948272-1-bernd@kuhls.net>
-References: <20260104104338.2948272-1-bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Philippe Proulx <eeppeliteloop@gmail.com>
+Message-ID: <20260104114643.62af08fe@windsurf>
+In-Reply-To: <20260104101205.1381959-1-bernd@kuhls.net>
+References: <20260104101205.1381959-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767523594; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1767523604; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=4C8jOvxearXT+w8j3mOx6qREu76M1kqQBYpqfCELwSg=;
- b=UnLgyS2Dfom5SHLo+82rHLF+Vw8e7n2wOu7XdLx8t/LQackfRBXIW3S7SpS4/t1dPV+Tvb
- 8At7s9c7ICk6etfq4hUXnH/t5O1THJdsXgo3fgsyeX+53Tn9hW7VCGDKZVHz4oA7x6u3Nb
- JBy+Ivztm8NhcnYdbxTAx5LBJEV1emIKOZOK0nioZ1Qy66JiNVeJYjr1fXxJLpUnpN3VeW
- i8xevks9mrNWOR+u6LapsM88/EJPXvM0kT14wo5h54V4/Hqu00PvV5rwDXiQDWY/4MUOyL
- veqg4WY4MykecjUbpgvO8gaTsJav13qbfUKRY5sWUs0OIs2WD+CGdbPHEf6Ggw==
+ bh=dA5rU8QWHhhoG10JQ8uzi2SVrcrAUu/7F2FeEGcp1eI=;
+ b=DStXjWQHcJ8OucFdIM/AL/mb6Hvhw/JcZHhMEqJIH+xd+srCjzbztWpFfEeY9R4KJ6koPM
+ 7FVT4lfsuaNcTfSgssQIwIBFcuhV5sgWLwx8ZgG3hBK9MdQ8c+9tTypHmrJlnEOJUan8/m
+ 94CJ3m2Yd00fGJTkD5BDQ9ZFspnxmJmsEfr0UpmM2mV6pJcswdZBFaQG67XnlpYxP69iZl
+ p7qrgTyCGN0I6TXO2Njrip53AzWE3BfVB34dYmV8v4y21sA31s9oHAtAqfGOd6TRIT8NPQ
+ SCERlTcY3saWVgqR1afSE0qEATA9EDVEvSRSZ6nCbDQLHXBoGYomySNldZ470Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=UnLgyS2D
-Subject: Re: [Buildroot] [PATCH 1/1] package/brotli: fix LoongArch64 build
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=DStXjWQH
+Subject: Re: [Buildroot] [PATCH 1/1] package/babeltrace2: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,27 +102,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
-
-Thanks for the patch!
-
-On Sun,  4 Jan 2026 11:43:38 +0100
+On Sun,  4 Jan 2026 11:12:05 +0100
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Buildroot commit 473c9400a0c7be14e7eb8ba617697a76286915b3 bumped brotli
-> to version 1.2.0 causing build errors on loongarch64 which were not seen
-> by the autobuilders with the previous brotli version 1.1.0.
+> Buildroot commit cea219e5180e7117a6002c4a784995c9dad48176 bumped the
+> package to version 2.1.2.
+> Upstream added a mandatory dependency to c++ in version 2.1.0:
+> https://github.com/efficios/babeltrace/commit/c20049fd0678f462f621c80f9e91c1ba16e6b656
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/a18/a18f8a5561536d0ae649d73e5871d9a7f88275db/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/babeltrace2/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Not seen by the autobuilders by luck, or because the issue didn't
-exist? Did you reproduce the issue with 1.2.0, and confirmed that with
-1.1.0 it didn't exist?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
