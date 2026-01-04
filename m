@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2487C2A075
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE84DC2A076
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96B9C607D0;
-	Sun,  4 Jan 2026 13:06:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D261405B0;
+	Sun,  4 Jan 2026 13:06:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AM-lR90j5WxK; Sun,  4 Jan 2026 13:06:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PHShF0PXewV0; Sun,  4 Jan 2026 13:06:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC8C660756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F703404C3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767532000;
-	bh=Cu0+4NllON8OKGUQkNeUmcRrLHR7nKyWnA/IueWItL0=;
+	s=default; t=1767532003;
+	bh=MLNiedeWlindPFFDQtAIAJW53NLolPZXYAStAAkafHg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Z4aYDolhOjTKyHiVYM3Xcv0oZJVdeVveVRzA3RLKpH1wOnqoh5wy0wuOkB7W1RiL+
-	 NZ+CXqPduLxHW/kB4BVxqpFCoj2MdMZ8xaOUEgt53lWpvk8OHJcAFhK5GaD8QmHu5z
-	 CzYTApc6TQHoct4UfjoDDHpLZi4dG9pM/oA2GqLEfuTbbPEAuV5QKK9WK1JZvdbuCC
-	 s+THfx6ZulKyeQ0/3ZQLUo431rzw4hsg0uiBoJZjD4u/76bIylfp77MXEfGxdeJYv6
-	 4AhBBYCS3C7DZd2tejUdGFBMJmvc/0VG69buT93rCjZD8f44PuxWegL3ob6OwC00yn
-	 0uKjhzgRZQuRA==
+	b=HyggygIFBcMqOmYh0Ex0xG7PkUge2CDZbmYZ/JpJ6rFKk2ZvK+qpPoMTamJho1eUw
+	 ZtCRJ/0J561t5qwWCI5K4xzHk7melL03jFW0j/u3IhHDniXkIKclOinYX7MvIao+sd
+	 18paX8Q9RHBiXcOC4bPpzn2jWswD8etItJF2v92tHKWS4/Xr7VUkyYZXlWblL6vbNE
+	 S9QUkpSCOtTqyzIMfz3SIgsHEaIxhe/TbSvKn1YtC2irtbrIuMuYXgD5QGeNwt/FS0
+	 bsBNzIGVpqdEAaFL5eklz0cj7BlIrWC6VApLlGNJUl/rgrZylrkm/pKLr8bd3rHZim
+	 +X0sl6nUcEuEA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC8C660756;
-	Sun,  4 Jan 2026 13:06:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0944B2DF
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F703404C3;
+	Sun,  4 Jan 2026 13:06:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CB622DF
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E33244025C
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF80A405A1
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CgKsrJFsNJWx for <buildroot@buildroot.org>;
- Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rI5SNr32LI0S for <buildroot@buildroot.org>;
+ Sun,  4 Jan 2026 13:06:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 256644019E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB73403A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 256644019E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FB73403A8
  for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14E7588244; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
+ id 8E23280E53; Sun,  4 Jan 2026 13:06:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 4 Jan 2026 14:00:11 +0100
+Date: Sun, 4 Jan 2026 14:00:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf2ce6de553e04bbf428000ceb50173ed278ad66
-X-Git-Newrev: 0cead19ec2fcba0bbd56f9849ca2161537d3c9b0
+X-Git-Oldrev: 7571ee4a3697106b8938a83116a6e305dffbc3aa
+X-Git-Newrev: d0034ff96531b8993ed591323e37d0c1dec4de48
 X-Patchwork-Hint: ignore
-Message-Id: <20260104130636.14E7588244@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender-update-modules: fix kernel
- header dependency
+Message-Id: <20260104130636.8E23280E53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgtk4: add missing dependency
+ for BR2_PACKAGE_LIBGTK4_GSTREAMER
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cead19ec2fcba0bbd56f9849ca2161537d3c9b0
+commit: https://git.buildroot.net/buildroot/commit/?id=d0034ff96531b8993ed591323e37d0c1dec4de48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit f933a165e2ee2ee775c7fa0824d2bfcfa9545f88 ("package/podman:
-raise kernel header requirement to v4.14") raised the kernel headers
-dependency of podman from 3.17 to 4.14, but forgot to propagate this
-change to the mender-update-modules podman option, causing the
-following kconfig warning:
+Back when the libgtk4 package was introduced in commit
+faf2a1d2abfbff79fc0603def835066587144420, its
+BR2_PACKAGE_LIBGTK4_GSTREAMER option did not properly propagate the
+dependencies of BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL, causing the
+following Config.in warning:
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_PODMAN
-  Depends on [n]: BR2_USE_MMU [=y] && BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS [=y] && BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS [=y] && BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS [=y] && BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 [=n] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_WCHAR [=y]
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
+  Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BASE [=y] && (BR2_PACKAGE_HAS_LIBGL [=n] || BR2_PACKAGE_HAS_LIBGLES [=n])
   Selected by [y]:
-  - BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN [=y] && BR2_PACKAGE_MENDER_UPDATE_MODULES [=y] && BR2_USE_MMU [=y] && BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS [=y] && BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS [=y] && BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS [=y] && BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_WCHAR [=y]
+  - BR2_PACKAGE_LIBGTK4_GSTREAMER [=y] && BR2_PACKAGE_LIBGTK4 [=y]
 
-Fix this by properly propagating the dependency.
+Fix that by properly propagating the dependency.
 
-Fixes: f933a165e2ee2ee775c7fa0824d2bfcfa9545f88 ("package/podman: raise kernel header requirement to v4.14")
+Fixes: faf2a1d2abfbff79fc0603def835066587144420 ("package/libgtk4: new package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mender-update-modules/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libgtk4/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-index e71309c3d6..1158bb42b2 100644
---- a/package/mender-update-modules/Config.in
-+++ b/package/mender-update-modules/Config.in
-@@ -132,7 +132,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # podman
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # podman
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # podman
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17  # podman
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # podman
- 	depends on BR2_TOOLCHAIN_HAS_THREADS  # podman
- 	depends on BR2_USE_WCHAR  # podman
- 	select BR2_PACKAGE_JQ # runtime
-@@ -150,13 +150,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
+diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
+index 259226e0e4..6d871b8517 100644
+--- a/package/libgtk4/Config.in
++++ b/package/libgtk4/Config.in
+@@ -87,6 +87,7 @@ config BR2_PACKAGE_LIBGTK4_X11
  
- 	  https://github.com/mendersoftware/mender-update-modules/tree/master/podman
+ config BR2_PACKAGE_LIBGTK4_GSTREAMER
+ 	bool "gstreamer support"
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
+@@ -94,6 +95,9 @@ config BR2_PACKAGE_LIBGTK4_GSTREAMER
+ 	help
+ 	  Enable gstreamer support.
  
--comment "podman support needs a toolchain w/ headers >= 3.17, threads, wchar"
-+comment "podman support needs a toolchain w/ headers >= 4.14, threads, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 \
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_USE_WCHAR
- 
++comment "gstreamer support needs an OpenGL or OpenGL ES backend"
++	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
++
+ config BR2_PACKAGE_LIBGTK4_DEMO
+ 	bool "Install libgtk4 demo/example programs"
+ 	select BR2_PACKAGE_SHARED_MIME_INFO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
