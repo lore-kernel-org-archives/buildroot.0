@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74FA1C2A062
-	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0177C2A062
+	for <buildroot@archiver.kernel.org>; Sun,  4 Jan 2026 13:34:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EAE0606F0;
-	Sun,  4 Jan 2026 13:29:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A160C80CDA;
+	Sun,  4 Jan 2026 13:34:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u4hr3946QNBM; Sun,  4 Jan 2026 13:29:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RARY7AfcZMub; Sun,  4 Jan 2026 13:34:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4818C60646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D068D80DC4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767533356;
-	bh=zuXHI8rQbp0Ikz6KmsDQOk++ooA78uehPlfAMf+8Z2w=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	s=default; t=1767533659;
+	bh=BRokYEA6mFe1cuySqMEZ4v9VgBvwTp68Q4JmwjfHRhw=;
+	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=aqFWP4lf01yDVBaudDgQPdsHCMRB2qMvBTDuMb6lVS+C1zyre4H0uodp8NpMtPT4K
-	 UZMeJxtxAo+pUSLte3sXEzfJ5apNdZUvaKVP2gmQpb+SQm5VuiIX3rPn0AVdMDOJk8
-	 WSV1ymDDGzAdAZz64LayRPfnYIis/5IOirDtLZXj4EDqVULbYNTLrgaKiFGarZ1+aw
-	 Lbdbio0T94W9rD2EWr2vO/mbbTH5qeNVevBug9Mp6ekHtlulSL0JZEE4Z8F0EtBAsK
-	 pgIm8yf2gTCJ5qmqBDROEgctXDXbKpNFEafy8rg6I3mkM1RhQU6iaYLnrSyUHnKSlQ
-	 lvNXRibORbGrA==
+	 Cc:From;
+	b=mYZ21uOsNbQuA5btbWV4/6E1e9hXlHNj4vIPfmNx81GuUMjQUAzHd+kfadA0kWwMx
+	 n1XeecgsUNo/llgu57sccEB4Ibpzp8a3S3bhvhz/MZim6DTb/07QCRUqgwcRWFHbgN
+	 4rfCs9qDP8+QuIg4whdzqW1qVRlYaRx8s7W6X/Nj/zE+akop/9SlzxMnuO+ueil7QX
+	 xxGwqwmYLSuEXD6UBzlun98h0fN1Fn3R9N45CXh/lka73NLE7FMoynf+IjboKtKvNJ
+	 9FwhYw5lLUTO/f44hk2tWUYE0mGSNkqLHd0p4hKIkikknuwo74H+nMfz+BMiRR/Hw+
+	 YOEzEIRoaXtUQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4818C60646;
-	Sun,  4 Jan 2026 13:29:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CDDF92DF
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:29:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D068D80DC4;
+	Sun,  4 Jan 2026 13:34:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B928B229
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:34:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB86C404D9
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:29:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A013580DC4
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:34:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f7So5Ukfs1zr for <buildroot@buildroot.org>;
- Sun,  4 Jan 2026 13:29:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.218;
- helo=smtpcmd01-sp1.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ECB62404A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECB62404A1
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ECB62404A1
- for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:29:11 +0000 (UTC)
-Received: from [192.168.50.220] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id cOAOviYbvGVgvcOAOvaTPk; Sun, 04 Jan 2026 14:29:08 +0100
-Message-ID: <9705aeaf-cc8c-45e6-9067-41bf0e89486b@benettiengineering.com>
-Date: Sun, 4 Jan 2026 14:29:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id auZ_w4jsmSVG for <buildroot@buildroot.org>;
+ Sun,  4 Jan 2026 13:34:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1337B80CDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1337B80CDA
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1337B80CDA
+ for <buildroot@buildroot.org>; Sun,  4 Jan 2026 13:34:15 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -2107541478; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 04 Jan 2026 13:34:05 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vcOF9-00000001dqP-1jyD;
+ Sun, 04 Jan 2026 14:34:03 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
-References: <20251003225823.3871690-1-giulio.benetti@benettiengineering.com>
- <20251003225823.3871690-2-giulio.benetti@benettiengineering.com>
- <20260101171216.4c560d17@windsurf>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20260101171216.4c560d17@windsurf>
-X-CMAE-Envelope: MS4xfHfCxMO5gOhdgEhUSDTaWQQshnm95BsN19Ag7+z6hfTKcpiKNK3iapU4+nDewFZ4ok5NtRUDXf91HU9avyHHSco/6QlBdUFaQ4/P2273K6LpQoAciC1q
- 5OR3dNPFuvBKwNVddm2Uh+mEFyVLMDkQdTdyKGiqv9sBpmstyGhp1yotH9JrbO9b5zrPgWE2mu1Sf2+4nfaKknAO/CnhYicLfVPqrs82MvK5VtnvIsSxw88C
- +fIV01G1970pxqtdH6h0E8saWKCmdEIOYh51dtI6DqC687dHIMGIZ5dL+XFlBUoW
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1767533348; bh=0iKNApl+5+kXtqED63LFqh9ZtKcmKTb88w4qppAL6Ic=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=FPnWrJik16LMyRVrf7nMAWnxBEV2uvH9QS0qaeidL0TWuCNvT6ckHJcYkdkqaN2Pn
- GMNBAaynQ/a90V44gPRPZoL4vpRr9ZnB2He1nZz+whD3RCSyaO6DfMAqN9k75BFWJK
- 1L5xSUMtaSBShhwW9OQ1wx4djyPjjfCP7KICX3/PiadPnqoe4rU7XAJIo2qZ8bvuF6
- YXZh1hRmywdYDDvnNmDYmKKafzRBAGI9iatHg/YZMVb69APMSBj8IQc1+0xjmtBWNu
- kQTE4Yu4ubIyhiFb7e0ONxxUR+eHhNLts+DsckOvfXVA8dhCbpZKmbdANsVtU/6YAg
- xf7//sriPIoBg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+In-Reply-To: <20260104113924.204d1799@windsurf> (Thomas Petazzoni's message of
+ "Sun, 4 Jan 2026 11:39:24 +0100")
+References: <20250929092431.8974-1-fiona.klute@gmx.de>
+ <20260101181830.35ccf7c3@windsurf> <87wm1xn0sp.fsf@dell.be.48ers.dk>
+ <20260104113924.204d1799@windsurf>
+Date: Sun, 04 Jan 2026 14:34:03 +0100
+Message-ID: <87seclmrhw.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=JMSwFGf1zxTCMZ2x2Vizgti945dj70+/IK2Fqc7KmNRsLDI6F1HphKQrdCdcXMhwJ6Xd9RkIsgYfRa4XTxq3rpy7rQW4UP1W/7OxDnKYSpJVuLDEyKhEuOtFdLvheBlxGgz+mDRIaSt8U7zMHHJKhTHb5Bmibz6ISfKtTZPZorQNbzEa+lxFQDAs8OGPVLIvaE7PnF+Puh9DqdbAYasCh/WQDBCfw0TYhtWOo+XxE19zXpHw77QhaKax0z2VM/87SPQifrqZw/OPub4DLraT002YgKQUm00XoJfF9SLApV5/YgXlcBER1SjOa42jgeRVu2n+YmC5bfqqof0CNdNpTg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=2bCaFVqWFJPtgyrUZR/89091awUrbWJtPDll9q/yvSg=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=FPnWrJik
-Subject: Re: [Buildroot] [PATCH 1/1] package/efl: bump to version 1.28.1
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=JMSwFGf1
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: add check-package-external
+ target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,53 +94,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Julien Olivain <ju.o@free.fr>, Fiona Klute <fiona.klute@gmx.de>,
+ Romain Naour <romain.naour@smile.fr>,
+ Fiona Klute via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 1/1/26 17:12, Thomas Petazzoni wrote:
-> Hello Giulio,
-> 
-> Thanks for this work!
-> 
-> On Sat,  4 Oct 2025 00:58:23 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> Some important addition and several bug fixes for gcc-15. Some of those
->> fixes are committed but not part of version 1.28.1 so they are added as
->> local patches while dropping old patches except the tslib one.
->>
->> See Release Notes of all versions:
->> https://www.enlightenment.org/news/2025-03-17-efl-1.28.1
->> https://www.enlightenment.org/news/2025-01-11-efl-1.28.0
->> https://www.enlightenment.org/news/2023-12-23-efl-1.27.0
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> Applied to master, thanks!
-> 
-> You had forgotten two things:
-> 
-> - make check-package, which pointed issues in .checkpackageignore
-> - make legal-info, which pointed issues with license files
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Thank you for all *your* fixes
+Hi,
 
-> If you are brave and want to tackle upstreaming the patch 0001, it
-> would definitely be nice :-)
+ > Still maybe we should consider ensuring that check-package validates
+ > BR2_EXTERNAL, and somehow address these concerns?
 
-I had sent the patch to their ML and realized only today they require
-a PR, so I've opened it here:
-https://git.enlightenment.org/enlightenment/efl/pulls/103
+ > I think (1) is pretty moot, if you're not concerned about check-package
+ > warnings, don't run it at all.
 
-Best regards
+Or run make BR2_EXTERNAL= check-package
+
+
+ > Regarding (2): probably a matter of merging BR2_EXTERNAL support for
+ > docker-run.
+
+ > Regarding (3): we could also update our Docker container.
+
+Yes, agreed. I think it makes sense to move to Debian 13 now.
+
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering
-https://www.linkedin.com/company/benetti-engineering/
-https://www.linkedin.com/in/giulio-benetti-79975951/
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
