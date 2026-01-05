@@ -1,100 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4C1BC2A072
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 08:32:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A3FC2A077
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 08:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15E1A405F3;
-	Mon,  5 Jan 2026 08:32:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8B7680FBA;
+	Mon,  5 Jan 2026 08:49:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZtRUB3jJ6xf; Mon,  5 Jan 2026 08:32:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RPQEhRb1boR4; Mon,  5 Jan 2026 08:49:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCF0405BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3196780FF8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767601942;
-	bh=CmgVl/P9Qw2a5bATdGUf7DRS+3mkkzLjc1X14Uqp5Ng=;
-	h=Date:To:CC:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1767602972;
+	bh=9OawxypnNtodz79ip2KP6PoxtGzIZtA5jLEsSuHaF14=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=AbtXyF8WVrIpD0xFvUPLOV6r8aOiOD1sJLhUjVw4ROX1kSH6rWrBy10MTce8szGlC
-	 M9Vrg2czYZscr2VXvcm4pQujnRZu3hXKUsshytzn2PXpnf9UPOlI46sJxcEpb1ZNPI
-	 eLYRQubChe6bTsWSwlRlqFc2AauiUeOvEEtDBnDm9yuFrK623AdDDQLoA6GDYQKyg2
-	 OLIK8IZdUaqsYYc6H+RI4moWrPk6Hz7E3dSGcyU0zgGKIAV+NwdPE0WCl2xJbgmfa/
-	 N20GXgTmqDXZPyyWKvNxUvjtZze2+UI8CYRGEuFSarf6g5rCO8dWYQEcPhaLZzW7bh
-	 SyqP5OUYTINgg==
+	 From;
+	b=ibfD530gvrVXeendOCldo9NRMCDYSxcD/Pk1Ig4JKnEDVAbz493JopKIaUrzuoGCH
+	 /XEecoid1OzeaIzK4gPpCpn0JRX2mYTDw3vo/qACjBh1pG4TVrLlpaDq2X8OPa9o/s
+	 go3l71bhapxGeNyN5TTAyoLGkJ/vtzQwVxWuy5XXac5m4VchRozqP5/ZubSjSxQUb9
+	 UebiVgXIbyQUjFycabx4zcLM5xqkaN5avjXd5POkyvwI+MZWUX1CW222AkLxl7m5Pb
+	 QwAqy0iqF4dTCCQ7cxz2CwkKJHqGUp+oVHS5tzixyD5tKoiCle6wgJ2YEOuQi6tGYI
+	 cwjPn1m26IJXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DCF0405BA;
-	Mon,  5 Jan 2026 08:32:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 308A4E7
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 08:32:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3196780FF8;
+	Mon,  5 Jan 2026 08:49:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F2A6E7
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 08:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D3EA402A4
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 08:32:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65A996087A
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 08:49:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LmIxJ3P2sL5J for <buildroot@buildroot.org>;
- Mon,  5 Jan 2026 08:32:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.154.123;
- helo=esa.microchip.iphmx.com;
- envelope-from=prvs=458dbad6e=horatiu.vultur@microchip.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3101401F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3101401F2
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.154.123])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3101401F2
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 08:32:19 +0000 (UTC)
-X-CSE-ConnectionGUID: ccdzT2c4RtSgzqhnFLRPnA==
-X-CSE-MsgGUID: iUIWD61FQy2Ids4cNScsJg==
-X-IronPort-AV: E=Sophos;i="6.21,203,1763449200"; d="scan'208";a="51818095"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
- by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 05 Jan 2026 01:25:07 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
- chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Mon, 5 Jan 2026 01:24:51 -0700
-Received: from localhost (10.10.85.11) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Mon, 5 Jan 2026 01:24:51 -0700
-Date: Mon, 5 Jan 2026 09:23:59 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-CC: buildroot <buildroot@buildroot.org>, Samuel Martin <s.martin49@gmail.com>, 
- Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20260105082359.whvlxgcxrqvjnrpd@DEN-DL-M31836.microchip.com>
-References: <20211212130745.2240973-1-horatiu.vultur@microchip.com>
- <20251216093901.3a425563@windsurf>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P3W5DtklbmUd for <buildroot@buildroot.org>;
+ Mon,  5 Jan 2026 08:49:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0D09D607B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D09D607B4
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0D09D607B4
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 08:49:28 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2034230554; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 05 Jan 2026 08:49:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vcgHD-00000002WIp-2CHe;
+ Mon, 05 Jan 2026 09:49:23 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Philip Molloy <philip@philipmolloy.com>
+Cc: buildroot@buildroot.org,  Michael Hennerich
+ <michael.hennerich@analog.com>,  Philip Molloy <philip.molloy@analog.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260105081456.2799173-1-philip@philipmolloy.com> (Philip
+ Molloy's message of "Mon, 05 Jan 2026 08:18:20 +0000")
+References: <20260105081456.2799173-1-philip@philipmolloy.com>
+Date: Mon, 05 Jan 2026 09:49:23 +0100
+Message-ID: <87bjj8xx4c.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20251216093901.3a425563@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1767601940; x=1799137940;
- h=date:from:to:cc:subject:message-id:references:
- mime-version:in-reply-to;
- bh=bTmkzrgn675T9Jgo04kIzMYxHVanp9WoilpuCvtkgmg=;
- b=qkHsJIamB5jmhOdpsy81TBVKWv5FJHG/GUQ6Ktr+ingl7v+BPCR1Sv3A
- wUvpi/EnKEcz6hK6/J7RAFsdhCo03W0btYXANsHpMSsKgA9mDrHLmBFT6
- 4pmF6AQFDWCV9expeSI2+leo0iq+nv506RICbSLIU2Od/BKCog5AW84Qt
- jznlsNXjqvIo88QlpqPzvZxTCxnRJ5l30NuhSgmtO/PRabvx1pSx+7iX3
- uh41C/s7ocs0IjHVlxRxSRSb+Yp8b2sh75kywVbEH5EHTlv46QCgjcWen
- njK9jZ15ejGO/nzMf645Z3Gkl8VnTI47vvaK0E8WhzKf608LpIkwUTCKN
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=microchip.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=ENShIBdJbgK3fudRtFDNn/66DZ/441SJY5UUuiRTB3+/LpGfaBV7XDNhuNxYlZRZKj++pmlxz3OZI7dLmrL/5ighVDr3LmgtPlPKIWauOvOYJ8EkCxa9zgKPubBDXCyBONRoVnfMeASudzTzzyfyYFdBfaYDWDMaN/tFHeUUiKX+Z14xgX4WihDbqjjwa/z4D+2kDGDAmF5TuFvMPJ7k9YTqNzq6hOioNc70RJWP4LZs/EQeCucAzEROkFuGj12Drfovvr+3Vt5JFOzOwxZQRz7RyTqW31gYq5jt0lFKFa44yloGGL5OS4l12PtLXQ9rayDliruJFgnqeS+pnQXb8Q==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=zms2ox0fKEMBLJis2xMiS8PQIgufjh61+AtmoMvnhFY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=microchip.com header.i=@microchip.com
- header.a=rsa-sha256 header.s=mchp header.b=qkHsJIam
-Subject: Re: [Buildroot] [PATCH] package/cfm: new package
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=ENShIBdJ
+Subject: Re: [Buildroot] [PATCH] configs/beagleboneai_defconfig: fix
+ whitespace
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,65 +95,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Horatiu Vultur via buildroot <buildroot@buildroot.org>
-Reply-To: Horatiu Vultur <horatiu.vultur@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The 12/16/2025 09:39, Thomas Petazzoni wrote:
-> 
-> Hello Horatiu,
+>>>>> "Philip" == Philip Molloy <philip@philipmolloy.com> writes:
 
-Hi Thomas,
+ > From: Philip Molloy <philip.molloy@analog.com>
+ > Signed-off-by: Philip Molloy <philip.molloy@analog.com>
 
-> 
-> On Sun, 12 Dec 2021 14:07:45 +0100
-> Horatiu Vultur via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> 
-> I am getting back to after several years, as this package is no longer
-> building after the update to CMake 4:
-> 
-> CMake Error at CMakeLists.txt:6 (cmake_minimum_required):
->   Compatibility with CMake < 3.5 has been removed from CMake.
-> 
->   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
->   to tell CMake that the project requires at least <min> but has been updated
->   to work with policies introduced by <max> or earlier.
-> 
->   Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-> 
-> See also:
-> 
->   https://autobuild.buildroot.net/results/dff/dff5fd392a4d35ee54ac8f1e7d44a04a1f1323b6/build-end.log
-> 
-> Most likely it is just a matter of updating:
-> 
->   cmake_minimum_required(VERSION 2.6)
-> 
-> to:
-> 
->   cmake_minimum_required(VERSION 3.5)
-> 
-> Could you have a look and provide a fix?
-
-Sorry for late reply. Somehow I have missed this email.
-I can see that Bernd has already send a patch for fixing this.
-
-> 
-> Thanks a lot!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+Committed, thanks.
 
 -- 
-/Horatiu
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
