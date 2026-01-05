@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B054CC2A099
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 10:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38718C2A09A
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 10:56:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8480D80964;
-	Mon,  5 Jan 2026 10:56:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 545E78035C;
+	Mon,  5 Jan 2026 10:56:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6wNa6jhl4zkp; Mon,  5 Jan 2026 10:56:15 +0000 (UTC)
+ id wHbs4-pEkH2R; Mon,  5 Jan 2026 10:56:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF8CE807B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8124580827
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767610574;
-	bh=nIRhbg0KB7kcWNNXU0qLxedY5L438+NnEEu1O0bs3C8=;
+	s=default; t=1767610577;
+	bh=4KP1In/YcEN/F+0kE/L2CMX2mm74BHaEB3vfkHjfe1g=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=HuC3JZctKdn2hktGN+SHiDORMJTtB1jZGipaJRbqm4xHRAPLvd7hmF8800y/qCIvt
-	 MShM1gqg4gBe9s8M2uKnC7pojOb8b1WAHgcO7je9Bpb/6exCh9qBH2/Ubkmi6MNZDN
-	 ZOlx+aenjgEsA54g6yN/+6rj2tM4ErHp24c/BwRjTKrPfKiPCv01yD4gjExxUwQt58
-	 jHRuHZZffjCqnKdLYehzzHtaKwCjP0j0pxoWriwj/pIQS3JQW/rAtyNRZavueRAex3
-	 +F/973qQZO1vGYLLt4XMhOPFipLJmXw7mh/a5x3brHfL/VK+x9M7Q4DCiJ0n/huAah
-	 /Nc9ISf/JvDcg==
+	b=GwL21N5KzhbZPGkkoWDQeIDQE4sp/p9Jr3VDOvjJ502N9D9J/kR05nD79HSXifc8A
+	 9jAnRY2+r0eSrG/1sCsm1DwACrJ/9tWxI0MAJSgV2cJSe6SoqekjCVFYaJ/wUXKJ6J
+	 rpE4HV8vA/HEJXi66HM0L12iD1C3I5HC6AfKZuMc1CqQH/o3mFDMJadvEd6Wg3gOEC
+	 L1sq+uoVSTFUDTwHhCFf+ImL6QWL3OhKq0s+vEQMtxJAQdl3dE9GgFvKgnCAVASBX2
+	 UlJL7X+sq4QkBN5ELeLAlxcLXtJklaCXXqdzhhE1qh7w5vWM9lnG8UmQ5v+ltm6jcl
+	 9GSej9wArvTGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF8CE807B0;
-	Mon,  5 Jan 2026 10:56:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5016CE7
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 10:56:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8124580827;
+	Mon,  5 Jan 2026 10:56:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C25F62DF
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 10:56:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 372274032C
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 10:56:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B465B606F6
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 10:56:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uXNGJoyhWEby for <buildroot@buildroot.org>;
- Mon,  5 Jan 2026 10:56:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v7MUK5BTr9yU for <buildroot@buildroot.org>;
+ Mon,  5 Jan 2026 10:56:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0B56B40327
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B56B40327
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B56B40327
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 10:56:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4BBD160625
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BBD160625
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4BBD160625
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 10:56:14 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 39FC34E41F6C;
- Mon,  5 Jan 2026 10:56:09 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 25D061A264D;
+ Mon,  5 Jan 2026 10:56:13 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0FE0760726;
- Mon,  5 Jan 2026 10:56:09 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id F06F860726;
+ Mon,  5 Jan 2026 10:56:12 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A6B3E103C8494; Mon,  5 Jan 2026 11:56:07 +0100 (CET)
+ with ESMTPSA id 4741D103C8494; Mon,  5 Jan 2026 11:56:11 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Mon,  5 Jan 2026 10:55:51 +0000
-Message-ID: <20260105105558.1991-2-kory.maincent@bootlin.com>
+Date: Mon,  5 Jan 2026 10:55:53 +0000
+Message-ID: <20260105105558.1991-4-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260105105558.1991-1-kory.maincent@bootlin.com>
 References: <20260105105558.1991-1-kory.maincent@bootlin.com>
@@ -67,23 +67,22 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767610568; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767610572; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=f8o4TZbKy9N+RFdb9Yh//yFhR5Z/Gu29uwgtGYg25pM=;
- b=fl0aAS7IWDlVb8l7Z/lLLxkS2uSPFcc5a2EV2lVVX0VL6QqK8kExOvDoo4m1BfZVqFBd6+
- 3Q/6DyBFZX/LPMA2hX5uJWSIT1ZBQK5f5ug/qpayupQXhPXyHr5PS4aX85Ijfw5SJd//Se
- VjCrvIo9ssVRWF4mNjaGwThjgO4X9DqIonvOjuHnXxuxw1BfgaJ2yEi1JulRxZYc5PobLY
- qYAcqzrG9aSSI1xAcisM/6l7iLyBz1OgGgGnLt3gNuNXoXj6CKGzTCcn9wUVn1MXfrQnIq
- NrXzelU/ZyZHkfHDMJMDoSDlSc8on2UbEeVReeyv3tqDVWDV32rxoAQEpxi23g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=X41QHhxf+QcLSc1XZ+R1qnDoIdGxBkISuQDjcZ42uzg=;
+ b=vjiL7pRdVcRcdQMR3zNtq3aLD8u4VP/c7ho1t2K3XDFKM8tTw48gTrx0OD0tMWC3r3Xeo/
+ 4F93gmGgfULCJ7EKJFD4cHPpFzPgU/SWA0/Zeu4ZRhBh3bQGQyyYCQOtBrhy8cZR6fLyvq
+ ksmdmnlmTmY+qR5DeuraNGDinBELCCa2OYioWuX0B65N/gJlvjGOGppaszK3J6JeGFjZNP
+ e8O3AHdLXEUethIJI4J6Z3P91xGgbEXD4TiJw6iJUH1FaERLTrG01AtSqo6TqxqFUJ0NJH
+ fEFLV2khy5y5Djjcyn3PQCvGk3WY0DPz2RldEGaAnd2u8zgnBaMWPXfGv4ffFg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=fl0aAS7I
-Subject: [Buildroot] [PATCH v4 1/4] configs/beaglebone: Bump to Linux
- mainline 6.18.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=vjiL7pRd
+Subject: [Buildroot] [PATCH v4 3/4] package/am33x-cm3: Switch to TI repo and
+ bump to v0x192
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,54 +107,317 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Kory Maincent (TI.com)" <kory.maincent@bootlin.com>
 
-Bumps the Linux kernel to the latest 6.18.1 mainline version.
+Switch from the RobertCNelson GitHub mirror to the official TI git
+repository and update to version 0x192 (latest release).
 
-Tested on BeagleBone Black.
+The previous installation method used sysfs to load the firmware,
+which was specific to old downstream Beaglebone or TI kernels. The
+mainline wkup_m3_ipc driver now expects am335x-pm-firmware.elf and
+*-scale-data.bin files to be installed in /lib/firmware, making the
+sysfs init script obsolete.
+
+Changes:
+ - Switch repository from github.com/RobertCNelson to git.ti.com
+ - Update version from 11107db (v05.00.00.02) to fb484c5 (v0x192)
+ - Refresh all patches to apply cleanly on new version
+ - Install .elf and scale-data files instead of .bin
+ - Remove obsolete S93-am335x-pm-firmware-load init script
 
 Signed-off-by: Kory Maincent (TI.com) <kory.maincent@bootlin.com>
 ---
-Changes in v4:
-- Use omap2plus_defconfig instead of a custom defconfig.
-
-Changes in v3:
-- Move linux.config in board/beagleboard/beaglebone instead of
-  board/ti/am335x
-- Update Linux hash file.
-- Update Linux to 6.18.1
-
-Change in v2:
-- Use a specific Linux version.
+Change in v3:
+- New patch.
 ---
- board/beagleboard/beaglebone/patches/linux/linux.hash | 4 ++--
- configs/beaglebone_defconfig                          | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Enforce-correct-march-option.patch   | 38 +++++++++++++++++++
+ package/am33x-cm3/0001-fix-makefile.patch     | 30 ---------------
+ ...Makefile-unconditionally-disable-SSP.patch | 17 +++++----
+ ...Makefile-unconditionally-disable-PIE.patch | 17 +++++----
+ .../0004-Makefile-add-fno-builtin.patch       | 17 +++++----
+ package/am33x-cm3/S93-am335x-pm-firmware-load |  6 ---
+ package/am33x-cm3/am33x-cm3.hash              |  2 +-
+ package/am33x-cm3/am33x-cm3.mk                | 18 ++++-----
+ 8 files changed, 76 insertions(+), 69 deletions(-)
+ create mode 100644 package/am33x-cm3/0001-Enforce-correct-march-option.patch
+ delete mode 100644 package/am33x-cm3/0001-fix-makefile.patch
+ delete mode 100644 package/am33x-cm3/S93-am335x-pm-firmware-load
 
-diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
-index e70a999129..99ac4fc57e 100644
---- a/board/beagleboard/beaglebone/patches/linux/linux.hash
-+++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256  1db327d0743e97ec725fefe05065a6fb779abe3063845fc3b551a4a716247c0a  linux-6.12.34-ti-arm32-r12.tar.gz
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  d0a78bf3f0d12aaa10af3b5adcaed5bc767b5b78705e5ef885d5e930b72e25d5  linux-6.18.1.tar.xz
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 8a8f618e40..38d5d3b52f 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -11,9 +11,9 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beagleboard/beaglebone/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.34-ti-arm32-r12)/linux-6.12.34-ti-arm32-r12.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/package/am33x-cm3/0001-Enforce-correct-march-option.patch b/package/am33x-cm3/0001-Enforce-correct-march-option.patch
+new file mode 100644
+index 0000000000..3a915a0ef8
+--- /dev/null
++++ b/package/am33x-cm3/0001-Enforce-correct-march-option.patch
+@@ -0,0 +1,38 @@
++From 4e2c99b1197633704ce249413d86da28d21e1d8b Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 16 Dec 2025 14:58:28 +0100
++Subject: [PATCH] Enforce correct -march option
++
++Buildroot uses a normal ARM compiler to build the AM33X CM3 firmware
++(which runs on a Cortex-M3 processor), but Buildroot will have a
++default -march value that doesn't necessarily match the one needed for
++Cortex-M3, leading to build failures (gcc complains that the
++-mcpu=cortex-m3 option being passed is not compatible with the
++selected -march).
++
++Fix this by explicitly indicating -march=armv7-m.
++
++Upstream: N/A Buildroot specific
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 3fd9f23d4969..3f27be4dff4f 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -13,7 +13,7 @@ SRCDIR = src
++ BINDIR = bin
++ 
++ INCLUDES = $(SRCDIR)/include
++-CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -Wundef \
+++CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -Wundef \
++ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
++ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
++ 	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2	-MD
++-- 
++2.43.0
++
+diff --git a/package/am33x-cm3/0001-fix-makefile.patch b/package/am33x-cm3/0001-fix-makefile.patch
+deleted file mode 100644
+index f3cdb5e2b9..0000000000
+--- a/package/am33x-cm3/0001-fix-makefile.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-Enforce correct -march option
+-
+-Buildroot uses a normal ARM compiler to build the AM33X CM3 firmware
+-(which runs on a Cortex-M3 processor), but Buildroot will have a
+-default -march value that doesn't necessarily match the one needed for
+-Cortex-M3, leading to build failures (gcc complains that the
+--mcpu=cortex-m3 option being passed is not compatible with the
+-selected -march).
+-
+-Fix this by explicitly indicating -march=armv7-m.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Updated the patch to the latest version of the Makefile
+-
+-Signed-off-by: Anders Darander <anders@chargestorm.se>
+-
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -13,7 +13,7 @@ SRCDIR = src
+- BINDIR = bin
+- 
+- INCLUDES = $(SRCDIR)/include
+--CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
+-+CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
+- 	-Werror-implicit-function-declaration -Wstrict-prototypes \
+- 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
+- 	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2
+diff --git a/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch b/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch
+index ed333bfe05..ae6e315382 100644
+--- a/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch
++++ b/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch
+@@ -1,6 +1,6 @@
+-From 6c3b05b74ccd49d8ba246bfef0c2e549b9f2bf7b Mon Sep 17 00:00:00 2001
++From ba71b50bef042ed404759a8d48bef1f779cec6d6 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 29 Oct 2019 16:14:18 +0100
++Date: Tue, 16 Dec 2025 15:02:28 +0100
+ Subject: [PATCH] Makefile: unconditionally disable SSP
+ 
+ Though -nostdlib is passed in $(CFLAGS), -fno-stack-protector must also be
+@@ -11,25 +11,28 @@ passed to avoid linking errors related to undefined references to
+ Fixes:
+  - http://autobuild.buildroot.net/results/3a3a21f3c35ea025e9b93e09c2454aed0ad31034
+ 
++Upstream: N/A Buildroot specific
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+ ---
+  Makefile | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index c3ec071..5226006 100644
++index 3f27be4dff4f..52423507f50b 100644
+ --- a/Makefile
+ +++ b/Makefile
+ @@ -16,7 +16,8 @@ INCLUDES = $(SRCDIR)/include
+- CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -Wundef \
+  	-Werror-implicit-function-declaration -Wstrict-prototypes \
+  	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
+--	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2
++-	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2	-MD
+ +	-Wempty-body -fno-strict-overflow -fno-stack-protector \
+-+	-g -I$(INCLUDES) -O2
+++	-g -I$(INCLUDES) -O2 -MD
+  LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
+  
+  EXECUTABLE=am335x-pm-firmware.elf
+ -- 
+-2.23.0
++2.43.0
+ 
+diff --git a/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch b/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch
+index 6be157932d..02b192fbda 100644
+--- a/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch
++++ b/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch
+@@ -1,6 +1,6 @@
+-From 0e8c3c4851ce64268a8ae1810ef72594251d917d Mon Sep 17 00:00:00 2001
++From 8d86dd4b141da8d4d4dc0002b5588389b4412df8 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 10 Nov 2019 21:57:12 +0100
++Date: Tue, 16 Dec 2025 15:03:55 +0100
+ Subject: [PATCH] Makefile: unconditionally disable PIE
+ 
+ Though -nostdlib is passed in $(CFLAGS), -fno-pie must also be passed to
+@@ -10,24 +10,27 @@ enforces PIE.
+ Fixes:
+  - http://autobuild.buildroot.org/results/418a40b995e91bc66e692dfbc4b0521db3fa5fbb
+ 
++Upstream: N/A Buildroot specific
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+ ---
+  Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index 5226006..fe3d844 100644
++index 52423507f50b..9146a8b6a7da 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -W
+  	-Werror-implicit-function-declaration -Wstrict-prototypes \
+  	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
+  	-Wempty-body -fno-strict-overflow -fno-stack-protector \
+--	-g -I$(INCLUDES) -O2
+-+	-fno-pie -g -I$(INCLUDES) -O2
++-	-g -I$(INCLUDES) -O2 -MD
+++	-fno-pie -g -I$(INCLUDES) -O2 -MD
+  LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
+  
+  EXECUTABLE=am335x-pm-firmware.elf
+ -- 
+-2.23.0
++2.43.0
+ 
+diff --git a/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch b/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
+index 7478bd45f3..73e697edc6 100644
+--- a/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
++++ b/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
+@@ -1,6 +1,6 @@
+-From 25fc567ba8a0cd199e48bfa82863247d953784ea Mon Sep 17 00:00:00 2001
++From bce00a9036fb0fc4d7735cd2c386b4932b915d97 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 30 Aug 2020 20:59:29 +0200
++Date: Tue, 16 Dec 2025 15:09:15 +0100
+ Subject: [PATCH] Makefile: add -fno-builtin
+ 
+ Build with gcc 10 fails on:
+@@ -18,24 +18,27 @@ To fix this build failure, add -fno-builtin
+ Fixes:
+  - http://autobuild.buildroot.org/results/a991e6efa012df518ff1bb35017ad2c96c8feedc
+ 
++Upstream: N/A Buildroot specific
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+ ---
+  Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index fe3d844..fa24d4b 100644
++index 9146a8b6a7da..b4869c494593 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -W
+  	-Werror-implicit-function-declaration -Wstrict-prototypes \
+  	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
+  	-Wempty-body -fno-strict-overflow -fno-stack-protector \
+--	-fno-pie -g -I$(INCLUDES) -O2
+-+	-fno-pie -fno-builtin -g -I$(INCLUDES) -O2
++-	-fno-pie -g -I$(INCLUDES) -O2 -MD
+++	-fno-pie -fno-builtin -g -I$(INCLUDES) -O2 -MD
+  LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
+  
+  EXECUTABLE=am335x-pm-firmware.elf
+ -- 
+-2.28.0
++2.43.0
+ 
+diff --git a/package/am33x-cm3/S93-am335x-pm-firmware-load b/package/am33x-cm3/S93-am335x-pm-firmware-load
+deleted file mode 100644
+index 56c17b334d..0000000000
+--- a/package/am33x-cm3/S93-am335x-pm-firmware-load
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#!/bin/sh
+-
+-# Load the PM CM3 firmware
+-echo 1 > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading
+-cat /lib/firmware/am335x-pm-firmware.bin > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/data
+-echo 0 > /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading
+diff --git a/package/am33x-cm3/am33x-cm3.hash b/package/am33x-cm3/am33x-cm3.hash
+index 33dc205f3b..aa282dab15 100644
+--- a/package/am33x-cm3/am33x-cm3.hash
++++ b/package/am33x-cm3/am33x-cm3.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  79b05eda90498390778001caf18435617d5983c075b5b4a6b339bee40551e946  am33x-cm3-11107db2f1e9e58ee75d4fe9cc38423c9a6e4365-git4.tar.gz
++sha256  b6020ce5fee52e8df6cf8e045c75064021760dd04e2923ad0e4bdd6e18ebaa49  am33x-cm3-fb484c5e54f2e31cf0a338d2927a06a2870bcc2c-git4.tar.gz
+ sha256  e136e6949a1d3ca144374375af8b9387faa11d2eee7debff8cf22ca8fe7bf7e9  License.txt
+diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
+index d5ace7bb0e..8c890a75fc 100644
+--- a/package/am33x-cm3/am33x-cm3.mk
++++ b/package/am33x-cm3/am33x-cm3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-# This should correpsond to v05.00.00.02
+-AM33X_CM3_VERSION = 11107db2f1e9e58ee75d4fe9cc38423c9a6e4365
+-AM33X_CM3_SITE = https://github.com/RobertCNelson/am33x-cm3
++# This should correspond to version 0x192
++AM33X_CM3_VERSION = fb484c5e54f2e31cf0a338d2927a06a2870bcc2c
++AM33X_CM3_SITE = https://git.ti.com/git/processor-firmware/ti-amx3-cm3-pm-firmware.git
+ AM33X_CM3_SITE_METHOD = git
+ AM33X_CM3_LICENSE = TI Publicly Available Software License
+ AM33X_CM3_LICENSE_FILES = License.txt
+@@ -17,15 +17,11 @@ define AM33X_CM3_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
+ endef
+ 
+-# Not all of the firmware files are used
+ define AM33X_CM3_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/bin/am335x-pm-firmware.bin \
+-		$(TARGET_DIR)/lib/firmware/am335x-pm-firmware.bin
+-endef
+-
+-define AM33X_CM3_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D package/am33x-cm3/S93-am335x-pm-firmware-load \
+-		$(TARGET_DIR)/etc/init.d/S93-am335x-pm-firmware-load
++	$(INSTALL) -m 0644 -D $(@D)/bin/am335x-pm-firmware.elf \
++		$(TARGET_DIR)/lib/firmware/am335x-pm-firmware.elf
++	$(INSTALL) -m 0644 -D $(@D)/bin/*-scale-data.bin \
++		$(TARGET_DIR)/lib/firmware/
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.43.0
 
