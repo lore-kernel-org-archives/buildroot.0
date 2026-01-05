@@ -1,92 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DBA9C79FA4
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 16:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62729C79FA7
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 16:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1706E40346;
-	Mon,  5 Jan 2026 16:06:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C29C9811DE;
+	Mon,  5 Jan 2026 16:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sHYkJFnxqM3B; Mon,  5 Jan 2026 16:05:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UV_IJTNfz7_X; Mon,  5 Jan 2026 16:59:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84346402AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3C5181342
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767629159;
-	bh=xrx3Z7ZP08+wgzNrp4CiYmFvOs39cQq7ZsTqucOpt9Q=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=aLN+9NSDhPtLVacSenj8C18qw5Pdteh+HDw/O/gaEHe7mxdPOwEKWuQgUh7hcFp2R
-	 8u5+m8XLQL+1AGIqt6bNeu7f07T32DJGldmEtsjACFB/2imeKHRule1lbBh/MaSHYn
-	 +myIjsYekFYGBYeRe4Dt3SMRjssYgTF60unvFTvn0WFEFZNeRPjxLHdfUGW9cMseo9
-	 rBHXTIpgecdf5mfdjbRgcdqOYAInR964xAjVmoLMrKVWn2Xi+fIUDQJJJgEb2TqjXR
-	 M2dcnBL/zzaFpaW1HLLCcU0IKsfh1hVCP4IsUqotDsSzTSNXQcxNu4iKpbnqd/rB4/
-	 xDrVYZXNnvYEA==
+	s=default; t=1767632356;
+	bh=XMtiKVuIe8WuiRJ5RZC7cyZ8pXqo9IWyrpxBLuo5CaI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=FC+5P1bWCHnodqsHNMxg8WVnGbIWpypkU9a47cGQbeTUwTB4+/WBy/c9VlQu2d1wQ
+	 W32+IelOZkXX8E0vB9iYFxEiEtDbcvy4IeVaPPu+U3BimLItax/wCwCNceKijZ8mRY
+	 kwliRMJwEnNuL6sMFxg2IsJGaHC96NjwRNE/vNaevG6b4yEabQqtorcTgPkyrSrPnh
+	 gMLCpyz8c9WLE6eBVJThxMo+bDyWwgsduH/qP63gcIMdnD3CGVQehmbj34Ez99Phm5
+	 Ys5Hs8RXNqjEftssTngPydF9EyvjMGXwvQTT4SMcan9S1qfl0bshbCJlVOiiOTckOm
+	 a4uGPekWHs2Jg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84346402AC;
-	Mon,  5 Jan 2026 16:05:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BE89249
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 16:05:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3C5181342;
+	Mon,  5 Jan 2026 16:59:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C9B1E7
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 16:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7CE8B40297
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 16:05:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 226A381342
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 16:59:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cop9VLOxwY4W for <buildroot@buildroot.org>;
- Mon,  5 Jan 2026 16:05:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hc8Y7c7zpf08 for <buildroot@buildroot.org>;
+ Mon,  5 Jan 2026 16:59:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B00CF40293
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B00CF40293
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B00CF40293
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 16:05:55 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id A3472C1E489;
- Mon,  5 Jan 2026 16:05:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 9319F60726;
- Mon,  5 Jan 2026 16:05:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D7C64103C8567; Mon,  5 Jan 2026 17:05:48 +0100 (CET)
-Date: Mon, 5 Jan 2026 17:05:47 +0100
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <20260105170547.6f767364@windsurf>
-In-Reply-To: <9bff7357-ef32-4d03-873e-7d052655158b@gmx.de>
-References: <20260104143240.4126891-1-fiona.klute@gmx.de>
- <20260104143240.4126891-2-fiona.klute@gmx.de>
- <20260104174637.3421eaea@windsurf>
- <9bff7357-ef32-4d03-873e-7d052655158b@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7D4E8811DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D4E8811DE
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D4E8811DE
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 16:59:13 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -249459738; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 05 Jan 2026 16:59:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vcnvA-00000003FdV-3ZnZ;
+ Mon, 05 Jan 2026 17:59:08 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon,  5 Jan 2026 17:59:06 +0100
+Message-ID: <20260105165907.775076-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767629152; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=7ntxmtYKmcUxiEtZYc4Hxw2jXxCdnLWMMEH93Gh4ugQ=;
- b=pjKuXkh0XpUdiCcPFs7ply/zx3CZe49UlJJc0L/8/8wjVnbM1xbBKWRA3RNznEowPoJKcI
- KjwhK03+2OpdaNQD4iSvU2tPbB81PUZMaiMv1bJi48Auf0UnKS0M2RnFqACw6p4XZzBnJC
- W77QkquYdNX70ftgHlpAHvOIjlXykAWTznrsK2tmeM99jjOd2tuxjghD+LSD2g1Chz7UTT
- 1ZAT9LCBf+rJDup5KOCSnVq32FZgbAjIdHwUtcFAgtnGmGfcR+OyoeHm6jSEB3k+AHP0mR
- hy4+L4pnlOxosufjHroBkUSfP2/RVQEAXBooqHdwSies3FJQRiuzhv+EW4rAlg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=pjKuXkh0
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-memray: require
- toolchain with C++ support
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=QLob9x1QrS5rtCuCp+eoPnF7wVqZKIvdyWQdD12bvtHieAOiKawTyhg8pilc7EhZkG9iRomLd6NT2Q1hBsce3l73J/VCD4fl/wpc4vjVwNVa+FqE0NR6cbtUfGjmKwg9GuYKzlltqBqalD1ei02sFGKwPPkwcdqPykNW/bHZCw02UnQErcQZ8KVmMQcSS1sAm0ru7+n18ZF5cPLpY6ocqfKjKp6WPoFt4l5n99NefQj4dkIiC+QpTwxg/iLPoof6exhk6NLwWiXQJHtzVqhlQg7YBy3dsrXqMWxo6x/pVTQ/NElynxlWFI5O8O33nbYvmuvTtt3+GP0xmi0vLNmwaA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=lrkYrPMwxwv+YkNmpgi9uk/XQimci4q+1jmTAdbNFSQ=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=QLob9x1Q
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/rauc: bump version to 15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,38 +89,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>,
- buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Andrey Yurovsky <yurovsky@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fiona,
+Bugfix release fixing compatibility with Linux 6.19-rc1+.
 
-On Mon, 5 Jan 2026 15:42:33 +0100
-Fiona Klute <fiona.klute@gmx.de> wrote:
+https://github.com/rauc/rauc/releases/tag/v1.15.1
 
-> I've just sent v2 of the series that should address both issues.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rauc/rauc.hash | 2 +-
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It does, thanks!
-
-You can also just use the Fixes tag:
-
-Fixes: 26bc4b51a808d73c09598035aa94f9c37b273218 ("package/python-rich: new package")
-
-No need to resend just for that, that's merely a suggestion for future
-commits.
-
-Thanks!
-
-Thomas
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index c0eee0d8d8..ea537c63b6 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  4ae0b5246c668acb544ce0230a3bada81c78e8afd4755e5afa2218cbd686fd70  rauc-1.15.tar.xz
++sha256  603dafa5085b6b964c74d5f57a154a1489af2b415dd20c6ff1447815d02c094f  rauc-1.15.1.tar.xz
+ sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 10d4a2db95..ba30c70dad 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 1.15
++RAUC_VERSION = 1.15.1
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
