@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 593A8C79FBC
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 19:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D4F0C79FBA
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 19:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E6E86071A;
-	Mon,  5 Jan 2026 19:41:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3061980844;
+	Mon,  5 Jan 2026 19:41:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AJTuKDXdw575; Mon,  5 Jan 2026 19:41:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s2XW2R1daV-x; Mon,  5 Jan 2026 19:41:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40BBA6073F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64F93808A2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767642077;
-	bh=dyEQHpauJ1SeXuePEqPyZhcTfJPRKsL9cxR9Y2/U7rI=;
+	s=default; t=1767642089;
+	bh=oMu1tjosCacDN2cWancqzHIuLm74vL2E+mrWMcQ4OJg=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=JFiEK6wg7+ZprqnrRWdeBJpMX52RCbk7lPgUrfgjxCcZVAAPCymKB5ewkRRH9bCgp
-	 y2ZlRQTO8yjFXpvnKNBsLgAFT4ch22mKEovaNUXZvwnIdagMICT6NYn7jTYgjS7E32
-	 n2WpoZn+7+3U0qeg3z0usfAU26bMqkxqrbc54h3LvVoK7j7p+qurLeRwlh4wj8gDuz
-	 XSo2CpkBT3s4lgHTpV4DFU32iut7a4ofYxOzeY9A8JPEn21mvAn2X5Nseiql0kc3bt
-	 LslR88GGUA5Oe3tNlivL0O+8Xozyur2dCXrMwdib6k/zM3uStv2CXXCk2+jzw7xUIN
-	 P4iXJILLhvIaA==
+	b=YvKMunh4l7zvSxHjxQPKZcF/fWJVM5TUvpspYU1UPDaIZeoXfg3NgZ+tu/k+do+R0
+	 FkHUR9oY4x+IeS0U0Z6Qor7a/T7l9W8qXQ5xrQBrhnXH4GT4LzJMIu7oznEZBOUZ3r
+	 YrkyNl7eB868ZKloeUoUpCmxxWDa076zjh5Ac5SXHquq7pLCjxDJfbS59QIXddlb8s
+	 ZPhYqCIM6GfbWWKKTkfLuox2/4SoG7TF4cClyxcLE/bp7k5HHLZqf54b+nUMisvHHA
+	 aZ2MD4RFzfQVCcEsD8h5VzyX2MjC8HxFMbqIn8HiI52/giGWZqyjDqW3lKEm/e7ral
+	 xN6ixW9Xp3w+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40BBA6073F;
-	Mon,  5 Jan 2026 19:41:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 44D4DE7
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:41:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64F93808A2;
+	Mon,  5 Jan 2026 19:41:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFDEFE7
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 41C376073F
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:41:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6EE8808A2
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:41:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5tcf6dqhCa9k for <buildroot@buildroot.org>;
- Mon,  5 Jan 2026 19:41:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bMhWH0hUiAgC for <buildroot@buildroot.org>;
+ Mon,  5 Jan 2026 19:41:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0216C6071A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0216C6071A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F27D80844
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F27D80844
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0216C6071A
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:41:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F27D80844
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:41:26 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ABF24A4C36DB
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BACA9A4C374B
  for <buildroot@buildroot.org>; Mon,  5 Jan 2026 20:40:56 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41588)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vcqRk-0000000057p-1YSk
+ (envelope-from <bernd@kuhls.net>) id 1vcqRk-0000000057p-1oQl
  for buildroot@buildroot.org; Mon, 05 Jan 2026 19:40:56 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  5 Jan 2026 20:40:55 +0100
-Message-ID: <20260105194056.2156773-2-bernd@kuhls.net>
+Date: Mon,  5 Jan 2026 20:40:56 +0100
+Message-ID: <20260105194056.2156773-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260105194056.2156773-1-bernd@kuhls.net>
 References: <20260105194056.2156773-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++++
-X-Spam: Yes
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1767642056;
- bh=b1BeEj3r35QF/W0FhUn2g5YFrWAsxmluo5zOONGU5vk=;
+ bh=JNj9b5ZjUU/2aIRz10y6MJV4rfsY0vySC3efY7ZGNY4=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=Lr8t3o04uGfiFPKaREpHmItkTgS1ydq+zPnfaxOWYP/xHrSuhTBt04iJeqjSCbZW4
- nYO0J2j8ynNQNjY6XbWpsjgsU57kyUyCYyfJaiwBoSy1as/MwUtRcLalLQia/TkKvR
- hlbaYd7kNq0JYRFafBT8pbBWhxPQIwsbZys+7ocawI6vPufmnMB0EGA5KiTViOeEMJ
- l+ACbk7Q5q1Ee1MRGLuDFiPNz9f03UqK8cVET6mv5M1/YFgxm/y0hmSt+rSKuNMvwD
- udFruTXHXqgFEPQ+MMC7rm1fTfGdo8kdSyhO9UmLculPhk6DIpp89rwJ52NWYDW9Q9
- EAOMNg3kmusQg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=hkfzlQvAtIGg0mAgWMbcuMFML2WK1wpLulcP88YAIpwZM0h5xsx3qyr0cGN9RqphO
+ eCmSXWceBCZDDaf6BbGlaXW0LlCvR2QgvOEI2OLBAUBhc0UY/Yw8d+o2EA8MNz1N6E
+ qe0YzlOtYH9KawWPoNQINYsSfB6mH+ytegQTBDDwIty2cRVdL905lAcwh6eKEyC6KK
+ MfOsYBpcOGbBTL+vBH2J+TOXSJaQ5iFZi2SOIRvHRTd1JyEbGBUs5Gwju/6qCI+0mI
+ DBOwS3YH5WT9EaJLACbzWnSD5WaQ50cUXsw/6t/qio18bnAJNMqo/oSE4HDsGQoXdl
+ P3b7Vf/Wwt65Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Lr8t3o04
-Subject: [Buildroot] [PATCH 2/3] package/dc3dd: needs host-bison
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=hkfzlQvA
+Subject: [Buildroot] [PATCH 3/3] package/dc3dd: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,32 +99,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+savewd.c:75:27: error: implicit declaration of function 'fork' [-Wimplicit-function-declaration]
+   75 |           wd->val.child = fork ();
+
 Fixes:
-https://autobuild.buildroot.net/results/f11/f11b0b9154e9979f3f2d7ea84a019f7719565e8f/
+https://autobuild.buildroot.net/results/40a/40a90638f90260ca2cb51bac03b0f8fb23a6ccc4/
 
-    ../build-aux/ylwrap: line 176: bison: command not found
-
-The build error occured already in 2024:
-https://autobuild.buildroot.net/results/dea/dea779bbbbc08c7192f89073b93db768c41832f4/
+The build error occured already in January 2025:
+https://autobuild.buildroot.net/results/9f3/9f3fefe5578dc41272e460146b566ac20f6cde75/
 so a backport to the LTS branches should be considered.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dc3dd/dc3dd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/dc3dd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/dc3dd/dc3dd.mk b/package/dc3dd/dc3dd.mk
-index c31ab9e1f3..e9cb6ec7ac 100644
---- a/package/dc3dd/dc3dd.mk
-+++ b/package/dc3dd/dc3dd.mk
-@@ -10,6 +10,7 @@ DC3DD_SOURCE = dc3dd-$(DC3DD_VERSION).tar.xz
- DC3DD_SITE = https://downloads.sourceforge.net/project/dc3dd/dc3dd/$(DC3DD_VERSION_MAJOR)
- DC3DD_LICENSE = GPL-3.0+
- DC3DD_LICENSE_FILES = COPYING
-+DC3DD_DEPENDENCIES = host-bison
- # We are patching Makefile.am, so we need to autoreconf. We also need to
- # enable autopoint as dc3dd comes with an old gettext infra.
- DC3DD_AUTORECONF = YES
+diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
+index bd181b7065..b4b7dfd691 100644
+--- a/package/dc3dd/Config.in
++++ b/package/dc3dd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DC3DD
+ 	bool "dc3dd"
++	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_RISCV_32
+ 	depends on !BR2_arc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_DC3DD
+ 	  https://sourceforge.net/projects/dc3dd/
+ 
+ comment "dc3dd needs a glibc or uClibc toolchain w/ threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_RISCV_32
+ 	depends on !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
 -- 
 2.47.3
 
