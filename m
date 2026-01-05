@@ -1,92 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF4D3C79F9A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 13:56:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8009C79F9D
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 14:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B39B080A77;
-	Mon,  5 Jan 2026 13:56:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50FAE60A78;
+	Mon,  5 Jan 2026 14:29:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 656SL26lb8RW; Mon,  5 Jan 2026 13:56:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rbd-M4NOLYs7; Mon,  5 Jan 2026 14:29:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEC7880A7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BC4060A70
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767621382;
-	bh=nKtzQJOIErPwjYx1Ly0jHUvFUTd/ncD707eN6WJ9DDU=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=RiOVCA4y72vFXAu41lCCNzJzZMPHP42AdmwQJLXmTiq8PPPubjvy4NbSZhnpL1fGN
-	 fN9L2shFlL6hFpL4dfL2jLMtmwRrTFkmhEH12OpUHL6Fhbat60ZvUojpchPb115XKo
-	 S0FxddfRgM3aFO78fPI4hN2MGvrsWLKS+aIsnlQKO0kvnB9rqIcWEnEM7ILl+TiuxW
-	 udPD8XkwgyLYrypd4MTRLEFIbPKuABnN7CzzpQyC1pB1r+0N/2sYbQeO8w9tm7febH
-	 prTy+uX/kFTT4UuuVtpQoV/w7hBOJf+qGs+OehNYwKF6NWtUhFjgsyQbjFB663IkEo
-	 FCXdenINcGZcg==
+	s=default; t=1767623342;
+	bh=MuEP63mtIZb6TFBULNpqRQsf1o2gpr04GVeAWIjzZ0Y=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=cTibOB0SSDiKUYb3OnK6MUycBpNi0IKw66HcmmpCt2pVzXHRqozCk6uwm9wJSMM+4
+	 4tFj/2aILppH9EU09OufdH0ccM04PoXLkiodQgJ7jvfR4sMqDC2TOyq7Oqj8i5sxvI
+	 rQiG4UuoUw3LTN2GFca6aeK3/EYu3jmb6tSgsDb2ikuu9oZmKnpin6B5QGXGdgBMZb
+	 zmi4qCVPHPKqCqNBt6sdTuvbyJ0Fqrv6oJuE0cwCTJBJI7Yu4qO99NOlJ9b3dyXfJV
+	 FM32n3i3r5Vkv6L+Df6LLEx2yWbTLF5o+1NeA+p71qkMgPVBXzBe+Ld0vH27FFysrj
+	 tDBdArMlBICxQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEC7880A7B;
-	Mon,  5 Jan 2026 13:56:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B8BD2DF
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 13:56:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BC4060A70;
+	Mon,  5 Jan 2026 14:29:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 45A4C2DF
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 14:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D16280A7B
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 13:56:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C6C2406C4
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 14:29:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AJqpHLhXQ-jB for <buildroot@buildroot.org>;
- Mon,  5 Jan 2026 13:56:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TbHEqexd0cqg for <buildroot@buildroot.org>;
+ Mon,  5 Jan 2026 14:28:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0E76A80A77
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E76A80A77
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E76A80A77
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 13:56:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 434F0406D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 434F0406D9
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 434F0406D9
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 14:28:58 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id BFE491A2662;
- Mon,  5 Jan 2026 13:56:15 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id E727AC1E485
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 14:28:29 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 95E5560726;
- Mon,  5 Jan 2026 13:56:15 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id CAD5760726;
+ Mon,  5 Jan 2026 14:28:55 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7B36D103C8550; Mon,  5 Jan 2026 14:56:12 +0100 (CET)
-Date: Mon, 5 Jan 2026 14:56:11 +0100
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20260105145611.7a99251d@windsurf>
-In-Reply-To: <CAEyMn7bBCT4qMbJbMPkPHVuvC7rGM-LcQsNaL8=rMw1790mp-A@mail.gmail.com>
-References: <20260105132326.4867-1-heiko.thiery@gmail.com>
- <20260105144206.6305e4e4@windsurf>
- <CAEyMn7bBCT4qMbJbMPkPHVuvC7rGM-LcQsNaL8=rMw1790mp-A@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+ with ESMTPSA id 2E66D103C8417; Mon,  5 Jan 2026 15:28:52 +0100 (CET)
+Date: Mon, 05 Jan 2026 15:28:40 +0100
 MIME-Version: 1.0
+Message-Id: <20260105-uboot-2025-10-fix-build-on-lts-v1-1-51997f7758a4@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAJfKW2kC/x3NQQqDMBCF4avIrDsyiUakVyldGB11QJKSaBHEu
+ zu6/ODxvwMyJ+EM7+KAxH/JEoPCvAro5y5MjDKowZJtyJDDzce4otKhIRxlR7/JMmAMuKwZXW/
+ axtdV1Y41aOSXWDfPweeOuJJsucP3PC90cZmTewAAAA==
+X-Change-ID: 20260105-uboot-2025-10-fix-build-on-lts-5c186b4338f4
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767621375; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=c59JxHD5KBl35iS8vqEmkNiEtNS2D36mE+0kaIVWqPY=;
- b=1ay0Lo2xpff/KAajmPCBsmObME9arxhgpMIAQf5pYYVqDyiycHjTPyiUrLW+tdIv7O2zc0
- /nnYzVPcjY/LeunNM//CatGzRQUiWh9+oTh3GGjEuYh076udMoWADqq6+B8gR5i2Bf5jfV
- ww46CRnW2vxRjyTr6CFNlhhmSvAeNa5L6nwFKE/pcTI+15J9iBGpSGQZO5t2FIs25mGoxr
- 5k2j8lYVdzpLSE9lQaXxd2YOON/A7kpomUCT8fWVT8XiXinGQ1dv4nhg/+SV87g8r0QZUa
- J5hk++A2iPikGE3fdQAgDZAH1cPtWmWbIWdhOpgyXFZ4o0/6CP4bEcoxb356eQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1767623335; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=eKkzYw26vGnxqW5gyw1FQopE5LHquiF/rZ6/GlOZvOM=;
+ b=VVDsLQNp6KD043rGT3g8w9ti3TfGADYlmhESw03I1etdJ7Ix6sJ8ITQpwLK2lgVDTd7x7Y
+ go4Oa35NZhDqZqtJggQJG+mSQO559UlSHlFcCkbCePPAIndb0Angp5rx0ekPYRFu3Hp5Do
+ RRsLQ7C2IqdhTTSSxXYUvZSallGe6NulwCv+T3/qNRd6WetzqxbSibqlH/mvzJWaaqTGNN
+ UIUuueiNL1qNvIbCq2rEyZ6CnzPrVSaptr2HIdkshA6SWWtS1X9kMiIbluTFdLAW5Ps4+Z
+ 7zIo8gJwvpJ1KNNGGZhJP17wVeP4UuMKRqgNeO/ZW9VwRSH5AeL4zIlW43IFdQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=1ay0Lo2x
-Subject: Re: [Buildroot] [PATCH v2] package/uboot-tools: use U-Boot host
- tool printinitialenv to extract environment
+ header.s=dkim header.b=VVDsLQNp
+Subject: [Buildroot] [PATCH 2025.02.x] uboot: allow building versions >=
+ 2025.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,40 +98,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>,
- Michael Walle <michael@walle.cc>, buildroot@buildroot.org
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 5 Jan 2026 14:50:44 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+With upstream commit a239b0b0b6db ("Add symlink from gpl-2.0.txt to
+a COPYING file"), COPYING is now a symlink to Licenses/gpl-2.0.txt,
+causing the install command in UBOOT_COPY_OLD_LICENSE_FILE to fail
+because the source and destination refer to the same file. To avoid
+this, copy the license file only if Licenses/gpl-2.0.txt does not
+already exist.
 
-> > I'm not sure why we're using $(UBOOT_SRCDIR) in all of this instead of
-> > $(@D), but that's a comment unrelated to your change.
-> 
-> At least for the first case we need to use the file coming from the
-> built U-Boot and not from the used sources from u-boot-tools package
-> (an older U-Boot version). How it is for the "old" path I do not know
-> if we could use here the script from the u-boot-tools package version
-> or if it is also related to the U-Boot sources related to the
-> environment.
+Link: https://gitlab.com/buildroot.org/buildroot/-/commit/128c26f2875dd60ed5fafe25f63b3da11bb79f60
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+This change was applied on master as part of commit 128c26f2875d
+("boot/uboot: bump to version 2025.10"). This commit is only taking the
+line to allow to building a recent U-Boot on stable branches.
 
-Aaah, yes, indeed.
+To maintainers: I'm not sure whether I should set the original patch author
+as the author of this patch, or add a Co-developed-by, or something
+else. I'm fine with resending with such changes if they apply.
+---
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Isn't it a bit crappy that the uboot-tools package does that? This
-logic is in uboot-tools, but it uses nothing from uboot-tools, only
-stuff from the uboot package. But oh well, we're not going to
-revolutionize this now :)
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2796b0a31010..0d77340f85a4 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -307,7 +307,7 @@ endif
+ # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
+ # legal-info finds it
+ define UBOOT_COPY_OLD_LICENSE_FILE
+-	if [ -f $(@D)/COPYING ]; then \
++	if [ -f $(@D)/COPYING ] && [ ! -f $(@D)/Licenses/gpl-2.0.txt ]; then \
+ 		$(INSTALL) -m 0644 -D $(@D)/COPYING $(@D)/Licenses/gpl-2.0.txt; \
+ 	fi
+ endef
 
-Thomas
+---
+base-commit: e81d65de87f710d711fb204e2af4ac07d26feb20
+change-id: 20260105-uboot-2025-10-fix-build-on-lts-5c186b4338f4
+
+Best regards,
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Luca Ceresoli <luca.ceresoli@bootlin.com>
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
