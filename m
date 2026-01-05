@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 261B9C79FBD
-	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 19:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35475C79FBC
+	for <buildroot@archiver.kernel.org>; Mon,  5 Jan 2026 19:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E13AE404B8;
-	Mon,  5 Jan 2026 19:49:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99FD740865;
+	Mon,  5 Jan 2026 19:52:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9wLPxlaww6UM; Mon,  5 Jan 2026 19:49:33 +0000 (UTC)
+ id xJhu2391Eo7M; Mon,  5 Jan 2026 19:52:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 030A5404E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 695F3407D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767642573;
-	bh=JB1eE6nE07JIXuVsfjhFgSPXzCWcaNHz7e18vE53ojU=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Ygd5TLFekspBiXaVAHwCUWq3xMX1+MWaF/zzbyBnr3lyj+bhyTG+eMc+0FqEH2GFy
-	 GMYnJ8MGcyy5PDLYURtEWcnRui2wvv/rpmJkmIidf2P3djCAfG1TUiS8t/6zzxSJWm
-	 Io10Aa1cgAw5ZyBZhLsCx+ujMkbl8Ja6dDPk/k8DVZfTZ1MRTUkVbJmB/MJ3Gt5Fo6
-	 xiU4T6wOCuFNZkOBbgPiFBE8S6KIrGStLJ+XF8hbkD8c2iKa8j4xmjz++Nv+jXSqaI
-	 UCZsG1uHeXAWikhJtQ7mZXByQC0LQDnecVlBTQPKzsk3Kb7KhJSUJpo9gA1o4SvFpn
-	 eXtr/e6wX7bPg==
+	s=default; t=1767642760;
+	bh=i9owTMGhgA4eTYgqisY0ASRDMXyiu9GmjKPyvFJphGo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=F8x71B8BOo8FQrvegz659OVnNHX9AEd4OcLPHJuCvsnSM1jO1OgLQ2FwAET+X5+bq
+	 OGPoqoTyKoTT6mGvU2uuohRz8ESSKxvtLa1RY0Go/Tr946s9RQsZLmJsWBPRCV+6xh
+	 CmTOHbLXdZHeVP+CJacJbFQS1PUh2ENrXEZYI+q+rZayS5cIj8GmzWCNTYRTWyxdeX
+	 IQGPBDGQNT4pBGchlKJ9WYQCtvLHiucwuQFrHvOy/7e+27FSsUIhxthE/u2iw/qlkU
+	 TN11IqqOKVONf3W6FJYlt9ggEWc5uQo2TMTRpVH4vhjfrcw8hOGwQ5iXo+HcXt4V16
+	 2Ct8SS/0BQS0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 030A5404E9;
-	Mon,  5 Jan 2026 19:49:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7036E96F
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:49:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 695F3407D7;
+	Mon,  5 Jan 2026 19:52:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5169196F
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:52:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62189404E9
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:49:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCB0940625
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:52:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u9YlaZ-72Syl for <buildroot@buildroot.org>;
- Mon,  5 Jan 2026 19:49:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 58783404B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58783404B8
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 58783404B8
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:49:30 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 72E4CA4C3753
- for <buildroot@buildroot.org>; Mon,  5 Jan 2026 20:48:16 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40420)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vcqYq-000000006SQ-0R6x
- for buildroot@buildroot.org; Mon, 05 Jan 2026 19:48:16 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vVofLbvbcHq6 for <buildroot@buildroot.org>;
+ Mon,  5 Jan 2026 19:52:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27DFA40088
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27DFA40088
+ for <buildroot@buildroot.org>; Mon,  5 Jan 2026 19:52:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1993B88280; Mon,  5 Jan 2026 19:52:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon,  5 Jan 2026 20:48:12 +0100
-Message-ID: <20260105194813.2157401-7-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260105194813.2157401-1-bernd@kuhls.net>
-References: <20260105194813.2157401-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1767642496;
- bh=meUli96Psv6DvRWNlpwBlDARELhf+yxCvo76rsVRY6Y=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=VLmBFTeJejs5X14NQAcPpkSOfKPSFPJRLQztFt1mP/QaJBMziy8QDn7grsVVc00L6
- IfNdfqVZCfHgduVXITtuNHrPKqrEXD+E+CpmmqZJNKc/bOBYvk840IMV5ZYnyIZN5W
- T/BVcBFE++yVVt8z7Gq2kfRCRSDUES9hmHme6Ibil6eOgDL/kraJZVRMjqEmgHZ4UM
- m37auI0suFtfmKA/ma2ZL6XCpgK1A3VHk0tGjRGUvrolDwE6gPREmbROZYMdftuFqL
- Fmx7UYarGHDjTeSm3UWwElIA6EblCO3573rVAhkNRHF1ZFlMGd/Fq52WC/9si/fD7U
- T+jMMrV+pJRlw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=VLmBFTeJ
-Subject: [Buildroot] [PATCH 6/6] package/dbus-triggerd: remove package
+Date: Mon, 5 Jan 2026 18:52:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 072f01878b46307c96d5526bebca35b75d2c43c3
+X-Git-Newrev: 6721942c98b8b691c480e8d6b9c333faed2c7f89
+X-Patchwork-Hint: ignore
+Message-Id: <20260105195237.1993B88280@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: Enable AM33X_CM3 config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,129 +68,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-According to https://rg42.org/gitweb/?p=dbustriggerd.git the last commit
-to the upstream repo occured 2014.
+commit: https://git.buildroot.net/buildroot/commit/?id=6721942c98b8b691c480e8d6b9c333faed2c7f89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Musl libc 1.2.5 removed the definition of the basename() function from
-string.h and only provides it in libgen.h as the POSIX standard
-defines it:
+Add support for suspend resume by enabling AM33X_CM3 config.
 
-dbus-triggerd.c:150:27: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-  150 |     argv[argc++] = strdup(basename(handler_cmd));
-
-Instead of fixing an unmaintainted package we remove it from buildroot,
-no other package depends on it.
-
-Fixes:
-https://autobuild.buildroot.net/results/811/81170fe89e1f5b70c63657684de43175e621f762/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Kory Maincent (TI.com) <kory.maincent@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in.legacy                         |  7 +++++++
- package/Config.in                        |  1 -
- package/dbus-triggerd/Config.in          | 15 ---------------
- package/dbus-triggerd/dbus-triggerd.hash |  3 ---
- package/dbus-triggerd/dbus-triggerd.mk   | 21 ---------------------
- 5 files changed, 7 insertions(+), 40 deletions(-)
- delete mode 100644 package/dbus-triggerd/Config.in
- delete mode 100644 package/dbus-triggerd/dbus-triggerd.hash
- delete mode 100644 package/dbus-triggerd/dbus-triggerd.mk
+ configs/beaglebone_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 28919e8594..e97fd0ebb2 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_DBUS_TRIGGERD
-+	bool "dbus-triggerd removed"
-+	select BR2_LEGACY
-+	help
-+	  dbus-triggerd was no longer maintained upstream, so it has
-+	  been dropped.
-+
- config BR2_PACKAGE_CVS
- 	bool "cvs has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 25a06caa4a..18d3e05242 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -485,7 +485,6 @@ endmenu
- 	source "package/dbus-cxx/Config.in"
- 	source "package/dbus-glib/Config.in"
- 	source "package/dbus-python/Config.in"
--	source "package/dbus-triggerd/Config.in"
- 	source "package/dfu-programmer/Config.in"
- 	source "package/dfu-util/Config.in"
- 	source "package/dmidecode/Config.in"
-diff --git a/package/dbus-triggerd/Config.in b/package/dbus-triggerd/Config.in
-deleted file mode 100644
-index 331c414704..0000000000
---- a/package/dbus-triggerd/Config.in
-+++ /dev/null
-@@ -1,15 +0,0 @@
--config BR2_PACKAGE_DBUS_TRIGGERD
--	bool "dbus-triggerd"
--	depends on BR2_USE_MMU # fork(), dbus
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
--	depends on BR2_PACKAGE_DBUS
--	help
--	  dbus-triggerd is a tool to trigger shell-commands upon
--	  receiving a given dbus-signal.
--
--	  http://gareus.org/oss/dbustriggerd/start
--
--comment "dbus-triggerd needs a toolchain w/ threads"
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_DBUS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dbus-triggerd/dbus-triggerd.hash b/package/dbus-triggerd/dbus-triggerd.hash
-deleted file mode 100644
-index c5127133fb..0000000000
---- a/package/dbus-triggerd/dbus-triggerd.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  73dbd92e89eee223928b5cbf414affb5913f70c1ca7e3f8ab733a4696436dae3  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09-git4.tar.gz
--sha256  30d135650639af9019633690fc1aecbfc150aeeef9446347d4286a58338d10b0  dbus-triggerd.c
-diff --git a/package/dbus-triggerd/dbus-triggerd.mk b/package/dbus-triggerd/dbus-triggerd.mk
-deleted file mode 100644
-index 7d73a6c98f..0000000000
---- a/package/dbus-triggerd/dbus-triggerd.mk
-+++ /dev/null
-@@ -1,21 +0,0 @@
--################################################################################
--#
--# dbus-triggerd
--#
--################################################################################
--
--DBUS_TRIGGERD_VERSION = ba3dbec805cb707c94c54de21666bf18b79bcc09
--DBUS_TRIGGERD_SITE = git://rg42.org/dbustriggerd.git
--DBUS_TRIGGERD_LICENSE = GPL-2.0+
--DBUS_TRIGGERD_LICENSE_FILES = dbus-triggerd.c
--DBUS_TRIGGERD_DEPENDENCIES = host-pkgconf dbus
--
--define DBUS_TRIGGERD_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
--endef
--
--define DBUS_TRIGGERD_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
--endef
--
--$(eval $(generic-package))
--- 
-2.47.3
-
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 11859a6c02..be11186f8c 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+ BR2_PACKAGE_XZ=y
++BR2_PACKAGE_AM33X_CM3=y
+ BR2_PACKAGE_KMOD=y
+ BR2_PACKAGE_KMOD_TOOLS=y
+ BR2_TARGET_ROOTFS_EXT2=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
