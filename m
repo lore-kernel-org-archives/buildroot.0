@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90F29D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01411D0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66FC24152F;
-	Wed,  7 Jan 2026 18:02:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF0B883409;
+	Wed,  7 Jan 2026 18:02:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ecMs-d_10GcM; Wed,  7 Jan 2026 18:02:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cp1wmQfnUDzT; Wed,  7 Jan 2026 18:02:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7900F4153B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF2A8833C9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808974;
-	bh=2KS7lBjz7tSu4Q6FRKPB4zleFB3BTOFGmcj+g5N7lco=;
+	s=default; t=1767808976;
+	bh=X8lcJGMmi7oCUz9dogSaDGIOF6uJ00iaQCmyR8YtMGM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BRPEMOzd95sKXl//ML87xwGvpjwAoAiGWym9Y/3LGRBvgnQRBJEThge/5Ofiee4Mc
-	 VKNkvDq0q3E/0Ks8vrWBk9qI/hO08HAwFQm6aEwHu0tds42Va68sNGDDmzurrBWZ+S
-	 WmbFHObep5Ap75yuBCe4tz5ZK9/yZ/+J9l2PvHEnFX9yQDm0AbX3WPngvb8ZEqkBO/
-	 M3Ip/YoAPxP9ENJiKXk6NrNnqGGp7jROSo11aWip5+H1XuLpfBPGV4WN+PG1cJr1Th
-	 JuzPA584bg259+zP04XRL3fQQjsQ6MIPPa1E40aZRyaEnUlmPf+ZyLqQ5/Xy0ITrZK
-	 0r1T45kS1EElQ==
+	b=nHzhXf2kn9MlSQh3j3cuoXnyu/Je7hNV7NXpMfdR1w/zNqZNx2IpWsoOnfy7iOw38
+	 mTH7/TBXWiduSZjnyOz/bG9sImzFFd08jB+9e3N8BAfwFCfPi1mywyV7rzUmhhfULr
+	 NaYWsdh8Cpt+Uu9+Hh4jGmzVMgUEF6ft0vfOv01+OcSZyOQjhrcXptYEW2D5ORSz3g
+	 iq+Wtrrod1+LDxtzlCfQqpf2sRSzgGBiJ6icQmnHyJozpTXtiJxmHkjF9DSxsRMONy
+	 eQP7YOKCmbrUG+nmRQy8DlK7kcBbUB1j12hcKL5QLSUDluDNMwk4HV1lvUBXdefXex
+	 xPraZjGv+kKvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7900F4153B;
-	Wed,  7 Jan 2026 18:02:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF2A8833C9;
+	Wed,  7 Jan 2026 18:02:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07C1525B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EC829ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 456CC40A46
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56D1D40DDA
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o0BbXBi6IPPa for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
+ id mIwjM1zWQraQ for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40FE240B57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ECBD408AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40FE240B57
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5ECBD408AA
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F8EA811C5; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ id 5E0C98268F; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:58:25 +0100
+Date: Tue, 6 Jan 2026 08:56:10 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: b495fc06c1dbbe273e0336c93e5606fa0e5657da
-X-Git-Newrev: 410fc5866602f73d97f95dd504472f521dd4c829
+X-Git-Oldrev: 0584d66576fd5a62db90b25a10bf502ce2867a9f
+X-Git-Newrev: cb492295c02e9889a017f31d31a2103da515c2bc
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180114.3F8EA811C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/python-crc16:
- switch SITE to pypi.org
+Message-Id: <20260107180113.5E0C98268F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/qt5/qt5enginio:
+ update SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=410fc5866602f73d97f95dd504472f521dd4c829
+commit: https://git.buildroot.net/buildroot/commit/?id=cb492295c02e9889a017f31d31a2103da515c2bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Updated package as computed by scanpypi.
+Old URL returns 404.
+
+Fixes:
+https://autobuild.buildroot.net/results/064/0647daa54deb9df953d43b438ac05ebefb81b6ce/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4adcc7cac31c71f44d50c3db39db8b19c2b41f0d)
+(cherry picked from commit 814eef2adf1ddb0507b053645918f2f7b92a083e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-crc16/python-crc16.hash | 6 ++++--
- package/python-crc16/python-crc16.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/qt5/qt5enginio/qt5enginio.hash | 2 +-
+ package/qt5/qt5enginio/qt5enginio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-crc16/python-crc16.hash b/package/python-crc16/python-crc16.hash
-index 4576a907ec..5244e400fa 100644
---- a/package/python-crc16/python-crc16.hash
-+++ b/package/python-crc16/python-crc16.hash
-@@ -1,3 +1,5 @@
--# locally computed
--sha256  10aeda70fbe8b284874b3b1b8f74b9c1f6d5e8dee20ac8f9d5bc49f45f12a42a  python-crc16-0.1.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/crc16/json
-+md5  3cb6a4f5fd10a58c09792e321cc467e5  crc16-0.1.1.tar.gz
-+sha256  c1f86aa0390f4baf07d2631b16b979580eae1d9a973a826ce45353a22ee8d396  crc16-0.1.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9  COPYING.txt
-diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
-index 86e6f2ecf2..7a773eaf8e 100644
---- a/package/python-crc16/python-crc16.mk
-+++ b/package/python-crc16/python-crc16.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/package/qt5/qt5enginio/qt5enginio.hash b/package/qt5/qt5enginio/qt5enginio.hash
+index f1ad364ca3..f268458e52 100644
+--- a/package/qt5/qt5enginio/qt5enginio.hash
++++ b/package/qt5/qt5enginio/qt5enginio.hash
+@@ -1,4 +1,4 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtenginio-opensource-src-1.6.3.tar.xz.mirrorlist
++# Hash from: https://download.qt.io/new_archive/qt/5.6/5.6.3/submodules/qtenginio-opensource-src-1.6.3.zip.sha256
+ sha256  d907060b355512ceb7a8c3f6980e3979c20d54320b6804303b6c5e8ed42d3912  qtenginio-opensource-src-1.6.3.tar.xz
  
- PYTHON_CRC16_VERSION = 0.1.1
--PYTHON_CRC16_SITE = $(call github,gennady,pycrc16,v$(PYTHON_CRC16_VERSION))
-+PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
-+PYTHON_CRC16_SITE = https://files.pythonhosted.org/packages/a6/e0/70a44c4385f2b33df82e518005aae16b5c1feaf082c73c0acebe3426fc0a
- PYTHON_CRC16_LICENSE = LGPL-3.0+
- PYTHON_CRC16_LICENSE_FILES = COPYING.txt
- PYTHON_CRC16_SETUP_TYPE = setuptools
+ # Hashes for license files:
+diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+index b74775f298..dd3f3a5d6f 100644
+--- a/package/qt5/qt5enginio/qt5enginio.mk
++++ b/package/qt5/qt5enginio/qt5enginio.mk
+@@ -7,7 +7,7 @@
+ # Qt5Enginio does not follow Qt versioning
+ # see https://bugreports.qt.io/browse/QTBUG-50111
+ QT5ENGINIO_VERSION = 1.6.3
+-QT5ENGINIO_SITE = https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules
++QT5ENGINIO_SITE = https://download.qt.io/new_archive/qt/5.6/5.6.3/submodules
+ QT5ENGINIO_SOURCE = qtenginio-opensource-src-$(QT5ENGINIO_VERSION).tar.xz
+ QT5ENGINIO_DEPENDENCIES = openssl
+ QT5ENGINIO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
