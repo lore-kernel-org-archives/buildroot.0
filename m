@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A032DCEFD01
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 20:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B04F1CEFCFE
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 20:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5829480D55;
-	Tue,  6 Jan 2026 20:03:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mwKe8vH2BrYV; Tue,  6 Jan 2026 20:03:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DDF7814B8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767729782;
-	bh=CW6QIYiK6dGkhqcigplWLGtj8PT5Iap9ND5u4hRTMMY=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=qwN54trN3sK3y0h1FKPKgQ0jWk0Fdm0GQYVlN2taMMCzZruGTzmEaBxoltDV/6Fpz
-	 TNSWQmtyEBT67t48Z2WTtxqiexvCB0DwduGpOcMD9oLvJJzQIjrXSXrB4cDxUkJY9a
-	 mn4RDKHyQW3IWv1WmmveRBfPkpdzwNtUydnPzL0cNL5evUtrMUxGLbVgtIW3Dtc1ZN
-	 RWBBVozbtdV1kZXbtG3c7k6KjhxUMclSTj9C+CwPPffd4YH8O9G5jZAM4Q+XD/rKuR
-	 sYKqvrwLD5MdleiOg8NkbQscAOZWMlcZ0pYFxhbB7OU8xGHYFVSXZlhXlQu170Abyj
-	 8inHUHVawBB2g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DDF7814B8;
-	Tue,  6 Jan 2026 20:03:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C201170B
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:03:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9076408EA
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:03:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86BD2408F6;
+	Tue,  6 Jan 2026 20:03:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ISy7Jbd9idjc for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 20:02:59 +0000 (UTC)
+ id IRIQdM1EirGF; Tue,  6 Jan 2026 20:03:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82405408EA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767729801;
+	bh=rhaGvSJO9dvA73io7R3SPSZWpwte6zWri9YLNn7QIG4=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=JNaGrrkE7wymxF94H63rr2kd8nZIOVLdn+7Kk+0DuvA/DZb/Wo4WWD3tF2WDVMDZc
+	 v9cOsQz6WYrCMipgVYKkf4iqPMc5dQsN+QTKYoN1oIN6b9ykBeKFO+prszH7Cmcohd
+	 CU21wdDJ/RaW5yGp7d9PmWanG76OkmwnoZN7vvjN00P3iG3+CPTwoutg7vp9j82hX6
+	 GVMkmqYmA0tSLPyxR50IRVsxifQkhsdwDx7TNw1Q/QouIdY6/OBzF5H9l7TMfRwen3
+	 otILsN+JZs8nNQ9DrO1bmsdvGKNp92pZsMn3wPwsaeSIHXNp4yxJ0Dd/dzpyBDNeTm
+	 2ddPnh+VIuJ1Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82405408EA;
+	Tue,  6 Jan 2026 20:03:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA10470B
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:03:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A17A7408E9
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:03:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qW0BEtyHrquP for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 20:03:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6DECE408E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DECE408E9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B0162408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0162408EA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6DECE408E9
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:02:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0162408EA
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:03:16 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 10D20A4C38AB;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 36849A4C398C;
  Tue,  6 Jan 2026 21:01:19 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:48554)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vdDF0-000000002Vv-2fgh;
+ (envelope-from <bernd@kuhls.net>) id 1vdDF0-000000002Vv-3HNr;
  Tue, 06 Jan 2026 20:01:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  6 Jan 2026 21:01:08 +0100
-Message-ID: <20260106200115.1985522-4-bernd@kuhls.net>
+Date: Tue,  6 Jan 2026 21:01:09 +0100
+Message-ID: <20260106200115.1985522-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260106200115.1985522-1-bernd@kuhls.net>
 References: <20260106200115.1985522-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1767729679;
- bh=vjCScQyriBZN6G4+gU+MGbzVrhe1fRHBETGb1RSwbBs=;
+ bh=RxTp8Za1BICNfjLgoc4Qj4PUuHLbC6Ljz8FCzTwNrZM=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=h07Q9Am6oYCNSRfVEOd+H9xEYFXuGgbcKbNwZFd464Ky24VUG8jXb2Kw0qTHP2HkP
- ELB7lRecmyWpd1MPtXTK5dzWgjiHM9XebUjPi2Zi9lHcJR6vk7RfmjD/3zltoxtTi9
- jfY8lJAca25CSiM242IVcGUdX3A7pSlhCJyxmPpm5m24Jd1Q6dOqSvmuL8GC/dF/yX
- Z3mRt2AJqIE9QC2whwKZlOnVwLadFNF0OnPdVAq0/2CPAI0ObGNCpfPXrODlGpFCen
- xDDxDtUh3krKiSJ6IpAjBNjxey9FoukzZaNdk4U5BMEf3ot5L/7M/6PUhEhNrI7qvx
- BcHnkVNKnt6rw==
+ b=ffbKCl2thmiB1Wi4yqGTX1iw3gO7p4XkpFW6wpzXpWugvqdaFNdc+TCT9mZ9/2MSV
+ rQF7Yx1wbDROPzmYkJzVLuxKsu/wCsuopoUYQk8Y4ce6OyvbJfPyhuaonM9K99zaCG
+ VZps74ZJlNpscqZABV/vXHl2Dgf+f789Bezb+NzL/wBvUe1ROSPkV3dU5Iz+zZmfDe
+ BKlcU69L7DgEueefrAZjump4wJcTuZLRgd/zUn8Zcy4mLbQq1CGUXFNEf+Ju4fjBs5
+ 4B0EdVOFlcxBsvynOkNkfMRLQLQlHOsm+yTMyCvcxUvNoGXWDxoe4y6UurJuVN4h4s
+ fdzmFS+F6lifw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=h07Q9Am6
-Subject: [Buildroot] [PATCH v2 3/9] package/gconf: remove package, broken
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=ffbKCl2t
+Subject: [Buildroot] [PATCH v2 4/9] package/criu: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,108 +94,238 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KCmdj
-b25mIGhhcyBub3Qgc2VlbiBhbnkgcmVsZWFzZSBzaW5jZSAyMDEzLCBhbmQgdGhlIGxhc3QgY29t
-bWl0IGluCmh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9BcmNoaXZlL2djb25mIGlzIGZyb20gMjAx
-NS4KClRoZSBwYWNrYWdlIGV4YW1wbGUgYXBwbGljYXRpb24gYmFzaWMtZ2NvbmYtYXBwIGZhaWxz
-IHRvIGJ1aWxkIHdpdGggYQpyZWNlbnQgY29tcGlsZXIgc3VjaCBhcyBHQ0MgMTQueDoKCmJhc2lj
-LWdjb25mLWFwcC5jOjQ1ODo2MDogZXJyb3I6IHBhc3NpbmcgYXJndW1lbnQgMSBvZiDigJhndGtf
-ZGlhbG9nX2dldF9jb250ZW50X2FyZWHigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBl
-IFstV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQoKSXQgaXMgbm90IGVudGlyZWx5IGNsZWFy
-IHNpbmNlIHdoZW4gdGhpcyBicmVha2FnZSB0YWtlcyBwbGFjZSwgYnV0Cm1vc3QgbGlrZWx5IHNp
-bmNlIEdDQyAxNC54IHdhcyBpbnRyb2R1Y2VkLiBUaGlzIGlzc3VlIGNhbiBiZQpyZXByb2R1Y2Vk
-IGluY2x1ZGluZyBvbiAyMDI1LjAyLnggd2l0aCB0aGUgZm9sbG93aW5nIGRlZmNvbmZpZzoKCkJS
-Ml9hYXJjaDY0PXkKQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15CkJSMl9UT09MQ0hBSU5fRVhURVJO
-QUxfQk9PVExJTj15CkJSMl9QQUNLQUdFX01FU0EzRD15CkJSMl9QQUNLQUdFX01FU0EzRF9HQUxM
-SVVNX0RSSVZFUl9TV1JBU1Q9eQpCUjJfUEFDS0FHRV9NRVNBM0RfT1BFTkdMX0VHTD15CkJSMl9Q
-QUNLQUdFX01FU0EzRF9PUEVOR0xfRVM9eQpCUjJfUEFDS0FHRV9MSUJHVEszPXkKQlIyX1BBQ0tB
-R0VfR0NPTkY9eQoKSG93ZXZlciwgZm9yIHRoZSBidWlsZCBpc3N1ZSB0byBoYXBwZW4geW91IG5l
-ZWQgdG8gcnVuOgoKJCBtYWtlIGxpYmd0azMKJCBtYWtlCgpTbyB0aGF0IGxpYmd0azMgZ2V0cyBi
-dWlsdCBiZWZvcmUgZ2NvbmYuIEluZGVlZCwgdGhlcmUncyBhIGhpZGRlbgpkZXBlbmRlbmN5IGJl
-dHdlZW4gdGhlIHR3bywgYW5kIHRoZSBleGFtcGxlIHByb2dyYW1zIG9mIGdjb25mIG9ubHkgZ2V0
-CmJ1aWxkIGlmIGxpYmd0azMgaXMgYnVpbHQgYmVmb3JlLiBXZSd2ZSBob3dldmVyIGVuY291bnRl
-cmVkIHRoZQpwcm9ibGVtIGluIGEgKHJlYWwpIGJpZ2dlciBidWlsZCB3aGVyZSB0aGUgZGVwZW5k
-ZW5jeSByZWxhdGlvbnNoaXAgb2YKcGFja2FnZXMgaGF2ZSBjYXVzZWQgbGliZ3RrMyB0byBnZXQg
-YnVpbHQgYmVmb3JlIGdjb25mLgoKTm90ZSB0aGF0IHdlIGNvdWxkIHBlcmhhcHMgaGF2ZSBmaXhl
-ZCB0aGUgcHJvYmxlbSBieSBkaXNhYmxpbmcgdGhlCmV4YW1wbGVzLCBidXQgZ2NvbmYgaXMgYW55
-d2F5IHNvIG9sZCBhbmQgZGVwcmVjYXRlZCB0aGF0IGl0IGlzbid0CndvcnRoIHRoZSBlZmZvcnQu
-CgpUaGVyZSBhcmUgbm8ga25vd24gYXV0b2J1aWxkZXIgaXNzdWVzLgoKU2lnbmVkLW9mZi1ieTog
-VGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KU2lnbmVkLW9m
-Zi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tCiBDb25maWcuaW4ubGVnYWN5
-ICAgICAgICAgfCAgNyArKysrKysrCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgfCAgMSAtCiBw
-YWNrYWdlL0NvbmZpZy5pbiAgICAgICAgfCAgMSAtCiBwYWNrYWdlL2djb25mL0NvbmZpZy5pbiAg
-fCAyMSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvZ2NvbmYvZ2NvbmYuaGFzaCB8ICA0
-IC0tLS0KIHBhY2thZ2UvZ2NvbmYvZ2NvbmYubWsgICB8IDIzIC0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tCiA2IGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNTAgZGVsZXRpb25zKC0pCiBk
-ZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nY29uZi9Db25maWcuaW4KIGRlbGV0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL2djb25mL2djb25mLmhhc2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L2djb25mL2djb25mLm1rCgpkaWZmIC0tZ2l0IGEvQ29uZmlnLmluLmxlZ2FjeSBiL0NvbmZpZy5p
-bi5sZWdhY3kKaW5kZXggOTYzMWFmNWMyNi4uYTJkNDhiMmY3YyAxMDA2NDQKLS0tIGEvQ29uZmln
-LmluLmxlZ2FjeQorKysgYi9Db25maWcuaW4ubGVnYWN5CkBAIC0xNDYsNiArMTQ2LDEzIEBAIGVu
-ZGlmCiAKIGNvbW1lbnQgIkxlZ2FjeSBvcHRpb25zIHJlbW92ZWQgaW4gMjAyNi4wMiIKIAorY29u
-ZmlnIEJSMl9QQUNLQUdFX0dDT05GCisJYm9vbCAiZ2NvbmYgcGFja2FnZSByZW1vdmVkIgorCXNl
-bGVjdCBCUjJfTEVHQUNZCisJaGVscAorCSAgZ2NvbmYgd2FzIG5vIGxvbmdlciBtYWludGFpbmVk
-IHVwc3RyZWFtLCBzbyBpdCBoYXMgYmVlbgorCSAgZHJvcHBlZC4KKwogY29uZmlnIEJSMl9QQUNL
-QUdFX0xJQlNWRwogCWJvb2wgImxpYnN2ZyBwYWNrYWdlIHJlbW92ZWQiCiAJc2VsZWN0IEJSMl9M
-RUdBQ1kKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDg0ZjdlYzVi
-ZWMuLmM1NTUzOTYwZjUgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpA
-QCAtMTc1OSw3ICsxNzU5LDYgQEAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVz
-dF96ZnMucHkKIE46CUpvc2VwaCBLb2d1dCA8am9zZXBoLmtvZ3V0QGdtYWlsLmNvbT4KIEY6CXBh
-Y2thZ2UvYXQtc3BpMi1jb3JlLwogRjoJcGFja2FnZS9lYXJseW9vbS8KLUY6CXBhY2thZ2UvZ2Nv
-bmYvCiBGOglwYWNrYWdlL2xpYm5zcy8KIEY6CXBhY2thZ2UvbGxhbWEtY3BwLwogRjoJcGFja2Fn
-ZS9sbHZtLXByb2plY3QvY2xhbmcvCmRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3Bh
-Y2thZ2UvQ29uZmlnLmluCmluZGV4IGQ4YmFlOGRjZTIuLmVlNjNhYjlkMzkgMTAwNjQ0Ci0tLSBh
-L3BhY2thZ2UvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvQ29uZmlnLmluCkBAIC0yMTUxLDcgKzIx
-NTEsNiBAQCBtZW51ICJPdGhlciIKIAlzb3VyY2UgInBhY2thZ2UvZmxhdGNjL0NvbmZpZy5pbiIK
-IAlzb3VyY2UgInBhY2thZ2UvZnAxNi9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2Z4ZGl2
-L0NvbmZpZy5pbiIKLQlzb3VyY2UgInBhY2thZ2UvZ2NvbmYvQ29uZmlnLmluIgogCXNvdXJjZSAi
-cGFja2FnZS9nZGFsL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvZ2VtbWxvd3AvQ29uZmln
-LmluIgogCXNvdXJjZSAicGFja2FnZS9nZmxhZ3MvQ29uZmlnLmluIgpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9nY29uZi9Db25maWcuaW4gYi9wYWNrYWdlL2djb25mL0NvbmZpZy5pbgpkZWxldGVkIGZp
-bGUgbW9kZSAxMDA2NDQKaW5kZXggYTIzNzFiM2YyMy4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdl
-L2djb25mL0NvbmZpZy5pbgorKysgL2Rldi9udWxsCkBAIC0xLDIxICswLDAgQEAKLWNvbmZpZyBC
-UjJfUEFDS0FHRV9HQ09ORgotCWJvb2wgImdjb25mIgotCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJ
-Tl9IQVNfVEhSRUFEUyAjIGRidXMsIGxpYmdsaWIyCi0JZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAj
-IGRidXMsIGxpYmdsaWIyCi0JZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgbGliZ2xpYjIKLQlk
-ZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMKLQlzZWxlY3QgQlIyX1BBQ0tBR0VfREJVUwotCXNl
-bGVjdCBCUjJfUEFDS0FHRV9EQlVTX0dMSUIKLQlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCR0xJQjIK
-LQlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCWE1MMgotCWhlbHAKLQkgIEdDb25mIHdhcyBhIHN5c3Rl
-bSB1c2VkIGJ5IHRoZSBHTk9NRSBkZXNrdG9wIGVudmlyb25tZW50IGZvcgotCSAgc3RvcmluZyBj
-b25maWd1cmF0aW9uIHNldHRpbmdzIGZvciB0aGUgZGVza3RvcCBhbmQKLQkgIGFwcGxpY2F0aW9u
-cy4gSXQgaXMgc2ltaWxhciB0byB0aGUgV2luZG93cyBSZWdpc3RyeS4KLQotCSAgaHR0cHM6Ly9w
-cm9qZWN0cy5nbm9tZS5vcmcvZ2NvbmYvCi0KLWNvbW1lbnQgImdjb25mIG5lZWRzIGEgdG9vbGNo
-YWluIHcvIHRocmVhZHMsIHdjaGFyLCBkeW5hbWljIGxpYnJhcnkiCi0JZGVwZW5kcyBvbiBCUjJf
-VVNFX01NVQotCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgfHwgIUJSMl9V
-U0VfV0NIQVIgXAotCQl8fCBCUjJfU1RBVElDX0xJQlMKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ2Nv
-bmYvZ2NvbmYuaGFzaCBiL3BhY2thZ2UvZ2NvbmYvZ2NvbmYuaGFzaApkZWxldGVkIGZpbGUgbW9k
-ZSAxMDA2NDQKaW5kZXggYWQwMDY0ZmE5OS4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL2djb25m
-L2djb25mLmhhc2gKKysrIC9kZXYvbnVsbApAQCAtMSw0ICswLDAgQEAKLSMgRnJvbSBodHRwczov
-L2Rvd25sb2FkLmdub21lLm9yZy9zb3VyY2VzL0dDb25mLzMuMi9HQ29uZi0zLjIuNi5zaGEyNTZz
-dW0KLXNoYTI1NiAgMTkxMmI5MTgwM2FiMDlhNWVlZDM0ZDM2NGJmMDlmZTNhMmE5Yzk2NzUxZmRl
-MDNhNGUwY2ZhNTFhMDRkNzg0YyAgR0NvbmYtMy4yLjYudGFyLnh6Ci0jIExpY2Vuc2UgZmlsZXMs
-IGxvY2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICA5NGIwM2YxYTYwYTdmZDUwMDcxNDk1MzA2MjZh
-ODk1YTZlZjVhOGI5MzQyYWJmZDU2ODYwYzVmMzk1NmY1ZDIzICBDT1BZSU5HCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL2djb25mL2djb25mLm1rIGIvcGFja2FnZS9nY29uZi9nY29uZi5tawpkZWxldGVk
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggYjg0ZmE5NjA4Mi4uMDAwMDAwMDAwMAotLS0gYS9wYWNr
-YWdlL2djb25mL2djb25mLm1rCisrKyAvZGV2L251bGwKQEAgLTEsMjMgKzAsMCBAQAotIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMKLSMKLSMgZ2NvbmYKLSMKLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-Ci0KLUdDT05GX1ZFUlNJT04gPSAzLjIuNgotR0NPTkZfU09VUkNFID0gR0NvbmYtJChHQ09ORl9W
-RVJTSU9OKS50YXIueHoKLUdDT05GX1NJVEUgPSBodHRwczovL2Rvd25sb2FkLmdub21lLm9yZy9z
-b3VyY2VzL0dDb25mLzMuMgotR0NPTkZfQ09ORl9PUFRTID0gLS1kaXNhYmxlLW9yYml0Ci1HQ09O
-Rl9ERVBFTkRFTkNJRVMgPSBkYnVzIGRidXMtZ2xpYiBsaWJnbGliMiBsaWJ4bWwyIFwKLQlob3N0
-LWludGx0b29sICQoVEFSR0VUX05MU19ERVBFTkRFTkNJRVMpCi1HQ09ORl9MSUNFTlNFID0gTEdQ
-TC0yLjArCi1HQ09ORl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwotCi1pZmVxICgkKEJSMl9QQUNL
-QUdFX0dPQkpFQ1RfSU5UUk9TUEVDVElPTikseSkKLUdDT05GX0NPTkZfT1BUUyArPSAtLWVuYWJs
-ZS1pbnRyb3NwZWN0aW9uCi1HQ09ORl9ERVBFTkRFTkNJRVMgKz0gZ29iamVjdC1pbnRyb3NwZWN0
-aW9uCi1lbHNlCi1HQ09ORl9DT05GX09QVFMgKz0gLS1kaXNhYmxlLWludHJvc3BlY3Rpb24KLWVu
-ZGlmCi0KLSQoZXZhbCAkKGF1dG90b29scy1wYWNrYWdlKSkKLS0gCjIuNDcuMwoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+The criu package was added in Nov 2023, and then bumped once in
+December 2023. Since then, it has never been bumped again, and all
+follow-up fixes were provided by other people than the original
+package submitter listed in the DEVELOPERS file.
+
+criu has seen several upstream releases since then, and most notably
+is causing a number of build issues in our autobuilders:
+
+  https://autobuild.buildroot.net/?reason=criu-3.19
+
+The package was never updated to those newer upstream releases, and
+the autobuilder issues have not been addressed.
+
+Therefore, let's drop this package.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ Config.in.legacy       |  7 ++++
+ DEVELOPERS             |  1 -
+ package/Config.in      |  1 -
+ package/criu/Config.in | 52 ----------------------------
+ package/criu/criu.hash |  3 --
+ package/criu/criu.mk   | 77 ------------------------------------------
+ 6 files changed, 7 insertions(+), 134 deletions(-)
+ delete mode 100644 package/criu/Config.in
+ delete mode 100644 package/criu/criu.hash
+ delete mode 100644 package/criu/criu.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a2d48b2f7c..062a9ebd5a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_CRIU
++	bool "criu has been removed"
++	help
++	  criu was removed from Buildroot as it was insufficiently
++	  maintained. It can be re-added if someone volunteers to
++	  maintain it.
++
+ config BR2_PACKAGE_GCONF
+ 	bool "gconf package removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c5553960f5..c0f9279f8d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2255,7 +2255,6 @@ F:	support/testing/tests/package/test_python_pytest.py
+ F:	support/testing/tests/package/test_python_pytest_asyncio.py
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+-F:	package/criu/
+ F:	package/libcamera/
+ F:	package/libcamera-apps/
+ F:	package/libostree/
+diff --git a/package/Config.in b/package/Config.in
+index ee63ab9d39..628a1f0aa6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2785,7 +2785,6 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
+-	source "package/criu/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+deleted file mode 100644
+index 04a2080041..0000000000
+--- a/package/criu/Config.in
++++ /dev/null
+@@ -1,52 +0,0 @@
+-# criu only builds on certain architectures
+-config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	bool
+-	default y if BR2_ARM_CPU_ARMV6
+-	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_ARM_CPU_ARMV7M
+-	default y if BR2_ARM_CPU_ARMV8A && !BR2_aarch64_be
+-	default y if BR2_aarch64
+-	default y if BR2_x86_64
+-	default y if BR2_powerpc64le # Only support powerpc64 with LE
+-	# CRIU has "some" support for s390 but it is not included due to
+-	# BE/LE endian issues.
+-	depends on BR2_USE_MMU # libcap
+-	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-
+-config BR2_PACKAGE_CRIU
+-	bool "criu"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+-	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+-	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
+-	depends on BR2_USE_WCHAR # libbsd
+-	select BR2_PACKAGE_HOST_PYTHON3_SSL
+-	select BR2_PACKAGE_PROTOBUF
+-	select BR2_PACKAGE_PROTOBUF_C
+-	select BR2_PACKAGE_LIBAIO
+-	select BR2_PACKAGE_LIBBSD
+-	select BR2_PACKAGE_LIBCAP
+-	select BR2_PACKAGE_LIBNET
+-	select BR2_PACKAGE_LIBNL
+-	select BR2_PACKAGE_PYTHON3
+-	help
+-	  Checkpoint/Restore In Userspace (CRIU), is a software
+-	  tool for the Linux operating system to make it possible
+-	  to freeze a running application and checkpoint it to
+-	  persistent storage as a collection of files.
+-
+-	  https://criu.org/Main_Page
+-
+-comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+-		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+deleted file mode 100644
+index c3fcdbc03f..0000000000
+--- a/package/criu/criu.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  990cdd147cb670a5d5d14216c2b5c2fc2b9a53ef19396569a6413807ba2a6aa2  criu-3.19.tar.gz
+-sha256  568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  COPYING
+diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+deleted file mode 100644
+index 3b72a1131e..0000000000
+--- a/package/criu/criu.mk
++++ /dev/null
+@@ -1,77 +0,0 @@
+-################################################################################
+-#
+-# CRIU
+-#
+-################################################################################
+-
+-CRIU_VERSION = 3.19
+-CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
+-
+-CRIU_LICENSE = GPL-2.0, LGPL-2.1 (for lib/), MIT (for images/)
+-CRIU_LICENSE_FILES = COPYING images/LICENSE
+-
+-CRIU_DEPENDENCIES =\
+-	host-pkgconf \
+-	host-protobuf-c \
+-	host-python3 \
+-	host-python-pip \
+-	libaio \
+-	libbsd \
+-	libcap \
+-	libnet \
+-	libnl \
+-	protobuf \
+-	protobuf-c \
+-	python3
+-
+-CRIU_MAKE_ENV =\
+-	$(TARGET_MAKE_ENV) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CROSS_COMPILE=$(TARGET_CROSS) \
+-	WERROR=0
+-
+-# Remap to match the used in criu.
+-ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
+-CRIU_MAKE_ENV += ARCH=x86
+-else ifeq ($(BR2_NORMALIZED_ARCH),"powerpc")
+-CRIU_MAKE_ENV += ARCH=ppc64
+-else ifeq ($(BR2_NORMALIZED_ARCH),"arm64")
+-CRIU_MAKE_ENV += ARCH=aarch64
+-else
+-CRIU_MAKE_ENV += ARCH=$(BR2_NORMALIZED_ARCH)
+-endif
+-
+-ifeq ($(BR2_ARM_CPU_ARMV6),y)
+-CRIU_MAKE_ENV += SUBARCH=armv6
+-else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV7M),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv8
+-endif
+-
+-# Criu needs Kernel Checkpoint/restore support which is not enabled
+-# by default.
+-define CRIU_LINUX_CONFIG_FIXUPS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
+-endef
+-
+-define CRIU_BUILD_CMDS
+-	rm -rf $(@D)/images/google/protobuf/descriptor.proto
+-	cp -a  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto \
+-		$(@D)/images/google/protobuf/descriptor.proto
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr
+-endef
+-
+-define CRIU_INSTALL_TARGET_CMDS
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr \
+-		DESTDIR=$(TARGET_DIR) \
+-		install-criu \
+-		install-lib \
+-		install-compel
+-endef
+-
+-$(eval $(generic-package))
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
