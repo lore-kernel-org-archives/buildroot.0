@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09931D0D150
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12536D0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5D0E822A1;
-	Wed,  7 Jan 2026 17:48:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC50440C2B;
+	Wed,  7 Jan 2026 17:48:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FHAzrBAg9cFP; Wed,  7 Jan 2026 17:48:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1564F40C31
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808115;
+	bh=9T963HS+BIpsU+tN7MOhDNqFonLMnD4MCNKN1ZL05DM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=GVTbMLQ+EkX5q3E+79wDUFSD3cTmy7z5ZkCddDKkSEsV9l390HxsR/vVevldBMJFv
+	 uubUJeFGTEa+Qr4qFNMJCo7dtk2dl94kWWGaee3vzybG9grhsO76lCyX0nisjQ4ynN
+	 VcgyGbNMbrxBFwJfMpgDKRGyptUz5nX+RU4R9Fv0lgwMcA8lPha+v9I306M/H4yWYn
+	 drKQ+vi8NXaZZFs/jgTvopuQ2meKBFzeQuR037aib+2xxK3ckFt3VWIUOYSXgEglDw
+	 ojogHdsLp2SA2zsiLqep8Ks15R4UNdeqVKpIVlaV8BXV7AYc9uwQYPU7z+lxhiP/EF
+	 RrRYCfB7cTaTg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1564F40C31;
+	Wed,  7 Jan 2026 17:48:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F64625B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1FB6680D17
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 78K0FwXedZdO; Wed,  7 Jan 2026 17:48:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAC748229D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808114;
-	bh=hmw/HHfF0ItRff96Z8DpUnK0eV3ybfxiKZxzeKLbwuM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HKQbZmcLr2Gz1UUSf8MP/L1UvZpeoV/PDkFLeqDgvCi9hfqFRRZ4KuLhtqHV83m2c
-	 jFxam9qiDV00kda1ajxq+3mnGJaCGtHvdENoMP8GNjRycLwJqkBjEgU4QtrCgtyit0
-	 8L88mTcXndGswQaYflVDlvNZkv/ZtlZRFDHu1j39SjMK3s88bdl0yNutN64xkQxgSc
-	 Bm4zjVFJapP6BPkmp71lhNceGhstAMFG6pyO35JWF53wf1pQyyQSqjLNo0vSo1WDAX
-	 00W5EPi6Na2DDdMFT79TqEd7fZ0oALMTkdiFzJeR6vCZqIEq2cyuRwwTbe11RaeLd9
-	 KgaCknBTA9APA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAC748229D;
-	Wed,  7 Jan 2026 17:48:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3AA839ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC9C960ABE
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gasxv9kZUkSh for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+ id 8HYqynfKKxxL for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:46:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A300860A62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B66AE80CD6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A300860A62
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B66AE80CD6
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A289881192; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ id B58D78225F; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:18:52 +0100
+Date: Tue, 6 Jan 2026 09:19:44 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0ca81ef13c44befb0819922a847df86cdd04ec85
-X-Git-Newrev: 84f79ef4cf4c4c4d9a7d7de63fa6823c8a018472
+X-Git-Oldrev: 9cb5a7f69063fe8eeef3b106e02a743f83f218b8
+X-Git-Newrev: 3f9e201663268c61767e9de43aa71e270e06a9a5
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174643.A289881192@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-mpmath:
- update tarball URL
+Message-Id: <20260107174644.B58D78225F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pixman: fix patch
+ reference in IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,44 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84f79ef4cf4c4c4d9a7d7de63fa6823c8a018472
+commit: https://git.buildroot.net/buildroot/commit/?id=3f9e201663268c61767e9de43aa71e270e06a9a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Updated package as computed by scanpypi.
+Since Buildroot commit [1] the
+`0001-Disable-tests.patch` patch reference
+was removed in favour of a build argument that disable the tests.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This update the reference in IGNORE_CVES accordingly.
+
+[1] ba2fb599cd package/pixman: bump to version 0.44.2
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 15e91103837567245b3486de404a2a2c456a27f6)
+(cherry picked from commit f276648692b898aed8b32d4887a8372209b3cd2c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-mpmath/python-mpmath.hash | 4 +++-
- package/python-mpmath/python-mpmath.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/pixman/pixman.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mpmath/python-mpmath.hash b/package/python-mpmath/python-mpmath.hash
-index 1b263c925f..e402647a59 100644
---- a/package/python-mpmath/python-mpmath.hash
-+++ b/package/python-mpmath/python-mpmath.hash
-@@ -1,3 +1,5 @@
--# Locally computed sha256 checksums
-+# md5, sha256 from https://pypi.org/pypi/mpmath/json
-+md5  d5d17bbefea73eeb959967351d905306  mpmath-1.3.0.tar.gz
- sha256  7a28eb2a9774d00c7bc92411c19a89209d5da7c4c9a9e227be8330a23a25b91f  mpmath-1.3.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  c26cae81da4508e5e249985777a33821f183223ebb74d7f8cfbf90fe7eef2fb7  LICENSE
-diff --git a/package/python-mpmath/python-mpmath.mk b/package/python-mpmath/python-mpmath.mk
-index cd19dd52be..86a3562d04 100644
---- a/package/python-mpmath/python-mpmath.mk
-+++ b/package/python-mpmath/python-mpmath.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 5d29fd7b35..0a6ecaa7dd 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -26,11 +26,10 @@ PIXMAN_CONF_OPTS = \
+ 	-Dlibpng=disabled \
+ 	-Dtests=disabled
  
- PYTHON_MPMATH_VERSION = 1.3.0
- PYTHON_MPMATH_SOURCE = mpmath-$(PYTHON_MPMATH_VERSION).tar.gz
--PYTHON_MPMATH_SITE = https://mpmath.org/files
-+PYTHON_MPMATH_SITE = https://files.pythonhosted.org/packages/e0/47/dd32fa426cc72114383ac549964eecb20ecfd886d1e5ccf5340b55b02f57
- PYTHON_MPMATH_SETUP_TYPE = setuptools
- PYTHON_MPMATH_LICENSE = BSD-3-Clause
- PYTHON_MPMATH_LICENSE_FILES = LICENSE
+-# Affects only tests, and we don't build tests (see
+-# 0001-Disable-tests.patch). See
+-# https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
+-# "not sure why NVD keeps assigning CVEs like this. This is just a
+-# test executable".
++# Affects only tests, and we don't build tests.
++# See https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
++# "not sure why NVD keeps assigning CVEs like this. This is just a test
++# executable".
+ PIXMAN_IGNORE_CVES += CVE-2023-37769
+ 
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
