@@ -1,93 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8675FCEFD01
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 20:30:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2756CEFD05
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 20:31:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 533B16062C;
-	Tue,  6 Jan 2026 20:30:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hgPU4Qgme3K3; Tue,  6 Jan 2026 20:30:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D5E960592
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767731454;
-	bh=aujJvyjQDKheEn7MTmRgHk1DD046KldpJc31XqEjrCQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=XExS+AJVIUMrCxaxnw72HUZplyJHV81BQKKDg/y1sq8KK23REpk7bl7aakcJX+oeW
-	 kjS1dd4Lho/pAKcnO0fW3sYLVRDa3hOxZ7UMNjTTBY7qH5r7xKLyYiEZ6MWGM9ZhWq
-	 VPQi/a3LQquYLXO1qFOghTA5Z3LBIU478Ax1WymAacU1zt6YLSff+C6WpvZS8Tput0
-	 CM1F6E44TaT4bdHNQP7OX6YYxbIjKcdb8RE/cfMHnNrcpOyVRQSSTsHdiga0Mynkob
-	 C5Dl18HAiC1Mg8EmgoNjvo9KTKhL7YxpvWzGPbJuKyqHpvxx6mUvziWWxpZOMx6dZh
-	 5MwPy7q3b5MCQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D5E960592;
-	Tue,  6 Jan 2026 20:30:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E2F112A3
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:30:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9E61807AA
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:30:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EDF681B0A;
+	Tue,  6 Jan 2026 20:31:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eYe-4dkeHAYn for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 20:30:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C0E5480766
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0E5480766
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C0E5480766
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:30:50 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 92513C1E4BC;
- Tue,  6 Jan 2026 20:30:22 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6BB8860739;
- Tue,  6 Jan 2026 20:30:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6FC45103C8412; Tue,  6 Jan 2026 21:30:44 +0100 (CET)
-Date: Tue, 6 Jan 2026 21:30:43 +0100
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Cc: Neal Frager <neal.frager@amd.com>, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, yann.morin@orange.com,
- brandon.maier@collins.com, ju.o@free.fr, romain.naour@smile.fr,
- michal.simek@amd.com, romain.naour@gmail.com
-Message-ID: <20260106213043.5b2cf126@windsurf>
-In-Reply-To: <20260106155630.2404514-1-neal.frager@amd.com>
-References: <20260106155630.2404514-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+ id rEEGFl33exkf; Tue,  6 Jan 2026 20:31:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB3AB81A27
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767731492;
+	bh=J+sgCFZSvyFGes7ecXHL+qf736+T7ryRxiPx5hZM2gs=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lpwy7VYk98iVBB4gunlfXodwqpn8QsRWR1Eq7XGzzvTgbZ7j2fvdHpid4bJ8oG7Pp
+	 6Cc+cY5Yg/XIiDrgAgplxW/zto8Wn1jy6FnrqvPztzKCY5n98sbVB078mec5PTrQIn
+	 p6iOYlSaYP5rbRm89jbtcQ2PX7bBT8MkMVch66Shcnd0VhSHwny7+sfbT0scoXH0PN
+	 dlb8YMskgTEeccnEFyzxTCCpvfUJipb7B6hD8psqYBSIKWsXl0tmygIuNyP5O1Z0yB
+	 gJk0QFg9TDeTEBkd7WamnhWScD12M8yAxK0WfsC+Rz/khXHW3r2mH6tqipITC7SGn2
+	 5JdAOYIRZuGVw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB3AB81A27;
+	Tue,  6 Jan 2026 20:31:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 515FC2A3
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:31:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4257481A27
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:31:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gHMti2wwPC_0 for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 20:31:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BEB2681919
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEB2681919
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BEB2681919
+ for <buildroot@busybox.net>; Tue,  6 Jan 2026 20:31:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 0D6B1200421;
+ Tue,  6 Jan 2026 21:31:25 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 06 Jan 2026 21:31:25 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767731447; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=/H5/D1Do6HQKXd7rjqyW+t2UNKyoFUwfJEyACp36aig=;
- b=nX+Iymr04D7chD5Fbbd+wEJH219U0/lXa3koYE5Z799ciPFReZkpPd8v+MXZ1uBnC+QZkv
- 9rxJhedom9IOlzKZhDUBqKHRPzd4wvdzv0EeOH/PnVFIIZ0LeqtRtyt+2QNtZEMZK+d6lC
- SpjyktKSrrV0nF9A0X/xnIw1Ol2Dt9TXr6SAE7ENlivgTORiZ/JQaR28p3zPhVJZ+d7UAA
- 6rpJhf8FIXtPAEe5lPaJxt0875uH3Z7Otj2rrYBWqmrMh2LYWIERJCr2OsGbv8kjA4jevS
- e6D8HesCRQqogvAsxti2pvn9uys6vd5vEFHEG3r3irLxOsIzy4tkMte4iOKP2g==
+Date: Tue, 06 Jan 2026 21:31:25 +0100
+To: Michael Fischer <mf@go-sys.de>
+Cc: buildroot@busybox.net
+In-Reply-To: <20260106160221.662427-1-mf@go-sys.de>
+References: <20260106160221.662427-1-mf@go-sys.de>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <3600b70caa8df0d81459e903c336bdca@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767731487;
+ bh=coniHS1BdaMj3lh1emC9eWCNysEyj8qLZLbrRkBrxYU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=bPmP7i3J0qYmKcu/gdV/+DnjZlwpIm2KrtWyo7faz0EEyw6/5hcAHE+QbEsh1o9B1
+ cIASm+J4BeuJDX3DeoU08W7W87FZ/JlPgWX9RTANrGtsoDGkpn/ClqYz10dfWyVszB
+ yiTId6YgzpB4OGDR6eCB72K2ygOZ3rNrcuaBYqp1HXenoqW/2qc68gws6w9wQBOtAI
+ 4mHmCU1sXLxe7QlzPsC8Ee+DsPVjslhrZjOiyLez5kb/ZHLwPi5Zfw6nnzzZ5cb/vJ
+ A0/EcZNzJQwSqOiy6rccutkdWkzLSCv7rjfir+AOvjAHheVs8JdAukjTw5HTiPeK1K
+ jMoBhAwK/RSsA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=nX+Iymr0
-Subject: Re: [Buildroot] [PATCH v1 1/4] board/xilinx: add Linux 6.12.60 hash
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bPmP7i3J
+Subject: Re: [Buildroot] [PATCH] package/gnuplot: bump version to 6.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,39 +92,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Neal,
-
-On Tue, 6 Jan 2026 15:56:27 +0000
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
-
-> Add the hash for the Xilinx Linux 6.12.60 release tag.
+On 06/01/2026 17:02, Michael Fischer wrote:
+> For release note, see:
+> http://www.gnuplot.info/ReleaseNotes_6_0_4.html
 > 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
 
-Series applied, thanks!
-
->  # Locally calculated
->  sha256  38aec9ce252ed6a0b64d294d4d58bf51e25b249eefb31b800a5ce62cb084298a  xlnx_rebase_v6.12_LTS_2025.2.tar.gz
-
-Can this hash be dropped now? If all defconfigs have been updated to
-use the new kernel version?
-
-> +sha256  444f573cd4438af1f5062fd69fcc82965a56068e6a25cd43c062a68398f90b03  xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
