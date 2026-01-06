@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E65D9D0D14B
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A319D0D156
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB2A883829;
-	Wed,  7 Jan 2026 18:03:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 090FF4170B;
+	Wed,  7 Jan 2026 18:03:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DtF8bmrG6Whz; Wed,  7 Jan 2026 18:03:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t_TrrMKeIn4Y; Wed,  7 Jan 2026 18:03:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1296F837B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21764416F9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767809019;
-	bh=oFkvNHpinN5nOPyET7IQNzMHasyDtJ8fQRy75g9ltqo=;
+	s=default; t=1767809020;
+	bh=sdhLOaJCjab7E3mCaJdBMQOQ1mkWVtdN6/15V+fiL+U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NAdDNlUvgq9ANRcjSrZ1mUGq0TWx5sYG23sRPapxV6EawHVDkE8HQhRRZdBYYStB7
-	 T7DXc+Eu2helub3h3y6D3moruAhV95+W5C9QwBxTgkHcMz3gxuF1FKSFyLwvRze/bC
-	 5oUyvbOQ98lob+7WCySbJ5Xk7QRMtdh7wxfYJIwOW3miVVnsJl21Zyv0Hxff+F5HQw
-	 3O9Uolk9rhteb6hIN0B1bo8zU4TH9CCd5HLi4z8RZU+dTDt1D0w0J2dk7+biopnUsU
-	 d6+I6PNw9uggClXhIespHEesWiiG+07/137mqinKdxBsGtswBkGTDpo8os4H5gTdLw
-	 Ow1fRrILfakeQ==
+	b=Jt2bxZD4cXZf1BKilhV/8FgLhdLrcCtyj1eZiR1N7fPWyZiABnTpZXBBbj+EBTh50
+	 Ljt5yQrcA74bjQcnPZRz6fM4stqaYSNz8zAbax8jKqKwPs4V3KDvFh2RBf2uY9CLeX
+	 NDiiNuGu7nELVPqRbFbtDktlhFpQZDwpxYaWRkQhy8Nc0DArZMrxdwF1vvjWlFZlC/
+	 eA9mpgwkozQn+IfOzWJ81qcQtohyfyS3PPk2tCZsR7XN+o6kjE+A1I43gM0DEY4V/a
+	 Hl3l6RvT16hgsWz6DmBh7RYfLU2nzNMWQHwYzXqsLGfyDMkIK18lx2JVcQWbYwn5JZ
+	 AYwqk39BbRECw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1296F837B6;
-	Wed,  7 Jan 2026 18:03:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21764416F9;
+	Wed,  7 Jan 2026 18:03:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1313425B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F5709ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B04F080F37
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1422C80EDB
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LpGcXCK13_bx for <buildroot@buildroot.org>;
+ id Jg7nJ-N4qgZO for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8285C81421
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53AC28116E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8285C81421
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53AC28116E
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8109D80333; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ id 4EF0480333; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:07:25 +0100
+Date: Tue, 6 Jan 2026 09:02:34 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: bae0e9a4534c569869dd2596874515403c1959b3
-X-Git-Newrev: f409cf24525ad3d83437576c3bec5e5b0b00a21d
+X-Git-Oldrev: b7a154df972035aa78343f5a38d3707c821ee956
+X-Git-Newrev: 618b0c68222f0a3e93360cd20a791324f827a0dd
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180115.8109D80333@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/dovecot: add CVE
- trailer in patch
+Message-Id: <20260107180115.4EF0480333@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/collectl: switch
+ to GitHub
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,36 +77,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f409cf24525ad3d83437576c3bec5e5b0b00a21d
+commit: https://git.buildroot.net/buildroot/commit/?id=618b0c68222f0a3e93360cd20a791324f827a0dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+development no longer on https://sourceforge.net/projects/collectl/
+but documentation still on https://collectl.sourceforge.net/
 
-This patch adds the relevant information to the patch header.
-
-[1] 1167d0ff3d docs/manual: mention CVE trailer
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eb0dde58b3f0fa6cd3120343094634fc8a13412d)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f8b9a50a0e6579abacdacdb920cfbde26347f5f9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch      | 1 +
- 1 file changed, 1 insertion(+)
+ package/collectl/Config.in     | 2 +-
+ package/collectl/collectl.hash | 2 +-
+ package/collectl/collectl.mk   | 3 +--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-index 04b8f5392a..99a2b83563 100644
---- a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-+++ b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-@@ -12,6 +12,7 @@ Fixed by moving mechanisms and username_filter from struct passdb_module
- to struct auth_passdb, which is where they should have been in the first
- place.
+diff --git a/package/collectl/Config.in b/package/collectl/Config.in
+index 28379abe25..7a62c935ec 100644
+--- a/package/collectl/Config.in
++++ b/package/collectl/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_COLLECTL
+ 	  disk, inodes, infiniband, lustre, memory, network, nfs,
+ 	  processes, quadrics, slabs, sockets and tcp.
  
-+CVE: CVE-2022-30550
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-  src/auth/auth-request.c |  6 +++---
+-	  http://collectl.sourceforge.net/
++	  https://collectl.sourceforge.net/
+diff --git a/package/collectl/collectl.hash b/package/collectl/collectl.hash
+index 1785d25d87..6714e2afcc 100644
+--- a/package/collectl/collectl.hash
++++ b/package/collectl/collectl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  9fab4769441c07201748e52c7f8c7b21526ab45a05142dd2b2b1fa5c16c38750  collectl-4.3.2.src.tar.gz
++sha256  552bdbe9e97071767bf0871789e19ede7d2827b68824e75da9cd7664218ea440  collectl-4.3.2.tar.gz
+ sha256  b92800d37afa2aa03c02817ff3b68efc7236436fe76af06ad9b1fc4682f59bcb  ARTISTIC
+ sha256  264fe27852db5624e6a9a9845b4e14e91ee5007305b33e5556dfade394d578a8  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL
+diff --git a/package/collectl/collectl.mk b/package/collectl/collectl.mk
+index c6cb2e1494..358f8e3cb6 100644
+--- a/package/collectl/collectl.mk
++++ b/package/collectl/collectl.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ COLLECTL_VERSION = 4.3.2
+-COLLECTL_SOURCE = collectl-$(COLLECTL_VERSION).src.tar.gz
+-COLLECTL_SITE = http://downloads.sourceforge.net/collectl/collectl
++COLLECTL_SITE = $(call github,sharkcz,collectl,$(COLLECTL_VERSION))
+ COLLECTL_LICENSE = Artistic or GPL-2.0
+ COLLECTL_LICENSE_FILES = COPYING ARTISTIC GPL
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
