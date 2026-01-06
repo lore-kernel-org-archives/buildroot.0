@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65FDFD0D14F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD34D0D150
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32F0640240;
+	by smtp1.osuosl.org (Postfix) with ESMTP id A090080CB1;
+	Wed,  7 Jan 2026 17:46:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ueCxVDkyBeWo; Wed,  7 Jan 2026 17:46:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC20980CD5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808010;
+	bh=UJpNcKrnwPm510nJsEyLYGHWotNi+zNff/u7ZbwWrYQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=A4dQZ42FiuXs6OsggCCU4jq9hrswsGpHmunngt9gEhQ6mlvbf+LYTfPjVriu+8/Cy
+	 kx+uDSZahtQ8uqGMvP9qT42kKjTN9cbHFHN5e/tD+z1f+sQIYD/q9E7RYSqv3wxtj5
+	 o2OnmgL8DjwuiiJCK4EsJYIEsPS+f4t9TPufzhH9wy33rXvbVrOhiUxdIV3VZOriY9
+	 EXhtwek6VA7KIRV9HhZ3FCvhjWe5NGgEQlHL44CrTUOf8PdIMB6vZsvRT3JKlZ1rt9
+	 MCSfI2tulmBpA41Mku3SYkxinNbN+fFhmbEQmiXpALV0EeUBKvUlrbnZBQWXfeSbJ8
+	 tz9hTcEO1YV+g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC20980CD5;
 	Wed,  7 Jan 2026 17:46:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2196625B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55CEB4085E
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o7-lQ4utDhQE; Wed,  7 Jan 2026 17:46:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52E3F40871
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808009;
-	bh=FA08bsDKOVoHILV4y3BtquHCU/sDSE4xU2z/hS+Xdmg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VUAtJ4S+G5ca8df/+z2HtOo3+Ccn4glc+UKNeMcB3obrZrAc6LYBzWtnDnCcfaEf8
-	 arLclpxsxk036qyZ5I2+Hdn3Ko6jcqvfPJu0sJh2NNfrsIgOvxQdPmciXTi3iR64o6
-	 SHAOXPu3XF/zqWoS65xXjD004AFyfZvg+osW1TX7sDA6/NjUjhGP4A5tsmOqer9GAu
-	 tRwP7MolsogfauNHyBVRrg6RCh3PFjkGZHRiNPdaqpCCsrSsF8GvJgy50lVelQU7lO
-	 EoyqZi3QPhNLT3eduUgxavyf0YmHja+W42wY7O6GqdBerC78NQzo5kv6UCoaAl6YV8
-	 fBnLs2vj3e5nQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52E3F40871;
-	Wed,  7 Jan 2026 17:46:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CE14A58
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55AF660895
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RIjbFHrsPhNG for <buildroot@buildroot.org>;
+ id DFgw-nSk5rHY for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5448C607FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 925AC4085F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5448C607FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 925AC4085F
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 501AF88354; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
+ id 9162888367; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Dec 2025 10:31:46 +0100
+Date: Tue, 6 Jan 2026 09:16:38 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c527be5f24f385b045971357dbf6bc230c2539fe
-X-Git-Newrev: ccd8a00240c8d8a985c0bd24dff806879aab8caa
+X-Git-Oldrev: 2d40b04b7c799d50d50098a2506d798bef0f36a2
+X-Git-Newrev: ddf4033924cd923afc89230d21d19eca55652e5b
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174640.501AF88354@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libfcgi: update
- to 2.4.6
+Message-Id: <20260107174640.9162888367@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/php: security
+ bump to v8.3.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccd8a00240c8d8a985c0bd24dff806879aab8caa
+commit: https://git.buildroot.net/buildroot/commit/?id=ddf4033924cd923afc89230d21d19eca55652e5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Announcement:
-- https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.6
+For more information on the release, see:
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 97e52b323c8940d6022e39451cc4e7c9500a8081)
+- https://www.php.net/ChangeLog-8.php#8.3.29
+- https://www.php.net/ChangeLog-8.php#8.3.28
+- https://www.php.net/ChangeLog-8.php#8.3.27
+- https://www.php.net/ChangeLog-8.php#8.3.26
+- https://www.php.net/ChangeLog-8.php#8.3.25
+
+Fixes the following security issues:
+
+- CVE-2025-14180
+
+For more information, see:
+  - https://github.com/php/php-src/security/advisories/GHSA-8xr5-qppj-gvwj
+
+- CVE-2025-14178
+
+For more information, see:
+  - https://github.com/php/php-src/security/advisories/GHSA-h96m-rvf9-jgm2
+
+- CVE-2025-14177
+
+For more information, see:
+  - https://github.com/php/php-src/security/advisories/GHSA-3237-qqm7-mfv7
+
+(cherry picked from 15258031791d34692d0784545fae7b0456064d22)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libfcgi/libfcgi.hash | 2 +-
- package/libfcgi/libfcgi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/0006-Sync-headers-installation.patch | 21 +++++----------------
+ package/php/php.hash                             |  2 +-
+ package/php/php.mk                               |  2 +-
+ 3 files changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-index 371dba8939..348b0b6867 100644
---- a/package/libfcgi/libfcgi.hash
-+++ b/package/libfcgi/libfcgi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  92b0111a98d8636e06c128444a3d4d7a720bdd54e6ee4dd0c7b67775b1b0abff  libfcgi-2.4.5.tar.gz
-+sha256  39af4fb21a6d695a5f0b1c4fa95776d2725f6bc6c77680943a2ab314acd505c1  libfcgi-2.4.6.tar.gz
- sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-index 2348af843b..e0ef6da55c 100644
---- a/package/libfcgi/libfcgi.mk
-+++ b/package/libfcgi/libfcgi.mk
+diff --git a/package/php/0006-Sync-headers-installation.patch b/package/php/0006-Sync-headers-installation.patch
+index da1c6a6e4c..3c4e6b1779 100644
+--- a/package/php/0006-Sync-headers-installation.patch
++++ b/package/php/0006-Sync-headers-installation.patch
+@@ -22,9 +22,11 @@ systems by installing only what is intended outside of php-src.
+ Closes GH-13210
+ Closes GH-13213
+ 
++Upstream: https://github.com/php/php-src/commit/52dba99d47563f38d8ed5f84690a3cb2c1785475
+ [Thomas: minor backporting tweaks]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/php/php-src/commit/52dba99d47563f38d8ed5f84690a3cb2c1785475
++[tperale: xxhash include fixed in https://github.com/php/php-src/commit/be8819259417d63b389eb9ea6c00abd6aeb8e1c6]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+ ---
+  ext/date/config.w32        |  2 +-
+  ext/dom/config.m4          |  2 +-
+@@ -190,26 +192,13 @@ index d38b032efd3..bafbd0b9f8d 100644
+ -									'php_hash_murmur.h php_hash_xxhash.h');
+ +									'php_hash_murmur.h php_hash_xxhash.h php_hash_fnv.h ' +
+ +									'php_hash_joaat.h xxhash/xxhash.h');
+-diff --git a/ext/hash/php_hash_xxhash.h b/ext/hash/php_hash_xxhash.h
+-index a1e8840ce27..ace70deedb0 100644
+---- a/ext/hash/php_hash_xxhash.h
+-+++ b/ext/hash/php_hash_xxhash.h
+-@@ -18,7 +18,7 @@
+- #define PHP_HASH_XXHASH_H
+- 
+- #define XXH_INLINE_ALL 1
+--#include "xxhash.h"
+-+#include "xxhash/xxhash.h"
+- 
+- typedef struct {
+- 	XXH32_state_t s;
+ diff --git a/ext/iconv/config.m4 b/ext/iconv/config.m4
+ index 3cf400fe962..63221eddb0b 100644
+ --- a/ext/iconv/config.m4
+ +++ b/ext/iconv/config.m4
+-@@ -149,7 +149,7 @@ int main(void) {
++@@ -163,7 +163,7 @@ int main(void) {
+  
+-     PHP_NEW_EXTENSION(iconv, iconv.c, $ext_shared,, [-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1])
++     PHP_NEW_EXTENSION(iconv, iconv.c, $ext_shared,, [-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -DICONV_CONST=$php_cv_iconv_const])
+      PHP_SUBST(ICONV_SHARED_LIBADD)
+ -    PHP_INSTALL_HEADERS([ext/iconv/])
+ +    PHP_INSTALL_HEADERS([ext/iconv], [php_iconv.h])
+diff --git a/package/php/php.hash b/package/php/php.hash
+index dbb130f30b..02ebf1b0f6 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  388ee5fd111097e97bae439bff46aec4ea27f816d3f0c2cb5490a41410d44251  php-8.3.24.tar.xz
++sha256  f7950ca034b15a78f5de9f1b22f4d9bad1dd497114d175cb1672a4ca78077af5  php-8.3.29.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 5460f440cb..37dabdcd1a 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFCGI_VERSION = 2.4.5
-+LIBFCGI_VERSION = 2.4.6
- LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
- LIBFCGI_LICENSE = OML
- LIBFCGI_LICENSE_FILES = LICENSE
+-PHP_VERSION = 8.3.24
++PHP_VERSION = 8.3.29
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
