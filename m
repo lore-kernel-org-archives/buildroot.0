@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73614D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC9DED0D155
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 459BF413FA;
-	Wed,  7 Jan 2026 18:02:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yRamkDAxy8M1; Wed,  7 Jan 2026 18:02:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 438A940D6D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808946;
-	bh=FFpf+PAYOJ3xjnohyj/fCti7i1sYsa4bn6Ua3aWHNZg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rKkXZ8nFJXD0tcLWfMS1u5JeeD2lc9AZR4g046s3WBzr/AJLybHanuRZfRlyGqq6l
-	 CklKgkAicS06TyISlidnEqojpjn5qcOv74xSx2+WK3/hJ1cH4RXoubSTKnbaLa6VFZ
-	 pvqgc+ybDpgbpI30p/4MsyHjc0QTm/g9CY1EVWnikHP8ihQr34x9VTmFx/iiG25F0J
-	 Olp6Or0E6CMVyNcnFz4+KPyWKhL+qHIF9WDOEmPd+5HwRx9OValCz/6lFmPGbi4Jg4
-	 OrGf5TJPsAIBvOqYOdk5uqQ9wi+A95QnCMVqUL0OtPbWJd+JOXOcQktdPSB+3r8K9w
-	 qtdcJhoWKktGA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 438A940D6D;
-	Wed,  7 Jan 2026 18:02:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DFFBA58
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE20781124
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84A1F82FDE;
+	Wed,  7 Jan 2026 18:02:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fsef7oZZ6D6a for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ id fQOR9OZEvle2; Wed,  7 Jan 2026 18:02:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4FF183026
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808947;
+	bh=unSG8eJRiwXT0xmh0cVwl7+CXDOoo/rJec3tW8XdoJo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=AY1W4P86Kd2A1NwOtJO8/P6EfMND941hXnau273Y7Namqz04vVfBqUwD6JYW1lZ+i
+	 AQ8RZu7AYp3oYnKhk+vGZ7IzVLJK+Kw57vBQ7k37CkxEW9azWVlFjuf8qbppZ+70Zq
+	 P5FvZieR2jix4Jsjljs/1vIidGWr5KAQjlQnLNX+Lp942ZXUM3gGcfxRQmAnWYcJuS
+	 AOg0HQP9hddIPIo+7EnwmFD2p1U9upSBWX17ngxi7ca3PccV0KFxDpV/YUEt4UiIFG
+	 5u5InHmEAXP5p1tvReloIL2b1U1csMICeWtOxFFFTnaTHZ1OE7ZINiW0OSn10JHNaH
+	 a3nVTqlB5gf4w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4FF183026;
+	Wed,  7 Jan 2026 18:02:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C4249ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 96271608C6
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fF6q7Na3Yqsf for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 247AF8107F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 897F960895
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 247AF8107F
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 897F960895
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2262C8268F; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ id 893F2811C5; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:55:24 +0100
+Date: Tue, 6 Jan 2026 09:07:46 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: c7684b92f67509c82c884972e3fbf0604223985b
-X-Git-Newrev: 934795b78d383863d7385c0a8c5c03e44e5733e2
+X-Git-Oldrev: f409cf24525ad3d83437576c3bec5e5b0b00a21d
+X-Git-Newrev: d7c3aa1413de33188bb3f0065183836edeb00264
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180113.2262C8268F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/matchbox-panel:
- add patch fixing GCC 14.x build issue
+Message-Id: <20260107180115.893F2811C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/avahi: add CVE
+ trailer in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,84 +72,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5156756727352472343=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5156756727352472343==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=934795b78d383863d7385c0a8c5c03e44e5733e2
+commit: https://git.buildroot.net/buildroot/commit/?id=d7c3aa1413de33188bb3f0065183836edeb00264
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Fixes:
+Since Buildroot commit [1] the patches that fixes a security
+vulnerability needs to reference the fixed vulnerability.
 
-mb-applet-launcher.c: In function ‘get_launch_window’:
-mb-applet-launcher.c:269:18: error: implicit declaration of function ‘time’ [-Wimplicit-function-declaration]
-  269 |   time_t stime = time(NULL);
-      |                  ^~~~
+This patch adds the relevant information to the patch header
+and adds the `Upstream` trailer.
 
-No autobuilder failures, it was hidden by other failures.
+[1] 1167d0ff3d docs/manual: mention CVE trailer
 
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d5bb2902ec53070ac2db82f77f45f1e0fc3ab160)
+(cherry picked from commit cef136b5f09827a8d1e98a0dce0380449ed61cd4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...s-mb-applet-launcher.c-add-missing-time.h.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ .checkpackageignore                                        | 1 -
+ package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/matchbox-panel/0005-applets-mb-applet-launcher.c-add-missing-time.h.patch b/package/matchbox-panel/0005-applets-mb-applet-launcher.c-add-missing-time.h.patch
-new file mode 100644
-index 0000000000..999394157d
---- /dev/null
-+++ b/package/matchbox-panel/0005-applets-mb-applet-launcher.c-add-missing-time.h.patch
-@@ -0,0 +1,36 @@
-+From 7608e4f755b1fb3a99c387c58f79b0c4b6aadfbe Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 27 Dec 2025 23:53:23 +0100
-+Subject: [PATCH] applets/mb-applet-launcher.c: add missing <time.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+mb-applet-launcher.c: In function ‘get_launch_window’:
-+mb-applet-launcher.c:269:18: error: implicit declaration of function ‘time’ [-Wimplicit-function-declaration]
-+  269 |   time_t stime = time(NULL);
-+      |                  ^~~~
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: N/A, dead
-+---
-+ applets/mb-applet-launcher.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/applets/mb-applet-launcher.c b/applets/mb-applet-launcher.c
-+index 08a6a10..f7685de 100644
-+--- a/applets/mb-applet-launcher.c
-++++ b/applets/mb-applet-launcher.c
-+@@ -26,6 +26,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <signal.h>
-++#include <time.h>
-+ 
-+ #ifdef USE_LIBSN
-+ #define SN_API_NOT_YET_FROZEN 1
-+-- 
-+2.52.0
-+
-
---===============5156756727352472343==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 870d7b0c49..d089609208 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -218,7 +218,6 @@ package/attr/0001-build-with-older-GCCs.patch lib_patch.Upstream
+ package/aumix/0001-fix-incorrect-makefile-am.patch lib_patch.Upstream
+ package/autoconf/0001-dont-add-dirty-to-version.patch lib_patch.Upstream
+ package/automake/0001-noman.patch lib_patch.Upstream
+-package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch lib_patch.Upstream
+ package/avahi/S05avahi-setup.sh lib_sysv.Indent lib_sysv.Variables
+ package/avahi/S50avahi-daemon lib_sysv.Indent lib_sysv.Variables
+ package/babeld/S50babeld Shellcheck lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+index 7e191e8da7..c2c6434196 100644
+--- a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
++++ b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+@@ -9,8 +9,8 @@ Add missing NULL pointer checks to fix it.
+ 
+ Introduced in #175 - merge commit 8f75a045709a780c8cf92a6a21e9d35b593bdecd
+ 
+-[Retrieved from:
+-https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c]
++CVE: CVE-2021-36217
++Upstream: https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  avahi-core/browse-dns-server.c   | 5 ++++-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5156756727352472343==--
