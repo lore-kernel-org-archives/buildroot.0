@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9AEACEFCFA
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 19:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17218CEFCF2
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 19:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFAC560BAC;
-	Tue,  6 Jan 2026 19:26:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9159581CEF;
+	Tue,  6 Jan 2026 19:30:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QFyayXzKe6Ci; Tue,  6 Jan 2026 19:26:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xaqOtVPtWnp0; Tue,  6 Jan 2026 19:30:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 280C8606F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2AF181CD0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767727592;
-	bh=Ga7gqo7SJ269A3Ls+lPjMm+veEUw+0r3tBqXX+DyGx8=;
+	s=default; t=1767727821;
+	bh=PIc++MIGinRojj0Vg2SE9OAlV77GVEZZfVrvtqd3aks=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=FP8vl+J6fbJ0buBB/Uo481tvsE00u0LlLmHEPG3XjQgC0vmyJmP8iCLGw89obgQyJ
-	 GH1otyPMPun2zQfFF5EQ7CsIVdTKjn2YPSlCMfTyb70mCCy1S3XpEHYXqUU9j6Qe6O
-	 0lYwymqZfhqdhOVqN4mlTmdN73IOJnmnDMdD+tPExetmbF3p5YNiPCyOxYDzjDudIu
-	 789z1esGHEOiPSmxAwD9vKjNZdeh0ihqVnLBv6eMDXApmoQB07Ky+hhQcp7dT1Tcc1
-	 +ntr2hONLGg8ZmSMA+GkkoGM2juhb+8AAodrdUjxOKgNra4JZqno3K0IYtePB3Ygqp
-	 FLiYL6pwL+Rwg==
+	b=UQZTHhiAhwXu/6vib2Htr2L4N0g6YYq2BrOSM7RiPft1BGwsC8Y7lvd2vpLWzMs6j
+	 KQkqbmS6ULJep+KJcadn4zawalrxLDC2cWX3/yPZZ4zQtfgzhPjRGCshn0nkeBcgS+
+	 cbZu8b9YZztK3oxwD0LXbyQJioioZKJRJcE5XW9kBCJBwUN3wa28pk6CirWF8UioQk
+	 xKt1A9vkIqB8i9cp85dsGki1O0O5ckwIYu6W+7suCDCLOXePm2bP/0QRR/VEgdQ6XI
+	 vRieIEdB1ZoFDwOIa17IjlPzjiKvcA7kzG54gty+EAZJdXvi2YEzRO0wCCqm5Vd9kY
+	 kyW1BJVs+yIFQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 280C8606F4;
-	Tue,  6 Jan 2026 19:26:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C6E93249
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:26:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2AF181CD0;
+	Tue,  6 Jan 2026 19:30:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25B4D70B
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B788E606F4
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:26:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17CFA408D8
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:30:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FJ6jHvM4Ptvz for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 19:26:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R8O67kSEDTWF for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 19:30:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 83584606E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83584606E9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 08642408D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08642408D6
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 83584606E9
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:26:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 08642408D6
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:30:19 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 75B67A4C3734;
- Tue,  6 Jan 2026 20:26:27 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57190)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 809F5A4C3734;
+ Tue,  6 Jan 2026 20:30:17 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51454)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vdChH-000000004m0-05Vf;
- Tue, 06 Jan 2026 19:26:27 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vdCkz-000000005Ug-0SIf;
+ Tue, 06 Jan 2026 19:30:17 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Simon Dawson <spdawson@gmail.com>
-Date: Tue,  6 Jan 2026 20:26:26 +0100
-Message-ID: <20260106192626.1712153-1-bernd@kuhls.net>
+Cc: Baxiche Su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue,  6 Jan 2026 20:30:13 +0100
+Message-ID: <20260106193017.1817810-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1767727587;
- bh=WrWeL14oeNQvRx4hi0s8RxUdbV5gcCR5VtbQtJllVJs=;
+ s=kas202511301023; t=1767727817;
+ bh=ZPJRElHk31hX9tgCXLoQ322qrrAT8ML9yjOyz/VxM6o=;
  h=From:To:Cc:Subject:Date:From;
- b=sTVS7moW2IhBJJca55i9u62IA+GY6EyuwK22sBv4wojoFGIHpUV7E+z2p3A3Ksk5R
- ZT/XdEpgAcHu2DosisZllkdzSLS1e5+9zIlxNnpKeHFp10pJnz97tLK1b5LfVkyzLv
- OANOG27WCz3mDrq8Ds9269oIVmZvccTyhccC5n5nMVGSbupNQopIGaJQLcyG2FARmm
- DNhWaBrRQ5X00tAU/9XP05T665x/W9kUUZgWUCZuw/Gctf6/j3x2zkk11eZmnd9/qm
- pX7AOLTXgDwNwz4cjoiHQ01hwgi5yELZoCBONDYCNQ9vSL/6TZXXLHjShlvWGztBC7
- ExKzDUZgkcbmA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=YZGnxY1VzZ0+uAAE/JOjqyiSzXmK71i7BWNZGZAh+EkPu4xNzfPgxBxSF9Wu0vBtt
+ XXKGSD/qZd51RFSOv9WLprFLTOlTvVTtZKR/kDnTsnxiX2aqaSlVap4GVv0xKXerGb
+ vWVft6Phg/5J9Fbf/1QZA5O2dXmX2IUiNFO0mOlH9U4IpV5Nfoo53aTRBAr322VGe0
+ sIWQxupWgSBm0zmtwWRRx7vAvYLzSEGM5vkD9iOixxL8EoYZfn0hi6rrjBHtvk8Ptz
+ F4aAPYsl8EO7n+4akgBdiHfLuXs1/vKrGJHHMpStFw+QV8wqCMqHajkINQyyj580tc
+ Zn1/ybaodFs4w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=sTVS7moW
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump to version 3.0.23
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=YZGnxY1V
+Subject: [Buildroot] [PATCH v3 0/3] Build fixes for ffmpeg 8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,51 +99,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://code.videolan.org/videolan/vlc/-/blob/3.0.23/NEWS
-"Security:
- * Fix null deref in libass, undefined shift in theora and cc-708,
-   integer overflow in daala, Infinite loop in h264 parsing, buffer
-   overflow in png and multiple format-overflows"
+Hi,
 
-https://code.videolan.org/videolan/vlc/-/tags/3.0.23
-"It also adds a small feature on audio codec information, and fixes extra
- security issues compared to the numerous we fixed in 3.0.22."
+this series adds patches to fix build errors which would occur with the
+upcoming bump of ffmpeg from 6.1.3 to 8.0.1, no backports in buildroot
+necessary.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/vlc/vlc.hash | 8 ++++----
- package/vlc/vlc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+All patches are compatible with the current ffmpeg version used in
+buildroot and are tested using this defconfig:
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 6733a870b1..9634ba3f1f 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha256
--sha256  e2cc1cf0ae0902a09da5a37c249a8a4e4b5ec4dc095443b8e1493c6a7cc138ea  vlc-3.0.22.tar.xz
--# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha1
--sha1  f9871439cdb281e18a78828c389cf7bf66d47d69  vlc-3.0.22.tar.xz
-+# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha256
-+sha256  e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0  vlc-3.0.23.tar.xz
-+# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha1
-+sha1  7b8c00a9c5bb879a403d5328c99924eefe01739a  vlc-3.0.23.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 9091a7e7fa..07aeefd193 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 3.0.22
-+VLC_VERSION = 3.0.23
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_FREERDP=y
+BR2_PACKAGE_QT6=y
+BR2_PACKAGE_QT6MULTIMEDIA=y
+BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG=y
+BR2_PACKAGE_FREESWITCH=y
+
+To my knowledge the only remaining package which gets broken if the
+ffmpeg version bump[1] would be applied without further changes is kodi.
+The Kodi project prepares version 22.0 which includes compatibility with
+ffmpeg 8.0 and is currently at alpha2 stage.
+
+The current version of libcamera-apps is broken with ffmpeg 8.0 as well
+but version 1.10.1 adds compatibility with ffmpeg 8.x while removing
+support for older ffmpeg versions like the one used by buildroot:
+https://github.com/raspberrypi/rpicam-apps/commit/cbe9921eeddd8e1c2e5798102f485baea5de3f65
+
+../encoder/libav_encoder.hpp:33:2: error: #error "Error: libavcodec API version is too old for the libav encoder!"
+   33 | #error "Error: libavcodec API version is too old for the libav encoder!"
+
+Regards, Bernd
+
+[1] https://github.com/bkuhls/buildroot/commit/d8dbe78d03a8d3ded297328a3737fc49ba230cf1
+
+v3: removed vlc from series, patches are included in 3.0.23 bump
+v2: removed libcamera-apps from series
+
+Bernd Kuhls (3):
+  package/freerdp: fix build with ffmpeg 8.0
+  package/freeswitch: fix build with ffmpeg 8.0
+  package/qt6/qt6multimedia: fix build with ffmpeg 8.0
+
+ .../0005-fix-ffmpeg-deprecations.patch        | 146 ++++++++++++++++++
+ .../0006-fix-ffmpeg-deprecation-warning.patch |  34 ++++
+ .../0007-FF_PROFILE-Depreciation-Fix.patch    |  31 ++++
+ .../0008-ignore-EAGAIN-for-FFMPEG.patch       |  44 ++++++
+ package/freerdp/freerdp.mk                    |   4 +-
+ package/freeswitch/0004-ffmpeg8.patch         |  52 +++++++
+ package/qt6/qt6multimedia/0001-ffmpeg8.patch  |  39 +++++
+ 7 files changed, 349 insertions(+), 1 deletion(-)
+ create mode 100644 package/freerdp/0005-fix-ffmpeg-deprecations.patch
+ create mode 100644 package/freerdp/0006-fix-ffmpeg-deprecation-warning.patch
+ create mode 100644 package/freerdp/0007-FF_PROFILE-Depreciation-Fix.patch
+ create mode 100644 package/freerdp/0008-ignore-EAGAIN-for-FFMPEG.patch
+ create mode 100644 package/freeswitch/0004-ffmpeg8.patch
+ create mode 100644 package/qt6/qt6multimedia/0001-ffmpeg8.patch
+
 -- 
 2.47.3
 
