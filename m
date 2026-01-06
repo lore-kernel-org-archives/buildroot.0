@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CB1AD0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E678D0D14F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 128C180F1A;
-	Wed,  7 Jan 2026 17:48:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 312B940C79;
+	Wed,  7 Jan 2026 17:48:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ATYCHyp0xzaf; Wed,  7 Jan 2026 17:48:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nzs3q2c6GGFR; Wed,  7 Jan 2026 17:48:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39538822BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5022440C8A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808125;
-	bh=mgUeImGXw6MMrEkaXh4sfaSMHTdNrCJn0SGwx5Vye1c=;
+	s=default; t=1767808126;
+	bh=2JXIlt+ys1OCXFfVJwXHM1Km2mXuGWCDalVAjm9Zyx8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UXRg/PO+RQX5l18+DG3cM7hOZjRyDBSNsh7b/gc3UuY/v+0226w8Dp/iL2oGz41Xo
-	 kZlPaAmLHFqDEPbVJe0kYYlnv5tsvzPQkx9U/3L8qdSxyZIhGlgajXVxeMPlcn5aJl
-	 +I73c4ACEQUVUAJ/u150DPMj8p9N9TvQruzIthLoJ5AO/VJfsUGeMEQvZE5M2y/93h
-	 A8GOgiSG/uygjQKkmK7qGhf5VWxigldZ9k7FI0glqs/3pHuu2+QUPdm+02GwGWZtoR
-	 YD+KQAdnnrgXuJ4ZeZXanND1WdeMeNtW4LrUUtHvBl5boF97lDY9ObM5aAENAdWzV5
-	 tABkBbZyowekQ==
+	b=lxrmhzrFXmdzzu4aoD/KNWqeUYpG5WJjgB3Cg1OleknJUZQoMrFAIr3pW+fbq1wdQ
+	 3DD488Y7RV7KVcuiYGASle+P1U5wpA4QPRXHa+dbYQgF7Br0JBoqEhiDT+iou1nwJ9
+	 Hl5AvinZxSP9obT/hhEzlQ3TOjQgha+tz3xVtOHd+s2dz4yOpamf0JPnlAkHCUVx/o
+	 VkgEXsVBOthRszGm1mYVQRsdeuS4NeK5HW6EmekIon2s0mW++7LBahLxefwXRiY2nw
+	 GrTqjKcx30MH892gv6Pv+iMTSj1iXQhlOxTplUOxH77G1nA6U5Q2Zph+q1iJOwU4WX
+	 sEBR2QgQjdsTA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39538822BD;
-	Wed,  7 Jan 2026 17:48:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D51F25B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5022440C8A;
+	Wed,  7 Jan 2026 17:48:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4489125B
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30D2680A96
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 227B86085E
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nAuPXaHiv_Oy for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:46:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d7x4Kanty516 for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CC5480CCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 366796087F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CC5480CCF
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 366796087F
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4BFE58225F; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+ id 36032883AA; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:19:22 +0100
+Date: Tue, 6 Jan 2026 09:17:16 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2f7a2dcdd2377ebd7d37cfc1c907842e185c97a0
-X-Git-Newrev: 86215951ee3b359375d9d8733ed62177ff674bbc
+X-Git-Oldrev: eb3e03b7447d74ca6cb00f14e1ec0eed74e20ab4
+X-Git-Newrev: 3e2a4318cc6eabeea13857e46b820bde222b7111
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174644.4BFE58225F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/x11vnc: add CVE
- trailer in patch
+Message-Id: <20260107174641.36032883AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/vim: inline the
+ VIM_REMOVE_DOCS variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,36 +77,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86215951ee3b359375d9d8733ed62177ff674bbc
+commit: https://git.buildroot.net/buildroot/commit/?id=3e2a4318cc6eabeea13857e46b820bde222b7111
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+The VIM_REMOVE_DOCS variable is currently a post install target hook,
+but it can just as well be done inside VIM_INSTALL_TARGET_CMDS
+directly.
 
-This patch adds the relevant information to the patch header.
+The hook was registered conditionally based on BR2_PACKAGE_VIM_RUNTIME
+because prior to commit f7a07f42f70a73806fd2f6bf3662fc6907845fe9, the
+hook's logic was:
 
-[1] 1167d0ff3d docs/manual: mention CVE trailer
+    find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+which was failing if BR2_PACKAGE_VIM_RUNTIME was not enabled, as
+$(TARGET_DIR)/usr/share/vim would not exist.
+
+But since this commit, the hook logic is:
+
+    $(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc/
+
+which obviously won't fail if $(TARGET_DIR)/usr/share/vim doesn't
+exist.
+
+So let's simplify the whole logic.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6244163284a05ae38a819abcb7b65e03b04102dd)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 7bcc99b57b2b021daf72cfc4604708e3138736f6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0002-scan-limit-access-to-shared-memory-segments-to-curre.patch      | 1 +
- 1 file changed, 1 insertion(+)
+ package/vim/vim.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-curre.patch b/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-curre.patch
-index 05977375d8..015a8c4c41 100644
---- a/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-curre.patch
-+++ b/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-curre.patch
-@@ -3,6 +3,7 @@ From: =?UTF-8?q?Gu=C3=A9nal=20DAVALAN?= <guenal.davalan@uca.fr>
- Date: Wed, 18 Nov 2020 08:40:45 +0100
- Subject: [PATCH] scan: limit access to shared memory segments to current user
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index d250ac6b59..77d3ac35ad 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -58,9 +58,6 @@ define VIM_INSTALL_TARGET_CMDS
+ 	$(RM) -f $(TARGET_DIR)/usr/bin/{ex,view,rvim,rview,vimdiff}
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
+ 		$(VIM_INSTALL_TARGETS)
+-endef
+-
+-define VIM_REMOVE_DOCS
+ 	$(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc/
+ endef
  
-+CVE: CVE-2020-29074
- Upstream: https://github.com/LibVNC/x11vnc/commit/69eeb9f7baa14ca03b16c9de821f9876def7a36a
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
+@@ -77,10 +74,6 @@ endef
+ endif
+ VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
+ 
+-ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
+-VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
+-endif
+-
+ HOST_VIM_DEPENDENCIES = host-ncurses
+ HOST_VIM_CONF_OPTS = \
+ 	--with-tlib=ncurses \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
