@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14266D0D155
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9242BD0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE4704083A;
-	Wed,  7 Jan 2026 18:02:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A3A283196;
+	Wed,  7 Jan 2026 18:02:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G9qQmPbws3S8; Wed,  7 Jan 2026 18:02:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EU9WUVmwEv5y; Wed,  7 Jan 2026 18:02:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAC72414D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E45383264
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808964;
-	bh=V3j4Bq9s9DePv85Ys3/MqNHy2HiSfQrLk5ExjE6zcJc=;
+	s=default; t=1767808966;
+	bh=Z/Z2wYO/RX+eJ1jOjtzMo9DIjAPCrAN18TuALXRFow0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TAn7F9xLhmxKM1Y4sN+4oRHoXFy/7TCjxuaUm27K0OmkziIyP2SsPAKs3avSAcv2t
-	 wP5OngGFB61DwCYKonTF6Y5D9kl+6C4vihnwGltZiwjd5yymaFZgFrjDqVzbVs/3b+
-	 CfniKIzLPl3Q8KMedoXCtuS/+UMgMw+Mku/xMgTcDMO3qYNMJ6afermcinVL0JXJW9
-	 ItUAPknfWeTbVq+w3k3P+3uWtTlhALPpaJmEFMLw4lsLh0wojaE0QrnKthvJZ+Ugj2
-	 E7CCO1RyrlI2JHTczDNetew6nElpLeaZ3kFgSJoNOxbzFRPRoHAOgRmDS6bLaP0/cJ
-	 lvyIN7vF+o/OQ==
+	b=gjXR+CRARTUEx2YW10EgzHiJdj1gI3DUU65xS8JjUM1dPvhp2fqcJKPr0TV8mppLT
+	 s2OJ/vunIDbzEAlYgMjA74OHopsCMvCLASVBGx0qneTIwOh2H3Jl7wAsMkrf/TZKOh
+	 z4jWLrTInTH59Nr4j0UFaFL8J9J/ffmORAsRCvGZxTxdxqdt71i91iqWGtjZwWqccC
+	 /5+nI55qS0UMRlbyhzgIyTXvsWLvYC56paTcrXNLhJJDi8xH3fEun/5r7Fm8ULKZJ1
+	 90I6cwyRzdMqYfNbScrVqCEKOgRefPpIyPE++bx8F+PKSDHAVZnV1YcoOaY1M5Ln5r
+	 jpWG2OcXO2Shg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAC72414D6;
-	Wed,  7 Jan 2026 18:02:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0256825B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E45383264;
+	Wed,  7 Jan 2026 18:02:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13398A58
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 116F040A36
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97EBA80FAC
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Huormu5a7NzN for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bt5zkkw184Mg for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F9FD40A6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 998B280C8D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F9FD40A6B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 998B280C8D
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E5F38039B; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ id 98087873D4; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:55:33 +0100
+Date: Tue, 6 Jan 2026 08:35:28 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 934795b78d383863d7385c0a8c5c03e44e5733e2
-X-Git-Newrev: b0bf5cb73a24def1a9fef8c0e7e2561eaaf9c8cb
+X-Git-Oldrev: 2853c71b319ad68082e2bdd4c38034faf1de0a9c
+X-Git-Newrev: 8718e8be5ead0a4a3b53c5f3da21c079f501c281
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180113.2E5F38039B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/matchbox-lib: fix
- build failure with GCC 15.x
+Message-Id: <20260107180111.98087873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/rtl8822cs bump
+ driver version to latest with support kernel 6.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,83 +72,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3203845632070026326=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3203845632070026326==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b0bf5cb73a24def1a9fef8c0e7e2561eaaf9c8cb
+commit: https://git.buildroot.net/buildroot/commit/?id=8718e8be5ead0a4a3b53c5f3da21c079f501c281
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Backport upstream patch fixing:
+Update rtl8822cs driver for Kernel 6.17/6.18
+Fixes: https://autobuild.buildroot.org/results/bafd5af112e49359201580ece3a12bc8724914fe/
 
-hash.c:76:6: error: conflicting types for ‘hash_empty’; have ‘void(struct hash *)’
-   76 | void hash_empty(struct hash *h)
-      |      ^~~~~~~~~~
-In file included from hash.c:22:
-hash.h:41:6: note: previous declaration of ‘hash_empty’ with type ‘void(void)’
-   41 | void hash_empty();
-      |      ^~~~~~~~~~
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2bfdadab434d3f9100b66a783ee317d118b5623c)
+Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 57395ccf91bc383770e7ba8e15cc3765c0a5fabd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...2-Define-correct-prototype-for-hash_empty.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/rtl8822cs/rtl8822cs.hash | 2 +-
+ package/rtl8822cs/rtl8822cs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/matchbox-lib/0002-Define-correct-prototype-for-hash_empty.patch b/package/matchbox-lib/0002-Define-correct-prototype-for-hash_empty.patch
-new file mode 100644
-index 0000000000..ac65d03b12
---- /dev/null
-+++ b/package/matchbox-lib/0002-Define-correct-prototype-for-hash_empty.patch
-@@ -0,0 +1,34 @@
-+From 312c04b6ba60dca0d6c4a7d1393f0ec816a265e3 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Mon, 17 Mar 2025 14:16:03 -0700
-+Subject: [PATCH] Define correct prototype for hash_empty()
-+
-+GCC-15 follows C23 standard which does not allow function
-+declarations without parameters and types
-+
-+Fixes
-+
-+../../git/libmb/hash.c:76:6: error: conflicting types for 'hash_empty'; have 'void(struct hash *)'
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
-+Upstream: https://git.yoctoproject.org/libmatchbox/commit/?id=312c04b6ba60dca0d6c4a7d1393f0ec816a265e3
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libmb/hash.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libmb/hash.h b/libmb/hash.h
-+index 86f18bf..43827b2 100644
-+--- a/libmb/hash.h
-++++ b/libmb/hash.h
-+@@ -38,5 +38,5 @@ struct hash* hash_new(int size);
-+ unsigned int hashfunc(struct hash *h, char *s);
-+ struct nlist *hash_lookup(struct hash *h, char *s);
-+ struct nlist *hash_add(struct hash *h, char *key, char *val);
-+-void hash_empty();
-++void hash_empty(struct hash *h);
-+ void hash_destroy(struct hash *h);
-+-- 
-+2.52.0
-+
-
---===============3203845632070026326==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
+index 2a649fe493..ff2e5d3eaa 100644
+--- a/package/rtl8822cs/rtl8822cs.hash
++++ b/package/rtl8822cs/rtl8822cs.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  12bf44c0dbce921440f5800a98e877fadda2d656824cca546c2b9e0e99e6a489  rtl8822cs-0ef9ddd619d2a386df90fd7c32b65958b0d675ed.tar.gz
++sha256  71d1d29d1f04a9decaba4e23df0b213fb454c4cf15f6305133d2821188b588b0  rtl8822cs-2519c0b865e31d93daa65fc5b1168722f6ec7526.tar.gz
+diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
+index d10388c2e1..c6a541dd99 100644
+--- a/package/rtl8822cs/rtl8822cs.mk
++++ b/package/rtl8822cs/rtl8822cs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8822CS_VERSION = 0ef9ddd619d2a386df90fd7c32b65958b0d675ed
++RTL8822CS_VERSION = 2519c0b865e31d93daa65fc5b1168722f6ec7526
+ RTL8822CS_SITE = $(call github,jethome-iot,rtl88x2cs,$(RTL8822CS_VERSION))
+ RTL8822CS_LICENSE = GPL-2.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3203845632070026326==--
