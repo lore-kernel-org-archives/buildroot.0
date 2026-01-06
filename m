@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA6FD0D153
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8992D0D14F
 	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55E9D40B21;
-	Wed,  7 Jan 2026 17:47:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3xdoNiVjagjL; Wed,  7 Jan 2026 17:47:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23BC140AFD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808074;
-	bh=wexXLYADb88FgGWCNKN/Omw90NYATz8D4ZS6jV2ZnXg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VfHAfjwDbDkUpMX08TmjAJne2RLfgloOaYvSOCdPUxhhDQfvCw8TYCGTk7JDGtqKQ
-	 PGvLvKC9cT/mRSVc1+C8ZyTsfptc6R8xI/AMp5sWQzgrsUPgH1ZheNEuB7fbSdwaHz
-	 7KqqBOAJGbv1Y3oGd+L1wY2rJvZsmo4UTTrNx2omCyPg3QBenjpFyu+AcB3mQaGc8H
-	 KvsqJKLvk3r+epsmquARzU9jAaNDymVTP89DvIkK8zYrDWnJkL7McnTwa4IHSxxoP2
-	 D3H1xr6yZHbwH5aR88zqP+Rl+/R58eQK8mE1LRXcyQjSV5+0YzpNLF00OReFE0+t8m
-	 5HooaY6ci1/yA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23BC140AFD;
-	Wed,  7 Jan 2026 17:47:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D3A19ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF10980C92
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC7BD81EB9;
+	Wed,  7 Jan 2026 17:47:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Eyw6AdhH2kju for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+ id 1IYtYQwQf-ww; Wed,  7 Jan 2026 17:47:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC69D81FAF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808075;
+	bh=BctnY5hJsW+zPSUMNcOlK2NhluqvepY0DaCCSwpNsFI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=L40PnI07kCtyamQiKr/Lhon+ab0zm97xDZLUPTelpgAatPwKfjUc2RMzEfWWuuWp5
+	 JYnUCxz+N/7l5KU+AR6sXkOb1TZ+MX67VTBLajkeMybytfSX5f+yu+6Eo2f7yAPpnE
+	 sAj2/3gk9FYgrQPIRFeyRMGAOtlBxQOYlptwMLC/MQaVO+9quLupPECl1LyA+KDC7P
+	 6CgdRlbvL43WqfOlw0gRqJXkRInxkqFpnFgcKM2C9tGXW3oxjMxsxSQnd9ZOioeVHB
+	 fiGM4dLV44iAtZ67hVhD4Wii4h3YK3N2uHzbvra3r/Lz4IWiscCu69hNQ72Nzn5o+o
+	 TNJInDsYGN2Cg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC69D81FAF;
+	Wed,  7 Jan 2026 17:47:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E9539ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E44760B97
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rPSYrG9cTquM for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AB4580BAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1755260891
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8AB4580BAE
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1755260891
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8973786D3D; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+ id 1607586FC2; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:18:13 +0100
+Date: Tue, 6 Jan 2026 09:18:31 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8ca029e27a02bbfb5b81946f5fef00fe61356231
-X-Git-Newrev: b97e9adb890b52d7b1a5d430e6fb976535bfcc80
+X-Git-Oldrev: c8f90ae3935f51d73a0582ad8ffe29b519a3a617
+X-Git-Newrev: 951530dae057a00478b366c981eeed4bee66ae6d
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174642.8973786D3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/graphicsmagick:
- add CVE trailer in patch
+Message-Id: <20260107174643.1607586FC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-crc16:
+ switch SITE to pypi.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97e9adb890b52d7b1a5d430e6fb976535bfcc80
+commit: https://git.buildroot.net/buildroot/commit/?id=951530dae057a00478b366c981eeed4bee66ae6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+Updated package as computed by scanpypi.
 
-This patch adds the relevant information to the patch header.
-
-[1] 1167d0ff3d docs/manual: mention CVE trailer
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 04d80d13ec7f84e8074ad4f886da06a8e0ca0e86)
+(cherry picked from commit 4adcc7cac31c71f44d50c3db39db8b19c2b41f0d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch        | 1 +
- .../0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch        | 1 +
- 2 files changed, 2 insertions(+)
+ package/python-crc16/python-crc16.hash | 6 ++++--
+ package/python-crc16/python-crc16.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-index 275738a71a..56122e466e 100644
---- a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-+++ b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-@@ -6,6 +6,7 @@
- # Parent  db3ff8d00c28c38895e1600a28706ce251dac570
- ReadJXLImage(): Apply image dimension resource limits. Addresses oss-fuzz Issue 69728
+diff --git a/package/python-crc16/python-crc16.hash b/package/python-crc16/python-crc16.hash
+index 4576a907ec..5244e400fa 100644
+--- a/package/python-crc16/python-crc16.hash
++++ b/package/python-crc16/python-crc16.hash
+@@ -1,3 +1,5 @@
+-# locally computed
+-sha256  10aeda70fbe8b284874b3b1b8f74b9c1f6d5e8dee20ac8f9d5bc49f45f12a42a  python-crc16-0.1.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/crc16/json
++md5  3cb6a4f5fd10a58c09792e321cc467e5  crc16-0.1.1.tar.gz
++sha256  c1f86aa0390f4baf07d2631b16b979580eae1d9a973a826ce45353a22ee8d396  crc16-0.1.1.tar.gz
++# Locally computed sha256 checksums
+ sha256  ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9  COPYING.txt
+diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
+index 86e6f2ecf2..7a773eaf8e 100644
+--- a/package/python-crc16/python-crc16.mk
++++ b/package/python-crc16/python-crc16.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
  
-+CVE: CVE-2025-27795
- Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/9bbae7314e3c3b19b830591010ed90bb136b9c42
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- [Peter: drop ChangeLog/version changes]
-diff --git a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-index d1cc795b4c..004594523c 100644
---- a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-+++ b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-@@ -6,6 +6,7 @@
- # Parent  036a1376a2a6dc9504c5148249cbd8feaef72de6
- ReadJXLImage(): pixel_format.num_channels needs to be 2 for grayscale matte.
- 
-+CVE: CVE-2025-32460
- Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/8e56520435df50f618a03f2721a39a70a515f1cb
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- [Peter: drop ChangeLog/version changes]
+ PYTHON_CRC16_VERSION = 0.1.1
+-PYTHON_CRC16_SITE = $(call github,gennady,pycrc16,v$(PYTHON_CRC16_VERSION))
++PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
++PYTHON_CRC16_SITE = https://files.pythonhosted.org/packages/a6/e0/70a44c4385f2b33df82e518005aae16b5c1feaf082c73c0acebe3426fc0a
+ PYTHON_CRC16_LICENSE = LGPL-3.0+
+ PYTHON_CRC16_LICENSE_FILES = COPYING.txt
+ PYTHON_CRC16_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
