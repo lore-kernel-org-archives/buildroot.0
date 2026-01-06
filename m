@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 581D7D0D155
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74397D0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FCC34169F;
-	Wed,  7 Jan 2026 18:03:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41B17416B6;
+	Wed,  7 Jan 2026 18:03:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EN6-PJV1MuDt; Wed,  7 Jan 2026 18:03:28 +0000 (UTC)
+ id d6-fkcXvPxWf; Wed,  7 Jan 2026 18:03:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EAB9416A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7402416AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767809008;
-	bh=Zz0Lr0VMVhHP4IrIcNMOjlPFaB5v6FfYF5YttPgA4Uw=;
+	s=default; t=1767809009;
+	bh=QJuTBmIoS9hxMM8Y02m5a5Eb6g5gSDzToiYYMB/Gw3s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Qn8rDeDxweyJ1GKfOEKxq0hlf5Ar2lrsh8ws5dluIk+Yde9SDxITF+tFoGfv9ADtI
-	 pAsUO00+/QeiRYZ7ONt8aVFmynRqeCa2WG26EsLuAv/PxoritmY+dPanaxf+AYU01p
-	 2JiuXUvMz5xzNCLxkfGaXQBPKlcjboTegCmDZm6FpVcwVqbQNyBsVOVdTc76+0pWyF
-	 Z733FMsssNdYsrVu8KAwpCKwBzpAWLLrH41IfTfZRYQT4xSe9tSDJaXXNJins9gXn5
-	 adsRIwoUaxfFXAoiyFMQDeH0UUZ7X2kkeAu6Xb3Id35DXLpvEIERDIslaO1f3aelDl
-	 PitO//4ux6zDg==
+	b=hji2MhnOkWqIAgq35Uc8aV3NER056iBGRVkeB4DuNQWGWXgAoU90Xv7JMaCQb6kpa
+	 uUb81/rKpKHn170zcsKibZlJZbzZHi3+Fz4Xik9M0+76PYvqEH7WO0YdltvucuZ01p
+	 JoNeoU1qzKlcd7RzXESi5F7KPVht54aoYmlYJvvFh9zT4L5ORJ6yYxl9gbcOXdLHcf
+	 8oipVOQbhl/xymYxDsU3soyoy5P1t51+7w+Dh2fNp4rVO4L4Mm+C6/YTZ7AGPYyWvT
+	 HqfnLj1G/JeWeTnMZrPVIMXSsb04Axg+RtF7S1rtZb10qIUJrH431CGEn0EeJYHhKh
+	 UWkou67RDuNIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EAB9416A2;
-	Wed,  7 Jan 2026 18:03:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7402416AB;
+	Wed,  7 Jan 2026 18:03:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15229A58
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E4B025B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BA3740DED
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAACC40DF9
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9n61btPASkpz for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
+ id puzzny4mOJ0K for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 952B740A06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9272C4082D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 952B740A06
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9272C4082D
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94059811C5; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ id 90BFE81F75; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:59:42 +0100
+Date: Tue, 6 Jan 2026 09:07:54 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: eaae745b402dac7404411de617f363baad6f8e36
-X-Git-Newrev: e0fd58288c6d506c119c8e689cbdb85fa3e8e8ef
+X-Git-Oldrev: d7c3aa1413de33188bb3f0065183836edeb00264
+X-Git-Newrev: 7ca4625da76069dc181d6c88eadffcbd3856d801
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180114.94059811C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x]
- package/python-ipython-genutils: update tarball URL
+Message-Id: <20260107180115.90BFE81F75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/cups-filter: add
+ CVE trailer in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0fd58288c6d506c119c8e689cbdb85fa3e8e8ef
+commit: https://git.buildroot.net/buildroot/commit/?id=7ca4625da76069dc181d6c88eadffcbd3856d801
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Updated package as computed by scanpypi.
+Since Buildroot commit [1] the patches that fixes a security
+vulnerability needs to reference the fixed vulnerability.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This patch adds the relevant information to the patch header.
+
+[1] 1167d0ff3d docs/manual: mention CVE trailer
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 84536c14986ab9f2de93d76a220a06d962134552)
+(cherry picked from commit c9b63b439c06c6bf485ff17dcf4477caded2d40e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-ipython-genutils/python-ipython-genutils.hash | 4 ++--
- package/python-ipython-genutils/python-ipython-genutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch    | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-ipython-genutils/python-ipython-genutils.hash b/package/python-ipython-genutils/python-ipython-genutils.hash
-index fd719c93a0..c368272f07 100644
---- a/package/python-ipython-genutils/python-ipython-genutils.hash
-+++ b/package/python-ipython-genutils/python-ipython-genutils.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/ipython_genutils/json
-+# md5, sha256 from https://pypi.org/pypi/ipython-genutils/json
- md5  5a4f9781f78466da0ea1a648f3e1f79f  ipython_genutils-0.2.0.tar.gz
--# Locally computed
- sha256  eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8  ipython_genutils-0.2.0.tar.gz
-+# Locally computed
- sha256  f09da6c0f4971485f6fbd6c630d0d6cdd012bfe128b2ebbd014de2f6c7c7e2a6  COPYING.md
-diff --git a/package/python-ipython-genutils/python-ipython-genutils.mk b/package/python-ipython-genutils/python-ipython-genutils.mk
-index 08a0b8ba9a..847279b6b4 100644
---- a/package/python-ipython-genutils/python-ipython-genutils.mk
-+++ b/package/python-ipython-genutils/python-ipython-genutils.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch b/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+index e527b20f91..fbe2bfac4a 100644
+--- a/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
++++ b/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+@@ -32,6 +32,7 @@ In addition, done the following fixes and improvements:
  
- PYTHON_IPYTHON_GENUTILS_VERSION = 0.2.0
- PYTHON_IPYTHON_GENUTILS_SOURCE = ipython_genutils-$(PYTHON_IPYTHON_GENUTILS_VERSION).tar.gz
--PYTHON_IPYTHON_GENUTILS_SITE = https://pypi.python.org/packages/e8/69/fbeffffc05236398ebfcfb512b6d2511c622871dca1746361006da310399
-+PYTHON_IPYTHON_GENUTILS_SITE = https://files.pythonhosted.org/packages/e8/69/fbeffffc05236398ebfcfb512b6d2511c622871dca1746361006da310399
- PYTHON_IPYTHON_GENUTILS_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_GENUTILS_LICENSE_FILES = COPYING.md
- PYTHON_IPYTHON_GENUTILS_SETUP_TYPE = setuptools
+ - Use "static volatile int" for global variable job_canceled.
+ 
++CVE: CVE-2023-24805
+ Upstream: https://github.com/OpenPrinting/cups-filters/commit/93e60d3df358c0ae6f3dba79e1c9684657683d89
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
