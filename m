@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA9BD0D150
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:47:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B7AD0D14F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4684740A43;
-	Wed,  7 Jan 2026 17:47:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C4R5v_Ze-lkf; Wed,  7 Jan 2026 17:47:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE19B408EF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808040;
-	bh=9MeQY6ULljDU4rMmZDY3Fpv2EpiZAwvbYAU1Sw4NzNk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mCqrn6Hsr7ky+MhYaBtQuwDxESnHGVliXlGwIXVEJZA5OnGmggYBeWa9V90aU5njF
-	 1acF0897609qJbBCiQupnoyTsnKJUgKBIayvYczFcoDhSKceES73ClT2e+FG8PHeyz
-	 z+hDObCRUP6pWJ4Xcgs5D1sRI/UKf65c3BwTGmr2n4cL1mXp0A0CnbHp+Xq9WGnkWC
-	 CJzThPF9fu5w1vz/enEQ6SRMVK/s0keM7ao39p/msgnxU7eEzySY39BcTSPhCMy9x/
-	 r0xmuSWdN7iR4rBf4gf+eOLKuym4ZESavZy3jqAt73zZFX7KEr57SE6ybXlu6DCujO
-	 e0NeX+xsAnVqw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE19B408EF;
-	Wed,  7 Jan 2026 17:47:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D97825B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF31F80BC9
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9953E80FC6;
+	Wed,  7 Jan 2026 17:47:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCmqefuTAbba for <buildroot@buildroot.org>;
+ id ZwJZQQPV0gzZ; Wed,  7 Jan 2026 17:47:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CACEC80D3E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808039;
+	bh=GjHJEm6Wic0Ikxu6t6Zfq1nn1nVC7BqdUm/qOFqEgoE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Kvj3gire//Bl+s6BU68O8R5pP7H+nHzWHt6oGVZM4veW/1+8eBxSShphdbiT/uQDq
+	 ozac6SIHsjCLiHXW5/Z0JKTp9+gH5x4E9KDr1t0idatdrPayAMFdbww4vhrfrip/nK
+	 5QOQH49mbTLoRsIgo+OLkxEy0ciTN+JGMEZXszm7bxrFPXsCvXqHI8V2dI4858ljfs
+	 ZzPwaq9pidzDVF9CFHe3BMEIb4mrCpoJc1m7RVKo6TUjL+XHKwhqpIg3b1bwM/JXGc
+	 J1iAAcxcVPGWdVMKCVfYcrss1o1jHzZVG2fei5k6tI6GUBI6OU+QuLRrgGvskip+1f
+	 nrUN22XL71jQQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CACEC80D3E;
+	Wed,  7 Jan 2026 17:47:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFEBF25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1228B60B3A
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GGfhCX-1RpWo for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D45E080B82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F57560891
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D45E080B82
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F57560891
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2C7688367; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
+ id 7E770883AA; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:17:44 +0100
+Date: Tue, 6 Jan 2026 09:17:30 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 770100904c20037cc8becb33616d89987cad70cd
-X-Git-Newrev: 2060800874dd945d5d88f2c194a9ec7e7d676c1e
+X-Git-Oldrev: 8006dc71975bbf4eb09abd06de4a46fc60198281
+X-Git-Newrev: e7e124a1c8c5b1d3b412ede2a3ac65baf10b7a15
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174641.D2C7688367@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libiio: fix
- python bindings without glibc utils
+Message-Id: <20260107174641.7E770883AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cppcms: change
+ upstream to Github, bump to 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,74 +77,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2060800874dd945d5d88f2c194a9ec7e7d676c1e
+commit: https://git.buildroot.net/buildroot/commit/?id=e7e124a1c8c5b1d3b412ede2a3ac65baf10b7a15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Libiio python bindings use ctypes and specifically the find_library()
-function from there to load the libiio.so shared library. This is not
-working unless glibc utils (specifically ldconfig) is installed to the
-target (alternatively the target would need gcc or binutils, for objdump
-or ld).
+cppcms.com now points to a Github page at
+https://github.com/artyom-beilis/cppcms which has a 2.0.1 version, so
+let's use that. The number of differences to 2.0.0.beta2 is very
+small:
 
-The easy fix here is to just bypass the find_library() machinery
-altogether as it's not needed on a buildroot system.
+$ git log --online v2.0.0.beta2..v2.0.1
+b872972 (tag: v2.0.1, origin/master, origin/HEAD, master) Version to 2.0.1
+a1914f7 (tag: v2.0.0) Replaced system category with one from predating C++11 (v1.2) because std::system_category does not translate WSAGetLastError results
+c4febcc Merge pull request #104 from dreaming-augustin/upstream
+922cd49 Python 3.12 compatibility: wrap regex in r''.
+a11e9d4 Merge branch 'cpp11'
+3000bc6 (origin/1.2_updates) Merge pull request #99 from dreaming-augustin/master
+44e24c7 [#89] cppcms_error fix typo + consistent  messages
+a6d5575 (origin/cpp11) Added backtrace to system error
+b3aef3b Fixed missing include for stripped down build
+463a9a6 Removed IPV6 due to travis limitations
+f8163c6 Merges from cpp11
+31d4fe7 Added verbose log on failure
+90bc996 Added Linux to build matrix - so I have fallback if normal build environment fails
+f78ee39 Added Readme for github
+a737d5d Merged python3 compatibility from master
+0c67544 Support of python 2.7 and python 3
+0d121a7 Python3 compatibility
+2fc7e38 Python3 compatibility
+d745869 python3 fix for tmp_cc
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Tested-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 193df1cbec8b4e18b998494a7dc05c2a06445036)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 29641d1675756dd82486cff4d5f71321bd89cad2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-bindings-python-fix-library-loading.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/cppcms/cppcms.hash | 5 +----
+ package/cppcms/cppcms.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/libiio/0001-bindings-python-fix-library-loading.patch b/package/libiio/0001-bindings-python-fix-library-loading.patch
-new file mode 100644
-index 0000000000..f8715b4c5b
---- /dev/null
-+++ b/package/libiio/0001-bindings-python-fix-library-loading.patch
-@@ -0,0 +1,41 @@
-+From 4d4d17e2810f793b9f7fd8acad2a3c551dbff2b5 Mon Sep 17 00:00:00 2001
-+From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+Date: Fri, 31 Mar 2023 20:13:07 +0200
-+Subject: [PATCH] bindings: python: fix library loading
-+
-+On Linux the find_library() function requires ld, gcc, objdump
-+or ldconfig on the target, which might not be present on a
-+buildroot system. [1]
-+We do not actually need this function at all, as we know the iio library
-+will be referencable in the system under the name "libiio.so".
-+So instead of kicking of this complicated cross-platform/cross-distro
-+compatible machinery, we just pass in the name of the library we already
-+know.
-+
-+[1] https://docs.python.org/3/library/ctypes.html#finding-shared-libraries
-+
-+Upstream: N/A, buildroot doesn't have to care about different OS's and
-+distro setups, so we can just hardcode the lib name, but we cannot
-+submit that upstream.
-+
-+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-+---
-+ bindings/python/iio.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bindings/python/iio.py b/bindings/python/iio.py
-+index b91260cc..bde17694 100644
-+--- a/bindings/python/iio.py
-++++ b/bindings/python/iio.py
-+@@ -224,7 +224,7 @@ else:
-+     # Non-windows, possibly Posix system
-+     _iiolib = "iio"
-+ 
-+-_lib = _cdll(find_library(_iiolib), use_errno=True, use_last_error=True)
-++_lib = _cdll("libiio.so", use_errno=True, use_last_error=True)
-+ 
-+ _get_backends_count = _lib.iio_get_backends_count
-+ _get_backends_count.restype = c_uint
-+-- 
-+2.25.1
-+
+diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
+index a8d04ff36f..8e59f66489 100644
+--- a/package/cppcms/cppcms.hash
++++ b/package/cppcms/cppcms.hash
+@@ -1,8 +1,5 @@
+-# From http://sourceforge.net/projects/cppcms/files/cppcms/2.0.0-beta2/
+-sha1  746cc5e3f58565d91d9ded6e2616399d60e9d01d  cppcms-2.0.0.beta2.tar.bz2
+-md5  ef561d13ee92d2053151cab073feba10  cppcms-2.0.0.beta2.tar.bz2
+ # Locally computed:
+-sha256  697031c7d141fdd215c6be5090b66e2106a63bb3e52f09ee8120e8efc6c08a21  cppcms-2.0.0.beta2.tar.bz2
++sha256  4a7a2217b3fa59384650912a7000e016c308b4fa986a3d2562002691e5a9d6e7  cppcms-2.0.1.tar.gz
+ sha256  fb7c15ddf590037d4cd18ebd61148a2304b9243369d238a64f599182377e32db  COPYING.TXT
+ sha256  3e4012cc5950e05bedfdd2f00ceffe1ef71c46ac8c79f07e237ecb23c773f65f  MIT.TXT
+ sha256  d6ce062e5cf4f7e3c536d7d2fee84c882c45245f1848ed3162401f2b29fa2b4b  THIRD_PARTY_SOFTWARE.TXT
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index 8a59990a8d..b39122d12f 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-CPPCMS_VERSION = 2.0.0-beta2
+-CPPCMS_SOURCE = cppcms-$(subst -,.,$(CPPCMS_VERSION)).tar.bz2
++CPPCMS_VERSION = 2.0.1
++CPPCMS_SITE = $(call github,artyom-beilis,cppcms,v$(CPPCMS_VERSION))
+ CPPCMS_LICENSE = MIT, BSL-1.0 (boost), Public Domain (json2.js), Zlib (md5)
+ CPPCMS_LICENSE_FILES = COPYING.TXT MIT.TXT THIRD_PARTY_SOFTWARE.TXT
+-CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+ CPPCMS_INSTALL_STAGING = YES
+ CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
