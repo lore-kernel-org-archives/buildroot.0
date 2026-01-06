@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2756CEFD05
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 20:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB040CEFD01
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 20:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7EDF681B0A;
-	Tue,  6 Jan 2026 20:31:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75D3E60C09;
+	Tue,  6 Jan 2026 20:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rEEGFl33exkf; Tue,  6 Jan 2026 20:31:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qi8QS-Bcl57X; Tue,  6 Jan 2026 20:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB3AB81A27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D92ED6062C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767731492;
-	bh=J+sgCFZSvyFGes7ecXHL+qf736+T7ryRxiPx5hZM2gs=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=lpwy7VYk98iVBB4gunlfXodwqpn8QsRWR1Eq7XGzzvTgbZ7j2fvdHpid4bJ8oG7Pp
-	 6Cc+cY5Yg/XIiDrgAgplxW/zto8Wn1jy6FnrqvPztzKCY5n98sbVB078mec5PTrQIn
-	 p6iOYlSaYP5rbRm89jbtcQ2PX7bBT8MkMVch66Shcnd0VhSHwny7+sfbT0scoXH0PN
-	 dlb8YMskgTEeccnEFyzxTCCpvfUJipb7B6hD8psqYBSIKWsXl0tmygIuNyP5O1Z0yB
-	 gJk0QFg9TDeTEBkd7WamnhWScD12M8yAxK0WfsC+Rz/khXHW3r2mH6tqipITC7SGn2
-	 5JdAOYIRZuGVw==
+	s=default; t=1767731529;
+	bh=GQsur9uv04iRSFUkpnWSLQLvs2pQZCjKO2XwVwxULeU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ev4+QQW1KLleRMQFibetz5i+k854rQWEZ70/cboS3qcTcPjk1e44oaKHucoV5IjoH
+	 /stnr3ztBCcDEcFrkMAOp/09mQ3JANUP6aZ0oZyzzdUd8Dzjx2domGkQH41vl5cPk0
+	 F8SM+VS/KSmDpzn/DZOEy8Us3VrDoIQ5IV6ts7PHqhUcq9woJFBr/unTeTsSgfbn9s
+	 bg4d4u+U0148y1R0kG3e6MYV/OOKOuVPk0XXfR1ssXeOjW+W044ET2wnJT3WhJLyKk
+	 +GE2Dpw8BfQSaCp12zcTPERWc9LHOhYVOTSk89Pvlm3DnDzA0V63+c1OX/ugOJ0Ofz
+	 UzAf8OODNjjmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB3AB81A27;
-	Tue,  6 Jan 2026 20:31:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 515FC2A3
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:31:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D92ED6062C;
+	Tue,  6 Jan 2026 20:32:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FF842A3
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4257481A27
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:31:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3676560BEA
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:32:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gHMti2wwPC_0 for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 20:31:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BEB2681919
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEB2681919
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BEB2681919
- for <buildroot@busybox.net>; Tue,  6 Jan 2026 20:31:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 0D6B1200421;
- Tue,  6 Jan 2026 21:31:25 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 06 Jan 2026 21:31:25 +0100
-MIME-Version: 1.0
-Date: Tue, 06 Jan 2026 21:31:25 +0100
-To: Michael Fischer <mf@go-sys.de>
-Cc: buildroot@busybox.net
-In-Reply-To: <20260106160221.662427-1-mf@go-sys.de>
-References: <20260106160221.662427-1-mf@go-sys.de>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <3600b70caa8df0d81459e903c336bdca@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767731487;
- bh=coniHS1BdaMj3lh1emC9eWCNysEyj8qLZLbrRkBrxYU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=bPmP7i3J0qYmKcu/gdV/+DnjZlwpIm2KrtWyo7faz0EEyw6/5hcAHE+QbEsh1o9B1
- cIASm+J4BeuJDX3DeoU08W7W87FZ/JlPgWX9RTANrGtsoDGkpn/ClqYz10dfWyVszB
- yiTId6YgzpB4OGDR6eCB72K2ygOZ3rNrcuaBYqp1HXenoqW/2qc68gws6w9wQBOtAI
- 4mHmCU1sXLxe7QlzPsC8Ee+DsPVjslhrZjOiyLez5kb/ZHLwPi5Zfw6nnzzZ5cb/vJ
- A0/EcZNzJQwSqOiy6rccutkdWkzLSCv7rjfir+AOvjAHheVs8JdAukjTw5HTiPeK1K
- jMoBhAwK/RSsA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bPmP7i3J
-Subject: Re: [Buildroot] [PATCH] package/gnuplot: bump version to 6.0.4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ACYpLLJpY8Q for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 20:32:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3761D60631
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3761D60631
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:32:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 26A23882F7; Tue,  6 Jan 2026 20:32:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 6 Jan 2026 21:30:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eb401b574ae03b41f9ee518f01d395acaec64dbd
+X-Git-Newrev: e45ba467210b85ff2dc6406411cce178b03ee280
+X-Patchwork-Hint: ignore
+Message-Id: <20260106203207.26A23882F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuplot: bump version to 6.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,18 +70,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/01/2026 17:02, Michael Fischer wrote:
-> For release note, see:
-> http://www.gnuplot.info/ReleaseNotes_6_0_4.html
-> 
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=e45ba467210b85ff2dc6406411cce178b03ee280
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For release note, see:
+http://www.gnuplot.info/ReleaseNotes_6_0_4.html
+
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gnuplot/gnuplot.hash | 8 ++++----
+ package/gnuplot/gnuplot.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index bac1cb9d2d..17211ab7dc 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.3/
+-md5  c897ca69062010e2cf5f7483e39e5acc  gnuplot-6.0.3.tar.gz
+-sha1  b31779d6760f432f57136600fc0c2bf65f4d4013  gnuplot-6.0.3.tar.gz
+-sha256  ec52e3af8c4083d4538152b3f13db47f6d29929a3f6ecec5365c834e77f251ab  gnuplot-6.0.3.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.4/
++md5  3a42b32f5d5a003bb88717fce350c3fd  gnuplot-6.0.4.tar.gz
++sha1  b199107483eaa70273d644f1cba259c19e64a178  gnuplot-6.0.4.tar.gz
++sha256  458d94769625e73d5f6232500f49cbadcb2b183380d43d2266a0f9701aeb9c5b  gnuplot-6.0.4.tar.gz
+ # Locally computed
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index efdc08deae..487985c5a1 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPLOT_VERSION = 6.0.3
++GNUPLOT_VERSION = 6.0.4
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
