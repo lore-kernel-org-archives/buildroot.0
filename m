@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE967D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96CE9D0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B2DD80A6D;
-	Wed,  7 Jan 2026 17:47:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 610904092E;
+	Wed,  7 Jan 2026 17:47:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nwcIHIOScMsW; Wed,  7 Jan 2026 17:47:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CEe5zzJ3CinR; Wed,  7 Jan 2026 17:47:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E71380EEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93BB1409CE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808025;
-	bh=2SJtc1V92wu4LtdrimmdL21hHM8ihiJk5KALFIPQTx0=;
+	s=default; t=1767808026;
+	bh=dwxIALRjZSBJmB0Ti+VTX5i60TE64MxaJOW/9uHxR3Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ahr+VjGmF7Tzc49opzj7p1WE+1CQAyrBzUXdzHJLxR/pAFnrYL33g8lLY1fZEPide
-	 W4B5PHOaHNGoZ6oxLkXiTzVmmjj66KIHV7heLpJaa9H77mCVbnaAI8DBNTvhvR0hZ0
-	 tZq/2MMqRgVoyMbwh7YDsy+oVcf2TwkY1yIlMzAeASetA/UpRDHwoMNU3ijDSW89J3
-	 WF/MiRPU7CvY+GRqQlWU0hP00UUORO8a9uYC9uHZb5fv8dGXtZHbKpxiVaP8n18dJE
-	 iGT1GO1dOw1JN5IuP/dRrlMX9TSG/JM1Xf4gGgaZXDbblc1qokoBDTOzHfJlLLAMdX
-	 IDwwlC/XCGGhQ==
+	b=gQo4QA3UcYJv5aQetPp/Kw2aIDBH96ALXbCWz1VNylJwefro/AoNyyqxjbAVYA4sd
+	 juoobH/55nmL94ep6VyeFQwMQi2YWfeuK9iRc0RSJIbZQTY5cKJV8tR5+ZEVYeaIM4
+	 gpq8osMX8zoXOy0/rSXB6Pf0rsnxaQYDIWtSCEhBtfXCRQr/rUQSL40uw1LOarCx7H
+	 LmlZtobYCzmuZqeBMkwCA/Px2zrikJrI4Z4/VHW4p91TihjrxKeHxntXYV0+Yz8i6J
+	 k4P11NeI17AUIlLaqavscWn9rFPGtC2UxLtl0Tdf2xvp0XcIOjOCAPwmdUevkA9gbo
+	 DHZwE/LPsRR0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E71380EEE;
-	Wed,  7 Jan 2026 17:47:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93BB1409CE;
+	Wed,  7 Jan 2026 17:47:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 23406AEB
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E64E25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04DC080A99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 260EE80B10
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iJWR5MZwAmiU for <buildroot@buildroot.org>;
+ id 47sdSw8bbQgh for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C946A80A96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D81780ABB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C946A80A96
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D81780ABB
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C860188367; Wed,  7 Jan 2026 17:46:40 +0000 (UTC)
+ id 0C6F588367; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:16:56 +0100
+Date: Tue, 6 Jan 2026 09:17:08 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4a146c1e4081585cc89ffa48f5d015071f3d2912
-X-Git-Newrev: d2b2dc49ab32128515bcf69a3e11ee1afd5fd3ba
+X-Git-Oldrev: 0955700ceb031bafb223e813b85d4ebeaebfb999
+X-Git-Newrev: 50fafbfadebec7d6ba7e7c1edf4792d975fee459
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174640.C860188367@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-filelock:
- fix CVE-2025-68146
+Message-Id: <20260107174641.0C6F588367@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: add Giulio
+ Benetti to libtirpc and rpcbind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,73 +77,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2b2dc49ab32128515bcf69a3e11ee1afd5fd3ba
+commit: https://git.buildroot.net/buildroot/commit/?id=50fafbfadebec7d6ba7e7c1edf4792d975fee459
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following vulnerability:
-
-- CVE-2025-68146
-
-A Time-of-Check-Time-of-Use (TOCTOU) race condition allows local
-attackers to corrupt or truncate arbitrary user files through symlink
-attacks.
-
-For more informations, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-68146
-  - https://github.com/tox-dev/filelock/commit/18a99880087934252e7c0c994640f66e80e34be9
-
-(cherry picked from commit d9c1379d1f7651951d00ce59b588d74aad049573)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit e9786cbb7b50302ae071a83ffaa18958c092290f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...mlink-vulnerability-in-lock-file-creation.patch | 27 ++++++++++++++++++++++
- package/python-filelock/python-filelock.mk         |  3 +++
- 2 files changed, 30 insertions(+)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-filelock/0001-Fix-TOCTOU-symlink-vulnerability-in-lock-file-creation.patch b/package/python-filelock/0001-Fix-TOCTOU-symlink-vulnerability-in-lock-file-creation.patch
-new file mode 100644
-index 0000000000..a1656e1fa1
---- /dev/null
-+++ b/package/python-filelock/0001-Fix-TOCTOU-symlink-vulnerability-in-lock-file-creation.patch
-@@ -0,0 +1,27 @@
-+From 4724d7f8c3393ec1f048c93933e6e3e6ec321f0e Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Bern=C3=A1t=20G=C3=A1bor?= <gaborjbernat@gmail.com>
-+Date: Mon, 15 Dec 2025 15:52:12 -0800
-+Subject: [PATCH] Fix TOCTOU symlink vulnerability in lock file creation (#461)
-+
-+CVE: CVE-2025-68146
-+Upstream: https://github.com/tox-dev/filelock/commit/4724d7f8c3393ec1f048c93933e6e3e6ec321f0e
-+[thomas: Dropped the windows part of the patch]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/filelock/_unix.py    |  2 +-
-+ src/filelock/_windows.py | 38 ++++++++++++++++++++++++++++++++++++++
-+ 2 files changed, 39 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/filelock/_unix.py b/src/filelock/_unix.py
-+index b2fd0f33..25cbeca6 100644
-+--- a/src/filelock/_unix.py
-++++ b/src/filelock/_unix.py
-+@@ -38,7 +38,7 @@ class UnixFileLock(BaseFileLock):
-+ 
-+         def _acquire(self) -> None:
-+             ensure_directory_exists(self.lock_file)
-+-            open_flags = os.O_RDWR | os.O_TRUNC
-++            open_flags = os.O_RDWR | os.O_TRUNC | os.O_NOFOLLOW
-+             if not Path(self.lock_file).exists():
-+                 open_flags |= os.O_CREAT
-+             fd = os.open(self.lock_file, open_flags, self._context.mode)
-diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-index 44599ee865..48025d8345 100644
---- a/package/python-filelock/python-filelock.mk
-+++ b/package/python-filelock/python-filelock.mk
-@@ -12,4 +12,7 @@ PYTHON_FILELOCK_LICENSE = Public Domain
- PYTHON_FILELOCK_LICENSE_FILES = LICENSE
- PYTHON_FILELOCK_DEPENDENCIES = host-python-hatch-vcs
- 
-+# 0001-Fix-TOCTOU-symlink-vulnerability-in-lock-file-creation.patch
-+PYTHON_FILELOCK_IGNORE_CVES += CVE-2025-68146
-+
- $(eval $(python-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 303280ed69..14d051e45d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1278,6 +1278,7 @@ F:	package/liblo/
+ F:	package/libnspr/
+ F:	package/libnss/
+ F:	package/libnvme/
++F:	package/libtirpc/
+ F:	package/libtraceevent/
+ F:	package/libtracefs
+ F:	package/linux-tools/linux-tool-rtla.mk.in
+@@ -1290,6 +1291,7 @@ F:	package/python-libconf/
+ F:	package/python-uvloop/
+ F:	package/qt5/
+ F:	package/rockchip-mali/
++F:	package/rpcbind/
+ F:	package/rtl8188eu/
+ F:	package/rtl8189es/
+ F:	package/rtl8192eu/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
