@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D720D0D14B
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 764EFD0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02CBC416C4;
-	Wed,  7 Jan 2026 18:03:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EDD180F46;
+	Wed,  7 Jan 2026 18:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8-Q9fSGxQpjo; Wed,  7 Jan 2026 18:03:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KfL72ISFDx-A; Wed,  7 Jan 2026 18:03:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06470416CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63B4382348
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767809014;
-	bh=OysknNaGqnuLjGVZf6RPGYm7GBqibH+C22z4MX9Pddg=;
+	s=default; t=1767809015;
+	bh=XBmMBqLfK4HJHpiHfVZKgKCvtqZNt+8A1NsDZs0a7Gw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Jrei72aPh0zbtntKe0GiKrRz57Ig+pZpuLM0+QeqFoYPl/aDtJiloZE26MMSb5Nyo
-	 QR+JTRjfIM5+ofaPkAcFrtbFV2+00Mm16zDCnKegZ1NiXD1mA5f8wdUlLjbgBqHyZv
-	 Tw+lF/Zx+LKE+I7PNUdHK2knUKbuIZGR/qmtFie4bTmFqf1c3zL0y3m8vIlKfyGBD3
-	 0L/LkiswpsUtrOtwRwLX/vomI5rNMcAGHjxwiaNhzX9JHo1SWFX8u3MG9M91oeTrIQ
-	 atXSCWW5nRTptei7MSIcbIerlqMzEwJ5KHZbKOSwTd9noJLXJNY5amPltR0wpehUcR
-	 OahsKnbCtaoVQ==
+	b=gtTm2T+TUvDiEQz1ZXXTpssSa9EGIeUrFw5ZXLnuvZfX6jIDBVrRk4HKz/qoznVHp
+	 ooOmDq79Q/yLlZ1DTM4M5SYj/bBRWiAP1GpRO/Acs/rj/1GwOEuTmCGogefpielOgf
+	 HrroM4HrLN99oZMLUOeIIFRl/ygFf/VSRkY1dNToMuj97+38yzVmKiQKMG3FKHUSxb
+	 tP6DPNKK3Odzmn2Q8FIXfaBR6g1G5B5a6wqbhugnScE38scC2XOtlEkUGct6ps4Iap
+	 4KX/Tgqt79/wik77tkHUZ9GrYK+V92D6B+xtMn2Esl2bm7g8FvVSKrQXMe4R5Cw3e3
+	 m6fkxSl8WbQvQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06470416CD;
-	Wed,  7 Jan 2026 18:03:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EE51A58
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63B4382348;
+	Wed,  7 Jan 2026 18:03:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CC7125B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8C0040A3F
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3FD318209B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id el4dnl96aBUS for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LJL0iEoHPbGB for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 038B34090F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AC4781384
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 038B34090F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AC4781384
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 02A58811C5; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ id 3994F811C5; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:01:16 +0100
+Date: Tue, 6 Jan 2026 09:02:11 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: a00713b7736dfebe38da83e86b21afade89c684f
-X-Git-Newrev: acc6b5d3d0a884a0400d1cba094f87c08bb90ca3
+X-Git-Oldrev: 0315fd3d1fc17f88b41aa125bd4567df5960fb6e
+X-Git-Newrev: c5ac63e267bc8d0ff780dab11790bfc178cb6007
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180115.02A58811C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/python-pyqrcode:
- update tarball URL
+Message-Id: <20260107180115.3994F811C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] support/testing: new
+ kvmtool runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,157 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acc6b5d3d0a884a0400d1cba094f87c08bb90ca3
+commit: https://git.buildroot.net/buildroot/commit/?id=c5ac63e267bc8d0ff780dab11790bfc178cb6007
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Updated package as computed by scanpypi.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 46f8497e1c92c29a2f1d9889b897d948b496ef92)
+(cherry picked from commit 577a2a32af0ef88321cf147b88cfecdbe17c9b4f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-pyqrcode/python-pyqrcode.hash | 4 ++--
- package/python-pyqrcode/python-pyqrcode.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_kvmtool.py      | 97 ++++++++++++++++++++++
+ .../tests/package/test_kvmtool/linux-kvm.fragment  |  6 ++
+ .../rootfs-overlay/etc/profile.d/stty-raw.sh       |  3 +
+ 4 files changed, 108 insertions(+)
 
-diff --git a/package/python-pyqrcode/python-pyqrcode.hash b/package/python-pyqrcode/python-pyqrcode.hash
-index c946ba9d9b..9c1dfce294 100644
---- a/package/python-pyqrcode/python-pyqrcode.hash
-+++ b/package/python-pyqrcode/python-pyqrcode.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pyqrcode/json
-+# md5, sha256 from https://pypi.org/pypi/pyqrcode/json
- md5  371f29f4b03bd2830c6e0319258b1259  PyQRCode-1.2.1.tar.gz
--# Locally computed
- sha256  fdbf7634733e56b72e27f9bce46e4550b75a3a2c420414035cae9d9d26b234d5  PyQRCode-1.2.1.tar.gz
-+# Locally computed
- sha256  bef0c3595451da5132dea99e288fb5dafcbc469e0643f993a4ba0a69980f5ec9  setup.py
-diff --git a/package/python-pyqrcode/python-pyqrcode.mk b/package/python-pyqrcode/python-pyqrcode.mk
-index f3eac5a3c0..6dfe1afa6d 100644
---- a/package/python-pyqrcode/python-pyqrcode.mk
-+++ b/package/python-pyqrcode/python-pyqrcode.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_PYQRCODE_VERSION = 1.2.1
- PYTHON_PYQRCODE_SOURCE = PyQRCode-$(PYTHON_PYQRCODE_VERSION).tar.gz
--PYTHON_PYQRCODE_SITE = https://pypi.python.org/packages/37/61/f07226075c347897937d4086ef8e55f0a62ae535e28069884ac68d979316
-+PYTHON_PYQRCODE_SITE = https://files.pythonhosted.org/packages/37/61/f07226075c347897937d4086ef8e55f0a62ae535e28069884ac68d979316
- PYTHON_PYQRCODE_SETUP_TYPE = setuptools
- PYTHON_PYQRCODE_LICENSE = BSD-3-Clause
- PYTHON_PYQRCODE_LICENSE_FILES = setup.py
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 622f1009b4..91378c36e3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1933,6 +1933,8 @@ F:	support/testing/tests/package/test_kmod.py
+ F:	support/testing/tests/package/test_kmod/
+ F:	support/testing/tests/package/test_kmscube.py
+ F:	support/testing/tests/package/test_kmscube/
++F:	support/testing/tests/package/test_kvmtool.py
++F:	support/testing/tests/package/test_kvmtool/
+ F:	support/testing/tests/package/test_lame.py
+ F:	support/testing/tests/package/test_less.py
+ F:	support/testing/tests/package/test_libcamera.py
+diff --git a/support/testing/tests/package/test_kvmtool.py b/support/testing/tests/package/test_kvmtool.py
+new file mode 100644
+index 0000000000..d6859172bd
+--- /dev/null
++++ b/support/testing/tests/package/test_kvmtool.py
+@@ -0,0 +1,97 @@
++import os
++
++import infra.basetest
++
++
++class TestKvmTool(infra.basetest.BRTest):
++    # This test passes the Buildroot image directory to the emulated
++    # guest using the 9p virtiofs. This guest enables the
++    # virtualization support. It will start a nested KVM virtual
++    # machine, using the same Kernel/initramfs images. For these
++    # reasons, we need a specific kernel configuration that enables
++    # KVM and 9P.
++    kern_frag = \
++        infra.filepath("tests/package/test_kvmtool/linux-kvm.fragment")
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_kvmtool/rootfs-overlay")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.1"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_KVMTOOL=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kern = os.path.join(self.builddir, "images", "Image")
++        img_dir = os.path.join(self.builddir, "images")
++        virtfs_tag = "br-imgs"
++        virtfs_opts = [
++            f"local,path={img_dir}",
++            f"mount_tag={virtfs_tag}",
++            "security_model=mapped-xattr",
++            "readonly"
++        ]
++        qemu_opts = ["-M", "virt,gic-version=3,virtualization=on",
++                     "-cpu", "cortex-a57",
++                     "-smp", "4",
++                     "-m", "1G",
++                     "-virtfs", ','.join(virtfs_opts),
++                     "-initrd", img]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Test the program can execute.
++        self.assertRunOk("lkvm --version")
++
++        # We mount the virtfs to get the Kernel and initramfs from the
++        # test host.
++        self.assertRunOk(f"mount -t 9p {virtfs_tag} /mnt/")
++
++        # We define an arbitrary kernel command line argument that we
++        # will use to detect we are in our virtual machine.
++        kvm_karg = "br-kvm"
++
++        # The number of CPU of our virtual machine
++        kvm_nproc = 2
++
++        # We run the KVM virtual machine
++        cmd = "lkvm run"
++        cmd += " --kernel /mnt/Image"
++        cmd += " --initrd /mnt/rootfs.cpio"
++        cmd += f" --cpus {kvm_nproc}"
++        cmd += " --mem 320M"
++        cmd += " --console virtio"
++        cmd += " --irqchip gicv3"
++        cmd += f" --params {kvm_karg}"
++
++        # We use qemu.sendline() to run the command because the
++        # program will not return an exit code. The command "lkvm run"
++        # will spawn the new virtual machine console. The login is
++        # expected to be reached after the command is issued.
++        self.emulator.qemu.sendline(cmd)
++
++        # We login in the virtual machine.
++        self.emulator.login()
++
++        # We check we can see our kernel argument.
++        out, ret = self.emulator.run("cat /proc/cmdline")
++        self.assertEqual(ret, 0)
++        self.assertIn(kvm_karg, out[0])
++
++        # We check the virtual machine has the expected number of CPU.
++        out, ret = self.emulator.run("nproc")
++        self.assertEqual(ret, 0)
++        self.assertEqual(int(out[0]), kvm_nproc)
+diff --git a/support/testing/tests/package/test_kvmtool/linux-kvm.fragment b/support/testing/tests/package/test_kvmtool/linux-kvm.fragment
+new file mode 100644
+index 0000000000..8058ac41c3
+--- /dev/null
++++ b/support/testing/tests/package/test_kvmtool/linux-kvm.fragment
+@@ -0,0 +1,6 @@
++CONFIG_VIRTUALIZATION=y
++CONFIG_KVM=y
++CONFIG_NET_9P=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_9P_FS=y
++CONFIG_9P_FS_POSIX_ACL=y
+diff --git a/support/testing/tests/package/test_kvmtool/rootfs-overlay/etc/profile.d/stty-raw.sh b/support/testing/tests/package/test_kvmtool/rootfs-overlay/etc/profile.d/stty-raw.sh
+new file mode 100644
+index 0000000000..24d72995e6
+--- /dev/null
++++ b/support/testing/tests/package/test_kvmtool/rootfs-overlay/etc/profile.d/stty-raw.sh
+@@ -0,0 +1,3 @@
++# Avoid double-cooking the terminal, otherwise the test infrastructure
++# would not be able to retrieve return codes properly.
++grep -Fq br-kvm /proc/cmdline && stty raw
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
