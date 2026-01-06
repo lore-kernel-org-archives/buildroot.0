@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB1F4CEFCF2
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 19:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80AE4CEFCF5
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 19:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05124606C9;
-	Tue,  6 Jan 2026 19:05:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC95460BED;
+	Tue,  6 Jan 2026 19:20:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ovsuzz9z24kt; Tue,  6 Jan 2026 19:05:50 +0000 (UTC)
+ id 5KT2lnE04hn2; Tue,  6 Jan 2026 19:20:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD3D360627
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEDA66064B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767726350;
-	bh=elJ060oIwRg/U89CYLq92TykLiob2YkGZF0YM9ii6TU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1767727210;
+	bh=6vVZqK/rW292UqEfcMzvcn5oD3Ef+bxBoitZqSZlbOA=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=rkxxJqadD34pJyzu+Lf61LYUL6iPhdxqz1HMXG2UdF8EWx4+f5bwJz+P8zBrssnsM
-	 dj00tVN8ECqGB5e7IERJrhWABSs6LyD0XdrvJcgajI8AcFTfaEQAnFK9OqiaG/HtV+
-	 RsgpruzgA19lQA+fD4k1UYkKRBmMJCxNCeB9CDPZrT/fga/DsxT9M5uWcJoES6QQyw
-	 t2CQlidn8QKBI+PFP+5SyI+Y5iiwLUq5AjAzv17hePWQ/0f6Yg1CvIoilewxfNvmsj
-	 eZi+J+UgqUI99ump3k1EncfVXEDM3aEGTP9TmKKGh5h0XtncnToB4gII225BoDL+nP
-	 Uzh209qfxCR6g==
+	b=M6Lhm3Zv/uNHMcFDFVYhphP4c+lYhyu2au6aLPNzxUm0y1egDX7gtbioU7Yn+oYqX
+	 +AFosVJ2h5hQV+GTaE92Vdpgq1Ri1NVmXhdc2YO7teOt2RdhpBg0rkxLbDilq/vA2R
+	 YKGDdM1QL/UgwEzLagvlYswoABZG03XCUE28V/c8D5pXMsHjEvQmBgFgPx/x2IxJXK
+	 kXTV75Ojje3Q6p/M5+KkK2r0FMBR9fe4BCipWkZv2TVNNrz2Zd6hfl//UK31OTfUYT
+	 Y4A9ZPnBH5u4j0CXyTcINkink4LXosohOZrMcnVEhFnDclxTanQ969LCwxRc8D8nt5
+	 vp1/LeC8YqvQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD3D360627;
-	Tue,  6 Jan 2026 19:05:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BA8A170B
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:05:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEDA66064B;
+	Tue,  6 Jan 2026 19:20:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1DEE70B
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:20:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABEBC6064A
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:05:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D899081CA7
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:20:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vs7kP7P0HF6B for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 19:05:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ijDhziUmLezw for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 19:20:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A128600C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A128600C7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A583A81BCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A583A81BCF
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2A128600C7
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:05:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A583A81BCF
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 19:20:08 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E0C61A4C3325
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 20:05:43 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50056)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C955AA4C3734;
+ Tue,  6 Jan 2026 20:20:06 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33720)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vdCND-0000000017V-0aHm
- for buildroot@buildroot.org; Tue, 06 Jan 2026 19:05:43 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vdCb8-000000003ez-1yfr;
+ Tue, 06 Jan 2026 19:20:06 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  6 Jan 2026 20:05:43 +0100
-Message-ID: <20260106190543.1318334-1-bernd@kuhls.net>
+Cc: Trammell Hudson <hudson@trmm.net>
+Date: Tue,  6 Jan 2026 20:20:06 +0100
+Message-ID: <20260106192006.1629907-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1767726343;
- bh=dfqWK6lhwtDTI2dOWNtRq/fxaGlMD7A4zijf9lNvU+I=;
- h=From:To:Subject:Date:From;
- b=VAyO6k2bHj/ckrCt8vnM7L8ZImI80lzLWA+7hz6n0Zu7BUfxc+lJnD8FvfdwFFAg6
- oBkmSY1oiBhG9uHCtSvi/wVfGcAVjs7/5bchR/F2TBZoqy2eArqOTp7U6BWRmPy/G5
- 0yp8ZJF0g/WdFwariCgZZlVw73U8EpuPPeXP5s4G/1lsPiCD44PpcOn/goCviiCPBo
- fsvKgZSKtspQLMdmXt+42iJmZQBFh042yqAbuF/x1dMwyDR7tlY5Xxob+2iEJKpIAx
- RN9eBpMyO0f627815y8kySiQFGJKoydT8m+bKsLsVaTr10HmDG3nn+BM7HONMH33m0
- KoykUbPqe4ZnQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202511301023; t=1767727206;
+ bh=xIvunWNp2Go+IP/JH5bBkLdJ+vO5cTSgw1C4KrBaI0A=;
+ h=From:To:Cc:Subject:Date:From;
+ b=JXAiRM/vV0daG3BluxWCbwBNkY62mhfirOvYoS8rLMmXh7/YlhVtT1ldeCWFuKBJu
+ 0ZFsvPm14/Qr0ZbULZFHClOoydu7uwaKTyHl/lLzm2Gk2wuKeAmhm90ECOF1RUZ7dL
+ AdocyRHkmuBBF5rSaJ7gOzjTPDr+VIML/hLEtvSeheWBBvdBI5oyY+3Q1W9mEU/c2f
+ HwXlqA1w+KQVnztGQuvIHWxZk3DQ/C7hlOh3Ofdu20o+Ajqz032A/ThH9IRBXfRyNS
+ CCgpe3xAwqiLQYrU/ORX31ipCjpk0kK9zgnkzrmnYm0RfGR89XExaXzJrKwjdEqK2u
+ xRhUl0HF0VCOA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=VAyO6k2b
-Subject: [Buildroot] [PATCH 1/1] package/luv: bump version to 1.51.0-1
+ header.s=kas202511301023 header.b=JXAiRM/v
+Subject: [Buildroot] [PATCH 1/1] package/nqptp: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,36 +97,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/luvit/luv/releases
+Fixes:
+https://autobuild.buildroot.net/results/5b5/5b5eac85ca0221596ee12ea5e23acde46c6b7edb/
+
+checking for pthread_create in -lpthread... no
+configure: error: pthread library needed
+
+NPTL support is not needed, this defconfig builds:
+
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_PTHREADS=y
+BR2_GCC_VERSION_15_X=y
+BR2_PACKAGE_NQPTP=y
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/luv/luv.hash | 2 +-
- package/luv/luv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nqptp/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 4cdb91729f..f47257f37e 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  567a6f3dcdcf8a9b54ddc57ffef89d1e950d72832b85ee81c8c83a9d4e0e9de2  luv-1.43.0-0.tar.gz
-+sha256  dc706d9141c185bdce08b6fc8a9d4df05c3ac3676809ee4e9e37e1553d821237  luv-1.51.0-1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index 36fcdc742e..0349f7afba 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nqptp/Config.in b/package/nqptp/Config.in
+index ec5d2ece2e..62742e81fb 100644
+--- a/package/nqptp/Config.in
++++ b/package/nqptp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NQPTP
+ 	bool "nqptp"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	help
+ 	  nqptp is a daemon that monitors timing data from PTP clocks
+@@ -11,3 +12,7 @@ config BR2_PACKAGE_NQPTP
+ 	  timing information for AirPlay 2 operation.
  
--LUV_VERSION = 1.43.0-0
-+LUV_VERSION = 1.51.0-1
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
+ 	  https://github.com/mikebrady/nqptp
++
++comment "nqptp needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.47.3
 
