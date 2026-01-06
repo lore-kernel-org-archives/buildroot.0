@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41778D0D150
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EA06D0D14F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11EA5820E1;
-	Wed,  7 Jan 2026 17:48:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DFF340A0D;
+	Wed,  7 Jan 2026 17:48:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 15x1u6F96TcQ; Wed,  7 Jan 2026 17:47:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id edry5X2p08nC; Wed,  7 Jan 2026 17:48:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B19382016
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5654A40B26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808079;
-	bh=0VUS54Nu1HvntBYbOygMpcBAFULZaoMNsD9+eGLr8UQ=;
+	s=default; t=1767808080;
+	bh=avgKx/qnod+zVuA1+Z+oMGVXoYKJWcMtHew2u7quY6g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AoZSmgoLiESzJnYyyNp6gV0SB/4j7lkblsOoT5LHwpjGBTbwupCe6/V8TeaE3Bcj9
-	 VYDpNhanPfvXw/9tJ/IurvUCe5q0olofunurHi/0hsmeTMyppDt7ITGuNYaMFQ5ZmC
-	 huv4AOynfWXPiNGkh8EU0MegFY/xfKICy+f1Sip6U/J0xwakT7ng+n94ufqJC0BStH
-	 5lqKIh86Qo4INGeJPmKQRny+cm9LV6DAdyIOkGS35Un7KX5qffpJRZNefpTt2z4ovi
-	 8LMhQUAW/zNkM8lZO+HnSXUdvkFA3IJkD7pvy0iAg3MDbqLCeo2hYQUn0esN27hrGC
-	 eKj6XJnNm3i7g==
+	b=m2BpwDVqbIebnvZiZ3LHTCNi03AZWXDQBOO9vhoxphmW8r6mA9uzozHT1Aybx1k6z
+	 UflybbRkSJ1Q0KQgKXroBT9bXckHvfBrP93s0WTT9fCdeGtk6TpPiumV01K+FMijog
+	 RAOjI8HVOXLPFmOm/5lIBIFeT8PrfI5H4+g/Q5cj+X5ReTcLzqQR4tBGqVSe97MX1I
+	 iqNStmhGc7fprdRiPR6ShNSGiGRBmPABKr02suniyw1UIeWuhtRsI7KaBmRDNXGIPV
+	 L1IXCwxPL0kHAloh1a5uLvl/dclsxIihyMcLv2CvJI1DJ7lHactMGyh9u7SgEee67/
+	 joRHl3x1TfVcw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B19382016;
-	Wed,  7 Jan 2026 17:47:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DE8C9ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5654A40B26;
+	Wed,  7 Jan 2026 17:48:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8CBC25B
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2990480B2B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CFAF60BA2
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NMd5SKib91Kr for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7X7Hd2hljdMP for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4386480C1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50DAC6089B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4386480C1B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 50DAC6089B
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4273A81917; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ id 5041B883AA; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:18:37 +0100
+Date: Tue, 6 Jan 2026 09:18:39 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b05af4db3392f21f74e5ee7b415df270cbf4d986
-X-Git-Newrev: 7c37f8643690056d470351d82756aac65ae55b4d
+X-Git-Oldrev: 7c37f8643690056d470351d82756aac65ae55b4d
+X-Git-Newrev: e4b5b97b7dea58f4e701ac24dc1a008b71488ff4
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174643.4273A81917@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-httplib2:
- fix sort order of dependencies in Config.in
+Message-Id: <20260107174643.5041B883AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-iniparse:
+ update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,33 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c37f8643690056d470351d82756aac65ae55b4d
+commit: https://git.buildroot.net/buildroot/commit/?id=e4b5b97b7dea58f4e701ac24dc1a008b71488ff4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
 Updated package as computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 84c9fc51cc8325611310d5a7b7e3176b790cfe48)
+(cherry picked from commit c62e2390e90627e2cb71c268623e980f78a95951)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-httplib2/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-iniparse/python-iniparse.hash | 5 ++---
+ package/python-iniparse/python-iniparse.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-httplib2/Config.in b/package/python-httplib2/Config.in
-index a029814f03..9647bd495a 100644
---- a/package/python-httplib2/Config.in
-+++ b/package/python-httplib2/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_HTTPLIB2
- 	bool "python-httplib2"
-+	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB
- 	select BR2_PACKAGE_PYTHON3_SSL
--	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
- 	help
- 	  httplib2 is a comprehensive HTTP client library, httplib2.py
- 	  supports many features left out of other HTTP libraries.
+diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
+index afcfcd2ffb..747d403965 100644
+--- a/package/python-iniparse/python-iniparse.hash
++++ b/package/python-iniparse/python-iniparse.hash
+@@ -1,7 +1,6 @@
+-# From https://pypi.org/project/iniparse/#copy-hash-modal-5fdd923b-0592-4d2d-8b49-03472f948290
++# md5, sha256 from https://pypi.org/pypi/iniparse/json
+ md5  2054bab923df21107652d009f2373789  iniparse-0.5.tar.gz
+ sha256  932e5239d526e7acb504017bb707be67019ac428a6932368e6851691093aa842  iniparse-0.5.tar.gz
+-
+-# sha256 locally computed
++# Locally computed sha256 checksums
+ sha256  ff45637d8a96adc414179e502fbed40160e57205bf2e302140e79a0c71eceaa7  LICENSE
+ sha256  9b02e3dfe433ccd2bd94636ef6eb08638b5a54deafe5f87a3d9d9104356c48e0  LICENSE-PSF
+diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
+index 9f00cf7387..05c9b3930f 100644
+--- a/package/python-iniparse/python-iniparse.mk
++++ b/package/python-iniparse/python-iniparse.mk
+@@ -6,7 +6,7 @@
+ 
+ PYTHON_INIPARSE_VERSION = 0.5
+ PYTHON_INIPARSE_SOURCE = iniparse-$(PYTHON_INIPARSE_VERSION).tar.gz
+-PYTHON_INIPARSE_SITE = https://pypi.python.org/packages/source/i/iniparse
++PYTHON_INIPARSE_SITE = https://files.pythonhosted.org/packages/4c/9a/02beaf11fc9ea7829d3a9041536934cd03990e09c359724f99ee6bd2b41b
+ PYTHON_INIPARSE_LICENSE = Python-2.0, MIT
+ PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
+ PYTHON_INIPARSE_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
