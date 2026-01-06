@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EA06D0D14F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A5ED0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DFF340A0D;
-	Wed,  7 Jan 2026 17:48:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8230640B3D;
+	Wed,  7 Jan 2026 17:48:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id edry5X2p08nC; Wed,  7 Jan 2026 17:48:00 +0000 (UTC)
+ id 4lvgAbDPzdq8; Wed,  7 Jan 2026 17:48:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5654A40B26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9969F40B3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808080;
-	bh=avgKx/qnod+zVuA1+Z+oMGVXoYKJWcMtHew2u7quY6g=;
+	s=default; t=1767808081;
+	bh=u6W4Ail+KT00Z3BY8y5WmPGHZdTA9/eYt/3576IgRPs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m2BpwDVqbIebnvZiZ3LHTCNi03AZWXDQBOO9vhoxphmW8r6mA9uzozHT1Aybx1k6z
-	 UflybbRkSJ1Q0KQgKXroBT9bXckHvfBrP93s0WTT9fCdeGtk6TpPiumV01K+FMijog
-	 RAOjI8HVOXLPFmOm/5lIBIFeT8PrfI5H4+g/Q5cj+X5ReTcLzqQR4tBGqVSe97MX1I
-	 iqNStmhGc7fprdRiPR6ShNSGiGRBmPABKr02suniyw1UIeWuhtRsI7KaBmRDNXGIPV
-	 L1IXCwxPL0kHAloh1a5uLvl/dclsxIihyMcLv2CvJI1DJ7lHactMGyh9u7SgEee67/
-	 joRHl3x1TfVcw==
+	b=dLlb0JH5lJQ/0H5fNNhyucnKBxkioJWlVSXMHrBm+KrV0EVnjGZTeny+B17G+JFc2
+	 1JhE6g8zhVurLqJT3o4nkCVn7Bb/AHz7nrjqkuLYqQotryl9MvWVOXl4NHpHMpJVpT
+	 v7XdNr+WTeuKx0u5OKsfUiZ5bY6O/ijnEGqBGUWjzuuw36t7buE/8L2j8erskkN5e8
+	 qI65qJd/E0yGYbrf7HN0Q0HPC6oSf9+0syma/fenvE5NVwI6YsXOv/vioSgdFPHJ/E
+	 jRKw6cDV/zKZgilpoy/+GnKWvipSvhQiQE4reevmxnZWCJz9iczRgmUUQEPtouXM82
+	 z3IyxbwXWkX7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5654A40B26;
-	Wed,  7 Jan 2026 17:48:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D8CBC25B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9969F40B3E;
+	Wed,  7 Jan 2026 17:48:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0730B25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CFAF60BA2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C89A80BB3
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7X7Hd2hljdMP for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rkY1Rtl8b6NN for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50DAC6089B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC09D80B21
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50DAC6089B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC09D80B21
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5041B883AA; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ id BB234883AA; Wed,  7 Jan 2026 17:46:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:18:39 +0100
+Date: Tue, 6 Jan 2026 09:17:41 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7c37f8643690056d470351d82756aac65ae55b4d
-X-Git-Newrev: e4b5b97b7dea58f4e701ac24dc1a008b71488ff4
+X-Git-Oldrev: 32d1d7c367104d23cc9eec2762a7e543afdafd9e
+X-Git-Newrev: c8f817c9957d6288119ba216425d3aa296246c95
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174643.5041B883AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-iniparse:
- update tarball URL
+Message-Id: <20260107174641.BB234883AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pixman: really
+ enable NEON support on AArch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,53 +72,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7762194736279542614=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4b5b97b7dea58f4e701ac24dc1a008b71488ff4
+--===============7762194736279542614==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c8f817c9957d6288119ba216425d3aa296246c95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Updated package as computed by scanpypi.
+The test to enable NEON on AArch64 is as following:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ifeq ($(BR2_aarch64)$(BR2_ARM_CPU_HAS_NEON),yy)
+
+It cannot be to true as $(BR2_aarch64) and $(BR2_ARM_CPU_HAS_NEON) are
+mutually exclusive. NEON is compulsory on AArch64 so remove
+$(BR2_ARM_CPU_HAS_NEON) from the test.
+
+Fixes: ba2fb599cd002b57fa70e978d91884c98d8aad05 ("package/pixman: bump to version 0.44.2")
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c62e2390e90627e2cb71c268623e980f78a95951)
+(cherry picked from commit d297569eb405d2db729dadf8dd86ac2d1070b742)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-iniparse/python-iniparse.hash | 5 ++---
- package/python-iniparse/python-iniparse.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/pixman/pixman.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
-index afcfcd2ffb..747d403965 100644
---- a/package/python-iniparse/python-iniparse.hash
-+++ b/package/python-iniparse/python-iniparse.hash
-@@ -1,7 +1,6 @@
--# From https://pypi.org/project/iniparse/#copy-hash-modal-5fdd923b-0592-4d2d-8b49-03472f948290
-+# md5, sha256 from https://pypi.org/pypi/iniparse/json
- md5  2054bab923df21107652d009f2373789  iniparse-0.5.tar.gz
- sha256  932e5239d526e7acb504017bb707be67019ac428a6932368e6851691093aa842  iniparse-0.5.tar.gz
--
--# sha256 locally computed
-+# Locally computed sha256 checksums
- sha256  ff45637d8a96adc414179e502fbed40160e57205bf2e302140e79a0c71eceaa7  LICENSE
- sha256  9b02e3dfe433ccd2bd94636ef6eb08638b5a54deafe5f87a3d9d9104356c48e0  LICENSE-PSF
-diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
-index 9f00cf7387..05c9b3930f 100644
---- a/package/python-iniparse/python-iniparse.mk
-+++ b/package/python-iniparse/python-iniparse.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 76e72d6d96..5d29fd7b35 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -68,7 +68,7 @@ else
+ PIXMAN_CONF_OPTS += -Dneon=disabled
+ endif
  
- PYTHON_INIPARSE_VERSION = 0.5
- PYTHON_INIPARSE_SOURCE = iniparse-$(PYTHON_INIPARSE_VERSION).tar.gz
--PYTHON_INIPARSE_SITE = https://pypi.python.org/packages/source/i/iniparse
-+PYTHON_INIPARSE_SITE = https://files.pythonhosted.org/packages/4c/9a/02beaf11fc9ea7829d3a9041536934cd03990e09c359724f99ee6bd2b41b
- PYTHON_INIPARSE_LICENSE = Python-2.0, MIT
- PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
- PYTHON_INIPARSE_SETUP_TYPE = setuptools
+-ifeq ($(BR2_aarch64)$(BR2_ARM_CPU_HAS_NEON),yy)
++ifeq ($(BR2_aarch64),y)
+ PIXMAN_CONF_OPTS += -Da64-neon=enabled
+ else
+ PIXMAN_CONF_OPTS += -Da64-neon=disabled
+
+--===============7762194736279542614==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7762194736279542614==--
