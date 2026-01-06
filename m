@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F16D0D14F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFF0D0D150
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2627480D6F;
-	Wed,  7 Jan 2026 17:48:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B6ED40B6E;
+	Wed,  7 Jan 2026 17:48:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k3Of5gR5Ret6; Wed,  7 Jan 2026 17:48:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oP9-mdePI002; Wed,  7 Jan 2026 17:48:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48A59821AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 641EC40B70
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808086;
-	bh=K+jwbvdx+FRC8eysAYhYzNZvLBLw7CrTGkpEbk5LSu0=;
+	s=default; t=1767808087;
+	bh=sa0YEibRa3DgSfF4r8xaU5im/qy85t8reX94Nr0K4bs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=c1EeQOcd1Twk5BdQ7yz2wM+XBcwpOxY8RWgeJXGGx7Sfq5yigcU0gB32NQYYlpBby
-	 MakCT307SVQQcl1DOd7zxKOwTdY/+5qBISg7dQZpZ7RnqGBVmEWZDalGrQ7rib3m3D
-	 RoXuOYfrXMVuDW4QUa7OiugSBnAEM7RmWcYUg6E7gi4IyJGKXEsvvytkXkHJvp9x8N
-	 2B6wNFZhbxmapXi+HKecKLAQ9ADrIYZPsqw7wbMCfCBgprnXlKaPiKlEPFUdfD48MQ
-	 fuif/XCwktGGyqGO21lWI6tndcQNm2DFG97zTwCzn4UZe24y4b7jITomrYUL8Qj2ni
-	 HqjhnR+9A5wVg==
+	b=jjnn+0fxRoETnoPvLvwLf8P0ntdD5s7co099x8utSOOCr+70rC2ojViinzO03kpuY
+	 Q3IFlmG/0pvk04Yq2Vkt14Z1reM5qBW3uzUj6CVzkfD0+jqiaxKmhdn+gS3nbeXP1A
+	 vfVyWkfF7VYJhcbCqMCDGJfJ2n0FxV7A1bSPnjWgsg1r2J2iyNZMr5l7bEfuZUePy7
+	 Bem7xvO8Jbw0aboo8EnmqAA4PczE3pgCf5jUrbkVxilLd93Qt4qNbth8TQZW8pkGm5
+	 fyg05EXODv5qfwHd6gPbqSGFP81sLPsRoxLZADaFmjK1T5MiA8GDtn4hG7fhR1Kj0x
+	 ci1CAg+qGkwaw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48A59821AC;
-	Wed,  7 Jan 2026 17:48:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CE139ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 641EC40B70;
+	Wed,  7 Jan 2026 17:48:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6BCB29ED
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 528DE80C47
+ by smtp3.osuosl.org (Postfix) with ESMTP id C87486085F
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lh5Nfk9WeO8a for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TiqBXYN_hXjW for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95B4580C62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AFD960843
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95B4580C62
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AFD960843
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 947ED81917; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
+ id 99BA786FC2; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:18:50 +0100
+Date: Tue, 6 Jan 2026 09:18:15 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 432ba70009252693bac2c7b58d3449a1f9825e1e
-X-Git-Newrev: 0ca81ef13c44befb0819922a847df86cdd04ec85
+X-Git-Oldrev: b97e9adb890b52d7b1a5d430e6fb976535bfcc80
+X-Git-Newrev: fe6204462a1e2524818ca69332380f528b553914
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174643.947ED81917@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/python-minimalmodbus: add md5 hash
+Message-Id: <20260107174642.99BA786FC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/jbig2dec: add CVE
+ trailer in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,37 +72,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0658241182970888194=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ca81ef13c44befb0819922a847df86cdd04ec85
+--===============0658241182970888194==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fe6204462a1e2524818ca69332380f528b553914
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Updated package as computed by scanpypi.
+Since Buildroot commit [1] the patches that fixes a security
+vulnerability needs to reference the fixed vulnerability.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This patch adds the relevant information to the patch header.
+
+[1] 1167d0ff3d docs/manual: mention CVE trailer
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8132e84e0491da912df51e18c35d5fab981a2bce)
+(cherry picked from commit 51a3cb5db4b4c1be51e7572028555b5a53055752)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-minimalmodbus/python-minimalmodbus.hash | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch      | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-minimalmodbus/python-minimalmodbus.hash b/package/python-minimalmodbus/python-minimalmodbus.hash
-index 635090fae7..ee688e49d3 100644
---- a/package/python-minimalmodbus/python-minimalmodbus.hash
-+++ b/package/python-minimalmodbus/python-minimalmodbus.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/project/minimalmodbus
-+# md5, sha256 from https://pypi.org/pypi/minimalmodbus/json
-+md5  a981b31df61c7dd9fa04d0def72f8486  minimalmodbus-2.1.1.tar.gz
- sha256  c3f5a56e107d537e4bb420f7e735841ab2939c8ca6fb528f5fe4124571315b64  minimalmodbus-2.1.1.tar.gz
--# Hash for license file
-+# Locally computed sha256 checksums
- sha256  abe787d472ae2069e935c84eb13fd770518dfb08b92d5f190f3cd7ff6d1f6f32  LICENSE
+diff --git a/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch b/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch
+index 8331d5f2a4..dd96c45ebd 100644
+--- a/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch
++++ b/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch
+@@ -4,6 +4,7 @@ Date: Sun, 5 Nov 2023 12:21:52 +0100
+ Subject: [PATCH] Bug 705041: jbig2dec: Avoid uninitialized allocator in
+  command-line tool.
+ 
++CVE: CVE-2023-46361
+ Upstream: https://github.com/ArtifexSoftware/jbig2dec/commit/ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
+ Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+ ---
+
+--===============0658241182970888194==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0658241182970888194==--
