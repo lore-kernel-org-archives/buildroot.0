@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85265D0D14B
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBECBD0D155
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEBD414C6;
-	Wed,  7 Jan 2026 18:02:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3BC682751;
+	Wed,  7 Jan 2026 18:02:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yACZifaluHrD; Wed,  7 Jan 2026 18:02:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pw3Y0FYTaTU4; Wed,  7 Jan 2026 18:02:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01F5F41522
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5675683376
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808972;
-	bh=BbdTa37f7VhsBNT2iAyypk9iezIZxZ0ikIWz39DERuw=;
+	s=default; t=1767808973;
+	bh=yQJsVCHsaFCDmzvcKwzqkkupLOdXhO8uDL68H0GmjAM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QDuVXYN+oHzidATdkW/Zk9L/8eOwGj9sKGUirIrmegC9n3DyUjlLUYKUTU4jY1b39
-	 2Cne9M5S3u2LRr+t1JkG8BjvavZ+y/bgr5PcJoE74/M677OkHclMnGlTRACZNMnJWd
-	 eKdYdRk7BbmpFIHg1CP3V6xOkcK7/kA6+/OEe8NSHbc7rmY4n+ReGXnhXWuXgbbqyF
-	 lvNRJOXW3hf9wiLPBux1DBuLBbTMQzZo9AXIwm0Y27H/KBR8iVlEQXXomzHdfnFNg4
-	 P3fayk8rbOuwbMEmgvgFhoy+OULyc1l8A120HL+Q2AXyZT77dFdM/UC+oySmfgc3cj
-	 3Qiu3T3bd5+GA==
+	b=QCuooGIW0BuFEtjcAvtJNKlCrFnmmcNWxSJWu9mkj+kPlwjrrOWKA2JoL6iQAkRwk
+	 KDFoE9aaAOMoukn7C/c4Z3VpnLl7z4qyUh8PJAl6oyVUbBYvps9tcCYwmT7srOr8fe
+	 1umpGVtFES0XXbeF9fUqtMZYC2okOq3Se0vQOjgupw7899ED2tDB9wK5mQu0wA59By
+	 WcVj2SVNulRNS4p3x9fQbn87dmXseosugDgLN9MlmQkR9qsykMMyZNCB7lM146MuAu
+	 nHtvBYOStnbn+qHjnwBZNIWKRyHJByorijomAGfFs48o1SjTuWTs9U+69zfu73KGjW
+	 1g78j8bNNfR1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01F5F41522;
-	Wed,  7 Jan 2026 18:02:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E1BE9ED
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5675683376;
+	Wed,  7 Jan 2026 18:02:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F95FA58
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AD6140DD9
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F31C681351
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YMRaNJ93e_Gk for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B58eDHqHifzK for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2938040A3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC8680C97
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2938040A3C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AC8680C97
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28704811C5; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ id 49D7681340; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:58:08 +0100
+Date: Tue, 6 Jan 2026 08:58:29 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: f244566d7f1fda005fc226df1ced034f5d98626c
-X-Git-Newrev: 20b7af0d01cd0258cf3e91538e9f319ea6836438
+X-Git-Oldrev: 410fc5866602f73d97f95dd504472f521dd4c829
+X-Git-Newrev: 21c7f13b6bd1f41c28e6d0193371871687a2a940
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180114.28704811C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x]
- package/python-characteristic: add md5 hash, update SITE
+Message-Id: <20260107180114.49D7681340@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/python-crccheck:
+ add md5 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20b7af0d01cd0258cf3e91538e9f319ea6836438
+commit: https://git.buildroot.net/buildroot/commit/?id=21c7f13b6bd1f41c28e6d0193371871687a2a940
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
 Updated package as computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 39a123b9ec3392a16304f270210714841c91cd0b)
+(cherry picked from commit 30379483bbb3e935f6cb7f986e9366b0ec2e9b98)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-characteristic/python-characteristic.hash | 4 ++--
- package/python-characteristic/python-characteristic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-crccheck/python-crccheck.hash | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
-index c91017d707..84304818c6 100644
---- a/package/python-characteristic/python-characteristic.hash
-+++ b/package/python-characteristic/python-characteristic.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913
-+# md5, sha256 from https://pypi.org/pypi/characteristic/json
- md5  b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
--# Locally computed
- sha256  ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+diff --git a/package/python-crccheck/python-crccheck.hash b/package/python-crccheck/python-crccheck.hash
+index 3fb58a7299..b8fb4e3312 100644
+--- a/package/python-crccheck/python-crccheck.hash
++++ b/package/python-crccheck/python-crccheck.hash
+@@ -1,4 +1,5 @@
+-# From https://pypi.org/project/crccheck/#crccheck-1.3.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/crccheck/json
++md5  b70543709102d2edb9159a9b26366706  crccheck-1.3.1.tar.gz
+ sha256  1544c0110bf0a697d875d4f29dc40d7079f9d4d402a9317383f55f90ca72563a  crccheck-1.3.1.tar.gz
+-# Locally calculated
 +# Locally computed sha256 checksums
- sha256  0af91b662f8428b28f5e517b049a0bb9feeb59b1adaa5c9418c1579f9485107c  LICENSE
-diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
-index 7ea8d95cd4..dd081eacef 100644
---- a/package/python-characteristic/python-characteristic.mk
-+++ b/package/python-characteristic/python-characteristic.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_CHARACTERISTIC_VERSION = 14.3.0
- PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
--PYTHON_CHARACTERISTIC_SITE = https://pypi.python.org/packages/source/c/characteristic
-+PYTHON_CHARACTERISTIC_SITE = https://files.pythonhosted.org/packages/dc/66/54b7a4758ea44fbc93895c7745060005272560fb2c356f2a6f7448ef9a80
- PYTHON_CHARACTERISTIC_LICENSE = MIT
- PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
- PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
+ sha256  1237ab8ea60caa782d77d9d2ac0cdccd765475e3848b0b91b5751d3f299e9d31  LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
