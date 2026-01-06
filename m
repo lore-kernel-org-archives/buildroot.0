@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC1BD0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4236ED0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4E878145A;
-	Wed,  7 Jan 2026 18:02:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A959413C4;
+	Wed,  7 Jan 2026 18:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5A4BCbsKl9L5; Wed,  7 Jan 2026 18:02:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id duEGg7feldiI; Wed,  7 Jan 2026 18:02:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D29F982E19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF5FF413A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808929;
-	bh=bbxeJxZxFZRFEmQTyB0nQAsDoIVe68u6P28F/wenQHw=;
+	s=default; t=1767808931;
+	bh=HIwuE+wYy4Zvcpii6Y9tBT6SRc4QNaWOIfBs9s/fWuQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XgHdC62KQN4kI+1OHrIKo5FzuYnfZQJ0Jhn17ZaqI6AKj9rH7qPv6kZeolt9ESqnW
-	 7yR2PieQf95icitr+PH4P6DqfyQ3aIp+NyaMAlclwk4gw5AkpD7bImgFmSPaaBMSFQ
-	 ZyGBqRjtnpmpn3ht/B6sjAgu7uSRbYyCBN8+FTGyYbW3suPeFwmpeEs2Shn4HAtln1
-	 l1tdz1oRkiEU6e99tCFVLqpmMspDCzl36WenztCGqX3BrS7CaLWH1/0CQHnSI1hdei
-	 WcjRscbP4p0zfGKzSU9DlXsqfhosJRWnkxddcEVI4aTTyHt+CgTvQNAI+2Z9aIDZm/
-	 62ZBPnlzl9ldA==
+	b=bT8S/PEOboQ7wly9am99O02+gXFp52fyGTOEov1x8dzxjff2E/GdqjcmiaXGoc9ts
+	 6R8CQfxO0SlSTytqr87P/laHEJRd0Mb74/Z7JCvj2lHsHAhk9APkRSMf6YwkJeKyUo
+	 LA/ESnRy4Zw3P4Y6gnhEwoVCwaZNdGKoQVqTm0omzFK7Ynp/wcaAsyDQvdRyJF5Kxr
+	 WIXkDysUGdlhvYvnO8WixeEmPKxVjoVk6UvQnuwSL7b39oWSTEGPRETThXN+VpsEj8
+	 xNBT6Hjzk8SE9RfdJz8+JXhFm7fjNPvOVJzIf3msjGNJ/cgnl2ZEu1sq4uWCGTKjFB
+	 eUujzyFtjVpKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D29F982E19;
-	Wed,  7 Jan 2026 18:02:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 670AA25B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF5FF413A9;
+	Wed,  7 Jan 2026 18:02:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DAD99ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD649608AD
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D410440B48
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j4OzNZvk5rXn for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6t_-Gvx0VKFF for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 319DB607FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFFE04099A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 319DB607FC
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFFE04099A
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 300C180333; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ id DEEE781340; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:02:02 +0100
+Date: Tue, 6 Jan 2026 08:39:16 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 930866069681edc1dad82a1943da71e27fc92f87
-X-Git-Newrev: 0315fd3d1fc17f88b41aa125bd4567df5960fb6e
+X-Git-Oldrev: 61261f2cad154429c427afade71afabefceebebb
+X-Git-Newrev: 3b276e91c98990e71d19af9f72378831041cbf72
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180115.300C180333@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/kvmtool: remove
- unneeded KVMTOOL_EXTRA_LDFLAGS
+Message-Id: <20260107180111.DEEE781340@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/rpi-firmware:
+ bump version to 063bcab
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,38 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0315fd3d1fc17f88b41aa125bd4567df5960fb6e
+commit: https://git.buildroot.net/buildroot/commit/?id=3b276e91c98990e71d19af9f72378831041cbf72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Buildroot commit [1] "kvmtool: bump to f77d646ba0" removed the
-definition of KVMTOOL_EXTRA_LDFLAGS but forgot to remove its usage
-in KVMTOOL_MAKE_OPTS.
+Version 063bcab matches with kernel 6.12.61
 
-This commit removes it since it is no longer needed.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/f20615b53e83d6263346cb038d59df8e8d6b2b74
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 443307ef50e0a5b14b095178b7c8d59ad3639ab4)
+(cherry picked from commit c1ab01cdc8bc3ceb41f8bceda2dce5261024cf05)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/kvmtool/kvmtool.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-index 7fec6643f8..6d94c41aaf 100644
---- a/package/kvmtool/kvmtool.mk
-+++ b/package/kvmtool/kvmtool.mk
-@@ -22,7 +22,7 @@ KVMTOOL_CPE_ID_VALID = YES
- # Disable -Werror, otherwise musl is not happy
- KVMTOOL_MAKE_OPTS = \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	LDFLAGS="$(TARGET_LDFLAGS) $(KVMTOOL_EXTRA_LDFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	WERROR=0
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 0645d6ad77..4dd8aa9a26 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6c1b017867c3a51e606859f1cd50df61b94af311577583b6b2a113d11131ee93  rpi-firmware-95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93.tar.gz
++sha256  812cb64617d6ffbc76f9b8dce8237b31159a1216b31845faec1bb75b6b6b291f  rpi-firmware-063bcab6c8a90efb0d19f69d88cbbc7ec79cab68.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index d0b6abcc6f..3318e9a0c1 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- define KVMTOOL_BUILD_CMDS
+ # Please keep in sync with configs/raspberrypi*_deconfig
+-RPI_FIRMWARE_VERSION = 95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93
++RPI_FIRMWARE_VERSION = 063bcab6c8a90efb0d19f69d88cbbc7ec79cab68
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
