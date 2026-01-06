@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C69D0D156
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B57D9D0D155
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:02:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E842482F14;
-	Wed,  7 Jan 2026 18:02:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84AF7413D7;
+	Wed,  7 Jan 2026 18:02:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sY_YqDCLCnYC; Wed,  7 Jan 2026 18:02:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ggsq32KcY03s; Wed,  7 Jan 2026 18:02:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13F5782F49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 284C4413E1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808940;
-	bh=S1Xxkt6+iFrx4MWafi/BNgYOfDPnEZLyCl/nXe/36b4=;
+	s=default; t=1767808941;
+	bh=1FMkCvauN6ybfIRe+zp21I/32MUg9j18maC9XbvbaZE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LH1AM9rFH/imEmiCVs7MX9SwcJlmlkiJ9eQz7xtNoXeRVq8OJ6s+xblSdo6Cch2B9
-	 nRe77H7m0y38UdfOOgMvK1wWkEsWZCCT6D+bvSVccBUszAAGmXdflo5LvKbhYbK5tu
-	 ObMtGuuhoFYbKJ/HJWG7rbVVAgJDvAxcZQDj0gsP28nPK9Iuve7JesBQThyuulMu+B
-	 bDeKzJr2FZA+G/8gSm2qgz2MW5VCaylLU+rVwRJrAX4Na2pLwKAFswYECWCUq5Z0MH
-	 jUr5f/lUdMcUFcvMcCnXDunQVYyFIbubq9xDGb8lP+RNbBGlmcrzqAWsVtZIrfJZp9
-	 AddKPCk/qfTkQ==
+	b=GOw1ITdaRT3D6vvVU4NDXM/Rv+MvgBTC4Crn5O+D4+jb5io0EckQ0ov3MsVFTlWC+
+	 8F60yMMoHzw9zfeWfalKC7uPbvAOBpSUzey+cFUuHA2pLa/IHj0hfGEtuzihJAXd2Y
+	 fNS62eEfeV8lhhOv9NVRfD4hQQuLGqjRzePZjpI9lLcwy1K0WkAufc6kSVYrq4k804
+	 hbC3ftZbgkSu+sLCwwsCYGoxLtc6DNS8MiDu30W+il7gtLrzCSRL/VD9TSNgtcnOKL
+	 QsyzRt5p8XUNAxVECTkJ2gcn6if9CRCstu3vsa4SI4hreOwPFUzbO2CO9webJwPsdE
+	 1mwMJTqf1mobA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13F5782F49;
-	Wed,  7 Jan 2026 18:02:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12834A58
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 284C4413E1;
+	Wed,  7 Jan 2026 18:02:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D26E25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3EC680FF2
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2F2B40B7C
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TCda7lEFfppE for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jHz5cFQF77ez for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E21CA80C8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D64A040A4E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E21CA80C8B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D64A040A4E
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E0459883B1; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+ id D4D3683B69; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:54:23 +0100
+Date: Tue, 6 Jan 2026 08:54:13 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 3d23d0a30a72182e3dee95cb9075736330c6cbed
-X-Git-Newrev: 9011ca9d31e724c6db3e08204bae601429938d9a
+X-Git-Oldrev: 836753465c116d242a88a7f41caeb9da44d52369
+X-Git-Newrev: 3d23d0a30a72182e3dee95cb9075736330c6cbed
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180112.E0459883B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/matchbox-lib:
- switch to gz tarball
+Message-Id: <20260107180112.D4D3683B69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/skopeo: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +76,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9011ca9d31e724c6db3e08204bae601429938d9a
+commit: https://git.buildroot.net/buildroot/commit/?id=3d23d0a30a72182e3dee95cb9075736330c6cbed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Switched _SOURCE to .gz, upstream does not provide bz2 tarballs anymore.
+So far, skopeo inherited the thread dependency from its runtime
+dependencies. However, skopeo uses pthread_getattr_np(3), which
+is only available with NPTL on uClibc. glibc and musl have had
+it for ages (and only implement NPTL anyway).
 
-Fixes:
+Fixes: https://autobuild.buildroot.org/results/b9d123986c2a65427bfca32ee3ea792a988e6890/
 
-  https://autobuild.buildroot.net/results/66ac5ae4b1cd053122ccebad9f61af02fa5fe7f6/
-
-Co-developed-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4b33839f12c4638ea148c4ac7ae2e85adf79f936)
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit dab0feeae84ad8d1e4a52621b2606dab2ede0cad)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/matchbox-lib/matchbox-lib.hash | 2 +-
- package/matchbox-lib/matchbox-lib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/skopeo/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/matchbox-lib/matchbox-lib.hash b/package/matchbox-lib/matchbox-lib.hash
-index 8144c10258..ecd02f7174 100644
---- a/package/matchbox-lib/matchbox-lib.hash
-+++ b/package/matchbox-lib/matchbox-lib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5c7795e46c24d848a2b960f3b994911165d95e5d5731e39105ee0d808d2373eb  libmatchbox-1.12.tar.bz2
-+sha256  648d7e1af82e69b79c0932ff9f85e6781584eada5da8662f70196916dd208f55  libmatchbox-1.12.tar.gz
- sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index 00ca4a0d15..b6e4584052 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/skopeo/Config.in b/package/skopeo/Config.in
+index 0de9b16047..b0229873d4 100644
+--- a/package/skopeo/Config.in
++++ b/package/skopeo/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SKOPEO
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_USE_MMU  # btrfs-progs, libgpgme, lvm2
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
+-	depends on BR2_TOOLCHAIN_HAS_THREADS  # btrfs-progs, lvm2
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS  # lvm2
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_BTRFS_PROGS
+@@ -17,10 +17,10 @@ config BR2_PACKAGE_SKOPEO
  
- MATCHBOX_LIB_VERSION = 1.12
--MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
-+MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.gz
- MATCHBOX_LIB_SITE = http://git.yoctoproject.org/cgit/cgit.cgi/libmatchbox/snapshot
- MATCHBOX_LIB_LICENSE = LGPL-2.1+
- MATCHBOX_LIB_LICENSE_FILES = COPYING
+ 	  https://github.com/containers/skopeo
+ 
+-comment "skopeo needs a toolchain w/ threads, sahred libs"
++comment "skopeo needs a toolchain w/ NPTL, sahred libs"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
