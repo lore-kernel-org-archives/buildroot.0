@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC566D0D150
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A9B5D0D14F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A42F140C51;
-	Wed,  7 Jan 2026 17:48:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6E90822A9;
+	Wed,  7 Jan 2026 17:48:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c-kYkyp1QLKy; Wed,  7 Jan 2026 17:48:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JCnxgOX6xnj2; Wed,  7 Jan 2026 17:48:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50ADA40C46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC90822A0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808116;
-	bh=wCfPaBjd5te6FOgm4JhgFtp97VZLYDhy8wqKSsb3K80=;
+	s=default; t=1767808118;
+	bh=rBCGWWPHdl8X8ut7YyBPJJDF1AjFEZfhg0Yf4REUS0M=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=i/A+G0t6zPVER7im0Bu7Ro3aRO8Y3/HwUqSxmp/EIBjx8dvKgslbeF3+y6lme2GgK
-	 CjR/1qPUerNrP4wsdQSv4syiD9nxOV6GcPAMN1KntradFoePBnsFr4gW9BqZr/Wrhp
-	 jjZif/Qqq0zslZVPnyikjivugDaH3zAKm0on8wmdcobLwCGS3/fPOkDtZOsinZ9Hhq
-	 Fmm5HcpYVx4CAO7gY7xbO76vE2crsRAha3qXHfUA3DcsP7hV7IAJ+ya+8uNgVyx+iN
-	 amBw3VMTlHitSLyp3zQtrP/ZlBR4gsaprDWMgI6aRV4ppaJKRS9XrnYCc0Oc97+TQD
-	 +sZ9kOEZAwbYA==
+	b=NKAPK83wvrHAcdWapmIjVi9MmExN1sAlsflJlUPF7Cu+DX7w37ipMqXIIF4r0cndY
+	 qCB7WSjL8xE+dgcjQGJeLh1NDXyyanf5hAhNuFOzrX5xLBrJ+RbvOJtpPoRxje2cEL
+	 OcRnIrAdSCSNxKjCrYox4OeZbxQuqCCd0nJ5M9YD8xiMvUZ3RgKuq9cJWleR45y5W9
+	 bx0H4Kz1JQ4qYe07h07rYeKyGjvRArKrmxhDLk5D9BOwwWGZc7tU68N4tw6fs75NDB
+	 pcoUgLDix0fwT1b9UyXTL/p530zuQamLLYv5bYv+yPnSQ+7bbWisGzKoe9KYvn8S1m
+	 HsqnQkveuSmAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50ADA40C46;
-	Wed,  7 Jan 2026 17:48:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 48B5025B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDC90822A0;
+	Wed,  7 Jan 2026 17:48:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 137E09ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 140D060A62
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AB3980CBD
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id stPh-Dl_v8oA for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WqrDWZarxyJr for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 906716089B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6115D80A68
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 906716089B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6115D80A68
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 901E481917; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
+ id 5FA0281917; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:19:36 +0100
+Date: Tue, 6 Jan 2026 09:18:42 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7f97279529c3ff4ffd3b746beef3c532d70bea4a
-X-Git-Newrev: e278e4a68ed5a70db56e24cc83ee27e69bde8217
+X-Git-Oldrev: e4b5b97b7dea58f4e701ac24dc1a008b71488ff4
+X-Git-Newrev: df976fede9f0883242b02dff6ad18df6c2d45e52
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174644.901E481917@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libconfuse: add
- CVE trailer in patch
+Message-Id: <20260107174643.5FA0281917@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-iowait:
+ update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e278e4a68ed5a70db56e24cc83ee27e69bde8217
+commit: https://git.buildroot.net/buildroot/commit/?id=df976fede9f0883242b02dff6ad18df6c2d45e52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+Updated package as computed by scanpypi.
 
-This patch adds the relevant information to the patch header
-and adds the `Upstream` trailer.
-
-[1] 1167d0ff3d docs/manual: mention CVE trailer
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ba51d53019bbc6f862b87389a90695a3dbe0670c)
+(cherry picked from commit 9b7399336e1e8e02a8c7976964d35033e2680cbe)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                                   | 1 -
- .../0001-Fix-163-unterminated-username-used-with-getpwnam.patch       | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/python-iowait/python-iowait.hash | 3 ++-
+ package/python-iowait/python-iowait.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f555bec09e..2053988215 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -566,7 +566,6 @@ package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch lib_patch.Upstream
- package/libcec/0001-cecloader-h-fix-null-return.patch lib_patch.Upstream
- package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
- package/libcgicc/0001-disable-documentation-option.patch lib_patch.Sob lib_patch.Upstream
--package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch lib_patch.Upstream
- package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch lib_patch.Upstream
- package/libcuefile/0001-fix-static-link.patch lib_patch.Upstream
- package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch lib_patch.Upstream
-diff --git a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-index 9ff3f5ec1c..44e15468ac 100644
---- a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-+++ b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-@@ -5,8 +5,8 @@ Subject: [PATCH] Fix #163: unterminated username used with getpwnam()
+diff --git a/package/python-iowait/python-iowait.hash b/package/python-iowait/python-iowait.hash
+index fc10e180f3..35ad91cb69 100644
+--- a/package/python-iowait/python-iowait.hash
++++ b/package/python-iowait/python-iowait.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/iowait/json, sha256 locally computed
++# md5, sha256 from https://pypi.org/pypi/iowait/json
+ md5  f49ca7766fe4a67e03a731e575614f87  iowait-0.2.tar.gz
+ sha256  ab1bc2eb84c22ccf61f17a0024f9fb6df781b39f1852764a66a7769d5adfb299  iowait-0.2.tar.gz
++# Locally computed sha256 checksums
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
+diff --git a/package/python-iowait/python-iowait.mk b/package/python-iowait/python-iowait.mk
+index 028001d7f3..d7738c7eb4 100644
+--- a/package/python-iowait/python-iowait.mk
++++ b/package/python-iowait/python-iowait.mk
+@@ -6,7 +6,7 @@
  
- Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
- 
--[Retrieved (and backported) from:
--https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b]
-+CVE: CVE-2022-40320
-+Upstream: https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  src/confuse.c | 10 ++++++----
+ PYTHON_IOWAIT_VERSION = 0.2
+ PYTHON_IOWAIT_SOURCE = iowait-$(PYTHON_IOWAIT_VERSION).tar.gz
+-PYTHON_IOWAIT_SITE = https://pypi.python.org/packages/65/30/e953673fe9619938e9c74408401cf865f37716da89f61f6e5d9328c0f71e
++PYTHON_IOWAIT_SITE = https://files.pythonhosted.org/packages/65/30/e953673fe9619938e9c74408401cf865f37716da89f61f6e5d9328c0f71e
+ PYTHON_IOWAIT_SETUP_TYPE = setuptools
+ PYTHON_IOWAIT_LICENSE = LGPL-3.0+
+ PYTHON_IOWAIT_LICENSE_FILES = COPYING.LESSER
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
