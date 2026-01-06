@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05D2CD0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 400A7D0D14B
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF7844160F;
-	Wed,  7 Jan 2026 18:03:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j430jjQGtOKU; Wed,  7 Jan 2026 18:03:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8CC241601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808998;
-	bh=a+qdnOHG3IJRmVzuBdkyTiT8AEydfqEd9CmR+tVSlDs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dEgECRU/IjAKTCHd6z7F+tCnM3RP+4FrbhITvH1TuIJ9zmQ1CF0OTdQu0hfqZQ5SX
-	 sOeCMk4wn0j0tMQnMF8bpSmj8dWXhXmnsAPE3OHlQXTg0iEmaJPsK9+giq2bKGEJww
-	 pKvQeueKVzc04O6pkok6s4b2rfoR9XwTDY2tRZVNsOylIpMxYa8CFey4IOA2VDSU+m
-	 0uKs8l4B0AoTXQr6Yaz5sNxeVH5Mce6aHUlRH2P2+XvnBq8WIzyLhuRu/beAOiojev
-	 IeNY+xvdv1ffg8pQdlQWjLbfiGcvqIN8v0AYytb6hi3OBXiLq2/TdW3RxrKAAC+RXP
-	 U/1j4MTYhHu8A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8CC241601;
-	Wed,  7 Jan 2026 18:03:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D52B9ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 60CBF81454
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15C8482218;
+	Wed,  7 Jan 2026 18:03:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aO3N9U6fHtVX for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ id 3_8OZjgt6TaF; Wed,  7 Jan 2026 18:03:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24A1F82965
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767809000;
+	bh=Trxu937udYCJOzGkjpmmggkUDgGApzN1q9eZneNTx3o=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=UULj1ho0EZIsYALW9dS1hyaz5G7zT4aZCh4kZxJfsjFlqfr6Fpgu8iK9YcNVzbfO2
+	 0ufJp4IQVBjbsZEe2mEiFOqtA1zesS5GB5yGuH+eQcGbk3/wHVw03rYpec+ALdrrnK
+	 z2lxCW7zvPsD0KE3mVqa1vrUz8Kemct64r/1vjKl29kX538ApeCPrhFPypzpGg8m7K
+	 0ZaiwFL1boV4pW6i6yX0Mz98fgmcswBsS4TuPFYvX0L/gr7LhKcadvkr5dD7WxSSkn
+	 k/5pSzQp8mAsq0pNEA0sInxfPcqEYTE9n9pLkFA29NdbyhO6BVxRQNaRMC9fnUxlbA
+	 nYZZttuMKVxig==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24A1F82965;
+	Wed,  7 Jan 2026 18:03:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0228025B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A70EF40A5E
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fet3BcXjMfsX for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E74B18130B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A94E740AE9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E74B18130B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A94E740AE9
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E64DA86E66; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
+ id A879781F75; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:00:55 +0100
+Date: Tue, 6 Jan 2026 09:09:22 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 1e8db1db49ba6f0c251f0ebcd6ca53707f89fdb1
-X-Git-Newrev: 094ed4d09e193f4f91688a969042225609a621fd
+X-Git-Oldrev: cf87779694b7b6982c8aa948be5d86b33870f5b6
+X-Git-Newrev: 3315c0d2c659b15fc87d70c788e4f38c319a184e
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180114.E64DA86E66@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/python-pyinotify:
- update tarball URL
+Message-Id: <20260107180115.A879781F75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/sdl: fix patch
+ reference in IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=094ed4d09e193f4f91688a969042225609a621fd
+commit: https://git.buildroot.net/buildroot/commit/?id=3315c0d2c659b15fc87d70c788e4f38c319a184e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Updated package as computed by scanpypi.
+Since Buildroot commit [1] the
+`0003-SDL_x11yuv.c-fix-possible-use-after-free.patch` patch reference
+was renamed.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This update the reference in IGNORE_CVES accordingly.
+
+[1] 9fab7bb79d package/sdl: drop directfb support
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d2fbbecf94d02a9ebb284b60bd243e0f9452c0e8)
+(cherry picked from commit d372b654a45882f641ff65a4acf7126e66c35487)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-pyinotify/python-pyinotify.hash | 6 ++++--
- package/python-pyinotify/python-pyinotify.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/sdl/sdl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pyinotify/python-pyinotify.hash b/package/python-pyinotify/python-pyinotify.hash
-index 72095ff6e5..9eecfbf9be 100644
---- a/package/python-pyinotify/python-pyinotify.hash
-+++ b/package/python-pyinotify/python-pyinotify.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
--sha256  7943f198c5cef2bdc121d847937fbe565daaa7d4daaf1b8de8ef5689812f481c  python-pyinotify-0.9.6.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyinotify/json
-+md5  8e580fa1ff3971f94a6f81672b76c406  pyinotify-0.9.6.tar.gz
-+sha256  9c998a5d7606ca835065cdabc013ae6c66eb9ea76a00a1e3bc6e0cfe2b4f71f4  pyinotify-0.9.6.tar.gz
-+# Locally computed sha256 checksums
- sha256  97c96d577f761e23c7778bda2b163dba7b94e4defdd7873b7155bed252820608  COPYING
-diff --git a/package/python-pyinotify/python-pyinotify.mk b/package/python-pyinotify/python-pyinotify.mk
-index b4ea66299d..61666e8b49 100644
---- a/package/python-pyinotify/python-pyinotify.mk
-+++ b/package/python-pyinotify/python-pyinotify.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 439c30b2a5..29697fe3c9 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -13,7 +13,7 @@ SDL_CPE_ID_VENDOR = libsdl
+ SDL_CPE_ID_PRODUCT = simple_directmedia_layer
+ SDL_INSTALL_STAGING = YES
  
- PYTHON_PYINOTIFY_VERSION = 0.9.6
--PYTHON_PYINOTIFY_SITE = $(call github,seb-m,pyinotify,$(PYTHON_PYINOTIFY_VERSION))
-+PYTHON_PYINOTIFY_SOURCE = pyinotify-$(PYTHON_PYINOTIFY_VERSION).tar.gz
-+PYTHON_PYINOTIFY_SITE = https://files.pythonhosted.org/packages/e3/c0/fd5b18dde17c1249658521f69598f3252f11d9d7a980c5be8619970646e1
- PYTHON_PYINOTIFY_SETUP_TYPE = setuptools
- PYTHON_PYINOTIFY_LICENSE = MIT
- PYTHON_PYINOTIFY_LICENSE_FILES = COPYING
+-# 0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
++# 0002-SDL_x11yuv.c-fix-possible-use-after-free.patch
+ SDL_IGNORE_CVES += CVE-2022-34568
+ 
+ # we're patching configure.in, but package cannot autoreconf with our version of
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
