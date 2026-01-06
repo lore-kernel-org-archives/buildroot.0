@@ -4,93 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EC7CCE9D40
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 14:48:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BA71CE9D47
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 15:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FC1281774;
-	Tue,  6 Jan 2026 14:48:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54B44817FF;
+	Tue,  6 Jan 2026 15:10:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lCxAia6r8HFt; Tue,  6 Jan 2026 14:48:09 +0000 (UTC)
+ id oPEppy-VqkhA; Tue,  6 Jan 2026 15:10:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DA3A81455
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60062817FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767710889;
-	bh=z05/n6IRWFHxfE6zX9j9bn3QU4Jjy4rEUnr26e4wqZA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=s975Y6ystHZWlT0hgBnkVhULB3LisqCWstJObqMNwcMOHDbUikd9vLyelV3/9BnIF
-	 FchAIVXIMP5QayXIOBIDJfCgbjpYVkYagyCpezsa4JGYz6x0r7+/4XStK1ar2hN+qf
-	 DueXrwwupvYe7S4J1J5CWW0ewOPHBDreh+aj0ekMtmXfcme18GkoKA5u27F1pfhai4
-	 R1CuqCSgFq3OSQ+IH+39tpzywLVQiFMN5JyiJm9oWQuAL+FpMK3JKH806HDBrsX1fs
-	 wHa8AIDCl7XcoqTeBjbGxktcF58d2qhSzmRd1H0QIglu0rT1y2l8I5PqZtniIUZVbL
-	 PtS1GgWFCcXLA==
+	s=default; t=1767712240;
+	bh=+qLZ+cdd5R3QzuC+EiIkwxKxx5hNICzDByzQOceCAvE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=B8KiL8dvsxmo4G0bdq3znwC2XXSeYqgwVM5ELHVH2/9wbsQ9HvQ6edFaDTyT+iusx
+	 14LqPEdOSulryc8ep0UB9WGaoA9orQRzC0bYo5r8QyNMBcjEhsERbRqJsU1RCYYx+N
+	 lQha/haJleAdVTWqOh8849bpy02vGq/3NLFllBgqYxq6CjEC2UGr2W8W3D/cLClgJp
+	 wnOG6eGmJXhJ/VrZgKlF4HqMCIYRUo5ZX3ezqLGFEbJsmyvzu4qRKhUlPaaIvyxnAL
+	 1GK88/u7yabQtI0HT7nSTpjxVU3o/aTxqGd6wRVzJOxYAH5MsAJvRjN/M8E7u85FDi
+	 mJ0qxQ4xKumXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DA3A81455;
-	Tue,  6 Jan 2026 14:48:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B81F249
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 14:48:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60062817FD;
+	Tue,  6 Jan 2026 15:10:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F27A7249
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:10:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D6B840691
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 14:48:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D19CD815DB
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:10:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xd_ZWr-czvmN for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 14:48:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1370B4067A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1370B4067A
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1370B4067A
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 14:48:06 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id C39C44E41FAE
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 14:48:03 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 98BDC60739;
- Tue,  6 Jan 2026 14:48:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 825A8103C86C1; Tue,  6 Jan 2026 15:48:00 +0100 (CET)
-Date: Tue, 6 Jan 2026 15:47:58 +0100
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Message-ID: <20260106154758.37b2117e@windsurf>
-In-Reply-To: <08ad8b80-c5b6-4dfe-a3a9-e3030583af59@gmx.de>
-References: <20260103114046.2461857-1-fiona.klute@gmx.de>
- <3fe4137c982f5acd08e775ca43dab9f2@free.fr>
- <12ad4f39-5622-430c-9b02-fcd5893f6730@gmx.de>
- <951a546a-a56c-4aa9-b515-b72f73bd249b@gmx.de>
- <9547c61ca16e7605d291fb41116a0769@free.fr>
- <754dff23-3a88-454e-ba32-8341aecbab15@gmx.de>
- <08ad8b80-c5b6-4dfe-a3a9-e3030583af59@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AoKwG2sqOOwy for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 15:10:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9948780C77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9948780C77
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9948780C77
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:10:37 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-64b58553449so1592049a12.1
+ for <buildroot@buildroot.org>; Tue, 06 Jan 2026 07:10:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1767712235; x=1768317035;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gThhXBwLzhDAGJIwiDs4TzuhYbAyaWY3efFiT/iHDjk=;
+ b=poJ4HB1m3dvk18NBf/7SBQlqNCofEwcWwOSL5zN678ePeXyfKk/vdub7a16B7R7Hba
+ gIX3Ctt1+FNEv4vMFp+txEGlabA/JIOOZc286zWoGq0pYEGaUWJFwikg5lnhguvoQOC1
+ b3duL4CoLt5N4COuNHebP68XFcqDHE8sgFaoNwH6ThQRLIHq1wtzmh+ZwtPYS2w3o84j
+ flHwjpkzH6wiEdBM2BP3qqX9XZ9kuAQJUZ/gMi2EJ0NUdOrpUJSMxYMR9is2eyHbgBrk
+ o1DXXa62gOp22LPkQkQKh8hpDZ7Kj6rpE2IX88698uvPDkXfbIGwvwUwyaq4vl3zaicC
+ sHSg==
+X-Gm-Message-State: AOJu0Ywy8cQwtWyJ7okIWRQeINKA7Z2tyojLK8oExTpFoMUSewTHKjD6
+ Qw/a3SqnQN370Ohfm5IvYyHenljMSIAsiNkX5ncVUXv5WRTatMQQvgTUWrjodg==
+X-Gm-Gg: AY/fxX7LOHA3DsuIYRTX82Suu4mdMxCe8ie4BDGR3qPSk61/GCtNgC0IQBpk7I+QQg3
+ kUGhKKAGjX3XlOCdbJJl4POKyotigXaBwe4ig/BNiowst6ezP2Js4Ii2B+/XSsEZEPR7v6tcAL6
+ YOI2o6W61erVCauFL+E1R7kHWgksqys5EExbcU1mAmVw9Zkk1Eunh1TUkKbQ5mQlXzz/Gs9ubkK
+ 4UqWfA213D0kw3TuBM4D9LQhW1rCgXjxHWeaHlbJM/H3KLTsW+tExB2gH9M9pzI59EIUF/4WJ7p
+ fCvxPCM5S+sVrTJRsuLPPmJSF1HML6hm7HdLi03pZC9GrsgscYlTi+g9qRVX7vCHI2kfmMySlU3
+ kR3Rvxu5gKMJOMqPDx22MjJBZ59bvFCJprUG58z/pS+BfUrOOOgCZnMYIAWZI+38aHf6b5lcDog
+ HkTASCmUy7L2XF9MXqxCOIG/OTxhg=
+X-Google-Smtp-Source: AGHT+IFzj7d0nI2c4zd0n++OquvJyQ+l8IZvs086WL8dNYz32kfzdBZ0UO2OegPanHVdf6MGSxscLQ==
+X-Received: by 2002:a17:907:98d:b0:b76:3478:7d52 with SMTP id
+ a640c23a62f3a-b8426bee23bmr339531466b.38.1767712234330; 
+ Tue, 06 Jan 2026 07:10:34 -0800 (PST)
+Received: from hthiery.kontron.local ([213.135.10.150])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b842a56db21sm244908766b.71.2026.01.06.07.10.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 06 Jan 2026 07:10:33 -0800 (PST)
+From: Heiko Thiery <heiko.thiery@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  6 Jan 2026 16:10:23 +0100
+Message-Id: <20260106151022.29135-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1767710883; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=J25OY6B3ffpO8kmGFUU5GpeNhZ0CTSR4O4IDYsR/iUU=;
- b=uBgjZgvoqT3r0/hYd28/EKug+8MRHRZh2S9m/6zMIsd+cv3ozPsmmTXTLI/CS+bTQPiveK
- 47kT0iQn5MsRBFLHhj7jS9kskVkI/yUnFf6qNvH3jGoFc0/I7SgemSXpk9t1Y186+5anJ0
- tgr8075B3LFcX5KPIY0Zhw3aVMoGEyx9ItjLmUN4LtOJJLKRdfHh6woUhhsU+vzhsHilYB
- rNKUsoU6H8/s3jEGFG3yF5/eLQuqv6DqoTvhmtttAaSA0eHZhOlMjy+N+53wMX6pGTkSQu
- aVZpyPzpRQW1XiYs/k7mpZPicp0LwAf2iMPPxX4/UjWZ8AFTUEOlmN9tJErmYA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=uBgjZgvo
-Subject: Re: [Buildroot] [PATCH 1/1] package/squashfs: bump to version 4.7.4
+ d=gmail.com; s=20230601; t=1767712235; x=1768317035; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gThhXBwLzhDAGJIwiDs4TzuhYbAyaWY3efFiT/iHDjk=;
+ b=kqFshGQyrbnCWIEI08a9M//W2sxi4ZMHiqLKDxfVxBvVt1CGmASemMZEa8PrYPeSKX
+ ZSEGnEGzs0F9Fl1+KFESPXN3r/x1R1BWPldSNWP2Her7Xws/q2Xe2oG6dfxhXToW5CIK
+ Tx9jgvHZb3l8GTxT4x+01NFSSKw8xeAqmJ+ojHSOC1b5IE7ecxAFVQ0A+UYot/buJ2wI
+ Q+k/gYwNmLorlKUcw86cfAh1Bg15WCp3LIdRdqu2MPWfX2XOXPjJUSOyKK78COs8hTJL
+ BLE/vj0ecDn71xTXr6kcLXwlcG2ba2p2OAyrarqCbSDdQ/seGICov7xirYpXi9Uz/5Zb
+ hKlQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=kqFshGQy
+Subject: [Buildroot] [PATCH v3] package/uboot-tools: use uboot host tool
+ printinitialenv to extract env
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,53 +118,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>,
+ Michael Walle <michael@walle.cc>, Heiko Thiery <heiko.thiery@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fiona,
+If u-boot is compiled with the LTO option, it is no longer possible to
+use the script 'get_default_envs.sh'. The problem was already observed
+and a solution available upstream u-boot since the commit 486aef08de09 [1].
+This was first available in release v2023.04.
 
-On Tue, 6 Jan 2026 14:52:07 +0100
-Fiona Klute <fiona.klute@gmx.de> wrote:
+Now if the the new tool 'printinitialenv' is available it is used. The
+tool is build with u-boot that is a dependency of this package.
 
-> > I've created an upstream issue about the problem, citing your version 
-> > details (thanks!): https://github.com/plougher/squashfs-tools/issues/338  
-> 
-> Update: The upstream maintainer has added a fallback similar to the 
-> util-linux one [1]. However a new issue has been reported since about 
-> corrupted images with all-zero files [2], so I think it's best to delay 
-> the update until that's resolved.
-> 
-> > On the Buildroot side I wonder how old toolchains can reasonably be 
-> > before we consider them *too old*. So far I thought the Bootlin stable 
-> > toolchains were the expected baseline, because they're supposed to be 
-> > used for tests unless there's a good reason not to. Personally, I 
-> > wouldn't consider musl 1.2.3 "recent", uClibc-ng 1.0.50 maybe kind of, 
-> > but toolchains from 2020 definitely outdated. I may be influenced by the 
-> > ~2 year Debian stable cycle. ;-)  
-> With the upstream fallback merged the question isn't critical any more, 
-> but I think it'd be generally useful to have a documented answer.
+[1] https://source.denx.de/u-boot/custodians/u-boot-tegra/-/commit/486aef08de091ca35386f32fe961a201c3cfa9d4
 
-On the gcc version, we do have a fairly clear policy, but it's true we
-don't have such a policy on the C library. We try to reasonably support
-older toolchains as we recognize people may be using somewhat old
-toolchains to support specific HW, or just because they "fear"
-switching to a newer toolchain. So in the case of squashfs, when there
-is a relatively easy fallback solution, it's always good to have (and
-good for upstream, as it makes their project more broadly "compatible").
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+v3:
+    - fixed redirect (thanks Thomas)
+v2:
+    - used hint from Arnout to check for availibity of the new tool
 
-I don't know if we want a policy that says "toolchains with components
-older than X years are not supported. Can be a topic for the upcoming
-Buildroot Developers Meeting though.
+ boot/uboot/uboot.mk                | 4 ++++
+ package/uboot-tools/uboot-tools.mk | 9 +++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-Thomas
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index c92568a559..e613d015a9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -144,6 +144,10 @@ UBOOT_MAKE_TARGET += u-boot.stm32
+ endif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),y)
++UBOOT_MAKE_TARGET += u-boot-initial-env
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_INITIAL_ENV),y)
+ UBOOT_MAKE_TARGET += u-boot-initial-env
+ define UBOOT_INSTALL_UBOOT_INITIAL_ENV
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 1925047ccd..69e03f40d8 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -154,10 +154,11 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
+ ifeq ($(UBOOT_TOOLS_GENERATE_ENV_FILE),)
+ UBOOT_TOOLS_GENERATE_ENV_FILE = $(@D)/boot-env-defaults.txt
+ define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
+-	CROSS_COMPILE="$(TARGET_CROSS)" \
+-		$(UBOOT_SRCDIR)/scripts/get_default_envs.sh \
+-		$(UBOOT_SRCDIR) \
+-		> $(UBOOT_TOOLS_GENERATE_ENV_FILE)
++	if [ -x $(UBOOT_SRCDIR)/tools/printinitialenv ]; then \
++		$(UBOOT_SRCDIR)/tools/printinitialenv > $(UBOOT_TOOLS_GENERATE_ENV_FILE); \
++	else \
++		CROSS_COMPILE="$(TARGET_CROSS)" $(UBOOT_SRCDIR)/scripts/get_default_envs.sh > $(UBOOT_SRCDIR); \
++	fi
+ endef
+ endif # UBOOT_TOOLS_GENERATE_ENV_FILE
+ endif # BR2_TARGET_UBOOT
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
