@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFF0D0D150
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E638D0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B6ED40B6E;
-	Wed,  7 Jan 2026 17:48:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEF2140B85;
+	Wed,  7 Jan 2026 17:48:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oP9-mdePI002; Wed,  7 Jan 2026 17:48:07 +0000 (UTC)
+ id Y-wTTlYgGY9i; Wed,  7 Jan 2026 17:48:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 641EC40B70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD49540B77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808087;
-	bh=sa0YEibRa3DgSfF4r8xaU5im/qy85t8reX94Nr0K4bs=;
+	s=default; t=1767808088;
+	bh=67WvWgvrduAj8dOSLrCSk/ZhxPMeM7V6UMablKTO6lQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jjnn+0fxRoETnoPvLvwLf8P0ntdD5s7co099x8utSOOCr+70rC2ojViinzO03kpuY
-	 Q3IFlmG/0pvk04Yq2Vkt14Z1reM5qBW3uzUj6CVzkfD0+jqiaxKmhdn+gS3nbeXP1A
-	 vfVyWkfF7VYJhcbCqMCDGJfJ2n0FxV7A1bSPnjWgsg1r2J2iyNZMr5l7bEfuZUePy7
-	 Bem7xvO8Jbw0aboo8EnmqAA4PczE3pgCf5jUrbkVxilLd93Qt4qNbth8TQZW8pkGm5
-	 fyg05EXODv5qfwHd6gPbqSGFP81sLPsRoxLZADaFmjK1T5MiA8GDtn4hG7fhR1Kj0x
-	 ci1CAg+qGkwaw==
+	b=m/xtMRVrfFsCkCetzSF/ZmGtrhRIHyyhAqWFQ+nBesrmvwUt4f1TzH2ahiUc5RyKL
+	 y3LVhlGtTyAWb4d7yeFRaMCF9hDycvRfDWzkDS48BoF1aK3ZDlvaJQpLOzTzOaCm1T
+	 n5or/wpktiKAb42RQlvZDe4jTmGwoG6CamUKQ1VwrBVmSiR6VVpjRYqHQQ0E3FtEpy
+	 sYkdXufUHVUFYNcNDOvQq6faIK0UXqIv6mbEnLnlLWIvEogmQmnaet56ErrhlQ/Mhz
+	 FUGdmUFjKUm9EnJHgpyjF7XoCy+Rd4nEIRTQcBH5OkZqkVDzqqzyIRaXoKvXdz5gQe
+	 ueuigsWgV7eTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 641EC40B70;
-	Wed,  7 Jan 2026 17:48:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6BCB29ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD49540B77;
+	Wed,  7 Jan 2026 17:48:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D08D25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:47:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C87486085F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E78480C62
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TiqBXYN_hXjW for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8BdFKr09YvoJ for <buildroot@buildroot.org>;
  Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AFD960843
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B082180C78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AFD960843
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B082180C78
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99BA786FC2; Wed,  7 Jan 2026 17:46:42 +0000 (UTC)
+ id AF4DE81917; Wed,  7 Jan 2026 17:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 09:18:15 +0100
+Date: Tue, 6 Jan 2026 09:18:54 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b97e9adb890b52d7b1a5d430e6fb976535bfcc80
-X-Git-Newrev: fe6204462a1e2524818ca69332380f528b553914
+X-Git-Oldrev: 84f79ef4cf4c4c4d9a7d7de63fa6823c8a018472
+X-Git-Newrev: 7106098c53181f38b00a33a9b2a3caed3abfc4d2
 X-Patchwork-Hint: ignore
-Message-Id: <20260107174642.99BA786FC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/jbig2dec: add CVE
- trailer in patch
+Message-Id: <20260107174643.AF4DE81917@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/python-pyasynchat: update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,53 +72,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0658241182970888194=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0658241182970888194==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fe6204462a1e2524818ca69332380f528b553914
+commit: https://git.buildroot.net/buildroot/commit/?id=7106098c53181f38b00a33a9b2a3caed3abfc4d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+Updated package as computed by scanpypi.
 
-This patch adds the relevant information to the patch header.
-
-[1] 1167d0ff3d docs/manual: mention CVE trailer
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 51a3cb5db4b4c1be51e7572028555b5a53055752)
+(cherry picked from commit 424a55cffd663fcc281d6391d21bcbd09fa40ce7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch      | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-pyasynchat/python-pyasynchat.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch b/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch
-index 8331d5f2a4..dd96c45ebd 100644
---- a/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch
-+++ b/package/jbig2dec/0001-Bug-705041-jbig2dec-Avoid-uninitialized-allocator-in.patch
-@@ -4,6 +4,7 @@ Date: Sun, 5 Nov 2023 12:21:52 +0100
- Subject: [PATCH] Bug 705041: jbig2dec: Avoid uninitialized allocator in
-  command-line tool.
+diff --git a/package/python-pyasynchat/python-pyasynchat.mk b/package/python-pyasynchat/python-pyasynchat.mk
+index 6fb460cee1..2c503ea71b 100644
+--- a/package/python-pyasynchat/python-pyasynchat.mk
++++ b/package/python-pyasynchat/python-pyasynchat.mk
+@@ -6,7 +6,7 @@
  
-+CVE: CVE-2023-46361
- Upstream: https://github.com/ArtifexSoftware/jbig2dec/commit/ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
- Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
- ---
-
---===============0658241182970888194==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ PYTHON_PYASYNCHAT_VERSION = 1.0.4
+ PYTHON_PYASYNCHAT_SOURCE = pyasynchat-$(PYTHON_PYASYNCHAT_VERSION).tar.gz
+-PYTHON_PYASYNCHAT_SITE = https://github.com/simonrob/pyasynchat/releases/download/v$(PYTHON_PYASYNCHAT_VERSION)
++PYTHON_PYASYNCHAT_SITE = https://files.pythonhosted.org/packages/8a/fd/aacc6309abcc5a388c66915829cd8175daccac583828fde40a1eea5768e4
+ PYTHON_PYASYNCHAT_SETUP_TYPE = setuptools
+ PYTHON_PYASYNCHAT_LICENSE = PSF-2.0
+ PYTHON_PYASYNCHAT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0658241182970888194==--
