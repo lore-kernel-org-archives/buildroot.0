@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D054D0D14B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A674FD0D155
 	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81DCF412CE;
-	Wed,  7 Jan 2026 18:01:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MZ3kIMPWO4Rf; Wed,  7 Jan 2026 18:01:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 825EF408A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808906;
-	bh=bI0bPDWmg8QokaMjhI8bGk7SsnUrGOA+0dW1U9SgD78=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=B5447BaIwdkj9KXqwV7It6Gz4a7XOwz6zqGpd6JyQ5KN8QDoaKkK1DGxQz+IiUbF1
-	 3utN0KZFBu9Pk5BAJPwmNYJPhwqe4Lg6HCvxGsyJp+nqTulr4P2rk6BaOFjg1greUD
-	 461S+VNkl5fNyJrQJFMhFt61zJHjNlPaRdUGMAcferF92fBQ0pjnVwAT/WRxGhnZNZ
-	 SOM6cJbjeCWi9DOiQwCZVXS/+Tj30hZjDxefV+pAT8OwncjN6/jOyAu7shE+1qQTGL
-	 NpR6hzMw71L4kESzDxUExg5ftxGOfets0B3rv/r8hpLM8P/Pzz5ICpBShh/yX+rirl
-	 CATAn/3eeA8Kw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 825EF408A0;
-	Wed,  7 Jan 2026 18:01:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0455125B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7568B80F37
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E01E82ACA;
+	Wed,  7 Jan 2026 18:01:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l7wrttu0n80r for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
+ id jYZC7GxqdLBN; Wed,  7 Jan 2026 18:01:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB68A8291A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808907;
+	bh=gyB3ydd6mxAb6huFkdmJ3mbFQvaJmK+JAU3i7+Lsn4Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=CHjePLyCIV7rKi5pTI87kKCdNBFG6w1jPU9ldtV6WTUVIFjT85Rxnlsrc0ylrBVYu
+	 qGtq1zfkA9uyC39gkgQrc66kce7IKOdUZhCRA3bN/5Wes2eouj1Ow8m2xDK0rJvWhs
+	 e4tYNe0NDrrb50F3E9s/OHD+CI6axIPEf7+vasmuEzRJJn/wkVkuIah39nFtKtt7Br
+	 m7MKYQY/hREQZ6KHpbYVRvrWLIwxjnBeZsmPrJ0RZA1ceyMsuklfQUz8tX1hmcil5j
+	 rZ/tie7AmaGoel3unx26joUhXvMHDDKPwNYk2OjfyiHn9rN8NMkxvdlI9a8NJ2e+fB
+	 +MOoG5RZh52AQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB68A8291A;
+	Wed,  7 Jan 2026 18:01:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D8C7A58
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B608A40A49
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S6rvcsNFrcHh for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2F2180EB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0915A40A00
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2F2180EB2
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0915A40A00
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0BBE873D4; Wed,  7 Jan 2026 18:01:11 +0000 (UTC)
+ id 0810882200; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:36:04 +0100
+Date: Tue, 6 Jan 2026 08:39:41 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: c33f9a2871f5dc2b5b6abcf28f81411b3400a924
-X-Git-Newrev: 3bfab7709d8bbe43b906174971783fd7caec71b4
+X-Git-Oldrev: d362a9c2f6d0f83ad1dbc89d7470705b1adceac2
+X-Git-Newrev: 980ee4e02fa50bcc0b3055d5a2740c951783b078
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180111.B0BBE873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/vim: use more
- conventional $(MAKE) construct
+Message-Id: <20260107180112.0810882200@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] DEVELOPERS: add Giulio
+ Benetti to vim
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bfab7709d8bbe43b906174971783fd7caec71b4
+commit: https://git.buildroot.net/buildroot/commit/?id=980ee4e02fa50bcc0b3055d5a2740c951783b078
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-In Buildroot, we more commonly do:
-
-   $(MAKE) -C $(@D)/src
-
-than:
-
-   cd $(@D)/src; $(MAKE)
-
-so let's adopt this more conventional style.
-
-This coding style in vim.mk dates from when the package was introduced
-by Peter Korsgaard back in 2010.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 21e613753ec2fc931c4f7a95ab5c0019bd30636c)
+(cherry picked from commit edf4a89aaf9d7af884149a431a141a4b80c524bc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/vim/vim.mk | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 36015c6085..2bf01fa8bd 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -48,17 +48,15 @@ endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3760bb6659..c9f1e1961d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1332,6 +1332,7 @@ F:	package/tmux/
+ F:	package/trace-cmd/
+ F:	package/udisks/
+ F:	package/util-linux/
++F:	package/vim/
+ F:	package/wilc-driver/
+ F:	toolchain/
  
- define VIM_INSTALL_TARGET_CMDS
- 	$(RM) -f $(TARGET_DIR)/usr/bin/{ex,view,rvim,rview,vimdiff}
--	cd $(@D)/src; \
--		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
--		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installpack; \
--		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installtools; \
--		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installlinks
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) installvimbin
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) installpack
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) installtools
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) installlinks
- endef
- 
- define VIM_INSTALL_RUNTIME_CMDS
--	cd $(@D)/src; \
--		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installrtbase; \
--		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installmacros
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) installrtbase
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) installmacros
- endef
- 
- define VIM_REMOVE_DOCS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
