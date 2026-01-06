@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03224D0D14B
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B3C6D0D155
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0E2E41575;
-	Wed,  7 Jan 2026 18:03:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8EEA4156F;
+	Wed,  7 Jan 2026 18:03:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m9f_RYnViv0f; Wed,  7 Jan 2026 18:03:03 +0000 (UTC)
+ id jdTEPSUYEQqj; Wed,  7 Jan 2026 18:03:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 731224156E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 830C141571
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808983;
-	bh=oRKFs2L9q2/U1gq+A7pftH+7VQvY+RU82oQTgxnCwcU=;
+	s=default; t=1767808984;
+	bh=npZjKQxC6oCBsLSvFPmdMGwx8E7/PvbheWJ6HBeMqbo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=O+oDMvekVZwaHRxxOuJ+baEWTAgrYMiGkFKRcix1iBGlxOfnsWpyR7SCPMhVCO543
-	 H/K9eLwPupCbagBCaCyYab3ZUJlbYyebzWtJ0GvvV/FVt8SUqktE8Mx0ESo+9++jSF
-	 Q6dJ3dxCtlLLsfsmOaaMxGbAtlc/amN2jaUQHocJ6uWqT6zpiMBZt55zEARcNlB/y0
-	 2izgMxSemMuuLoh1RvV4KOfRpzMHH/GjsH5M3NkRmFO7Spzyflb4ZFeSx6vlWlRLlr
-	 7WuIyf7zz31m36d4u5hpLI9z4fEtKQdA5gWPkqvOYTFn8TltVddiB1W3Uj85Wdvy9p
-	 hev5WT5IMUS9A==
+	b=CUn4vuq0r52WHJEJjqQgEum6L/5RF6xW3OES07+B2Ro0SD7XdPFh43kdQFWdVzvNs
+	 2ac3E3AjngyN8blct8cjUiQJz9h1lFx/KhURPkAH+sRICTn6N1hpsW05FzpYdg3z8z
+	 zmXJr2mzxRiMk4oADzBa3/x66wIdgjKuHKukAo006VoH61omEFfkoMDT/Z0TIlOzMi
+	 IAi3PmzEqVvMfqHYeOakTbW33XTfXaVgPaV2z+yn30y2a+Tx2lf9pCJrOlQIi5Yvdo
+	 YYkHxvIRTLUMeRhn4exjUzjQZvql5QIHtljUjk/rG9gbsB8C0qwrP6HImDL0TrFiiw
+	 UnAiz/gR2Snmw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 731224156E;
-	Wed,  7 Jan 2026 18:03:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 015499ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 830C141571;
+	Wed,  7 Jan 2026 18:03:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ED9AA58
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91C4F810EF
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6D8940B6D
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gBCSxNsqPp02 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WWFqIMFLOE17 for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC47380AB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FF03409EA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC47380AB2
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FF03409EA
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA99A8268F; Wed,  7 Jan 2026 18:01:12 +0000 (UTC)
+ id 5F210811C5; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:52:35 +0100
+Date: Tue, 6 Jan 2026 08:58:45 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 820df57a933bd1a48abd3a9da5e7dd7e068644eb
-X-Git-Newrev: 836753465c116d242a88a7f41caeb9da44d52369
+X-Git-Oldrev: 7d33e2668b443a0efc56062705dd2d269c54d71b
+X-Git-Newrev: 67ab9c832a45461cb03771f33646fbf026d819ad
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180112.CA99A8268F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/python-can:
- remove msgpack dependency
+Message-Id: <20260107180114.5F210811C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/python-dockerpty:
+ update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,40 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=836753465c116d242a88a7f41caeb9da44d52369
+commit: https://git.buildroot.net/buildroot/commit/?id=67ab9c832a45461cb03771f33646fbf026d819ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Dependency was made optional in 4.6.0 release here:
-https://github.com/hardbyte/python-can/commit/6058ab9dfe8b3ba5d23cbff670c0fe767147390a
+Updated package as computed by scanpypi.
 
-python-can has a lot of optional dependencies, most of which are not
-represented in buildroot. As msgpack is used for the virtual multicast
-udp can interface[1], which does seem like a bit of a niche usecase,
-just drop the mandatory dependency without introducing a user-visible
-config option to enable it.
-
-[1] https://python-can.readthedocs.io/en/4.0.0/interfaces/udp_multicast.html
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a4cdb412f15f3b6abad2028c955aa3bda7b486df)
+(cherry picked from commit 3b0683d66ed9984fd265b2109df774fd857cbcf8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-can/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-dockerpty/python-dockerpty.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index 34ba35bad2..e3f47813af 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_CAN
- 	bool "python-can"
- 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
--	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
- 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	select BR2_PACKAGE_PYTHON_WRAPT # runtime
+diff --git a/package/python-dockerpty/python-dockerpty.mk b/package/python-dockerpty/python-dockerpty.mk
+index e6fe6e3b49..7ad98c6b94 100644
+--- a/package/python-dockerpty/python-dockerpty.mk
++++ b/package/python-dockerpty/python-dockerpty.mk
+@@ -6,7 +6,7 @@
+ 
+ PYTHON_DOCKERPTY_VERSION = 0.4.1
+ PYTHON_DOCKERPTY_SOURCE = dockerpty-$(PYTHON_DOCKERPTY_VERSION).tar.gz
+-PYTHON_DOCKERPTY_SITE = https://pypi.python.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba
++PYTHON_DOCKERPTY_SITE = https://files.pythonhosted.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba
+ PYTHON_DOCKERPTY_SETUP_TYPE = setuptools
+ PYTHON_DOCKERPTY_LICENSE = Apache-2.0
+ PYTHON_DOCKERPTY_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
