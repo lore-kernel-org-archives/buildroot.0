@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E39DACEFD04
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 21:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 684B8CEFD10
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 21:07:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6FCF40612;
-	Tue,  6 Jan 2026 21:00:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91D4360C07;
+	Tue,  6 Jan 2026 21:07:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GLomXgUduXQm; Tue,  6 Jan 2026 21:00:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ar4yfW5Mrm6l; Tue,  6 Jan 2026 21:07:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDE9A4061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9536F60BEA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767733230;
-	bh=p1kqtvJDhwVbC+VywPvYiqdGCNX5lkmVibsTVdsOBOI=;
+	s=default; t=1767733633;
+	bh=Hb3mhL7ttbf6PHFpwz/Y2l2mtEyMoLnr8XFacEs17fg=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=akR6FtSnmEoLsD2PWOVHi2/s9w/4UufIL0bTSDe9xYq5PFR09hkX3ylzcvCGhfrHr
-	 a0cAdAy1QzigWF8jG50l2bAENtj89M05QJr8UhGuw/Pur4NTmnkH6hzxbWuwUBRIOW
-	 LZOEAWI9+EBkXoT1Ki9b5wpNWzzizJc9GZkSXaHJry7SuEYi2rUDYkbvaywzRjkmMQ
-	 oNdLdMnJtV1sn/VK5GsX3EncNBLo2MWXEHETmlPLqWunMyGkWfbdr6C1ECTC/HmuFX
-	 Sgos5pD/1L/Vy3tejnPwHoMC9nsloKakITAtYrwph6rBVWlflFgXYyu5jp4InhWfSn
-	 w87r/tTsvqlkA==
+	b=PWojy2+dUnORTEHJAz525OlRiUOdoPJDgVoT9ZVfe5MX59TMjxIIPaHF56ex5NhtE
+	 t4lbxwMMR6h6++ZBnukVPbV7yM0GVctOZj1vwIMX4Z1CO78ZFHGerjU45SOzGjHaNw
+	 1b9m2YXXBIm+AbtVelHgPssagD1k10m06gefewypJ4lCOmbpQFM5bnpZRHSridw9lO
+	 vFM99SAQKZDap7z43o1JSa1jsreTCYgG4RhKhDQ/0ZQmxfv/NGQevavLObSIrti2D4
+	 ZRsh/duUM5LoGHjvUr/Jumqya5/zqx0WL3qscUBBXS3GKm7GwF3DimGw+aOoj4pTW9
+	 L6DvnVjOpbd6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDE9A4061F;
-	Tue,  6 Jan 2026 21:00:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D54F170B
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:00:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9536F60BEA;
+	Tue,  6 Jan 2026 21:07:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5BC272A3
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA0C2406EF
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:00:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 41A1860BEA
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 87V6c76jIXNm for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 21:00:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JwalsN4zE-nH for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 21:07:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DD44340327
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD44340327
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD44340327
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:00:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5BD5060BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BD5060BDF
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5BD5060BDF
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:07:10 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id C9BD2C1E4BD;
- Tue,  6 Jan 2026 21:00:00 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id A82204E41FB2
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 21:07:08 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id B05F960739;
- Tue,  6 Jan 2026 21:00:26 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 7E7CB60739;
+ Tue,  6 Jan 2026 21:07:08 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CF8E9103C85F8; Tue,  6 Jan 2026 22:00:24 +0100 (CET)
-Date: Tue, 6 Jan 2026 22:00:23 +0100
-To: Mohammed Sadik Shaik via buildroot <buildroot@buildroot.org>
-Cc: Mohammed Sadik Shaik <s-sadik@ti.com>, Bryan Brattlof <bb@ti.com>,
- "Bajjuri Praneeth" <praneeth@ti.com>
-Message-ID: <20260106220023.5441033a@windsurf>
-In-Reply-To: <20251218065017.1286139-1-s-sadik@ti.com>
-References: <20251218065017.1286139-1-s-sadik@ti.com>
+ with ESMTPSA id EEABD103C85F8; Tue,  6 Jan 2026 22:07:05 +0100 (CET)
+Date: Tue, 6 Jan 2026 22:07:04 +0100
+To: Fabio Estevam <festevam@gmail.com>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+Message-ID: <20260106220704.3283de69@windsurf>
+In-Reply-To: <20251227212244.3098285-1-festevam@gmail.com>
+References: <20251227212244.3098285-1-festevam@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767733226; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1767733628; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=GDzpDlau4zenJxyEchrBk6xzE/HXWf8Fnf/KNTjKgak=;
- b=EhRdgSHvjtS7mCPOZx9g5695aVb1bkOySgHHwhKvJtLMrML7uMK1jj6OTANbgwr0KzlJIa
- Y6g6l6dKObjEWwjGTmot3RNla4dXW3AfteDjQMogNdFVluuAPUf7EXOz+Xgtt3+ZdVlXC0
- ZR3LcXIuUL5JTAVQ1D8ltnZSP9et1OwpfLpoHcjDdNF2Rvj3+Bh4W34iB0gBe70eRITbPc
- LGfRWacKqQPrEzPV6sg5LAGSPSgoVZdb74TFIomXCPYKrEF0aDGxvaMescjOF7MEGevACV
- MUMcQM4Z5nVM2/wS/TaRTq9g/UHfqHpIZBYLSHu46HnYZr+zhd7IfIeA1DBfag==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=3mi/Osmbmh8Lv7OCU/ezn57KzfLawIvNadUmUH6v5U4=;
+ b=xboxAmTIbJTNySca1XmQLfNV+sZlbGkPEVHUrbHor6JBEYDKDIjonVIhdYdX59t0Ue8EZC
+ EIgwQWnT9AJ3lANoAhBtAMhNu3PZOefdFA1nPNi5Yoc8NwFljmBELza1Q5xOUj3JL+A3mE
+ x623gY0wVF/rEtCU6ROYigp4f4gO5CwGpEJ7JJDC3uktK8PGgE7ZgYdKc6w8fDuG9ETr08
+ YKvby/nVCG80q9mvqStMbp+TBcOK/RR/MzvSMA0WbnM+h/bP/863ng2gWwTGgj2eM8RWKX
+ +kZCfUjtCDSOr+buiKWLvgJ8jh3RJzsjovoq6V/XgN70aSYB/gOZLyJbKlm9hA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=EhRdgSHv
-Subject: Re: [Buildroot] [V2] package/k3conf: new package
+ header.a=rsa-sha256 header.s=dkim header.b=xboxAmTI
+Subject: Re: [Buildroot] [PATCH] package/crucible: disable cgo to fix 32-bit
+ build failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,86 +103,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Mohammed,
+Hello Fabio,
 
-On Thu, 18 Dec 2025 12:20:18 +0530
-Mohammed Sadik Shaik via buildroot <buildroot@buildroot.org> wrote:
+Thanks for the patch. Adding Christian to the loop. Christian, could
+you comment on the below patch and help us understand whether this is
+the right fix?
 
-> K3CONF is a Linux user-space standalone application
-> designed to provide a quick'n easy way to dynamically
-> diagnose Texas Instruments' K3 architecture based
-> processors. K3CONF is intended to provide similar
-> experience to that of OMAPCONF that runs on legacy TI platforms.
+Fabio, one comment/request below.
+
+On Sat, 27 Dec 2025 18:22:44 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
+
+> The Buildroot autobuilder fails when building crucible on 32-bit
+> architectures (notably i386) due to unresolved _cgo_* symbols during
+> linking.
 > 
-> K3CONF currently supports Texas Instruments AM654, J721E, J7200, 
-> AM64x,AM62x,J721S2,J784S4,J722S, AM62Ax, AM62Px, and AM62Lx devices.
-> Along with the BeagleBoard variants of the above mentioned TI SOC's.
+> Crucible does not require cgo, and building it with CGO_ENABLED=0
+> avoids toolchain and linker issues while producing a fully functional
+> binary.
 > 
-> Signed-off-by: Mohammed Sadik Shaik <s-sadik@ti.com>
+> Disable cgo explicitly to ensure reliable builds across all supported
+> architectures.
+> 
+> Fixes:
+> 
+> https://autobuild.buildroot.org/results/0b59fb382f7a1d9c3644da71e7bd53b6a19418ce/build-end.log
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Thanks for your v2, which I have applied with some tweaks. See below.
+In commit logs, we like to have some details on what initially
+introduced the problem, so that we can understand whether the patch is
+a fix that should be backported to our LTS release. Ideally a pointer
+to the Buildroot commit introducing the problem. If not, at least some
+indication that the problem exists since <some time> (to be specified,
+with an old autobuilder failure). In our case, we're mostly interested
+in understanding whether that fix should be backported to Buildroot
+2025.02.x. So if the problem already existed prior to February 2025, we
+will want to backport it.
 
-
-> diff --git a/package/k3conf/Config.in b/package/k3conf/Config.in
-> new file mode 100644
-> index 0000000000..6146a5413b
-> --- /dev/null
-> +++ b/package/k3conf/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_K3CONF
-> +	bool "k3conf"
-
-Added:
-
-	depends no BR2_aarch64
-
-here since it's only for K3 platforms, which AFAIK are all ARM64.
-
-> +	help
-> +	  A Powerful Diagnostic Tool for Texas Instruments K3 based
-> +	  Processors.
-
-Replaced this text with parts of your commit log, which was much more
-useful.
-
-Added a blank line to separate the help text with the upstream URL
-below.
-
-> +	  https://git.ti.com/cgit/k3conf/k3conf
-> diff --git a/package/k3conf/k3conf.hash b/package/k3conf/k3conf.hash
-> new file mode 100644
-> index 0000000000..2c8d4ef664
-> --- /dev/null
-> +++ b/package/k3conf/k3conf.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated sha256sum
-> +sha256  a3459f80e7af5672da6b41bc0814114690dd549aac4cf81ba4e5dc84d42ab9c6  k3conf-v0.4-git4.tar.gz
-> +sha256  f962a0a4912aeae2d6f2f6e07bc3f79f7f1df9d4bf1abfb5c421b9b14352bfaf  LICENSE
-> diff --git a/package/k3conf/k3conf.mk b/package/k3conf/k3conf.mk
-> new file mode 100644
-> index 0000000000..da21fcccbb
-> --- /dev/null
-> +++ b/package/k3conf/k3conf.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# k3conf
-> +#
-> +################################################################################
-> +
-> +K3CONF_VERSION = v0.4
-> +K3CONF_SITE = https://git.ti.com/git/k3conf/k3conf.git
-> +K3CONF_SITE_METHOD = git
-> +K3CONF_LICENSE = BSD-3-Clause
-> +K3CONF_LICENSE_FILES = LICENSE
-> +
-> +define K3CONF_LINUX_CONFIG_FIXUPS
-> +        $(call KCONFIG_ENABLE_OPT,CONFIG_DEVMEM)
-
-Indentation here should have been with a tab. Noticed by "make
-check-package".
-
-Thanks a lot for your contribution!
+Thanks!
 
 Thomas
 -- 
