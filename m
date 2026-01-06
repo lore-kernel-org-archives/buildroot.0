@@ -1,112 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BA71CE9D47
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 15:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A16B2CE9D46
+	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 15:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54B44817FF;
-	Tue,  6 Jan 2026 15:10:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 548FC401F8;
+	Tue,  6 Jan 2026 15:11:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oPEppy-VqkhA; Tue,  6 Jan 2026 15:10:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ojHGVFRWmtDT; Tue,  6 Jan 2026 15:11:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60062817FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72AF140279
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767712240;
-	bh=+qLZ+cdd5R3QzuC+EiIkwxKxx5hNICzDByzQOceCAvE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=B8KiL8dvsxmo4G0bdq3znwC2XXSeYqgwVM5ELHVH2/9wbsQ9HvQ6edFaDTyT+iusx
-	 14LqPEdOSulryc8ep0UB9WGaoA9orQRzC0bYo5r8QyNMBcjEhsERbRqJsU1RCYYx+N
-	 lQha/haJleAdVTWqOh8849bpy02vGq/3NLFllBgqYxq6CjEC2UGr2W8W3D/cLClgJp
-	 wnOG6eGmJXhJ/VrZgKlF4HqMCIYRUo5ZX3ezqLGFEbJsmyvzu4qRKhUlPaaIvyxnAL
-	 1GK88/u7yabQtI0HT7nSTpjxVU3o/aTxqGd6wRVzJOxYAH5MsAJvRjN/M8E7u85FDi
-	 mJ0qxQ4xKumXA==
+	s=default; t=1767712284;
+	bh=YegMAIDMrYEOtVkDBpf1PyxebGdjvi3JTKhANUqE28Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=GdMtVlFPUXdeBwbbXtIEIFPT2m1bs35FybBM3YaM3QGDHp7wzZK7BDOn4XfvlFz0V
+	 OslfYzdwty+4WfQGCymDOQBSzWrFXFgxAT4P3A79t/eOa8TyI8gruU75EaUE7DpArK
+	 fuE1ppfdlEy8NxPSgIOcy1CwY89IuymyImnoNO61OM6iq0Alm3i8wv//K6OpvWg6wh
+	 diQVUWZYeJ9OMXl47pvJEcFiojSE69ENiUBE6O07Vw9lQrc+lw/kPnrrI66+P0TPld
+	 rrBUj2v7Kr+9PUh5huN0mxYX3Owq9OdHP7k27homFs6SiLWzi94ueQn3TG6DLUrlBy
+	 vhtPSTItC2PjQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60062817FD;
-	Tue,  6 Jan 2026 15:10:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F27A7249
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:10:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72AF140279;
+	Tue,  6 Jan 2026 15:11:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D7B34249
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D19CD815DB
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:10:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9E4780B53
+ for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:11:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AoKwG2sqOOwy for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 15:10:38 +0000 (UTC)
+ id cOARnndBlHAz for <buildroot@buildroot.org>;
+ Tue,  6 Jan 2026 15:11:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9948780C77
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9948780C77
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9948780C77
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 15:10:37 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-64b58553449so1592049a12.1
- for <buildroot@buildroot.org>; Tue, 06 Jan 2026 07:10:37 -0800 (PST)
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E5E4980B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5E4980B48
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5E4980B48
+ for <buildroot@busybox.net>; Tue,  6 Jan 2026 15:11:21 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-477bf34f5f5so9857635e9.0
+ for <buildroot@busybox.net>; Tue, 06 Jan 2026 07:11:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1767712235; x=1768317035;
+ d=1e100.net; s=20230601; t=1767712280; x=1768317080;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gThhXBwLzhDAGJIwiDs4TzuhYbAyaWY3efFiT/iHDjk=;
- b=poJ4HB1m3dvk18NBf/7SBQlqNCofEwcWwOSL5zN678ePeXyfKk/vdub7a16B7R7Hba
- gIX3Ctt1+FNEv4vMFp+txEGlabA/JIOOZc286zWoGq0pYEGaUWJFwikg5lnhguvoQOC1
- b3duL4CoLt5N4COuNHebP68XFcqDHE8sgFaoNwH6ThQRLIHq1wtzmh+ZwtPYS2w3o84j
- flHwjpkzH6wiEdBM2BP3qqX9XZ9kuAQJUZ/gMi2EJ0NUdOrpUJSMxYMR9is2eyHbgBrk
- o1DXXa62gOp22LPkQkQKh8hpDZ7Kj6rpE2IX88698uvPDkXfbIGwvwUwyaq4vl3zaicC
- sHSg==
-X-Gm-Message-State: AOJu0Ywy8cQwtWyJ7okIWRQeINKA7Z2tyojLK8oExTpFoMUSewTHKjD6
- Qw/a3SqnQN370Ohfm5IvYyHenljMSIAsiNkX5ncVUXv5WRTatMQQvgTUWrjodg==
-X-Gm-Gg: AY/fxX7LOHA3DsuIYRTX82Suu4mdMxCe8ie4BDGR3qPSk61/GCtNgC0IQBpk7I+QQg3
- kUGhKKAGjX3XlOCdbJJl4POKyotigXaBwe4ig/BNiowst6ezP2Js4Ii2B+/XSsEZEPR7v6tcAL6
- YOI2o6W61erVCauFL+E1R7kHWgksqys5EExbcU1mAmVw9Zkk1Eunh1TUkKbQ5mQlXzz/Gs9ubkK
- 4UqWfA213D0kw3TuBM4D9LQhW1rCgXjxHWeaHlbJM/H3KLTsW+tExB2gH9M9pzI59EIUF/4WJ7p
- fCvxPCM5S+sVrTJRsuLPPmJSF1HML6hm7HdLi03pZC9GrsgscYlTi+g9qRVX7vCHI2kfmMySlU3
- kR3Rvxu5gKMJOMqPDx22MjJBZ59bvFCJprUG58z/pS+BfUrOOOgCZnMYIAWZI+38aHf6b5lcDog
- HkTASCmUy7L2XF9MXqxCOIG/OTxhg=
-X-Google-Smtp-Source: AGHT+IFzj7d0nI2c4zd0n++OquvJyQ+l8IZvs086WL8dNYz32kfzdBZ0UO2OegPanHVdf6MGSxscLQ==
-X-Received: by 2002:a17:907:98d:b0:b76:3478:7d52 with SMTP id
- a640c23a62f3a-b8426bee23bmr339531466b.38.1767712234330; 
- Tue, 06 Jan 2026 07:10:34 -0800 (PST)
-Received: from hthiery.kontron.local ([213.135.10.150])
+ bh=Xz4u4YdwgPCsuqaty7MPIRaqcx/RKZHqY0qD6QJdwrw=;
+ b=vBfa4n9FcaKpIIBV+MPe8r8/sR2utUc0u1JJCxQvbVlHG0J4MoVwHm2BF3zFVD6G8N
+ RdmwthJAvC4RUqqOcWM+38WWfK+3KyrAZTO6q+I/J8e3xJ0b0YNph1PdULUpQcVU8+h4
+ 5d/O+gzX5NAuKYCgtMtXBCsDkqWqoX66LmFVu0ZqyX853D803BO122uPTx0ck/zAVHrk
+ MpOR2i3bAIwzkdQjukRvyfzMIGD78al3k4pUyXkbEY0ptR9AfyYcyCY3Zij43/B1teqk
+ XcGI8Bt2SngFFAO85mzszuwiryBvvILkekAZ5hLLDPsEYXIs+AOqsXMyS19pDULoOpSs
+ qa6w==
+X-Gm-Message-State: AOJu0Yx/6TdCuc2mpNStqo6GM8XEGtRVDueVGvZk1ATUhG4KKuAqLXwW
+ GDaXNCSJX9db1Vcwai4P53GMpV0CD8h/AZ+acAsgqicWUSv0WUApGFlHPjDvSYyfFKcNqMQ5YKV
+ 9bbzxAQ==
+X-Gm-Gg: AY/fxX7BTX6OvooV5Td82X1Vb5ZU1BtxTp7Lg9Q4F+o+Pe7A/mQfmNuLD/F/TB9eb+1
+ IL3Eic6PNPDLFNMxOqvOekk0QFaeYbZAWNXuITJr4hvCH7VE6AbEAzb2H6XKROb/d94QkJly7/9
+ zGwaMhKftIQ+FGNZS+pwF0Gcmmms4iJsQls/5SpsXunBuFkViEY3hMhTQdLc5DNgIYowr0JRNXh
+ /mRw2Y2KO6dpSJPzppUxFd33u4PIA6PQ9PGEt/Wy2jDDFaZHu4oI/PBmINfM5NcCqcGrUXd2Myl
+ 3dyqirwmXW9hTBc8eyNa8zJiVAhkXtEhij/AB5dM7EmXF98US8EfzVGYlaoxxGydNe4GiZ1Sw12
+ AGebT44sxij6X0QeO5ztHWsV+ZzQZQ/1To7uU/nlQ0E/8RKhS8FQ2kQU+IyNson6OZYWQhpPUqH
+ M71iDmeCjYtbNjVIwkUq5liZ5ftKbKoH5vg/k=
+X-Google-Smtp-Source: AGHT+IE2/m7cz8N9dkkDC9u3ASm64ezgwX5TVJpCnxJax114O9CVwg4xVDS1s7gr8IaTMB/VixDO7Q==
+X-Received: by 2002:a05:600c:4705:b0:47d:403e:9cd5 with SMTP id
+ 5b1f17b1804b1-47d7f06feaemr33276515e9.11.1767712279545; 
+ Tue, 06 Jan 2026 07:11:19 -0800 (PST)
+Received: from vm-2404.. (46.184.66.37.rev.sfr.net. [37.66.184.46])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b842a56db21sm244908766b.71.2026.01.06.07.10.33
+ ffacd0b85a97d-432bd0e17aasm4901630f8f.15.2026.01.06.07.11.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Jan 2026 07:10:33 -0800 (PST)
-From: Heiko Thiery <heiko.thiery@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  6 Jan 2026 16:10:23 +0100
-Message-Id: <20260106151022.29135-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.39.5
+ Tue, 06 Jan 2026 07:11:18 -0800 (PST)
+To: buildroot@busybox.net
+Date: Tue,  6 Jan 2026 16:11:11 +0100
+Message-ID: <20260106151112.335270-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1767712235; x=1768317035; darn=buildroot.org;
+ d=gadz.org; s=google; t=1767712280; x=1768317080; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gThhXBwLzhDAGJIwiDs4TzuhYbAyaWY3efFiT/iHDjk=;
- b=kqFshGQyrbnCWIEI08a9M//W2sxi4ZMHiqLKDxfVxBvVt1CGmASemMZEa8PrYPeSKX
- ZSEGnEGzs0F9Fl1+KFESPXN3r/x1R1BWPldSNWP2Her7Xws/q2Xe2oG6dfxhXToW5CIK
- Tx9jgvHZb3l8GTxT4x+01NFSSKw8xeAqmJ+ojHSOC1b5IE7ecxAFVQ0A+UYot/buJ2wI
- Q+k/gYwNmLorlKUcw86cfAh1Bg15WCp3LIdRdqu2MPWfX2XOXPjJUSOyKK78COs8hTJL
- BLE/vj0ecDn71xTXr6kcLXwlcG2ba2p2OAyrarqCbSDdQ/seGICov7xirYpXi9Uz/5Zb
- hKlQ==
+ bh=Xz4u4YdwgPCsuqaty7MPIRaqcx/RKZHqY0qD6QJdwrw=;
+ b=TWXl4ZXg0HWNYwCAVAbN6N2rEETfiFKZZHI1BVIPhFTWPLzTXLufT4gbQkJeNy93Aa
+ RLTX3wP6ZztG1UWk4+jnsj4QCFq8XAKjjYUGFEUPIUbBX8RZkWDiHLGzQxMFMgwcmZlF
+ f057Dl6zLt+1F/4IK7Y5c/bSxHdnMARHt2+pfgkcRhxogXWwx3hgCsEHa1lDn+1mA1EZ
+ ZPRc49cz4Sgq+yQVV51a49nOMnUUeSEf7wyM0FdI07MOusM9SBKxBj87OWGplO8pjehk
+ CRp4gtIi0B6tF0N7pz2t0XucffYeZNzPFPnGqNCItkVQ4PHwf/aoNDNz6qTsWoCToUUO
+ cz5g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kqFshGQy
-Subject: [Buildroot] [PATCH v3] package/uboot-tools: use uboot host tool
- printinitialenv to extract env
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=TWXl4ZXg
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,72 +119,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>,
- Michael Walle <michael@walle.cc>, Heiko Thiery <heiko.thiery@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Francois Perrad via buildroot <buildroot@buildroot.org>
+Reply-To: Francois Perrad <francois.perrad@gadz.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If u-boot is compiled with the LTO option, it is no longer possible to
-use the script 'get_default_envs.sh'. The problem was already observed
-and a solution available upstream u-boot since the commit 486aef08de09 [1].
-This was first available in release v2023.04.
-
-Now if the the new tool 'printinitialenv' is available it is used. The
-tool is build with u-boot that is a dependency of this package.
-
-[1] https://source.denx.de/u-boot/custodians/u-boot-tegra/-/commit/486aef08de091ca35386f32fe961a201c3cfa9d4
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v3:
-    - fixed redirect (thanks Thomas)
-v2:
-    - used hint from Arnout to check for availibity of the new tool
+ board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
+ board/olimex/a20_olinuxino/patches/uboot/uboot.hash | 2 +-
+ configs/olimex_a20_olinuxino_lime2_defconfig        | 4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig         | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
- boot/uboot/uboot.mk                | 4 ++++
- package/uboot-tools/uboot-tools.mk | 9 +++++----
- 2 files changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index c92568a559..e613d015a9 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -144,6 +144,10 @@ UBOOT_MAKE_TARGET += u-boot.stm32
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),y)
-+UBOOT_MAKE_TARGET += u-boot-initial-env
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_INITIAL_ENV),y)
- UBOOT_MAKE_TARGET += u-boot-initial-env
- define UBOOT_INSTALL_UBOOT_INITIAL_ENV
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 1925047ccd..69e03f40d8 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -154,10 +154,11 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
- ifeq ($(UBOOT_TOOLS_GENERATE_ENV_FILE),)
- UBOOT_TOOLS_GENERATE_ENV_FILE = $(@D)/boot-env-defaults.txt
- define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
--	CROSS_COMPILE="$(TARGET_CROSS)" \
--		$(UBOOT_SRCDIR)/scripts/get_default_envs.sh \
--		$(UBOOT_SRCDIR) \
--		> $(UBOOT_TOOLS_GENERATE_ENV_FILE)
-+	if [ -x $(UBOOT_SRCDIR)/tools/printinitialenv ]; then \
-+		$(UBOOT_SRCDIR)/tools/printinitialenv > $(UBOOT_TOOLS_GENERATE_ENV_FILE); \
-+	else \
-+		CROSS_COMPILE="$(TARGET_CROSS)" $(UBOOT_SRCDIR)/scripts/get_default_envs.sh > $(UBOOT_SRCDIR); \
-+	fi
- endef
- endif # UBOOT_TOOLS_GENERATE_ENV_FILE
- endif # BR2_TARGET_UBOOT
+diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
+index 52688f83e..9dd49776b 100644
+--- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
++++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  c435bd74d1c21fc5a950781a50d78bae2b93944144694843359948ad3afc72a5  linux-6.12.50.tar.xz
++sha256  7a8879167b89c4bae077d6f39c4f2130769f05dbdad2aad914adab9afb7d7f9a  linux-6.18.3.tar.xz
+diff --git a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
+index a2725383c..60971ee74 100644
+--- a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
++++ b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
++sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index ff6eca176..671aa1968 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.50"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 7d95bd4d4..2df63b9ab 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.50"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.39.5
+2.43.0
 
 _______________________________________________
 buildroot mailing list
