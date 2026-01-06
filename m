@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03161D0D14B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF7A2D0D151
 	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACBF7834C7;
-	Wed,  7 Jan 2026 18:03:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C509541576;
+	Wed,  7 Jan 2026 18:03:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S3SWvxPJ2QkZ; Wed,  7 Jan 2026 18:03:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MeP6YhunKm2m; Wed,  7 Jan 2026 18:03:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9184834AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB1C541588
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808985;
-	bh=q52ShwQ+/CVd6vzGJwOOodax5jqjMzr2lNbWoGZhKyc=;
+	s=default; t=1767808986;
+	bh=EeyS9Dlzf3qnCGmw9nHTB0eZQ7zE9tfCYoKs5ecPQFI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=H4Fbo36aVDVjtPHVw489F7dUAygEcjNfK9k9pvJaipHS4pElYB3IPMI1dCFcJBdic
-	 4vwYk2qr0yQTzpmNJMPcH2fjBz2cRL9ywhRlm4Du6ke5q2D3hkjOEEZqVJZ4fysu6c
-	 9zDB1tkkWEPthvHdbox1L7ZajCldp3NpBtsY4Ypb6LZt1KKjnT9SWQBoF4dv3dIovs
-	 B/c13wNWkqJ1GHNiSSf5irhhmDmCedJ8oABfZ37XTRDPY26ipR5R7dliu/AyNYIxiU
-	 yzTVg+WNFR0BuR4A0zQY/r55Pkm0vOizXF9ycna87vFCrlnhYZadTMyEgjIMG5yDKt
-	 1Uick+PCE6r2w==
+	b=R4hg+K/aCVDxDF27kBTnMKG4IZal2SUvIT/VLDrCDUzlcFGDJZLVEoQ76cEvBoZV3
+	 U3OCrtjorhK6ywiW/xxPIGUAEEGu7OiWu/g1VYti23hJfYgwQmzpqose7zKjSTCWI4
+	 EpW2nbaYpm/mZunwb1SybfKJIhFbnWzgrAICVIUEI9Avn3e9knAq3ThxwQLOvl0rMe
+	 MScCSJfMKbpe2GKkEXrlLv2vDL3YwPSmNJ+eC1P1EEVKCrItKzcbJ26l0LYObsLr+L
+	 BCrlxRop/BIeZkpMWIlIhzfxtEPuzzihC/928wNCPPzAEr/TYpFFezxnWq1a0iwZay
+	 RpjFNmf1ZCbSg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9184834AE;
-	Wed,  7 Jan 2026 18:03:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 06CA325B
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB1C541588;
+	Wed,  7 Jan 2026 18:03:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CA90A58
  for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F0F6810D9
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D816840B4B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E2O6z8FMdRR8 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VxrQOgCO6pkY for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:01:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A9B781105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AECD140B84
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A9B781105
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AECD140B84
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 875A180333; Wed,  7 Jan 2026 18:01:13 +0000 (UTC)
+ id ADD89811C5; Wed,  7 Jan 2026 18:01:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Jan 2026 08:56:35 +0100
+Date: Tue, 6 Jan 2026 08:59:57 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 8d4db92e66f2c7a7b7322bcb94aeb48f7f491731
-X-Git-Newrev: 94e3d1a7414f896d8d2b2ca2dc3719d6a8ba46dd
+X-Git-Oldrev: 562e7fb5d27be538405db90e6be02698a62e2927
+X-Git-Newrev: 027b6edc67d10cd501cb7b5b04e0813780b836e4
 X-Patchwork-Hint: ignore
-Message-Id: <20260107180113.875A180333@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/yasm: add CVE
- trailer in patch
+Message-Id: <20260107180114.ADD89811C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/python-libconf:
+ update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,38 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94e3d1a7414f896d8d2b2ca2dc3719d6a8ba46dd
+commit: https://git.buildroot.net/buildroot/commit/?id=027b6edc67d10cd501cb7b5b04e0813780b836e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Since Buildroot commit [1] the patches that fixes a security
-vulnerability needs to reference the fixed vulnerability.
+Updated package as computed by scanpypi.
 
-This patch adds the relevant information to the patch header.
-
-[1] 1167d0ff3d docs/manual: mention CVE trailer
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1b656345ecb8353a788f809a2aeca5c580fa0d8f)
+(cherry picked from commit 5d76be1c041938acee9650cbb777f3880865f629)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-libconf/python-libconf.hash | 5 +++--
+ package/python-libconf/python-libconf.mk   | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-index 976c2f7a13..b563fda71c 100644
---- a/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-+++ b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-@@ -10,8 +10,8 @@ For more info see:
-   - https://nvd.nist.gov/vuln/detail/CVE-2021-33454
-   - https://github.com/yasm/yasm/pull/244
+diff --git a/package/python-libconf/python-libconf.hash b/package/python-libconf/python-libconf.hash
+index d05efd37fd..40dfeadac6 100644
+--- a/package/python-libconf/python-libconf.hash
++++ b/package/python-libconf/python-libconf.hash
+@@ -1,4 +1,5 @@
+-# Locally calculated
+-sha256  66897870fcafce05624eafcc99e2dc8e150124e91019d9c29cc4f3bef64311dd  python-libconf-2.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/libconf/json
++md5  e212611cbf6a696e05742a983b3a0c57  libconf-2.0.1.tar.gz
++sha256  2f907258953ba60a95a82d5633726b47c81f2d5cf8d8801b092579016d757f4a  libconf-2.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3c2afc8c9f7a12032f225e6fa870e85af14d1b71236afe28d94a4b67e5e8c873  LICENSE
+diff --git a/package/python-libconf/python-libconf.mk b/package/python-libconf/python-libconf.mk
+index 65bdee8619..5bea1b2cc6 100644
+--- a/package/python-libconf/python-libconf.mk
++++ b/package/python-libconf/python-libconf.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
  
-+CVE: CVE-2021-33454
- Upstream: https://github.com/yasm/yasm/pull/244
--
- Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
- ---
-  libyasm/expr.c | 2 +-
+ PYTHON_LIBCONF_VERSION = 2.0.1
+-PYTHON_LIBCONF_SITE = $(call github,ChrisAichinger,python-libconf,$(PYTHON_LIBCONF_VERSION))
++PYTHON_LIBCONF_SOURCE = libconf-$(PYTHON_LIBCONF_VERSION).tar.gz
++PYTHON_LIBCONF_SITE = https://files.pythonhosted.org/packages/c8/41/592c24b42ec6e349629f2b6310ff31255b213bc696c0e4ad2ee1d2bbb68e
+ PYTHON_LIBCONF_SETUP_TYPE = setuptools
+ PYTHON_LIBCONF_LICENSE = MIT
+ PYTHON_LIBCONF_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
