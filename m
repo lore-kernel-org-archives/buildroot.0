@@ -1,81 +1,131 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A9ECEFD1E
-	for <buildroot@archiver.kernel.org>; Tue,  6 Jan 2026 23:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26FDECF6BE1
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 00:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7884980ABE;
-	Tue,  6 Jan 2026 23:11:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE2E840950;
+	Wed,  7 Jan 2026 00:43:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nMm-CvZf26B4; Tue,  6 Jan 2026 23:11:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0lOdoS8yFuVI; Wed,  7 Jan 2026 00:43:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CDB980A7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 357B74093B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767741093;
-	bh=hG702kr5nE6vNnYaG08G/jrC5n7cCdI2HfyU4pe8PVA=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=W6Jx6v5glehHFRxhLlpQ29GpllqR8UPqRx3Z85kauYGLwEPw+1jbWzKVCO31z4CjG
-	 pdZIUzIdklgyOsMVRS68A44PR2Mzh6vb0sJwtk5R1XvbbsyLboC89P1O/bb4sB5Bj7
-	 ZijHKcEG0KHmKmIHBtzi80vn7wYeoVpGm75Jl+m2NrdbiqsqCe5i3vKfVHEPtwaeCA
-	 yHP9rPCnyW9JfoBQbSS69CyD2QLC9mkxZjooG8QX5wjPyfkipLvXLAo/tdLy5wI2iy
-	 qCTPSx0vxPPzKDqNZQgepKuezjHbAfZnfPe2cJA1hCNwCOwhtMTsJcMe36x+HgNaAk
-	 eS+yfOWPKdjyw==
+	s=default; t=1767746588;
+	bh=6q5l/I6f33UyP2PGcIm8Ga/b6Bi2Tmu88hyLXw00ZZY=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=MTr+CIXeirr61LRxxGznbb0y77zpaxyJYvHttpurmyezyKP9UlBswrSN3wDku8+7v
+	 lpbV/GZc3w6dkGLC5h/fUyVScdyj236ORBsohMvwai4DGun7Wxkpv+jm8fIQ1dJcr4
+	 a8PiPy5RcYDGgWLfiqKAjayIyucKLFZN7brohMAnltRxmagKiwmrA8wZS9gfR1zcGC
+	 HOQXYVzgimnvf12nYuGcAzN9wE/ufhe/tq61oYT0xzrGPJrn1nqKStA4LiG90abKw+
+	 qrb3mmTJQ/wdEWWcBeS+2OQf4uHKDlUF7wnbaccr+UZ/Ld1c5Axt7Df4BEtjMpmZ5k
+	 IG4GB1IFQ7jvA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6CDB980A7A;
-	Tue,  6 Jan 2026 23:11:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E6792A3
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 23:11:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 357B74093B;
+	Wed,  7 Jan 2026 00:43:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16E57249
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 00:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14ECF407A6
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 23:11:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0907460788
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 00:43:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AVFB8axcaNVS for <buildroot@buildroot.org>;
- Tue,  6 Jan 2026 23:11:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E17BC407A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E17BC407A5
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E17BC407A5
- for <buildroot@buildroot.org>; Tue,  6 Jan 2026 23:11:29 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 45DD319F754;
- Wed,  7 Jan 2026 00:11:24 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, Alexander Shirokov <shirokovalexs@gmail.com>
-Date: Wed,  7 Jan 2026 00:11:10 +0100
-Message-ID: <20260106231110.991548-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.52.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A8WMvn_JMF4R for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 00:43:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B0A9E60706
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0A9E60706
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B0A9E60706
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 00:43:05 +0000 (UTC)
+Received: by mail-lf1-x132.google.com with SMTP id
+ 2adb3069b0e04-59b67388c9cso1419487e87.2
+ for <buildroot@buildroot.org>; Tue, 06 Jan 2026 16:43:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1767746583; x=1768351383;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ZqTncunycjHs2EIQCk9XcY5PzHnmJa0N16i6BkiWHyc=;
+ b=tc2qCwcyRwLrtE5H6Jj5eCdIDqhRNmqyjaFEHE2SxK3GVf2E4HBOKYfxbM5dvCY+wG
+ 3EKRNkV+tBXFMsJH6nurYHEyQcQ1Ikpf0lncUZzB6/v+jVa3OxLzO1S/f/CjOc6TrTI0
+ v4MeAZlPa6eUn8j9uS6+jebF1djjczKV/8yAGbvf/8J2SW3QLMOkICcL22XRzGnUL2Ws
+ mDXQ390umO7BRY/6ZIW0nOp8/FmUIHsccRuNqOFqGNw+3nDuTx7khlfnaZdUcHtFijLO
+ 1y0TwH+2gwfpc4fewqgBaF2Kbb+8m5qkSKKwwbnob+FL0DWvRblrqM5rJ9XkeF3uiGwE
+ fuGw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW87Z0JfXUEObSUUVXAIQ97AIVq7RV2gh4HEd+/lt5gRx0XsV+m0CRNpQFGwVU3t5Dsu1DMTbLp3Ik=@buildroot.org
+X-Gm-Message-State: AOJu0YzSvjpHLituetyVzZczRtLVQVlSa5pVxtA9NMchhDrWq/Y/VTDF
+ oB09Z5S/33zZValIeSxxRaQGmCMDYrN/h3kvZ/8cCTl/1au9pJfA1fyWTCBPotch0j6WCmn4iGe
+ 5Y5OcS1D6Fw==
+X-Gm-Gg: AY/fxX5x/oei6jqqz2MCjuCH8kfEeOeuoykjiaInVP8ykEsSRtPje8McJ/ju5GB/NiD
+ lEjZ/R2NNLsCjjCmvGhubJBcBtJZhYpUBCHjVsBJcm5w6JOEfhsVgnvc1UYO09TmvzOg3etiFwv
+ qSF4hbMj4UdMZgbyUpBpqZwMNGgEExDrd4bKrwqcdbPZEzL9k30lXBf/XnZg8WzFqziN651c8QP
+ 55hc34rqNQXfWr/iFABmQRR5V+rI1SGieR7+rJnyEEKwshExgFl6GpaM+IDtdGUQ3UhwuYIx/gb
+ qwqBUE2qIX6SD6HtuiVErKD7+Qz2NTBQOsJ9Q4mGYFYGSH+xUuHhP51gU8UQ/dvxbDa74hcVdmu
+ PbbgBPjlcLeu5G65RgXwgpHnHIH8q2Dr4jxpmEea6okQo8y7LQlHmn2FYa2aio2eBULIT0kqSnP
+ x1152MpZECuSuz5liI0dPSUBbWXC5Pm4Bo6YVAIbvxji24LXS+KA==
+X-Google-Smtp-Source: AGHT+IGs0FO+G/G0xxCZAVsxeXirFB6Wwx0HnGGoSRa9Bq1N5/FZU93dX0LTTTcxtlv3bz1mVCUhCg==
+X-Received: by 2002:a05:6512:304c:b0:594:357a:220c with SMTP id
+ 2adb3069b0e04-59b6f04098amr198473e87.40.1767746582811; 
+ Tue, 06 Jan 2026 16:43:02 -0800 (PST)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com.
+ [209.85.167.42]) by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-382eb8ad930sm7825581fa.28.2026.01.06.16.43.00
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 06 Jan 2026 16:43:01 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id
+ 2adb3069b0e04-59b6f59c4f5so199857e87.3
+ for <buildroot@buildroot.org>; Tue, 06 Jan 2026 16:43:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXYNSh/HrJNmfdwU2H1OuxoMqWPJf2zU/ydFRlzuRAGhLKHRmErc25ow5NOq4/cUFe4Nucvp28X8Ek=@buildroot.org
+X-Received: by 2002:a05:6512:2305:b0:59a:11a4:4c29 with SMTP id
+ 2adb3069b0e04-59b6f0410a5mr193427e87.41.1767746580170; Tue, 06 Jan 2026
+ 16:43:00 -0800 (PST)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767741086;
- bh=gXX2a9wH9LirnS6GPjvJWXyNov37vESar27wI0+m7AM=;
- h=From:To:Cc:Subject:Date:From;
- b=KsFIMesvDAPJ4SrscNToVq6w3+Q0ZK7gqxUl4stFSuQZJX8N+W5Ob81eSNO1HpALg
- xZ8Ti8N8EU5eH46norK9g4RqgbBTMWzTg6O0lq5Y5Lkk+l4dpbz2nsbIg6UukipUYm
- 64nFvRZ2mEWd9l3rRiRUnqdq0WNx+8jPku82LfDxmiBY0bitaXORvWOgFlnUTaXtal
- IPG7eEK6/2vX0WTyS096CdgNu+Aw06Nt3Rw1D0IgRhtBnsyCMQtW3vLh2wfqOZKQkX
- sMq6wJstHXg9dvOdQAcJZZqhJ3xrX1YVrFUifgB15TImqek4nGHaohM6hcxwJUF/wE
- ox3AcP0CV/BWQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+References: <20251227212244.3098285-1-festevam@gmail.com>
+ <20260106220704.3283de69@windsurf>
+In-Reply-To: <20260106220704.3283de69@windsurf>
+Date: Tue, 6 Jan 2026 16:42:49 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2pb=eD8o1yxvStZDHTdFzrTSUGR2Tt0t-g_H_-M==LedQ@mail.gmail.com>
+X-Gm-Features: AQt7F2qzDf66KZ0LE_3fSU6h9_rekrcwQxzvBe3RszLkobXwMkrQqFV0PRmdeZ8
+Message-ID: <CA+h8R2pb=eD8o1yxvStZDHTdFzrTSUGR2Tt0t-g_H_-M==LedQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabio Estevam <festevam@gmail.com>, buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1767746583; x=1768351383; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ZqTncunycjHs2EIQCk9XcY5PzHnmJa0N16i6BkiWHyc=;
+ b=YTn8gcg5aeruL54alfYRVbK7MvAY4ClzrilenD5/st60ZomDVKJkucOrIodP1BxqjH
+ vrQvdlILMlatwPgJQbQgWVVDgeC1YSy6ag9LVGuAdIB7tzbmtAirb7AkgX2Yb0q0y2ah
+ 4bXLmrVT0YMtR/Mhn2oDe6MNPfZrcdQ6sR3pMesUjJj0h6TjaVx5X1rwSxJuvgK81AA/
+ +KSFX1Sg5bDOX2Vh/6pdwTN0atuWYFMkx87xaVIZJQkKkIzQK/QBtU5zoVKzq36jwvaC
+ URh5zJS5OWEHhkvU7rZmcyZ7nQxqnG+kzk0Rv6FVxyrC9CFDM8ZL6KCK0zmtb0I55FHy
+ cMFg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=KsFIMesv
-Subject: [Buildroot] [PATCH 1/1] support/testing: add aichat runtime test
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=YTn8gcg5
+Subject: Re: [Buildroot] [PATCH] package/crucible: disable cgo to fix 32-bit
+ build failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,174 +137,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Cc: Alexander Shirokov <shirokovalexs@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/12624150651
----
- DEVELOPERS                                    |   2 +
- support/testing/tests/package/test_aichat.py  | 108 ++++++++++++++++++
- .../root/.config/aichat/config.yaml           |  11 ++
- 3 files changed, 121 insertions(+)
- create mode 100644 support/testing/tests/package/test_aichat.py
- create mode 100644 support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f982e3123a..0db91f6f40 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1870,6 +1870,8 @@ F:	support/testing/tests/package/test_4th.py
- F:	support/testing/tests/package/test_acl.py
- F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
-+F:	support/testing/tests/package/test_aichat.py
-+F:	support/testing/tests/package/test_aichat/
- F:	support/testing/tests/package/test_apache.py
- F:	support/testing/tests/package/test_attr.py
- F:	support/testing/tests/package/test_audio_codec_base.py
-diff --git a/support/testing/tests/package/test_aichat.py b/support/testing/tests/package/test_aichat.py
-new file mode 100644
-index 0000000000..7c978315c9
---- /dev/null
-+++ b/support/testing/tests/package/test_aichat.py
-@@ -0,0 +1,108 @@
-+import json
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestAiChat(infra.basetest.BRTest):
-+    rootfs_overlay = \
-+        infra.filepath("tests/package/test_aichat/rootfs-overlay")
-+    config = f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.3"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_AICHAT=y
-+        BR2_PACKAGE_CA_CERTIFICATES=y
-+        BR2_PACKAGE_LIBCURL=y
-+        BR2_PACKAGE_LIBCURL_CURL=y
-+        BR2_PACKAGE_LLAMA_CPP=y
-+        BR2_PACKAGE_LLAMA_CPP_SERVER=y
-+        BR2_PACKAGE_LLAMA_CPP_TOOLS=y
-+        BR2_PACKAGE_OPENSSL=y
-+        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="1024M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+    """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(
-+            arch="aarch64",
-+            kernel=kern,
-+            kernel_cmdline=["root=/dev/vda"],
-+            options=[
-+                "-M", "virt",
-+                "-cpu", "cortex-a57",
-+                "-smp", "4",
-+                "-m", "2G",
-+                "-drive", f"file={img},if=virtio,format=raw",
-+                "-net", "nic,model=virtio",
-+                "-net", "user"
-+            ]
-+        )
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+
-+        # Check the program can execute.
-+        self.assertRunOk("aichat --version")
-+
-+        # We define a Hugging Face model to be downloaded.
-+        # We choose a relatively small model, for testing.
-+        hf_model = "ggml-org/gemma-3-270m-it-GGUF"
-+
-+        # We define a common knowledge question to ask to the model.
-+        prompt = "What is the capital of the United Kingdom?"
-+
-+        # We define an expected keyword, to be present in the answer.
-+        expected_answer = "london"
-+
-+        # We set few llama-server options:
-+        llama_opts = "--log-file /tmp/llama-server.log"
-+        # We set a fixed seed, to reduce variability of the test
-+        llama_opts += " --seed 123456789"
-+        llama_opts += f" --hf-repo {hf_model}"
-+
-+        # We start a llama-server in background, which will expose an
-+        # openai-compatible API to be used by aichat.
-+        cmd = f"( llama-server {llama_opts} &>/dev/null & )"
-+        self.assertRunOk(cmd)
-+
-+        # We wait for the llama-server to be ready. We query the
-+        # available models API to check the server is ready. We expect
-+        # to see the our model. We also add an extra "echo" to add an
-+        # extra newline.
-+        cmd = "curl http://127.0.0.1:8080/v1/models && echo"
-+        for attempt in range(20 * self.timeout_multiplier):
-+            time.sleep(5)
-+            # To debug the llama-server startup, uncomment the
-+            # following line:
-+            # self.assertRunOk("cat /tmp/llama-server.log")
-+            out, ret = self.emulator.run(cmd)
-+            if ret == 0:
-+                models_json = "".join(out)
-+                models = json.loads(models_json)
-+                model_name = models['models'][0]['name']
-+                if model_name == hf_model:
-+                    break
-+        else:
-+            self.fail("Timeout while waiting for llama-server.")
-+
-+        # We ask our question and check the expected answer is present
-+        # in the output. We pipe the output in "cat" to suppress the
-+        # aichat UTF-8 spinner (aichat stdout will not be a tty).
-+        cmd = f"aichat '{prompt}' | cat"
-+        out, ret = self.emulator.run(cmd, timeout=120)
-+        self.assertEqual(ret, 0)
-+        out_str = "\n".join(out).lower()
-+        self.assertIn(expected_answer, out_str)
-diff --git a/support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml b/support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml
-new file mode 100644
-index 0000000000..f6a054696e
---- /dev/null
-+++ b/support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml
-@@ -0,0 +1,11 @@
-+# see https://github.com/sigoden/aichat/blob/main/config.example.yaml
-+
-+model: llama-server:ggml-org/gemma-3-270m-it-GGUF
-+stream: false
-+highlight: false
-+clients:
-+- type: openai-compatible
-+  name: llama-server
-+  api_base: http://127.0.0.1:8080/v1
-+  models:
-+  - name: ggml-org/gemma-3-270m-it-GGUF
--- 
-2.52.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgYWxsLAoKT24gVHVlLCBKYW4gNiwgMjAyNiBhdCAxOjA34oCvUE0gVGhvbWFzIFBldGF6em9u
+aQo8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4gd3JvdGU6Cj4KPiBIZWxsbyBGYWJpbywK
+Pgo+IFRoYW5rcyBmb3IgdGhlIHBhdGNoLiBBZGRpbmcgQ2hyaXN0aWFuIHRvIHRoZSBsb29wLiBD
+aHJpc3RpYW4sIGNvdWxkCj4geW91IGNvbW1lbnQgb24gdGhlIGJlbG93IHBhdGNoIGFuZCBoZWxw
+IHVzIHVuZGVyc3RhbmQgd2hldGhlciB0aGlzIGlzCj4gdGhlIHJpZ2h0IGZpeD8KPgo+IEZhYmlv
+LCBvbmUgY29tbWVudC9yZXF1ZXN0IGJlbG93Lgo+Cj4gT24gU2F0LCAyNyBEZWMgMjAyNSAxODoy
+Mjo0NCAtMDMwMAo+IEZhYmlvIEVzdGV2YW0gPGZlc3RldmFtQGdtYWlsLmNvbT4gd3JvdGU6Cj4K
+PiA+IFRoZSBCdWlsZHJvb3QgYXV0b2J1aWxkZXIgZmFpbHMgd2hlbiBidWlsZGluZyBjcnVjaWJs
+ZSBvbiAzMi1iaXQKPiA+IGFyY2hpdGVjdHVyZXMgKG5vdGFibHkgaTM4NikgZHVlIHRvIHVucmVz
+b2x2ZWQgX2Nnb18qIHN5bWJvbHMgZHVyaW5nCj4gPiBsaW5raW5nLgo+ID4KPiA+IENydWNpYmxl
+IGRvZXMgbm90IHJlcXVpcmUgY2dvLCBhbmQgYnVpbGRpbmcgaXQgd2l0aCBDR09fRU5BQkxFRD0w
+Cj4gPiBhdm9pZHMgdG9vbGNoYWluIGFuZCBsaW5rZXIgaXNzdWVzIHdoaWxlIHByb2R1Y2luZyBh
+IGZ1bGx5IGZ1bmN0aW9uYWwKPiA+IGJpbmFyeS4KPiA+Cj4gPiBEaXNhYmxlIGNnbyBleHBsaWNp
+dGx5IHRvIGVuc3VyZSByZWxpYWJsZSBidWlsZHMgYWNyb3NzIGFsbCBzdXBwb3J0ZWQKPiA+IGFy
+Y2hpdGVjdHVyZXMuCj4gPgo+ID4gRml4ZXM6Cj4gPgo+ID4gaHR0cHM6Ly9hdXRvYnVpbGQuYnVp
+bGRyb290Lm9yZy9yZXN1bHRzLzBiNTlmYjM4MmY3YTFkOWMzNjQ0ZGE3MWU3YmQ1M2I2YTE5NDE4
+Y2UvYnVpbGQtZW5kLmxvZwo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEZhYmlvIEVzdGV2YW0gPGZl
+c3RldmFtQGdtYWlsLmNvbT4KPgoKSWYgQ2dvIGlzIG5vdCByZXF1aXJlZCwgdGhlbiBkaXNhYmxp
+bmcgaXQgc2hvdWxkIGJlIE9LLgoKTG9va3MgZ29vZCB0byBtZSEKClJldmlld2VkLWJ5OiBDaHJp
+c3RpYW4gU3Rld2FydCA8Y2hyaXN0aWFuQGFwZXJ0dXJlLnVzPgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
