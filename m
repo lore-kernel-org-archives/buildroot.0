@@ -4,79 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82B07D0D150
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 138A9D0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3176B409D8;
-	Wed,  7 Jan 2026 17:50:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCB5C40DAC;
+	Wed,  7 Jan 2026 17:50:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d4YHWFV2Gj1Z; Wed,  7 Jan 2026 17:50:04 +0000 (UTC)
+ id vnceAJWXRMiY; Wed,  7 Jan 2026 17:50:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AFEB40D9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEE4A40D95
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808204;
-	bh=ue1XR5MVd4XSbicZghTZQ7e5eAZKhQlg9ESiCeqVudo=;
+	s=default; t=1767808207;
+	bh=07ZfGk0W9c8A8YeqvoBVNn9MZ7cQs6OKWNThWRc1uLs=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YiB12iCfkwHkzgCFVFoHB2g2OuQtaYtBjvRCWodqgRe0OSqrRP/iToeoB27JED+jJ
-	 EFO4gAiMTfQkacdtjCAkewWNRVd6LBkpjX0t9jNo0IxqwdCZvfRczEjEXreHFQqHG6
-	 N0eBla4CLY0VCrmXOhmd+ANHghN+NN07I7zhlBLyzMPA/AkC6f04vIHrnl79IpyUr1
-	 uC8Tf/x/CpXg95j0QzP6xzZsr878GXhAiezqd3o/C+hYjdS8X9XCDUJtrdBUhIAsR3
-	 ncyXPW/89P/mXQGZDKaM/jWonrfU+CYjIpuo/TVOzkFC0SyMX3qJnhs/MdOZI/sO/y
-	 UcjATGfwefC9w==
+	b=Wm9cYDg424jEKmUO7ABn8j+C+Lw+emqSQRMVBn/e26ztFRz1YAn4v6AEcAReNX4hE
+	 IcXrWu5KhwDkhUymw/AzIPMHlroEOTdtL9wxbz6RWrInPb2hCjElwRpaYO0Aknm1Ei
+	 fuZHsAvfzbH/hhqNScyRaWTQyBr3oZihfGS75mlPcqvhxkqqrKGQ3OvIZk2riiUT4q
+	 Clw/rOFVXCoIe1A/Z5FBJmVdQP/XjxDaWb1JFt7qZBvyFJ6Ae4z0JU/Vkp1q3XbiGK
+	 NptdAE4LU5BwfBHleDQzGh6QmkEz/4L7C06S/xP3ucEjs0aWG89YLDyZG+zpRIjTr/
+	 VZsa4lPC+pMZQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AFEB40D9F;
-	Wed,  7 Jan 2026 17:50:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8444925B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEE4A40D95;
+	Wed,  7 Jan 2026 17:50:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0F229ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6ACD86083D
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B724240263
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6BwoOqiJ4ek for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:50:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id coNwigSeB0F7 for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:50:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E6548607D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6548607D9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ABB2240128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABB2240128
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E6548607D9
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ABB2240128
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:04 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 29535B97A192; Wed,  7 Jan 2026 18:50:00 +0100 (CET)
+ with ESMTPSA id B4EE9B97A192; Wed,  7 Jan 2026 18:50:02 +0100 (CET)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:49:58 +0100
-Message-ID: <20260107174958.225764-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:50:00 +0100
+Message-ID: <20260107175000.225865-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251221223441.185169-5-bernd@kuhls.net>
-References: <20251221223441.185169-5-bernd@kuhls.net>
+In-Reply-To: <20251221223441.185169-6-bernd@kuhls.net>
+References: <20251221223441.185169-6-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808200; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808202; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=2vRL0YM8u2RjxkcQu+Vd4xw26xiaNpN6pMcmKASC7Ig=;
- b=LpJtVHLNzrnab6kec1MaBVhK+0tS+m7atIFUtUr8M/UA7izUGcBNMoL/I/t9iQ0OvryGuc
- LRjL2a5/ea5vRadXWrZvsOf77/Qys/2Wf45geaY1f7JctlDfInzXuBYnGMJsAL1HTR7P/y
- 7p0fxGMYsnsSu2mZ5vLJ3HrgQLKJoYYtGT8nj2Nly7zM6xDNRvIJuKJFubmKvByyTAj5G+
- DFr6LIgibrdq4V2/xYO7C7s5ilNMPOe433ZkK4VHogr0E44bEzCSvtVyJqNQ7r0cqVgTsp
- 9nTJvRcgwGEFBcTE64DgC7KkH5qf9BLy8cLEueau0sitqEcsHMbMZAVVAczr/g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=qC9Un4Q5nzVVELRC/m7oyouyjnrtnrVlE/pCceGkJgc=;
+ b=N3M8ThZrqpZvY6nSEYXEaZFdZcZn0CNOPFJ7hVvvCZT80JaYSqGku+NMzD39dHaHZiksde
+ zgkmZ6PJum/K7kh16NbYOwd/c+Lstjq8wTydKWngucSDKcLSxGwPGgtna8/QP/LSkwUw/q
+ Oaopg3zK0BEgumghgRRKJVpibU3Ui628DoNYV3Hyy4a/+ufuPsHRfWr3Qg0Jg/D3Bm/P2/
+ 7K9cOllY+OMgr3ZoFKFg3xnItZKhPs8rWIHQpmk/KJGhi7ZyOC4x5XZ13XmEA+yBBUr6AL
+ ku5YUYz7dypWgFzBb3U0Yvq4G1zK4cxuGtjB7PsCz9rkdY06BiHP6y4+Olu/Hw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=LpJtVHLN
-Subject: Re: [Buildroot] [PATCH v2 05/23] package/python-crcmod: update
+ header.a=rsa-sha256 header.s=dkim header.b=N3M8ThZr
+Subject: Re: [Buildroot] [PATCH v2 06/23] package/python-dockerpty: update
  tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -104,35 +104,22 @@ In reply of:
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/python-crcmod/python-crcmod.hash | 4 ++--
->  package/python-crcmod/python-crcmod.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-dockerpty/python-dockerpty.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/python-crcmod/python-crcmod.hash b/package/python-crcmod/python-crcmod.hash
-> index 43ef7dd8e7..81a7f34614 100644
-> --- a/package/python-crcmod/python-crcmod.hash
-> +++ b/package/python-crcmod/python-crcmod.hash
-> @@ -1,5 +1,5 @@
-> -# md5 from https://pypi.python.org/pypi/crcmod/json
-> +# md5, sha256 from https://pypi.org/pypi/crcmod/json
->  md5  2d5b92117d958dcead94f9e17f54cd32  crcmod-1.7.tar.gz
-> -# Locally computed
->  sha256  dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e  crcmod-1.7.tar.gz
-> +# Locally computed sha256 checksums
->  sha256  89480768826f408daea1f3caff0509c2cc9606e10f6bb0ccfd12a3d604842c35  LICENSE
-> diff --git a/package/python-crcmod/python-crcmod.mk b/package/python-crcmod/python-crcmod.mk
-> index c97f8808c1..a8f2e86be6 100644
-> --- a/package/python-crcmod/python-crcmod.mk
-> +++ b/package/python-crcmod/python-crcmod.mk
+> diff --git a/package/python-dockerpty/python-dockerpty.mk b/package/python-dockerpty/python-dockerpty.mk
+> index e6fe6e3b49..7ad98c6b94 100644
+> --- a/package/python-dockerpty/python-dockerpty.mk
+> +++ b/package/python-dockerpty/python-dockerpty.mk
 > @@ -6,7 +6,7 @@
 >  
->  PYTHON_CRCMOD_VERSION = 1.7
->  PYTHON_CRCMOD_SOURCE = crcmod-$(PYTHON_CRCMOD_VERSION).tar.gz
-> -PYTHON_CRCMOD_SITE = https://pypi.python.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b
-> +PYTHON_CRCMOD_SITE = https://files.pythonhosted.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b
->  PYTHON_CRCMOD_SETUP_TYPE = setuptools
->  PYTHON_CRCMOD_LICENSE = MIT
->  PYTHON_CRCMOD_LICENSE_FILES = LICENSE
+>  PYTHON_DOCKERPTY_VERSION = 0.4.1
+>  PYTHON_DOCKERPTY_SOURCE = dockerpty-$(PYTHON_DOCKERPTY_VERSION).tar.gz
+> -PYTHON_DOCKERPTY_SITE = https://pypi.python.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba
+> +PYTHON_DOCKERPTY_SITE = https://files.pythonhosted.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba
+>  PYTHON_DOCKERPTY_SETUP_TYPE = setuptools
+>  PYTHON_DOCKERPTY_LICENSE = Apache-2.0
+>  PYTHON_DOCKERPTY_LICENSE_FILES = LICENSE.txt
 > -- 
 > 2.47.3
 > 
