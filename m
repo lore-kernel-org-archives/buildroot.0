@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3FAAD185D7
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jan 2026 11:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500F4D185CC
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jan 2026 11:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75CDA60E24;
-	Thu,  8 Jan 2026 11:00:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CAF460E2D;
+	Thu,  8 Jan 2026 11:00:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cJzBgVbKYu8l; Thu,  8 Jan 2026 11:00:42 +0000 (UTC)
+ id 2D7hHNPRywCz; Thu,  8 Jan 2026 11:00:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D50960E26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEF2760E18
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767870042;
-	bh=1KacDArEDWH5XNQTEeCVDFe6BpMzRmcLsT/sbX59ggU=;
+	s=default; t=1767870043;
+	bh=Cur3gK5oLRWghRhoXYEWFWx72A/H5BYbJo2R6S+Y/18=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Y2sb/xmXWDoA8s6bwe+Bo3Rfq2XRuFjl77B3Bklt6jP1tmAn6ly2k40lnN83l7jhK
-	 zYXZoXcQldwlizW8458RMAgoSKWvEcCz/G3FKrXpsvQOJAv5BBKZGPJv8N16hCI2g+
-	 kj6BWpIUV2fLyv5SjSV85VxRP6dgdrMRXbxo/6xXDX3NvfopCP93REIXNtPOsxe5O1
-	 /Phkblx5fMWOBBKUDeqNkfjRzQIRgvlEvZRKz2Uy6XH0dpVqtBsJBPV8F3D6jwNDVN
-	 sW4W1nIH6HYg7DSBJUMOHUbFOaivFlnG4HS/N3FWL6YvTk2koA2t5td2psw4/yFKAi
-	 c3ePHT4rwtZqA==
+	b=PRlUvvsIBAP6EOBx4BwVECYSS1rCuz1cGgVk6i6haj/l7mPxZlYRA+0OL/JcR+iDP
+	 Ta/cAZ6ofHT29Or6VzfUG2zf6RlRWx0/SOTFYSZPWiq+KLZvc4OjPVLb30QOw8VFQ2
+	 OqOUR33IJemtTKV8YJW/ll4hdDb5CBH/QeHPlkB3zVDXC2YfmjZ2fesK36lga+/i2j
+	 SSP9yDanS+jHmKaYp99TbCmEa/vgYL7Q2HtiUOpTIBe7ZcHZBALwq87Ee29T9Hik4E
+	 UcL0c+dZs5EMgHd2pXLWqdwefWSFe1L9B63gs5iLwnezgQLxxKtW4xNPE9tiuB2xSd
+	 HROMKzHY3xTsQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D50960E26;
-	Thu,  8 Jan 2026 11:00:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4520D436
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEF2760E18;
+	Thu,  8 Jan 2026 11:00:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFC0F436
  for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD92F408A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA2934004E
  for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gGdc9YojUCQJ for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7rMFEOLmaQ1Y for <buildroot@buildroot.org>;
  Thu,  8 Jan 2026 11:00:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4570940B8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38B744066D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4570940B8E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38B744066D
  for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:00:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 439408834B; Thu,  8 Jan 2026 11:00:24 +0000 (UTC)
+ id 370E4883B6; Thu,  8 Jan 2026 11:00:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 7 Jan 2026 23:34:56 +0100
+Date: Wed, 7 Jan 2026 23:34:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab52feec52ecac3e085518981f54703b1a8799af
-X-Git-Newrev: 9659afcd7956f7eca87219c89ae43fcb57ee8761
+X-Git-Oldrev: 5d5e93f14f9b87650e5a9a284f5d584337310462
+X-Git-Newrev: ab52feec52ecac3e085518981f54703b1a8799af
 X-Patchwork-Hint: ignore
-Message-Id: <20260108110024.439408834B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-net-http: bump to version 6.24
+Message-Id: <20260108110024.370E4883B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-module-runtime: bump to
+ version 0.018
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +77,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9659afcd7956f7eca87219c89ae43fcb57ee8761
+commit: https://git.buildroot.net/buildroot/commit/?id=ab52feec52ecac3e085518981f54703b1a8799af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff LICENSE: use "The Perl Artistic License 1.0"
-    see https://metacpan.org/release/OALDERS/Net-HTTP-6.24/diff/OALDERS/Net-HTTP-6.23#LICENSE
+host-perl-module-build is no longer a dependency
+(Build.PL was removed, so Makefile.PL is used)
+
+now, this module has its own LICENSE file
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-net-http/perl-net-http.hash | 7 ++++---
- package/perl-net-http/perl-net-http.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/perl-module-runtime/perl-module-runtime.hash | 8 ++++----
+ package/perl-module-runtime/perl-module-runtime.mk   | 7 +++----
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
-index 094b9e5da0..c286ee0ece 100644
---- a/package/perl-net-http/perl-net-http.hash
-+++ b/package/perl-net-http/perl-net-http.hash
-@@ -1,5 +1,6 @@
+diff --git a/package/perl-module-runtime/perl-module-runtime.hash b/package/perl-module-runtime/perl-module-runtime.hash
+index c87963bfb0..e30040c7d5 100644
+--- a/package/perl-module-runtime/perl-module-runtime.hash
++++ b/package/perl-module-runtime/perl-module-runtime.hash
+@@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--sha256  0d65c09dd6c8589b2ae1118174d3c1a61703b6ecfc14a3442a8c74af65e0c94e  Net-HTTP-6.23.tar.gz
+-md5  d3d47222fa2e3dfcb4526f6cc8437b20  Module-Runtime-0.016.tar.gz
+-sha256  68302ec646833547d410be28e09676db75006f4aa58a11f3bdb44ffe99f0f024  Module-Runtime-0.016.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  3728289552dc5031700596e0cf4092b4  Net-HTTP-6.24.tar.gz
-+sha256  290ed9a97b05c7935b048e6d2a356035871fca98ad72c01c5961726adf85c83c  Net-HTTP-6.24.tar.gz
++md5  455eedb62183b9d9e437c59c375c1054  Module-Runtime-0.018.tar.gz
++sha256  0bf77ef68e53721914ff554eada20973596310b4e2cf1401fc958601807de577  Module-Runtime-0.018.tar.gz
  
  # computed by scancpan
--sha256  0ed700a4bfc022e999d83407f71ab62ead96662d8f7bbebfd857376bf3ed6528  LICENSE
-+sha256  bd8fcd2e2a8c322e3d9ff9dc943b0ca651760327bdcb82f0adecd8573442c096  LICENSE
-diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
-index 08e81f95a1..df360c9cb9 100644
---- a/package/perl-net-http/perl-net-http.mk
-+++ b/package/perl-net-http/perl-net-http.mk
-@@ -4,7 +4,7 @@
+-sha256  ad1761020436687e8493208336ef53e84589fdba212da59b05b8111cca75ddc1  README
++sha256  03b1feed0e190459ef83b42518a970e8ed576c4f5bb5156d047a2edc4e469427  LICENSE
+diff --git a/package/perl-module-runtime/perl-module-runtime.mk b/package/perl-module-runtime/perl-module-runtime.mk
+index dcf045cf18..c698300b40 100644
+--- a/package/perl-module-runtime/perl-module-runtime.mk
++++ b/package/perl-module-runtime/perl-module-runtime.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--PERL_NET_HTTP_VERSION = 6.23
-+PERL_NET_HTTP_VERSION = 6.24
- PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
- PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_NET_HTTP_LICENSE = Artistic or GPL-1.0+
+-PERL_MODULE_RUNTIME_VERSION = 0.016
++PERL_MODULE_RUNTIME_VERSION = 0.018
+ PERL_MODULE_RUNTIME_SOURCE = Module-Runtime-$(PERL_MODULE_RUNTIME_VERSION).tar.gz
+-PERL_MODULE_RUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
+-PERL_MODULE_RUNTIME_DEPENDENCIES = host-perl-module-build
++PERL_MODULE_RUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+ PERL_MODULE_RUNTIME_LICENSE = Artistic or GPL-1.0+
+-PERL_MODULE_RUNTIME_LICENSE_FILES = README
++PERL_MODULE_RUNTIME_LICENSE_FILES = LICENSE
+ PERL_MODULE_RUNTIME_DISTNAME = Module-Runtime
+ 
+ $(eval $(perl-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
