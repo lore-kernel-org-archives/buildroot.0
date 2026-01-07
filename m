@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 114A3D0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:54:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49CE6D0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAEA04100F;
-	Wed,  7 Jan 2026 17:54:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 233A0409D5;
+	Wed,  7 Jan 2026 17:54:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrij54QCW7_H; Wed,  7 Jan 2026 17:54:17 +0000 (UTC)
+ id 4w_a-ABK4CDj; Wed,  7 Jan 2026 17:54:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3268541003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4788F40A89
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808457;
-	bh=slnoQ1GajYmnfvO4P+d9ySw1ENR4eV3jXTa1cymXhaU=;
+	s=default; t=1767808466;
+	bh=hyj5DjDUswjtmVsOW51S6qFiweizLJZhZTBq1MJ4aww=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Zwj/vTtnzhMm1PkGi6MB8wMa6cVevaiEFJmOgFPrniWCvxf5nWV+qvEGHMItNV8Qt
-	 FvjUsXiAuVBoLl7/TyurOmU6+49XgoIHwzOUsLL05Lb9H/JYwxwQ9Jiiqlm8GTkoMx
-	 6EbSUlMy20teMpWxxCUe0dWsrVmk6ADVkz8qdE7PljxD4O8BZqGUr6P/vGgbrBE4hY
-	 YJl9tzbIsba6XhAwQ4M6xQK3dN5W6z7oh6yBcxz0j2SqNQnuMsG3BmSYRB51/KvndN
-	 K61/oQPZdDUojhASY6Vqtc8f3UvY16K6/nl681y6oGHOB8ONYXPj216q3uMaW8VmWi
-	 TmeSzB+3mJU4w==
+	b=leTceD4ENgI7FWH4hS1WwaA4ovD5N7r90Nmv+O5PiBJsIbl9r+Lv2k8xIsudohhKw
+	 bx2djuyfCfmED8d9nqhdLffHYa3Ohz1LZyot831mUlubm7CmoqO+X45FdF90f61H++
+	 rE7h9CDEEbqOqCGOPeMGNzFSs619egY5Ot+AAtlqRD7Pi8e5iQdTohtJ7o9Xq+CQb9
+	 z2lknnSEOkXp/3s+u/ite/935ctGZ3is/yQkyL9xwwPyPr8sTCryIzhH+Eu7MtELJm
+	 5y9VZe7JIhGq9tHq3djc/8/HFzeV+SsTysObNu6+IfCZBwYW0JlVl8/HoXLJPHW01j
+	 llSMpr0/VXKQg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3268541003;
-	Wed,  7 Jan 2026 17:54:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C26359ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4788F40A89;
+	Wed,  7 Jan 2026 17:54:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE4D725B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B455160667
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:54:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A516A40160
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:54:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PXg4_pIMTqXb for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:54:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6QA6QmF2wc3X for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:54:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 49B1360661
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49B1360661
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9FDBB40128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FDBB40128
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49B1360661
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:54:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9FDBB40128
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:54:23 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2669AB97A596; Wed,  7 Jan 2026 18:54:12 +0100 (CET)
-To: Thomas Perale <thomas.perale@mind.be>
+ with ESMTPSA id B72ECB97A596; Wed,  7 Jan 2026 18:54:21 +0100 (CET)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:54:10 +0100
-Message-ID: <20260107175410.229291-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:54:18 +0100
+Message-ID: <20260107175418.229361-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251228181840.37501-1-thomas.perale@mind.be>
-References: <20251228181840.37501-1-thomas.perale@mind.be>
+In-Reply-To: <20251116202053.3276072-1-fiona.klute@gmx.de>
+References: <20251116202053.3276072-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808452; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808461; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=P0Jii/h10nwS0gXqzsPcoFnf7fizjcvuCWggEzzA+5Y=;
- b=pSiRKb3B8+RAsy4JDPFB5PpVRfTi4xcomYKE+1+y/KdJusuMRB2zaB236LF14pNdspncDL
- QDLTQjMGAh0e3hq3Ltq9PErLX2mexiVFJqErzKoHP8E02UySIDjxJlrRGGbiXK8J6QxpqM
- w9oB/RoD0b8+9LCYbo5g/83/r43bDYG+1yiIvArehYbIrLzbdWXLHdTiMs0VhGIhaEQthZ
- Ae+I0sZRZGoWjlbsQPfbt9F9FberHfVO1eNrWuQHogfoeL8+S/TvPjDBhXionF5iH2Bmlw
- 8NYYPFg0V2env9EWzhm1qR4C9scSelkazjU7ZBOB7c6NkFEcsKET+T9N7ReufQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=na9Q91ZL8TRRiDyO4WxoLuFSvrVtrooGhRYjbDFpGFo=;
+ b=QarZxCbZrRLOOL59KH5bXLUG9bsCu557MWXhmBTtzcpIfcOcBc6tKEJmOdrF/tLZ5GV4oJ
+ dPpceIhR9gSQBf2TiK1A6+MazoQy8chugPnKwpSBCpPmt5buXt/jXX99ZK1BydmLq5UlYr
+ Ni+C3V3pbMKIgJPlX6QPbyyVrSZEReLoIFVqeET8xwUnA8+nn2E0MRkzlIWN/zLfq09CKX
+ 5u9J/BmvCOp019m3d/5v7m5Dld5qcshscDiOqjmG6S2vkTrU8KbzRh0fcJe8fTvvgTmAvT
+ 2b7i3+ho4zzBbEtVmjDYiiLjdRcljQW8i2yIAP4Ndm4UdJcWETmADtE68NOzgA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=pSiRKb3B
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-django: security bump to
- 5.1.15
+ header.a=rsa-sha256 header.s=dkim header.b=QarZxCbZ
+Subject: Re: [Buildroot] [PATCH 1/3] package/uboot-tools: include FIT print
+ support if FIT support is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,67 +97,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For more details on the version bump, see the release note:
->  - https://docs.djangoproject.com/en/dev/releases/5.1.15/
+> Otherwise "dumpimage -l" produces only a newline when processing a FIT
+> image.
 > 
-> Fixes the following security issue:
-> 
-> - CVE-2025-13372:
-> 
-> Potential SQL injection in FilteredRelation column aliases on
-> PostgreSQL.
-> 
-> For more information, see:
->   - https://nvd.nist.gov/vuln/detail/CVE-2025-13372
-> 
-> - CVE-2025-64460:
-> 
-> Potential denial-of-service vulnerability in XML Deserializer.
-> 
-> For more information, see:
->   - https://nvd.nist.gov/vuln/detail/CVE-2025-64460
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-Applied to 2025.02.x. Thanks
+Applied to 2025.11.x. Thanks
 
 > ---
->  package/python-django/python-django.hash | 4 ++--
->  package/python-django/python-django.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/uboot-tools/uboot-tools.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-> index 97e568ea14..0c9b70959f 100644
-> --- a/package/python-django/python-django.hash
-> +++ b/package/python-django/python-django.hash
-> @@ -1,6 +1,6 @@
->  # md5, sha256 from https://pypi.org/pypi/django/json
-> -md5  b0c6556282e4ef15209b34b09604b9a1  django-5.1.14.tar.gz
-> -sha256  b98409fb31fdd6e8c3a6ba2eef3415cc5c0020057b43b21ba7af6eff5f014831  django-5.1.14.tar.gz
-> +md5  232748d1f2d6d1074f873dde91f7d75b  django-5.1.15.tar.gz
-> +sha256  46a356b5ff867bece73fc6365e081f21c569973403ee7e9b9a0316f27d0eb947  django-5.1.15.tar.gz
->  # Locally computed sha256 checksums
->  sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
->  sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-> index fc5494cd80..32821e19a0 100644
-> --- a/package/python-django/python-django.mk
-> +++ b/package/python-django/python-django.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_DJANGO_VERSION = 5.1.14
-> +PYTHON_DJANGO_VERSION = 5.1.15
->  PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
->  # The official Django site has an unpractical URL
-> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/6e/f9/284077f0e61f633e5279518a9ac5924ade4bef12bc841174ca48c57f2438
-> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/45/1ac68964193cfcc0b0912a0f68025d5bdb54f71ba7b8716e85b959874bd0
->  PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
->  PYTHON_DJANGO_LICENSE_FILES = LICENSE \
->  	django/contrib/gis/measure.py \
+> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+> index 37ccd7b953..1135fb9c03 100644
+> --- a/package/uboot-tools/uboot-tools.mk
+> +++ b/package/uboot-tools/uboot-tools.mk
+> @@ -32,6 +32,7 @@ define UBOOT_TOOLS_CONFIGURE_CMDS
+>  	touch $(@D)/include/config/auto.conf
+>  	mkdir -p $(@D)/include/generated
+>  	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
+> +	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
+>  	echo $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
+>  	mkdir -p $(@D)/include/asm
+>  	touch $(@D)/include/asm/linkage.h
+> @@ -124,6 +125,7 @@ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
+>  	touch $(@D)/include/config/auto.conf
+>  	mkdir -p $(@D)/include/generated
+>  	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
+> +	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
+>  	echo $(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
+>  	mkdir -p $(@D)/include/asm
+>  	touch $(@D)/include/asm/linkage.h
 > -- 
-> 2.52.0
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
