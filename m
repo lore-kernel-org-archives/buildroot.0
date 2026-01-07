@@ -4,81 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F405ED0D162
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 134E1D0D16A
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 18:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5DA981150;
-	Wed,  7 Jan 2026 18:25:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1E9480C4B;
+	Wed,  7 Jan 2026 18:46:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZbhuQZ60qfwU; Wed,  7 Jan 2026 18:25:08 +0000 (UTC)
+ id 5lx6J_8S_0hp; Wed,  7 Jan 2026 18:46:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5CF4810FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7F6980D4B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767810308;
-	bh=Sl5xYLdpH/euAWcEa5B6BJqv2F7qayhi2aksqs/l8DA=;
-	h=To:In-Reply-To:References:Date:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=UiGEoD3/36+XbCjisTe+SPo6oRdPWHCseiqiIGjMNNe+QBkr4kafFF/8qHKZ3McPF
-	 l6PHSOAiyeHt/AiiaXS/Z8gqJmoARPYzzO2MIITrOc6CGFDNdtuGKWN9tEJesO7fAT
-	 ZLj/Zc2EDT0KRgPVbgSmu8X4JFNFv08J+o8EAmy9zBT3vG2iP1/ZsH2/28+R8v3DF0
-	 FEiLISl+4FgjnnxUIAI7R+Lywvrdwg6OGMJfffQS4uFyaw9JBG1ZGcKM1lSMqeMJr1
-	 YL5I/rBkxClcw+xgsa9LK1r3macEVd+qP6eDp4SOa8YjcBhD8NcE2021B3Sboy25y4
-	 KqwwI9j/uDY6A==
+	s=default; t=1767811586;
+	bh=xfA/rr0ekdOWbfh1xpoc8PRtO3+BO9YKQvPRI77RG6Y=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=gIOy/fcun8xyG7KRFvx4y+nsoCQpWlaEmzC7nE25T8GUoc1IDw1tQfFw/fcgVS7h2
+	 3xT+PiufJkJtsNfBr/yhcNs5wkeDx2+NeAxdtHlpWgy0h44rpKp0JNbLyBM323MeWM
+	 QZ16z8RhjgAsBSYeZzG8z0dEVURKejfCkGS0by1KSBiri0NuLeGS68Ib7h1pT/5Clg
+	 dXaw7Q3hR9muXNTZyQ69nZKjOIKSojhhQfooQHa6M1arsltkF5W8mRUCtwYA6m9PQX
+	 KpDBfulrMp7fIzJKszMeXn0uCMTEIdoPNVXXVbv20V9WH5gJ/mxzE2gjrQaJ5kEQAe
+	 h8YxQHvA9j7fw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5CF4810FB;
-	Wed,  7 Jan 2026 18:25:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 12A93436
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:25:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7F6980D4B;
+	Wed,  7 Jan 2026 18:46:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63475436
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 047CB40160
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:25:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4977C80D4B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:46:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LluJRL0aQamF for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 18:25:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 439434000B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 439434000B
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 439434000B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:25:04 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.3])
- by mail.tkos.co.il (Postfix) with ESMTP id 964634405EE;
- Wed,  7 Jan 2026 20:22:06 +0200 (IST)
-To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-In-Reply-To: <20260107175147.228330-1-arnout@rnout.be> (Arnout Vandecappelle
- via buildroot's message of "Wed, 7 Jan 2026 18:51:47 +0100")
-References: <20251229090719.13291-9-thomas.perale@mind.be>
- <20260107175147.228330-1-arnout@rnout.be>
-User-Agent: mu4e 1.12.13; emacs 30.2
-Date: Wed, 07 Jan 2026 20:25:01 +0200
-Message-ID: <875x9d5lhe.fsf@tarshish>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAVsidIuGkb8 for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 18:46:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E0B6980C4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0B6980C4B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0B6980C4B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 18:46:23 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0cbc.dip0.t-ipconnect.de [91.58.12.188])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 81284A4C35B0
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 19:46:20 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42640)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vdYY0-000000006Xx-0KHo
+ for buildroot@buildroot.org; Wed, 07 Jan 2026 18:46:20 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Wed,  7 Jan 2026 19:46:20 +0100
+Message-ID: <20260107184620.93518-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1767810126;
- bh=Xb9vdjs2CWyQdPuJdsKsHlULf8sIzUIshso18zpDrDQ=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=KHCRNtL9XtbR2yLjHT873pJthc1+Ca6CDLVvy5VHFLOqe593B7GclzPmNt8TSY8Ep
- 3xOhCgUAa11jqcrSbKXGdr99mqLYxEUh+HpZF7o4j7dlvfgCK43BRQ0Bzct83KHOIN
- HVUw/scnSWbB/w71lDgcSYu1ARMrnqT3I6K1QrokbB9yjc5HfyXEnHhd3jV76NmW0q
- ZfafOl3XYlYenfbCkgKWFY+p3Rdpu3UHH8wBNte5xczZNoQeyIKG2YZ/NjbULymey9
- sZCZT3365zReGSSDibJ7NUySLHWbFykssQ7fTf+E8T5JRELdFbw5Uk1NiVzoOZLfQj
- xXSfSiPFibRZA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1767811580;
+ bh=MQp3184p4HxFOTTqfLfJ6oeOyotyR1PIGA6taZMbcrU=;
+ h=From:To:Subject:Date:From;
+ b=Yo1NyEs8GNUI+mgucA/CnZcnnwZ11moignZW1DOoipAzWSRC7MqVu4iHAiiKkmJSz
+ gARA6K4BpfCpwA3mYr8NJocu2/FOBFKTX1pYpbMlIpoTO1OLhO7vuIN/6d6iWWjazQ
+ 7pthC4oWZcPfnTCuVRzbNuq6IqGuDJ8PMWwpurhkLiGCmsEZQ5RSpSnc8yQ9OFpYbL
+ PNJoSeEKm97VQM5p7CmQCPa4F5EPPpVFyj+KTWksUrWgT9Wmr2VbjvPF8XoeeQZLJH
+ Kv7ehk7Lh+CNjNLi28C0Dr23l/V2Xwt8JXWvriu2oy3G2PikKV+HQ/lqmw/ziSr9W8
+ WN5m0CgggNmwQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=KHCRNtL9
-Subject: Re: [Buildroot] [PATCH 09/14] package/libconfuse: add CVE trailer
- in patch
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Yo1NyEs8
+Subject: [Buildroot] [PATCH 1/1] package/resiprocate: disable "Log
+ repository revision and branch"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,71 +92,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+Buildroot commit 79adde0180e834f839c770caa14d5253544d9719 bumped the
+package to 1.13.2 that includes upstream commit
+https://github.com/resiprocate/resiprocate/commit/0f13a697072ccb257391c1b59834f0e883a144df
+which added the computation of the git source tree hash, current code can
+be found here:
+https://github.com/resiprocate/resiprocate/blob/resiprocate-1.13.2/CMakeLists.txt#L54
 
-On Wed, Jan 07 2026, Arnout Vandecappelle via buildroot wrote:
-> In reply of:
->> Since Buildroot commit [1] the patches that fixes a security
->> vulnerability needs to reference the fixed vulnerability.
->> 
->> This patch adds the relevant information to the patch header
->> and adds the `Upstream` trailer.
->> 
->> [1] 1167d0ff3d docs/manual: mention CVE trailer
->> 
->> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
->
-> Applied to 2025.02.x and 2025.11.x. Thanks
+This code causes a build error when neither the package source nor the
+buildroot root directory contains .git/ as seen on the autobuilder:
 
-Not in 2025.11.x as of commit e98515299 ("package/mupdf: add
-CVE-2024-2425{8, 9} to IGNORE_CVES").
+ -- Found Git: /usr/bin/git (found version "2.43.0")
+ fatal: not a git repository (or any of the parent directories): .git
+ fatal: not a git repository (or any of the parent directories): .git
 
-baruch
+The package source does not contain .git/ due to usage of the github
+helper to download a tarball instead of a git checkout.
 
->
->> ---
->>  .../0001-Fix-163-unterminated-username-used-with-getpwnam.patch | 2 ++
->>  1 file changed, 2 insertions(+)
->> 
->> diff --git
->> a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
->> b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
->> index 9ff3f5ec1c..4c2aa114aa 100644
->> --- a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
->> +++ b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
->> @@ -5,6 +5,8 @@ Subject: [PATCH] Fix #163: unterminated username used with getpwnam()
->>  
->>  Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
->>  
->> +CVE: CVE-2022-40320
->> +Upstream: https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b
->>  [Retrieved (and backported) from:
->>  https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b]
->>  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> -- 
->> 2.52.0
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+If the buildroot tree was created by a git checkout the configure script
+of resiprocate will pick-up the hash of the buildroot tree:
 
+ $ grep RESIPROCATE_GIT_ID output/build/resiprocate-1.13.2/config.h
+ #define RESIPROCATE_GIT_ID "15ac4a40d0f62730a67286269c4153d85043f1d1-dirty"
+
+~/buildroot$ git describe --match="" --always --abbrev=40 --dirty
+15ac4a40d0f62730a67286269c4153d85043f1d1-dirty
+
+and no build error occurs. But using the hash of the buildroot tree makes
+no sense and will create non-reproducable builds so we disable the
+function "Log repository revision and branch".
+
+Fixes:
+https://autobuild.buildroot.net/results/0d6/0d66279c378d21a14d10b7cafaebbeceda3fd12b/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/resiprocate/resiprocate.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/resiprocate/resiprocate.mk b/package/resiprocate/resiprocate.mk
+index ab8299302a..8e57bcfb6d 100644
+--- a/package/resiprocate/resiprocate.mk
++++ b/package/resiprocate/resiprocate.mk
+@@ -21,6 +21,7 @@ RESIPROCATE_CONF_OPTS += \
+ 	-DBUILD_REPRO=OFF \
+ 	-DBUILD_RETURN=OFF \
+ 	-DBUILD_TFM=OFF \
++	-DENABLE_LOG_REPOSITORY_DETAILS=OFF \
+ 	-DHAVE_CLOCK_GETTIME_MONOTONIC_EXITCODE=0
+ 
+ ifeq ($(BR2_PACKAGE_GEOIP),y)
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
