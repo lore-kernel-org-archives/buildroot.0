@@ -1,82 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25400D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0C52D0D152
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E481440EF2;
-	Wed,  7 Jan 2026 17:51:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5667823A7;
+	Wed,  7 Jan 2026 17:51:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ISGdGbi2TS_a; Wed,  7 Jan 2026 17:51:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ULLD2Y8y4DEP; Wed,  7 Jan 2026 17:51:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02BCF40EEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF6D0823AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808283;
-	bh=RxsLUln0/uNbhhbZ/IAWDzQb5UNXqs7n5KaYRQJyj3Q=;
+	s=default; t=1767808285;
+	bh=0jZPPod8nXNMsOLHp4w0No97KpP5z/ljCXzqrpq9eU8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=KH73S+vAatvRVWBiieiKwFvRkY89qQTC5K8JUmlSm5GXiGxuFq8zp53UX5boc6fbs
-	 ny7KqrlNASv2MWbBLyqTitHd/J+9ouRtWOI8hzEirQCDq7vNYq4xW168ItAxRd9DDI
-	 Ow0LIIKUTpbueYA7isKDEI213iihablENbz4Nnkaf7w9G6MUBXB7TYzKjKgFcUw/wR
-	 ssOLF20JjXAItMjPnlifBcJKtGej1fuM4eyrhEOxm7hk/YqsuV/ogkiU9+ksIFwmvg
-	 u3Pri9YtJ+YGAjeuEYi6FVoUJGP2WQUWooUpUNeQzjUa2/Rez0oJqbSkF+OtEFf7U3
-	 iKnd554gkIGTA==
+	b=ZGO8hha42TuiJrpZe+POdLphTz2Fes/QNiDr3uEcmHEYcO+u0/d3D8e9tSFmUSnIQ
+	 7X3XZ30BWbDjgl82X+QWArrysPHL3mXf0uFKGmAB/nKq4EO27Lq8ARHUNPwLtRRFoI
+	 nCdDwwbDvGSj6UlNbLU/vRgDyNtWjQuKVWlgdJGt0HG8Gz/dNgXhxGJxldWrRNzsRz
+	 TXaarsf1JkutXnUvhnN7wvprcLZFsYwsoIsFRorg/aIe3vXqRa0xQSOgKxtdkkXvMS
+	 qKBKsxgIhJV1sRBoWdIyUJyKp5xjnuVjMcw6SPJXQrgoOC2qZRB1g+5x2j+u2hBnrl
+	 iDUgi6E2zanfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02BCF40EEF;
-	Wed,  7 Jan 2026 17:51:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D3A029ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF6D0823AA;
+	Wed,  7 Jan 2026 17:51:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C72F9ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C62DE40EEF
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 399FB60661
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zjMaCxKHUZGM for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:51:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YXZHAPltLUvz for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:51:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2481740EE6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2481740EE6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 22C6960653
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22C6960653
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2481740EE6
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 22C6960653
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:22 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id F394CB97A70C; Wed,  7 Jan 2026 18:51:17 +0100 (CET)
+ with ESMTPSA id 471A0B97A704; Wed,  7 Jan 2026 18:51:20 +0100 (CET)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:51:16 +0100
-Message-ID: <20260107175116.227711-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:51:19 +0100
+Message-ID: <20260107175119.227758-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251228185637.58072-5-thomas.perale@mind.be>
-References: <20251228185637.58072-5-thomas.perale@mind.be>
+In-Reply-To: <20251228185637.58072-6-thomas.perale@mind.be>
+References: <20251228185637.58072-6-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808278; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808280; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=S1wWYhbGdZDjZIERxHWrs1dd+QJGlqC4gOXcaCW50Bo=;
- b=XXUT7jaQTtF9jj3E7naXqFXD4Yp/a1W3VrH0SuFAZgcWf14XSUAWkH+RFTwZ73cL1ntZHY
- ajkXjfOHO3vdhQDikQNc9Gzn+6YA0tjPlrH1HR6+ttNrbH5LyZPV28jnUmP3ubTbzrq42f
- JY8uu/WfPvQUkzdohuiD6Mgls+sWUeK2DOcy7pduM+axrIGTFivFyucu4xkkbtLDlNIvUf
- 9/1QfiCew3Bad+ap/UlIbBuhGgC6D3vUDALY1mIod9YyCCYDJmaDk29Eaor1xVOya2s3LO
- 83sdvlStRFBMLoL5E5C8ao+97Rafxu3byrSjGfbEsjVN7mZCsJ2WK0DTEIdcAw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=40rrt2wbjVZ6+KVTQgIlSzH2xS/GOqdsUM8T1cIMK2A=;
+ b=XLHkSabDCjc0OgpGfEW94eqSRLKIRWFskEepirx4B+JHJFIOjNK+Q4UjzE5DYafFw4q1Vt
+ S4dX/i7S8DGYzCgM2ZIMzinQF/hGMKLAhVd/YJIE9TNK/GrFhsDbw2ajitzo8hep5X1Q1c
+ /iIxEPLZzvdjgmuiYSppsC5Ajy4rmTS30baxP3OQu1hjuiw6qM0XG2puWDMGNt3XtBUvKY
+ qEu5js7vsZfCTA9kCdasveRVuJnSLUUuNjgAMrPZKaS2cw7Pzr/+k5oO2ChOxgadsyJan0
+ 4pjdmI7lpulkTRzPCU/DxBv6WNVMAIIHZgNFMiHVxBI3b32oKkWCO/2NzaT+ug==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=XXUT7jaQ
-Subject: Re: [Buildroot] [PATCH 05/10] boot/grub2: add CVE trailer in patch
+ header.a=rsa-sha256 header.s=dkim header.b=XLHkSabD
+Subject: Re: [Buildroot] [PATCH 06/10] package/graphicsmagick: add CVE
+ trailer in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,119 +109,34 @@ In reply of:
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  ...4-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch |  4 ++--
->  ...-tar-Integer-overflow-leads-to-heap-OOB-write.patch |  2 +-
->  ...text-Integer-overflow-leads-to-heap-OOB-write.patch |  2 +-
->  boot/grub2/0043-fs-bfs-Disable-under-lockdown.patch    |  4 ++--
->  ...44-fs-Disable-many-filesystems-under-lockdown.patch | 10 +++++-----
->  ...ent-overflows-when-allocating-memory-for-arra.patch |  4 ++--
->  boot/grub2/0074-Constant-time-grub_crypto_memcmp.patch |  1 +
->  7 files changed, 14 insertions(+), 13 deletions(-)
+>  ...0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch | 1 +
+>  ...0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> diff --git a/boot/grub2/0004-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch b/boot/grub2/0004-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch
-> index 40df727a60..3cffc80530 100644
-> --- a/boot/grub2/0004-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch
-> +++ b/boot/grub2/0004-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch
-> @@ -5,8 +5,8 @@ Subject: [PATCH] fs/hfs: Fix stack OOB write with grub_strcpy()
+> diff --git a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
+> index 275738a71a..56122e466e 100644
+> --- a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
+> +++ b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
+> @@ -6,6 +6,7 @@
+>  # Parent  db3ff8d00c28c38895e1600a28706ce251dac570
+>  ReadJXLImage(): Apply image dimension resource limits. Addresses oss-fuzz Issue 69728
 >  
->  Replaced with grub_strlcpy().
+> +CVE: CVE-2025-27795
+>  Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/9bbae7314e3c3b19b830591010ed90bb136b9c42
+>  Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  [Peter: drop ChangeLog/version changes]
+> diff --git a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
+> index d1cc795b4c..004594523c 100644
+> --- a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
+> +++ b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
+> @@ -6,6 +6,7 @@
+>  # Parent  036a1376a2a6dc9504c5148249cbd8feaef72de6
+>  ReadJXLImage(): pixel_format.num_channels needs to be 2 for grayscale matte.
 >  
-> -Fixes: CVE-2024-45782
-> -Fixes: CVE-2024-56737
-> +CVE: CVE-2024-45782
-> +CVE: CVE-2024-56737
->  Fixes: https://savannah.gnu.org/bugs/?66599
->  
->  Reported-by: B Horn <b@horn.uk>
-> diff --git a/boot/grub2/0006-fs-tar-Integer-overflow-leads-to-heap-OOB-write.patch b/boot/grub2/0006-fs-tar-Integer-overflow-leads-to-heap-OOB-write.patch
-> index c3c845a50a..9d89bcd48f 100644
-> --- a/boot/grub2/0006-fs-tar-Integer-overflow-leads-to-heap-OOB-write.patch
-> +++ b/boot/grub2/0006-fs-tar-Integer-overflow-leads-to-heap-OOB-write.patch
-> @@ -9,7 +9,7 @@ number parsed by read_number(). Later direct arithmetic calculation like
->  grub_size_t leading to heap OOB write. This patch fixes the issue by
->  using grub_add() and checking for an overflow.
->  
-> -Fixes: CVE-2024-45780
-> +CVE: CVE-2024-45780
->  
->  Reported-by: Nils Langius <nils@langius.de>
->  Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
-> diff --git a/boot/grub2/0037-gettext-Integer-overflow-leads-to-heap-OOB-write.patch b/boot/grub2/0037-gettext-Integer-overflow-leads-to-heap-OOB-write.patch
-> index bb3cfb1813..b9638caabb 100644
-> --- a/boot/grub2/0037-gettext-Integer-overflow-leads-to-heap-OOB-write.patch
-> +++ b/boot/grub2/0037-gettext-Integer-overflow-leads-to-heap-OOB-write.patch
-> @@ -9,7 +9,7 @@ to 0 leading to heap OOB write. This patch fixes
->  the issue by using grub_add() and checking for
->  an overflow.
->  
-> -Fixes: CVE-2024-45777
-> +CVE: CVE-2024-45777
->  
->  Reported-by: Nils Langius <nils@langius.de>
->  Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
-> diff --git a/boot/grub2/0043-fs-bfs-Disable-under-lockdown.patch b/boot/grub2/0043-fs-bfs-Disable-under-lockdown.patch
-> index 58a63985cd..7598254496 100644
-> --- a/boot/grub2/0043-fs-bfs-Disable-under-lockdown.patch
-> +++ b/boot/grub2/0043-fs-bfs-Disable-under-lockdown.patch
-> @@ -6,8 +6,8 @@ Subject: [PATCH] fs/bfs: Disable under lockdown
->  The BFS is not fuzz-clean. Don't allow it to be loaded under lockdown.
->  This will also disable the AFS.
->  
-> -Fixes: CVE-2024-45778
-> -Fixes: CVE-2024-45779
-> +CVE: CVE-2024-45778
-> +CVE: CVE-2024-45779
->  
->  Reported-by: Nils Langius <nils@langius.de>
->  Signed-off-by: Daniel Axtens <dja@axtens.net>
-> diff --git a/boot/grub2/0044-fs-Disable-many-filesystems-under-lockdown.patch b/boot/grub2/0044-fs-Disable-many-filesystems-under-lockdown.patch
-> index 9120f8c872..778903533d 100644
-> --- a/boot/grub2/0044-fs-Disable-many-filesystems-under-lockdown.patch
-> +++ b/boot/grub2/0044-fs-Disable-many-filesystems-under-lockdown.patch
-> @@ -9,11 +9,11 @@ hfsplus, iso9660, squash4, tar, xfs and zfs.
->  The JFS, ReiserFS, romfs, UDF and UFS security vulnerabilities were
->  reported by Jonathan Bar Or <jonathanbaror@gmail.com>.
->  
-> -Fixes: CVE-2025-0677
-> -Fixes: CVE-2025-0684
-> -Fixes: CVE-2025-0685
-> -Fixes: CVE-2025-0686
-> -Fixes: CVE-2025-0689
-> +CVE: CVE-2025-0677
-> +CVE: CVE-2025-0684
-> +CVE: CVE-2025-0685
-> +CVE: CVE-2025-0686
-> +CVE: CVE-2025-0689
->  
->  Suggested-by: Daniel Axtens <dja@axtens.net>
->  Signed-off-by: Daniel Axtens <dja@axtens.net>
-> diff --git a/boot/grub2/0050-fs-Prevent-overflows-when-allocating-memory-for-arra.patch b/boot/grub2/0050-fs-Prevent-overflows-when-allocating-memory-for-arra.patch
-> index e7bf8d543b..ce84e677c3 100644
-> --- a/boot/grub2/0050-fs-Prevent-overflows-when-allocating-memory-for-arra.patch
-> +++ b/boot/grub2/0050-fs-Prevent-overflows-when-allocating-memory-for-arra.patch
-> @@ -9,8 +9,8 @@ overflow checks are in place.
->  The HFS+ and squash4 security vulnerabilities were reported by
->  Jonathan Bar Or <jonathanbaror@gmail.com>.
->  
-> -Fixes: CVE-2025-0678
-> -Fixes: CVE-2025-1125
-> +CVE: CVE-2025-0678
-> +CVE: CVE-2025-1125
->  
->  Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
->  Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
-> diff --git a/boot/grub2/0074-Constant-time-grub_crypto_memcmp.patch b/boot/grub2/0074-Constant-time-grub_crypto_memcmp.patch
-> index 7449e08191..e7d89e02e7 100644
-> --- a/boot/grub2/0074-Constant-time-grub_crypto_memcmp.patch
-> +++ b/boot/grub2/0074-Constant-time-grub_crypto_memcmp.patch
-> @@ -9,6 +9,7 @@ The code is extracted from the upstream commit:
->  
->  Fix: bsc#1234959
->  
-> +CVE: CVE-2024-56738
->  Signed-off-by: Gary Lin <glin@suse.com>
->  Upstream: not submitted upstream, as upstream has switched to gcrypt
->  Taken-from: https://build.opensuse.org/projects/SUSE:SLE-15-SP5:Update/packages/grub2.39923/files/grub2-constant-time-grub_crypto_memcmp.patch?expand=0
+> +CVE: CVE-2025-32460
+>  Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/8e56520435df50f618a03f2721a39a70a515f1cb
+>  Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  [Peter: drop ChangeLog/version changes]
 > -- 
 > 2.52.0
 > 
