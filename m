@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 104D7D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4C9D0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB09140360;
-	Wed,  7 Jan 2026 17:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 220CD40E64;
+	Wed,  7 Jan 2026 17:51:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Adxm8si_ngnw; Wed,  7 Jan 2026 17:50:58 +0000 (UTC)
+ id wR-NghjBGzMD; Wed,  7 Jan 2026 17:50:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26C2F40E53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31AB840E58
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808258;
-	bh=vR3lqF9AJJuLWOTYxiB/W/sy+P2mMUUilKRHW7fcZRw=;
+	s=default; t=1767808259;
+	bh=/MpUZGH6Kz1lLHKBciVdkg+cW7zYK03NbieY75Pmpfs=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=jvVImUxKiu18Ulb97AmnDTqDIPJctKDKFv+q4XkhtmrpYtVQPhO9RYGtVXaPnzhyu
-	 SrXFG7HlHqdUSQP33OBPUPMne/GFECUs+CwKcvkdn4eupSWs8ImWJpmyukw6jeqmuU
-	 Y3NtQXxRJcMW8qb5CLK0dZ+rPQBQSmye4mgrU1o7rBZnktdAg5LSykba6cfMpTx3Lh
-	 TPnKp8eFDh/iLoZy6W1BHHqtF4luySrYP3WfKoInlN7o8zhDhgSF451qt3LXB/DkKK
-	 lKZhjueXN5soMVseLKntPsXHEhb9vue4x/kr2CEnOBQTzW2QbwSpczfI8/oeABChhr
-	 exzt58CzaNvWA==
+	b=XDyFlzVlyx0typZ0eybYYDLUcSMkpyn5QiWHmSoPinTvBGUR7jxVG+QsmX1EWOY3+
+	 bM9bmgdr94AUpRIUMXl8FNRueHyNktnpWA3fa/jlFCnjiPXV2fm3mftK7hqEaMFVIa
+	 QsjgbVD+feEgtqiMgvuficQIS8Cmkb96dnO96a5nGye3iQ9GAOsc61AsI0DVqJK96B
+	 /yqZRxNGNVr+EsBPNasHDcQgBZ/t327MA/MPj9/sOk4Y3LEZx144eavdQ2dGYheUvC
+	 HS98WLIgMiGK019Ip+DB3McmFJwLLXen8rS25LoeOcwxoEBe8etwyVuIStAJRH9Qnk
+	 yXrdjNlcJ7Q7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26C2F40E53;
-	Wed,  7 Jan 2026 17:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31AB840E58;
+	Wed,  7 Jan 2026 17:50:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8432A9ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B1229ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B439807D6
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45A3B808BD
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ikvAEi2WENS5 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:50:54 +0000 (UTC)
+ id RoI25GUfERGz for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:50:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 58CE5809BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58CE5809BF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3D1A180885
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1A180885
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 58CE5809BF
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D1A180885
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:50:56 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6088AB97A596; Wed,  7 Jan 2026 18:50:52 +0100 (CET)
+ with ESMTPSA id 59393B97A192; Wed,  7 Jan 2026 18:50:54 +0100 (CET)
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:50:51 +0100
-Message-ID: <20260107175051.227013-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:50:53 +0100
+Message-ID: <20260107175053.227064-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251223202230.3132006-2-giulio.benetti@benettiengineering.com>
-References: <20251223202230.3132006-2-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20251223194653.3036119-2-giulio.benetti@benettiengineering.com>
+References: <20251223194653.3036119-2-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808252; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808254; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=Au/1SNme+BygZWP8GzzEkUFKc8FAY66cQUwUCugVXds=;
- b=dAKMeOhOPbkZb5kB6aQAuuHH2/t2mDlBYVql1UTRTSL3mZ5e8PUxzVn8vkjT8NdwrKGqrt
- 5Q4B84/zRg/VqmDqQ1dfZMYE3MGKLyAgX2nOzURIwGaUM4nfUNTaLv/TJrf7lkK7J7hAdS
- 2t/wmNiFnhFlsfuo2oBqiWfwu263zpHre7o0Eh180sTeQVOe3/W4OL5XfbeKYD1HGBixDq
- EqslSK5HXPSgR9ep1VGSNnWQLxxesCrf6mLh/SG10Rqy1dwUATG9gnmiY7mv73T7Fx5fw5
- QLiBoUYoXL1HfqLqkO50On5K1Co6g1IUL1MgmN2FBWod5sQfjmYHhgQpOgCySA==
+ bh=atGQgoiiy/vEGjJd1ChHak3nGppfJTNvvzA5f4+EYYw=;
+ b=Ti9yk7zgfDBmVgpIA5j78s5ssIVMezZtBsF5loBx0e7SXL2ILgQgmpo64RUO8mZeO/qskJ
+ r96kMRsTUzedwUZdnNQmIIZ7M/aZnZVc4zZxLW3Viti7xyOYNCVX/fWYVWPg0wjCrFPbZw
+ YAJKiU3Cp8NctqoL4NCXo/16//hox2jnD6w12wU+nJXDKTVlMneAHVHq3kXOO0nRqK0FEt
+ m/tHmPguYq5/d3sl+Yj1MjbNVgjeNfeAVQk65shqAxi/y1ABLyVSDs4Fi72D1N898nDLs2
+ B2HF7666aYlz0jXWBadBMTYgcJT/17fU5PSyhbHu7otb7aE/ouD3IEp0FeKN5A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=dAKMeOhO
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti for package
- zlib-ng
+ header.a=rsa-sha256 header.s=dkim header.b=Ti9yk7zg
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to package
+ dash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,17 +106,17 @@ Applied to 2025.02.x and 2025.11.x. Thanks
 >  1 file changed, 1 insertion(+)
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index f289f81229..224c0fda73 100644
+> index ac7813fc35..f289f81229 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1335,6 +1335,7 @@ F:	package/swupdate/
->  F:	package/trace-cmd/
->  F:	package/udisks/
->  F:	package/wilc-driver/
-> +F:	package/zlib-ng/
->  F:	toolchain/
->  
->  N:	Graeme Smecher <gsmecher@threespeedlogic.com>
+> @@ -1292,6 +1292,7 @@ F:	configs/rockpro64_defconfig
+>  F:	package/at/
+>  F:	package/binutils/
+>  F:	package/cryptsetup/
+> +F:	package/dash/
+>  F:	package/dotnet-runtime-prebuilt/
+>  F:	package/dotnet6-runtime/
+>  F:	package/erlang-jiffy/
 > -- 
 > 2.47.3
 > 
