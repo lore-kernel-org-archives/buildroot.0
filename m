@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC18D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D372D0D151
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 573BD40F35;
-	Wed,  7 Jan 2026 17:51:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D55F140F67;
+	Wed,  7 Jan 2026 17:51:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I2KdyLVNECJ6; Wed,  7 Jan 2026 17:51:50 +0000 (UTC)
+ id 8MCLNWkt7wGj; Wed,  7 Jan 2026 17:51:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9193740F4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9834540F5C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808310;
-	bh=ik/34F1IjlfRRjQcJPqddXM7qcoUVGOVQuNLHIlhMp0=;
+	s=default; t=1767808313;
+	bh=vJpPNZGntqJUANFa0ExwaA3sPK0VBY+t1XN/N5alM3k=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=r+o9CO9SZcP5RGYXSmTxG1hbJLl2/F6Wd/GMHpbIZS44ytOMgcqczuiLrDjzL7j7v
-	 FJ8Bwkb3nxOupAFMTMb7sLQ9NVtUMTqBC68LZQjJEHRaRtUD56gl+Py1eaxKEzNnJv
-	 CLljjZlj/RrkknTfhAkrUOtpXbwJk2/GZyc3GtSxxYcMofTaT3xvvpltVU1VJYwcHk
-	 8Cuo0cY2m0w7Uwmc5jQ6dNrqlOTg5Y4M1q8xzUbqz/mkiQcuzih7/bvHKhSl6T0l1g
-	 ai0JeqT9ovLKUbKfZZCCHhy5q7u663D5Do2lS4LwXTWA2nqhlXGYvflqx6FG8pc4HB
-	 F+MZZ99nipPXw==
+	b=UU42iKJUFN4/sS3/VYOsQFgrVBTpVL6Xy36gpk8WzrcgKb7sD+wHeulVBk+Fi2OyE
+	 WLKVG07Q69xEbv16VLdZPbGEjATHaFJipR8/UhJPAkHpqiaYtY8PG3m/+Qb25JLhmW
+	 iiralaI1mhmxV4yPpS4ffur0oEleme3W7KVDO4xGSDesi71d18wx6Bn/1vXPgPyxqO
+	 HgSFkPXLIulHhYAcD6AyVPnhzuaW+Hykx56iVexEDB1lVue8AAKgXUL6kqYAyy1oIr
+	 QddT9buaTISgJrHEkPfnCM4Q5L2LcNlub+CPJWwWvhd07V7UwXeU0IXK2plYRiEiVh
+	 ywR/AfB8T2wQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9193740F4F;
-	Wed,  7 Jan 2026 17:51:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A03209ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9834540F5C;
+	Wed,  7 Jan 2026 17:51:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB54D9ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85C29607FC
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A09BF40128
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ynHSshxwlLG2 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:51:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aU-nojNmOvdQ for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:51:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6F0AD60667
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F0AD60667
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9C9E640160
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C9E640160
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6F0AD60667
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9C9E640160
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:50 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 811D6B97A704; Wed,  7 Jan 2026 18:51:46 +0100 (CET)
+ with ESMTPSA id 88B7CB97A70C; Wed,  7 Jan 2026 18:51:48 +0100 (CET)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:51:45 +0100
-Message-ID: <20260107175145.228283-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:51:47 +0100
+Message-ID: <20260107175147.228330-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251229090719.13291-6-thomas.perale@mind.be>
-References: <20251229090719.13291-6-thomas.perale@mind.be>
+In-Reply-To: <20251229090719.13291-9-thomas.perale@mind.be>
+References: <20251229090719.13291-9-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808306; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808308; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=bUj/IvQFt/sJagEqoO6OKOU1Tc+c9U0YkY81y+qHW2U=;
- b=ekuEmxGuc6DQ7GQ4Kkv2TMudtRSoPi80KfcgriJvlrVCSl19692WkBaO4C43dfau653Vw6
- rzqu2g/aBA8rla6ViAPprtb6FHc3izbKtsdzPrZRZJa8jZZDEUeQZA1U2p4VcZtVCmHo1G
- IoC1Seeb5QkFUIYsXjaQ3nBewqhNNINE4oSZKPICd61ru6U+bLTSVptQHvXw5wWywcnVKh
- 0ig+vhgyWQgsQY6a7nOXxkzJkiEbjGhuWIh50YW5g7ER0o0hKsMsOOg2hc6A6NqF0/e66L
- ujQ+B3XEVyiPWdU1tfB8tsqeguqPdD6fcuUof+19JSY34sD5XtwdNNBDk2NksQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=wlv7AwsnWzt0WqMHuXcDvC6iNRpNSdAdagVq+kobFYQ=;
+ b=GMPDK9ZVnzrkWj3w2/VGrcYtXvZmIKgzpstmkQWgwVUi6Urr1q/UbxEpP6zlBAP7ouVF1f
+ lcB7RXdzdshqOrqZ0XAO2v2H8qjkCdUH6+43UpMmtJr8ocmfRQ55u2S0TDo8sKurE+57eT
+ f6AK8wDvYl40RKT2ky2qfc8beaoBLJ7YRo7cHJ+JiPaNnbfg+457enZhTlrieDzgq1t5m/
+ dY/PFP+cJZd+uV9NPc7iDDH9ziY1k/RWpPUgupiUbzYQqXjSdp+3ta6GxDriSlNZNSKVZo
+ 4RuooMbdMNSyP8gQaD7XdlHWEdAfYTZvqAmC83TpGr49QiGD0/Xz516/hTmUGA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ekuEmxGu
-Subject: Re: [Buildroot] [PATCH 06/14] package/dovecot: add CVE trailer in
- patch
+ header.a=rsa-sha256 header.s=dkim header.b=GMPDK9ZV
+Subject: Re: [Buildroot] [PATCH 09/14] package/libconfuse: add CVE trailer
+ in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,7 +100,8 @@ In reply of:
 > Since Buildroot commit [1] the patches that fixes a security
 > vulnerability needs to reference the fixed vulnerability.
 > 
-> This patch adds the relevant information to the patch header.
+> This patch adds the relevant information to the patch header
+> and adds the `Upstream` trailer.
 > 
 > [1] 1167d0ff3d docs/manual: mention CVE trailer
 > 
@@ -109,21 +110,22 @@ In reply of:
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  ...01-auth-Fix-handling-passdbs-with-identical-driver-args.patch | 1 +
->  1 file changed, 1 insertion(+)
+>  .../0001-Fix-163-unterminated-username-used-with-getpwnam.patch | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-> index 04b8f5392a..99a2b83563 100644
-> --- a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-> +++ b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-> @@ -12,6 +12,7 @@ Fixed by moving mechanisms and username_filter from struct passdb_module
->  to struct auth_passdb, which is where they should have been in the first
->  place.
+> diff --git a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
+> index 9ff3f5ec1c..4c2aa114aa 100644
+> --- a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
+> +++ b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
+> @@ -5,6 +5,8 @@ Subject: [PATCH] Fix #163: unterminated username used with getpwnam()
 >  
-> +CVE: CVE-2022-30550
->  Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->  ---
->   src/auth/auth-request.c |  6 +++---
+>  Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+>  
+> +CVE: CVE-2022-40320
+> +Upstream: https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b
+>  [Retrieved (and backported) from:
+>  https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b]
+>  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > -- 
 > 2.52.0
 > 
