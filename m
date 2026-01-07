@@ -4,79 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 157D8D0D151
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86A6BD0D153
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC24A40F3E;
-	Wed,  7 Jan 2026 17:51:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F05540A84;
+	Wed,  7 Jan 2026 17:51:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9L-FnT0ZjVdI; Wed,  7 Jan 2026 17:51:44 +0000 (UTC)
+ id q-kOKCoOLw77; Wed,  7 Jan 2026 17:51:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AAA140F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 769C640F36
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808304;
-	bh=MscJ2EdTWMEbFVGzF3i0yDOoAl2yDuepgTRkHGSeGUE=;
+	s=default; t=1767808306;
+	bh=fPHa7aoOFdGpEeo9mm0ky5vQ61Ceg8+I7+YTr3NskG4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=X2muGQh242M0bCb/aNoGRiUDKt53MR+Na7549IRQXppcLQuAO13rmvLCZfVNHXjxG
-	 V5YSKdMT6Y3ehsvLZHhrIkIsZF8KbKKTApOx/49vVPqB1PApRpIMuPaykAL1i9uDHu
-	 p+J+dUJYJu7qyA9JS8l5W1MEo5KFdbzR3EEeO59kl51cumueXA6XOfFS/zYJltmwye
-	 jLo4ZU/REdokdKh6dc5/HgaaSWSUMb/rYf4otgW5zse6swFa0qUhQ++RfVODmGHha9
-	 jfgOLXIZa1MLAXOuCYBEAcASbjQ2kH0fLtMs18e3yZIlcCc3bbUtdWQzy2AIO0pcW0
-	 xmINVXp8nn3vg==
+	b=XedCy+S3eiePvNBuS8B0JGgj2uxUCh0N/wKX1IBLn3uMqtA1HjuKIvh1EqmfkU6zk
+	 9554KHLg5Kt+XcEVy4rehPAXh4ImpEUdEBEzfjgmyVoFhv2lr3gbn9pUMsGJHuyGzZ
+	 Ll5F+F+uu4sgG3K/gUC+GYnLorDZIYd7FAY3/XZW4qOdwMaDyLLP9ceQNfeZwxOe5G
+	 bR/u7CVPDvUfQyGaqy0TXS3c+jnAqjFKY9e9mdiyydUThBQOa/srpLCqt6lggkx1Hy
+	 sQks41kM+d73WWIJJZL3RFG8//lQzGuzHdckwAF5vJs+0ocDPSL4SxwxTMgAy9athX
+	 IYTvdzf3Q7KsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AAA140F34;
-	Wed,  7 Jan 2026 17:51:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1069E9ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 769C640F36;
+	Wed,  7 Jan 2026 17:51:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 359209ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0266740391
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27BDB60661
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OMQ5JAO286oa for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:51:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VbU29x7P3crv for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:51:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 022BC40160
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 022BC40160
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 23F6060653
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23F6060653
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 022BC40160
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 23F6060653
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:44 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1E826B97A70C; Wed,  7 Jan 2026 18:51:40 +0100 (CET)
+ with ESMTPSA id 5A252B97A704; Wed,  7 Jan 2026 18:51:42 +0100 (CET)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:51:38 +0100
-Message-ID: <20260107175138.228143-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:51:41 +0100
+Message-ID: <20260107175141.228189-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251228185637.58072-2-thomas.perale@mind.be>
-References: <20251228185637.58072-2-thomas.perale@mind.be>
+In-Reply-To: <20251229090719.13291-7-thomas.perale@mind.be>
+References: <20251229090719.13291-7-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808300; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808302; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=Qbxte5U2KB/xfiDTMt0w1NuPZuCjCgNrkkXtQvfdQlk=;
- b=ZblY8H1LzILPu2u9BAf6zOarRlOXhRZbECByAuNYk7XjZCzKr0er5fp2GY0nOrKUPCOdeu
- IISO8dH/wk8VtaQ0xT10yNPKbh68rJK0X9oHtDzTK55VFkaFHLP7H6c/h+VAEYBLevMsCq
- yKa8PWwuoJupzgmQVGEPHAdpterRD/uwb2Q3IHYazLjSIeQTZfeZISVLYkB6wjOQpW0WrD
- XOyI7kTOem5b+QjysGJzaPBiymZePdDbh/45qChm4km22MobKD+OksSPoococ/RY6pTl2Z
- uBqtnYEsgtckLX9EH7FaTyxgyA9H9gZOce5WW3+H8rcKSr9ArvI34QKTwlmaVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=rLKZtoAhjtMkeWKYSH17qXvgMVkcOeLPvcoSeCSwKIE=;
+ b=W9jDKAsWyciVKGBT5A/PPeu7MQL/4EygvIx38Cf4mTv4a0NYNLYBHdRTCoZZZKa8Sxp/nV
+ MJDegk9otmJmNEiIyt35lDIau9ZdklGXjOKSe2Q4PM8kHNEz95FanvENwmyIrWJ2IFXgWx
+ ndVBaAFiGtdpSzY6Z5lVA6WmPq/Wm54s0XcUnZnJq896nWra8I0dEQwmqCDpT5Xxjt7adY
+ f6+i3krH9hYchOB9efMKg+j8c+V6zCIlgyouEK3PF85NPZmGSrc+mC0RFyPTdmJhqfGfaN
+ pPoQgoeq2czbPypivzi0lMBtZ+kKnjR7PUpci7TFzLByiojBfzDv5l/O4nWWEg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ZblY8H1L
-Subject: Re: [Buildroot] [PATCH 02/10] package/yasm: add CVE trailer in patch
+ header.a=rsa-sha256 header.s=dkim header.b=W9jDKAsW
+Subject: Re: [Buildroot] [PATCH 07/14] package/avahi: add CVE trailer in
+ patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,7 +100,8 @@ In reply of:
 > Since Buildroot commit [1] the patches that fixes a security
 > vulnerability needs to reference the fixed vulnerability.
 > 
-> This patch adds the relevant information to the patch header.
+> This patch adds the relevant information to the patch header
+> and adds the `Upstream` trailer.
 > 
 > [1] 1167d0ff3d docs/manual: mention CVE trailer
 > 
@@ -108,23 +110,22 @@ In reply of:
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  ...1-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-> index 976c2f7a13..b563fda71c 100644
-> --- a/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-> +++ b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-> @@ -10,8 +10,8 @@ For more info see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2021-33454
->    - https://github.com/yasm/yasm/pull/244
+> diff --git a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+> index 7e191e8da7..98d5dbf633 100644
+> --- a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+> +++ b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+> @@ -9,6 +9,8 @@ Add missing NULL pointer checks to fix it.
 >  
-> +CVE: CVE-2021-33454
->  Upstream: https://github.com/yasm/yasm/pull/244
-> -
->  Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
->  ---
->   libyasm/expr.c | 2 +-
+>  Introduced in #175 - merge commit 8f75a045709a780c8cf92a6a21e9d35b593bdecd
+>  
+> +CVE: CVE-2021-36217
+> +Upstream: https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c
+>  [Retrieved from:
+>  https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c]
+>  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > -- 
 > 2.52.0
 > 
