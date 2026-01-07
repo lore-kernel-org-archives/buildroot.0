@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB032D0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEF10D0D152
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A55A0409B0;
-	Wed,  7 Jan 2026 17:55:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vYXxqQbS3IOn; Wed,  7 Jan 2026 17:55:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C728E41067
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808533;
-	bh=s0mIX8qwpdUN6QvR/EBaxuFM/OwTuxdiKAnWhiM26o0=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LpI/dagoK4n72PcuXrl8dtQTP/agjPYn5TXNew7SeOOkdgo58AqA1fiNuMSLjiq9K
-	 psGddFxBmTtARrJKMPXODMtaCtCvz8iShbVo+XD27JjMnKOGtUEN10ZCLEX+Q3V/Tw
-	 +ogvL6wDzTwAIhhbjzF4s9OAAVhVWEKxHdYMCKVGL+CORBB3GXCdbNZZbnqE3tNmkr
-	 UmITCzD/9nCKHYYtlzKm7TUfGCUbylVWAnLSCm8R+SHKvnCBiIx9sd2DWl8jYPxv1U
-	 Ky0yeRAn6jkF6sAMh4tFxW3ndrnXO8GrJcXu4fCzdv8c70CUyMB2JssMREb+9ZZDN5
-	 TScTeLOd2+lWg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C728E41067;
-	Wed,  7 Jan 2026 17:55:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C64525B
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:55:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EE1A827A0
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:55:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 895A98234B;
+	Wed,  7 Jan 2026 17:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vC3PtB6-KWsg for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:55:31 +0000 (UTC)
+ id aONLoLGAxhzp; Wed,  7 Jan 2026 17:55:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B50E5827AF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767808535;
+	bh=ylv3Pq82k8cpQXtA/rzq/nIp/m2cF/WBwiT2Qp8LamY=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=rXsI0N82kIrIpA9/3II3RwWkVkSoAjm1PU0MQp9J/BpxNHqb7bW3XDpbFeis6wFmd
+	 OpZTn0l0ZHxXl+Vj0S8YSs78MY+PqnOm+EhP/7tJ/50EKBTQ7bI6EyoVSXEPoEvsgX
+	 YtHn5Gt+/KPZokLPQscg36t5hRI7+2yOzJqNmjNuuLRMXiA3PMxGc+qKQZhyAdGRh1
+	 7YptiyFn3kfgDoTPECk8BjbwK6R4+QlJd7sxhcsx/tEMMYyRQxOAzJon90+2hVokIa
+	 jiW6Omr0Be/WPZzl2EA9tuWc37uaD6hcARlB/jWk82v8PRUwyawFLyfjkHyg57dA9t
+	 peLJHRhxNFvKg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B50E5827AF;
+	Wed,  7 Jan 2026 17:55:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A6B19ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:55:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D55B40391
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:55:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cbtamcVwJlzY for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:55:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9FC480BAE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9FC480BAE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0210F40160
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0210F40160
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E9FC480BAE
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:55:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0210F40160
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:55:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 02922B97A704; Wed,  7 Jan 2026 18:55:28 +0100 (CET)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ with ESMTPSA id 3AF18B97A70C; Wed,  7 Jan 2026 18:55:31 +0100 (CET)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:55:26 +0100
-Message-ID: <20260107175526.229986-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:55:29 +0100
+Message-ID: <20260107175529.230040-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251214153711.766150-1-thomas.petazzoni@bootlin.com>
-References: <20251214153711.766150-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251214210114.2523806-1-giulio.benetti@benettiengineering.com>
+References: <20251214210114.2523806-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808529; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808531; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=gNQpGqSskplkWBQ4R7luSHxUog3PkOOhIHtFnNuHj/g=;
- b=gVGuG32aRanXG5vqD1Uqj2hv9koolID4loaeWAtYtk1iBMAJkzgZQaPAyQMF+9EbdeEwBL
- Q7EiIsE9+DO/KPk/qvtjvOI4VKn6uPrIJ2bi5O7+koFxpm8iNuXbz0YiUpfHGATd7pB1MI
- mNoOp7UIlFBkv4fKSu3yMkXeQy4B2Rl2Hz2NBvd5nvvk+yWyvFF3S/5XvJ52aIcPMc2W7M
- V6gASJImyG6OgSkjq5SYmOhdu/nRX+c8SRKCJVwul4FZ91yphenyb4JvVOnEvD7VQy/18E
- wbOCh9MdXH5X5KUykBu/kutPekKhyrlwuIckQNxwSrRbZkSYkOe9B+fDObjUcg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=mmZWgpJs1p5gqpTw1NLcRLrzgO0dqC5MjZKkNr6OY/M=;
+ b=SjJJ1UWFo1FmTOtfcTHw+IuRbap4xvQwO7lCYR5EANbiEjfhxd1q6bRkjz/16oK4pFXS/t
+ 77cvd+XLpDcdsbSS53H9EMUiqF6V/Pzz4qZss8dNtSs6kxvtSrQiQqbMIET+ji7N2drmsF
+ G9JZrdXBGRLhO9fQHAzJFbZi2uxaDFcDbUsejkaPya+CJNUYI94CK/CJXeBPejpIrY/C9r
+ BCqXUboKmRALpFTBQ+K9JIEO3iaApvSuo/+HT4TikVttYLzjNm5yiadGTEuhDcxBKBGFfb
+ U7+hmZbax1SL+xEcQnEAXA3nb5swvidsR8xDXl1wAN8Q/THOG/sU8MMQ5wy9+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=gVGuG32a
-Subject: Re: [Buildroot] [PATCH 1/2] package/python3: make SuperH tweak
- actually effective
+ header.a=rsa-sha256 header.s=dkim header.b=SjJJ1UWF
+Subject: Re: [Buildroot] [PATCH] package/rtl8723bu: bump to 2025-12-14
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,44 +97,40 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> In commit a68899d49ec4c7f97dea0dcb9995e6a5d7b282c9 ("package/python3:
-> work around GCC bug 121567"), we introduced a work around for a gcc
-> bug, by reducing to -O1 the optimization level on SuperH.
+> This version allows to build with Linux 6.18
 > 
-> However, it turns out that this is not sufficient, as the build will
-> only succeeded at -O0.
-> 
-> Fixes:
-> 
->   https://autobuild.buildroot.net/results/31f/31f34a983036b4135c12e5797b5c2258ab33e6c2/
-> 
-> Which is a config with BR2_OPTIMIZE_2=y, which means
-> BR2_TOOLCHAIN_HAS_GCC_BUG_121567=y, and therefore -O1 is passed, but
-> still the build fails. At -O0 the build doesn't fail.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.11.x. Thanks
 
 > ---
->  package/python3/python3.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/rtl8723bu/rtl8723bu.hash | 2 +-
+>  package/rtl8723bu/rtl8723bu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 0189a505b4..4e660ecee2 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -192,7 +192,7 @@ endif
->  PYTHON3_CFLAGS = $(TARGET_CFLAGS)
+> diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
+> index 1261139a20..e230485226 100644
+> --- a/package/rtl8723bu/rtl8723bu.hash
+> +++ b/package/rtl8723bu/rtl8723bu.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256  e9f94b6e6a6412acbef98d5e21f5c5ef185b0d856f35790e328caeb5df40702c  rtl8723bu-bb6fcc9d14b1ec8eb9c3b448c2023fa8fc551178.tar.gz
+> +sha256  22d81a21318cdae23ab6a65bed7c24d7cc98e7d1afef7a200804761c72036019  rtl8723bu-ac3d2f564bdf6816f1e3a3384524dc1a966f78a3.tar.gz
+> diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
+> index b324b87685..f1c4eda4ed 100644
+> --- a/package/rtl8723bu/rtl8723bu.mk
+> +++ b/package/rtl8723bu/rtl8723bu.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_121567),y)
-> -PYTHON3_CFLAGS += -O1
-> +PYTHON3_CFLAGS += -O0
->  endif
+> -RTL8723BU_VERSION = bb6fcc9d14b1ec8eb9c3b448c2023fa8fc551178
+> +RTL8723BU_VERSION = ac3d2f564bdf6816f1e3a3384524dc1a966f78a3
+>  RTL8723BU_SITE = $(call github,benetti-engineering,rtl8723bu,$(RTL8723BU_VERSION))
+>  RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
 >  
->  PYTHON3_CONF_ENV += \
 > -- 
-> 2.52.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
