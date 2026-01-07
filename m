@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A954D0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8CBED0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B1CE81E31;
-	Wed,  7 Jan 2026 17:49:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0A9C40240;
+	Wed,  7 Jan 2026 17:50:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pTsWetkJTzHd; Wed,  7 Jan 2026 17:49:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m9aoNXZ0R1Gg; Wed,  7 Jan 2026 17:49:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F7558233A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3D6040D8B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808196;
-	bh=3OUi/1EZZtdDgCyAsUEt6VpE6Qn5LFpaMR/CVLV3bTo=;
+	s=default; t=1767808199;
+	bh=BawHnDR9/DXqCCw5hu4i2y/w4XztDPVWLLLz+I89fO4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=U4ShOmXIvFg4mF9tutIKifeEVFxuE2Q+6h0GkMnlimmIox8mti7znRAscglhBs+/2
-	 jmJ3bbD5JBd61718ybU4kLTC7JUa6fpmOtmMO/4nuYrCivF2kiwCsDTeFMz/VEIPCz
-	 CBBUs+e9O7m/Wi3xjtKSxtDYDn+uRTLeZn+w9TG2Vlvtx8jOj094HrBr4jNZ4ebAvc
-	 QFlVu8N9XKmLF31FNAXNM0rqdUzVJL6rTgTT5bYwjoBQInMcOPqgoErWSb29C3i1G/
-	 4O5oSRHC3PG3WjctGrPNqMfCTlXTNy69O8VhmedCDjSJX2iLgu7InDIDTlCzFD6wk0
-	 /pBWweK66Hvcw==
+	b=sR6VI7kn+mNVPVLASWk7p1LRNzAux8/DmVXzS6qz3xkj0xMkDOrOFee3N73D4QF5E
+	 tpLt6yRXeeRZgoD/rdyyvCgV2XH4FWn3ewCUdFXwEuaj3ciumIv01PHQQVOSnU776q
+	 k11butoyO67BUnYuIF5je4ZqpY/cB25MeYcxFy7fi6WD6OTtD1+PxC2ZT81yZ8juQo
+	 vHhWDSTN8hXu0SwP7OsS2YZ4Ll2ugPm1HKmClVEmJK0FQKiQJZuPMZ8w8f56WQAmzH
+	 J6A7GAfh26nhcum2ClsfJ4zIeV7IZhhMeSYSlZG3Q+N+A6hE+b3oZwvEd505fHPT9u
+	 KkDIJYmLpxMgg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F7558233A;
-	Wed,  7 Jan 2026 17:49:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 12B119ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3D6040D8B;
+	Wed,  7 Jan 2026 17:49:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8CD4025B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0516340263
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72C6540160
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VIszLTPQsqGT for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:49:53 +0000 (UTC)
+ id YQRs272fUO_M for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:49:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E3AA40128
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E3AA40128
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6EAFB40128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EAFB40128
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E3AA40128
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6EAFB40128
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:56 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A3556B97A192; Wed,  7 Jan 2026 18:49:51 +0100 (CET)
+ with ESMTPSA id 9DF89B97A192; Wed,  7 Jan 2026 18:49:54 +0100 (CET)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:49:49 +0100
-Message-ID: <20260107174949.225612-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:49:52 +0100
+Message-ID: <20260107174952.225662-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251221223441.185169-1-bernd@kuhls.net>
-References: <20251221223441.185169-1-bernd@kuhls.net>
+In-Reply-To: <20251221223441.185169-2-bernd@kuhls.net>
+References: <20251221223441.185169-2-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808191; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808194; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=mPa4LUzdBbh9PuxIew+XvrQd3yp+60SXJozCS10DZRk=;
- b=aZ0dvSxpMge64Ww+yZQkb/uAoh2B5ixHUvunpMV0fy+V1vQGjVMxahwdBkwBeJdlLoTzBp
- vokPv5vEjQLeNclBi6Y68m2LcZppjKO6oZaKggBcjnckMJ4IdJUysnBJkRH7ISKvkXhUVJ
- 6GZMlNUjVB42ZepUzLQVtTvLoeImmq+fFHc7Cf8vEZAg9+GcRaEhgdTnuhCM6NczwI13YM
- euhVehMd1aN/x99chpkw8bbpm1uPirtk+J/2ZHbSXJqdINLSsXNjAxa4yQAxi0m8LBx0Nl
- SsS0vH3iwtuCo7Adqq3UJoK/6CpOLG5EZB6UknnCbf31dMJy2DpEU7F3lW0qKw==
+ bh=0l9YzP3uCXKkSYuXbwSI8gxSLtGjW7FOvR7jY97CO0c=;
+ b=SXL5HWNN0NbItjEIYz8N617JNJXx+YoCzO2TNCu/qQjRw+LMS78s/MENQ/PUepVQvketKl
+ 7ZqrKJJsPjA+hcUhU/pYWuj4a8KcRO79hVtFMhugoHZHeP6IDJtaBHp5lTr9WHKu1a3g4k
+ tVJTpkvCFXBs8/JJVRF9XxQyIGVdWv5ass1ugqXgTA+belJVU2rRVpU9pnQqLVUMw5VUKs
+ pLi9r/hBtS7R999QPr8CIzhSCco+tqQDOtQ9P43ugsDgQ/kUAJY6fuNKarmX8uvlSCEA94
+ zttLew+/QMotgr5Nt8yoc04tyTp0i4sVUzzhlbIyyQVoVM2f+8U9o/pKaCHlow==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=aZ0dvSxp
-Subject: Re: [Buildroot] [PATCH v2 01/23] package/python-characteristic: add
- md5 hash, update SITE
+ header.a=rsa-sha256 header.s=dkim header.b=SXL5HWNN
+Subject: Re: [Buildroot] [PATCH v2 02/23] package/python-colorzero: switch
+ SITE to pypi.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,35 +104,37 @@ In reply of:
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/python-characteristic/python-characteristic.hash | 4 ++--
->  package/python-characteristic/python-characteristic.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-colorzero/python-colorzero.hash | 7 ++++---
+>  package/python-colorzero/python-colorzero.mk   | 3 ++-
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
-> index c91017d707..84304818c6 100644
-> --- a/package/python-characteristic/python-characteristic.hash
-> +++ b/package/python-characteristic/python-characteristic.hash
-> @@ -1,5 +1,5 @@
-> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913
-> +# md5, sha256 from https://pypi.org/pypi/characteristic/json
->  md5  b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
+> diff --git a/package/python-colorzero/python-colorzero.hash b/package/python-colorzero/python-colorzero.hash
+> index fc2455c836..4a1b900453 100644
+> --- a/package/python-colorzero/python-colorzero.hash
+> +++ b/package/python-colorzero/python-colorzero.hash
+> @@ -1,4 +1,5 @@
 > -# Locally computed
->  sha256  ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+> -sha256  86c9933b004aec8ce1c476d1d1129e00325c7724df3c09aa353d5f8e883ed08d  python-colorzero-2.0.tar.gz
+> -# Locally computed
+> +# md5, sha256 from https://pypi.org/pypi/colorzero/json
+> +md5  e7f71e181b94754bcc5ca7c92c52c0d7  colorzero-2.0.tar.gz
+> +sha256  e7d5a5c26cd0dc37b164ebefc609f388de24f8593b659191e12d85f8f9d5eb58  colorzero-2.0.tar.gz
 > +# Locally computed sha256 checksums
->  sha256  0af91b662f8428b28f5e517b049a0bb9feeb59b1adaa5c9418c1579f9485107c  LICENSE
-> diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
-> index 7ea8d95cd4..dd081eacef 100644
-> --- a/package/python-characteristic/python-characteristic.mk
-> +++ b/package/python-characteristic/python-characteristic.mk
-> @@ -6,7 +6,7 @@
+>  sha256  ee1c76f465410c34802ddf81d70e1ea7a4542cf58459425038498d8f4e36bb45  LICENSE.txt
+> diff --git a/package/python-colorzero/python-colorzero.mk b/package/python-colorzero/python-colorzero.mk
+> index f38c98a093..0ed6a90c61 100644
+> --- a/package/python-colorzero/python-colorzero.mk
+> +++ b/package/python-colorzero/python-colorzero.mk
+> @@ -5,7 +5,8 @@
+>  ################################################################################
 >  
->  PYTHON_CHARACTERISTIC_VERSION = 14.3.0
->  PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
-> -PYTHON_CHARACTERISTIC_SITE = https://pypi.python.org/packages/source/c/characteristic
-> +PYTHON_CHARACTERISTIC_SITE = https://files.pythonhosted.org/packages/dc/66/54b7a4758ea44fbc93895c7745060005272560fb2c356f2a6f7448ef9a80
->  PYTHON_CHARACTERISTIC_LICENSE = MIT
->  PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
->  PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
+>  PYTHON_COLORZERO_VERSION = 2.0
+> -PYTHON_COLORZERO_SITE = $(call github,waveform80,colorzero,release-$(PYTHON_COLORZERO_VERSION))
+> +PYTHON_COLORZERO_SOURCE = colorzero-$(PYTHON_COLORZERO_VERSION).tar.gz
+> +PYTHON_COLORZERO_SITE = https://files.pythonhosted.org/packages/b3/ca/688824a06e8c4d04c7d2fd2af2d8da27bed51af20ee5f094154e1d680334
+>  PYTHON_COLORZERO_LICENSE = BSD-3-Clause
+>  PYTHON_COLORZERO_LICENSE_FILES = LICENSE.txt
+>  PYTHON_COLORZERO_SETUP_TYPE = setuptools
 > -- 
 > 2.47.3
 > 
