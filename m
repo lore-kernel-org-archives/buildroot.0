@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A115CD0D178
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 22:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E18A0D0D178
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 22:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73959813F6;
-	Wed,  7 Jan 2026 22:45:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B42FF821DA;
+	Wed,  7 Jan 2026 22:47:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pe0Gu6laOC75; Wed,  7 Jan 2026 22:45:13 +0000 (UTC)
+ id YlAmbB47PH3W; Wed,  7 Jan 2026 22:47:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 706A581EBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1785821E6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767825913;
-	bh=g2lR78AKEF1L6DneeP6ZCqzLSN/InWalRMeq6kAR3uw=;
+	s=default; t=1767826049;
+	bh=0RRH+VwCR5B2xGXL+a5/4geYVvBxITnIONg0IMPW1ZU=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BGlPYj6Zreh/o34rP9gzyxfUrdTh8VNI3KBtNpb92vkclQtfY+iD4ACs+QR1Q2ONn
-	 csIT1osAQlJPlwNUPfLUONEulF/cI0g0FOaFTvXNqn7D8X3lND6fvZQ/7Myp2aRiBd
-	 XljtHiAL21IGYwaZBKAgTIuB+wBvItF534GTxVX6zmQI0fTzU7J6rLsdyH+4tbLmo1
-	 Gh0ZMnqXi16Gg0Q4Fv4Nr9FHiLsHLE4OQu9M67h58sTh0T3MHujRJjNrJO8R9zj8DE
-	 99VBRwbaqUkhMlEiUWemWLlS6N0BYYOA3QApa76cJkXFpLJVuEbDGYAqzCONZnA2Vz
-	 cL9nChr5CT1WQ==
+	b=equv08WKszKX2mzV4ZA/XTVMS4QGyFaImKt8ViwatE88PiQfcPyUhG9yWM+Xc1VuL
+	 TJU0FUesJ8sQFrD6QG0Eaihx1erUWIaUxTkD/Xk8Yoaw02xQGxi3xVbgz3dWnaX+VT
+	 3lkpT2a9iMW8Qng7KkojLVA15eLn6Ez5K4rGElbP0jkz3W96iS7T68x5iKYXh3uLVd
+	 57nGiVrZWhPttDgoBLxo5emRCk70Ajj2TOnpEBx1BsIrOi0Tvh/J/YV/ajqClyhnbY
+	 njkJKhD2SnE78AtzpubC06jvH9e9zIhOMukk8ccONtR2p7WliO5DFnL66i0c/AaBnj
+	 NADwomh6JGSiQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 706A581EBB;
-	Wed,  7 Jan 2026 22:45:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48E719ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:45:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1785821E6;
+	Wed,  7 Jan 2026 22:47:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 989C09ED
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A2054029F
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:45:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C46A821DA
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:47:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Q5Y-wdTdT38 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 22:45:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PldXeCVKIAMn for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 22:47:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 99AAF4023C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99AAF4023C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7D046821DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D046821DB
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 99AAF4023C
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:45:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D046821DB
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:47:27 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 4C12B1A26D1;
- Wed,  7 Jan 2026 22:45:08 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 99A321A26E3
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 22:47:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 21754606F8;
- Wed,  7 Jan 2026 22:45:08 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 67C2E606F8;
+ Wed,  7 Jan 2026 22:47:25 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2F193103C867C; Wed,  7 Jan 2026 23:45:07 +0100 (CET)
-Date: Wed, 7 Jan 2026 23:45:05 +0100
+ with ESMTPSA id ADE52103C867C; Wed,  7 Jan 2026 23:47:24 +0100 (CET)
+Date: Wed, 7 Jan 2026 23:47:23 +0100
 To: Vincent Jardin via buildroot <buildroot@buildroot.org>
 Cc: Vincent Jardin <vjardin@free.fr>
-Message-ID: <20260107234505.0810d964@windsurf>
-In-Reply-To: <20260107175446.2470125-3-vjardin@free.fr>
-References: <20260107175446.2470125-1-vjardin@free.fr>
- <20260107175446.2470125-3-vjardin@free.fr>
+Message-ID: <20260107234723.330fc373@windsurf>
+In-Reply-To: <20260107180108.2470425-2-vjardin@free.fr>
+References: <20260107180108.2470425-1-vjardin@free.fr>
+ <20260107180108.2470425-2-vjardin@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767825907; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1767826045; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=/6F4mUt1POW/so1R21vqhtdzy+g4vLZkczkJjHSnaas=;
- b=zRlV0Wu7twzU0dcyy4Qdnj/gJocmSNPFYsEyVbJgrLKmyWovVIg1YA3lcy0o4zcpScbpkT
- SyuvSffWcgU9zmKF/6BltPxnQcfNGvgY1vWzGeJiQriyAkzmt00bDHTC1J6SLf673NOsFR
- HzUij5F1cPWInWTo9X1CZpu42rkN+oXE91RxiojfbnkDE71b6s2ZpYKaj8akx20Xxr3ecl
- 15zPtfGXhO3McNI2M8IofFLN9jaXSSUZvqDUmTz2que4ZB+PRh2H/CMDxxD7P13rkuCr7U
- xd8CSs1Tb6sUMNXUu221nKcK6o+YdsdZrWo+31m74gnIwCwewfUBlsuMhP8FZg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Xgmh0g61rrl+QBP86Aectyt6YNCcSo+IvToqNTtoNV0=;
+ b=uvsyovLuEUUv0S1dIk0KqLqxcfzZqzM2yhCnYys6VGY6G5UnTAf+SXW4JCq3hl5Xo0/7yu
+ Qvei6xcEZaBHKp+ORSNVpIonSMeLyluG8sjnS0jJrn/PI2ksMaGz21W4Rh6naO8xjFIkYr
+ X9LPsRCKMxmu8qdb+EADRkYM/QRMeU3H11s8uENuEpLu9Lq4cPZIgQrjv03KvorFV50m4o
+ lGhIHBGKz1I9cDq4tHWDmMmmN+1JVc/yJQ9XJxCDndnFnIaPi8vdZGLEAoBg/faE1V8yL9
+ 050SdgCdQXYpMzDjMS1FTlPZMVeS5LF6GtcCwv3BG+rbv9x5TC43xl+xnXXdaw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=zRlV0Wu7
-Subject: Re: [Buildroot] [PATCH v1 2/2] package/python-sysrepo: new package
+ header.a=rsa-sha256 header.s=dkim header.b=uvsyovLu
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/python-ncclient: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,139 +105,72 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Vincent,
 
-Thanks for the patch.
-
-On Wed,  7 Jan 2026 18:54:46 +0100
+On Wed,  7 Jan 2026 19:01:08 +0100
 Vincent Jardin via buildroot <buildroot@buildroot.org> wrote:
 
-> Python CFFI bindings for the sysrepo YANG datastore. This package
-> provides the 'sysrepo' Python module which talks to the C sysrepo
-> library.
-> 
-> Also fix sysrepo build on riscv32 where glibc doesn't define
-> SYS_futex (only SYS_futex_time64). Use pthread-based condition
-> variables instead of futex on this architecture.
-
-
-> 
-> Upstream: https://github.com/sysrepo/sysrepo/issues/3346
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> ---
->  package/python-sysrepo/Config.in           | 26 ++++++++++++++++++++++
->  package/python-sysrepo/python-sysrepo.hash |  5 +++++
->  package/python-sysrepo/python-sysrepo.mk   | 18 +++++++++++++++
->  package/sysrepo/sysrepo.mk                 |  7 ++++++
->  4 files changed, 56 insertions(+)
-
-Missing changes in DEVELOPERS and package/Config.in (because they are
-mistakenly in PATCH 1/2).
-
-> diff --git a/package/python-sysrepo/Config.in b/package/python-sysrepo/Config.in
+> diff --git a/package/python-ncclient/Config.in b/package/python-ncclient/Config.in
 > new file mode 100644
-> index 0000000000..ce6b8611f2
+> index 0000000000..2be69efb2b
 > --- /dev/null
-> +++ b/package/python-sysrepo/Config.in
-> @@ -0,0 +1,26 @@
-> +config BR2_PACKAGE_PYTHON_SYSREPO
-> +	bool "python-sysrepo"
+> +++ b/package/python-ncclient/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_PYTHON_NCCLIENT
+> +	bool "python-ncclient"
 > +	depends on BR2_PACKAGE_PYTHON3
 
 Not needed.
 
-> +	depends on BR2_PACKAGE_SYSREPO
-
-Should be a "select" + replication of sysrepo "depends on".
-
-> +	# Python3 doesn't work with uClibc and kernel headers < 5.1
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-
-Not needed.
-
-> +	select BR2_PACKAGE_PYTHON_LIBYANG
-
-select BR2_PACKAGE_PYTHON_LIBYANG # runtime
-
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-paramiko
+> +	select BR2_PACKAGE_PYTHON_LXML
+> +	select BR2_PACKAGE_PYTHON_PARAMIKO
+> +	select BR2_PACKAGE_PYTHON_SIX
 > +	help
-> +	  Python CFFI bindings for the sysrepo YANG datastore.
+> +	  ncclient is a Python library for NETCONF clients. It
+> +	  facilitates client-side scripting and application
+> +	  development around NETCONF.
 > +
-> +	  This package provides the 'sysrepo' Python module which
-> +	  talks to the C sysrepo library packaged as
-> +	  BR2_PACKAGE_SYSREPO.
+> +	  https://github.com/ncclient/ncclient
 > +
-> +	  Upstream project name on PyPI is 'sysrepo'.
-> +
-> +	  https://github.com/sysrepo/sysrepo-python
-> +
-> +comment "python-sysrepo needs python3, uClibc needs kernel headers >= 5.1"
-> +	depends on !BR2_PACKAGE_PYTHON3 || \
-> +		(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1)
+> +comment "python-ncclient needs python3 and host Rust (for paramiko)"
+> +	depends on !BR2_PACKAGE_PYTHON3 || !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
 
-To be updated based on the actual dependencies.
+Not needed. BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is an
+architecture dependency, so we don't write a comment about it, since
+there's nothing the user can do about it.
 
-> +comment "python-sysrepo needs sysrepo"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-> +	depends on !BR2_PACKAGE_SYSREPO
-
-Not needed.
-
-> diff --git a/package/python-sysrepo/python-sysrepo.mk b/package/python-sysrepo/python-sysrepo.mk
+> diff --git a/package/python-ncclient/python-ncclient.mk b/package/python-ncclient/python-ncclient.mk
 > new file mode 100644
-> index 0000000000..5e9e97df25
+> index 0000000000..ca1b23e441
 > --- /dev/null
-> +++ b/package/python-sysrepo/python-sysrepo.mk
-> @@ -0,0 +1,18 @@
+> +++ b/package/python-ncclient/python-ncclient.mk
+> @@ -0,0 +1,21 @@
 > +################################################################################
 > +#
-> +# python-sysrepo
+> +# python-ncclient
 > +#
 > +################################################################################
 > +
-> +PYTHON_SYSREPO_VERSION = 1.7.6
-> +PYTHON_SYSREPO_SOURCE = sysrepo-$(PYTHON_SYSREPO_VERSION).tar.gz
-> +PYTHON_SYSREPO_SITE = https://files.pythonhosted.org/packages/source/s/sysrepo
-> +PYTHON_SYSREPO_SETUP_TYPE = setuptools
+> +PYTHON_NCCLIENT_VERSION = 0.7.0
+> +PYTHON_NCCLIENT_SOURCE = ncclient-$(PYTHON_NCCLIENT_VERSION).tar.gz
+> +PYTHON_NCCLIENT_SITE = https://files.pythonhosted.org/packages/source/n/ncclient
 > +
-> +PYTHON_SYSREPO_LICENSE = BSD-3-Clause
-> +PYTHON_SYSREPO_LICENSE_FILES = LICENSE
+> +PYTHON_NCCLIENT_LICENSE = Apache-2.0
+> +PYTHON_NCCLIENT_LICENSE_FILES = LICENSE
 > +
-> +PYTHON_SYSREPO_DEPENDENCIES = sysrepo
-> +PYTHON_SYSREPO_DEPENDENCIES += python-libyang
+> +PYTHON_NCCLIENT_SETUP_TYPE = setuptools
+> +
+> +PYTHON_NCCLIENT_DEPENDENCIES = \
+> +	python-lxml \
+> +	python-paramiko \
+> +	python-six
 
-Are you sure python-libyang is a build-time dependency, or is it only a
-runtime dependency?
+Are you sure these are build-time dependencies? Most of the time Python
+modules are only run-time dependencies.
 
-Also, with Python packages, it's always good to have a minimal test
-case in support/testing/.
+And as asked for some other patches, a test case in support/testing/
+would be nice.
 
-> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-> index 59dc59a5df..329c0ee7c6 100644
-> --- a/package/sysrepo/sysrepo.mk
-> +++ b/package/sysrepo/sysrepo.mk
-> @@ -26,6 +26,13 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
->  SYSREPO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->  
-> +# riscv32 glibc doesn't define SYS_futex (only SYS_futex_time64)
-> +# Use pthread-based condition variables instead of futex
-> +# https://github.com/sysrepo/sysrepo/issues/3346
-> +ifeq ($(BR2_RISCV_32),y)
-> +SYSREPO_CONF_OPTS += -DSR_COND_IMPL=sr_cond_pthread
-> +endif
-
-This is unrelated and should really be in its own patch. I guess it fixes:
-
-  https://autobuild.buildroot.net/results/b0f/b0f30feeddad1a8d51ac87af8b7c56fd9a9b5ff6/build-end.log
-
-Correct?
-
-If yes, then you should indicate in the patch that it fixes a build
-issue, have the link to the autobuilder failure, and indicate when the
-issue was introduced, so that we can understand if the fix should be
-backported to our 2025.02 LTS branch.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
