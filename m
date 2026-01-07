@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9468D0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:49:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB871D0D150
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C08CD8233B;
-	Wed,  7 Jan 2026 17:49:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C80A140AC8;
+	Wed,  7 Jan 2026 17:49:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p2YD_q8I_ZOW; Wed,  7 Jan 2026 17:49:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vJYgyvvlxMRq; Wed,  7 Jan 2026 17:49:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BC3081DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86C5540D01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808187;
-	bh=gxh4OjSlmNq1+oAzQUqIcbSnepofuySY2NBAn5WYlsM=;
+	s=default; t=1767808190;
+	bh=X4al6ebyGc0VCWCgms2dicoFk0jARml0yQWU7+Y/5SY=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=T4jUYRCHBZLLNIIIYyObxbdYteS6cBCh3YBpMcIKq4ezvkqAfPvwRcdLK2Zyvwvf5
-	 Oy/HkKoA8YdZqiCj6uZBiLcu2y79MzS6t/8YJfzrL5KUrVaaEdY2MSvhJpt8WpgFKo
-	 NaV8OTUdoqcLcsY4FGXrsNQoCjrJQvTmi71+oEw7tnOHGEfItZ/yu3RxhyyVbSjlNs
-	 6S+7HzdaWP/DAiJOZ8V83VoCkJS8Yk3hjgvWuwXjN637spRgg4+McnG5du278CED+h
-	 3lhrij4BZqa6+dSIH9U1EYzK6RSruSGhwn+cHLKPojb/OD26uJ31o+IC4cLpV71qXN
-	 kQZlci0j66w0g==
+	b=MG/77bJpcwfKCBa9U6seGgEDqqFLNVZIzjJGuQlKZZKY7+XKNQnFbCkvkpO+uRyks
+	 QX0eeaF2K139C8LCVAsZUZExJINxMm6uAir0k6aF6VxxeKpfQaZVEvyttzQnrWig7X
+	 oLgXz+Wu8cUkO8MrybyMt9aGeogNIj8p6p9lvlyFXF+Wl1v43DqQ+980B87TRdrwzB
+	 y0CjJN5yPSJtHCdaX21qTMGq7BgB6NqaMMxlyjyxtCzwgmHEncvjSYH+59gxR1FF9p
+	 Fu1RZV9kUofdVhi7FwEWTeQrOfOzi8pwuVGcuduAYJnDSbbnJB0vvP/Sr2bK4Yqaxm
+	 Pr01Y1yUAgKHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7BC3081DFD;
-	Wed,  7 Jan 2026 17:49:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C2E9B9ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86C5540D01;
+	Wed,  7 Jan 2026 17:49:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0D5125B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4AB280FAB
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D27308233C
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A7P8J9N-PPp4 for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:49:44 +0000 (UTC)
+ id OT8v366zSgXz for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:49:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B3FA181396
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3FA181396
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CC82082337
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC82082337
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B3FA181396
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:49:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC82082337
+ for <buildroot@busybox.net>; Wed,  7 Jan 2026 17:49:47 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9E764B97A192; Wed,  7 Jan 2026 18:49:42 +0100 (CET)
-To: Julien Olivain <ju.o@free.fr>
+ with ESMTPSA id C30A3B97A192; Wed,  7 Jan 2026 18:49:45 +0100 (CET)
+To: Francois Perrad <francois.perrad@gadz.org>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
-	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:49:40 +0100
-Message-ID: <20260107174940.225462-1-arnout@rnout.be>
+	buildroot@busybox.net
+Date: Wed,  7 Jan 2026 18:49:43 +0100
+Message-ID: <20260107174943.225509-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251219210957.556930-3-ju.o@free.fr>
-References: <20251219210957.556930-3-ju.o@free.fr>
+In-Reply-To: <20251220083916.348329-1-francois.perrad@gadz.org>
+References: <20251220083916.348329-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808182; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808185; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=lUSnfxpw5yV0QjGceKqYF9kxp5QyfgvtrgrwPb9J5Kw=;
- b=dEgufWCprDeUwIlBKMMMBchSNwPiWBDp7sjQp5BQ4IqcnYGaKU4GokPJlrfsW6uQSz8DNw
- 6GT74FMR1W2UTsprsG/iLX9UzUbasHteu4itf/YCKNfc/A3jq16uxUBMRX5rDdepLovGav
- h02+xM8Gy/uFZjQ2D7CGTh1ygpyimj+RtBDlbPhk+YCRC4zBfX/LxMgAJb7ZgPrvmfj0UH
- vO67AGUdg2UGpeI8kvle1DtW7hx1dyMNuSkuCkSvwypFeyXke80bE+/c2YxsmCLHFYKjnF
- I+IFKFRLQDcXEfeAU5a4lDAsGiEQbmu1aKQxS45sWaUQRnQuYfJf+SGcUuA6ww==
+ bh=RkDd+Avflf0M1SREVQpuyg40Eu+uDFkM3SiMLTvPhYw=;
+ b=X8IA0yHlmt6cVx9hOLY/OhNsucdI1BA7vr4Tmf7MBiKK4HLqA1srFMayzzJsSMlo+OKR0q
+ DakIsi+RvK3RTnsHZmk3V7uqnEt0IrR1froWuUmtPzi76cCG2F099nqvTmdQJr3mVjTIGK
+ nAP6UbA686ACDXGsc4dq5/niM1gtJdaKHb6LPzr1SuhYk/RJdMCUZ9wBmhqXz1DCK3ogwr
+ 2U5D0sVZChqrShe9zCvDKfJk6DVFbTcU7dhzqpd+enM/TKBelaT4GNtX+1WFZyZVD9b8Qw
+ +ijKR8PKWde6hlsKAAePIONAIv0LrP2A3ceY0tw1l8Tj77/u3BXLlVCqMUFVBQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=dEgufWCp
-Subject: Re: [Buildroot] [PATCH 3/4] support/testing: ddrescue: use f-string
- for test config
+ header.a=rsa-sha256 header.s=dkim header.b=X8IA0yHl
+Subject: Re: [Buildroot] [PATCH] package/linenoise: security bump to version
+ e26268de5e56bfaad773786471844578fe9f7f4b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,51 +97,41 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> fix CVE-2025-9810: TOCTOU  in linenoiseHistorySave
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  support/testing/tests/package/test_ddrescue.py | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  package/linenoise/linenoise.hash | 2 +-
+>  package/linenoise/linenoise.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
-> index eb3f63ae53..bd34694737 100644
-> --- a/support/testing/tests/package/test_ddrescue.py
-> +++ b/support/testing/tests/package/test_ddrescue.py
-> @@ -10,8 +10,10 @@ class TestDdrescue(infra.basetest.BRTest):
->      #   mapper dm-dust, which are used to simulate a failing storage
->      #   block device.
->      # - lvm2 user space package is needed to configure dm-dust with dmsetup
-> +    kernel_fragment = \
-> +        infra.filepath("tests/package/test_ddrescue/linux-ddrescue.fragment")
->      config = \
-> -        """
-> +        f"""
->          BR2_aarch64=y
->          BR2_TOOLCHAIN_EXTERNAL=y
->          BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> @@ -20,16 +22,14 @@ class TestDdrescue(infra.basetest.BRTest):
->          BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.2"
->          BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->          BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> -        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
->          BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->          BR2_PACKAGE_DDRESCUE=y
->          BR2_PACKAGE_LVM2=y
->          BR2_TARGET_ROOTFS_CPIO=y
->          BR2_TARGET_ROOTFS_CPIO_GZIP=y
->          # BR2_TARGET_ROOTFS_TAR is not set
-> -        """.format(
-> -            infra.filepath("tests/package/test_ddrescue/linux-ddrescue.fragment")
-> -        )
-> +        """
+> diff --git a/package/linenoise/linenoise.hash b/package/linenoise/linenoise.hash
+> index 9a1436eb8..3f82ba0ff 100644
+> --- a/package/linenoise/linenoise.hash
+> +++ b/package/linenoise/linenoise.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  1086f82fbf30b0618b1953b05d33db62c68fc7ce49391ce1374192f776fde72d  linenoise-97d2850af13c339369093b78abe5265845d78220.tar.gz
+> +sha256  d5e702e7e04f0fcd09393bd4c010ce2bb19b4d137e22f2dd6064e848f4a6b5b2  linenoise-e26268de5e56bfaad773786471844578fe9f7f4b.tar.gz
+>  sha256  efe1692aa5b869edaa0ac88f95eb0276c1125304ffc636a299db3ebbab47f62b  LICENSE
+> diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
+> index fd2c4c703..05f8aa484 100644
+> --- a/package/linenoise/linenoise.mk
+> +++ b/package/linenoise/linenoise.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->      def test_run(self):
->          img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+> -LINENOISE_VERSION = 97d2850af13c339369093b78abe5265845d78220
+> +LINENOISE_VERSION = e26268de5e56bfaad773786471844578fe9f7f4b
+>  LINENOISE_SITE = $(call github,antirez,linenoise,$(LINENOISE_VERSION))
+>  LINENOISE_LICENSE = BSD-2-Clause
+>  LINENOISE_LICENSE_FILES = LICENSE
 > -- 
-> 2.52.0
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
