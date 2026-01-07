@@ -4,79 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83BE3D0D145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 166D0D0D145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Jan 2026 17:51:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B71A40EC8;
-	Wed,  7 Jan 2026 17:51:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E130940EE2;
+	Wed,  7 Jan 2026 17:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jkUH1d_a87ua; Wed,  7 Jan 2026 17:51:15 +0000 (UTC)
+ id PYDmt6okgGof; Wed,  7 Jan 2026 17:51:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6700D40EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79E8A40EC9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767808275;
-	bh=tw291DIADqZmV9caqU+rmZTHaAECl9RLVvIzLq8e+j8=;
+	s=default; t=1767808276;
+	bh=YWT3K0fFtEIqT/y32kFlD1/CJ7CN0rZmDAYGho9wZGs=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=q+u0HQWIz0Mbf3bBYpcfI92TiklNEpN3d70bvZBvuFTarzMgq9z2rkCbm3aUuVi5h
-	 a9PQjMyPTUQQjcDIt7J1LYsv61tsKYmBwLjjms5hrgsOpF77Oycg1NhSou/QKw9KEM
-	 tQtP3OGC2MqIwPqsbfM/QRP/mo47G8MfIRrzN1QVAr3snatx1lbVPY0fNg3IgADadD
-	 NLXMHvfxhpRxWfwaSCCAiK2G72C370Y8aDqlQrLdaOKErnFWN4ZZClk0sx2gcUaqvU
-	 W5feisFXFn9RDiWeME+/zYhtcW/8mTzgsJkVQDrhFB/VVaeIaVMTaZXhjNYWha5XQg
-	 wWZxMUH6diWbw==
+	b=BAy/rNw/OFLTb+/pqXNTrltjkXWyPugH8I58KPe+64BR3N513fyj38C+kYl6ILPtT
+	 GWry8vJzMcwAr8HxcRf2uVX/LbJBA0J7AveBvhH0CYvElsdqD6bSIgCoLVbb7jPdeF
+	 Z+z5o5n/y5+YNM6mhs612O81cmep/4py6GMhOEMMLVfmsiz6pKEC3BvuDc3Rj5gbJL
+	 7Ti3vKLMJDNdQc73L9wRFKNGrAgmCiwfLcdR8uupq4iXk1A/XKnkzMDfPmKGmig3xi
+	 DnR0YzQd1xwXczoqjSwSPAPTK0i5GwNYzR1RwVoG39MlGUj7H7cxJ8Lhruh83D5yCO
+	 s0tPqZBaNyLDA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6700D40EC9;
-	Wed,  7 Jan 2026 17:51:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79E8A40EC9;
+	Wed,  7 Jan 2026 17:51:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F1529ED
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1204F25B
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70A1D40160
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECE8C40160
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6yPJ7hKHPakc for <buildroot@buildroot.org>;
- Wed,  7 Jan 2026 17:51:12 +0000 (UTC)
+ id PE4drCIPbuMv for <buildroot@buildroot.org>;
+ Wed,  7 Jan 2026 17:51:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 41E9E40128
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41E9E40128
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E343340128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E343340128
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 41E9E40128
- for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E343340128
+ for <buildroot@buildroot.org>; Wed,  7 Jan 2026 17:51:13 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A87FEB97A70F; Wed,  7 Jan 2026 18:51:09 +0100 (CET)
+ with ESMTPSA id 08BA0B97A704; Wed,  7 Jan 2026 18:51:12 +0100 (CET)
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed,  7 Jan 2026 18:51:08 +0100
-Message-ID: <20260107175108.227512-1-arnout@rnout.be>
+Date: Wed,  7 Jan 2026 18:51:11 +0100
+Message-ID: <20260107175111.227567-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251226171448.1213664-3-thomas.petazzoni@bootlin.com>
-References: <20251226171448.1213664-3-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251226171448.1213664-2-thomas.petazzoni@bootlin.com>
+References: <20251226171448.1213664-2-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1767808269; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1767808272; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=cddUJQc1y51SwoFF0AL299QWX8KZk1xwlWPybi1CZuE=;
- b=UkGgaJiD75eQmg5J3DZ9+dqHlZ15lYpqoAKAde3ftdByZaCc3mAiDWzn+DeUoGC31xqjix
- uUTvqrPPfAGGJhCxmKJu6OSLSIr+uawo8w6Ren8e1Lfs+jnaA6vzP8Fq7dmA+F6ZnhWDkO
- e6VRo8Yp4S4OTJBXXSPGXrlM7m7W6OthpwWvrAjSdkr7DMU/+sKcJG6jCh12Qw7tcVge7m
- QvKmKY3RjAoH3XHxn8qZz6yeRC83XWUEif3Zww2B1wl9DCtFZsDL+1nM6S64sOppFy1I8v
- KPPoIxddj7pYbKUcDuAmR5qB/HD9oDbncK1l1HS4NMprfDnHUF9o7dxBFV8mXg==
+ bh=NsO5AxROtRxa8zfSnKSMMfYy9fVlKAnEwqcJ/+4yKJo=;
+ b=hgXkzLupFaIsqqCkWi3AUFsk8J/E8vkyP+w5YrkZQ6B82lTLHT8ej2dMR+6pe79il2tVSL
+ cTfS/Ipmk7oux3whNP4tn+6MJff+PSEJ32NwUMZJaa6BzniE95py+B6j4dEsYTt0hkdURF
+ R7w+sIPLtD6ZtdqHs7mOprG5zgoujlqowwsrgxxD0km3A0Y/v/ecclEDF+5fkmAcUnz+uP
+ KBtrS8RSsJjgJ4oLqzH0YmLOWAg+SaO5YuiQrSLHNDtm76VmlMo3otAiiSeFC4P/ZnZFAZ
+ 6jJyxbdO6QDDIJqI69UXJMvIuDm0Dds39Y01H2uESOxw9wwhv65AhYOqZ/38rA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=UkGgaJiD
-Subject: Re: [Buildroot] [PATCH 3/3] package/opencv3: drop support for ffmpeg
+ header.a=rsa-sha256 header.s=dkim header.b=hgXkzLup
+Subject: Re: [Buildroot] [PATCH 2/3] package/opencv3: drop support for
+ protobuf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,126 +97,112 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> opencv3's code is not compatible with newer versions of ffmpeg, and
-> opencv3 is no longer maintained, so we have no choice but to disable
-> its ffmpeg support.
+> The protobuf support breaks the build, as protobuf includes
+> libabseil-cpp headers, which now require C++14. opencv3 doesn't have
+> any ENABLE_CXX14 option, so for the time being, disable protobuf
+> support until someone bothers enough to fix this up.
+> 
+> While we suspect a libabseil-cpp version bump to be responsible for
+> the issue, we are not 100% sure. However, the issue is definitely
+> present in Buildroot 2025.02.x, as it can be reproduced using the
+> following defconfig:
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_PACKAGE_OPENCV3=y
+> BR2_PACKAGE_OPENCV3_LIB_SHAPE=y
+> BR2_PACKAGE_OPENCV3_LIB_STITCHING=y
+> BR2_PACKAGE_OPENCV3_LIB_SUPERRES=y
+> BR2_PACKAGE_OPENCV3_LIB_TS=y
+> BR2_PACKAGE_OPENCV3_LIB_VIDEOSTAB=y
+> BR2_PACKAGE_OPENCV3_WITH_PROTOBUF=y
 > 
 > Fixes:
 > 
->   https://autobuild.buildroot.net/results/9ae3911583cccb6362f33cd82e5eaafb059fdc76/
-> 
-> It's not clear which ffmpeg version bump broken the build exactly, but
-> this issue is definitely present in 2025.02.x as the following
-> defconfig fails to build in a similar way on 2025.02.x:
-> 
->  BR2_aarch64=y
->  BR2_TOOLCHAIN_EXTERNAL=y
->  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
->  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
->  BR2_PACKAGE_FFMPEG_NONFREE=y
->  # BR2_PACKAGE_FFMPEG_FFMPEG is not set
->  # BR2_PACKAGE_FFMPEG_INDEVS is not set
->  # BR2_PACKAGE_FFMPEG_OUTDEVS is not set
->  BR2_PACKAGE_OPENCV3=y
->  BR2_PACKAGE_OPENCV3_LIB_VIDEOIO=y
->  BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS=y
->  BR2_PACKAGE_OPENCV3_WITH_FFMPEG=y
->  BR2_PACKAGE_OPENCV3_INSTALL_DATA=y
+>   https://autobuild.buildroot.net/results/39432e7746e6bc5224592a7d2f744ca992bd529a/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  Config.in.legacy           | 7 +++++++
->  package/ffmpeg/ffmpeg.mk   | 6 +++---
->  package/opencv3/Config.in  | 9 ---------
->  package/opencv3/opencv3.mk | 8 +-------
->  4 files changed, 11 insertions(+), 19 deletions(-)
+>  Config.in.legacy           |  7 +++++++
+>  package/opencv3/Config.in  | 12 ------------
+>  package/opencv3/opencv3.mk | 12 +-----------
+>  3 files changed, 8 insertions(+), 23 deletions(-)
 > 
 > diff --git a/Config.in.legacy b/Config.in.legacy
-> index 03e0673fba..51f77ad312 100644
+> index 7c598e0e68..03e0673fba 100644
 > --- a/Config.in.legacy
 > +++ b/Config.in.legacy
 > @@ -146,6 +146,13 @@ endif
 >  
 >  comment "Legacy options removed in 2026.02"
 >  
-> +config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
-> +	bool "opencv3 ffmpeg support removed"
+> +config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
+> +	bool "opencv3 protobuf support removed"
 > +	select BR2_LEGACY
 > +	help
-> +	  Support for OpenCV 3 ffmpeg support has been removed as it
-> +	  was no longer compatible with recent versions of ffmpeg.
+> +	  Support for OpenCV 3 protobuf support has been removed as it
+> +	  was no longer compatible with recent versions of protobuf.
 > +
->  config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
->  	bool "opencv3 protobuf support removed"
+>  config BR2_PACKAGE_LIBDNET_PYTHON
+>  	bool "libdnet python module removed"
 >  	select BR2_LEGACY
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index cee34eba9e..f3b76f69b5 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -287,11 +287,11 @@ else
->  FFMPEG_CONF_OPTS += --disable-vdpau
->  endif
->  
-> -# To avoid a circular dependency only use opencv if opencv itself does
-> -# not depend on ffmpeg.
-> -ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),yx)
-> +ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),y)
->  FFMPEG_CONF_OPTS += --enable-libopencv
->  FFMPEG_DEPENDENCIES += opencv3
-> +# To avoid a circular dependency only use opencv if opencv itself does
-> +# not depend on ffmpeg.
->  else ifeq ($(BR2_PACKAGE_OPENCV4_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV4_WITH_FFMPEG),yx)
->  FFMPEG_CONF_OPTS += --enable-libopencv \
->  	--extra-cflags=-I$(STAGING_DIR)/usr/include/opencv4
 > diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-> index 6c4d4e9c8a..ad8a075729 100644
+> index c4c5d22a54..6c4d4e9c8a 100644
 > --- a/package/opencv3/Config.in
 > +++ b/package/opencv3/Config.in
-> @@ -232,15 +232,6 @@ config BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS
+> @@ -278,18 +278,6 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
+>  	help
+>  	  Use shared libpng from the target system.
 >  
->  comment "3rd party support"
->  
-> -config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
-> -	bool "ffmpeg support"
-> -	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-> -	select BR2_PACKAGE_BZIP2
-> -	select BR2_PACKAGE_FFMPEG
-> -	select BR2_PACKAGE_FFMPEG_SWSCALE
+> -config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
+> -	bool "protobuf support"
+> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+> -	select BR2_PACKAGE_PROTOBUF
 > -	help
-> -	  Use ffmpeg from the target system.
+> -	  Use shared protobuf from the target system.
 > -
->  config BR2_PACKAGE_OPENCV3_WITH_GSTREAMER1
->  	bool "gstreamer-1.x"
->  	depends on BR2_USE_MMU # gstreamer1 -> libglib2
+> -comment "protobuf support needs a toolchain w/ gcc >= 8"
+> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> -	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> -
+>  config BR2_PACKAGE_OPENCV3_WITH_TIFF
+>  	bool "tiff support"
+>  	select BR2_PACKAGE_TIFF
 > diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-> index 3fcf2543a7..9e488bed0c 100644
+> index 8a862a47b1..3fcf2543a7 100644
 > --- a/package/opencv3/opencv3.mk
 > +++ b/package/opencv3/opencv3.mk
-> @@ -212,6 +212,7 @@ OPENCV3_CONF_OPTS += \
->  	-DWITH_1394=OFF \
->  	-DWITH_CLP=OFF \
->  	-DWITH_EIGEN=OFF \
-> +	-DWITH_FFMPEG=OFF \
->  	-DWITH_GDAL=OFF \
->  	-DWITH_GPHOTO2=OFF \
->  	-DWITH_GSTREAMER_0_10=OFF \
-> @@ -232,13 +233,6 @@ OPENCV3_CONF_OPTS += \
+> @@ -223,6 +223,7 @@ OPENCV3_CONF_OPTS += \
+>  	-DWITH_OPENEXR=OFF \
+>  	-DWITH_OPENNI2=OFF \
+>  	-DWITH_OPENNI=OFF \
+> +	-DWITH_PROTOBUF=OFF \
+>  	-DWITH_UNICAP=OFF \
+>  	-DWITH_VA=OFF \
+>  	-DWITH_VA_INTEL=OFF \
+> @@ -282,17 +283,6 @@ else
+>  OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
+>  endif
 >  
->  OPENCV3_DEPENDENCIES += host-pkgconf zlib
->  
-> -ifeq ($(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),y)
-> -OPENCV3_CONF_OPTS += -DWITH_FFMPEG=ON
-> -OPENCV3_DEPENDENCIES += ffmpeg bzip2
+> -ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
+> -# protobuf needs c++11 (since 3.6.0)
+> -OPENCV3_CONF_OPTS += \
+> -	-DENABLE_CXX11=ON \
+> -	-DPROTOBUF_UPDATE_FILES=ON \
+> -	-DWITH_PROTOBUF=ON
+> -OPENCV3_DEPENDENCIES += protobuf
 > -else
-> -OPENCV3_CONF_OPTS += -DWITH_FFMPEG=OFF
+> -OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF
 > -endif
 > -
->  ifeq ($(BR2_PACKAGE_OPENCV3_WITH_GSTREAMER1),y)
->  OPENCV3_CONF_OPTS += -DWITH_GSTREAMER=ON
->  OPENCV3_DEPENDENCIES += gstreamer1 gst1-plugins-base
+>  ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
+>  OPENCV3_CONF_OPTS += -DWITH_QT=5
+>  OPENCV3_DEPENDENCIES += qt5base
 > -- 
 > 2.52.0
 > 
