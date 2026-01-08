@@ -4,88 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AD03D185CC
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jan 2026 11:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC0ED185CC
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jan 2026 11:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46FC360DB7;
-	Thu,  8 Jan 2026 11:11:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDF5E60DE3;
+	Thu,  8 Jan 2026 11:11:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vTQ9HY2wl55b; Thu,  8 Jan 2026 11:11:09 +0000 (UTC)
+ id VwyaZETc040w; Thu,  8 Jan 2026 11:11:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73EB8605E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7694A60DC7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767870669;
-	bh=43UqaznwK+AX+WdGWfhD4JtJ4E5WiZjlXKYYnd6NXNQ=;
+	s=default; t=1767870675;
+	bh=xUysQhT4dyKYwsJr42zLJHsMzScBhgSvw+iiH0E80mI=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=hbSqdA5aGvDiR7qqEUvwKOlOL1XQ6MdDAT+pWb2lvNtFV8its8dD5+qJkm8OsG8N9
-	 MphViV3tf+qKW1BU6Yb4zGHc6RHlL9c6vImBkvE5Hhx4NTfaKLPTW3o+p+7yDPBHvS
-	 QWcKonCx16XVQt0yIvW9Pg/hqIzU1fmph6/ksE5QWA14VkmZLtcuhKBmNjPOIXjXkg
-	 aPC0CmTukbVJSRZL9YY9J1WgdJ5TXuzVV/yGduOw0vB6Abe1iK13PZwRQCWwwwZATB
-	 FQ+u3eZPvFVA/K4vER5vq/3QBl6YbeNkM8en0ZewJlnBgFg0YLXnN92zD6H4K11yBz
-	 /BSYEXCscbssg==
+	b=Gs+T9IQWsU0nw/1BN9WF8qBbho5iHYyyWiKCX1yP+b0CMpgM4Kqf7Ixti1HbTopyQ
+	 WSPQQ9vI6z4ZX4Y/WEzMTXVSZOq85uZMgSeMOFU1ohqXFN9hzMk7riOXfad/27JKqV
+	 qrZOJ5vWiG5zqyt5abw/RbGalcuIp3GtzgRIPuTMFULTP57GrnBfnWzqLk0D7e8FvV
+	 gqoKxgwOPrdgRiDCvVWEhBFticQfG1t6nFsWIaKa4TJr/nXKNHv1ItVjiZ7Y9RPcMA
+	 BwGaGexiYiKOYWFpBXUJsHXLQIuC3NFj6qfgu5SJVrY08K6VVYRSArfSmu22vRQoGw
+	 6Ui4oDA+9lXrQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73EB8605E4;
-	Thu,  8 Jan 2026 11:11:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7694A60DC7;
+	Thu,  8 Jan 2026 11:11:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A46D2C0
- for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:11:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 54A592C0
+ for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0795E60625
- for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:11:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46BC760DC7
+ for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:11:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZfwZZFzl0MT1 for <buildroot@buildroot.org>;
- Thu,  8 Jan 2026 11:11:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id GyZk8R8UW8JC for <buildroot@buildroot.org>;
+ Thu,  8 Jan 2026 11:11:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0B209605E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B209605E4
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B209605E4
- for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:11:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5299F605A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5299F605A8
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5299F605A8
+ for <buildroot@buildroot.org>; Thu,  8 Jan 2026 11:11:13 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 944A21A26FF;
- Thu,  8 Jan 2026 11:11:04 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 67EEF4E41FF3;
+ Thu,  8 Jan 2026 11:11:11 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5D1EE606B6;
- Thu,  8 Jan 2026 11:11:04 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 32887606B6;
+ Thu,  8 Jan 2026 11:11:11 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6E6E5103C8837; Thu,  8 Jan 2026 12:11:03 +0100 (CET)
-Date: Thu, 8 Jan 2026 12:11:02 +0100
+ with ESMTPSA id 6F03F103C8829; Thu,  8 Jan 2026 12:11:10 +0100 (CET)
+Date: Thu, 8 Jan 2026 12:11:09 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
 Cc: buildroot@buildroot.org
-Message-ID: <20260108121102.31ff5b49@windsurf>
-In-Reply-To: <20260105215807.1898190-1-james.hilliard1@gmail.com>
-References: <20260105215807.1898190-1-james.hilliard1@gmail.com>
+Message-ID: <20260108121109.183a8ad9@windsurf>
+In-Reply-To: <20260106023038.2231960-1-james.hilliard1@gmail.com>
+References: <20260106023038.2231960-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1767870663; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1767870670; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=36Dh160V3bVA5gt8+r2CN+txU35n8QZACicigX9Sgjo=;
- b=1QH98191kaV8ayzfYvQ6QKVFhDFUA3y1ODALeOSmbUiRmbQ2fKCHi9jAOApFYFUlYCFqSR
- xcmtKzQhcBfKe/FoRV64skaKj4C5IRAF9Aq8QaCJnBfbv42x3DZLy7LIP9nLG4M8qk+Zot
- AylPYPbqQe2C/cBOF28wFkMTi7g38f2MFY7nBtO9JlTZAkcrYduuBybzkJHG22u1L0+DxZ
- MRbicTDrpUf/WfLSuvd6bxpME6jl/yfoo5CpKjVTNi0LnyJEI9RRRbCQxibIv7VG2Njtys
- ufAmGatFEei3uu4OCB/jFWYrvCE3TMQrcTQ7zeeSTM05R5cC2kQ1kyOdXgoI2Q==
+ bh=j0oOAAq3QWY/8gNFJa2KrHLARM8RK0smtnsFn6U6gDk=;
+ b=ZUxLEhLqn/0rOOtlHHJxv2ZHOVdF1r5cyydi0yuf7fpQUgsiurn2d+vq/09tGilhusDm4z
+ clPABm+5zweq9G83RRBQoWjVcBFPYFoKR/gi/2OSVBJFzDfXrCeNL4CgWeNVCdd7MMWGtC
+ hDQKlMiaIwHfyPUv49ICRgV9IYXFWJqfe16ZVTt3kWDslPeDbYFnVrTk0rdt6xoCWseI8g
+ C1K8U+aRrPoikov0/fmzTuqFNNOg3i8yBBEgKzNqKCHbwARLTSJcWwCjdG/3bzZ5x2KlK6
+ Q1D4HjeKWc0B24mEQgtCgrriaSonhYVvEy0U9MLNpNVyPK/0ClC1GLLeKzBsEg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=1QH98191
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
- 1.11.2
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=ZUxLEhLq
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiohttp: bump to version
+ 3.13.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,14 +103,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  5 Jan 2026 14:58:07 -0700
+On Mon,  5 Jan 2026 19:30:38 -0700
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-maturin/python-maturin.hash | 2 +-
->  package/python-maturin/python-maturin.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-aiohttp/python-aiohttp.hash | 4 ++--
+>  package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
