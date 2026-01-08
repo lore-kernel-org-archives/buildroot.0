@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41CF6D1D48C
-	for <buildroot@archiver.kernel.org>; Thu,  8 Jan 2026 20:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FB22D1D48D
+	for <buildroot@archiver.kernel.org>; Thu,  8 Jan 2026 20:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DCE782779;
-	Thu,  8 Jan 2026 20:15:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD18840B36;
+	Thu,  8 Jan 2026 20:22:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YR4eY9S5mc6i; Thu,  8 Jan 2026 20:22:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82C0040AC2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1767903746;
+	bh=gT0/VZEZcpBkAX/ehoVz7V9CJqiFPoK8Sd4kwrs1ENs=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=VEuJLvtZU9yYaeWTTMGe1fr+Dhg9mb9kHXxZCorBql2WQsSSAv9mBIfAlcbtMZZIN
+	 Ay3W4nmCYh17imhGfxCDpA+0YIHYDEjHcFz7l+1hi7/N/l97BkSL9Yg7WZ2NRy8BU0
+	 rB1t2lnk0wpL/WMlQJ6a9YRRfwNVEl2pZws+kz/2/u1gaslGIF+zzVubhG5NT0D7a1
+	 Us1KGjnUOF4yQwA23d4cPxazmuVSC5E5g63pNbjwkWaZ2fON32WKWByWyIum5/D/Xi
+	 LY6D6Nysq3RbduGyp+AViPlj4hiS8oMtPu7Ang4zQVM0qdeD3Zn0iMwEkfehcvjWW3
+	 g9/5cTA6k/FSg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82C0040AC2;
+	Thu,  8 Jan 2026 20:22:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18ADD7B1
+ for <buildroot@buildroot.org>; Thu,  8 Jan 2026 20:22:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3F3A828A9
+ for <buildroot@buildroot.org>; Thu,  8 Jan 2026 20:22:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AxX3TodyB8dZ; Thu,  8 Jan 2026 20:15:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F6F18266D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767903334;
-	bh=t9XYIXsolumK6wWEsa/STThhSg6OhJZqsYOZHL3x89s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lZWcPsdArLP7NTW8GWMRwkFS09i595quWUhlHeM9Nzr3gZOPN4sRzSRiNpTSCtn/T
-	 qYa4G1NY+ZYerVga/cajQ1QJXbN0xt1Gn1QIeLizDe1KO3x1jOy+lsU40F1JhCEKNY
-	 aQCFM2d/75uDMGFvAU+fRKiAxKdpHi+NNybM9zCMl2bVDjQA75BndEeW8EfJd0va08
-	 XU1kPeM0fsHA/vpP6jIaf+uZWTrDv2MJu0Bii6imId1ePFB3vrKmgMxAq269vWGBuo
-	 dB4dlw7GedLNuO+11veUn+EyG/XQUhQqWkss+zJA+ZjAVDB1LKon++wK6i7ND8ofkd
-	 TmEV6oHT5LBpw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F6F18266D;
-	Thu,  8 Jan 2026 20:15:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4ECA8278
- for <buildroot@buildroot.org>; Thu,  8 Jan 2026 20:15:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34A7860DD9
- for <buildroot@buildroot.org>; Thu,  8 Jan 2026 20:15:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H_NbbSwIOc4i for <buildroot@buildroot.org>;
- Thu,  8 Jan 2026 20:15:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F273607CC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F273607CC
- for <buildroot@buildroot.org>; Thu,  8 Jan 2026 20:15:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A45C80FD8; Thu,  8 Jan 2026 20:15:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 8 Jan 2026 21:00:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f842d9189a92e3bbab7f66a4151873e998cd9d88
-X-Git-Newrev: f190162e0dbdbbea7fa20cf5fda1d6976270b425
-X-Patchwork-Hint: ignore
-Message-Id: <20260108201532.6A45C80FD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.{12,
- 18}.x series
+ id PLe7AMmbIfHo for <buildroot@buildroot.org>;
+ Thu,  8 Jan 2026 20:22:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2776282893
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2776282893
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2776282893
+ for <buildroot@buildroot.org>; Thu,  8 Jan 2026 20:22:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 216D3B0053D;
+ Thu,  8 Jan 2026 21:22:21 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 08 Jan 2026 21:22:21 +0100
+MIME-Version: 1.0
+Date: Thu, 08 Jan 2026 21:22:21 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260108194233.3499269-2-bernd@kuhls.net>
+References: <20260108194233.3499269-1-bernd@kuhls.net>
+ <20260108194233.3499269-2-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <d3c8d9807913346a8a105613347b3d81@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1767903742;
+ bh=3ybudcGmYaU1rpAc8YYlzmxigalsffiptY8hRvIU8zY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CDdjUbyh9gus7BzMEh49TjYYb9A75oScuXs1TU+N5VDBnLtIdP8e42B45F8/bLIUB
+ wsHHvVg8McdYBvCRrcQ7HEScY2wZgw+TwjCnn17HLB7eW1kEe5O6UVqC/GoNTMww7k
+ ON3aGonyKMSHZi6Ajgzjjm+f/GDDcULBLZInzSn9l+l97wb0GJUhaXWl1Q/JS+xsV8
+ oMos85T37xwwTKahHGlSxv+gqpL5nYxjo6IVhB/V7p/JqyQ/soiduWm0zZ4LmIiSMR
+ KUVzxKlHzlLDglVX0NpBM1w2SoG1YIWkt8LKMy0GNf2/Kb1mPGrX/7KuDYyWiiA5YZ
+ ILnhKp/tm/yTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CDdjUbyh
+Subject: Re: [Buildroot] [PATCH 2/2] linux: bump CIP kernel to version
+ 5.10.246-cip66
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,64 +96,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f190162e0dbdbbea7fa20cf5fda1d6976270b425
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+On 08/01/2026 20:42, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  .../0001-arch-microblaze-mm-init.c-fix-build.patch        | 0
+>  linux/Config.in                                           | 8 ++++----
+>  linux/linux.hash                                          | 4 ++--
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+>  rename linux/{5.10.162-cip24-rt10 => 
+> 5.10.246-cip66-rt29}/0001-arch-microblaze-mm-init.c-fix-build.patch 
+> (100%)
+> 
+> diff --git 
+> a/linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch 
+> b/linux/5.10.246-cip66-rt29/0001-arch-microblaze-mm-init.c-fix-build.patch
+> similarity index 100%
+> rename from 
+> linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch
+> rename to 
+> linux/5.10.246-cip66-rt29/0001-arch-microblaze-mm-init.c-fix-build.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 628fc91094..0bf8d0ab02 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.18.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.18.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 733ef50d8e..45437f8796 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  558c6bbab749492b34f99827fe807b0039a744693c21d3a7e03b3a48edaab96a  linux-6.18.2.tar.xz
--sha256  9502c5ffe4b894383c97abfccf74430a84732f04ee476b9c0d87635b29df7db3  linux-6.12.63.tar.xz
-+sha256  7a8879167b89c4bae077d6f39c4f2130769f05dbdad2aad914adab9afb7d7f9a  linux-6.18.3.tar.xz
-+sha256  d1ad94a33681148efe884f4028970d69e332f2b003f0e8be53a1d25de38e49a2  linux-6.12.64.tar.xz
- sha256  3da09b980bb404cc28793479bb2d6c636522679215ffa65a04c893575253e5e8  linux-6.6.119.tar.xz
- sha256  1f207ebe93980829ecc0a18b694816f22b715e9893767731651969a168342b9e  linux-6.1.159.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 05a4822636..f28ccaffe0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -460,8 +460,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.15.197"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.159"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.6.119"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.63"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.2"	if BR2_KERNEL_HEADERS_6_18
-+	default "6.12.64"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.3"	if BR2_KERNEL_HEADERS_6_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+This patch generates a check-package error:
+
+.checkpackageignore:179: ignored file 
+linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch 
+is missing
+linux/5.10.246-cip66-rt29/0001-arch-microblaze-mm-init.c-fix-build.patch:0: 
+missing Upstream in the header 
+(https://nightly.buildroot.org/#_additional_patch_documentation)
+
+Could fix the missing "Upstream:" header and remove the 
+.checkpackageignore entry, please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
