@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41DC8D2F32D
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 496E0D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F8DC8406B;
-	Tue, 13 Jan 2026 19:42:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E03E84085;
+	Tue, 13 Jan 2026 19:42:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qYRD-lzxfG15; Tue, 13 Jan 2026 19:42:11 +0000 (UTC)
+ id znnaEa3-4IsB; Tue, 13 Jan 2026 19:42:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDE3984091
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10DE68402B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333325;
-	bh=wpuJvTiiFnd2Rfg4eLtU2GU1UVM+cvwP5MHBpNmvvqk=;
+	s=default; t=1768333327;
+	bh=PC8Lgqq2EMKzk91OoMhNspsosWrmzk1NbOlrxE9J/fE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JHSvK1HSNBYuE/vHX+wYRkQ4YKPq4/iFy3jQHf8/s99YwJS2hcogaIk2fmIWsoSnj
-	 SQz25NA9J6Sp/nQUeYy0UXpzh6uLNDPe/dHnyjkXo7DD4pygdNWsIYGC+uO+Hgze1r
-	 qK82HQCon7PEqqJZyISznU15ONlnBlTOaHLOZeG0t3Xcj1UyPZ5LOnNUrN54JFz/N4
-	 A2g923ph4iN47SdufuzrMiG+VQ079rmHNE8vJQKR7G7Iq+Igv+vkeD6GRAlmA9j5oE
-	 t+uB+Ja4lG4ILTsYPSgtchoViNKhvJbQX7zznkGt9sy39HMD+jMKhJ+aw9r1PVbpTy
-	 zclHzcjKFZh4w==
+	b=UzLkxMgFd7EYSZD5O4o+KyZi342RloKtEYjiIOlT3W6u2SqPW27GC738l10HZS2P6
+	 k4Uyvnq5y6/M/uGSG8iwxtYng+uZfOztpTGNPbJHfEStH3MofkMdwREeZkliI8qNvE
+	 gSzEDk/ETx2c4Cqe5s1pNgg0Ga3qqdFnDkiQt5jpTZIbgr9ZGDCKuP8YPEHOQuqT5/
+	 r8UZ56Fqt4vwA18sYEVeJmB+4HNJC3KV1BJ+1hL/d4lh43a2nB3fZ4Kuy/ASx96gGA
+	 JP1XuIwyyN8R2wdeP0X2ZUfyAzE36FQ2uhRnDHq06Oonl6sZZPqKfPfZS5mLqbngxC
+	 2fCquzBE/Nv2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDE3984091;
-	Tue, 13 Jan 2026 19:42:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A5212CC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:41:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10DE68402B;
+	Tue, 13 Jan 2026 19:42:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 032421C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:41:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A503406E5
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22F5682A0E
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4BQp3NpuMsH1 for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g6TwrWYEzVuk for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:40:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3510A406EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3D3082A0B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3510A406EC
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3D3082A0B
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33F9580840; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
+ id F25FA82271; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 16:58:11 +0100
+Date: Fri, 9 Jan 2026 18:22:31 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: e97f1cfe3573b221ddb26e8744da00c702e86206
-X-Git-Newrev: 01e73806f161e9f1e1d0f658b8ed17b34f75b426
+X-Git-Oldrev: 0744d70e27732e566a9ead628e9d6c7305630cf1
+X-Git-Newrev: c5ef3667014545f492456d1204c971d2429b3d2b
 X-Patchwork-Hint: ignore
-Message-Id: <20260113194034.33F9580840@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/fontconfig:
- disable doc and tests for host
+Message-Id: <20260113194034.F25FA82271@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/opencv4-contrib:
+ add missing gcc >= 8 dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,35 +77,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01e73806f161e9f1e1d0f658b8ed17b34f75b426
+commit: https://git.buildroot.net/buildroot/commit/?id=c5ef3667014545f492456d1204c971d2429b3d2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-On Debian 13 doc generation fails. Disable it like for
-the target.
+Commit
+75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b ("package/{python-}protobuf:
+bump to version 28.1") added a whole bunch of gcc >= 8 dependencies to
+OpenCV 4 options, but forgot to propagate those to opencv4-contrib.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes:
+
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+  Depends on [n]: BR2_PACKAGE_OPENCV4 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE [=y] && BR2_PACKAGE_OPENCV4_CONTRIB [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n]
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 20f31f90ad55b3e0654b6bc1b1ed76e7a1e6032e)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit a67ab908d4f546bda9a94521f3b1f37aea60a365)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/fontconfig/fontconfig.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/opencv4-contrib/Config.in | 36 +++++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index d9f5dbefad..639f6ed51d 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -16,6 +16,10 @@ FONTCONFIG_LICENSE = fontconfig license
- FONTCONFIG_LICENSE_FILES = COPYING
- FONTCONFIG_CPE_ID_VALID = YES
+diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
+index ad61c3fbe8..529687dd96 100644
+--- a/package/opencv4-contrib/Config.in
++++ b/package/opencv4-contrib/Config.in
+@@ -76,28 +76,32 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
+ 	bool "dnn_objdetect"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 dnn
+ 	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	help
+ 	  Object Detection using CNNs -- Implements compact CNN Model
+ 	  for object detection. Trained using Caffe but uses
+ 	  opencv_dnn module.
  
-+HOST_FONTCONFIG_CONF_OPTS = \
-+	-Dtests=disabled \
-+	-Ddoc=disabled
-+
- FONTCONFIG_CONF_OPTS = \
- 	-Dcache-dir=/var/cache/fontconfig \
- 	-Dtests=disabled \
+-comment "dnn_objdetect needs a glibc or musl toolchain"
++comment "dnn_objdetect needs a glibc or musl toolchain w/ gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
+ 	bool "dnn_superres"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 dnn
+ 	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	help
+ 	  Superresolution using CNNs -- Contains four trained
+ 	  convolutional neural networks to upscale images.
+ 
+-comment "dnn_superres needs a glibc or musl toolchain"
++comment "dnn_superres needs a glibc or musl toolchain w/ gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
+ 	bool "dnns_easily_fooled"
+@@ -109,27 +113,31 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
+ 	bool "dpm"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
+ 	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	help
+ 	  Deformable Part Model -- Felzenszwalb's Cascade with
+ 	  deformable parts object recognition code.
+ 
+-comment "dpm needs a glibc or musl toolchain"
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
++comment "dpm needs a glibc or musl toolchain w/ gcc >= 8"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
+ 	bool "face"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
+ 	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	help
+ 	  Face Recognition -- Face recognition techniques: Eigen, Fisher
+ 	  and Local Binary Pattern Histograms LBPH methods.
+ 
+-comment "face needs a glibc or musl toolchain"
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
++comment "face needs a glibc or musl toolchain w/ gcc >= 8"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE
+ 	bool "freetype"
+@@ -347,15 +355,17 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
+ 	bool "xobjdetect"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
+ 	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	help
+ 	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
+ 	  local binary patterns computed as integral features for 2D
+ 	  object detection.
+ 
+-comment "xobjdetect needs a glibc or musl toolchain"
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
++comment "xobjdetect needs a glibc or musl toolchain w/ gcc >= 8"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
+ 	bool "xphoto"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
