@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5470AD2F32D
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A630D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A193403DF;
-	Tue, 13 Jan 2026 19:41:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71EA4408D0;
+	Tue, 13 Jan 2026 19:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4j727mbCl0Jn; Tue, 13 Jan 2026 19:41:25 +0000 (UTC)
+ id PK6x2XOhQ3TY; Tue, 13 Jan 2026 19:41:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B59840813
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 921AD40955
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333285;
-	bh=EGIX7yhS6v696pVnNyvkb0W0bUltjEbLeJkwybyKSGw=;
+	s=default; t=1768333287;
+	bh=dwJNUYHr6nWW2HMhSYLtfHwESN/N1U+uiVp8mThI5YM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XKtQc3m8z1iv3QIJkCugFzVphWdGDldsfNvxZGiTzW+Jue/afDz7M9fVMovfXacwJ
-	 dUj9iS5UHYSw7ICw9JTBIGfPYmxQmjpgKWlOC1vu/iYB1WvPeqoreOGL+ydCqHRAez
-	 efD3bOxddtWytqmEkfjUVkyrTawYj51gfgeyQ18FbCKjA+QRlH2s1xZR+zbtvhaG1c
-	 qCiiYsg6ssi6QuWPpSzFwlBjlUyDKsBKci/EVjzfW0j8h3p50cyeK3uJTqGRKV+aM5
-	 uEXbJy4njOwV9994Sc8QujDBk+776Z6MW4rXe6ugab8TiJQZhUNhPnuOKkHmvUSt+U
-	 kKKG3TTkoSD5Q==
+	b=TPvg/MWKwoWP/GjMOYDCQ6fEJCLZbFy/8SCmrxiaBLyUM2/QrZSbHd1TpjcuJ3nzz
+	 PYc3AOYRHBGluLXGi5FC8DTHCS4QrS+JrCuhFldps/5cRjXPt/f/88ufJGgj/dFYQs
+	 Hr6eoZI2wmaVgIHQmKEJGV+EoJKjvwI/sd7MTo9rP9cjHNU3KPZXZ4S/6m58xA6qpF
+	 7lyl7g03e0QCYybdxt1NbEeyQ2u/U1/6BikGeVnlTBW9rcbc0C0dJphoEyuuSSFrme
+	 o7Wda7/SttlpG6buzG5b40lWPPunHv4u8uEUTReA1np1mBJjinJwQD1cbOs3rr+MAw
+	 cobO4/qDtPxtA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B59840813;
-	Tue, 13 Jan 2026 19:41:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 139FB2CC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 921AD40955;
+	Tue, 13 Jan 2026 19:41:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 285FA231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21385406E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 39BBD82E95
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YDv5TqZzbpyi for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sUCIrEXMdoy8 for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:40:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AC44406DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8709882C7C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6AC44406DC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8709882C7C
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6964880840; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
+ id 8408986E70; Tue, 13 Jan 2026 19:40:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 17:03:12 +0100
+Date: Fri, 9 Jan 2026 16:04:19 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 279b5fd4c05d906402fe8f603992cf7487e42e97
-X-Git-Newrev: cc96e9214a2af1b26b45469e663d9fadea446f1b
+X-Git-Oldrev: 6f5c8638c1200df34cdc465102557628a5df439a
+X-Git-Newrev: c4958f7b985fa035da30c42b988a8202764baf99
 X-Patchwork-Hint: ignore
-Message-Id: <20260113194034.6964880840@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/fio: fix build
+Message-Id: <20260113194032.8408986E70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/glibc: remove
+ stale IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,73 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc96e9214a2af1b26b45469e663d9fadea446f1b
+commit: https://git.buildroot.net/buildroot/commit/?id=c4958f7b985fa035da30c42b988a8202764baf99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-Buildroot commit 215133c0fc2819f059fbb35071ab2e0987f5107d bumped fio from
-3.38 to 3.41. Upstream commit
-https://github.com/axboe/fio/commit/4175f4dbec5d1d9e5e0490026e98b1806188e098
-was added to fio 3.40 including FALLOC_FL_ZERO_RANGE which causes build
-errors.
+The IGNORE_CVES entries introduced in [1] no longer match to the glibc
+package following the bump to v2.42 in [2]. The version boundaries
+specified on the NVD DB are specific to 2.40 & 2.41.
 
-Added upstream commit which not only fixes musl builds but also uclibc.
+The CVE-2025-8058 though don't have any information available on the NVD
+DB and will remain on the IGNORE_CVES then.
 
-Fixes:
-musl: https://autobuild.buildroot.net/results/8e9/8e946c7104be0295a9a2b946fe4a82bba0e28db8/
-uclibc: https://autobuild.buildroot.net/results/ece/ece6ff1b20fa3482a88ffb3a6167b2bba9b06101/
+[1] feaf53585a package/glibc: security bump to version 2.41-70
+[2] fb6256c0ef package/{glibc, localdef}: bump to version 2.42
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8ba59c12e9190772bfbf25374fe6a66611b43a79)
+(cherry picked from commit 6fc37d7c6e8320679eff6bf7a602e3bd5b486e6b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/fio/0001-fix-musl-builds.patch | 38 ++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/glibc/glibc.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/fio/0001-fix-musl-builds.patch b/package/fio/0001-fix-musl-builds.patch
-new file mode 100644
-index 0000000000..16c3d3836d
---- /dev/null
-+++ b/package/fio/0001-fix-musl-builds.patch
-@@ -0,0 +1,38 @@
-+From ccce76d2850d6e52da3d7986c950af068fbfe0fd Mon Sep 17 00:00:00 2001
-+From: Arthur Gautier <arthur.gautier@arista.com>
-+Date: Sat, 13 Dec 2025 20:07:11 -0800
-+Subject: [PATCH] fix musl builds
-+
-+This commit fixes the build on musl which fails with the following
-+error:
-+```
-+oslib/linux-blkzoned.c: In function 'blkzoned_move_zone_wp':
-+oslib/linux-blkzoned.c:389:37: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
-+  389 |                 ret = fallocate(fd, FALLOC_FL_ZERO_RANGE, z->wp, length);
-+      |                                     ^~~~~~~~~~~~~~~~~~~~
-+oslib/linux-blkzoned.c:389:37: note: each undeclared identifier is reported only once for each function it appears in
-+make: *** [Makefile:501: oslib/linux-blkzoned.o] Error 1
-+make: *** Waiting for unfinished jobs....
-+```
-+
-+Signed-off-by: Arthur Gautier <arthur.gautier@arista.com>
-+
-+Upstream: https://github.com/axboe/fio/commit/ccce76d2850d6e52da3d7986c950af068fbfe0fd
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ oslib/linux-blkzoned.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/oslib/linux-blkzoned.c b/oslib/linux-blkzoned.c
-+index 78e25fca91..c45ef623de 100644
-+--- a/oslib/linux-blkzoned.c
-++++ b/oslib/linux-blkzoned.c
-+@@ -25,6 +25,7 @@
-+ #ifndef BLKFINISHZONE
-+ #define BLKFINISHZONE _IOW(0x12, 136, struct blk_zone_range)
-+ #endif
-++#include <linux/falloc.h>
-+ 
-+ /*
-+  * If the uapi headers installed on the system lacks zone capacity support,
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 924274a7d6..9c3ff7124e 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -25,12 +25,6 @@ GLIBC_CPE_ID_VENDOR = gnu
+ # allow proper matching with the CPE database.
+ GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
+ 
+-# Fixed by glibc-2.41-57-g84bdbf8a6f2fdafd3661489dbb7f79835a52da82
+-GLIBC_IGNORE_CVES += CVE-2025-5745
+-
+-# Fixed by glibc-2.41-60-g0c76c951620f9e12df2a89b2c684878b55bb6795
+-GLIBC_IGNORE_CVES += CVE-2025-5702
+-
+ # Fixed by glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
+ GLIBC_IGNORE_CVES += CVE-2025-8058
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
