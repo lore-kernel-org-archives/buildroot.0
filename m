@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879A6D2502E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D83D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 327B682FAE;
-	Tue, 13 Jan 2026 19:37:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E5C283D19;
+	Tue, 13 Jan 2026 19:37:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B_zgFH2FlnyB; Tue, 13 Jan 2026 19:37:35 +0000 (UTC)
+ id g5d8hANFMONY; Tue, 13 Jan 2026 19:37:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D085783D52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AD0883D5D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333050;
-	bh=YJ8kSL/pD4F/1ZhU/ksqkRSTudy5bobZ14P4Lw+xfwM=;
+	s=default; t=1768333053;
+	bh=iHpA5c3TV/FdYDOq/lL80Y1tFoglCMhrRIuWPYAW9Jo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MV/7ENe6IVcVxiqi036qsa3lrbzi0PkKqsnc+QqL1UEwCCu1+fTaz2QA+uFanm1Rd
-	 e2bloWEHsqGlz9/ON+VWCaJvr0gkUl/+n11EGJnro701Xm4QsrxlSeIcnxKg90Tssk
-	 VPvlcCaAtPl8+WxITQDXPW3yoTnmw3EjGMCQbAWZRSRSEJUIhT9dyWVGN26NJM2pRc
-	 lPAAkNrQNS71EXUs2YMMf8OslQ9jNz1wzI6Jviw8t3opajV7tpW9aTFb2TStUgbZLt
-	 tbvIIEOv5STS2staEwyADb0/0Znfe+2d6wgb+pPaOQ6Fx5FABo+il+tVlDsC11dfxT
-	 f0tqgByOyKgBQ==
+	b=YEO1irlx4JZ8b6WYSw06t+cJUi7U4CC29guUVK5RXFFXKVS4ssq3GP2T1MXV/oy+B
+	 Eg0WVFzLo65jKLxGuKGHKa/0RacYSYRJAmMPu99OXFMPjC2u3Z6jSx3PcuL20gfyY4
+	 FiU1oFYUUyOX2Ad0cUUGcrMnf1u2vkBIKNrIjSbdOsZ9m/KPEjoDsB+oIzEqOPGN2z
+	 iHDwDhk/9yccNncpLE6Isy4F+049KxzmDT+FNmdxx88BUCt+Al/U5gfIWLsmwWN1dU
+	 ZRL1roeEEo2deb36JHxxrRFcYymUl9vNGiZU9N2FRceKjJiL+pq15g0PUPznqxEqQ5
+	 7Cv6WLNU6ELOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D085783D52;
-	Tue, 13 Jan 2026 19:37:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AD0883D5D;
+	Tue, 13 Jan 2026 19:37:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D4333231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 155491C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A24D44054B
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 181E94056A
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UqTmzSGXMCUk for <buildroot@buildroot.org>;
+ id YKzQFFQ0MThd for <buildroot@buildroot.org>;
  Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 057704056E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD9E440409
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 057704056E
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD9E440409
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01D4B86184; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
+ id BCFB686184; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 18:23:21 +0100
+Date: Fri, 9 Jan 2026 18:23:12 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5b550746bccb21592d18bba2c9e9bf8d0858bc6f
-X-Git-Newrev: 997ee1124deeaa4392d950d454cdb0a68e46fcbb
+X-Git-Oldrev: 7dd431c0d82ff363c64fe181a8b1b0419d29520b
+X-Git-Newrev: 5d3880e9f35edf34fafaca07bf7026a54c3ac74f
 X-Patchwork-Hint: ignore
-Message-Id: <20260113193620.01D4B86184@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/perl-dbd-mysql:
- add missing dependencies
+Message-Id: <20260113193619.BCFB686184@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/opencv4-contrib:
+ fix Config.in comments
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,54 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=997ee1124deeaa4392d950d454cdb0a68e46fcbb
+commit: https://git.buildroot.net/buildroot/commit/?id=5d3880e9f35edf34fafaca07bf7026a54c3ac74f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since commit 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 ("package/mysql:
-drop virtual package"), we no longer have mysql as a virtual package,
-and therefore perl-dbd-mysql directly selects mariadb. However,
-mariadb as stricter dependencies than what the mysql virtual package
-had, and this commit forgot to properly propagate those dependencies,
-causing a Config.in warning:
+The comments saying that dnn_objdetect and dnn_superres need a glibc
+or musl toolchain should be shown when a uClibc toolchain is selected,
+not when a toolchain NOT using uClibc is selected (as this is exactly
+what's needed).
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_MARIADB
-  Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && (BR2_TOOLCHAIN_HAS_ATOMIC [=y] || BR2_TOOLCHAIN_HAS_SYNC_8 [=n]) && BR2_USE_WCHAR [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_PERL_DBD_MYSQL [=y] && BR2_PACKAGE_PERL [=y] && !BR2_STATIC_LIBS [=n] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
-
-Fixes: 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 ("package/mysql: drop virtual package")
+Fixes: a2e01b23fc441a4be4416e68d91e331e00db3bbd ("package/opencv-contrib: propagate opencv4 dependencies")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 64a288e33c076300bacfdf1aa3e955a7da86ad65)
+(cherry picked from commit 3b84ec3ee24d0000be339b66b1f1f93735d8757f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/perl-dbd-mysql/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/opencv4-contrib/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-dbd-mysql/Config.in b/package/perl-dbd-mysql/Config.in
-index b430e44027..cd75c9d18b 100644
---- a/package/perl-dbd-mysql/Config.in
-+++ b/package/perl-dbd-mysql/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
- 	depends on BR2_INSTALL_LIBSTDCPP # mariadb
- 	depends on BR2_USE_MMU # mariadb
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # mariadb
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mariadb
-+	depends on BR2_USE_WCHAR # mariadb
- 	select BR2_PACKAGE_MARIADB
- 	select BR2_PACKAGE_PERL_DBI # runtime
- 	help
-@@ -11,7 +13,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
+diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
+index d992c6d1ac..ad61c3fbe8 100644
+--- a/package/opencv4-contrib/Config.in
++++ b/package/opencv4-contrib/Config.in
+@@ -84,7 +84,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
  
- 	  http://dbi.perl.org/
+ comment "dnn_objdetect needs a glibc or musl toolchain"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
  
--comment "perl-dbd-mysql needs a toolchain w/ dynamic library, C++, threads"
-+comment "perl-dbd-mysql needs a toolchain w/ dynamic library, wchar, C++, threads"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
+ 	bool "dnn_superres"
+@@ -97,7 +97,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
+ 
+ comment "dnn_superres needs a glibc or musl toolchain"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
+ 	bool "dnns_easily_fooled"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
