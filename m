@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC41FD2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879A6D2502E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE3DA83D20;
-	Tue, 13 Jan 2026 19:37:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 327B682FAE;
+	Tue, 13 Jan 2026 19:37:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qlrokix-VWwI; Tue, 13 Jan 2026 19:37:33 +0000 (UTC)
+ id B_zgFH2FlnyB; Tue, 13 Jan 2026 19:37:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9309D83D25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D085783D52
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333049;
-	bh=hKhLT02FJRu11NiCeN5d2F3IMLm/cytyxB2+PEqgOyY=;
+	s=default; t=1768333050;
+	bh=YJ8kSL/pD4F/1ZhU/ksqkRSTudy5bobZ14P4Lw+xfwM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=i7FIHZulFAOy565cY7BvzqFvfr9B05zwkYl8iqiNIk95JeYkqaJYjgJi0A6f8LuDq
-	 TnRPd7Z5dOo2rSmzEcFORGjg4J44djXlUp9Z5X72EuDo/pX/NLod0CKOeOMTqXnVwv
-	 PJJmySPfyiX0GKDoVF1IuIsUl2h+ic1dd5Da+Fmshq9NAKXRwPdOP0QKdGUvI+yN5E
-	 R3k/ZzXjbd4UltwXuSLBCngd7/gLonQAt2gdlmOU4LA8JQvvYr9pmOOr/YCO0cNTzJ
-	 kFSf90+eyU6CfrLT1GRakfMEO7YPDgTWaUrwffXFRxmMX5ZgULOXGWGFTaiJH2+RlA
-	 wc9zAm0It3gEg==
+	b=MV/7ENe6IVcVxiqi036qsa3lrbzi0PkKqsnc+QqL1UEwCCu1+fTaz2QA+uFanm1Rd
+	 e2bloWEHsqGlz9/ON+VWCaJvr0gkUl/+n11EGJnro701Xm4QsrxlSeIcnxKg90Tssk
+	 VPvlcCaAtPl8+WxITQDXPW3yoTnmw3EjGMCQbAWZRSRSEJUIhT9dyWVGN26NJM2pRc
+	 lPAAkNrQNS71EXUs2YMMf8OslQ9jNz1wzI6Jviw8t3opajV7tpW9aTFb2TStUgbZLt
+	 tbvIIEOv5STS2staEwyADb0/0Znfe+2d6wgb+pPaOQ6Fx5FABo+il+tVlDsC11dfxT
+	 f0tqgByOyKgBQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9309D83D25;
-	Tue, 13 Jan 2026 19:37:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D085783D52;
+	Tue, 13 Jan 2026 19:37:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C23451C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D4333231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC06140302
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A24D44054B
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQNrEPOQdQ3U for <buildroot@buildroot.org>;
+ id UqTmzSGXMCUk for <buildroot@buildroot.org>;
  Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA95E403FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 057704056E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA95E403FE
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 057704056E
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D9F8186184; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
+ id 01D4B86184; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 18:23:17 +0100
+Date: Fri, 9 Jan 2026 18:23:21 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3edb679ccd2caded8173aa02aeede00a1282b0f7
-X-Git-Newrev: 12a5bd91eb11b7fcf82c9eac73655806696f9323
+X-Git-Oldrev: 5b550746bccb21592d18bba2c9e9bf8d0858bc6f
+X-Git-Newrev: 997ee1124deeaa4392d950d454cdb0a68e46fcbb
 X-Patchwork-Hint: ignore
-Message-Id: <20260113193619.D9F8186184@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libgtk4: add
- missing dependency for BR2_PACKAGE_LIBGTK4_GSTREAMER
+Message-Id: <20260113193620.01D4B86184@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/perl-dbd-mysql:
+ add missing dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12a5bd91eb11b7fcf82c9eac73655806696f9323
+commit: https://git.buildroot.net/buildroot/commit/?id=997ee1124deeaa4392d950d454cdb0a68e46fcbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Back when the libgtk4 package was introduced in commit
-faf2a1d2abfbff79fc0603def835066587144420, its
-BR2_PACKAGE_LIBGTK4_GSTREAMER option did not properly propagate the
-dependencies of BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL, causing the
-following Config.in warning:
+Since commit 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 ("package/mysql:
+drop virtual package"), we no longer have mysql as a virtual package,
+and therefore perl-dbd-mysql directly selects mariadb. However,
+mariadb as stricter dependencies than what the mysql virtual package
+had, and this commit forgot to properly propagate those dependencies,
+causing a Config.in warning:
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-  Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BASE [=y] && (BR2_PACKAGE_HAS_LIBGL [=n] || BR2_PACKAGE_HAS_LIBGLES [=n])
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_MARIADB
+  Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && (BR2_TOOLCHAIN_HAS_ATOMIC [=y] || BR2_TOOLCHAIN_HAS_SYNC_8 [=n]) && BR2_USE_WCHAR [=n]
   Selected by [y]:
-  - BR2_PACKAGE_LIBGTK4_GSTREAMER [=y] && BR2_PACKAGE_LIBGTK4 [=y]
+  - BR2_PACKAGE_PERL_DBD_MYSQL [=y] && BR2_PACKAGE_PERL [=y] && !BR2_STATIC_LIBS [=n] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
 
-Fix that by properly propagating the dependency.
-
-Fixes: faf2a1d2abfbff79fc0603def835066587144420 ("package/libgtk4: new package")
+Fixes: 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 ("package/mysql: drop virtual package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d0034ff96531b8993ed591323e37d0c1dec4de48)
+(cherry picked from commit 64a288e33c076300bacfdf1aa3e955a7da86ad65)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libgtk4/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/perl-dbd-mysql/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
-index 99553fc44e..8c01ffd535 100644
---- a/package/libgtk4/Config.in
-+++ b/package/libgtk4/Config.in
-@@ -84,6 +84,7 @@ config BR2_PACKAGE_LIBGTK4_X11
- 
- config BR2_PACKAGE_LIBGTK4_GSTREAMER
- 	bool "gstreamer support"
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-@@ -91,6 +92,9 @@ config BR2_PACKAGE_LIBGTK4_GSTREAMER
+diff --git a/package/perl-dbd-mysql/Config.in b/package/perl-dbd-mysql/Config.in
+index b430e44027..cd75c9d18b 100644
+--- a/package/perl-dbd-mysql/Config.in
++++ b/package/perl-dbd-mysql/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP # mariadb
+ 	depends on BR2_USE_MMU # mariadb
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mariadb
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mariadb
++	depends on BR2_USE_WCHAR # mariadb
+ 	select BR2_PACKAGE_MARIADB
+ 	select BR2_PACKAGE_PERL_DBI # runtime
  	help
- 	  Enable gstreamer support.
+@@ -11,7 +13,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
  
-+comment "gstreamer support needs an OpenGL or OpenGL ES backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
-+
- config BR2_PACKAGE_LIBGTK4_DEMO
- 	bool "Install libgtk4 demo/example programs"
- 	select BR2_PACKAGE_SHARED_MIME_INFO
+ 	  http://dbi.perl.org/
+ 
+-comment "perl-dbd-mysql needs a toolchain w/ dynamic library, C++, threads"
++comment "perl-dbd-mysql needs a toolchain w/ dynamic library, wchar, C++, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
