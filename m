@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF37DD2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E4ED2502E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:36:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3EB68382F;
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE2AE60D5F;
+	Tue, 13 Jan 2026 19:36:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aY3EBDGOUZrF; Tue, 13 Jan 2026 19:36:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11DC60BFB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768333017;
+	bh=aZYxIbcTuvwXcZHCAhTUB+5pDoGDqFKLpKpjdomUzDU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ZJ53t8w7l6z3ULiHxJohJQQzSlkSA6FlgPDrmGdBpVUZLr0e86pkdcQ9h4FwtRmKH
+	 PcMOxsE2RKFZPTmHFmF12kBG9wCMTiq1XSp7t728FIhrRblYLkZfnbfAWCEAInmH3p
+	 AeUH/evITkpLVJXy5fl0cfdvGITavbzLKdP+A3Px3/Ga3ouOPAJ28avIcIBL35OG/9
+	 YMH1oIXX9bQfG8wWkYb54dd55mWxy9DpFLYn8uq7d1TRQWThw+mXzwT8lBX9wpO3oX
+	 vj27Zj8wxjWlTXBD82iCkgWULbrMUr5IS4AmMa7ANBrOwbeGpIoEY+AcfykgUsioAe
+	 a9gYQaRIaXK4A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E11DC60BFB;
 	Tue, 13 Jan 2026 19:36:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 089FE2CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8BE2382BF5
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yELx9roVd0Kb; Tue, 13 Jan 2026 19:36:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E679837CD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333015;
-	bh=HH9NpJRvvwH2ygTghVFHuPnuJ/MYvxJavY+m4MyP098=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fE/7/vHTFoAjHCNJeX2acs0254JbXylitJCgbiJlkltIg4BArlpI4OTaaKU3pkw/+
-	 UeSNqBZLXl70IUrRI5I80MouwFu2Upd9b6jFDfFhKvEUSIdjvRzUZgzXl7Z+vAWdZ7
-	 IRJTzHuZ702KR+rlmqkeY3mmJSzS+Eua0aM+DCwJ/6/0ri359UPM4PHQdNcfjiXhSr
-	 Vx5l2hOjSPVg9ahDwnNszP6Zu4Ys9IpI2UbqWQphrP/BqzxMDSNxD4KjTPGaN4HjyB
-	 oKJA7cDfLsMK2lkAd1RhS7+nSP3mfnPpQQQexH8KIozslSHCRUa6rKoQVP1IQlEJj6
-	 oPLTYosLMRbyg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E679837CD;
-	Tue, 13 Jan 2026 19:36:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id F2D8E1C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B8C44050C
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4_IFmiPlhACy for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
+ id hyZHxmc-XdOi for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57CA9404C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A2B082BE5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57CA9404C7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A2B082BE5
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5609580FAC; Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
+ id 883168123D; Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 16:17:24 +0100
+Date: Fri, 9 Jan 2026 16:21:48 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3d13a6de73459a9b468f484ce04b97d50ccc8f00
-X-Git-Newrev: fdfd19dc15db492a55d7b2dc2618ff9ec3cd336a
+X-Git-Oldrev: f777594d19f696f8e5361afde1fc34a4114b1e3b
+X-Git-Newrev: 9a4ef6c282363bc9d349b177596e2b064223f30d
 X-Patchwork-Hint: ignore
-Message-Id: <20260113193618.5609580FAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/qt5/qt5webkit:
- fix gcc >= 14.x build issue
+Message-Id: <20260113193618.883168123D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/rpi-firmware:
+ drop support for vcdbg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,85 +72,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1508057193089420249=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdfd19dc15db492a55d7b2dc2618ff9ec3cd336a
+--===============1508057193089420249==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9a4ef6c282363bc9d349b177596e2b064223f30d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Add another patch from Fedora, also used in Arch Linux to fix a gcc >=
-14.x build issue:
+This tool has been removed from upstream rpi-firmware, so drop the
+corresponding option and logic in rpi-firmware.mk.
 
-build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
-  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
-condition for static assertion
- 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
-      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+The tool has been removed by upstream commit
+d1fcc26038186aecc1501a0b749833300afba801 ("opt: Remove builds of
+deprectated userland tools").
 
+It is Buildorot commit
+28e6953ba84d39a6074aee439a64ef86b109dcf0 ("package/rpi-firmware: bump
+version to 5476720") that did a bump to a version of rpi-firmware that
+no longer provided vcdbg.
+
+Cc: Köry Maincent <kory.maincent@bootlin.com>
+Cc: Gaël PORTAY <gael.portay@rtone.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b79eb5a28f50b54078eff5c92fb2c00ac05a2882)
+(cherry picked from commit f53a1af56b8cedda58038413cbb9e621ab01705a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...ore-page-csp-ContentSecurityPolicy.cpp-fi.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ Config.in.legacy                     |  6 ++++++
+ package/rpi-firmware/Config.in       | 12 ------------
+ package/rpi-firmware/rpi-firmware.mk | 20 --------------------
+ 3 files changed, 6 insertions(+), 32 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
-new file mode 100644
-index 0000000000..ab6137dd28
---- /dev/null
-+++ b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
-@@ -0,0 +1,45 @@
-+From 286e0280a55949d62b2163d68c827539c141d487 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 28 Dec 2025 18:35:45 +0100
-+Subject: [PATCH] Source/WebCore/page/csp/ContentSecurityPolicy.cpp: fix build
-+ with gcc >= 14.x
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 598cd9c0ef..9416e9d114 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2025.02.10"
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
++	bool "rpi-firmware vcdbg option removed"
++	select BR2_LEGACY
++	help
++	  rpi-firmware upstream has dropped the vcdbg tool
 +
-+Fixes:
-+
-+/home/thomas/buildroot/br/output-all/build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
-+  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-+      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-+/home/thomas/buildroot/br/output-all/host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
-+condition for static assertion
-+ 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
-+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Patch used in Fedora and Arch Linux:
-+
-+  https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/rawhide/f/qtwebkit-fix-build-gcc14.patch
-+  https://aur.archlinux.org/packages/qt5-webkit
-+
-+Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Source/WebCore/page/csp/ContentSecurityPolicy.cpp | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-+index 9e726d5fe10c..989a59a6122f 100644
-+--- a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-++++ b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-+@@ -231,8 +231,9 @@ bool isAllowedByAllWithHashFromContent(const CSPDirectiveListVector& policies, c
-+         auto cryptoDigest = CryptoDigest::create(toCryptoDigestAlgorithm(algorithm));
-+         cryptoDigest->addBytes(contentCString.data(), contentCString.length());
-+         Vector<uint8_t> digest = cryptoDigest->computeHash();
-++        ContentSecurityPolicyHash hash = std::make_pair(algorithm, digest);
-+         for (auto& policy : policies) {
-+-            if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-++            if ((policy.get()->*allowed)(hash))
-+                 return true;
-+         }
-+     }
-+-- 
-+2.52.0
-+
+ config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
+ 	bool "opencv3 ffmpeg support removed"
+ 	select BR2_LEGACY
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index f99c116ca2..4dda33a713 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -100,16 +100,4 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	  overlays, to support HATs (Hardware Attached on Top, add-on
+ 	  modules).
+ 
+-config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+-	bool "vcdbg"
+-	depends on BR2_arm # prebuilt arm binary, rpi-userland
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
+-	help
+-	  Install vcdbg, to help debug communication with the GPU.
+-
+-comment "vcdbg needs a glibc toolchain w/ C++"
+-	depends on BR2_arm
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
+-
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 8350d395da..0debb89091 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -62,26 +62,6 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ endef
+ endif
+ 
+-# Install prebuilt libraries if RPI_USERLAND not enabled
+-ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-define RPI_FIRMWARE_INSTALL_TARGET_LIB
+-	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libvcos.so \
+-		$(TARGET_DIR)/usr/lib/libvcos.so
+-	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libdebug_sym.so \
+-		$(TARGET_DIR)/usr/lib/libdebug_sym.so
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+-define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
+-		$(TARGET_DIR)/usr/sbin/vcdbg
+-	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libelftoolchain.so \
+-		$(TARGET_DIR)/usr/lib/libelftoolchain.so
+-	$(RPI_FIRMWARE_INSTALL_TARGET_LIB)
+-endef
+-endif # INSTALL_VCDBG
+-
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(RPI_FIRMWARE_INSTALL_BIN)
+ 	$(RPI_FIRMWARE_INSTALL_CONFIG)
+
+--===============1508057193089420249==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1508057193089420249==--
