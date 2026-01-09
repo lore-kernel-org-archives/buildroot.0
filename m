@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A6EBD2F32D
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B679D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:37:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB67A60D69;
-	Tue, 13 Jan 2026 19:37:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AF9B83A41;
+	Tue, 13 Jan 2026 19:37:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l1aQJSjcsRIa; Tue, 13 Jan 2026 19:37:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GFTiLmHirWAd; Tue, 13 Jan 2026 19:37:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DC3260D57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 617B083916
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333024;
-	bh=WkoJOPe7Hap42kX5NzqhXUWKAULNzDeld2gUv0++oZY=;
+	s=default; t=1768333026;
+	bh=W+dKkptWs+jtEJhqCaJ0WEP5tw5Yrqb0ZWNeCDjj+MM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HWiTwermTTOFrG2OVhOpOaG/Z5ejG/HfIpqYPZUscp1sw81TGfqA0UW1+8yo2vEYw
-	 3Mi/St6hHIzG6RL4nY2LoyBm6eowK9r+PnN+kFaFb/ReppQnpHkFg69UroHVaK3RG9
-	 2QC3X919fgcv3AWye2eqfxJTv0ow20HrRmePVV9JW/bPmI3eas+xvPvLH1ETU7KCBQ
-	 NMHRuE70qyaQy5R/dsg7UldG7FfxauC5ECyAWpU0ufd78bAuuYLYZ/XK/yaGkHkkM+
-	 TBOGPspjnDQAMkL9AxF5Apeuwbp2h2viv2veVjPEh3HvxxugAxPhDH8htL0kq7vX/K
-	 Yzq2xk6VjxK2A==
+	b=AkUBLLZtCmblo8OzeQhgPTEs1cJD1VRU/5TA8nCAu1e2Mym4DjJUTzbrdvRbBK5EF
+	 31eYIVx7P3IRPlp6VHqz9iQFQ8/XyEwBbAXHJXNzICRWepo66+olPn/rjtE/mT5/p6
+	 yNCVh+xa+cW5uXDj1/ERND+jwulOQKLidJ+Uv4hczjccEpv6Mc+ZuPdRxJPUmL8gRj
+	 c9Cia5hSb4y3s92ELO8CG7gGtGVdEpz+reyp+Y65Ud9M82Q1gRW/Hy0eVUAu8x6T1T
+	 n2WBMOFQbkHx/h7UzX+NfqhDxMb9DPCHsmYV3B4GkrgrRUpKjzAeUN5CoGOT1LKtEp
+	 r/Arh/+h06jCw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DC3260D57;
-	Tue, 13 Jan 2026 19:37:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 617B083916;
+	Tue, 13 Jan 2026 19:37:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 274D32CC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F3A591C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C3E94056F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6BA6404EB
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VVM1lgxVe0Gb for <buildroot@buildroot.org>;
+ id BWvpFI2ScuBt for <buildroot@buildroot.org>;
  Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6CED404EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D8B74037A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6CED404EB
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D8B74037A
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5F948197D; Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
+ id 4CE8E86184; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 16:28:07 +0100
+Date: Fri, 9 Jan 2026 16:58:08 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6bfb1a51c4fcb7bdf0da082a10c501bdac0dabd3
-X-Git-Newrev: 5826d197fb6bc131a58175ebdb18c31ac0967260
+X-Git-Oldrev: 8d47bca9a5a06e5b524eb29cd0e3fcddf01de4cc
+X-Git-Newrev: f3490f35fb929e62100a4bc29ecdefb9b242a3b7
 X-Patchwork-Hint: ignore
-Message-Id: <20260113193618.D5F948197D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dbus: rewrite and
- rename SysV init script
+Message-Id: <20260113193619.4CE8E86184@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/fontconfig:
+ disable doc and tests for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,198 +77,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5826d197fb6bc131a58175ebdb18c31ac0967260
+commit: https://git.buildroot.net/buildroot/commit/?id=f3490f35fb929e62100a4bc29ecdefb9b242a3b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This brings the script in line with current standards, except the
-expected PIDFILE value because changing the PID file path would
-require changing build options.
+On Debian 13 doc generation fails. Disable it like for
+the target.
 
-The stop action now uses the PID file instead of "killall", and reload
-is supported using SIGHUP (with limitations described in D-Bus
-documentation). "--syslog" is added to the dbus-daemon arguments to
-ensure log messages will be available, otherwise log messages after
-fork may be lost.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f51a4752801860fff5749b03d145b6d41e3283b6)
+(cherry picked from commit 20f31f90ad55b3e0654b6bc1b1ed76e7a1e6032e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore         |  1 -
- package/dbus/S30dbus        | 58 ------------------------------------
- package/dbus/S30dbus-daemon | 71 +++++++++++++++++++++++++++++++++++++++++++++
- package/dbus/dbus.mk        |  4 +--
- 4 files changed, 73 insertions(+), 61 deletions(-)
+ package/fontconfig/fontconfig.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0501de75ab..c24cb3db64 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -324,7 +324,6 @@ package/davfs2/0001-src-Makefile.am-do-not-hardcode-fstack-protector-str.patch l
- package/dbus-cpp/0001-gcc4.7.patch lib_patch.Upstream
- package/dbus-cpp/0002-cross-compile-tools.patch lib_patch.Upstream
- package/dbus-cpp/0003-src-pipe.c-fix-build-error-with-gcc-7.x.patch lib_patch.Upstream
--package/dbus/S30dbus Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/dc3dd/0001-no_man.patch lib_patch.Upstream
- package/dc3dd/0002-fix-autoreconf.patch lib_patch.Upstream
- package/dc3dd/0003-fix-for-glibc-2.28.patch lib_patch.Upstream
-diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-deleted file mode 100644
-index da02609f2d..0000000000
---- a/package/dbus/S30dbus
-+++ /dev/null
-@@ -1,58 +0,0 @@
--#!/bin/sh
--#
--# messagebus:   The D-BUS systemwide message bus
--#
--# chkconfig: 345 97 03
--# description:  This is a daemon which broadcasts notifications of system events \
--#               and other messages. See http://www.freedesktop.org/software/dbus/
--#
--# processname: dbus-daemon
--# pidfile: /run/messagebus.pid
--#
--
--# Create needed directories.
--[ -d /run/dbus ] || mkdir -p /run/dbus
--[ -d /tmp/dbus ] || mkdir -p /tmp/dbus
--
--RETVAL=0
--
--start() {
--    printf "Starting system message bus: "
--
--    dbus-uuidgen --ensure
--    dbus-daemon --system
--    RETVAL=$?
--    echo "done"
--}
--
--stop() {
--    printf "Stopping system message bus: "
--    killall dbus-daemon
--    RETVAL=$?
--    echo "done"
--    if [ $RETVAL -eq 0 ]; then
--        rm -f /run/messagebus.pid
--    fi
--}
--
--# See how we were called.
--case "$1" in
--    start)
--        start
--        ;;
--    stop)
--        stop
--        ;;
--    restart)
--        stop
--        start
--        ;;
--    reload)
--        echo "Message bus can't reload its configuration, you have to restart it"
--        RETVAL=$?
--        ;;
--    *)
--        echo "Usage: $0 {start|stop|restart|reload}"
--        ;;
--esac
--exit $RETVAL
-diff --git a/package/dbus/S30dbus-daemon b/package/dbus/S30dbus-daemon
-new file mode 100644
-index 0000000000..3331b11ced
---- /dev/null
-+++ b/package/dbus/S30dbus-daemon
-@@ -0,0 +1,71 @@
-+#!/bin/sh
-+
-+DAEMON="dbus-daemon"
-+# check-package lib_sysv.Variables
-+PIDFILE="/run/messagebus.pid"
-+
-+start() {
-+	printf 'Starting system %s: ' "$DAEMON"
-+	# Create needed directories
-+	mkdir -p /run/dbus
-+	mkdir -p /tmp/dbus
-+	# Generate /var/lib/dbus/machine-id if needed
-+	dbus-uuidgen --ensure
-+
-+	start-stop-daemon --start --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON" \
-+		-- --system --syslog
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+reload() {
-+	printf "Reloading %s config: " "$DAEMON"
-+	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|reload|restart)
-+		"$1"
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+		;;
-+esac
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 2002e707f0..061a341363 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -93,8 +93,8 @@ endef
- DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 7ac8872e82..ea29c41189 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -16,6 +16,10 @@ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ FONTCONFIG_CPE_ID_VALID = YES
  
- define DBUS_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/dbus/S30dbus \
--		$(TARGET_DIR)/etc/init.d/S30dbus
-+	$(INSTALL) -m 0755 -D package/dbus/S30dbus-daemon \
-+		$(TARGET_DIR)/etc/init.d/S30dbus-daemon
- 
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
++HOST_FONTCONFIG_CONF_OPTS = \
++	-Dtests=disabled \
++	-Ddoc=disabled
++
+ FONTCONFIG_CONF_OPTS = \
+ 	-Dcache-dir=/var/cache/fontconfig \
+ 	-Dtests=disabled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
