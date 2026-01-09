@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 017FBD2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8148CD2502E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAC2B60BEA;
-	Tue, 13 Jan 2026 19:36:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5517583443;
+	Tue, 13 Jan 2026 19:36:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j8-q-nDK65pg; Tue, 13 Jan 2026 19:36:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MAGDKH-2ZnHC; Tue, 13 Jan 2026 19:36:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E92A160BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7CD83419
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333006;
-	bh=TmCMA2ycFwPkyY6sW76rpKl5vNUXABaRGODzyOru8NA=;
+	s=default; t=1768333007;
+	bh=iqTn7LEayzYkspOhOkvM9+mxb7DRwiscGlvWWpxop+Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TaqRoJvYKluVWpJUGy69vjLeru8Z63dOPGCN1SdgZl+ortiKAxwKJQVNeOrmR2beg
-	 6MrxZjCcmjRQpiXkOhGZjQIR294HCvSDtzdw6X5wQ0U7x5RTi1o/PYCyZjCRttWo61
-	 Hu2ifMBwE3R+g3OEOxSIMptpclZ9kEe4C+KcUKbBWBWeCvvc4WJjsIbPtw9PDL6fCL
-	 x2QRDLCBIw4ghqr9cBxCjMs5eNKZwvMma1FaRyYzVm9uZHaYb6viC9UNnWAhbljYy/
-	 5Hoc55gJhEbgUqcqm6A5kqaQpp1glvtRp1thVu0IbtTMPgjzbWeqxqGVkVy45+Cin4
-	 2BrDB0LDSXnaA==
+	b=mqbpIKw3r8CJkH2m7ILlFdsm27YG0fLyeZrgips28WIixjQwtI6fWNel99qgRfTJF
+	 1oOXli5blbMvbTAcSbI1r9DFAoYWL6y3tOBKvSTO3hpgIGItDyQ4RP1O7Skwd/i2AP
+	 z+1gQ8k9FqWn7hNn+rdYtiEMG24q4dlHuh1msSRwBz3/cGSNb6OucG+tEGE3j0/6dN
+	 SbYiMrowlAj8tjtdtDQZGHFPdHVgOffzBkjnBo9mY/ma1DQ0IS28aGyo6YMRyUEPcV
+	 snks0jFiE2I8ksBlspAcw/gZKaMbQb+wfIuebvxR+Jv4kzL2ffIC0wblQ29+Etufo9
+	 bgz7Xh1w/+2GQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E92A160BF2;
-	Tue, 13 Jan 2026 19:36:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 323E0231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA7CD83419;
+	Tue, 13 Jan 2026 19:36:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05BEE1C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCA7C4056B
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B4DE82D75
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mS7aKQwW9I37 for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:36:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YWJb6Ps9Ao_v for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2424E403FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61CC382CE4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2424E403FE
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61CC382CE4
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15FDC8854B; Tue, 13 Jan 2026 19:36:17 +0000 (UTC)
+ id 606A186E71; Tue, 13 Jan 2026 19:36:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 16:02:40 +0100
+Date: Fri, 9 Jan 2026 17:00:34 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 34399ef8c270caef1235405f2427c0b4edfec58a
-X-Git-Newrev: f7dec4b0d2a85bfda308ee6f0461b992051a14ba
+X-Git-Oldrev: 4288f056cb6b2cab982bfcd8baa96c0cd8208363
+X-Git-Newrev: 1de40783e078d032a0dcbfc39e3e76b0f224a2d3
 X-Patchwork-Hint: ignore
-Message-Id: <20260113193617.15FDC8854B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/liburiparser:
- security bump version to 1.0.0
+Message-Id: <20260113193619.606A186E71@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libcpprestsdk:
+ add dependency on Boost.System
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7dec4b0d2a85bfda308ee6f0461b992051a14ba
+commit: https://git.buildroot.net/buildroot/commit/?id=1de40783e078d032a0dcbfc39e3e76b0f224a2d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-https://github.com/uriparser/uriparser/blob/uriparser-1.0.0/ChangeLog
+libcpprestsdk searches for the Boost.System module in its
+CMakeLists. Hence it should be selected as a dependency.
 
-Added sha256 hash provided by upstream.
+This does not fix any build failure, as boost-system was implicitly
+selected by one of the other boost-* options that this package
+selects, but an upcoming commit is going to change how boost-system is
+selected by other boost-* modules, making this preparation change
+necessary.
 
-Fixes CVE-2025-67899.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3ef90e752b4c3eb35c2715bde8750cb9ed3005fb)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c659e0383d8f66b9bf89b5a30de89476ef48d5bc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/liburiparser/liburiparser.hash | 3 ++-
- package/liburiparser/liburiparser.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libcpprestsdk/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index bed9c8ee9b..f8d7124b7f 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.0
-+sha256  154a3f649d80a78d5095fc461ec032ffb45f5ed3619edec923ac68cff29a088d  uriparser-1.0.0.tar.xz
- # Locally calculated
--sha256  85645df1bb220a3867c42f8adeba4f6a4b2fdc1563e91ad7d9f92d14d3dd377d  uriparser-0.9.9.tar.xz
- sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index 66ec72409c..731739e582 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURIPARSER_VERSION = 0.9.9
-+LIBURIPARSER_VERSION = 1.0.0
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
+diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
+index e533b30393..7688021ed0 100644
+--- a/package/libcpprestsdk/Config.in
++++ b/package/libcpprestsdk/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_RANDOM
+ 	select BR2_PACKAGE_BOOST_REGEX
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
