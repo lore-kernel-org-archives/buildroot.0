@@ -4,86 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A31D2D277EB
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 14:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75121D277E8
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 14:07:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 675A06087A;
-	Sat, 10 Jan 2026 14:00:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 449A36084B;
+	Sat, 10 Jan 2026 14:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tsEjj4tSyiX6; Sat, 10 Jan 2026 14:00:03 +0000 (UTC)
+ id UFGxOwieNQ-e; Sat, 10 Jan 2026 14:07:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25B7560793
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 291B260793
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768053603;
-	bh=QBPAmP4j4crnsiQKaExuJoZPu9lZUSItUttO0W0o88w=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=XBemojxAE3aCZhwI3o7+d511lZ8kECtpGesHM1p1Vi9scB2+Zll+e10GOZWLRfje6
-	 o0Sp8RLErdl5Yf0wPbab5NZfb5Gb+pQwukqtONE8GYAP5Cd5Pkz2m6TNHY2JPqIJT+
-	 hmgEBcRqVzTYTS2eWdAu59B+JYz9AyZ0k5AmeqnyiEyYQy+x+RP+m11xWfxLARYeeq
-	 Dh9R1tmr1fG6/N9RHvetQtFPHVGNwz+B+G/03VmVUljI/Y/ntbYAguE72w+ZhWnrte
-	 BxTiE82ah1b6rR1VleMJB8ETSU1qG5e1nV9TnA2kMLqcDJXeGM96zzSfyjSEIg+QRC
-	 4/tRdocsR7aVA==
+	s=default; t=1768054055;
+	bh=msDhFRaGEt50IUU4tPBYiFs7VDPJ/CJbwmK8fIdf3GE=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=F1ZCQ1pTRAgRNC65ftHrFnJKXLYrKl70yhzJYhC8nXiOf3xWTeeqgMLwzyZ6M9Jt8
+	 ATwhmMQNBroJ5SKke+nbjsYnOOH5Pm0mF0G6ifFpPpOJR2xEsoXnXAnaG7stB3TM/5
+	 rcQsQOEFyqYP55OPEI3KPHe/rIpshZ3X0E38d9kULDrKxlHIHebKZEPf8vV2ngJbtb
+	 UuDCrBsE0quTLDH9j3EDSMDFNr31BLWJut21ft7Gb5el+RQvfjx6jGvkUy35zU7fLD
+	 XtMd8Q2BT4RPU0VNIk77kwDz+D5PEGYr4kRq+meOSvhDZ4ebCrckhhXqJJjlCmZ/i+
+	 ipVGWJ75gxyqw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25B7560793;
-	Sat, 10 Jan 2026 14:00:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 291B260793;
+	Sat, 10 Jan 2026 14:07:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BF612131
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 14:00:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A9D5812E
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 14:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A66E0408A6
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 14:00:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90E4140681
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 14:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7wETvLUt7BzO for <buildroot@buildroot.org>;
- Sat, 10 Jan 2026 14:00:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EB4DB408A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB4DB408A0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EB4DB408A0
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 14:00:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 92CB12003D0;
- Sat, 10 Jan 2026 14:59:56 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 10 Jan 2026 14:59:55 +0100
+ id JZ1_NBBRw8Gt for <buildroot@buildroot.org>;
+ Sat, 10 Jan 2026 14:07:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2A9CA40613
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A9CA40613
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A9CA40613
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 14:07:29 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 1143B31E0067; Sat, 10 Jan 2026 15:07:27 +0100 (CET)
+Date: Sat, 10 Jan 2026 15:07:27 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <aWJdHyFAsJcw6JYP@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Date: Sat, 10 Jan 2026 14:59:55 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Michael Trimarchi
- <michael@amarulasolutions.com>, linux-amarula@amarulasolutions.com
-In-Reply-To: <20260110112255.190445-1-dario.binacchi@amarulasolutions.com>
-References: <20260110112255.190445-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <5ef5e4683a6c89c42cf4f6378fca0771@free.fr>
-X-Sender: ju.o@free.fr
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.57+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1768053599;
- bh=iCTAw4wTNSq/uLlooYKM1xWw87Q1LlQPa465GVOZW50=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Liwag4dPnIiUgNtE5HjPJTdJOXFNvYvEeboX0QfKKPW5Orpj9bmvq6FersRS9v8Se
- 8x1E7Vi9sAlwJ3Gp/W/m0IKJbwvYM5k1J6xZBLC2EJ9vvZYGD+dGZ1cMMHKT16ej3T
- 2OrwTfGlgi2XNDhLRyMzsFKgBRaKV47str7bnMrUw13+PZdmBGQkHC6KLBTBwhtdOd
- D0RX7JigWncdquW/wEm0/G80nRb7hZI5VL5BBlxW5XXDQr1ZJntibkS52QQniJq0qx
- qEVCpe3miDnaoN22FNyT6ffNRwoSD4oWuMcWDdMV+DwSgWsjMAPKtE+qE0u9DAtgj5
- D8QDAWV7gL69A==
+ d=openadk.org; s=2022; 
+ t=1768054048; bh=ZK3KAioVMRr0NoHTZwUWN9Xz9lH381QXQuIIGqCLh/c=;
+ h=Date:From:To:Subject:From;
+ b=E4ZLQk95KA/cp48WdsPFESdnimR+LUPejDDY7eajonDVuDgA6sA5lMY1lT+/10dGU
+ 46fGMIrT5dWCWc0nSX44Ot4tJUFRwgq6vXki4fnu1E0DgiaJw38K3RABO1Lt7ER/JW
+ FC+MnrDsJ3VP/lhb8XrZDa2r2v4slKzRJN5X3PP85B02M9HMaEaK+SdVovEqJGxF0q
+ /R9cWyFKxZFEgLr6gz4HXmMRpJi6fnxof0OfSFSvkwiphd4ecYsknL+Q3P/2gOihHq
+ GehfPrFRiJ01t5b2fWi1AJhpjePRLGZaD8c2bsb1/WYNDgmgCEvxkMf3DhfccTNxSg
+ tgH/jLeno9heQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Liwag4dP
-Subject: Re: [Buildroot] [PATCH 1/1] configs/imx6ulz_bsh_smm_m2: bump Linux
- to 6.12.64 and U-Boot to 2026.01
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=E4ZLQk95
+Subject: [Buildroot] [PATCH] package/uclibc: bump to 1.0.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,20 +87,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/01/2026 12:22, Dario Binacchi wrote:
-> The patch bumps the Linux kernel to version 6.12.64 and U-Boot to
-> version 2026.01.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Changes in this release:
 
-Applied to master, thanks.
+Julian Vetter (1):
+      libc: kvx: add {get,set,swap,make}context functions
+
+Waldemar Brodkorb (6):
+      Add glibc internal macros for 64 Bit architectures
+      fix verbose output with make 4.4.1
+      nds32: add missing define for TLS
+      NPTL: remove attribute_protected from function
+      add gettid syscall wrapper
+      bump version for 1.0.56 release
+
+tinyusbboard .matrixstorm (1):
+      avoid crashes in statical linked binaries when dlopen()
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 56174a33b8..6a96e57069 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
+-sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.56/uClibc-ng-1.0.56.tar.xz.sha256
++sha256  23c9cab54c113e020fb20b9dc06be4a49560df791b78fcbc2ca899a6e8f213dd  uClibc-ng-1.0.56.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0c303d77f8..e1cf12fa68 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.55
++UCLIBC_VERSION = 1.0.56
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
