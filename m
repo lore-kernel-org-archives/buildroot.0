@@ -1,89 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55988D277C1
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 15:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB6AD277EE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 16:05:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5F9581EB1;
-	Sat, 10 Jan 2026 15:55:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F16560811;
+	Sat, 10 Jan 2026 16:05:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OUx1FP0DJs37; Sat, 10 Jan 2026 15:55:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AHtJnIq0ZpTZ; Sat, 10 Jan 2026 16:05:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 497B781EBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9950660747
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768060505;
-	bh=Qs1C+DKWqfWf1a28uxQbmzgOGBBMJpZAtbxW2Bqmwco=;
+	s=default; t=1768061110;
+	bh=YrTSuvO78i16y8+Ns4pVZFaeFHMah+D18zPHQuU7tMA=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=jAnawi0IY8E+ffgGUj9jgBBf5AW1eCuyYI5O8+ZapTBYutMzkXs7ppKJcknUUIDF8
-	 8rrageQot6FgGjudjum0xEFMZcVUftM+WvagoUWeap26Y/YNM3rK6tGh7mouk9sH4r
-	 HgaPZUhuZM6gVxYFCb/AugmTcVBx8e2qjag5urutOd7/w5s7YcqYRXIopl9cJAu25r
-	 me1RTCYoF403kbFZwiomitijFO/cLimTNv/guZ7Oyl30DIFDl1xvnSjipg2h9KX1ti
-	 I7k8suAUoDdNxCZ6fJackTduJZBajFwak/5lYhxuzMbCff42SG3AHz00OyK+fGUNMj
-	 Flul5JZEAsHdg==
+	b=RfN0CWaLu1RbcqJORIc8oS/N+hiNkaxtQ8hkw2JK8H7M9s8aKA5/FcyQZ1ImOnVuS
+	 b5Ug4/iaVIcwCg+q8Dt6mA8MUVc4wh/AgR8cYDIdcGPc88uIrJ/IWOeTi2oDprRjIy
+	 Bz4pxmVddcVZpBL6VS+uqIT9wLhsm0T6mPdNw5DPKiA6tntJ64CU1H0C0BuIKdxiA2
+	 gap+uLIQ00lxNJTJEiSC7t0GBQz2HGpEP4iG3AlyhVpgWyWBALF/FoWW0e8acck8Dc
+	 Hcj34SWjI2lm2ACCD3gQSbptM0L6zCICd1UErH6CZwhTDd1cmG3QWFXYhDXNwAbYSN
+	 AC5330AFagr6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 497B781EBA;
-	Sat, 10 Jan 2026 15:55:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5726C18D
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 15:55:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9950660747;
+	Sat, 10 Jan 2026 16:05:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7137F12E
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 16:05:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DBB840248
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 15:55:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 635C240238
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 16:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MddQzmOPDxyt for <buildroot@buildroot.org>;
- Sat, 10 Jan 2026 15:55:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.117.158.92;
- helo=sender-pp-o92.zoho.in; envelope-from=preyas17@zohomail.in;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7B2844006B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B2844006B
-Received: from sender-pp-o92.zoho.in (sender-pp-o92.zoho.in [103.117.158.92])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7B2844006B
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 15:55:01 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1768060494; cv=none; d=zohomail.in; s=zohoarc; 
- b=G1ZcwIpD6Ul0vA88SboxdPnqcIf8uRO7TIobxY4cdb+5JfAgESLDVepQHSsJPsO0dGxzZaUYd7C/J+TtHyAagFV6hQtZXxtp8TnQFILxviY6weVBxHXNOYKucsjlatnhTZHRleBiqVFQpFDxb3aZCIqYpG/PLEDXeeXXrQHMKRg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in;
- s=zohoarc; t=1768060494;
- h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
- bh=Egq4qxXS/INh3xFVSHBHdTD/D0HyJwyw1fdZrUwrdPw=; 
- b=Iy4OoWujPlCKDucE/zMR4DatoHGf1f5Fa7bp6XPG26OcYqPworATZwpUvYELVIOQpDP7Xfr1v9piaG63pNOEEW5nraE0RjBNo1zgc9OmAbUm6bzg/5kyjAzC+tQbXJEuAb4jfoJ/ACoNOZvj3oNrVwxFQECcMXYK93YyvrRO3yU=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
- dkim=pass  header.i=zohomail.in;
- spf=pass  smtp.mailfrom=preyas17@zohomail.in;
- dmarc=pass header.from=<preyas17@zohomail.in>
-Received: by mx.zoho.in with SMTPS id 1768060493884254.82336662458886;
- Sat, 10 Jan 2026 21:24:53 +0530 (IST)
+ id 2WfQs6ySpJQ7 for <buildroot@buildroot.org>;
+ Sat, 10 Jan 2026 16:05:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 32A5D4009D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32A5D4009D
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 32A5D4009D
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 16:05:06 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 2C64119F576;
+ Sat, 10 Jan 2026 17:05:00 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Preyas Sharma <preyas17@zohomail.in>
-Date: Sat, 10 Jan 2026 15:54:52 +0000
-Message-ID: <20260110155452.5532-1-preyas17@zohomail.in>
-X-Mailer: git-send-email 2.43.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Sat, 10 Jan 2026 17:04:41 +0100
+Message-ID: <20260110160448.3310804-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1768060494; 
- s=zoho; d=zohomail.in; i=preyas17@zohomail.in;
- h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
- bh=Egq4qxXS/INh3xFVSHBHdTD/D0HyJwyw1fdZrUwrdPw=;
- b=x2pyeU2vKyyOqNaJdqVJVR4AP6Von5yZ13uDe+8pS4k6sYjsJj4jIopfw0L5Z1Va
- +Eh+JGSus9H5AwqEe40GUgOKvemhP+z5IFB/UXKa7Ex1iu0mey0GDM6Htg3AoQ27LQK
- R6NLphYpsM1tylsJKTMVV1DnUrb9PBma8Ko6jjz4=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1768061105;
+ bh=L5JHlQaEc3szfD1SVuBieBA0JUb11x/Mp4Lu4OjRG4c=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Xt9Mixq2eiAh2oDkm6k3mwcafFusVKhECwD1rC/SJFwdU/qyL9/pl2ceecZK71Ml3
+ t9F7Z1BXbbi7SRmfu9wwt62K24JVOz0Tv6DmLZ4FRfeXI9RVrx3QZHwholSb7oZhTk
+ oSw8MWDYBlQ3MrVVY/CiNuMRgXEFof3wmkVvLsloUyirdtgnOHGpLf5xhNzp82MHIW
+ rL0A7mtJ5a9hLNw0/Q4a3lVcKESVS2VU+vl/mrUKxLG/3San/h6J0rJB65eUhGHcdB
+ P+g9eaihoQRb78DmMmLIaGWAeDbqL4n/SsWIzAM2ug6sa2U9i1bjRTUO4OS9pEDqnF
+ +h8xI1SkFUOFg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=zohomail.in
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=zohomail.in header.i=preyas17@zohomail.in
- header.a=rsa-sha256 header.s=zoho header.b=x2pyeU2v
-Subject: [Buildroot] [PATCH] docs: use https for documentation links
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Xt9Mixq2
+Subject: [Buildroot] [PATCH 1/2] configs/rockpro64: update U-Boot, TF-A,
+ Kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,95 +91,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Preyas via buildroot <buildroot@buildroot.org>
-Reply-To: Preyas <preyas17@zohomail.in>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Preyas Sharma <preyas17@zohomail.in>
-
-Switch a handful of documentation/website links from http to https.
-
-Signed-off-by: Preyas Sharma <preyas17@zohomail.in>
----
- README                       |  2 +-
- docs/website/contribute.html | 10 +++++-----
- docs/website/download.html   |  4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/README b/README
-index 008e996f5f..143b476be6 100644
---- a/README
-+++ b/README
-@@ -3,7 +3,7 @@ Linux systems through cross-compilation.
- 
- The documentation can be found in docs/manual. You can generate a text
- document with 'make manual-text' and read output/docs/manual/manual.text.
--Online documentation can be found at http://buildroot.org/docs.html
-+Online documentation can be found at https://buildroot.org/docs.html
- 
- To build and use the buildroot stuff, do the following:
- 
-diff --git a/docs/website/contribute.html b/docs/website/contribute.html
-index 52c30d60d3..115b1fd8b8 100644
---- a/docs/website/contribute.html
-+++ b/docs/website/contribute.html
-@@ -14,22 +14,22 @@
-       <ul>
- 	<li>Reproducing, analyzing and fixing bugs from our
- 	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a></li>
--	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
-+	<li>Analyzing and fixing <a href="https://autobuild.buildroot.org/">
- 	    autobuild failures</a></li>
- 	<li>Reviewing and testing patches sent by other developers. See the
--	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
-+	  <a href="https://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	  </a> or <a href="https://patchwork.ozlabs.org/project/buildroot/list/">
- 	    patchwork</a>.</li>
- 	<li>Working on items from the
--	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
--	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
-+	  <a href="https://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
-+	<li><a href="https://buildroot.org/manual.html#submitting-patches">Submitting
- 	  your own patches</a> through the
- 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	</a></li>
-       </ul>
- 
-       <p>For more details on these topics, check out the
--	<a href="http://buildroot.org/manual.html#_contributing_to_buildroot">
-+	<a href="https://buildroot.org/manual.html#_contributing_to_buildroot">
- 	  Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
- 
-       <p>If you need any support yourself, have a look at <a href="./support.html">
-diff --git a/docs/website/download.html b/docs/website/download.html
-index d1d92c8e6b..b2b4891464 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -98,7 +98,7 @@
-       </table>
- 
-       This and earlier releases (and their PGP signatures) can always be downloaded from
--      <a href="/downloads/">http://buildroot.net/downloads/</a>.
-+      <a href="/downloads/">https://buildroot.org/downloads/</a>.
-     </div>
-   </div>
- 
-@@ -123,7 +123,7 @@
-       </div><br>
- 
-       <p>If you are not already familiar with using Git, we recommend
--	you visit <a href="http://git-scm.org">the Git
-+	you visit <a href="https://git-scm.org">the Git
- 	website</a>.</p>
- 
-       <p>Once you've checked out a copy of the source tree, you can
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBjb21taXQ6Ci0gdXBkYXRlcyB0aGUgS2VybmVsIGZyb20gNi4xMC4xNCB0byA2LjE4LjQK
+LSB1cGRhdGVzIGFybS10cnVzdGVkLWZpcm13YXJlIGZyb20gdjIuMTEgdG8gdjIuMTQKLSB1cGRh
+dGVzIFUtQm9vdCBmcm9tIDIwMjQuMTAgdG8gMjAyNi4wMQotIHN3aXRjaGVzIHRvIEJvb3RsaW4g
+ZXh0ZXJuYWwgZ2xpYmMgc3RhYmxlIHRvb2xjaGFpbgotIHJlbW92ZXMgaGFzaCBmb3IgbGludXgt
+aGVhZGVycyAobm8gbG9uZ2VyIG5lZWRlZCkKCkluIG9yZGVyIHRvIHJlZHVjZSB0aGUgZGlmZmVy
+ZW5jZXMgd2l0aCB0aGUgcm9ja3BybzY0X2ViYnJfZGVmY29uZmlnLAp0aGlzIGNvbW1pdCBhbHNv
+OgotIHNsaWdodGx5IGluY3JlYXNlcyB0aGUgcm9vdGZzIHNpemUgZnJvbSAxMjBNIHRvIDEyOE0s
+Ci0gdW5zZXRzIHRoZSByb290ZnMgdGFyIGFyY2hpdmUgd2hpY2ggaXMgbm90IG5lZWRlZCwKLSBy
+ZW1vdmVzIHJvb3Rmcy50YXIgZnJvbSBib2FyZC9waW5lNjQvcm9ja3BybzY0L3JlYWRtZS50eHQK
+ClRlc3RlZCBvbiBib2FyZCBSb2NrcHJvNjRfVjIuMSAyMDE4LTA3LTAyLgoKQ2M6IEdpdWxpbyBC
+ZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgpTaWduZWQtb2Zm
+LWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgotLS0KIC4uLi9hcm0tdHJ1c3RlZC1m
+aXJtd2FyZS9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoICB8ICAyICstCiAuLi4vcGF0Y2hlcy9s
+aW51eC1oZWFkZXJzL2xpbnV4LWhlYWRlcnMuaGFzaCAgICAgICAgfCAgMSAtCiBib2FyZC9waW5l
+NjQvcm9ja3BybzY0L3BhdGNoZXMvbGludXgvbGludXguaGFzaCAgICAgfCAgMiArLQogYm9hcmQv
+cGluZTY0L3JvY2twcm82NC9wYXRjaGVzL3Vib290L3Vib290Lmhhc2ggICAgIHwgIDIgKy0KIGJv
+YXJkL3BpbmU2NC9yb2NrcHJvNjQvcmVhZG1lLnR4dCAgICAgICAgICAgICAgICAgICB8ICAxIC0K
+IGNvbmZpZ3Mvcm9ja3BybzY0X2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICB8IDEz
+ICsrKysrKysrLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgMTAgZGVs
+ZXRpb25zKC0pCiBkZWxldGUgbW9kZSAxMjAwMDAgYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRj
+aGVzL2xpbnV4LWhlYWRlcnMvbGludXgtaGVhZGVycy5oYXNoCgpkaWZmIC0tZ2l0IGEvYm9hcmQv
+cGluZTY0L3JvY2twcm82NC9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJlL2FybS10cnVzdGVk
+LWZpcm13YXJlLmhhc2ggYi9ib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvYXJtLXRydXN0
+ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaAppbmRleCA4Yjc3ZTFmMTY1Li4w
+YmY3MGI1NTQyIDEwMDY0NAotLS0gYS9ib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvYXJt
+LXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaAorKysgYi9ib2FyZC9w
+aW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQt
+ZmlybXdhcmUuaGFzaApAQCAtMSwyICsxLDIgQEAKICMgTG9jYWxseSBjYWxjdWxhdGVkCi1zaGEy
+NTYgIGMwZjIzY2NjNzFjNDk5ODllOWFkMjM4YWNmMzM0NDczYzE3YjdjODhmNzlhMjBjODI5YzNk
+NDQzZTM3OTRhMjIgIGFybS10cnVzdGVkLWZpcm13YXJlLXYyLjExLWdpdDQudGFyLmd6CitzaGEy
+NTYgIDZmZDc0OWU1M2M0NTVhZWMzNDE4Mjg4NjMwNTQ0ZTc1NTJiYmZmYWI0NDQyZGRjNDhiMjBl
+YmVmOWFlZTg3ZmYgIGFybS10cnVzdGVkLWZpcm13YXJlLXYyLjE0LWdpdDQudGFyLmd6CmRpZmYg
+LS1naXQgYS9ib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51
+eC1oZWFkZXJzLmhhc2ggYi9ib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvbGludXgtaGVh
+ZGVycy9saW51eC1oZWFkZXJzLmhhc2gKZGVsZXRlZCBmaWxlIG1vZGUgMTIwMDAwCmluZGV4IDU4
+MDhkOTJhZmUuLjAwMDAwMDAwMDAKLS0tIGEvYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVz
+L2xpbnV4LWhlYWRlcnMvbGludXgtaGVhZGVycy5oYXNoCisrKyAvZGV2L251bGwKQEAgLTEgKzAs
+MCBAQAotLi4vbGludXgvbGludXguaGFzaApcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlm
+ZiAtLWdpdCBhL2JvYXJkL3BpbmU2NC9yb2NrcHJvNjQvcGF0Y2hlcy9saW51eC9saW51eC5oYXNo
+IGIvYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKaW5kZXgg
+Mzk2YzE4ZGQ1Yy4uNTgxMGQzZDU4MCAxMDA2NDQKLS0tIGEvYm9hcmQvcGluZTY0L3JvY2twcm82
+NC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKKysrIGIvYm9hcmQvcGluZTY0L3JvY2twcm82NC9w
+YXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKQEAgLTEsMiArMSwyIEBACiAjIEZyb20gaHR0cHM6Ly9j
+ZG4ua2VybmVsLm9yZy9wdWIvbGludXgva2VybmVsL3Y2Lngvc2hhMjU2c3Vtcy5hc2MKLXNoYTI1
+NiAgNTVlNWJjYmM2OGQ2Njc3NmZjNDY4OTYyOTFmMGEyNDg0NGJlYjU3ODE3MzQ1YTg1NGQ2NWUz
+ZDA1NWZhNDIzZSAgbGludXgtNi4xMC4xNC50YXIueHoKK3NoYTI1NiAgZjg1MDEzOWNhNWY3OWMx
+YmY2YmI4YjMyZjkyZTIxMmFhZGNhOTdiZGFlZjhhODNhN2NmNGFjNGQ2YTUyNWZhYiAgbGludXgt
+Ni4xOC40LnRhci54egpkaWZmIC0tZ2l0IGEvYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVz
+L3Vib290L3Vib290Lmhhc2ggYi9ib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvdWJvb3Qv
+dWJvb3QuaGFzaAppbmRleCA5MDRmYTU2YzAyLi5iNmE5MjVlYTRlIDEwMDY0NAotLS0gYS9ib2Fy
+ZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaAorKysgYi9ib2FyZC9w
+aW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaApAQCAtMSwyICsxLDIgQEAK
+ICMgTG9jYWxseSBjYWxjdWxhdGVkCi1zaGEyNTYgIGIyOGRhZjRhYzE3ZTQzMTU2MzYzMDc4YmY1
+MTAyOTc1ODQxMzdmNmRmNTBmY2VkOWIxMmRmMzRmNjFhOTJmYjAgIHUtYm9vdC0yMDI0LjEwLnRh
+ci5iejIKK3NoYTI1NiAgYjYwZDU4NjVjZWZkYmM3NWRhOGRhNDE1NmM1NmM0NThlMDBkZTc1YTQ5
+YjgwYzFhMmU1OGE5NmUzMGFkMGQ1NCAgdS1ib290LTIwMjYuMDEudGFyLmJ6MgpkaWZmIC0tZ2l0
+IGEvYm9hcmQvcGluZTY0L3JvY2twcm82NC9yZWFkbWUudHh0IGIvYm9hcmQvcGluZTY0L3JvY2tw
+cm82NC9yZWFkbWUudHh0CmluZGV4IGRlODY5NzAxMDQuLmQyYTg2NTY3MGEgMTAwNjQ0Ci0tLSBh
+L2JvYXJkL3BpbmU2NC9yb2NrcHJvNjQvcmVhZG1lLnR4dAorKysgYi9ib2FyZC9waW5lNjQvcm9j
+a3BybzY0L3JlYWRtZS50eHQKQEAgLTIwLDcgKzIwLDYgQEAgb3V0cHV0L2ltYWdlcwog4pSc4pSA
+4pSAIHJrMzM5OS1yb2NrcHJvNjQuZHRiCiDilJzilIDilIAgcm9vdGZzLmV4dDIKIOKUnOKUgOKU
+gCByb290ZnMuZXh0NCAtPiByb290ZnMuZXh0Mgot4pSc4pSA4pSAIHJvb3Rmcy50YXIKIOKUnOKU
+gOKUgCBzZGNhcmQuaW1nCiDilJzilIDilIAgdS1ib290LmJpbgog4pSU4pSA4pSAIHUtYm9vdC5p
+dGIKZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvcm9ja3BybzY0X2RlZmNvbmZpZyBiL2NvbmZpZ3Mvcm9j
+a3BybzY0X2RlZmNvbmZpZwppbmRleCBkNmMyMTdlOTQ2Li5jMzEzNjVjYTZiIDEwMDY0NAotLS0g
+YS9jb25maWdzL3JvY2twcm82NF9kZWZjb25maWcKKysrIGIvY29uZmlncy9yb2NrcHJvNjRfZGVm
+Y29uZmlnCkBAIC0xLDYgKzEsOCBAQAogQlIyX2FhcmNoNjQ9eQogQlIyX2NvcnRleF9hNzJfYTUz
+PXkKLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMD15CitCUjJfVE9P
+TENIQUlOX0VYVEVSTkFMPXkKK0JSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTj15CitCUjJf
+VE9PTENIQUlOX0VYVEVSTkFMX0JPT1RMSU5fQUFSQ0g2NF9HTElCQ19TVEFCTEU9eQogQlIyX0dM
+T0JBTF9QQVRDSF9ESVI9ImJvYXJkL3BpbmU2NC9yb2NrcHJvNjQvcGF0Y2hlcyIKIEJSMl9ET1dO
+TE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQogQlIyX1RBUkdFVF9HRU5FUklDX0hPU1ROQU1FPSJy
+b2NrcHJvNjQiCkBAIC0xMCw3ICsxMiw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9
+InN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIKIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJH
+Uz0iLWMgYm9hcmQvcGluZTY0L3JvY2twcm82NC9nZW5pbWFnZS5jZmciCiBCUjJfTElOVVhfS0VS
+TkVMPXkKIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQotQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMC4xNCIKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X1ZFUlNJT05fVkFMVUU9IjYuMTguNCIKIEJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVM
+VF9DT05GSUc9eQogQlIyX0xJTlVYX0tFUk5FTF9DT05GSUdfRlJBR01FTlRfRklMRVM9ImJvYXJk
+L3BpbmU2NC9yb2NrcHJvNjQvbGludXguZnJhZ21lbnQiCiBCUjJfTElOVVhfS0VSTkVMX0RUU19T
+VVBQT1JUPXkKQEAgLTE5LDE3ICsyMSwxOCBAQCBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1Rf
+T1BFTlNTTD15CiBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfUFlUSE9OMz15CiBCUjJfVEFS
+R0VUX1JPT1RGU19FWFQyPXkKIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Ci1CUjJfVEFSR0VU
+X1JPT1RGU19FWFQyX1NJWkU9IjEyME0iCitCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjEy
+OE0iCisjIEJSMl9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0CiBCUjJfVEFSR0VUX0FSTV9U
+UlVTVEVEX0ZJUk1XQVJFPXkKIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9N
+X1ZFUlNJT049eQotQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lP
+Tl9WQUxVRT0idjIuMTEiCitCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9W
+RVJTSU9OX1ZBTFVFPSJ2Mi4xNCIKIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfUExB
+VEZPUk09InJrMzM5OSIKIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfSU1BR0VTPSIi
+CiBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX05FRURTX0FSTTMyX1RPT0xDSEFJTj15
+CiBCUjJfVEFSR0VUX1VCT09UPXkKIEJSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05G
+SUc9eQogQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTj15Ci1CUjJfVEFSR0VUX1VCT09U
+X0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDI0LjEwIgorQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01f
+VkVSU0lPTl9WQUxVRT0iMjAyNi4wMSIKIEJSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVGQ09ORklH
+PSJyb2NrcHJvNjQtcmszMzk5IgogQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQogQlIyX1RB
+UkdFVF9VQk9PVF9ORUVEU19QWUxJQkZEVD15Ci0tIAoyLjUyLjAKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
