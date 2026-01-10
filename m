@@ -1,88 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E80FD26D9D
-	for <buildroot@archiver.kernel.org>; Fri,  9 Jan 2026 21:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73520D277D0
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 04:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E357E60F30;
-	Fri,  9 Jan 2026 21:37:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDD3E83B98;
+	Sat, 10 Jan 2026 04:20:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F8wjAKdqC3BN; Fri,  9 Jan 2026 21:37:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q97awZYZCmQz; Sat, 10 Jan 2026 04:20:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB3F560F26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2A0883B8E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1767994636;
-	bh=i29VClT/UwpfYDTSnqy7QYXb0IsjrpgrVwOZ8I3mHr4=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=F/YgIidoU7wSELA2vz6Y/1BQ91sXll7J345pX8uqhHrBEIJyyxVdVD6nj3z1zO1fX
-	 ZrQNlnzR2m0y7Kx3nKe2yKSurT7sICpAXotr3D+ItzNPf29bZnic3ZFfvkNqWcjTVt
-	 6J/qnWpaD2Dtwxy9C8eOicD4F8exP/JTXoHMNBZB6PJ21kl0ALb131I8owkYQVHU3P
-	 HLBiYRB1jpKfqfLm07AfVwchsA/5uPh9lTCawl180CAHxzKjD4YEVhSGW7mtwD3AU9
-	 aa4Ps+uz8/4NODKMeXjnIz4M3NEQOYpTjSur2vI5th8oZ8CzxKF0KMr6qo/kvrvjir
-	 osvOlfp4yrsxQ==
+	s=default; t=1768018846;
+	bh=g5fBpGpGuMm5jdmt6lVVL154B0ERX1XltYRagLF2KAI=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=TJkQU1SikvCo6W3MNqk0NGv/xy6fsWvHCU9ikoWQ+Vs0NKWRbDY7siz+WGPWVMHwz
+	 NUvZqYO4HkNYu7Znojrx+tE9hbOJAPmXYGCNF8+V2qavIN/72tKKW9Bf5VUSqabvkV
+	 Bnjdy4Pjjtnmay5zv/wzPkzKvrQnxps5dD5xiwcch9BbHv3zjtZ2Y8V6OFi4ps/eH+
+	 D2ma+6gmRSM/SIpRl5dYxOjRtSAtu9ioj45E3Da/6ETT25sAk/9XqF5i6dXanpXpb8
+	 s5ms9p5CcGjOnXRTjukBacUPfk3/Izl0UsPgxajoZlQ/mDIePSmiwRL2oPVbx5Imex
+	 dHRCNnYhv+QDQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB3F560F26;
-	Fri,  9 Jan 2026 21:37:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 47777131
- for <buildroot@buildroot.org>; Fri,  9 Jan 2026 21:37:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2A0883B8E;
+	Sat, 10 Jan 2026 04:20:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0504131
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 04:20:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E2B240CB4
- for <buildroot@buildroot.org>; Fri,  9 Jan 2026 21:37:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C787783B8E
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 04:20:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HHduECV4lDK2 for <buildroot@buildroot.org>;
- Fri,  9 Jan 2026 21:37:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F120140CB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F120140CB3
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F120140CB3
- for <buildroot@buildroot.org>; Fri,  9 Jan 2026 21:37:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 84AA819F5A5;
- Fri,  9 Jan 2026 22:37:07 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 09 Jan 2026 22:37:07 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YTr0gg5AT8XM for <buildroot@buildroot.org>;
+ Sat, 10 Jan 2026 04:20:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C82B083B82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C82B083B82
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C82B083B82
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 04:20:43 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4779a4fc95aso18696695e9.1
+ for <buildroot@buildroot.org>; Fri, 09 Jan 2026 20:20:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1768018842; x=1768623642;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=rcVWdVZz10NZT7ItbBeUvY3S8Zn3+ru4Y7rpLOhA0QY=;
+ b=IfKPA9RRzNbRzd7VNsxFoVp1ara/NDPEEA1pvGAx7kQ5BMd0CwuzfUtpbqMPxFl6aO
+ 26me/HpAx5KuBXs0+fo8L+KniVaQB5sEtNfgd+bG5QqmCSBBF/+/oBctgheWuYB1y1dB
+ Uawy8nOkTu0wBiOlTatCY2nJmtc/wlrf/SD/h187oG1WYHWtbgazylfJR6d7EG+rVDdM
+ dwTtRPLD+p2wOoREVx3USVHtAx76Eq6AonUNNpUI0743eIx1eMwiVmRltDVbxe5FhaC0
+ Sxx/4fWUlR79KKlnL9F0Pi6boXqw/cwBiB69LfrTZ9DSJDE3c9wlMr/yCyTQQlsgDXma
+ oWTg==
+X-Gm-Message-State: AOJu0YwHEuodZzQh4Q0/geKvIPRqX0yrhULWMhNffboGU3zXrDbOErzG
+ 0X0B04XJUTcL9IauVHvpD2r5PXP58gCMbaCD8GLiMhG77g4pdYEYNJ364XDlaA==
+X-Gm-Gg: AY/fxX4ycSlS0xIW4wl0qN7P3tfd78a0je1awyqaJW5XcalYN1evGkw+DfybDhtMyB8
+ NPmuHpIa1I9CFCGeExs/00QOGQsOMIl/yBNPu4PYjOCSyYPTfB/dHjuuz+4VQp5F8GrZd6bQtgQ
+ kzcd/6AXR+9N++fbkSiw7T+Tjb6Ec7uSGEcFF4CyYMt4c7qtsXys2+d6lW3iKXZVWuCakxHYQwM
+ gCDOheXNk3VkJ3I5GdnAyRGLXX6eZv04T2mI8v6zEgiaNRJHpnoE/c9iddXMwNZGY162zWZ7kFP
+ E8+4+bOHaUWVKwCAQQugaz2MnXNmBlScyIslYnzfgwdzGWjlXs4wLe62pfWe5N4dPmIt84mnB3u
+ NdRkAI9NvufPc0SSqZ+kJQZlL/wjUu/jb0yafoCVmkzDZpbi7pPIXFk9SVyHZA01hCW2gLAS9Gr
+ X1NCFXwKKHCWGuC7CqNQ==
+X-Google-Smtp-Source: AGHT+IFMfGBzxSg6rtZlPQihjAJV1w3LzJJRDeIlq4qHWvTK0TDLRkhQnt1eCquEsiOXGwzNcJOZrg==
+X-Received: by 2002:a05:600c:1f95:b0:47d:875d:fa2 with SMTP id
+ 5b1f17b1804b1-47d875d122emr134945575e9.4.1768018841542; 
+ Fri, 09 Jan 2026 20:20:41 -0800 (PST)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-432bd0860f5sm25692485f8f.0.2026.01.09.20.20.41
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 09 Jan 2026 20:20:41 -0800 (PST)
+Message-ID: <6961d399.5d0a0220.d7d33.32aa@mx.google.com>
 MIME-Version: 1.0
-Date: Fri, 09 Jan 2026 22:37:07 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Dick Olsson <hi@senzilla.io>, Fabio Urquiza
- <fabiorush@gmail.com>
-In-Reply-To: <20260103190259.1904724-2-bernd@kuhls.net>
-References: <20260103190259.1904724-1-bernd@kuhls.net>
- <20260103190259.1904724-2-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <7e17169896257a406e36e3caea1c06d0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1767994630;
- bh=efTYwHWQqssMQo7NNu75ZSTLgTtL6ETH3XKJXpexdQ4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tI1LM1XNAw8RUQxRj2cnWFqVAvBuedpdvMOFkPg2Rxsw3mwD3NxxwZhUnNmsRLlLi
- CzN4KHVvCy3XVR/9gUW3VtxwmBqT6NCxCun/Md/mUPIHLHopw4IxOFRoQioMrArBfA
- zgy9X38qq1AVpOGoIahNKK5NphnMhpA3GCBSZ7eOSzDSyoWvQ/A/r/o1jFK6WTVERW
- H8e02CymNeZTSi8mNUpY8Tl4wwTIEVH7dePNIPRp3m1iNYMfZxedbCXjvh+3cX5gZs
- BjM1uhNqrmMshgLu/3MCU67Ll2HTspMutef93Eq8TzilBbManJaERtW64uWfKIzN3I
- 13nxLeTSsB2FA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tI1LM1XN
-Subject: Re: [Buildroot] [PATCH 2/2] package/bitcoin: bump to version 30.1
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sat, 10 Jan 2026 04:20:41 -0000
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1768018842; x=1768623642; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=rcVWdVZz10NZT7ItbBeUvY3S8Zn3+ru4Y7rpLOhA0QY=;
+ b=N/GJib9yIQ9ihzKlUSTN3uxBVjbs4f9JPefjF+prc/PS5cFL7vLnKKLTNqKlBeDebQ
+ s0L6ACLVnRyJJrk2zZ9thhc5zNaYm7CXMc0J0sjCVq1hJIxyrWfqVnyI1hsd7b/t4nBu
+ bpDzskxUDDb+OmryupLW9d+32L4ITiaL20gy3oyh6G0OXOXVo9pkQqg2iWLfjiw5NOg5
+ PV1VipGmUa5OokbX0uajiK60E8EvK0RAUpCctOQrB2kWmxsWdY6X4l31Hc3SdgdHr5xE
+ nX/MXH/aEkYjPcpfrDI05ZnKMSSX2KCBDnzliz+eFUEPQ4baw9FfiVWHE9aIX5hxoxAV
+ AAwQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=N/GJib9y
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-01-09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,32 +117,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Hello,
 
-On 03/01/2026 20:02, Bernd Kuhls wrote:
-> https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-30.1.md
+Autobuild statistics for 2026-01-09
+===================================
 
-Due to a bug in version 30.0 and 30.1, the source archives have been 
-removed. See:
-https://bitcoincore.org/en/2026/01/05/wallet-migration-bug/
+      branch |  OK | NOK | TIM | TOT |
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-So I'm marking this patch as rejected, and I suggest we wait for the
-version 30.2 to be released. There is already a 30.2rc1, so this version
-should be released soon.
-https://bitcoincore.org/bin/bitcoin-core-30.2/test.rc1/
-
-Best regards,
-
-Julien.
+-- 
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
