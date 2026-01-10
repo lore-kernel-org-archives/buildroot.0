@@ -1,118 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06C06D277D9
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 10:30:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED48D277D9
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 11:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C6548397F;
-	Sat, 10 Jan 2026 10:30:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BPoHZ2Z1xSik; Sat, 10 Jan 2026 10:30:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A9C683916
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768041029;
-	bh=1N6D6rx5/KtXLLIFV+DNbF13GKa08P2hka1/uf7KiOg=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=hTdjtYjWU+lez367XZkReCTAujJaK0r7AiWnU+2uNpOibIZv1+ReF7+bSs7YyHMHi
-	 hD7POiR60Ua6/wCrwDKFzMezYNGKIEqUD+ZoJh2Iaz/N/3HmHe2vtubPZp/cMulxR0
-	 qg1OZll/gbxDTNvUQcsHYr+XJStWRQA28z0fXmaYgRGcO9Jp3VPvbQUA1hxQK0a9b5
-	 hpON1wFLD6aFjwi74PgR30snnC6KhIrpfeEhpeEl9Q6/G7VYf2rR8vKbyChgUuxpmm
-	 rCpdnF5CkoKfT4FtkLAJZFMIxrYfLEVahZ1Sv8agrU/wLSAsmAY1Dr8L4oLiHKgG5w
-	 kKf2VkGf5fxwg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A9C683916;
-	Sat, 10 Jan 2026 10:30:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D39E612E
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 10:30:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA96940A03
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 10:30:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B299B404EC;
+	Sat, 10 Jan 2026 11:01:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8FQ0QGUGzPfE for <buildroot@buildroot.org>;
- Sat, 10 Jan 2026 10:30:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE75C409B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE75C409B0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE75C409B0
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 10:30:26 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-b86f69bbe60so27988566b.1
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 02:30:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768041024; x=1768645824;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=yTFvKXxg3XxgMHMMWO4gZ/V0K5790+KcLg5RKaObi/Q=;
- b=A5+tgRwCQcrK5bcprw4iZGIxkvxjuOHPmVm5QPoWdVuj7Y8cBmw6Mg/HjtxneZ/xnF
- SJELytoe0zrZvFVk2lbPsyw/UxQ5kvZeyfrRmy3l4aG0Mq7ocFXkdd2iyH0ASD3VpKTr
- JRARi3+5jfh5twcjhu4b1AJcuu/0gHZaOD/j7vzUelZbVfCB2zlDAN+uNwwL5PrenC34
- ztJS55yeCnZ7zYG3mjcWsD4s/fYfEl3b/xs5J1bDdzv6JJ3w/8I3fyzQc2M/O+4yVHWR
- XnqGfwfUMSMJ/rRdKo4gFLfnrrVCHe1fAdpUHQTvio6jKWaUsXu9jGqiUI6dJNZ0VziF
- 7b0Q==
-X-Gm-Message-State: AOJu0YwbGpQi4tpOaumfY0CgQVWCXzuq+m28jn5XkMDXafULW93iNVZC
- pjxjWJ4VUl2RSn5OUgKNWxSfjqNTVF4ti9VzdfiGrveuIBkrFdixd6Btk3Ja9EmX9qv4TlXNfWP
- AXnQj
-X-Gm-Gg: AY/fxX7tvd8KcvT8hqMhW1H8LBKGSi6Cd1plqBDvAVWUEqjcWc4Q+WPFGlFm6+XHbnz
- hX3FuleDekHUhUVnsFlb1sWK9dpb908buMKTdmirwIOC9pzl7BkQHtc0trEzjSD2FjKZPf6D8ng
- OZQ55L2HVSP3PIwGxHznaqTSXz0MS4vfyzEYBfk3WXAb8Lm0O8vtJdDJcpBIS6AIiaYE0zOi3xE
- RkfwMWNIBZ2FdDd9F2duHg+6cr5vDAcnYZiFpEtMBkKu+BmsJzd+IAqBnhfU9bMewUq29uMJwKs
- suAVvKJPdLFohkUEyjn1/qTv2HHtCQBjsgGCFYd9Fl0hItwybkobJ9IpWfzbRiw51hvzIl6Oizj
- 7eRBPmJ0vjQnYaVAkHJHJfdPx8Jgyr3DE1xoQmUnJdxkvKeYCosgr+WeGt4G6FUc6amNexrrhY6
- r+5wij3J1Ft9XuQFIdHyNRjy/lNRiH4Z+reGP/UBOvKS+UN5v8zi//gYv4FrcW0tX1AchecwvjE
- HFzcmTNNbuE6dJLP0yz3TAroRXc17qqQN/0eFrm1x0pdtetXXKLWCZ6oYkEHdIb/4rVynqPgqbw
- ksSPozettSg=
-X-Google-Smtp-Source: AGHT+IGyRweDKcrRRlTncaULGJ/dbYRdi0QPkI6oGg3i1mF1h5hG9MY7wIxWhQoeMFUWEuXXRj7rPA==
-X-Received: by 2002:a17:907:6d20:b0:b7d:1cbb:5dfb with SMTP id
- a640c23a62f3a-b844516a807mr1174260966b.7.1768041024113; 
- Sat, 10 Jan 2026 02:30:24 -0800 (PST)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-95-248-31-95.retail.telecomitalia.it. [95.248.31.95])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b86f88f90a4sm100824566b.37.2026.01.10.02.30.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Jan 2026 02:30:23 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id lhJG2WqJqE2s; Sat, 10 Jan 2026 11:00:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA2A740337
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768042858;
+	bh=c1KUChRS+uW1JxzEWLpXttEIIXyK5H6UxJzzgibfm5w=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=VOSXxaF0TOgKSXjGd0iS9bOmTlUm/W3witcZolgN6byFq3M+pUnnlexYmyOfLuQEq
+	 8goeDopmdSbar1+KpRthwppgOG2MMBgG3j64+jRLpklAHJkcuO4FUUHraw32+rXh5E
+	 JodZHtltsKtQiuPnQatfRZv6lQeFPFc55qa9li7qRh7yhnuUsDtRggz5IMQJBorPmi
+	 lyuEKq43iRFVnSWXvoaiN2Vuwfj8XvC2stv2eok9xXLubTZwEzc/MpaPcrVP7BFBgg
+	 QvAb3znpicbKq7bRzyDOb6hbwbAkrka0LrGYC4AzPHHZvG0ETLEebVR83tDmudSEIW
+	 nqIB6Z6m8rLqQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA2A740337;
+	Sat, 10 Jan 2026 11:00:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93AA1131
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 11:00:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91E174032A
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 11:00:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1V3-EEUdr79r for <buildroot@buildroot.org>;
+ Sat, 10 Jan 2026 11:00:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E15784030B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E15784030B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E15784030B
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 11:00:55 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b915.dip0.t-ipconnect.de [84.161.185.21])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2019DA4C310F
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 12:00:52 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52646)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1veWiB-000000004JD-0gt8
+ for buildroot@buildroot.org; Sat, 10 Jan 2026 11:00:51 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 10 Jan 2026 11:30:21 +0100
-Message-ID: <20260110103021.2630877-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sat, 10 Jan 2026 12:00:51 +0100
+Message-ID: <20260110110051.4158329-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1768041024; x=1768645824;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=yTFvKXxg3XxgMHMMWO4gZ/V0K5790+KcLg5RKaObi/Q=;
- b=j3obB2wYpgmCtuo8wsI3QS/nZd8ufJUK+sbE17ejCVZ625CxrxEsrxY4KJa5seOzkB
- igncr8N7WJeNkvpYu7D0MzcWFw1XMhtEvw0ftM0dbgrJMDvJbJUJjkAd/pWqvhhsRgTr
- RmLRU79HmZ0Vw4QXZp66DTOXYgpfv2JSbu6Yk=
+ d=kuhls.net; 
+ s=kas202511301023; t=1768042852;
+ bh=01f2BqI1RFziiGptjfnHslsJ5Bl8zz3KajwwTKnnmEI=;
+ h=From:To:Subject:Date:From;
+ b=plpkC5FmI9huuU+9E4CDF/zyEKHKChibqgR487+RUbLKRHmAPJHnxGvYa0s/ne+6L
+ LbBrp16XpWKR4KA/kGFaPGcl/QTD8xKlcFBe2DVmAfpk7qJb2JdXb2KZhIaAiCKNKT
+ +1yVOea0dTZ3BjTorLKMJLJnDZg1AV/iBtnyT97MlRkZ1nsmbfV2yiSHO3m+7KlFmu
+ PaKLxG3NbXQRRBxdYGPF4g9szI6ZIAqS7RdJdirPfFtlHhEIFsW3QdM/dnvLNLNV6/
+ oM/IUzVYSXdAwn3mTog38k6nOQdzo9Covv0QQcW8aE8+nhpD18oLZo/rfXEN/GrdtL
+ 3oTvI6uYjAMpg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=j3obB2wY
-Subject: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: bump Linux to
- 6.1.159
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=plpkC5Fm
+Subject: [Buildroot] [PATCH 1/1] package/ustream-ssl: needs OpenSSL ssl-trace
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,39 +96,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.1.159. The size of
-xipImage has increased by only 181 bytes (1673625 bytes compared to
-1673444 in version 6.1.155).
+Buildroot commit e1050a3a50886c72d3ff2416dd8db2fe3c389973 bumped the
+package which includes upstream commit
+https://git.openwrt.org/?p=project/ustream-ssl.git;a=commit;h=956fba242ac0a4bcfe3db103d4d1f41545c924fb
+that adds the usage of SSL_trace causing a build error when OpenSSL was
+built without ssl-trace support:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+/home/autobuild/autobuild/instance-10/output-1/build/ustream-ssl-5a81c108d20e24724ed847cc4be033f2a74e6635/ustream-openssl.c:
+ In function '__ustream_ssl_set_debug':
+/home/autobuild/autobuild/instance-10/output-1/build/ustream-ssl-5a81c108d20e24724ed847cc4be033f2a74e6635/ustream-openssl.c:490:44:
+ error: 'SSL_trace' undeclared (first use in this function); did you mean 'SSL_write'?
+  490 |         SSL_CTX_set_msg_callback(ctx->ssl, SSL_trace);
+
+Fixes:
+https://autobuild.buildroot.net/results/17c/17c88282c32f2edfa0991e0e10cb45013c947be9/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
- configs/stm32f429_disco_xip_defconfig                           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ustream-ssl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-index 6450f4b2d48c..82b6e47e73b6 100644
---- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c29387aeee085fbcbd91236224b9df805063bac43615e75cea2c6b29604a5c73  linux-6.1.155.tar.xz
-+sha256  1f207ebe93980829ecc0a18b694816f22b715e9893767731651969a168342b9e  linux-6.1.159.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index c22b6e1135ee..7bce025261db 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.155"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.159"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
+index c328a6ea12..6fc54f3bef 100644
+--- a/package/ustream-ssl/Config.in
++++ b/package/ustream-ssl/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_USTREAM_SSL
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
+ 	select BR2_PACKAGE_LIBUBOX
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL_TRACE if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  ustream SSL wrapper
+ 
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
