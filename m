@@ -1,84 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9896D277C1
-	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 18:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8CA4D277E4
+	for <buildroot@archiver.kernel.org>; Sat, 10 Jan 2026 19:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A32640748;
-	Sat, 10 Jan 2026 18:08:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 326E981271;
+	Sat, 10 Jan 2026 19:33:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zxjlLAPfTSsZ; Sat, 10 Jan 2026 18:08:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GX6BmiABJgBY; Sat, 10 Jan 2026 19:33:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 314B64073A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C56C8129B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768068492;
-	bh=SfMKmrn7YcZXd2wJqDnmKVGjnfyd42EineP6SrhuuTo=;
+	s=default; t=1768073580;
+	bh=Q0O/ajU7MEHtf3LnOxEXwXjP7YZ4LN667UDa08uE5Qo=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=OVSphMxZyKq3msup+bVWkDzwjOLTkOq7HcYJzeX7GnEynGxbanZ3P7Tx7tk2vcU8p
-	 wK3hJukSauATh/sO5SocmxuFKhvIGky5WkX7wzVsuVHVd7pRKzYCOmZBVObX42XeSk
-	 9YoJBuyvb91Rdaj0d3mnkaNnYWr/lNi3eAu7uRLe6FS0kssBKbnJit1OewPKwDpEs7
-	 V8DFC9sIMNL/ePayZl5Q+9Be6ZEfgCJDuGUFS8D3bYITXROo/gvn8Zsf1u9eWiAhfv
-	 /W/Obk3SK7k/uYBSuZLNDDomW/A1JVRAaIrT6vNXulij+otjpC0B7grYEBeDIZz3PJ
-	 /lWWVSeu9Gv5Q==
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=RC0R0kc3Sp07fZy2LHOogmwZzcQgT8sA62JSVbG/jE7oZB1829C2MsXS2urpDa3KT
+	 xk4dk4etTR7Y04ekvPjSYUwhnjwmCmlSOB7qRK+vH/WyK/cMwryK1Ef3H0IrtvL3PY
+	 GYb6ZLqH2sL+xqyBwjDGxux7ZazdSu2+rdhpx9uJOcoOpLss9d0oNrJHBB15ppr6OF
+	 7/OkE8oH7Xe6FiLL6x2S+7VyoJ7/ZfFovaDJ31n9KqByDe1LIVfrKj1t0/mp0CDJza
+	 EbwhQwNNzMfJ/Ssy3mDe0QeTWB77KeevoMT8KZqqC74zkXXw5D9t3ZjIvW+pykJX5n
+	 rC47gZVsFqZXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 314B64073A;
-	Sat, 10 Jan 2026 18:08:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AE91B131
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 18:08:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C56C8129B;
+	Sat, 10 Jan 2026 19:33:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA2F712E
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 19:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94C2060820
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 18:08:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C055D8129B
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 19:32:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6daa3QfKi9au for <buildroot@buildroot.org>;
- Sat, 10 Jan 2026 18:08:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kPKl3D9CdC1B for <buildroot@buildroot.org>;
+ Sat, 10 Jan 2026 19:32:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8E63760793
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E63760793
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB94281271
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB94281271
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E63760793
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 18:08:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BB94281271
+ for <buildroot@buildroot.org>; Sat, 10 Jan 2026 19:32:57 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B0320A4C362F
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 19:08:07 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38428)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EADFDA4C3306;
+ Sat, 10 Jan 2026 20:32:54 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45114)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vedNf-000000008EE-1cBs
- for buildroot@buildroot.org; Sat, 10 Jan 2026 18:08:07 +0000
+ (envelope-from <bernd@kuhls.net>) id 1veehi-000000006yJ-2Jtr;
+ Sat, 10 Jan 2026 19:32:54 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 10 Jan 2026 19:08:07 +0100
-Message-ID: <20260110180807.2254994-1-bernd@kuhls.net>
+Date: Sat, 10 Jan 2026 20:32:53 +0100
+Message-ID: <20260110193254.4079274-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768068487;
- bh=Og/w55ntPepNuaadChOzKP4IUvpFGHX4aAMirf9xlXQ=;
- h=From:To:Subject:Date:From;
- b=P/bZnbFFG+MgdtBnPYpf01nNa7p4Mafz1RHyomyw6sBQGDzodYvLkWhqI3p7bIZGt
- NaUTIAniUnxprtO+7Pa4oMZSKz81xBwi/lHhF475LCuE9O40QRdA+HpTmhrYjjhpfM
- idwA+qzeSZX4xQA3zvNxkYS70SSKQNcqq8mqWmYicOh9xlgTNhd8u5boaCtnJQjy+8
- j6tYP1BiHQ7XZhUK5XruSP3ZROJ7r81jizFXxXfeE9GWNEwmOCdvMPuxEUgDt6u+w0
- Fws2DR02pdWqkiWtK4CUd/yP1jAJCQGfFvbfeXxwYizNg+ZUILveWNRoVtTErwleNV
- MFnTzl8bqPXFw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202511301023; t=1768073575;
+ bh=xb1C75MPU8qHQ2+2xSZpGpgZGrCW9MQyBq4Hiivk8JU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=PrHT9sZpGxCkAWLw2fASVlSrmtchRUEI9Bg266jGmPJnzq8+ngIUK17aujib+hhRm
+ fWMzZrJ+MbpFvJQhcxPPJMLODw3b1iFqrFjy/eoh7rhnwN0090S2fvdp230p1hzDIr
+ b2U0bvxEBzFnwbBZ8YmlM7qhPBvpYVfFoXhFaDIjrdmiZqawFuJEFGQ5WeMfUnUXLN
+ xxvFYJiAJhyL5nwqcHTrLBjRTTpfj00uJPinjkbJYyBPlAlBx6q/w1uZ17tEZS2eHb
+ fW9n6wrukqAMeDbqmJWECLTgnL5Bn5sztpoh7JELQoklEWIbXybac0z5ENGOVvbkfP
+ 4QgCesvNw6o3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=P/bZnbFF
-Subject: [Buildroot] [PATCH 1/1] package/hwdata: bump version to 0.403
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=PrHT9sZp
+Subject: [Buildroot] [PATCH 1/2] package/ell: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,42 +90,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Marcin Bis <marcin@bis.org.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/vcrhonek/hwdata/releases/tag/v0.403
+Buildroot commit e834d23cd792ee57ea80f37ce01d9d50756dba1d bumped ell to
+version 0.79 that includes upstream commits in version 0.72 which make
+use of fork():
+
+https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=9245dfb84d1e0f58dda102704201d78ddfdfca68
+https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=e0628c429d50d50b116717f37a5f5c1f66bef6a2
+
+Fixes:
+https://autobuild.buildroot.net/results/036/03690fa454ffb1c4c79b182cc3a165555e2c59eb/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bluez5_utils/Config.in | 2 +-
+ package/ell/Config.in          | 2 ++
+ package/iwd/Config.in          | 2 +-
+ package/ofono/Config.in        | 2 +-
+ 4 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 6a0b931aea..eee3eaa555 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  e390fe2f5f5ef7ed9ccbe62eb7cd40d4ee2b57389e7869c0dc96433c81812e7a  hwdata-0.402.tar.gz
-+sha256  77d0a69e5558d16d33bbb510a09093deaf11c882baf9ef6ec5f18a8ef96e2c13  hwdata-0.403.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 8a8e399c21..c185358bf6 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 49bb719102..2fe25466b4 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	bool "bluez-utils"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, ell
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/ell/Config.in b/package/ell/Config.in
+index c7c9164816..124a57f7e9 100644
+--- a/package/ell/Config.in
++++ b/package/ell/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ELL
+ 	bool "ell"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	depends on BR2_USE_WCHAR
+@@ -9,5 +10,6 @@ config BR2_PACKAGE_ELL
+ 	  https://01.org/ell
  
--HWDATA_VERSION = 0.402
-+HWDATA_VERSION = 0.403
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+ comment "ell needs a toolchain w/ wchar, headers >= 4.12"
++	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+index e4b0ead882..d8fb6a6ea0 100644
+--- a/package/iwd/Config.in
++++ b/package/iwd/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_IWD
+ 	bool "iwd"
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, ell
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+index c1d0cae4ef..c6a45625d9 100644
+--- a/package/ofono/Config.in
++++ b/package/ofono/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_OFONO
+ 	bool "ofono"
+ 	depends on BR2_USE_WCHAR # gettext, libglib2, ell
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus, libglib2
++	depends on BR2_USE_MMU # dbus, ell, libglib2
+ 	depends on !BR2_STATIC_LIBS # dlopen(), ell
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
 -- 
 2.47.3
 
