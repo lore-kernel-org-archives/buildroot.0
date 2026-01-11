@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 394F5D2502D
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 17:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FD9D2502D
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 20:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0386403D2;
-	Sun, 11 Jan 2026 17:31:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 336CF405ED;
+	Sun, 11 Jan 2026 20:58:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id atCaS9mnOTLt; Sun, 11 Jan 2026 17:31:04 +0000 (UTC)
+ id nRgpbdMVlgRv; Sun, 11 Jan 2026 20:58:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11015403C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C5640544
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768152664;
-	bh=VzzSBTHAW8/KatcKh6yAv/b0ps9K2wzh92sugW32DpM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=rsN3aeOlktC7RQy/mk6/tGpmP6to66XPlI6q+oxyufXaXyR2GViMnkdV2ILdtGJ9s
-	 HQpW40h1zdcwSVIEScS3ry+HXC6yhSJYMgK6NFVoA22m5RmEJfDX+FfxE97OvF+Kn0
-	 lQid5N3i8QNzv8W4V7JjH8xMJHeCJdSEVHgb6/NYHxXPBv8/DpdGELevzk3Oi5yn8P
-	 G0vL4aGIPv+qNYculdhRbsbnNfZ4W7fVflMVacLxcMcQNo2Nbw2/Ddme4Elxvzm8WD
-	 b0NVsmvSTHNmQXCxyYiSISUpf9kqaZuqagqR0td20a+fp9PNgYFT1DL6eIW6NtjTzv
-	 G/A+zWIJV+nPQ==
+	s=default; t=1768165123;
+	bh=SKs+Ht/LZSRfRvNZyWnO86BSb2SHmqdKrl+mbWCQE+0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=glKMGt0mjVyszm+z5e5ha8YAHCfX4Tc4jwiOT1Bq6sk4Tz8CcbJ5iDAT9gIcz+gws
+	 cMB3dDHFwmR5+jWZI4XOcbHDv6cSi56/3fC6LsR2oVGMR33KXQGa6M/dzB75bPr3aV
+	 fRJFUnMxbuFD7aCgsXRyC4CZOYVmWB10tPjUmqk4hPKjS1PudgH46Sj6s1Znag9wFq
+	 2eVLN+8CaYgsMedb0GkFHEqCJGPR7neJjBLyG/7ppzWehZ2ioWR2AgWju2A0xJtRk+
+	 jLtZuYWNLjptlf/6E5pDuQk6WWbkRKB9rn8ikwdY7Y26cssdRGhb0XhCgWosiJypul
+	 dlzFhFXHTR14w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11015403C1;
-	Sun, 11 Jan 2026 17:31:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78A6B18D
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:31:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36C5640544;
+	Sun, 11 Jan 2026 20:58:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D410318D
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 20:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B1D5403C1
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:31:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA46681212
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 20:58:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e3vylo_vEEig for <buildroot@buildroot.org>;
- Sun, 11 Jan 2026 17:31:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sgWyXzzcK592 for <buildroot@buildroot.org>;
+ Sun, 11 Jan 2026 20:58:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88FFD403B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6F2781203
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88FFD403B8
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:31:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6F2781203
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 20:58:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 845BE884AB; Sun, 11 Jan 2026 17:31:01 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id A39C2884A4; Sun, 11 Jan 2026 20:58:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Jan 2026 18:29:07 +0100
+Date: Sun, 11 Jan 2026 21:48:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90c8073bd46060e40f90db0b2476a0789554236e
-X-Git-Newrev: 71f2cc70025e30883152ff7b8899fec8dea3d2f6
+X-Git-Oldrev: 71f2cc70025e30883152ff7b8899fec8dea3d2f6
+X-Git-Newrev: 5eac154044c4976fc504d7202d766817d0a1d48a
 X-Patchwork-Hint: ignore
-Message-Id: <20260111173101.845BE884AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs: use https for documentation links
+Message-Id: <20260111205840.A39C2884A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/osm2pgsql: bump version to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,92 +68,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71f2cc70025e30883152ff7b8899fec8dea3d2f6
+commit: https://git.buildroot.net/buildroot/commit/?id=5eac154044c4976fc504d7202d766817d0a1d48a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch a handful of documentation/website links from http to https.
+Release-notes, since 2.0.1:
+https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.1.0
+https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.1.1
+https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.2.0
 
-Signed-off-by: Preyas Sharma <preyas17@zohomail.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+[Julien: add links to other releases since 2.0.1]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- README                       |  2 +-
- docs/website/contribute.html | 10 +++++-----
- docs/website/download.html   |  4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/osm2pgsql/osm2pgsql.hash | 2 +-
+ package/osm2pgsql/osm2pgsql.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/README b/README
-index 008e996f5f..143b476be6 100644
---- a/README
-+++ b/README
-@@ -3,7 +3,7 @@ Linux systems through cross-compilation.
+diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
+index 9f119d9c7d..6c04d4e989 100644
+--- a/package/osm2pgsql/osm2pgsql.hash
++++ b/package/osm2pgsql/osm2pgsql.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b9d5c95ccc928aafc3c6caccb8b5bc19c4d48a5d1640cada07388d0dbf171ecc  osm2pgsql-2.0.1.tar.gz
++sha256  567dad078f8a66d6d706ac1876b5251b688109d16974909d89ce2056d6e9f258  osm2pgsql-2.2.0.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
+index f968a159d2..10e64e75a6 100644
+--- a/package/osm2pgsql/osm2pgsql.mk
++++ b/package/osm2pgsql/osm2pgsql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- The documentation can be found in docs/manual. You can generate a text
- document with 'make manual-text' and read output/docs/manual/manual.text.
--Online documentation can be found at http://buildroot.org/docs.html
-+Online documentation can be found at https://buildroot.org/docs.html
- 
- To build and use the buildroot stuff, do the following:
- 
-diff --git a/docs/website/contribute.html b/docs/website/contribute.html
-index 52c30d60d3..115b1fd8b8 100644
---- a/docs/website/contribute.html
-+++ b/docs/website/contribute.html
-@@ -14,22 +14,22 @@
-       <ul>
- 	<li>Reproducing, analyzing and fixing bugs from our
- 	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a></li>
--	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
-+	<li>Analyzing and fixing <a href="https://autobuild.buildroot.org/">
- 	    autobuild failures</a></li>
- 	<li>Reviewing and testing patches sent by other developers. See the
--	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
-+	  <a href="https://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	  </a> or <a href="https://patchwork.ozlabs.org/project/buildroot/list/">
- 	    patchwork</a>.</li>
- 	<li>Working on items from the
--	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
--	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
-+	  <a href="https://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
-+	<li><a href="https://buildroot.org/manual.html#submitting-patches">Submitting
- 	  your own patches</a> through the
- 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	</a></li>
-       </ul>
- 
-       <p>For more details on these topics, check out the
--	<a href="http://buildroot.org/manual.html#_contributing_to_buildroot">
-+	<a href="https://buildroot.org/manual.html#_contributing_to_buildroot">
- 	  Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
- 
-       <p>If you need any support yourself, have a look at <a href="./support.html">
-diff --git a/docs/website/download.html b/docs/website/download.html
-index d1d92c8e6b..b2b4891464 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -98,7 +98,7 @@
-       </table>
- 
-       This and earlier releases (and their PGP signatures) can always be downloaded from
--      <a href="/downloads/">http://buildroot.net/downloads/</a>.
-+      <a href="/downloads/">https://buildroot.org/downloads/</a>.
-     </div>
-   </div>
- 
-@@ -123,7 +123,7 @@
-       </div><br>
- 
-       <p>If you are not already familiar with using Git, we recommend
--	you visit <a href="http://git-scm.org">the Git
-+	you visit <a href="https://git-scm.org">the Git
- 	website</a>.</p>
- 
-       <p>Once you've checked out a copy of the source tree, you can
+-OSM2PGSQL_VERSION = 2.0.1
++OSM2PGSQL_VERSION = 2.2.0
+ OSM2PGSQL_SITE = $(call github,osm2pgsql-dev,osm2pgsql,$(OSM2PGSQL_VERSION))
+ OSM2PGSQL_LICENSE = GPL-2.0+
+ OSM2PGSQL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
