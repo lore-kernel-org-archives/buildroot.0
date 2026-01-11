@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94EB5D2502E
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 17:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9FBD2502D
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 17:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD6488125E;
-	Sun, 11 Jan 2026 17:26:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A483881300;
+	Sun, 11 Jan 2026 17:26:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMDmkErV8F2A; Sun, 11 Jan 2026 17:26:54 +0000 (UTC)
+ id 7DV42iekWdnI; Sun, 11 Jan 2026 17:26:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACCC4812E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 759A8812E2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768152414;
-	bh=37BjbmmeFMeJ3GkGbILg80iMYbcngEGiapi0+/XihqA=;
+	s=default; t=1768152416;
+	bh=E962Dd48D2xff09jX61lgnKucKDu1Rf8vCHuVgJ5Chg=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=fYxZeuKXFZDmoSU9bAeVEnDXmclH7MXCoxwCDd6zA0zHhSAWK6xx8cYES9uKC+hBv
-	 yRYGw7JK4amhHVJ/Wkznh9jACFOdPLEPsoC2YmtIUaLpURnofow34H0jsKyMIB3hxx
-	 2z20LOawtbo0DQ6BEoESg3oMbGlSG8aT1q8UB7QKXZKUyZ2pfxXzgkoBIZ/T0fGiUE
-	 CLkGpht6umc3DIrSW2qK9OmxD1R2rOzKuLbeqfoZDqlpKtqW8DHA65s8/VXTohAFqU
-	 PuNlNjyPK16Lhd4L+FfE74+GsWLy4OVblqJM4/qvdf9j5WAT1qkK+JAcHSXO6t0lVm
-	 GwdWRjxqFc+OA==
+	b=KiEfcBdPS46OOweQFNMTK+2PqE9ebDyrmOlpWJrYhSo1Axgj21x0LxwiI0UMrZAVk
+	 N6ZVRvzeXMRVqgecq8ACnJaeuvDP+0w3FrNJsSwVdalEfQUB1WrDwIrzxUZE5sR6/T
+	 s28BAJZfvoJ8h2eWg8KkdsauHenr2lvF1VITAWLGkkhbY9A17NvMxXYydv4Jp8tsHY
+	 chnZikyhPhODKbpdU9womLcfWaobUISs+mLNWNrSCg4+T/pDKi6LHjuJyLYgL1MJvv
+	 /OqJDLU/S6d/fVk9YAiIqSjU8SXRSuza5Mz1Zr2xv/+I0Nn24TFByrzcyYOvrYVd7+
+	 R7U9ivpVqSpvg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACCC4812E6;
-	Sun, 11 Jan 2026 17:26:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C794D18D
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 759A8812E2;
+	Sun, 11 Jan 2026 17:26:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 491EF18D
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEE048114B
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7C664022A
  for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B9V4UqYpCJfh for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a6EAtFg2di5r for <buildroot@buildroot.org>;
  Sun, 11 Jan 2026 17:26:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 052D080E1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBBC3402A7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 052D080E1E
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBBC3402A7
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAA3F884A6; Sun, 11 Jan 2026 17:26:49 +0000 (UTC)
+ id D31CB884A3; Sun, 11 Jan 2026 17:26:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Jan 2026 18:22:47 +0100
+Date: Sun, 11 Jan 2026 18:17:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13c3e723cee2a2c892c51dee9a10c37dc38d873d
-X-Git-Newrev: a57a35bdd08ec7ff778823efea4c383ef9694040
+X-Git-Oldrev: b26ba37f1c47aa83039f18dbcad1164de9a805cd
+X-Git-Newrev: eff2064c05db70eb97a2ef19f41d614f71e232ea
 X-Patchwork-Hint: ignore
-Message-Id: <20260111172649.EAA3F884A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.403
+Message-Id: <20260111172649.D31CB884A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.15.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,41 +75,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a57a35bdd08ec7ff778823efea4c383ef9694040
+commit: https://git.buildroot.net/buildroot/commit/?id=eff2064c05db70eb97a2ef19f41d614f71e232ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/vcrhonek/hwdata/releases/tag/v0.403
+https://www.alsa-project.org/wiki/Changes_v1.2.15.1_v1.2.15.2#alsa-lib
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 6a0b931aea..eee3eaa555 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 8892ebdb0e..569b4887d4 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
 @@ -1,4 +1,4 @@
  # Locally calculated
--sha256  e390fe2f5f5ef7ed9ccbe62eb7cd40d4ee2b57389e7869c0dc96433c81812e7a  hwdata-0.402.tar.gz
-+sha256  77d0a69e5558d16d33bbb510a09093deaf11c882baf9ef6ec5f18a8ef96e2c13  hwdata-0.403.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 8a8e399c21..c185358bf6 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
+-sha256  7f983ca89ca420872ca16e8a9f8f97fb63db6c1c6e2585b91737a08bb03f566c  alsa-lib-1.2.15.1.tar.bz2
++sha256  637eefd4966ce738da44464494df2b2894e19778fac2f9e7c47277e2af9297f4  alsa-lib-1.2.15.2.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index a4713edf0a..08d96c3188 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.402
-+HWDATA_VERSION = 0.403
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-ALSA_LIB_VERSION = 1.2.15.1
++ALSA_LIB_VERSION = 1.2.15.2
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
