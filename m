@@ -4,83 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFD66D2502E
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 17:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDD0AD2502D
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 17:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78A468126D;
-	Sun, 11 Jan 2026 17:24:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7757A81286;
+	Sun, 11 Jan 2026 17:26:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id otiBKq18Ji5u; Sun, 11 Jan 2026 17:24:09 +0000 (UTC)
+ id 22TXM_tQc2ng; Sun, 11 Jan 2026 17:26:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4067C810A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00C4F8115F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768152249;
-	bh=7EpxD955gYiyV6s1EzzHl5Za5ei9CR0IzF2EMNS6YU8=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=UfbMgIGpjpWIUhyBRvIL1y8nCIn+KSF8LeZL0NxEfi2Jou/9JHndbIEmI+lWvW2iy
-	 7fDLiNBZczd4ksP7P7NS5DQUZClLYDSUKXWyzSTCCA5YEk0ZGc0g7EF7nNvwfnD5Hj
-	 sKakWVVkjJXtp6GcX5LZLk6/T/sjqRWnLYul5q0wbFq7INFVbw+DRJjjkPnTDfIbvf
-	 HvPAqGQkt+hjwF9TUDUXdabg0j5nRbRzWvaVUF4LR4oe1WTpyPzOf0Ind6mfWQFBpv
-	 91hjzsWh9DCgmlGr68BI0CK04xfaex1Ob3mJJnDf9DE4hhS54X9Ob+nmMKMMEAMIRP
-	 1Ni7bvVBy1byQ==
+	s=default; t=1768152412;
+	bh=B/875fh9DNUOZjt3NdA569kiI5TFlrx+vLizhr0eiro=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Hz4LgqsUKqKxWL5mkPM6SO0LkBLcJR9r6SktNVJbKCIE/C1PUOwmPhdBTcTkoWns5
+	 bzoLNL1G+xvGMtAuj5J+L+zNJWpkg/kofqxhrYY8iqC8ueS9/DLC0oOD8onmJ6Ztev
+	 sz5FOv62NU0jrA0OHKp2tUliv0VtQE8qD34wwDlD5Tp9vERCMy2WCjKurFOHB0HJt0
+	 Ub0RK765XtjjbkQOlzcz1wOk0Qhor3Ru/D3osrLSS93rQR3Pxbt00yfFCE6UfGJSOY
+	 OwVRbsDWBx57GGrIIuAjnEtwlZ4YAFruSaPEOJ5kb919JXQdwjljXjUnrC4+FbVKI2
+	 Mh+zyzGSSxHeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4067C810A2;
-	Sun, 11 Jan 2026 17:24:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D2C6F18D
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:24:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00C4F8115F;
+	Sun, 11 Jan 2026 17:26:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A329118D
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C47D66085B
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:24:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93D54403F4
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SaKeqhaXvynx for <buildroot@buildroot.org>;
- Sun, 11 Jan 2026 17:24:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sMftAJPzpqLo for <buildroot@buildroot.org>;
+ Sun, 11 Jan 2026 17:26:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B54CD60781
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B54CD60781
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B54CD60781
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:24:05 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1311598155; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 11 Jan 2026 17:24:02 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vezAX-00000006stc-3b3U;
- Sun, 11 Jan 2026 18:24:01 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC64E4022A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC64E4022A
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 17:26:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CA5FC884A1; Sun, 11 Jan 2026 17:26:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-In-Reply-To: <20260111132505.135161-1-fido_max@inbox.ru> (Maxim Kochetkov via
- buildroot's message of "Sun, 11 Jan 2026 16:25:05 +0300")
-References: <20260111132505.135161-1-fido_max@inbox.ru>
-Date: Sun, 11 Jan 2026 18:24:01 +0100
-Message-ID: <87fr8cysem.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=o2IAdBSQQ+ztwOQQnESKaTYYbDB0rYUqIOf2e7JSUM2VXYFvkvdkk69naw6O+rIvI3rUXH/KZNtvcv7pMbRflMxQxsK7p9vbu1/4WqHfn+gVwaXQ/SiuNNEQwapzFlChVsh4aZuUyz4XCSNdAvCC1GMSn/rGXA03FdgOND6+c9cfVNuPKleirqpvsm1vGY7eJzg9iTedt7eQTGGOATizPIIA9Ms2GvLt1OAGp9a5aY3ND2ATgoKJS3B/dnUJJlDy6o8DDfFoDvww69MlGbTUkjUfOFeJbigAua6te+2HDWv+VnaxqZlvegB7JEDvaa6f0ovAGHgZl40KIjPfddaXlw==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=HSf4flZhrFnRquKraGSM5TY5mpHckFgw/fzgRxyO7vI=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=o2IAdBSQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgeos: bump version to 3.14.1
+To: buildroot@buildroot.org
+Date: Sun, 11 Jan 2026 18:15:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d3ebc63ce7a7f69a45bb9dc810ecdc27add02c15
+X-Git-Newrev: b26ba37f1c47aa83039f18dbcad1164de9a805cd
+X-Patchwork-Hint: ignore
+Message-Id: <20260111172649.CA5FC884A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.51.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,22 +69,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Maxim" == Maxim Kochetkov via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b26ba37f1c47aa83039f18dbcad1164de9a805cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changelog: https://github.com/libgeos/geos/releases/tag/3.14.1
- > Drop merged upstream patch.
+https://sqlite.org/releaselog/3_51_2.html
 
- > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 19d5584625..055e935a4e 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4f2445cd70479724d32ad015ec7fd37fbb6f6130013bd4bfbc80c32beb42b7e0  sqlite-autoconf-3510100.tar.gz
++sha256  fbd89f866b1403bb66a143065440089dd76100f2238314d92274a082d4f2b7bb  sqlite-autoconf-3510200.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index ca8071c78e..795bc32dbf 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3.51.1
+-SQLITE_TAR_VERSION = 3510100
++SQLITE_VERSION = 3.51.2
++SQLITE_TAR_VERSION = 3510200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+-SQLITE_SITE = https://www.sqlite.org/2025
++SQLITE_SITE = https://www.sqlite.org/2026
+ SQLITE_LICENSE = blessing
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_CPE_ID_VENDOR = sqlite
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
