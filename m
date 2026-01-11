@@ -4,82 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17AACD2502F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 11:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52ED9D2502F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 11:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F13A608A0;
-	Sun, 11 Jan 2026 11:20:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08C446071A;
+	Sun, 11 Jan 2026 11:31:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n7rsuogzxPq8; Sun, 11 Jan 2026 11:20:29 +0000 (UTC)
+ id 0Oj-T7z7YhJn; Sun, 11 Jan 2026 11:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F64760853
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 043F66076D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768130429;
-	bh=zOxc2Jc2JbJP77yFzppTyAXO/yEQrI1Wh69suoavypc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=rad65AOgm8h5qtKtzF9yPro/t5RqLBDiacTcZG05DpdNaEhP+7A2cvxIuU6CNC8mW
-	 iE2GnveyYi9LpRWOyaQrSElVL6xfrTjhMLTBNQ76Qh0k/tjJOA4QVEAKqkazgAnaWH
-	 DAvNgC5LS4wKMxDu2o7u57wG5+Zy0dQLv+NjSk4RrslTUg9dRZt7GR+uvvkMpnLWQM
-	 orJQ8FN4S2GaMgIJzz7TD1GWwOqtuwdorWps2UMmCdbSPFaJ5OaTJG9eZWA0X63jiZ
-	 /MUSzyjdsZBT+m5cGkpiNp4RmghH4XstNV5z73MU7gn4q/k4WwwtZUJKMqtga7YKsH
-	 kIFTmDBPn/oKw==
+	s=default; t=1768131074;
+	bh=eQH9tsAoGlQHQWK911+78lZcORVB4Hky3GEFp+wZ7nk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=VlSZQ7F1WF3OkaWTtxJOv4cUfFY9eppv4DT7iOldBsnsnoEjx0rEUXJFCn4WepHiu
+	 uAXPQ1hKyTA7f1CLIFeOnRYIK6QXjPETriHt+8bUOk/XuMpl+IEMlsLPrJO6jq214P
+	 gPZAWjf/cemN35e4a9OTLlLzHYpxiGwRsyqw9sIrrSQvM0vYO8NYaboXc2KMQpQXA9
+	 VVvdLFACr6VWaX8C7PxI1sOKOi+uo65TGx71el2gWPuWIKcC7qD/7aiq1NH7GsCam8
+	 fR9A0VWegaDJ6Ge6ySECw95hc0EVgw1fmbA6Q8azY11tJvyEBFEFDfW5SoFieI+mSC
+	 GfVcoLFn14oYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F64760853;
-	Sun, 11 Jan 2026 11:20:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 93C451CC
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:20:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 043F66076D;
+	Sun, 11 Jan 2026 11:31:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41BEB1CC
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72F78401D0
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:20:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28A5E401D0
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:31:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fud9BOJL5ZwR for <buildroot@buildroot.org>;
- Sun, 11 Jan 2026 11:20:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AAC824008C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAC824008C
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AAC824008C
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:20:24 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 07A91A4C3700
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 12:20:22 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60108)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vetUb-000000000J2-1cvD
- for buildroot@buildroot.org; Sun, 11 Jan 2026 11:20:21 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id uREALAo8adQR for <buildroot@buildroot.org>;
+ Sun, 11 Jan 2026 11:31:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A9074008C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A9074008C
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:31:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EEED7881BF; Sun, 11 Jan 2026 11:31:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Jan 2026 12:20:20 +0100
-Message-ID: <20260111112021.3551404-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1768130422;
- bh=9qhCO/EzeH9Bug0QV6AvNsUlhFpdoL3m+MZW1IzYAGw=;
- h=From:To:Subject:Date:From;
- b=U3zl3QP+A1YlLRd1wbR8Y92zwg8roFkj92720qKpg3fjWJU3e0ERQp4j0lheCQEN2
- 0J0r+cdx08w036fhzuWrS+lEBKIpXEyDxXgWphNWuxKkYlq9qMnY52/DFWtJal+Rfi
- 0F5pTHXFy5t1PY3s6u/AbfNEUmHuYQsNyrZpt9nTMzs3nxT0rwKYNQI5go1gK5zwJA
- c3ErOYrxrJ41c95X300qIIGdgWgS1//KgQd9t5KG0t0DPLtLrnV7eFU2vYgroebdH3
- TJ8lQTukkgY7jUK8nPxP6G7Kg+qf7cv4LfWlwHZougaL2Skaq3PGhJuCMYCA4c9sjz
- PX9yZX+WAegPQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=U3zl3QP+
-Subject: [Buildroot] [PATCH 1/1] package/uqmi: bump version
+Date: Sun, 11 Jan 2026 12:09:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 39aaf317d5f6f511faa3459ca54e021f72b5d0f2
+X-Git-Newrev: d3ebc63ce7a7f69a45bb9dc810ecdc27add02c15
+X-Patchwork-Hint: ignore
+Message-Id: <20260111113111.EEED7881BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcoap: security bump to v4.3.5a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,86 +68,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVtb3ZlZCBwYXRjaCAwMDAxLCBub3QgbmVlZGVkIGFueW1vcmUgZHVlIHRvIHVwc3RyZWFtIGNv
-bW1pdApodHRwczovL2dpdC5vcGVud3J0Lm9yZy8/cD1wcm9qZWN0L3VxbWkuZ2l0O2E9Y29tbWl0
-ZGlmZjtoPWViZmU4YjQ3YjM2NjA5MjQ1N2RmN2E3ZjYzMWM4Zjc0NmU4NDU1ZmQKClVwZGF0ZWQg
-bGljZW5zZSBmaWxlIG5hbWUgZHVlIHRvIHVwc3RyZWFtIHJlbmFtZToKaHR0cHM6Ly9naXQub3Bl
-bndydC5vcmcvP3A9cHJvamVjdC91cW1pLmdpdDthPWNvbW1pdGRpZmY7aD1hMDQzYTc0MDdiZjYw
-MmNhYzY2YzllN2JiMmI4MWFhMmU1MGE2OTkzCgpTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8
-YmVybmRAa3VobHMubmV0PgotLS0KIC4uLjIueC1mYWxzZS1lcnJvci1yZXBvcnRpbmctc3Rvcmlu
-Zy10aC5wYXRjaCB8IDU3IC0tLS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvdXFtaS91cW1pLmhh
-c2ggICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstCiBwYWNrYWdlL3VxbWkvdXFtaS5tayAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgNCArLQogMyBmaWxlcyBjaGFuZ2VkLCA0IGluc2Vy
-dGlvbnMoKyksIDYxIGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdXFt
-aS8wMDAxLXVxbWktYXZvaWQtZ2NjLTEyLngtZmFsc2UtZXJyb3ItcmVwb3J0aW5nLXN0b3Jpbmct
-dGgucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3VxbWkvMDAwMS11cW1pLWF2b2lkLWdjYy0x
-Mi54LWZhbHNlLWVycm9yLXJlcG9ydGluZy1zdG9yaW5nLXRoLnBhdGNoIGIvcGFja2FnZS91cW1p
-LzAwMDEtdXFtaS1hdm9pZC1nY2MtMTIueC1mYWxzZS1lcnJvci1yZXBvcnRpbmctc3RvcmluZy10
-aC5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZTIxOTkyMjhiOS4uMDAwMDAw
-MDAwMAotLS0gYS9wYWNrYWdlL3VxbWkvMDAwMS11cW1pLWF2b2lkLWdjYy0xMi54LWZhbHNlLWVy
-cm9yLXJlcG9ydGluZy1zdG9yaW5nLXRoLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNTcgKzAs
-MCBAQAotRnJvbSA2M2FiODg3YmU5MGM3ZmUzN2Q1MzdlYTc1ZTYwZWI5NWQ2ZDg3ZDNmIE1vbiBT
-ZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgu
-bmV0PgotRGF0ZTogU3VuLCA1IE1hciAyMDIzIDIyOjA4OjEzICswMTAwCi1TdWJqZWN0OiBbUEFU
-Q0hdIHVxbWk6IGF2b2lkIGdjYy0xMi54IGZhbHNlIGVycm9yIHJlcG9ydGluZyAoc3RvcmluZyB0
-aGUKLSBhZGRyZXNzIG9mIGxvY2FsIHZhcmlhYmxlICdjb21wbGV0ZScgaW4gJypyZXEuY29tcGxl
-dGUnKQotCi1Bdm9pZCBnY2MtMTIueCBmYWxzZSBlcnJvciByZXBvcnRpbmcgKHJlcS0+Y29tcGxl
-dGUgaXMgbGF0ZXIgcmVzZXQgdG8gTlVMTAotaW4gY2FzZSBvZiB1c2Ugb2YgbG9jYWwgY29tcGxl
-dGUpOgotCi0gIGRldi5jOjIxNzoyMzogZXJyb3I6IHN0b3JpbmcgdGhlIGFkZHJlc3Mgb2YgbG9j
-YWwgdmFyaWFibGUgJ2NvbXBsZXRlJyBpbiAnKnJlcS5jb21wbGV0ZScgWy1XZXJyb3I9ZGFuZ2xp
-bmctcG9pbnRlcj1dCi0gICAgMjE3IHwgICAgICAgICByZXEtPmNvbXBsZXRlID0gJmNvbXBsZXRl
-OwotICAgICAgICB8ICAgICAgICAgfn5+fn5+fn5+fn5+fn5efn5+fn5+fn5+fgotCi1TaWduZWQt
-b2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Ci1bVXBzdHJlYW06IGh0
-dHA6Ly9saXN0cy5vcGVud3J0Lm9yZy9waXBlcm1haWwvb3BlbndydC1kZXZlbC8yMDIzLU1hcmNo
-LzA0MDY2Ny5odG1sXQotU2lnbmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBn
-bXgubmV0PgotLS0tCi1DaGFuZ2VzIHYxIC0+IHYyOgotICAtIGFwcGx5IHByYWdtYSBpZ25vcmVk
-IG9ubHkgZm9yIGdjYyA+PSAxMi54IChhcyB0aGUgd2FybmluZwotICAgICctV2RhbmdsaW5nLXBv
-aW50ZXInIHdhcyBpbnRyb2R1Y2VkIHdpdGggZ2NjLTEyLngpCi0tLS0KLSBkZXYuYyB8IDEyICsr
-KysrKysrKysrKwotIDEgZmlsZSBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspCi0KLWRpZmYgLS1n
-aXQgYS9kZXYuYyBiL2Rldi5jCi1pbmRleCBiZDEwMjA3Li5kYmQ0MmQ0IDEwMDY0NAotLS0tIGEv
-ZGV2LmMKLSsrKyBiL2Rldi5jCi1AQCAtMjAzLDYgKzIwMywxNSBAQCB2b2lkIHFtaV9yZXF1ZXN0
-X2NhbmNlbChzdHJ1Y3QgcW1pX2RldiAqcW1pLCBzdHJ1Y3QgcW1pX3JlcXVlc3QgKnJlcSkKLSAJ
-X19xbWlfcmVxdWVzdF9jb21wbGV0ZShxbWksIHJlcSwgTlVMTCk7Ci0gfQotIAotKy8qIGF2b2lk
-IGdjYy0xMi54IGZhbHNlIGVycm9yIHJlcG9ydGluZzoKLSsgKiAgIGRldi5jOjIxNzoyMzogZXJy
-b3I6IHN0b3JpbmcgdGhlIGFkZHJlc3Mgb2YgbG9jYWwgdmFyaWFibGUg4oCYY29tcGxldGXigJkg
-aW4g4oCYKnJlcS5jb21wbGV0ZeKAmSBbLVdlcnJvcj1kYW5nbGluZy1wb2ludGVyPV0KLSsgKiAg
-ICAgMjE3IHwgICAgICAgICByZXEtPmNvbXBsZXRlID0gJmNvbXBsZXRlOwotKyAqICAgICAgICAg
-fCAgICAgICAgIH5+fn5+fn5+fn5+fn5+Xn5+fn5+fn5+fn4KLSsgKi8KLSsjaWYgX19HTlVDX18g
-Pj0gMTIKLSsjcHJhZ21hIEdDQyBkaWFnbm9zdGljIHB1c2gKLSsjcHJhZ21hIEdDQyBkaWFnbm9z
-dGljIGlnbm9yZWQgIi1XZGFuZ2xpbmctcG9pbnRlciIKLSsjZW5kaWYKLSBpbnQgcW1pX3JlcXVl
-c3Rfd2FpdChzdHJ1Y3QgcW1pX2RldiAqcW1pLCBzdHJ1Y3QgcW1pX3JlcXVlc3QgKnJlcSkKLSB7
-Ci0gCWJvb2wgY29tcGxldGUgPSBmYWxzZTsKLUBAIC0yMzEsNiArMjQwLDkgQEAgaW50IHFtaV9y
-ZXF1ZXN0X3dhaXQoc3RydWN0IHFtaV9kZXYgKnFtaSwgc3RydWN0IHFtaV9yZXF1ZXN0ICpyZXEp
-Ci0gCi0gCXJldHVybiByZXEtPnJldDsKLSB9Ci0rI2lmIF9fR05VQ19fID49IDEyCi0rI3ByYWdt
-YSBHQ0MgZGlhZ25vc3RpYyBwb3AKLSsjZW5kaWYKLSAKLSBzdHJ1Y3QgcW1pX2Nvbm5lY3RfcmVx
-dWVzdCB7Ci0gCXN0cnVjdCBxbWlfcmVxdWVzdCByZXE7Ci0tLSAKLTIuMzkuMgotCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3VxbWkvdXFtaS5oYXNoIGIvcGFja2FnZS91cW1pL3VxbWkuaGFzaAppbmRl
-eCAzMjc3YjE3NjQ1Li5jYWUyYTA4YjAyIDEwMDY0NAotLS0gYS9wYWNrYWdlL3VxbWkvdXFtaS5o
-YXNoCisrKyBiL3BhY2thZ2UvdXFtaS91cW1pLmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2Fs
-bHkgY2FsY3VsYXRlZAotc2hhMjU2ICBlY2VjMWFiNWE5Y2Y5MWU1NGQyOTQ5NmQ2NzkzY2U1ODIx
-MjQ2MjYxYjk5Yzc0MzEyNjg5OWZjZjk4MzdhZjQ4ICB1cW1pLTBhMTliNWI3NzE0MDQ2NWMyOWUy
-YWZhN2Q2MTFmZTkzYWJjOTY3MmYtZ2l0NC50YXIuZ3oKLXNoYTI1NiAgYTY5YmY0NGRiZmYxNWQ3
-Mjc1NzhkMjA2OWE2NTRkNjBlOTAzNGM1ZTJjYzNlMTk5YTAxMmU3MmFmZWY2YzI1OSAgbWFpbi5j
-CitzaGEyNTYgIGZmNDg1MGNhM2MxNTE3YWM3OTYxNGEzOWZkYjQ3NTYwYzk5ZjExNTkxNjNlOTZl
-MWY1MDM3YmY1NTA3NzU2YzYgIHVxbWktNzkxNGRhNDNjZGRhYWY2Y2ZiYTExNjI2MGM4MWU2ZTlh
-ZGZmZDVhYi1naXQ0LnRhci5negorc2hhMjU2ICBhNjliZjQ0ZGJmZjE1ZDcyNzU3OGQyMDY5YTY1
-NGQ2MGU5MDM0YzVlMmNjM2UxOTlhMDEyZTcyYWZlZjZjMjU5ICB1cW1pL3VxbWkuYwpkaWZmIC0t
-Z2l0IGEvcGFja2FnZS91cW1pL3VxbWkubWsgYi9wYWNrYWdlL3VxbWkvdXFtaS5tawppbmRleCBm
-MjBjM2Y1MTQxLi41Y2I5ZWJkZTQzIDEwMDY0NAotLS0gYS9wYWNrYWdlL3VxbWkvdXFtaS5tawor
-KysgYi9wYWNrYWdlL3VxbWkvdXFtaS5tawpAQCAtNCwxMSArNCwxMSBAQAogIwogIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMKIAotVVFNSV9WRVJTSU9OID0gMGExOWI1Yjc3MTQwNDY1YzI5ZTJhZmE3
-ZDYxMWZlOTNhYmM5NjcyZgorVVFNSV9WRVJTSU9OID0gNzkxNGRhNDNjZGRhYWY2Y2ZiYTExNjI2
-MGM4MWU2ZTlhZGZmZDVhYgogVVFNSV9TSVRFID0gaHR0cHM6Ly9naXQub3BlbndydC5vcmcvcHJv
-amVjdC91cW1pLmdpdAogVVFNSV9TSVRFX01FVEhPRCA9IGdpdAogVVFNSV9MSUNFTlNFID0gTEdQ
-TC0yLjArCi1VUU1JX0xJQ0VOU0VfRklMRVMgPSBtYWluLmMKK1VRTUlfTElDRU5TRV9GSUxFUyA9
-IHVxbWkvdXFtaS5jCiBVUU1JX0RFUEVOREVOQ0lFUyA9IGpzb24tYyBsaWJ1Ym94CiAKICQoZXZh
-bCAkKGNtYWtlLXBhY2thZ2UpKQotLSAKMi40Ny4zCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=d3ebc63ce7a7f69a45bb9dc810ecdc27add02c15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For more info on the release, see:
+
+- https://github.com/obgm/libcoap/compare/v4.3.5...v4.3.5a
+- https://github.com/obgm/libcoap/blob/release-4.3.5-patches/ChangeLog
+
+Fixes the following vulnerabilities:
+
+- CVE-2025-59391:
+    A memory disclosure vulnerability exists in libcoap's OSCORE
+    configuration parser in libcoap before release-4.3.5-patches. An out-
+    of-bounds read may occur when parsing certain configuration values,
+    allowing an attacker to infer or read memory beyond string boundaries
+    in the .rodata section. This could potentially lead to information
+    disclosure or denial of service.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-59391
+
+- CVE-2025-65493:
+    NULL pointer dereference in src/coap_openssl.c in OISM libcoap 4.3.5
+    allows remote attackers to cause a denial of service via a crafted
+    DTLS/TLS connection that triggers BIO_get_data() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65493
+
+- CVE-2025-65494:
+    NULL pointer dereference in get_san_or_cn_from_cert() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted X.509 certificate that causes
+    sk_GENERAL_NAME_value() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65494
+
+- CVE-2025-65495:
+    Integer signedness error in tls_verify_call_back() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted TLS certificate that causes
+    i2d_X509() to return -1 and be misused as a malloc() size parameter.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65495
+
+- CVE-2025-65496:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65496
+
+- CVE-2025-65497:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65497
+
+- CVE-2025-65498:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65498
+
+- CVE-2025-65499:
+    Array index error in tls_verify_call_back() in src/coap_openssl.c in
+    OISM libcoap 4.3.5 allows remote attackers to cause a denial of
+    service via a crafted DTLS handshake that triggers
+    SSL_get_ex_data_X509_STORE_CTX_idx() to return -1.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65499
+
+- CVE-2025-65500:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65500
+
+- CVE-2025-65501:
+    Null pointer dereference in coap_dtls_info_callback() in OISM libcoap
+    4.3.5 allows remote attackers to cause a denial of service via a DTLS
+    handshake where SSL_get_app_data() returns NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65501
+
+LICENSE Year updated see [1].
+
+[1] https://github.com/obgm/libcoap/commit/c9135b6b26b978295a3e1312ff59cb7cb9b32251
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libcoap/libcoap.hash | 4 ++--
+ package/libcoap/libcoap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index fc618fef52..17fce990fa 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
++sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+-sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
++sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index d7c2a78944..bb1321f194 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCOAP_VERSION = 4.3.5
++LIBCOAP_VERSION = 4.3.5a
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
