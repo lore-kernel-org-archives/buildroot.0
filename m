@@ -4,85 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1F2AD2502F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 11:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E06FD2502F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 11:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61D0B40420;
-	Sun, 11 Jan 2026 11:31:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DE2F4068A;
+	Sun, 11 Jan 2026 11:56:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QcorEb0PnZ53; Sun, 11 Jan 2026 11:31:35 +0000 (UTC)
+ id z7dn3VywT_DL; Sun, 11 Jan 2026 11:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF23440417
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B15D4065D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768131095;
-	bh=ibQHZ7ajwMsln4Edy3ZdSdx3rVexFAHXmLyrY2cGrXc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=rF8SK9eIX50pcehpdsoLG04GlpDf2aMaQ18udPBsYtGZuxz2+fPy9M/enpEMbOJC5
-	 W+5nn4huLRUdUwTHc9vt0WCNdkl5bgFGt6ZtnHdApEQphg5e5Cdese/Rd+EmErDpLW
-	 WetfV71xe+9xrfZ/e5Dnm60VNUKS0+1yQWPbkWR9MsxyVx4NDOskZ6QM2SUfXnk+4c
-	 pNbGSHjof3D6EMNPUo1CFy7azCz3kzIRuuSinlAKpSjAk8YahmfmA1XD3yCKO/x1al
-	 dOW6sN295pEj0lM3Y7trxGIOPlAw/NIb/Qzb74Sia127DI6l/Tm/sTPSC8hP1KAwtn
-	 FEl4d95NGWkrw==
+	s=default; t=1768132611;
+	bh=RRK4iBOdK6MsT5OCFr+UJi2zwU4JZ3Qtk/m2Vuwao/g=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=gGOZOsfZM3PLXcvzE19QQkiCsMibN/qZJu4cgohv93t5LkmPx68dTXfbkLUaMncpW
+	 c+kwNLpLqWofJFAROrGNpzzAnZSgyaGTQpndHVHMz6sNunHF9QxkUmM38fX38YsWIb
+	 A7HXkcjTrVdPcN5uEWx6dYH7ICBe5tj/OdtBbd1+wVu83kDoRuQtujyAuImtKve9MR
+	 vpzPlItpImQcm+lL4qxQllVkeuDYCAPESgGtxPXg0S58yWV24u44m+pIxPLAaDRnji
+	 iQO28Co7TY5h/dZucTIrTwDqppP9K+KMO9B1ivtk3DNeK8sVcOMMw3Tw0q1oCwOidL
+	 N9QFIvDlY2ySg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF23440417;
-	Sun, 11 Jan 2026 11:31:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE0B218D
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:31:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B15D4065D;
+	Sun, 11 Jan 2026 11:56:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 899C712E
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A536580D78
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:31:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C005606DB
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:56:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FyXpNGleH2m2 for <buildroot@buildroot.org>;
- Sun, 11 Jan 2026 11:31:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A968380D64
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A968380D64
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A968380D64
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:31:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id E6B525FFAA;
- Sun, 11 Jan 2026 12:31:26 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 11 Jan 2026 12:31:26 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EchDdnmM0X8O for <buildroot@buildroot.org>;
+ Sun, 11 Jan 2026 11:56:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C98C60669
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C98C60669
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C98C60669
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 11:56:49 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 30331A4C3943
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 12:56:46 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60456)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1veu3p-000000007Hx-3aHT
+ for buildroot@buildroot.org; Sun, 11 Jan 2026 11:56:45 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 11 Jan 2026 12:56:45 +0100
+Message-ID: <20260111115645.2780818-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 11 Jan 2026 12:31:26 +0100
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Joris Lijssens <joris.lijssens@gmail.com>
-In-Reply-To: <20260111100551.34348-1-thomas.perale@mind.be>
-References: <20260111100551.34348-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <2ecb8a82d03d6ee924b63a842e13410d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1768131089;
- bh=kQuqfDQsuPMmKDJ1xR2YZA9rZYWZzDbjE2ynQEGGnjQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FAkVYkcN+2cOx4kvB8FkgCW8gIhlPD8/JomdiljB02wlcZ522pUO+XBP19xAYVLTA
- IRwva5SJQ7EsR5nB3G1t2L0cW6puQIsVAA8PIiM/NSjk3Tnm44UJ6Dmh9fo2U5R4+N
- ePdNhPZ3W/V5RcJ7/uymvhFtbsjaQ3H207xwkqOfmXAektInSyKqawCO/dNgZj96Yl
- l6XIeC27KoQQiqA5US5dfB/pbAfStB+LvksD6VWm7ewIRdRWVQnSZUphByGVEybjaP
- x8e/jGtOb1P7yRoKYAi5YkPklB6j5K43o7Y5qFJilhGPfQmyDEABptNQc1xBxMxVPz
- r6i7DwIwS86/w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1768132606;
+ bh=KHxXwKGCfgv68QRZ/DEJTD6bLdl6vm9tHo2atQE2Wzs=;
+ h=From:To:Subject:Date:From;
+ b=aiw56vFGj0R+p0zDPzETDyLTdUip1FiDifr95XsUkGegjSg9Z1f1KdxavLTb98FmO
+ VP1Co6pA/3QzV3FnyuKqFXVLH0l1tFy9nBGDFjqQwbXX79AQlFxnBWKepVY9hDGNn3
+ TeATH5SsO7DmipnEjeBthdokEjPYG0o6H7th03EAIdKvLr9xEFb6CFdJa7OcyGU8Q+
+ rjBUuzaQv0iePrPsAXMqfmIN/QMLcUjPMUwu8snHcZuMq+eGZYOtMfYRp3jwp+SOCh
+ qCDhvKnBVPU9U5Gc3dQiCLq7J9rZBZzg4sW5lfU8k659xRgkI2pXGeqq3vlxMqhR82
+ MQbRKQXYaqdcA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=FAkVYkcN
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcoap: security bump to
- v4.3.5a
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=aiw56vFG
+Subject: [Buildroot] [PATCH 1/1] package/icu: bump version to 78.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,121 +91,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/01/2026 11:05, Thomas Perale via buildroot wrote:
-> For more info on the release, see:
-> 
-> - https://github.com/obgm/libcoap/compare/v4.3.5...v4.3.5a
-> - https://github.com/obgm/libcoap/blob/release-4.3.5-patches/ChangeLog
-> 
-> Fixes the following vulnerabilities:
-> 
-> - CVE-2025-59391:
->     A memory disclosure vulnerability exists in libcoap's OSCORE
->     configuration parser in libcoap before release-4.3.5-patches. An 
-> out-
->     of-bounds read may occur when parsing certain configuration values,
->     allowing an attacker to infer or read memory beyond string 
-> boundaries
->     in the .rodata section. This could potentially lead to information
->     disclosure or denial of service.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-59391
-> 
-> - CVE-2025-65493:
->     NULL pointer dereference in src/coap_openssl.c in OISM libcoap 
-> 4.3.5
->     allows remote attackers to cause a denial of service via a crafted
->     DTLS/TLS connection that triggers BIO_get_data() to return NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65493
-> 
-> - CVE-2025-65494:
->     NULL pointer dereference in get_san_or_cn_from_cert() in
->     src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
->     cause a denial of service via a crafted X.509 certificate that 
-> causes
->     sk_GENERAL_NAME_value() to return NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65494
-> 
-> - CVE-2025-65495:
->     Integer signedness error in tls_verify_call_back() in
->     src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
->     cause a denial of service via a crafted TLS certificate that causes
->     i2d_X509() to return -1 and be misused as a malloc() size 
-> parameter.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65495
-> 
-> - CVE-2025-65496:
->     NULL pointer dereference in coap_dtls_generate_cookie() in
->     src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
->     cause a denial of service via a crafted DTLS handshake that 
-> triggers
->     SSL_get_SSL_CTX() to return NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65496
-> 
-> - CVE-2025-65497:
->     NULL pointer dereference in coap_dtls_generate_cookie() in
->     src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
->     cause a denial of service via a crafted DTLS handshake that 
-> triggers
->     SSL_get_SSL_CTX() to return NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65497
-> 
-> - CVE-2025-65498:
->     NULL pointer dereference in coap_dtls_generate_cookie() in
->     src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
->     cause a denial of service via a crafted DTLS handshake that 
-> triggers
->     SSL_get_SSL_CTX() to return NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65498
-> 
-> - CVE-2025-65499:
->     Array index error in tls_verify_call_back() in src/coap_openssl.c 
-> in
->     OISM libcoap 4.3.5 allows remote attackers to cause a denial of
->     service via a crafted DTLS handshake that triggers
->     SSL_get_ex_data_X509_STORE_CTX_idx() to return -1.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65499
-> 
-> - CVE-2025-65500:
->     NULL pointer dereference in coap_dtls_generate_cookie() in
->     src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
->     cause a denial of service via a crafted DTLS handshake that 
-> triggers
->     SSL_get_SSL_CTX() to return NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65500
-> 
-> - CVE-2025-65501:
->     Null pointer dereference in coap_dtls_info_callback() in OISM 
-> libcoap
->     4.3.5 allows remote attackers to cause a denial of service via a 
-> DTLS
->     handshake where SSL_get_app_data() returns NULL.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-65501
-> 
-> LICENSE Year updated see [1].
-> 
-> [1] 
-> https://github.com/obgm/libcoap/commit/c9135b6b26b978295a3e1312ff59cb7cb9b32251
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+https://github.com/unicode-org/icu/releases/tag/release-78.2
 
-Applied to master, thanks.
+Added tarball hash from github.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/icu/icu.hash | 3 ++-
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 4f60681c54..d79b95b174 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/unicode-org/icu/releases/tag/release-78.2
++sha256  3e99687b5c435d4b209630e2d2ebb79906c984685e78635078b672e03c89df35  icu4c-78.2-sources.tgz
+ # Locally computed
+-sha256  6217f58ca39b23127605cfc6c7e0d3475fe4b0d63157011383d716cb41617886  icu4c-78.1-sources.tgz
+ sha256  e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 6ac2085700..64d750a5ac 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 78.1
++ICU_VERSION = 78.2
+ ICU_SOURCE = icu4c-$(ICU_VERSION)-sources.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
