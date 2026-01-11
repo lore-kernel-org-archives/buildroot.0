@@ -1,111 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8EDAD25032
-	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 04:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49136D2502F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Jan 2026 10:06:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2014F81469;
-	Sun, 11 Jan 2026 04:22:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58BDF40484;
+	Sun, 11 Jan 2026 10:06:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Olurj67LUajc; Sun, 11 Jan 2026 04:22:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cy4q3kkg40RH; Sun, 11 Jan 2026 10:05:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56139813B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64EC2403E9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768105325;
-	bh=b/UwquHxCoww2A61QoxNURulF9XL0nxoniwxbEtEjHg=;
-	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=J3XPZZppkDPnSyBvis54dPmhilHyhYQckKB6FeocyhoPa2+uaHXJCYCuD0D+ZcrVs
-	 PFnX1EEQF8xU0ZguxC0L/jBeo69xBniKASXt05Spstu0xZmjBMnEI13pAoR9NJuhlO
-	 JqtkqPldzOHGdJoS6GDPQXXY483nv87IgujgnCdqiLxjA1OvCjf364UNuROTo2vQ9n
-	 dpBFVR18JoANlk7VG8a29b4YB0Ivoc4U8evkgBWDJvhlk5hchcRQsoKsXyV3Z5Uc8A
-	 wR3YYpOhroLNkjrX+6L7mC6r6/9bLHXvQ7RAOtyq6NIMtp7wC0c6gTvPnJDUnQcWzW
-	 IUekDH2Ylpyag==
+	s=default; t=1768125959;
+	bh=4/QjIqb32mVsk+QYHgs+Ohum8VW5nuS/OxLUN2uONDE=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=bVnN9x/+SVWwyM++X4NGerpfxaavGm6E5oRmitQ1hCOFw1PWTsRWYtZyikqPC9HKI
+	 Hoh1e9lzpcPzw+VtG1SKCDzrVSrVTTUxbYxB7X347uH1uM8UGWtCHQGnmbMwrgIxpK
+	 xLFR9BTmfYdJZz7i48REAbySXAhQ6354NZ87At1cR10bUA7JDr8cvrXiKtxwEjCYus
+	 4/iyCyDS1MQ5FdBJ/LzH0aEZRpSvapJO22A+wNkt5VHTnV1ujfLxRGFbmsS+6k3M0A
+	 HhDxb4f/B5cCteaduZiK0KpyAqdaPtHoI1TLvetDNV8ZRSUuj/YpJzc3tjurhKc7dI
+	 q8S1LxPxPfOWw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56139813B0;
-	Sun, 11 Jan 2026 04:22:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B21ED18D
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 04:22:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64EC2403E9;
+	Sun, 11 Jan 2026 10:05:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A6B5818D
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 10:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3CDF403D0
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 04:22:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98A6F403E9
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 10:05:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ASZlC2L5hr7 for <buildroot@buildroot.org>;
- Sun, 11 Jan 2026 04:22:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RZW2uhl0va0q for <buildroot@buildroot.org>;
+ Sun, 11 Jan 2026 10:05:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8EEF740088
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EEF740088
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8EEF740088
- for <buildroot@buildroot.org>; Sun, 11 Jan 2026 04:22:02 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4779cb0a33fso57795805e9.0
- for <buildroot@buildroot.org>; Sat, 10 Jan 2026 20:22:02 -0800 (PST)
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EE3DE403B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE3DE403B1
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EE3DE403B1
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 10:05:55 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-4327555464cso3209717f8f.1
+ for <buildroot@buildroot.org>; Sun, 11 Jan 2026 02:05:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768105320; x=1768710120;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=1e100.net; s=20230601; t=1768125953; x=1768730753;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gz7uE2B3aUyXgdS9s8WhEU4i67ZedgfVn7Kn00kIIFs=;
- b=eBFV1osBw6XPATubktG+txLyAAwkYfKWhjvw26NcOzYmsnapF0xkBb47JszPU3m1eZ
- Y9hRKHiyNqb36CQ2KPYkagjPhIn/4LQJG1AQbaBqDwWMDRUdZYlzv/llD7RRgdhxftZY
- S8eQhDMvekayrPCyVJrJWWcVhN2rqwFzaCDtT4rRJKSR9U8k5ZpGHCiUSBbNBu97KqbF
- XQfeX00YsrbnnE/dkEpaR91NC1UGZLL5Bl5uxlCm7eaZ/egeSQEZFHnwBrb/7MLDBxGS
- 5Y0WrFY9NDuj8291gW0wwos5A9TBKbXzNO2xureQg29hGNguE6VYrstaKDPvcKKkA2P5
- vJ5A==
-X-Gm-Message-State: AOJu0Yw7cVma8pqLAGxyzeb6MkprIGss1AzUuSlLgn6lLkd2kBfoy5En
- /Z1RxynU+iQyxLwX+KEHlsxfrwQ3FW5KaYisPdX64J/vzQSIMjOR4GJHXYrmLQ==
-X-Gm-Gg: AY/fxX7VRzk/eXGAQ0iLGJjhjHsLAMU63S/vROPPLHmN1/4VaMdyJXD8T3oDNt/wpAW
- ps8XsvXxnX+Es0K/68qIXfly+UlgaIhtlGPqV0iU2ACmqNnaoMSWbdYygPuMooM3vVyYbJVZ6fq
- nPfixZ398erN01UoFsfQdbF6zQKk6tMEDx5I6Vx5QL5l7muOK6OBHbmaN0RKyTKKp5vDOIsA3WX
- nrH2g+4NHdjmXyRfr8QffBl8wzrGuaZtssyPtc1kGJ2unasT37nRyMElIp320CKqsD0j4Wbmoyf
- l+HtWtr52OAEMn0nOkOZcTekhsnNP9HsU+9LYmYGTmvCgiDLCPFraWKbx6qW3eNFS7pop+NvMba
- YBbHyHMwyS4yWL3K/uUzGgcdA+qLfaQzga5QG/lQUJCRCZJ4OQS6QsRjFgCEGTPSWCkXtfTEMKf
- wKhfxTyvmCSHrASQdcnw==
-X-Google-Smtp-Source: AGHT+IENw3gXdrcfmqbPruKP628sbHJTyRLsgyObtuAUNh5pVPVnfiYGUVomJpnXg0x8oRSPMuyvfg==
-X-Received: by 2002:a05:6000:22c7:b0:430:f6bc:2f8b with SMTP id
- ffacd0b85a97d-432c37d2faemr15729399f8f.45.1768105320438; 
- Sat, 10 Jan 2026 20:22:00 -0800 (PST)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ bh=15aUq2quXqICe3cGp8dP9x4DDZmaBGH976nMChHYpMw=;
+ b=Mx7sTFP4aPDJDqTBzB0Zx54DQpcXF5GJJwQptYsqo0VSWhB+Rrg1ZA9NoSRqzMqXRy
+ KFFZ3vj9hE0K97yNlWyGcFZuGZmZsQ2Gx1piLhp+uJv2IF05d1Kx0O/CkVrPSmOkFzoU
+ ADzSnhAS5EzT43GMeApFjNgzPaLEm5W8ljOCjKH2QYyZ1tZWTJimOA/kCYYd2PuV2vIB
+ 5Rkfaz+YtunA0/90iyME8c3nRBxRxNy8+pZQn4/S0UhS/972eM389R+VHfUkbLjERf0X
+ 4pb4LpQkFWv0rSR1GpRKBRv8vvq1nJJVlzGpW2uGWO9S0zdXsxmL9Wq9bN7eSH2qkUJf
+ x8Mg==
+X-Gm-Message-State: AOJu0YwE1slzw1ypBYqQZwibRwrSV+D205H5lSXo2WE7v4UjVRGSy/TZ
+ 8GCWpvkpW+ikaRFGUwHUdpHUUOW8ff/Z0B/NYlnnyeT6FNDQ9vwAU7069Xwn0LzQvqkGalQKCTM
+ +QAWV
+X-Gm-Gg: AY/fxX4+IEgbaaCMVX5GTELcqFYh6buMxaf+wFKn0Oce03u4BigK9NA2I9kednlPW36
+ L8hZx+/NoUhahUcNPBCn8Kqa8K+QyDS8R3FXTLQn5BfjJjIcbjgKB1E4Qfqppch/zwz4worsywD
+ 2gUIRNOosU/vCPBSa1BBgUMwpUvX0L97pVr26DdUCL/D/bAIU+rwmABDKJEej8nfRf71AUZ6QUb
+ ka9vCQp8DIXEC1bjf31WyatQCN6mMqOP8WhrJLtBMG7SXloMtGlUP8MOW2w99bpog+5ikxrmui9
+ ROp+X+LE1wYMPnPwW+aiHUJm5w1irktzKYGzQttZzNOdAHv/cK39B/64OG6wcGickZ75eS9NQJD
+ 5lXMffNUTMQnMvDNc1+Fk4ccaAt0uVelGMHu9Ri3GGqJLgoslVeogjRwzp2YpsXpUIdwt6yNPe8
+ 3ot6+hmVEDDf8Hjp7rwDoes2DJ9EGfXs9qfCkGgApy2Wq1VA==
+X-Google-Smtp-Source: AGHT+IE4hTmCbHmMrWeBEalnI3nvtLpFia/qAmhj8apFZ8s1ZUJENU2ZdEjypo5VF23Cc+VSomWEtA==
+X-Received: by 2002:a05:6000:26c2:b0:431:8f8:7f24 with SMTP id
+ ffacd0b85a97d-432c379d19emr17220247f8f.39.1768125952975; 
+ Sun, 11 Jan 2026 02:05:52 -0800 (PST)
+Received: from arch (94.105.116.200.dyn.edpnet.net. [94.105.116.200])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-432bd5feaf8sm31137707f8f.39.2026.01.10.20.21.59
- for <buildroot@buildroot.org>
+ ffacd0b85a97d-432d286cdecsm18491794f8f.7.2026.01.11.02.05.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Jan 2026 20:22:00 -0800 (PST)
-Message-ID: <69632568.df0a0220.269984.70a0@mx.google.com>
-MIME-Version: 1.0
+ Sun, 11 Jan 2026 02:05:52 -0800 (PST)
 To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Sun, 11 Jan 2026 04:21:59 -0000
+Cc: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Sun, 11 Jan 2026 11:05:51 +0100
+Message-ID: <20260111100551.34348-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1768105320; x=1768710120; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=gz7uE2B3aUyXgdS9s8WhEU4i67ZedgfVn7Kn00kIIFs=;
- b=ATDg6y9OS6GZYB3w35nPV0o9Y/10TIF94Yz7BwPumJS2FgWWJqpfjyK+/buBqQoZSk
- Avmnexb3vjHyM/S4AOo8UrVY9FIhBgiuv39GcdCeU6pTVHDrxq1iqTKDTKXN1q4ITIbu
- mKNo1Ore8ZesrHQHXKYrXWyidHwxc2rrSbDmuwo224yGaeH+5ADw0PcVmBeOE+UgU5tt
- yV6AnC+qfNZMA20CMg3QF+zPBztri6aHN6MKmhi61OjCQd8KUNFAQ7iSasSpOvF4mIRL
- dleReS494J+pjXx7BCzaNht/FosAL4QrP1wqprSYzfQ+qI77dyMPHwEz08VakoS4/WAD
- wCEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ATDg6y9O
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-01-10
+ d=mind.be; s=google; t=1768125953; x=1768730753; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=15aUq2quXqICe3cGp8dP9x4DDZmaBGH976nMChHYpMw=;
+ b=ZXxNpoeJ0H6nYKXPM878/pt4qvIeww6XO+gajEXV5RhTMEprGAfvqoWZf6W69tPNM2
+ nM4hnpgYbz46kQXLDRXtflkGoL8Ejni+VSHYTCsta0jzbOv/PEbzIX8yqKAUcUKUjPkc
+ hf1z2ghzvnAStYuB3cyRLzW5AWBPyG+yPGufkDkZXvZZdFzseCEByG++Guk2WclvzKbs
+ jCPQCzFRf4zROa0PdrsH4pxpJsZQC/CmTD87RNL62Nux0TFfaCRl1aByn+CL0PVsvZ+H
+ +jKhtCuxwYkfgSRzlYFco0JIU5bCDl8ht2w9d1BReg7eAoT5dnI0djgW3DyV3UJl7bSC
+ /8cQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=ZXxNpoeJ
+Subject: [Buildroot] [PATCH 1/1] package/libcoap: security bump to v4.3.5a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,21 +119,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+For more info on the release, see:
 
-Autobuild statistics for 2026-01-10
-===================================
+- https://github.com/obgm/libcoap/compare/v4.3.5...v4.3.5a
+- https://github.com/obgm/libcoap/blob/release-4.3.5-patches/ChangeLog
 
-      branch |  OK | NOK | TIM | TOT |
+Fixes the following vulnerabilities:
 
+- CVE-2025-59391:
+    A memory disclosure vulnerability exists in libcoap's OSCORE
+    configuration parser in libcoap before release-4.3.5-patches. An out-
+    of-bounds read may occur when parsing certain configuration values,
+    allowing an attacker to infer or read memory beyond string boundaries
+    in the .rodata section. This could potentially lead to information
+    disclosure or denial of service.
 
+    https://www.cve.org/CVERecord?id=CVE-2025-59391
+
+- CVE-2025-65493:
+    NULL pointer dereference in src/coap_openssl.c in OISM libcoap 4.3.5
+    allows remote attackers to cause a denial of service via a crafted
+    DTLS/TLS connection that triggers BIO_get_data() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65493
+
+- CVE-2025-65494:
+    NULL pointer dereference in get_san_or_cn_from_cert() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted X.509 certificate that causes
+    sk_GENERAL_NAME_value() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65494
+
+- CVE-2025-65495:
+    Integer signedness error in tls_verify_call_back() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted TLS certificate that causes
+    i2d_X509() to return -1 and be misused as a malloc() size parameter.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65495
+
+- CVE-2025-65496:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65496
+
+- CVE-2025-65497:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65497
+
+- CVE-2025-65498:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65498
+
+- CVE-2025-65499:
+    Array index error in tls_verify_call_back() in src/coap_openssl.c in
+    OISM libcoap 4.3.5 allows remote attackers to cause a denial of
+    service via a crafted DTLS handshake that triggers
+    SSL_get_ex_data_X509_STORE_CTX_idx() to return -1.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65499
+
+- CVE-2025-65500:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65500
+
+- CVE-2025-65501:
+    Null pointer dereference in coap_dtls_info_callback() in OISM libcoap
+    4.3.5 allows remote attackers to cause a denial of service via a DTLS
+    handshake where SSL_get_app_data() returns NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65501
+
+LICENSE Year updated see [1].
+
+[1] https://github.com/obgm/libcoap/commit/c9135b6b26b978295a3e1312ff59cb7cb9b32251
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/libcoap/libcoap.hash | 4 ++--
+ package/libcoap/libcoap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index fc618fef52..17fce990fa 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
++sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+-sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
++sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index d7c2a78944..bb1321f194 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCOAP_VERSION = 4.3.5
++LIBCOAP_VERSION = 4.3.5a
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
 -- 
-https://autobuild.buildroot.org
+2.52.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
