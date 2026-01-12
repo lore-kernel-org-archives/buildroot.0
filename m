@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25219CF45BC
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 17:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99E8CF45C0
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 18:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDED940DD6;
-	Mon, 12 Jan 2026 17:59:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 255AD60C14;
+	Mon, 12 Jan 2026 18:02:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nh_7oR4uCtGP; Mon, 12 Jan 2026 17:59:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TT3E7Y2jwLBZ; Mon, 12 Jan 2026 18:02:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 054B740DC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B342B60BFD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768240788;
-	bh=NQ0oXsVl7wU6ONJaIB/ewgoX7xyH1VV+Z18TLcePh+8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kumhAyaNqd1b+OpPhrumRuoCLNYndRS2doAJn3LpU8pPh4EBMYirrZU2JbkQQa06z
-	 4SuVla47v8gxsTdnNQB+sJtKYBvaIH5/kP02p4BE7VhIs0XjbeX1ocnYcSiaCoqh1W
-	 +Ub6y0fR/ZteMrxhMc5NMRX/RY0P4vcysQwWjP4WbA8NgsVXetkZ2iiJ+Xenr7Rpkk
-	 SuqT+8tQY5eyzk+YV9uADNE3PAkhb0jjQf8spHZ8vaD5NzJXj8V2hVEkxE0efBXUZ1
-	 AGADoBdlbgOZpMoGmsuSA4RTaH8PR+jCu6ub114yKrF1XcyBzN39aNpGiD6iVUh2/A
-	 kqRRFRO4kdXoQ==
+	s=default; t=1768240950;
+	bh=AfBpAMK2tGaYw4NrnEmN3qFbmLRTL9tK5Whp+T3DGRM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LqmlZ5414hAKJS+sbWcW37B4EU9u2IUGpX7VpgHh/d1HX442Ad5Dkd2A5qXNN9Kgh
+	 1ycX+JfKcaa8aeRftAvsYK3LejPj/KzHCyIupUtrIIt5GTm/P1ZkR8ghQ1xIPT4RY9
+	 CgOKuUOdezXwAmuJu8kh0zyljenuIqzZ5ndR85vjghAVgI9v52DP/T0HLPfvVrZ8UD
+	 3MXRdJqnDcGHh59JzVj/xYw6yzloEe6WECKDO4KfDHFuSYMX+0asZg8bLUAw9iZNpA
+	 EADtGZSRt5o2QTiRUsasZA6nrO7sV5gnT6S75aVCXotr3Yt17eFk3V+lRvdawND7cy
+	 21N3eqLFJDPKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 054B740DC1;
-	Mon, 12 Jan 2026 17:59:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 59C251CC
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 17:59:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B342B60BFD;
+	Mon, 12 Jan 2026 18:02:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62AC31CC
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 18:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C6CE40DDA
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 17:59:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5FD9683F4B
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 18:02:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pun109bLLPMn for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 17:59:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 974CA40DD6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974CA40DD6
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 974CA40DD6
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 17:59:45 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id ABBAB19F59C;
- Mon, 12 Jan 2026 18:59:40 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 12 Jan 2026 18:59:40 +0100
-MIME-Version: 1.0
-Date: Mon, 12 Jan 2026 18:59:40 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Jagan Teki
- <jagan@amarulasolutions.com>
-In-Reply-To: <aWTh4cfQ4FN0j_ZT@debian>
-References: <20260110160448.3310804-1-ju.o@free.fr> <aWTh4cfQ4FN0j_ZT@debian>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <cfc78e68cab5e95f6d5f72c6f3ab54a1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1768240784;
- bh=kbllCC1xnukeNyThWBWvuv9ltNv7NU2hvhSB90uIdy4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BLzHOT6rmFSsJ10WcruqCqVo5yfq9hLrvr1vsW53PYw5xei9Ama089aWP6LZbRSWE
- 6xCYmaMX3M1mdi74XXeQFwkarIpQJHT5M01rW8wQqep8pWMfGdLseQ03iFzbVzlkQh
- VlueSFZ5rVq1H4Dykk/CxzPBPVf8UZzWmYNmBx7+6UXcPRzL0C2/v1BLmbwi6cfRoh
- VV11scRTeLNO6egFwSJQNsaK/un3YmY8DC4xoQFa5ReKTwIwM3W1OneWSOzEbPYYUu
- xJL/vvApwaHTvOPxSiD8Tn77cinpFZS7usdALDKeX6qM8kLYrbzqh6gYfDieHY35FO
- M/KHNZXcba0Rw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BLzHOT6r
-Subject: Re: [Buildroot] [PATCH 1/2] configs/rockpro64: update U-Boot, TF-A,
- Kernel
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m4lbHDsK_rwb for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A087683F4A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A087683F4A
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8E52588549; Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 12 Jan 2026 19:01:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bdeecb18ab3d5a53363d581ab9c991b5f5562571
+X-Git-Newrev: ce30d9680e10d9cfd2c8ffbe58fbd9142d921596
+X-Patchwork-Hint: ignore
+Message-Id: <20260112180227.8E52588549@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-sub-quote: bump to version
+ 2.006009
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,29 +71,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTIvMDEvMjAyNiAxMjo1OCwgVmluY2VudCBTdGVobMOpIHdyb3RlOgo+IE9uIFNhdCwgSmFu
-IDEwLCAyMDI2IGF0IDA1OjA0OjQxUE0gKzAxMDAsIEp1bGllbiBPbGl2YWluIHdyb3RlOgo+PiBU
-aGlzIGNvbW1pdDoKPj4gLSB1cGRhdGVzIHRoZSBLZXJuZWwgZnJvbSA2LjEwLjE0IHRvIDYuMTgu
-NAo+PiAtIHVwZGF0ZXMgYXJtLXRydXN0ZWQtZmlybXdhcmUgZnJvbSB2Mi4xMSB0byB2Mi4xNAo+
-PiAtIHVwZGF0ZXMgVS1Cb290IGZyb20gMjAyNC4xMCB0byAyMDI2LjAxCj4+IC0gc3dpdGNoZXMg
-dG8gQm9vdGxpbiBleHRlcm5hbCBnbGliYyBzdGFibGUgdG9vbGNoYWluCj4+IC0gcmVtb3ZlcyBo
-YXNoIGZvciBsaW51eC1oZWFkZXJzIChubyBsb25nZXIgbmVlZGVkKQo+PiAKPj4gSW4gb3JkZXIg
-dG8gcmVkdWNlIHRoZSBkaWZmZXJlbmNlcyB3aXRoIHRoZSByb2NrcHJvNjRfZWJicl9kZWZjb25m
-aWcsCj4+IHRoaXMgY29tbWl0IGFsc286Cj4+IC0gc2xpZ2h0bHkgaW5jcmVhc2VzIHRoZSByb290
-ZnMgc2l6ZSBmcm9tIDEyME0gdG8gMTI4TSwKPj4gLSB1bnNldHMgdGhlIHJvb3RmcyB0YXIgYXJj
-aGl2ZSB3aGljaCBpcyBub3QgbmVlZGVkLAo+PiAtIHJlbW92ZXMgcm9vdGZzLnRhciBmcm9tIGJv
-YXJkL3BpbmU2NC9yb2NrcHJvNjQvcmVhZG1lLnR4dAo+PiAKPj4gVGVzdGVkIG9uIGJvYXJkIFJv
-Y2twcm82NF9WMi4xIDIwMTgtMDctMDIuCj4gCj4gSGkgSnVsaWVuLAo+IAo+IFRoYW5rcyBmb3Ig
-dGhpcyB1cGRhdGUgdG8gdGhlIHJvY2twcm82NF9kZWZjb25maWc7IGl0IHdvcmtzIGZpbmUgb24g
-bXkKPiBzaWRlLCB0aGVyZWZvcmUgZm9yIHRoaXMgc2Vjb25kIHBhdGNoIGZlZWwgZnJlZSB0byBh
-ZGQgKG9yIG5vdCk6Cj4gCj4gVGVzdGVkLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3Rl
-aGxlQGFybS5jb20+CgpTZXJpZXMgYXBwbGllZCB0byBtYXN0ZXIuClRoYW5rcyBmb3IgdGhlIHJl
-dmlldyBhbmQgdGVzdGluZyEKCj4gQmVzdCByZWdhcmRzLAo+IFZpbmNlbnQuCgpCZXN0IHJlZ2Fy
-ZHMsCgpKdWxpZW4uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=ce30d9680e10d9cfd2c8ffbe58fbd9142d921596
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+diff LICENCE: update copyright years & minor cleanup & use "The Perl Artistic License 1.0"
+    see https://metacpan.org/release/HAARG/Sub-Quote-2.006009/diff/HAARG/Sub-Quote-2.006008#LICENSE
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/perl-sub-quote/perl-sub-quote.hash | 6 +++---
+ package/perl-sub-quote/perl-sub-quote.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/perl-sub-quote/perl-sub-quote.hash b/package/perl-sub-quote/perl-sub-quote.hash
+index 8db560fd44..823c49ef1a 100644
+--- a/package/perl-sub-quote/perl-sub-quote.hash
++++ b/package/perl-sub-quote/perl-sub-quote.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  f19c60039ba87f69f7f9357fc0a03e07  Sub-Quote-2.006008.tar.gz
+-sha256  94bebd500af55762e83ea2f2bc594d87af828072370c7110c60c238a800d15b2  Sub-Quote-2.006008.tar.gz
++md5  8f4600b812f6106a1f907ee47a87bd1d  Sub-Quote-2.006009.tar.gz
++sha256  967282d54d2d51b198c67935594f93e4dea3e54d1e5bced158c94e29be868a4b  Sub-Quote-2.006009.tar.gz
+ 
+ # computed by scancpan
+-sha256  de7a14750e81d97e19e111df58a3b51e3f2c8ec2d2dd90f576f54243251972c6  LICENSE
++sha256  ca095549209becaf2d8f1d4623bccd8512045acbf74a41ea839007b1b47174d4  LICENSE
+diff --git a/package/perl-sub-quote/perl-sub-quote.mk b/package/perl-sub-quote/perl-sub-quote.mk
+index 3c2a25be51..da2bd7e2dc 100644
+--- a/package/perl-sub-quote/perl-sub-quote.mk
++++ b/package/perl-sub-quote/perl-sub-quote.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_SUB_QUOTE_VERSION = 2.006008
++PERL_SUB_QUOTE_VERSION = 2.006009
+ PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
+ PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+ PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
