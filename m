@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 399FAD25051
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BA1AD25050
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:40:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 118DD80E08;
-	Mon, 12 Jan 2026 08:40:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2186961546;
+	Mon, 12 Jan 2026 08:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J5NA5trQXtIm; Mon, 12 Jan 2026 08:40:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rL8vvTTQ509Q; Mon, 12 Jan 2026 08:40:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 072498453E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1045C6154A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768207220;
-	bh=MDx4HLYkVPZm2mQzvi8BL3QufdfGy20rNn0wwuUHaZY=;
+	s=default; t=1768207232;
+	bh=ZRN46JOEf51g1/ljbC6Am8zSttITi7FI3cFnD+Ll6X8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=OUri9s2neN7yT66Jun4bNbVq47auPck7qoI9w2jf2lvUV0d8a3tVB3UUnP1R7LPzS
-	 Y8a43ChfhXgUbrY9rofg96NCwhgHG5xEjrANGcVD0clygkj4QqmBudZUqaKhWwtqkm
-	 ramQd9tMuFgRIc73QmjMQIhuQuhNmJMqW9xpd0dxJlFl53CkNkTqduA4DdCUvFqF+8
-	 tyXFfq+0kx3e5TZ8RhL+qO5QUD8cCbDYqasMlklt8jLIsZIs+sdBO+u69S2K75/x7z
-	 U9S7U1aB1Y9bbCbVicsA7SNF8BzvRqURvFIu5tBQouSd+wzfvH2vaR7aUISh2U2bW3
-	 p9DrkduzqPD5g==
+	b=aBujK/Zr1e9XKKE3GCZVDJ2lYjG128H4sd3JGKoo7oZx0w+9qJXdvqpwG4wyls28L
+	 ZJB8rLsSukU+j2RfgMT9dDuYXWr/YukBwU1+XfzztUUFAcX/hyW2yzQ5d9y8meHZxR
+	 enwZUsST8nQpM0/I2ADgXrjYg4YCD2I/KClJNDAaTVhEQv4xB5GNHRNJ2DlrlVNGkD
+	 U/qxBOCSCJo6Q8t91D6kcBra8XTXrQUMLaIo0wMQDtWRRHxMPcdCsQSpw34QtpWax8
+	 JMJQA0zhNVe13ofgAVEyO1KAa9sITMQKHkoTVXO19LfafvNabm17iBdSjehwKhrkXw
+	 Bnq5z0Xq1c+1A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 072498453E;
-	Mon, 12 Jan 2026 08:40:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D8A518D
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:40:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1045C6154A;
+	Mon, 12 Jan 2026 08:40:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 795B618D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B37684566
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:40:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4200E41584
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 83UCvqt9IP4P for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:40:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lwTrHM9ns1s1 for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:40:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE93280E08
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE93280E08
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 09F714157E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09F714157E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE93280E08
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:40:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 09F714157E
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:40:29 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0F70DA4C3E5E
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:41 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 20407A4C3E2B
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:40 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50756)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfDJ9-000000007z0-0dcv
- for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:51 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vfDJH-000000007z0-2mmn
+ for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:28:14 +0100
-Message-ID: <20260112082950.2528445-6-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:29:50 +0100
+Message-ID: <20260112082950.2528445-102-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112082950.2528445-1-bernd@kuhls.net>
 References: <20260112082950.2528445-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
+X-Spamd-Bar: +++++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768206641;
- bh=/LOFWZgkTmfh6JbCTkNcHO0AO9n9V+zBsIkAxDz14e8=;
+ s=kas202511301023; t=1768206640;
+ bh=b9h2Mp9cw5NtFVUWUYCz56OkXJM3ocQtDcwxS/dmJi4=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=PcQN6Tmxc343vSM8n5Ibk/sOx0WwhNmVjsnpw/aN6CThMk2upN0nXP0dA9uax2Nge
- 82Puo//vGKlCx8CeMj3NvmB2/II+R05pFR2CIpfxSi1KHDWcoXziYmxG2pSLzflyu3
- +xMOGEgw9OBDseT/4JCaYt3fCfFEy5ZHGHoUak+H2oZDUXpTiEknr/sFpZJlnZOecp
- BAjV3YgGO6w9KbnrSmaROGiNtUYfR1t+ve0Ucf2+O9mNx/JlS3MyCSVoKNUqfNQu09
- 5mcX6z5vtis4gfJdZsYfokHyYigZYbpt0xYPyO1df3pNKxFZYSOgeJK1txbPVrRHqt
- gVSZec9yXuLZA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=XW+TI+KnDuNLm9RDqhhZkRTJyOfhflbWpBCpOBryWoWHYh2xq1bLOPp8EI2VFLeui
+ 798RXt1TgPDjf/7pgu4QKfRPxWfgsgU+9AEBU1sdnNbKBWAQOoXqGrqKZ8S0HDK7Hp
+ UDN61ztEEJk65d6A/+LdJjpnR3Z7KxaZPArwR0sEbD8Wn9ZhGkuhcoohM5DPYhB+TB
+ nBs3hMBAsX7xnfNpPfb6aK6TV0wzJqbvBcKPj6A5Uqa+NN/MM6EMOEazLjHSI3jJp2
+ EmLHw5NcpH7VYoN4nM7g7liwNgpPZPyvrGI7uxYXOQTcdFjAWTam7pOZ72ZywKG6Fz
+ 3J4gLhihU/6Cg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=PcQN6Tmx
-Subject: [Buildroot] [PATCH 006/102] package/x11r7/xorgproto: bump version
- to 2025.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=XW+TI+Kn
+Subject: [Buildroot] [PATCH 102/102] package/x11r7/xdriver_xf86-input-mouse:
+ remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,109 +100,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2025-December/003649.html
+In version 2.0.0 Linux support was removed:
+https://lists.x.org/archives/xorg-announce/2025-August/003624.html
 
-Updated license hashes due to upstream commit:
-https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/commit/f7176375692e47275e89c3064da4cd3a0f8dd1e7
+"This mouse driver is primarily used with BSD, GNU Hurd, illumos, &
+ Solaris systems. Linux systems should instead use either xf86-input-
+ libinput or xf86-input-evdev.
 
-Added dependencies to host-pkgconf to fix a build error which would be
-introduced by this bump due to configure being created by autoconf 2.72
-instead of 2.71 which was used for xorgproto 2024.1.
+ While versions 1.9.5 and earlier had rudimentary support for Linux as
+ well, that has been removed in this release."
 
-The configure script at line 5146 now contains
-
- if test -z "$PKG_CONFIG"; then
-     as_fn_error $? "pkg-config not found" "$LINENO" 5
- fi
-
-where the previous script would continue:
-
-2024.1:
-checking pkg-config is at least version 0.9.0... ./configure: line 4796:
- /home/bernd/buildroot/output/per-package/xorgproto/host/bin/pkg-config: No such file or directory
-no
-checking build system type... x86_64-pc-linux-gnu
-
-2025.1:
-checking pkg-config is at least version 0.9.0... ./configure: line 5137:
- /home/bernd/buildroot/output/per-package/xorgproto/host/bin/pkg-config: No such file or directory
-no
-configure: error: pkg-config not found
+Alternative packages can not be selected due to udev dependencies.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/x11r7/xorgproto/xorgproto.hash | 20 ++++++++++----------
- package/x11r7/xorgproto/xorgproto.mk   |  4 +++-
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ .checkpackageignore                           |  1 -
+ Config.in.legacy                              |  6 ++
+ package/x11r7/Config.in                       |  1 -
+ .../0001-build-get-rid-of-sdkdir.patch        | 81 -------------------
+ .../x11r7/xdriver_xf86-input-mouse/Config.in  |  5 --
+ .../xdriver_xf86-input-mouse.hash             |  5 --
+ .../xdriver_xf86-input-mouse.mk               | 15 ----
+ 7 files changed, 6 insertions(+), 108 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
+ delete mode 100644 package/x11r7/xdriver_xf86-input-mouse/Config.in
+ delete mode 100644 package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+ delete mode 100644 package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
 
-diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
-index 941ceabd49..300d5d0810 100644
---- a/package/x11r7/xorgproto/xorgproto.hash
-+++ b/package/x11r7/xorgproto/xorgproto.hash
-@@ -1,8 +1,8 @@
--# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2024.1.tar.xz.sig
-+# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2025.1.tar.xz.sig
- # with key 67DC86F2623FC5FD4BB5225D14706DBE1E4B4540
--# From https://lists.x.org/archives/xorg-announce/2024-March/003495.html
--sha256  372225fd40815b8423547f5d890c5debc72e88b91088fbfb13158c20495ccb59  xorgproto-2024.1.tar.xz
--sha512  63955cb604ff831575af2193548857c1b99e52d00206ea9421ce99e145094bcd907388c4574bc32174a01cbe2c940b0377bf75ae7d2c0f953157dc9c32e5a07f  xorgproto-2024.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2025-December/003649.html
-+sha256  56898c716c0578df8a2d828c9c3e5c528277705c0484381a81960fe1a67668e8  xorgproto-2025.1.tar.xz
-+sha512  dbbee3aa1bc62721d64309e1d98807d403609d8129944b2e23e48f95d30c6448718c2842362994d67647908645bafc757c710070c5dcdca96d191fd2689d023a  xorgproto-2025.1.tar.xz
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 2a09961f74..2ef37e063a 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1041,7 +1041,6 @@ package/x11r7/xcursor-transparent-theme/0001-fix-symlink.patch lib_patch.Upstrea
+ package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch lib_patch.Upstream
+ package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch lib_patch.Upstream
+ package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch lib_patch.Upstream
+-package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch lib_patch.Upstream
+ package/x11r7/xdriver_xf86-input-synaptics/0001-build-get-rid-of-sdkdir.patch lib_patch.Upstream
+ package/x11r7/xdriver_xf86-video-fbturbo/0001-sunxi_x_g2d-drop-unused-dri2-include.patch lib_patch.Upstream
+ package/x11r7/xdriver_xf86-video-fbturbo/0002-Use-own-thunk-functions-instead-of-fbdevHW-Weak.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ce7a475838..c3d30d1f5f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- # Locally computed
- sha256  aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
-@@ -18,22 +18,22 @@ sha256  1ab381e978bff63d68be2e4f235d51935f3f16f3ba3bebf83afa99a70c0484a2  COPYIN
- sha256  f4af05774b02ae149357cc26f7bf5ef1116c2e09373c2492081a3a1892c58417  COPYING-fontsproto
- sha256  823deb4673d3f26aa8c90e704888299648f00be3262f9363eaeecedcd65b936d  COPYING-glproto
- sha256  5e083a2ace0215a6084c877c023a6079952ba803d692488203ba4269196debe3  COPYING-inputproto
--sha256  d397a67d4b28e897bc5fce79b2b917df9905b54f961fc3ad1f49c7fe3803f92c  COPYING-kbproto
--sha256  7a5dd5d4c989c167da50f15879959f42bbda960e06d0a0aea7197f61fe1dc846  COPYING-lg3dproto
-+sha256  883f26ebeffb29f955c1e2becdee284bce16c7139b1410f6f7331d3bd59bfc78  COPYING-kbproto
-+sha256  2467132d97b75edba05d908604124be2f46ee113954f848c99bcd938055e8e4b  COPYING-lg3dproto
- sha256  8442b5f22f2fb13017a4302a906e7dedc899267b41f613558970941120170128  COPYING-pmproto
- sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-presentproto
- sha256  46f599055002bbf3e6ce244bde8d9ebe5ec24ae7906836db186773a9791d0b75  COPYING-printproto
- sha256  41c13dcd09147ed2440286f2fb8151df8ebee06deee4ed78ddf094601c216d3d  COPYING-randrproto
--sha256  ee10aee0f1697ffdbe870a39f037361d4f7136f2976bb7919a41b3f66407caee  COPYING-recordproto
--sha256  9e48921a94da36d7a69fe71809223ee0bb46370db9842dccdeeb55b5a9946872  COPYING-renderproto
-+sha256  e37891ac36e827611d6e7ae51ddb14a9cc9ba56f6cc87c55b6ce3b6d76cd2bf4  COPYING-recordproto
-+sha256  e0ca4f1d27a95ef7552ccdfce7e95ddf1e8b10ac713a05b49e8bd82713d7914b  COPYING-renderproto
- sha256  403e7be948674530ad40669b1e3a31adeddb656502f3b0ef810d5d3cc35d0b52  COPYING-resourceproto
- sha256  fcbd3c628bf4d28ee3e6032054bf44bbe58f3b1a944dad856a8d3eb6b37ea412  COPYING-scrnsaverproto
--sha256  d6d3513f5a7099748dc387f54498d799380b45f8a444f13aa98aa45a860ae55b  COPYING-trapproto
-+sha256  2c1807ecb78dddba1a9cd612a11bfdbc013b77144880ec3c268241495cb022dd  COPYING-trapproto
- sha256  f8f49bbad61967ebc890fb79fff5bfb7cfc1c341aa8f8dee13eb3fb534040b47  COPYING-videoproto
- sha256  eb183a00c61bb47992f096b6993ed7ec17518bea9c285fe87efff7f622cc6c12  COPYING-windowswmproto
- sha256  da835951edc6e3b8d168d6afe7447c65d0b9a99937293cf3f288bba8244a9f86  COPYING-x11proto
- sha256  5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING-xcmiscproto
--sha256  fb42146c6c06a200a9b121220eb692ff9101ba0fbd0b224b9e16a016c59ae86a  COPYING-xextproto
-+sha256  bcdbd7abc060725d3a16c6f5b2d673ab38691f6f7d55c62709140555f8944b9c  COPYING-xextproto
- sha256  3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86bigfontproto
- sha256  3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86dgaproto
- sha256  4a05d06752388d9db71ee1006f371d4fb2c316a821fc2fc272db90b3ef978334  COPYING-xf86driproto
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index 0253167372..2704e84546 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2026.02"
  
--XORGPROTO_VERSION = 2024.1
-+XORGPROTO_VERSION = 2025.1
- XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.xz
- XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XORGPROTO_LICENSE = MIT
-@@ -50,6 +50,8 @@ XORGPROTO_INSTALL_STAGING = YES
- XORGPROTO_INSTALL_TARGET = NO
- # xproxymngproto is needed by xfindproxy
- XORGPROTO_CONF_OPTS += --enable-legacy
-+XORGPROTO_DEPENDENCIES = host-pkgconf
-+HOST_XORGPROTO_DEPENDENCIES = host-pkgconf
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++config BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE
++	bool "xf86-input-mouse removed"
++	select BR2_LEGACY
++	help
++	  Linux support was removed upstream.
++
+ config BR2_PACKAGE_HOST_JSMIN
+ 	bool "host-jsmin has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 0002dfe598..efa25988c9 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -152,7 +152,6 @@ if BR2_PACKAGE_XORG7
+ 		source "package/x11r7/xdriver_xf86-input-evdev/Config.in"
+ 		source "package/x11r7/xdriver_xf86-input-joystick/Config.in"
+ 		source "package/x11r7/xdriver_xf86-input-libinput/Config.in"
+-		source "package/x11r7/xdriver_xf86-input-mouse/Config.in"
+ 		source "package/x11r7/xdriver_xf86-input-synaptics/Config.in"
+ 		source "package/x11r7/xdriver_xf86-input-tslib/Config.in"
+ 		source "package/x11r7/xdriver_xf86-input-vmmouse/Config.in"
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
+deleted file mode 100644
+index d5f97f98c1..0000000000
+--- a/package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
++++ /dev/null
+@@ -1,81 +0,0 @@
+-From aef3d9bca4d77db833f71d50b1c84b16c69d7deb Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 23 Oct 2016 22:53:21 +0200
+-Subject: [PATCH] build: get rid of sdkdir
+-
+-Use of sdkdir causes problems during cross-compilation, where the full
+-path is then appended to the DESTDIR, leading to host paths being
+-appended in the target:
+-    https://bugs.busybox.net/show_bug.cgi?id=8696
+-
+-Other drivers (e.g. keyboard) got rid of sdkdir. Do the same.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- Makefile.am         |  3 ---
+- configure.ac        | 10 ----------
+- include/Makefile.am |  4 +++-
+- xorg-mouse.pc.in    |  3 +--
+- 4 files changed, 4 insertions(+), 16 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 7142485..efe66cb 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -34,9 +34,6 @@ ChangeLog:
+- 
+- dist-hook: ChangeLog INSTALL
+- 
+--# Provide an sdk location that is writable by this module
+--DISTCHECK_CONFIGURE_FLAGS = --with-sdkdir='$${includedir}/xorg'
+--
+- if LINT
+- # Check source code with tools like lint & sparse
+- lint:
+-diff --git a/configure.ac b/configure.ac
+-index 15d9047..515681d 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -60,16 +60,6 @@ AC_ARG_WITH(xorg-module-dir,
+- inputdir=${moduledir}/input
+- AC_SUBST(inputdir)
+- 
+--# X Server SDK location is required to install xf86-mouse-properties.h
+--# This location is also relayed in the xorg-mouse.pc file
+--sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`
+--
+--# Workaround overriding sdkdir to be able to create a tarball when user has no
+--# write permission in sdkdir. See DISTCHECK_CONFIGURE_FLAGS in Makefile.am
+--AC_ARG_WITH([sdkdir], [], [sdkdir="$withval"])
+--AC_SUBST([sdkdir])
+--
+--
+- # Work out which OS mouse driver we need to build
+- case $host_os in
+-   linux*)
+-diff --git a/include/Makefile.am b/include/Makefile.am
+-index 27ce0fb..2b85e4e 100644
+---- a/include/Makefile.am
+-+++ b/include/Makefile.am
+-@@ -1 +1,3 @@
+--sdk_HEADERS = xf86-mouse-properties.h
+-+# Location formerly known as 'sdkdir'
+-+xorgincludedir = $(includedir)/xorg
+-+xorginclude_HEADERS = xf86-mouse-properties.h
+-diff --git a/xorg-mouse.pc.in b/xorg-mouse.pc.in
+-index 57df596..8355e61 100644
+---- a/xorg-mouse.pc.in
+-+++ b/xorg-mouse.pc.in
+-@@ -1,6 +1,7 @@ prefix=@prefix@
+--sdkdir=@sdkdir@
+-+prefix=@prefix@
+-+includedir=@includedir@
+- 
+- Name: xorg-mouse
+- Description: X.Org mouse input driver for non-evdev OS'es
+- Version: @PACKAGE_VERSION@
+--Cflags: -I${sdkdir}
+-+Cflags: -I${includedir}/xorg
+--- 
+-2.7.4
+-
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/Config.in b/package/x11r7/xdriver_xf86-input-mouse/Config.in
+deleted file mode 100644
+index efa181e556..0000000000
+--- a/package/x11r7/xdriver_xf86-input-mouse/Config.in
++++ /dev/null
+@@ -1,5 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE
+-	bool "xf86-input-mouse"
+-	select BR2_PACKAGE_XORGPROTO
+-	help
+-	  X.Org driver for mouse input devices
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+deleted file mode 100644
+index d654c362a9..0000000000
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-May/003392.html
+-sha256  4fde8ae9b44352e2a208584c36528ee3ed13cf5fe4417208a9785daccefd9968  xf86-input-mouse-1.9.5.tar.xz
+-sha512  ed9bd9cb9a05dac0ff1bfb4e4704cb2e94117afb400aa9e0b7ccdbb102bc6db1b0d3af7cb6f99d0892f8fc306f1643286291c0fa7114af8e65864412bd6c1afa  xf86-input-mouse-1.9.5.tar.xz
+-# Locally computed
+-sha256  5b066654bdb61a1ef41f38cceda752897bbddb6e60e20f5889cab436a9b7b813  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+deleted file mode 100644
+index 25e25ab93d..0000000000
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# xdriver_xf86-input-mouse
+-#
+-################################################################################
+-
+-XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.5
+-XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.xz
+-XDRIVER_XF86_INPUT_MOUSE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+-XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
+-XDRIVER_XF86_INPUT_MOUSE_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xorgproto
+-XDRIVER_XF86_INPUT_MOUSE_AUTORECONF = YES
+-
+-$(eval $(autotools-package))
 -- 
 2.47.3
 
