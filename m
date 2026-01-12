@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A572DD25050
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:39:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E36E0D25050
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:39:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D069845B9;
-	Mon, 12 Jan 2026 08:39:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 08TLhIFCL4o8; Mon, 12 Jan 2026 08:39:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88FEC845BA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768207148;
-	bh=3uYBwO6olVKnuCEibxP26lFzwJahTr+YfafNQh4IHRg=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=sBnwnpnWASqA+FtAjFazZrwigyqHUpwuPwPn7eWfeaCGFmM0mxVpsuTH7Bo02iohp
-	 ERcjktnhJq3GNfNKynDRkg2kjVRBfhtuGBJL83D/joWy0Pw9k2HOoyL4xdy0g2dJmv
-	 wsVsI5bV6w2Zks4amkVdheMv/2bC0T3MB89BuLAEen1skuWfHiCLZqO1NP+fPLA77S
-	 Cgf9OPVN0b/PDuvXO6nc0URneHjvJ2u5BgwiBzw9n7v4wJONc75Nk4mjCYw2PVmoCb
-	 3FdX+39mnWpynFiJPGmgwsJ3aGf7i9CtPtwA+9LWLWjxeijJ/0NoEMCxUZ3BhB4kpp
-	 XWAi/4AAN41HQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88FEC845BA;
-	Mon, 12 Jan 2026 08:39:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 190281CC
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:39:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2E9B6152D
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:39:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B98CB61565;
+	Mon, 12 Jan 2026 08:39:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xN7nREAp29nz for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:39:06 +0000 (UTC)
+ id X0hX6DrnQS81; Mon, 12 Jan 2026 08:39:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A65566152D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768207160;
+	bh=/fi4a+2UZWcAObFFal1jV4ojdQ0GJpZCi3oJzrBcj5E=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=EYIQH1+RkIVVC8pehfSSP04QLVNPax+wDKu0IHHyeo0FjrcS3PXWV3utKkYF3c6eZ
+	 /Jl9ad8Cxyg0hDQLAW2CmawRcmgZ95akHtSRZW7woijNnl9wU1/L1nnDpYS2C5N2Lx
+	 XO0qkpGZQygsSo55CQXhwnU08nuUjsLJlJjXScqxQW8Dx+u9fAvThs9xAAoW/cgo8R
+	 2cmGxAqzdN9j4M+TITcpzw0ay+g+HwwfralCx0Tu3R6ZH04AB29ZY2yLSviOgvlL0y
+	 0I+8LQCc1qHJHimK0MphqS0vc6nYbtuiCodiX9X74gAcZOPXsZg/t5aHpamR9IfgmY
+	 7qWjHVi7iduDQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A65566152D;
+	Mon, 12 Jan 2026 08:39:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20FE918D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:39:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1314141667
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:39:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PgYkjSUSc6J4 for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:39:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EC07C61501
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC07C61501
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 09B6B4004D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09B6B4004D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC07C61501
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:39:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 09B6B4004D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:39:17 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 115A4A4C3CCA
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BA008A4C3D2E
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:36 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50756)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfDJH-000000007z0-10MP
+ (envelope-from <bernd@kuhls.net>) id 1vfDJH-000000007z0-1Idl
  for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:29:44 +0100
-Message-ID: <20260112082950.2528445-96-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:29:45 +0100
+Message-ID: <20260112082950.2528445-97-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112082950.2528445-1-bernd@kuhls.net>
 References: <20260112082950.2528445-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1768206636;
- bh=1/ZFy6waWBhY5vB7S1JDUk4rTFSYT1iMi+inkK8VaW4=;
+ bh=Rn/O7leaZolzd4Qh5s/lmsj6DFB+WSYnwgY3MmxV3EE=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=AmUoiyv4L59nv+QSGIQc1X1ZVKB7d+tsi11UpggPat4IIfVDPH3V0q3E7jTRdVrKI
- VLRNhZ+1O1HQyQnyxY2NmbORXyIzVONFC/KD1wPzAHBw7JwOxhdubxQ7uaBvFuTmry
- Dstz1UBe8B6mY7jQWxgJRiQNWcSwy8Rt1MKQHyS7MiyBSxhfJ4JWI2OqsmBEtgds9m
- pjN667nXR3HHhn0HDFu6cRUaOpfqTSb3qWVVshWG/032mhvoOIARI8eFF1Dr+5piSH
- +4CcQOYW3eNq9pMf4Zv+r7L40ni6y/CjqaqIoYEZGoJxjtCFPw5ovigUlJ9vPbmmb4
- DXxkxclEk969g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=INjVOWAlp1wpSjBpviFNsBQ+2xZnsfmmA3v997NWZ52ZmlD7k+7hdijbhftiz95cN
+ c+sgVnBpaB849zXgjL1g7pfqCxFmIt48nQk7UtCblL3qOWeENs+vTOIJH8O6YCcH5g
+ i9H/KQqe5yd9XGgrLs2CMHKF8e4aBAf5phGn4UzusFhxvP73DbyLPvaMy0K6mFyDhd
+ +HTJDCL/KUtRyTkkKO9SjzG1yIfVdlY0F9UUbmyLw2RZ/AlwBO/v5T8/KaPhPx8wRl
+ tW4Ma/gAtYaNTasB/ykqEdkO9hXrYdJCjHwoy7NLPKgqNvUodJxoFLen2zL65hsWtn
+ rj4cffGcGYO/A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=AmUoiyv4
-Subject: [Buildroot] [PATCH 096/102] package/x11r7/xfont_font-util: bump
- version to 1.4.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=INjVOWAl
+Subject: [Buildroot] [PATCH 097/102]
+ package/x11r7/xdriver_xf86-input-libinput: bump version to 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,46 +99,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2023-September/003418.html
-
-Updated license hash due to upstream commits:
-https://gitlab.freedesktop.org/xorg/font/util/-/commit/c28d8ca618f24855e735313c2b8f6effa7b7f1e4
-https://gitlab.freedesktop.org/xorg/font/util/-/commit/5a9e7c7d3c3da68e5b421e7d038bc0a7a5f66b22
-https://gitlab.freedesktop.org/xorg/font/util/-/commit/ecbf1fa15e14a9ccf339b86198b03f31db838382
+https://lists.x.org/archives/xorg-announce/2024-October/003543.html
+https://lists.x.org/archives/xorg-announce/2023-August/003417.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.hash | 8 ++++----
- package/x11r7/xfont_font-util/xfont_font-util.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../xdriver_xf86-input-libinput.hash                        | 6 +++---
+ .../xdriver_xf86-input-libinput.mk                          | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
-index cf52a2348f..13263ea5e1 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.hash
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index cca2639dc3..2f6622ed58 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-February/003331.html
--sha256  9f724bf940128c7e39f7252bd961cd38cfac2359de2100a8bed696bf40d40f7d  font-util-1.4.0.tar.xz
--sha512  05fff613019718a4bd8537ff7eb270bd85345ffb006c16f81b739d6e8cdbfaa9d6503aef9bc48d6c7f70330bf90ff1a46bacdff3c99e8017191d935c85f73d60  font-util-1.4.0.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-September/003418.html
-+sha256  5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95  font-util-1.4.1.tar.xz
-+sha512  cec7fc38ba64ca9c81c59a8395da94d71c75e14f19faf6457da0a1a8c3c1cf51bcaab227834f6f5a6d274ba2557555e542dbe2bd88e527c45ea196318bbc38d0  font-util-1.4.1.tar.xz
- # Locally calculated
--sha256  ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c  COPYING
-+sha256  5d959e54276964bd0056941fa6f2ecd818a1b081b27f5debcacb54c0be87ece8  COPYING
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 8a97c85d68..fa4d983109 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+-# From https://lists.x.org/archives/xorg-announce/2023-April/003378.html
+-sha256  1446ba20a22bc968b5a4a0b4dbc3b8e037c50d9c59ac75fa3f7fc506c58c1abb  xf86-input-libinput-1.3.0.tar.xz
+-sha512  f81f408b37e5f98ee97337dc4da6e78449e554e0ab2a3c6791b089d2cb6d645d0206ddf9babbc2120ab8bfe3b1489314fe42503ee015cec41775024538f3a34f  xf86-input-libinput-1.3.0.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-October/003543.html
++sha256  2524c35f196554ea11aef3bba1cf324759454e1d49f98ac026ace2f6003580e6  xf86-input-libinput-1.5.0.tar.xz
++sha512  03090beb7c162fdf55e9bb9da41ffb8601b20047e4a53895bad27de47b3197fc920e710f26fa23e7322b367ab65fa56ba5f9a195ec69801529af3958632c2d6e  xf86-input-libinput-1.5.0.tar.xz
+ # Locally computed
+ sha256  4114220b281561e80f3422f0e7ae8d3e1fc85131ffc2e3b6265119e66f1adb27  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 381df31fee..4e2f48c947 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_UTIL_VERSION = 1.4.0
-+XFONT_FONT_UTIL_VERSION = 1.4.1
- XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.xz
- XFONT_FONT_UTIL_SITE = https://xorg.freedesktop.org/archive/individual/font
- XFONT_FONT_UTIL_LICENSE = MIT/BSD-2-Clause
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 1.3.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 1.5.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.xz
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 2.47.3
 
