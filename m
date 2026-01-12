@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 293F2D25050
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B70AD2504D
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01BC6614EC;
-	Mon, 12 Jan 2026 08:47:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EDC68469A;
+	Mon, 12 Jan 2026 08:47:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HDxG0jB8OEqD; Mon, 12 Jan 2026 08:47:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GLCz3n2kvBNP; Mon, 12 Jan 2026 08:47:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 118AC6152E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC2A84682
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768207621;
-	bh=Qw6wZsdbrdOooOIcD/ZxoCe2V7593AJ3Ne21p5iVRRA=;
+	s=default; t=1768207632;
+	bh=nJaHxZMQSKORa4wmzPITSjDFpxlAqo3OdWnIR8ce/qc=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=lzEdbpXKQ1wRQQfLVBmcFlHubzhXKH8uLdI1FlrE1nxoyeXnNjbh2mPloTOaG9PYI
-	 FvuI+Jn5mrVz+q/sse3kcSQKukmzh2rJLk/GEGKJvT0971R3qwChlI6ElIVfJiWKT8
-	 /Vrf6ZPm0qfrMknUhz+4wdIVEEZMKa+2jrI8Ssj1hD+TN1ykApVlGHn0sRd1qX/7s7
-	 37mB2XWbAtxm6dUr4phmYDxkINN35Xn1hzWbhS3UGULk1jYHrGxVrT66WBnWhmZ0dW
-	 K2I6lE4SBOuvhV18O5H9ZxkQH4clu0NUbsRfVMLZ+fMIspQ4tKmspnWJodqER1b/hm
-	 K7WLukgpDeYdQ==
+	b=kPg35OVjuKFCHnrmyB532mP0YhPJU7xzcRwppp49XtTf19GRQHDsNrGKaxhDXUZY/
+	 NvyinC3HWfSbtbuDmOc4h9NM8cpLbklqL/3DO1U0O1+iVs90XPU28VBnNaW7uQ1Rvu
+	 WFexn4Naq8yR20bbKxr46ZxSeKcAmLRdTbft6XJRxE3A/Q86F9z/qqHcTNAgYT6tsx
+	 B4HinUn4FXuFJerXcERweD3SYJK+VQJEwzA7Xpt+hx2c3z/NA+aYxByKauz0cqI54q
+	 xetkb7pn5QvxmGQgoPbe549R1gqcrQUcbgrihpg6Dnh0BnLusMXxiMRyV4CIAMiv7L
+	 aJ1QUzvtXQbhw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 118AC6152E;
-	Mon, 12 Jan 2026 08:47:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AF92F1CC
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:46:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CC2A84682;
+	Mon, 12 Jan 2026 08:47:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D40518D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9672B415B7
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:46:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F6E640350
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2E1LpPtdVUY4 for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:46:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vZbCvKJyISWS for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:47:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 886CE415B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 886CE415B6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 167964004D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 167964004D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 886CE415B6
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:46:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 167964004D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:47:10 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 25954A4C3AF5
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6A70EA4C4222
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:31:06 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50756)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfDJD-000000007z0-0ppS
+ (envelope-from <bernd@kuhls.net>) id 1vfDJD-000000007z0-1NkA
  for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:55 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:28:44 +0100
-Message-ID: <20260112082950.2528445-36-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:28:46 +0100
+Message-ID: <20260112082950.2528445-38-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112082950.2528445-1-bernd@kuhls.net>
 References: <20260112082950.2528445-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1768206666;
- bh=HXoRaMM4xXJDwvZJ8PXbMPKPIzgO6aAxuCREFfdfcjI=;
+ bh=RCeOy7yV5qg6d0zJ5zuncnDS2vivfH7Y5YoX8KP315o=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=Vr4wwRl4eW6DHLWCOhV8zHEE7nNXiFaCjpB1e6TTZLqN1E9DHt0/av5Gpe/k0w4JZ
- 391aRApRGjNLhkNZGF04b8q0DenH4WUE3gvl+Si6CvyaXQZlEQ9kTGiZg8+ilxoHSv
- keVLyuHyLw5YSFHAoif+WRzvpj8sCTfDytc6JDexKy7dECrhae0TYLMnzRJg4uKxeM
- 7bTeafyqywXM7/50efjMR1n1QBeH5mScDiesAPMZlhAIYkphIcOi1nbcrs6LqxyT+i
- tlJ6FalIwgCzkLkr/duSRredvFmi209Kp0EHoc3okB7mkWq0Nsze2GtJsDfgZsRvIa
- ydq31/OmSuiWQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=jfA4QYQ7GKTT+5BPlnSYhyXRx5eQlpWTSjRGM7dtWQUIbvB4LqvTBnU/tolr12tQa
+ VIyZO6e0ZNynl6dZ8EkI7+JyntBidMjjL8r9N/XNDiwwzIHpZ6BsguMmHk7R1S6jzi
+ 9Pj/HCpJXjQN/qOuWFQ5CZpBbjqPoc9JvFCHgFe/IqsXeBJHxne37W38Ru5mbGWv4N
+ bh33R4ebk97HxoZLWEy84rT5mhzsNyLHkgrITp4RvyGelas1h10+nuFtwjCl4365XZ
+ ZKzdnUJBORywWZ9ya7Uw3bhLru1MsvEmmFel6SXi0gCUUOwRMdTjXhgA2wAlv5+fDz
+ 3p6QQKSfTd0Eg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Vr4wwRl4
-Subject: [Buildroot] [PATCH 036/102] package/x11r7/xlib_libxcvt: bump
- version to 0.1.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=jfA4QYQ7
+Subject: [Buildroot] [PATCH 038/102] package/x11r7/xlib_libICE: bump version
+ to 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,45 +99,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2024-December/003571.html
-
-Switched _SITE to URL mentioned in latest release notes.
+https://lists.x.org/archives/xorg-announce/2024-December/003568.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/x11r7/xlib_libxcvt/xlib_libxcvt.hash | 6 +++---
- package/x11r7/xlib_libxcvt/xlib_libxcvt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xlib_libICE/xlib_libICE.hash | 6 +++---
+ package/x11r7/xlib_libICE/xlib_libICE.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash b/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
-index f635c90fdc..2d8ba5076a 100644
---- a/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
-+++ b/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.hash b/package/x11r7/xlib_libICE/xlib_libICE.hash
+index 4a58f97698..67850b6589 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.hash
++++ b/package/x11r7/xlib_libICE/xlib_libICE.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-July/003195.html
--sha256  0561690544796e25cfbd71806ba1b0d797ffe464e9796411123e79450f71db38  libxcvt-0.1.2.tar.xz
--sha512  3f6b2baca712a4608780686932f8881255c07bb74b1a788f9b07d4e22975c038d75111cd6b452257882a0b2bad57eebb2002f80a3e435d2e2d16936597f039b0  libxcvt-0.1.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-December/003571.html
-+sha256  a929998a8767de7dfa36d6da4751cdbeef34ed630714f2f4a767b351f2442e01  libxcvt-0.1.3.tar.xz
-+sha512  2fecc784375e69b6e8e46608618a5f5a8ad20ecd5229fd093883fe401dd6ea231d8b77c6753756fff01f3040bef2db60a042d40fc349769ef5348e5cd9ed1f28  libxcvt-0.1.3.tar.xz
- # Locally calculated
- sha256  4849851554bdeda9a2a85ce93946b786605e009685941b8b907a9a36b02ae068  COPYING
-diff --git a/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk b/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
-index 7f61054dbe..428553a19d 100644
---- a/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
-+++ b/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
-@@ -4,9 +4,9 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-December/003288.html
+-sha256  03e77afaf72942c7ac02ccebb19034e6e20f456dcf8dddadfeb572aa5ad3e451  libICE-1.1.1.tar.xz
+-sha512  2f7833a25f31cc743ca95cb88f9a8403b50e19ffb5bf43bfef87ba405857d359789daaa9ec2391351237d958f16d35dbf082adb76d301e46d3a54162a6b452d3  libICE-1.1.1.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-December/003568.html
++sha256  974e4ed414225eb3c716985df9709f4da8d22a67a2890066bc6dfc89ad298625  libICE-1.1.2.tar.xz
++sha512  340f51ffa1f14ed442ab8bcea92dd63df147c48242e232e818cafe02f43de7ab6e99c5430b9cb8d0dc661295239d2b3f6bdb6a092ce51a98afa06235257e9b1f  libICE-1.1.2.tar.xz
+ # Locally computed
+ sha256  60105b7ea93cb07a67fee8443b092b727e3db7f0dff4fbe05bc6cd7747fb53c8  COPYING
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index d92e81c0ab..60b16b47e9 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXCVT_VERSION = 0.1.2
-+XLIB_LIBXCVT_VERSION = 0.1.3
- XLIB_LIBXCVT_SOURCE = libxcvt-$(XLIB_LIBXCVT_VERSION).tar.xz
--XLIB_LIBXCVT_SITE = https://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXCVT_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXCVT_LICENSE = MIT
- XLIB_LIBXCVT_LICENSE_FILES = COPYING
- XLIB_LIBXCVT_INSTALL_STAGING = YES
+-XLIB_LIBICE_VERSION = 1.1.1
++XLIB_LIBICE_VERSION = 1.1.2
+ XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.xz
+ XLIB_LIBICE_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBICE_LICENSE = MIT
 -- 
 2.47.3
 
