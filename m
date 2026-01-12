@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D87CAD25047
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6E97D25048
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B017984478;
-	Mon, 12 Jan 2026 08:14:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0EC480E77;
+	Mon, 12 Jan 2026 08:14:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ne8IYOF2EnEX; Mon, 12 Jan 2026 08:14:32 +0000 (UTC)
+ id iXyHyBxscvgE; Mon, 12 Jan 2026 08:14:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC4818447B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0D3880F59
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768205672;
-	bh=9jk969H5J31ZGQFrbo9qFLK7qb5V4AFfndzeVj0B6Ws=;
+	s=default; t=1768205685;
+	bh=0m7LbKqG0BSQ8WQJnSCBOPccpQ2RnQ6zg6W3cU++IVs=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=R8ue85dTm8AfQrXq+kg5z08E4Qu2vnOpm4sufV7m4m/32e3FjbqzH0b2gC57JQR+J
-	 q5AmazGOvlOD/gOrkFssVHZvmzF0UiTLAcV/5zSt7HPoQ/zv8e+eFxovWuOTZtzD+C
-	 wrT2iOiS8nvmYwLketjgjL6YkFLikA2py21eyhx8efVXLqZemApL8L8xP3juYU8AxX
-	 G1dbmdbsCPzKMrQ1hEsWyIrOnUlp6SqpJn2m4KG1hSHApIqFoSATB9FgVY9WqvMgU+
-	 gl2WIiIS09/m+FpoBSDJr9XBTt6Q4DD4G6igbMK5tzwUkA80hwkw6kdb7+UBADuStp
-	 i8P79P0Pv3vHw==
+	b=UP6KiHuGN9ibDzztdiTS0t9sWEB8mdkg1cfgsJbXSCceZ+qBCvf0NPT9XdTErUrhu
+	 1jiynGjOIffHb65Cd/Zj5bTGaMNOsAqY1ampMOQVUKHNL0WfKWiWiGFMXLNE9nkYle
+	 6qbCHiOUsyBQpNhKcRzqQoLYPoeS4f1uIKv3/wTlpFWzWGWzZcM4I0wZYRkTDwIXqs
+	 fWU9F0wBXjOyhyHTDstANEfZJ1wv9SlpQRnOzAsyWFfOtn5La1AvEMsSBzNqJEnieo
+	 NjIsTFk6aB6og4WYS7J7teAppsMG1baxDjr2SvrtM2jyGM2ibljtwtQ1f1sud4Yr/4
+	 0WsmCxTZ6HhyQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC4818447B;
-	Mon, 12 Jan 2026 08:14:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B3C7912E
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:14:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0D3880F59;
+	Mon, 12 Jan 2026 08:14:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DAD9618D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:14:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1893414B2
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:14:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C15EC84453
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:14:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oavCVdzKGkrq for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:14:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JquuhdXKoubE for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:14:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9EAAE414A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EAAE414A1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B0D2480E77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0D2480E77
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9EAAE414A1
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:14:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B0D2480E77
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:14:42 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A0F2BA4C3C93
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:05:32 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F1718A4C3CA0
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:05:33 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:33104)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfCub-000000003M6-2Cbz
+ (envelope-from <bernd@kuhls.net>) id 1vfCub-000000003M6-2WPT
  for buildroot@buildroot.org; Mon, 12 Jan 2026 08:04:29 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:04:14 +0100
-Message-ID: <20260112080419.2516889-99-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:04:15 +0100
+Message-ID: <20260112080419.2516889-100-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112080419.2516889-1-bernd@kuhls.net>
 References: <20260112080419.2516889-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768205132;
- bh=ot6rOiI6QB4+l5aDYeBmyeCWVZ7vikrBrYUl5KIzs3g=;
+ s=kas202511301023; t=1768205133;
+ bh=nRqgN9gIC3X7LEJK2KaBrUuURhVtIkLmmJ/S5OSxEbs=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=pkyNirLiLa2ydA3zSYi5tAXyE7KXOZcOkrIDEOuc1O+HTLJoyCPG4txhgQA1Qxcg1
- sovtFbMIf88vaG1HDz+/mrdPKTXMmfjU4Za7SfSCy6YMlKGlOlrrYL7/vXYd+bKrkC
- ou8qESNzgdvl3jl6gHc2a6CAbmnICW8eRB+ykkiXO1g/4h1QqwZPrK/IOv2oWRq/zS
- QU5Slg4Saw4Oyr+dhpGrN/qpJbnzeuisi6o5dQHxXOtms4SqR4NDJD4Y9bl56PlKoF
- XfeaA0dpXVfwL4DdbbHzrCx6wyoEPY1Xef40MkRE+7YA2FUQNm5IFzn8ofumpj1o4C
- mOhF+0ZBR2+vQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=f1yibpvamlJbIyZ+tf6RcEapc0aZVeZvjB4Ms5Xlegqz/j3REb4PHt/zkHsEv2ZN+
+ h5w14IHA0EeS0ewvPpvI3+4Uis9XWjiRas8Di81g+6YICWGPI7U3DAjzWZYHWbIJ1s
+ b23Cgo+o6nnL8L2McvvYpzneJK9SeNtCLc390VHVt5XBXdKPtpCAWgGdWaVlMDfeMb
+ kaoh1aeigiUwjlWSKt96q2HZvl3JbK37uKo+hR+1iyAYPN5wJJzcJjlcuQFVe2dMI9
+ Fmwoo83B+sLHkMB4ynxstQFkX0n/byiw41snaunKjcIzkOzlBFgYOj2vkpB5p06ur5
+ n/y4xxoEin/2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=pkyNirLi
-Subject: [Buildroot] [PATCH 099/104]
- package/x11r7/xfont_font-adobe-utopia-75dpi: bump version to 1.0.5
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=f1yibpva
+Subject: [Buildroot] [PATCH 100/104]
+ package/x11r7/xdriver_xf86-video-amdgpu: bump version to 25.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,48 +99,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2023-February/003344.html
+https://lists.freedesktop.org/archives/amd-gfx/2025-July/127936.html
 
-Used tarball hashes provided by upstream.
+Switched build system to meson after autotools removal.
 
-Switched tarball to xz.
-
-Switched _SITE to URL mentioned in latest release notes.
+Added optional dependency to udev provided by meson build system.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../xfont_font-adobe-utopia-75dpi.hash                      | 4 +++-
- .../xfont_font-adobe-utopia-75dpi.mk                        | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../xdriver_xf86-video-amdgpu.hash               |  6 +++---
+ .../xdriver_xf86-video-amdgpu.mk                 | 16 ++++++++++------
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.hash b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.hash
-index 0b6e1af638..00bd9131f8 100644
---- a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.hash
-+++ b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.hash
-@@ -1,3 +1,5 @@
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003344.html
-+sha256  a726245932d0724fa0c538c992811d63d597e5f53928f4048e9caf5623797760  font-adobe-utopia-75dpi-1.0.5.tar.xz
-+sha512  9608698288fca47bf61cff911b8f081593807eed9f138ea22f05a7b6c26c481ec5144d79665cf509ba889df35ef5406e0de71710362bcf6de6b602c12158e22a  font-adobe-utopia-75dpi-1.0.5.tar.xz
- # locally computed
--sha256  8732719c61f3661c8bad63804ebfd54fc7de21ab848e9a26a19b1778ef8b5c94  font-adobe-utopia-75dpi-1.0.4.tar.bz2
- sha256  234c2a8109afa8034c787dbf69696a9bdd374914aadf937d2a103831d95c1867  COPYING
-diff --git a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
-index ac3bf2e230..fed78362f7 100644
---- a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
-+++ b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index 962cb0e16b..e69a7baab4 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-February/003334.html
+-sha256  4f04f0ea66f3ced0dcc58f617409860163a19c4e8c285cfb5285f36ba09cc061  xf86-video-amdgpu-23.0.0.tar.xz
+-sha512  bf26f147629a34e84a0ae8435119e170b9c95edafcab1995b63bb8f55abef32f2efbf4536eb070e64b2ae1460424b1b27a4206cb9836d33ddc6dfbee404f718b  xf86-video-amdgpu-23.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/amd-gfx/2025-July/127936.html
++sha256  7653cead024a6820ed1139958503278d78b4b3f80befcacf54ce87a5199b0ce2  xf86-video-amdgpu-25.0.0.tar.xz
++sha512  d143294fead7073c14100299ccab20d1f5eab8b7e36c1770b12aaade958211e1961f4353dc47123c3b9af9f7a911d913def71d25b83dab3dee1d289043869891  xf86-video-amdgpu-25.0.0.tar.xz
+ # Locally computed
+ sha256  58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index 84f8e39ddd..688f09c7a1 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_ADOBE_UTOPIA_75DPI_VERSION = 1.0.4
--XFONT_FONT_ADOBE_UTOPIA_75DPI_SOURCE = font-adobe-utopia-75dpi-$(XFONT_FONT_ADOBE_UTOPIA_75DPI_VERSION).tar.bz2
--XFONT_FONT_ADOBE_UTOPIA_75DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
-+XFONT_FONT_ADOBE_UTOPIA_75DPI_VERSION = 1.0.5
-+XFONT_FONT_ADOBE_UTOPIA_75DPI_SOURCE = font-adobe-utopia-75dpi-$(XFONT_FONT_ADOBE_UTOPIA_75DPI_VERSION).tar.xz
-+XFONT_FONT_ADOBE_UTOPIA_75DPI_SITE = https://xorg.freedesktop.org/archive/individual/font
- XFONT_FONT_ADOBE_UTOPIA_75DPI_LICENSE = Adobe License (no modification allowed)
- XFONT_FONT_ADOBE_UTOPIA_75DPI_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 23.0.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 25.0.0
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.xz
+ XDRIVER_XF86_VIDEO_AMDGPU_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+@@ -17,12 +17,16 @@ XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
+ 	xserver_xorg-server
  
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
+-XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += --enable-glamor
++XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += -Dglamor=enabled
+ else
+-XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += --disable-glamor
++XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += -Dglamor=disabled
+ endif
+ 
+-# xdriver_xf86-video-amdgpu requires O_CLOEXEC
+-XDRIVER_XF86_VIDEO_AMDGPU_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += -Dudev=enabled
++XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES += udev
++else
++XDRIVER_XF86_VIDEO_AMDGPU_CONF_OPTS += -Dudev=disabled
++endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.47.3
 
