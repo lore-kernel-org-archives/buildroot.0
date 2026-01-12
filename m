@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B880DCF45B2
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 17:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A47B1CF45BD
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 17:52:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18E9D60BC9;
-	Mon, 12 Jan 2026 17:52:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C3CD60BD6;
+	Mon, 12 Jan 2026 17:52:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o5P9wI9CDxhr; Mon, 12 Jan 2026 17:52:10 +0000 (UTC)
+ id V3V4OKro_KDd; Mon, 12 Jan 2026 17:52:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3119460BAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C0D860BB5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768240330;
-	bh=Twws0x1jUybXHGnOsU3QiEjCJpHCf1VLxRUko99vFDk=;
+	s=default; t=1768240331;
+	bh=a4vtP+O7k5jTib1pSwuBDf1fD5MAS29JlyeW1SL4P/0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=brNK0Dl5rxgcRXdeD2a9sF/PcELy4WsEgPQuqYUhoqi3M3Ek7cD0scqlFspxxI+Wi
-	 anOEOmrUeIlgaWcE+qaHnl1ulQZqzLlE8dSTymeZ0KM9wRgxyQnwjArcdasNZtH7nf
-	 dSGcH3xaniEIiJjZySS33EcRpoM5mqGU/CvDp/v+Ng0eY//KqWyBdTV7hfjuZtkypy
-	 yz9T3hNpfoIHsja5hRyoNTOa/Vada168q4D83p4xGjmYq/fb8Ve2H44QpiswSz0fC+
-	 YD+vYedE4JCmE4Vux/Y0PDhg9tVdesx63XTokqHnAxx2BQV3w6mXjnF8GoFdXoN2y9
-	 CAcpE/+IRjZmw==
+	b=lTooBHbY1Aq/1fWwIKskONWQ/4uDNhStN17W5xoYjXq0qjoS//jndI/dPbIQwL2hE
+	 dbHhq2g6wzAnw9tsAP819noHGDvuB5Z96L5dTandy/ROguw8I+G270eTTVjKvNgyuQ
+	 3UMCIod7qWLA/M5nII8mSLK40c6qm+uCL4zZyx/XnCl3+MZ4cHvZ6q7CCqmdpTzX5t
+	 3No65qoPN5xs5oFT8S79JY2wt3qbT/c8mfXnJCTeIz8ptbHFQTXI7CdjA/Ny4FEXWt
+	 7WQKpTT6HGhSFeURp/7tN+6Xs6/5qQEf1E0oUNhA9Sg/xNYP6mpX1D2gXD1HUcrx4n
+	 Ty/ZoWmXI7TPA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3119460BAA;
-	Mon, 12 Jan 2026 17:52:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C5AF18D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C0D860BB5;
+	Mon, 12 Jan 2026 17:52:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12BC1231
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 17:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E72B060BAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA47340D90
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 17:52:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eegTWFqZnliQ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wj0w2mhwrM8N for <buildroot@buildroot.org>;
  Mon, 12 Jan 2026 17:52:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 163B960BA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27E6040D8E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 163B960BA9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27E6040D8E
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 17:52:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C9D888511; Mon, 12 Jan 2026 17:52:08 +0000 (UTC)
+ id 16C8988512; Mon, 12 Jan 2026 17:52:08 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 12 Jan 2026 18:51:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92dc57c4604b7fa0893ecf689b5f64f34866bef8
-X-Git-Newrev: 17f7cd9c5529e3f7876c16b5abc7b0c07b594daf
+X-Git-Oldrev: 17f7cd9c5529e3f7876c16b5abc7b0c07b594daf
+X-Git-Newrev: ae81440dd0114a39bfb768ce6ff32349934f16e3
 X-Patchwork-Hint: ignore
-Message-Id: <20260112175208.0C9D888511@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.24.0
+Message-Id: <20260112175208.16C8988512@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgis: bump to version 3.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,40 +76,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17f7cd9c5529e3f7876c16b5abc7b0c07b594daf
+commit: https://git.buildroot.net/buildroot/commit/?id=ae81440dd0114a39bfb768ce6ff32349934f16e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/timescale/timescaledb/blob/2.24.0/CHANGELOG.md
+Changelog:
+https://github.com/postgis/postgis/blob/3.6.1/NEWS
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+[Julien: fix change log url]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
+ package/postgis/postgis.hash | 2 +-
+ package/postgis/postgis.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index a2ccc28e29..888b6c2cfa 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
+diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+index 2d205ff5b4..e70d0e43eb 100644
+--- a/package/postgis/postgis.hash
++++ b/package/postgis/postgis.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  26575fa9e287a6107a6bf162bacab4932b0df19bee38d28c132f9a2d6591d647  timescaledb-2.23.1.tar.gz
-+sha256  06a5d38c52bebb364104541002ccfb9ea739f93183c339895f0d1ed90b005e17  timescaledb-2.24.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 80c2b385aa..3ad8bb41fa 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
+-sha256  8caffef4b457ed70d5328bf4e5a21f9306b06c271662e03e1a65d30090e5f25f  postgis-3.6.0.tar.gz
++sha256  ec0cfaab475630106211d180d71df46782e41e10b6dffe91d79ca818ecd2cbb4  postgis-3.6.1.tar.gz
+ sha256  81749eea887e78402c9b85896cd629b155bc29256927f818f01001f038146391  LICENSE.TXT
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index a3a2756593..d5c8fc80be 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.23.1
-+TIMESCALEDB_VERSION = 2.24.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-POSTGIS_VERSION = 3.6.0
++POSTGIS_VERSION = 3.6.1
+ POSTGIS_SITE = https://download.osgeo.org/postgis/source
+ # parallel build issues
+ POSTGIS_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
