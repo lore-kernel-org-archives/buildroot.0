@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99E8CF45C0
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 18:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C5A5CF45BB
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 18:02:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 255AD60C14;
-	Mon, 12 Jan 2026 18:02:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 224F860C1A;
+	Mon, 12 Jan 2026 18:02:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TT3E7Y2jwLBZ; Mon, 12 Jan 2026 18:02:30 +0000 (UTC)
+ id pYQMPkD7iXMI; Mon, 12 Jan 2026 18:02:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B342B60BFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B035460C05
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768240950;
-	bh=AfBpAMK2tGaYw4NrnEmN3qFbmLRTL9tK5Whp+T3DGRM=;
+	s=default; t=1768240951;
+	bh=oSwApvZtFn6U1AJ8TuXx6ECD2yy7YZ7u/tQp/0RrWjk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LqmlZ5414hAKJS+sbWcW37B4EU9u2IUGpX7VpgHh/d1HX442Ad5Dkd2A5qXNN9Kgh
-	 1ycX+JfKcaa8aeRftAvsYK3LejPj/KzHCyIupUtrIIt5GTm/P1ZkR8ghQ1xIPT4RY9
-	 CgOKuUOdezXwAmuJu8kh0zyljenuIqzZ5ndR85vjghAVgI9v52DP/T0HLPfvVrZ8UD
-	 3MXRdJqnDcGHh59JzVj/xYw6yzloEe6WECKDO4KfDHFuSYMX+0asZg8bLUAw9iZNpA
-	 EADtGZSRt5o2QTiRUsasZA6nrO7sV5gnT6S75aVCXotr3Yt17eFk3V+lRvdawND7cy
-	 21N3eqLFJDPKw==
+	b=mu1h5GkjzVJK+eEzov+0O+Ox92vmL2ADpe004D2nNl/fp9vNGX62XR2BVWF7GmRLh
+	 pOVNu+d4inuTPxwxdmne1e++mtYm0wKfO7o8at3QNXzkjOjXwtAst9OZMkSvngLVIL
+	 V4uZM9U95Px9WsQpPcibMQpj6PaQewl8NvtAQTJa9STjBHXMFoW5lApFCTiZnB2tAY
+	 2LtNVFb9tyh+hcWtpc0yGz9fSW8bq6n9QaEz1bA4UB3Id/0HC8ERPMm9+DqQe1o+tW
+	 kRD7P//6ViB51g3OwRLoWG6CF/HJvWn9RlJJImphlffItRYPbYfd5hDjKCQyBDNLwB
+	 jZI1NMisdtAIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B342B60BFD;
-	Mon, 12 Jan 2026 18:02:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 62AC31CC
+	by smtp3.osuosl.org (Postfix) with ESMTP id B035460C05;
+	Mon, 12 Jan 2026 18:02:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7026A231
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 18:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FD9683F4B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 612CC400C1
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 18:02:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m4lbHDsK_rwb for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id npyszpohNYK6 for <buildroot@buildroot.org>;
  Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A087683F4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FA8F40465
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A087683F4A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FA8F40465
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E52588549; Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
+ id 7FA9788547; Mon, 12 Jan 2026 18:02:27 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 12 Jan 2026 19:01:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdeecb18ab3d5a53363d581ab9c991b5f5562571
-X-Git-Newrev: ce30d9680e10d9cfd2c8ffbe58fbd9142d921596
+X-Git-Oldrev: aa87aafa4b89b70330883d0e79f087bf3dbd319f
+X-Git-Newrev: bdeecb18ab3d5a53363d581ab9c991b5f5562571
 X-Patchwork-Hint: ignore
-Message-Id: <20260112180227.8E52588549@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-sub-quote: bump to version
- 2.006009
+Message-Id: <20260112180227.7FA9788547@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-net-ssh2: bump to version 0.74
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +76,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce30d9680e10d9cfd2c8ffbe58fbd9142d921596
+commit: https://git.buildroot.net/buildroot/commit/?id=bdeecb18ab3d5a53363d581ab9c991b5f5562571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-diff LICENCE: update copyright years & minor cleanup & use "The Perl Artistic License 1.0"
-    see https://metacpan.org/release/HAARG/Sub-Quote-2.006009/diff/HAARG/Sub-Quote-2.006008#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/perl-sub-quote/perl-sub-quote.hash | 6 +++---
- package/perl-sub-quote/perl-sub-quote.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-ssh2/perl-net-ssh2.hash | 8 ++++----
+ package/perl-net-ssh2/perl-net-ssh2.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-sub-quote/perl-sub-quote.hash b/package/perl-sub-quote/perl-sub-quote.hash
-index 8db560fd44..823c49ef1a 100644
---- a/package/perl-sub-quote/perl-sub-quote.hash
-+++ b/package/perl-sub-quote/perl-sub-quote.hash
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
+index b2e8b2d48e..0fa86f1158 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.hash
++++ b/package/perl-net-ssh2/perl-net-ssh2.hash
 @@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  f19c60039ba87f69f7f9357fc0a03e07  Sub-Quote-2.006008.tar.gz
--sha256  94bebd500af55762e83ea2f2bc594d87af828072370c7110c60c238a800d15b2  Sub-Quote-2.006008.tar.gz
-+md5  8f4600b812f6106a1f907ee47a87bd1d  Sub-Quote-2.006009.tar.gz
-+sha256  967282d54d2d51b198c67935594f93e4dea3e54d1e5bced158c94e29be868a4b  Sub-Quote-2.006009.tar.gz
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  57aa0f6e2be4020f75888a7195ad5cba  Net-SSH2-0.72.tar.gz
+-sha256  867d83070fac6436b9f0971918243002072fbf8d2724a87c254b34250dce0222  Net-SSH2-0.72.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  6ac3a6616dc673ae00ba101e33d637dd  Net-SSH2-0.74.tar.gz
++sha256  1c124699745eeb40ed636097fdcc3e722c94cfd7704ebc0acfb0f05541d2809c  Net-SSH2-0.74.tar.gz
  
  # computed by scancpan
--sha256  de7a14750e81d97e19e111df58a3b51e3f2c8ec2d2dd90f576f54243251972c6  LICENSE
-+sha256  ca095549209becaf2d8f1d4623bccd8512045acbf74a41ea839007b1b47174d4  LICENSE
-diff --git a/package/perl-sub-quote/perl-sub-quote.mk b/package/perl-sub-quote/perl-sub-quote.mk
-index 3c2a25be51..da2bd7e2dc 100644
---- a/package/perl-sub-quote/perl-sub-quote.mk
-+++ b/package/perl-sub-quote/perl-sub-quote.mk
-@@ -4,7 +4,7 @@
+-sha256  268afaee7aa88a41959c93cd91853e8124bdbe64a74480d36ff1130e01a1c0ca  README.pod
++sha256  5fdfc16a4c38c1a82d97f91bf3166806c03015ec42bc2b96aee330ffeebd9461  README.pod
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+index 20e45b6287..f5ba67865f 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.mk
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_SUB_QUOTE_VERSION = 2.006008
-+PERL_SUB_QUOTE_VERSION = 2.006009
- PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
- PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_SSH2_VERSION = 0.72
++PERL_NET_SSH2_VERSION = 0.74
+ PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
+-PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
++PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RK/RKITOVER
+ PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
+ PERL_NET_SSH2_LICENSE_FILES = README.pod
+ PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
