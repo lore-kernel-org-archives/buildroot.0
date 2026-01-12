@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BD72D25051
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2011FD25051
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E88926158B;
-	Mon, 12 Jan 2026 08:37:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D629B84577;
+	Mon, 12 Jan 2026 08:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id reSsAdib9pL3; Mon, 12 Jan 2026 08:37:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1oFzNsWY7YTx; Mon, 12 Jan 2026 08:37:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF27B6155E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00F1584597
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768207064;
-	bh=3UnhGquoIsJL4LKOOiRq6B8scyYiFt0foYhKHJDtfVI=;
+	s=default; t=1768207077;
+	bh=fFlcxD9g4vJVneq3VndF5B7gVQcyMyy9VKQf/MNxNK8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=XxgAGbVYBztFOs27bF2851vZqZXUqICerMAXrAfApkteO12xb0GJh2wLFKiUFUTaF
-	 OqSILu0+9e7U+V3gxHGORlf3bRWg8kJGsd6+dFhM3YP8ODcAHtT4ql66DASG3g04Dq
-	 7Zx/wfv4P6VH17KgktE8TgdAknqnjQNvdWzqAuTcmfnUAhEh2SxAmhbIuNKDRPBqum
-	 1zI7dks457JcE7C1KYXYgj0b+8+f3BgQmu96iNZ6hrjAX4/vlf8wa1wHIuoeDzsoGg
-	 PxqHu/g829RjD8JuhAz32jEAqCU5vcdCFQxzsiKNUL2aj1L8dEBL0CRI+NfpIf0LH9
-	 LX3bb+9NAjI6g==
+	b=q/VRPJwV9v3jS6IyPf/Y2G/O7AgxVp1g23AaPCHakMcik1TwYcpHB76QV4X78e3fQ
+	 X7ifSswMXYN5mlg8IcMcON98yYHfo/cwltkHcZhbhIUjdUiZrwjRzQ2EslaZhsenkr
+	 /4JwPf7ffG56UCZhdJ5tbTMaffYa72zmBqUqNEOrP0PAmr59DuYWnLY4dhGobkaWA4
+	 28i56OrfGKAfh0PY0uxFVvtfp1k1TfdyC7jIbJct2wFhVv0b2QKddgr+yZuTQXwXv3
+	 SIBloDuUvqjnAtTas54PzJqpeUl8te4drDY+uqJ80DplEkqDyX0/dBmNWvWBjLZMpi
+	 WUhVPcuPw+Ndg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF27B6155E;
-	Mon, 12 Jan 2026 08:37:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4CCA218D
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00F1584597;
+	Mon, 12 Jan 2026 08:37:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 727A518D
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4AB1C414C0
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 590A541561
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3wyD4DwIlkx for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:37:42 +0000 (UTC)
+ id O3QtnGj6WRtb for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:37:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 41C3A413D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41C3A413D0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 504C241560
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 504C241560
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 41C3A413D0
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 504C241560
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:54 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1AA64A4C3C5A
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:29 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 365BEA4C3CAB
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:34 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50756)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfDJG-000000007z0-1mSQ
+ (envelope-from <bernd@kuhls.net>) id 1vfDJG-000000007z0-3ngH
  for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:58 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:29:32 +0100
-Message-ID: <20260112082950.2528445-84-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:29:39 +0100
+Message-ID: <20260112082950.2528445-91-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112082950.2528445-1-bernd@kuhls.net>
 References: <20260112082950.2528445-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768206629;
- bh=TWbcS1/9I1IGdX5sxU42GXhnMWd3XWa9Zo9IWn76KI8=;
+ s=kas202511301023; t=1768206634;
+ bh=Jyhz8iZq7CUujRofdTKBWf3JGpGqED/EaCYs1PrDcOY=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=Fuu8iWrPeMmGmbEUeh9sE2Vvz5AjPVVo0Mbo18deLEbQ3h8VcLiq+xGF6Xp2tOxeP
- /uDpydq99ccUw/v/PVm1OZQB8hsc0zKprO6BRYGL4AlSrIugiCqQEAyAPsCU6i6Fi7
- WnhMsCx3Kyb8dds3TjtQNfjdJyHbe7blrc9JTYI2OqmuIwwSHQ8UH3hOlAVMilQlHm
- dIAgey1yMcXSo2prqMe9G2MzazUe8+Dd+hq2JVEyxVjdQ2Ju5P7DJvE5aYW7b//N67
- OwAYEYV7N7et2mxJC/Ms2vmZodGlfsjHi9UC0YD/KrurUfLEJTzuGMhonY9YvAGY5N
- ZdlfwffQLvF0Q==
+ b=WS3yaDcvoqV+vUxuRKcEBUCT18eoo1rew8g2XVsaSuw4uc253JWoLYzQhrVjRbZwp
+ RsPgjRS55b2H3KLc2rCi0bJvWwLSTzpq7I+p1DlV8U5hL59+KerQTBdHuAQ78CTheD
+ LDQ8OO+5uz7vjhYBtDOwyItUgejSKus1j/GrcgWX0XGriht35Y8KKWyugJKr2EgJ51
+ o+tHa7w2To5U2S305Elkh4EL5DZ3MR3ZIsboGUE6KjKx/EMznCFpGkKo5ZZ8qeF8zg
+ MqgSuTaT0WPTShkWPNb7/OVCSCf0ameXqJxzb5HnVNHaP0qx2FVROzp4Z0w7tgdVm5
+ RemlyNszCUXog==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Fuu8iWrP
-Subject: [Buildroot] [PATCH 084/102] package/x11r7/xapp_editres: bump
- version to 1.0.9
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=WS3yaDcv
+Subject: [Buildroot] [PATCH 091/102] package/x11r7/xapp_xditview: bump
+ version to 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,59 +99,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2024-March/003469.html
-
-Switched _SITE to URL mentioned in latest release notes.
-
-Added optional dependency to xlib_libxkbfile which was introduced by
-upstream commit:
-https://gitlab.freedesktop.org/xorg/app/editres/-/commit/80959deec664cd80cd5dbf84af86b52ded4eaee0
+https://lists.x.org/archives/xorg-announce/2024-February/003449.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/x11r7/xapp_editres/xapp_editres.hash |  6 +++---
- package/x11r7/xapp_editres/xapp_editres.mk   | 11 +++++++++--
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xditview/xapp_xditview.hash | 6 +++---
+ package/x11r7/xapp_xditview/xapp_xditview.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_editres/xapp_editres.hash b/package/x11r7/xapp_editres/xapp_editres.hash
-index a1a8ab9005..73f97fb32a 100644
---- a/package/x11r7/xapp_editres/xapp_editres.hash
-+++ b/package/x11r7/xapp_editres/xapp_editres.hash
+diff --git a/package/x11r7/xapp_xditview/xapp_xditview.hash b/package/x11r7/xapp_xditview/xapp_xditview.hash
+index dbaf5e42b7..93ddc10e0f 100644
+--- a/package/x11r7/xapp_xditview/xapp_xditview.hash
++++ b/package/x11r7/xapp_xditview/xapp_xditview.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-April/003139.html
--sha256  83cf5dffb1883635fd9c6a8dc48ff9e560f6c6d8ce1a0e929d5f409cba18b6f9  editres-1.0.8.tar.xz
--sha512  9a007ed7a02abf61af8b65a163a7289a1e960db390db401bdfad162aa642e0eb887ecf85be14093efd8567c68f5e01450bb8321403a203a00065fa21985c7922  editres-1.0.8.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-March/003469.html
-+sha256  cdfc3f7a6f0ecea417af785b1f46469d9c21a3543a765480a3090fd65e3db3c6  editres-1.0.9.tar.xz
-+sha512  b1abf32cad8f881b8b98c8b4a3280b09f581fc3a86188e86d5d435801676ec75377d8a636b9479a335c5c2321d358841f1194861913b2c17803758b626517230  editres-1.0.9.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-October/003220.html
+-sha256  517700df205d4fdf65db182698157c959f1e7c10597670a7f45b1fcb2319819f  xditview-1.0.6.tar.xz
+-sha512  249769d27980e9a69ac8f056f329dfa514f3ab6267d6ed69814c5695f315d2a7021c560a0e26fdd2568290a071793d7f2eafdd92f9981ed556047deb244ebf5a  xditview-1.0.6.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-February/003449.html
++sha256  039e2d447fa409d4bb25c4e87cf09b4d4b3eff2d3af5aee8e7e52165a3259fd7  xditview-1.0.7.tar.xz
++sha512  da7e80cd9fbb5da0ec4949c6fed0bad135a2490767f030e60f1c51a9f5a62379572bf8b4dd6dec2fe824152d090470e62fce12c9144aaa1be1b48ddbc3b2910b  xditview-1.0.7.tar.xz
  # Locally computed
- sha256  b1049cf96db2c00428b8313541ab333ec4e06f102955f3edd44f88ec43b0acd6  COPYING
-diff --git a/package/x11r7/xapp_editres/xapp_editres.mk b/package/x11r7/xapp_editres/xapp_editres.mk
-index bd1bce732c..e8d6e008cb 100644
---- a/package/x11r7/xapp_editres/xapp_editres.mk
-+++ b/package/x11r7/xapp_editres/xapp_editres.mk
-@@ -4,12 +4,19 @@
+ sha256  023d879308a49249181f78bbb567e93c45138ad847fe969d191e4802e7a1a005  COPYING
+diff --git a/package/x11r7/xapp_xditview/xapp_xditview.mk b/package/x11r7/xapp_xditview/xapp_xditview.mk
+index 8655bd3e92..5459853ef7 100644
+--- a/package/x11r7/xapp_xditview/xapp_xditview.mk
++++ b/package/x11r7/xapp_xditview/xapp_xditview.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_EDITRES_VERSION = 1.0.8
-+XAPP_EDITRES_VERSION = 1.0.9
- XAPP_EDITRES_SOURCE = editres-$(XAPP_EDITRES_VERSION).tar.xz
--XAPP_EDITRES_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_EDITRES_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_EDITRES_LICENSE = MIT
- XAPP_EDITRES_LICENSE_FILES = COPYING
- XAPP_EDITRES_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXmu xlib_libXt
- XAPP_EDITRES_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXKBFILE),y)
-+XAPP_EDITRES_CONF_OPTS += --with-xkb
-+XAPP_EDITRES_DEPENDENCIES += xlib_libxkbfile
-+else
-+XAPP_EDITRES_CONF_OPTS += --without-xkb
-+endif
-+
- $(eval $(autotools-package))
+-XAPP_XDITVIEW_VERSION = 1.0.6
++XAPP_XDITVIEW_VERSION = 1.0.7
+ XAPP_XDITVIEW_SOURCE = xditview-$(XAPP_XDITVIEW_VERSION).tar.xz
+ XAPP_XDITVIEW_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XDITVIEW_LICENSE = MIT
 -- 
 2.47.3
 
