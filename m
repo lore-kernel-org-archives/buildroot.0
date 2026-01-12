@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E1AD25051
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B247D25050
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A47C61634;
-	Mon, 12 Jan 2026 08:43:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D731E80F86;
+	Mon, 12 Jan 2026 08:43:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oHS0FmNhjxLF; Mon, 12 Jan 2026 08:43:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id snsbobA0SBZC; Mon, 12 Jan 2026 08:43:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46C4861616
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A51380C30
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768207390;
-	bh=MDrx02BFISSrx2ysvIF68AVW39ZS5fU3xWolOOiRL24=;
+	s=default; t=1768207402;
+	bh=H6mFDrKtPQIkTG1aBlYF/s3NpnQMCf4SkSR5OIZSIuk=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=nVoFafWvq7ytQFE9KbyPZe2QhJj3Ba1MpA1fsvdzi8XBJGeCGIz7Q2t3neKV/WnqU
-	 SPiJXhzU5yKw8FdVLwSzgkbgypouLNh0vR0jG7p6dhEpGx4AqTJ2t+lhXCxwCXFet+
-	 MtsBqsr1NRfBiSmsMXs8Lre3fAjdS8HttZ1X7vGfOScmy1ml+71wHn9a4xZzNVYGK/
-	 KMVGp3h/ZMiLXwhSi33BZKYckA7uN7pqPYwfWRGXAL2u8SJfXTuheUcWcfIrzd0gLH
-	 mIh7TA+N4qB7zhR2/Sc5RT2wkVjSoYDjIHn/pPZAfYCAGTz8o0a0vJN6iCmVEJaSMO
-	 ArHwJsn04+p6g==
+	b=o4OLGujaFyQvGRKjQdtsJdBa01iKKkfq3h19lHIrrR24cSc/DPhq/c+nHi55GG096
+	 vJW4m4YTX5RY2mLlYwdOrc6QbdcvXa4GHp7JAmtAC+x0Y2GZFlCjz3KZW+iPtO3M2p
+	 4mUZ1G/sAuV1xlhk7i7wCxlmmq5N6CmshHwE3/qy1YOxV7EfQdMo/SOwOUmcBSHyLU
+	 d1sDugdWu8voL8fbFNg/r7FO7D/AqTC7NUXaW3gNWraELmhrtumA4nwU7MduwmFow2
+	 6vRdLaUQn0jCcCT2xho+XrOpBir3IojK3wLeHbBwzEP5wQsO9bHiNm/4Ts02u1NpIu
+	 jwuHgVgZTmd3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46C4861616;
-	Mon, 12 Jan 2026 08:43:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 95A1418D
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:43:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A51380C30;
+	Mon, 12 Jan 2026 08:43:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B1DC1CC
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CD4941704
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:43:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08C4641597
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:43:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l4KHanDybnx3 for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:43:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m8XsrppTRPkq for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:43:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DD66416F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DD66416F0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DB5FE415A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB5FE415A5
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6DD66416F0
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:43:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DB5FE415A5
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:43:19 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 855F0A4C40D8
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:55 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 30CBCA4C3AF0
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:54 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50756)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfDJB-000000007z0-41Cg
- for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:54 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vfDJB-000000007z0-35kG
+ for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:53 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:28:26 +0100
-Message-ID: <20260112082950.2528445-18-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:28:23 +0100
+Message-ID: <20260112082950.2528445-15-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112082950.2528445-1-bernd@kuhls.net>
 References: <20260112082950.2528445-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768206655;
- bh=ZXl+kAL/5VVnmnRteCMotQ/UwFv8sXmDCXYV5o0CyaE=;
+ s=kas202511301023; t=1768206654;
+ bh=Jvy+LQj5TSXBDDvuI+FT+J2KVhiA3vJurIswL/TfkFY=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=cLN9sOHmtSkeh5lwA6z9AeA3MFZItC+1oVIODVXj0n8RNYRaejJ5qMRNSuAkd9Fpt
- lXI05icBnOumadV6o2HLEmeCip2Es9pyvCQLcnr11p6X6VpVusgRAz/e2yuhQ505ME
- 2yBp4bF2B5gizAX5Va+BwI7RPLXi42ptqI0gzkAPI667gZ2bZzi1mGlUDZujXoXiyG
- bwfC3G+F6hE4NI+6Me0mkspOJvsLaBljs2fIF3/bUP6x3yyd5/Nr7QnRk55buYvtqP
- tdKUiOF0BvGkiOgbf0d5Safsr0h/otKjFU4yXWz7Wc5TVl1XrMzAXZD5o18UiokwUy
- bcMcM1wU87OmA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=cv1N8VWF6QNjtJTh+Vfwmswh1jnThM8an9kKBqf33r+kjPqeUtnaJBa2Wwqrki9Lv
+ g3+vUTm2y0AnpeFUFdoqrIF17HB7oizzBen2voHSIqD+lVec115AaMU1M4zN7c/d2M
+ GAYmA4oM+ngNM6PIJV/vgylsY5lUkcp+uQuyvy88MdrefmoYGMFeutAZoaLjcUJJ1l
+ x641XPtQ02vnKbU/Dhmxmg/zNEEyuJVRQomRnWhlH2iHH9LnDcPYkNrz43vJi1VUvK
+ KdQGE5dX5RXhNAT8P/lKoTygrJbKHLhZC+QBw6p71oozLrAQpg1psp7Wjd5VAPlvuO
+ 8mwOWTZw3tVRQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=cLN9sOHm
-Subject: [Buildroot] [PATCH 018/102] package/x11r7/xapp_xfsinfo: bump
- version to 1.0.8
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=cv1N8VWF
+Subject: [Buildroot] [PATCH 015/102] package/x11r7/xdriver_xf86-video-geode:
+ bump version to 2.18.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,40 +100,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2025-July/003619.html
+https://lists.x.org/archives/xorg-announce/2025-August/003623.html
+https://cgit.freedesktop.org/xorg/driver/xf86-video-geode/tree/NEWS?h=xf86-video-geode-2.18.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash | 6 +++---
- package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk   | 2 +-
+ .../xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash  | 6 +++---
+ .../xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk    | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
-index 7d5976473d..1904dcf145 100644
---- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
-+++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+index 7dcb99fe2a..01b05180af 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-October/003238.html
--sha256  92f3ca451cba7717eed15f80de3c123aa56c82a1ee7d6e9116ba513021b98874  xfsinfo-1.0.7.tar.xz
--sha512  1914916bf995c08a520bd009ddfa57c7e4a997a829380232d359f9bf68852c67650efb8f1fe3cc8a11889b2ec067f50ac38df711ffaf4536802a0b530dc1789c  xfsinfo-1.0.7.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2025-July/003619.html
-+sha256  ae80592b6063da928e3d0c81023709b2fa29a04fcda49f6c363ac579d97f23a2  xfsinfo-1.0.8.tar.xz
-+sha512  fdba207b6fbce0f9335b712a2b25bc3be973fe1ff712373b0d1a688c130299e9ea870f34a44f24757e73e88c59bdea03d67e96efbc455030f71ef81ab4668c98  xfsinfo-1.0.8.tar.xz
- # Locally computed
- sha256  bae01fa08f30f21f9cfb75e8339d081b34e5e03d12677177f85a55b0ca41d0db  COPYING
-diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
-index 29e9fc75c4..4fcacf599a 100644
---- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
-+++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
+-# From https://lists.x.org/archives/xorg-announce/2023-May/003393.html
+-sha256  8256ac3f14117324d00b7bfa8053645ca92562fe837c542489a502adbb5f9f1e  xf86-video-geode-2.11.21.tar.xz
+-sha512  e12f74268ab7d16b57644a9465b4be1ca28d250625a31b8810e19a1f94a17e47e0a258455155fd8f336fa59fd78160cdf3763aa94b85c6ccc2c42edf3b65bc61  xf86-video-geode-2.11.21.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-August/003623.html
++sha256  bdb0fa8154f06be080c88b59e8f7af6b41597161135152aaac84f8ea41853a1f  xf86-video-geode-2.18.2.tar.xz
++sha512  9228db606704494ab4490a676a6d25355d68438fe909b22cba9766040fc92b6484c95ac08a5e7bd09540bff7b37992b37febb4e3de44ec49c026b378836f5478  xf86-video-geode-2.18.2.tar.xz
+ # Locally calculated
+ sha256  3994ef7cee54f0935a4b57b1c34efd904da567931dd9e1a2d9390d22c8332ea2  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+index 8f84e4863f..9dfc991282 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XFSINFO_VERSION = 1.0.7
-+XAPP_XFSINFO_VERSION = 1.0.8
- XAPP_XFSINFO_SOURCE = xfsinfo-$(XAPP_XFSINFO_VERSION).tar.xz
- XAPP_XFSINFO_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XFSINFO_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.21
++XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.18.2
+ XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.xz
+ XDRIVER_XF86_VIDEO_GEODE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
 -- 
 2.47.3
 
