@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3EDDD25051
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE983D25051
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 08:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D56080E93;
-	Mon, 12 Jan 2026 08:37:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pc8M51jbGkwO; Mon, 12 Jan 2026 08:37:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD93A8453F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768207040;
-	bh=klqe60v9KaynO1/ktIqXrhqcqn6/2Op1JeM+FPfsMmA=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=CvojgmEWQ1lcSovx6yzLsJ0nxNhYG8JSHVqOSSjHOkEMw5qLSDm1lotB6WRSkbGDL
-	 iL1KJdtkHb/8597FvXiRVsbb/woHw2xq0WF9gFCaigJvf3oCAL5pjnDt9a7fAxsVtY
-	 rjxJzMTDJCH7FU9OYXp1TSLShaoe565pUdT9i5rB2o5FyxGBs8JOSfg8/NGMZooWRk
-	 ole2aWHwv+LTud649GQ0BUqPTA+UeTwSqPYintrlmgjlCi0nB+9AkfSjCv3eEHTeoV
-	 h/pns99TqwYWRsCmQjH4lOlXfItAOi2Y485o8bWGzl9zY9uKzuVPVEitCPXDiSmGzH
-	 5oUZN26fc21gg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD93A8453F;
-	Mon, 12 Jan 2026 08:37:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D424E18D
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C58E76152B
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A761761575;
+	Mon, 12 Jan 2026 08:37:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wC5rg-WiYgLR for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 08:37:18 +0000 (UTC)
+ id RbawMnl_KcWY; Mon, 12 Jan 2026 08:37:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C21E96152A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768207052;
+	bh=ikllmme8xSY0Pdix2K+vzGryqzJUAT7awJQPZ9SG+IY=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=cxrInV+HgOWoUT1YgUgExiHk1Ci1CO+UgTL5Tvyh5V0uLIwwO4jUVUri/iQ1B2juk
+	 zQpnSz/cU8sAdo/dmATd3a372TgutvPWFHMMlqmwHzVp01OLjddMDsI2tzEQDDlGr9
+	 KbCCk+DoaF1zYWvU4W3hUPvwCSaIkJx9g0YoR1YaevWVO75SZtMdi+Sj8XDRqe/VLl
+	 MmCnV9MEGxKHc1Bt4ZYQF1/yIZWEao+b37T9Td4b+pZ3duzzqXd0pNk+y+Wey9nJaw
+	 BhRHWkAzjMO8Zxi2BhAg7OWfL0ZZATXZ/JvqAkDFt50TgzXrYWo60wl1onAx/O2aqa
+	 /0UpaTU9i9yqQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C21E96152A;
+	Mon, 12 Jan 2026 08:37:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 561141CC
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C777412BE
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pyF_TmRLp6lY for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 08:37:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2DA1A614F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DA1A614F6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 30186412BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30186412BB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2DA1A614F6
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 30186412BB
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 08:37:30 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c81c.dip0.t-ipconnect.de [79.214.200.28])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4877BA4C3C7E
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6486DA4C3C93
  for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:30:33 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50756)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vfDJG-000000007z0-2wYr
+ (envelope-from <bernd@kuhls.net>) id 1vfDJG-000000007z0-3Dqn
  for buildroot@buildroot.org; Mon, 12 Jan 2026 08:29:58 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 09:29:36 +0100
-Message-ID: <20260112082950.2528445-88-bernd@kuhls.net>
+Date: Mon, 12 Jan 2026 09:29:37 +0100
+Message-ID: <20260112082950.2528445-89-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112082950.2528445-1-bernd@kuhls.net>
 References: <20260112082950.2528445-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1768206633;
- bh=ko/zPN07ct6K69iiLWAFCkwliuk7PzW9BX3uMhcXj/4=;
+ bh=SHKLgIPdbJb67ZOsm3sU+yUCb1Bswj10R59+aAnr/aQ=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=D+rV1L9r0O8llf47+/vOoBlK82ALJ/fa3QgjOJaWX6PHM8DtBeTyuxVwhM89fvWe8
- w/sVCqWPgneP3MqwfFpscM/TTvZR3IJR0TvvrM7zfMsU3oLFpIi40O1P1Bou5s69cM
- xJjmMowWdcRpkWw3eYhcykfCW5bnk0WBB4ZI2qANUcsf90sJUOQ/B5D4yMbhmXwMqS
- HVJQXdEyK+roHmlLsXWLSwCOQDaOBBrcZn2BnKdzFdbLqTVEDLnA+CAwS17Ht8Hq+L
- XvwT/pZ8EpVmSu6RGZCSLqoLdaMGN08TD6wNU+GIUyvC1WB58GN9b8IfNyhAtLeWe2
- MfjbMSVS3MHjA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=aL0VnL8vKSmjwFLlQreDLYGiNwuSanSptJ3lCoT6bvRski+tW2UfrI+8lOqNYjlGy
+ 7d9m8XsYUudHYlzrMeXrlbUFigdW3W3U746QjcJqXQkw5Xwcz7koLZSVe5Ic8NiBbd
+ 8hGh5gpdEEyIm77J9sbMBB6q3rw9r98KU0mVnCFs7Wy+qYdryRXiLnBaLtrEmGIMWT
+ 6yOkAXyoSFW4ZwQZEfpzsRF46ri1XaXmXXxjBW2meKdnUJD+x8fVxQgA2uzBbztmbK
+ v8eB9MPye+iEN5NBfauBX0noUxfspGyq0Pi9kmthAsgG9rPaBSlAtT0fm6EgnUFns8
+ Osyopnbzoeliw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=D+rV1L9r
-Subject: [Buildroot] [PATCH 088/102] package/x11r7/xlib_libxkbfile: bump
- version to 1.1.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=aL0VnL8v
+Subject: [Buildroot] [PATCH 089/102] package/x11r7/xlib_libXext: bump
+ version to 1.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,45 +99,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2024-February/003455.html
-
-Switched _SITE to URL mentioned in latest release notes.
+https://lists.x.org/archives/xorg-announce/2024-February/003454.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash | 6 +++---
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xlib_libXext/xlib_libXext.hash | 6 +++---
+ package/x11r7/xlib_libXext/xlib_libXext.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-index 7e6199f16b..d8a1173925 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
+diff --git a/package/x11r7/xlib_libXext/xlib_libXext.hash b/package/x11r7/xlib_libXext/xlib_libXext.hash
+index 2ab509598b..77284e2b37 100644
+--- a/package/x11r7/xlib_libXext/xlib_libXext.hash
++++ b/package/x11r7/xlib_libXext/xlib_libXext.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-December/003286.html
--sha256  b8a3784fac420b201718047cfb6c2d5ee7e8b9481564c2667b4215f6616644b1  libxkbfile-1.1.2.tar.xz
--sha512  0639fad7b64b36a85f8d24cdd40085e0ec18d7a671793b8b5c26449e9cc5a84c37117e7757fb1238ac353044935dd00013e42166de5af9dec428e873a47e598d  libxkbfile-1.1.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-February/003455.html
-+sha256  a9b63eea997abb9ee6a8b4fbb515831c841f471af845a09de443b28003874bec  libxkbfile-1.1.3.tar.xz
-+sha512  d80ac41f6fa3a1ffad77ea1f8f9d9542f0bd210d74b263802bc6e6c1594fe325b27f42b5454aeeb36352518963b1ed1fdbbad95d7db3690b2e36d54742b7c236  libxkbfile-1.1.3.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-October/003241.html
+-sha256  db14c0c895c57ea33a8559de8cb2b93dc76c42ea4a39e294d175938a133d7bca  libXext-1.3.5.tar.xz
+-sha512  fd9805982dabfb14b1526c0cb71f94508003fa3fcd60560d387465afd891c1dca61927ae86278436d53f4b840cacd1f412071fdc3dce1d6f730610a9c163d59b  libXext-1.3.5.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-February/003454.html
++sha256  edb59fa23994e405fdc5b400afdf5820ae6160b94f35e3dc3da4457a16e89753  libXext-1.3.6.tar.xz
++sha512  fd7693b5698cc4f5e80002a2cd4bd88e5d52c755c19a0417ee73029bd65f9d77b0969e765a1febc4d8fce1ba5dfb7278717f47be742e33d8fc5eb941e769792e  libXext-1.3.6.tar.xz
  # Locally computed
- sha256  e1b3fdad8037ab3f986ef9caaa7c8da47d8d55875e680c7d6011f6c07363ea7c  COPYING
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-index 2e7f82922f..23fddee97a 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-@@ -4,9 +4,9 @@
+ sha256  fd62910be4b13829d94e76c1447cf840953f0e225c4dc6c79349c84dd0557f22  COPYING
+diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
+index 0bb3efa31f..bb35244b01 100644
+--- a/package/x11r7/xlib_libXext/xlib_libXext.mk
++++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXKBFILE_VERSION = 1.1.2
-+XLIB_LIBXKBFILE_VERSION = 1.1.3
- XLIB_LIBXKBFILE_SOURCE = libxkbfile-$(XLIB_LIBXKBFILE_VERSION).tar.xz
--XLIB_LIBXKBFILE_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXKBFILE_SITE = https://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXKBFILE_LICENSE = MIT
- XLIB_LIBXKBFILE_LICENSE_FILES = COPYING
- XLIB_LIBXKBFILE_INSTALL_STAGING = YES
+-XLIB_LIBXEXT_VERSION = 1.3.5
++XLIB_LIBXEXT_VERSION = 1.3.6
+ XLIB_LIBXEXT_SOURCE = libXext-$(XLIB_LIBXEXT_VERSION).tar.xz
+ XLIB_LIBXEXT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXEXT_LICENSE = MIT
 -- 
 2.47.3
 
