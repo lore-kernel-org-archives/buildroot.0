@@ -1,111 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C727D25032
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 07:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 872DCD25032
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 07:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66377614A9;
-	Mon, 12 Jan 2026 07:58:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nSni4ihaXtMk; Mon, 12 Jan 2026 07:58:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10FD36149A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768204708;
-	bh=9vgyc1DPuVdw+3Sgrazvk1v5Znl7hrurCuw17M+xpPk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JCHNAcdDbyHAqMf9Xo4ZhrrK37WW3WvAI6LZfQXZLNXUBA9qANrhYnWiuL1j81kwZ
-	 y1yeMKZRO9e6jJqkfLC8vkEpDqYfvZE10bFHc64t2hdynGNzuuaeJ/BV3HGZndm5qC
-	 RuPvIBEbkoUgsaawZtU3/EwB9h4hncgGfNTT1NmZS5ZAkOxHHu2b0WPVstuIfOexBy
-	 buTiIa2G7zPmuddum15gbPlRM5R2d0nlTAsp4aw+Cnd0/mLhZXxU9SR0n44WKV7dJC
-	 DcsvQ0n+XtHR30PGiYH41FFF1dwTHP0Yyv9t29v56bJ4cX5SZqN4NU7j8XambPDpOK
-	 QuwsTiIylk+RQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10FD36149A;
-	Mon, 12 Jan 2026 07:58:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 00B9C12E
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 07:58:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB4EF843A6
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 07:58:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 424DE843A0;
+	Mon, 12 Jan 2026 07:58:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9ji1Cd-kafn for <buildroot@buildroot.org>;
+ id 19t_ZUPOgFOT; Mon, 12 Jan 2026 07:58:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A1D084397
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768204710;
+	bh=8R7Vvkgm5IXY18vxk0+A5GyfUG7msjHbiq989WmgDCM=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=Y13xf0cco0KaxHx6fjzktEFz2MB0Z75gASLSOVUYZZXl3u+qEnJIoUyQGW0K6blZ7
+	 fLOMPLk4yZ5OoncAAdAw1flmxyczHSkrFZJn+XoQMW9EiDu2z5UuTOLuUVWqfymdPf
+	 nFzBFZLVAxEQTZy5qk+eYtYeltJx64wSIolLNDp+uwe94vgWFpPNQ5+ReZ5VVXrYu1
+	 s8sKfzcnIxAtZ6QtJi/vjxO3GKZy1nETiIEErpgn6b+EuQtiAdSvpROeH9kxb9oCL4
+	 Ku0E2kWCM6JKb4Vjpfevlwl1xIbO61AR2PJ73UsVi7fGOHj7mPLJjMxKBWryw3AkJh
+	 egCazfEtHk8wg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A1D084397;
+	Mon, 12 Jan 2026 07:58:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C31E12E
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 07:58:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9856F84398
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 07:58:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id INUM-ZscHzJ6 for <buildroot@buildroot.org>;
  Mon, 12 Jan 2026 07:58:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CD28B84398
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD28B84398
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD28B84398
- for <buildroot@busybox.net>; Mon, 12 Jan 2026 07:58:24 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4775ae5684fso27604045e9.1
- for <buildroot@busybox.net>; Sun, 11 Jan 2026 23:58:24 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8ADB7843A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ADB7843A0
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8ADB7843A0
+ for <buildroot@busybox.net>; Mon, 12 Jan 2026 07:58:25 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4779aa4f928so62511075e9.1
+ for <buildroot@busybox.net>; Sun, 11 Jan 2026 23:58:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768204702; x=1768809502;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=h2hDlJTGow3OT9Lnl7PnaPSouIG0avpg7fn634V132Y=;
- b=ow5rdUBNiOJwpAaaBlw5Uk2TBPfEg9mCRE4fMhSAwMynTuNb6Ct/YmNT0kKZMxaJL8
- 4wBaxSXVqhbuRNGzOiKrZHUkoDVuoDN7UmDdC+ErPKyMzhFOpcu4UoEFD9TnFl8f3LDg
- ncWuI24ijEBir+4sSSVz3bWFvyyeJu796yJAQWx1LV9qrpsFK1FszgI7rMnfyxRKJSkP
- xYs7sgnmfvW44rxPcgmTFjBHB0YkqhIWDQ5XxZZuZ6K/qYKTif4oBpptkfuMPLp81usL
- IK6QYBvQOhHiouLpLgjFLftbNGYJSH8J/BX70BO9AO1SRKunUhcmxre89RssyyZs27vm
- AUog==
-X-Gm-Message-State: AOJu0YxZDxzs84raICbjwctC1DTeF35lb1s8bs6IlBJnrFnUipSbaaxf
- FE39fLvcwz9ork7Dei4bR2Sv4PUdzE6iMfluJeZ754asr8V9ACUjqpGCR1S63+DySOXfwQnk+UI
- gZ6yang==
-X-Gm-Gg: AY/fxX4vuma/WSc/60owrBqcWJPmIctxStULkDjU4KgAUyi6qXGapuBBLEjvctnZI7o
- JezqKKtMZ7v8kSMumNQnv2Qo1Lz4bARFVMNZswJJmpGpuN16tcnSZWDypSVARk+ogJSf++dCNle
- rxOZetQhwnHzm0WECghO/E4yLT/XUgLtEPEmlLy4JidVm09lzudeMkhJqlnr/GQWtW/GPNtKUEP
- lnE8y6JCUszpH6VKHXLb1cQtjgwubOe9nHbgYuESfmcMAo5gUlo1FsFM01GizOpkDGkltx13URZ
- /6080h5aprO68o2eTAa1Aem6DNIwFX8lat/gPnUnqpwSYoAi/prbCof5RqXs+UDPWntMIQbyd44
- xEGVZy2I8S187th1ilmcO04sb8l5PIMK9uw45P8s5F3G0Qq1G19GXb5If+s2odjtWTrfREaZnJc
- 6iK/gGmBOx0EXJm/3Dr2cp7J2fOFNhJm7kpLo=
-X-Google-Smtp-Source: AGHT+IHKDNQl6ZlqBhSpxEAlzP/XxaDVEGQwFGyq0hsDJue2fMeMIF+WATp3TvEbU4iZ6our7OipLA==
-X-Received: by 2002:a05:600c:4e13:b0:47d:25ac:3a94 with SMTP id
- 5b1f17b1804b1-47d84b32f30mr213489025e9.17.1768204702281; 
- Sun, 11 Jan 2026 23:58:22 -0800 (PST)
+ d=1e100.net; s=20230601; t=1768204703; x=1768809503;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=YbXY1vk3kK5BeZqhkQW8VVyjuSi9SFAoSD3QPR1HQvg=;
+ b=iQLVJM6rVUti/v/Yl//SqtEMZou8R6lRmgm6dz0NwYrkZEjvMMdj4YjFvdrawKtjte
+ 4jK4TBOjZqLtNvIrFUUxRVfo99wZ/tcNF4s5PHrqGWEfgcRhJLu7uKuGG/3v0ikELkEZ
+ zeN/Ai7AG8FZWhAwB+wiLy+mBC2QOqP5/58vKeMkhejbrpHL5BHbK2SPtgVxAugcCNA5
+ amUWjb3N4sFiqIemW/1foscTUcUV5eVUCaM+G+8qLhxOgDyyWS27mjMvqmTPYinSUSf5
+ I10sPqhZcTlCqNp2J35wne0H3w1bISfmnJDhtUfctepJw7DB7VcEujUALQSUoHCg916H
+ +yvw==
+X-Gm-Message-State: AOJu0Yzn4ycoo2E4ECajkeo2ZT70Qo14Lw8ir98c7VmxML5biAeRleRJ
+ RuWtRsnQTkGlO47F6+CAquOxMCJOft+lPBiBMT2MC01PrzN8zDAhf+dIUNmE9Y4Y+2V7opCFkdo
+ WAtTDUA==
+X-Gm-Gg: AY/fxX7ffhExhJyHYDxnXTbYcon00LghN37J6SP1tcLNcF+ZoBcd5XvSYeF8oYcPl4z
+ GwOtPGfR+6CMwQkYT/4BhCCZN3qrm194TqoTQnWZVtM924rj1zB9vRfl0JbkDMitcJC93SR8m9r
+ GEUjDiWWBlAIoWuMLt7Zl4fSvNHltaBSEwRwStFrQwV8CS7a7u7tqZDVWDAm+X9D87pUnfwzf8V
+ S3elnj6GXTroptHkBO/f7ir+k3Ii9u7OBeKkru0VggC/ujyA6jnS9/sYAFW50lY8hAvIrncZaxb
+ Mqs/Ak4nV/GvNlsqG3dMQ8+LDhMgp3t3FgfcJ4AeNyE/FpK35NopY6wPyGLdO/uG8ypU57Gaiu5
+ fuFwVyZPoT54/Eu2b+7+IhZzhEKf2TyjuZSn09yXyC2hYKYqQBXGxyMRaTZgcEGqcQG3b4nwCEx
+ jw/Sdytd70/iKsM4T7bPExdhMYhtS7+NJ/qJQ=
+X-Google-Smtp-Source: AGHT+IHr61H1cAK9dbv5d6COYrcqFhty9YUtoIe/ZXt9oLMY9SGnMEnxe+n43vDqVo4m1VjhYjCotQ==
+X-Received: by 2002:a05:600c:19cd:b0:477:a246:8398 with SMTP id
+ 5b1f17b1804b1-47d84b09166mr177349245e9.2.1768204703148; 
+ Sun, 11 Jan 2026 23:58:23 -0800 (PST)
 Received: from vm-2404.. (46.184.66.37.rev.sfr.net. [37.66.184.46])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-47d8661caffsm123217675e9.5.2026.01.11.23.58.21
+ 5b1f17b1804b1-47d8661caffsm123217675e9.5.2026.01.11.23.58.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Jan 2026 23:58:21 -0800 (PST)
+ Sun, 11 Jan 2026 23:58:22 -0800 (PST)
 To: buildroot@busybox.net
-Date: Mon, 12 Jan 2026 08:58:15 +0100
-Message-ID: <20260112075816.710903-1-francois.perrad@gadz.org>
+Date: Mon, 12 Jan 2026 08:58:16 +0100
+Message-ID: <20260112075816.710903-2-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260112075816.710903-1-francois.perrad@gadz.org>
+References: <20260112075816.710903-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1768204702; x=1768809502; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=h2hDlJTGow3OT9Lnl7PnaPSouIG0avpg7fn634V132Y=;
- b=JVfX1aZeQ5SRqHuEB6m5ozw9twwpNgXFpc6tL26+DGAdCrQpM3WnvyBiC7ExRQe3HV
- /z4paJn2fRlZzVPPe2I32D/VSv8ZfOduxLi1BN6zET+7Tu/EAqLfIsyM9BJAi2MVEXDc
- xCMTUTYsAoF76OLS4GctU5NPvg0MaO+tzI9yIFdjOJhE9uWFzVNrREE5t5YZVuzMiDFw
- pGZFKPmG8l8KfOhmdDeraTlH9Q1PnhSm6FBz2GLOZCFNggxIXIRw8REQoOkgqX/QkNlM
- e7V0dFbI1Y7B5/LnLCYyNFV31Y60KYXAphB42dGGt1R4EOeewaUuAaQ3JOkUnz7SH7Lf
- 7o6w==
+ d=gadz.org; s=google; t=1768204703; x=1768809503; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=YbXY1vk3kK5BeZqhkQW8VVyjuSi9SFAoSD3QPR1HQvg=;
+ b=jHAPwZ6mDxFJXTWFPcg4xMQghwAScP+P6M3BE+cDR5vL4u2SFKb5XPmO3JI5FotfAU
+ 6iiYEa8FAe1mfdkF6Mb9jJotpzv2L0/Xyth/xg19PbeX/9x1DC+uYkDEqwU2A4SiIpCo
+ jlamU8bIJo8Ia4NMUifoNsks2PWBGeKMIULvpKmSYxrhZtcxIL9/fFsWpP73m7fH6/56
+ t6PKzdI2MFeJiWUy4dbNZT7YsIeqfUdZo4MHrBe+Aoh0XufSLN3c2N+PPSQ/ij9Xp734
+ cVgVdveOYS/qP9wTjwc0NVss9l8M+bAhq4A0mu+Yu3De0V4Cd1sKqv+nEG3jr5/7EYB4
+ qUAw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=JVfX1aZe
-Subject: [Buildroot] [PATCH 1/2] package/perl-net-ssh2: bump to version 0.74
+ header.a=rsa-sha256 header.s=google header.b=jHAPwZ6m
+Subject: [Buildroot] [PATCH 2/2] package/perl-sub-quote: bump to version
+ 2.006009
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,43 +129,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+diff LICENCE: update copyright years & minor cleanup & use "The Perl Artistic License 1.0"
+    see https://metacpan.org/release/HAARG/Sub-Quote-2.006009/diff/HAARG/Sub-Quote-2.006008#LICENSE
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-ssh2/perl-net-ssh2.hash | 8 ++++----
- package/perl-net-ssh2/perl-net-ssh2.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-sub-quote/perl-sub-quote.hash | 6 +++---
+ package/perl-sub-quote/perl-sub-quote.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
-index b2e8b2d48..0fa86f115 100644
---- a/package/perl-net-ssh2/perl-net-ssh2.hash
-+++ b/package/perl-net-ssh2/perl-net-ssh2.hash
+diff --git a/package/perl-sub-quote/perl-sub-quote.hash b/package/perl-sub-quote/perl-sub-quote.hash
+index 8db560fd4..823c49ef1 100644
+--- a/package/perl-sub-quote/perl-sub-quote.hash
++++ b/package/perl-sub-quote/perl-sub-quote.hash
 @@ -1,6 +1,6 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5  57aa0f6e2be4020f75888a7195ad5cba  Net-SSH2-0.72.tar.gz
--sha256  867d83070fac6436b9f0971918243002072fbf8d2724a87c254b34250dce0222  Net-SSH2-0.72.tar.gz
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  6ac3a6616dc673ae00ba101e33d637dd  Net-SSH2-0.74.tar.gz
-+sha256  1c124699745eeb40ed636097fdcc3e722c94cfd7704ebc0acfb0f05541d2809c  Net-SSH2-0.74.tar.gz
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  f19c60039ba87f69f7f9357fc0a03e07  Sub-Quote-2.006008.tar.gz
+-sha256  94bebd500af55762e83ea2f2bc594d87af828072370c7110c60c238a800d15b2  Sub-Quote-2.006008.tar.gz
++md5  8f4600b812f6106a1f907ee47a87bd1d  Sub-Quote-2.006009.tar.gz
++sha256  967282d54d2d51b198c67935594f93e4dea3e54d1e5bced158c94e29be868a4b  Sub-Quote-2.006009.tar.gz
  
  # computed by scancpan
--sha256  268afaee7aa88a41959c93cd91853e8124bdbe64a74480d36ff1130e01a1c0ca  README.pod
-+sha256  5fdfc16a4c38c1a82d97f91bf3166806c03015ec42bc2b96aee330ffeebd9461  README.pod
-diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
-index 20e45b628..f5ba67865 100644
---- a/package/perl-net-ssh2/perl-net-ssh2.mk
-+++ b/package/perl-net-ssh2/perl-net-ssh2.mk
-@@ -4,9 +4,9 @@
+-sha256  de7a14750e81d97e19e111df58a3b51e3f2c8ec2d2dd90f576f54243251972c6  LICENSE
++sha256  ca095549209becaf2d8f1d4623bccd8512045acbf74a41ea839007b1b47174d4  LICENSE
+diff --git a/package/perl-sub-quote/perl-sub-quote.mk b/package/perl-sub-quote/perl-sub-quote.mk
+index 3c2a25be5..da2bd7e2d 100644
+--- a/package/perl-sub-quote/perl-sub-quote.mk
++++ b/package/perl-sub-quote/perl-sub-quote.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_SSH2_VERSION = 0.72
-+PERL_NET_SSH2_VERSION = 0.74
- PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
--PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
-+PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RK/RKITOVER
- PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
- PERL_NET_SSH2_LICENSE_FILES = README.pod
- PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
+-PERL_SUB_QUOTE_VERSION = 2.006008
++PERL_SUB_QUOTE_VERSION = 2.006009
+ PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
+ PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+ PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
 -- 
 2.43.0
 
