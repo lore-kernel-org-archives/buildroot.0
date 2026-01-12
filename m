@@ -4,73 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F5FD26D97
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 09:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6BCBC9EC6C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 10:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8769C41716;
-	Mon, 12 Jan 2026 09:50:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFF9441838;
+	Mon, 12 Jan 2026 10:47:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yl0uMGVN1dPb; Mon, 12 Jan 2026 09:50:41 +0000 (UTC)
+ id a-b8r9xoLNCC; Mon, 12 Jan 2026 10:47:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B385341710
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5092D4182B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768211441;
-	bh=LBnQCnOn9kMHmYnZj55WWGqgwqF2nhU+EP7YkYKy0ko=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=fHWS00gDzm4J19SCauDtUyBTGIX5JsdW8/TiuXEifECY0DZwAodAdRuTtA7gMEG7i
-	 2zgarW5dW+cTSz+op7flt95V92mswb2nQ97qlOCNOAs7fhKc9OLJlo02wpl8JQHhLu
-	 RvTcRSyvxg/MBsZXo6N0WRxfIA7Hv4gxdIH8w9RSDKMsS2bQTmqY3GIy7BoOSAdmCb
-	 zFXW9/KPWfdlF70seR1IgtmaEeCxMBGysLz/W/RGk/MnqYMiRxATKO3UQGPchzzXn8
-	 EeQyQM2Fr/R1S64o3ACaCjMXutYkFES17ExbV5tYnu000MmTys14kxU8rcDNwuzk8y
-	 bM/NDXTOka13g==
+	s=default; t=1768214856;
+	bh=d21cGQyDMYn34WU3+6v4Hr0pCRt2tn6YjqSA0AUu75o=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=QwDU0U9W/vn1UWr0Rt9OZCsX4BAA8xUvO7vYVdkjRjcqYDRUXXyw+OKVIl3eGJE/k
+	 f9Ui6cN5uB7DULQ/NfY83mTGF95XyJMZbRvhRQ4P6j/XK1tWpJMS0xDC1DgLkVBxyE
+	 5yt/7O/XEEarUruVlF+fm1GqfUzFNndqt95MdgQrk8LfkvPKdudz5y+fJM+42k9t2V
+	 xXRcpFyWo55sHhQxhUoyA7wFZNPR0NcLOD3/aAMPvBknXf1Y8ypJOsDCQ1EbIu3A6a
+	 NOLdr9UHKuawUmAD8bkNF0qU6k54xhavBCejjF4urFJUhLRunVpJvZOBm++28mJF8t
+	 TWUt7U4TVrYZQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B385341710;
-	Mon, 12 Jan 2026 09:50:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B458512E
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:50:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5092D4182B;
+	Mon, 12 Jan 2026 10:47:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 657441CC
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 10:47:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AFC5845E5
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:50:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C882616BC
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 10:47:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYELu2RU8t3F for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 09:50:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 804AD845F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 804AD845F8
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 804AD845F8
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 09:50:39 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EF2A41814B9; Mon, 12 Jan 2026 10:50:35 +0100 (CET)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6rbw4uSCm-tb for <buildroot@buildroot.org>;
+ Mon, 12 Jan 2026 10:47:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.102;
+ helo=smtpcmd10102.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9B5E8616B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B5E8616B9
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9B5E8616B9
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 10:47:31 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id fFSJvsDJ6IfDkfFSKvkn6q; Mon, 12 Jan 2026 11:47:28 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Jan 2026 10:50:28 +0100
-Message-ID: <20260112095031.251701-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.43.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Lothar Felten <lothar.felten@gmail.com>
+Date: Mon, 12 Jan 2026 11:47:27 +0100
+Message-ID: <20260112104727.2624299-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1768211436; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=x6//lu2VsV9trIVFRwhBEUXEO4DAFEg0WcH1/N7VdkI=;
- b=FMX5wZO/fMPkIusdbEU4OEXKMFPPr2u9LU84pDkh5JxC1MFOO6+PtCu/Whxiouos1fkTj9
- BAtFgP2Yv0g2MUWLf4i8eipfACMEj6qlCQNBJ0Yh6MTCb1rbOiDs85pUxfSfEFGh7zCDaw
- ielTl3egAQbPAqjJoMurvDrGamkGKCY=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=FMX5wZO/
-Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 33.3
+X-CMAE-Envelope: MS4xfA56dBLEjgt3KftTpTmLnzdMNx6/FGjeCczBkVkJieijXAPYYk7YdyyDaDr2ZRprR4E5o68DkZ/Oj8F52jRyfwNb7wWajW5gKHVdHHFTX/eCOkHIl36Q
+ +XDR9OoCKQYoqR3+o6zh2lkjBDPw+V8t6pPiVqHLPrGTVT70NjrsE4W0EnMerGv7ePwZxgjsqxnSY5GN42OROU+bqnfvzO+SOV4uLHsysfyU8BkQyqpA56N9
+ 4qpW9Hhxeem8/ZjVDm34B4VphKD3D+y/c3zIEHOPPUR60TddDFvGg6edeSutBvBZbBmvBwn7LmxLzqgL12rspEVY1RhDKmvbj0gF1d4s9md8cyRc5jTx/upi
+ wP/lT8bU
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1768214848; bh=brE+X7bgqeNKUZtAtvB3heNnxRrG5TGr8xFFcTn7v5E=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=eqRWxLbTWYQF/I9IMpeaeNsVqmzzzBN0UCNyBmPXWjRJL8umHk04Jjos6wVxQZ/9D
+ EslL9LnyxfAgyJnMcmohINgmHulHGZFQ+U2VItJ+MxnI6hIOglqmmwd10odRlxcxe8
+ kBGFhsD8A07B4QW52QqeZyA9r0+WJ4RMmAshHlbVA8BE/D8BYK5RBosYcXphIF4eIw
+ wc73MoJwBA13tlOUnY+kgCg//Hkk4MEiUIf/q8T6Eh0eBs9fCBdFXqvbW1gCoVFPC8
+ pdfqJr6T1l+VQJYhnQX/0T+O9aTduZGqHKMAtoZUWhzNwgzdXbqQBZQWdX5eVoi6OB
+ E/O+07DN239iA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=eqRWxLbT
+Subject: [Buildroot] [PATCH] board/bananapi: simplify berry and ultra
+ configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,75 +94,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release Notes: https://github.com/protocolbuffers/protobuf/releases/tag/v33.3
+The genimage.cfg and post-build.sh files for Banana Pi Berry and
+Ultra are identical. Replace the files in the M2 Ultra directory
+with symbolic links pointing to the M2 Berry directory to reduce
+code duplication and ease maintenance.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-V2: corrected title
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 4 ++--
- package/python-protobuf/python-protobuf.mk   | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ board/bananapi/bananapi-m2-ultra/genimage.cfg  | 17 +----------------
+ board/bananapi/bananapi-m2-ultra/post-build.sh |  7 +------
+ 2 files changed, 2 insertions(+), 22 deletions(-)
+ mode change 100644 => 120000 board/bananapi/bananapi-m2-ultra/genimage.cfg
+ mode change 100755 => 120000 board/bananapi/bananapi-m2-ultra/post-build.sh
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index db91cf296b..adbcf1d227 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  6b6599b54c88d75904b7471f5ca34a725fa0af92e134dd1a32d5b395aa4b4ca8  protobuf-33.2.tar.gz
-+sha256  1c9996fa0466206d5e4b8120b3fceb332369b64248e0649089aad586569d3896  protobuf-33.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index e2158216c4..e77b1be08c 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 33.2
-+PROTOBUF_VERSION = 33.3
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index fdfbc4b4f1..9f1950f20e 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/protobuf/json
--md5  59060f8bb01846579e5c8d95917ad925  protobuf-6.33.2.tar.gz
--sha256  56dc370c91fbb8ac85bc13582c9e373569668a290aa2e66a590c2a0d35ddb9e4  protobuf-6.33.2.tar.gz
-+md5  64d69417f4fe879daabc70137006c0ac  protobuf-6.33.3.tar.gz
-+sha256  c8794debeb402963fddff41a595e1f649bcd76616ba56c835645cab4539e810e  protobuf-6.33.3.tar.gz
- # Locally computed sha256 checksums
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index 8db9a2f621..df214550ba 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
- PYTHON_PROTOBUF_SOURCE = protobuf-6.$(PYTHON_PROTOBUF_VERSION).tar.gz
--PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/34/44/e49ecff446afeec9d1a66d6bbf9adc21e3c7cea7803a920ca3773379d4f6
-+PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/cc/5c/f912bdebdd4af4160da6a2c2b1b3aaa1b8c578d0243ba8f694f93c7095f0
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
- PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
- PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+diff --git a/board/bananapi/bananapi-m2-ultra/genimage.cfg b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+deleted file mode 100644
+index 92c8677545..0000000000
+--- a/board/bananapi/bananapi-m2-ultra/genimage.cfg
++++ /dev/null
+@@ -1,16 +0,0 @@
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/bananapi/bananapi-m2-ultra/genimage.cfg b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+new file mode 120000
+index 0000000000..aa6832894c
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+@@ -0,0 +1 @@
++../bananapi-m2-berry/genimage.cfg
+\ No newline at end of file
+diff --git a/board/bananapi/bananapi-m2-ultra/post-build.sh b/board/bananapi/bananapi-m2-ultra/post-build.sh
+deleted file mode 100755
+index 21a2b0d8e7..0000000000
+--- a/board/bananapi/bananapi-m2-ultra/post-build.sh
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname "$0")"
+-
+-install -m 644 -D "${BOARD_DIR}"/extlinux.conf \
+-	"${TARGET_DIR}"/boot/extlinux/extlinux.conf
+diff --git a/board/bananapi/bananapi-m2-ultra/post-build.sh b/board/bananapi/bananapi-m2-ultra/post-build.sh
+new file mode 120000
+index 0000000000..01ca59fa50
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-ultra/post-build.sh
+@@ -0,0 +1 @@
++../bananapi-m2-berry/post-build.sh
+\ No newline at end of file
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
