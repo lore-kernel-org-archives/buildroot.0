@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99DC4D30CC2
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8484BD30CC1
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D30F60D9B;
-	Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A18781589;
+	Tue, 13 Jan 2026 20:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pr9QfQJE53ha; Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aLyL0G_37FVM; Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE2160D9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7640882E19
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337935;
-	bh=KWZ2pLTG237/ShWHIolwc6fp5Nda2Me3VEmlNkTV6GI=;
+	s=default; t=1768337936;
+	bh=Ti4MBPJk0w7zo4+Iam0Q2253ZCnIUyxj52DgLPs+aSY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a8qJexsXRlRYBBx4CX31btrXL6HMqZhxow1w5ke5v+p2I9hn6NvcGUxZlxZ6t/sUb
-	 IC7YEOVQeBdNv2AO8cXtiCje401NUXVIoKQTMsdLkeEyKrYOHtElB5R0NxNFF5jKiy
-	 TK1i0JGDlJaeTetVf0RF2+QRsn346RbmrXT6gEMMr96rpc90Ie7pOmuj92Lf7v6QlS
-	 AtjpixbQSZoJJr4Un6bePz/lX1uNvzx8OpSxqdikSaerlDMGA+KRKkzNil1o/8JnLY
-	 lEVMEVTxA64JcTXoxCTppY0Wp7YQrsgTRxuutewpY7FQR/oh31J8w02YKGYzhpN/7B
-	 G7RlyfAm7LZUw==
+	b=mHnea4f21GCfWQQrC1FM4npFhiWiAniNAgPEHCS60J1qY8FrkIwRjbLpWCeJmgBe9
+	 7BrYiwudIDIJgxvMSD9/0EQaZIH44Pyf/9oslV2WDm8/GxsNQC87sPaNmc8h6o+nyE
+	 2aFQy7VMrt32jCksyL2WlKOf26SlVpURgtHg29EnOWMBShF3yHfdXirf0yvI2mXdYi
+	 3n+4dbyB2XBeGGw4JNXIhUyHbBNvPCWrwNoWDIbChaplPPinwG9RumWEOzgKGnSwaw
+	 zJfwrNzr0i4zkjufWTxb+xiF2WIGEQQ/RaAE1mq0fCrImr5cWBNKzmUGDDVBhwknKh
+	 vYdEiOqebgy8w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE2160D9C;
-	Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F849231
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7640882E19;
+	Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D9FC2CC
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C2B44073D
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93FF040C2E
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RtLMDxHkqTEP for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e-L6tcWkMDbz for <buildroot@buildroot.org>;
  Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4A440730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7842740C1D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B4A440730
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7842740C1D
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BA4888570; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
+ id 70A9488573; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66d25cdfad73bfb5202ba1745356d2b26ef42377
-X-Git-Newrev: 58e859c9ff9c036fa6e58d123f77cec1d1a12495
+X-Git-Oldrev: 6ad7b859e08da0a2592a40c8a7083fd040ddbb4b
+X-Git-Newrev: 66d25cdfad73bfb5202ba1745356d2b26ef42377
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205845.7BA4888570@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xorgproto: bump version to
- 2025.1
+Message-Id: <20260113205845.70A9488573@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_fonttosfnt: bump
+ version to 1.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,113 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58e859c9ff9c036fa6e58d123f77cec1d1a12495
+commit: https://git.buildroot.net/buildroot/commit/?id=66d25cdfad73bfb5202ba1745356d2b26ef42377
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2025-December/003649.html
+https://lists.x.org/archives/xorg-announce/2025-December/003651.html
+https://lists.x.org/archives/xorg-announce/2024-October/003533.html
+https://lists.x.org/archives/xorg-announce/2023-September/003422.html
 
-Updated license hashes due to upstream commit:
-https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/commit/f7176375692e47275e89c3064da4cd3a0f8dd1e7
-
-Added dependencies to host-pkgconf to fix a build error which would be
-introduced by this bump due to configure being created by autoconf 2.72
-instead of 2.71 which was used for xorgproto 2024.1.
-
-The configure script at line 5146 now contains
-
- if test -z "$PKG_CONFIG"; then
-     as_fn_error $? "pkg-config not found" "$LINENO" 5
- fi
-
-where the previous script would continue:
-
-2024.1:
-checking pkg-config is at least version 0.9.0... ./configure: line 4796:
- /home/bernd/buildroot/output/per-package/xorgproto/host/bin/pkg-config: No such file or directory
-no
-checking build system type... x86_64-pc-linux-gnu
-
-2025.1:
-checking pkg-config is at least version 0.9.0... ./configure: line 5137:
- /home/bernd/buildroot/output/per-package/xorgproto/host/bin/pkg-config: No such file or directory
-no
-configure: error: pkg-config not found
+Switched tarball to xz.
+Switched _SITE to URL mentioned in latest release notes.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xorgproto/xorgproto.hash | 20 ++++++++++----------
- package/x11r7/xorgproto/xorgproto.mk   |  4 +++-
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 6 +++---
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
-index 941ceabd49..300d5d0810 100644
---- a/package/x11r7/xorgproto/xorgproto.hash
-+++ b/package/x11r7/xorgproto/xorgproto.hash
-@@ -1,8 +1,8 @@
--# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2024.1.tar.xz.sig
-+# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2025.1.tar.xz.sig
- # with key 67DC86F2623FC5FD4BB5225D14706DBE1E4B4540
--# From https://lists.x.org/archives/xorg-announce/2024-March/003495.html
--sha256  372225fd40815b8423547f5d890c5debc72e88b91088fbfb13158c20495ccb59  xorgproto-2024.1.tar.xz
--sha512  63955cb604ff831575af2193548857c1b99e52d00206ea9421ce99e145094bcd907388c4574bc32174a01cbe2c940b0377bf75ae7d2c0f953157dc9c32e5a07f  xorgproto-2024.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2025-December/003649.html
-+sha256  56898c716c0578df8a2d828c9c3e5c528277705c0484381a81960fe1a67668e8  xorgproto-2025.1.tar.xz
-+sha512  dbbee3aa1bc62721d64309e1d98807d403609d8129944b2e23e48f95d30c6448718c2842362994d67647908645bafc757c710070c5dcdca96d191fd2689d023a  xorgproto-2025.1.tar.xz
- 
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index 72077bee60..05ea16b02c 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-June/003093.html
+-sha256  1a1bb4ef25856dea7de3d491ae7231493225b400bee0f6a1f949017ffd203a64  fonttosfnt-1.2.2.tar.bz2
+-sha512  ceac6ccb064043d46f9f16f31fb89c6cbf7f026d049f7b5325d6af97e809b4cd068e6149413bb328c0af601a98b5070e21d469888a6853f6cabecd5b46f60240  fonttosfnt-1.2.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2025-December/003651.html
++sha256  2e251e66e8753c08aa280b26fd4a10d0d88e7d9bba5c8aac3d3fb36705e5918e  fonttosfnt-1.2.5.tar.xz
++sha512  3be2a625234175dfc8a637b13f2d273afc82126ccd624a38afcc7ef3e13814dac0e55c8ae0a0a713725cf52078f8b45f3e86d7b357b1a19a55def55f969d0640  fonttosfnt-1.2.5.tar.xz
  # Locally computed
- sha256  aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
-@@ -18,22 +18,22 @@ sha256  1ab381e978bff63d68be2e4f235d51935f3f16f3ba3bebf83afa99a70c0484a2  COPYIN
- sha256  f4af05774b02ae149357cc26f7bf5ef1116c2e09373c2492081a3a1892c58417  COPYING-fontsproto
- sha256  823deb4673d3f26aa8c90e704888299648f00be3262f9363eaeecedcd65b936d  COPYING-glproto
- sha256  5e083a2ace0215a6084c877c023a6079952ba803d692488203ba4269196debe3  COPYING-inputproto
--sha256  d397a67d4b28e897bc5fce79b2b917df9905b54f961fc3ad1f49c7fe3803f92c  COPYING-kbproto
--sha256  7a5dd5d4c989c167da50f15879959f42bbda960e06d0a0aea7197f61fe1dc846  COPYING-lg3dproto
-+sha256  883f26ebeffb29f955c1e2becdee284bce16c7139b1410f6f7331d3bd59bfc78  COPYING-kbproto
-+sha256  2467132d97b75edba05d908604124be2f46ee113954f848c99bcd938055e8e4b  COPYING-lg3dproto
- sha256  8442b5f22f2fb13017a4302a906e7dedc899267b41f613558970941120170128  COPYING-pmproto
- sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-presentproto
- sha256  46f599055002bbf3e6ce244bde8d9ebe5ec24ae7906836db186773a9791d0b75  COPYING-printproto
- sha256  41c13dcd09147ed2440286f2fb8151df8ebee06deee4ed78ddf094601c216d3d  COPYING-randrproto
--sha256  ee10aee0f1697ffdbe870a39f037361d4f7136f2976bb7919a41b3f66407caee  COPYING-recordproto
--sha256  9e48921a94da36d7a69fe71809223ee0bb46370db9842dccdeeb55b5a9946872  COPYING-renderproto
-+sha256  e37891ac36e827611d6e7ae51ddb14a9cc9ba56f6cc87c55b6ce3b6d76cd2bf4  COPYING-recordproto
-+sha256  e0ca4f1d27a95ef7552ccdfce7e95ddf1e8b10ac713a05b49e8bd82713d7914b  COPYING-renderproto
- sha256  403e7be948674530ad40669b1e3a31adeddb656502f3b0ef810d5d3cc35d0b52  COPYING-resourceproto
- sha256  fcbd3c628bf4d28ee3e6032054bf44bbe58f3b1a944dad856a8d3eb6b37ea412  COPYING-scrnsaverproto
--sha256  d6d3513f5a7099748dc387f54498d799380b45f8a444f13aa98aa45a860ae55b  COPYING-trapproto
-+sha256  2c1807ecb78dddba1a9cd612a11bfdbc013b77144880ec3c268241495cb022dd  COPYING-trapproto
- sha256  f8f49bbad61967ebc890fb79fff5bfb7cfc1c341aa8f8dee13eb3fb534040b47  COPYING-videoproto
- sha256  eb183a00c61bb47992f096b6993ed7ec17518bea9c285fe87efff7f622cc6c12  COPYING-windowswmproto
- sha256  da835951edc6e3b8d168d6afe7447c65d0b9a99937293cf3f288bba8244a9f86  COPYING-x11proto
- sha256  5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING-xcmiscproto
--sha256  fb42146c6c06a200a9b121220eb692ff9101ba0fbd0b224b9e16a016c59ae86a  COPYING-xextproto
-+sha256  bcdbd7abc060725d3a16c6f5b2d673ab38691f6f7d55c62709140555f8944b9c  COPYING-xextproto
- sha256  3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86bigfontproto
- sha256  3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86dgaproto
- sha256  4a05d06752388d9db71ee1006f371d4fb2c316a821fc2fc272db90b3ef978334  COPYING-xf86driproto
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index 0253167372..2704e84546 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -4,7 +4,7 @@
+ sha256  f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index 9fdccbb843..d341272b09 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XORGPROTO_VERSION = 2024.1
-+XORGPROTO_VERSION = 2025.1
- XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.xz
- XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XORGPROTO_LICENSE = MIT
-@@ -50,6 +50,8 @@ XORGPROTO_INSTALL_STAGING = YES
- XORGPROTO_INSTALL_TARGET = NO
- # xproxymngproto is needed by xfindproxy
- XORGPROTO_CONF_OPTS += --enable-legacy
-+XORGPROTO_DEPENDENCIES = host-pkgconf
-+HOST_XORGPROTO_DEPENDENCIES = host-pkgconf
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-XAPP_FONTTOSFNT_VERSION = 1.2.2
+-XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+-XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_FONTTOSFNT_VERSION = 1.2.5
++XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.xz
++XAPP_FONTTOSFNT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
+ XAPP_FONTTOSFNT_LICENSE_FILES = COPYING
+ XAPP_FONTTOSFNT_DEPENDENCIES = freetype xlib_libX11 xlib_libfontenc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
