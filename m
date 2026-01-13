@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD2ED30CC3
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1134BD30CC2
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFE5682FDE;
-	Tue, 13 Jan 2026 20:59:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1D5840C33;
+	Tue, 13 Jan 2026 20:59:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zdy0ZE7q1iTy; Tue, 13 Jan 2026 20:59:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0764640C82
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768337941;
+	bh=7rt+vYlwUG2Pym4oJu4h795WtrXiNOYJwf8esH/jbPA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=d9ytGqkkTysPKp7jZuUxZBG2tVdaB5+nDPP3yvJ3oZxihhaoPoImcEeSnc4FnYLeK
+	 JMDnJXXUV/Os8kOmb2dyDc+sh4q+rG0AfkD+fwlgiSKfuch9ZoCdpn7fkPCdkDpwnw
+	 Tx2KiSYa7FA2+Q39hMSbKb6yyDOzbx3H/D/MBgRg8DqLECvtAdJNL5LHUZtn2dIYrF
+	 UCyaYOtga9AvTOY2nN5Tv8EEkIMXJGHxBTQG32EXLky5E8zj/f4QOi/PAkpugxSNuv
+	 TwoGaOtGSriYCaRvtP+KC5sX2wLA6b4mMqVjPT/1wc4JU3aI2f4vm1fQG6OKteaJfh
+	 HE599G6DPmNDw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0764640C82;
+	Tue, 13 Jan 2026 20:59:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 297551CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2455280839
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1OEJZVJuCGvB; Tue, 13 Jan 2026 20:59:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DECA183211
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337940;
-	bh=dTPUA4Pvz5WpcYmycDl35X02CUgmP4e3aJdY5BjrHCA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bp9KDqRzMdkrEMjWfl2j9DYXecOaoBSJNX9lR2MgS4lz33Knxp+A3YGSpuOxDmitO
-	 +Oihlec+wDtCXovsQFnQLTlMT2c7emPIm4H06Fs7wGngpWBsedxHm31G94k4qj0H75
-	 vbR5bxiIbkgNbprxiKHa5r2oSjqpgObz7wCg87ik0514KhmJ7rnJEujbYXvR5Jvoq+
-	 MIHl9WMuFPGJ+zJalRXSfgGfONQcIFE7dXQBH7iYxDRXPlocjjr0t0BLbCNcb8igRO
-	 hPAUjdedOnevGH4SU+2mXlrPknaY4Eg4vOUJCeKcoBgYmUwmy35SBOy9UkLusQsFk3
-	 HKg5+xjzomTog==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DECA183211;
-	Tue, 13 Jan 2026 20:58:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 05DC6231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FCCF40797
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bAKRi4Dxtzpl for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
+ id ApxoV0EpEKqP for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFE694075B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C9D080FFB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFE694075B
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C9D080FFB
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEB9588570; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
+ id 5D4D880F55; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ae757762c32b5a3d0cd259fc196f9d8d515f168
-X-Git-Newrev: 39cc6f9572a8ca154fcc333ed7f2da2bbbb27a8d
+X-Git-Oldrev: 70d7bed695fdc12f0ddaa3248e697b9cd335e81f
+X-Git-Newrev: cb760e4da06b1a412e224a87853183383f722987
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205845.BEB9588570@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXfixes: bump version
- to 6.0.2
+Message-Id: <20260113205848.5D4D880F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbprint: bump version
+ to 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,44 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39cc6f9572a8ca154fcc333ed7f2da2bbbb27a8d
+commit: https://git.buildroot.net/buildroot/commit/?id=cb760e4da06b1a412e224a87853183383f722987
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2025-September/003626.html
+https://lists.x.org/archives/xorg-announce/2024-October/003535.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xlib_libXfixes/xlib_libXfixes.hash | 6 +++---
- package/x11r7/xlib_libXfixes/xlib_libXfixes.mk   | 2 +-
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.hash | 6 +++---
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
-index 03de906245..03f5838546 100644
---- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
-+++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
+diff --git a/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash b/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
+index 8ca7656b5c..180216139d 100644
+--- a/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
++++ b/package/x11r7/xapp_xkbprint/xapp_xkbprint.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-April/003382.html
--sha256  b695f93cd2499421ab02d22744458e650ccc88c1d4c8130d60200213abc02d58  libXfixes-6.0.1.tar.xz
--sha512  b46deffb30cd73ec8a127390d99f2ba2f3ab78f334fdba227f1f461441644a0c169b0d13ffa47576fa458780e7a6db664ff8b93e9195fb217262efd8128f1ffe  libXfixes-6.0.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2025-September/003626.html
-+sha256  39f115d72d9c5f8111e4684164d3d68cc1fd21f9b27ff2401b08fddfc0f409ba  libXfixes-6.0.2.tar.xz
-+sha512  87542927ba9839fdd83282b0fba1bd2afae853ffe4e0f5f548915de22432bbc34a064578ba8527ba6041a993ee27390ba6ee2f1a957cb961717d45026e40ec75  libXfixes-6.0.2.tar.xz
- # Locally calculated
- sha256  a07d8a5a6972638a745a03983207a1052881c24eea29021fdca7794bea8d7774  COPYING
-diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-index 3f535fc1d4..514cf97d75 100644
---- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-+++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+-# From https://lists.x.org/archives/xorg-announce/2022-October/003222.html
+-sha256  99cc9404f7b90289ae04944c0d98a208cc8b158492ad6481386e31d4d09aa7b0  xkbprint-1.0.6.tar.xz
+-sha512  a1c2401b2a2ef4c6bd2efc18923ecb176adcf38b6c5dfdce25f22f1f5ab21e25f494b25dac25b1765fb9a0f6acc24d191cd41b9a098a9e3c6eaf9a9df490be29  xkbprint-1.0.6.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-October/003535.html
++sha256  1c4f49c030329e0defd8c7bc3739e60f2aa1d2aabe0e2d7e63740ab629aa59cc  xkbprint-1.0.7.tar.xz
++sha512  52f803ba85b053408dfff400f47ae9461954430665a12257a99b9775e26dd7192a97b979de949b9c4532936c9bfcc181a773de41514a122973f05d676dee6476  xkbprint-1.0.7.tar.xz
+ # Locally computed
+ sha256  79b32f28f7f5063054a564e1fdeee56f82a525b6516303704a1f70e55fe7197e  COPYING
+diff --git a/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk b/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
+index f374c18dae..680a1d9f67 100644
+--- a/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
++++ b/package/x11r7/xapp_xkbprint/xapp_xkbprint.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFIXES_VERSION = 6.0.1
-+XLIB_LIBXFIXES_VERSION = 6.0.2
- XLIB_LIBXFIXES_SOURCE = libXfixes-$(XLIB_LIBXFIXES_VERSION).tar.xz
- XLIB_LIBXFIXES_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFIXES_LICENSE = MIT
+-XAPP_XKBPRINT_VERSION = 1.0.6
++XAPP_XKBPRINT_VERSION = 1.0.7
+ XAPP_XKBPRINT_SOURCE = xkbprint-$(XAPP_XKBPRINT_VERSION).tar.xz
+ XAPP_XKBPRINT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XKBPRINT_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
