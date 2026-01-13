@@ -1,82 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41D80D2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AB64D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1977240E60;
-	Tue, 13 Jan 2026 19:48:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10A1684475;
+	Tue, 13 Jan 2026 19:48:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eem-Wh4qKgXl; Tue, 13 Jan 2026 19:48:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mS_eC04OtMMV; Tue, 13 Jan 2026 19:48:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EBE940E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F86784476
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333702;
-	bh=35UTlklFxdR5H6+QhoqkAKiq9qGKrkLu1G1qhAaCIz0=;
+	s=default; t=1768333705;
+	bh=kmmpEog5UvMJQyrl230oNB+3q1nw/12DmAQxv1Ay0Cc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=To+k+JltkD0zg3QvE2C56JOVZdZU3trKdbOpetOiRXaouwgBiyPfSNIkmht20cpn8
-	 qByMDgykGM7ZBwXi8Jke/e4Pam5JBcJZ1uxAfalg1erm60vcZGwo3/3weeZmHEJFF5
-	 v0wnjcTPlF8R1a7zApNF1CWksHKu9MMXi/yX1e7sARvAXYCWZAbE+CiU+EKEWG4qwg
-	 FyxTsXZY/fXOg+q7SA8EyvZfyA0/smvBmSAU3o65LUCju4n+J1YPHAmy6nle7USD0L
-	 0jMpbpFJkekri/bP3Xizu6xRsDVJbXbgZV7qtN7LWtiZi3wb7o3DVvTSyILiIyJ4I4
-	 5ceTFmSBNLDow==
+	b=m07OXKP7ssV2GJpU+WNeBTjxb/UAy1MYg23Wu1I4lvFNaqJqthpr9wyus+QF2u4l8
+	 VbiGJJqg37L7Kw0MrdOjiyqXv/DY6wUbjQfK/j6dGzfA/bdDzv1MBaG4OFTuDujHr9
+	 YEMAukGbMGr9IhvgxG0+sJn1SKYiOjztibIb8pTn4RbwcuM/BmlRR1MoRuRyEjrHKU
+	 wKBQSXaeHrdGkYa98CIXF/ZAqEs2pY/3hqwcmUWcsLMc8+V2tel4ee1VMV4/h6ZcqD
+	 +S+okLmhRozxHnnq8Hgzng80g9CWSTND1TS/Cp7XxJYq8KPGqumfKqbcxzN8Nr7vgc
+	 1dhctebENClIw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EBE940E62;
-	Tue, 13 Jan 2026 19:48:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C4F1F1C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:48:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F86784476;
+	Tue, 13 Jan 2026 19:48:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14F82231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABD0860BB2
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:48:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 050AA40E60
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:48:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tb9M9Au-jSil for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:48:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cymaQsppZZFG for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:48:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A25EB60B91
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A25EB60B91
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 07ACB40E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07ACB40E62
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A25EB60B91
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:48:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07ACB40E62
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:48:20 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D293AB97A863; Tue, 13 Jan 2026 20:48:16 +0100 (CET)
+ with ESMTPSA id 33084B97A863; Tue, 13 Jan 2026 20:48:19 +0100 (CET)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:48:15 +0100
-Message-ID: <20260113194815.100618-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:48:17 +0100
+Message-ID: <20260113194817.100671-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260102154342.1180158-1-bernd@kuhls.net>
-References: <20260102154342.1180158-1-bernd@kuhls.net>
+In-Reply-To: <20260102201743.3421271-1-bernd@kuhls.net>
+References: <20260102201743.3421271-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333696; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333699; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=TonmWpbGA+Eb7jah1Bj160yxKjpLlvLD7BKyFX3VkC4=;
- b=c7C5nJc2N4+KOQUzpy2lnyyk3ZndRbop9XqC5MRuHJ8v+PH+VRWxqDcGXLl21xqYePgxuW
- my+WBQO+cZZZQqP3QNKsB6bXBJ1FDwDuSNGpRwJeXlB0X6EYQlCI1l/r3IqNwzPCJclo8y
- 6Tf05nvUMWqVY/L0iytIIlBvyM3BCzXokvkj0ZYkeyupDuDnn2zunPQlRZxD8h1wbPwQBm
- QCX9PXJhSsXspoQ+U0KTCUtc9edV6qGtr2gLDpcrVpB0ySQ5/3JMFlnX9ubbtUAHZAAhYE
- qrPF8I+0yc4hqdL8QWTI5fU8rxBm88ZkZqASNi37aW7FaJ7v8X0BUs1O8+ELyA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=kkGl2KG1EXAoTyBVSEvIeJpmxtvIwzk8R0Ep5jnjxho=;
+ b=GylSDcHQT7ZkfhauEvsQuS2laoIJncwL6G4HR+HehO1A23Of506neVfFAq9TeaYr1p6nXc
+ nJmYAYeevDoUzOADdC23Zfvouu+VVkly8PwE2MNbdo1yWA/HbBIS8VSkrbiUVr6ezx/cuH
+ q/kktboVOiDqDe1aMio3qbTlE/5RgyZjjbIG9h3tSKsbFLy1CzFq/dDYdD6682Xoej7oGg
+ R4lRHGBTpTJMjW2USf0wHTwm+jS2AfxSAp9tadsZvk6bIrBGedMYUaNCZNzg7Vlfs92xty
+ 3WxD8Ciut2rmFTqf3KadxV7qRJigUkgIVYSfLjIRFH1jmJTSgXHkeCp8mlVegw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=c7C5nJc2
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/atf: fix non-threaded build
+ header.a=rsa-sha256 header.s=dkim header.b=GylSDcHQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/fio: fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,80 +96,71 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit d6c3257e931ed256e3ebcd78938f6146bba8586f bumped the
-> package from 0.21 to 0.23. Upstream release 0.22 includes commit
-> https://github.com/freebsd/atf/commit/d7c7c53c0626ab59a62aa4efcf05323b3621baa9
-> which uses CLOCK_MONOTONIC without including time.h.
+> Buildroot commit 215133c0fc2819f059fbb35071ab2e0987f5107d bumped fio from
+> 3.38 to 3.41. Upstream commit
+> https://github.com/axboe/fio/commit/4175f4dbec5d1d9e5e0490026e98b1806188e098
+> was added to fio 3.40 including FALLOC_FL_ZERO_RANGE which causes build
+> errors.
+> 
+> Added upstream commit which not only fixes musl builds but also uclibc.
 > 
 > Fixes:
-> https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/
-> 
-> Two minimal defconfigs to reproduce the build error:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-> BR2_PTHREADS_NONE=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_ATF=y
-> 
-> BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-> BR2_PTHREADS_NONE=y
-> BR2_GCC_VERSION_13_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_ATF=y
-> 
-> All defconfigs of the build errors recorded by the buildroot autobuilders
-> contain BR2_PTHREADS_NONE=y.
+> musl: https://autobuild.buildroot.net/results/8e9/8e946c7104be0295a9a2b946fe4a82bba0e28db8/
+> uclibc: https://autobuild.buildroot.net/results/ece/ece6ff1b20fa3482a88ffb3a6167b2bba9b06101/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.11.x. Thanks
 
 > ---
-> v2: updated subject, build error is unrelated to gcc version (Thomas)
+>  package/fio/0001-fix-musl-builds.patch | 38 ++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/fio/0001-fix-musl-builds.patch
 > 
->  .../0001-atf-check.cpp-include-time.h.patch   | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/atf/0001-atf-check.cpp-include-time.h.patch
-> 
-> diff --git a/package/atf/0001-atf-check.cpp-include-time.h.patch b/package/atf/0001-atf-check.cpp-include-time.h.patch
+> diff --git a/package/fio/0001-fix-musl-builds.patch b/package/fio/0001-fix-musl-builds.patch
 > new file mode 100644
-> index 0000000000..359172c0e6
+> index 0000000000..16c3d3836d
 > --- /dev/null
-> +++ b/package/atf/0001-atf-check.cpp-include-time.h.patch
-> @@ -0,0 +1,33 @@
-> +From 67e7d350a15aff88c151b1fc838dac83d35be955 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd@kuhls.net>
-> +Date: Sat, 22 Nov 2025 23:47:41 +0100
-> +Subject: [PATCH] atf-check.cpp: include time.h
+> +++ b/package/fio/0001-fix-musl-builds.patch
+> @@ -0,0 +1,38 @@
+> +From ccce76d2850d6e52da3d7986c950af068fbfe0fd Mon Sep 17 00:00:00 2001
+> +From: Arthur Gautier <arthur.gautier@arista.com>
+> +Date: Sat, 13 Dec 2025 20:07:11 -0800
+> +Subject: [PATCH] fix musl builds
 > +
-> +Fixes build error with gcc 14 as reported by the buildroot autobuilders:
-> +https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/build-end.log
+> +This commit fixes the build on musl which fails with the following
+> +error:
+> +```
+> +oslib/linux-blkzoned.c: In function 'blkzoned_move_zone_wp':
+> +oslib/linux-blkzoned.c:389:37: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
+> +  389 |                 ret = fallocate(fd, FALLOC_FL_ZERO_RANGE, z->wp, length);
+> +      |                                     ^~~~~~~~~~~~~~~~~~~~
+> +oslib/linux-blkzoned.c:389:37: note: each undeclared identifier is reported only once for each function it appears in
+> +make: *** [Makefile:501: oslib/linux-blkzoned.o] Error 1
+> +make: *** Waiting for unfinished jobs....
+> +```
 > +
-> +atf-sh/atf-check.cpp: In function 'useconds_t get_monotonic_useconds()':
-> +atf-sh/atf-check.cpp:183:24: error: 'CLOCK_MONOTONIC' was not declared in this scope
+> +Signed-off-by: Arthur Gautier <arthur.gautier@arista.com>
 > +
-> +Upstream: https://github.com/freebsd/atf/commit/67e7d350a15aff88c151b1fc838dac83d35be955
+> +Upstream: https://github.com/axboe/fio/commit/ccce76d2850d6e52da3d7986c950af068fbfe0fd
 > +
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > +---
-> + atf-sh/atf-check.cpp | 1 +
+> + oslib/linux-blkzoned.c | 1 +
 > + 1 file changed, 1 insertion(+)
 > +
-> +diff --git a/atf-sh/atf-check.cpp b/atf-sh/atf-check.cpp
-> +index 1354e3a..94da413 100644
-> +--- a/atf-sh/atf-check.cpp
-> ++++ b/atf-sh/atf-check.cpp
-> +@@ -30,6 +30,7 @@ extern "C" {
-> + #include <limits.h>
-> + #include <signal.h>
-> + #include <stdint.h>
-> ++#include <time.h>
-> + #include <unistd.h>
-> + }
+> +diff --git a/oslib/linux-blkzoned.c b/oslib/linux-blkzoned.c
+> +index 78e25fca91..c45ef623de 100644
+> +--- a/oslib/linux-blkzoned.c
+> ++++ b/oslib/linux-blkzoned.c
+> +@@ -25,6 +25,7 @@
+> + #ifndef BLKFINISHZONE
+> + #define BLKFINISHZONE _IOW(0x12, 136, struct blk_zone_range)
+> + #endif
+> ++#include <linux/falloc.h>
 > + 
-> +-- 
-> +2.47.3
-> +
+> + /*
+> +  * If the uapi headers installed on the system lacks zone capacity support,
 > -- 
 > 2.47.3
 > 
