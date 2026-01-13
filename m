@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED761D30CC0
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB790D30CC1
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE59960D87;
-	Tue, 13 Jan 2026 21:00:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C048784036;
+	Tue, 13 Jan 2026 21:00:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2EU4HS6taZyF; Tue, 13 Jan 2026 21:00:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iFCnwONC3IFs; Tue, 13 Jan 2026 21:00:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE8AE6104B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C866B8403C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768338028;
-	bh=ptA2LheOITYMAW0WY6/8kKrEf26NNsNaKWWDv3taRlE=;
+	s=default; t=1768338029;
+	bh=PM9JvgISUOLYQlWszEhkSWe3cpOk2XbIEU6SfjdBEhs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=B1/u5llIfZGxIARyygCCyUsD7pndbFXd9kKWQl4Ic+uua8NVY/xbnSFa7YJoMCCsU
-	 +X9/rBWQ4IsLsD72DvcZOyPpWPDyFqNJ41dE1i4NXYZLL33s5EUXnedfcGIPdNMn7v
-	 jeVqdcpyJRtdbMjlZkh6Bn2TceB5EjVfTq06r28nXV9UQgzc63B1p4KgrY/8ST1vXQ
-	 ppYLntF45Jpm7/K1pJh7Qj5Y+3MBEtgeRMn4afZjh5QkWFd9MnScGYNKxZ+RuliUZe
-	 Oi0p+gkI4x79duOrYzGLMMknLBHG0DTjtEP3gGZSRVBMGyOcUc/haw2oMUSYj8ANtp
-	 ww7m12JNSLPCw==
+	b=plCbi8bV18KIFG22wmlTlSrRSfEXBTEl/cQ58qxNfHEE21rI3krAJNXEkuXTqN07F
+	 WsYDxDjTqJftqQgzfgxMyBtpXmjifULWFcexs9otgpuWRp2+gPjZzmNNK/d+NB4SkI
+	 7EoAmoRDNPOtYhAUt+lDwWSrqFvckDNLEbOetSeEulnEVMNJL8Jj1RTBQvon0d4gbn
+	 ai5oPLdZ8N92OfgPf3GWUQv4Rc2j/V6fSO2opGPZlEE9xqqSfmlH+ugpslbUzXr1PA
+	 5NKoxVI2svj0zUVqpNWrfMLv+MX+I0TEJfYgzerfO5vMOzzP2ar1a9TUfBSaB4IdLZ
+	 a26LB6UFc3MnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE8AE6104B;
-	Tue, 13 Jan 2026 21:00:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C866B8403C;
+	Tue, 13 Jan 2026 21:00:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BE7C231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 21:00:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AFF80231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 21:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3BCCF407AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F0A84078B
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GuoOLo5j7NEt for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:53 +0000 (UTC)
+ id 24xPWqHRN8Qk for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACF934078B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B559840084
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACF934078B
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B559840084
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB31A81382; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
+ id B2E4E88573; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4dbca7a9ce6da2ad953194f14bd557f23b386e9
-X-Git-Newrev: 86177c0682990ea99497bfb58102130842d0f9ac
+X-Git-Oldrev: 51c05053658c9874145cec6da425e881b03ae107
+X-Git-Newrev: 59b504e03d33dfa32cfb368470631c05e39a4a80
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205849.AB31A81382@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xev: bump version to
- 1.2.6
+Message-Id: <20260113205850.B2E4E88573@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXvMC: bump version
+ to 1.0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86177c0682990ea99497bfb58102130842d0f9ac
+commit: https://git.buildroot.net/buildroot/commit/?id=59b504e03d33dfa32cfb368470631c05e39a4a80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-March/003473.html
+https://lists.x.org/archives/xorg-announce/2024-February/003456.html
 
 Switched _SITE to URL mentioned in latest release notes.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xapp_xev/xapp_xev.hash | 6 +++---
- package/x11r7/xapp_xev/xapp_xev.mk   | 4 ++--
+ package/x11r7/xlib_libXvMC/xlib_libXvMC.hash | 6 +++---
+ package/x11r7/xlib_libXvMC/xlib_libXvMC.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xev/xapp_xev.hash b/package/x11r7/xapp_xev/xapp_xev.hash
-index 9449781360..73788a5648 100644
---- a/package/x11r7/xapp_xev/xapp_xev.hash
-+++ b/package/x11r7/xapp_xev/xapp_xev.hash
+diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
+index 15221969e3..12099ffaae 100644
+--- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
++++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-July/003185.html
--sha256  c9461a4389714e0f33974f9e75934bdc38d836a0f059b8dc089c7cbf2ce36ec1  xev-1.2.5.tar.xz
--sha512  9fbfb78c9547974c2256a678948bf4a694a40b1c2bd5c5dec5f365a713e6d938c6039f055a9629f49de27f02f3d7cb912f07c035df129798a4b2ddc20febe66a  xev-1.2.5.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-March/003473.html
-+sha256  61e1c5e008ac9973aca7cdddf36e9df7410e77083b030eb04f4dc737c51807d7  xev-1.2.6.tar.xz
-+sha512  aaabb635622abfbf0b7ef2a1978070a918ea94480f375dd0798375274cf378ddb25007cc42426bb2292ed65c8af922f88e6a04c5a2f6cff3fadb0194b53eb7e7  xev-1.2.6.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-March/003132.html
+-sha256  0a9ebe6dea7888a747e5aca1b891d53cd7d3a5f141a9645f77d9b6a12cee657c  libXvMC-1.0.13.tar.xz
+-sha512  c9d0f73884a586efb9ea4f77fc8555f60d940077d7dff8eaa765b86345c8b4e3d80b860f68191d2830c272b9e464c08450fbb51bb64819753a6f4228c71861ac  libXvMC-1.0.13.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-February/003456.html
++sha256  e4be9eb6b6bafdbbf81f47f7163047215376e45e2dc786d0ea6181c930725ed9  libXvMC-1.0.14.tar.xz
++sha512  fc76c6d591780f3481f5032d1f956f2043f3dc7655a4b776dfda4bae55d4424a36d1a3c63dafe2a851908f33159297c0b038a41329d7a137ca7ea73d3db3eedf  libXvMC-1.0.14.tar.xz
  # Locally computed
- sha256  9b840f2e1900889124cc999f3158da2b6b07bf6d0d77bdbb01ce65d2e702dc83  COPYING
-diff --git a/package/x11r7/xapp_xev/xapp_xev.mk b/package/x11r7/xapp_xev/xapp_xev.mk
-index 0f29a731e7..9e1fd42302 100644
---- a/package/x11r7/xapp_xev/xapp_xev.mk
-+++ b/package/x11r7/xapp_xev/xapp_xev.mk
+ sha256  b7c709df281675a07eb60a71c5fa2599d1ef538eb79ae7ad6e774b10e4a804c4  COPYING
+diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+index c1fe31277e..1accda1254 100644
+--- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
++++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XEV_VERSION = 1.2.5
-+XAPP_XEV_VERSION = 1.2.6
- XAPP_XEV_SOURCE = xev-$(XAPP_XEV_VERSION).tar.xz
--XAPP_XEV_SITE = https://xorg.freedesktop.org/releases/individual/app
-+XAPP_XEV_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XEV_LICENSE = MIT
- XAPP_XEV_LICENSE_FILES = COPYING
- XAPP_XEV_DEPENDENCIES = xlib_libX11 xlib_libXrandr
+-XLIB_LIBXVMC_VERSION = 1.0.13
++XLIB_LIBXVMC_VERSION = 1.0.14
+ XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.xz
+-XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXVMC_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXVMC_LICENSE = MIT
+ XLIB_LIBXVMC_LICENSE_FILES = COPYING
+ XLIB_LIBXVMC_CPE_ID_VENDOR = x.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
