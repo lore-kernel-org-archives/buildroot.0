@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFA4D30CC1
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 424AED30CC3
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 342C361077;
-	Tue, 13 Jan 2026 21:00:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17E3484083;
+	Tue, 13 Jan 2026 21:00:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tqu7Dlm69bAg; Tue, 13 Jan 2026 21:00:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qiYYqd4wtpq3; Tue, 13 Jan 2026 21:00:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 359BB61063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFD808407E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768338037;
-	bh=ciEG8ROO9H76+cShsaWiPgomvamvag8bU5wGIVVrDdE=;
+	s=default; t=1768338038;
+	bh=4hwvKGLcyJjaZgDD2G9RSCELFw17sI83wGJIJh4c+y8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eNNlmB/RoUhtshzS+1PcHtcjoTdQjPDhVZke/Ab4QUZTkODfIuNa0rQBq+tSROuy6
-	 wQ9yJbW59K/RvNPulfKcZfdt2dKxlFdvd1PkuAwVvNHDubuJUkS3Fy/sn7pgL8TNCE
-	 undNt8csdjovw3qyjdLXi7fRmy1DwZSWJRsYTSdCRZFnwHSKIINOfvqXjYhrMiMH4v
-	 C9V6Yto/yWwnaf3bu4dEPb5PEN4/0OS2AFIheLTA+hrPOPNCdj7ntcrxrraMxN0lix
-	 nCAF827W1+IBuCnibSSfXFjLBhdCKLq44TfBNTL2eFQltg51Qe9rC5D38N0C+hMoRD
-	 VNb9H+do7kVpQ==
+	b=j8Rkze6xbwNdd4psqYY1imU1MSlbert0qi73vCRhXPeCDqh5byOJfHmNywfiM6k/s
+	 W/NXM3luS/BIP384WGu1K0bqmo8QnPvtr9mGdPOPxAtteA6k1js1iaqalIceaB5tID
+	 FmXESYD4r584tG9fUkyswAuAyeuATFFTeMq1Tz3Mkl8b/0rwuas66EIL4QQwYZmIXu
+	 AShKYNXsUEmNrkaYI2zJlg0jHNnwmKfUuLldLy3WYRHUGW1vhe+HrJWUDa7HMMrQfA
+	 sp8Yp1P3Q6riWb0r8cYECvr+2xg5k8Yisl6pPw35qsmkAVmdp+MUSYJjIIIQirLD0m
+	 BZlMu1b6WmJcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 359BB61063;
-	Tue, 13 Jan 2026 21:00:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFD808407E;
+	Tue, 13 Jan 2026 21:00:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D37311CC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 21:00:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9FAEB1CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3639407CD
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 092C5407CE
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7b6AlJveIXLm for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:53 +0000 (UTC)
+ id 1qJnfYmJDbUa for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37B44407D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67E3E407D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37B44407D1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67E3E407D6
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35B1680E26; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
+ id 657FC81124; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 789649b2880a91930d0f90e012cea630e390da32
-X-Git-Newrev: 025a32d63b7927da9c2098d1b3a0f0a3704bbbdb
+X-Git-Oldrev: 965a86b38ab6d9d74db5f114929a3eed3106ae01
+X-Git-Newrev: 88d6e75a53c0cab855e0c4b70cfa8496ef59de75
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205850.35B1680E26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xmore: bump version to
- 1.0.4
+Message-Id: <20260113205850.657FC81124@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrandr: bump version
+ to 1.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=025a32d63b7927da9c2098d1b3a0f0a3704bbbdb
+commit: https://git.buildroot.net/buildroot/commit/?id=88d6e75a53c0cab855e0c4b70cfa8496ef59de75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-February/003451.html
-
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/app/xmore/-/commit/f1d979d7a304113ab5df35971c440e6a76761ad9
-
-Switched tarball to xz.
-
-Switched _SITE to URL mentioned in latest release notes.
+https://lists.x.org/archives/xorg-announce/2023-October/003427.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xapp_xmore/xapp_xmore.hash | 10 ++++------
- package/x11r7/xapp_xmore/xapp_xmore.mk   |  6 +++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.hash | 6 +++---
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xmore/xapp_xmore.hash b/package/x11r7/xapp_xmore/xapp_xmore.hash
-index 960a1e5f92..5ebf7473f4 100644
---- a/package/x11r7/xapp_xmore/xapp_xmore.hash
-+++ b/package/x11r7/xapp_xmore/xapp_xmore.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002964.html
--md5  8e1279352192e4142740c21db58f9be9  xmore-1.0.3.tar.bz2
--sha1  b57b92afd783d28c4c505e0c95556939f24c3ec9  xmore-1.0.3.tar.bz2
--sha256  644a1e0d5182d7708d413722d0579a587dc56b9a8cb60640df076d302e09251b  xmore-1.0.3.tar.bz2
--sha512  e3e44831cd87a54bb585f80ef0d87f69dc35f6c834a73241aad9f6e2b0999b53c51a0a3f915a94ae4d6dc9bdfb9f60b6576f0bdcec441443abd98efa6c51b1d3  xmore-1.0.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2024-February/003451.html
-+sha256  7eb560dbc1de4e43c64fe491ad73907a29d734cca82a9ad82c7d3feb9cdb0a9a  xmore-1.0.4.tar.xz
-+sha512  52ac9bca78431f5f830b4607ff2cc375ab90e11380e0d4d3e591689359806cc7c7ec92c713d4d65742f40407e4f407c372759e5d03e30a30dfd866e6d5c6f6f7  xmore-1.0.4.tar.xz
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+index 3d3bb640ed..e2914eabd7 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-November/003262.html
+-sha256  897639014a78e1497704d669c5dd5682d721931a4452c89a7ba62676064eb428  libXrandr-1.5.3.tar.xz
+-sha512  0c385fc304a872048ffca5cfb8789dfe3132e3126894d54b2fe642dff19d286e7ade1d2f6da894e03788df9c5cf31427c674e987143037b7d385b19285590edb  libXrandr-1.5.3.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-October/003427.html
++sha256  1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3  libXrandr-1.5.4.tar.xz
++sha512  f7c0b083943e11b4cc3c97e10e2cbbc3920fe0c9c5031ef86fca2eb5df413d767caf53dca266abf65395eb10e55354c8fe59ed6b3265402ffccb919a813bc781  libXrandr-1.5.4.tar.xz
  # Locally computed
--sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-+sha256  eaba8f94ecdc70f7d0f7a7c44544abd198f8ef034d1c45d3b915d52194f3ee3f  COPYING
-diff --git a/package/x11r7/xapp_xmore/xapp_xmore.mk b/package/x11r7/xapp_xmore/xapp_xmore.mk
-index f8a3ba8c1f..ac58ce35d3 100644
---- a/package/x11r7/xapp_xmore/xapp_xmore.mk
-+++ b/package/x11r7/xapp_xmore/xapp_xmore.mk
-@@ -4,9 +4,9 @@
+ sha256  73777e5be1cef2827d843e4b186803f050c66db472cf8076d88e2b5f71696e67  COPYING
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index 5e88173ed7..20b6805b51 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XMORE_VERSION = 1.0.3
--XAPP_XMORE_SOURCE = xmore-$(XAPP_XMORE_VERSION).tar.bz2
--XAPP_XMORE_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XMORE_VERSION = 1.0.4
-+XAPP_XMORE_SOURCE = xmore-$(XAPP_XMORE_VERSION).tar.xz
-+XAPP_XMORE_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XMORE_LICENSE = MIT
- XAPP_XMORE_LICENSE_FILES = COPYING
- XAPP_XMORE_DEPENDENCIES = xlib_libXaw
+-XLIB_LIBXRANDR_VERSION = 1.5.3
++XLIB_LIBXRANDR_VERSION = 1.5.4
+ XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.xz
+ XLIB_LIBXRANDR_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXRANDR_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
