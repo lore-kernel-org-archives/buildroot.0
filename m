@@ -1,82 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC0AD29DE5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DABA4D2502E
 	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F79484222;
+	by smtp4.osuosl.org (Postfix) with ESMTP id B205940B89;
 	Tue, 13 Jan 2026 19:46:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4T2YnsGAbgqd; Tue, 13 Jan 2026 19:46:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RC6hFmgrhuJc; Tue, 13 Jan 2026 19:46:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7209A84269
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C53E040D94
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333601;
-	bh=awnZ1NxIyYZC35TvZa+01kHKrT/C8+ip/ChJbsE8Fuc=;
+	s=default; t=1768333602;
+	bh=OETYo/Yb6w2KVR5IGCtPaaSV1GdTykVV/Q7frJarRh8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Z8VALmDZcpIMYr55J9aGnPnXKBVZ0MYiOJ7YU+Iz5bi1n1FccASw7waDq4xFqWLuS
-	 wiwGVTxzTT2JOlGbUrEG0eocV7tvaC8Z+lmuCYEq+k9dPgIohMyj8PNBSIzpyzNo6q
-	 jv5ZkTwQZpPzEzKZCeHu+LbAC80awzwYrWZdF0mbyC1vDOV3WCA9POZUD+iziLneKo
-	 16TsuVmQwCz2EU9wni7jFPk6e6c1LbzDsampOmA7Du31FPufRoKLaEBX/Xzj8Gla2X
-	 3WEQiC84oY/x6fWsUGE9ka5tHWrMwX55IiDsWsrpz8jQexcH4YPdH9pcYy4AB/i1J9
-	 hcbBLozfKXU6A==
+	b=HIBQgY5vUNirAfDqnliuY43ELWC3QAEjUwFOEdXw91acBMCvPXZS9/r2SQ41zvw0D
+	 axaveWP1eSWcy1knUScp8H9gM2D2VJSHLxWpFHzLWlbgFMWuYWIcQpIGlKbUXNLq4c
+	 1iNDEdX2KZF7S5WwtW6w+7YgoF594Yyd//xfr2x95Psu7amvZKra6VNxGfDmVN3VMw
+	 KhQ5OXwe9ldqDOOttl6NgbNITmABGfBvEJ1ksDRBM9rY+mGCIPtQci1a8UdBNY7h1y
+	 g/0yR7qgCELjePMaDs25Xeb4CU8uo16ba2yrqe8qgA60JSsWNHYR1murd7Q0X00Dmq
+	 ZAAmwj2oh/3qA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7209A84269;
-	Tue, 13 Jan 2026 19:46:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E66761C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C53E040D94;
+	Tue, 13 Jan 2026 19:46:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53ECF1C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D78D660BD1
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3AF1840B76
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a9UqLWkfeMcl for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:46:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id guceJmy00DrL for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:46:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA53060BB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA53060BB3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3B4E940359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B4E940359
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CA53060BB3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B4E940359
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:41 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id F2B1EB97A863; Tue, 13 Jan 2026 20:46:36 +0100 (CET)
-To: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTPSA id 47BB5B97A863; Tue, 13 Jan 2026 20:46:39 +0100 (CET)
+To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:46:35 +0100
-Message-ID: <20260113194635.98803-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:46:37 +0100
+Message-ID: <20260113194637.98857-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251229075539.516207-1-bernd@kuhls.net>
-References: <20251229075539.516207-1-bernd@kuhls.net>
+In-Reply-To: <20251230081917.18676-11-thomas.perale@mind.be>
+References: <20251230081917.18676-11-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333597; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333599; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=m92pDKOB3j1lgcxxrOTEH4aocLOa+6uygsUVvG8XFeE=;
- b=ffsT/WFfj3Acvf9gLrPisHpyfA0oG5l5L3mhzM1mQmORWP4+JdDJAXjSdzLkpIqwAfpfkt
- bZhS5CLmuiAwarb+kfNks0kUhK9Dbi2gmLCGkLRNl/JWxiBdLxbNFNkNpdJNHOwdt0OAnq
- +MXoNTloZ0F9w/nFkD9dqNVOeMa5BZkpugzUfrG+/JZf8gqkpdLvc5F3pmW/lLXMZkcsJu
- 52AcJE64ARhhC8NPh4zrL5aXEb1BF3mhWVyeDhYfv1UPq2rQwsHc91zrR4fy6nI3GA2VJE
- MB3IJB3xrp8fKsrfy44jMXt+QkeAw+yVQoJ/TQOAje0GC9WVAiRSMVWBa2HuIA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=WCB0WjmpIpFT6UsieMjo2MByJCuasFZ+yvrhc6dDH6Y=;
+ b=KNuwiXynpjkXhko1eDXo1WV6BIuregZRgux/ZHc7sr2elLsZCkDyPnWZAQcOmu9t9dr1n+
+ m/uP/+xRnE2sHZYW5HF5io2tF+HOd6NSalzHosQjv/gGaE3E36Gv/AOrVuKkBGhOUs4Shp
+ 0EKknUYLNcY2FZSt/Sbv0fk+LJTw5Srvy8UknBIC1CrK1janr07qrIatjY5Y/AGzEqjs4s
+ 5+ijc4tnd87MhUA4N7TIbNsLBuqyMbQzGq+nP81/aHSy3xDkWyC5fH6L/kDPaBftAtsQzF
+ LLypxVLUjp+lMD/XxxIF0Vig531JpWx1Rl7ttlLH5yvIqWkq8LVN9sGpiVF2sA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ffsT/WFf
-Subject: Re: [Buildroot] [PATCH 1/2] package/utfcpp: fix comments
+ header.a=rsa-sha256 header.s=dkim header.b=KNuwiXyn
+Subject: Re: [Buildroot] [PATCH v2 10/15] boot/grub2: remove stale
+ IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,44 +97,51 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit dc55e7eb518e1c0d81d1ed1cb9b0f0ae6f75a454 added this
-> package as copy from the taglib package but forgot to change all taglib-
-> related comments.
+> Since Buildroot commit [1] the CVEs are no longer matched to CPEs with
+> versions using '-'.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> The IGNORE_CVES entries introduced in [2][3][4] are then no longer
+> matched to the grub2 package.
+> 
+> For more information, see the explanation in commit [1].
+> 
+> [1] 35f376d88e support/scripts/cve.py: fix CPE matching
+> [2] 2495630383 boot/grub2: ignore CVE-2024-1048
+> [3] e2f46ed03d boot/grub2: ignore CVE-2023-4001
+> [4] a490687571 boot/grub2: ignore the last 3 remaining CVEs
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/utfcpp/Config.in | 2 +-
->  package/utfcpp/utfcpp.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  boot/grub2/grub2.mk | 11 -----------
+>  1 file changed, 11 deletions(-)
 > 
-> diff --git a/package/utfcpp/Config.in b/package/utfcpp/Config.in
-> index 19e1f21688..3a3fc339bd 100644
-> --- a/package/utfcpp/Config.in
-> +++ b/package/utfcpp/Config.in
-> @@ -6,5 +6,5 @@ config BR2_PACKAGE_UTFCPP
+> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+> index f543c53cd8..fdf274d9aa 100644
+> --- a/boot/grub2/grub2.mk
+> +++ b/boot/grub2/grub2.mk
+> @@ -15,17 +15,6 @@ HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk \
+>  	$(BR2_PYTHON3_HOST_DEPENDENCY)
+>  GRUB2_INSTALL_IMAGES = YES
 >  
->  	  https://github.com/nemtrif/utfcpp
->  
-> -comment "taglib needs a toolchain w/ C++"
-> +comment "utfcpp needs a toolchain w/ C++"
->  	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/utfcpp/utfcpp.mk b/package/utfcpp/utfcpp.mk
-> index d3d7896813..4e17364e0b 100644
-> --- a/package/utfcpp/utfcpp.mk
-> +++ b/package/utfcpp/utfcpp.mk
-> @@ -1,6 +1,6 @@
->  ################################################################################
->  #
-> -# taglib
-> +# utfcpp
->  #
->  ################################################################################
->  
+> -# CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
+> -# doesn't exist upstream, but is added by the Redhat/Fedora
+> -# packaging. Not applicable to Buildroot.
+> -GRUB2_IGNORE_CVES += CVE-2019-14865
+> -# vulnerability is specific to the Redhat distribution, affects a
+> -# downstream change from Redhat related to password authentication
+> -GRUB2_IGNORE_CVES += CVE-2023-4001
+> -# vulnerability is specific to the Redhat distribution, affects the
+> -# grub2-set-bootflag tool, which doesn't exist upstream
+> -GRUB2_IGNORE_CVES += CVE-2024-1048
+> -
+>  # 0004-fs-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch (yes, two
+>  # CVEs are fixed by this patch)
+>  GRUB2_IGNORE_CVES += CVE-2024-45782
 > -- 
-> 2.47.3
+> 2.52.0
 > 
 > _______________________________________________
 > buildroot mailing list
