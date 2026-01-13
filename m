@@ -1,63 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 496E0D2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B212D2F32D
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E03E84085;
-	Tue, 13 Jan 2026 19:42:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D81B40286;
+	Tue, 13 Jan 2026 19:44:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id znnaEa3-4IsB; Tue, 13 Jan 2026 19:42:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rQnTQgXrnHZd; Tue, 13 Jan 2026 19:44:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10DE68402B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D8A1402A8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333327;
-	bh=PC8Lgqq2EMKzk91OoMhNspsosWrmzk1NbOlrxE9J/fE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UzLkxMgFd7EYSZD5O4o+KyZi342RloKtEYjiIOlT3W6u2SqPW27GC738l10HZS2P6
-	 k4Uyvnq5y6/M/uGSG8iwxtYng+uZfOztpTGNPbJHfEStH3MofkMdwREeZkliI8qNvE
-	 gSzEDk/ETx2c4Cqe5s1pNgg0Ga3qqdFnDkiQt5jpTZIbgr9ZGDCKuP8YPEHOQuqT5/
-	 r8UZ56Fqt4vwA18sYEVeJmB+4HNJC3KV1BJ+1hL/d4lh43a2nB3fZ4Kuy/ASx96gGA
-	 JP1XuIwyyN8R2wdeP0X2ZUfyAzE36FQ2uhRnDHq06Oonl6sZZPqKfPfZS5mLqbngxC
-	 2fCquzBE/Nv2w==
+	s=default; t=1768333455;
+	bh=RfBvQ1go2VQ+R390A/TkKc8az91pc7WPwmvLwsZ8PtU=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=REj/Jrkq/khBQoGeZA5X5+Ap0F/yLyK8kMbF+fN+nbRlOqGR48AZkyb0soaE5VMuR
+	 Icmhn0CbuFYEkudHrnbrgrqilirlx6JKLVMnZhmsy/togOthwl0iM+wbBoE71RVVJA
+	 POKgiCbT7ewovl3p0a8AHnGsrIo+B6ZWv/jjRz77d96AxrVVksVQxLuwqdJO6HV/u9
+	 rFQRo3yZQIgBW/+8rN/NiWGqwXmRnuYGTyD34SjvTbjYLA9WE2ra6QqR7QFlSkbYbY
+	 GbWmpWwV3aJ9vnFSr+ADVGXAqbSaOJxHMWknw+XmkrkTr3cr1Fae7FsXNsNUN0Sb+v
+	 etxrr3bS+QD2Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10DE68402B;
-	Tue, 13 Jan 2026 19:42:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 032421C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:41:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D8A1402A8;
+	Tue, 13 Jan 2026 19:44:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F560231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 22F5682A0E
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 592A5402A8
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:44:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g6TwrWYEzVuk for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:40:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3D3082A0B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F3D3082A0B
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F25FA82271; Tue, 13 Jan 2026 19:40:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 9 Jan 2026 18:22:31 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 0744d70e27732e566a9ead628e9d6c7305630cf1
-X-Git-Newrev: c5ef3667014545f492456d1204c971d2429b3d2b
-X-Patchwork-Hint: ignore
-Message-Id: <20260113194034.F25FA82271@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/opencv4-contrib:
- add missing gcc >= 8 dependencies
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 45yIMw-nG8BX for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:44:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3B03A40286
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B03A40286
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B03A40286
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:44:12 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 9A3F1B97A863; Tue, 13 Jan 2026 20:44:10 +0100 (CET)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Arnout Vandecappelle <arnout@rnout.be>,
+	buildroot@buildroot.org
+Date: Tue, 13 Jan 2026 20:44:01 +0100
+Message-ID: <20260113194401.97073-1-arnout@rnout.be>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251013184504.3610364-1-bernd@kuhls.net>
+References: <20251013184504.3610364-1-bernd@kuhls.net>
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1768333450; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=e5kldRslq86T96G6XCdpFa67KYSOYhKF6KXDk+9yDkY=;
+ b=KT2g7i4b5t+z8W0vs4OdUFGtdegGVHrDW+EmWJcPwodmzrvLtomVAJZRVL6B73v6f9Hq1P
+ Mm/U1WdDiJxlI3oy2XVd43y49VXO5Ggn+nSEG9wutbbG4BefCdsipk1fUTmbfDVOQ9cLtr
+ mGK/OMdKWPHJtLhE22qwuj4bzrSVvjXnCRrVBQovIlRtvzwj8qesrtlDnRtiO64ha7zTE3
+ ZN606rx7qwnZr0Taxx4c81f5LaLVaOMAx71Oq5Od7Asi4bu5zYeEd5BfgaOrtuxO+guIc3
+ 8pTNqHIGVdhoAe7ImNL86RiwEDD6KoEMFCfjIONdbLIjX3LV0/1xDBQ8c8SVpA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=KT2g7i4b
+Subject: Re: [Buildroot] [PATCH 1/1] package/liburiparser: bump version to
+ 0.9.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,137 +90,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5ef3667014545f492456d1204c971d2429b3d2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
+In reply of:
+> Changelog:
+> https://github.com/uriparser/uriparser/blob/uriparser-0.9.9/ChangeLog
+> 
+> Renamed license file due to upstream commit:
+> https://github.com/uriparser/uriparser/commit/460ff9e573b4b2bc3a3114d91e95c885d8745458
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Commit
-75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b ("package/{python-}protobuf:
-bump to version 28.1") added a whole bunch of gcc >= 8 dependencies to
-OpenCV 4 options, but forgot to propagate those to opencv4-contrib.
+Applied to 2025.02.x. Thanks
 
-Fixes:
-
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
-  Depends on [n]: BR2_PACKAGE_OPENCV4 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE [=y] && BR2_PACKAGE_OPENCV4_CONTRIB [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n]
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a67ab908d4f546bda9a94521f3b1f37aea60a365)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/opencv4-contrib/Config.in | 36 +++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
-index ad61c3fbe8..529687dd96 100644
---- a/package/opencv4-contrib/Config.in
-+++ b/package/opencv4-contrib/Config.in
-@@ -76,28 +76,32 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
- 	bool "dnn_objdetect"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 dnn
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
- 	help
- 	  Object Detection using CNNs -- Implements compact CNN Model
- 	  for object detection. Trained using Caffe but uses
- 	  opencv_dnn module.
- 
--comment "dnn_objdetect needs a glibc or musl toolchain"
-+comment "dnn_objdetect needs a glibc or musl toolchain w/ gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
- 	bool "dnn_superres"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 dnn
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
- 	help
- 	  Superresolution using CNNs -- Contains four trained
- 	  convolutional neural networks to upscale images.
- 
--comment "dnn_superres needs a glibc or musl toolchain"
-+comment "dnn_superres needs a glibc or musl toolchain w/ gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
- 	bool "dnns_easily_fooled"
-@@ -109,27 +113,31 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
- 	bool "dpm"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
- 	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	help
- 	  Deformable Part Model -- Felzenszwalb's Cascade with
- 	  deformable parts object recognition code.
- 
--comment "dpm needs a glibc or musl toolchain"
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
--	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-+comment "dpm needs a glibc or musl toolchain w/ gcc >= 8"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
- 	bool "face"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
- 	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	help
- 	  Face Recognition -- Face recognition techniques: Eigen, Fisher
- 	  and Local Binary Pattern Histograms LBPH methods.
- 
--comment "face needs a glibc or musl toolchain"
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
--	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-+comment "face needs a glibc or musl toolchain w/ gcc >= 8"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE
- 	bool "freetype"
-@@ -347,15 +355,17 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
- 	bool "xobjdetect"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
- 	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	help
- 	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
- 	  local binary patterns computed as integral features for 2D
- 	  object detection.
- 
--comment "xobjdetect needs a glibc or musl toolchain"
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
--	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-+comment "xobjdetect needs a glibc or musl toolchain w/ gcc >= 8"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
- 	bool "xphoto"
+> ---
+>  package/liburiparser/liburiparser.hash | 4 ++--
+>  package/liburiparser/liburiparser.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+> index f2e3317897..bed9c8ee9b 100644
+> --- a/package/liburiparser/liburiparser.hash
+> +++ b/package/liburiparser/liburiparser.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  1d71c054837ea32a31e462bce5a1af272379ecf511e33448e88100b87ff73b2e  uriparser-0.9.8.tar.xz
+> -sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
+> +sha256  85645df1bb220a3867c42f8adeba4f6a4b2fdc1563e91ad7d9f92d14d3dd377d  uriparser-0.9.9.tar.xz
+> +sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
+> diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+> index b0ba8c387b..66ec72409c 100644
+> --- a/package/liburiparser/liburiparser.mk
+> +++ b/package/liburiparser/liburiparser.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -LIBURIPARSER_VERSION = 0.9.8
+> +LIBURIPARSER_VERSION = 0.9.9
+>  LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
+>  LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+>  LIBURIPARSER_LICENSE = BSD-3-Clause
+> -LIBURIPARSER_LICENSE_FILES = COPYING
+> +LIBURIPARSER_LICENSE_FILES = COPYING.BSD-3-Clause
+>  LIBURIPARSER_CPE_ID_VENDOR = uriparser_project
+>  LIBURIPARSER_CPE_ID_PRODUCT = uriparser
+>  LIBURIPARSER_INSTALL_STAGING = YES
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
