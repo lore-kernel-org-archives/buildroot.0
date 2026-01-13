@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5851D30CC3
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F123D30CC1
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BB9D83B9C;
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA06540D51;
 	Tue, 13 Jan 2026 20:59:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3tlIhx5Xh7Gq; Tue, 13 Jan 2026 20:59:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uzDPepcxENol; Tue, 13 Jan 2026 20:59:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0824483B91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F37C40D64
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337982;
-	bh=1/jEaURGrveOtznlmwjWBmwxrGRPE7/HhDVFsPJdg9Q=;
+	s=default; t=1768337983;
+	bh=vkR97HNeQqNs2KtvsWsi4LJXsR2UB/etlMKYDBjPkm0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KxDJeqTo5UQjEhSmhkwRIAZTU+rr0CI5fw5eqVJT/xBE6PhxijQ6d+Svz8rV8ixU6
-	 9sbGeu1zmO8ohPcAdmFJJGAFKGjHRxbZSyfqaxAvv31+4cyRJ8QF74ZetkCAYvQzYM
-	 maNN3/hdFSk7HfjIRhHquzhBBAB2tuFCs3Q5YFXzlI1OM36mVifOisRmuQbZA8XdPa
-	 EI+rd5Y/2TimzLBcCrmND/XOjn6g0wZn1QxoX00oyYU+ALamrelfjz6z008wjrHGua
-	 rpY2yzGd7rfLhMDxhrz/7O9FuCxp7ViUu96TUne/LiknH27emj6soZ87drlz+vuw5o
-	 bwLvA7cnunPRA==
+	b=BotpR6vtehmnlgYav0tx+qxhwEfFGu79FCCl1CHC9fmJ8enmGOV9ZrxZ5ryeo8eO9
+	 8gZNaJ8EmsEVka8DSl3i683NJqHiVNGSGBzQ9dU1/pVesQcZ/Ov9CGHq2TaVVzMFbS
+	 UI/gP0mBDBtsx1F54PgbKZteEWyKigQOA90/VQmZbuOT4fRxo8B/byoosIq+kWyYRb
+	 WgEJPaK3e6Jaq+uomy2uAjYI8NxPVMv530QN+Di0klWDy1Pb5S/Hq/kSsLH6gLFSO3
+	 PCi4AQGBOVEBc2eG8Tpz1ZbcnxZDvmBr1vaSzRJNfPbPA+8AThM+NCEtRy2neu5Q7y
+	 lX9mhXZrIh37w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0824483B91;
-	Tue, 13 Jan 2026 20:59:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F37C40D64;
+	Tue, 13 Jan 2026 20:59:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A66B61CC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B50FF1CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1456D4077E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 285384079A
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6E7BS59ST8I3 for <buildroot@buildroot.org>;
+ id wLweEgeKIXP5 for <buildroot@buildroot.org>;
  Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88AF4407A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB31D40757
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88AF4407A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB31D40757
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 86E5982242; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
+ id A871C82242; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa812972cdc9102ab51868119efd96be2720ee86
-X-Git-Newrev: cd951830c703ae7afb50a3c0f3be6b1c042b668e
+X-Git-Oldrev: 9f01acb3cefdfcc3884e635a53fc644337797463
+X-Git-Newrev: 101838aa38a5a8b669b2867897888e82c684698e
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205847.86E5982242@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xcompmgr: bump version
- to 1.1.10
+Message-Id: <20260113205847.A871C82242@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xbacklight: bump
+ version to 1.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,44 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd951830c703ae7afb50a3c0f3be6b1c042b668e
+commit: https://git.buildroot.net/buildroot/commit/?id=101838aa38a5a8b669b2867897888e82c684698e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-November/003555.html
+https://lists.x.org/archives/xorg-announce/2024-November/003550.html
+
+Switched tarball to xz.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash | 6 +++---
- package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_xbacklight/xapp_xbacklight.hash | 8 +++-----
+ package/x11r7/xapp_xbacklight/xapp_xbacklight.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
-index b9675a5ecf..74333d92c0 100644
---- a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
-+++ b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003254.html
--sha256  4875b6698672d01eb3a5080bde6eac9a989d486a82226a2d5e23624f1527a6f0  xcompmgr-1.1.9.tar.xz
--sha512  699117492af7fd84b36d317dcbf422d5ec86a7f21e29370caa737cd940d8ff866a5c8704ba2e7bd17a64e085d77fd23b628263d619813dead85cd669ff5b860e  xcompmgr-1.1.9.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-November/003555.html
-+sha256  7824f709c4f22432eaea7542ec93384e5dd48f6fcb85c12ff82d721423b0b98f  xcompmgr-1.1.10.tar.xz
-+sha512  6dd5c72d6859489580dabdb96e3b572931cec7c426022213007c92df2d805a8f01a7f3dc5e8493f6e550bb809f71a50ca1630f50555d47b8d5b4b2726d7b8b12  xcompmgr-1.1.10.tar.xz
+diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash b/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
+index bda5c32cde..999945d160 100644
+--- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
++++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003008.html
+-md5  5b6405973db69c0443be2fba8e1a8ab7  xbacklight-1.2.3.tar.bz2
+-sha1  f0a6163738143ec23542b459aef567309a119e0c  xbacklight-1.2.3.tar.bz2
+-sha256  3a27f324777ae99fee476cfb2f064576fb8cba4eb77f97cda37adda1c1d39ade  xbacklight-1.2.3.tar.bz2
+-sha512  717c87ce24634892fc4ac54fc59dcc0a5bc8f206aaf1d13410f95f7e4fe6e3dbc7ff8d951bcd8ea8c5e955357a00fea6ceadd4559e60b1a632e40f71290e12c7  xbacklight-1.2.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2024-November/003550.html
++sha256  d4c30b0e6f18c82f387585a737ee3b72d468c927892b08a898c41bc12248e8ee  xbacklight-1.2.4.tar.xz
++sha512  6aa39d8f4430b2b9da92afff462aebbd0f3fdef50bf6a4fc3e5c08e45ae18156dc2017b8a46cd3185b2e4b1b836d2bd7379821a6591afa3d6db395247c8193e3  xbacklight-1.2.4.tar.xz
  # Locally computed
- sha256  c843545f72771b3ff95eb88defc2e3ed8f9a1802d9bb6c32c196bb5eec3d3a5d  COPYING
-diff --git a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
-index c754ea37b3..d8a6855d88 100644
---- a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
-+++ b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
-@@ -4,7 +4,7 @@
+ sha256  c9fbf1f272215babef31808c1235de8e4f7641ca5edfc4fc615b6556054b2b04  COPYING
+diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
+index d52d562ceb..91aa1d09da 100644
+--- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
++++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XAPP_XCOMPMGR_VERSION = 1.1.9
-+XAPP_XCOMPMGR_VERSION = 1.1.10
- XAPP_XCOMPMGR_SOURCE = xcompmgr-$(XAPP_XCOMPMGR_VERSION).tar.xz
- XAPP_XCOMPMGR_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XCOMPMGR_LICENSE = MIT
+-XAPP_XBACKLIGHT_VERSION = 1.2.3
+-XAPP_XBACKLIGHT_SOURCE = xbacklight-$(XAPP_XBACKLIGHT_VERSION).tar.bz2
++XAPP_XBACKLIGHT_VERSION = 1.2.4
++XAPP_XBACKLIGHT_SOURCE = xbacklight-$(XAPP_XBACKLIGHT_VERSION).tar.xz
+ XAPP_XBACKLIGHT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XBACKLIGHT_LICENSE = MIT
+ XAPP_XBACKLIGHT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
