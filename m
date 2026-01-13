@@ -4,80 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E80F9D2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE50D2502E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD29184213;
-	Tue, 13 Jan 2026 19:46:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B38FC8422C;
+	Tue, 13 Jan 2026 19:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u_947w30v8kr; Tue, 13 Jan 2026 19:46:31 +0000 (UTC)
+ id lV7IWttOtZUp; Tue, 13 Jan 2026 19:46:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCDC284215
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54E4E8422D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333591;
-	bh=iHkhpnZFHxy2V+leoQ1ao8T+cShYwZN4AtgkPsUsiCU=;
+	s=default; t=1768333595;
+	bh=hPa9M4g1QXB3JC80OCHp7ukI1gF0OcwC5GLcLIoizN0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=E3VSHWg45i7IACIRg4RUmpmYV86ejGTcM8JOk/NyypYRux1XrHAASUyspjshwHPRP
-	 MnGXQJJDGjcQ1hVksvcRVS8fUgKzTNnXq0vqzJU4+WLDhRsfwXGF1pAL9A0cuSlRWF
-	 aebYf1d25akS+NY9eJVyZF+MfV/f66+shrpPifqdnc4RgumIcNQJkaVWi93HJ6NxYn
-	 VxKB+ysnrAvZBsiJaZyDutthTS0GmPwYObvGcQJxdtY+YfuAE2yPYQE75PpJ6e5r6H
-	 mHjzs5J9LLPPh+tGVTmW50xB3SZb3kAA/7HM4tnfO33sPdTBoHd97LOWSZJsWuCD6A
-	 T1i+dRbt6eoEw==
+	b=cjZhzWmf9DhNIvuj3epYCRCwZVvU7Knnx2+C+ufV25Xy7uxQj0ayttv8xKszVxcQx
+	 Pf7aIgYy03mUS/GLfDnNedPReQdB80hd+u9/i16Ze2um586914Nyk/MD7Xbybywvo0
+	 75KV8ybiZvYjlodpCH6PLsnLflC5U0s/K9o12t0mrV6zKKbTYHsinbr7UfobvbUh2i
+	 Ez+5HNlq0zQWVNowwW+ePZk7CSlFAkE7TVvZ/3C43zqJ7nl3Yo0pJENtMf0NiOtYNh
+	 M+DEWH5fHqCnBz+SYjdxYC+qAt6jBPqgzi75/PtP15njHUJgraRInJh6DplzcG9yRe
+	 n8SBPVSsKUtDA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCDC284215;
-	Tue, 13 Jan 2026 19:46:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D4761C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54E4E8422D;
+	Tue, 13 Jan 2026 19:46:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 479B0231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E88134089A
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 381B340376
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CO2wTFh4bydp for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:46:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S1tS5WzoOV90 for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:46:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DCE1C40809
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCE1C40809
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 328C040373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 328C040373
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DCE1C40809
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 328C040373
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 05567B97A863; Tue, 13 Jan 2026 20:46:27 +0100 (CET)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ with ESMTPSA id 455FEB97A863; Tue, 13 Jan 2026 20:46:30 +0100 (CET)
+To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:46:26 +0100
-Message-ID: <20260113194626.98560-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:46:28 +0100
+Message-ID: <20260113194628.98611-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251228211045.3059593-4-thomas.petazzoni@bootlin.com>
-References: <20251228211045.3059593-4-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251229181303.1813920-1-pkerbrat@free.fr>
+References: <20251229181303.1813920-1-pkerbrat@free.fr>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333588; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333590; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=YaXzdyCIxDl8LeakoiXei/mGp07qf5BL3GxR3qvXkPg=;
- b=fMKucAr0lIt+uLUdhayEuZFaV1ejMde4n7oD6gDF0Sn5Br++oWPiOyql4IYQF746iXJ/9F
- SpG29aXoNICw4HGQ0XHzNdBOFP4U18JbgWNKq6+qR7ki1yO4PbWscEAhp6QxbFLKgEe8MG
- eGPRJMHuLjV1Z5nViFixSC3UncVn44Pu6u5xBHxKIyfpRtMeW3WOVStKoplabRRhwYd9Df
- jf1kBACZPlKFAaJfs0Zu8v4+/dlLRvaHmfSMoIwT+QMPrJemrbqhySSM6uphoEYcfdzceR
- /jAIdWxhZfFXljQHvTRrjueoWBjLBqtBeNpAo11vPzIPZ8uullrLKDMUecSvdQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hX1BkyS7uTu/oGo+Gibdjr8BDodjAc9cG5BrsDhv1Fo=;
+ b=XvYmYmvMdn3e28fAsumTc9PP5140KHsec8ygxHGstviHj8FQjvcoygBZyUlOINXAQpF7O3
+ FS6riBqzjn/fhUZeebC6qQRoVz3eBWtosps215rGrYNDkMSW9Rbdq4TauR5u1Do4H4wvAa
+ lsPM6cmWNMG2c/5dTW2yOgwukDyRltaCcvxeciS3IPsPwtzeFA0Sq2zBHNRiiZImNigBnd
+ 1DtjxAM6Rr5Sqq6R5TelGCEilp1u/1y4TWoFrFKlozELDshMVlu1ZNsk3x2c3X+nLWWXy8
+ KjL8rggMOngEb5bclm4m2kRHm3pfeATMYCJZgwaq/32qsZbrLOCQl7qPtnWxvw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=fMKucAr0
-Subject: Re: [Buildroot] [PATCH 4/5] package/qt5/qt5webkit: fix gcc >= 14.x
- build issue
+ header.a=rsa-sha256 header.s=dkim header.b=XvYmYmvM
+Subject: Re: [Buildroot] [PATCH] package/imagemagick: bump to 7.1.2-12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,79 +96,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Add another patch from Fedora, also used in Arch Linux to fix a gcc >=
-> 14.x build issue:
+> Changelog:
+> https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
 > 
-> build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
->   235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
->       |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-> host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
-> condition for static assertion
->  1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
->       |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  ...age-csp-ContentSecurityPolicy.cpp-fi.patch | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
+>  package/imagemagick/imagemagick.hash | 2 +-
+>  package/imagemagick/imagemagick.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
-> new file mode 100644
-> index 0000000000..ab6137dd28
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit/0013-Source-WebCore-page-csp-ContentSecurityPolicy.cpp-fi.patch
-> @@ -0,0 +1,45 @@
-> +From 286e0280a55949d62b2163d68c827539c141d487 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Sun, 28 Dec 2025 18:35:45 +0100
-> +Subject: [PATCH] Source/WebCore/page/csp/ContentSecurityPolicy.cpp: fix build
-> + with gcc >= 14.x
-> +
-> +Fixes:
-> +
-> +/home/thomas/buildroot/br/output-all/build/qt5webkit-5.212.0-alpha4/Source/WebCore/page/csp/ContentSecurityPolicy.cpp:235:56:   required from here
-> +  235 |             if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-> +      |                                          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-> +/home/thomas/buildroot/br/output-all/host/opt/ext-toolchain/aarch64-buildroot-linux-gnu/include/c++/14.3.0/type_traits:1246:52: error: non-constant
-> +condition for static assertion
-> + 1246 |       static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
-> +      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Patch used in Fedora and Arch Linux:
-> +
-> +  https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/rawhide/f/qtwebkit-fix-build-gcc14.patch
-> +  https://aur.archlinux.org/packages/qt5-webkit
-> +
-> +Upstream: dead
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + Source/WebCore/page/csp/ContentSecurityPolicy.cpp | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-> +index 9e726d5fe10c..989a59a6122f 100644
-> +--- a/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-> ++++ b/Source/WebCore/page/csp/ContentSecurityPolicy.cpp
-> +@@ -231,8 +231,9 @@ bool isAllowedByAllWithHashFromContent(const CSPDirectiveListVector& policies, c
-> +         auto cryptoDigest = CryptoDigest::create(toCryptoDigestAlgorithm(algorithm));
-> +         cryptoDigest->addBytes(contentCString.data(), contentCString.length());
-> +         Vector<uint8_t> digest = cryptoDigest->computeHash();
-> ++        ContentSecurityPolicyHash hash = std::make_pair(algorithm, digest);
-> +         for (auto& policy : policies) {
-> +-            if ((policy.get()->*allowed)(std::make_pair(algorithm, digest)))
-> ++            if ((policy.get()->*allowed)(hash))
-> +                 return true;
-> +         }
-> +     }
-> +-- 
-> +2.52.0
-> +
+> diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+> index 3dbea6d8bc76..eead3a9f97b8 100644
+> --- a/package/imagemagick/imagemagick.hash
+> +++ b/package/imagemagick/imagemagick.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  acf76a9dafbd18f4dd7b24c45ca10c77e31289fc28e4da0ce5cc3929fd0aef16  imagemagick-7.1.2-8.tar.gz
+> +sha256  521fa7a8c0f664a3f5cf7437cbcc219f12bd6d5fe0c1fb014f212fa145076e60  imagemagick-7.1.2-12.tar.gz
+>  sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 4e6a810631e8..0d5eb2aa34a8 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -IMAGEMAGICK_VERSION = 7.1.2-8
+> +IMAGEMAGICK_VERSION = 7.1.2-12
+>  IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+>  IMAGEMAGICK_LICENSE = Apache-2.0
+>  IMAGEMAGICK_LICENSE_FILES = LICENSE
 > -- 
-> 2.52.0
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
