@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CDC1D30CC3
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C083BD30CC2
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6371B83D44;
-	Tue, 13 Jan 2026 20:59:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 960A840CCE;
+	Tue, 13 Jan 2026 20:59:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PAjLBf6Vq2JA; Tue, 13 Jan 2026 20:59:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PGqbOEgZTuDZ; Tue, 13 Jan 2026 20:59:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 819B883D87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A68BF40CDE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337949;
-	bh=IkZckwxoTDagDxyqTQVtBKjqRt22tbx3f/iGr1rsZwU=;
+	s=default; t=1768337950;
+	bh=rnGuaUbrRTyBQCtqC2/pFsOZ6FFdcB4kCnUMWTQmRUw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YFrtI5LMIjYx9bSEbXIyBsJfOMPuNUqyx9RgiBTgajRrJ17H1rSM6XnVfQLA78cJr
-	 hBAdjhkHvXJNKNrFBeWdeCfJP1U27Um5NK0hwQ58o4yPxpoeWhp+hR495rpGNOgcxx
-	 tt+ePe4+vEXTmRSZcPY5PPWttxYgk2rmxNZ7NXkD0WNzvufSvGYLzmKRrPtEv8ZaHc
-	 SqewAoBfOe0njhR6OG9vb+jJzjmn8VAy3+rS1rTG929BXrCpUpi5Sn+OwIZPXNtkzj
-	 mvnOd6UuniSqfvpwtDVTfc9l9A+CcThE1rbND2m6PBdxjyZZgCk2tCcwkGX8qIhRMo
-	 BOFNwSjWq1itw==
+	b=D0KjKMjSDBFzS5NS4PzRnsHLOZnCaDKlKPemCBaoKoyA/GkanLCxc+JSSknp2v6kn
+	 0LuetWh8XY+Fqmrbayf1nYlVuoESIcOfZejCkN9PmU+pa20D6yu6gjH4iJ9DqHSkEc
+	 zPB3xUv4JpJnjooyaLIzpOdBizZXmz5UuenZzSDGvmCBaP6QJ5t3QoYFTTKvPMIIPb
+	 QLmCS7G4373+yY5002jL9bTpUafExp524AdgxDlKdygFt+QVPZfGlRKedg4iwzMq7v
+	 kc0/btWPBKLFtDsDDzxPG63x06mpkUwloNoFeAJGLbJyysmnRa32gbv2zzWNkEPeaY
+	 vbW1RMhAPVQJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 819B883D87;
-	Tue, 13 Jan 2026 20:59:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C2EB231
+	by smtp4.osuosl.org (Postfix) with ESMTP id A68BF40CDE;
+	Tue, 13 Jan 2026 20:59:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F5532CC
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C14A581109
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3976407A4
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QJWKS8p9i1kc for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kCsKoNYCAVm5 for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E6678101A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDE1B4075F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E6678101A
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDE1B4075F
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83C8881124; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
+ id CC17B81094; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 21:37:23 +0100
+Date: Tue, 13 Jan 2026 21:37:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dec410c63633a40f74caa51e214761178b821a27
-X-Git-Newrev: e828e6a9261d50b6729618c5e558ae95e9cbf8c1
+X-Git-Oldrev: 39cc6f9572a8ca154fcc333ed7f2da2bbbb27a8d
+X-Git-Newrev: f65fd11d24f25e70f94803c107f3861f4f0b4446
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205850.83C8881124@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xfont_font-util: bump
- version to 1.4.1
+Message-Id: <20260113205845.CC17B81094@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xcb-util-cursor: bump
+ version to 0.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e828e6a9261d50b6729618c5e558ae95e9cbf8c1
+commit: https://git.buildroot.net/buildroot/commit/?id=f65fd11d24f25e70f94803c107f3861f4f0b4446
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2023-September/003418.html
-
-Updated license hash due to upstream commits:
-https://gitlab.freedesktop.org/xorg/font/util/-/commit/c28d8ca618f24855e735313c2b8f6effa7b7f1e4
-https://gitlab.freedesktop.org/xorg/font/util/-/commit/5a9e7c7d3c3da68e5b421e7d038bc0a7a5f66b22
-https://gitlab.freedesktop.org/xorg/font/util/-/commit/ecbf1fa15e14a9ccf339b86198b03f31db838382
+https://lists.x.org/archives/xorg-announce/2025-September/003625.html
+https://lists.x.org/archives/xorg-announce/2023-October/003428.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.hash | 8 ++++----
- package/x11r7/xfont_font-util/xfont_font-util.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xcb-util-cursor/xcb-util-cursor.hash | 6 +++---
+ package/x11r7/xcb-util-cursor/xcb-util-cursor.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
-index cf52a2348f..13263ea5e1 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.hash
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
+diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
+index ca316d3ce8..f105a301e5 100644
+--- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
++++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-February/003331.html
--sha256  9f724bf940128c7e39f7252bd961cd38cfac2359de2100a8bed696bf40d40f7d  font-util-1.4.0.tar.xz
--sha512  05fff613019718a4bd8537ff7eb270bd85345ffb006c16f81b739d6e8cdbfaa9d6503aef9bc48d6c7f70330bf90ff1a46bacdff3c99e8017191d935c85f73d60  font-util-1.4.0.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-September/003418.html
-+sha256  5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95  font-util-1.4.1.tar.xz
-+sha512  cec7fc38ba64ca9c81c59a8395da94d71c75e14f19faf6457da0a1a8c3c1cf51bcaab227834f6f5a6d274ba2557555e542dbe2bd88e527c45ea196318bbc38d0  font-util-1.4.1.tar.xz
- # Locally calculated
--sha256  ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c  COPYING
-+sha256  5d959e54276964bd0056941fa6f2ecd818a1b081b27f5debcacb54c0be87ece8  COPYING
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 8a97c85d68..fa4d983109 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+-# From https://lists.x.org/archives/xorg-announce/2022-October/003230.html
+-sha256  28dcfe90bcab7b3561abe0dd58eb6832aa9cc77cfe42fcdfa4ebe20d605231fb  xcb-util-cursor-0.1.4.tar.xz
+-sha512  d27dd59a4d7ded9994dca77774421dd9533e3ee823b880af35d3219bd7340c89fbc61d1d0fa10e2991de2cac9e6395e09497769d7b8728eedc691e76649107b1  xcb-util-cursor-0.1.4.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-September/003625.html
++sha256  fdeb8bd127873519be5cc70dcd0d3b5d33b667877200f9925a59fdcad8f7a933  xcb-util-cursor-0.1.6.tar.xz
++sha512  5cdf2f942e3aad9662456cf6b5c2be2ff1837d73348046f6d8b72aeabf005c481a5f00ee169d9ccd18878697cb1744f0b274d0caa85955979c8e4f92d2cc3f72  xcb-util-cursor-0.1.6.tar.xz
+ # Locally computed
+ sha256  0dde91ae1d443105dc9e13cbaed6674c36683b7095836ad9ddfce26be270aad5  COPYING
+diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
+index 0fb131693b..14cefede7a 100644
+--- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
++++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_UTIL_VERSION = 1.4.0
-+XFONT_FONT_UTIL_VERSION = 1.4.1
- XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.xz
- XFONT_FONT_UTIL_SITE = https://xorg.freedesktop.org/archive/individual/font
- XFONT_FONT_UTIL_LICENSE = MIT/BSD-2-Clause
+-XCB_UTIL_CURSOR_VERSION = 0.1.4
++XCB_UTIL_CURSOR_VERSION = 0.1.6
+ XCB_UTIL_CURSOR_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.xz
+ XCB_UTIL_CURSOR_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
