@@ -1,82 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70266D2502E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4783D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4707E40DBB;
-	Tue, 13 Jan 2026 19:47:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAA03842F4;
+	Tue, 13 Jan 2026 19:47:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rhwu1Bgt5LRl; Tue, 13 Jan 2026 19:46:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4gzqK4b0NpLe; Tue, 13 Jan 2026 19:47:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 265A940DB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1249E842E8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333618;
-	bh=ndlvZ8IAt4HoDII7tGa+OHUjE6PbwprISJGyei9lIvY=;
+	s=default; t=1768333621;
+	bh=vNCmSw+hLhjmhllWgpO9DDPOmPL48GYPrfua3nyZGsk=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=nqQ/VN0i85UpN4TJjal9xa+gKkzm14PaHl1FJFhZyLkdgGMo4tuOszbPVbP7SwL6J
-	 K0mXygVibqJVl92hLyUV/69pB3K1Tuz0oN7Oefg8f90vOfEl7z6/qh5m5rdRHbxFUH
-	 RU6yNpHm9Gry0sWPcqAoz8Cysg6QUBC4GLyaLBsxijSGoSBHWMBnxLJJUhQmGjJC8z
-	 bfMhMEz1za9BHGaKdpwRANcMhLlxouOj18nFXzE912ZMuSqsoEIfU+dX4x4lezN1Fg
-	 68SebbyoW9vnApgFINv+rbZ1mjPlOprb6u1TFM1jrGR1e6JQQShDZ1MJ0NIZxqaau1
-	 g+HwJLY5ZzW3Q==
+	b=SMmUsss8xLAd7BiDholQSLTVAQPou8CNV/Gfw7mJtQ74NUSweX6+p4Ne/OeDGd2+S
+	 qmjpYXs0OSuJ9yJ7S+2X+18oHXj7wJmZRnJCCTO4luAInsdzhqXl0cbXd6PL+Qu07U
+	 vA7IBzCA5Ts6IQS1tzWeOSgQO3KkbG6fa2stH5iSJUkUuv2IJHmidIwKed6QxmimW/
+	 uJsJL/GZN5tVfEMl4NttpnCroNICj4/R/sUeKjJ8ngL55VOQ5vTx1gjGenIjhttJPI
+	 tX+gNpUHcTX3XFYOn6goNUEiI/RQmKOts4ThaZQv5XMwyoL4ugKuuYdQXwdCCJbcWg
+	 ZNTMz8mVu9qYg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 265A940DB7;
-	Tue, 13 Jan 2026 19:46:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CCED1231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1249E842E8;
+	Tue, 13 Jan 2026 19:47:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FE14231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8E7740B8A
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2106060BD1
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OAVsNbQBODLj for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:46:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xj8UC3Tf3Eza for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:46:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C5D2040B63
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5D2040B63
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1BEE660BB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BEE660BB3
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C5D2040B63
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1BEE660BB3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:58 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E2C3BB97A886; Tue, 13 Jan 2026 20:46:53 +0100 (CET)
+ with ESMTPSA id 2CDC5B97A863; Tue, 13 Jan 2026 20:46:56 +0100 (CET)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:46:52 +0100
-Message-ID: <20260113194652.99148-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:46:54 +0100
+Message-ID: <20260113194654.99195-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251230081917.18676-15-thomas.perale@mind.be>
-References: <20251230081917.18676-15-thomas.perale@mind.be>
+In-Reply-To: <20251230081917.18676-14-thomas.perale@mind.be>
+References: <20251230081917.18676-14-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333614; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333616; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=cubQOs4IS7TdEvmQPdI/B4EZdGs63fvKLiEz/LxUIMM=;
- b=ohGVR0Hn4uLiw/a5m1Jd47PcOemF4OqPH2jcRUqYnFezvlVVnBdyLUxQoOJMzFuxQU4bSC
- FTWzx4Bs9EWcPDoaf2CAxxf9qLVEITDNMF4ys7v0Hf0xw5pXT9ZW7xkAeGx5ZWvctWe5ed
- AbATrUQpK/qkXfJD7bcFr3yHQbKHBDyxJTic3AMdZ0WuKr2MN5d3cZ2eNgUWq54mh5/mys
- xks0CSCnJXXTTuldFZABe903vAiW0p7OwhTpd0ITu/IOC9odPyZ6NBgp1yZyv8ONRUo6t1
- 2atiphcvfCEv0I0B3ussmueYYZZWcbTfAiRMZX6TDOOfdqXutrKeVnqbF6BNwA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=xIsLRaSCuc++TSPNToj+cFBt5JAOlu0pRHpGUmLI7dU=;
+ b=MOM+yIaQTvO3CD8Tdre2Giv4dBv56xn7g4pWXr+ng+Uj0gCjSuk5NACBCnLczd7jwxQBiX
+ PmZCSSLTMv9iRo4REuN792IwVUqrXgRnj1Kl9hbQgD2/e6RrmCMAX3e6+8nSddREthY+Ri
+ wiYSFPpumjklQmOHWgi44lu7UdUP2JXX/6UXQZEBACtonbaXAydyyr4Y5QTqGgwq9Cyj58
+ S00L3W5bLHi1nJ5fnV0ZfXxw95Dv8QnelfczUiBCKMHyrtMVNEizVRls9uWkWVcQUqwldW
+ u9OadUF2y4bXDb60mk2khwdHoUY/tNYLmR6w3DTFE1cSK0YpG1UTX4y7AutHKg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ohGVR0Hn
-Subject: Re: [Buildroot] [PATCH v2 14/15] package/dovecot: remove stale
+ header.a=rsa-sha256 header.s=dkim header.b=MOM+yIaQ
+Subject: Re: [Buildroot] [PATCH v2 13/15] package/freerdp: remove stale
  IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -97,42 +97,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Since Buildroot commit [1] the CVEs are no longer matched to CPEs with
-> versions using '-'.
+> The NVD DB is now correctly tracking the vulnerability starting version
+> 3.0 (see [1]). The IGNORE_CVES entry introduced in [2] is then no longer
+> needed.
 > 
-> These IGNORE_CVES entry introduced in [2] is then no longer matched to
-> the dovecot package.
-> 
-> For more information, see the explanation in commit [1].
-> 
-> [1] 35f376d88e support/scripts/cve.py: fix CPE matching
-> [2] 948e71689a package/dovecot: ignore CVE-2016-4983
+> [1] https://nvd.nist.gov/vuln/detail/CVE-2025-4478
+> [2] f741e8f6e6 package/freerdp: ignore CVE-2025-4478
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/dovecot/dovecot.mk | 5 -----
->  1 file changed, 5 deletions(-)
+>  package/freerdp/freerdp.mk | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-> index 6612787a94..a4c799221c 100644
-> --- a/package/dovecot/dovecot.mk
-> +++ b/package/dovecot/dovecot.mk
-> @@ -21,12 +21,7 @@ DOVECOT_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
->  	openssl
+> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> index 391b9a4675..3a1ba61621 100644
+> --- a/package/freerdp/freerdp.mk
+> +++ b/package/freerdp/freerdp.mk
+> @@ -13,10 +13,6 @@ FREERDP_LICENSE = Apache-2.0
+>  FREERDP_LICENSE_FILES = LICENSE
+>  FREERDP_CPE_ID_VENDOR = freerdp
 >  
-> -# CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm, which
-> -# is part of the Red Hat packaging and not part of upstream dovecot
-> -DOVECOT_IGNORE_CVES += CVE-2016-4983
+> -# As explained on https://github.com/FreeRDP/FreeRDP/pull/11573#issuecomment-2904160524,
+> -# the affected code is new with 3.x, was not there on 2.x
+> -FREERDP_IGNORE_CVES += CVE-2025-4478
 > -
->  # 0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-> -
->  # Note: this ignore CVE entry is reported as stale by pkg-stats, but
->  # the NVD database is incorrect:
->  # https://lore.kernel.org/buildroot/20250517181815.02ce0393@windsurf/
+>  FREERDP_INSTALL_STAGING = YES
+>  
+>  FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev -DWITH_GSTREAMER_0_10=OFF
 > -- 
 > 2.52.0
 > 
