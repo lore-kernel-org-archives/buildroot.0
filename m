@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4051AD2502E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0366D2F35C
 	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1814840E28;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DA34843CF;
 	Tue, 13 Jan 2026 19:47:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lb6b9eRfPEis; Tue, 13 Jan 2026 19:47:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 190Y7EkuAved; Tue, 13 Jan 2026 19:47:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40C6B40E29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CEBC843B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333659;
-	bh=B7o6pHSH/iasOhv6t5rpAkh/wwkP+UGs7L+19dYu+qQ=;
+	s=default; t=1768333658;
+	bh=mfPpZfghTO7Wh63I4I88o9q3PPYbygPMAKLfTml506o=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DLhhxeu9pvsNhbndiUbVQ3kZd5pR8n7DttnvrZ6fwK2jSjJBfux48r6yI87z9OBHr
-	 aTxdCED5pzspIqfnCZnViJ4+B7/Mh297xJ5WEy9uwGR7fHUmC6E5leA0ePeAAu9AHd
-	 k1R6stlPqoCbzgGUs9aj0Od2E8VM0FLwnuiJfRjsvihzt+Xwz0K9s+mArRkvDn5lAS
-	 HD02LTv2OondoTK/lFDb+KiAzA+QjJXDcuH3abFOnPbXokjaik3ZZvdcK2K1KOymet
-	 oXXhSfwQnh+QcF/lZSJ5pvsvS4dSJ0/9jXmLF7nJHkxkOczgVPzFHTCIXW+HeSubYO
-	 NAkjBjOYeZpWQ==
+	b=kvGYe7tN2PMZqMo1G4YIPl/3wUtEqu5r/74Ilxi1/lV13aFHl/U1zY/Mq3TNOe96d
+	 Q4pkaXFSyl74di6byP1g5stthCwMnc5iN6bl0pxs5r8FEBov6d0OnIeKgX6Yt1AA/i
+	 BxBT66NRCvILx3qn/bjg6nOPlmUUjPUxSVsFbLnehmHrFd2fQwOfZ+4eVddZlmJ0L8
+	 7zRfLVLwakQR/V/7DGXjEkS208CLMH9ZqauuSeCuwYvMDGwndBhlNQiiJSCSVTtxZy
+	 hQG6S4PxgSlkR4WfSg1jXcwnUMNr4RV8osVGPqba0rQ851yruI8+eD7rRFuld+Rt8E
+	 YbUJ6xURgWiAA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40C6B40E29;
-	Tue, 13 Jan 2026 19:47:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 59D5E231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:47:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CEBC843B6;
+	Tue, 13 Jan 2026 19:47:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13FD21C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F71F40376
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:47:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDE4340376
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:47:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DYXKWxTVDn8H for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:47:34 +0000 (UTC)
+ id WxnbFJuDSb3q for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:47:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C4F640373
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C4F640373
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E4CBC40373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4CBC40373
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C4F640373
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:47:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E4CBC40373
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:47:31 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3AFAEB97A885; Tue, 13 Jan 2026 20:47:32 +0100 (CET)
+ with ESMTPSA id 37E06B97A863; Tue, 13 Jan 2026 20:47:30 +0100 (CET)
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:47:30 +0100
-Message-ID: <20260113194730.100007-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:47:28 +0100
+Message-ID: <20260113194728.99961-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260103224330.2933161-3-thomas.petazzoni@bootlin.com>
-References: <20260103224330.2933161-3-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260103224330.2933161-4-thomas.petazzoni@bootlin.com>
+References: <20260103224330.2933161-4-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333652; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333650; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=/rBoXZi6f62/1BESXz0vbhndQD92O6nXZfpwiZLt4zo=;
- b=XmlNFjK6PHN9iQqBa3yhsGHI/tvGAgEWd6YJXGvtSyPsu4pdtd1JUY7k8CNaRX9xZJFo2e
- KqLp61yJvkGmCEFbV/g870KEHiSBoNJXcA3cc30hF18+YDDPzYEjQ/nrvNRbjzs5U93ZcV
- v5dVcGiabrMvp2nDl+d4XmMaIVZLMbyI2A/uvYSbC79UAue4z6elJPJbnxV3qrWQ/JGn/0
- bJnOLTwc7au24IBoIEmSDeFsRDlXcAG16eVgBFpjBEkaJqVEXyTD+4w1UHJpJhY5qnsnDc
- SBw9tGGLm96sFsHZcSvkBC6wj4Rk3J2cx+Kshzhv15sEkhw34dw2E+uw/w4BWA==
+ bh=iQ6xpx3IEcwC85Ec8Llox0pss2AjM1YMkeyEfIUX3qg=;
+ b=auQ2HXOMuydev6x07Q6h/SYoX6bJAw8sScXaLD2pDpO5SJ4XbtcUySrhni7uNWD7s9GvI2
+ ZGDPFVwqOSE7wVPs6nd5f3Ij9VB7pbstq63gxCv8unUKuFtNIsNDApgGwlUpokVgQS1R1S
+ MVVg4Ea6mJ2L3Yg4rSO//u+Ov3m9yj0d6tjjnKBhTQ2RXB+PGRYIf5qZGHfht/Pfba9wf1
+ TmDgv03wWRz8JK5kwNlPjsya/SI/EUpb97ieq6NxQdE0C/OcMUi5as+5D4iycrnTYzysKu
+ /1X3Kve4HQh0+HcI5HOOtwwJBNqBGSv8NX1hDQrv/+bcqwf8p5xsaBWGRp5+xw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=XmlNFjK6
-Subject: Re: [Buildroot] [PATCH 03/11] package/opencv4-contrib: add missing
- gcc >= 8 dependencies
+ header.a=rsa-sha256 header.s=dkim header.b=auQ2HXOM
+Subject: Re: [Buildroot] [PATCH 04/11] package/opencv4: add missing
+ Config.in comments on gcc >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,123 +100,62 @@ In reply of:
 > Commit
 > 75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b ("package/{python-}protobuf:
 > bump to version 28.1") added a whole bunch of gcc >= 8 dependencies to
-> OpenCV 4 options, but forgot to propagate those to opencv4-contrib.
+> opencv4 options, but forgot to create or update appropriate Config.in
+> comments for several options:
 > 
-> Fixes:
-> 
-> WARNING: unmet direct dependencies detected for BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
->   Depends on [n]: BR2_PACKAGE_OPENCV4 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=n]
->   Selected by [y]:
->   - BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE [=y] && BR2_PACKAGE_OPENCV4_CONTRIB [=y] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n]
+> BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+> BR2_PACKAGE_OPENCV4_LIB_STITCHING
+> BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/opencv4-contrib/Config.in | 36 ++++++++++++++++++++-----------
->  1 file changed, 23 insertions(+), 13 deletions(-)
+>  package/opencv4/Config.in | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
-> index ad61c3fbe8..529687dd96 100644
-> --- a/package/opencv4-contrib/Config.in
-> +++ b/package/opencv4-contrib/Config.in
-> @@ -76,28 +76,32 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
->  	bool "dnn_objdetect"
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
->  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 dnn
->  	select BR2_PACKAGE_OPENCV4_LIB_DNN
->  	help
->  	  Object Detection using CNNs -- Implements compact CNN Model
->  	  for object detection. Trained using Caffe but uses
->  	  opencv_dnn module.
+> diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+> index a7f5592122..47c1cf3f4a 100644
+> --- a/package/opencv4/Config.in
+> +++ b/package/opencv4/Config.in
+> @@ -157,9 +157,10 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+>  	  Include opencv_objdetect (object detection) module into the
+>  	  OpenCV build.
 >  
-> -comment "dnn_objdetect needs a glibc or musl toolchain"
-> +comment "dnn_objdetect needs a glibc or musl toolchain w/ gcc >= 8"
+> -comment "objdetect needs a glibc or musl toolchain"
+> +comment "objdetect needs a glibc or musl toolchain w/ gcc 8"
 >  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
 > -	depends on BR2_TOOLCHAIN_USES_UCLIBC
 > +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
 > +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
 >  
->  config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
->  	bool "dnn_superres"
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 dnn
->  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 dnn
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 dnn
->  	select BR2_PACKAGE_OPENCV4_LIB_DNN
->  	help
->  	  Superresolution using CNNs -- Contains four trained
->  	  convolutional neural networks to upscale images.
+>  config BR2_PACKAGE_OPENCV4_LIB_PHOTO
+>  	bool "photo"
+> @@ -207,9 +208,10 @@ config BR2_PACKAGE_OPENCV4_LIB_STITCHING
+>  	  Include opencv_stitching (images stitching) module into the
+>  	  OpenCV build.
 >  
-> -comment "dnn_superres needs a glibc or musl toolchain"
-> +comment "dnn_superres needs a glibc or musl toolchain w/ gcc >= 8"
+> -comment "stitching needs a glibc or musl toolchain"
+> +comment "stitching needs a glibc or musl toolchain w/ gcc >= 8"
 >  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
 > -	depends on BR2_TOOLCHAIN_USES_UCLIBC
 > +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
 > +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
 >  
->  config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
->  	bool "dnns_easily_fooled"
-> @@ -109,27 +113,31 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
->  	bool "dpm"
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
->  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
->  	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+>  config BR2_PACKAGE_OPENCV4_LIB_SUPERRES
+>  	bool "superres"
+> @@ -332,6 +334,10 @@ config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
 >  	help
->  	  Deformable Part Model -- Felzenszwalb's Cascade with
->  	  deformable parts object recognition code.
+>  	  Use shared protobuf from the target system.
 >  
-> -comment "dpm needs a glibc or musl toolchain"
-> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
-> -	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-> +comment "dpm needs a glibc or musl toolchain w/ gcc >= 8"
+> +comment "protobuf support needs a toolchain w/ gcc >= 8"
 > +	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
->  
->  config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
->  	bool "face"
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
->  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
->  	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
->  	help
->  	  Face Recognition -- Face recognition techniques: Eigen, Fisher
->  	  and Local Binary Pattern Histograms LBPH methods.
->  
-> -comment "face needs a glibc or musl toolchain"
-> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
-> -	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-> +comment "face needs a glibc or musl toolchain w/ gcc >= 8"
-> +	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
->  
->  config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE
->  	bool "freetype"
-> @@ -347,15 +355,17 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
->  	bool "xobjdetect"
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
->  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # opencv4 objdetect
->  	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
->  	help
->  	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
->  	  local binary patterns computed as integral features for 2D
->  	  object detection.
->  
-> -comment "xobjdetect needs a glibc or musl toolchain"
-> -	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # opencv4 objdetect
-> -	depends on BR2_TOOLCHAIN_USES_UCLIBC # opencv4 objdetect
-> +comment "xobjdetect needs a glibc or musl toolchain w/ gcc >= 8"
-> +	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
->  
->  config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
->  	bool "xphoto"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> +
+>  config BR2_PACKAGE_OPENCV4_WITH_TBB
+>  	bool "tbb support"
+>  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # tbb
 > -- 
 > 2.52.0
 > 
