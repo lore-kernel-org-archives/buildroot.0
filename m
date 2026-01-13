@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91D6AD30CC1
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADB41D30CC3
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6741C60FC1;
-	Tue, 13 Jan 2026 21:00:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83D4D83D4A;
+	Tue, 13 Jan 2026 21:00:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zeB6oVu1pK44; Tue, 13 Jan 2026 21:00:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5JkPaYNrhykO; Tue, 13 Jan 2026 21:00:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 773CC60FC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85FE783EBA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768338002;
-	bh=CHaUOSmutUUrNZx0z5GV1zZMhTFGN8qV2Gp3h/9qKKo=;
+	s=default; t=1768338003;
+	bh=XVTcd6E4nRCrFYSEi6rrxDUCQ4H7nNQ8jGEr3hlOY8c=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aWXEZka3eQwIqzMeNjWG5Yho0bA+3VTXWoyBmYKu7SGMsTPHVbToSev7I1IhEkM9k
-	 gBb0oRmFRcekRTowQf8XXDJE9p7LTsHE7uVXt7IN8G+D6W8ee1scC0Dyu5J1QjQvyt
-	 t8aiVj8+OjicMzXTrbjNmv0D22n5GXej37nD8uFRQJtJ+6nGEAasda7nxQzdDzITQn
-	 jqpsW8f9Z+OdqfbMpkvki4O5oMjuLFA/85qEeqDVjWmFaxrSB/gkqISShRhUP3jqsx
-	 eoqrjCWt2/IaH6gOcnyU7lLY5d4zGOamnP4H4CNv9cmCsyz/w3H+RDWPOTYt3llmT9
-	 PgJ2mmCrOwDXw==
+	b=fiakeUIZKbs78ykGl44Na5uVsQdCUL448MyTH+2w3XH6Cff2vLHItpA7VQJzmbk/Z
+	 EuYcCBiHxpQeaCKu4aeyMNYVseTzOilLv9aP5Z+P4O9NAOB9iXkzKzURK/K44lrj0m
+	 1OKlbw6tuz51bW0D1GOivNv/UDzj3gILBQ2Gxy49WEGw5TTWVYnFm3pioWQeH1p4ES
+	 sTQcd6Ti4EqfvPFBgdl/FXIcvoVSjWY4PFuQ+D86ljUDdUlUPlD/CO/OaobOHPTGjE
+	 6RxbqaOOSq5bng5CTQ84FT3vH4RWzX88Qr7I0NfzRHZ6z4r0gG5EQIf2D/YveFGIDZ
+	 CeAwsMdxm+/HA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 773CC60FC2;
-	Tue, 13 Jan 2026 21:00:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85FE783EBA;
+	Tue, 13 Jan 2026 21:00:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C779231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 54F5A1CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2E634077F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E588440794
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ya088GWVZfU8 for <buildroot@buildroot.org>;
+ id 0rNMMeuXdw7x for <buildroot@buildroot.org>;
  Tue, 13 Jan 2026 20:58:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EFB940794
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47889407BD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EFB940794
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47889407BD
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D45C7FCC5; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
+ id 463A98254B; Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 82c681bcc81589643d022ba64368d25306af29aa
-X-Git-Newrev: b27bb473243d64806be420226f16143e6464366d
+X-Git-Oldrev: 4dfa4f609ca239886ac3abcdc1b27811b7c4cee0
+X-Git-Newrev: 735bd8bd9f74d7e10cbfc834adfef243f281094b
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205849.2D45C7FCC5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xload: bump version to
- 1.2.0
+Message-Id: <20260113205849.463A98254B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_iceauth: bump version
+ to 1.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b27bb473243d64806be420226f16143e6464366d
+commit: https://git.buildroot.net/buildroot/commit/?id=735bd8bd9f74d7e10cbfc834adfef243f281094b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-March/003485.html
-
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/app/xload/-/commit/ef450fb99630a406c4638d8ba251eac45e434411
+https://lists.x.org/archives/xorg-announce/2024-March/003480.html
 
 Switched _SITE to URL mentioned in latest release notes.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xapp_xload/xapp_xload.hash | 8 ++++----
- package/x11r7/xapp_xload/xapp_xload.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_iceauth/xapp_iceauth.hash | 6 +++---
+ package/x11r7/xapp_iceauth/xapp_iceauth.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xload/xapp_xload.hash b/package/x11r7/xapp_xload/xapp_xload.hash
-index 9716fe1500..29a729a70d 100644
---- a/package/x11r7/xapp_xload/xapp_xload.hash
-+++ b/package/x11r7/xapp_xload/xapp_xload.hash
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.hash b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
+index 694b6beaa1..fca34fbcb3 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.hash
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-April/003150.html
--sha256  8346b99120db24e0f42920f7f12e23e9b1b407d3a66ce419990387b608373031  xload-1.1.4.tar.xz
--sha512  114babe4e5a60f4713f9e4627ee0a1bbb2f1f238cb46f24c38aecff67f25e6b0f58cbd554c71095ddc2b01398adbfa379550a34c23c413db52157648028554f2  xload-1.1.4.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-March/003485.html
-+sha256  2c0fe6d624e1a25c1707e2d56407b979d6a78d64271df9ea0a89d99b81b59a80  xload-1.2.0.tar.xz
-+sha512  b6143f796f7d24bb204e29f341f59c27a0eba00ae58e42bde0d1471e3e9357a0ce5e9e23de119d2540c9f5c71d28eb1e85dd766b6b28a7f066805b5f386aa716  xload-1.2.0.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-April/003140.html
+-sha256  2cb9dfcb545683af77fb1029bea3fc52dcc8a0666f7b8b2d7373b6ed4c408c05  iceauth-1.0.9.tar.xz
+-sha512  16b2f58008587cf1544037ca8b1c76dbb75eb043b3048b3064e66ba6b147962233f1453c2cf18bfb136dd6dd21d3e27b5219e17e1ab7b81dbe93fb6aff801a72  iceauth-1.0.9.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-March/003480.html
++sha256  3deefb7da26af9dc799b5628d929d91c9af68c78575639944db3b955f29aa029  iceauth-1.0.10.tar.xz
++sha512  cfadac03a3f72f3c0bb58f67984a033847c76e7e3fdd9ebce583c0554d7f9484faf5053d878f5a82a543cdcc8e2ef8acecadb8830bd3c53584d7ec950cb51cc3  iceauth-1.0.10.tar.xz
  # Locally computed
--sha256  a09b31d26e4d2781eef1e71f39789f86cad6d81153e72064f45875910fa6258f  COPYING
-+sha256  c5fa9a1ea9032b1422d423b73fac9710a3e54c2d11d9c810ea5fc5585a53977c  COPYING
-diff --git a/package/x11r7/xapp_xload/xapp_xload.mk b/package/x11r7/xapp_xload/xapp_xload.mk
-index f219359447..4ef86dbb51 100644
---- a/package/x11r7/xapp_xload/xapp_xload.mk
-+++ b/package/x11r7/xapp_xload/xapp_xload.mk
+ sha256  fdd9ba8ccb92af2f31f542e7b7a18c27257e6cdce147d231bc9ba3654ad84976  COPYING
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.mk b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+index ba1f522911..fa65775e00 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.mk
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XLOAD_VERSION = 1.1.4
-+XAPP_XLOAD_VERSION = 1.2.0
- XAPP_XLOAD_SOURCE = xload-$(XAPP_XLOAD_VERSION).tar.xz
--XAPP_XLOAD_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XLOAD_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XLOAD_LICENSE = MIT
- XAPP_XLOAD_LICENSE_FILES = COPYING
- XAPP_XLOAD_DEPENDENCIES = xlib_libXaw $(TARGET_NLS_DEPENDENCIES)
+-XAPP_ICEAUTH_VERSION = 1.0.9
++XAPP_ICEAUTH_VERSION = 1.0.10
+ XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.xz
+-XAPP_ICEAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_ICEAUTH_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_ICEAUTH_LICENSE = MIT
+ XAPP_ICEAUTH_LICENSE_FILES = COPYING
+ XAPP_ICEAUTH_DEPENDENCIES = xlib_libICE xlib_libX11
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
