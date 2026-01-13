@@ -1,115 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE4F8CF45D5
-	for <buildroot@archiver.kernel.org>; Mon, 12 Jan 2026 22:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BCAFD29DC9
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 06:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCB5A61102;
-	Mon, 12 Jan 2026 22:19:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B5714176C;
+	Tue, 13 Jan 2026 06:02:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qHbVseDeJqK7; Mon, 12 Jan 2026 22:19:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hvUXuhhzPYW9; Tue, 13 Jan 2026 06:02:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB6BE6105D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D713F4176D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768256376;
-	bh=5nEBvM04C2K+vNCwZ0ZYTtAY2rpKkP4iHa9KAqu8Wvw=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1768284172;
+	bh=+I+dTAGLfNXKknGRRX5ANn1I4oldMEpnUrwfZ7bYiXw=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=nCMI/XxQUoSTL6zp3H5GXDoYgWKRkLbI7aGOqKH2tBkI7mXGhbK1OcqncN51plSlM
-	 QkEpc/lJ5+S43g2jnO/y0imGOMhe6UVYgEobvoiWxXtcGTCj6wbbLR1SosTWBgT+h7
-	 QuO1PN5AAxi8bJweH58AEbsdGRz7jQw/UXrwxG3gewzmXNjhlK4kTpkTYerLbb/Q09
-	 mrtlycCk8uaW46Mrqxi5NdFuh3/bMeHufjVD1CSmNAdOsypxDXPvonk/xZ/2XRUGyG
-	 VhdU28nYYwQNl1o456OeSO6BeCHHJ75y4wBNevby/Kjdsekqvx3oWdPqFHsJwvRs0s
-	 baEfXe7UjrKJw==
+	b=hxkvu8dTRIhzHd7WV19FmEfppNT+mQ6wtaaM7tw4NNdAx96Zr68D17EB0In03KIpL
+	 sDoTGySLCp8cTeu9L5R1k4S/t/CFNvO7WFIseO3X79fZSVha+bwTceROlcw/yBwj1X
+	 IGCIHKPUddNUs+7N8nLOA7oqcIuoO//dY5CZyBc/kj8Am7H0xiqZWERfdxSK/nPF8I
+	 UcpU+YSPjevxTvYsz0qNSBvosp8qzmyPe3NEcxHgcJBh671Knhl/sn9JPKVRE0WR6e
+	 rM7QKO4iT/zhSVefM3zfVro1rj3dfxIF7SY53m7kFdGp5mY/yH1HRQc+kg2RIvQNkP
+	 uQGu7mtHiZQGg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB6BE6105D;
-	Mon, 12 Jan 2026 22:19:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 162291CC
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 22:19:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D713F4176D;
+	Tue, 13 Jan 2026 06:02:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B2EB1CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 06:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F170A80A88
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 22:19:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59AFC415FC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 06:02:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2v73MrMn-dHz for <buildroot@buildroot.org>;
- Mon, 12 Jan 2026 22:19:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EVBgqAACCqWX for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 06:02:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f29; helo=mail-qv1-xf29.google.com;
- envelope-from=mr.bossman075@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9780C80864
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9780C80864
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
- [IPv6:2607:f8b0:4864:20::f29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9780C80864
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 22:19:32 +0000 (UTC)
-Received: by mail-qv1-xf29.google.com with SMTP id
- 6a1803df08f44-88ffcb14e11so76944676d6.0
- for <buildroot@buildroot.org>; Mon, 12 Jan 2026 14:19:32 -0800 (PST)
+ client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5C64C40025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C64C40025
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5C64C40025
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 06:02:50 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-b8719994ba4so261333666b.1
+ for <buildroot@buildroot.org>; Mon, 12 Jan 2026 22:02:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768256369; x=1768861169;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=1e100.net; s=20230601; t=1768284168; x=1768888968;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wBjsIYuxOpt5qQ4bl9G4EawxD+JKfsl8GqkpuWRzcpU=;
- b=v+qEuctb+vkB2OBkAf6PsaOzT5goGX8/IKngAzK9TtDm9L/cL9NhMFnor5NgMNBHAM
- jo5WbKqV14T3rrW2mfLATn4Rt6amzZkFSFP2WJlnDYpWQcEjG2BxqHoz90s+FMPnEepS
- BGIadk2XofllWxmhLnlHLaGELjxwjNHD/89WZf0XnvDHewGYgiF4X0Fhr+PN6NgjjY4h
- YlxMl3HpXU+FI6peAF4HcqjYH0A7SIdotYbX7iFjsT+1AG3ajcH3U/76IHSnTmeJupHP
- c/3kSWYyLdEKl03XRigm3otrOX+0076HZbjhT2fdzcuRl51ppVnmvF2LajYntdAsyEvY
- E8uA==
-X-Gm-Message-State: AOJu0YyuLKbc6tKP+Sm2YIUAec8nrZtA+y0NH9lfEaqJ3CbrFh2nuwvs
- jvbwnz+2nIV5pQssr2x1YMcu/I36ouw4SneztL3DI7VEPCzyhAc+Yx9vt1SYGA==
-X-Gm-Gg: AY/fxX7U/Gk70xxaaxQG0tr4WJ0YmMjm8FSY60jInBBb/Eskxvpkv8Ptldn7XxnLJCI
- sF/pnhyPmJpsBM9L4yFhfjK5QnpWOL5O29BMsHS9adhnhYHYrOAzlTwIOUEUmB5jXi8E1RqIv10
- 6NX7mGz5LGAT1Cj74jGq1k5jsrZBgLAS/TabmjJ2wPNkRnu0cLibhofOLh8xFMiwzg0OZ0nGjrW
- P6VPw9N9izkYUM52k2k2YSeF+bS/TTboaFWulIcNaSAHKuyBoygi5rOyl7RjO4IEBdgSLQYeTyt
- ooEgvlmqWrtIMm6JqRs5rw3XhdYwEYDtkoWaf6xZX1ckMCyrZP7v6CYJd7aJeR7FPoEu9s8vH+k
- tKFpk6PfZMtXMVfGQzA5k8CU6hV2nw1wlf2HzXfu5adhp1r2oCa4U9WgYyf7twE9O3QI1qu83yS
- TM7FGi5XjT6eBYXjUevZqFlRUeMyDLA/z5gOPlEJqojKyGlTnsCDDhGojLx5bEAfp5
-X-Google-Smtp-Source: AGHT+IGhA5yNcAj/qUdg8h7cFveR0QQRZRdxR9xZ1JbA3MgTC0xIeNEOgRe75g4mFzsMlRnalM1uGQ==
-X-Received: by 2002:a05:6214:21e3:b0:87c:765:dc6 with SMTP id
- 6a1803df08f44-8908417512dmr268622576d6.8.1768256368697; 
- Mon, 12 Jan 2026 14:19:28 -0800 (PST)
-Received: from jesse-desktop (pool-108-26-186-76.bstnma.fios.verizon.net.
- [108.26.186.76]) by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-89076fa0718sm140990246d6.0.2026.01.12.14.19.28
+ bh=zkl2+lfZ76fzWoGFYXDLy7FjS+3Lv+Un30ICI19N0FI=;
+ b=iSBvoY/ZFCRFva9EXkZWepFHNSLwWqQtcrI5vzzZ8sReam0Og/S6SpJS8L6u0e85g9
+ 9esL9u/H60qFRj2W8VWwL2/bvdANJhEQPd0xkw9R1yLO49R2lRa3WfwpdgRvaH/lSbZh
+ qDK31mm7wIlEbcM1tLDsvdvvVvnprup1c8yG1jr3gaHrWmGJx4vzA3Dq86bFMUYpdtq+
+ M7o90tAULoDJWfL7odM+0Q+j1+CwBKWcm5k12V3QCoUbLvl0gbmYTqIx/D+YwXRz/Bfl
+ qr3NB6U5SZv61CJz5/Oh6Gp3FY2JOLEb52zsAA/wRkMJjp1kfNxsbsfpelUeXzMeITpS
+ +Xfg==
+X-Gm-Message-State: AOJu0YzSCQnTOMKsWns4musKl+rsqs/ZZOuDIhXZbxEQNo5emWxj3rGM
+ 8m0g4yKvz7U5bq0aaDbdiCUnMhMA7ZEZss96nCwTmPrbxBUuxlT6EpnzIwSY4A==
+X-Gm-Gg: AY/fxX67iLSNX/jkmU0ZSmW8r2slfCq9eRBbB0N3Zp8gxuYmzisrdlyEBGP2nXoBeMW
+ eysuS3Vh8DwPH046giiXhHIeY1vzHAEyJDKc8n7Ouaw6FeHqnW7THM6WfIfV6EM0Q0fwPkbFsvd
+ D7m/pUgsDsPiRpmiTgHNDQ1iqTRc2Bwo8sDHOyFGzfYYEpIST4fo7KQmizN8PTz2ECITJEczPSH
+ +OtB1BKUuHT0CcmIJUgSlTX4XsG5PYdHjW/ZhuE99F3SZHzLUbTHgyi1iTJ8Mbl8hXZ5SZDWasA
+ nfcdU/Bo5JEV3bolK9aSEqLZWc5k+Cx3wMVywAhIYmnxXNdGeTvZfBljSl//FsCABIXLFPMFORa
+ fTn2xWWUxAfO/tF2BqoOy18bj96pUEgLwjdQK9xUCFj2WlDCRmFvcKsihIKGUHgYE5lEARwPNFH
+ TAhPXP3ZMIrpQCI68bWQ==
+X-Google-Smtp-Source: AGHT+IF1AnnAvk/O9Rv9dvEtYntYQPFZldRAfwPdYkiFryNo3o7aILfvLVX2vbvEcVYep2dkNCNfIA==
+X-Received: by 2002:a05:6000:238a:b0:432:c092:ee50 with SMTP id
+ ffacd0b85a97d-432c37a50b9mr24860583f8f.50.1768277888463; 
+ Mon, 12 Jan 2026 20:18:08 -0800 (PST)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-432bd0e19bfsm41412832f8f.18.2026.01.12.20.18.08
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Jan 2026 14:19:28 -0800 (PST)
-From: Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To: buildroot@buildroot.org
-Cc: Marcus Hoffmann <bubu@bubu1.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Jesse Taube <Mr.Bossman075@gmail.com>
-Date: Mon, 12 Jan 2026 17:19:26 -0500
-Message-ID: <20260112221927.3745398-1-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.51.0
+ Mon, 12 Jan 2026 20:18:08 -0800 (PST)
+Message-ID: <6965c780.5d0a0220.26d040.f2b0@mx.google.com>
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Tue, 13 Jan 2026 04:18:08 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1768256369; x=1768861169; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wBjsIYuxOpt5qQ4bl9G4EawxD+JKfsl8GqkpuWRzcpU=;
- b=NCoTocPrv+7AoAD4XYe083HMXAtJBAQQQ21ZxCT920mbL5g8AxCRn4zt2Em8OPU/E6
- 7DPKBp2NT0//L+lNNJgphSD48RV4wJA4EQyDZ+a/yfBuvUcYJDivUyaqRzAtTIjeSB/Q
- wpn65nfT2eoNUvPKiws/gdrpSSB1EeVJM/pW7OXwZaPsMBvNMl5Syuy+N/ZpUBxqAIjg
- rtKB7FgLPu+m2bCYsFHD8flVn5DnqchAGOfbaOU/1roKNwryDkCIAogLJy62//WOa4Fp
- 1J4NCWt+pzpUHY5XsLyr/cJxsiDALiy8aKTVIgsiqPvCg9TJg1BBjsjI2bizT4rsDjSo
- 53Tg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1768284168; x=1768888968; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=zkl2+lfZ76fzWoGFYXDLy7FjS+3Lv+Un30ICI19N0FI=;
+ b=NXq4W5XjGsSyh34rwClzAHTaL9cVMD3Hwb5jg31ZTwM/8lRfpIwGI3BFipjez5vZL7
+ F7wrUiq31GvchXDLvmw3RQ5mAQMGakZUYzjTCyX7q7rIpQZ7giAYATKuXDbtXbHMpQcX
+ i0HXpHaimVhHtFXIRDO858wBMuVXveTd6ghAOKGkNZBJdyWyw/XNrIwB2rAASqVmbeYp
+ 9WunM3EAdRYKmzMcSR0Kf1IEz5gDD44Dp0nt3htMclWYrGBf+C5+HdYwfMyQuiUc130p
+ wanQbZMx2IDBMMMgo90oB5B/lhjIX3a1mGcb/CTSSfVcEVyC297mmm9+5ar/6lKpRcCv
+ kQ0g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NCoTocPr
-Subject: [Buildroot] [PATCH v2 1/2] package/pico-sdk: Add host-pico-sdk
+ header.a=rsa-sha256 header.s=20230601 header.b=NXq4W5Xj
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-01-12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,35 +122,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a host-pico-sdk package to pico-sdk.
-This will allow users to build rpi pico applications on the host system.
+Hello,
 
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1 -> V2:
- - No change
----
- package/pico-sdk/pico-sdk.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Autobuild statistics for 2026-01-12
+===================================
 
-diff --git a/package/pico-sdk/pico-sdk.mk b/package/pico-sdk/pico-sdk.mk
-index 3f242ab06b..5bcf71650d 100644
---- a/package/pico-sdk/pico-sdk.mk
-+++ b/package/pico-sdk/pico-sdk.mk
-@@ -19,4 +19,10 @@ define PICO_SDK_INSTALL_STAGING_CMDS
- 	cp -r $(@D)/* $(STAGING_DIR)/usr/share/pico-sdk
- endef
- 
-+define HOST_PICO_SDK_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/usr/share/pico-sdk
-+	cp -r $(@D)/* $(HOST_DIR)/usr/share/pico-sdk
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  2  |  3  |  0  |  5  |
+  2025.11.x  |  2  |  0  |  0  |  2  |
+    master   | 10  |  0  |  0  | 10  |
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+                libselinux-3.7 | 2 
+          host-binutils-2.43.1 | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    |      host-binutils-2.43.1      | NOK | https://autobuild.buildroot.org/results/d0a1a50d3e5baf4dc41c21e5895e11fe15a44364 |     
+    or1k     |         libselinux-3.7         | NOK | https://autobuild.buildroot.org/results/fcc9ec7259bfeab779f19123bd93e7f862760c9a |     
+    arm      |         libselinux-3.7         | NOK | https://autobuild.buildroot.org/results/eed1e2e695d2f1cbb2ef215c198ae30affb0eec2 |     
+
+
+
 -- 
-2.51.0
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
