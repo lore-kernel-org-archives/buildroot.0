@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6352D2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9A31D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D4B184293;
-	Tue, 13 Jan 2026 19:46:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BFA4842AF;
+	Tue, 13 Jan 2026 19:46:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pZvm9w9FgYkA; Tue, 13 Jan 2026 19:46:45 +0000 (UTC)
+ id vgFG0mh5Vm8z; Tue, 13 Jan 2026 19:46:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFDD484270
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DED27842A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333605;
-	bh=pA5F3CvwSgWHkmo+eOPcD8EQgGCTeS/tvD5XWEC0VDA=;
+	s=default; t=1768333609;
+	bh=+53akdNY1BsovAecIUgXWxo7U9qLqIz2C2wz/Wiq9Lg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=dZ8y+Ihj8QXUXLTBC/fA3vbQ/i60rXRi5RaHmyDyLOFBDZejykYqsq0lsmBYSxA8y
-	 YeouCR+IoAMn7Wz0DI5nmlfp38lRaNa8KmFhVlF/zun8e6tiOg+ND86yGZwkxGFtaL
-	 MgUcFNjCU7vZVisKGWMrb6vKpcPkfoxFG5D3Ra5iX4nEybyF2WF+RyVYbiBy2hN9q0
-	 b3SqhUd9WJO4xwBXXS1/1ex/15K2URzIxiCAziys1Ocg95qqSa+KpKOrKkMsdyrpJy
-	 uCHlGKeMlDIRuoWVUbFn/8xBZ0c3rKQ2rz8K5XsJVMCqfU8Hgtuy7uAdEKK70QsBKB
-	 Tcky+oaog4TRw==
+	b=Ma68LMMJJRCC06AMElx96Lw3VRBJFTBvuw2fkmpDeCApOta0j9FNu3YkWxjrtPQXV
+	 zukOH3qecVixwYtkAQbOeVuKOzuVyHz/QhGip7WuN1L3C5wks3GFeMEneSOQ88+y+W
+	 NhhWWZZ8XQMhJhGZB9Q+HUx5xW9UdTTM4BYq6mlXGGAcH5FpRWUghU9hJydRuAFFZQ
+	 m0boMFt/boLHpD0CGYish9fqupG58vupg1YZXGHn2pEFjVtccVzg2yAUyQWELbuCP+
+	 aqk3d/X8qVuPOYsJGXAsjeBMYrQ/76Tv+AzZt0qXGVGefuL8KPo1/L+plfMCPEUw90
+	 1xKvqim9GvqxQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFDD484270;
-	Tue, 13 Jan 2026 19:46:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 98644231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DED27842A6;
+	Tue, 13 Jan 2026 19:46:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD3061C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F7B240376
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C294F60BB3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3iSbs2-hwWFB for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:46:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RwINAYmypAiz for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:46:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 723EB40373
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 723EB40373
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0684A60BD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0684A60BD1
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 723EB40373
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0684A60BD1
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:45 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8B8DBB97A863; Tue, 13 Jan 2026 20:46:41 +0100 (CET)
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTPSA id 2C181B97A863; Tue, 13 Jan 2026 20:46:44 +0100 (CET)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:46:40 +0100
-Message-ID: <20260113194640.98908-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:46:42 +0100
+Message-ID: <20260113194642.98958-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251230222031.3626500-2-giulio.benetti@benettiengineering.com>
-References: <20251230222031.3626500-2-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20251230145117.3375118-1-fiona.klute@gmx.de>
+References: <20251230145117.3375118-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333601; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333604; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=g0iCL4INj+XaoTx1+A+mroek58kCqYWeIE1lLpnbM8s=;
- b=FbVwCMnMojNnZpyXg3U27I6IklcHCeZ8vRPTod1iF9mDLAUca4Zahb1GQhEttV6NufJexe
- tRiplTgazMDg8Xl712A+mRFMAN6KSaaud1C7pnMEGImX+cdNb1+XzuXvBZ4jRZKlg4ZAZw
- ki74eRdih+DHdNQdbP0HPMm77KZUs17fF7faKVR/DeKrjvzZ0Q40xPo1JoehtWdPq4924d
- 5qP5Y0rt+QHmS1jrfnGa8nZnjSglPInSVi1TjE9seZjt78ujFOze7ua7wRAwCqcJvW/bQz
- iLvhUR5fdSb4kZ9BGvYScCK15natmxE/G+QyaTqDLWovEJotCpVHIP1b5PlvEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=gmEDuJlqlzdtG0R3FgsKKX1Z5ZVAHabmqXDj2B+IzbY=;
+ b=imMuSd7PWZ3sFCPmaHRzGU3MZuV6ckEeH31eV+EkJJC9rsxy6upYa/Ura43mPlHZJSPIX3
+ wg3PlDPvTtiAewHrktChGxhMcrmNuEFdGmiSaB59V67Dv9vDmPSQgeLpst6SANcmsFgF5Y
+ TFRpEufN+y+0QmAc9sYOG0P+XX+deO411nfCXWiS55wf/j5j46q07AtjvUOUPbE+ApFcj2
+ boH1YNfhxVr9lFfsTJPQZ746yNFFYPM2xFcnacrpBPoFtZ0cw3QtDmVgKvpi8Hw4GU+iQn
+ IKbn+l1eDtsQzaei1DWwEglvq3cg8GbiS0BAgaVfgqTGksAAOh1o07LMBudLgw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=FbVwCMnM
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to Putty
- package
+ header.a=rsa-sha256 header.s=dkim header.b=imMuSd7P
+Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: tidy up klogd init
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,28 +97,65 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> * Wait for process to stop before deleting PID file, instead of fixed
+>   wait during restart
+> 
+> * Use long form options
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+> Restarting klogd is probably not common, but it's nicer this way. :-)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 97a2701df8..73ece0231c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1318,6 +1318,7 @@ F:	package/minicom/
->  F:	package/mongoose/
->  F:	package/mmc-utils/
->  F:	package/nfs-utils/
-> +F:	package/putty/
->  F:	package/python-libconf/
->  F:	package/python-uvloop/
->  F:	package/qt5/
+>  package/busybox/S02klogd | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/busybox/S02klogd b/package/busybox/S02klogd
+> index 0677e1e5ca..f76d4e72d4 100644
+> --- a/package/busybox/S02klogd
+> +++ b/package/busybox/S02klogd
+> @@ -13,7 +13,8 @@ KLOGD_ARGS=""
+>  start() {
+>  	printf 'Starting %s: ' "$DAEMON"
+>  	# shellcheck disable=SC2086 # we need the word splitting
+> -	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
+> +	start-stop-daemon --start --background --make-pidfile \
+> +		--pidfile "$PIDFILE" --exec "/sbin/$DAEMON" \
+>  		-- -n $KLOGD_ARGS
+>  	status=$?
+>  	if [ "$status" -eq 0 ]; then
+> @@ -26,20 +27,24 @@ start() {
+>  
+>  stop() {
+>  	printf 'Stopping %s: ' "$DAEMON"
+> -	start-stop-daemon -K -q -p "$PIDFILE"
+> +	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/sbin/$DAEMON"
+>  	status=$?
+>  	if [ "$status" -eq 0 ]; then
+> -		rm -f "$PIDFILE"
+>  		echo "OK"
+>  	else
+>  		echo "FAIL"
+> +		return "$status"
+>  	fi
+> +	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
+> +		--exec "/sbin/$DAEMON"; do
+> +		sleep 0.1
+> +	done
+> +	rm -f "$PIDFILE"
+>  	return "$status"
+>  }
+>  
+>  restart() {
+>  	stop
+> -	sleep 1
+>  	start
+>  }
+>  
 > -- 
-> 2.47.3
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
