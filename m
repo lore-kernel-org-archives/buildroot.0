@@ -4,81 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E6BD2F35C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96050D2F35C
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F82D8413B;
-	Tue, 13 Jan 2026 19:45:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 643B28415C;
+	Tue, 13 Jan 2026 19:45:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0fYazPDvTuSI; Tue, 13 Jan 2026 19:45:39 +0000 (UTC)
+ id 8uqO5XcX7pQ7; Tue, 13 Jan 2026 19:45:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 774DA8413D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90D4984145
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333539;
-	bh=Tpa86RCdaLlN8guib8PUG8TbCiGh6Z0Bv/zuCrwnmGc=;
+	s=default; t=1768333540;
+	bh=wAXPhPODHdCE6s9yTKlCgsyOJpE7+16+VMAfY8ghhX4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=OGSX6uxKRAVAAqRZ6ztfBS4xwfuQwwDe4ON5amMSMdMRP7EOvq8wCsHn/JvT3/iXW
-	 9jQei/n8hYZR9BSMuiLmIMcjtiTNiE71vYqTPqP10LmnAyS/iGBH3HVgA3DQ/GzLk5
-	 pkCFnOCGOpWADYu5uYeC08FumJilvSHyNfcJbSTLrXDUVTdcHZQvfcWqxiEc0YJVTT
-	 KEO4BlQaAUKKEcRsS2LU4RQfed+Llw5a+g3EQT8b9WbT27D5A6NXhpfmt2cErdxUfR
-	 IAXcLl+dsoN+6GS7rMN75OnYQX9lMCjR0q5p2DBRBqB4w1tP8tDfceJ2a2DPTEB7xR
-	 PT9j1aMulX7UA==
+	b=n0tj3ouQG6MPDXxQuYA8T41TR9CTL8sN6BEB1dMmjx2+OxT1jANKTlckep4OiBZQf
+	 z+T5tvOXboDnzVOLlutaT+qRuu2+fpFu+LhOeuWicAj++Lh3njS57WRUe+w5S4FYZl
+	 XyozVMClIidGa1R2X59SG5S0rrFK6KtbKWSZec8ELZ1PN2F9qz75ihaYtT+P5ZVson
+	 psyGKKv+z+OawsI/Ddg4M5idCJhBs+qZ/pLUlHzDPoamnd0TN08vJTYIi4twuG07Qo
+	 eJ1R3+dPPaTH/PZLd0a1YAAyFpY/sFqab/FMDpyR4hYAGwpbm9I1GZjRnrkM5iG4g6
+	 bZKfUgioyAATQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 774DA8413D;
-	Tue, 13 Jan 2026 19:45:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E6550231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:45:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90D4984145;
+	Tue, 13 Jan 2026 19:45:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 803491C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD82960A94
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:45:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 670858413B
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:45:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TP0D1UsCOyCW for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:45:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iKMuELw8Q7Nc for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:45:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BF8A2607C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF8A2607C5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 65F0784135
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65F0784135
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BF8A2607C5
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:45:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 65F0784135
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:45:36 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C0A3CB97A887; Tue, 13 Jan 2026 20:45:31 +0100 (CET)
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ with ESMTPSA id 7FA5BB97A885; Tue, 13 Jan 2026 20:45:34 +0100 (CET)
+To: Waldemar Brodkorb <wbx@openadk.org>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:45:30 +0100
-Message-ID: <20260113194530.97762-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:45:32 +0100
+Message-ID: <20260113194532.97813-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20250909144713.569514-1-dario.binacchi@amarulasolutions.com>
-References: <20250909144713.569514-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <aMKU_BEQ4TKSd6qq@waldemar-brodkorb.de>
+References: <aMKU_BEQ4TKSd6qq@waldemar-brodkorb.de>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333531; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333534; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=r3b+D6HkBuDUGrkKplg05L52XaYtY+H7N8Rl1wWryVw=;
- b=YAclZGurzKxU9a1qTk64bQ5hC+1TCs61ZyXoR4VDIm8Qp+pev2eNQ/pW3M1mzq0he6gfwH
- 6KRY+CGW3HxwmZ01EEW7Ea5MPlSAB6JXQzlrqPjtImytTauK4rp+CqsPnNLsDS5BWgdrih
- tbZvPHLOio334nh86N9UmC7JRO0NA0ektWiRL8WZiRPP5ryzGN1NNchSs/mf8d6BGYZ+L6
- 6uNMNNYoWNIK0QfDd7EZ+JIPBeDZkQKpcMsMEXT8rgQFVMJHJnP/PSWwQvxjQ9TId69p+3
- juLpcRyjyXkBqNhLL8yxoWNdguIDp9jo2LHx7G2KSxuzDN7aeRz2jHhjgp1l2g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=lUetrKfPYVu88CmudyiNnhZwkdFDdcoyNMdDGg0SsmA=;
+ b=PT5/wbsihVWz4XZSPNia3gDhYX7SqHSkO+R8FiNxU3lbuMWmBvgev+g5pX+ZWyIZli4CVy
+ Oc8MaZjDzBsXJzKmalbp5TdaO5chyspXf+ACPBrm1Eg3fA+1JoiMDOBByFxNBMRbt0Bh90
+ APpGxIG465AmaucP4Iu2AflodjzeiiR4GD0MXRpTOWzmpmJBVEF0vixozsGV1aSHJbH5YK
+ t3G69Fm7BoAi2wBHeTUF0TijA+YK57kErLdfaOWOWypMxn359kowQzujyFav9J65A7Zipx
+ wOhVEoUGiq8On1Ru/67pyX908W1mRFW0ER48aNc62R0CHb8uu1Zj2c5D4FLqRA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=YAclZGur
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6base: use
- QT6BASE_CONF_OPTS for Vulkan
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=PT5/wbsi
+Subject: Re: [Buildroot] [PATCH v2] package/evilwm: fix compilation with
+ external toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,38 +97,59 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The Vulkan option was appended to QT6BASE_CONFIGURE_OPTS instead of
-> QT6BASE_CONF_OPTS, which is the variable actually used during CMake
-> configuration. This prevented the feature from being enabled/disabled
-> as expected.
+> Switch to generic-package, as the configure script isn't really a
+> autotool generated script. This fixes building evilwm with an
+> external toolchain.
 > 
-> Fixes: 1c27f3a12d77b ("package/qt6base: add vulkan option")
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Fixes:
+>  - https://autobuild.buildroot.org/results/250/25040ce7e94acf8f92c24db895d7dea081de1d7a
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/qt6/qt6base/qt6base.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> v1->v2:
+>   - add link to autobuilder (suggested by Arnout)
+>   - use TARGET_CROSS (suggested by Arnout)
+> ---
+>  package/evilwm/evilwm.mk | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-> index 51a4f1b5be7f..3bf4a1221b43 100644
-> --- a/package/qt6/qt6base/qt6base.mk
-> +++ b/package/qt6/qt6base/qt6base.mk
-> @@ -183,9 +183,9 @@ QT6BASE_DEPENDENCIES += freetype
+> diff --git a/package/evilwm/evilwm.mk b/package/evilwm/evilwm.mk
+> index 78b531095b..12934427b9 100644
+> --- a/package/evilwm/evilwm.mk
+> +++ b/package/evilwm/evilwm.mk
+> @@ -18,4 +18,26 @@ endef
 >  
->  ifeq ($(BR2_PACKAGE_QT6BASE_VULKAN),y)
->  QT6BASE_DEPENDENCIES   += vulkan-headers vulkan-loader
-> -QT6BASE_CONFIGURE_OPTS += -DFEATURE_vulkan=ON
-> +QT6BASE_CONF_OPTS += -DFEATURE_vulkan=ON
->  else
-> -QT6BASE_CONFIGURE_OPTS += -DFEATURE_vulkan=OFF
-> +QT6BASE_CONF_OPTS += -DFEATURE_vulkan=OFF
->  endif
+>  EVILWM_POST_INSTALL_TARGET_HOOKS += EVILWM_INSTALL_XSESSION_FILE
 >  
->  ifeq ($(BR2_PACKAGE_QT6BASE_LINUXFB),y)
+> -$(eval $(autotools-package))
+> +EVILWM_TOOLS_PREFIX += $(patsubst %-,%,$(TARGET_CROSS))
+> +
+> +# the configure script is not generated by autoconf
+> +define EVILWM_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) \
+> +		CFLAGS="$(TARGET_CFLAGS)" \
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		./configure \
+> +		--prefix=/usr \
+> +		--mandir=/usr/share/man \
+> +		--host=$(EVILWM_TOOLS_PREFIX) \
+> +	)
+> +endef
+> +
+> +define EVILWM_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define EVILWM_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
 > -- 
-> 2.43.0
+> 2.47.2
 > 
 > _______________________________________________
 > buildroot mailing list
