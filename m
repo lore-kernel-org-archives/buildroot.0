@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9CCCD30CC4
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4744D30CC1
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 21:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D83A84023;
-	Tue, 13 Jan 2026 21:00:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB38640DA3;
+	Tue, 13 Jan 2026 21:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8BdZi7ITQAPa; Tue, 13 Jan 2026 21:00:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1JmD0JcyXbbL; Tue, 13 Jan 2026 21:00:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A613184032
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAF7440E28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768338026;
-	bh=vmesWY919CvV3gCe3XsQ1UFa4baajwQA9KBH87kxRgc=;
+	s=default; t=1768338027;
+	bh=FLp6iqa8URZpqKPJSjS6MALaYbeMmO0oZXaiNVKhyMk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=PoXq8dLK9ZVawmCCru9snL27KUVxD/H9wQIe8bCy8OqzcfOnfJwPnDd3aEYBTnECt
-	 Uf9GcrFLy0Nr0HoPVSQsg4TUG4rLxR7L/rmQc5ooLFACUBvGhfyK4aaLbQ9wTEuIm4
-	 XVJAzleVnj3z5h+5a1N2N7uR+T7OXwOUXLlpS9IskOO9MJwKSMIhN7I/WTO0ek84Tm
-	 gxYdrwLPWHJGaI27ddiQq1Ugx5Z4ZSv9fceXk/yEfUj0OXFioIl1+d6/1dYGElcBjw
-	 1FMTTFU86eWzr2ZUk1qUUpIS71vXCW1XaedufRUxgIzx+zW5JXG9RT0CXbRlenQKd5
-	 bIb47rdNWAkLA==
+	b=PQLiA+Yb7ajoFC+7nCI1lrpZb/UF83S7UJnPXAJ4EXuGZx5qa1jCreZMp5icPGmH4
+	 /jP/Jv2uBjjtQtXn+dvEU/f/7Aj8/Hw2hin5TIxqC0d0/NGDPJfPmC47MesIFjrGzk
+	 OJ4lEXjk0G5SwMUEIlFlJJoe/PVOySWreFCtV7A1ueY+p3r6baUuTVvyeXLgJ3vlRb
+	 5Cil3TOyM4wlfeSkLEPwzVcAcT4SfrVqroJX4RGuodvITRS5ZL+p/PW3oEOlu6h2H0
+	 HkfhPYmaga8OPEw+P6Xb8VtPQguHicTQEc1+HiSeJl4AGXrejC3ntPZVqC/iIQtHaj
+	 Ag/grtHlBzvEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A613184032;
-	Tue, 13 Jan 2026 21:00:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAF7440E28;
+	Tue, 13 Jan 2026 21:00:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1994B1CC
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 21:00:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 56F131CC
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 21:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 052EF40799
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2632740772
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E476p1Z_yOjA for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:51 +0000 (UTC)
+ id MNuIQ219FLdI for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6E16407AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77311407D8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6E16407AF
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77311407D8
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A536B80F55; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
+ id 75EAD80E26; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3db688e649ad7ae30a859d6cbf76c8f2ef32a526
-X-Git-Newrev: 6f8f5689d310c92535bc84d1a3686653cad3244d
+X-Git-Oldrev: 88d6e75a53c0cab855e0c4b70cfa8496ef59de75
+X-Git-Newrev: dec410c63633a40f74caa51e214761178b821a27
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205848.A536B80F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXtst: bump version
- to 1.2.5
+Message-Id: <20260113205850.75EAD80E26@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ package/x11r7/xdriver_xf86-video-siliconmotion: bump version to 1.7.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,44 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f8f5689d310c92535bc84d1a3686653cad3244d
+commit: https://git.buildroot.net/buildroot/commit/?id=dec410c63633a40f74caa51e214761178b821a27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-August/003525.html
+https://lists.x.org/archives/xorg-announce/2023-September/003421.html
+
+Switched tarball to xz.
+
+Switched _SITE to URL mentioned in latest release notes.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xlib_libXtst/xlib_libXtst.hash | 6 +++---
- package/x11r7/xlib_libXtst/xlib_libXtst.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../xdriver_xf86-video-siliconmotion.hash                           | 5 +++--
+ .../xdriver_xf86-video-siliconmotion.mk                             | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.hash b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
-index 7bdcdb9c17..5d4b60b31d 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.hash
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-September/003214.html
--sha256  84f5f30b9254b4ffee14b5b0940e2622153b0d3aed8286a3c5b7eeb340ca33c8  libXtst-1.2.4.tar.xz
--sha512  f2f4e01239b892b8e26284cede90feb4fe7738beb243bca0f6adb349029f8bf87b5a482911edcd2401733c92ef78eec07fcd455b92e5b8c4828374769e60098d  libXtst-1.2.4.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-August/003525.html
-+sha256  b50d4c25b97009a744706c1039c598f4d8e64910c9fde381994e1cae235d9242  libXtst-1.2.5.tar.xz
-+sha512  848fa580d7abccd48c9ca3440f92e299839ada0912ed60d38d4d4f5bf37431cd02d7059265ab4e524c3e2cb9c368b9b90b863d1ed97d74979ef8811fc5e635a9  libXtst-1.2.5.tar.xz
- # Locally computed
- sha256  940190489c7a0e5ae3d83fc4fcbd79e0cd1b765bf1a4efd408293c1ee0332ceb  COPYING
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-index 47103377aa..4e019f75dd 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
+index eeff39fed1..bc664d85d6 100644
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
++++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002763.html
+-sha256  d0f3c691e71108d27a061beb62bf78b36ec35bd755905692734dd68cfb3359bc  xf86-video-siliconmotion-1.7.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-September/003421.html
++sha256  16059c7833a288da43b1d179f5edd2b633e3b102bc5113488c5d41dd71158fc0  xf86-video-siliconmotion-1.7.10.tar.xz
++sha512  d8bb90e636598ed20a32bdc049fe42420d9e6093429f09c3a886a7e78d3813c8533abf67c4fed084be97dd7553a1934c49aa9f94d1083dfa64ab36867ae55fca  xf86-video-siliconmotion-1.7.10.tar.xz
+ # Locally calculated
+ sha256  e1e3ce7ce1f63fff96444206e09c8490ad7a4af7457c81ea6cdee4f1fee1f960  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+index 65fd846535..e84173d120 100644
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
++++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXTST_VERSION = 1.2.4
-+XLIB_LIBXTST_VERSION = 1.2.5
- XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.xz
- XLIB_LIBXTST_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXTST_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.9
+-XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.10
++XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
