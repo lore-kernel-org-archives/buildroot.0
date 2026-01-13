@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8B5D30CC4
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99DC4D30CC2
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FC7340C49;
-	Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D30F60D9B;
+	Tue, 13 Jan 2026 20:58:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7zRnGQ0ovk84; Tue, 13 Jan 2026 20:58:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pr9QfQJE53ha; Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F69F40C5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE2160D9C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337934;
-	bh=QT4ZNX3UJnOdipX/su3jYv+8W2LicVBagJtULXcIN6E=;
+	s=default; t=1768337935;
+	bh=KWZ2pLTG237/ShWHIolwc6fp5Nda2Me3VEmlNkTV6GI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XTZcviuMHyGZMsWmw/sdBAuBfg7I355EYfix7KVq4HBfWMnKwQpDoyiF11DmDvKe4
-	 FV3bzdjfS+0TPMkEW9FbKYySGf3k6K4Dm4VKmk38qrtwL4v4jA1FAhzbTngL7P5b7g
-	 JhewtJvVA+r+uoByKj6jrAHOY+XDwcgwSbeNI9P+ayDCNzN93+w6eo9/mKQDaJadCl
-	 LFttraCkKqg4CCx5vykBQyZllJ6RCO13vWskRWuLJ0tOwfKU8VOJyyPW9gasv6lisy
-	 hR7nsTm09P9i12Bf71BlVsx7Kmw2LLyXejOmz7dEjBm/ClhjqjZZOqUQI/1UmCDqYi
-	 6eOOEyPjixVVA==
+	b=a8qJexsXRlRYBBx4CX31btrXL6HMqZhxow1w5ke5v+p2I9hn6NvcGUxZlxZ6t/sUb
+	 IC7YEOVQeBdNv2AO8cXtiCje401NUXVIoKQTMsdLkeEyKrYOHtElB5R0NxNFF5jKiy
+	 TK1i0JGDlJaeTetVf0RF2+QRsn346RbmrXT6gEMMr96rpc90Ie7pOmuj92Lf7v6QlS
+	 AtjpixbQSZoJJr4Un6bePz/lX1uNvzx8OpSxqdikSaerlDMGA+KRKkzNil1o/8JnLY
+	 lEVMEVTxA64JcTXoxCTppY0Wp7YQrsgTRxuutewpY7FQR/oh31J8w02YKGYzhpN/7B
+	 G7RlyfAm7LZUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F69F40C5E;
-	Tue, 13 Jan 2026 20:58:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 73094231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE2160D9C;
+	Tue, 13 Jan 2026 20:58:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F849231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58F3180FFB
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C2B44073D
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KeGQ_DreS33q for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RtLMDxHkqTEP for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 976FE80839
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4A440730
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 976FE80839
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B4A440730
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8884188570; Tue, 13 Jan 2026 20:58:46 +0000 (UTC)
+ id 7BA4888570; Tue, 13 Jan 2026 20:58:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 21:37:22 +0100
+Date: Tue, 13 Jan 2026 21:37:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 734eb062b463565a0ffb53d15eaad2387035515e
-X-Git-Newrev: 4f4b9b31e7b5fd0b3d8331f0093b708242e9aa4e
+X-Git-Oldrev: 66d25cdfad73bfb5202ba1745356d2b26ef42377
+X-Git-Newrev: 58e859c9ff9c036fa6e58d123f77cec1d1a12495
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205846.8884188570@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_sessreg: bump version
- to 1.1.4
+Message-Id: <20260113205845.7BA4888570@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xorgproto: bump version to
+ 2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f4b9b31e7b5fd0b3d8331f0093b708242e9aa4e
+commit: https://git.buildroot.net/buildroot/commit/?id=58e859c9ff9c036fa6e58d123f77cec1d1a12495
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2025-May/003601.html
+https://lists.x.org/archives/xorg-announce/2025-December/003649.html
 
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/app/sessreg/-/commit/498db3a831ac76b487cfec86492ebc54e0e25bb4
+Updated license hashes due to upstream commit:
+https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/commit/f7176375692e47275e89c3064da4cd3a0f8dd1e7
+
+Added dependencies to host-pkgconf to fix a build error which would be
+introduced by this bump due to configure being created by autoconf 2.72
+instead of 2.71 which was used for xorgproto 2024.1.
+
+The configure script at line 5146 now contains
+
+ if test -z "$PKG_CONFIG"; then
+     as_fn_error $? "pkg-config not found" "$LINENO" 5
+ fi
+
+where the previous script would continue:
+
+2024.1:
+checking pkg-config is at least version 0.9.0... ./configure: line 4796:
+ /home/bernd/buildroot/output/per-package/xorgproto/host/bin/pkg-config: No such file or directory
+no
+checking build system type... x86_64-pc-linux-gnu
+
+2025.1:
+checking pkg-config is at least version 0.9.0... ./configure: line 5137:
+ /home/bernd/buildroot/output/per-package/xorgproto/host/bin/pkg-config: No such file or directory
+no
+configure: error: pkg-config not found
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xapp_sessreg/xapp_sessreg.hash | 8 ++++----
- package/x11r7/xapp_sessreg/xapp_sessreg.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xorgproto/xorgproto.hash | 20 ++++++++++----------
+ package/x11r7/xorgproto/xorgproto.mk   |  4 +++-
+ 2 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.hash b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-index 1f1b54b877..7d12d7617d 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-October/003246.html
--sha256  022acd5de8077dddc4f919961f79e102ecd5f3228a333681af5cd0e7344facc2  sessreg-1.1.3.tar.xz
--sha512  bc1e83afc598ac5b4c6ab0861799b6c8727c123ee662c1fb9cbdd9ee926973b7a00cc62e32f6b4e462c0da3516f8b824337d9cf17587ebabd3f4753502641a60  sessreg-1.1.3.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2025-May/003601.html
-+sha256  4e85b52f4f65a93449753bfb00ceb5d77f3317e24d07dc23147f2f116c785350  sessreg-1.1.4.tar.xz
-+sha512  836d2cfa60448de9b4af1b79693905854ba5c1135d623654bba627d125271eb74111bac2b4437a86f4cbd362695e796fc0279d4f4684f2cd5080cdd953318686  sessreg-1.1.4.tar.xz
+diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
+index 941ceabd49..300d5d0810 100644
+--- a/package/x11r7/xorgproto/xorgproto.hash
++++ b/package/x11r7/xorgproto/xorgproto.hash
+@@ -1,8 +1,8 @@
+-# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2024.1.tar.xz.sig
++# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2025.1.tar.xz.sig
+ # with key 67DC86F2623FC5FD4BB5225D14706DBE1E4B4540
+-# From https://lists.x.org/archives/xorg-announce/2024-March/003495.html
+-sha256  372225fd40815b8423547f5d890c5debc72e88b91088fbfb13158c20495ccb59  xorgproto-2024.1.tar.xz
+-sha512  63955cb604ff831575af2193548857c1b99e52d00206ea9421ce99e145094bcd907388c4574bc32174a01cbe2c940b0377bf75ae7d2c0f953157dc9c32e5a07f  xorgproto-2024.1.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-December/003649.html
++sha256  56898c716c0578df8a2d828c9c3e5c528277705c0484381a81960fe1a67668e8  xorgproto-2025.1.tar.xz
++sha512  dbbee3aa1bc62721d64309e1d98807d403609d8129944b2e23e48f95d30c6448718c2842362994d67647908645bafc757c710070c5dcdca96d191fd2689d023a  xorgproto-2025.1.tar.xz
+ 
  # Locally computed
--sha256  ac8f5cc696e6c473aea4caaf18650316dc8912fcf0f370cae1df5f395cea8631  COPYING
-+sha256  1274afd6bafa32e4e1c2fc7c1b2ebe2fd690f6e63faf4a54a5b1348d6928e20d  COPYING
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-index b196bb947e..bd5a419ad1 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+ sha256  aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
+@@ -18,22 +18,22 @@ sha256  1ab381e978bff63d68be2e4f235d51935f3f16f3ba3bebf83afa99a70c0484a2  COPYIN
+ sha256  f4af05774b02ae149357cc26f7bf5ef1116c2e09373c2492081a3a1892c58417  COPYING-fontsproto
+ sha256  823deb4673d3f26aa8c90e704888299648f00be3262f9363eaeecedcd65b936d  COPYING-glproto
+ sha256  5e083a2ace0215a6084c877c023a6079952ba803d692488203ba4269196debe3  COPYING-inputproto
+-sha256  d397a67d4b28e897bc5fce79b2b917df9905b54f961fc3ad1f49c7fe3803f92c  COPYING-kbproto
+-sha256  7a5dd5d4c989c167da50f15879959f42bbda960e06d0a0aea7197f61fe1dc846  COPYING-lg3dproto
++sha256  883f26ebeffb29f955c1e2becdee284bce16c7139b1410f6f7331d3bd59bfc78  COPYING-kbproto
++sha256  2467132d97b75edba05d908604124be2f46ee113954f848c99bcd938055e8e4b  COPYING-lg3dproto
+ sha256  8442b5f22f2fb13017a4302a906e7dedc899267b41f613558970941120170128  COPYING-pmproto
+ sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-presentproto
+ sha256  46f599055002bbf3e6ce244bde8d9ebe5ec24ae7906836db186773a9791d0b75  COPYING-printproto
+ sha256  41c13dcd09147ed2440286f2fb8151df8ebee06deee4ed78ddf094601c216d3d  COPYING-randrproto
+-sha256  ee10aee0f1697ffdbe870a39f037361d4f7136f2976bb7919a41b3f66407caee  COPYING-recordproto
+-sha256  9e48921a94da36d7a69fe71809223ee0bb46370db9842dccdeeb55b5a9946872  COPYING-renderproto
++sha256  e37891ac36e827611d6e7ae51ddb14a9cc9ba56f6cc87c55b6ce3b6d76cd2bf4  COPYING-recordproto
++sha256  e0ca4f1d27a95ef7552ccdfce7e95ddf1e8b10ac713a05b49e8bd82713d7914b  COPYING-renderproto
+ sha256  403e7be948674530ad40669b1e3a31adeddb656502f3b0ef810d5d3cc35d0b52  COPYING-resourceproto
+ sha256  fcbd3c628bf4d28ee3e6032054bf44bbe58f3b1a944dad856a8d3eb6b37ea412  COPYING-scrnsaverproto
+-sha256  d6d3513f5a7099748dc387f54498d799380b45f8a444f13aa98aa45a860ae55b  COPYING-trapproto
++sha256  2c1807ecb78dddba1a9cd612a11bfdbc013b77144880ec3c268241495cb022dd  COPYING-trapproto
+ sha256  f8f49bbad61967ebc890fb79fff5bfb7cfc1c341aa8f8dee13eb3fb534040b47  COPYING-videoproto
+ sha256  eb183a00c61bb47992f096b6993ed7ec17518bea9c285fe87efff7f622cc6c12  COPYING-windowswmproto
+ sha256  da835951edc6e3b8d168d6afe7447c65d0b9a99937293cf3f288bba8244a9f86  COPYING-x11proto
+ sha256  5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING-xcmiscproto
+-sha256  fb42146c6c06a200a9b121220eb692ff9101ba0fbd0b224b9e16a016c59ae86a  COPYING-xextproto
++sha256  bcdbd7abc060725d3a16c6f5b2d673ab38691f6f7d55c62709140555f8944b9c  COPYING-xextproto
+ sha256  3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86bigfontproto
+ sha256  3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86dgaproto
+ sha256  4a05d06752388d9db71ee1006f371d4fb2c316a821fc2fc272db90b3ef978334  COPYING-xf86driproto
+diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
+index 0253167372..2704e84546 100644
+--- a/package/x11r7/xorgproto/xorgproto.mk
++++ b/package/x11r7/xorgproto/xorgproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_SESSREG_VERSION = 1.1.3
-+XAPP_SESSREG_VERSION = 1.1.4
- XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.xz
- XAPP_SESSREG_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_SESSREG_LICENSE = MIT
+-XORGPROTO_VERSION = 2024.1
++XORGPROTO_VERSION = 2025.1
+ XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.xz
+ XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
+ XORGPROTO_LICENSE = MIT
+@@ -50,6 +50,8 @@ XORGPROTO_INSTALL_STAGING = YES
+ XORGPROTO_INSTALL_TARGET = NO
+ # xproxymngproto is needed by xfindproxy
+ XORGPROTO_CONF_OPTS += --enable-legacy
++XORGPROTO_DEPENDENCIES = host-pkgconf
++HOST_XORGPROTO_DEPENDENCIES = host-pkgconf
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
