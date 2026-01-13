@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E389D29DE5
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3849D2502E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 19:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75AB6841AF;
-	Tue, 13 Jan 2026 19:46:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8927C841E8;
+	Tue, 13 Jan 2026 19:46:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R0Mg0phL0Wjl; Tue, 13 Jan 2026 19:46:18 +0000 (UTC)
+ id Ql-e_Nn-wvdZ; Tue, 13 Jan 2026 19:46:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E421841D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD539841E9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768333578;
-	bh=QfH87qVVqLs8CLqBPh5/ukFdgKoUEj02fp4GWmVB90c=;
+	s=default; t=1768333582;
+	bh=9bMo/9D9hhib9mSOsbpzdlWHYW8vEnnLkp1bhj/Wl4M=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=CogXO19Q47D0UPc3ZevUiZ4znUzdZlRDciZBJ41QmJi4G/Qj9L6PEnnbgtGwNbm8U
-	 sYKh1dXLmOujSuHPVW+lSnEVloIeVqiUcbdIjqCyUrIs/PuQuMYHe/Xbw7ApC9Y3cw
-	 Q8OpJvLl8K0jnGDiELnZAOspeWKSIcDQgSKqomZyrUvxYmWq4XCQcqpg2uPOnt1REf
-	 9fMZuV37vGXAcBpF+A7l+Gi06ifLHNkE9il8oy0kb61epBgHX+6CESVZH1s7NpPOPB
-	 C1TEXRqHrtBprTvPfqKroIlTWwzj2c3sRaZJkOVhWREaI0v13iPNgd9+vr1A+ttySV
-	 0vjiq4BPwV3Hw==
+	b=GmAMcEB+y7+wNBXEsjxFuDCtPSFm7Xu8sY2h7Bti0ctCr+Is1njZFel8ln+XnNfM1
+	 wyaVWQ0pwDrFD4WBkZef6RcLre7n+rlcwBR0OokyRH824mcYnMNIXakZSHcU92lfW9
+	 y9loCWz47RAU+YfMc18LxJjGW2ID4nr6hQHLggjWUUpafFOd7ibQB5bjsIBDpsWpzn
+	 p02iAs5FznLp+tsurFTZ/QFHYj/+NNdCZfBidvTKrCgG9nPTpROEEHa0s1lqnjOEoS
+	 dzxTgave4A/VLlaEwrBJQ/rGb0PEjRvKJlyewAtuZrafdU7aN91VXplcUbOTSl8mbW
+	 aarbdpn1kfzFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E421841D2;
-	Tue, 13 Jan 2026 19:46:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 89A521C3
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD539841E9;
+	Tue, 13 Jan 2026 19:46:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 978491C3
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B9F0841DB
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91C1440373
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NdSoI6j17hxq for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 19:46:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ORBAR2JGOxZ9 for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 19:46:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6F572841AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F572841AF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 72DD740376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72DD740376
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6F572841AF
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 72DD740376
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 19:46:18 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A49AAB97A886; Tue, 13 Jan 2026 20:46:13 +0100 (CET)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ with ESMTPSA id 83F7DB97A863; Tue, 13 Jan 2026 20:46:16 +0100 (CET)
+To: Julien Olivain <ju.o@free.fr>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 20:46:10 +0100
-Message-ID: <20260113194610.98360-1-arnout@rnout.be>
+Date: Tue, 13 Jan 2026 20:46:14 +0100
+Message-ID: <20260113194614.98410-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251216095531.1381197-1-thomas.petazzoni@bootlin.com>
-References: <20251216095531.1381197-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251218214636.736781-1-ju.o@free.fr>
+References: <20251218214636.736781-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768333573; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768333576; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=xwY/BM0DwpS3LbguqFcRPO+Gcqh6xaHWHZM2wL+gJGo=;
- b=aMlSvN0lEwg6xTojPkwkLvBNkqzH7v0G3PIkpyd5oJ5mCOm3DHlNGoQE2WkQy1wIUkC86h
- gFERQXxL1LWw1Jk+U7n/mKXE4FxiizDzwuyu1ubF66NEc+8NX5zCzJdtcdB4WBBz+l3CkS
- NLKSIwXRn5Je8+9Cb0EE0IQhRxS/nYO6F2wBlXJ4sCCE6g6PvKR6FX7/IfZNSn6GbHNk1e
- NBy+xR1mQqD4YBftiZOZZot5nTGnvedMSIUmgyT53blgwwXXiHCgrN0GbVA5y7prQREJzU
- gQKtEfL1IJq5fmfwv8W7OppvL4jwpOBLjmZV93J7UnXdlVhEFVgrSyfrfYkqZg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Vg2rCvzCypFLaAcot7nJ1k31a+XgPnQhCcj7KlS8yZU=;
+ b=nlaNpPlSw2H3l8FbLaUDnUvxhxbm4bavos45cj5Pr815i5mqIYG+Ts5XCrFqHUj4VlLrhF
+ 1b9mp5YgRBewlEE1kZkSCdB9Ux+GD36QdXRCYSco+XamwqBmbq9SrzLY9wGMcSBH0JlB4z
+ bHdHvNBqucvX7PLAEPI0LF0hyAHaW94HzjUM3TP+xZRDcKvWOtIUwcqkbJel15J6f84mRB
+ ijog28Wlh3/PmOhO7Y1KZHStc5Rwg7IwobgK2EgR/krY9Z2mpkqhxO+HCUjP6p14UozyDb
+ T1oYB0mVrJzK8ft0P25WWVg722bxB8GQp3lfc6fCPHtDnQOtwXOF3Gagkl/8VQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=aMlSvN0l
-Subject: Re: [Buildroot] [PATCH] package/zxing-cpp: drop support for Python
- bindings
+ header.a=rsa-sha256 header.s=dkim header.b=nlaNpPlS
+Subject: Re: [Buildroot] [PATCH 1/2] support/testing: add opus-tools runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,51 +97,52 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Since the bump of zxing-cpp to version 2.3.0 in Buildroot commit
-> fb032bd34acf57f86f62bd474cbabd4e1e750e67 ("package/zxing-cpp: bump to
-> version 2.3.0"), the build of the Python bindings has been broken. We
-> tried to figure things out, but couldn't, and nobody bothered fixing
-> this since February 2025, so let's drop support for the Python
-> bindings for the time being.
-> 
-> Fixes:
-> 
->   https://autobuild.buildroot.net/results/93ffa69b9f92f142c65169f9c3a7c7ad0e733551/
-> 
-> Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-> Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  package/zxing-cpp/zxing-cpp.mk | 13 ++-----------
->  1 file changed, 2 insertions(+), 11 deletions(-)
+>  DEVELOPERS                                     |  1 +
+>  .../testing/tests/package/test_opus_tools.py   | 18 ++++++++++++++++++
+>  2 files changed, 19 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_opus_tools.py
 > 
-> diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-> index 515daf590f..8c44e8ea9a 100644
-> --- a/package/zxing-cpp/zxing-cpp.mk
-> +++ b/package/zxing-cpp/zxing-cpp.mk
-> @@ -14,17 +14,8 @@ ZXING_CPP_DEPENDENCIES = host-pkgconf stb
->  ZXING_CPP_CONF_OPTS = \
->  	-DBUILD_BLACKBOX_TESTS=OFF \
->  	-DBUILD_UNIT_TESTS=OFF \
-> -	-DBUILD_DEPENDENCIES=LOCAL
-> -
-> -ifeq ($(BR2_PACKAGE_PYTHON3)$(BR2_PACKAGE_PYTHON_PYBIND),yy)
-> -ZXING_CPP_DEPENDENCIES += python3 python-pybind
-> -ZXING_CPP_CONF_OPTS += \
-> -	-DBUILD_PYTHON_MODULE=ON \
-> -	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
-> -	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
-> -else
-> -ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=OFF
-> -endif
-> +	-DBUILD_DEPENDENCIES=LOCAL \
-> +	-DBUILD_PYTHON_MODULE=OFF
->  
->  ifeq ($(BR2_PACKAGE_ZXING_CPP_READERS),y)
->  ZXING_CPP_CONF_OPTS += -DBUILD_READERS=ON
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1b27df9beb..3ea5f84b30 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1973,6 +1973,7 @@ F:	support/testing/tests/package/test_oath_toolkit.py
+>  F:	support/testing/tests/package/test_octave.py
+>  F:	support/testing/tests/package/test_openblas.py
+>  F:	support/testing/tests/package/test_openocd.py
+> +F:	support/testing/tests/package/test_opus_tools.py
+>  F:	support/testing/tests/package/test_parted.py
+>  F:	support/testing/tests/package/test_patch.py
+>  F:	support/testing/tests/package/test_patch/
+> diff --git a/support/testing/tests/package/test_opus_tools.py b/support/testing/tests/package/test_opus_tools.py
+> new file mode 100644
+> index 0000000000..89b76fb954
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_opus_tools.py
+> @@ -0,0 +1,18 @@
+> +from tests.package.test_audio_codec_base import TestAudioCodecBase
+> +
+> +
+> +class TestOpusTools(TestAudioCodecBase):
+> +    __test__ = True
+> +    config = TestAudioCodecBase.config + \
+> +        """
+> +        BR2_PACKAGE_OPUS_TOOLS=y
+> +        """
+> +    encoded_file = "encoded.opus"
+> +
+> +    def encode_test(self, input_filename):
+> +        cmd = f"opusenc {input_filename} {self.encoded_file}"
+> +        self.assertRunOk(cmd)
+> +
+> +    def decode_test(self, output_filename):
+> +        cmd = f"opusdec {self.encoded_file} {output_filename}"
+> +        self.assertRunOk(cmd)
 > -- 
 > 2.52.0
 > 
