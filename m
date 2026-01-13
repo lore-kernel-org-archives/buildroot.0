@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0DFD30CC2
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9390D30CC2
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 232C781A0D;
-	Tue, 13 Jan 2026 20:59:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C96E40D5E;
+	Tue, 13 Jan 2026 20:59:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uKcs74MCiTO0; Tue, 13 Jan 2026 20:59:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZgGwnck7IOw7; Tue, 13 Jan 2026 20:59:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4673D81BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6718340D44
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337975;
-	bh=A/aaObCIl88b1lNBGK9Mf7xNIZrW8uLcSfuj6pgKoUs=;
+	s=default; t=1768337976;
+	bh=hNOleIYfHfJGKqw0Q1+bHxTEalQmFanQCjiH86NtfP0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KzS5wbxaV/LHCdM9DoDWLr6gsqBs8kKaJfGczmkDb4OrsxiN4Uu2HyX//mSi4dQLT
-	 CYmN80Kzyn1W6xk/ub9Thd2IaH4jzauvz7oZr5+gVJuzakT0K0AdUuwnLxBgN7oBXq
-	 dZRyY/Otr50IBDfSOM0WjGOV0Nn05x3UcYcW8yvxvyjxqlXu5QO/1Ogo4vMaewCgKI
-	 +qHy9P6qEUA0R1IUseXh/zcZXV+i7IrfQPVbzhkzdUCeaYVW4PbZTLbdJyXnjR9U4p
-	 CRm3CsoOG7cJXvWmM65nQvhSOtHNqW5HqdkqThDuBF7Oj87k8yELSxUgC4LfP0iz/i
-	 EM8Rz2nL+xBYw==
+	b=B768tT0ihFWWJ0+y76CYQfvgMWTDXugo4HBZESi2hLzYYOSIzpDcvEH4JUV7ZIAL9
+	 5tUflgBfU897b2M9pqNsjc1dfgp7nq11qks8m/xomuihGUDDwBvIZ3ZpTVqUIY+Ls/
+	 GLnnwS8idDP2vBWWqSGWQmlCmiZEMqomprBftSALB5bR72SwqTjWq2EEULYHBHuI9J
+	 3Isl7maj2ZUtdOKebsn+BS1qvxwwM4OGswJYh7GJJceceLuJIBs3MYGT+XaS8IMt/b
+	 W3O7RIJmoyx7lZuIAXPabeNs6dhZNfu59X6rDZPctkpEEVqxM7o3Jc2XhBjaHtyZaS
+	 TuBVshAEIRSRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4673D81BD6;
-	Tue, 13 Jan 2026 20:59:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6718340D44;
+	Tue, 13 Jan 2026 20:59:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B44CC231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B8793231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E5D5407D9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F624407A1
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JpF9iKqNwsEp for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
+ id ej-5UEuTOZQU for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93173407A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B64740084
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93173407A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B64740084
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9158187F77; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
+ id 1A5E4819E3; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 13 Jan 2026 21:37:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd951830c703ae7afb50a3c0f3be6b1c042b668e
-X-Git-Newrev: 6e98f026f9b036f5bf9df644f49632a9799bda18
+X-Git-Oldrev: 130244a730a7210498cf784bcbc5f9aa2ae4a3df
+X-Git-Newrev: 0259107f8825ee53e75f8e59d8747c03b3f261ef
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205847.9158187F77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-fbdev:
- bump version to 0.5.1
+Message-Id: <20260113205847.1A5E4819E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxcvt: bump version
+ to 0.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e98f026f9b036f5bf9df644f49632a9799bda18
+commit: https://git.buildroot.net/buildroot/commit/?id=0259107f8825ee53e75f8e59d8747c03b3f261ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-November/003553.html
+https://lists.x.org/archives/xorg-announce/2024-December/003571.html
 
 Switched _SITE to URL mentioned in latest release notes.
-
-Switched tarball to xz.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash    | 5 +++--
- package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk  | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xlib_libxcvt/xlib_libxcvt.hash | 6 +++---
+ package/x11r7/xlib_libxcvt/xlib_libxcvt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash
-index 0b38a9b41b..3d3593c540 100644
---- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash
-+++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2013-September/002324.html
--sha256  dcc3d85f378022180e437a9ec00a59b6cb7680ff79c40394d695060af2374699  xf86-video-fbdev-0.5.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2024-November/003553.html
-+sha256  9c2bc0fb9af092804138e8d5cb5627cabf2919ef60f0d1544a95c4ac2047f387  xf86-video-fbdev-0.5.1.tar.xz
-+sha512  ab345d796fb6a404c44a5caec31497fd36dce8882befad644b3f6fac1969c0a4ba9243e911e86a29a149ee7b0847ba676a28a49e15f1789238f2726b9dcea1a8  xf86-video-fbdev-0.5.1.tar.xz
+diff --git a/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash b/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
+index f635c90fdc..2d8ba5076a 100644
+--- a/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
++++ b/package/x11r7/xlib_libxcvt/xlib_libxcvt.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-July/003195.html
+-sha256  0561690544796e25cfbd71806ba1b0d797ffe464e9796411123e79450f71db38  libxcvt-0.1.2.tar.xz
+-sha512  3f6b2baca712a4608780686932f8881255c07bb74b1a788f9b07d4e22975c038d75111cd6b452257882a0b2bad57eebb2002f80a3e435d2e2d16936597f039b0  libxcvt-0.1.2.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-December/003571.html
++sha256  a929998a8767de7dfa36d6da4751cdbeef34ed630714f2f4a767b351f2442e01  libxcvt-0.1.3.tar.xz
++sha512  2fecc784375e69b6e8e46608618a5f5a8ad20ecd5229fd093883fe401dd6ea231d8b77c6753756fff01f3040bef2db60a042d40fc349769ef5348e5cd9ed1f28  libxcvt-0.1.3.tar.xz
  # Locally calculated
- sha256  e437aed89c3440a9fe7e19968a3f2eeb97041ef6c9616837a3fd42d0874fc0e6  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-index a480befdd0..65b2c19b5e 100644
---- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-+++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+ sha256  4849851554bdeda9a2a85ce93946b786605e009685941b8b907a9a36b02ae068  COPYING
+diff --git a/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk b/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
+index 7f61054dbe..428553a19d 100644
+--- a/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
++++ b/package/x11r7/xlib_libxcvt/xlib_libxcvt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.5.0
--XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_FBDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.5.1
-+XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_FBDEV_SITE = https://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_FBDEV_LICENSE = MIT
- XDRIVER_XF86_VIDEO_FBDEV_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_FBDEV_DEPENDENCIES = xserver_xorg-server xorgproto
+-XLIB_LIBXCVT_VERSION = 0.1.2
++XLIB_LIBXCVT_VERSION = 0.1.3
+ XLIB_LIBXCVT_SOURCE = libxcvt-$(XLIB_LIBXCVT_VERSION).tar.xz
+-XLIB_LIBXCVT_SITE = https://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXCVT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXCVT_LICENSE = MIT
+ XLIB_LIBXCVT_LICENSE_FILES = COPYING
+ XLIB_LIBXCVT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
