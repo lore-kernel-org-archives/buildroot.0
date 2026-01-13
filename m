@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45095D30CC1
-	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FAFDD30CC2
+	for <buildroot@archiver.kernel.org>; Tue, 13 Jan 2026 20:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0809783DC1;
-	Tue, 13 Jan 2026 20:59:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 268A483DF7;
+	Tue, 13 Jan 2026 20:59:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNqQjgVL-U-c; Tue, 13 Jan 2026 20:59:48 +0000 (UTC)
+ id s6UJ6Pb_pSkc; Tue, 13 Jan 2026 20:59:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7E4D83D5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CA4983D5D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768337986;
-	bh=b+Rq6nbAB++FYcoGifXcuyn8BsBUisE22jSG84Scf6s=;
+	s=default; t=1768337990;
+	bh=00IcZd5EA+xSBbGEJGYrZdsjZwptpzqxUSApW5935Aw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Fwql651FBQ0DZJQVsmhk2jim26jO1rZcvbQXtvC5r2Eq246P7oj6fE6l9ZUjFMZN/
-	 F5BUQi+kfDySBmjIy37qJf6bxlyufym9qrKYWps4Q2C9+qOPHwbwp7VJkbfjrv6P5R
-	 0oa8q7n3zwqvbdGRqj6AXfnJcOPNjjwbBVBmihIhdMnMJ37itc0x2U4wdFrAB9rTyC
-	 U6q08GzYtpc3Xq5ttXgMtGzCV1e2uHWuwosTNKvAtXtfx8fSHuShJzZEWAqroBxfdc
-	 IQOtfNJ3egv81CE1BRnskow87vV74oJkSDguypHf6+7MBUhunR99fBZtx1iTIM99Z5
-	 aq6tJ2eMsPjog==
+	b=mW2EEHGHvK7iRyd4TJG+8Wno4+HdQaeDc8npO3bNckjTwuA807RbigFXu7POsmsrL
+	 vT2WYQGcN5PpRgIHrnHACDibbwQWFQ4tGncyrkQHudG9//LruFuZiQ8ZmPrlpzMx7v
+	 bFFtRLWSb7mG7U3bjzKcnRqFDqkdHVEaMq8AUa1OqwJ6KKx/L6r/3gja1aFj/OkAC0
+	 nG6ypmHZ0tyTZfW7aUHziutlz3Aqdf5h+BcJ7V8GkegA0JEZScOEvdi1o1TIQue7tf
+	 5t5gALGCxadyQJtUicUUEJ8FK6OJP81RA9WlZzkIO3QTXMqyPYVreag0ogeI+TtjOt
+	 xMbAQplkpRNlw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7E4D83D5D;
-	Tue, 13 Jan 2026 20:59:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CA4983D5D;
+	Tue, 13 Jan 2026 20:59:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BBA06231
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EA705231
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9676E407A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8D0040771
  for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T5rOsSdBbRGl for <buildroot@buildroot.org>;
- Tue, 13 Jan 2026 20:58:49 +0000 (UTC)
+ id C5JHJVtgQRML for <buildroot@buildroot.org>;
+ Tue, 13 Jan 2026 20:58:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDB504075F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1928407B0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDB504075F
- for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1928407B0
+ for <buildroot@buildroot.org>; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BCA5781382; Tue, 13 Jan 2026 20:58:47 +0000 (UTC)
+ id B030E81382; Tue, 13 Jan 2026 20:58:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 13 Jan 2026 21:37:22 +0100
+Date: Tue, 13 Jan 2026 21:37:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 101838aa38a5a8b669b2867897888e82c684698e
-X-Git-Newrev: a9de86eafe232167f569942921f7830cfab900d2
+X-Git-Oldrev: 6f8f5689d310c92535bc84d1a3686653cad3244d
+X-Git-Newrev: 9d3368e8d7e8b8993ad807c6146476fab8b1fd25
 X-Patchwork-Hint: ignore
-Message-Id: <20260113205847.BCA5781382@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXcursor: bump
- version to 1.2.3
+Message-Id: <20260113205848.B030E81382@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libFS: bump version to
+ 1.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9de86eafe232167f569942921f7830cfab900d2
+commit: https://git.buildroot.net/buildroot/commit/?id=9d3368e8d7e8b8993ad807c6146476fab8b1fd25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2024-November/003549.html
-https://lists.x.org/archives/xorg-announce/2024-March/003465.html
-
-Switched _SITE to URL mentioned in latest release notes.
+https://lists.x.org/archives/xorg-announce/2024-August/003524.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 6 +++---
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xlib_libFS/xlib_libFS.hash | 6 +++---
+ package/x11r7/xlib_libFS/xlib_libFS.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-index 11575edbf5..6a0a2eeaf7 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
+index 6ca152ac4a..e88e77b2ce 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.hash
++++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-April/003136.html
--sha256  46c143731610bafd2070159a844571b287ac26192537d047a39df06155492104  libXcursor-1.2.1.tar.xz
--sha512  ebb42a39855aab86d0c11fe6ad33d011cf56a6dc5c309bef643460319c03df239b7e09fe88777bb25c0e9ff8aceac6bf66e51cc04a2d5ee463b3bc3bbf1674e3  libXcursor-1.2.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-November/003549.html
-+sha256  fde9402dd4cfe79da71e2d96bb980afc5e6ff4f8a7d74c159e1966afb2b2c2c0  libXcursor-1.2.3.tar.xz
-+sha512  069a1eb27a0ee1b29b251bb6c2d0688543a791d6862fad643279e86736e1c12ca6fc02b85b8611c225a9735dc00efab84672d42b547baa97304362f0c5ae0b5a  libXcursor-1.2.3.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2022-August/003200.html
+-sha256  597379438b3242ccc7d7b0fc432dc6c844eca0d4a82a7b82518bfeb203fc208a  libFS-1.0.9.tar.xz
+-sha512  7d012e62736c6d567931bad982eec221199d296f0fe41e1e7fde5575b8b928e9a8c644aa8746242bdfe72393635320b58774d9a519285765bd26d633588092b8  libFS-1.0.9.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-August/003524.html
++sha256  9babbd3c86069c98563da044045fdc0ece4ec0c93dcdd2c68aa74eb34b4f3b77  libFS-1.0.10.tar.xz
++sha512  f4dc361b7e1dcc1f348ea86e96c5a60ff40c5168b6097f00d8a5db2b86d089cfca12ac13dbde5ce3b53279b7eb8773ed6dcd9c678c2e95363ffa5127ecaacee7  libFS-1.0.10.tar.xz
  # Locally computed
- sha256  ad2e9d279088c5d612fb0e506ea8bb7d9f01b411e7f4b97b64589c3cd48a68f1  COPYING
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index 4a1ffcce9e..44319cc804 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-@@ -4,9 +4,9 @@
+ sha256  5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index 0fbf453ca4..1311c8df7a 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXCURSOR_VERSION = 1.2.1
-+XLIB_LIBXCURSOR_VERSION = 1.2.3
- XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.xz
--XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXCURSOR_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXCURSOR_LICENSE = MIT
- XLIB_LIBXCURSOR_LICENSE_FILES = COPYING
- XLIB_LIBXCURSOR_INSTALL_STAGING = YES
+-XLIB_LIBFS_VERSION = 1.0.9
++XLIB_LIBFS_VERSION = 1.0.10
+ XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.xz
+ XLIB_LIBFS_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
