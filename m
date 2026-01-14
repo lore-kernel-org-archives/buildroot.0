@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D03EAD39019
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 20:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 385DED3901A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 20:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9624F60DB8;
-	Wed, 14 Jan 2026 20:39:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09ECE60DAA;
+	Wed, 14 Jan 2026 20:40:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3k4eh8NEG6BW; Wed, 14 Jan 2026 20:39:23 +0000 (UTC)
+ id H6iqIzEjuv7k; Wed, 14 Jan 2026 20:40:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CB1E60DA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 328A460D9C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768423163;
-	bh=uU9dJXXEt5zU3js/MTX2/Yhiyz/qpU3SGJDMBkXdOJ0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=IkDCYm7q4eEDKhGber1GtkpjtAjeL3D8J0u7TwHrjGQV0LWBup545wexO+jLroE/1
-	 D2mUZYC4HgcXKTjlYEegGPXCddf+mNuuqu5slJW95opMEMoO6KDvrtPOcqgZIsEy6h
-	 hcG/geNyk9uHkxI9WsEAhUNpAmwtd4fm0xDNO1iu8eP2fDbHjxscCny5l16bqqIsx5
-	 ajHJyO99qNkDu53JjojoGtYv6Z625MZ92Y7Ua2G3DHDCMUhIJAsL3xtgLHEz08auJa
-	 bpDGM5uasv3vx3OGVxTKkMwGqAn0X0kgkxWq7B+a15R2hQY1IEaE492Q7z/6BDTAM2
-	 lnCMO99ycBjjA==
+	s=default; t=1768423214;
+	bh=6pV1/zdpC5P0GqXfEBAxCnTEz7x7/xu0R+FgxeKrbSs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=p5pcyQMfOpg9R/79MgjkEBX1DeBFNmdWrB5hNg+JPTYKv5J5zok1AKTIbrJ9KIj5i
+	 jDUIxDXs8BATcn8c5YfKax5OCheLWT4JtA3MVQ7iB88X6yVoMT0ljD2RZ839ek7//q
+	 pDL5PdLfpUlH6Urt/F/73d4vPEo1sr/9DRAiPn2BAWFcIbj5SK2IDi5ecdgxso27ZX
+	 ihSQcPzCJe1R2DLSNP2CjenMIl3woWAzptjBI/0ooe3Q5fT8Cafu9yo58y/wt1kR4O
+	 eDzGcNMe6rVW+DXaj4JAr2eKXqGwiwQMQP1W+U+U/cCkw+7980ayxDN9sau+QOxNtj
+	 b/2sDaedKRsFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CB1E60DA7;
-	Wed, 14 Jan 2026 20:39:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BAD9232
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:39:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 328A460D9C;
+	Wed, 14 Jan 2026 20:40:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1CE625D
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E535784028
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:39:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3712407D1
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:40:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Ep-nkoPymgH for <buildroot@buildroot.org>;
- Wed, 14 Jan 2026 20:39:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12E6384026
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E6384026
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12E6384026
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:39:17 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id D8F2220039C;
- Wed, 14 Jan 2026 21:39:14 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 14 Jan 2026 21:39:14 +0100
-MIME-Version: 1.0
-Date: Wed, 14 Jan 2026 21:39:14 +0100
-To: Gilles Talis <gilles.talis@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260114155946.70930-3-gilles.talis@gmail.com>
-References: <20260114155946.70930-1-gilles.talis@gmail.com>
- <20260114155946.70930-3-gilles.talis@gmail.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <5349d1b24924a0795efe47b19fc36d90@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1768423156;
- bh=zj2zEZC2PKFbGV3nR2GvYBrktnxeNmMxxb/uuHL5C3A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FwfmDedZg9ccZOAd2kTPxTDT/xu9LUxRXMmhH6xhnP7pMIFAEJAO3vOVttDTc+uNd
- sePbeZuX4rR6WbVmBJ83G8BJ8AN0SkAb0QFLqnCJkKkOEgNBGm4KYg6SYoxZF/uyqH
- p1ueKscOH6HKmQ63yYdmaPLl5+AvEVjUQYLer9crqW9UdssHtlBWNQNduYd10RgGYt
- RVSzG81eb2HQedCvcKC7aYbkdkiIROtPp8Sl3uo/J4G/8SxqhZcZarojZuSmoj25vt
- +IOPBnq4/DleyTLEB9OKXeTnjR/sOv8tnPmCZJnzEDh/2miI3aWm5IlpEl9XKIq8nd
- mg1cu1bX+F/JA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FwfmDedZ
-Subject: Re: [Buildroot] [PATCH] package/xapian: bump to version 1.4.30
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KPviqkwN9o-T for <buildroot@buildroot.org>;
+ Wed, 14 Jan 2026 20:40:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1838406A5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1838406A5
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:40:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C0636885C1; Wed, 14 Jan 2026 20:40:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 14 Jan 2026 21:29:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 517af4da0194e1e6d207c323014d062dcb54498b
+X-Git-Newrev: c183602cb37214e47294cddb785bbb73536b810f
+X-Patchwork-Hint: ignore
+Message-Id: <20260114204010.C0636885C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tesseract-ocr: bump to version
+ 5.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,18 +71,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/01/2026 16:59, Gilles Talis wrote:
-> ChangeLog:
-> https://xapian.org/docs/xapian-core-1.4.30/NEWS
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=c183602cb37214e47294cddb785bbb73536b810f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Change logs, since version 5.5.0:
+https://github.com/tesseract-ocr/tesseract/releases/tag/5.5.1
+https://github.com/tesseract-ocr/tesseract/releases/tag/5.5.2
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+[Julien: update change log links]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/tesseract-ocr/tesseract-ocr.hash | 2 +-
+ package/tesseract-ocr/tesseract-ocr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tesseract-ocr/tesseract-ocr.hash b/package/tesseract-ocr/tesseract-ocr.hash
+index b45e892966..fbc209b892 100644
+--- a/package/tesseract-ocr/tesseract-ocr.hash
++++ b/package/tesseract-ocr/tesseract-ocr.hash
+@@ -1,5 +1,5 @@
+ # locally computed
+-sha256  f2fb34ca035b6d087a42875a35a7a5c4155fa9979c6132365b1e5a28ebc3fc11  tesseract-ocr-5.5.0.tar.gz
++sha256  6235ea0dae45ea137f59c09320406f5888383741924d98855bd2ce0d16b54f21  tesseract-ocr-5.5.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  daa0c97d651c19fba3b25e81317cd697e9908c8208090c94c3905381c23fc047  eng.traineddata
+ sha256  eac01c1d72540d6090facb7b2f42dd0a2ee8fc57c5be1b20548ae668e2761913  fra.traineddata
+diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
+index 81a1e8097c..4f5be993dc 100644
+--- a/package/tesseract-ocr/tesseract-ocr.mk
++++ b/package/tesseract-ocr/tesseract-ocr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TESSERACT_OCR_VERSION = 5.5.0
++TESSERACT_OCR_VERSION = 5.5.2
+ TESSERACT_OCR_DATA_VERSION = 4.1.0
+ TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
+ TESSERACT_OCR_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
