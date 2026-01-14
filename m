@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87786D39014
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 19:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8805D39015
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 19:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF06F8117A;
-	Wed, 14 Jan 2026 19:55:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C20740B02;
+	Wed, 14 Jan 2026 19:55:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r4q3IJndr_hm; Wed, 14 Jan 2026 19:55:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wsyC9Mn7QkYT; Wed, 14 Jan 2026 19:55:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D24648112B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E50D140AE9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768420501;
-	bh=JQQQc14Z0rgLelCuSK7U/iX7UfEWvpyMs7qdzh1SNpU=;
+	s=default; t=1768420503;
+	bh=YXe9VuQXtC/KwZDMRggriwQ2RHYmQI0Jb0sbftsI89c=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=RwyfLzBEyOG4nbbXpKNZZbdlXsT67bSvxgMJLCS/NKRSDpEUylMEEfarVhScciWPf
-	 zzixiIWbUpKSiFdwRSgZejCdychdWUaJJQ3ZD3h+sIjY0C1krf6MUNkUlNDU9ZglDe
-	 ij+Za0Q21XvM2gx9Hey1m93N0oSPyNTSy4FUjFsSDRFfxMpxJg/+YD+0ipdOgl0n42
-	 ynjG8z2eFAIp6xVwPqr7gX+AJRPZrAJFyTPnsmuBWAzzb6VWMYhDFN+CiBhoj0D8Bq
-	 kuuLyMPU6mUsxdsz8gpdsTiLCLFjrwYvgDyyxIhZIuWEEjFFDCMo7MNOZSK8NGZpSL
-	 rRYUN7WqdhzHw==
+	b=skCDzX3aWbEKT096coh3c4gK0YguPV5IQAvrX/UqllYvgX3o5NHHaFu5JpuV0iU8m
+	 UGMVEJrH71ymT0hztYF1z+yh3q5cod4TMZRpnPcMZJ9MwcvdblzbbouxGXlCqAAL1Z
+	 Y2TWadbxofAT21b8k+8LtVq02IYmb5ktHI1cd5nGwRAOCOX16DTjiTAzHbSwIas/Kv
+	 /CYYZtVMyGtx2HSBLEnCjO3dXAm2mJxDtRgKMhspGtBgLIIBfoBObbYYDeHdsYO4Va
+	 CRKszIEywK/FCdwsiNhRviXUTmrL858Qijp2bawrXmWcZ2vCJmUeEODEfzlL/Hh8sU
+	 h+j6GB13i030A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D24648112B;
-	Wed, 14 Jan 2026 19:55:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 74B959E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id E50D140AE9;
+	Wed, 14 Jan 2026 19:55:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 747002F2
  for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5993560BC2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53A38406FE
  for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PdhzGamiWCaK for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r9Ksn7mftBk7 for <buildroot@buildroot.org>;
  Wed, 14 Jan 2026 19:54:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
  helo=smtpcmd15176.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9EF4D60BBF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EF4D60BBF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E51D8406F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E51D8406F9
 Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9EF4D60BBF
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E51D8406F9
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:56 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id g6xAvBAQ9wf0Dg6xBvzgb1; Wed, 14 Jan 2026 20:54:53 +0100
+ id g6xAvBAQ9wf0Dg6xCvzgc4; Wed, 14 Jan 2026 20:54:55 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Jan 2026 20:54:35 +0100
-Message-ID: <20260114195451.3978704-3-giulio.benetti@benettiengineering.com>
+Date: Wed, 14 Jan 2026 20:54:40 +0100
+Message-ID: <20260114195451.3978704-8-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260114195451.3978704-1-giulio.benetti@benettiengineering.com>
 References: <20260114195451.3978704-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfCgihcE5ANmE4LoHgsJ0LdLfOfwXyZ3Wgr7NMVIpSAtKb/gCpuHhOcVSMxAytoPXiqI5fhxDf9hH/9Aico/jP0oh8SMLt12r69TB593xFV12CpUJiwmt
- iVoFKbMBHRwEdRtw+k8RrbLuuXxCxTGgp97TSaP+Qhkb0jMST2CRNv2ZCnezo+D9F+7AKHLxXoKvVVLYS5gdenKcmBwnsA8hDQJYZecQGdpuCEei1zyaoN5L
- WIRs6xIb/ac/arWlhDpTS5YrmAYQjBoM6d1LtjjkdNM/Fbg3i4NRilmcmnrNYL00QzjVKkuhRNkVzBhZrB6aR0IT5qbMcDNDDEnS8zhxKjlz9xPyW1OaWh5t
- pGQELGGZWehu8sRFmI4fLwfYBOMXSGTwEtVweX4OxWANLEdIGPuz4xzRyTtL2ssyOyCKLlXJmIg6Q8tfYxG0mG76UuwiiGOuV0jWRh7Tf7ryOGMsmufeC2Mx
- OCIWZvLYHeWBr+OIvgJDD22Sdok6qgXhQ1IV4NmFWRwf6XImidWQtDBXSkYfAt/CdEOt8TpX/93NQIGz
+X-CMAE-Envelope: MS4xfPAbAqtF48MySqi5n2QEtKiZOfdDNaQ5g6jwTJE/tUu4+rn7SYvPaRNfgU20jx2lI1U8eiOHdbZKpXYhRDLGnHQREdUKQk5Ai99R+OdHqZgmO9MKGKRg
+ ogPDJNLXMyrhwZhNeGk2INZeQoWn3TdwkQ06KwQY5h7Uu1tJw/HPBHZ+Y5Ybwg0o9ZLzjq219dISiPMUMvUA8B42/+hTw70fOJ/nEjjd/zcVGFp9yLK6cwWL
+ 8F1w3K3Iv1ndZZHUpCMxkgdi/rKMm5fer8eV2zY9iH5hQh04QDPgGQ2mJK89G8uvO81RLWQbg7EfFQmTeaLTvBxqk1JA5o4OC/U3r8nhmft5RsEdKQ/7zEsr
+ vIVftwXbdMCus1bZieJKzq6/CJxCYqKThzh91ODxcxawsLtTu/PaMgrcuacQIIBpt4YzpjQ6+RP8ki2Dder3l9WsZ0J1u4CXEyo4qXvsjYPW7AyTd35BjX+R
+ DXQBHIGvWfncIkx0QjgsC53d6I87sWlC/rLdUgpumGZmir3s2wAqUqgllUNYALtaoxwk3JAqwDfwXorE
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1768420493; bh=DubdLoRjQFpKy6I16wYz5B7CvHhvgVvgpmUaSx6ev5o=;
+ t=1768420495; bh=B6g9OCcPsuemu26O2l2DqvQ1sMmcJbKDkGymdhkZjLg=;
  h=From:To:Subject:Date:MIME-Version;
- b=mDrtx4hWNUL6EMvDCdkX1MzisHSy9KUr3E2iuQuoy28mKY0UDUKxPwUrld0HbXTst
- MLw1xRTHctjwCrT3JPrIe7z08EcTFD6i8PIrWxo/WBmAb5GSD+hdBJZMMDqwL4lhvH
- frshGaco6XPFsGsHbRcAPsxhing27fOe1VXw0wWHExRlooKx1b92qsswkKPCG9b6ek
- 2G+I7fOcVwFgKsOk6tu3iPQpCiC0TZ79NYWhbQgIXuT7VRIIzSyvdchVv5SJ/N7qbN
- Xcn417FKE+7nEesonE/LYlKlbbY0aiDglop7eY7i3vLo/dLrfNvWAh9eSyJOCe9pam
- 0kZ6Yb+NXUWkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=PWjjkTXC3ezCKezrHX34XBI+IEnHjqSuCftHif4/g/paU6QpHknAmZ9KdeneN0xCj
+ PebzjSWmR495qc8/ycERD0Iap142Lg0Yj9ZcDMCOYHo09yGFha3ZGbVGMgAZFyYR2w
+ 9vnxqKmSm1POGYP64p8m0ajpch1ye7JHMAg44tjKS8oVAoRvPfpxjUCO84BtW/JtAO
+ V7gkDsrgbXoo+FT1r3zBfb5I84uL9VN+h1zDzcIncLp6A2oybJiDsPwRLlMJXl4gdX
+ I4XDb85joQ0eWhdPeWb73DOoLZVUvem4D/3IIU2oY1uqSQHpLYEkug+4svKLSUbjc+
+ b+LZAAaHTSlqQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=mDrtx4hW
-Subject: [Buildroot] [PATCH 02/17] configs/asus_tinker_rk3288: bump Linux to
- 6.18.5 and U-Boot to 2026.01
+ header.s=a1 header.b=PWjjkTXC
+Subject: [Buildroot] [PATCH 07/17] configs/imx6ullevk: bump Linux to 6.18.5
+ and U-Boot to 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,81 +115,61 @@ The patch:
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- .../tinker/patches/linux-headers/linux-headers.hash   |  1 +
- board/asus/tinker/patches/linux/linux.hash            |  2 ++
- board/asus/tinker/patches/uboot/uboot.hash            |  2 ++
- configs/asus_tinker_rk3288_defconfig                  | 11 +++++++----
- 4 files changed, 12 insertions(+), 4 deletions(-)
- create mode 120000 board/asus/tinker/patches/linux-headers/linux-headers.hash
- create mode 100644 board/asus/tinker/patches/linux/linux.hash
- create mode 100644 board/asus/tinker/patches/uboot/uboot.hash
+ board/freescale/imx6ullevk/patches/linux/linux.hash | 1 +
+ board/freescale/imx6ullevk/patches/uboot/uboot.hash | 1 +
+ configs/imx6ullevk_defconfig                        | 9 ++++++---
+ 3 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/board/asus/tinker/patches/linux-headers/linux-headers.hash b/board/asus/tinker/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/asus/tinker/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/asus/tinker/patches/linux/linux.hash b/board/asus/tinker/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..16cc0b3e4a
---- /dev/null
-+++ b/board/asus/tinker/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
+diff --git a/board/freescale/imx6ullevk/patches/linux/linux.hash b/board/freescale/imx6ullevk/patches/linux/linux.hash
+index b138642633..2e9a100ebc 100644
+--- a/board/freescale/imx6ullevk/patches/linux/linux.hash
++++ b/board/freescale/imx6ullevk/patches/linux/linux.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  2166d92e5631ee11bd249d492a1f4009c7635ee36b835fa55384b4ce41e8a63f  linux-imx-lf-6.12.49-2.2.0.tar.gz
 +sha256  189d1f409cef8d0d234210e04595172df392f8cb297e14b447ed95720e2fd940  linux-6.18.5.tar.xz
-diff --git a/board/asus/tinker/patches/uboot/uboot.hash b/board/asus/tinker/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..60971ee74f
---- /dev/null
-+++ b/board/asus/tinker/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
+diff --git a/board/freescale/imx6ullevk/patches/uboot/uboot.hash b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
+index 5d57adfa22..c8c173d501 100644
+--- a/board/freescale/imx6ullevk/patches/uboot/uboot.hash
++++ b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  212ea4d8d442153ab732ab724282fef64450e9dab5cfe9565eec4f618e305a80  uboot-imx-lf-6.12.49-2.2.0.tar.gz
 +sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index f3a2c4d71d..3c3a362c56 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -1,7 +1,9 @@
+diff --git a/configs/imx6ullevk_defconfig b/configs/imx6ullevk_defconfig
+index 38ea8f6940..c8970c1d20 100644
+--- a/configs/imx6ullevk_defconfig
++++ b/configs/imx6ullevk_defconfig
+@@ -1,13 +1,15 @@
  BR2_arm=y
- BR2_cortex_a17=y
+ BR2_cortex_a7=y
  BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
-+BR2_GLOBAL_PATCH_DIR="board/asus/tinker/patches"
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx6ullevk/patches"
 +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="tinker-rk3288"
- BR2_TARGET_GENERIC_ISSUE="Welcome to TINKER RK3288!"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/asus/tinker/post-build.sh"
-@@ -9,10 +11,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/asus/tinker/genimage.cfg"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.44"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.4"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.5"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-tinker"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3288-tinker"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-@@ -20,11 +22,12 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6ull-14x14-evk"
+@@ -20,9 +22,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 +BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.47.3
 
