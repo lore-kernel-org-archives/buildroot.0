@@ -4,91 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73311D39008
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 19:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379C6D39014
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 19:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECF3540A36;
-	Wed, 14 Jan 2026 19:31:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEE1240AE5;
+	Wed, 14 Jan 2026 19:55:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rdoJ-qupXkcW; Wed, 14 Jan 2026 19:31:55 +0000 (UTC)
+ id SSWyOS_Q7wDd; Wed, 14 Jan 2026 19:54:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0725440942
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A68CB40AE8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768419115;
-	bh=ojfMdCgasr5daGn3iCvL5zt/4K8bxqTJkA5AQtdgqsI=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=NYOltIVQvDdTEVeSBXTxGrQbL3x/wvDF6dw8sq+75oZSMl5e2HZGVA+NamqyJdYUz
-	 NEjmXtKDCsJvo85e5IhhmXELcsCSHdkFF/MhqCGO8ncE5LPDqgehIJQpzXtOj4YITM
-	 kVlTo144mL0TDVTrPdst27Te8TLqK4EojxnNdbPf4hLFjNY1e4oNwCqodYVygKsbvX
-	 owCi7AUoIN+NidaKcYoFz6tcJOl0xPtMSQ67IPldddvXD1QT7nE4Upy9k9Fd+txJYF
-	 X3tDLhD2GK8kMKYhsGzHYD1S3KmxIOzKidBnuEre0Vm0Ytf3SsPLnLuK1KRYWLsxyD
-	 6utUc4MVRpKKg==
+	s=default; t=1768420499;
+	bh=aMAZMtfnwYh9QnXiyFzTZ9ET/koBIwScmPvWUq2kpXA=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=IVk6Mkj1ZPxL7Q8ycQLmq2yh//ZWpT+fAvAwqqoSU0e5tmk6BM1G298EBHMp+EfMV
+	 wttCMZTMHkqxCtWMscXFA2RAsC4flHPHk3G1VEwytxcGgKLfjMcJjpVjm59n7n4Znj
+	 fyIfWcIfukU3SMKiB3FhTOQoqHqeCkFS2KOtCGvqUV3Bzh2T+MqbKkE+bm5fYdyDFa
+	 b4JoJJBa6CeC9NlU4QeNW4JvvE9jgTcwM6PS1870a4Oax2LMrN6VpCJODYPmqPshc5
+	 v/KKsgqHH27wQXEohvRBf4RTS+qZEs8hcC2qTn0rxRqJOS3626YPEdDHVoM/SMDSrK
+	 IB2xYS5xN7DFA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0725440942;
-	Wed, 14 Jan 2026 19:31:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E46B61C3
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:31:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A68CB40AE8;
+	Wed, 14 Jan 2026 19:54:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FD6B232
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D65B940942
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:31:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 516018112B
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZFGu8FLUHV9T for <buildroot@buildroot.org>;
- Wed, 14 Jan 2026 19:31:52 +0000 (UTC)
-X-Greylist: delayed 400 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 14 Jan 2026 19:31:50 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3AFB840939
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AFB840939
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a02:6b8:c02:900:1:45:d181:d204; helo=forward204b.mail.yandex.net;
- envelope-from=tarelovma@yandex.ru; receiver=<UNKNOWN> 
-Received: from forward204b.mail.yandex.net (forward204b.mail.yandex.net
- [IPv6:2a02:6b8:c02:900:1:45:d181:d204])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3AFB840939
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:31:50 +0000 (UTC)
-Received: from forward102b.mail.yandex.net (forward102b.mail.yandex.net
- [IPv6:2a02:6b8:c02:900:1:45:d181:d102])
- by forward204b.mail.yandex.net (Yandex) with ESMTPS id 0494187366
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 22:25:06 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net
- (mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net
- [IPv6:2a02:6b8:c1e:3990:0:640:454b:0])
- by forward102b.mail.yandex.net (Yandex) with ESMTPS id 822EDC0002;
- Wed, 14 Jan 2026 22:24:57 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net
- (smtp/Yandex) with ESMTPSA id EOai5G2GkiE0-lPqVNYVn; 
- Wed, 14 Jan 2026 22:24:57 +0300
-X-Yandex-Fwd: 1
-From: Maxim Tarelov <tarelovma@yandex.ru>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JUuabjBHB8DM for <buildroot@buildroot.org>;
+ Wed, 14 Jan 2026 19:54:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
+ helo=smtpcmd15176.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B93281117
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B93281117
+Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B93281117
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 19:54:56 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id g6xAvBAQ9wf0Dg6xDvzgcH; Wed, 14 Jan 2026 20:54:55 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>,
-	Maxim Tarelov <tarelovma@yandex.ru>
-Date: Wed, 14 Jan 2026 22:24:13 +0300
-Message-ID: <20260114192413.569151-1-tarelovma@yandex.ru>
+Date: Wed, 14 Jan 2026 20:54:41 +0100
+Message-ID: <20260114195451.3978704-9-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260114195451.3978704-1-giulio.benetti@benettiengineering.com>
+References: <20260114195451.3978704-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yandex.ru; s=mail; 
- t=1768418697; bh=XqwCtj5hW20froVnwmGU55YXEeUM+CYrb0kTziXVu8c=;
- h=Message-ID:Date:Cc:Subject:To:From;
- b=DVca2ZX5FOLeO6usEF57Fzyi32zsEwX17RVOV3n4eYCd1JrfwVhkc/aQUUJFQxEK/
- WNVNskM9NfCTwQqXyaK1Opo0qHLEw+qWKEx3ElpKMuLIKi1ZQp7lWxeCU3csNLbhP5
- EKfVuGGKZ31jrqT1M1e+ELKsnb868pJQJj2dfMHU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-CMAE-Envelope: MS4xfPAbAqtF48MySqi5n2QEtKiZOfdDNaQ5g6jwTJE/tUu4+rn7SYvPaRNfgU20jx2lI1U8eiOHdbZKpXYhRDLGnHQREdUKQk5Ai99R+OdHqZgmO9MKGKRg
+ ogPDJNLXMyrhwZhNeGk2INZeQoWn3TdwkQ06KwQY5h7Uu1tJw/HPBHZ+Y5Ybwg0o9ZLzjq219dISiPMUMvUA8B42/+hTw70fOJ/nEjjd/zcVGFp9yLK6cwWL
+ 8F1w3K3Iv1ndZZHUpCMxkgdi/rKMm5fer8eV2zY9iH5hQh04QDPgGQ2mJK89G8uvO81RLWQbg7EfFQmTeaLTvBxqk1JA5o4OC/U3r8nhmft5RsEdKQ/7zEsr
+ vIVftwXbdMCus1bZieJKzq6/CJxCYqKThzh91ODxcxawsLtTu/PaMgrcuacQIIBpt4YzpjQ6+RP8ki2Dder3l9WsZ0J1u4CXEyo4qXvsjYPW7AyTd35BjX+R
+ DXQBHIGvWfncIkx0QjgsC53d6I87sWlC/rLdUgpumGZmir3s2wAqUqgllUNYALtaoxwk3JAqwDfwXorE
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1768420495; bh=599+dW0XvHNHzaoN7bch9TtGpMSO8J/6h3S0aVGRnvM=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=C6NOMf+vPEWOnYxkx7tN0cHk4xPYHcWSNfrJ7ifKEfFmuRm0rlmKMzuoKQAeWvMSy
+ rSZjwbQ87K/u5D85SX7NakKs8cCvi4C54M6FIrvXYvtjKxX9p2YaJtxyQPJJJU7EkW
+ +0A9/QT0pzq5ezLw+JNVn25vwlfwiT/JdxlIT/fiC9IC1dB369bibDqGdh+htR9AEe
+ uoZr+BEmhgOa4s5jznxVCZj7GyWMOV1k3ArSzd4FNjDBI/PWg2FCOs/Xw/lJHe5xqz
+ xL7Ht7etLfI//c+i+EnH+Ub7vPFjupZZ4mSOy+ylWRYctUutYpawq/d2ZkngDSexU1
+ QR6XJ0l+8VTCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=yandex.ru
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=yandex.ru header.i=@yandex.ru header.a=rsa-sha256
- header.s=mail header.b=DVca2ZX5
-X-Mailman-Original-Authentication-Results: mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net;
- dkim=pass header.i=@yandex.ru
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: kirk needs python3
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=C6NOMf+v
+Subject: [Buildroot] [PATCH 08/17] configs/mangopi_mq1rdw2: bump Linux to
+ 6.18.5 and U-Boot to 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,51 +95,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Leon Anavi <leon.anavi@konsulko.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Fabrice Goucem <fabrice.goucem@oss.nxp.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Lothar Felten <lothar.felten@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LTP project contains a number of scripts, such as kirk, which depend on
-python3, but not all boards _defconfigs enable python3 by default.
+The patch:
+* bumps Linux kernel to version 6.18.5
+* bumps U-Boot to version 2026.01
+* forces check hashes
+* switches to extlinux
 
-To avoid errors like this:
- # /usr/lib/ltp-testsuite/kirk
- env: can't execute 'python3': No such file or directory
-
-we must explicitly enable python3 when selecting LTP.
-
-Signed-off-by: Maxim Tarelov <tarelovma@yandex.ru>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/ltp-testsuite/Config.in        | 1 +
- package/ltp-testsuite/ltp-testsuite.mk | 2 ++
- 2 files changed, 3 insertions(+)
+ .../mq1rdw2/patches/linux-headers/linux-headers.hash     | 1 +
+ board/mangopi/mq1rdw2/patches/linux/linux.hash           | 2 ++
+ board/mangopi/mq1rdw2/patches/uboot/uboot.hash           | 2 ++
+ configs/mangopi_mq1rdw2_defconfig                        | 9 ++++++---
+ 4 files changed, 11 insertions(+), 3 deletions(-)
+ create mode 120000 board/mangopi/mq1rdw2/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/mangopi/mq1rdw2/patches/linux/linux.hash
+ create mode 100644 board/mangopi/mq1rdw2/patches/uboot/uboot.hash
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 81dc9dffee..0ddc2fe02c 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_PYTHON3
- 	help
- 	  The Linux Test Project provides a huge testsuite for Linux.
- 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index e4e3ff8717..c103ac9819 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -13,6 +13,8 @@ LTP_TESTSUITE_LICENSE_FILES = COPYING
- 
- LTP_TESTSUITE_CONF_OPTS += --disable-metadata
- 
-+LTP_TESTSUITE_DEPENDENCIES += python3
-+
- ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX),y)
- LTP_TESTSUITE_CONF_OPTS += --with-open-posix-testsuite
- endif
+diff --git a/board/mangopi/mq1rdw2/patches/linux-headers/linux-headers.hash b/board/mangopi/mq1rdw2/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/mangopi/mq1rdw2/patches/linux/linux.hash b/board/mangopi/mq1rdw2/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..9f5d285c35
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  189d1f409cef8d0d234210e04595172df392f8cb297e14b447ed95720e2fd940  linux-6.18.5.tar.xz
+diff --git a/board/mangopi/mq1rdw2/patches/uboot/uboot.hash b/board/mangopi/mq1rdw2/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..b6a925ea4e
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
+diff --git a/configs/mangopi_mq1rdw2_defconfig b/configs/mangopi_mq1rdw2_defconfig
+index 2249fa4be5..68cd82e1a8 100644
+--- a/configs/mangopi_mq1rdw2_defconfig
++++ b/configs/mangopi_mq1rdw2_defconfig
+@@ -1,7 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
++BR2_GLOBAL_PATCH_DIR="board/mangopi/mq1rdw2/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="mangopi-mq1rdw2"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to MangoPI MQ1RDW2"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+@@ -12,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/mangopi/mq1rdw2/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-t113s-mangopi-mq-r-t113"
+@@ -31,11 +33,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01-rc4"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mangopi_mq_r"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.47.3
 
