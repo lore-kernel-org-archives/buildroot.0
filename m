@@ -4,86 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E33B1D39011
-	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 20:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E450DD39013
+	for <buildroot@archiver.kernel.org>; Wed, 14 Jan 2026 20:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF09A60BEF;
-	Wed, 14 Jan 2026 20:16:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2F9E60C03;
+	Wed, 14 Jan 2026 20:20:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wq0fcXYP33oQ; Wed, 14 Jan 2026 20:16:25 +0000 (UTC)
+ id DsR_LxscpQQP; Wed, 14 Jan 2026 20:20:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9BE560BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D270060C07
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768421784;
-	bh=w2eNPm113fbOi+NhpCf+GjFXWJptLHwzTd8p/WaAGb8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ifWbzsxHO3kZ6SBGyeygL0aLDRQNlInx2hgKsOkKyyh4RgEcqBPh4P79Dx7CArmvJ
-	 PLD1lECtRsSOrZKNFSYNBW6R3yRlZyVeFRrCbyHNVA/RVVpXxIF+yQUc5TpOy9R1UW
-	 6jqUUCW7OUVN8m3qM0xnQqyJ1mhP3dc7nVi5Pk2e8KOyTS8w1Ds+2FpfQoftOzK2pv
-	 c12fKVQrKEGZY/blAjGu0EKm+Ogwqh72LFTwQlqVhXDkkTkwU/6Mg7rx1Vn7Aus4mj
-	 dXC0ip12lkqn8ddy74uzf+E1YbGalhp6hNewqMU3DimQfKXZnzz43eIZaEz325JjyJ
-	 AHBEeixbzTYLA==
+	s=default; t=1768422055;
+	bh=jmdkteKcUn2nSfgoIUQeNbvmeIdgQmt0iJWCF8xpH2Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=kVaoBvQpDUMMH1euqAqrAT+XamlgEBs9h16sE4NwP5Hiv3BXRILSBjwVTLqtQxIjS
+	 QoNVGJnntWNWZZN7gMiaawc5SfRLq8fIR1SnbPBINAbDK2O4K7PtqePyTUnbxnohfi
+	 Y/4X+IoaqTeZgATsHWxb3YpohLBz484oz0FlV7jTee6Ke/HYLVEgP92JfGGHblvLhh
+	 YQn/0Q2iIqr01ugQ06vkLPzrXdv9loFqmd1fmxcR6uw0tHO4E6XP0Y21D9/hFRovdP
+	 Jg2ryRrluuarVk96oh8yZyZq9VCwblzdxe5t67UjIrnHYT0xVG1MKB1Rfqcr4R4tzg
+	 pqYpSZasz/Vnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9BE560BF2;
-	Wed, 14 Jan 2026 20:16:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B3FA232
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:16:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D270060C07;
+	Wed, 14 Jan 2026 20:20:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C4C41C3
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F01DC833AE
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:16:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D90460C07
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:20:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IbfH77QKnJLc for <buildroot@buildroot.org>;
- Wed, 14 Jan 2026 20:16:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6723783FA6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6723783FA6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6723783FA6
- for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:16:21 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id AB9EAB0051E;
- Wed, 14 Jan 2026 21:16:13 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 14 Jan 2026 21:16:13 +0100
-MIME-Version: 1.0
-Date: Wed, 14 Jan 2026 21:16:13 +0100
-To: Bernd Kuhls <bernd@kuhls.net>, Thomas Perale <thomas.perale@mind.be>,
- Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org, Dick Olsson <hi@senzilla.io>, Fabio Urquiza
- <fabiorush@gmail.com>
-In-Reply-To: <20260112210929.3767530-1-bernd@kuhls.net>
-References: <20260112210929.3767530-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <249b604fb4e11c43ee3813eafdc765cd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1768421779;
- bh=vp4EmPS2kUEsGmS5WQe+KGCRPwY966ijEjwOfwxsLhs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ePfDV9CqC8C+ISLeS1OBdmmWvSV3wKKK9Lq1uER1l2c7KyQvcjMcrC4TFEleTsZlL
- lmcAApvVYy9mTAkkb3nLO7Nly16Ubcqp0LvxrVChSriEmaVTjMs3GJUczyNQSlXETJ
- w/zsG+a5/4+vjc541HfOAY19xRMsh7tqmlStEdx+k2d/0nb3K9aZta5ggvUJOgGncZ
- tGVKXTCPhET5eYr9pPfmySLecqFyfdn+rRw/XREnpd8NSuHRYKVExZ3ulCKPQaDgix
- +xg7eHplqeM8lenF71VpFgyI4wHOz/F0hiTOB76/8EgXT0WBXH+TDsGPn6tMyv7rw5
- 2IHdVcuYWZdIg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ePfDV9Cq
-Subject: Re: [Buildroot] [PATCH 1/1] package/bitcoin: bump to version 30.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DX3HJ9fdvfsp for <buildroot@buildroot.org>;
+ Wed, 14 Jan 2026 20:20:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1C6C60C08
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C1C6C60C08
+ for <buildroot@buildroot.org>; Wed, 14 Jan 2026 20:20:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A534D885D1; Wed, 14 Jan 2026 20:20:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 14 Jan 2026 21:16:40 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f4d619a4ca82f8c179f083f44895888b5880b97
+X-Git-Newrev: 73ab737a25a3e08c48920873280323d0f62330b2
+X-Patchwork-Hint: ignore
+Message-Id: <20260114202053.A534D885D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/privoxy: bump version to 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,35 +70,71 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=73ab737a25a3e08c48920873280323d0f62330b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 12/01/2026 22:09, Bernd Kuhls wrote:
-> https://bitcoincore.org/en/releases/30.2/
-> 
-> Updated license hash due to copyright year bump:
-> https://github.com/bitcoin/bitcoin/commit/ed0774bd08b83813f162be33672b7d6c7fff9933
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob;f=ChangeLog;h=4a45820271febac332f183dd763749393dc97adf;hb=ad5cec777f1180c28f6fa229f4b587a2f245adf1
+"- Removed support for pcre1."
 
-I applied this patch to master. I added a link to the blog post about 
-the wallet
-migration bug fix and the explanation why the 30.0 and 30.1 source 
-archives were
-removed. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/2f4d619a4ca82f8c179f083f44895888b5880b97
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/privoxy/Config.in    | 2 +-
+ package/privoxy/privoxy.hash | 6 +++---
+ package/privoxy/privoxy.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Also, I would like to point out to the LTS maintainers Thomas and 
-Titouan that this patch is a
-candidate for branches containing bitcoin-30.0.
-
-Best regards,
-
-Julien.
+diff --git a/package/privoxy/Config.in b/package/privoxy/Config.in
+index 4138c0d281..d1133976e4 100644
+--- a/package/privoxy/Config.in
++++ b/package/privoxy/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PRIVOXY
+ 	bool "privoxy"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_PCRE2 if !BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A non-caching web proxy with advanced filtering capabilities
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 3c96c5644e..cfb6f5a5c8 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/ijbswa/files/Sources/4.0.0%20%28stable%29/
+-sha1  d302cb0bf23536e67a1b5505d01486a335d9c4c0  privoxy-4.0.0-stable-src.tar.gz
++# From https://sourceforge.net/projects/ijbswa/files/Sources/4.1.0%20%28stable%29/
++sha1  6afc12dc38781a37670c7e4bb69700900123084f  privoxy-4.1.0-stable-src.tar.gz
+ # Locally computed
+-sha256  c08e2ba0049307017bf9d8a63dd2a0dfb96aa0cdeb34ae007776e63eba62a26f  privoxy-4.0.0-stable-src.tar.gz
++sha256  23e4686e5848c74cb680c09c2811f0357739ecfe641f9c4072ee42399092c97b  privoxy-4.1.0-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index 64e8fb24db..bfd4996292 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-PRIVOXY_VERSION = 4.0.0
++PRIVOXY_VERSION = 4.1.0
+ PRIVOXY_SITE = https://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
+ PRIVOXY_AUTORECONF = YES
+-PRIVOXY_DEPENDENCIES = $(if $(BR2_PACKAGE_PCRE2),pcre2,pcre) zlib
++PRIVOXY_DEPENDENCIES = pcre2 zlib
+ PRIVOXY_LICENSE = GPL-2.0+
+ PRIVOXY_LICENSE_FILES = LICENSE
+ PRIVOXY_CPE_ID_VENDOR = privoxy
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
