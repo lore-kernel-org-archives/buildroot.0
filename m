@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA3ACCF2D1
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 10:01:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A86ECCF2D4
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 10:01:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C513081E32;
-	Mon, 19 Jan 2026 10:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDA0E4050F;
+	Mon, 19 Jan 2026 10:01:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y417yBdfQsx8; Mon, 19 Jan 2026 10:01:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3gKPAjwj42XW; Mon, 19 Jan 2026 10:01:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 408CA81E6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03F5640520
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816871;
-	bh=4BD3KBbypUHN31r+xqMsZu3uQdukNP/FNpRY9oVoqXs=;
+	s=default; t=1768816874;
+	bh=vXbzOjWTlyqMrKLM4VsZ7UUhzdC62tPXFk/7YIC/IbE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=f1wWjMptA1HJPJ6DezjN7sjglgmBl+1xX4pfWzYQPFVI/kq6nCDYSW4AowWutcKC3
-	 H8VG2wC3UG2XXSnfTC3q7WSePVakYaWXB5zDIPnpXxFhBIoD/DgFuGlMfKS5gtI6Zb
-	 pWrghWkvfDMHZjAdG/drfRGaZ5Dvj/UF3fIaOmQW+PplcPiQsljOTc5k3ZXuc/+pSZ
-	 QPKQegdv+u8vA8DkExshv9htg51j1kN3awGxDaHDbsdJi+urC/d00BFUBdqaWNd6wI
-	 KiHk6iXv5duUnEyhK4Viii9YW+FV4/HBs0kmD/iACH183Y5oyNZ5W6XrbfhWQ79j0m
-	 QmBIulNtRu3DQ==
+	b=BWnUrcPjpqioHxgk/JoHbJJDqsAzSbYfFntHGpxkIlIxxV19qYNC4gxefOkBLCn/f
+	 VGNUlVrw+XIZfBchvdP/qF2sEvH4v9/Qj4GpG3EJj4M2DWtAR63TpedbOaeynEETZV
+	 vmB/BeuOG6jl3pNEnsXg+eA9CbVf/MPnvp8p27E5fMIPPPm3VgldehBTgyh5B5g7DO
+	 Wa67kz2WQ8SwTRhDYqVcfHLPd0It6jUT+y6l/4vm9WQDnBCOCx6wEKFxtQHL9M9zir
+	 otcxnVuIzaTVYJYVSczO1NQ5OhV9Wqp1VNvGJEW40cfCSx09Jksdr4iMwhsN2FdxeD
+	 46u6fAgw4V7LQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 408CA81E6A;
-	Mon, 19 Jan 2026 10:01:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03F5640520;
+	Mon, 19 Jan 2026 10:01:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 42E1F2CE
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:00:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5564D160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26A3F406D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87918406CA
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:00:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZZ6P6i4QigVm for <buildroot@buildroot.org>;
+ id 8dVSrLbvFfnp for <buildroot@buildroot.org>;
  Mon, 19 Jan 2026 10:00:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5DE5406D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC5C4406DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5DE5406D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC5C4406DB
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:00:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A5067885CF; Mon, 19 Jan 2026 10:00:40 +0000 (UTC)
+ id DB67F885F0; Mon, 19 Jan 2026 10:00:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:18:23 +0100
+Date: Thu, 15 Jan 2026 09:28:52 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 09e041bdf8ec92d6d2996142f2690ad5952ce3d0
-X-Git-Newrev: 845eb6c33d015846094d770f71ddd0b5e55d837f
+X-Git-Oldrev: e35028d7088d2c7d5b32ff1b7b00de73c6a9e4ec
+X-Git-Newrev: dc3e25cbeefe404ec726794ee99de971762da0ae
 X-Patchwork-Hint: ignore
-Message-Id: <20260119100040.A5067885CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/vlc: security
- bump to version 3.0.23
+Message-Id: <20260119100040.DB67F885F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/xen: xen tools
+ need coreutils stat at runtime
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,63 +72,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0088629346459772051=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=845eb6c33d015846094d770f71ddd0b5e55d837f
+--===============0088629346459772051==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=dc3e25cbeefe404ec726794ee99de971762da0ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-https://code.videolan.org/videolan/vlc/-/blob/3.0.23/NEWS
-"Security:
- * Fix null deref in libass, undefined shift in theora and cc-708,
-   integer overflow in daala, Infinite loop in h264 parsing, buffer
-   overflow in png and multiple format-overflows"
+Xen tools scripts need the stat program from coreutils to work
+correctly, and not the one from busybox.
+One such example is the /etc/xen/scripts/locking.sh script, which will
+cause timeouts for operations such as "xl block-attach", or when
+starting a DomU with a disk.
 
-https://code.videolan.org/videolan/vlc/-/tags/3.0.23
-"It also adds a small feature on audio codec information, and fixes extra
- security issues compared to the numerous we fixed in 3.0.22."
+Add the dependency on coreutils to fix this.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9c3d4008166e52e13e774f5b21b40ce4f75429cb)
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Alistair Francis <alistair@alistair23.me>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit ca23f860d1d5ed83cfa5eece8911d26a593b2f3e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/vlc/vlc.hash | 8 ++++----
- package/vlc/vlc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/xen/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 6733a870b1..9634ba3f1f 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha256
--sha256  e2cc1cf0ae0902a09da5a37c249a8a4e4b5ec4dc095443b8e1493c6a7cc138ea  vlc-3.0.22.tar.xz
--# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha1
--sha1  f9871439cdb281e18a78828c389cf7bf66d47d69  vlc-3.0.22.tar.xz
-+# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha256
-+sha256  e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0  vlc-3.0.23.tar.xz
-+# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha1
-+sha1  7b8c00a9c5bb879a403d5328c99924eefe01739a  vlc-3.0.23.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 81783c99ed..a878a78181 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/xen/Config.in b/package/xen/Config.in
+index 70a06f3cbf..e8168ca8c8 100644
+--- a/package/xen/Config.in
++++ b/package/xen/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_XEN_TOOLS
+ 	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_BASH # runtime (scripts)
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # bash
++	select BR2_PACKAGE_COREUTILS # runtime (stat)
+ 	help
+ 	  The Xen tools can be accessed by the xl command.
  
--VLC_VERSION = 3.0.22
-+VLC_VERSION = 3.0.23
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+
+--===============0088629346459772051==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0088629346459772051==--
