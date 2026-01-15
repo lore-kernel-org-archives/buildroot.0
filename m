@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFE7CCF2D4
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48E70CCF2D5
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6A8B81DB2;
-	Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E1F460DAD;
+	Mon, 19 Jan 2026 09:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GW9atD6Mk_QZ; Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UbesRY32wWG5; Mon, 19 Jan 2026 09:59:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11CD581D65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39FA360DE9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816756;
-	bh=RCo3KTArSOIUFEEseyciAgSUpZ09C/DUpyGmbiet5Eg=;
+	s=default; t=1768816757;
+	bh=VowLEGENYfjDiRzJCOLE3xt85dh41mAnsJvXXAIws3g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fwDB2ZdCtu6kM93n52mXnH9vfUSq/ljSQ4STYgdLyEpiMuyI5eKAwJkU0WV9yIjA9
-	 AkDIREhqAeO8BWf8dfS65i80Ev0q0H5/BtVIiC+r4YrPGOvrJDa4Cm5GKStyfhmSpI
-	 GZ2sJHvKlr/XhJEcAvzy3TfUNgTJQILJ78bUpVwgNJJeXMKknMLMJA702qguXt5nV+
-	 01vuFEb8bvH+izyGE8V41Vw3rzmEUgtIf+benDCTzohnmcdP3s9iYynyb+NqPz0kNT
-	 76G2/8a3JbDisg82kZq9aENUfD3LNr02h2+v84iog73wqdKKb31tvM1LLrevpPSfsb
-	 cymr3ASfoDi3A==
+	b=VaQcUOXqQ5G9J5s70RlvS5wOvdOPwYwjvrZfqBwyRKRKACX4+EbMYTufathx79JVP
+	 KOsY0MAfMFMtEz0XqVr4tR2okw0+zOykWa3McscWNZXm8Oi5hd/IN8TFjDsz1hZKZ3
+	 7nBrAOY43yrzpDglSx+0xiPY5WBIkhglVxvuX4Vbfo6Hu6IQRWKIpkrr2a50Db01aF
+	 i8HzkCnsPKgqQyD54riCRSVT/CDXgogsZUcHSjoh46gVrQvYwuoA6T5fNCY3kHA6oj
+	 B6xrdyCOerj8wKtCqPg++TFKsehEbl+k0nN4L6X0DTUEpvG8caCXwZoy0Uw4JwZzvL
+	 LSPduaZOVdxWw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11CD581D65;
-	Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 057812CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39FA360DE9;
+	Mon, 19 Jan 2026 09:59:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 105AA347
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F65B40CEB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15FC4406D2
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GBGDvn1QlEF8 for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BsxyaECQyIjq for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB02F40CE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D5EA406D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB02F40CE3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D5EA406D5
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C960688673; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id 8AEDA88679; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:36:08 +0100
+Date: Thu, 15 Jan 2026 09:32:28 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a84c83d2962a7e5fd08b408e1248bdf2455163ab
-X-Git-Newrev: dd2122c6f095100110d7bf68daf81bf099dc4a60
+X-Git-Oldrev: d64f13754f962920201362011aeeb5c12a307008
+X-Git-Newrev: 28a171568993141ef0d3e3f43933153bcdafae2a
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.C960688673@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] docs: use https for
- documentation links
+Message-Id: <20260119095850.8AEDA88679@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: bump to
+ 1.0.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,88 +77,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd2122c6f095100110d7bf68daf81bf099dc4a60
+commit: https://git.buildroot.net/buildroot/commit/?id=28a171568993141ef0d3e3f43933153bcdafae2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Switch a handful of documentation/website links from http to https.
+Changes in this release:
 
-Signed-off-by: Preyas Sharma <preyas17@zohomail.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 71f2cc70025e30883152ff7b8899fec8dea3d2f6)
+Julian Vetter (1):
+      libc: kvx: add {get,set,swap,make}context functions
+
+Waldemar Brodkorb (6):
+      Add glibc internal macros for 64 Bit architectures
+      fix verbose output with make 4.4.1
+      nds32: add missing define for TLS
+      NPTL: remove attribute_protected from function
+      add gettid syscall wrapper
+      bump version for 1.0.56 release
+
+tinyusbboard .matrixstorm (1):
+      avoid crashes in statical linked binaries when dlopen()
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f82f5fe177b7f884d424c7ce22aff670ed13f359)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- README                       |  2 +-
- docs/website/contribute.html | 10 +++++-----
- docs/website/download.html   |  4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/README b/README
-index 008e996f5f..143b476be6 100644
---- a/README
-+++ b/README
-@@ -3,7 +3,7 @@ Linux systems through cross-compilation.
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 56174a33b8..6a96e57069 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
+-sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.56/uClibc-ng-1.0.56.tar.xz.sha256
++sha256  23c9cab54c113e020fb20b9dc06be4a49560df791b78fcbc2ca899a6e8f213dd  uClibc-ng-1.0.56.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0c303d77f8..e1cf12fa68 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- The documentation can be found in docs/manual. You can generate a text
- document with 'make manual-text' and read output/docs/manual/manual.text.
--Online documentation can be found at http://buildroot.org/docs.html
-+Online documentation can be found at https://buildroot.org/docs.html
- 
- To build and use the buildroot stuff, do the following:
- 
-diff --git a/docs/website/contribute.html b/docs/website/contribute.html
-index 52c30d60d3..115b1fd8b8 100644
---- a/docs/website/contribute.html
-+++ b/docs/website/contribute.html
-@@ -14,22 +14,22 @@
-       <ul>
- 	<li>Reproducing, analyzing and fixing bugs from our
- 	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a></li>
--	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
-+	<li>Analyzing and fixing <a href="https://autobuild.buildroot.org/">
- 	    autobuild failures</a></li>
- 	<li>Reviewing and testing patches sent by other developers. See the
--	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
-+	  <a href="https://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	  </a> or <a href="https://patchwork.ozlabs.org/project/buildroot/list/">
- 	    patchwork</a>.</li>
- 	<li>Working on items from the
--	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
--	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
-+	  <a href="https://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
-+	<li><a href="https://buildroot.org/manual.html#submitting-patches">Submitting
- 	  your own patches</a> through the
- 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	</a></li>
-       </ul>
- 
-       <p>For more details on these topics, check out the
--	<a href="http://buildroot.org/manual.html#_contributing_to_buildroot">
-+	<a href="https://buildroot.org/manual.html#_contributing_to_buildroot">
- 	  Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
- 
-       <p>If you need any support yourself, have a look at <a href="./support.html">
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 501fcc68f8..ba7fc5b686 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -111,7 +111,7 @@
-       </div>
- -->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
--      <a href="/downloads/">http://buildroot.net/downloads/</a>.
-+      <a href="/downloads/">https://buildroot.org/downloads/</a>.
-     </div>
-   </div>
- 
-@@ -136,7 +136,7 @@
-       </div><br>
- 
-       <p>If you are not already familiar with using Git, we recommend
--	you visit <a href="http://git-scm.org">the Git
-+	you visit <a href="https://git-scm.org">the Git
- 	website</a>.</p>
- 
-       <p>Once you've checked out a copy of the source tree, you can
+-UCLIBC_VERSION = 1.0.55
++UCLIBC_VERSION = 1.0.56
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
