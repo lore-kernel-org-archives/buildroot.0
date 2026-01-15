@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24046CCF2D1
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFE7CCF2D4
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA49D40D3E;
-	Mon, 19 Jan 2026 09:59:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6A8B81DB2;
+	Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oao6mESxpRnK; Mon, 19 Jan 2026 09:59:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GW9atD6Mk_QZ; Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1BA640D19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11CD581D65
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816755;
-	bh=SI/gehKS0sB93UWfSKBZbWjua2QUkh0lYJrSw+eDYcY=;
+	s=default; t=1768816756;
+	bh=RCo3KTArSOIUFEEseyciAgSUpZ09C/DUpyGmbiet5Eg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BDq+lMCGEkZZnhxdgbDKhBzmWzxpXqW/OUrd66L8Fuva3y6iaVmAG83kEQj/MpdTy
-	 WQFT7ze4FeZFVQaX3gQGSld3/P3DbNWUacd2YZT2+yrErqpj1ZpyrSuzQ30Ei7yp7d
-	 IxIqqza9Bd9b3n8t+MleYTNG7G5oNdfZDXXlSFZ5L5yxzSj03aIo2kuAAToaJTSnUT
-	 +bl5v/rHFrCSuCHpCN7Z6dVdOLqQLvdLOGreIuA40CGypT487OERsFudpeZoIytgFg
-	 bTjdnG4sm/p9+BDC4jFe1uv1wF4CpPkptPx73iQqKjgB3DtXv26cU2pYIY5oiXqpWZ
-	 oyV0ElNH60vfA==
+	b=fwDB2ZdCtu6kM93n52mXnH9vfUSq/ljSQ4STYgdLyEpiMuyI5eKAwJkU0WV9yIjA9
+	 AkDIREhqAeO8BWf8dfS65i80Ev0q0H5/BtVIiC+r4YrPGOvrJDa4Cm5GKStyfhmSpI
+	 GZ2sJHvKlr/XhJEcAvzy3TfUNgTJQILJ78bUpVwgNJJeXMKknMLMJA702qguXt5nV+
+	 01vuFEb8bvH+izyGE8V41Vw3rzmEUgtIf+benDCTzohnmcdP3s9iYynyb+NqPz0kNT
+	 76G2/8a3JbDisg82kZq9aENUfD3LNr02h2+v84iog73wqdKKb31tvM1LLrevpPSfsb
+	 cymr3ASfoDi3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1BA640D19;
-	Mon, 19 Jan 2026 09:59:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11CD581D65;
+	Mon, 19 Jan 2026 09:59:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F1E02CE
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 057812CE
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA25240CE5
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F65B40CEB
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S_Dw9KS8blyF for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id GBGDvn1QlEF8 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68F8240CEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB02F40CE3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68F8240CEB
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB02F40CE3
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65E9688679; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id C960688673; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:27:16 +0100
+Date: Thu, 15 Jan 2026 09:36:08 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9606a6d0336f43a2aef0654ea93eecf572f716cc
-X-Git-Newrev: 460748400820b0602eb8e568b76e96358189ac42
+X-Git-Oldrev: a84c83d2962a7e5fd08b408e1248bdf2455163ab
+X-Git-Newrev: dd2122c6f095100110d7bf68daf81bf099dc4a60
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.65E9688679@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] linux: bump CIP kernel to
- version 5.10.246-cip66
+Message-Id: <20260119095850.C960688673@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] docs: use https for
+ documentation links
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,101 +77,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=460748400820b0602eb8e568b76e96358189ac42
+commit: https://git.buildroot.net/buildroot/commit/?id=dd2122c6f095100110d7bf68daf81bf099dc4a60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Added Upstream: tag to patch.
+Switch a handful of documentation/website links from http to https.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fd2555ecfdc682201cc2081d0f9249f70a1f4022)
+Signed-off-by: Preyas Sharma <preyas17@zohomail.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 71f2cc70025e30883152ff7b8899fec8dea3d2f6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                               | 1 -
- .../0001-arch-microblaze-mm-init.c-fix-build.patch                | 4 ++--
- linux/Config.in                                                   | 8 ++++----
- linux/linux.hash                                                  | 4 ++--
- 4 files changed, 8 insertions(+), 9 deletions(-)
+ README                       |  2 +-
+ docs/website/contribute.html | 10 +++++-----
+ docs/website/download.html   |  4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 7de7fb12ac..285aeb3a06 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -188,7 +188,6 @@ configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
- configs/visionfive_defconfig lib_defconfig.ForceCheckHash
- configs/wandboard_defconfig lib_defconfig.ForceCheckHash
- configs/warp7_defconfig lib_defconfig.ForceCheckHash
--linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch lib_patch.Upstream
- package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch lib_patch.Upstream
- package/4th/0001-avoid-regen-during-install.patch lib_patch.Upstream
- package/acl/0001-Build-with-old-GCC-versions.patch lib_patch.Upstream
-diff --git a/linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch b/linux/5.10.246-cip66-rt29/0001-arch-microblaze-mm-init.c-fix-build.patch
-similarity index 93%
-rename from linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch
-rename to linux/5.10.246-cip66-rt29/0001-arch-microblaze-mm-init.c-fix-build.patch
-index 4760d9e4fb..d1124f4cda 100644
---- a/linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch
-+++ b/linux/5.10.246-cip66-rt29/0001-arch-microblaze-mm-init.c-fix-build.patch
-@@ -13,9 +13,9 @@ arch/microblaze/mm/init.c:71:2: error: #endif without #if
- Fixes:
-  - http://autobuild.buildroot.org/results/27291870cf7539d26e45c45f34322d24a6dbca33
+diff --git a/README b/README
+index 008e996f5f..143b476be6 100644
+--- a/README
++++ b/README
+@@ -3,7 +3,7 @@ Linux systems through cross-compilation.
  
-+Upstream: sent to Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-+
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: sent to
--Sebastian Andrzej Siewior <bigeasy@linutronix.de>]
- ---
-  arch/microblaze/mm/init.c | 1 +
-  1 file changed, 1 insertion(+)
-diff --git a/linux/Config.in b/linux/Config.in
-index a589d8cb38..fb21c3f513 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ The documentation can be found in docs/manual. You can generate a text
+ document with 'make manual-text' and read output/docs/manual/manual.text.
+-Online documentation can be found at http://buildroot.org/docs.html
++Online documentation can be found at https://buildroot.org/docs.html
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (5.10.162-cip24)"
-+	bool "Latest CIP SLTS version (5.10.246-cip66)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
-@@ -55,7 +55,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	  https://www.cip-project.org
+ To build and use the buildroot stuff, do the following:
  
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
--	bool "Latest CIP RT SLTS version (5.10.162-cip24-rt10)"
-+	bool "Latest CIP RT SLTS version (5.10.246-cip66-rt29)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
-@@ -138,8 +138,8 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "6.12.65" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-+	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5585746d5a..658b6d9647 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -10,8 +10,8 @@ sha256  fd218df8e2107a4443b6c29fef7f95aad167031e0fbdbc7a858ae8471360668a  linux-
- sha256  70c8b87ba1fcd8bfa663661934dc9bda92d0b5f3c0fc3197bb56399f69d9fe0c  linux-5.10.247.tar.xz
- sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
- # Locally computed
--sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
--sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-+sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
-+sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
+diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+index 52c30d60d3..115b1fd8b8 100644
+--- a/docs/website/contribute.html
++++ b/docs/website/contribute.html
+@@ -14,22 +14,22 @@
+       <ul>
+ 	<li>Reproducing, analyzing and fixing bugs from our
+ 	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a></li>
+-	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
++	<li>Analyzing and fixing <a href="https://autobuild.buildroot.org/">
+ 	    autobuild failures</a></li>
+ 	<li>Reviewing and testing patches sent by other developers. See the
+-	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
++	  <a href="https://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
+ 	  </a> or <a href="https://patchwork.ozlabs.org/project/buildroot/list/">
+ 	    patchwork</a>.</li>
+ 	<li>Working on items from the
+-	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
+-	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
++	  <a href="https://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
++	<li><a href="https://buildroot.org/manual.html#submitting-patches">Submitting
+ 	  your own patches</a> through the
+ 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
+ 	</a></li>
+       </ul>
  
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+       <p>For more details on these topics, check out the
+-	<a href="http://buildroot.org/manual.html#_contributing_to_buildroot">
++	<a href="https://buildroot.org/manual.html#_contributing_to_buildroot">
+ 	  Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
+ 
+       <p>If you need any support yourself, have a look at <a href="./support.html">
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 501fcc68f8..ba7fc5b686 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -111,7 +111,7 @@
+       </div>
+ -->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+-      <a href="/downloads/">http://buildroot.net/downloads/</a>.
++      <a href="/downloads/">https://buildroot.org/downloads/</a>.
+     </div>
+   </div>
+ 
+@@ -136,7 +136,7 @@
+       </div><br>
+ 
+       <p>If you are not already familiar with using Git, we recommend
+-	you visit <a href="http://git-scm.org">the Git
++	you visit <a href="https://git-scm.org">the Git
+ 	website</a>.</p>
+ 
+       <p>Once you've checked out a copy of the source tree, you can
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
