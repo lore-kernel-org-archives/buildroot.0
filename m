@@ -4,81 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7997ED4661C
-	for <buildroot@archiver.kernel.org>; Thu, 15 Jan 2026 19:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA17DD4661C
+	for <buildroot@archiver.kernel.org>; Thu, 15 Jan 2026 19:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D39884789;
-	Thu, 15 Jan 2026 19:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD0B38478E;
+	Thu, 15 Jan 2026 19:47:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hr-Slly44QWP; Thu, 15 Jan 2026 19:46:08 +0000 (UTC)
+ id nWlhWrH916k1; Thu, 15 Jan 2026 19:47:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 190D884780
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE30284792
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768506368;
-	bh=20FeIhFhTH8JUD2vLrrXmCRh1M6miTS11S53gsY+AtU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=K7xZb7izTONOO32dtzmiIui+lFcvzpC4x/KmXqf9T0VDKkA5dTdSqsNboTog7EGv4
-	 idqhzOQvkfcOhmniLRSaL0w9g+utOfnIKmP7an+HG1oGavAjGhdNmfc8mykyX5QTyN
-	 TLblHzjRLK6Sev65wYta1tKTyEmY6Aov0WyGoydu2aeAiXAtQLyluBpPqbDl/E05RA
-	 H7h5WgYukfG3FtpZribn2OV3igpLLKMUo3mJNCDhmbbFqXfGniwazYW6FFBGrK1m7A
-	 OequS3YkVMD4VHTRdTavZvUdzJ0pPbNEQAdbU1IwFSdm/eATQdzPLiNeIJzGrXMSeX
-	 OGT5u8wFHxXJg==
+	s=default; t=1768506460;
+	bh=/NDtCWm9XuZ9ud6ZLASPvqWsjPE9Omtls2SaJG6qtSo=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LtkM/WjuGLcSDe5wggFNeLrAP0cUqxnVefghLhsaEe3L5vPfz2Evv2eGZ2paoixRf
+	 2gD1doWfHxXxYLxLj4ncW0cuboEo80DvjgPiWVyBjtVdZlSLLQlq+aN7x0xTyB1wi3
+	 21Xq3oUxgdZ4OzYni4qIspGe1ZcXMB7FLMXoSFP3kwe2RqnbHsnZ4UkCeMIbePNx4T
+	 drR66lAM5kkmVsx/xGYY84i5fhAWlOeaAjMSveoOSs1LXCbY7Oe849IYB3LScCCbSl
+	 TgyshcIVCxXsj+nTFp5p8w9004sYn3+9d8KPr/CsYEZyynSojj/yGckr1nawozH4ZW
+	 AB89Nyf9TDKkg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 190D884780;
-	Thu, 15 Jan 2026 19:46:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84349223
- for <buildroot@buildroot.org>; Thu, 15 Jan 2026 19:46:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE30284792;
+	Thu, 15 Jan 2026 19:47:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A2AE0223
+ for <buildroot@buildroot.org>; Thu, 15 Jan 2026 19:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7529A40197
- for <buildroot@buildroot.org>; Thu, 15 Jan 2026 19:46:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89CE884792
+ for <buildroot@buildroot.org>; Thu, 15 Jan 2026 19:47:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aY6NWO4R03c2 for <buildroot@buildroot.org>;
- Thu, 15 Jan 2026 19:46:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CCFCC41676
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCFCC41676
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CCFCC41676
- for <buildroot@buildroot.org>; Thu, 15 Jan 2026 19:46:01 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bd81.dip0.t-ipconnect.de [84.161.189.129])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B084AA4C36A2
- for <buildroot@buildroot.org>; Thu, 15 Jan 2026 20:45:58 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35394)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vgTHx-000000006ua-0Dg8
- for buildroot@buildroot.org; Thu, 15 Jan 2026 19:45:58 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 20:45:48 +0100
-Message-ID: <20260115194549.1208078-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zTm0dfT8edI4 for <buildroot@buildroot.org>;
+ Thu, 15 Jan 2026 19:47:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B4FD8478E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B4FD8478E
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B4FD8478E
+ for <buildroot@buildroot.org>; Thu, 15 Jan 2026 19:47:37 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 9D0334E420F1;
+ Thu, 15 Jan 2026 19:47:35 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5E036606E0;
+ Thu, 15 Jan 2026 19:47:35 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 891CC10B687EE; Thu, 15 Jan 2026 20:47:34 +0100 (CET)
+Date: Thu, 15 Jan 2026 20:47:33 +0100
+To: Petr Vorel <petr.vorel@gmail.com>
+Cc: Julien Olivain via buildroot <buildroot@buildroot.org>, 
+ Julien Olivain <ju.o@free.fr>
+Message-ID: <aWlEAhChn8gSm7QZ@windsurf>
+References: <20251221180810.3770181-1-ju.o@free.fr>
+ <20251228232021.4d4e70c9@windsurf> <20251230174958.GA496221@pevik>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <20251230174958.GA496221@pevik>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1768506358;
- bh=5FSyDZGzz9eFNzJZkmlNwj6Z/sVAZ/JI443tZi4F4h8=;
- h=From:To:Subject:Date:From;
- b=bXBH3a/JJ4cu8MaxC0ZeOUWdFSiGPwNFe2JWzh7VrDTs4RwKzDP7HqIpxQt9IbZ8z
- zUDttHsDunVrvwgjb4TUYl3s/0fAZu5zKw6u5l27m76MtP70bQxOYqlek9wdZ92S/b
- 4m8Q89KAqnvnEGGjg3WKvTbNNPtOzPSfL8/9BJZp0CDmr12scCEfkSWp2wNbHs9btf
- ORJydx+10q0S3vr/d3TbhdiBQInVd0gMLTsH+lu1DNpoiQevUX9nDfOWQeeGUvCBey
- 8iqCFJqqasAWmp1EmcONHytXP9euBRPoFWhO3ZqNByLChPRWPeoMGhqttJIvSLxMn8
- ZiHXD3nPOr2dQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=bXBH3a/J
-Subject: [Buildroot] [PATCH 1/1] package/berkeleydb/: fix non-threaded build
+ d=bootlin.com; s=dkim; 
+ t=1768506455; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=RQgIG5wHY107kk5016DNRUqJ9XltDGjd95jDimeqQdM=;
+ b=dUG+4ZhiroXSu1MDwNZv0igoGWJGU46vuTw7aVgP40lr70/0hAiVssdgN9r8bkmRdOPrsL
+ 2SoSA4ki6VHclSoXc1Ml7daiOBdtL0KFJCd1t7xTfxkIuDo9bh/qhh4et8qhP0sebLVO2S
+ oU9ZnUPNhMrMFKjimaKoOyEJcKC7YxjUsqg89JLmUg25sSIxjZqbkz28g9n6IDZJmtkbGV
+ /EWoF8hBsgjN9K4ReK3zxBMHFyqEZlPfspIrWnuI5fxzhfBbpUJfLKTxdHmEia9EEntil9
+ zqN0VaJg6W/8B4tliwGZZKyfD6JJIn5X6tL0ezDqUOlVioBiro9QE/tEt4DH7w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=dUG+4Zhi
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: ltp-testsuite: replace
+ runltp by kirk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,75 +97,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building berkeleydb is broken with a non-threaded toolchain with gcc >=
-14.x:
+Hello,
 
-../src/rep/rep_method.c:1740:25: error: implicit declaration of function
- '__repmgr_get_nsites'; did you mean '__rep_get_nsites'?
- [-Wimplicit-function-declaration]
- 1740 |                 return (__repmgr_get_nsites(env, n));
+On Tue, Dec 30, 2025 at 06:49:58PM +0100, Petr Vorel wrote:
 
-According to src/repmgr/repmgr_util.c, line 503+, the function
-'__repmgr_get_nsites' mentioned in the gcc error message "may only be
-called after threads have been started".
-This source file repmgr_util.c belongs to REPMGR_OBJS according to
-dist/Makefile.in, line 249+, which is, according to dist/configure.ac,
-line 956, only build if thread support is present.
+> Yeah. I don't like it either. Specially LTP tests themselves does not require
+> anything (single test is either binary written in C statically linked LTP
+> libraries, we also have few POSIX compatible shell based tests which require
+> barely minimum of external dependencies), it can be run as is.
+> 
+> ATM we have list of tests in so called runtest files [1], which contain list of
+> tests (each line is single test: "test_label binary/script optional_arguments"),
+> therefore anything which can remove the first parameter and execute the rest can
+> be LTP runner. i.e. Buildroot custom script could be really minimal.
 
-In a non-threaded build '__repmgr_get_nsites' does not exist causing the
-build error.
+I don't think I would want Buildroot to carry its own custom script
+for this.
 
-To fix the build error we disable replication for non-threaded
-toolchains.
+> runltp does quite a few other things but these who need them should really move
+> to kirk. Also we plan to implement in kirk and ltx running tests in parallel.
+> That will save a lot of runtime.
+> 
+> [1] https://github.com/linux-test-project/ltp/tree/master/runtest
+> 
+> > One option would as suggested by Petr to use kirk in its intended mode,
+> > with kirk running on the host, and connected over SSH to the target to
+> > run tests.
+> 
+> > On the other hand, it was a lot more simple/convenient to be able to
+> > just run a simple shell script on the target to run the test suite.
+> 
+> Would it be possible to have both? Vendor runltp for local use and package kirk
+> as a host package (+ ltx as normal package)?
 
-Using gcc 13.x the build error does not occur, tested with this
-defconfig:
+I'm not sure what you're suggesting as "both"? Do you mean, having a
+simple test runner that we can run directly on the target, but also
+offer the possibility of building/installing kirk to run the test
+suite from the host?
 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_GCC_VERSION_13_X=y
-BR2_PACKAGE_BERKELEYDB=y
+I'm not sure what ltx is in this context.
 
-Using this minimal gcc 14.x-based defconfig
+Best regards,
 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_BERKELEYDB=y
-
-the build error can be reproduced.
-
-The oldest build error of this kind, afaics, dates back to 2024-06-13:
-https://autobuild.buildroot.net/results/e0d/e0d6bdbef01bee277b0da83605b2906af876058a/
-
-Fixes:
-https://autobuild.buildroot.net/results/792/792ed942d17bb8d00cd321536a102f6dd63b6a8a/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/berkeleydb/berkeleydb.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index 6c487400ae..46838ca85c 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -45,6 +45,7 @@ define BERKELEYDB_CONFIGURE_CMDS
- 		--with-pic \
- 		--enable-o_direct \
- 		$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-mutexsupport,--disable-mutexsupport) \
-+		$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-replication,--disable-replication) \
- 	)
- endef
- 
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
