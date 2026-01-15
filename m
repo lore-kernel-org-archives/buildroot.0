@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 581BACCF2D4
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934EACCF2D5
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A8EE8036A;
-	Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65D0460DA0;
+	Mon, 19 Jan 2026 09:59:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Akikw463TgHF; Mon, 19 Jan 2026 09:59:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SQzmLnRRHhiH; Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B540803E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D0AE60DD8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816759;
-	bh=BflXAnFmKmrgqpC8xaB4lZ87S38Wbz5/jHI2ITBTLPw=;
+	s=default; t=1768816760;
+	bh=YAMJEV3f9jfqFMXuhDsX7wveluSzhCOSSJw9tEAYkG8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cHTcJ6cfbj+OfzSCgtaBsA9FuAYf3dRMz+YBhlPcVCD4QM5fWwStTZ19lu6bNy+oc
-	 BUV2djlKJpixTVBxcZjb7o5ZabHkx1v/k2XMj/8ca9EOZbDFqB40rYExchke4O+xS3
-	 S8bBokeeccY2/hWFYbe+dGdJDpZZQc1Qt9vL3/DEw+GvpeJZ3qFgJWOV+8xCjMOoJl
-	 deBwoBCLzDspyvbgkTqFWsr2zubDvLutm63CEoq1q0BvuDDI9w0EsfERmlwTYRmOQe
-	 mcQ3VRc8DmyDVp/i6Qv1j23IW0p+GfNB7dssOhVMhFKsXStqvOfSvgMsg3qWNfmPz1
-	 6RuSjDkYMvvjg==
+	b=VhYCN6JE9ZkbEn75FkiHJq8jUEsAS9O0/usHQnjDcePRYw47srGwl6jTaE+b/bXhS
+	 FFDydewP4zHHoUyphoKxY8QlSbJT6iYhOWs5hM7gdHcERX9ipSIWgilCh8btkhwXLz
+	 6Fg78JO4Ix2xZPg00yxzMecJcbS8G9kD3rjZsB/5OL1fEW6z7ipygvbuH21sAy9hLM
+	 eSbGUWXmzu3EIHr+ILwHRVi4yzJi9+4sOmLsWeNRonjXq/BY8tYX7I80+JvDxfFveP
+	 W8sVkqUQ7nD6ivzlMkMMPEvG5TM7+gFHVgtsNvK0vFZOgorGXWgsGYbE2PtkoC1JeU
+	 eoC92i4GUWblw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B540803E4;
-	Mon, 19 Jan 2026 09:59:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 21924347
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0AE60DD8;
+	Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03B2E160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54BB6406CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFB7840CE6
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1_FLXGRczYXp for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8rzsJDib54G8 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5A52406D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C69E40CE8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5A52406D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C69E40CE8
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A34D18867D; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id 49EFE8408E; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:33:51 +0100
+Date: Thu, 15 Jan 2026 09:23:17 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c32269354772f954dde3b5f1f01524a104dbf74e
-X-Git-Newrev: 659e69704ad9480846c68a1e4c3a8f37ed5eda90
+X-Git-Oldrev: 78d3b36743b05e43e5bd9b47733999c344bd112a
+X-Git-Newrev: 9206e34bbcca37b529fa5b22eac8efc265d729db
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.A34D18867D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libcurl: security
- bump to version 8.18.0
+Message-Id: <20260119095850.49EFE8408E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-certifi:
+ bump to 2025.11.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=659e69704ad9480846c68a1e4c3a8f37ed5eda90
+commit: https://git.buildroot.net/buildroot/commit/?id=9206e34bbcca37b529fa5b22eac8efc265d729db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-https://curl.se/ch/8.18.0.html
-
-Fixes CVE-2025-13034, CVE-2025-14017, CVE-2025-14524, CVE-2025-14819,
-CVE-2025-15079 & CVE-2025-15224: https://curl.se/docs/vuln-8.17.0.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 39aaf317d5f6f511faa3459ca54e021f72b5d0f2)
+(cherry picked from commit 4c062573026aa7947411be76de14c9ef4af7999b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 786d030171..de3f2402e9 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index ef0e0d4ca5..cc80fa1bbe 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.17.0.tar.xz.asc
-+# https://curl.se/download/curl-8.18.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  955f6e729ad6b3566260e8fef68620e76ba3c31acf0a18524416a185acf77992  curl-8.17.0.tar.xz
-+sha256  40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946  curl-8.18.0.tar.xz
- sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 6924631735..e1e5a7facb 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5  7fe97b2e79933430062935f3759a09b0  certifi-2025.10.5.tar.gz
+-sha256  47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43  certifi-2025.10.5.tar.gz
++md5  430a5fa9f18895a9b69a018d2beae67b  certifi-2025.11.12.tar.gz
++sha256  d8ab5478f2ecd78af242878415affce761ca6bc54a22a27e026d7c25357c3316  certifi-2025.11.12.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index ad85d44bbc..1f889d425d 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 8.17.0
-+LIBCURL_VERSION = 8.18.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-PYTHON_CERTIFI_VERSION = 2025.10.5
++PYTHON_CERTIFI_VERSION = 2025.11.12
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4c/5b/b6ce21586237c77ce67d01dc5507039d444b630dd76611bbca2d8e5dcd91
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/a2/8c/58f469717fa48465e4a50c014a0400602d3c437d7c0c468e17ada824da3a
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
