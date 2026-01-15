@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6FB2CCF2D1
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C4C1CCF2D6
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FAFD60DB0;
-	Mon, 19 Jan 2026 09:59:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D508B81CBA;
+	Mon, 19 Jan 2026 09:59:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id skTkBPG78rZ2; Mon, 19 Jan 2026 09:59:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vhmji8ORynYh; Mon, 19 Jan 2026 09:59:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 001EC60D88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09ABC81CE3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816744;
-	bh=2ahM8fqhXume6S0VQhpClLeGJVUo6Hq5DyYi6cORPD8=;
+	s=default; t=1768816746;
+	bh=6eTeevbR8Q85iXc5gX99hQO3VCMmoiXJ1Gas+lYl0RM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Lbfs/26F4+0o2kbiP+IsHSER07khOK5sq3T+1Sfn4fjF7PZjGX7469U6vR9JTSUUm
-	 MU/NmWizyuK0XVGJRF2G2yJj0G84QkXv9oTAQVl08pqFzE2QTOpArkSkN1Q2eEpINH
-	 qnp6dpAK/y3XBOwwVpE/ErHWytQX24jIveYTFLDRnEQWL/19hKk8cYGq6PxwECL3Hk
-	 xJMLPQjCm9GSQ1u0WM3cIDcjFUg997Cz8oKy6VezaGd/rZcv5dFs/ExJQC3jStvvpb
-	 dJS09TCQ5qltcGuHyf8cDGh57dUwYIEXjf7P09t3nr3kbXz/zJU39aCdgE4jHwzBGb
-	 Z65qHFjwFkpNA==
+	b=JwD9+88zLDs9lP8rcIl/y4foTvJ97Gx3IdurYR1nSHLhS1ew6y0nImbS0wBGCZSnU
+	 vi5aS2XyscegkK6MKvRHEqKS7AMotOYOZ5vhMlVmsZMaKS09QbC6XcshRBk7kOk/Vy
+	 0RxYeRrzjY2jsl87DzP7Y6j/Fi+CfZFNJMk7o8+ZG3OyOhELotiT3rRhd2gEW15oK/
+	 KoRsLGpzR+apNnPRuqq94m65KsEp1UkaUtW4Ztfy1I8ncxqQjCyVGBBJSJsPo817Op
+	 G1wjF0HLhsAOdDlBV77JgUKRoN91MC75N9O99pj0YVNAK62VxTIPpxj/Nd7312jZor
+	 O2exWcILyUG/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 001EC60D88;
-	Mon, 19 Jan 2026 09:59:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09ABC81CE3;
+	Mon, 19 Jan 2026 09:59:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 354D6160
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 14EB4160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0262340CE5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8299A40CE7
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 231-EieSiBHX for <buildroot@buildroot.org>;
+ id 1PfnCHHJfXYL for <buildroot@buildroot.org>;
  Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3269440CE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8172640CEC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3269440CE7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8172640CEC
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 304DF8408E; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id 7F4298867D; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:20:28 +0100
+Date: Thu, 15 Jan 2026 09:31:51 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7eac8a96bc4a3b04a5e28ac1b320322f2ce41dd5
-X-Git-Newrev: 79d25e28df7dae7ad50d5e1bedc0ea1a5a853837
+X-Git-Oldrev: 65c79510a982e23a0bec71c5d972416b83b05540
+X-Git-Newrev: d64f13754f962920201362011aeeb5c12a307008
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.304DF8408E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: Drop support
- for some packages from Francois Perrad
+Message-Id: <20260119095850.7F4298867D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/bitcoin: broken
+ on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,78 +72,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6512513250670064808=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79d25e28df7dae7ad50d5e1bedc0ea1a5a853837
+--===============6512513250670064808==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d64f13754f962920201362011aeeb5c12a307008
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0a1f5fd5925c73640475722ca2c405a5dc42c23c)
+Buildroot commit a3a88ff1c85ba0067af1028bc232f8f61b628979 bumped bitcoin
+to version 26.0 which includes upstream commit
+https://github.com/bitcoin/bitcoin/commit/b8401c3281978beed6198b2f9782b6a8dd35cbd7
+causing an assertion on m68k:
+
+/home/thomas/autobuild/instance-7/output-1/build/bitcoin-30.0/src/support/allocators/pool.h:92:36:
+ error: static assertion failed: Units of size ELEM_SIZE_ALIGN need to
+ be able to store a ListNode
+   92 |     static_assert(sizeof(ListNode) <= ELEM_ALIGN_BYTES, "Units
+      |                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+ of size ELEM_SIZE_ALIGN need to be able to store a ListNode");
+
+/home/thomas/autobuild/instance-7/output-1/build/bitcoin-30.0/src/support/allocators/pool.h:92:36:
+ note: the comparison reduces to '(4 <= 2)'
+
+To fix the problem we disable bitcoin on m68k.
+
+Fixes:
+30.0: https://autobuild.buildroot.net/results/268/2688e4a2aa8dc34343f0218fd6727d0ae3adb132/
+26.0: https://autobuild.buildroot.net/results/fb0/fb05401c7de289e0f87f5c9e3a7f92f5589b590b/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 555114a0ecae0a62a4d4a5de9327eeaa0543eb53)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 13 -------------
- 1 file changed, 13 deletions(-)
+ package/bitcoin/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 82dcc729ff..2308af08d3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1131,33 +1131,25 @@ F:	configs/sipeed_licheepi_nano_defconfig
- F:	configs/visionfive2_defconfig
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 425e99ce8b..8a36ab4f86 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -6,6 +6,10 @@ config BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ 	# support. BR2_TOOLCHAIN_HAS_ATOMIC does not provide a
+ 	# size-level granularity to express this dependency.
+ 	depends on !(BR2_arm || BR2_armeb) || BR2_USE_MMU
++	# error: static assertion failed: Units of size ELEM_SIZE_ALIGN
++	# need to be able to store a ListNode
++	# note: the comparison reduces to ‘(4 <= 2)’
++	depends on !BR2_m68k
  
- N:	Francois Perrad <francois.perrad@gadz.org>
--F:	board/freescale/ls1028ardb/
- F:	board/olimex/a20_olinuxino
- F:	board/olimex/imx233_olinuxino/
- F:	board/olimex/stmp1_olinuxino/
--F:	configs/ls1028ardb_defconfig
- F:	configs/olimex_a20_olinuxino_*
- F:	configs/olimex_imx233_olinuxino_defconfig
- F:	configs/olimex_stmp157_olinuxino_lime_defconfig
- F:	package/4th/
- F:	package/cgilua/
--F:	package/chipmunk/
--F:	package/cog/
- F:	package/collectl/
- F:	package/copas/
- F:	package/coxpcall/
- F:	package/dado/
- F:	package/ficl/
--F:	package/graphene/
- F:	package/janet/
--F:	package/libgtk4/
- F:	package/libtomcrypt/
- F:	package/libtommath/
--F:	package/libwpe/
- F:	package/linenoise/
- F:	package/ljlinenoise/
- F:	package/lua-inotify/
--F:	package/lmdb/
- F:	package/lpeg/
- F:	package/lpty/
- F:	package/lrandom/
-@@ -1166,16 +1158,11 @@ F:	package/lua*
- F:	package/lynis/
- F:	package/lzlib/
- F:	package/moarvm/
--F:	package/mstpd/
--F:	package/netsurf/
- F:	package/perl*
- F:	package/pkg-perl.mk
- F:	package/pkg-luarocks.mk
- F:	package/quickjs/
- F:	package/rings/
--F:	package/tekui/
--F:	package/wpebackend-fdo/
--F:	package/wpewebkit/
- F:	package/wsapi/
- F:	package/wsapi-fcgi/
- F:	package/wsapi-xavante/
+ config BR2_PACKAGE_BITCOIN
+ 	bool "bitcoin"
+
+--===============6512513250670064808==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6512513250670064808==--
