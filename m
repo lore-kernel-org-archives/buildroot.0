@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB4ECCF2D6
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 581BACCF2D4
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F373E40CCF;
-	Mon, 19 Jan 2026 09:59:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A8EE8036A;
+	Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vQU1l7pelxzO; Mon, 19 Jan 2026 09:59:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Akikw463TgHF; Mon, 19 Jan 2026 09:59:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3272E40D3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B540803E4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816758;
-	bh=0X3j2a05ozpBuq6BYZaSdAfOm6Z3rzxRRO6eNc0nVC4=;
+	s=default; t=1768816759;
+	bh=BflXAnFmKmrgqpC8xaB4lZ87S38Wbz5/jHI2ITBTLPw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AVYRInmw/kKhoy0v0JdXUi/hWXqFEJUHTpTzKij02lclnF0l44Kk2g506mEVp4Ijk
-	 jTNxMjj+DOaHWp/AFOtrsWxblhFkNZos82CfMba6fUi7dLKV6T3iTnb13fdHHuW8JX
-	 e8D0ezWX/Dv5VDa53tlLgylBg8xZqnH+xaUkY/SSASh4SXbXPWhBdR2IP3007w2GNX
-	 yAXsGypqUChPmslILwlf4Gm0PSOJLW35BulXZ0qHssf7fhST8n1Lriy8IHB44Z3n8g
-	 k8dRdATKNH/R6nmt4eZKP9SyCO0nUnyVXLTapSeUWzYtp0fHuBNK/g7D3whp3Eveeg
-	 ekd1C/+J0i2ZQ==
+	b=cHTcJ6cfbj+OfzSCgtaBsA9FuAYf3dRMz+YBhlPcVCD4QM5fWwStTZ19lu6bNy+oc
+	 BUV2djlKJpixTVBxcZjb7o5ZabHkx1v/k2XMj/8ca9EOZbDFqB40rYExchke4O+xS3
+	 S8bBokeeccY2/hWFYbe+dGdJDpZZQc1Qt9vL3/DEw+GvpeJZ3qFgJWOV+8xCjMOoJl
+	 deBwoBCLzDspyvbgkTqFWsr2zubDvLutm63CEoq1q0BvuDDI9w0EsfERmlwTYRmOQe
+	 mcQ3VRc8DmyDVp/i6Qv1j23IW0p+GfNB7dssOhVMhFKsXStqvOfSvgMsg3qWNfmPz1
+	 6RuSjDkYMvvjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3272E40D3C;
-	Mon, 19 Jan 2026 09:59:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02FB1160
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B540803E4;
+	Mon, 19 Jan 2026 09:59:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21924347
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8244840CE3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54BB6406CF
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aIi0r0IS4a9k for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1_FLXGRczYXp for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12D5540CE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5A52406D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12D5540CE6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5A52406D6
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10B458408E; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id A34D18867D; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:18:20 +0100
+Date: Thu, 15 Jan 2026 09:33:51 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9487aafa1bc2d35d901d0c2f9a5425d577d63625
-X-Git-Newrev: 0d0f445a06a945e9b685780f0610f1e500c0f486
+X-Git-Oldrev: c32269354772f954dde3b5f1f01524a104dbf74e
+X-Git-Newrev: 659e69704ad9480846c68a1e4c3a8f37ed5eda90
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.10B458408E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/vlc: security
- bump to version 3.0.23
+Message-Id: <20260119095850.A34D18867D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libcurl: security
+ bump to version 8.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d0f445a06a945e9b685780f0610f1e500c0f486
+commit: https://git.buildroot.net/buildroot/commit/?id=659e69704ad9480846c68a1e4c3a8f37ed5eda90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-https://code.videolan.org/videolan/vlc/-/blob/3.0.23/NEWS
-"Security:
- * Fix null deref in libass, undefined shift in theora and cc-708,
-   integer overflow in daala, Infinite loop in h264 parsing, buffer
-   overflow in png and multiple format-overflows"
+https://curl.se/ch/8.18.0.html
 
-https://code.videolan.org/videolan/vlc/-/tags/3.0.23
-"It also adds a small feature on audio codec information, and fixes extra
- security issues compared to the numerous we fixed in 3.0.22."
+Fixes CVE-2025-13034, CVE-2025-14017, CVE-2025-14524, CVE-2025-14819,
+CVE-2025-15079 & CVE-2025-15224: https://curl.se/docs/vuln-8.17.0.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9c3d4008166e52e13e774f5b21b40ce4f75429cb)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 39aaf317d5f6f511faa3459ca54e021f72b5d0f2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/vlc/vlc.hash | 8 ++++----
- package/vlc/vlc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 6733a870b1..9634ba3f1f 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha256
--sha256  e2cc1cf0ae0902a09da5a37c249a8a4e4b5ec4dc095443b8e1493c6a7cc138ea  vlc-3.0.22.tar.xz
--# From https://get.videolan.org/vlc/3.0.22/vlc-3.0.22.tar.xz.sha1
--sha1  f9871439cdb281e18a78828c389cf7bf66d47d69  vlc-3.0.22.tar.xz
-+# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha256
-+sha256  e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0  vlc-3.0.23.tar.xz
-+# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha1
-+sha1  7b8c00a9c5bb879a403d5328c99924eefe01739a  vlc-3.0.23.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 81783c99ed..a878a78181 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 786d030171..de3f2402e9 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.17.0.tar.xz.asc
++# https://curl.se/download/curl-8.18.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  955f6e729ad6b3566260e8fef68620e76ba3c31acf0a18524416a185acf77992  curl-8.17.0.tar.xz
++sha256  40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946  curl-8.18.0.tar.xz
+ sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 6924631735..e1e5a7facb 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VLC_VERSION = 3.0.22
-+VLC_VERSION = 3.0.23
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-LIBCURL_VERSION = 8.17.0
++LIBCURL_VERSION = 8.18.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
