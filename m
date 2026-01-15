@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0ECCCF2D1
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA96ACCF2D5
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9018360D89;
-	Mon, 19 Jan 2026 09:59:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1lpMxfPidOAq; Mon, 19 Jan 2026 09:59:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A29CC60DC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816750;
-	bh=ZVNEfu+wKCWbbbYgVeWbLzCp9e9yADXj2/qRFmwN9/k=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Z0oKGpfJ7iDHQidcZIlsCe9hYGH4cxaOJfft8lOq5mr53HEhoxxoA/joCux/Fnu1n
-	 MFWZDEorMK73vN0QG7ope9n4njWXJr7jUfOFETkq//YHzVXQoGAXMqeZizXJku7nsm
-	 l6Mjk3I8xJ8pPxrlX9b+z8wqV2ambOljnOYJzV88sG3PjatTbT9ZqwicsYlKwjnn8Q
-	 uLajlQqV3SCNGVTJcUv1nr5lTz7AY8Wu/eXhxz/tkk6qdjMij2SJiRgG4t+JrRwbgi
-	 HeUcDwRrfbLVIGKJGe3ksFtVaZewe5XRyHxyC2dhdA3I6qynH3hxgufucKsDBN5NOE
-	 bzEC3oEbnVhvw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A29CC60DC6;
-	Mon, 19 Jan 2026 09:59:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 178EE160
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E481140CE4
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E84840D39;
+	Mon, 19 Jan 2026 09:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rQrgD4LwcPmq for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
+ id bYwMFsycmQiP; Mon, 19 Jan 2026 09:59:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BCC340D32
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768816751;
+	bh=ff4ACI7A68qGuDdcIg8g41YoQN8xZpo7AhhDKflSpF0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=YzDD+ob2bUgIGrdcXLvjeMhvwfG8+8OW7f1iHJzvD4AMkCeV8E4xIGda3kV3qpNFL
+	 Fa/pBbrHNhSuDAOALvHPmLfKtAGb6gU10VYpBnSrtmDtW91byX0TTTv2UcYYeeH0cS
+	 6hLMvUOCKMYiz/zQNF7SnIE6aBk80dsbSOwmoUPkhuiuP23XOHtxEiFie/9ISRnOAg
+	 0gc6X9DPqo9osweXoiNe3ofF9APAxV4dbveprm5wp5p6GbFmr06JYBMGCPFv9DZLlV
+	 VT/3dp2/VxGop8G4nZD8mrUtB5DOrd3ZwjBomoCt9OtM21OGy9YHTSvIoKJvL2fBjQ
+	 vf+fCIHKh7viw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BCC340D32;
+	Mon, 19 Jan 2026 09:59:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD408160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 937C8406CA
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nznfwAiEBZyc for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B158540CF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E584406D2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B158540CF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E584406D2
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF65288673; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id 3C8A288366; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:34:25 +0100
+Date: Thu, 15 Jan 2026 09:22:33 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 659e69704ad9480846c68a1e4c3a8f37ed5eda90
-X-Git-Newrev: 39a3758ebccaba73ed7a66e6f24fb14df598f4e4
+X-Git-Oldrev: 79d25e28df7dae7ad50d5e1bedc0ea1a5a853837
+X-Git-Newrev: 78d3b36743b05e43e5bd9b47733999c344bd112a
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.AF65288673@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libcoap: security
- bump to v4.3.5a
+Message-Id: <20260119095850.3C8A288366@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-certifi:
+ bump version to 2025.10.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,133 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a3758ebccaba73ed7a66e6f24fb14df598f4e4
+commit: https://git.buildroot.net/buildroot/commit/?id=78d3b36743b05e43e5bd9b47733999c344bd112a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-For more info on the release, see:
-
-- https://github.com/obgm/libcoap/compare/v4.3.5...v4.3.5a
-- https://github.com/obgm/libcoap/blob/release-4.3.5-patches/ChangeLog
-
-Fixes the following vulnerabilities:
-
-- CVE-2025-59391:
-    A memory disclosure vulnerability exists in libcoap's OSCORE
-    configuration parser in libcoap before release-4.3.5-patches. An out-
-    of-bounds read may occur when parsing certain configuration values,
-    allowing an attacker to infer or read memory beyond string boundaries
-    in the .rodata section. This could potentially lead to information
-    disclosure or denial of service.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-59391
-
-- CVE-2025-65493:
-    NULL pointer dereference in src/coap_openssl.c in OISM libcoap 4.3.5
-    allows remote attackers to cause a denial of service via a crafted
-    DTLS/TLS connection that triggers BIO_get_data() to return NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65493
-
-- CVE-2025-65494:
-    NULL pointer dereference in get_san_or_cn_from_cert() in
-    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
-    cause a denial of service via a crafted X.509 certificate that causes
-    sk_GENERAL_NAME_value() to return NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65494
-
-- CVE-2025-65495:
-    Integer signedness error in tls_verify_call_back() in
-    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
-    cause a denial of service via a crafted TLS certificate that causes
-    i2d_X509() to return -1 and be misused as a malloc() size parameter.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65495
-
-- CVE-2025-65496:
-    NULL pointer dereference in coap_dtls_generate_cookie() in
-    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
-    cause a denial of service via a crafted DTLS handshake that triggers
-    SSL_get_SSL_CTX() to return NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65496
-
-- CVE-2025-65497:
-    NULL pointer dereference in coap_dtls_generate_cookie() in
-    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
-    cause a denial of service via a crafted DTLS handshake that triggers
-    SSL_get_SSL_CTX() to return NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65497
-
-- CVE-2025-65498:
-    NULL pointer dereference in coap_dtls_generate_cookie() in
-    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
-    cause a denial of service via a crafted DTLS handshake that triggers
-    SSL_get_SSL_CTX() to return NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65498
-
-- CVE-2025-65499:
-    Array index error in tls_verify_call_back() in src/coap_openssl.c in
-    OISM libcoap 4.3.5 allows remote attackers to cause a denial of
-    service via a crafted DTLS handshake that triggers
-    SSL_get_ex_data_X509_STORE_CTX_idx() to return -1.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65499
-
-- CVE-2025-65500:
-    NULL pointer dereference in coap_dtls_generate_cookie() in
-    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
-    cause a denial of service via a crafted DTLS handshake that triggers
-    SSL_get_SSL_CTX() to return NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65500
-
-- CVE-2025-65501:
-    Null pointer dereference in coap_dtls_info_callback() in OISM libcoap
-    4.3.5 allows remote attackers to cause a denial of service via a DTLS
-    handshake where SSL_get_app_data() returns NULL.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-65501
-
-LICENSE Year updated see [1].
-
-[1] https://github.com/obgm/libcoap/commit/c9135b6b26b978295a3e1312ff59cb7cb9b32251
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d3ebc63ce7a7f69a45bb9dc810ecdc27add02c15)
+(cherry picked from commit e4aec355ffb92f7666788986dffcc4c732a0561d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libcoap/libcoap.hash | 4 ++--
- package/libcoap/libcoap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index fc618fef52..17fce990fa 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
-+sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
- sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
--sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
-+sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index d7c2a78944..bb1321f194 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 723e2eccfb..ef0e0d4ca5 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5  bb7ee7c24518dc4314ce7a83ca24263f  certifi-2025.8.3.tar.gz
+-sha256  e564105f78ded564e3ae7c923924435e1daa7463faeab5bb932bc53ffae63407  certifi-2025.8.3.tar.gz
++md5  7fe97b2e79933430062935f3759a09b0  certifi-2025.10.5.tar.gz
++sha256  47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43  certifi-2025.10.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index 996e451d33..ad85d44bbc 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBCOAP_VERSION = 4.3.5
-+LIBCOAP_VERSION = 4.3.5a
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = BSD-2-Clause
+-PYTHON_CERTIFI_VERSION = 2025.8.3
++PYTHON_CERTIFI_VERSION = 2025.10.5
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/dc/67/960ebe6bf230a96cda2e0abcf73af550ec4f090005363542f0765df162e0
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4c/5b/b6ce21586237c77ce67d01dc5507039d444b630dd76611bbca2d8e5dcd91
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
