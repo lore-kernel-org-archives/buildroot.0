@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934EACCF2D5
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964DDCCF2D4
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65D0460DA0;
-	Mon, 19 Jan 2026 09:59:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SQzmLnRRHhiH; Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D0AE60DD8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816760;
-	bh=YAMJEV3f9jfqFMXuhDsX7wveluSzhCOSSJw9tEAYkG8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VhYCN6JE9ZkbEn75FkiHJq8jUEsAS9O0/usHQnjDcePRYw47srGwl6jTaE+b/bXhS
-	 FFDydewP4zHHoUyphoKxY8QlSbJT6iYhOWs5hM7gdHcERX9ipSIWgilCh8btkhwXLz
-	 6Fg78JO4Ix2xZPg00yxzMecJcbS8G9kD3rjZsB/5OL1fEW6z7ipygvbuH21sAy9hLM
-	 eSbGUWXmzu3EIHr+ILwHRVi4yzJi9+4sOmLsWeNRonjXq/BY8tYX7I80+JvDxfFveP
-	 W8sVkqUQ7nD6ivzlMkMMPEvG5TM7+gFHVgtsNvK0vFZOgorGXWgsGYbE2PtkoC1JeU
-	 eoC92i4GUWblw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0AE60DD8;
-	Mon, 19 Jan 2026 09:59:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03B2E160
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:59:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFB7840CE6
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 629E540D2C;
+	Mon, 19 Jan 2026 09:59:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8rzsJDib54G8 for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id wl54Xh6gO1MS; Mon, 19 Jan 2026 09:59:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8183740D3C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768816761;
+	bh=ZgjjrAWbDIV/Nmn5iTAD4YD7X6H0fosPJbaPRVa4R/k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=qZVSkw2CM6Uqi0ufpAmjGQwl9EXpiY+6VasbcgxN+Fri321fO+7IuWfiaj6ezuxZS
+	 +KX6Pqmaj45eqd7XcS0APVTUdhlX3j1J6Tu09Xs8guq9DSja2qQshXX7JrRVdvK5L+
+	 0VHPU1blbtQtdFeRk9tGEPSgcEAKYUessZ+eES1B7V6AFtfLhHgWMe2Yju3pVtkyLS
+	 vJh7DUn1LBv3KssTHYxO2bjdmse2WXNjx9cJR4DR0yBQq5FUussdbojpp9BaOYhDNZ
+	 6sk5OaNWQZI8pQ7WvOWS7SopIbJ4RatQeo1tZg+gVXTA8SgaGTvNXGItKfZTq81RXu
+	 VOcXsQ8qXkMPQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8183740D3C;
+	Mon, 19 Jan 2026 09:59:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7EF7B2CE
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:59:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E84F406D3
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D2YEc-KO7SIk for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C69E40CE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCD26406D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C69E40CE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCD26406D7
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 49EFE8408E; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id BAFF988679; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:23:17 +0100
+Date: Thu, 15 Jan 2026 09:35:10 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 78d3b36743b05e43e5bd9b47733999c344bd112a
-X-Git-Newrev: 9206e34bbcca37b529fa5b22eac8efc265d729db
+X-Git-Oldrev: 39a3758ebccaba73ed7a66e6f24fb14df598f4e4
+X-Git-Newrev: a84c83d2962a7e5fd08b408e1248bdf2455163ab
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.49EFE8408E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-certifi:
- bump to 2025.11.12
+Message-Id: <20260119095850.BAFF988679@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libarchive: bump
+ version to 3.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9206e34bbcca37b529fa5b22eac8efc265d729db
+commit: https://git.buildroot.net/buildroot/commit/?id=a84c83d2962a7e5fd08b408e1248bdf2455163ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4c062573026aa7947411be76de14c9ef4af7999b)
+Fixes a bsdtar regression introduced in 3.8.4.
+
+https://github.com/libarchive/libarchive/releases/tag/v3.8.5
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Peter: Mention regression fix]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 13c3e723cee2a2c892c51dee9a10c37dc38d873d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
+ package/libarchive/libarchive.hash | 6 +++---
+ package/libarchive/libarchive.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index ef0e0d4ca5..cc80fa1bbe 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  7fe97b2e79933430062935f3759a09b0  certifi-2025.10.5.tar.gz
--sha256  47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43  certifi-2025.10.5.tar.gz
-+md5  430a5fa9f18895a9b69a018d2beae67b  certifi-2025.11.12.tar.gz
-+sha256  d8ab5478f2ecd78af242878415affce761ca6bc54a22a27e026d7c25357c3316  certifi-2025.11.12.tar.gz
- # Locally computed sha256 checksums
- sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index ad85d44bbc..1f889d425d 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index 1a61d254f7..db7ed95bd9 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/libarchive/libarchive/releases/tag/v3.8.4
++# From https://github.com/libarchive/libarchive/releases/tag/v3.8.5
+ # After verifying the pgp signature from:
+-# https://www.libarchive.de/downloads/libarchive-3.8.4.tar.xz.asc
+-sha256  c7b847b57feacf5e182f4d14dd6cae545ac6843d55cb725f58e107cdf1c9ad73  libarchive-3.8.4.tar.xz
++# https://www.libarchive.de/downloads/libarchive-3.8.5.tar.xz.asc
++sha256  d68068e74beee3a0ec0dd04aee9037d5757fcc651591a6dcf1b6d542fb15a703  libarchive-3.8.5.tar.xz
+ # Locally computed:
+ sha256  30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 083e913033..f3e90e5910 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2025.10.5
-+PYTHON_CERTIFI_VERSION = 2025.11.12
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4c/5b/b6ce21586237c77ce67d01dc5507039d444b630dd76611bbca2d8e5dcd91
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/a2/8c/58f469717fa48465e4a50c014a0400602d3c437d7c0c468e17ada824da3a
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-LIBARCHIVE_VERSION = 3.8.4
++LIBARCHIVE_VERSION = 3.8.5
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
