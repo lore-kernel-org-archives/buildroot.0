@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D685CCF2D5
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0ECCCF2D1
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 09:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62EEB81CE7;
-	Mon, 19 Jan 2026 09:59:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9018360D89;
+	Mon, 19 Jan 2026 09:59:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xGNgO5HncPTs; Mon, 19 Jan 2026 09:59:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1lpMxfPidOAq; Mon, 19 Jan 2026 09:59:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E4FE81D02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A29CC60DC6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768816749;
-	bh=bYQxP5SpttLDyve4Fdnia+c9PJ9Hl+WF00aR1UmhODc=;
+	s=default; t=1768816750;
+	bh=ZVNEfu+wKCWbbbYgVeWbLzCp9e9yADXj2/qRFmwN9/k=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cr0a4YZUhZJe6k9Dku/L8VkK+0E/fh7YO3e1bIIcHwWbCpt/xSLlWWmQFp0wF1yfr
-	 gWoAsRF4EPhzYL4uZ5guW3NT2HGjvRDUP+FQB8GGuqXwvEG94EFcBfV5j5Ct32X9/2
-	 pFh5CtY9f8apwATPvU5QpHfbwYN2S5ROeZQF4hGdoLn1I4TVfwzAC+VxjYIXdpQ+/W
-	 Bl8KHEIOGEJHTdP/NVkbTOKeI81V54vCXoRxbcxTwLFVH5V+ckrUiSmXPESsfTlS7Y
-	 q/tQg3tVTFJVhD/b9v0KOATLLe/khhISN6L6UgKMq0nlcZhQ1WMT/JuX6CicZrMHdG
-	 sG4LPxQ3MB4PA==
+	b=Z0oKGpfJ7iDHQidcZIlsCe9hYGH4cxaOJfft8lOq5mr53HEhoxxoA/joCux/Fnu1n
+	 MFWZDEorMK73vN0QG7ope9n4njWXJr7jUfOFETkq//YHzVXQoGAXMqeZizXJku7nsm
+	 l6Mjk3I8xJ8pPxrlX9b+z8wqV2ambOljnOYJzV88sG3PjatTbT9ZqwicsYlKwjnn8Q
+	 uLajlQqV3SCNGVTJcUv1nr5lTz7AY8Wu/eXhxz/tkk6qdjMij2SJiRgG4t+JrRwbgi
+	 HeUcDwRrfbLVIGKJGe3ksFtVaZewe5XRyHxyC2dhdA3I6qynH3hxgufucKsDBN5NOE
+	 bzEC3oEbnVhvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E4FE81D02;
-	Mon, 19 Jan 2026 09:59:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BD2892CE
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A29CC60DC6;
+	Mon, 19 Jan 2026 09:59:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 178EE160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CE7C406BB
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E481140CE4
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ylWZVBE67n7A for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rQrgD4LwcPmq for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 09:58:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22A05406D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B158540CF4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22A05406D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B158540CF4
  for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2048588366; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
+ id AF65288673; Mon, 19 Jan 2026 09:58:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Jan 2026 09:19:20 +0100
+Date: Thu, 15 Jan 2026 09:34:25 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0d0f445a06a945e9b685780f0610f1e500c0f486
-X-Git-Newrev: 7eac8a96bc4a3b04a5e28ac1b320322f2ce41dd5
+X-Git-Oldrev: 659e69704ad9480846c68a1e4c3a8f37ed5eda90
+X-Git-Newrev: 39a3758ebccaba73ed7a66e6f24fb14df598f4e4
 X-Patchwork-Hint: ignore
-Message-Id: <20260119095850.2048588366@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/perl-mozilla-ca:
- bump to version 20250602
+Message-Id: <20260119095850.AF65288673@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libcoap: security
+ bump to v4.3.5a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,44 +77,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7eac8a96bc4a3b04a5e28ac1b320322f2ce41dd5
+commit: https://git.buildroot.net/buildroot/commit/?id=39a3758ebccaba73ed7a66e6f24fb14df598f4e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8e1abc7c3f38b2d4c9f0cf1f11ddae89d5c90e91)
+For more info on the release, see:
+
+- https://github.com/obgm/libcoap/compare/v4.3.5...v4.3.5a
+- https://github.com/obgm/libcoap/blob/release-4.3.5-patches/ChangeLog
+
+Fixes the following vulnerabilities:
+
+- CVE-2025-59391:
+    A memory disclosure vulnerability exists in libcoap's OSCORE
+    configuration parser in libcoap before release-4.3.5-patches. An out-
+    of-bounds read may occur when parsing certain configuration values,
+    allowing an attacker to infer or read memory beyond string boundaries
+    in the .rodata section. This could potentially lead to information
+    disclosure or denial of service.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-59391
+
+- CVE-2025-65493:
+    NULL pointer dereference in src/coap_openssl.c in OISM libcoap 4.3.5
+    allows remote attackers to cause a denial of service via a crafted
+    DTLS/TLS connection that triggers BIO_get_data() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65493
+
+- CVE-2025-65494:
+    NULL pointer dereference in get_san_or_cn_from_cert() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted X.509 certificate that causes
+    sk_GENERAL_NAME_value() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65494
+
+- CVE-2025-65495:
+    Integer signedness error in tls_verify_call_back() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted TLS certificate that causes
+    i2d_X509() to return -1 and be misused as a malloc() size parameter.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65495
+
+- CVE-2025-65496:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65496
+
+- CVE-2025-65497:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65497
+
+- CVE-2025-65498:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65498
+
+- CVE-2025-65499:
+    Array index error in tls_verify_call_back() in src/coap_openssl.c in
+    OISM libcoap 4.3.5 allows remote attackers to cause a denial of
+    service via a crafted DTLS handshake that triggers
+    SSL_get_ex_data_X509_STORE_CTX_idx() to return -1.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65499
+
+- CVE-2025-65500:
+    NULL pointer dereference in coap_dtls_generate_cookie() in
+    src/coap_openssl.c in OISM libcoap 4.3.5 allows remote attackers to
+    cause a denial of service via a crafted DTLS handshake that triggers
+    SSL_get_SSL_CTX() to return NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65500
+
+- CVE-2025-65501:
+    Null pointer dereference in coap_dtls_info_callback() in OISM libcoap
+    4.3.5 allows remote attackers to cause a denial of service via a DTLS
+    handshake where SSL_get_app_data() returns NULL.
+
+    https://www.cve.org/CVERecord?id=CVE-2025-65501
+
+LICENSE Year updated see [1].
+
+[1] https://github.com/obgm/libcoap/commit/c9135b6b26b978295a3e1312ff59cb7cb9b32251
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit d3ebc63ce7a7f69a45bb9dc810ecdc27add02c15)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/perl-mozilla-ca/perl-mozilla-ca.hash | 4 ++--
- package/perl-mozilla-ca/perl-mozilla-ca.mk   | 2 +-
+ package/libcoap/libcoap.hash | 4 ++--
+ package/libcoap/libcoap.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-index 35bb158d12..bd396d1dec 100644
---- a/package/perl-mozilla-ca/perl-mozilla-ca.hash
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  dad624e6dce1d5f87dbb6268395df180  Mozilla-CA-20240924.tar.gz
--sha256  c4b1412bbc37dff8cf29af6f92cb47defbe90eebcbc29e407a98638f7a31bcd0  Mozilla-CA-20240924.tar.gz
-+md5  c28848458e8ae2325e46b15a243f1918  Mozilla-CA-20250602.tar.gz
-+sha256  adeac0752440b2da094e8036bab6c857e22172457658868f5ac364f0c7b35481  Mozilla-CA-20250602.tar.gz
- 
- # computed by scancpan
- sha256  95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e  README
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
-index ce56649969..02b4cf3d5c 100644
---- a/package/perl-mozilla-ca/perl-mozilla-ca.mk
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index fc618fef52..17fce990fa 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
++sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+-sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
++sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index d7c2a78944..bb1321f194 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOZILLA_CA_VERSION = 20240924
-+PERL_MOZILLA_CA_VERSION = 20250602
- PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
- PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LW/LWP
- PERL_MOZILLA_CA_LICENSE = MPL-2.0
+-LIBCOAP_VERSION = 4.3.5
++LIBCOAP_VERSION = 4.3.5a
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
