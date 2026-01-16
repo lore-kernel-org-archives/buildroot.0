@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F549C982FE
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 20:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2DDBC982C0
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 20:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 404DC41810;
-	Fri, 16 Jan 2026 20:24:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6856784003;
+	Fri, 16 Jan 2026 20:26:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D2L-NyvItbD1; Fri, 16 Jan 2026 20:25:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A19F183FEA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768595158;
+	bh=WosoUPnlfDWOjoOcVP4TcMwNY4tBxjNBlPUwqWWieaE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=krMvAKLbLQpv0MpHz/UveMnjJhsR3aw6GTjp0TD0x2KzScmHJqB2trdfBWxHtGa30
+	 +KxgfrCojX5MdqqywSjC7vytCN9k4ZUCk1CaTFiXTZSGaIlOodYWXZYWmgFPXkMDY4
+	 UFg25Bb4Gkc3uzVmtOGZPKFMOee42Rl6dpDvSjrACOkyNFh0wypJ6quNp022ogmcGn
+	 62vuLBUTH5otHmCY39UAZPUAFmN4dvpEBZG4QosUCnUsKiptCypC9MR79oWpX5aZs1
+	 ilDqQSUJPbVMvmQs1PTzNdM2y2uWAx2AAiEj1zw+e1QRDmGV5kePSKjhWsGThxDlU3
+	 Hv/vsnNhUweXg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A19F183FEA;
+	Fri, 16 Jan 2026 20:25:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F3C0223
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:25:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FE8941812
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhyGssMXHdzs; Fri, 16 Jan 2026 20:24:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A7F41812
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768595097;
-	bh=p3CQYohTPeGRFhOWwvCYX1IdPo2Izh48lSseXiMhj1M=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ffrNqxsmiiavpiPEecnhDdQfZCkzBs7XCHBxKcrWwX2P49Bfuvlp0ciitjqqPHH8/
-	 07rLh1i3HbNjwtt6bW8y1vwz6k04QFuN1ohJtICAw/qIx6fvZHCdwqTxVMwIpe7+mw
-	 XynsVa+E+T0fQKpCqPtILRYprrlVu/wDp1v4LEDQYXQ5VLWSutLH3LsDhBYsoI64ED
-	 RkoYmjr0NlxrxBv+909XMYAnIZZfay2zGDrZsnd+yTESgzJGuwwyXzVToPlTg/P4Wu
-	 r0Ly+WM5OR/jrj3WOvJC6CuKiww7qoHHfWKxZrlzguniplo8qvZ3fCSGdwyLhT2ywV
-	 H1rDVz0Qb63kA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66A7F41812;
-	Fri, 16 Jan 2026 20:24:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 36F972CC
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:24:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BA514025E
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:24:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y3mxKe4wspdS for <buildroot@buildroot.org>;
- Fri, 16 Jan 2026 20:24:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id vt8-D7M1bp7Y for <buildroot@buildroot.org>;
+ Fri, 16 Jan 2026 20:25:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A66740027
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A66740027
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A66740027
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:24:54 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 955B51A28CE
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:24:51 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5F59C606F9;
- Fri, 16 Jan 2026 20:24:51 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BA6D510B68DD2; Fri, 16 Jan 2026 21:24:50 +0100 (CET)
-Date: Fri, 16 Jan 2026 21:24:49 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <aWqeff4I0f-_M-cN@windsurf>
-References: <20260105174328.373330-1-ju.o@free.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260105174328.373330-1-ju.o@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1768595091; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=FdWdt1YHuEFVzACZuL156gvbSeV0cekBYg9pd0sUIUw=;
- b=SVIPX7ScjGvZRh/2Cja8dwp0YjVMdSDImm9IP9Y7LmOIHivWAbh+UTjcgr0MvnPXwDvhQ/
- YNVTkoCRlaRRn2e+nwnRAkwSPAMB/aHPJnBzyg84DzUFW5f10xUczuPpU6Mif8ZbB3FDIh
- sRfknMqGkZIg/i31MSYbWOzLI7vZCkBbV1hIeKAwKEApRF31GWpvB9Z+1IVKbIN9y0C6N4
- fmi2rbTvqxYq2LVZllp6kSodveDnBn4Qdd3Uh1pXGYT86W8FXtGEi/fyX5of+ujKB/ZB+f
- rN00ZHzqyq52Z4X8dM9a87BzvZliy98P6PdIJeBlYq9p4Sk7kht2syQcq3UW+g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=SVIPX7Sc
-Subject: Re: [Buildroot] [PATCH 1/1] package/ddrescue: bump version to 1.30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 986C041810
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 986C041810
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:25:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 88C628864C; Fri, 16 Jan 2026 20:25:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 16 Jan 2026 21:25:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 99b4067859d0623dffcca743adc6ebe5c67a1bd2
+X-Git-Newrev: 9868f67d38c598663b72e8d2b8878380303a76de
+X-Patchwork-Hint: ignore
+Message-Id: <20260116202555.88C628864C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/edk2: add a new Kconfig option to
+ pass arbitrary build options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,26 +71,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9868f67d38c598663b72e8d2b8878380303a76de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jan 05, 2026 at 06:43:28PM +0100, Julien Olivain via buildroot wrote:
-> For release announce, see:
-> https://lists.gnu.org/archive/html/info-gnu/2026-01/msg00001.html
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+EDK2 build may include extra options. Those are usually in the form
+of "-D SOMEFLAG_ENABLE" and might be specific for a processor
+architecture or a platform. For example:
+"-D NETWORK_HTTP_BOOT_ENABLE", "-D NETWORK_TLS_ENABLE", ...
 
-Applied to master, thanks!
+Those options are generally documented in their respective packages.
+See for example:
+https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+This commit adds a new Kconfig string option to let the use define
+arbitrary build flags.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/edk2/Config.in | 15 +++++++++++++++
+ boot/edk2/edk2.mk   |  3 ++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+index 850b9a39de..168fc296a2 100644
+--- a/boot/edk2/Config.in
++++ b/boot/edk2/Config.in
+@@ -130,6 +130,21 @@ config BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL
+ 	  See OVMF README:
+ 	  https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
+ 
++config BR2_TARGET_EDK2_EXTRA_BUILD_OPTS
++	string "Extra build options"
++	help
++	  EDK2 build may include extra options. Those are usually in
++	  the form of "-D SOMEFLAG_ENABLE" and might be specific for a
++	  processor architecture or a platform. For example: "-D
++	  NETWORK_HTTP_BOOT_ENABLE", "-D NETWORK_TLS_ENABLE", ...
++
++	  Those options are generally documented in their respective
++	  packages. See for example:
++	  https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
++
++	  This configuration is an arbitrary string that will be
++	  passed to the build command.
++
+ config BR2_TARGET_EDK2_FD_NAME
+ 	string
+ 	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_I386
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 05e44c711b..2c089aefca 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -156,7 +156,8 @@ EDK2_BUILD_OPTS += \
+ 	-n $(BR2_JLEVEL) \
+ 	-a $(EDK2_ARCH) \
+ 	-b $(EDK2_BUILD_TYPE) \
+-	-p $(EDK2_PACKAGE_NAME)/$(EDK2_PLATFORM_NAME).dsc
++	-p $(EDK2_PACKAGE_NAME)/$(EDK2_PLATFORM_NAME).dsc \
++	$(call qstrip,$(BR2_TARGET_EDK2_EXTRA_BUILD_OPTS))
+ 
+ define EDK2_BUILD_CMDS
+ 	mkdir -p $(EDK2_BUILD_PACKAGES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
