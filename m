@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CAE3C982D1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 16:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA916C982D1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 16:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61625833D3;
-	Fri, 16 Jan 2026 16:35:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1FAF83896;
+	Fri, 16 Jan 2026 16:43:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTjf0IzvdSWv; Fri, 16 Jan 2026 16:35:47 +0000 (UTC)
+ id aqsZKK7utzOI; Fri, 16 Jan 2026 16:43:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F1F6833AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0CAE838AC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768581347;
-	bh=iEnra+YRpIUUTeqYg7JKv0A+kyoM3PGTKtwDoAIuwcE=;
+	s=default; t=1768581819;
+	bh=gA+qcgDpHLChYevNbp2Ujz0/eWlVjpP++8UzqzzKib4=;
 	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=dzPhbqeyepGbXC/VId2ljfoFKOCnEXgTL171BVf7Opia5huA4iO51RBsNRixqCVPQ
-	 N7zSPtQBDTJa6MJlz2BkWgxJgX5U0ruOPCn05lc0+Chi5C4yuLCdxYdYYrUWRnY8pt
-	 ICijALYlWOpCMfqrWiQblXcOFyju/+zWxVgWABdFgLS0rU+MRsWKoDRkq+DS1l4s7Q
-	 FzoNtZpQcsGmxE/HuIhuX73U2YJ3rLwQWpUv82jb5JNltvdj5HUzfjcxQ/N8B/A/l0
-	 okhHOKYCNaddn/JA7AQn6a6oXdwJflGlbXsLHs/wk6OeBMlbDr7BL1ZWmI15jVqnxE
-	 xjsT2onm54Mww==
+	b=FEv0BYSXrKLdx2AYg2jYQ8hkQ1Oc2akBPQrDW8OisiZZ88/cyUKWSkJ3cPplQJ3Qj
+	 ZNwqCBJQvq43vZyjBNLG7xHkLPizVOe0uqh9kd4KrZ9N5sa/oZDGnwuCnCva2FYyLL
+	 OjVREcVqjiC8EJJkwVEinfbXZ2j+p4Vd15qvU0BKci6cdee1NqwJJoU3erfOWlE5G1
+	 jNhx4LZd7vo498CkAc6j59yczlefFU/iVK6F3QKZFAGYBUa9q4D9ZDkDd28Lh7Zoyv
+	 AoZtyXqLdneaz+tLwT58wo5KnBJ+++akLCs0s7QKXlcVJGD2VJcB5ee5VmDg/5u344
+	 qIOSIJ5w+xRgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F1F6833AF;
-	Fri, 16 Jan 2026 16:35:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 706E8223
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 16:35:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0CAE838AC;
+	Fri, 16 Jan 2026 16:43:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CCF3223
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 16:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6113160837
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 16:35:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CC6D40A7D
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 16:43:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q6tuBQH1fR6X for <buildroot@buildroot.org>;
- Fri, 16 Jan 2026 16:35:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zct14X0QO5XX for <buildroot@buildroot.org>;
+ Fri, 16 Jan 2026 16:43:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
  envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CBDB060835
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBDB060835
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3BC8340741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BC8340741
 Received: from helium.openadk.org (helium.openadk.org
  [IPv6:2a00:1828:2000:679::23])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CBDB060835
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 16:35:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3BC8340741
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 16:43:37 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 0BAB631E059B; Fri, 16 Jan 2026 17:35:35 +0100 (CET)
-Date: Fri, 16 Jan 2026 17:35:35 +0100
+ id AB84F31E09EE; Fri, 16 Jan 2026 17:43:34 +0100 (CET)
+Date: Fri, 16 Jan 2026 17:43:34 +0100
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <aWpo1wBWy1lQh61V@waldemar-brodkorb.de>
+Message-ID: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 6.12.57+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1768581336; bh=ytcWzcMjzcB7ulUUZyLgxyGOG3ZFpgu9/9niWRZ/TFw=;
+ t=1768581814; bh=MKKs331bRc8q0YrNGQ6z1/V4CUhwJvjJELaBdFD8EVM=;
  h=Date:From:To:Subject:From;
- b=jroG2qjCib+ymSMSbRk4GNqLJCEEHcvlCOXfOH8QzxjGdvWmLs/lHJvjWTN+XRpNn
- Az5Kdk+qwrOjUgeDABhC9H+tXTdwmgz4SLGeKZ4Cz0WmdftGmGaMn79KgGGgPOhEKb
- 013O77DDhD4lN13DmQGeUnFxqDpLPslHwyiwb6uQ52tQjPSc2m8bCmXu1LYaSlSkg3
- Q2rm9t6WkddgBak2XKwypDthwQhZ/E5ZMVBEWTbGs1TzpuZBg5egBAMUXTMOpoYCGt
- sraWwhLcG6gv2OcRk83QusWfA9Tbwo4A/V8Yv++pB6T8TB0m5exIleFikZngI8CUtm
- 4weORgfJzeaEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=aJXZHVTEkY+kqC/VVdd+lw2K8ZFEty20xdLSOeTOgo88uRed7eqiSJPgfDVPu5qfG
+ qlScMg79VsDGS6nQ73JtjDRJix1pZBBlSEJ1FD6Q7OMc5zAcQbsXmjj67WCydbiuim
+ zo1cujuQraz04Illimefds0aBKw+Jg/KY4VyeuIz0ucT38WdLlgkR/OdYboY4Sk/nA
+ rkRwkb+G28S0efkrudvDsZ73+HMVNMs6DER5hviBmiSud8f++SL8JaJA1AEu+2kU67
+ +luASgzxshDnYGeJRHG2R7qaxhekdzbTbK1cpEYwpfDqG0bEpboJ2cWevWKoFcUfbc
+ 12E8MUITwDcfA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=jroG2qjC
-Subject: [Buildroot] [PATCH] package/nginx: security bump to 1.28.1
+ header.s=2022 header.b=aJXZHVTE
+Subject: [Buildroot] [PATCH v2] package/nginx: security bump to 1.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,8 +115,12 @@ Following security related issues are fixed:
        Thanks to Nils Bars of CISPA.
 
 Update patch 0007, which does not apply cleanly.
+License file was changed, year was bumped to 2025.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1->v2:
+ - forgot to mention license file update
 ---
  ...nix-ngx_linux_config.h-only-include-dlfcn.h-.patch | 11 ++++-------
  package/nginx/nginx.hash                              |  4 ++--
