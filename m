@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8878C982F0
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 18:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63BD0C982F0
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 18:25:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C8948309A;
-	Fri, 16 Jan 2026 18:25:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1003561017;
+	Fri, 16 Jan 2026 18:25:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i_2dyZ7R3pga; Fri, 16 Jan 2026 18:25:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wm5xPyGAuSwd; Fri, 16 Jan 2026 18:25:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34E5D834DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31C3161019
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768587909;
-	bh=5EKmYEknCaDlhkgMBGbpdYlDyRLZbpU5XzIBSnlanYc=;
+	s=default; t=1768587941;
+	bh=IVngXHvNEfLyoL6ykAe+T0+JLrrst9NFKcXViOvW55o=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=NizP+zFxltTyY8d7VFdOT0+7bja7bRQo3buuCp5G8faJg7Mn2CRS5J7mVDpEYzJZ2
-	 ex1sItpPyOeykD+boOyLbCiqggXXKRb4yQsBKUPifeIkBrJeaFxmcFyA2PfQgp5nZY
-	 LLka9gSQzj4vc9HBMn+5OVvUaRq64C37IsIjS97cM0i7Vamx0xG+jPw79EuktFT6l+
-	 E33f4/OsQE51EegM90nNar58gxgoOv0Av3h0UAfXXsBoeN0LHEmL2Hvw16xX4IsRtc
-	 LftzPp4/kosorsOdGwjk1V+/j9eZMN8osgXFGCQ0oAjy3v8af8U8Yl34BQEKfbGZml
-	 iF7n2DYd5aMcg==
+	b=hset4zzZcjgAn025uxmC1hVyI6517wlSy+759Zcz6cy1JZBNUmdOhkGXcTBHfwqg6
+	 j99VJfZ/7jErSlm2Vr3JI1qXe8O7ScEkcjaY/7PQwmlMXPawplXgjhnIQWbjcE3pc0
+	 J8z2KbHXIao243+0Z4erDpN/dO5CWgK0UcsgTSo9M+VO219E9TpKnMPkfPJeNHzGgE
+	 hHcMlYRMVXwon6Ce/XDuCVvtNvQ4LJHeu2q/0pvGwBnY0C2cWFO1qPpU4tW3eG+Phv
+	 ZTvwPS7MHkXgVVkC8srwYuAFcINtWzF625oLcUnbo2INWdxFJ2BjM1pDRb69SXsCeY
+	 naLhYO7c9XfOg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34E5D834DB;
-	Fri, 16 Jan 2026 18:25:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 93348223
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 18:25:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31C3161019;
+	Fri, 16 Jan 2026 18:25:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B2552CC
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 18:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F194834DB
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 18:25:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BEC340A4A
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 18:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TSpr2J5b_hGe for <buildroot@buildroot.org>;
- Fri, 16 Jan 2026 18:25:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LU9uDyzdWA9f for <buildroot@buildroot.org>;
+ Fri, 16 Jan 2026 18:25:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C7CCB8309A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7CCB8309A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DF665409B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF665409B5
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C7CCB8309A
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 18:25:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DF665409B5
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 18:25:38 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bd81.dip0.t-ipconnect.de [84.161.189.129])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 566BAA4C322F
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 19:25:02 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36542)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 817F2A4C322F
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 19:25:36 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39218)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vgoVK-000000000Zs-03nI
- for buildroot@buildroot.org; Fri, 16 Jan 2026 18:25:02 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vgoVs-000000000fx-0uq1
+ for buildroot@buildroot.org; Fri, 16 Jan 2026 18:25:36 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jan 2026 19:25:01 +0100
-Message-ID: <20260116182501.364366-1-bernd@kuhls.net>
+Date: Fri, 16 Jan 2026 19:25:36 +0100
+Message-ID: <20260116182536.364423-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768587902;
- bh=gdxs8o5J5K92EAjG6fBKAnXuN7Q/6efgCpnk/y3cxjc=;
+ s=kas202511301023; t=1768587936;
+ bh=4ucWq7F7F8pbTFPCTWphDaMFHkaD8vgTYg2p84J1aXc=;
  h=From:To:Subject:Date:From;
- b=BCAS5Q7jJL3A61xSWCOKwJW6z5SZW/wIlYsmQFaAjJugzgURSoGGKOTM6+d2FIjtQ
- B2/CH+e70q9jVtRYKXYhWVSPD0pvkq+5eBLm/ch9i5Rv/Pj6mLDhirD/iOnQo2dhtt
- Jh1cNkMvBmmSFhTvY5Bl4XrqDz1PBudyWa4Np/DI8cMWGnJYN2FMyLfYg4D6+gwY9A
- zYaSBprSg2HAUdFNyklQZkbGsyEEszS9kUHqqrCOBu3DqkcidFwMZOBXS2YfRbS+qu
- j9iHRNSt7Z4OcJpJdzmyI4Hk2YtEcHSkiHPZ6lzHuH4X9HAazgr2GoKKvD/B45f/Bz
- tqVE/cZ0PT2fQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=jBzNGWxITPvNQTEDxz4E2g8lFm9cJdmEveyYpu53YWYKA4+hcznQAvNb5Fc3Sea5y
+ FafqDcRa+x/ejllu3Qu05ti+krqdvGXr6Ydb7Eku2bnjOWRNMpcVUmcDZVFD8LU9HY
+ hoCSYUKSg1iQdpwQ2za2w/vV74xUgit6CsBovEmke8w7PfA5agLgwPBdYwhg5wn926
+ DFNPiOIjkqD5KL2ufI7kZKoeN5H35AxBYdCKYo6Ohj2FMoy8owWfm37CgnBLqAW8GX
+ iMhja1cki6L6xDxvWXIY4zQMyZJaDntBimMakKBG6FVh8SXCIuqsKECndlewLKcRXK
+ gPOLgLt7bvSEQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=BCAS5Q7j
-Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 8.4.17
+ header.s=kas202511301023 header.b=jBzNGWxI
+Subject: [Buildroot] [PATCH 1/1] package/php-imagick: bump version to 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,40 +96,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://news-web.php.net/php.announce/480
-
-Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_4
+https://pecl.php.net/package-changelog.php?package=imagick&release=3.8.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/php-imagick/php-imagick.hash | 2 +-
+ package/php-imagick/php-imagick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 4a9d2e4bb4..23ca842b72 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php?source=Y
--sha256  f66f8f48db34e9e29f7bfd6901178e9cf4a1b163e6e497716dfcb8f88bcfae30  php-8.4.16.tar.xz
-+sha256  28b234e347286158cae921d61283eb1169d89bc9d2e5f5976567260ff38b0bfa  php-8.4.17.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7524187649..aa6050c1a7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
+index f6091c6b7e..fe6a80a6d2 100644
+--- a/package/php-imagick/php-imagick.hash
++++ b/package/php-imagick/php-imagick.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bda67461c854f20d6105782b769c524fc37388b75d4481d951644d2167ffeec6  imagick-3.8.0.tgz
++sha256  3a3587c0a524c17d0dad9673a160b90cd776e836838474e173b549ed864352ee  imagick-3.8.1.tgz
+ sha256  b6e00df9cb3b91977c0d64a7c4db48cb6f5041f6eeda6583c236775f70a35b78  LICENSE
+diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
+index 0223b6ae93..d1ff69de6f 100644
+--- a/package/php-imagick/php-imagick.mk
++++ b/package/php-imagick/php-imagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.4.16
-+PHP_VERSION = 8.4.17
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-PHP_IMAGICK_VERSION = 3.8.0
++PHP_IMAGICK_VERSION = 3.8.1
+ PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
+ PHP_IMAGICK_SITE = http://pecl.php.net/get
+ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 -- 
 2.47.3
 
