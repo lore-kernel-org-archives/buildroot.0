@@ -1,119 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84DEED4A603
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 06:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 597D9D4A605
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 06:36:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE8161BFF;
-	Fri, 16 Jan 2026 06:23:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FE3285568;
+	Fri, 16 Jan 2026 06:36:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZtnQzuZThyfr; Fri, 16 Jan 2026 06:23:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XlMnM3bCg8DN; Fri, 16 Jan 2026 06:36:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2243616D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36E3A8556A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768544619;
-	bh=n9hkO8ZjFid4ktPlsXNHT6ByHE00SyUDN+5EZdLyjac=;
+	s=default; t=1768545363;
+	bh=/YM+ohBD1aBDfE0dP9120t5oN4Z7/1yAXQgIY2iq0TA=;
 	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Reply-To:From;
-	b=hzct8phQmWa9rd6pYX911u1xEzF72gW6U2AImXldTs90HlXIoMDyG4OTCSJuNwEcJ
-	 lVULQ3mmlM0BqkEWX8TpZ5jboNrEy0Mk0ENUmQU7GMo0QJrJb+0qJcRhsSsJwl7qwR
-	 8o6JhCFKG7bfWrLMyj0ve8Qx/wYF/S0yG3CuTLt6306zSXBstgg8gY6qh9imorg43H
-	 2yLUs0OgDI4XkHW47wQUEz3LUO+0BmPMl1mG/MePG/ckpf1gzQWtqdNQn6FrGU1s4q
-	 q5Ayyv7MUU+NxZFdwuvkr9HUCDwRslYprq93KNQjnCILLMapaHl65O69hTi2d0dOfl
-	 5KTcVrBA04haw==
+	b=cXbuwUnsayBEhZORdNu1/9IcWD+y9Vz/fTi86fTD8BaCDpjrMqLfNj6wdHyga44B6
+	 4zDmyl7rsZtt718I9ptf26SJgxJq2LQgxvU1XyXxVt4A2ULnOkI/Th5QZaMUOrUpCJ
+	 5FiMz//XhiTegUbr/pKdUKQkDgtNvNv/skDbmjs3OEBBg5HmolYF405+c4rAvSmjf9
+	 0UDvE3wuc1JFhvL6Vgek+XCTy6oqAWNlIwlO//S9VCJUysNiVg8g6t3lXkFD9z8AfU
+	 LSoUMvV2Px+DvMqRr96f8XuUE0c5aIppcAdX2ta3brl1SMyXs9oKVgIEDCi4XrlH9d
+	 EvHjOJBEDOXlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2243616D4;
-	Fri, 16 Jan 2026 06:23:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 113ED1C3
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 06:23:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36E3A8556A;
+	Fri, 16 Jan 2026 06:36:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B96D160
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 06:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 029BE615FA
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 06:23:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 06A9385568
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 06:36:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rFdjw_8sLQul for <buildroot@buildroot.org>;
- Fri, 16 Jan 2026 06:23:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LPNOyhEmWA0C for <buildroot@buildroot.org>;
+ Fri, 16 Jan 2026 06:36:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E11D3615DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11D3615DD
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E11D3615DD
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 06:23:37 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-47ee301a06aso14919385e9.0
- for <buildroot@buildroot.org>; Thu, 15 Jan 2026 22:23:37 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E327B85567
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E327B85567
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E327B85567
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 06:36:00 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-42fb6ce71c7so1436017f8f.1
+ for <buildroot@buildroot.org>; Thu, 15 Jan 2026 22:36:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768544616; x=1769149416;
+ d=1e100.net; s=20230601; t=1768545359; x=1769150159;
  h=in-reply-to:content-disposition:mime-version:references:reply-to
  :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=1ArHIGOSYHUiuqM9IxK+wSjcTxkAGFaGvP5jeSaa7QI=;
- b=m2o4bbck6JjjRIjyCU+1flT4CQ0qgneGZ6jF0JUvkeBHfHoq5jITkw64481RrTK2yM
- hq+e+4kpT5EBrcBziu6Tyv7B4xvf6+CTZ697l6QoeRnq2xRnwnuf37HNfsTS5BIhvj6k
- nEBDXRNOV5V6cIk4aLKK7485c057t4Xq33NLvdT/Kz9xwqkcXrstAWrmWyRYK7mwhjw4
- dyYAviFy/1oM2cHIROskGEkGoLMRHqHQ3yG6ywPEXQ85/e2pG2wp9mtkG898aTHCl+PX
- RebdBgodRYVRZBUoftz28DhgDTfHxucUtb3kn5jOZEmkIJEliNCZz7jnlEPQYFW5Sg6u
- EO4A==
-X-Gm-Message-State: AOJu0Yxs6l8Yu8DWKlULp01zOC0sUAXncSGXHPNTtS7dHUKncJu0Ol5G
- EowSuKXwkPC02jhIQ8WU/VLXGEeld1Pdwobt/CXzhIqZ92TK6JDJVtNv
-X-Gm-Gg: AY/fxX4RLrObNP3EYTmN6N2vi3BVGj/0JsFYKOJ66tGTrJN6pUxrOqYlnNVgiKibThv
- Ze0NOl49WrPkQyAy6pwV4hrb9uK8cSK0raBMZDnslvkLzha9jrkXKggibQfTdipg/IosWIrqUSD
- fdYe5Wf/H6rLFI3YsIM7cdpsYnMN+OVO6xNQ7AOfXe7868+okWwwjyDVyz3POBL0iKYf2ACD/pn
- C8e7Ra0ao9J1emqFFquRMYlHPOBBGCyWn83aKmUvCThBG4pkk02J/zZBSdOUF9mztRAlSySCbCn
- /saqNad+9b02CF+Lax0BVOKgjVFeqQv4iZBzPS40Wu5lhKfLRwjw2h2qGGMMFRTdbj8t9Xzxkr8
- +e55PWhzAY2P1hKI8z3Jgs9eBC9CYti3wxrjaETBv/HPrbYd+5LP6H8ZTcifCGjJQgGts/3Bgq6
- 4doEOlyvhNK9jRpRcvtZ7tR05KwN0rp4jDUWfY8H5T6so2ezgP
-X-Received: by 2002:a05:600c:3495:b0:477:639d:bca2 with SMTP id
- 5b1f17b1804b1-4801eaadbd9mr15079945e9.4.1768544615710; 
- Thu, 15 Jan 2026 22:23:35 -0800 (PST)
+ bh=haBaRCTz2nROHDBpcRZuOlCJGuLYKHEtYm82Kugkhj4=;
+ b=CSGWluCiZ+tFLblEqypwbok7BdzxvFTlYT3C1HZRLcLL5Lqj/UUTfjt+dvVDRI+tlt
+ mozKpiuIhZ058hvmIUuPbCVhjIcIcxlNYhCUpkNZkFxgQwlSpnVafswUStme+uoiW40r
+ H1qSiE7acNDpp28FES+Q5E2yE9zNl5neaiGkqcUrv/Th6WLnegyRTa888Lax1zySNhTC
+ uhfPHyjMFJxirzUXQUvd4UI2YHnDUVz5k4XpnkPrWaH4kYqSPXiuHM8dieLJmBtyhOuY
+ NTcB9R8/EBQLvh7/O0nfVficzCpt/ZD5uGHSLpd0mw8isnQCGC8UrG/5EaS2/IYSi6uE
+ hyrg==
+X-Gm-Message-State: AOJu0Yx6qmGWjuRfNw07O6cbNIDi4BV3zj6uGJF9PI91+K30s7RgoTxY
+ Sq6Iy+awXn8vnr1tDflp4tDZ5F/7mvzgYBjc+9PEMjleVsRZUq5bzaWh
+X-Gm-Gg: AY/fxX4Ki7gJSbtsNepV0FH/9jO+2MnYSVRUk5rWDpvwK28tBDoeOfkgfU+61vMcKYl
+ 7MZ0XH/m3e+HUXw2CvQEtblr7qE85MUnIVUPZ5QLr7A1U8Tp6b/Yi+sNTJwoG1UKyNoXmR5wXgQ
+ V+DAI9kcbM18ahVKBciZ9jWow72PiUgRNVN8D503S7ChBemFIS87/VMZtQczkVeM+sIY7GVtN1m
+ FMuyZT/Za3oHjKUO4JQYg7nNZOQO0rYlzbZyYBJVUP9I0afOMKC2q5TMJY73IVHJT2SEGFQ/n27
+ CfgWYl631SP/4GKqwt8UReeefkOirEQ9chxZ3zAzqmxVINW3lSFOjvOurg2xN1Oc1d2/P9Ov2E7
+ RKOP+aG5YSjUpjRlNWleaTBrk3u4yqv+mM+dDYmWEzdzn+JH/ze3UoOzI3N4pOQwy9B7FxkW3wT
+ sDmisiBVtYTGdoo82oApjmutyu0OAyOSe/pLokoJrc+3fC3ww8
+X-Received: by 2002:a05:6000:290d:b0:434:24ae:f687 with SMTP id
+ ffacd0b85a97d-4356997f729mr2006622f8f.6.1768545358307; 
+ Thu, 15 Jan 2026 22:35:58 -0800 (PST)
 Received: from pevik (gw1.ms-free.net. [185.243.124.10])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4801fd3bcd2sm10391755e9.1.2026.01.15.22.23.34
+ ffacd0b85a97d-43569926ff1sm3268104f8f.13.2026.01.15.22.35.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Jan 2026 22:23:35 -0800 (PST)
-Date: Fri, 16 Jan 2026 07:23:32 +0100
+ Thu, 15 Jan 2026 22:35:57 -0800 (PST)
+Date: Fri, 16 Jan 2026 07:35:55 +0100
 From: Petr Vorel <petr.vorel@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Olivain via buildroot <buildroot@buildroot.org>,
- Julien Olivain <ju.o@free.fr>, Maxim Tarelov <tarelovma@yandex.ru>
-Message-ID: <20260116062332.GA554275@pevik>
-References: <20251221180810.3770181-1-ju.o@free.fr>
- <20251228232021.4d4e70c9@windsurf> <20251230174958.GA496221@pevik>
- <aWlEAhChn8gSm7QZ@windsurf>
+To: Maxim Tarelov <tarelovma@yandex.ru>
+Cc: buildroot@buildroot.org, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20260116063555.GB554275@pevik>
+References: <20260114192413.569151-1-tarelovma@yandex.ru>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <aWlEAhChn8gSm7QZ@windsurf>
+In-Reply-To: <20260114192413.569151-1-tarelovma@yandex.ru>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1768544616; x=1769149416; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1768545359; x=1769150159; darn=buildroot.org;
  h=in-reply-to:content-disposition:mime-version:references:reply-to
  :message-id:subject:cc:to:from:date:from:to:cc:subject:date
  :message-id:reply-to;
- bh=1ArHIGOSYHUiuqM9IxK+wSjcTxkAGFaGvP5jeSaa7QI=;
- b=aNUaPzY3Kry33auID3h5XEg6M0qm0/DKaQCdk7BU7VEIkM0k9QAxba4OH6BTLM+Hux
- 8Sw+jSsgggGYDcxsuLRxigd26SqVraKDFhOP20+iE+rdMi0ao8cPFblt0qBFGqDUw5jV
- +mii7/9EMgD9NAsZGelQb5OI2MQ+uxt/zH67hEtz46IC3Mw1tD/ZNquSt9JW95/LsRbE
- /QNqJaMvLaZUrFePtwPamTlRM6XASH3x3Ip3WS0dFm/l/i0p+gbhUT5nPY73zdug4vO4
- 2pfY26axErVs6Hq97oBfP8LH2zDt0ElAz5SabSLBqNR8/Vknkq1UqFqhbJhUrSOnh5BE
- kxdA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=haBaRCTz2nROHDBpcRZuOlCJGuLYKHEtYm82Kugkhj4=;
+ b=OIRqzQ3VMKHVpOE+0tpXOdcMEQDtRFVwrNKzYxSBtpJovxWVesvPuPSc5S6Kb292/0
+ 7G/dnAOjGQidD6ksm66xLhjuXj81Dcy73DmP1RLgdho0aXYET19ogfA9oPFon9pjpVwf
+ bIPAD+MloahvkHDT+Ambma4FdUR2y6n6ea5Bcb6J171i7o7LyuhyBkNZun0mzEBPKy8j
+ 7OaA1E/HLrzWdLN8V9Jm40O9lQl0I+vZgS+lHsgHHZwGydODcvnqWcPQHXsMyJtxrdXG
+ zQ1LKYo3kfjEXbMpCYLvzp7lBn2AU2xTgDaJWjDeJyQoHSQbSYvupeIowJwldfsR2xXT
+ paLA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=aNUaPzY3
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: ltp-testsuite: replace
- runltp by kirk
+ header.a=rsa-sha256 header.s=20230601 header.b=OIRqzQ3V
+Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: kirk needs
+ python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,73 +129,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Hi,
 
-> Hello,
+[ Cc Julien and Thomas ]
 
-[ Cc Maxim ]
+> LTP project contains a number of scripts, such as kirk, which depend on
+> python3, but not all boards _defconfigs enable python3 by default.
 
-> On Tue, Dec 30, 2025 at 06:49:58PM +0100, Petr Vorel wrote:
+> To avoid errors like this:
+>  # /usr/lib/ltp-testsuite/kirk
+>  env: can't execute 'python3': No such file or directory
 
-> > Yeah. I don't like it either. Specially LTP tests themselves does not require
-> > anything (single test is either binary written in C statically linked LTP
-> > libraries, we also have few POSIX compatible shell based tests which require
-> > barely minimum of external dependencies), it can be run as is.
+> we must explicitly enable python3 when selecting LTP.
 
-> > ATM we have list of tests in so called runtest files [1], which contain list of
-> > tests (each line is single test: "test_label binary/script optional_arguments"),
-> > therefore anything which can remove the first parameter and execute the rest can
-> > be LTP runner. i.e. Buildroot custom script could be really minimal.
+> Signed-off-by: Maxim Tarelov <tarelovma@yandex.ru>
+> ---
+>  package/ltp-testsuite/Config.in        | 1 +
+>  package/ltp-testsuite/ltp-testsuite.mk | 2 ++
+>  2 files changed, 3 insertions(+)
 
-> I don't think I would want Buildroot to carry its own custom script
-> for this.
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 81dc9dffee..0ddc2fe02c 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -15,6 +15,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+> +	select BR2_PACKAGE_PYTHON3
 
-Fair enough.
+I would prefer not to drag python3 for all people which want LTP.
+There are a different ways to use LTP.
 
-We suggested the solution for the people which insisted we'd keep old runltp
-script forever.
+1) Preferred way to use kirk is to run it remotely. The main advantage is to to
+detect test crashed the kernel, actually one of the reasons why we wrote kirk.
+Also to reduce dependencies on SUT.
 
-And I tend to suggest it when see patches like this one:
+2) Run a single test (user wants to test sinle kernel/libc fix). Any LTP test
+can be run just by executing it. Any runner (kirk or the old script runltp) is
+to help using runtest files (and help with other tasks).
 
-https://lore.kernel.org/buildroot/20260114192413.569151-1-tarelovma@yandex.ru/
+Moreover Buildroot has support/testing/tests/package/test_ltp_testsuite.py
+where Julien adds kirk + BR2_PACKAGE_PYTHON3=y [1].
 
-> > runltp does quite a few other things but these who need them should really move
-> > to kirk. Also we plan to implement in kirk and ltx running tests in parallel.
-> > That will save a lot of runtime.
+If this must be added differently, maybe a new option: "run kirk locally"
+which would drag python3.
 
-> > [1] https://github.com/linux-test-project/ltp/tree/master/runtest
-
-> > > One option would as suggested by Petr to use kirk in its intended mode,
-> > > with kirk running on the host, and connected over SSH to the target to
-> > > run tests.
-
-> > > On the other hand, it was a lot more simple/convenient to be able to
-> > > just run a simple shell script on the target to run the test suite.
-
-> > Would it be possible to have both? Vendor runltp for local use and package kirk
-> > as a host package (+ ltx as normal package)?
-
-> I'm not sure what you're suggesting as "both"? Do you mean, having a
-> simple test runner that we can run directly on the target, but also
-> offer the possibility of building/installing kirk to run the test
-> suite from the host?
-
-Yes.
-
-> I'm not sure what ltx is in this context.
-
-https://github.com/linux-test-project/ltx
-(ltx is not yet relevant because it is still experimental / unfinished.
-It's a test executor which allows to execute binaries on host in the fastest way
-as possible. In the future together with LTP metadata it will allow to run tests
-in parallel - speedup.)
+Also, I'm not sure if people are aware of support scripts (I did not know),
+but I don't think anything can be done for it.
 
 Kind regards,
 Petr
 
-> Best regards,
+[1] https://lore.kernel.org/buildroot/20251221180810.3770181-1-ju.o@free.fr/
 
-> Thomas
+>  	help
+>  	  The Linux Test Project provides a huge testsuite for Linux.
+
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index e4e3ff8717..c103ac9819 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -13,6 +13,8 @@ LTP_TESTSUITE_LICENSE_FILES = COPYING
+
+>  LTP_TESTSUITE_CONF_OPTS += --disable-metadata
+
+> +LTP_TESTSUITE_DEPENDENCIES += python3
+> +
+>  ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX),y)
+>  LTP_TESTSUITE_CONF_OPTS += --with-open-posix-testsuite
+>  endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
