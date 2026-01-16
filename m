@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FA91C98301
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 20:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC93C982C0
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 20:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25792600CA;
-	Fri, 16 Jan 2026 20:57:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFFDB84ADE;
+	Fri, 16 Jan 2026 20:58:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LLYnoloWhEqy; Fri, 16 Jan 2026 20:57:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kjvvs2eBTJXx; Fri, 16 Jan 2026 20:57:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2800A615AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E5C884AD1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768597078;
-	bh=yoZcwdaPO4yUgCo5h3BRtkksgtcXfFiVHh4D63vE27I=;
+	s=default; t=1768597079;
+	bh=Cs5EuqCP4VreQQFwHlAcDLgJmPt8vMpqHp0usCvkEbI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=q+G3tUPlMy9jE3eld9LZyXittychdpwJvblehLsgTmeHBCvFp6LAXupQ2Aa03sVQh
-	 t3mpq4mQoDh8pwtrZH3l3s3vcx0Vv6AAE+Vfr21aVNh0sqK1cFmXhiBk9shckmG1j2
-	 qYvTrR7RikryKf+JE53Ax9GFYW1ualKJHohlsgLi7C2vsIIPlOjEJNesb2FP/5nFu5
-	 PPKEok+q/rKVyO9cZWMrDaPoYLYXVIC0noijTF/YEdk+3f9WKTG59ZYIyc6hjV5kYE
-	 6AdDzbOE88Xh3fWCx14Oo3AW0KBGhPMoiC/UL7j3srdpH8tAtBEMPc3iOH2u9kPD06
-	 +7nuEja+pnH1A==
+	b=NglaxTfKNPBHh7SjjrNG/TH2aGiIDNM37wkyoPb1rmWcEtRmd0rUfvHVY3APh4ERS
+	 5KW1WrYclZ65KES+7A9SxPv1eEHuTN8DdwZq4lQMIu4Tw6TOBrOVW0m7brPDmZezxb
+	 +K2CKdfgM21jV97VCPCft7W5ie2Ld2xUegwJqu6lFj+MBvII1ih6gzCl6Qpg86WZbK
+	 fO60QDoyybx0z1htrSymnCm182jRDgbbayAr0mobrJy0/DaY8uKChZc+zKzpROsJLI
+	 JHbYZTetN1QiMmAD1CFy9TN4b2y+/fydjXi1YyW2Ph40kSUgQZ7tgZ2bN5FuruOei8
+	 tRL/PjTbsf9yw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2800A615AE;
-	Fri, 16 Jan 2026 20:57:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E5C884AD1;
+	Fri, 16 Jan 2026 20:57:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A12B223
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:57:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 59143223
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D104D615A2
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:57:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76924615A3
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:57:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NW6FM1CfpHAL for <buildroot@buildroot.org>;
+ id EqrGZ3x-Q5Lt for <buildroot@buildroot.org>;
  Fri, 16 Jan 2026 20:57:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 018C5615AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27740615B0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 018C5615AD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27740615B0
  for <buildroot@buildroot.org>; Fri, 16 Jan 2026 20:57:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4C9688691; Fri, 16 Jan 2026 20:57:48 +0000 (UTC)
+ id 253E780242; Fri, 16 Jan 2026 20:57:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 Jan 2026 21:55:49 +0100
+Date: Fri, 16 Jan 2026 21:55:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 700726db4b21219fbaa9907d1a8525cd3107b0a0
-X-Git-Newrev: 12b6fbf40f3303b2d3463a00f874c6b2cbb3eac2
+X-Git-Oldrev: 5f9d8b6e54f51bb1b3cc8f8e659267e9f9e3540a
+X-Git-Newrev: f6e0678ba8c95a17b5ca7bedb05a0950ab727c9a
 X-Patchwork-Hint: ignore
-Message-Id: <20260116205748.E4C9688691@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-triggerd: remove package
+Message-Id: <20260116205749.253E780242@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lockdev: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,119 +76,206 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b6fbf40f3303b2d3463a00f874c6b2cbb3eac2
+commit: https://git.buildroot.net/buildroot/commit/?id=f6e0678ba8c95a17b5ca7bedb05a0950ab727c9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Analysis of https://rg42.org/gitweb/?p=dbustriggerd.git:
-last commit: 2014
+The package was removed from Debian in 2016:
+https://tracker.debian.org/news/738763/removed-103-16-from-unstable/
+"Obsolete and replaced by flock"
 
-Musl libc 1.2.5 removed the definition of the basename() function from
-string.h and only provides it in libgen.h as the POSIX standard
-defines it.
-
-Instead of fixing an unmaintainted package we remove it from buildroot,
-no other package depends on it.
+and causes build errors with musl.
 
 Fixes:
-https://autobuild.buildroot.net/results/811/81170fe89e1f5b70c63657684de43175e621f762/
-
-dbus-triggerd.c:150:27: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-  150 |     argv[argc++] = strdup(basename(handler_cmd));
+https://autobuild.buildroot.net/results/9fa/9fa9323bac3ee1720396bb34fefb3017125e5a85/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                         |  7 +++++++
- package/Config.in                        |  1 -
- package/dbus-triggerd/Config.in          | 15 ---------------
- package/dbus-triggerd/dbus-triggerd.hash |  3 ---
- package/dbus-triggerd/dbus-triggerd.mk   | 21 ---------------------
- 5 files changed, 7 insertions(+), 40 deletions(-)
+ .checkpackageignore                                |  1 -
+ Config.in.legacy                                   |  7 +++
+ package/Config.in                                  |  1 -
+ ...stall-static-library-and-headers-separate.patch | 44 ----------------
+ package/lockdev/Config.in                          |  6 ---
+ package/lockdev/lockdev.hash                       |  5 --
+ package/lockdev/lockdev.mk                         | 58 ----------------------
+ 7 files changed, 7 insertions(+), 115 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a25452290b..570c2bc489 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -607,7 +607,6 @@ package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch lib_p
+ package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch lib_patch.Upstream
+ package/lmbench/0004-Fix-garbage-pointer-for-lat_rpc-S-localhost.patch lib_patch.Upstream
+ package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch lib_patch.Upstream
+-package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch lib_patch.Upstream
+ package/lockfile-progs/0001-sus3v-legacy.patch lib_patch.Sob lib_patch.Upstream
+ package/lshw/0001-solve-Compile-error-when-g-version-is-less-than-5.patch lib_patch.Upstream
+ package/ltrace/0001-arm-plt.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 976b0951c0..a9ced52e37 100644
+index a9ced52e37..4502963b24 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_DBUS_TRIGGERD
-+	bool "dbus-triggerd removed"
++config BR2_PACKAGE_LOCKDEV
++	bool "lockdev removed"
 +	select BR2_LEGACY
 +	help
-+	  dbus-triggerd was no longer maintained upstream, so it has
-+	  been dropped.
++	  lockdev was no longer maintained upstream, so it has been
++	  dropped.
 +
- config BR2_PACKAGE_CVS
- 	bool "cvs has been removed"
+ config BR2_PACKAGE_DBUS_TRIGGERD
+ 	bool "dbus-triggerd removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 34d48d928b..58518a787d 100644
+index 58518a787d..6ce16bce0a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -486,7 +486,6 @@ endmenu
- 	source "package/dbus-cxx/Config.in"
- 	source "package/dbus-glib/Config.in"
- 	source "package/dbus-python/Config.in"
--	source "package/dbus-triggerd/Config.in"
- 	source "package/dfu-programmer/Config.in"
- 	source "package/dfu-util/Config.in"
- 	source "package/dmidecode/Config.in"
-diff --git a/package/dbus-triggerd/Config.in b/package/dbus-triggerd/Config.in
+@@ -1699,7 +1699,6 @@ menu "Filesystem"
+ 	source "package/liblockfile/Config.in"
+ 	source "package/libnfs/Config.in"
+ 	source "package/libsysfs/Config.in"
+-	source "package/lockdev/Config.in"
+ 	source "package/physfs/Config.in"
+ endmenu
+ 
+diff --git a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch b/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
 deleted file mode 100644
-index 331c414704..0000000000
---- a/package/dbus-triggerd/Config.in
+index d5a498a19e..0000000000
+--- a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
 +++ /dev/null
-@@ -1,15 +0,0 @@
--config BR2_PACKAGE_DBUS_TRIGGERD
--	bool "dbus-triggerd"
--	depends on BR2_USE_MMU # fork(), dbus
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
--	depends on BR2_PACKAGE_DBUS
+@@ -1,44 +0,0 @@
+-From 0dcd2368c3e23a5cc1cc4a979d9c241ed9302236 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sun, 4 Jan 2015 16:06:07 +0100
+-Subject: [PATCH] Makefile: install static library and headers separately
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Makefile | 12 +++++++-----
+- 1 file changed, 7 insertions(+), 5 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index e27dcbd..ecf52d1 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -45,12 +45,10 @@ perl-lib:	static
+- 	cd LockDev && make OPTIMIZE="-O2 -g -Wall"
+- 	cd LockDev && make test
+- 
+--.PHONY: install install_dev install_dbg install_doc install_run 
+--install:	install_dev install_dbg install_doc install_run
+-+.PHONY: install install_dev install_dbg install_doc install_run install_static
+-+install:	install_dev install_dbg install_doc install_run install_static
+- 
+--install_dev:	${static} src/lockdev.h
+--	install -m755 -d	${libdir}
+--	install -m644 ${static}	${libdir}
+-+install_dev:	src/lockdev.h
+- 	install -m755 -d	${incdir}
+- 	install -m644 src/lockdev.h	${incdir}
+- 	install -m644 src/ttylock.h	${incdir}
+-@@ -69,6 +67,10 @@ install_doc:	docs/lockdev.3
+- 	install -m755 -d	${mandir}/man3
+- 	install -m644 docs/lockdev.3	${mandir}/man3
+- 
+-+install_static:	${static}
+-+	install -m755 -d	${libdir}
+-+	install -m644 ${static}	${libdir}
+-+
+- install_run:	${shared}
+- 	install -m755 -d	${libdir}
+- 	install -m644 ${shared}	${libdir}
+--- 
+-1.9.3
+-
+diff --git a/package/lockdev/Config.in b/package/lockdev/Config.in
+deleted file mode 100644
+index 4b386f4ab0..0000000000
+--- a/package/lockdev/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_LOCKDEV
+-	bool "lockdev"
 -	help
--	  dbus-triggerd is a tool to trigger shell-commands upon
--	  receiving a given dbus-signal.
+-	  Library for locking devices.
 -
--	  http://gareus.org/oss/dbustriggerd/start
--
--comment "dbus-triggerd needs a toolchain w/ threads"
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_DBUS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dbus-triggerd/dbus-triggerd.hash b/package/dbus-triggerd/dbus-triggerd.hash
+-	  No upstream site, primary site is Debian.
+diff --git a/package/lockdev/lockdev.hash b/package/lockdev/lockdev.hash
 deleted file mode 100644
-index c5127133fb..0000000000
---- a/package/dbus-triggerd/dbus-triggerd.hash
+index e32466dfe7..0000000000
+--- a/package/lockdev/lockdev.hash
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  73dbd92e89eee223928b5cbf414affb5913f70c1ca7e3f8ab733a4696436dae3  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09-git4.tar.gz
--sha256  30d135650639af9019633690fc1aecbfc150aeeef9446347d4286a58338d10b0  dbus-triggerd.c
-diff --git a/package/dbus-triggerd/dbus-triggerd.mk b/package/dbus-triggerd/dbus-triggerd.mk
+@@ -1,5 +0,0 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev/lockdev_1.0.3-1.6.dsc
+-sha256  ccae635d7ac3fdd50897eceb250872b3d9a191d298f213e7f0c836910d869f82  lockdev_1.0.3.orig.tar.gz
+-sha256  a5405c6ee5e97e45eeb1c81330a7e9f444a58bda5e6771fa30007516c115007e  lockdev_1.0.3-1.6.diff.gz
+-# Locally calculated
+-sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  LICENSE
+diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
 deleted file mode 100644
-index 7d73a6c98f..0000000000
---- a/package/dbus-triggerd/dbus-triggerd.mk
+index e491b132d3..0000000000
+--- a/package/lockdev/lockdev.mk
 +++ /dev/null
-@@ -1,21 +0,0 @@
+@@ -1,58 +0,0 @@
 -################################################################################
 -#
--# dbus-triggerd
+-# lockdev
 -#
 -################################################################################
 -
--DBUS_TRIGGERD_VERSION = ba3dbec805cb707c94c54de21666bf18b79bcc09
--DBUS_TRIGGERD_SITE = git://rg42.org/dbustriggerd.git
--DBUS_TRIGGERD_LICENSE = GPL-2.0+
--DBUS_TRIGGERD_LICENSE_FILES = dbus-triggerd.c
--DBUS_TRIGGERD_DEPENDENCIES = host-pkgconf dbus
+-LOCKDEV_VERSION_MAJOR = 1
+-LOCKDEV_VERSION = $(LOCKDEV_VERSION_MAJOR).0.3
+-LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
+-LOCKDEV_PATCH = lockdev_$(LOCKDEV_VERSION)-1.6.diff.gz
+-LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev
+-LOCKDEV_LICENSE = LGPL-2.1
+-LOCKDEV_LICENSE_FILES = LICENSE
+-LOCKDEV_INSTALL_STAGING = YES
 -
--define DBUS_TRIGGERD_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LOCKDEV_BUILD_ARGS = static
+-LOCKDEV_INSTALL_ARGS = install_static
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-LOCKDEV_BUILD_ARGS = static shared
+-LOCKDEV_INSTALL_ARGS = install_run install_static
+-else # BR2_SHARED_LIBS
+-LOCKDEV_BUILD_ARGS = shared
+-LOCKDEV_INSTALL_ARGS = install_run
+-endif
+-
+-# Make the code believe we are using a C library compatible with
+-# glibc, which for the purpose of lockdev is actually true.
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-LOCKDEV_BUILD_ARGS += CFLAGS="$(TARGET_CFLAGS) -D__GNU_LIBRARY__"
+-endif
+-
+-ifeq ($(BR2_SHARED_STATIC_LIBS)$(BR2_SHARED_LIBS),y)
+-define LOCKDEV_CREATE_LINKS_STAGING
+-	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
+-	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_VERSION_MAJOR)
 -endef
 -
--define DBUS_TRIGGERD_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+-define LOCKDEV_CREATE_LINKS_TARGET
+-	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_VERSION_MAJOR)
+-endef
+-endif
+-
+-define LOCKDEV_BUILD_CMDS
+-	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(LOCKDEV_BUILD_ARGS)
+-endef
+-
+-define LOCKDEV_INSTALL_STAGING_CMDS
+-	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS) install_dev
+-	$(LOCKDEV_CREATE_LINKS_STAGING)
+-endef
+-
+-define LOCKDEV_INSTALL_TARGET_CMDS
+-	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS)
+-	$(LOCKDEV_CREATE_LINKS_TARGET)
 -endef
 -
 -$(eval $(generic-package))
