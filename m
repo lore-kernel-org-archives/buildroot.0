@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 783EFC982C0
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 21:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EAEFC982C0
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 21:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3806561651;
-	Fri, 16 Jan 2026 21:27:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2689884BF3;
+	Fri, 16 Jan 2026 21:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WC9luYH3Ha5J; Fri, 16 Jan 2026 21:27:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hUZZJUypymrs; Fri, 16 Jan 2026 21:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C13376164A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47E7E84BF4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768598820;
-	bh=IRg0T1mIaPtHqqnCq059P/5RdOW4pImifiOwKez0rPQ=;
+	s=default; t=1768599130;
+	bh=XV6L8a5GDs8pQumPxrZzsEUUSj5H3OllmbsZu3HrUfs=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=OloYPEKAbr7AVN/3nD7rzMIDUVaTkiHtSH7pQHWHY4nwbN7FKgIQK//+XqX9FTuzO
-	 7lWFQL4G0tZZhzRBYfrYClIaGMb9hMj1l4JAvY88MYu75ynbCGzEhTFuDacQHg5TGC
-	 gytr8dte4+UnRPkzah+ceb/BTP1YN8GXaCOJvp40vUm9KLiutmMse+etE3s18yUgY+
-	 AiZzkW9NBV3tNu8W1MHnggPm2sY1r+B6ZSr/iCp7aMZ0759PUFHg+Q9i6G5rnyDBdi
-	 YtDtUaY5jjxlffd/JIxOjPceDj0z4H7UCYf5vwvCyuAIGH4h1VtvFLw26tyVRFyKPM
-	 CJ6PglLtRhV5A==
+	b=koG14SzuBJ/KEoaiwNPxfwWSI3AQ9Bncmo+7rke1iINAt4dIkPdHzkUAbkZytl8ge
+	 I8gKkYKpafn7V2GBT6dbI+oj9Robe+wg6joNzpC68XWFrfrpS0TX/3WnATacF+J5u4
+	 nasbFm8UCpiCBQGTuuqxZ6T4u+IeAAoz7JRrc+gIFd4dakAQNz6WDqoeVBhMxPykA8
+	 5t6sF1z31hRk0m/739AGSGvyaC3RJ2JUlO6t/kkNgbjYB9Pme5cwqaxOL+K9u+Lh/L
+	 NpNA4hRIRCDnAHKs82/Iazh76egKiw7lQFUuxUiklTTcdO59SQHQJgbXs9GDMz3m1U
+	 BOGYQQ1L578oQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C13376164A;
-	Fri, 16 Jan 2026 21:27:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BDA2160
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:26:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47E7E84BF4;
+	Fri, 16 Jan 2026 21:32:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF4DC223
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BE34401CB
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:26:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFD3484BF4
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:32:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c99W90XESg2u for <buildroot@buildroot.org>;
- Fri, 16 Jan 2026 21:26:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OjVvpvvCtIKV for <buildroot@buildroot.org>;
+ Fri, 16 Jan 2026 21:32:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6AA40400FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA40400FF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E4ED184BF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4ED184BF3
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6AA40400FF
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:26:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E4ED184BF3
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:32:07 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 1DDB51A28C8
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:26:55 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id A54AE1A28C8;
+ Fri, 16 Jan 2026 21:32:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id DF41D606F9;
- Fri, 16 Jan 2026 21:26:54 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 73117606F9;
+ Fri, 16 Jan 2026 21:32:05 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3D04110B68CC3; Fri, 16 Jan 2026 22:26:54 +0100 (CET)
-Date: Fri, 16 Jan 2026 22:26:53 +0100
+ with ESMTPSA id DAAA610B68E6B; Fri, 16 Jan 2026 22:32:04 +0100 (CET)
+Date: Fri, 16 Jan 2026 22:32:04 +0100
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org
-Message-ID: <aWqs4r1FGNf5CH_L@windsurf>
-References: <20260114173925.1877799-1-bernd@kuhls.net>
+Message-ID: <aWquKyF9_zcjKaQf@windsurf>
+References: <20251220170623.155785-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260114173925.1877799-1-bernd@kuhls.net>
+In-Reply-To: <20251220170623.155785-1-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1768598814; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=H197Id8O3yyvnBd/Ax+Y+5O4tJ201XolE4np5H40yAo=;
- b=hnffUucj5pplQF9/PmFuY3uoEtdeB8jyXsxsdQFy4Ubmpm38bOkv3mN6ihRLaMFEX2u+Ln
- 6gpxumN5ZOUr3olz9lsj8CPfKpFLlkTzSbeIEM89MTl6EOiQMJGG8/GL0LTDyHuEY5/pVq
- 0Q8pZudt00Zl+1BImBy97Kqvqm2JK5VunmrfNbgxWEZrv5sRfYph5MwfX2eCB8tAr8b4pv
- byJzYYqi7ML96xf+SIvPmA/V8V4Zl3Nrb1fcuqQaZfV5jo5ltHm7uTxYSARDQcgm1zWdz9
- K/RmvqCxQRWCxUlIJAY5u+pklC5y3QgTkRKGADJ3LeHyTULXB45fuPtE6MnGEg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1768599125; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=blhn12DbmuIL4s0uNuNdv5Itn0KoDpS336/CdKxeiik=;
+ b=kGFr/K1Hl5t0DHvZmchDTguARwuJY9DF/QTK6KfxzYa8pykK7sp8DKPLQuFOPXlbjnUarg
+ aNc7sU4OGnFrIPJ/SA9rkXFYf0iYFZvfydmU+DasvR/WqIGWCndRW+pGucb1fkw79LdV0h
+ I8vD7U/sC2L7KzVRf82rEiX+csWHZ07oK1NGXr5ocHrFOKWG72A0yvkSCHcSMZk9rQ1x2s
+ e6JyCmdS7GaOlo2IsLazd04+vz+HZiv2Bvtcvik7+kfR7iXFG24PScJVKYSBkl8seHrD8w
+ u0AwCJ2GO/3lqP+MIw4amerL54bbxsP0x0+KAk7EID0gPIv7fk4VFXVQBpQl7w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=hnffUucj
-Subject: Re: [Buildroot] [PATCH 1/1] package/rp-pppoe: update tarball URL
+ header.a=rsa-sha256 header.s=dkim header.b=kGFr/K1H
+Subject: Re: [Buildroot] [PATCH 1/4] package/util-linux: Remove -lpthread
+ from uuid.pc for non-threaded builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,27 +101,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 14, 2026 at 06:39:25PM +0100, Bernd Kuhls wrote:
-> The project moved its repo to codeberg.org:
-> https://dianne.skoll.ca/pipermail/rp-pppoe/2025q3/000663.html
-> 
-> Updated tarball hash after verifying that no files changed, only the
-> directory name changed from rp-pppoe-4.0/ to rp-pppoe/
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/5ff/5fff21a4150a5f668d43830591e21b660299ed9d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+On Sat, Dec 20, 2025 at 06:06:20PM +0100, Bernd Kuhls wrote:
 
-Applied, thanks!
+> +define UTIL_LINUX_POST_EXTRACT_FIXUP
+> +	$(SED) 's/-lpthread//' $(@D)/libuuid/uuid.pc.in
+> +endef
+> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +UTIL_LINUX_POST_EXTRACT_HOOKS += UTIL_LINUX_POST_EXTRACT_FIXUP
+> +endif
 
-> -sha256  17d45712778f2bf6b0859ff610a3dacd24bc4462e9f53bb1466d47af391701d3  rp-pppoe-4.0.tar.gz
-> +sha256  459904065fd4a70c927757d84cc7b4ef70946a707fa1b83f16246f925158b13e  4.0.tar.gz
+Yerk, this is quite ugly. Why don't you fix the actual problem
+upstream?
 
-It would have been nice to find a solution that allowed to have a
-better tarball name, but I couldn't find a quick solution, so I
-applied as-is. And anyway, having a different tarball name is needed
-to not have clashes on the hash value.
+Could you try:
+
+diff --git a/libuuid/uuid.pc.in b/libuuid/uuid.pc.in
+index 51929fe80..a40dc6644 100644
+--- a/libuuid/uuid.pc.in
++++ b/libuuid/uuid.pc.in
+@@ -7,5 +7,5 @@ Name: uuid
+ Description: Universally unique id library
+ Version: @LIBUUID_VERSION@
+ Cflags: -I${includedir}/uuid
+-Libs.private: @SOCKET_LIBS@ -lpthread
++Libs.private: @SOCKET_LIBS@ @PTHREAD_LIBS@
+ Libs: -L${libdir} -luuid
+
+(Totally untested)
+
+Thanks!
 
 Thomas
 -- 
