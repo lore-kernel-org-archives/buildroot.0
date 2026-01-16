@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEC41C982FE
-	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 21:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39819C982C3
+	for <buildroot@archiver.kernel.org>; Fri, 16 Jan 2026 21:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92B7B84AD0;
-	Fri, 16 Jan 2026 21:00:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07FE5615BA;
+	Fri, 16 Jan 2026 21:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fc6yFmD4ZMCu; Fri, 16 Jan 2026 21:00:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y1QCMg34TNtc; Fri, 16 Jan 2026 21:02:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B35B584AD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35906615BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768597254;
-	bh=MW/RSzqZsVBrnA0f7feKrrmQn7Hnrx/odsWpm1aqZUY=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=MDiGgHEmJ5lMaLJ1fcGFgrLMBrzmppRNGntdUIgurQC+nu5lOyHKAgpboyeVnWhEf
-	 f4K97pDDm/If3X0c30axVsxQ5F47a+NLoP4v3VG3h2V4Qrpz2aTPVJE3ee0Hh4g5O6
-	 62QflefvB61hrfIZUFyXNPUiaMfKgFsBQMw5aUk4mShwNaT5BXSWugek4ZCXB/BBQR
-	 j6rExha/d1rmzDpNXuwG25lrsyF46P1NKD+QvMh2QaPH66B8MtKqW2M9vAIhAPuuRv
-	 EwhgrCS+Qq3gwVu/9PQDyKzq8/PTuodVV8YV3UcD5iHr2Da/OILCob4iod8DO0HM4l
-	 iDZWF2BusTjqQ==
+	s=default; t=1768597365;
+	bh=Y9br4u+/r3TfevLHC3NygCozBPlNjI8e9sW2yGhhRRM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=SVq/evFaaDqFLPdJFXzoPTu8QJ8cJRU8Qd9m9IcVJBNIMiAHL4JDoGXJCW1ess9zD
+	 jfvkuYRbTqfDoqaMJlE0YBuDq6GB80Tx05sP6cfy88Gm1HGBztjOme7ZlQj+0hZalq
+	 eVLgyuzhR0I4YGuVt/p8OpIuH8lOECl87QvBLDUgn6HKqSq8TsyfIxX17g2Kkyge+L
+	 AwV8IOUlop0LXq22xBA1h3zpyXPtawUgHzoSqdeIkr8sYZSTq/jwRTkrv5SP5dZ8rQ
+	 aejTm9jFnR5WxM/JGD+SaPB+sl0LpS9gswS64zThwpc9N6Bb/5jHGes+SSU/3thc6i
+	 bMoSje1VBE4Eg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B35B584AD1;
-	Fri, 16 Jan 2026 21:00:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35906615BC;
+	Fri, 16 Jan 2026 21:02:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A94DD223
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:00:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2263C160
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 984B741A50
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:00:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12EA741A74
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZeC_Da0IGyB for <buildroot@buildroot.org>;
- Fri, 16 Jan 2026 21:00:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 304bpRMyzZrM for <buildroot@buildroot.org>;
+ Fri, 16 Jan 2026 21:02:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8CA4441A42
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA4441A42
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8CA4441A42
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:00:52 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 937B3C1E48C
- for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:00:23 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 67C20606F9;
- Fri, 16 Jan 2026 21:00:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DF64E10B68E49; Fri, 16 Jan 2026 22:00:49 +0100 (CET)
-Date: Fri, 16 Jan 2026 22:00:49 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <aWqm4TXEfyz3Bgjr@windsurf>
-References: <20260106200115.1985522-1-bernd@kuhls.net>
- <20260106200115.1985522-10-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260106200115.1985522-10-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1768597250; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=3XkE16dKYLaWMnPI+3dZxoo90iYTonAoG3DCmw5piMA=;
- b=fHHNC/AVKoW/2vtqhE3XYOFJAYxxW3tkHn7awRcziK4n8XHLxJtU4msvFHDJXf00lDZncX
- RhXt1omnHAIA/4DbikBR2d+oWxSZQ8NvsHi3y/edSz8G8CgdIEI+mGtTSc3FsnLYmcgrQP
- v1Gnr9lgTkRn3nNM2VyUc8xm7IWKYP52+/xMDXOz/OZ8V6i5zXzXnQIEh93G/pLIpMVTjU
- GANXNwVFtWqsNMEZTviGhSc2YedGiCA+HB4r4D6Bv09Ht9xGmaXeTsEi5r6W4INnYHrdqU
- ibNinTJgVscpYynxwflliuQRfs6B5XpPoLnI77R/MKeQqS4p/AvpBxmMrqvmow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=fHHNC/AV
-Subject: Re: [Buildroot] [PATCH v2 9/9] package/lockdev: remove package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3318741A57
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3318741A57
+ for <buildroot@buildroot.org>; Fri, 16 Jan 2026 21:02:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2D9D7885E1; Fri, 16 Jan 2026 21:02:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 16 Jan 2026 22:02:26 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f6e0678ba8c95a17b5ca7bedb05a0950ab727c9a
+X-Git-Newrev: e4d075975f2ce0409a56902b0ef92fb34cdac167
+X-Patchwork-Hint: ignore
+Message-Id: <20260116210243.2D9D7885E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lsof: fix build failure due to
+ missing BR2_PACKAGE_LIBTIRPC_RPCDB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,30 +71,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Jan 06, 2026 at 09:01:14PM +0100, Bernd Kuhls wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e4d075975f2ce0409a56902b0ef92fb34cdac167
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  Config.in.legacy                              |  7 +++
->  package/Config.in                             |  1 -
->  ...-static-library-and-headers-separate.patch | 44 --------------
->  package/lockdev/Config.in                     |  6 --
->  package/lockdev/lockdev.hash                  |  5 --
->  package/lockdev/lockdev.mk                    | 58 -------------------
->  6 files changed, 7 insertions(+), 114 deletions(-)
+Package lsof requires libtirpc rpcdb option enabled with non-glibc
+toolchains since the bump of libtirpc to version 1.3.7 with buildroot
+commit 3f3d6e43de9b4aac7df8545fd811171256f878d3 which includes upstream
+commit:
+https://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=7cea8ad66aecc21e6caae330b5d31075af399193
 
-Following this removal, there was a leftover entry in
-.checkpackageignore, which I have dropped as part of this
-commit. Thanks!
+Fixes:
+https://autobuild.buildroot.net/results/59e/59e0cc2692a8a7d587f5a4da90ec268237141dab/
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/14.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
+ print.c:(.text+0x166): undefined reference to `getrpcbynumber'
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lsof/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/lsof/Config.in b/package/lsof/Config.in
+index 48ceb39a99..424778d3d7 100644
+--- a/package/lsof/Config.in
++++ b/package/lsof/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LSOF
+ 	bool "lsof"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_LIBTIRPC_RPCDB if BR2_PACKAGE_LIBTIRPC
+ 	help
+ 	  lsof (LiSt Open Files)
+ 	  The lsof tool lists information about files opened by
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
