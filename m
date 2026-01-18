@@ -1,85 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E11A4C9832F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jan 2026 14:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6061FD4A5F4
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jan 2026 15:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91F9C61CCA;
-	Sun, 18 Jan 2026 14:01:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0142584BAE;
+	Sun, 18 Jan 2026 15:07:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XE6HgARhUJgr; Sun, 18 Jan 2026 15:07:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8E4F84BA7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768748859;
+	bh=f/M8ediM4LNpW9jtg9k6NrafqKXc7kAPDqb6A8tZki4=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=mj3K75JLvraCOkR8+/mzuCgdnwJjav+q44Hmghkw92lYRL2aASUza3Kzr12zznN2t
+	 Fwg0nUZilMczGXM5zTaGywW9LoKl9qsaaTaNyWreKbMe7zlVO8iQtSHp1SOF1WVGir
+	 ICvDffb5B1x8PNUCPgAy1jL36X0xjpkZGEEK1sV1a4HW1Gu/zRF/6MIVnBUD3lxWdm
+	 8PZIiwM0k7opPa+ROWX+hpVhDWCZUiIEqh/4mg2I1Nk3nZuKEYmcQPXOn2L6Ak/9ia
+	 0pqkUd7zjpj87BCKuVwDTT6hU4FdlfTp47Ofr93U5vckGffrkj1185mWmXjCRTCE/N
+	 Op6RERpLUez8A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8E4F84BA7;
+	Sun, 18 Jan 2026 15:07:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8F7F160
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 15:07:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA77C6F5B9
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 15:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ez61Uf5fY2gn; Sun, 18 Jan 2026 14:01:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD9D61CC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768744872;
-	bh=m/qsz/Uoc/X/X4wEVYajOkF5spySRxmyt5QAOOGsV1M=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=hhgL32sUDpIXhJePxJAzcQ7tXxTcMXWkHKUnhqPU5WA1y8jEBk+1ArrLiTkZun0mA
-	 Q1o4FMROWvSr21uKG3noIj/XHFjhbVIM65CkGbEmZXm/Mj49H/c/9TdGiPk52gU1Ug
-	 fVkG/+nqxNEc2gM8GpHO2Eiti40kDorEpTYGQjvwrXZAC/B+hSxMqn6grh5jxuWD9R
-	 z5CoPFvgPE/XqS2ctz7BIdKvaL/x9ztC9NkxqcQOxe3PbuPcrPlBH0S5Lar3FvD6i3
-	 NPkPu77h1KmnQWulKjvCBidQnNku8MEs9RmwNfpHC906D87oh50bOsxTihncLqzQBM
-	 Zltl2ojyZ8ghQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD9D61CC6;
-	Sun, 18 Jan 2026 14:01:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B03F2CE
- for <buildroot@buildroot.org>; Sun, 18 Jan 2026 14:01:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23399403AF
- for <buildroot@buildroot.org>; Sun, 18 Jan 2026 14:01:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DoGzDDbb2L4m for <buildroot@buildroot.org>;
- Sun, 18 Jan 2026 14:01:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 35D9D402E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35D9D402E7
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 35D9D402E7
- for <buildroot@buildroot.org>; Sun, 18 Jan 2026 14:01:10 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a09ef.dip0.t-ipconnect.de [91.58.9.239])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 42A62A4C42CE;
- Sun, 18 Jan 2026 15:01:08 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58042)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vhTL1-000000002dJ-1nUn;
- Sun, 18 Jan 2026 14:01:07 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id n33yl4SFU2G5 for <buildroot@buildroot.org>;
+ Sun, 18 Jan 2026 15:07:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 361366F5AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 361366F5AB
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 361366F5AB
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 15:07:34 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 3D6A419F574;
+ Sun, 18 Jan 2026 16:07:31 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Sun, 18 Jan 2026 15:01:07 +0100
-Message-ID: <20260118140107.2331715-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun, 18 Jan 2026 16:07:26 +0100
+Message-ID: <20260118150726.245853-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1768744868;
- bh=qjjFAYvedgI5xX/0UBTA35+QG8kW3wtQRXL88q720do=;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1768748852;
+ bh=YS3ndHgJ8EQoymLkgSc0/gM5FiUMgy+EqZzqPv2dhnU=;
  h=From:To:Cc:Subject:Date:From;
- b=PtEGaVusa3pDgHqlF3516ZQjHJ8z8NMlIa8SpR/NOuT3gsWT6lHiIPPvrDhH4A+wB
- ZR/tP7OI3dPP2JMqq12TPhqTh1/fMi4fvm3Mpsnrz6PqZEOvfzoZGGMgb/2QSe4/uT
- NNxdMpvbV3gfJk6RliZ6o5NNM48suxqt5OcneJ1teJPQfx1l5s172xiO+8jQIHuo6J
- sPQwGSWoj5EE37vdF2jefiWLyuilecIoH3ynesUwOyAkdGCAj8aslpFUKg8X3xtG+M
- mNVN+YmKgWy3PAgwoR8ijq3L3XD4EwWR0bCI00nx4CSSnOGRVZeD2edgHiPzmNdjuR
- BOix5my/dn6YQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=QoRGInTEvAREKyknqQx7QEJClSXE7eRYJm4cqyPoQiG4Z/xYVpBwjLPrKPoaxtK6v
+ sMSaRG7g5x+59r2NGnAknv7ampAaalkP0uUiXL6pvWTtV3EIzz7dsZ5MPZ1ywvRPfy
+ oXP/2F6/HWDn9aTYW9c/NcvLVhJ7BIbLi3PSUVp16c/079Gb/JZLLNh8JTgxo2sEsZ
+ jldUiXvyfYEUCNu3JHSfO0SKMJxYwXk1RSV5IeETc7F4LChwuu9FX10XA514tLNeCZ
+ 92GYjN8zvn3fQlvYQZQanealJyrPTlwoJh58v5mlZNKt+4HRBx23CP9r4vEfnMytWA
+ KRDtMSbojJXuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=PtEGaVus
-Subject: [Buildroot] [PATCH 1/1] package/lua-sdl2: fix cmake 4 compatibility
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=QoRGInTE
+Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version v0.3.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,57 +87,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/f75/f75d1d0b83c90c0cb5dc7781ea8ce7ff1d67512a/
+For change log since v0.3.30, see:
+https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.31
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-better-FindSDL2-based-on-components.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/12758222200
+---
+ package/openblas/openblas.hash | 6 +++---
+ package/openblas/openblas.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch b/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
-new file mode 100644
-index 0000000000..ce3a96e5a3
---- /dev/null
-+++ b/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
-@@ -0,0 +1,29 @@
-+From 8bb1cbb2b346502d6285a40e25e52d3e41551afb Mon Sep 17 00:00:00 2001
-+From: David Demelier <markand@malikania.fr>
-+Date: Sun, 24 Jan 2021 14:28:15 +0100
-+Subject: [PATCH] cmake: use a better FindSDL2 based on components
-+
-+Upstream: https://github.com/Tangent128/luasdl2/commit/feb49bb1eea77aa953313f2a641576e515f0ec3b
-+
-+[Bernd: Partially backported to fix build error with cmake 4]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f5b59de..cc28bdf 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -17,7 +17,7 @@
-+ # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-+ #
-+ 
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.10)
-+ project(Lua-SDL2 C)
-+ 
-+ # Project information
-+-- 
-+2.47.3
-+
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index 965d7458ba..e97e32271a 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.30
+-md5  8db3d57f4d4485c6ae3f21ea465660e7  openblas-0.3.30.tar.gz
++# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.31
++md5  05050271d9196f65bc4ac3a89c6a3b05  openblas-0.3.31.tar.gz
+ # Locally calculated
+-sha256  27342cff518646afb4c2b976d809102e368957974c250a25ccc965e53063c95d  openblas-0.3.30.tar.gz
++sha256  6dd2a63ac9d32643b7cc636eab57bf4e57d0ed1fff926dfbc5d3d97f2d2be3a6  openblas-0.3.31.tar.gz
+ sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index edab26493d..d56934e41a 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENBLAS_VERSION = 0.3.30
++OPENBLAS_VERSION = 0.3.31
+ OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.52.0
 
 _______________________________________________
 buildroot mailing list
