@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C8BD4A5F4
-	for <buildroot@archiver.kernel.org>; Sun, 18 Jan 2026 10:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B0FC9832F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Jan 2026 11:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19A7341357;
-	Sun, 18 Jan 2026 10:10:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FE654170B;
+	Sun, 18 Jan 2026 11:08:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RURZKWBg-mSl; Sun, 18 Jan 2026 10:10:03 +0000 (UTC)
+ id NhiHmiVP6o0W; Sun, 18 Jan 2026 11:08:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B312041351
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9111541711
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768731003;
-	bh=KUrgZhpRKfpfDj5YeYiPDSh6YR+IYInu0Os6jlpFT/U=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1768734492;
+	bh=DjEkZfyGRrCbiGD8eOElzULbMM8TwL3zRoACBk9GXKk=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=r6mNl8MsJbgMRYsaxR2KmyDc17REzcgXnMyMB+7U4g/BLFAswpDi8+fmhi7oa+Yjy
-	 PEVTt5lc5g/7RauwwiM6MAEuGJXptx5uEUbc9FJlMh7AAH8vPaVpOtkL8ozvNCqDgt
-	 F6FJfc9NWNfsNwKS6FXJLVQWSBpbGxmJIhvo+f6N7mdPtwp5nvQIkeqayVs9zAGbVi
-	 yS5iEb4wISiunJirD5XejyYYGiAgKMAjs4ZmTt5d1mCqwco8iwZR0K60ugzQPUrADb
-	 r/zahX7F8YV7hXjFDFINZfYEE83Bp3WMGksnMin9LuSDXD1B1fZDKdBOL5DwgwbXNf
-	 mSY1J1xMK07yA==
+	b=s4IGYN5G8OacoZEcJbQjtkKf+PwQOsKh9+AsmipCKm8IcdmKhXPDF/TqRPTVRRr0g
+	 QmyCfHbf6+fQ0M7GXTEV6k5gUj1f6/0qyWy8cZasb/av6fTnnQ1HCM5xuU+TYlxuZf
+	 hfDQxerlBmqGfYXX8UeWko/JDhflzOwqEt4yXo2R6FTE/SnTBCfwm/WjbsVbF+o5IN
+	 jtJV38AxHE+j6jaNJeHwVLGXFDuNg0HRc+5q4YkUQVjHzBxCiSz9k4Mj7W2NjqfbPr
+	 xK0BiE4tCaTYU+74gG2MSEvmb15FRRKJmmklZQBWSGmXsBunjaSOg0jI9BKN42nE5I
+	 Xg4mdJMfgfqhA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B312041351;
-	Sun, 18 Jan 2026 10:10:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CA682A8
- for <buildroot@buildroot.org>; Sun, 18 Jan 2026 10:10:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9111541711;
+	Sun, 18 Jan 2026 11:08:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 012D52A8
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 11:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54230807A9
- for <buildroot@buildroot.org>; Sun, 18 Jan 2026 10:10:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB7E74143D
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 11:08:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9tr_jrnwtlDy for <buildroot@buildroot.org>;
- Sun, 18 Jan 2026 10:10:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4VTPERm7qplO for <buildroot@buildroot.org>;
+ Sun, 18 Jan 2026 11:08:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 891428079E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 891428079E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E15E340025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E15E340025
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 891428079E
- for <buildroot@buildroot.org>; Sun, 18 Jan 2026 10:09:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E15E340025
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 11:08:09 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a09ef.dip0.t-ipconnect.de [91.58.9.239])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8F8C6A4C19C8;
- Sun, 18 Jan 2026 11:09:56 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39172)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 84C0EA4C4747
+ for <buildroot@buildroot.org>; Sun, 18 Jan 2026 12:08:06 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57366)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vhPjG-0000000041s-3404;
- Sun, 18 Jan 2026 10:09:55 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vhQdZ-000000005th-2vRx
+ for buildroot@buildroot.org; Sun, 18 Jan 2026 11:08:06 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Sun, 18 Jan 2026 11:09:55 +0100
-Message-ID: <20260118100955.628730-1-bernd@kuhls.net>
+Date: Sun, 18 Jan 2026 12:08:06 +0100
+Message-ID: <20260118110806.947687-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +++++++
 X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1768730996;
- bh=PmScqq+D0rn2kphIB3w0y0QkHpp47OU4oXIJs5VHhtw=;
- h=From:To:Cc:Subject:Date:From;
- b=p7md/IJcg+n4ruACbsLT4dZUzZXy5n4MllqxiCPH8jWgpIIoNPUBZ6QCgMetpvgmu
- Wd3mx1m8N9fDULD2mXmfJnU8BnJaOBwXoEqfXa+UBtzgAZobEk3GxSU1OSNsQ00E1A
- V//DaNckxW/3aG9RWTN+Ekb9dQoXnMW0GexidP4T7Em94vBZ/J09g1AkcdOMzxNtfj
- hJVkNQCylljrUtyubXGqWNKABGs6hEZm66iDpEi9JJAadrG0CqlJcVmYbcVdNyrQCw
- +Az5q3dKUinQeKby0WciC4u1OjZd6Hu/K5xm88zkO+8dMhztqlEZ4ZdhATYNxVH2HW
- yeF3ESzd//xhA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202511301023; t=1768734486;
+ bh=bWQacyjZ66mNNMPClq0r0FROPFNJEPXMwphNGTv64Wc=;
+ h=From:To:Subject:Date:From;
+ b=Ai8UCIc8Z+/OkEDnxz2G67WWLKamMRxk6x+t9s4b5MSUQsdzngaqKQLikwkTMBhNR
+ Mh2RWPLLnDVYUBFMYaNApaDb0N6UReMrjiFrDuX7htTl/0Auqv1G6BleDfsiLN11hi
+ 3j78htbhvCBZFVfo37Owtzhh+W3Q08LfNvHXY7Cfokaido9M79NdDUXMJqDKyKov/U
+ GTBmpdrihN0g6gaBH597Iy3s7W752EYBzNkYmh9BAD4Z8ROgTgrUqLuFc4kxs7ABv7
+ Ns2aEZGVg15oq0F+Ln7F1jcwLbuhFTVa/7bGvFlfAfxIixAKW5/dKvpw0WzuDKRIWB
+ keawTLfusQQGA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=p7md/IJc
-Subject: [Buildroot] [PATCH 1/1] package/easydbus: fix cmake 4 compatibility
+ header.s=kas202511301023 header.b=Ai8UCIc8
+Subject: [Buildroot] [PATCH v3 1/1] package/vorbis-tools: Fix build with gcc
+ 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,59 +98,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Buildroot commit ce5d1735710d11b135fc6cb235e976b306833e7d removed
+0001-fix-build-with-gcc-14.patch which the version bump to 1.4.3.
+
+The patch originally not only fixed share/utf8.c but also
+ogginfo/codec_skeleton.c. Upstream only applied the fix for
+ogginfo/codec_skeleton.c:
+https://github.com/xiph/vorbis-tools/commit/68c5a33685f5b86e7f18f239ceb8861484fee552
+so the build still fails:
+
+utf8.c: In function 'convert_buffer':
+utf8.c:271:9: error: implicit declaration of function 'charset_convert'
+ [-Wimplicit-function-declaration]
+  271 |   ret = charset_convert(fromcode, tocode, from, fromlen, to, tolen);
+
+Upstream was notified:
+https://github.com/xiph/vorbis-tools/pull/48#issuecomment-3765168005
+
 Fixes:
-https://autobuild.buildroot.net/results/5e5/5e5c468c657a402befec13e3b7abf6423ccfeb37/
+https://autobuild.buildroot.net/results/135/13520e3cbf6b6d169985f4d1378c2a1baab852e0/
+
+The build error can be reproduced by this minimal defconfig:
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_PACKAGE_VORBIS_TOOLS=y
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...m-required-version-to-3.5-for-CMake-.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/easydbus/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
+v3: rebased original patch from Fabrice
+v2: added minimal defconfig (Thomas)
 
-diff --git a/package/easydbus/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch b/package/easydbus/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
+ .../0001-fix-build-with-gcc-14.patch          | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/vorbis-tools/0001-fix-build-with-gcc-14.patch
+
+diff --git a/package/vorbis-tools/0001-fix-build-with-gcc-14.patch b/package/vorbis-tools/0001-fix-build-with-gcc-14.patch
 new file mode 100644
-index 0000000000..cee84c21f5
+index 0000000000..763a2cef87
 --- /dev/null
-+++ b/package/easydbus/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
-@@ -0,0 +1,41 @@
-+From decf167b6b840fd520aec1f2fdac68a23c2acb83 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sun, 18 Jan 2026 10:57:58 +0100
-+Subject: [PATCH] cmake: Set minimum required version to 3.5 for CMake 4+
-+ compatibility
++++ b/package/vorbis-tools/0001-fix-build-with-gcc-14.patch
+@@ -0,0 +1,39 @@
++From 48aa869f3ece8cd0dc161d454198a4db6dc7e419 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 21 Jul 2024 21:57:38 +0200
++Subject: [PATCH] fix build with gcc >= 14
++
++Add missing includes to avoid the following build failure with gcc >=
++14:
++
++codec_skeleton.c: In function 'skeleton_process_fisbone_message_header':
++codec_skeleton.c:119:9: error: implicit declaration of function 'utf8_decode' [-Wimplicit-function-declaration]
++  119 |     if (utf8_decode(header, &decoded) < 0) {
++      |         ^~~~~~~~~~~
 +
 +Fixes:
-+CMake Error at CMakeLists.txt:7 (cmake_minimum_required):
-+  Compatibility with CMake < 3.5 has been removed from CMake.
++ - http://autobuild.buildroot.org/results/bb5d56d836e7d0f2a62daa9954878ad6e0b190ed
 +
-+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+  to tell CMake that the project requires at least <min> but has been updated
-+  to work with policies introduced by <max> or earlier.
-+
-+  Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+
-+-- Configuring incomplete, errors occurred!
-+
-+Upstream: https://github.com/mniestroj/easydbus/pull/7
-+
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/xiph/vorbis-tools/pull/48
++[Bernd: rebased for 1.4.3]
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ share/utf8.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 575eb24..efaf339 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -4,7 +4,7 @@
-+ # SPDX-License-Identifier: MIT
-+ #
++diff --git a/share/utf8.c b/share/utf8.c
++index e1199bc..1e6965f 100644
++--- a/share/utf8.c
+++++ b/share/utf8.c
++@@ -28,6 +28,7 @@
++ #include <stdlib.h>
++ #include <string.h>
 + 
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.5)
-+ project(easydbus C)
+++#include "charset.h"
++ #include "utf8.h"
 + 
-+ add_definitions("-Wall -Wextra -Wno-unused-parameter")
++ 
 +-- 
 +2.47.3
 +
