@@ -1,84 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92E98CCF2D5
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 10:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93ECFD29C2E
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 14:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3269580F7E;
-	Mon, 19 Jan 2026 10:38:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CmHnIE6MTZ_z; Mon, 19 Jan 2026 10:38:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52A5681344
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768819097;
-	bh=9Oc0e/FSa3I8ABdM3D/d8gQf1wkTjZOmTQ4KhoVKlwE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=j5/gmpEx0feASgLt//3A1Em8NN9Lo0HcfpOWcJIeKqnkJvQvPR+0Lu9u3i1i0QpPd
-	 bJ85nrnF5QVoI6rw7G/VD6U7NbAA5sZSPSA+P0mOe7tyWx9809ToX/PAjigHjdVRcR
-	 /8BzMaT3GQnLyM+hsXsbJlTQndvGqS2ZMiLw94LWYlBQDnZlauUumPjZue3h/2FgPD
-	 lFQ1fK3tzE0I1IFVBS+b8SY3fY7mlOw3uIUByMV9TqtC37QxuRUbEzAmgZIdBjg7xo
-	 CLVUDxV1Fok9KNawG86WFxMEM5TbJuoSDvKUGPe9Kfg3SgEHBazSQfHigLjm+eqSVh
-	 6+i5JOKtJ9JjA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52A5681344;
-	Mon, 19 Jan 2026 10:38:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EBD392CE
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:38:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAD5440D9D
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:38:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1090741375;
+	Mon, 19 Jan 2026 14:23:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9gHIZN6GBUru for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 10:38:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 277EF40D94
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 277EF40D94
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 277EF40D94
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:38:13 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1441994200; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 19 Jan 2026 10:38:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vhmeA-0000000C5LJ-1qKS;
- Mon, 19 Jan 2026 11:38:10 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 11:38:08 +0100
-Message-ID: <20260119103809.2880459-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+ id Z-lXLb17pll4; Mon, 19 Jan 2026 14:23:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 466334137E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768832637;
+	bh=CIytfiLw/wkV6Z2QQ3gupeKTHBlaKqB0kbo8BHRpi14=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=BDhHL7alC13TJsqjfJ+Ni3bSWKN+vBM1KFhXj8yl2GLmn5tkSscc6uAnVfzY8lHl0
+	 AZeyb7dBFlC5G3oZnw7WMc/LKlN5R5Yw2j2fR9ubGr9ZZMJk76Tizt5ToAAkLl50In
+	 TJg/Ju+4H4hA5Jl1Fsz6nSHj5ZOoorxePQUIHs8Nauc+iGtNdpjfCYBDCRlXg7cVHk
+	 WqHeKhbwdE3yRbOKtO/AyAo3dOoQQ5VMfWD70JK72Nbt4H+ZpNFCenggjPRchi4Fme
+	 rk9rR/ODcnb78kpYO8T3h+QMElMAocov+QV2UppD4doyBPmA6Sk+rkvWCNUv0PyJGu
+	 zAIYrclctFOKw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 466334137E;
+	Mon, 19 Jan 2026 14:23:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D329160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 14:23:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 786F283640
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 14:23:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hj5hjcWJ4AWj for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 14:23:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6634183626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6634183626
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6634183626
+ for <buildroot@busybox.net>; Mon, 19 Jan 2026 14:23:55 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-47ee76e8656so50261165e9.0
+ for <buildroot@busybox.net>; Mon, 19 Jan 2026 06:23:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1768832633; x=1769437433;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=jp3zBWPtq3vZd5etbmuyG+ZeqiAYxQTsx+0iygGpxiI=;
+ b=Z4DqhwyDoRpKiKsMJTMLehnkMz62QIVFo4sXTcQJiRusrOAUqoWczVMqWVYxrmVKoi
+ rA/OKafJyVr5dlI15a2Ijjnx9WWownegxDCZhjknUTEiCYwyeLpnJu9baa8uflrk1OLe
+ Ljr0Mg/hZ7wewhkAlsSaBw7tZIjcwpgiBehZu3o63KrmZftLdv6JrSc+18Hn2HLraR4S
+ NfGC7n/plyxXT23aP7wW2TG7wYq8E3BZwYA1wXGCAhd3G0Lci/YYUmCdBanmu7guGGP/
+ icit9zivKDdMp82XsUWSimxq06jMjFuNG92Jv+zasWir1TFPNU8iY0KHePCLqmI7MlOQ
+ KR0w==
+X-Gm-Message-State: AOJu0Yz2OH4peR4WA5d08yMGIWNtuHqzAFHIKYa+JSDWtoOpA9v9IopO
+ AZpO3rzRPA/es3tmJclaxK22osQjXB+1rTQ5rwRYEMeqEAjOMjr8G3iU7ssL106sQbziEVS4GqI
+ 7LZAgXg==
+X-Gm-Gg: AZuq6aJq6Kecmivp3WcUvVexChc8EGNslymWxYPV6x6kv4bD0hGMkubAXjB7wPJ+tGv
+ 6h7bGnWtwk50vzeyyk3MEFGEQMkO7p+YD2v3hL/6yHID4qrsqx5DwHKliCIry79bb3BXtkV+/i8
+ 7bORg+tPTVsguoqEOhUytxe8W/BMfTmw5oTVut9fsnlE3MCstyGqqHpk8z1ui6u7+U9o840ENSV
+ E2jStgonfnsdN6x7mVmKnz/BztqpNnWBkl0PZio+DzpAISxmwxkD3exAs6NyfCfSwUZReWBh0sX
+ tuwd2ycePUwZm+jOIqINe50yY2ghPeWYrVS0LAH5exDPf7EaxuaG8CODmaKFPshKde92gSivJSz
+ GlgrgH1hR3sepE7n0N2mvOWoeqA8iGFc+KIyV3uEYt3KBREGsyxsmGENBc3nrpMlqSNrNEIWON1
+ TonMMaEK7xJjbsHjMRuSi7m+0ERdjEcHRKd05Pyg==
+X-Received: by 2002:a5d:5f84:0:b0:42f:b581:c69a with SMTP id
+ ffacd0b85a97d-4356996f9d1mr16511591f8f.5.1768832632710; 
+ Mon, 19 Jan 2026 06:23:52 -0800 (PST)
+Received: from vm-2404.. (249.184.66.37.rev.sfr.net. [37.66.184.249])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-435699271easm23622476f8f.14.2026.01.19.06.23.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Jan 2026 06:23:52 -0800 (PST)
+To: buildroot@busybox.net
+Date: Mon, 19 Jan 2026 15:23:48 +0100
+Message-ID: <20260119142348.815064-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=rhSLv7ez736iu1c4bKbu0LH7ssqBq5uM90F+T5VTeAr6+wG1wXhJFrbVkyRER7H/WaAB5ybUu+SN2V7dsLW6cOaVzR3nkmQUurLK8dAn66O3s5RBVlzF+QfASqrsLbcFiuwkpxoUthA3bfd10MSWrRKy34zSOoNDPsGqLeHGMobpvCDS8a5Yf7M7aJYd5VLa6Qqc+Wsb+BxAhMJQNshUcgvztm/mW5YA6/tfS2wx37o7GEBN9f/xlYeitRFlIaOMilT1+UBp0xWtkBDqbztJfhVKhPC3CTM82aqbnf5g6yZ2T6FPo6gkGtXlrWwJv3D+cnWV5exZf0lvo8se+s14ug==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=kKZg/GYY8YZ7BMEBsz3nbKZuE9GAS+smAmsMXAcMpEo=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1768832633; x=1769437433; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=jp3zBWPtq3vZd5etbmuyG+ZeqiAYxQTsx+0iygGpxiI=;
+ b=f8lxxcma7D5wtA2TrHbT9WeIYpS6ZcsVJdc0CwvnDco8WF2AdpfMA2yK0UgBtcGU19
+ aqG+9Y+mY8KpexvPVdXyXPayeFNjH3v2LQwkOTKd2KmrDQGqZiGeHGKq4ClrMAsxx7o2
+ GGxNp0v+DiocgANNCyNqStkRK3Am9jvmz5Tt4Je39pFtlOPAjIaxwcuACJsEPh+z1s5i
+ 2XK/pZboc6/HyOHMT5xj3o7W/WVxeesEY1tWFN+Np5/BXTbIBGcWqOeVwgePVbCIXx+B
+ i3fyOtoS5gkl6D9tfTPU8gFFiKX0ywh42z+6OBAl7DBB4whLt/ntg/jL/jU2sN4cFdOO
+ fBBA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=rhSLv7ez
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/python-urllib3: security bump to
- version 2.6.3
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=f8lxxcma
+Subject: [Buildroot] [PATCH] package/lua-ev: fix cmake4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,55 +117,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Francois Perrad via buildroot <buildroot@buildroot.org>
+Reply-To: Francois Perrad <francois.perrad@gadz.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerability:
+see https://autobuild.buildroot.org/results/936aa32f0f3fe4b6ea53ba37483d8cf0799b7248/
 
-CVE-2026-21441: Decompression-bomb safeguards bypassed when following HTTP
-redirects (streaming API)
-
-https://github.com/urllib3/urllib3/security/advisories/GHSA-38jv-5279-wg99
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/lua-ev/0001-cmake4.patch | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/lua-ev/0001-cmake4.patch
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 76fe4e5fc9..858b8ca3a3 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  838e0ffee00ec870a3ba6727a7832ab8  urllib3-2.6.2.tar.gz
--sha256  016f9c98bb7e98085cb2b4b17b87d2c702975664e4f060c6532e64d1c1a5e797  urllib3-2.6.2.tar.gz
-+md5  2c381874816fe551f50a2551abae62b3  urllib3-2.6.3.tar.gz
-+sha256  1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed  urllib3-2.6.3.tar.gz
- # Locally computed sha256 checksums
- sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index d57473566b..7f7f0b03d2 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_URLLIB3_VERSION = 2.6.2
-+PYTHON_URLLIB3_VERSION = 2.6.3
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/1e/24/a2a2ed9addd907787d7aa0355ba36a6cadf1768b934c652ea78acbd59dcd
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+diff --git a/package/lua-ev/0001-cmake4.patch b/package/lua-ev/0001-cmake4.patch
+new file mode 100644
+index 000000000..ef90a3559
+--- /dev/null
++++ b/package/lua-ev/0001-cmake4.patch
+@@ -0,0 +1,28 @@
++From f8a49c3a306d182b1a9e6e7db2381ab5483bcf88 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Mon, 19 Jan 2026 15:15:14 +0100
++Subject: [PATCH] cmake4
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++Upstream: minimal part of https://github.com/brimworks/lua-ev/pull/31/files
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 413bb6c..2a994d0 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -7,8 +7,8 @@
++ # Please note that the package source code is licensed under its own
++ # license.
++ 
+++CMAKE_MINIMUM_REQUIRED (VERSION 3.10)
++ PROJECT(lua-ev C)
++-CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
++ 
++ # Basic configurations
++   SET(INSTALL_CMOD share/lua/cmod CACHE PATH "Directory to install Lua binary modules (configure lua via LUA_CPATH)")
++-- 
++2.43.0
++
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
