@@ -1,83 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0703AD29C39
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 15:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0714FD29C33
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 15:47:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5CC461272;
-	Mon, 19 Jan 2026 15:47:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4667414FB;
+	Mon, 19 Jan 2026 15:47:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P2-aJno1h02i; Mon, 19 Jan 2026 15:47:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WbMcnlRcyWCA; Mon, 19 Jan 2026 15:47:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D71B461281
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF045414FC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768837653;
-	bh=dOLECBZ1pyXNI2TXzH5Gwh8ELgBLHFwDexti/e9Llx8=;
+	s=default; t=1768837667;
+	bh=s3NijcRktHPfnW/PwQTgmRvEt9sg8VayItZ6bGf46Qw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=iADHk3TXPFymck5SHgU4OFdqGUvkfyvNN74cbxuYrjmJDOGQ8NG3U28FK9XUEexVZ
-	 8D0Z1ZppjEGUOn+2kjp2MwYaK0/imD7Affr7deGcu0hapwMSwvdTrP3otR31kHxkf1
-	 bEszXOL6AQVbBUOOXim4lslSBE6B8P74BiAthntt0HEWlsc6JV/Q3hdlieT88seoIz
-	 OCXVSYmNKEHNy7wvFsZVFywRWFdlq/W/QDVUnAi3WfYdAjBT2A0Fmfsjd8pDTmtBbD
-	 2DWFUakNnwjYeftg6LWoAMTVgds+Me0dN/Pb6b8y5L9YslyQk9urP9oy3cRLrENyr4
-	 cpGGBgXDBs0MQ==
+	b=LH9TRo6jGr+JnhRZw6MPhc1N0XI9T1NtjeLdzRipkw7oGR0sTG2fsVaIYtVIBli9j
+	 VTi5qTEsdE0b6ZGmc07BhQ6N2b7/VZnT8hWDZUvsAUklSKFB0zO3WU+EXsyryI1/5v
+	 3YKK8O5Ul8Yutnak93D94m9yAxV+b+bEHURk2sXW4XaBfH4teOolsVtffRVO8T3PU0
+	 2vQ7MveRR6Ba3Cbvlo105jZi91FWiq5tfJbVbgOoCsu0jZuL83gVFWDFPNS+LP742U
+	 /uXhzp+bPxZH+lxcbuY6sRz/ryQ0KNk+7qWBC/zo8H5TY5Gd7IjPWVCmHS91auDeIc
+	 2QJGwBOxTDZ1A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D71B461281;
-	Mon, 19 Jan 2026 15:47:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FB12160
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF045414FC;
+	Mon, 19 Jan 2026 15:47:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8FFA4160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7FBD84017B
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7EA6683C33
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qI3e1Fiy2oaY for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 15:47:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8qyp2fuKgkp8 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 15:47:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6211E4007D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6211E4007D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 730EC83C31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 730EC83C31
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6211E4007D
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 730EC83C31
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:44 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3F296B97A1FF; Mon, 19 Jan 2026 16:47:28 +0100 (CET)
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+ with ESMTPSA id 9C20FB97A967; Mon, 19 Jan 2026 16:47:42 +0100 (CET)
+To: Peter Seiderer <ps.report@gmx.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 16:47:27 +0100
-Message-ID: <20260119154727.74068-1-arnout@rnout.be>
+Date: Mon, 19 Jan 2026 16:47:41 +0100
+Message-ID: <20260119154741.74239-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260105-uboot-2025-10-fix-build-on-lts-v1-1-51997f7758a4@bootlin.com>
-References: <20260105-uboot-2025-10-fix-build-on-lts-v1-1-51997f7758a4@bootlin.com>
+In-Reply-To: <20250805171603.1296472-1-ps.report@gmx.net>
+References: <20250805171603.1296472-1-ps.report@gmx.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768837648; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768837662; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=JkyCRW6cZ08nKo+TL6ZClvSASjqIzoCX0ayWsOmaBL0=;
- b=e14gKqegdx2tVWwrhrUnA3Ay9EIisFg9Vbr/qZ81GXkr5MIqnfSq8JlfwANeOR+g0i+wff
- VYcxY42r6vU3NR0kae2RfpjshDsod/67y+WkOYtern0YKS/JOxQIqReXwazzUV03ZFExQ/
- t2+nu4RuFW9PQ2w7cfborfr7/2niw13+TtR4UzC9pHj0+gXObKqo8pKTMq1j9WthtVTy3q
- YQmYLz24cNCb2Dcsqq8CUeKVEZ1DcwWizl7m6pSgVGehSg4T+3RkF38sgvATmMUxYQcvzy
- Qle7TN6q59q/mHl4IAqKNgAeT971qwSXGoGmcj+ljt3LcddmtFbz/++lJYSI8A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=MIwYfCprVKnWnL5zxAbawWbsfMOUBa2YYLYTDgVMXAs=;
+ b=G5lveKWWIdfR6O9mlgC302RgJfdf54tR7jHB7ir8brc3CPhmPsgqoOF2f86jjAGOfJNM8g
+ dK90dFdy9NJb0KRHraQj2MSzuV78U6bG7MBRWMSaNgpKAn5mJJBAnXHIZwFHBun3w+mj3l
+ 0J087bhG5FNrxq4EIzsrChpxSckYmLA80I4liY2mAFlErEuMDFA12/LxsOnB9TPZIps0gV
+ wcCT2RmOj1x3u07v2SZAJiDMi3OJl1jLhByY000UVYHvBi5BEAp/vJf+U03KypxeT+Jcgs
+ ndVf8X8v1QhU3+BTWioZd4to2ZObn8so+zrwI3tpFkqDq8ietsXurot8xnArxQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=e14gKqeg
-Subject: Re: [Buildroot] [PATCH 2025.02.x] uboot: allow building versions >=
- 2025.10
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=G5lveKWW
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/iwd: update S40iwd (use long
+ options)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,51 +98,50 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> With upstream commit a239b0b0b6db ("Add symlink from gpl-2.0.txt to
-> a COPYING file"), COPYING is now a symlink to Licenses/gpl-2.0.txt,
-> causing the install command in UBOOT_COPY_OLD_LICENSE_FILE to fail
-> because the source and destination refer to the same file. To avoid
-> this, copy the license file only if Licenses/gpl-2.0.txt does not
-> already exist.
+> - use long options (as suggested in [1] example)
+> - drop '-q'/quiet option from startup
 > 
-> Link: https://gitlab.com/buildroot.org/buildroot/-/commit/128c26f2875dd60ed5fafe25f63b3da11bb79f60
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> [1] https://nightly.buildroot.org/#adding-packages-start-script
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Applied to 2025.02.x. Thanks
+Applied to 2025.11.x. Thanks
 
 > ---
-> This change was applied on master as part of commit 128c26f2875d
-> ("boot/uboot: bump to version 2025.10"). This commit is only taking the
-> line to allow to building a recent U-Boot on stable branches.
+> Changes v1 -> v2:
+>   - no changes
 > 
-> To maintainers: I'm not sure whether I should set the original patch author
-> as the author of this patch, or add a Co-developed-by, or something
-> else. I'm fine with resending with such changes if they apply.
+> Changes v2 -> v3:
+>   - no changes
 > ---
->  boot/uboot/uboot.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/iwd/S40iwd | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 2796b0a31010..0d77340f85a4 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -307,7 +307,7 @@ endif
->  # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
->  # legal-info finds it
->  define UBOOT_COPY_OLD_LICENSE_FILE
-> -	if [ -f $(@D)/COPYING ]; then \
-> +	if [ -f $(@D)/COPYING ] && [ ! -f $(@D)/Licenses/gpl-2.0.txt ]; then \
->  		$(INSTALL) -m 0644 -D $(@D)/COPYING $(@D)/Licenses/gpl-2.0.txt; \
->  	fi
->  endef
-> 
-> ---
-> base-commit: e81d65de87f710d711fb204e2af4ac07d26feb20
-> change-id: 20260105-uboot-2025-10-fix-build-on-lts-5c186b4338f4
-> 
-> Best regards,
+> diff --git a/package/iwd/S40iwd b/package/iwd/S40iwd
+> index 7858ff3e42..de5a1efb6f 100644
+> --- a/package/iwd/S40iwd
+> +++ b/package/iwd/S40iwd
+> @@ -10,7 +10,8 @@ IWD_ARGS=""
+>  start() {
+>  	printf 'Starting %s: ' "$DAEMON"
+>  	mkdir -p /tmp/iwd/hotspot
+> -	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/libexec/$DAEMON" \
+> +	start-stop-daemon --start --background --make-pidfile \
+> +		--pidfile "$PIDFILE" --exec "/usr/libexec/$DAEMON" \
+>  		-- $IWD_ARGS
+>  	status=$?
+>  	if [ "$status" -eq 0 ]; then
+> @@ -23,7 +24,7 @@ start() {
+>  
+>  stop() {
+>  	printf 'Stopping %s: ' "$DAEMON"
+> -	start-stop-daemon -K -q -p "$PIDFILE"
+> +	start-stop-daemon --stop --quiet --pidfile "$PIDFILE"
+>  	status=$?
+>  	if [ "$status" -eq 0 ]; then
+>  		echo "OK"
 > -- 
-> Luca Ceresoli <luca.ceresoli@bootlin.com>
+> 2.50.1
 > 
 > _______________________________________________
 > buildroot mailing list
