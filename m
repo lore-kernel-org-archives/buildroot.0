@@ -1,84 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 486E8D29C33
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 15:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F27FFD29C33
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 15:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E94436126D;
-	Mon, 19 Jan 2026 15:47:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A48C5414F8;
+	Mon, 19 Jan 2026 15:47:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QQe8ktVETWs8; Mon, 19 Jan 2026 15:47:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L5i7M2phFnTj; Mon, 19 Jan 2026 15:47:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D56626126F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C53F6414FB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768837646;
-	bh=024OUZnffJqqa+wVHGju9QGKIakkyLGatEwMcN9favw=;
+	s=default; t=1768837651;
+	bh=fu8vaaHB7LpeEIL1zBWl+C9qge21pesGPceGTvce5tI=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=C2DEw6XywMCudjJXaIn1EacaIkvMKV+tj7Omjb6dsBwTD5fqt9/i86jvlpmYVDs+t
-	 SzrR2sAUzjkkYXI09PaNAF1zjm4lG2EK01nz55pg++LPELvFJjk43zWe3fBkfdNiCa
-	 JpZsGeF0FLuyuhiPRvXcfkCTEy7TsnDnJOE/ryohBIlIqaans4cMvoB3N2aW7WwWNM
-	 zo+SjUehOOps/3iruTSQQ1Nj3BzUSTz97S0vYy2IbPPCJRRL0/CLjYqrtNO5uaBJR9
-	 9yRYl1iSd0SIitbTqI3gtN6RKya0kGlTgZ5lPsETD9996jqADhLJYgN8iWaqe/h6FQ
-	 OlRDXjKv9ujnA==
+	b=FKC3g8xWL3blXHAKY8PGolZ0TLoixX7j/fhBA8GAyDuUoG+ZNQH4NLzrw8Q1XyuNS
+	 Fq9nMc3zF50ogOpdQpr3cUwKbm/uHi/3KJ02D8uoW0KquC2CYpZfi4f0n74EteCEND
+	 S1Z7SFSgMHB/kw8BSlqQZz5nxpRE+qfSql+HCPQ0zRjUuCDLk+3E7ee2krSrBzqwnJ
+	 s+WP5yYfuL1I56wdwYhoiyo9DdXNJ4g2EUnbM2gA3DXycH4sbfH70xObMvQPOE3vkA
+	 Yt4PvVED1K2/aMcUhM0Sa2hyuMewNGXwPIJq1fzPsSL8FBvQVAUbRkJuDSc/86XX2o
+	 aljw54B8c6lbA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D56626126F;
-	Mon, 19 Jan 2026 15:47:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BA762CE
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C53F6414FB;
+	Mon, 19 Jan 2026 15:47:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 814CA160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49AF56126F
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 651EF4017B
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DjR-bVkBcsWB for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 15:47:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jSfq32bYSpq9 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 15:47:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5C2B86126D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C2B86126D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4E4004007D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E4004007D
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C2B86126D
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4E4004007D
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:28 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E23A8B97A1FF; Mon, 19 Jan 2026 16:47:21 +0100 (CET)
-To: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTPSA id EA07BB97A967; Mon, 19 Jan 2026 16:47:24 +0100 (CET)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 16:47:19 +0100
-Message-ID: <20260119154719.73966-1-arnout@rnout.be>
+Date: Mon, 19 Jan 2026 16:47:24 +0100
+Message-ID: <20260119154724.74018-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251012182016.2711834-13-bernd@kuhls.net>
-References: <20251012182016.2711834-13-bernd@kuhls.net>
+In-Reply-To: <20251106153917.1683677-1-peter@korsgaard.com>
+References: <20251106153917.1683677-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768837643; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768837645; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=eZYOKF6yqPvK+/NKJwjFzKVxFnyag/MnAPyFljc3CUM=;
- b=W7kgISf+C8Cjmlnm1zICdga9OtvDqaEQHtxJZSpGLQbjIH2/tbU+0u444bRl+5DX+Brx0J
- 8vq5BL0kK4558Ex32ZSjhPnM0V4BUyRalec23H9J9bNfyfhItsE1YXHyT8fkE63vSunVGi
- KdcSE0ONF3aH6wpDMk5rCwbmkYMlooHRsf1AVVel+JnjF7ZjEHLddb0YqZ9qhXT5mu2Kth
- lt0T++ljOYV47OuxL+C1pJLaBfXUQ+OOs6ZEdnYUrHJnNpMCG8R6wMp4y9d/6NHqQSLvCk
- I7L90pr4nMqFd3hvU5p6J3f7fYwq3ZEcxTLFAgpty8r/iQRp44gbsFWbW0UWew==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=HwmTFE6pUivxjfjkzlZ4lfgGaJVxaL6OvhgfUmKF9p4=;
+ b=EdDhVwrd7TrpQtBlXCthH0isqWZjor0YnzIFlPv6RRn9U/uhI8OE5xrn9J3iMtYKEMsCoi
+ nvG0Qyf8nwfVvZa89jrjpZ33k9PidQLOQa3fuC48SD9Cnv7/hXNVGxb2pl5Vgxq8Y1WaHU
+ F14c83Hgx+/Nogs6X5EIhKWAWRrEk2BgzTjuAkflWN8H98J6sVQ9aH7VBdE8pQOzPR133p
+ efS9NgfOw0HHJ0Dketl5773nqoofGLo3SVh+OH4vpKi8DxEGAhFnjISbUGxSMWclZJ/QHU
+ /qSTuVMkdb2WfaV5FLO1ptAwjKBmL54z04CQIFd0RfVdMcnyiQY1ImlMuZQIHg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=W7kgISf+
-Subject: Re: [Buildroot] [PATCH 13/21] package/python-certifi: bump version
- to 2025.10.5
+ header.s=dkim header.b=EdDhVwrd
+Subject: Re: [Buildroot] [PATCH] package/libcurl: bump to version 8.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,45 +97,47 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Brings a number of bugfixes and a (not applicable to Buildroot) security fix
+> for wolfssl (by dropping support for it).
+> 
+> https://curl.se/ch/8.17.0.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/python-certifi/python-certifi.hash | 4 ++--
->  package/python-certifi/python-certifi.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/libcurl/libcurl.hash | 4 ++--
+>  package/libcurl/libcurl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-> index 723e2eccfb..ef0e0d4ca5 100644
-> --- a/package/python-certifi/python-certifi.hash
-> +++ b/package/python-certifi/python-certifi.hash
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index 4cc4da4f26..786d030171 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/certifi/json
-> -md5  bb7ee7c24518dc4314ce7a83ca24263f  certifi-2025.8.3.tar.gz
-> -sha256  e564105f78ded564e3ae7c923924435e1daa7463faeab5bb932bc53ffae63407  certifi-2025.8.3.tar.gz
-> +md5  7fe97b2e79933430062935f3759a09b0  certifi-2025.10.5.tar.gz
-> +sha256  47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43  certifi-2025.10.5.tar.gz
->  # Locally computed sha256 checksums
->  sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
-> diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-> index 996e451d33..ad85d44bbc 100644
-> --- a/package/python-certifi/python-certifi.mk
-> +++ b/package/python-certifi/python-certifi.mk
-> @@ -4,9 +4,9 @@
+>  # Locally calculated after checking pgp signature
+> -# https://curl.se/download/curl-8.16.0.tar.xz.asc
+> +# https://curl.se/download/curl-8.17.0.tar.xz.asc
+>  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+> -sha256  40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d  curl-8.16.0.tar.xz
+> +sha256  955f6e729ad6b3566260e8fef68620e76ba3c31acf0a18524416a185acf77992  curl-8.17.0.tar.xz
+>  sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 51b8c4d147..9e32c38d97 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_CERTIFI_VERSION = 2025.8.3
-> +PYTHON_CERTIFI_VERSION = 2025.10.5
->  PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-> -PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/dc/67/960ebe6bf230a96cda2e0abcf73af550ec4f090005363542f0765df162e0
-> +PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4c/5b/b6ce21586237c77ce67d01dc5507039d444b630dd76611bbca2d8e5dcd91
->  PYTHON_CERTIFI_SETUP_TYPE = setuptools
->  PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
->  PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+> -LIBCURL_VERSION = 8.16.0
+> +LIBCURL_VERSION = 8.17.0
+>  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>  LIBCURL_SITE = https://curl.se/download
+>  LIBCURL_DEPENDENCIES = host-pkgconf \
 > -- 
-> 2.47.3
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
