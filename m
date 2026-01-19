@@ -1,82 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B5ED29C39
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 15:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9511D29C4C
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 17:04:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19FB761276;
-	Mon, 19 Jan 2026 15:47:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B48080730;
+	Mon, 19 Jan 2026 17:04:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8An1_AycCmn7; Mon, 19 Jan 2026 15:47:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dxGcOFlUpt0o; Mon, 19 Jan 2026 17:04:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED6956127E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE88806CF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768837671;
-	bh=pCfXrtoXRYLQ4tGNEoveiJKQS5hHJTJtksO2zg9fHAw=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=cb4Eb1eugL/eynkIvxjH8zLczOT7eUHVvIZe8C5RWxTq+mf9XbuH7vfXcOJHK7g+g
-	 08gFCE/l3F2YeDLz6d5zTX8gxUMsvCvX84Q2f3gjCSr5trDaZd1gQr2riU0VcK9xPn
-	 lhvRkg3U6G3A5QPL4x3fowJGXJ+w6jdvfrwLk2QpAZBAZ3DeYWeHh/fO8atFn+nECP
-	 oACEtPs1ku0H6xEGGz9fzaR7Z1h8Z8Gsix6YzGsvIKN7V1RyGLzXuLD+AmZidnjG5d
-	 yBTY2x6Ilv7AGjmgOvj/438gctlGQKRPLy2HR7wBAD38GirCHbRGW/NTPeApc3KYNS
-	 H5A72xOLH540A==
+	s=default; t=1768842261;
+	bh=VbMMeTpAgVWL9oGcB2RrplGl2tWnUm0f7/Wf5vx+NjY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=f/8K8Eiz0uyClL2QMC2cDzlBTY7r4WIXFlB007etdBcWDBj6b46YlS6DaKFS65M/9
+	 OSRW8ZrsymHc2GwGdsjS48wKciS7ffv9hUcQZRg88BOYexs4DOXM+jWW8m2NdXSYpU
+	 pGN5FNEPPIVezS/9XSZ357DcY/AHtfJOEjFla3gAWAmWmCQxy+xeDcGNC7eX+3KtCe
+	 ILusSAIP+AiCu1W144i3xYheo9pFv5qR21wdnkV3dtYPOHqHyGwrtlPsxV8lyPn9Ym
+	 qy2lYSR0fSJjzgvVA5iKrO4++BGeUg3tDD/c1OCsfzchi0nm+Kft07bfjC3UFp6kYS
+	 0Uhz/877SEJ9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED6956127E;
-	Mon, 19 Jan 2026 15:47:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 89C8C160
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DE88806CF;
+	Mon, 19 Jan 2026 17:04:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C57C9160
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 17:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83E414017B
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1A9341749
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 17:04:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6lnYLxnMmqrV for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 15:47:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0579B4007D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0579B4007D
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0579B4007D
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:47:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 52FF3B97A1FF; Mon, 19 Jan 2026 16:47:44 +0100 (CET)
-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-Cc: Arnout Vandecappelle <arnout@rnout.be>,
-	buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 16:47:43 +0100
-Message-ID: <20260119154743.74290-1-arnout@rnout.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260109163816.131696-3-vincent.stehle@arm.com>
-References: <20260109163816.131696-3-vincent.stehle@arm.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sKOWrdFnP9y4 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 17:04:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46C4E41746
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46C4E41746
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 46C4E41746
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 17:04:18 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id
+ 4fb4d7f45d1cf-6505d3adc3aso7086760a12.1
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 09:04:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1768842256; x=1769447056;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=m8cTsXlHIlJSFTsXDFM1O6Pyd1st6KyEek9+avhCWpk=;
+ b=Wx/3sVUB+G0sEzv0CDwLeN0PVrx4f151FFqG6ckeKPpWuTiHfG105jl8RQik3+yrMi
+ Aw5TeaYbJ+JPN3x+YwSMlrAmbSIj1EqCtOa5436SBYoF0oY8SkR8Eil+Dx3hMGwtGU+e
+ TkTFKghlpkkXHlrllbhQpUqvrAVSDBbSfVM2smPJytozAk7wsRmCsSSBPVZyiGplMiLr
+ WBCXZ0kFWdGKZz24uRwzhRUD/pnGALPZkDGYNbvzFuer25UoH3ZB1yNLJL18zFhYUB6S
+ eScRAbxCvVmryaYSsUWCRfnhxbPJFidEc5bjjeMqT422Ab32aOQa4bHplroAqec+28UP
+ pH7A==
+X-Gm-Message-State: AOJu0YyjY77svX8ht5kaw19+rnpgY+iphnazQd7JxNBG4zij4tORt3vl
+ 5WvbTvgTYajs3eU2h5LzPFRmelWF9dXkf92xtBuRCHXg8xlS4ygaVgrAxW6nKUdgkW9cU+e/ATm
+ AQahM
+X-Gm-Gg: AZuq6aIolBbjr9NX6BtXnCwYzhYStAF26t3AJoHPJ+Uo/57l7wZaKVu/I5V43zftDap
+ x7MrKAb0UKNhyRtTOBKk1fAIP/ZoW2uJ6zIQgIxW/t6N6dPKKgP/Q5SYQAR3Hb+NcDLmsWT+Mqs
+ fJHZf+6dO1pid2myGt1wrCTTb1VVhU+GQ6REJYCIRsWW1M21SBStBkONNHaXlXZe8e614dVLxFz
+ A5U6eeJzlTC+XV3SKoeHYkOVBBBHGZcc/0Ag+i64FaNr3oEa9ktJzbFtHgiv1JDIF+hDBC4TCty
+ LA8SOczAmJr07CaNBoafeutGadiT5nW/+3IvrF5k/EOW0PXX8kO3td/p2q5PhKUbrVK48jy3eDl
+ 3p59CkMaF0lfyoheYrDx/3uGqUgDpCaFjlNBgNBvlciGBs/K3WJnaq3XciNqnXv8KZgnJOTkMbK
+ RgwPAINXQqH2ETKy4Pev5+AzGIoEUTtV5GySgaTQzGHnYkTyi4rWjpb44B62OqSU2gDQnc6LPdu
+ U5uy82wroutrhQOIECX/gTIU1+8gkCbDbGEIR3pfT5Gia0sNGKkPTkM+NCPBrZoQWGhPVmC32w/
+ T6hDHmTUEei9mDjJrPXFlNqOD/BMRo8s
+X-Received: by 2002:a17:906:730b:b0:b87:34a0:78a0 with SMTP id
+ a640c23a62f3a-b8796bac990mr903795466b.58.1768842255642; 
+ Mon, 19 Jan 2026 09:04:15 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-95-248-31-95.retail.telecomitalia.it. [95.248.31.95])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b87959ca4d6sm1140527566b.39.2026.01.19.09.04.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Jan 2026 09:04:15 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Mon, 19 Jan 2026 18:04:03 +0100
+Message-ID: <20260119170403.2855377-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1768837666; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=q8FOdzmKnD6pdHNgqeimpCAxvX2CAVIzH4UFRGLnrGQ=;
- b=TMTWv3IhSgaGcbrgv4LXVxT14tDP2/kYQtIav7GPR7Nc73FNl5RAZr/V+C2P5Q0BDu2ZNX
- e37hnHJp4A2Yz2qJdNrh7kKPfS8W632hM30IRefleHIMMFbDZTHcpXh1qA28jjS0whPzJU
- +rgWmNCZctMAsX5ezrAko9cbmi34dypLzSskTw9WkEY/4gGMeTmUP2A54AMCuy+s0uEJNn
- Uqwpb0IoUoXwfSG2t1lnZ+DL296XX6rSS/IN16jSAOA7xLICdzJTAvlQn55IyJ5Gb0zlYb
- c34+ccBDmh+oLZSfQB4wf34sguohimFZs1e3VJS4qKdceVlkFlcM+u2QpWoXbA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=TMTWv3Ih
-Subject: Re: [Buildroot] [PATCH 2/2] support/testing: test_xen: add block
+ d=amarulasolutions.com; s=google; t=1768842256; x=1769447056;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=m8cTsXlHIlJSFTsXDFM1O6Pyd1st6KyEek9+avhCWpk=;
+ b=XgZ+EOSaguk49BLiqioeUfI3e7wPgHj34MkX+jeWj8DlxEx63rb2eu3OZSJHWsbYCh
+ E+9roHFlZZXmLHqhLetMGWMZY3djehlQAgJ0TEEgey356/awf2HBGWGCo7sLy58KwTwA
+ +nQfLvHSXNhhfIWMStNUxkryOIjR9U1NfsKy4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=XgZ+EOSa
+Subject: [Buildroot] [PATCH v2 1/1] configs/stm32h747_disco_sd: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,223 +121,245 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gRW5oYW5jZSB0aGUgWGVuIHB5dGhvbiB0ZXN0cyB0byBleGVyY2lzZSBi
-bG9jayBkZXZpY2VzOiB0aGlzIGJvaWxzIGRvd24KPiB0byBzd2l0Y2hpbmcgZnJvbSByYW1kaXNr
-cyB0byBkaXNrIHBhcnRpdGlvbnMgZm9yIHRoZSBkb21haW5zIHJvb3Rmcy4KPiAoUmVmZXIgdG8g
-dGhlIGNvbW1lbnRzIGluIHRoZSBweXRob24gc2NyaXB0IGZvciBibG9jayBkZXZpY2VzIGRldGFp
-bHMuKQo+IAo+IC0gQWRkIHN1cHBvcnQgZm9yIFBDSSBhbmQgWGVuIGJsb2NrIHRvIHRoZSBMaW51
-eCBrZXJuZWwgY29uZmlndXJhdGlvbnMuCj4gLSBBZGQgYSBmZXcgY29tbWFuZHMgdG8gbGlzdCB0
-aGUgeHZkYSBibG9jayBkZXZpY2UgZm9yIGdvb2QgbWVhc3VyZS4KPiAtIEdlbmVyYXRlIHR3byBw
-YXJ0aXRpb25zIHdpdGggdGhlIHJvb3RmcyBpbiB0aGUgZGlzayBpbWFnZXM7IHdlIHVzZSB0aGUK
-PiAgIHNhbWUgcm9vdGZzIGNvbnRlbnRzIHR3aWNlLCBvbmNlIGZvciBlYWNoIGRvbWFpbi4KPiAt
-IEFkZCBhIHBhcmF2aXJ0dWFsaXplZCBibG9jayBkZXZpY2UgdG8gdGhlIFhlbiBkb20xIGNvbmZp
-Z3VyYXRpb25zIGFuZAo+ICAgYWRqdXN0IGJvdGggZG9tYWlucyBrZXJuZWwgY29tbWFuZCBsaW5l
-cywgdG8gc3BlY2lmeSB0aGUgcm9vdGZzCj4gICBsb2NhdGlvbnMuCj4gLSBCdWlsZCBob3N0LXFl
-bXUgZm9yIEFybSB2NywgdG8gd29ya2Fyb3VuZCBhbiBpc3N1ZSB3aXRoIDMyYiBBcm0gYW5kCj4g
-ICBvbGQgUWVtdSB2ZXJzaW9ucywgd2hpY2ggaXMgd2hhdCB3ZSBoYXZlIG9uIENJIGN1cnJlbnRs
-eS4KPiAtIFdoaWxlIGF0IGl0LCBidW1wIExpbnV4IGtlcm5lbCB0byA2LjE4LjQgYW5kIFUtQm9v
-dCB0byAyMDI2LjAxLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2Vu
-dC5zdGVobGVAYXJtLmNvbT4KPiBDYzogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KCkFw
-cGxpZWQgdG8gMjAyNS4xMS54LiBUaGFua3MKCj4gLS0tCj4gIHN1cHBvcnQvdGVzdGluZy90ZXN0
-cy9wYWNrYWdlL3Rlc3RfeGVuLnB5ICAgICB8IDM2ICsrKysrKysrKysrKysrKystLS0KPiAgLi4u
-L3BhY2thZ2UvdGVzdF94ZW4vYWFyY2g2NC9nZW5pbWFnZS5jZmcgICAgIHwgMTQgKysrKysrLS0K
-PiAgLi4uL3BhY2thZ2UvdGVzdF94ZW4vYWFyY2g2NC9saW51eC5jb25maWcgICAgIHwgIDMgKysK
-PiAgLi4uL3Rlc3RfeGVuL2FhcmNoNjQvb3ZlcmxheS9ldGMveGVuL2RvbTEuY2ZnIHwgIDQgKy0t
-Cj4gIC4uLi90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FhcmNoNjQveGVuLmNmZyAgICB8ICAzICst
-Cj4gIC4uLi90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FybS9ib290LmNtZCAgICAgICB8ICA3ICst
-LS0KPiAgLi4uL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYXJtL2dlbmltYWdlLmNmZyAgIHwgMTQg
-KysrKysrLS0KPiAgLi4uL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYXJtL2xpbnV4LmNvbmZpZyAg
-IHwgIDMgKysKPiAgLi4uL3Rlc3RfeGVuL2FybS9vdmVybGF5L2V0Yy94ZW4vZG9tMS5jZmcgICAg
-IHwgIDQgKy0tCj4gIDkgZmlsZXMgY2hhbmdlZCwgNjcgaW5zZXJ0aW9ucygrKSwgMjEgZGVsZXRp
-b25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
-c3RfeGVuLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4ucHkKPiBp
-bmRleCA2ZjJkYTA1ZDNhLi4yM2VmYjIwNTVkIDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVzdGlu
-Zy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuLnB5Cj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3Rz
-L3BhY2thZ2UvdGVzdF94ZW4ucHkKPiBAQCAtNiwyNyArNiwyOCBAQCBpbXBvcnQgaW5mcmEuYmFz
-ZXRlc3QKPiAgY2xhc3MgVGVzdFhlbkJhc2UoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToKPiAgICAg
-ICIiIkEgY2xhc3MgdG8gdGVzdCBYZW4gZm9yIG11bHRpcGxlIGFyY2hpdGVjdHVyZXMuIiIiCj4g
-IAo+IC0gICAgIyBXZSBydW4gb25seSBpbiB0aGUgaW5pdHJhbWZzOyB0aGlzIGFsbG93cyB0byB1
-c2UgYSBzaW5nbGUgcmFtZGlzayBpbWFnZQo+IC0gICAgIyBmb3IgYm90aCB0aGUgaG9zdCBhbmQg
-dGhlIGd1ZXN0Lgo+ICsgICAgIyBXZSB1c2UgdGhlIHNhbWUgcm9vdGZzIGNvbnRlbnRzIGZvciBi
-b3RoIHRoZSBob3N0IGFuZCB0aGUgZ3Vlc3QuCj4gICAgICBiYXNlX2NvbmZpZyA9IFwKPiAgICAg
-ICAgICAiIiIKPiAgICAgICAgICBCUjJfVE9PTENIQUlOX0VYVEVSTkFMPXkKPiAgICAgICAgICBC
-UjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
-ZS90ZXN0X3hlbi9jb21tb24vcG9zdC1idWlsZC5zaCIKPiAgICAgICAgICBCUjJfTElOVVhfS0VS
-TkVMPXkKPiAgICAgICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtICAg
-ICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE3LjEiCj4gKyAg
-ICAgICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC40Igo+ICAg
-ICAgICAgIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICAgICAgICAgIEJS
-Ml9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiAgICAgICAgICBCUjJfUEFDS0FH
-RV9CUklER0VfVVRJTFM9eQo+ICAgICAgICAgIEJSMl9QQUNLQUdFX1hFTj15Cj4gICAgICAgICAg
-QlIyX1BBQ0tBR0VfWEVOX0hZUEVSVklTT1I9eQo+ICAgICAgICAgIEJSMl9QQUNLQUdFX1hFTl9U
-T09MUz15Cj4gLSAgICAgICAgQlIyX1RBUkdFVF9ST09URlNfQ1BJTz15Cj4gKyAgICAgICAgQlIy
-X1RBUkdFVF9ST09URlNfRVhUMj15Cj4gKyAgICAgICAgQlIyX1RBUkdFVF9ST09URlNfRVhUMl80
-PXkKPiArICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyOE0iCj4gICAgICAg
-ICAgIyBCUjJfVEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNldAo+ICAgICAgICAgIEJSMl9UQVJH
-RVRfVUJPT1Q9eQo+ICAgICAgICAgIEJSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05G
-SUc9eQo+ICAgICAgICAgIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT049eQo+IC0gICAg
-ICAgIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjIwMjUuMDciCj4gKyAg
-ICAgICAgQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNi4wMSIKPiAg
-ICAgICAgICBCUjJfVEFSR0VUX1VCT09UX05FRURTX09QRU5TU0w9eQo+ICAgICAgICAgIEJSMl9U
-QVJHRVRfVUJPT1RfTkVFRFNfR05VVExTPXkKPiAgICAgICAgICBCUjJfUEFDS0FHRV9IT1NUX0RP
-U0ZTVE9PTFM9eQo+IEBAIC02Niw2ICs2NywxNSBAQCBjbGFzcyBUZXN0WGVuQmFzZShpbmZyYS5i
-YXNldGVzdC5CUlRlc3QpOgo+ICAgICAgICAgIFRoZXJlIGlzIGEgc3RhYmlsaXR5IGlzc3VlIGZv
-ciBBcm12NyB3aXRoIFFlbXUgPCA5LjEsIHdoaWNoIG1ha2VzIHRoZQo+ICAgICAgICAgIGRvbTEg
-LT4gZ3cgY29ubmVjdGlvbiB1bnJlbGlhYmxlLiBBcyBhIHdvcmthcm91bmQsIHdlIGludGVyYWN0
-IG9ubHkgd2l0aAo+ICAgICAgICAgIGRvbTAgZnJvbSBkb20xIChoZW5jZSB0aGUgZml4ZWQgSVAg
-YWRkcmVzc2VzKS4KPiArCj4gKyAgICAgICAgSGVyZSBpcyB0aGUgZGlzayBzZXR1cCB3ZSB1c2Ug
-aW4gdGhlIHRlc3Q6Cj4gKwo+ICsgICAgICAgIEltYWdlL3BhcnQuICBEb20wICAgICAgICBEb20x
-ICAgICBEZXNjcmlwdGlvbgo+ICsgICAgICAgIC0tLS0tLS0tLS0tICAtLS0tLS0tLS0tICAtLS0t
-LS0tICAtLS0tLS0tLS0tLQo+ICsgICAgICAgICAgIGRpc2suaW1nICB2ZGEKPiArICAgICAgICAg
-ICArLS0gYm9vdCAgdmRhMSwgL21udCAgICAgICAgICAgQ29udGFpbnMgWGVuIGFuZCBrZXJuZWwK
-PiArICAgICAgICAgICArLS0gcm9vdCAgdmRhMiwgLyAgICAgICAgICAgICAgRG9tMCByb290ZnMK
-PiArICAgICAgICAgICBgLSBndWVzdCAgdmRhMyAgICAgICAgeHZkYSwgLyAgRG9tMSByb290ZnMK
-PiAgICAgICAgICAiIiIKPiAgCj4gICAgICAgICAgIyBCb290IHRoZSBlbXVsYXRvci4KPiBAQCAt
-MTA1LDYgKzExNSwxMSBAQCBjbGFzcyBUZXN0WGVuQmFzZShpbmZyYS5iYXNldGVzdC5CUlRlc3Qp
-Ogo+ICAgICAgICAgIHV1aWQgPSBzZWxmLmdldF9kb21fdXVpZCgpCj4gICAgICAgICAgc2VsZi5h
-c3NlcnROb3RFcXVhbCh1dWlkLCBkb20wX3V1aWQsICJVbmV4cGVjdGVkIGRvbTAgVVVJRCIpCj4g
-IAo+ICsgICAgICAgICMgVmVyaWZ5IGRvbTEgYmxvY2sgZGV2aWNlLgo+ICsgICAgICAgICMgKFRo
-aXMgaXMgYSBiaXQgcmVkdW5kYW50LCBhcyBpZiB0aGUgdGVzdCBydW5zIHRoaXMgZmFyIHdlIGFs
-cmVhZHkga25vdwo+ICsgICAgICAgICMgdGhhdCBkb20xIGZvdW5kIGl0cyByb290ZnMuKQo+ICsg
-ICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soImxzIC1sYUYgL3N5cy9jbGFzcy9ibG9jay94dmRhIikK
-PiArCj4gICAgICAgICAgIyBCcmluZyB1cCB0aGUgbmV0d29yayBpbiB0aGUgZG9tMS4KPiAgICAg
-ICAgICBzZWxmLmFzc2VydFJ1bk9rKCJpZmNvbmZpZyBldGgwIDEwLjAuMi40MyIpCj4gICAgICAg
-ICAgc2VsZi5hc3NlcnRSdW5PaygiaWZjb25maWcgLWEiKQo+IEBAIC0xMjcsNiArMTQyLDkgQEAg
-Y2xhc3MgVGVzdFhlbkJhc2UoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToKPiAgICAgICAgICAjIENo
-ZWNrIHRoYXQgd2UgaGF2ZSB0d28gVk1zIHJ1bm5pbmcuCj4gICAgICAgICAgc2VsZi5hc3NlcnRO
-dW1WTSgyKQo+ICAKPiArICAgICAgICAjIFByaW50IHRoZSBibG9jayBzZXR1cCBmb3IgZGVidWdn
-aW5nLgo+ICsgICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soInhsIGJsb2NrLWxpc3QgZG9tMSIpCj4g
-Kwo+ICAgICAgICAgICMgUHJpbnQgdGhlIGJyaWRnZSBzZXR1cCBmb3IgZGVidWdnaW5nLgo+ICAg
-ICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soImJyY3RsIHNob3ciKQo+ICAKPiBAQCAtMTc4LDYgKzE5
-NiwxMiBAQCBjbGFzcyBUZXN0WGVuQXJtdjcoVGVzdFhlbkJhc2UpOgo+ICAgICAgIyBXZSB1c2Ug
-VS1Cb290IGFuZCBhIHNjcmlwdCB0byBsb2FkIHRoZSBEb20wIGltYWdlcyBhbmQgYW1lbmQgdGhl
-Cj4gICAgICAjIERldmljZXRyZWUgZm9yIFhlbiBkeW5hbWljYWxseS4KPiAgICAgICMgV2UgaGF2
-ZSBhIGN1c3RvbSBrZXJuZWwgY29uZmlnIHRvIHJlZHVjZSBidWlsZCB0aW1lLgo+ICsgICAgIyBX
-ZSBuZWVkIHRvIGJ1aWxkIGhvc3QtcWVtdSB0byB3b3JrYXJvdW5kIGFuIGlzc3VlIHdpdGggWGVu
-IGd1ZXN0IGJsb2NrCj4gKyAgICAjIGRldmljZXMgb24gMzJiIEFybS4KPiArICAgICMgVGhpcyB3
-YXMgZml4ZWQgYnkgY29tbWl0IDcxNzVhNTYyZjE1NyAoImh3L2ludGMvYXJtX2dpYzogRml4IGRl
-YWN0aXZhdGlvbgo+ICsgICAgIyBvZiBTUEkgbGluZXMiKSBhbmQgdGhlIGZpeCBpcyBwcmVzZW50
-IGluIFFlbXUgdmVyc2lvbnMgPj0gOS4xLjAuCj4gKyAgICAjIFdoZW4gdGhlIENJIGRvY2tlciBp
-bWFnZSB3aWxsIGhhdmUgYSByZWNlbnQtZW5vdWdoIFFlbXUgdmVyc2lvbiB3aXRoIHRoZQo+ICsg
-ICAgIyBmaXgsIHdlIGNhbiByZW1vdmUgdGhlIGhvc3QtcWVtdSBwYWNrYWdlIGZyb20gdGhlIHRl
-c3QgY29uZmlndXJhdGlvbi4KPiAgICAgIGNvbmZpZyA9IFRlc3RYZW5CYXNlLmJhc2VfY29uZmln
-ICsgXAo+ICAgICAgICAgICIiIgo+ICAgICAgICAgIEJSMl9hcm09eQo+IEBAIC0xOTEsNiArMjE1
-LDggQEAgY2xhc3MgVGVzdFhlbkFybXY3KFRlc3RYZW5CYXNlKToKPiAgICAgICAgICBCUjJfUEFD
-S0FHRV9IT1NUX1VCT09UX1RPT0xTPXkKPiAgICAgICAgICBCUjJfUEFDS0FHRV9IT1NUX1VCT09U
-X1RPT0xTX0JPT1RfU0NSSVBUPXkKPiAgICAgICAgICBCUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RP
-T0xTX0JPT1RfU0NSSVBUX1NPVVJDRT0ic3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVz
-dF94ZW4vYXJtL2Jvb3QuY21kIgo+ICsgICAgICAgIEJSMl9QQUNLQUdFX0hPU1RfUUVNVT15Cj4g
-KyAgICAgICAgQlIyX1BBQ0tBR0VfSE9TVF9RRU1VX1NZU1RFTV9NT0RFPXkKPiAgICAgICAgICAi
-IiIKPiAgCj4gICAgICBkZWYgdGVzdF9ydW4oc2VsZik6Cj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQv
-dGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FhcmNoNjQvZ2VuaW1hZ2UuY2ZnIGIvc3Vw
-cG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYWFyY2g2NC9nZW5pbWFnZS5jZmcK
-PiBpbmRleCA3ZDdhODNkNmI2Li5mNzkyZGVhNTAzIDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVz
-dGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FhcmNoNjQvZ2VuaW1hZ2UuY2ZnCj4gKysrIGIv
-c3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYWFyY2g2NC9nZW5pbWFnZS5j
-ZmcKPiBAQCAtOSw4ICs5LDcgQEAgaW1hZ2UgZWZpLXBhcnQudmZhdCB7Cj4gIAkJfQo+ICAKPiAg
-CQlmaWxlcyA9IHsKPiAtCQkJIkltYWdlIiwKPiAtCQkJInJvb3Rmcy5jcGlvIgo+ICsJCQkiSW1h
-Z2UiCj4gIAkJfQo+ICAJfQo+ICAKPiBAQCAtMjgsNCArMjcsMTUgQEAgaW1hZ2UgZGlzay5pbWcg
-ewo+ICAJCW9mZnNldCA9IDMySwo+ICAJCWJvb3RhYmxlID0gdHJ1ZQo+ICAJfQo+ICsKPiArCXBh
-cnRpdGlvbiByb290IHsKPiArCQlwYXJ0aXRpb24tdHlwZS11dWlkID0gcm9vdC1hcm02NAo+ICsJ
-CWltYWdlID0gInJvb3Rmcy5leHQyIgo+ICsJfQo+ICsKPiArCXBhcnRpdGlvbiBndWVzdCB7Cj4g
-KwkJIyBMaW51eCByZXNlcnZlZAo+ICsJCXBhcnRpdGlvbi10eXBlLXV1aWQgPSA4REE2MzMzOS0w
-MDA3LTYwQzAtQzQzNi0wODNBQzgyMzA5MDgKPiArCQlpbWFnZSA9ICJyb290ZnMuZXh0MiIKPiAr
-CX0KPiAgfQo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0
-X3hlbi9hYXJjaDY0L2xpbnV4LmNvbmZpZyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
-L3Rlc3RfeGVuL2FhcmNoNjQvbGludXguY29uZmlnCj4gaW5kZXggMWM2YjZkN2E2Yy4uODE3OTQ3
-NGZhOCAxMDA2NDQKPiAtLS0gYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3hl
-bi9hYXJjaDY0L2xpbnV4LmNvbmZpZwo+ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNr
-YWdlL3Rlc3RfeGVuL2FhcmNoNjQvbGludXguY29uZmlnCj4gQEAgLTc1LDEwICs3NSwxMyBAQCBD
-T05GSUdfVU5JWD15Cj4gIENPTkZJR19JTkVUPXkKPiAgIyBDT05GSUdfSVBWNiBpcyBub3Qgc2V0
-Cj4gIENPTkZJR19CUklER0U9bQo+ICtDT05GSUdfUENJPXkKPiArQ09ORklHX1BDSV9IT1NUX0dF
-TkVSSUM9eQo+ICBDT05GSUdfREVWVE1QRlM9eQo+ICBDT05GSUdfREVWVE1QRlNfTU9VTlQ9eQo+
-ICBDT05GSUdfRldfTE9BREVSX1VTRVJfSEVMUEVSPXkKPiAgQ09ORklHX0JMS19ERVZfTE9PUD15
-Cj4gK0NPTkZJR19YRU5fQkxLREVWX0JBQ0tFTkQ9eQo+ICBDT05GSUdfVklSVElPX0JMSz15Cj4g
-IENPTkZJR19SQUlEX0FUVFJTPW0KPiAgQ09ORklHX1NDU0k9eQo+IGRpZmYgLS1naXQgYS9zdXBw
-b3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3hlbi9hYXJjaDY0L292ZXJsYXkvZXRjL3hl
-bi9kb20xLmNmZyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FhcmNo
-NjQvb3ZlcmxheS9ldGMveGVuL2RvbTEuY2ZnCj4gaW5kZXggNjUxYjhkZTkxOS4uMTc3ODgwNTc4
-MSAxMDA2NDQKPiAtLS0gYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3hlbi9h
-YXJjaDY0L292ZXJsYXkvZXRjL3hlbi9kb20xLmNmZwo+ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90
-ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FhcmNoNjQvb3ZlcmxheS9ldGMveGVuL2RvbTEuY2ZnCj4g
-QEAgLTEsNiArMSw2IEBACj4gIG5hbWU9ImRvbTEiCj4gIGtlcm5lbD0iL21udC9JbWFnZSIKPiAt
-cmFtZGlzaz0iL21udC9yb290ZnMuY3BpbyIKPiAgbWVtb3J5PTI1Ngo+IC1jbWRsaW5lPSJjb25z
-b2xlPWh2YzAiCj4gK2NtZGxpbmU9ImNvbnNvbGU9aHZjMCByb290PS9kZXYveHZkYSByb290d2Fp
-dCIKPiAgdmlmPVsnYnJpZGdlPWJyMCddCj4gK2Rpc2s9WydwaHk6L2Rldi92ZGEzLHh2ZGEsdydd
-Cj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2Fh
-cmNoNjQveGVuLmNmZyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2Fh
-cmNoNjQveGVuLmNmZwo+IGluZGV4IDgwMDdiYTcyNWMuLjA0NWExNjMxYTMgMTAwNjQ0Cj4gLS0t
-IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYWFyY2g2NC94ZW4uY2Zn
-Cj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYWFyY2g2NC94
-ZW4uY2ZnCj4gQEAgLTEsMyArMSwyIEBACj4gIG9wdGlvbnM9ZG9tMF9tZW09MjU2TSBsb2dsdmw9
-YWxsIGd1ZXN0X2xvZ2x2bD1hbGwKPiAta2VybmVsPVxJbWFnZSBjb25zb2xlPWh2YzAKPiAtcmFt
-ZGlzaz1ccm9vdGZzLmNwaW8KPiAra2VybmVsPVxJbWFnZSBjb25zb2xlPWh2YzAgcm9vdD1QQVJU
-TEFCRUw9cm9vdCByb290d2FpdAo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMv
-cGFja2FnZS90ZXN0X3hlbi9hcm0vYm9vdC5jbWQgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFj
-a2FnZS90ZXN0X3hlbi9hcm0vYm9vdC5jbWQKPiBpbmRleCA4NTlkYzY2MWM4Li40ZTMxNGExMzVm
-IDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2Fy
-bS9ib290LmNtZAo+ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVu
-L2FybS9ib290LmNtZAo+IEBAIC0xMSwxMyArMTEsOCBAQCBmZHQgc2V0IC9jaG9zZW4vbW9kdWxl
-cy9tb2R1bGVAMCBjb21wYXRpYmxlICJ4ZW4sbGludXgtemltYWdlIiAieGVuLG11bHRpYm9vdC1t
-bwo+ICBsb2FkICR7ZGV2dHlwZX0gJHtkZXZudW19ICR7a2VybmVsX2FkZHJfcn0gekltYWdlCj4g
-IGZkdCBzZXQgL2Nob3Nlbi9tb2R1bGVzL21vZHVsZUAwIHJlZyA8JHtrZXJuZWxfYWRkcl9yfSAw
-eCR7ZmlsZXNpemV9ID4KPiAgCj4gLWZkdCBta25vZCAvY2hvc2VuL21vZHVsZXMgbW9kdWxlQDEK
-PiAtZmR0IHNldCAvY2hvc2VuL21vZHVsZXMvbW9kdWxlQDEgY29tcGF0aWJsZSAieGVuLGxpbnV4
-LWluaXRyZCIgInhlbixtdWx0aWJvb3QtbW9kdWxlIgo+IC1sb2FkICR7ZGV2dHlwZX0gJHtkZXZu
-dW19ICR7cmFtZGlza19hZGRyX3J9IHJvb3Rmcy5jcGlvCj4gLWZkdCBzZXQgL2Nob3Nlbi9tb2R1
-bGVzL21vZHVsZUAxIHJlZyA8JHtyYW1kaXNrX2FkZHJfcn0gMHgke2ZpbGVzaXplfSA+Cj4gLQo+
-ICBsb2FkICR7ZGV2dHlwZX0gJHtkZXZudW19ICR7bG9hZGFkZHJ9IHhlbgo+IC1mZHQgc2V0IC9j
-aG9zZW4geGVuLGRvbTAtYm9vdGFyZ3MgImNvbnNvbGU9aHZjMCIKPiArZmR0IHNldCAvY2hvc2Vu
-IHhlbixkb20wLWJvb3RhcmdzICJjb25zb2xlPWh2YzAgcm9vdD1QQVJUTEFCRUw9cm9vdCByb290
-d2FpdCIKPiAgZmR0IHNldCAvY2hvc2VuIHhlbix4ZW4tYm9vdGFyZ3MgImRvbTBfbWVtPTI1Nk0g
-bG9nbHZsPWFsbCBndWVzdF9sb2dsdmw9YWxsIgo+ICBmZHQgcHJpbnQgL2Nob3Nlbgo+ICBib290
-eiAke2xvYWRhZGRyfSAtICR7ZmR0X2FkZHJ9Cj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGlu
-Zy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FybS9nZW5pbWFnZS5jZmcgYi9zdXBwb3J0L3Rlc3Rp
-bmcvdGVzdHMvcGFja2FnZS90ZXN0X3hlbi9hcm0vZ2VuaW1hZ2UuY2ZnCj4gaW5kZXggNmZkNGUw
-ZWRjZC4uY2RiM2RhZmE2OCAxMDA2NDQKPiAtLS0gYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFj
-a2FnZS90ZXN0X3hlbi9hcm0vZ2VuaW1hZ2UuY2ZnCj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rl
-c3RzL3BhY2thZ2UvdGVzdF94ZW4vYXJtL2dlbmltYWdlLmNmZwo+IEBAIC0zLDggKzMsNyBAQCBp
-bWFnZSBib290LnZmYXQgewo+ICAJCWZpbGVzID0gewo+ICAJCQkiYm9vdC5zY3IiLAo+ICAJCQki
-eGVuIiwKPiAtCQkJInpJbWFnZSIsCj4gLQkJCSJyb290ZnMuY3BpbyIKPiArCQkJInpJbWFnZSIK
-PiAgCQl9Cj4gIAl9Cj4gIAo+IEBAIC0yMiw0ICsyMSwxNSBAQCBpbWFnZSBkaXNrLmltZyB7Cj4g
-IAkJb2Zmc2V0ID0gMzJLCj4gIAkJYm9vdGFibGUgPSB0cnVlCj4gIAl9Cj4gKwo+ICsJcGFydGl0
-aW9uIHJvb3Qgewo+ICsJCXBhcnRpdGlvbi10eXBlLXV1aWQgPSByb290LWFybQo+ICsJCWltYWdl
-ID0gInJvb3Rmcy5leHQyIgo+ICsJfQo+ICsKPiArCXBhcnRpdGlvbiBndWVzdCB7Cj4gKwkJIyBM
-aW51eCByZXNlcnZlZAo+ICsJCXBhcnRpdGlvbi10eXBlLXV1aWQgPSA4REE2MzMzOS0wMDA3LTYw
-QzAtQzQzNi0wODNBQzgyMzA5MDgKPiArCQlpbWFnZSA9ICJyb290ZnMuZXh0MiIKPiArCX0KPiAg
-fQo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3hlbi9h
-cm0vbGludXguY29uZmlnIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4v
-YXJtL2xpbnV4LmNvbmZpZwo+IGluZGV4IDBhNTg3ODVmNzMuLjI4YWQxMzQzMGYgMTAwNjQ0Cj4g
-LS0tIGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYXJtL2xpbnV4LmNv
-bmZpZwo+ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuL2FybS9s
-aW51eC5jb25maWcKPiBAQCAtNDEsNiArNDEsOCBAQCBDT05GSUdfSVBfUE5QX0JPT1RQPXkKPiAg
-Q09ORklHX0lQX1BOUF9SQVJQPXkKPiAgIyBDT05GSUdfSVBWNiBpcyBub3Qgc2V0Cj4gIENPTkZJ
-R19CUklER0U9eQo+ICtDT05GSUdfUENJPXkKPiArQ09ORklHX1BDSV9IT1NUX0dFTkVSSUM9eQo+
-ICBDT05GSUdfUVJUUj1tCj4gIENPTkZJR19QQUdFX1BPT0xfU1RBVFM9eQo+ICBDT05GSUdfREVW
-VE1QRlM9eQo+IEBAIC01Nyw2ICs1OSw3IEBAIENPTkZJR19NVERfUEhZU01BUF9PRj15Cj4gIENP
-TkZJR19CTEtfREVWX0xPT1A9eQo+ICBDT05GSUdfQkxLX0RFVl9SQU09eQo+ICBDT05GSUdfQkxL
-X0RFVl9SQU1fU0laRT02NTUzNgo+ICtDT05GSUdfWEVOX0JMS0RFVl9CQUNLRU5EPXkKPiAgQ09O
-RklHX1ZJUlRJT19CTEs9eQo+ICBDT05GSUdfU1JBTT15Cj4gIENPTkZJR19ORVRERVZJQ0VTPXkK
-PiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4vYXJt
-L292ZXJsYXkvZXRjL3hlbi9kb20xLmNmZyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
-L3Rlc3RfeGVuL2FybS9vdmVybGF5L2V0Yy94ZW4vZG9tMS5jZmcKPiBpbmRleCAzYzc1YTBjZmI3
-Li4wODFhNGRhMmMwIDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
-L3Rlc3RfeGVuL2FybS9vdmVybGF5L2V0Yy94ZW4vZG9tMS5jZmcKPiArKysgYi9zdXBwb3J0L3Rl
-c3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3hlbi9hcm0vb3ZlcmxheS9ldGMveGVuL2RvbTEuY2Zn
-Cj4gQEAgLTEsNiArMSw2IEBACj4gIG5hbWU9ImRvbTEiCj4gIGtlcm5lbD0iL21udC96SW1hZ2Ui
-Cj4gLXJhbWRpc2s9Ii9tbnQvcm9vdGZzLmNwaW8iCj4gIG1lbW9yeT0yNTYKPiAtY21kbGluZT0i
-Y29uc29sZT1odmMwIgo+ICtjbWRsaW5lPSJjb25zb2xlPWh2YzAgcm9vdD0vZGV2L3h2ZGEgcm9v
-dHdhaXQiCj4gIHZpZj1bJ2JyaWRnZT1icjAnXQo+ICtkaXNrPVsncGh5Oi9kZXYvdmRhMyx4dmRh
-LHcnXQo+IC0tIAo+IDIuNTEuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Support STM32h747i-disco board. It includes an STM32H747XI SoC with the
+following resources:
+
+ - 2 Mbytes Flash
+ - 1 Mbyte SRAM
+ - LCD-TFT controller
+ - MIPI-DSI interface
+ - FD-CAN
+ - USB 2.0 high-speed/full-speed
+ - Ethernet MAC
+ - camera interface
+
+Detailed information can be found at:
+https://www.st.com/en/evaluation-tools/stm32h747i-disco.html
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+---
+
+Changes v1 -> v2:
+- drop board/stmicroelectronics/stm32h747-disco/patches/linux-headers/linux-headers.hash
+- Replace #!/bin/bash with #!/bin/sh in board/stmicroelectronics/stm32h747-disco/flash_sd.sh
+- Set '-eu' in board/stmicroelectronics/stm32h747-disco/post-build.sh
+- Fix a typo in board/stmicroelectronics/stm32h747-disco/readme.txt
+- Use bootlin toolchain
+
+ DEVELOPERS                                    |  2 ++
+ .../stm32h747-disco/extlinux.conf             |  4 +++
+ .../stm32h747-disco/flash_sd.sh               | 18 +++++++++++
+ .../stm32h747-disco/genimage.cfg              | 10 ++++++
+ .../stm32h747-disco/linux-sd.fragment         |  1 +
+ .../stm32h747-disco/patches/linux/linux.hash  |  2 ++
+ .../stm32h747-disco/patches/uboot/uboot.hash  |  2 ++
+ .../stm32h747-disco/post-build.sh             |  9 ++++++
+ .../stm32h747-disco/readme.txt                | 32 +++++++++++++++++++
+ configs/stm32h747_disco_sd_defconfig          | 32 +++++++++++++++++++
+ 10 files changed, 112 insertions(+)
+ create mode 100644 board/stmicroelectronics/stm32h747-disco/extlinux.conf
+ create mode 100755 board/stmicroelectronics/stm32h747-disco/flash_sd.sh
+ create mode 100644 board/stmicroelectronics/stm32h747-disco/genimage.cfg
+ create mode 100644 board/stmicroelectronics/stm32h747-disco/linux-sd.fragment
+ create mode 100644 board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash
+ create mode 100644 board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash
+ create mode 100755 board/stmicroelectronics/stm32h747-disco/post-build.sh
+ create mode 100644 board/stmicroelectronics/stm32h747-disco/readme.txt
+ create mode 100644 configs/stm32h747_disco_sd_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9ed4bdb0a073..08c98ec53bf5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -800,12 +800,14 @@ N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ F:	board/bsh/
+ F:	board/stmicroelectronics/stm32f746-disco/
+ F:	board/stmicroelectronics/stm32f769-disco/
++F:	board/stmicroelectronics/stm32h747-disco/
+ F:	boot/ti-k3-boot-firmware/
+ F:	configs/imx6ulz_bsh_smm_m2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
+ F:	configs/stm32f746_disco_sd_defconfig
+ F:	configs/stm32f769_disco_sd_defconfig
++F:	configs/stm32h747_disco_sd_defconfig
+ F:	package/aespipe/
+ F:	package/armadillo/
+ F:	package/atf/
+diff --git a/board/stmicroelectronics/stm32h747-disco/extlinux.conf b/board/stmicroelectronics/stm32h747-disco/extlinux.conf
+new file mode 100644
+index 000000000000..36f60e346b6d
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/extlinux.conf
+@@ -0,0 +1,4 @@
++label stm32h747i-disco-buildroot
++  kernel /boot/zImage
++  devicetree /boot/stm32h747i-disco.dtb
++  append console=ttySTM0,115200 root=/dev/mmcblk0p1 rw rootfstype=ext2 rootwait earlyprintk consoleblank=0 ignore_loglevel
+diff --git a/board/stmicroelectronics/stm32h747-disco/flash_sd.sh b/board/stmicroelectronics/stm32h747-disco/flash_sd.sh
+new file mode 100755
+index 000000000000..6f2e421aba39
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/flash_sd.sh
+@@ -0,0 +1,18 @@
++#!/bin/sh
++
++OUTPUT_DIR=$1
++
++if ! test -d "${OUTPUT_DIR}" ; then
++    echo "ERROR: no output directory specified."
++    echo "Usage: $0 OUTPUT_DIR"
++    exit 1
++fi
++
++"${OUTPUT_DIR}"/host/bin/openocd -f board/stm32h747i-disco.cfg \
++  -c "init" \
++  -c "reset init" \
++  -c "flash probe 0" \
++  -c "flash info 0" \
++  -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
++  -c "reset run" \
++  -c "shutdown"
+diff --git a/board/stmicroelectronics/stm32h747-disco/genimage.cfg b/board/stmicroelectronics/stm32h747-disco/genimage.cfg
+new file mode 100644
+index 000000000000..e911a94e46b5
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/genimage.cfg
+@@ -0,0 +1,10 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		size = 32M
++	}
++}
+diff --git a/board/stmicroelectronics/stm32h747-disco/linux-sd.fragment b/board/stmicroelectronics/stm32h747-disco/linux-sd.fragment
+new file mode 100644
+index 000000000000..846229d0d468
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/linux-sd.fragment
+@@ -0,0 +1 @@
++# CONFIG_XIP_KERNEL is not set
+diff --git a/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash
+new file mode 100644
+index 000000000000..9f5d285c3569
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  189d1f409cef8d0d234210e04595172df392f8cb297e14b447ed95720e2fd940  linux-6.18.5.tar.xz
+diff --git a/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash
+new file mode 100644
+index 000000000000..b6a925ea4e89
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
+diff --git a/board/stmicroelectronics/stm32h747-disco/post-build.sh b/board/stmicroelectronics/stm32h747-disco/post-build.sh
+new file mode 100755
+index 000000000000..293bf30cb3ff
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/post-build.sh
+@@ -0,0 +1,9 @@
++#!/bin/sh
++set -eu
++
++BOARD_DIR="$(dirname "$0")"
++
++# Kernel is built without devpts support
++sed -i '/^devpts/d' "${TARGET_DIR}"/etc/fstab
++
++install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${TARGET_DIR}"/boot/extlinux/extlinux.conf
+diff --git a/board/stmicroelectronics/stm32h747-disco/readme.txt b/board/stmicroelectronics/stm32h747-disco/readme.txt
+new file mode 100644
+index 000000000000..5c565de2112a
+--- /dev/null
++++ b/board/stmicroelectronics/stm32h747-disco/readme.txt
+@@ -0,0 +1,32 @@
++STM32H747 Discovery
++===================
++
++This tutorial describes how to use the predefined Buildroot
++configuration for the STM32H747 Discovery evaluation platform.
++
++Building
++--------
++
++  make stm32h747_disco_sd_defconfig
++  make
++
++Flashing
++--------
++
++  ./board/stmicroelectronics/stm32h747-disco/flash_sd.sh output/
++
++It will flash the U-Boot bootloader.
++
++Creating SD card
++----------------
++
++Buildroot prepares an "sdcard.img" image in the output/images/ directory,
++ready to be dumped on a SD card. Launch the following command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout and its content, see the
++definition in board/stmicroelectronics/stm32h747-disco/genimage.cfg.
++
+diff --git a/configs/stm32h747_disco_sd_defconfig b/configs/stm32h747_disco_sd_defconfig
+new file mode 100644
+index 000000000000..92cd23196bea
+--- /dev/null
++++ b/configs/stm32h747_disco_sd_defconfig
+@@ -0,0 +1,32 @@
++BR2_arm=y
++BR2_cortex_m7=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32h747-disco/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32h747-disco/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32h747-disco/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.5"
++BR2_LINUX_KERNEL_DEFCONFIG="stm32"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xd0000000.config board/stmicroelectronics/stm32h747-disco/linux-sd.fragment"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32h747i-disco"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_PACKAGE_EVTEST=y
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32h747-disco"
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_OPENOCD=y
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
