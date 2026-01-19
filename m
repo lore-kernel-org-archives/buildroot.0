@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 935E3CA5FFA
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 20:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E416D29C4D
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 20:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A0F184089;
-	Mon, 19 Jan 2026 20:17:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 540C084091;
+	Mon, 19 Jan 2026 20:18:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NHBGjtBNexuW; Mon, 19 Jan 2026 20:17:31 +0000 (UTC)
+ id p4Tkqd71C6S6; Mon, 19 Jan 2026 20:18:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3F6184083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB50584086
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768853851;
-	bh=OZTkfpxVYkBcmVPEzcBluouMTHzYYQ4wYIHscr6L4y4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CfqvIR3DeFeECq1WHwwbCwpP7vaE5Mu6S/Agnq/pkA6xRBEOASfGktvAYn/IesBp/
-	 O6JZtm3FD3T5hRKnJBwcUkNejZ+9t/ujlCA5vSYV08qXUSEkosB53fSVZFqjraI5or
-	 x87IIPWJodTkEvqxroGWm7JmW5nDa8ynYA/oXuwbe2DwTcFVlVSgqvqx1dqgeCqrX4
-	 xHQJ+gIdR9or1HSG8xejo681cgdBPw8IH7MGYdFRq3QOVK/GSFcXXAYhTnnqrFLOm3
-	 su/t1lika7mDHu1GMa8lXo7s0KfBFz8suzV2Qqc3p0YK0HyY02hzixKfF8DRxAjR4H
-	 gbP6gXhlaQqvQ==
+	s=default; t=1768853880;
+	bh=zg5k/HvNJCl+lUefidxLd3Qnd7EDU6aKq7o4Sdnxcek=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=SUmB9SIxQBlr8uzxDGsBeMCiFdFaXP90ToWCz3EXOsy9ix2cTbua3uLY3ie8c09tP
+	 346TSBb0ky4O7nvoDsXR3GrM7UjPtMyFgFC3Sguop8d144B3pOWNgESRhtupMbHkyF
+	 ClfMtkAOrMLGEUjT5/hCsTlPqJw266cINxSTA5JGo3rM1u+DH1ND+73LuhwgK8O+wp
+	 uZwll68E5jcfHNE8iBcV9uQYbedA6//NHvhPeMzNCqAfndhWJgiUXOE5ZRq/RL4HoV
+	 Q62zG+dSXPTDCSCd2upHnAiPOZuUiGTAfcIMPJ5XMSn4NSQ++YJyQ9usgE7LkeCcoM
+	 aq4AmgKjqxirQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3F6184083;
-	Mon, 19 Jan 2026 20:17:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 947BC2A8
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 20:17:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB50584086;
+	Mon, 19 Jan 2026 20:17:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DBBC2A8
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 20:17:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7367940669
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 20:17:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED38184086
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 20:17:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xMr-25g7qvgK for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 20:17:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E7E5405EB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E7E5405EB
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 20:17:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D33788695; Mon, 19 Jan 2026 20:17:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 21:16:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c5f5ac1cbb5b9a05f2680b04d368b1da4a17ffd2
-X-Git-Newrev: 888beb6c4493cb9d23958a8c1fb8b80e87d899aa
-X-Patchwork-Hint: ignore
-Message-Id: <20260119201729.8D33788695@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-urllib3: security bump to
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r22Z0k8A0207 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 20:17:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B565884082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B565884082
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B565884082
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 20:17:57 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id D1C69780368;
+ Mon, 19 Jan 2026 21:17:52 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 19 Jan 2026 21:17:52 +0100
+MIME-Version: 1.0
+Date: Mon, 19 Jan 2026 21:17:52 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20260119103809.2880459-1-peter@korsgaard.com>
+References: <20260119103809.2880459-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <5cbfc5bd978dec3e789ca29f6d83d8f7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1768853875;
+ bh=GB/FJv8vCHHbRK3XAzU5EK+D+KnRnQSH5NFetmWZ8WM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=dNKUP15rxvHGHBvIRppVfWlPj8m1Jxdwd/9GoTRY7pcVo3cKyIpYl24K32Cj6kjuR
+ 2JbUsIXLzUuCVO760030Z00+Rq3jFDWn6Frgq30b6GBwyt4/hsWeMJT7XwKBgsxcyh
+ 4T0USy0TFjPggQEB0V8DxY/oeuOWcvD8NHtt4lXvvx7aLh/e2JK8nnOmA0Q5UNJyRU
+ cMCLa75Oaz6SW+Tvtwa09rdaazH9pPYiEFbhzkISIVgkz+ICDk3UQZLu5vY9166mlj
+ bDR73dUf3GkhE2/vACdWnXcNYnx1Z+HZ1gCsXZijEOzLMx7aZw10TwDbfd0UiEYQD0
+ puXp/OUC2V2mg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=dNKUP15r
+Subject: Re: [Buildroot] [PATCH] package/python-urllib3: security bump to
  version 2.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,61 +96,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=888beb6c4493cb9d23958a8c1fb8b80e87d899aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/01/2026 11:38, Peter Korsgaard wrote:
+> Fixes the following vulnerability:
+> 
+> CVE-2026-21441: Decompression-bomb safeguards bypassed when following 
+> HTTP
+> redirects (streaming API)
+> 
+> https://github.com/urllib3/urllib3/security/advisories/GHSA-38jv-5279-wg99
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Release notes:
-https://github.com/urllib3/urllib3/releases/tag/2.6.3
-
-Fixes the following vulnerability:
-
-CVE-2026-21441: Decompression-bomb safeguards bypassed when following HTTP
-redirects (streaming API)
-
-https://github.com/urllib3/urllib3/security/advisories/GHSA-38jv-5279-wg99
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 76fe4e5fc9..858b8ca3a3 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  838e0ffee00ec870a3ba6727a7832ab8  urllib3-2.6.2.tar.gz
--sha256  016f9c98bb7e98085cb2b4b17b87d2c702975664e4f060c6532e64d1c1a5e797  urllib3-2.6.2.tar.gz
-+md5  2c381874816fe551f50a2551abae62b3  urllib3-2.6.3.tar.gz
-+sha256  1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed  urllib3-2.6.3.tar.gz
- # Locally computed sha256 checksums
- sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index d57473566b..7f7f0b03d2 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_URLLIB3_VERSION = 2.6.2
-+PYTHON_URLLIB3_VERSION = 2.6.3
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/1e/24/a2a2ed9addd907787d7aa0355ba36a6cadf1768b934c652ea78acbd59dcd
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
