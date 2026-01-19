@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA0DCCF2D9
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 10:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FFF4CCF2DA
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 10:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B6FC806D5;
-	Mon, 19 Jan 2026 10:09:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38F3480615;
+	Mon, 19 Jan 2026 10:09:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id syPZ_KXEXJhY; Mon, 19 Jan 2026 10:09:25 +0000 (UTC)
+ id pTTdhjSqDKZs; Mon, 19 Jan 2026 10:09:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDA6680626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEB1F806EF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768817365;
-	bh=PedZF9AK0oe4fLOoPJSSyZd05dbbvcRppVeuKD6he58=;
+	s=default; t=1768817367;
+	bh=LfSAovDh+9n7vhtReiuqKg5wwa2jtTbmmPXI9IpKnR8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=PZOS4CzDVESSl7ZetrvFEu5onTPHnyT723DYtILbUg4U3kUc7vuM0niwrmU1CTanf
-	 ESKRFL3owZGYSGMIvZAcn6xvFYVia0rSOJnNuDpT4e2Os5BHoNmiQJqYgpSnGwOUJx
-	 4rq6AcO7yZDD80fbPI6+cNyUp7YUVzPWAsFxsr7auObWVFRiwzQYMkpx69/+RsO62W
-	 mwAWJuFYk72O27J8gnteWQ/A9q4AYm8MGi9lF+WVAaJRhcfwGfcRh7s//tVMf39XyW
-	 lzGtX95EV6Cd15Ltg1aTN+26w1XwXTfaJEHPhj/84oJa3jcv0O/rYr8p7Bu16vpAiG
-	 ug3Fjbwi5R1zg==
+	b=FZxUmjK0f0oYAzvSGBwjRrjN+7ep1DVrbpj7yYIdnAeZzNkUsnEQoStSJExDRnS3q
+	 vJUsh7bRmW/xckr1ujXh5YI1wQIS9sSBP5cbhglljfugmLzcmCCdLbdWFq0QqDezfZ
+	 vcHfRxlpmO4briD7LFyM8hHOHrZnJ34SmXVRp7gkKob3PIknaInFrM+j/mUBdc7qro
+	 YsKqew4bFvIIyYH8M0UPjOBJMn88Fvh6dypo/PU6/d4rVJmyJ7ge4dxz4ajee9XzP8
+	 xt5CUKbN4AZd3CrAejNo+FxmI2kellMF2HFLWFPhqpD4RRksnn89shkfllhUHvTnv+
+	 iOEnTEmdLlXKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDA6680626;
-	Mon, 19 Jan 2026 10:09:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FD96160
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:09:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EEB1F806EF;
+	Mon, 19 Jan 2026 10:09:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 965602CE
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DC2881CEF
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:09:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 861F160D91
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:09:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AgvxzG81Q9D0 for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 10:09:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 52A_i9KvolA8 for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 10:09:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 507FB81D65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 507FB81D65
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D47460D90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D47460D90
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 507FB81D65
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:09:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6D47460D90
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 10:09:18 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 252D2B97A961; Mon, 19 Jan 2026 11:09:14 +0100 (CET)
-To: Philip Molloy <philip@philipmolloy.com>
+ with ESMTPSA id 64419B97A968; Mon, 19 Jan 2026 11:09:16 +0100 (CET)
+To: James Hilliard <james.hilliard1@gmail.com>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 11:09:13 +0100
-Message-ID: <20260119100913.12781-1-arnout@rnout.be>
+Date: Mon, 19 Jan 2026 11:09:15 +0100
+Message-ID: <20260119100915.12842-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260105081456.2799173-1-philip@philipmolloy.com>
-References: <20260105081456.2799173-1-philip@philipmolloy.com>
+In-Reply-To: <20260106023341.2237312-1-james.hilliard1@gmail.com>
+References: <20260106023341.2237312-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1768817354; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1768817356; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=V5pcQzOgC4go4CWuW8LS2+VZcjAMJuVSk8U1VzcqGoE=;
- b=Zr45Qb6DEf6UhfgZN7/RLgQH+nPfGERv9NIktIRnGdYsjQDtR048bijj/h5h6XGPpEa4Oe
- BuQgqCYuULnVg/iKbGzvT4xrv2q/UuegyS55JdQWWHq2G1Y0L07T6jo6IEkYKM+JX3BSz6
- ygPJAZ2BUroxgVUBg+TF5hpu8h5HuacmOvCXEuAjb71QybIOe/236beNf77erxIP74GnWc
- YbbGgDNGIbZqIu/7VOnDIjEMypBTyVg9J+3W2id1mEpWAMypFA/C+WDXMswVPYyeFZ4mGQ
- upxnZbWTKEZHYlQF97nORklXwmfcm9JgGe498xVeybki5eVuxpEg6KE3LPHu4A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=K9QiDzWpWdlLU6tTXcoVsN0xT+PNS41ctFCcvZuq7sE=;
+ b=O79c0w2rucGfEnU4HKstZ1w9UbPG10SGUVG2RqXDiCAZoit2NjbrTBMRRqnUsBYKnoJlcA
+ w0UDafQpsjH4xSAbE2twvjbs+vhkZJcxiRajovlBoW4KBeWqKwGWZZo785Cz7yBaKW5DPJ
+ Fqno6xeLs7K3aM8DweVh704Xx2ClmRI6dLJKHNwu1yUJB2aPid4RSxX+49ykphed2yyk4K
+ gmJK06DkDYJbQRN8bT9Jx6S2bU47cV5NJt64qA0BsPdxydzll6rVZLpBXN1xj+IWkTMyaB
+ N1GMXTYUE43zfOGJzdRJRHlw1Uto9DeQfxvJW2gw04tYS+WjyiLQcPI+1ay/dw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Zr45Qb6D
-Subject: Re: [Buildroot] [PATCH] configs/beagleboneai_defconfig: fix
- whitespace
+ header.a=rsa-sha256 header.s=dkim header.b=O79c0w2r
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-certifi: bump to version
+ 2026.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,30 +97,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Philip Molloy <philip.molloy@analog.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  board/beagleboard/beagleboneai/genimage.cfg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/python-certifi/python-certifi.hash | 4 ++--
+>  package/python-certifi/python-certifi.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/board/beagleboard/beagleboneai/genimage.cfg b/board/beagleboard/beagleboneai/genimage.cfg
-> index 8aefd76ef8..02e61bc9be 100644
-> --- a/board/beagleboard/beagleboneai/genimage.cfg
-> +++ b/board/beagleboard/beagleboneai/genimage.cfg
-> @@ -19,7 +19,7 @@ image sdcard.img {
->  	partition u-boot {
->  		partition-type = 0xC
->  		bootable = "true"
-> -                image = "boot.vfat"
-> +		image = "boot.vfat"
->  	}
+> diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+> index cc80fa1bbe..176da86300 100644
+> --- a/package/python-certifi/python-certifi.hash
+> +++ b/package/python-certifi/python-certifi.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/certifi/json
+> -md5  430a5fa9f18895a9b69a018d2beae67b  certifi-2025.11.12.tar.gz
+> -sha256  d8ab5478f2ecd78af242878415affce761ca6bc54a22a27e026d7c25357c3316  certifi-2025.11.12.tar.gz
+> +md5  d8447ad858fa15af16f91e32f182aa85  certifi-2026.1.4.tar.gz
+> +sha256  ac726dd470482006e014ad384921ed6438c457018f4b3d204aea4281258b2120  certifi-2026.1.4.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
+> diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+> index 1f889d425d..fe28f5878b 100644
+> --- a/package/python-certifi/python-certifi.mk
+> +++ b/package/python-certifi/python-certifi.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
 >  
->  	partition rootfs {
+> -PYTHON_CERTIFI_VERSION = 2025.11.12
+> +PYTHON_CERTIFI_VERSION = 2026.1.4
+>  PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+> -PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/a2/8c/58f469717fa48465e4a50c014a0400602d3c437d7c0c468e17ada824da3a
+> +PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/e0/2d/a891ca51311197f6ad14a7ef42e2399f36cf2f9bd44752b3dc4eab60fdc5
+>  PYTHON_CERTIFI_SETUP_TYPE = setuptools
+>  PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+>  PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 > -- 
-> 2.52.0
-> 
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
