@@ -1,85 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 921DFD2ECEB
-	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 21:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23549D2ECF6
+	for <buildroot@archiver.kernel.org>; Mon, 19 Jan 2026 23:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4133741A31;
-	Mon, 19 Jan 2026 21:32:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VNGuRb0IvDmM; Mon, 19 Jan 2026 21:32:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E99C241A33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768858340;
-	bh=vacJ7Nb2HZzO53d3DXWjaY8BF6d4g7ssKFj3JCw2kKc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Rvr/JpPMRLdrgyOxBzjADTiVsdNT3DtY2T+dsR77YjIDz1JYt6t0w4sF1eIujxI7M
-	 qt7bzmL8rXs/w+aZelvUjULcpeFsVcKg1bDXjjGkfaU2RMhJIt65iNDWwCGVkE6kmb
-	 69vgTrZW4vRCOc1Y9PJ+RuKRbUxmclQIHUYYGhI6yFb5D9H4yQjvJUB5b1fuLiyS6c
-	 QTA89ixDkYfwkY1i8VD5hg1pJT8LxJoUKWVJ90W0+rvZ/Qkp+L9U2I+VWDkYRhCt0S
-	 InMFf1h4T/jJDm1AanYdmwLcIraIQmIA1vTqPTC4/UUKVwSGH/Risf0Sh4ZRlO7nYa
-	 jw+3/cvwdlE8A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E99C241A33;
-	Mon, 19 Jan 2026 21:32:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B5CC4122
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 21:32:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AED7984271
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 21:32:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 894ED81E9A;
+	Mon, 19 Jan 2026 23:18:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6BUHN4z4LblX for <buildroot@buildroot.org>;
- Mon, 19 Jan 2026 21:32:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC0DF8426F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC0DF8426F
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC0DF8426F
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 21:32:15 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c7cb.dip0.t-ipconnect.de [79.214.199.203])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B88D1A4C4465
- for <buildroot@buildroot.org>; Mon, 19 Jan 2026 22:31:59 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39556)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vhwqq-000000000x8-3HqT
- for buildroot@buildroot.org; Mon, 19 Jan 2026 21:31:57 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id SuUqUyyX48iV; Mon, 19 Jan 2026 23:18:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 271A381DE0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768864731;
+	bh=lpqSsMLjIgQfEnx5HEl2calb6aw/9XEfWcMhksIGRnk=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=iqBoFAIdqtWPBLVD6qEMaZu0+Avq2YSypjA196n+UD2fBaE9hkemawKMaU/O6P7QT
+	 /GCN1Y4vPszsiSNMnJ5z9biHAX8hviNTGCWEsI5qKzLfUTUv5dox37IMwNWJG+b3bT
+	 bXoDQjI524+RTJX5SBBfLlEs9GhM61vM0zRpO1hHSTFI75ROhdflR9beGP0bO7KRAC
+	 s+v+Ein0NVxHhplizyBdaWt3XNIu1Em8A0g80NHpGDw+Mg64Ui/zAlUhqiwojlUNQa
+	 pIXhMuzL7TJ7icSbe570iCZv57ARicW702kxuBDM1NdP11ofsE7qjF6S/jVEqtMu6c
+	 MhwgzaBT+o8EQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 271A381DE0;
+	Mon, 19 Jan 2026 23:18:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 978212A8
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 23:18:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79C5841C6F
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 23:18:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UAIW_zpzQnWa for <buildroot@buildroot.org>;
+ Mon, 19 Jan 2026 23:18:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=mattianarducci1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0E65941C6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E65941C6E
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0E65941C6E
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 23:18:48 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4801eb2c0a5so29169925e9.3
+ for <buildroot@buildroot.org>; Mon, 19 Jan 2026 15:18:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1768864727; x=1769469527;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=MrcbKn1b5GmF+k4Wx0idC2x1IoCKbrSScXn8hRxfgPM=;
+ b=mvJDniaUloRYceHSLdAvgV2zZNSGg2YqyEFrPEaWQYnWnETimN7J18cXZdhFwke5JX
+ uhDzW8Dot96+QWW42hKqXnqiUbcldBtUHtQaAqiDfXDIbYzn4ERFngrRtRQwbUemjU56
+ 5cvyPSTzVeyTCrVHG9UkrJMB2LGvE0GMLFPH8AXkKMnD4Qq2OBNSrElEYyIgjSq9J16a
+ zTe58UjLvfns2gA25FrUdFPklwhCIUcvIrda9Tg0hGO1J3vTrtiXpOxkgzG/l7pmrdmi
+ 0bU0xgh66s4Af6Tt202azRRMZRGHqFz+a5qdT+Y08btA9TTzstnPos5Sqx8+rpAUQPQ8
+ zq/w==
+X-Gm-Message-State: AOJu0YyLgt/OtePYKqd0jNVwLse0+A8Xefcv+g2cnCkzjjslzukGgP1w
+ SMWhzJm9SzaGAQfeg/Ki4djBs6lvzkaGxfY6h5P6ta+4Nx7DtFIu+Y7gzQ5Rug==
+X-Gm-Gg: AY/fxX4CUkVCBrThZ4z/2i3fez5EPRNYQX7WrIcFUOJXvKH0TJe0x1cB31qpa4mPcCY
+ BRGo6fCNKlq67mkzhrYopNAGb4wQfHHfoa+Gu9vPcNVjC7lhaRDccK31IY7DW8BQsqTUc526QIR
+ 9rGB2GcvILr1LBtb4eobR6zMaoV5mr2A6jIelKbNgZVI7ldFOsZYjpa9SvD+fWbb8fw8wJ/t8kN
+ nT4MsNGEPSFTNHMXtVO5toflZ2mFihuGpF8aGoHZ/nOvg3GLi3mvix3dZGLaxi4dbnw6/kYSC1f
+ FwE62afTNXzEPpVcaXafgvu10KjEr3v2XEwdH2T5IpkP66Qkoz/LPK2sZmTSzhKoHrNfCI/JoBz
+ mIegkATceJLEcgG9ySCyicg3MGw66r6lL6Jl8qarAtQtevJRQIlq4n/imnIZhIrYf+HZtCLWEEL
+ IYDIy8m5z6aRJuCe4=
+X-Received: by 2002:a05:600c:3483:b0:471:1717:411 with SMTP id
+ 5b1f17b1804b1-4801e334248mr161410505e9.24.1768864726705; 
+ Mon, 19 Jan 2026 15:18:46 -0800 (PST)
+Received: from localhost ([37.163.185.24]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-47f429071a2sm270181925e9.11.2026.01.19.15.18.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Jan 2026 15:18:46 -0800 (PST)
+From: Mattia Narducci <mattianarducci1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Jan 2026 22:31:56 +0100
-Message-ID: <20260119213157.3681054-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Date: Tue, 20 Jan 2026 00:18:17 +0100
+Message-ID: <20260119231830.32276-1-mattianarducci1@gmail.com>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1768858319;
- bh=I0Aiu+SEGSwTZeWtQA5yoQd2H1YzXViMVTSkJBGvI7E=;
- h=From:To:Subject:Date:From;
- b=ITPXy/RP/T10R+DEfyMVAqpimgllZW5uaUpR+sDoHdgEP0k8M3sQtCqwP7fE3cA9v
- P+VeqzAGcbLuPIRA22R7NG+vDUOAEb2132AxQpv792SzFBqPX9vG9fun3trQcupJs6
- yzUvnnOac8cLoTEubYyfLIREu8gXsZHmcfh98G8HnzqP3Y8MLd6T+Bkt8E5cnjZzBS
- wHOMuVgzfBiTmI8qkq/t214TZ0qUZ80L/UFMcxaC4LxCNdB9Vd2Qsku8SKJiyT0fkF
- pANaHy8MwX4n0nd8MEx/alZTVupjzDQzlRkViMefNorZuwtUFKJCbxeh7WNAtWjNVC
- 3zw4AP33GHTfA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1768864727; x=1769469527; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=MrcbKn1b5GmF+k4Wx0idC2x1IoCKbrSScXn8hRxfgPM=;
+ b=nHDxLFYKG9aTVFB447H0M4Nq3RlxIuofBqKHZIr8pswJ7825Q+zte3TP4ih1thdyDW
+ PNbkO7GW6jvsYe66r1MSmfDsTBCLnyKmjIG9nqInIwiY7PfvNmIJoVdAJMBh/VZAK6v3
+ QMQStEkfPSV3H2XQCncLh93csdZaffDscRAsFTEqb1l5QsQyPZAqaj/MlZ99Y3/NQwdk
+ FOSDnEwoKTWWBEy2CjMRCuHrSyFcEqkyIbNaTQlffGzvDe6mxCAppkhdGIoVHkALSwFZ
+ auG3m68cnQV2QQWXE6Jj2barQr+s5cQ66xK2oP/Ko346VefYG40URecy6QOCfrwyrwLr
+ LlIQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=ITPXy/RP
-Subject: [Buildroot] [PATCH v2 1/2] package/php-zmq: remove package
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nHDxLFYK
+Subject: [Buildroot] [PATCH 1/4] package/gensio: bump to version 3.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,486 +115,214 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Francisco Gonzalez <gzmorell@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building php-zmq is broken with php 8.5.
-
-Although some pull requests exist upstream to fix php 8.5 support:
-https://github.com/zeromq/php-zmq/pulls
-
-they do not fix other bugs like broken build with gcc 15.x which was the
-cause for the its removal by Debian:
-https://tracker.debian.org/news/1668817/php-zmq-removed-from-testing/
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1097580
-
-According to various sources the package is unmaintained:
-https://pecl.php.net/package/zmq
-https://lists.zeromq.org/pipermail/zeromq-dev/2019-August/033109.html
-https://github.com/zeromq/php-zmq/pull/240#issuecomment-3684566367
-
-so we drop the package from buildroot.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: fixed Config.in.legacy help text (Julien)
-
- .checkpackageignore                           |   3 -
- Config.in.legacy                              |   7 +
- package/Config.in                             |   1 -
- .../0001-updates-for-php7.4-and-php8.0.patch  | 230 ------------------
- package/php-zmq/0002-fix-for-php-7.3.patch    |  43 ----
- .../php-zmq/0003-fix-for-php-8.0.0beta2.patch |  40 ---
- package/php-zmq/Config.in                     |  12 -
- package/php-zmq/php-zmq.hash                  |   3 -
- package/php-zmq/php-zmq.mk                    |  25 --
- 9 files changed, 7 insertions(+), 357 deletions(-)
- delete mode 100644 package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch
- delete mode 100644 package/php-zmq/0002-fix-for-php-7.3.patch
- delete mode 100644 package/php-zmq/0003-fix-for-php-8.0.0beta2.patch
- delete mode 100644 package/php-zmq/Config.in
- delete mode 100644 package/php-zmq/php-zmq.hash
- delete mode 100644 package/php-zmq/php-zmq.mk
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b843a14882..76be145bbd 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -777,9 +777,6 @@ package/perl-xml-libxml/0001-Makefile-PL.patch lib_patch.Upstream
- package/php-geoip/0001-add-build-support-for-php8.patch lib_patch.Upstream
- package/php-lua/0001-ZEND_ACC_ALLOW_STATIC-ZEND_ACC_STATIC-for-static-met.patch lib_patch.Upstream
- package/php-lua/0002-php8-explicitly-declare-arginfo.patch lib_patch.Upstream
--package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch lib_patch.Upstream
--package/php-zmq/0002-fix-for-php-7.3.patch lib_patch.Upstream
--package/php-zmq/0003-fix-for-php-8.0.0beta2.patch lib_patch.Upstream
- package/php/0001-acinclude.m4-don-t-unset-variables.patch lib_patch.Upstream
- package/php/0002-iconv-tweak-iconv-detection.patch lib_patch.Upstream
- package/php/0003-configure-disable-the-phar-tool.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4502963b24..2971699c78 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_PHP_ZMQ
-+	bool "php-zmq removed"
-+	select BR2_LEGACY
-+	help
-+	  php-zmq was no longer maintained upstream, broken with php
-+	  8.5, so it has been dropped.
-+
- config BR2_PACKAGE_LOCKDEV
- 	bool "lockdev removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 6ce16bce0a..94ea56b297 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -947,7 +947,6 @@ menu "External php extensions"
- 	source "package/php-ssh2/Config.in"
- 	source "package/php-xdebug/Config.in"
- 	source "package/php-yaml/Config.in"
--	source "package/php-zmq/Config.in"
- endmenu
- endif
- if BR2_STATIC_LIBS
-diff --git a/package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch b/package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch
-deleted file mode 100644
-index 3c286e3923..0000000000
---- a/package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch
-+++ /dev/null
-@@ -1,230 +0,0 @@
--From 4ad1b33e095924bd4ccf79295999dd54edaaac37 Mon Sep 17 00:00:00 2001
--From: Luca Boccassi <luca.boccassi@gmail.com>
--Date: Thu, 5 Mar 2020 22:51:22 +0000
--Subject: [PATCH] updates for php7.4 and php8.0 (#212)
--
--From upstream commit: 4ad1b33e095924bd4ccf79295999dd54edaaac37
--
--* travisci: enabled php7.4 and php8.0
--
--* updates for php7.4 and php8.0
--
--- travisci enabled php7.4 and php8.0
--- removed now unused references to TSRMLS_*
--  These flags were mostly already removed from the
--  php7 codebase but some instances were still present.
--  With php8 these produce compile errors.
--- fix tests for php8 and php7.4
--  New TypeErrors now get handled correctly in the test cases.
--- fix memory corruption in zmq.c
--  The conflicting line causes memory leaks on other php
--  version and causes a segfault on php8 and php7.4
--  The error was provocable with test case
--  021-callbackwarning.phpt. After removing of the line
--  valgrind showed no memory leak, so this line was probably
--  redundant. Also if you compare with zmqsocket constructor
--  this line is also not present.
--
--Signed-off-by: Luca Boccassi <luca.boccassi@gmail.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- php_zmq_private.h                  |  4 ++--
-- tests/016-callbackinvalidargs.phpt |  4 ++++
-- tests/022-highwatermark.phpt       |  6 +++---
-- tests/bug_gh_43.phpt               | 25 +++++++++++++++++--------
-- zmq.c                              |  1 -
-- zmq_device.c                       | 14 +++++++-------
-- zmq_sockopt.c                      |  2 +-
-- 7 files changed, 34 insertions(+), 22 deletions(-)
--
--diff --git a/php_zmq_private.h b/php_zmq_private.h
--index 49630e9..2e5cd3b 100644
----- a/php_zmq_private.h
--+++ b/php_zmq_private.h
--@@ -156,9 +156,9 @@ typedef struct _php_zmq_device_object  {
-- 
-- #define PHP_ZMQ_ERROR_HANDLING_INIT() zend_error_handling error_handling;
-- 
---#define PHP_ZMQ_ERROR_HANDLING_THROW() zend_replace_error_handling(EH_THROW, php_zmq_socket_exception_sc_entry, &error_handling TSRMLS_CC);
--+#define PHP_ZMQ_ERROR_HANDLING_THROW() zend_replace_error_handling(EH_THROW, php_zmq_socket_exception_sc_entry, &error_handling);
-- 
---#define PHP_ZMQ_ERROR_HANDLING_RESTORE() zend_restore_error_handling(&error_handling TSRMLS_CC);
--+#define PHP_ZMQ_ERROR_HANDLING_RESTORE() zend_restore_error_handling(&error_handling);
-- 
-- /* Compatibility macros between zeromq 2.x and 3.x */
-- #ifndef ZMQ_DONTWAIT
--diff --git a/tests/016-callbackinvalidargs.phpt b/tests/016-callbackinvalidargs.phpt
--index a940e41..6bd0e75 100644
----- a/tests/016-callbackinvalidargs.phpt
--+++ b/tests/016-callbackinvalidargs.phpt
--@@ -10,6 +10,8 @@ try {
-- 	echo "Fail\n";
-- } catch (ZMQSocketException $e) {
-- 	echo "OK\n";
--+} catch (TypeError $e) {
--+ 	echo "OK\n"; // on PHP8
-- }
-- 
-- try {
--@@ -18,6 +20,8 @@ try {
-- 	echo "Fail\n";
-- } catch (ZMQSocketException $e) {
-- 	echo "OK\n";
--+} catch (TypeError $e) {
--+ 	echo "OK\n"; // on PHP8
-- }
-- 
-- --EXPECT--
--diff --git a/tests/022-highwatermark.phpt b/tests/022-highwatermark.phpt
--index 84be509..c1ff703 100644
----- a/tests/022-highwatermark.phpt
--+++ b/tests/022-highwatermark.phpt
--@@ -1,11 +1,11 @@
-- --TEST--
-- Test that high-watermark works
-- --SKIPIF--
---<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
---
--+<?php
--+require_once(dirname(__FILE__) . '/skipif.inc');
-- if (!defined('ZMQ::SOCKOPT_LINGER'))
--     die ("Skip Not compiled against new enough version");
---
--+?>
-- --FILE--
-- <?php
-- 
--diff --git a/tests/bug_gh_43.phpt b/tests/bug_gh_43.phpt
--index bdc274a..923d074 100644
----- a/tests/bug_gh_43.phpt
--+++ b/tests/bug_gh_43.phpt
--@@ -7,16 +7,25 @@ Test for Github issue #43
-- --FILE--
-- <?php
-- 
--+error_reporting(0);
--+
-- $context = new ZMQContext (1, false);
-- 
-- $sock1 = new ZMQSocket ($context, ZMQ::SOCKET_PUB);
-- $sock2 = new ZMQSocket ($context, ZMQ::SOCKET_SUB);
-- 
---$device = new ZMQDevice ($sock1, $sock1, $sock1, $sock1);
---
---echo "OK";
---?>
---
-----EXPECTF--
---Warning: ZMQDevice::__construct() expects at most 3 parameters, 4 given in %s/bug_gh_43.php on line %d
---OK
--\ No newline at end of file
--+try {
--+    $device = new ZMQDevice ($sock1, $sock1, $sock1, $sock1);
--+    // on PHP7 and lower
--+    $lastError = error_get_last();
--+    if(strpos($lastError['message'], 'ZMQDevice::__construct() expects at most 3 parameters, 4 given') !== false)
--+     	echo "OK\n";
--+    else{
--+        echo "FAIL\n";
--+        print_r($lastError);
--+    }
--+}catch(TypeError $e){
--+ 	echo "OK\n"; // on PHP8
--+}
--+--EXPECT--
--+OK
--diff --git a/zmq.c b/zmq.c
--index 942e69b..66196ea 100644
----- a/zmq.c
--+++ b/zmq.c
--@@ -687,7 +687,6 @@ PHP_METHOD(zmqcontext, getsocket)
-- 			if (!php_zmq_connect_callback(return_value, &fci, &fci_cache, persistent_id)) {
-- 				php_zmq_socket_destroy(socket);
-- 				interns->socket = NULL;
---				zval_dtor(return_value);
-- 				return;
-- 			}
-- 		}
--diff --git a/zmq_device.c b/zmq_device.c
--index c7415c1..534f966 100644
----- a/zmq_device.c
--+++ b/zmq_device.c
--@@ -41,7 +41,7 @@
-- ZEND_EXTERN_MODULE_GLOBALS(php_zmq)
-- 
-- static
---zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts TSRMLS_DC)
--+zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts)
-- {
-- 	zend_bool retval = 0;
-- 	zval params[1];
--@@ -59,7 +59,7 @@ zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts TSRML
-- 	if (zend_call_function(&(cb->fci), &(cb->fci_cache)) == FAILURE) {
-- 		if (!EG(exception)) {
-- 			char *func_name = php_zmq_printable_func(&cb->fci, &cb->fci_cache);
---			zend_throw_exception_ex(php_zmq_device_exception_sc_entry_get (), 0 TSRMLS_CC, "Failed to invoke device callback %s()", func_name);
--+			zend_throw_exception_ex(php_zmq_device_exception_sc_entry_get (), 0, "Failed to invoke device callback %s()", func_name);
-- 			zval_ptr_dtor(&params[0]);
-- 			efree(func_name);
-- 		}
--@@ -94,7 +94,7 @@ int s_capture_message (void *socket, zmq_msg_t *msg, int more)
-- }
-- 
-- static
---int s_calculate_timeout (php_zmq_device_object *intern TSRMLS_DC)
--+int s_calculate_timeout (php_zmq_device_object *intern)
-- {
-- 	int timeout = -1;
-- 	uint64_t current = php_zmq_clock (ZMQ_G (clock_ctx));
--@@ -131,7 +131,7 @@ int s_calculate_timeout (php_zmq_device_object *intern TSRMLS_DC)
-- }
-- 
-- 
---zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
--+zend_bool php_zmq_device (php_zmq_device_object *intern)
-- {
-- 	int errno_;
-- 	uint64_t last_message_received;
--@@ -186,7 +186,7 @@ zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
-- 		uint64_t current_ts = 0;
-- 
-- 		/* Calculate poll_timeout based on idle / timer cb */
---		int timeout = s_calculate_timeout (intern TSRMLS_CC);
--+		int timeout = s_calculate_timeout (intern);
-- 
-- 		rc = zmq_poll(&items [0], 2, timeout);
-- 		if (rc < 0) {
--@@ -205,7 +205,7 @@ zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
-- 		if (intern->timer_cb.initialized && intern->timer_cb.timeout > 0) {
-- 			/* Is it timer to call the timer ? */
-- 			if (intern->timer_cb.scheduled_at <= current_ts) {
---				if (!s_invoke_device_cb (&intern->timer_cb, current_ts TSRMLS_CC)) {
--+				if (!s_invoke_device_cb (&intern->timer_cb, current_ts)) {
-- 					zmq_msg_close (&msg);
-- 					return 1;
-- 				}
--@@ -217,7 +217,7 @@ zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
-- 			/* Is it timer to call the idle callback ? */
-- 			if ((current_ts - last_message_received) >= intern->idle_cb.timeout &&
-- 				intern->idle_cb.scheduled_at <= current_ts) {
---				if (!s_invoke_device_cb (&intern->idle_cb, current_ts TSRMLS_CC)) {
--+				if (!s_invoke_device_cb (&intern->idle_cb, current_ts)) {
-- 					zmq_msg_close (&msg);
-- 					return 1;
-- 				}
--diff --git a/zmq_sockopt.c b/zmq_sockopt.c
--index 1357032..14b59f0 100644
----- a/zmq_sockopt.c
--+++ b/zmq_sockopt.c
--@@ -2036,7 +2036,7 @@ PHP_METHOD(zmqsocket, setsockopt)
--     long key;
--     zval *zv;
-- 
---    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz/", &key, &zv) == FAILURE) {
--+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz/", &key, &zv) == FAILURE) {
--         return;
--     }
-- 
---- 
--2.31.1
--
-diff --git a/package/php-zmq/0002-fix-for-php-7.3.patch b/package/php-zmq/0002-fix-for-php-7.3.patch
-deleted file mode 100644
-index 3ca87582cb..0000000000
---- a/package/php-zmq/0002-fix-for-php-7.3.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From e0db82c3286da81fa8945894dd10125a528299e4 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Gr=C3=A9gory=20PLANCHAT?=
-- <gplanchat@users.noreply.github.com>
--Date: Wed, 8 Jul 2020 10:09:38 +0200
--Subject: [PATCH] Fix for PHP 7.3 (#215)
--
--Co-authored-by: Remi Collet <remi@remirepo.net>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- zmq.c | 8 ++++++++
-- 1 file changed, 8 insertions(+)
--
--diff --git a/zmq.c b/zmq.c
--index 66196ea..879704f 100644
----- a/zmq.c
--+++ b/zmq.c
--@@ -235,7 +235,11 @@ php_zmq_context *php_zmq_context_get(zend_long io_threads, zend_bool is_persiste
-- 		le.type = php_zmq_context_list_entry();
-- 		le.ptr  = context;
-- 
--+#if PHP_VERSION_ID < 70300
-- 		GC_REFCOUNT(&le) = 1;
--+#else
--+		GC_SET_REFCOUNT(&le, 1);
--+#endif
-- 
-- 		/* plist_key is not a persistent allocated key, thus we use str_update here */
-- 		if (zend_hash_str_update_mem(&EG(persistent_list), plist_key->val, plist_key->len, &le, sizeof(le)) == NULL) {
--@@ -535,7 +539,11 @@ void php_zmq_socket_store(php_zmq_socket *zmq_sock_p, zend_long type, zend_strin
-- 	le.type = php_zmq_socket_list_entry();
-- 	le.ptr  = zmq_sock_p;
-- 
--+#if PHP_VERSION_ID < 70300
-- 	GC_REFCOUNT(&le) = 1;
--+#else
--+	GC_SET_REFCOUNT(&le, 1);
--+#endif
-- 
-- 	plist_key = php_zmq_socket_plist_key(type, persistent_id, use_shared_ctx);
-- 
---- 
--2.31.1
--
-diff --git a/package/php-zmq/0003-fix-for-php-8.0.0beta2.patch b/package/php-zmq/0003-fix-for-php-8.0.0beta2.patch
-deleted file mode 100644
-index c5aab16ab7..0000000000
---- a/package/php-zmq/0003-fix-for-php-8.0.0beta2.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From f0993f1fe973c4d359323ad1897ed7aa74f7e015 Mon Sep 17 00:00:00 2001
--From: Remi Collet <remi@remirepo.net>
--Date: Mon, 24 Aug 2020 15:55:54 +0200
--Subject: [PATCH] fix for PHP 8.0.0beta2
--
--Signed-off-by: Remi Collet <remi@remirepo.net>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- zmq.c        | 2 ++
-- zmq_device.c | 2 ++
-- 2 files changed, 4 insertions(+)
--
--diff --git a/zmq.c b/zmq.c
--index 89902f9..bd2401d 100644
----- a/zmq.c
--+++ b/zmq.c
--@@ -621,7 +621,9 @@ zend_bool php_zmq_connect_callback(zval *socket, zend_fcall_info *fci, zend_fcal
-- 	fci->params         = params;
-- 	fci->param_count    = 2;
-- 	fci->retval         = &retval;
--+#if PHP_VERSION_ID < 80000
-- 	fci->no_separation  = 1;
--+#endif
-- 
-- 	if (zend_call_function(fci, fci_cache) == FAILURE) {
-- 		if (!EG(exception)) {
--diff --git a/zmq_device.c b/zmq_device.c
--index 534f966..1c6aa3e 100644
----- a/zmq_device.c
--+++ b/zmq_device.c
--@@ -53,7 +53,9 @@ zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts)
-- 	cb->fci.param_count = 1;
-- 
-- 	/* Call the cb */
--+#if PHP_VERSION_ID < 80000
-- 	cb->fci.no_separation  = 1;
--+#endif
-- 	cb->fci.retval         = &fc_retval;
-- 
-- 	if (zend_call_function(&(cb->fci), &(cb->fci_cache)) == FAILURE) {
-diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
-deleted file mode 100644
-index 37be17792a..0000000000
---- a/package/php-zmq/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--comment "php-zmq needs a toolchain w/ C++, threads"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
--
--config BR2_PACKAGE_PHP_ZMQ
--	bool "php-zmq"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_ZEROMQ
--	help
--	  ZeroMQ messaging bindings for PHP
--
--	  http://pecl.php.net/package/zmq
-diff --git a/package/php-zmq/php-zmq.hash b/package/php-zmq/php-zmq.hash
-deleted file mode 100644
-index a4cca69878..0000000000
---- a/package/php-zmq/php-zmq.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  c492375818bd51b355352798fb94f04d6828c6aeda41ba813849624af74144ce  zmq-1.1.3.tgz
--sha256  0302303063d3612fc240032aeb6d70e9b7509fc17a4a9edf00eba091ed597514  LICENSE
-diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
-deleted file mode 100644
-index fed71955b6..0000000000
---- a/package/php-zmq/php-zmq.mk
-+++ /dev/null
-@@ -1,25 +0,0 @@
--################################################################################
--#
--# php-zmq
--#
--################################################################################
--
--PHP_ZMQ_VERSION = 1.1.3
--PHP_ZMQ_SOURCE = zmq-$(PHP_ZMQ_VERSION).tgz
--PHP_ZMQ_SITE = https://pecl.php.net/get
--# phpize does the autoconf magic
--PHP_ZMQ_DEPENDENCIES = php zeromq host-autoconf host-pkgconf
--PHP_ZMQ_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config
--PHP_ZMQ_LICENSE = BSD-3-Clause
--PHP_ZMQ_LICENSE_FILES = LICENSE
--
--define PHP_ZMQ_PHPIZE
--	(cd $(@D); \
--		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
--		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
--		$(STAGING_DIR)/usr/bin/phpize)
--endef
--
--PHP_ZMQ_PRE_CONFIGURE_HOOKS += PHP_ZMQ_PHPIZE
--
--$(eval $(autotools-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q2hhbmdlbG9nOiBodHRwczovL3NvdXJjZWZvcmdlLm5ldC9wL3NlcjJuZXQvbmV3cwoKU3RhdGlj
+IGJ1aWxkcyBhcmUgbm8gbG9uZ2VyIHN1cHBvcnRlZCBzdGFydGluZyB3aXRoIHZlcnNpb24gMi42
+LjAgWzFdCmV2ZW4gd2hlbiBjb21waWxpbmcgYWxsIG1vZHVsZXMgKGdlbnNpb3MpIGluIHRoZSBs
+aWJyYXJ5LgoKVXBkYXRlZCBsaWNlbnNlcyBoYXNoZXMgZHVlIHRvIHVwc3RyZWFtIGNvbW1pdDoK
+aHR0cHM6Ly9naXRodWIuY29tL2NtaW55YXJkL2dlbnNpby9jb21taXQvODU5ZTQ0NjVjZjU3ODhj
+Yjk5ZGExMDAyYTRjMzhjZDg4NDFjMWJiNwoKUmVtb3ZlZCBwYXRjaCAwMDAxIHdoaWNoIGlzIG5v
+dyB1cHN0cmVhbS4KCkFkZGVkIGEgdXBzdHJlYW0gcGF0Y2ggdG8gZml4IGJ1aWxkIGFnYWluc3Qg
+bGlicmVzc2wuCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL2NtaW55YXJkL2dlbnNpby9jb21taXQv
+N2IzNzg2ZjVmYjczM2NkNTkzZTYzMWE3Yjc1ZDRiNDdmNWE0Yjk1ZgoKU2lnbmVkLW9mZi1ieTog
+TWF0dGlhIE5hcmR1Y2NpIDxtYXR0aWFuYXJkdWNjaTFAZ21haWwuY29tPgotLS0KIC5jaGVja3Bh
+Y2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSAtCiAuLi5QS0VZX0VE
+MjU1MTktYnVpbGQtZXJyb3Itb24tbGlicmVzc2wucGF0Y2ggfCAxMDUgLS0tLS0tLS0tLS0tLS0t
+LS0tCiAuLi50b29sLWFsbG93LWJ1aWxkaW5nLWFnYWluc3QtbGlicmVzc2wucGF0Y2ggfCAgNzMg
+KysrKysrKysrKysrCiBwYWNrYWdlL2dlbnNpby9Db25maWcuaW4gICAgICAgICAgICAgICAgICAg
+ICAgfCAgIDEgKwogcGFja2FnZS9nZW5zaW8vZ2Vuc2lvLmhhc2ggICAgICAgICAgICAgICAgICAg
+IHwgIDEwICstCiBwYWNrYWdlL2dlbnNpby9nZW5zaW8ubWsgICAgICAgICAgICAgICAgICAgICAg
+fCAgIDMgKy0KIDYgZmlsZXMgY2hhbmdlZCwgODEgaW5zZXJ0aW9ucygrKSwgMTEyIGRlbGV0aW9u
+cygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ2Vuc2lvLzAwMDEtRml4LW1pc3Npbmct
+RVZQX1BLRVlfRUQyNTUxOS1idWlsZC1lcnJvci1vbi1saWJyZXNzbC5wYXRjaAogY3JlYXRlIG1v
+ZGUgMTAwNjQ0IHBhY2thZ2UvZ2Vuc2lvLzAwMDEtZ2Vuc2lvdG9vbC1hbGxvdy1idWlsZGluZy1h
+Z2FpbnN0LWxpYnJlc3NsLnBhdGNoCgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBi
+Ly5jaGVja3BhY2thZ2VpZ25vcmUKaW5kZXggNDBkNmM1OTVjOC4uZTdiYjg0MGIxNCAxMDA2NDQK
+LS0tIGEvLmNoZWNrcGFja2FnZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCkBAIC00
+MTUsNyArNDE1LDYgQEAgcGFja2FnZS9nZGIvMTYuMy8wMDA3LWZpeC1tdXNsLWJ1aWxkLW9uLXJp
+c2N2LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQogcGFja2FnZS9nZGIvMTYuMy8wMDA4LWdkYnNl
+cnZlci1NYWtlZmlsZS5pbi1maXgtTkxTLWJ1aWxkLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQog
+cGFja2FnZS9nZGIvMTYuMy8wMDA5LWdkYi1GaXgtbmF0aXZlLWJ1aWxkLW9uLXh0ZW5zYS5wYXRj
+aCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvZ2VucGFydC8wMDAxLWZpeC1yZXR1cm4tY29k
+ZS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KLXBhY2thZ2UvZ2Vuc2lvLzAwMDEtRml4LW1pc3Np
+bmctRVZQX1BLRVlfRUQyNTUxOS1idWlsZC1lcnJvci1vbi1saWJyZXNzbC5wYXRjaCBsaWJfcGF0
+Y2guVXBzdHJlYW0KIHBhY2thZ2UvZ2VyYmVyYS9TOTlnZXJiZXJhIGxpYl9zeXN2LkluZGVudAog
+cGFja2FnZS9naXQtY3J5cHQvMDAwMS1maXgtYnVpbGQtd2l0aC1saWJyZXNzbC0zLjUuMC5wYXRj
+aCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvZ2xvcnl0dW4vMDAwMS1BZGQtc3VwcG9ydC1m
+b3ItQXBwbGUtc2lsaWNvbi5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZ2Vuc2lvLzAwMDEtRml4LW1pc3NpbmctRVZQX1BLRVlfRUQyNTUxOS1idWlsZC1lcnJv
+ci1vbi1saWJyZXNzbC5wYXRjaCBiL3BhY2thZ2UvZ2Vuc2lvLzAwMDEtRml4LW1pc3NpbmctRVZQ
+X1BLRVlfRUQyNTUxOS1idWlsZC1lcnJvci1vbi1saWJyZXNzbC5wYXRjaApkZWxldGVkIGZpbGUg
+bW9kZSAxMDA2NDQKaW5kZXggZTkwODdhYTNlNS4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL2dl
+bnNpby8wMDAxLUZpeC1taXNzaW5nLUVWUF9QS0VZX0VEMjU1MTktYnVpbGQtZXJyb3Itb24tbGli
+cmVzc2wucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSwxMDUgKzAsMCBAQAotRnJvbSAxZTcwNzE2
+ODQzMjlmMjNlZTM0NDczMTBkMjAzZDE5M2MyODM5NzllIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAw
+MQotRnJvbTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Ci1EYXRl
+OiBXZWQsIDUgT2N0IDIwMjIgMTU6MzA6MzIgLTA2MDAKLVN1YmplY3Q6IFtQQVRDSF0gRml4IG1p
+c3NpbmcgRVZQX1BLRVlfRUQyNTUxOSBidWlsZCBlcnJvciBvbiBsaWJyZXNzbAotTUlNRS1WZXJz
+aW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAotQ29udGVu
+dC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi1GaXhlczoKLWdlbnNpb19maWx0ZXJfY2VydGF1
+dGguYzogSW4gZnVuY3Rpb24g4oCYdjNfY2VydGF1dGhfYWRkX2NoYWxsZW5nZV9yc3DigJk6Ci1n
+ZW5zaW9fZmlsdGVyX2NlcnRhdXRoLmM6ODM4OjQ0OiBlcnJvcjog4oCYRVZQX1BLRVlfRUQyNTUx
+OeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbik7IGRpZCB5b3UgbWVh
+biDigJhFVlBfUEtFWV9EU0Ex4oCZPwotICA4MzggfCAgICAgaWYgKEVWUF9QS0VZX2Jhc2VfaWQo
+c2ZpbHRlci0+cGtleSkgPT0gRVZQX1BLRVlfRUQyNTUxOSkgewotICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fgotICAgICAg
+fCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRVZQX1BLRVlfRFNB
+MQotZ2Vuc2lvX2ZpbHRlcl9jZXJ0YXV0aC5jOjgzODo0NDogbm90ZTogZWFjaCB1bmRlY2xhcmVk
+IGlkZW50aWZpZXIgaXMgcmVwb3J0ZWQgb25seSBvbmNlIGZvciBlYWNoIGZ1bmN0aW9uIGl0IGFw
+cGVhcnMgaW4KLWdlbnNpb19maWx0ZXJfY2VydGF1dGguYzogSW4gZnVuY3Rpb24g4oCYY2VydGF1
+dGhfYWRkX2NoYWxsZW5nZV9yc3DigJk6Ci1nZW5zaW9fZmlsdGVyX2NlcnRhdXRoLmM6OTAxOjQ0
+OiBlcnJvcjog4oCYRVZQX1BLRVlfRUQyNTUxOeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4g
+dGhpcyBmdW5jdGlvbik7IGRpZCB5b3UgbWVhbiDigJhFVlBfUEtFWV9EU0Ex4oCZPwotICA5MDEg
+fCAgICAgaWYgKEVWUF9QS0VZX2Jhc2VfaWQoc2ZpbHRlci0+cGtleSkgPT0gRVZQX1BLRVlfRUQy
+NTUxOSkKLSAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IF5+fn5+fn5+fn5+fn5+fn4KLSAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIEVWUF9QS0VZX0RTQTEKLWdlbnNpb19maWx0ZXJfY2VydGF1dGguYzogSW4g
+ZnVuY3Rpb24g4oCYY2VydGF1dGhfY2hlY2tfY2hhbGxlbmdl4oCZOgotZ2Vuc2lvX2ZpbHRlcl9j
+ZXJ0YXV0aC5jOjEwNDg6MzU6IGVycm9yOiDigJhFVlBfUEtFWV9FRDI1NTE54oCZIHVuZGVjbGFy
+ZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuIOKAmEVWUF9QS0VZ
+X0RTQTHigJk/Ci0gMTA0OCB8ICAgICBpZiAoRVZQX1BLRVlfYmFzZV9pZChwa2V5KSA9PSBFVlBf
+UEtFWV9FRDI1NTE5KQotICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+Xn5+fn5+fn5+fn5+fn5+fgotICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgRVZQX1BLRVlfRFNBMQotCi1TaWduZWQtb2ZmLWJ5OiBDb3JleSBNaW55YXJkIDxjbWlueWFy
+ZEBtdmlzdGEuY29tPgotW1JldHJpZXZlZCBmcm9tOgotaHR0cHM6Ly9naXRodWIuY29tL2NtaW55
+YXJkL2dlbnNpby9jb21taXQvMWU3MDcxNjg0MzI5ZjIzZWUzNDQ3MzEwZDIwM2QxOTNjMjgzOTc5
+ZV0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPgotLS0tCi0gbGliL2dlbnNpb19maWx0ZXJfY2VydGF1dGguYyB8ICA2ICsrKysrKwot
+IHRvb2xzL2d0bHNzaC1rZXlnZW4uYyAgICAgICAgfCAxMSArKysrKysrKysrLQotIDIgZmlsZXMg
+Y2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQotCi1kaWZmIC0tZ2l0IGEv
+bGliL2dlbnNpb19maWx0ZXJfY2VydGF1dGguYyBiL2xpYi9nZW5zaW9fZmlsdGVyX2NlcnRhdXRo
+LmMKLWluZGV4IDY0MjM3OWI2Li5jNDU1MmU3OSAxMDA2NDQKLS0tLSBhL2xpYi9nZW5zaW9fZmls
+dGVyX2NlcnRhdXRoLmMKLSsrKyBiL2xpYi9nZW5zaW9fZmlsdGVyX2NlcnRhdXRoLmMKLUBAIC04
+MzUsMTEgKzgzNSwxMyBAQCB2M19jZXJ0YXV0aF9hZGRfY2hhbGxlbmdlX3JzcChzdHJ1Y3QgY2Vy
+dGF1dGhfZmlsdGVyICpzZmlsdGVyKQotICAgICB1bnNpZ25lZCBpbnQgbGVucG9zLCBsZW47Ci0g
+ICAgIGludCBydiA9IDA7Ci0gCi0rI2lmZGVmIEVWUF9QS0VZX0VEMjU1MTkKLSAgICAgaWYgKEVW
+UF9QS0VZX2Jhc2VfaWQoc2ZpbHRlci0+cGtleSkgPT0gRVZQX1BLRVlfRUQyNTUxOSkgewotIAln
+Y2FfbG9nX2VycihzZmlsdGVyLAotIAkJICAgICJSZW1vdGUgZW5kIG9yIFNTTCB0b28gb2xkIHRv
+IHN1cHBvcnQgZWQyNTUxOSBrZXkiKTsKLSAJcmV0dXJuIEdFX0tFWUlOVkFMSUQ7Ci0gICAgIH0K
+LSsjZW5kaWYKLSAKLSAgICAgY2VydGF1dGhfd3JpdGVfYnl0ZShzZmlsdGVyLCBDRVJUQVVUSF9D
+SEFMTEVOR0VfUlNQKTsKLSAgICAgbGVucG9zID0gc2ZpbHRlci0+d3JpdGVfYnVmX2xlbjsKLUBA
+IC04OTgsOCArOTAwLDEwIEBAIGNlcnRhdXRoX2FkZF9jaGFsbGVuZ2VfcnNwKHN0cnVjdCBjZXJ0
+YXV0aF9maWx0ZXIgKnNmaWx0ZXIpCi0gICAgIGlmIChzZmlsdGVyLT52ZXJzaW9uIDwgNCB8fCBz
+ZmlsdGVyLT5teV92ZXJzaW9uIDwgNCkKLSAJcmV0dXJuIHYzX2NlcnRhdXRoX2FkZF9jaGFsbGVu
+Z2VfcnNwKHNmaWx0ZXIpOwotIAotKyNpZmRlZiBFVlBfUEtFWV9FRDI1NTE5Ci0gICAgIGlmIChF
+VlBfUEtFWV9iYXNlX2lkKHNmaWx0ZXItPnBrZXkpID09IEVWUF9QS0VZX0VEMjU1MTkpCi0gCWRp
+Z2VzdCA9IE5VTEw7Ci0rI2VuZGlmCi0gCi0gICAgIGNlcnRhdXRoX3dyaXRlX2J5dGUoc2ZpbHRl
+ciwgQ0VSVEFVVEhfQ0hBTExFTkdFX1JTUCk7Ci0gICAgIGxlbnBvcyA9IHNmaWx0ZXItPndyaXRl
+X2J1Zl9sZW47Ci1AQCAtMTA0NSw4ICsxMDQ5LDEwIEBAIGNlcnRhdXRoX2NoZWNrX2NoYWxsZW5n
+ZShzdHJ1Y3QgY2VydGF1dGhfZmlsdGVyICpzZmlsdGVyKQotIAlnb3RvIG91dF9ub21lbTsKLSAg
+ICAgfQotIAotKyNpZmRlZiBFVlBfUEtFWV9FRDI1NTE5Ci0gICAgIGlmIChFVlBfUEtFWV9iYXNl
+X2lkKHBrZXkpID09IEVWUF9QS0VZX0VEMjU1MTkpCi0gCWRpZ2VzdCA9IE5VTEw7Ci0rI2VuZGlm
+Ci0gCi0gICAgIGlmICghRVZQX0RpZ2VzdFZlcmlmeUluaXQoc2lnbl9jdHgsIE5VTEwsIGRpZ2Vz
+dCwgTlVMTCwgcGtleSkpIHsKLSAJZ2NhX2xvZ3NfZXJyKHNmaWx0ZXIsICJEaWdlc3QgdmVyaWZ5
+IGluaXQgZmFpbGVkIik7Ci1kaWZmIC0tZ2l0IGEvdG9vbHMvZ3Rsc3NoLWtleWdlbi5jIGIvdG9v
+bHMvZ3Rsc3NoLWtleWdlbi5jCi1pbmRleCBjOGMyODkzNy4uMDc3OWRkNzggMTAwNjQ0Ci0tLS0g
+YS90b29scy9ndGxzc2gta2V5Z2VuLmMKLSsrKyBiL3Rvb2xzL2d0bHNzaC1rZXlnZW4uYwotQEAg
+LTEwOCw3ICsxMDgsMTIgQEAgaGVscChjb25zdCBjaGFyICpwcm9nbmFtZSkKLSAgICAgUCgiICAg
+ICAgICBUaGUgZGVmYXVsdCBpcyB5b3VyIHVzZXJuYW1lIGZvciBub3JtYWwgY2VydGlmaWNhdGVz
+IGFuZFxuIik7Ci0gICAgIFAoIiAgICAgICAgdGhlIGZ1bGx5IHF1YWxpZmllZCBkb21haW4gbmFt
+ZSBmb3Igc2VydmVyIGNlcnRpZmljYXRlcy5cbiIpOwotICAgICBQKCIgIC0tYWxnb3JpdGhtIDxh
+bGduYW1lPiAtIFNldCB0aGUgYWxnb3JpdGhtIHRvIHVzZSBmb3IgdGhlIGtleSxcbiIpOwotLSAg
+ICBQKCIgICAgICAgIGVpdGhlciBlZDI1NTE5LCByc2Egb3IgZWMuICBUaGUgZGVmYXVsdCBpcyBl
+ZDI1NTE5LlxuIik7Ci0rICAgIFAoIiAgICAgICAgZWl0aGVyIGVkMjU1MTksIHJzYSBvciBlYy4g
+ICIpOwotKyNpZmRlZiBFVlBfUEtFWV9FRDI1NTE5Ci0rICAgIFAoIlRoZSBkZWZhdWx0IGlzIGVk
+MjU1MTkuXG4iKTsKLSsjZWxzZQotKyAgICBQKCJUaGUgZGVmYXVsdCBpcyBlYy5cbiIpOwotKyNl
+bmRpZgotICAgICBQKCIgIC0tZm9yY2UsIC1mIC0gRG9uJ3QgYXNrIHF1ZXN0aW9ucywganVzdCBk
+byB0aGUgb3BlcmF0aW9uLiAgVGhpc1xuIik7Ci0gICAgIFAoIiAgICAgICAgbWF5IG92ZXJ3cml0
+ZSBkYXRhIHdpdGhvdXQgYXNraW5nLlxuIik7Ci0gICAgIFAoIiAgLS12ZXJzaW9uIC0gUHJpbnQg
+dGhlIHZlcnNpb24gbnVtYmVyIGFuZCBleGl0LlxuIik7Ci1AQCAtODMxLDcgKzgzNiwxMSBAQCBn
+ZW5wa2V5X2VkMjU1MTkoY29uc3QgY2hhciAqa2V5KQotICAgICByZXR1cm4gcmMgIT0gMDsKLSB9
+Ci0gCi0rI2lmZGVmIEVWUF9QS0VZX0VEMjU1MTkKLSBzdGF0aWMgaW50ICgqZ2VucGtleSkoY29u
+c3QgY2hhciAqa2V5KSA9IGdlbnBrZXlfZWQyNTUxOTsKLSsjZWxzZQotK3N0YXRpYyBpbnQgKCpn
+ZW5wa2V5KShjb25zdCBjaGFyICprZXkpID0gZ2VucGtleV9lYzsKLSsjZW5kaWYKLSAKLSAvKgot
+ICAqIENyZWF0ZSBhIHNpbmdsZSBrZXkuICBJZiBuYW1lIGlzIE5VTEwsIGl0J3MgYSBzZXJ2ZXIg
+a2V5LCBvdGhlcndpc2UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ2Vuc2lvLzAwMDEtZ2Vuc2lvdG9v
+bC1hbGxvdy1idWlsZGluZy1hZ2FpbnN0LWxpYnJlc3NsLnBhdGNoIGIvcGFja2FnZS9nZW5zaW8v
+MDAwMS1nZW5zaW90b29sLWFsbG93LWJ1aWxkaW5nLWFnYWluc3QtbGlicmVzc2wucGF0Y2gKbmV3
+IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYzI0YzI0MWQ2NAotLS0gL2Rldi9u
+dWxsCisrKyBiL3BhY2thZ2UvZ2Vuc2lvLzAwMDEtZ2Vuc2lvdG9vbC1hbGxvdy1idWlsZGluZy1h
+Z2FpbnN0LWxpYnJlc3NsLnBhdGNoCkBAIC0wLDAgKzEsNzMgQEAKK0Zyb20gN2ZmOTUzMDY5MWI1
+MzlhYWExYzM3NzMxOWExYWJmNDBjNDJjYTZiOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zy
+b206IE1hdHRpYSBOYXJkdWNjaSA8bWF0dGlhbmFyZHVjY2kxQGdtYWlsLmNvbT4KK0RhdGU6IE1v
+biwgMjkgRGVjIDIwMjUgMTU6NDA6MTkgKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0gZ2Vuc2lvdG9v
+bDogYWxsb3cgYnVpbGRpbmcgYWdhaW5zdCBsaWJyZXNzbAorCitMaWJyZVNTTCBkb2VzIG5vdCBo
+YXZlIFJBTkRfc2V0X0RSQkdfdHlwZSgpIGFuZCBzdGlsbCBzdXBwb3J0cworUkFORF9zZXRfcmFu
+ZF9tZXRob2QoKSB3aGljaCB3YXMgZGVwcmVjYXRlZCBpbiBPcGVuU1NMIDMuMC4gU2luY2UgdGhl
+Citjb2RlIHVzaW5nIFJBTkRfc2V0X3JhbmRfbWV0aG9kKCkgaXMgc3RpbGwgcHJlc2VudCwgYWxs
+b3cgaXQgdG8gYnVpbGQKK2FnYWluc3QgTGlicmVTU0wgZGVmaW5pbmcgdGhlICdzZWVkJyBhbmQg
+J2FkZCcgZnVuY3Rpb25zIGFzIHJldHVybmluZwordm9pZCBpbiB0aGF0IGNhc2UuCisKK1RoZSBz
+YW1lIHdhcyBkb25lIGZvciBPcGVuU1NMIHZlcnNpb25zIG9sZGVyIHRoYW4gMS4xLjAgYmVmb3Jl
+IGZjYTIzMDQ2CisoInRvb2xzL2dlbnNpb3Q6IENvbnNvbGlkYXRlIGR1bW15cmFuZCBjb2RlIiku
+IFRoZSBjaGVjayBhY2NpZGVudGFsbHkKK2FsbG93ZWQgYnVpbGRpbmcgYWdhaW5zdCBMaWJyZVNT
+TCBzaW5jZSBPUEVOU1NMX1ZFUlNJT05fTlVNQkVSIHdhcyBub3QKK2RlZmluZWQgYnkgaW5jbHVk
+aW5nIG9ubHkgb3BlbnNzbC9yYW5kLmguCisKK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20v
+Y21pbnlhcmQvZ2Vuc2lvL2NvbW1pdC83ZmY5NTMwNjkxYjUzOWFhYTFjMzc3MzE5YTFhYmY0MGM0
+MmNhNmI5CisKK1NpZ25lZC1vZmYtYnk6IE1hdHRpYSBOYXJkdWNjaSA8bWF0dGlhbmFyZHVjY2kx
+QGdtYWlsLmNvbT4KKy0tLQorIHRvb2xzL2dlbnNpb3Rvb2wuYyB8IDE1ICsrKysrKysrKysrKysr
+KworIDEgZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspCisKK2RpZmYgLS1naXQgYS90b29s
+cy9nZW5zaW90b29sLmMgYi90b29scy9nZW5zaW90b29sLmMKK2luZGV4IGQ0ZWIyNjNlLi45NDI1
+ZGIwZSAxMDA2NDQKKy0tLSBhL3Rvb2xzL2dlbnNpb3Rvb2wuYworKysrIGIvdG9vbHMvZ2Vuc2lv
+dG9vbC5jCitAQCAtMjM0LDE1ICsyMzQsMjMgQEAgc2V0dXBfZHVtbXlyYW5kKGNvbnN0IGNoYXIg
+KmZpbGVuYW1lKQorICAqIFNldCBhIGR1bW15IHJhbmRvbSBpbnB1dCBmaWxlLCBmb3IgcmVwcm9k
+dWNhYmxlIG9wZW5zc2wgdXNhZ2UgZm9yCisgICogZnV6eiB0ZXN0aW5nLgorICAqLworKyNpbmNs
+dWRlIDxvcGVuc3NsL29wZW5zc2x2Lmg+CisgI2luY2x1ZGUgPG9wZW5zc2wvcmFuZC5oPgorIAor
+IHN0YXRpYyBGSUxFICpkdW1teXJuZF9maWxlOworIAorKyNpZiBkZWZpbmVkKExJQlJFU1NMX1ZF
+UlNJT05fTlVNQkVSKQorK3N0YXRpYyB2b2lkCisrZHVtbXlybmRfc2VlZChjb25zdCB2b2lkICpi
+dWYsIGludCBudW0pCisreworK30KKysjZWxzZQorIHN0YXRpYyBpbnQKKyBkdW1teXJuZF9zZWVk
+KGNvbnN0IHZvaWQgKmJ1ZiwgaW50IG51bSkKKyB7CisgICAgIHJldHVybiAxOworIH0KKysjZW5k
+aWYKKyAKKyBzdGF0aWMgaW50CisgZHVtbXlybmRfYnl0ZXModW5zaWduZWQgY2hhciAqYnVmLCBp
+bnQgbnVtKQorQEAgLTI3NCwxMSArMjgyLDE4IEBAIGR1bW15cm5kX2NsZWFudXAodm9pZCkKKyB7
+CisgfQorIAorKyNpZiBkZWZpbmVkKExJQlJFU1NMX1ZFUlNJT05fTlVNQkVSKQorK3N0YXRpYyB2
+b2lkCisrZHVtbXlybmRfYWRkKGNvbnN0IHZvaWQgKmJ1ZiwgaW50IG51bSwgZG91YmxlIHJhbmRv
+bW5lc3MpCisreworK30KKysjZWxzZQorIHN0YXRpYyBpbnQKKyBkdW1teXJuZF9hZGQoY29uc3Qg
+dm9pZCAqYnVmLCBpbnQgbnVtLCBkb3VibGUgcmFuZG9tbmVzcykKKyB7CisgICAgIHJldHVybiAx
+OworIH0KKysjZW5kaWYKKyAKKyBzdGF0aWMgaW50CisgZHVtbXlybmRfcHNldWRvcmFuZCh1bnNp
+Z25lZCBjaGFyICpidWYsIGludCBudW0pCistLSAKKzIuNTEuMAorCmRpZmYgLS1naXQgYS9wYWNr
+YWdlL2dlbnNpby9Db25maWcuaW4gYi9wYWNrYWdlL2dlbnNpby9Db25maWcuaW4KaW5kZXggZmQw
+ZTQ3Njk3MC4uZDUxZWE5OTEwOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9nZW5zaW8vQ29uZmlnLmlu
+CisrKyBiL3BhY2thZ2UvZ2Vuc2lvL0NvbmZpZy5pbgpAQCAtMSw2ICsxLDcgQEAKIGNvbmZpZyBC
+UjJfUEFDS0FHRV9HRU5TSU8KIAlib29sICJnZW5zaW8iCiAJZGVwZW5kcyBvbiBCUjJfVVNFX01N
+VSAjIGZvcmsoKQorCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIGRsZmNuLmgKIAlkZXBl
+bmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX0FUT01JQwogCWhlbHAKIAkgIEEgbGlicmFyeSB0byBh
+YnN0cmFjdCBzdHJlYW0gSS9PIGxpa2Ugc2VyaWFsIHBvcnQsIFRDUCwKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZ2Vuc2lvL2dlbnNpby5oYXNoIGIvcGFja2FnZS9nZW5zaW8vZ2Vuc2lvLmhhc2gKaW5k
+ZXggODRhZjNmZGFiMS4uN2Q1YTE2ODAxMyAxMDA2NDQKLS0tIGEvcGFja2FnZS9nZW5zaW8vZ2Vu
+c2lvLmhhc2gKKysrIGIvcGFja2FnZS9nZW5zaW8vZ2Vuc2lvLmhhc2gKQEAgLTEsNyArMSw3IEBA
+CiAjIEZyb20gaHR0cHM6Ly9zb3VyY2Vmb3JnZS5uZXQvcHJvamVjdHMvc2VyMm5ldC9maWxlcy9z
+ZXIybmV0LwotbWQ1ICBjOGQ2NWUxODA5ZWQ1Y2QxMTM4ZmEzMDllM2FiMGU5NCAgZ2Vuc2lvLTIu
+NS41LnRhci5negotc2hhMSAgMDc2ZmM4MzI0ZGVkYjY1ODk3MmE4OGM3MzgxMzFhNDA5OTY4ZTJi
+YSAgZ2Vuc2lvLTIuNS41LnRhci5negorbWQ1ICBjNTVmOWQ1ZDlmZDhhNDAzOGNiNjM2NThjZWU3
+OWNmNSAgZ2Vuc2lvLTMuMC4xLnRhci5negorc2hhMSAgNGQ2YzA4YmU2YWJjODMwZTY0ZTFhMjlj
+YmYxNzgzYWMzYjk2ZGVkMSAgZ2Vuc2lvLTMuMC4xLnRhci5negogIyBMb2NhbGx5IGNvbXB1dGVk
+Ogotc2hhMjU2ICA2M2M1ZmZmNTM2ZWZkMDgwZmI3YmM3ZmEwODQzMzFjMTlmYzY0YWJkNDJiN2Yy
+YmVjODZiZDc3YjRmZDEwODQwICBnZW5zaW8tMi41LjUudGFyLmd6Ci1zaGEyNTYgIDUwMWYzMTA4
+ZTZjMDNlNWEwYTU1ODVlYmFhYTM2OTE3MWFlYWQ1MzE5Y2QwYTdhNGRjMWY2NjIxMWMxZjA5ZjEg
+IENPUFlJTkcKLXNoYTI1NiAgZGNhYzdkNDQ3ZGQ4MWFiOTZkMjhkY2UwMGEwN2E2NDg2ZTYyM2Y3
+ZGVkOTRlMmEyYThlODMzMTI0MDVjZGY4OSAgQ09QWUlORy5MSUIKK3NoYTI1NiAgMDZlMDJmNDUw
+MDNkMTYzY2EyZDk0MTM3YmE5MjBlYTliNjgzYjc1ZjYzMzIxYWI3ZGMyMWY3NDIyNDZhMTIzYSAg
+Z2Vuc2lvLTMuMC4xLnRhci5negorc2hhMjU2ICA4MTc3Zjk3NTEzMjEzNTI2ZGYyY2Y2MTg0ZDhm
+Zjk4NmM2NzVhZmI1MTRkNGU2OGE0MDQwMTA1MjFiODgwNjQzICBDT1BZSU5HCitzaGEyNTYgIGRj
+NjI2NTIwZGNkNTNhMjJmNzI3YWYzZWU0MmM3NzBlNTZjOTdhNjRmZTNhZGIwNjM3OTlkOGFiMDMy
+ZmU1NTEgIENPUFlJTkcuTElCCmRpZmYgLS1naXQgYS9wYWNrYWdlL2dlbnNpby9nZW5zaW8ubWsg
+Yi9wYWNrYWdlL2dlbnNpby9nZW5zaW8ubWsKaW5kZXggMmJhMWI5NTBkNy4uYWM4ZmQ2MWVmZiAx
+MDA2NDQKLS0tIGEvcGFja2FnZS9nZW5zaW8vZ2Vuc2lvLm1rCisrKyBiL3BhY2thZ2UvZ2Vuc2lv
+L2dlbnNpby5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAK
+LUdFTlNJT19WRVJTSU9OID0gMi41LjUKK0dFTlNJT19WRVJTSU9OID0gMy4wLjEKIEdFTlNJT19T
+SVRFID0gaHR0cDovL2Rvd25sb2Fkcy5zb3VyY2Vmb3JnZS5uZXQvcHJvamVjdC9zZXIybmV0L3Nl
+cjJuZXQKIEdFTlNJT19MSUNFTlNFID0gTEdQTC0yLjErIChsaWJyYXJ5KSwgR1BMLTIuMCsgKHRv
+b2xzKQogR0VOU0lPX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HLkxJQiBDT1BZSU5HCkBAIC0xMiw2
+ICsxMiw3IEBAIEdFTlNJT19JTlNUQUxMX1NUQUdJTkcgPSBZRVMKIEdFTlNJT19DT05GX09QVFMg
+PSBcCiAJLS13aXRob3V0LXN3aWcgXAogCS0td2l0aG91dC1weXRob24KK0dFTlNJT19BVVRPUkVD
+T05GID0gWUVTCiAKIGlmZXEgKCQoQlIyX0lOU1RBTExfTElCU1REQ1BQKSx5KQogR0VOU0lPX0NP
+TkZfT1BUUyArPSAtLXdpdGgtY3BsdXNwbHVzCi0tIAoyLjUxLjAKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
