@@ -1,116 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D709D2ECF7
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 08:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE42D2ED0F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 08:24:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 007474EE14;
-	Tue, 20 Jan 2026 08:24:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DDA5857C0;
+	Tue, 20 Jan 2026 08:24:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c8leaseTyXDB; Tue, 20 Jan 2026 08:24:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bQicm75RoN-H; Tue, 20 Jan 2026 08:24:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19BC14EE17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50B0E857C5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768897453;
-	bh=uWCTk1Cnr4mMxg+2opb17AZxMGJaZr2Lr5MgW+VOwfk=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Gc+DCIunIYSEHKYtmkELu5tt2iq4+ywF8FxacXP156eKc9rl2LStOAcwVrY+X4lCV
-	 ai3xW/5D11ElBgtqNVlsdkld8mQy6d2ioXLkv56Q4wWg4jE+Ep0o07wlEh2bot1vQ7
-	 Z/J056zA9pP08NUmNfSY90G72fEB9J2rcEIOxQcmI6Wn6cVvbcUydd2U3fg12KShQ/
-	 QvxlPsGMCwxHR+k9tan7XcsbO7kThWEtG4auBvWmsV9JKJ/WbpyLhYd8Pv6rSzh8PC
-	 Ds7LKf3noTb6sW3o0S18Mk67v1RMW1wMf9jJfHU9dO8Q00/rTO9WwwkNFgTCNipp9R
-	 G0Gcyd2g03/Fg==
+	s=default; t=1768897454;
+	bh=UhE12FQ/7QmwVa5XmAHVyWF4SMcUefvWcyUupdeg700=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=dGff/AnIlGH1O6QBcMc/RuD8mGVgV9KcQvc0T69RnhnExFc2645O1HzcryOd+++fs
+	 YSLOdBahuCRGVZa2bR9RRLTVChAYUHN3f4coevZ1+d4JpbotzxA4D4tRBESomIriXU
+	 t8P3XjM8h8wSDIymZZm+5ryV2GrzWlpI3SZauVzjb4oG4TZbbGmC1AwzjBSOeSuytA
+	 2pzZBBTrV1jt8rU9U9e4Vcdjz5SoIcpyE4gweTKWBywj0ru+w44gczBDIwsS3McFl5
+	 /fGr9I3svYL7eDbT8LnrQf0A4YGSsvYDudQI+96QTR/jw1nhMtAyXt1cduFGSq+y/f
+	 i4vdEtFwJaxpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19BC14EE17;
-	Tue, 20 Jan 2026 08:24:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50B0E857C5;
+	Tue, 20 Jan 2026 08:24:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A2EB42A8
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 498F4160
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86F4441D61
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2C854EE14
  for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0UcLRtmA-nvk for <buildroot@buildroot.org>;
+ id xXclZTd3HDkr for <buildroot@buildroot.org>;
  Tue, 20 Jan 2026 08:24:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 70E714EE14
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70E714EE14
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 70E714EE14
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:10 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-b876c0d5318so687969466b.0
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 00:24:10 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 386854EE23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 386854EE23
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 386854EE23
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:09 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-64b608ffca7so7744300a12.3
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 00:24:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768897448; x=1769502248;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=4FzzbophiJ3va8Kxktsau8saEpkvCe/ton5Kts2rboY=;
- b=Oct4qhkczoqSVDX7ZJ4dm4egUNGs45MrMYTfkiz9B5r0AsrGOslkawCSlx3OLkWcW7
- u77PLWJQ+nAVYJSAxWTqYPqF3yZYbCmLZDWIPAzhCkTHPrO2nyQWV4XqjO7+GNNX3Ac4
- MqjZ6FALiDOeiZa9MQHoKmkmokBADmaBtGI4SsobWLI9sXMYs2E9xIfaf2GI/hMXDIsj
- mLiyTImKydhotLP/5QxSRTZl9EBVAHRSayBzvtS/QMWV04Cy7tX+oHBVW5eo1yIh4hFY
- R7/X3E+E8ITzW8+8RA8+vuDdcLB64r0cZP9KpL/d4HGrGr1Gy4QBiL0oOuqbAoEEU53p
- s8YA==
-X-Gm-Message-State: AOJu0YzitsKRWPcW0NCPGWlvcvA5fdL9B+iz2eDHL4f4Ufu7hM0hQvgg
- 2K+5vq/MSn9oyqICsQav8dJfPLNB3RlvwKcF5Ih8vag0Smc3CgG9NeNstj2OXbG6eKk+ndZoOwp
- 5IFv3
-X-Gm-Gg: AZuq6aJA1UdEuUZlMRe1szR8wiQNrgghtRw4Xfs3tyDk6rbyniIFtXEEOMulqGrFf7b
- R+D8I5pofpMoWuccwndtBydm6zbZK8trgfcT5TWx/KyoAuBnRAYErJFJNuHv6fj94kogkUe7oLs
- f8SEQ6fd+R58gvAmznK0jjjICJ/SvTEm0BucoIqUa4X6SeCSbm0d3AKZTpBlHnqc35o2YakS0rg
- dnl++dDM4BA2drqHkaOwC9wzJGvzDZVnGod7caUGQ3xjSdYjXwC+aIfoOLgbEW0XuJQXTBjYiGH
- ezf8uK5g9IgZR+g0k9P6/10RPBZyClxLAxy8cGFj5ULXE0eD3w3EJihuEU3sRTqZV9xUcxrdp48
- QPup86TOplPconDElNORpHvJTsrMkM4Gzq4o4NUUSu7++43zvwKw2oS76ITSkKFGFJgPJyqjWe9
- 6lal1/9bYmxRe2XdBc6T2QwwARO/0reUZ/DJs=
-X-Received: by 2002:a17:906:c14c:b0:b83:24a1:5e17 with SMTP id
- a640c23a62f3a-b8800361087mr95515066b.44.1768897448073; 
- Tue, 20 Jan 2026 00:24:08 -0800 (PST)
+ d=1e100.net; s=20230601; t=1768897447; x=1769502247;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xMhMz41Bjfviaeh6K3zRJsQHqdPuHn4OS5yKEbTgl1o=;
+ b=p8Qg1zxS616jLlyZhQWocuQJ4j0JdI0X6vAQ+MfHKHHv7ZhKvTxbPyd/S0jgoR6GPM
+ BKrIIlumTa0koyio2opAprpKKvsCrcbMUnFmaI/oobiCVInbSE/WfzUNqmop98p5oi+w
+ 31ER/GrizqRqqtrrlofuv5dCzoBnIfciwnSNDhhuxOKFwhaes1t3D69E1yOvrwR1mjhS
+ yiJjF6MjP6NFtaN+bfFtyj5N/rCdZg6svmesCHj6HqsWo1cbSRoTQDPOqQ2hZQ88fFHM
+ A7rGuWuBCNRodSfn8lB0BrjKs3zoXNhOscq5OTCK0WS/eaSaTHu9RKw+qEtwLXKBA4yS
+ /KGA==
+X-Gm-Message-State: AOJu0YwOb3BDNnjQglloD4xz2ZXX9IF+vxlAu1eKbxZ1T1ZGmWKV01Pa
+ pJPlmftK4WaiYddzK8mvmqxszUWSupD4HodJ+bICc/rc7ESvD52A2tvvJd9nDBt2mPd5eNWcW6K
+ ADxSG
+X-Gm-Gg: AY/fxX4jS7nhHdzlPbIe3q1BUftI6IX3oy1CG35Xnnzrit1zHsqKQIe9AUFgYFU2bBW
+ QWTfp+GjFjp3tOFZQJ/JaG6Ir0ARyISEIUnwd8DLmu2V5eWvdDMIsZggzUfgy/38AvxQIYonryy
+ VnX4aKB3zugN8UfSK7dyq6Ypzi5PY+DGKy56yeGLHw1QXwpnRswNsG9kQ7cpOqmXIm04HJ0sYOM
+ oB1uQR5NDWSpgldFvvJz45CIcC/WnQDPAFmbIsN1sG6BWmZeUjnYqPV19WITdw03DuZMQ+bKt3Y
+ SIu0M7mHGNjMsq4C5sMTFLSu3ko8awA4Ra5cX7C5amyTCVkOMTOidKn5zeAWTHudtiQo1Kqz+CP
+ ysgVREgGhbMluMV/vb0fT/kwBF5rdkj/6SIS0u/DUC27ovLyZQ1EEsikAIYyu3IELPdU3L8906H
+ /jbv/lxMau6HoXVcgD2UPOey+la5KgHXvuovk=
+X-Received: by 2002:a17:907:6e94:b0:b87:2bd6:6bc3 with SMTP id
+ a640c23a62f3a-b8796bb0f1cmr1214601866b.61.1768897446860; 
+ Tue, 20 Jan 2026 00:24:06 -0800 (PST)
 Received: from arch (94.105.116.200.dyn.edpnet.net. [94.105.116.200])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b87959fbefdsm1307568566b.55.2026.01.20.00.24.07
+ a640c23a62f3a-b87959fbefdsm1307568566b.55.2026.01.20.00.24.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 20 Jan 2026 00:24:07 -0800 (PST)
+ Tue, 20 Jan 2026 00:24:06 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Christian Stewart <christian@aperture.us>,
  Julien Viard de Galbert <julien@vdg.name>, Nimai Mahajan <nimaim@gmail.com>
-Date: Tue, 20 Jan 2026 09:24:02 +0100
-Message-ID: <20260120082405.46683-3-thomas.perale@mind.be>
+Date: Tue, 20 Jan 2026 09:24:00 +0100
+Message-ID: <20260120082405.46683-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260120082405.46683-1-thomas.perale@mind.be>
-References: <20260120082405.46683-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1768897448; x=1769502248; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4FzzbophiJ3va8Kxktsau8saEpkvCe/ton5Kts2rboY=;
- b=eQz35FEW7Yv4qkjl9FLyNKrASAd7l9N4w5HGl5mWDMEOex0qEM6DDxkIgs/KU7BgwC
- eJTZ7ykRKygMjmMRJNs57ixuo/WY3shCCLf8HcAKfuleGM/g6VRmfWiv4RJBR1ubnckS
- 3EPFO5ObLYgoycE0VIeKRTbR8QOZTC/zUOD+lNciIA8wpA2GM1jsjREFk4N1H4YQlS2t
- /VARfxI4Fn97uxeETFNbPeSKzsCUM09T2ejKHdTUqQTW36eSATgodmo60DhPHjCL7LKg
- Gj27WpO0PM8B8Z1rpXtdFXeFNBpHOgOVJV8FPQRPjZmF8mW4vKSQ7cXcDJW42WekdMbB
- mK+Q==
+ d=mind.be; s=google; t=1768897447; x=1769502247; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=xMhMz41Bjfviaeh6K3zRJsQHqdPuHn4OS5yKEbTgl1o=;
+ b=TbnHvaLuZzsvUO5ancS900iVWSwFl3KR6ZwbzqdnZcO8J/0GtO6K+YDlk/KN47dvwB
+ QMPc5tf+BxEHlEOxUoQQOAcCc5dYrpK4f5r3B60EHlGdxn7CCx61prFJ4S9SiNUSNMDG
+ P1DL62+D5brMRnA3byHsFo7vVsvHKjCqLXQGUZcE6cjHuBlh6cF+16LUkyx3GZijdNh5
+ VKD3H3VExtQWV1eRN1O/jYOI6D6FVO9AWR9AO1etb7x4Afxjl1RddGcLE3Qd8uVNIj4g
+ PaH8tcBqk20+tjnHMt8SIJRbir36i9nzMc+p8eao1h28IJ1ZJWN8XznjrRQFejnbKE21
+ /LaQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eQz35FEW
-Subject: [Buildroot] [PATCH 3/6] package/mp4v2: add CPE
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=TbnHvaLu
+Subject: [Buildroot] [PATCH 1/6] package/docker-engine: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,29 +126,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE `mp4v2:mp4v2` is valid for the package mp4v2. See the latest
-CVE: CVE-2023-33719 that reference the upstream repository.
+While `docker:docker` is not marked as deprecated by NVD after a
+scan through the CVEs the last entry for `docker:docker`
+is CVE-2022-34883 [1]. Replacing this tuple with `mobyproject:moby` that
+is referenced in the upstream project GHSA [2]. The last entry for this
+CPE is CVE-2025-54410 [3].
 
-[1] https://nvd.nist.gov//vuln/detail/CVE-2023-33719
+[1] https://nvd.nist.gov//vuln/detail/CVE-2023-5166
+[2] https://github.com/moby/moby/security/advisories
+[3] https://nvd.nist.gov//vuln/detail/CVE-2025-54410
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mp4v2/mp4v2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/docker-engine/docker-engine.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
-index ae777cdc75..8d8e184b99 100644
---- a/package/mp4v2/mp4v2.mk
-+++ b/package/mp4v2/mp4v2.mk
-@@ -12,6 +12,8 @@ MP4V2_INSTALL_STAGING = YES
- MP4V2_LICENSE = MPL-1.1
- MP4V2_LICENSE_FILES = COPYING
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 37d42edaea..5fe225fbbc 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -13,8 +13,8 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+ DOCKER_ENGINE_DEPENDENCIES = host-pkgconf libseccomp
+ DOCKER_ENGINE_GOMOD = github.com/docker/docker
  
-+MP4V2_CPE_ID_VENDOR = mp4v2
-+
- # help2man expects to be able to run utilities on the build machine to
- # grab --help output which doesn't work when cross compiling, so
- # disable it
+-DOCKER_ENGINE_CPE_ID_VENDOR = docker
+-DOCKER_ENGINE_CPE_ID_PRODUCT = docker
++DOCKER_ENGINE_CPE_ID_VENDOR = mobyproject
++DOCKER_ENGINE_CPE_ID_PRODUCT = moby
+ 
+ DOCKER_ENGINE_LDFLAGS = \
+ 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.BuildTime="" \
 -- 
 2.52.0
 
