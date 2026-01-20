@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4AD0D26283
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 18:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B187D26296
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 19:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17A5E409B9;
-	Tue, 20 Jan 2026 18:34:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t1IzCZJPL-Jb; Tue, 20 Jan 2026 18:34:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DE204099A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768934044;
-	bh=2/YxX1aC33VeuAZJsNl5ovthdf9KAgyOuCRROao9rm8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=rS0FhWRqt5gKjrZifnExWMJDtuXKNMTSbtjWbL++9z5LhgcLa7RlWeu2QC1IoS2fX
-	 isUhwXgjH1QggeTvHsp7X19uF46/gQLzD2LaSh4w9bUg6YXbHkXIT13jSIYRUtsLoJ
-	 llNTFXiapQPEhpUkC30YQB2ca6yEJ1rQfuA2MG1YetDFkqaM8FBtT9tVSsrJiEzJOa
-	 omyd84viHfE0LVJiqJmvwhAQmiqGnjQY+nRD3CBS5bBOXSiLk5Bm3YRzLReLTOmN8X
-	 ADeljqM+/R/KqBNH4FvMyhI9+1+KBIsgvjnnvVWZrLZAvpP1mHzSnXyHHlbD0PrvLe
-	 TcfiMMsnQwpbg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DE204099A;
-	Tue, 20 Jan 2026 18:34:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9650C160
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 18:34:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A6836081E
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 18:34:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3743608EA;
+	Tue, 20 Jan 2026 19:41:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QS8nwBgmMtQJ for <buildroot@buildroot.org>;
- Tue, 20 Jan 2026 18:34:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B6E95606D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E95606D6
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B6E95606D6
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 18:33:59 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c7cb.dip0.t-ipconnect.de [79.214.199.203])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5243AA4C03FE
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 19:33:56 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54772)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1viGY7-0000000052K-1zP4
- for buildroot@buildroot.org; Tue, 20 Jan 2026 18:33:56 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id rLOY6hIrJ_5X; Tue, 20 Jan 2026 19:41:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55602608E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768938081;
+	bh=msYrh9I839kYX8DXnvW6c1403qCP26J9vhb2GLzXUt8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=PcqyFtYdpQt3DNq98FUrGSDeTwwdZcOToi/bxflMSo+Uqc4hObW3Wgmn7RI5c2EoX
+	 0ZvBXVJw+EoxMfld11yLbaeqAyDxb4lfJHKRpi/hCYgkU+satD5ppI+EbK8TsKJvUC
+	 TCQAuY9ld+m+9dJu6WNTkGUjrMFRdX+yKwHkDoVujfPted0Ksde6NGXtyNdhNV9+e+
+	 tZ8vNSpLXcyIvds/St/yc1glzoATx40W/iFh05mQFGi9EIRHEI+iirBj5XGvInQ4BX
+	 CacImZqTiU8zDo/1Syq5P5IDovZrLVYpfWJE7t7mRPV+Kk8QUBsPR1rL2tvKCR0nUL
+	 UrOKKKM/Ksyow==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55602608E4;
+	Tue, 20 Jan 2026 19:41:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1BD1122
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 19:41:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D541C818A1
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 19:41:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UE45v2w4QoPG for <buildroot@buildroot.org>;
+ Tue, 20 Jan 2026 19:41:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E762E81401
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E762E81401
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 19:41:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D323C88550; Tue, 20 Jan 2026 19:41:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 20 Jan 2026 19:33:55 +0100
-Message-ID: <20260120183355.2730446-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1768934036;
- bh=3f7KWVZjHTAp29FE+9ES/374fje4Kn2mfFMq8z+mucE=;
- h=From:To:Subject:Date:From;
- b=ngrYm+PQx5n2UjL80m9UKh7n+LWlVnAI1yzu1B4nUKkEX1eIaJedP/l0OBcKJELFG
- TjIUqhYGHXDwKUO+p+gHUoJzUCT6kVqmMz43PIaO0xQ/m9Kh979fszhBJV3F9ewhFt
- sB+j5j/tr4zwzhZLjcmVQJmFFtA0ihkmUOFg71vH6gS/11PNg/L10SRF9RNZw6Jzhr
- srmHOkw9VGLjqhaQAa9/aS6YxMx36e/9vUpTYOmSKcvC9IZ6MR+ShyIWhBfbzxOofW
- pAKcAqxHN5AYJfFJFfskNPSlhQ2C0q2IS8sFfyR4C/OBYx+yXa75dYOGmLpRGa+xbu
- ssVZ7N0+WlQdQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=ngrYm+PQ
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{10,
- 15}.x series
+Date: Tue, 20 Jan 2026 20:37:33 +0100
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: 900c8524d5a7dabbb7d762edc369713207bfa92f
+X-Git-Newrev: e644eca5aca05b375ec078a7bcff3112d21806b7
+X-Patchwork-Hint: ignore
+Message-Id: <20260120194118.D323C88550@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] Makefile: update for
+ 2025.02.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,50 +69,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=e644eca5aca05b375ec078a7bcff3112d21806b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1f9256c27f..a3e621f38d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -4,8 +4,8 @@ sha256  ba3897a1c060b05a03cb4dda6f20d8c75e6f73c88b217744823a915056536eaf  linux-
- sha256  76af9d4fce24cc5a1c9f1fcbba2e23c4e87bbc8e20525b1691206801f24d14ba  linux-6.6.121.tar.xz
- sha256  b41666bda7223600386a07ebe1802f5029da2fe81f6a85d691b6ec6a707e5a29  linux-6.1.161.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  fd218df8e2107a4443b6c29fef7f95aad167031e0fbdbc7a858ae8471360668a  linux-5.15.197.tar.xz
--sha256  70c8b87ba1fcd8bfa663661934dc9bda92d0b5f3c0fc3197bb56399f69d9fe0c  linux-5.10.247.tar.xz
-+sha256  5d4c0994580dd3bbd5ffc5fcb81c22dd305b844c9d8c7b176cc41b28f7e29743  linux-5.15.198.tar.xz
-+sha256  b5e6e4f1f904a3377dde32ef3bc322f03a78f045c4d666483d383153902de005  linux-5.10.248.tar.xz
- # Locally computed
- sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
- sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 04dce45ea5..dcf5d46505 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -456,8 +456,8 @@ endchoice
+diff --git a/Makefile b/Makefile
+index 872f1a3900..486bf3fadc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.10.247"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.197"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.10.248"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.198"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.161"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.6.121"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.12.66"	if BR2_KERNEL_HEADERS_6_12
--- 
-2.47.3
-
+ # Set and export the version string
+-export BR2_VERSION := 2025.02.9
++export BR2_VERSION := 2025.02.10
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1765441500
++BR2_VERSION_EPOCH = 1768937900
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
