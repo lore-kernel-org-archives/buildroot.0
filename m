@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A18B7D2629D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC7D2D26296
 	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 20:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C65340AFC;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0830F60A59;
 	Tue, 20 Jan 2026 20:05:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DFNfiPHNxJ63; Tue, 20 Jan 2026 20:05:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LmBbpbufFuId; Tue, 20 Jan 2026 20:05:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E2DB40AFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8026B60A53
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768939509;
-	bh=vVLax3I6Rc3/gPWA/41Wgd55xuRDKjqTIbrAxbJbNdg=;
+	s=default; t=1768939508;
+	bh=raAkcM/vsmD+zJua9CuHlH8O9AUnT01wFbhB/0ppf34=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JPBHIT5Tl+yhHAMUTTW/2h6pRCyvV8LsgtBt0kKTqBkQfAO4PGzy+hdl2FAt2AE60
-	 X+hwWaKaoxPk+rsMlXJ7eezOkFOZGvwmX4wvjoZ5LLedIRovpNm5atepnSrP1vYAS0
-	 Bm2PZFASbiQjlb/pNWtSJW/mWVFPGLMN4/czvFJa+gyqacf3NHvqTafpkSgvPDbma3
-	 bhyXYOxW4iIROv26dqJkXxH3HAu+j2RX5puny0rYBiznOgEUmUcG5/J6G7LX9iGFTB
-	 2bcRKoilHC0RUtGwM/m0ICWzkaYS92YVhcfJDq+irDWqGuJ3n968mEoyREeu++4GAX
-	 Kbxnj11S8Ukqw==
+	b=BHFNRfPerzLQnEUivJ454XnvhaZdkWNd725skMWh2jiThnGCnHRsBx+9FYHsZuBsL
+	 itpvmV9APzZyyx+8qrEiuoR9GuQDuijlZvOQe0FkeARGxDjkkmfLndZ0mGl729vs0n
+	 2w/8LIVIGdolKY4ZRwcsoiqSCxqaJS2xZVk6JVxn/fvfnNypIECB1krl1q0i0TTWji
+	 2jHOpSkSqfAsCyM+OImgViAVbE1L5yQTCRseSgwtfGzLdBff4UvMS9PEuTee4pQ/+F
+	 LlmOqTRkgoiaPecQyj+ZnPw4k7a93ErJZMIfC28oS2KB7RH+g1lm6HH+/JZZHiseDo
+	 YRQvXpZfLiidA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E2DB40AFD;
-	Tue, 20 Jan 2026 20:05:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DAC32377
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8026B60A53;
+	Tue, 20 Jan 2026 20:05:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 262F5169
  for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D2C140572
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16B1460A51
  for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:05:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X72y2lpo8271 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SlyI3ztBJyet for <buildroot@buildroot.org>;
  Tue, 20 Jan 2026 20:05:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 391D4400A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28AB260A4E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 391D4400A8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28AB260A4E
  for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:05:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 294FB88710; Tue, 20 Jan 2026 20:05:04 +0000 (UTC)
+ id 16DF28870E; Tue, 20 Jan 2026 20:05:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 20 Jan 2026 20:57:02 +0100
+Date: Tue, 20 Jan 2026 20:56:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7b1377d45b7c57c5d6a41dcca048f6f7c533a0a
-X-Git-Newrev: 50822d25d136fa17f5b37728bbb4a161c41f9447
+X-Git-Oldrev: 45eaf7db42d6834d9d9f21dea3f7fe4a9db30ff1
+X-Git-Newrev: a7b1377d45b7c57c5d6a41dcca048f6f7c533a0a
 X-Patchwork-Hint: ignore
-Message-Id: <20260120200504.294FB88710@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] CHANGES: update for 2025.11.1
+Message-Id: <20260120200504.16DF28870E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: update for 2025.02.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,23 +76,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50822d25d136fa17f5b37728bbb4a161c41f9447
+commit: https://git.buildroot.net/buildroot/commit/?id=a7b1377d45b7c57c5d6a41dcca048f6f7c533a0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Co-authored-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit e272875fa7747f0e38a781d0583f4fc61ba2e755)
+(cherry picked from commit 900c8524d5a7dabbb7d762edc369713207bfa92f)
 ---
- CHANGES | 80 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ CHANGES | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
 diff --git a/CHANGES b/CHANGES
-index 16223328f9..0f2bc659ea 100644
+index 56267752c8..16223328f9 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -1,3 +1,83 @@
-+2025.11.1, released January 20, 2026
+@@ -679,6 +679,80 @@
+ 	- netsnmp: unexpected header length in /proc/net/snmp...
+ 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
+ 
++2025.02.10, released January 20, 2026
 +
 +	Important / security related fixes:
 +
@@ -135,7 +138,6 @@ index 16223328f9..0f2bc659ea 100644
 +	- cve-check: don't fail with unknown CVE
 +	- generate-cyclonedx: support 'resolved_with_pedigree'
 +	- testing: add host bin dir to PATH
-+	- testing: add tests for FIT hash support in package/uboot-tools
 +	- testing: add libiio python bindings runtime test
 +	- testing: ddrescue: use dmsetup from lvm2
 +	- testing: ddrescue: use f-string for test config
@@ -147,34 +149,29 @@ index 16223328f9..0f2bc659ea 100644
 +	- gitignore: ignore utils/brmake log output named `br.log`
 +	- testing: add opus-tools runtime test
 +	- testing: add flac runtime test
-+	- testing: test_xen: add block
 +
 +	Updated / fixed packages: apache, arm-trusted-firmware, atf, audit,
 +	bitcoin, boost, busybox, cage, cmake, collectl, cppcms, cpulimit,
-+	cryptsetup, dbus, dmraid, dropbear, efl, embiggen-disk, evilwm, exim,
-+	ficl, fio, fluent-bit, fontconfig, glibc, gnupg2, grpc, gvfs, icu,
-+	imagemagick, irqbalance, iwd, kvmtool, ledmon, libarchive, libcoap,
-+	libconfig, libcpprestsdk, libcurl, libdill, libdnet, libfcgi, libfreeimage,
-+	libgit2, libgtk3, libgtk4, libiio, libmbus, libpng, libselinux, libtirpc,
-+	libupnp, liburiparser, libvncserver, libxslt, linenoise, linux-tools,
-+	lttng-modules, lugaru, matchbox-fakekey, matchbox-keyboard, matchbox-lib,
-+	matchbox-panel, mender-update-modules, mesa3d, mosh, nfs-utils, open-lldp,
-+	opencv4, opencv4-contrib, openjdk, perl, perl-dbd-mysql, perl-mozilla-ca,
-+	php, pigz, pixman, python-brotli, python-can, python-certifi, python-django,
-+	python-filelock, python-fonttools, python-pyqt5, python-urllib3, python3,
-+	qt5enginio, qt5webkit, qt6base, racehound, rdesktop, rpcbind, rpi-firmware,
-+	rtl8192eu, rtl8723bu, rtl8723ds, rtl8821au, rtl8821cu, rtl8822cs, samba4,
-+	skopeo, softether, softhsm2, spice, ssdp-responder, sway, tio, trinity,
-+	tzdata, uboot, uboot-tools, uclibc, unbound, utfcpp, v4l2loopback, vim, vlc,
-+	xdriver_xf86-video-intel, xen, xinetd, xlib_libxshmfence,
-+	xserver_xorg-server, xvkbd, xwayland, zic, zxing-cpp
++	cryptsetup, dbus, dmraid, dropbear, embiggen-disk, evilwm, exim, ficl,
++	fontconfig, glibc, gnupg2, grpc, gvfs, imagemagick, kvmtool, ledmon,
++	libarchive, libcoap, libcpprestsdk, libcurl, libdill, libfcgi,
++	libfreeimage, libgit2, libgtk3, libgtk4, libiio, libmbus, libpng,
++	libselinux, libtirpc, libupnp, liburiparser, libxml2, libxslt, linenoise,
++	linux-tools, lttng-modules, lugaru, matchbox-fakekey, matchbox-keyboard,
++	matchbox-lib, matchbox-panel, mosh, nfs-utils, open-lldp, opencv4,
++	opencv4-contrib, openjdk, perl, perl-dbd-mysql, perl-mozilla-ca, php, pigz,
++	pixman, python-brotli, python-certifi, python-django, python-filelock,
++	python-fonttools, python-pyqt5, python-urllib3, qt5enginio, qt5webkit,
++	qt6base, racehound, rdesktop, rpcbind, rpi-firmware, softether, softhsm2,
++	spice, ssdp-responder, sway, sysprof, tio, trinity, tzdata, uboot, uclibc,
++	unbound, vim, vlc, xdriver_xf86-video-intel, xen, xinetd,
++	xlib_libxshmfence, xserver_xorg-server, xvkbd, xwayland, zic, zxing-cpp
 +
-+	Removed packages: opencv3 'protobuf', opencv3 'ffmpeg',
-+	   libdnet 'python', rpi-firmware 'vcdbg'
++	Removed packages: opencv3 'protobuf', opencv3 'ffmpeg'
 +
- 2025.11, released December 11th, 2025
+ 2025.02.9, released December 11, 2025
  
- 	Fixes all over the tree.
+ 	Important / security related fixes:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
