@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A459CD262A1
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 20:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0990AD262A1
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 20:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89CE660AC4;
-	Tue, 20 Jan 2026 20:38:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B63A181E79;
+	Tue, 20 Jan 2026 20:40:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1XKNNuQFtm15; Tue, 20 Jan 2026 20:38:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uk0jaL6_3aKp; Tue, 20 Jan 2026 20:40:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB1AE60ABA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4D3381E3D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768941497;
-	bh=uidYey1NinBfHatkkvJUr4KX8eyVyYSIIa+HYAWz/qA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=K/oR/FNs+4Jo2qXsi87Rrs4ba4FAAYYmv8Fdpu22dvn4zBc75i2iZZSt5pdlbz1Wl
-	 EkWZfOPOvRTPsuQVj7cBYPjMUVdm8Q6qsPaQ3pyPSvRXDoSxLm7qSdKen0ArwyKwQ8
-	 VG6VLqMjVGeWJSrXyUMCL/mx9y7Ks7Eke7zk4/3y0XzTY7y6ETKaqDOsalfJ10CFWY
-	 HVfq9KOagA6zhkyn+brC2WDh9EdjxKwJ3tvB7bvAw+s2bgUdYWrQWTPRTCb4vI4Awq
-	 UCgC8quAuCPvleXtM6ifF2tVil2e/DUiQD57mC47xPZix7M3qAPPccrxVJF5ZFIzSB
-	 IR9SA1TzA8ozA==
+	s=default; t=1768941653;
+	bh=y2u/LavUTwvxFJ56l+4ryspPiTLjaZ8MnZKjIRm2hU0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Y0xyr+5NWeiWBDEI1kIowDzK07LDuTdfJXxFg7TqW748atOeB3dQRGpe62jM/x04r
+	 qojZ3M/RTKXvOmpnH52Zfha+hoYurVWXg77stNTEGjg6y29HX4sg3hbGnwpaFDVG+K
+	 v+BQG98guE7on0sIL8v9d3l0iagxNnQtyEl2P9LD4Jj68/wizyuBqJEJB7tYH4xTZL
+	 INzE9J5o/TtRUoryLudbsV7t5tgkKErdsa9+BUBgIKFxRMshoNDVlR9jMpztBlHck5
+	 wWoF+jQkdbYVgPYHpsQCyy2fh+CKsi2FMiuhHJ/RoDwE/4+2zjFR7sSjTjmnuRcygW
+	 bnCkGOMoCWKjA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB1AE60ABA;
-	Tue, 20 Jan 2026 20:38:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D8C6160
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:38:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4D3381E3D;
+	Tue, 20 Jan 2026 20:40:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 99D16122
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C95540BA2
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:38:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 88C8D81E3D
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:40:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWIoNNgNxWLx for <buildroot@buildroot.org>;
- Tue, 20 Jan 2026 20:38:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0E28F40BA1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E28F40BA1
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0E28F40BA1
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:38:14 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 0B34F5FFAA;
- Tue, 20 Jan 2026 21:38:11 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 20 Jan 2026 21:38:11 +0100
-MIME-Version: 1.0
-Date: Tue, 20 Jan 2026 21:38:11 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260119213157.3681054-1-bernd@kuhls.net>
-References: <20260119213157.3681054-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <26b66788c1d5bf689a58660ed920f2a2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1768941493;
- bh=qe64gZG84GE6gIBX+pEa2Ns+hMPMFofuEif48sDobSw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dniBrHKJl9h0pCMjkx0hbJFfa34F8+MpSJdO4960MOcZeq7CFP2Ip2onBy9aNa467
- 0kLdBmMQBUSTAuLBOtiLLeBnauvj1d3S0gnPGSdg/ay3wZTys0OvelL2D8bsQP1YUP
- SZ1MLQLZx/bUSoSGh5LRROuB8VnyfpSXLTZ5UVVeYwLFJZyuwIbgDmc5nGl6gQcxyd
- j2EPf8weadBAD1xRAan/wJN5eGtP5oAlanGnTJ82/YWOr9dfILddY4SEJcamoQCz8G
- 6hnYlKvXp6WHYf94tvlJ/jivCoYY6Ij5f6v3NuGkvH/cENkPW1P6Ij9ohY4RhuL7Hc
- 9OjbRjmhBZj4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=dniBrHKJ
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/php-zmq: remove package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aqQWnro6neOb for <buildroot@buildroot.org>;
+ Tue, 20 Jan 2026 20:40:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37A4681E3C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37A4681E3C
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 20:40:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 13AFB8872C; Tue, 20 Jan 2026 20:40:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 20 Jan 2026 21:39:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: aedf131da66d2f2ebce64788deab07be17ce33eb
+X-Git-Newrev: 4fa6ab7b8f3091652af03093e48e9c1bd1291b96
+X-Patchwork-Hint: ignore
+Message-Id: <20260120204051.13AFB8872C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{10,
+ 15}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,33 +71,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/01/2026 22:31, Bernd Kuhls wrote:
-> Building php-zmq is broken with php 8.5.
-> 
-> Although some pull requests exist upstream to fix php 8.5 support:
-> https://github.com/zeromq/php-zmq/pulls
-> 
-> they do not fix other bugs like broken build with gcc 15.x which was 
-> the
-> cause for the its removal by Debian:
-> https://tracker.debian.org/news/1668817/php-zmq-removed-from-testing/
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1097580
-> 
-> According to various sources the package is unmaintained:
-> https://pecl.php.net/package/zmq
-> https://lists.zeromq.org/pipermail/zeromq-dev/2019-August/033109.html
-> https://github.com/zeromq/php-zmq/pull/240#issuecomment-3684566367
-> 
-> so we drop the package from buildroot.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=4fa6ab7b8f3091652af03093e48e9c1bd1291b96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 1f9256c27f..a3e621f38d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -4,8 +4,8 @@ sha256  ba3897a1c060b05a03cb4dda6f20d8c75e6f73c88b217744823a915056536eaf  linux-
+ sha256  76af9d4fce24cc5a1c9f1fcbba2e23c4e87bbc8e20525b1691206801f24d14ba  linux-6.6.121.tar.xz
+ sha256  b41666bda7223600386a07ebe1802f5029da2fe81f6a85d691b6ec6a707e5a29  linux-6.1.161.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  fd218df8e2107a4443b6c29fef7f95aad167031e0fbdbc7a858ae8471360668a  linux-5.15.197.tar.xz
+-sha256  70c8b87ba1fcd8bfa663661934dc9bda92d0b5f3c0fc3197bb56399f69d9fe0c  linux-5.10.247.tar.xz
++sha256  5d4c0994580dd3bbd5ffc5fcb81c22dd305b844c9d8c7b176cc41b28f7e29743  linux-5.15.198.tar.xz
++sha256  b5e6e4f1f904a3377dde32ef3bc322f03a78f045c4d666483d383153902de005  linux-5.10.248.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+ sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 04dce45ea5..dcf5d46505 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -456,8 +456,8 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.247"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.197"	if BR2_KERNEL_HEADERS_5_15
++	default "5.10.248"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.198"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.161"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.121"	if BR2_KERNEL_HEADERS_6_6
+ 	default "6.12.66"	if BR2_KERNEL_HEADERS_6_12
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
