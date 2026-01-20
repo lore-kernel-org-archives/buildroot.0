@@ -1,116 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FCB9D2ECF7
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 08:24:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13773D2ED11
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jan 2026 08:24:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E34E24EE20;
-	Tue, 20 Jan 2026 08:24:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF8D0806BD;
+	Tue, 20 Jan 2026 08:24:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6FqrfX0R22Vl; Tue, 20 Jan 2026 08:24:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x4_QaUMm9pUz; Tue, 20 Jan 2026 08:24:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14A994EE3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C30D806D9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768897461;
-	bh=7asQrdEYeBFkX/LKu9zg95YBLjM0viDRjW36mXNatDI=;
+	s=default; t=1768897460;
+	bh=0Y/ItPtRFC5/NZCmt0+ZK1qKFMeveu/Vz8KxBsGyjJo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=JZPkS/PcyIrT0lzSuAdzl7Brym0o1a0gDvXq0J9G/6bihi41LPf+QpJ47SVq8Q9We
-	 CYUuGZoYiiUlX/QQN6RnWLKGZ09Dy9l7Kn3k3P+z20ZRzvIvSMsSYDCCLDmnor+7Of
-	 Hob0j4wEYrW3zKlI0Xnf0SFqWuuy/ZaAC6ZZKkO9H3OxAnsk+vGcg271bcFqtwNbEs
-	 yOTm4mSkJeUF9KLrMQIMVYe81P5Q7DUZjR8ZLq3hBv+G3R0Rhr1iAM4TppzcaDfcH/
-	 ST8w3k+E7cDi51z4zvGTKM9Opggd60yRrmqY+VVotiVWOkdqfQ1DgPBbPIiWPdBdEx
-	 6w+ZSD9yLmG3w==
+	b=H4/0RL5XkoQDev+io4vATWkLLqwRq+dVVR9DRfHju5cNWBPpWIUtVQRhX7erJW/U5
+	 LWq8A+RDhNWU/81rqD1qKO5+2tkq8qmPCF1+OlnUNvQ84o4bBRN0aeozmD4OZTOYvA
+	 ML/kccEof7XDjA54yh4yUYlGjNBZy1ibyAEfLby6JnBXc5rZ8BGL6bZE2M/G5A12m0
+	 PLTEZFVOq/jeA7w/GIhlKy0gm5P2CkqSXXgNXMGsBFj/gDbEByM8y/oAOZPbtr/87p
+	 Np7u8cmpJ8pQf/2FLeGGq5yeJqZ58YTgKO2xCluH7EV59c66m3lunBgguDcrQ/rcv4
+	 SFHOJe8M0a3Ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 14A994EE3A;
-	Tue, 20 Jan 2026 08:24:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D7AA42CE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C30D806D9;
+	Tue, 20 Jan 2026 08:24:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0D89160
  for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FC7A4EE19
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 48mIXXJhpt77 for <buildroot@buildroot.org>;
- Tue, 20 Jan 2026 08:24:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A836C41D61
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A836C41D61
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A836C41D61
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B44D857C9
  for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:12 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-b876c0d5318so687973466b.0
- for <buildroot@buildroot.org>; Tue, 20 Jan 2026 00:24:12 -0800 (PST)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2IY4H9cVbJ7W for <buildroot@buildroot.org>;
+ Tue, 20 Jan 2026 08:24:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 48EE4857C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48EE4857C5
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 48EE4857C5
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 08:24:11 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id
+ a640c23a62f3a-b8719aeebc8so869301166b.3
+ for <buildroot@buildroot.org>; Tue, 20 Jan 2026 00:24:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768897450; x=1769502250;
+ d=1e100.net; s=20230601; t=1768897449; x=1769502249;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=mwTUSJVlBpdPjvgx+ikPIpOIHLCijJv8t5VI1Dqit3M=;
- b=V/XrmVT/JWyW7bIajalaWqJ5KYt+gXIOOaKIpsBjA3v78xU0civ/Hj4iMvt7MDgIla
- 16wz9Nz7Y11SN19+cQtKWWE7J6A095l+HDk0j6wWo/d1TI4D/Lndr8Kxi+eAIRdyMeBy
- JGPbF3zdNUVoG7Ppq9IjJ+3M+V3O4fgpvH+oZWYA3QDwgq/2/b2p+Ed2BIa4nB8jvY4u
- JHOn3s0d/MXK3cToMfs412XJNDoG9Pi0DE7Me+KB8YzUf8E3PKNnRuzdqMgX697CVxKK
- +f51flC5QeAvamIO8Fr/KKHnQyXVEh/Apv3BhfxlP4cUSS97lUFG1a2L95gvYXuArGt7
- nX6Q==
-X-Gm-Message-State: AOJu0YzgvfE8IV0YIK0M6UgBhDi9Ycvc5ViCI6mNnKha/zduZ4KAsCuJ
- vzBdBE2sBkT4HZ9+nJDkjsINepFeBdz0Gp7zWYrQwr0oM+99E4jJkc0uu9b8mORcjVVaEEBDlgb
- 4CB2c
-X-Gm-Gg: AY/fxX6sDCRIG59WjVwSQGYMindpSmLeKdVk//+IYAsDqGjoAxn/xKP+m28Y/8rQX+E
- HURFpo84qEmQhWh4oQFYjPn6LhICZsPl+qMEQKrGzOPLqcT7nhJ6gJBkSVjMsUVaqn70oQjWb8I
- nzXDbR8U5O5Uq61eg2QnLu20JJvKEGfl5FVG72Wf9lWegJgGAGBY9YkWSWspeYmDg/FZAAU7DE+
- w746VcEDnUVmKsSu57fYeM79mOVsG5UV0wLjR/pOQjxITBktUcuh3mkZrvW77v/5mbP+igjY8pv
- 4pSuXZMbPkpBDuj9K7+DBSytLaepKq8Wdtr+grb/IwBWPWn1D92JgbzXWa4c187mOr31Q7a2kyo
- XqZLFGO66ytH3BFPD56s67SobdscrHqp2vhN3Rqt4arzGx8bcARnX3VerceweZu6+TPhjWPnpop
- TEuiD9EpOs7caPHBsHe6PCUCTz0M6kP6yTQGU=
-X-Received: by 2002:a17:907:1b25:b0:b87:d09c:1825 with SMTP id
- a640c23a62f3a-b88002350aemr98500466b.13.1768897450500; 
- Tue, 20 Jan 2026 00:24:10 -0800 (PST)
+ bh=MqpG7LSd8+KfEMToOarVuON5b/WrnZ6Y94nngAYvOno=;
+ b=vgxvjTSyGy3jSyDeeimMl4jcyra+dpK2enGXMiYJIvpKCgWq0GkRjO+4iHMibr99gv
+ TRjwZtSuT5j3QPPmgAfbnutY3tZkVMA47fQiG5Wgq6LKFWI46ka1Clr01VZ3sDGkH2jW
+ gx4zKwBe8kpdU9sQ877AgLGs+I7/IJk6ZWv1BzLLmef0sEY3x8HgS5dBUZCrCLdpFBnp
+ OLcwhaoCcjdJOgdbO8vpgfB4sSUE1BxmX+vubM68pKP3Zs+9GFZ5OUogktS2j2Xo5AfL
+ os5AjpkjPli8xr1TYoHT+9OHJe1voGfWqKjyyW/k678BbY+Iu479rYQawWVfuQm2afiC
+ z9bw==
+X-Gm-Message-State: AOJu0YyX/sQov47dJEdiOW2PYFrhMdETud86tp7FMNPaEyBzr9G77y7F
+ WL6nae4/dx6xQSk8pNyHMypwuV2mcQZx4gxoyerEYXON1EuM8OYZ2A4qII7rqX6JA3TWOUNvstS
+ Ij72a
+X-Gm-Gg: AY/fxX4U1GH71u4Y7FUq83Axce52f3+9LykLhH3N/23LeZG+cG7ZYpto1ygNsuJIoxG
+ iXC7PerajspjuNLNzcEC/mh1oUtD1XZag6LkJ63u7NXGIMDqVX24zksVgLrTNBhQWbeQg33rf3R
+ yiEsvmjvbXtknX+0bR50/axCoUg8r/NTt53n/gdxvTwlNxYzsVckebW2tTny+4eUjFlkqkm/1Bm
+ opulKVsPRViMji0xabyj768sdyPfEgZqjX/SmrkGsWOVz1JlDT2BDH4ta24DvTRf0ljsK4bA7ZS
+ ngcg8/TNDcVpmN2D24ilOYOy0vOhaRv6Xv8CjsBtH+t5ZjnHAHugRatEtsxKMcHDp++90nfb/F/
+ TVbNb0d/YNayB86luD7B/iwZnXbUGK07jEMAxSwWcS1nAZQlmChz/u9oRfiueyJM+soz6Qpg8oy
+ 2Dh0DlM4//Xs8zKaGyzdKtpDSSI18J++qMksU=
+X-Received: by 2002:a17:907:7b9b:b0:b87:173f:630 with SMTP id
+ a640c23a62f3a-b8792f85a10mr1170661766b.40.1768897448890; 
+ Tue, 20 Jan 2026 00:24:08 -0800 (PST)
 Received: from arch (94.105.116.200.dyn.edpnet.net. [94.105.116.200])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b87959fbefdsm1307568566b.55.2026.01.20.00.24.09
+ a640c23a62f3a-b87959fbefdsm1307568566b.55.2026.01.20.00.24.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 20 Jan 2026 00:24:10 -0800 (PST)
+ Tue, 20 Jan 2026 00:24:08 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Christian Stewart <christian@aperture.us>,
  Julien Viard de Galbert <julien@vdg.name>, Nimai Mahajan <nimaim@gmail.com>
-Date: Tue, 20 Jan 2026 09:24:05 +0100
-Message-ID: <20260120082405.46683-6-thomas.perale@mind.be>
+Date: Tue, 20 Jan 2026 09:24:03 +0100
+Message-ID: <20260120082405.46683-4-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260120082405.46683-1-thomas.perale@mind.be>
 References: <20260120082405.46683-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1768897450; x=1769502250; darn=buildroot.org;
+ d=mind.be; s=google; t=1768897449; x=1769502249; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mwTUSJVlBpdPjvgx+ikPIpOIHLCijJv8t5VI1Dqit3M=;
- b=THVW6pB9OCPiffHig9Y7NVTV27wf80K4Zk75m7LUWap2m9s7KHgVyyGgg073uJjKl5
- WWkZZa2pJgegyTShT1NUuZYr2cviy16VCNujj2hmftyPAwDnYxBn+1xdcyg737aBK02L
- 9G6yparSk/XPYrb3D/9MpnDG0YHRWHDaL5cSM6IYHOc31aoSVvd1jPajadBgTHn7agUO
- G7A9Amt06rxylSz/CTFViusT1jZ15QHTdCjl6FjOSj9+wau2+/Dt2wdsh6i0erMDY6jy
- ZKdglP2n9Psd8VLePwuQGdprLJWjsfqt/BQ0rb5YfMAMIZyTQW5/LlHj++4rwJ5WG2eI
- 3wog==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=MqpG7LSd8+KfEMToOarVuON5b/WrnZ6Y94nngAYvOno=;
+ b=ZRK2QP7rSrXnkGu4o+GCDec1gxnNm3vqXEu0oeri1teqq9zpDjKEANNe7z2oVareCw
+ PBJGRdLmM3Icgu7vn5EvuL3UmSVeyXjsTMl44I93TlqyglAXE8DHm/SNTlHdTF/ZKXe9
+ wNjhbeJqntG5CZHY4aOnaoTEciMeepo9PzHSPT9Sar7miU1C/ejmvYPkbc1TDRicYztr
+ J9/CivKIZmOsmNkhQ/8BvOyIsy7nMemFupwRyXMuQ0mM9q4ckD6qtfY6o594RsP+0N84
+ iW0rM4ODjAnX7ZkylPVMgZPa+0VcbAjR9r8u7Kxvwf6z7H27yXOAjBmK3sM97/JEaRiX
+ Ajtg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=THVW6pB9
-Subject: [Buildroot] [PATCH 6/6] package/libucl: add CPE
+ header.a=rsa-sha256 header.s=google header.b=ZRK2QP7r
+Subject: [Buildroot] [PATCH 4/6] package/easy-rsa: add CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,31 +129,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE `vstakhov:libucl` is a valid CPE for the package libucl.
+The CPE `openvpn:easy-rsa` is valid for the EasyRsa package. The last
+CVE is CVE-2024-13454 [1] that is reference in the upstream bug tracker
+[2].
 
-See the latest CVE: CVE-2025-6499 [1] that reference the upstream
-repository.
-
-[1] https://nvd.nist.gov/vuln/detail/CVE-2025-6499
+[1] https://nvd.nist.gov/vuln/detail/CVE-2024-13454
+[2] https://github.com/OpenVPN/easy-rsa/issues/1122
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libucl/libucl.mk | 2 ++
+ package/easy-rsa/easy-rsa.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
-index bf5e368f2b..7b0e5b8e8c 100644
---- a/package/libucl/libucl.mk
-+++ b/package/libucl/libucl.mk
-@@ -12,6 +12,8 @@ LIBUCL_LICENSE = BSD-2-Clause
- LIBUCL_LICENSE_FILES = COPYING
- LIBUCL_DEPENDENCIES = host-pkgconf
+diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
+index 7266943f5b..2d70dfd05f 100644
+--- a/package/easy-rsa/easy-rsa.mk
++++ b/package/easy-rsa/easy-rsa.mk
+@@ -10,6 +10,8 @@ EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/v$(EASY_RS
+ EASY_RSA_LICENSE = GPL-2.0
+ EASY_RSA_LICENSE_FILES = COPYING.md gpl-2.0.txt
  
-+LIBUCL_CPE_ID_VENDOR = vstakhov
++EASY_RSA_CPE_ID_VENDOR = openvpn
 +
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBUCL_DEPENDENCIES += libcurl
- LIBUCL_CONF_OPTS += --enable-urls
+ # shell script, so no build step
+ 
+ define EASY_RSA_INSTALL_TARGET_CMDS
 -- 
 2.52.0
 
