@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75BD6C44506
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 18:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89316C44506
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 18:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B21785462;
-	Wed, 21 Jan 2026 18:17:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 407454710A;
+	Wed, 21 Jan 2026 18:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bw_WQmZ6Ohy1; Wed, 21 Jan 2026 18:17:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QWXRgzmGot_y; Wed, 21 Jan 2026 18:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63D5285465
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CF2846FD7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769019439;
-	bh=FaH5pqtGAt99FjqNODDQKz4+GebbdRfZGf29EHRu8yA=;
+	s=default; t=1769019440;
+	bh=38z5V007jT7hpVWT0cUuTcqIVG9mxLM5FwAqXPWLAwI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oMvUk05aq4yY8ZaVvXHaHn8B2hTuo+PyFSHtRWQblrsknvYbtWhhtBmZ+I3cysNXM
-	 qnxlhMua6r86z5m5sERdGR/hvmZ9Ncrl4Jq1Z1sqySrqAymGHbY9PhsRrVo2Gm6Xt/
-	 wlRjw54oTi5ZYyEeqPfHxquV5tLAW4alkthMQU0LwhAD/XBIQ51n9XCSFsSfhdI4fu
-	 Iim6LFZQXkkttYQCM09JDNPus6lKXRUsg666eYqSeN8JnA39qNBtukN5n3Nmz7xh+J
-	 zKA3GAtoJ497joh6vlYjvsz0iGrlQEQMixsdGk1mb0WJRbYQYtu+g8HSxww3Eljt4S
-	 8CU7MTeCrlNYg==
+	b=jiA+uTiWy9z9I1w3xaOUYcZmoYlo/74izkPDjDEgjiMv4p2VJ4kp+AFqZr3bj06Xw
+	 HlfS5LBqdvI892IWm9OKX6MFPn5W9ofEPNYt9W39W8WCCL8fQEazQPf9te2njNfXmV
+	 2dndnQCpqPvCv4UedlIURzvqenAYnCyDu4L8D9ieNDUsLWuvF14JE/5bQ75LS/gL23
+	 xwZn3dmbDqGHfXkVHHDmjLKguPM25nrxpGL9lUJ7vxosLZ4rRAJ0wR6ffkCO2bJRzf
+	 EdHCljQlWGabN0STJ56sOM/QK4D3Zq2IxCdBpEzY9FPtmzHt01J6CyBY+2JAknT9GS
+	 3s7f1lQH58QMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63D5285465;
-	Wed, 21 Jan 2026 18:17:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BB2934F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF2846FD7;
+	Wed, 21 Jan 2026 18:17:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 936A8160
  for <buildroot@buildroot.org>; Wed, 21 Jan 2026 18:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B2BB6F824
+ by smtp4.osuosl.org (Postfix) with ESMTP id 745CB45FD7
  for <buildroot@buildroot.org>; Wed, 21 Jan 2026 18:17:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GnNGzH5VuM4a for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EhfIBYHjPLlX for <buildroot@buildroot.org>;
  Wed, 21 Jan 2026 18:17:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D5C6F81F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64B4440C62
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69D5C6F81F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64B4440C62
  for <buildroot@buildroot.org>; Wed, 21 Jan 2026 18:17:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 591E4873ED; Wed, 21 Jan 2026 18:17:16 +0000 (UTC)
+ id 50632873EC; Wed, 21 Jan 2026 18:17:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Jan 2026 19:13:45 +0100
+Date: Wed, 21 Jan 2026 19:13:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f9a40c726f54df86382b10bcc74e81c487d7410f
-X-Git-Newrev: 51a10663580833388e10941e1ec70376a1b1d5bc
+X-Git-Oldrev: 4fa6ab7b8f3091652af03093e48e9c1bd1291b96
+X-Git-Newrev: f9a40c726f54df86382b10bcc74e81c487d7410f
 X-Patchwork-Hint: ignore
-Message-Id: <20260121181716.591E4873ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: fix 'bootloader' typo
+Message-Id: <20260121181716.50632873EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: fix 'architectures' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,7 +76,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51a10663580833388e10941e1ec70376a1b1d5bc
+commit: https://git.buildroot.net/buildroot/commit/?id=f9a40c726f54df86382b10bcc74e81c487d7410f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Found by codespell.
@@ -84,31 +84,22 @@ Found by codespell.
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/uboot/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 22a5c35821..29f3f40b1b 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -685,7 +685,7 @@ config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
- 	string "Custom psu_init_gpl file"
- 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
- 	help
--	  On ZynqMP the booloader is responsible for some basic
-+	  On ZynqMP the bootloader is responsible for some basic
- 	  initializations, such as enabling peripherals and
- 	  configuring pinmuxes. The psu_init_gpl.c file (and,
- 	  optionally, psu_init_gpl.h) contains the code for such
-@@ -722,7 +722,7 @@ config BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE
- 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
- 	depends on BR2_TARGET_UBOOT_ZYNQ
- 	help
--	  On Zynq the booloader is responsible for some basic
-+	  On Zynq the bootloader is responsible for some basic
- 	  initializations, such as enabling peripherals and
- 	  configuring pinmuxes. The ps7_init_gpl.c file (and,
- 	  optionally, ps7_init_gpl.h) contains the code for such
+diff --git a/linux/Config.in b/linux/Config.in
+index 96efbe5678..3a1852c7e9 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -473,7 +473,7 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
+ 	  match the vendor subdirectory used by the board in the kernel
+ 	  (e.g. arch/arm64/boot/dts/rockchip/).
+ 
+-	  While most architechtures make use of vendor subdirectories,
++	  While most architectures make use of vendor subdirectories,
+ 	  like arm, arm64 and riscv, some architectures like powerpc
+ 	  and xtensa do not.
+ 	  In this case, BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should point to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
