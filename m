@@ -4,108 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EA2FC44502
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 08:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A67EC44501
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 08:41:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0ABE40372;
-	Wed, 21 Jan 2026 08:41:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24C97403FB;
+	Wed, 21 Jan 2026 08:41:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X5t9TUiasjLQ; Wed, 21 Jan 2026 08:41:00 +0000 (UTC)
+ id KuKNB0Mn2uBJ; Wed, 21 Jan 2026 08:41:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C52F041462
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30F3841455
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768984860;
-	bh=uVy9Od1PXmFKeFGqUibIBr8bwi5bxuKZXki/4nWHous=;
+	s=default; t=1768984916;
+	bh=l414/mdOam1D8P75YNHOnxJvXVzz0ckT111L2g15xxo=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=LxMLg4A1fW7Pgg+dtJursrjJgnsNulVrQiWh1L05fnX3MRrIHUGDiEt2EhOP6IkJz
-	 e3rkReWZk0cT3hKjI8fBCN3FHLtzRFHrFVaf9bVbFFydIkgQ81osrculsIbyLMe3Dw
-	 LKmXvoM/sY8obroZxgMmkGWWr1NqgAh5TPX4fBsXs5y506INOPHOjOuyS84zQzzZx7
-	 xaBgD81120JJloOEy9vPxW7rdAY8vAmLyir1hlK5Q9i09rVKwWT6XsasCxDznuhjSK
-	 i3LG2gNZKjFM9QbC3jZyEjZ+gTVDIT3uxip13hYtQ53ElOel1qPqzrV7Z8YmgpIpiI
-	 d9Wo8QJiA4wMA==
+	b=a2WVlWm5Hfs8Jx9ek3fb2HeB08GN6ZyUpldfYDIYTPKRDtCJUTyk4cHX2x6BsRheA
+	 T9JDSjoEnEgLwiE1U7KO4SpOT9N3dfFwnD7E/GmsFRJ96gIqqIWd8a9l8rCYQ+uCpB
+	 /roZnXz64tCwmhSPM7+mIeJJC7hgzNlqYj9QCB1sok1ZWVWRjJQLUeNKx5rJMGdHM+
+	 L3pONkVUDBbyrd5b87aGxtnCOQyFO/Yp+bDU8TL/Fl6KnnL4MszwhGCH98vHZbE4au
+	 svXjFpa174l9ZdrTtHkzoJfnGnkpRRG+NzO8amQKYYxX0A3J3vvVP7TZg2ylItVjrB
+	 26xpl1gWxz0cg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C52F041462;
-	Wed, 21 Jan 2026 08:41:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C695E160
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:40:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30F3841455;
+	Wed, 21 Jan 2026 08:41:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F4138160
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B599940C3F
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:40:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA99D610FB
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:41:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Q34s2YZUMhc for <buildroot@buildroot.org>;
- Wed, 21 Jan 2026 08:40:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o6Jat3zvRRM7 for <buildroot@buildroot.org>;
+ Wed, 21 Jan 2026 08:41:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=nolange79@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BF42C40C3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF42C40C3E
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BF42C40C3E
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:40:55 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-47ee974e230so49418615e9.2
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 00:40:55 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 04669610F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04669610F9
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 04669610F9
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:41:53 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-4359249bbacso334552f8f.0
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 00:41:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768984854; x=1769589654;
+ d=1e100.net; s=20230601; t=1768984912; x=1769589712;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Smjl9mpfwWBc9S6caPgoUqqmpBds5OfAewF0yqugLrM=;
- b=wMs5fU8lJwEEFOb/9DtSD1IncJhA96mXqJc6UvAnDvmffNk7lBiBw5B7WnsVvxL9aK
- IAM+7fX4lv5/Z/y2850uOwAWBGVfJVfMbLpcTsj7kNQdBlAlFSwj1zQ+yyeWqWE+Y0/i
- V7W1U/5kY/opV0urfGCESa/TygTEa3NM2Zsze0wvr3GQIDkdBhkhW9gNXnt6a71R1W+E
- +UghcQvB7vHgNdJXFBvJXjL8PGP1JCaEhBaIrZbCFYRuR+4bydKso2ZqG0FVkxnWfHIV
- g9BgRs1TFWMfTk5W61Fp0HtBgnSh2b8Mxh5aIVaZzCh0QMlCAqvxQ6Qj6bVfyo0yiFF5
- fwVg==
-X-Gm-Message-State: AOJu0YxTL2GGVykY6abQr7h0yqvOgXQ+101URMybSBNuT4IPDnJZW2T7
- rmf9FUT99F2OtZ3ZNKs0nNRAm45+YtGnMskQIrtC8vDsw0B1jaURMXJMEZFwlw==
-X-Gm-Gg: AZuq6aKa48ivg3X/2Ibao8CINPsBze97b/qiBPtlsQVqxFc3ZxMUqVS0S6RBsmNfXDB
- 9FOKYjSxUhbE63CDChFm7cCgG46W0GzuVmEC1JwgMLHZFpLnLsZdGuXDY8Cxa7MoVtdvvDhkSbl
- 8Y+r9paAD+9y5MAsBvAkbGRYuaNEFnJyAhgRZLPzp0fzJBg9m8auZJpvjqKUdJxB67rPwsT/5I7
- RRslcsQGHsvbcfPA0Fk1CBfHZ96SYdJ4DVu2HNYS5j+soW5+KtO0lMMsSI18I+d9C7mTu3i07Rp
- 9TEe8SnmHQsblxqa4kgNqsJDGAUraz02p96kcnTHjTL/A39vuHU6PLvbJDjxyG2NHiyjTLv/mYE
- 98ulyDT1pqB0xfrXhoBqTUQIt8dSFU9jT0lAk5yHbL4Vq/dpdSOCXBzsFLxim65dFVMydPmv7t+
- UAnXEN7GE6K8EwCFLAiyOnyH1dhTlkQfRdFwO7FuwKoUU=
-X-Received: by 2002:a05:600c:3e0d:b0:479:3a86:dc1c with SMTP id
- 5b1f17b1804b1-4803e803c1amr74375095e9.36.1768984853495; 
- Wed, 21 Jan 2026 00:40:53 -0800 (PST)
+ bh=lZdDyxRkSAi8JGi9Ufw2kaw7OR4jL8lpi28NmwpB/6s=;
+ b=Wkd6iRk3sPcmoeTxvuxM74b/DQ8cFx+gC56e+9cgZ3AskPI3QYucjw94MO5za/myUG
+ DfEBBlKPYjFXuTGBKjyGfN2SLOXtGoazXGuwmsTmEpgYyj0czy+/H0nFrBFKpaWymhMG
+ JHmnU4vmnRN1rfHAnYaBKL0z9xRPK6ydLWpJoe9YZzZ0qKBNAJh3Lqn01AMhI7FRWQRU
+ Iu24uAlW9jxKdoOjCKEXw0TccF4RgnbDPAEz/RuIvwzypK5TtKaM5kVwA6ypZP5d4jHK
+ LqVK258j3xulX2spCo5juopGuAtmFahMdboLUAd2qvdE/K7I98zMsb3oXbqjb9KllnY/
+ c+Ww==
+X-Gm-Message-State: AOJu0YxRnRVg1codYcqZuyzRBzAZp2yKmv9CNqCMekQAJJFMANMxlSNq
+ xvCAZ/6DLxtvRajl7ufFkhiwJYmK+3mdyXhe0iTPO5w+VBNLq7JJxPjh/cZnrw==
+X-Gm-Gg: AZuq6aIZHkQiqQ1sXNemXDEZGE4mjG+suvFuBqhaXkLRvQZYx28ActVANErf0q04idM
+ 6GDbdVj6Zk4V6LHjXGxtk/UMLZuxUReLcoh+z9TjhuaW+phRPbkl0huYtb+jS1csUqFdBQHM0j+
+ zfJ/Dv/UnZca/iWFkwa6wqMiPNrZK/6yA2c1Bl6Yyj0xWLMi0W3rovn+mUXXmH6O4txYso8Rhlu
+ cms6XKXukvuK6S/+ISSyUVwcfztX9kscgT2OvkZkXwhb7AhD/x5PC4LMMBdyqI1J1cfCd2FpyCn
+ u1E0zW6PCc9TPP490+9kWGuttsZlAoAC1n16rIFn8oToHHANOJ3it6CXEYyWEaT6udnjIgQ9/sU
+ FzLSLTPRsuksjqj5LFrxAcIcPlxRxVNu5hBeiG3W3JM5PWnSdOzZMcbHSo6bjbi0ajt7ynGytcP
+ 3JUyyfZ6UPvclhxOgwGtS8K89YGxZvvZgkpjBBNy6V63D6NJpIufupEA==
+X-Received: by 2002:a05:6000:4387:b0:431:2ff:128f with SMTP id
+ ffacd0b85a97d-4356953f817mr26012133f8f.6.1768984911865; 
+ Wed, 21 Jan 2026 00:41:51 -0800 (PST)
 Received: from vcllano-01.. ([80.120.136.76]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4804249be6dsm17011735e9.2.2026.01.21.00.40.52
+ ffacd0b85a97d-43569921dddsm36249438f8f.6.2026.01.21.00.41.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 21 Jan 2026 00:40:52 -0800 (PST)
+ Wed, 21 Jan 2026 00:41:51 -0800 (PST)
 From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
 Cc: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 21 Jan 2026 09:40:48 +0100
-Message-ID: <20260121084049.3613479-1-nolange79@gmail.com>
+Date: Wed, 21 Jan 2026 09:41:48 +0100
+Message-ID: <20260121084148.3613545-1-nolange79@gmail.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1768984854; x=1769589654; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1768984912; x=1769589712; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Smjl9mpfwWBc9S6caPgoUqqmpBds5OfAewF0yqugLrM=;
- b=hPAZ1g2q8tGAt1xnjC8SoL44HjILyqKSPbk+tOsjthtPXJz2KpaybaVTekirrgxvOU
- n9+lLrr73hu/iNIM8tAg1AQpYtGHxxVfv/kHQzJTYTpCoBuZPVl2q4vjqPpNejzVQK3O
- z6OXJM21vEuRNT7waojbgpKFzH/531aVdXeMFeEkpLJf8vzifyr94w4pmfk3R7d8lEsE
- KXUlveFtrPEBw+M3bJMjwtx/7dLcd0Hsvup8dMyb9EHhPDDDurCZ+EXwHiOGgCfjo/sp
- P7W9qLBuFTAJRnA1Q5PX8T03DGP2hcI/0W8yPwphACP0BcQ7wRqwjivAs7P8LGz+sjZC
- noqA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lZdDyxRkSAi8JGi9Ufw2kaw7OR4jL8lpi28NmwpB/6s=;
+ b=SvN12QUMzD7wCsRstm+JOIJWl0TP1zc+qn/H0FcsKpEZDezpTKlVhqorsXY3+borOU
+ 1saQ1GDg4IWq3Bj33GxitgcgoCxy5oj0qgJPiuvMY+77Xhm0jrX4wWtuP8qP/y4GelY3
+ ZkW2P6IbLhi68cmQ9R4Pz13YMkteMhXSb2EG/v+eJvAK9ytV6eF9tZUF+WuVvhyk1bz5
+ euY/P/kPreUudzOWCoXZaBUJmz4KMV668n6ichJQGuFwnMS8T4DB3wbXstRUqL6xjfE+
+ Smy2ngRTQcxBHm88nk+UgOLQgOsGfvKhTwRYirCuWiqakU6zZIQbFqcSChhP5QPERt5u
+ rHtg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=hPAZ1g2q
-Subject: [Buildroot] [PATCH 1/1] package/dbus-broker: bump version to 37
+ header.s=20230601 header.b=SvN12QUM
+Subject: [Buildroot] [PATCH 1/1] package/dbus-broker: install dbus.socket
+ for session bus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,38 +123,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/bus1/dbus-broker/releases/tag/v37
+The unit file for the per-user session bus was missing,
+copy the file from the dbus package and install it.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/dbus-broker/dbus-broker.hash | 2 +-
- package/dbus-broker/dbus-broker.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dbus-broker/dbus-broker.mk   | 5 +++++
+ package/dbus-broker/dbus-user.socket | 6 ++++++
+ 2 files changed, 11 insertions(+)
+ create mode 100644 package/dbus-broker/dbus-user.socket
 
-diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
-index fd4f43d16e..f4abd668d3 100644
---- a/package/dbus-broker/dbus-broker.hash
-+++ b/package/dbus-broker/dbus-broker.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  d333d99bd2688135b6d6961e7ad1360099d186078781c87102230910ea4e162b  dbus-broker-36.tar.xz
-+sha256  f819a8db8795fa08c767612e3823fd594694a0990f2543ecf35d6a1a6bf2ab5b  dbus-broker-37.tar.xz
- sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
- sha256  ce7b8b8fb05126e556b3f9ed97fe21aa654e4ff411c00a9fd219ecbaae26abe0  subprojects/libcdvar-1/AUTHORS
- sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
 diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index 0bbdd304af..7e029879f9 100644
+index 7e029879f9..b3723a1114 100644
 --- a/package/dbus-broker/dbus-broker.mk
 +++ b/package/dbus-broker/dbus-broker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -62,8 +62,13 @@ define DBUS_BROKER_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/share/dbus-1/system.conf
+ 	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/dbus.socket \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/dbus.socket
++	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/dbus-user.socket \
++		$(TARGET_DIR)/usr/lib/systemd/user/dbus.socket
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/user/sockets.target.wants
+ 	$(HOST_MAKE_ENV) ln -sf ../dbus.socket \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/sockets.target.wants/dbus.socket
++	$(HOST_MAKE_ENV) ln -sf ../dbus.socket \
++		$(TARGET_DIR)/usr/lib/systemd/user/sockets.target.wants/dbus.socket
+ endef
  
--DBUS_BROKER_VERSION = 36
-+DBUS_BROKER_VERSION = 37
- DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
- DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
- 
+ $(eval $(meson-package))
+diff --git a/package/dbus-broker/dbus-user.socket b/package/dbus-broker/dbus-user.socket
+new file mode 100644
+index 0000000000..dc5ed8995d
+--- /dev/null
++++ b/package/dbus-broker/dbus-user.socket
+@@ -0,0 +1,6 @@
++[Unit]
++Description=D-Bus User Message Bus Socket
++
++[Socket]
++ListenStream=%t/bus
++ExecStartPost=-/usr/bin/systemctl --user set-environment DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus
 -- 
 2.47.3
 
