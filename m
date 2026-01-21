@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C77C44536
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 20:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9808BC44508
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 20:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E126F60B61;
-	Wed, 21 Jan 2026 20:44:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B97F81366;
+	Wed, 21 Jan 2026 20:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AvPQWqM1cu89; Wed, 21 Jan 2026 20:44:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WRquPHw9Prh9; Wed, 21 Jan 2026 20:44:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F7D260B68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DE40812FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769028296;
-	bh=+mN1rjG30ZkoPVqwtALVfMtHebePGdtWR5r3sxS6Jhc=;
+	s=default; t=1769028297;
+	bh=fCXafittgyHv1qnu1hsN5wOysaV89BEsy8vWI/i9Dmg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=buHS2PBXVhsh84A3var8VSgUh7H7dVrbQ2DgJhxGyGAg8gcJpNKvHtwQZhlJQsGrb
-	 JZvrVtM8ZErsR9u4LQ3sm61MfgkH5oBKIWuTk7flTMEsnSwApWGy1EKs2hGCBqbBN0
-	 ujG0KbeQPsNUkkrw5Y3kA21fIL869T5fY0ake4pWHi04UGp9hc0V09rHMlLIECpRQE
-	 PBMFoE/7fupz9tMO6lgYno7yrl+gwgQF7V3ivYGxT3mmi7tGGk2J6lAPzApI51jtDj
-	 181q3Z6WHKcPy0nX36H1TODbU3JCXdT3NwmuWvLZui6RxFlUnKNLTwymwEO4pPNg+x
-	 U6GsZ993oe44Q==
+	b=Kl4ia9h0y9ic2pvtX3V4w5NSiaX4PorfwQcio8PBYH/6OEO6IFvVJgMlXTCJv0Bmy
+	 0cfLjUAxYg1iQTptF/YqV7x1mz7KEUAVOjXgOclKzAiu8ie1CXyl7iE22Q6w6T1IHf
+	 rdSpABzJnJTBRavqLWcJD/3LvfK260wUAMnXmffOLLgQg2Q0MADipzGoOY8U/y2yOt
+	 SsUxRgpyviN2T4hKqgiHUkYNwTjiZ/wS2QAB4q6S/W6YT3mdrckac+yGgqhaC5xJO4
+	 Hwb/tZE8EHMKizuIt/R1XMRtgtqR3mz8jDspAUU0Ovx/S2Z+Jj7ouGeGNRuiPf1Szc
+	 w1SqPtjzlPHFA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F7D260B68;
-	Wed, 21 Jan 2026 20:44:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DE40812FF;
+	Wed, 21 Jan 2026 20:44:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BC763158
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 20:44:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C2137158
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 20:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA89A40C6E
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 20:44:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C23C40C6C
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 20:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2D0grOeiWiKs for <buildroot@buildroot.org>;
- Wed, 21 Jan 2026 20:44:45 +0000 (UTC)
+ id GrhM52q1CQE0 for <buildroot@buildroot.org>;
+ Wed, 21 Jan 2026 20:44:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC48D40C6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE35440C6F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC48D40C6C
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE35440C6F
  for <buildroot@buildroot.org>; Wed, 21 Jan 2026 20:44:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BFC2874AD; Wed, 21 Jan 2026 20:44:45 +0000 (UTC)
+ id D7A10874AF; Wed, 21 Jan 2026 20:44:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Jan 2026 21:05:54 +0100
+Date: Wed, 21 Jan 2026 21:06:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3a6e2b4a0395f6e049cd847cf16406a4d0d998ad
-X-Git-Newrev: 62648d98926cc96c680ce4698bb631188b2f72d9
+X-Git-Oldrev: 5978e0157be195e7712f1cb9b01929968b30f5fc
+X-Git-Newrev: a0a6abc8b193e5bdab5326324d7299c19d5d8c67
 X-Patchwork-Hint: ignore
-Message-Id: <20260121204445.9BFC2874AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-numpy: bump version to 2.4.0
+Message-Id: <20260121204445.D7A10874AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: bump version to 3.14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,303 +71,653 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5578875023007346927=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5578875023007346927==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=62648d98926cc96c680ce4698bb631188b2f72d9
+commit: https://git.buildroot.net/buildroot/commit/?id=a0a6abc8b193e5bdab5326324d7299c19d5d8c67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://numpy.org/news/
+https://www.python.org/downloads/release/python-3142/
+https://docs.python.org/release/3.14.2/whatsnew/changelog.html
 
-Add new supported architectures.
+Rebased all patches.
 
-License hash changed due to date update:
-https://github.com/numpy/numpy/commit/c1ffdbc0c29d48ece717acb5bfbf811c935b41f6
+Added patch 0010 to fix build error reported by Julien:
+https://gitlab.com/jolivain/buildroot/-/jobs/12589702787
 
-We need to build python-numpy with its vendored version of meson as
-it currently relies on features that are not yet upstream. To do this
-we can simply set the PYTHONPATH with the vendored meson path before
-the normal PYTHON3_PATH so that the vendored version will have
-precedence. We need to set this for both host and target numpy.
+Kodi added the same patch:
+https://github.com/xbmc/xbmc/blob/master/tools/depends/target/python3/process-vm-ready.patch
 
-We also need to set the architecture specific longdouble_format
-property as numpy is unable to determine the value for this without
-being able to execute target binaries.
-
-See:
-https://github.com/numpy/numpy/blob/3e7e5c3cabb8f1a0d940dc6f2058fed4a8c3e284/doc/source/building/cross_compilation.rst
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Bernd:
- Bumped to 2.4.0
-
- Removed patch which is included in this release.
-
- Updated license hashes due to upstream commits:
- - copyright year bumps:
-   https://github.com/numpy/numpy/commits/v2.4.0/LICENSE.txt
- - file move
-   tools/npy_tempita/license.txt -> numpy/_build_utils/tempita/LICENSE.txt
-   https://github.com/numpy/numpy/commit/63a1fee8d1c1e442aa8ca08ac7cefb195f99b2a9
-   https://github.com/numpy/numpy/commit/86940987a9d8d54c860d8c862d5d96c51b339f23
- - directory move core -> _core and various code updates
-   https://github.com/numpy/numpy/commits/v2.4.0/numpy/_core/src/multiarray/dragon4.c
- - directory move core -> _core
-   https://github.com/numpy/numpy/commits/v2.4.0/numpy/_core/include/numpy/libdivide/LICENSE.txt
-
- Following Romain's review
- https://lists.buildroot.org/pipermail/buildroot/2024-November/767739.html
- host-python-numpy was switched back to host-python-package to install the
- f2py script needed by the upcoming bump of python-scipy. A dependency to
- host-python-meson-python is also needed.
-
- Removed PYTHON_NUMPY_LONGDOUBLE_FORMAT configure option for BR2_arceb
- after this arch was removed from buildroot.
-
- Changed path in PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES following
- upstream commit
- https://github.com/numpy/numpy/commit/923f219077c8aa3ad7d3792d8c06cba010b70252
- and updated opencv4 as well]
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/opencv4/opencv4.mk                         |  2 +-
- .../0001-MNT-do-not-use-long-type.patch            | 34 ----------
- package/python-numpy/Config.in                     |  6 ++
- package/python-numpy/python-numpy.hash             | 13 ++--
- package/python-numpy/python-numpy.mk               | 76 +++++++++++++++++++---
- 5 files changed, 80 insertions(+), 51 deletions(-)
+ ...1-Make-the-build-of-pyc-files-conditional.patch | 14 +++---
+ .../0002-Add-an-option-to-disable-pydoc.patch      | 18 +++----
+ .../0003-Add-an-option-to-disable-IDLE.patch       | 18 +++----
+ ...e.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch | 12 +++--
+ ...-Add-option-to-disable-the-sqlite3-module.patch | 16 ++++---
+ ...06-Add-an-option-to-disable-the-tk-module.patch | 28 +++++------
+ ...dd-an-option-to-disable-the-curses-module.patch | 16 ++++---
+ .../0008-Add-an-option-to-disable-expat.patch      | 14 +++---
+ ...gure.ac-detect-unusable-termio-operations.patch |  8 ++--
+ ...ix-compilation-of-Modules-_remote_debuggi.patch | 55 ++++++++++++++++++++++
+ package/python3/python3.hash                       |  8 ++--
+ package/python3/python3.mk                         |  4 +-
+ 12 files changed, 141 insertions(+), 70 deletions(-)
 
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index d31d0ae598..695355c308 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -400,7 +400,7 @@ OPENCV4_CONF_OPTS += \
- 	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/bin/python3 \
- 	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR).so \
--	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
-+	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/_core/include \
- 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV4_DEPENDENCIES += python3
-diff --git a/package/python-numpy/0001-MNT-do-not-use-long-type.patch b/package/python-numpy/0001-MNT-do-not-use-long-type.patch
-deleted file mode 100644
-index d813a4d51b..0000000000
---- a/package/python-numpy/0001-MNT-do-not-use-long-type.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 6dc2fd31f8a5a4ef502cb7734f004f5bce94e671 Mon Sep 17 00:00:00 2001
--From: Thomas A Caswell <tcaswell@gmail.com>
--Date: Sat, 18 Nov 2023 16:46:52 -0500
--Subject: [PATCH] MNT: do not use `long` type
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Removed as type at language level 3 in ed7e95912b6ed7d20e190fbf1aecb9f2a997d479
--in cython
--
--Upstream: https://github.com/numpy/numpy/commit/6dc2fd31f8a5a4ef502cb7734f004f5bce94e671
--
--Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-----
-- numpy/random/_generator.pyx | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/numpy/random/_generator.pyx b/numpy/random/_generator.pyx
--index d067e795eb5c..ae481d69d696 100644
----- a/numpy/random/_generator.pyx
--+++ b/numpy/random/_generator.pyx
--@@ -3757,7 +3757,7 @@ def multivariate_normal(self, mean, cov, size=None, check_valid='warn',
-- 
--         if size is None:
--             shape = []
---        elif isinstance(size, (int, long, np.integer)):
--+        elif isinstance(size, (int, np.integer)):
--             shape = [size]
--         else:
--             shape = size
---- 
--2.49.1
--
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index e10618f058..f8c71274cd 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -3,15 +3,21 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	# Numpy has some CPU specific code
- 	default y if BR2_arc
- 	default y if BR2_aarch64
-+	default y if BR2_aarch64_be
- 	default y if BR2_arm
- 	default y if BR2_armeb
- 	default y if BR2_i386
-+	default y if BR2_m68k
- 	default y if BR2_mips
- 	default y if BR2_mipsel
-+	default y if BR2_or1k
- 	default y if BR2_powerpc
- 	default y if BR2_powerpc64
-+	default y if BR2_powerpc64le
- 	default y if BR2_riscv
- 	default y if BR2_sh
-+	default y if BR2_sparc
-+	default y if BR2_sparc64
- 	default y if BR2_x86_64
+diff --git a/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch b/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
+index 30ad4146c5..dbc3c60d87 100644
+--- a/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
++++ b/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
+@@ -15,16 +15,18 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Makefile.pre.in | 2 ++
+  configure.ac    | 7 +++++++
+  2 files changed, 9 insertions(+)
  
- config BR2_PACKAGE_PYTHON_NUMPY
-diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-index 6629cebbce..6dca37294a 100644
---- a/package/python-numpy/python-numpy.hash
-+++ b/package/python-numpy/python-numpy.hash
-@@ -1,8 +1,9 @@
--# Copied from https://github.com/numpy/numpy/releases/tag/v1.25.0
--sha256  f1accae9a28dc3cda46a91de86acf69de0d1b5f4edd44a9b0c3ceb8036dfff19  numpy-1.25.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/numpy/json
-+md5  828b6c6df0b6f89b5cf799314d4ee2b6  numpy-2.4.0.tar.gz
-+sha256  6e504f7b16118198f138ef31ba24d985b124c2c469fe8467007cf30fd992f934  numpy-2.4.0.tar.gz
- # License files, locally calculated
--sha256  1034d3bd61783f3b5e7ec3e7ca818f4da4135132323a0ef99f4c0edb3c7f6bd2  LICENSE.txt
--sha256  c27d0a8026bdb8876562b720ab24d1688e3827a89f6083cd6e7e8caa9584aba3  numpy/core/src/multiarray/dragon4.c
--sha256  fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec  numpy/core/include/numpy/libdivide/LICENSE.txt
-+sha256  1be1df33863f97a7bc1c4d67980bd6c69c9a6fef0a5ee76e6ad6cb91e56e8491  LICENSE.txt
-+sha256  743b0f4a0087fe3607167113fffab6f2ca069c8da321763697ab5d0d8411634a  numpy/_build_utils/tempita/LICENSE.txt
-+sha256  e09cfef237f1c47fec6c11926e23ed2222404d1e4357b5d65e65a2daf9d83949  numpy/_core/src/multiarray/dragon4.c
-+sha256  fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec  numpy/_core/include/numpy/libdivide/LICENSE.txt
- sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55  numpy/linalg/lapack_lite/LICENSE.txt
--sha256  badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e  tools/npy_tempita/license.txt
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 200fac20a1..6b052569fe 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -4,25 +4,28 @@
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index a7dc9709d62..a1d460b36f4 100644
++index 08ad5f4921d..486a35ed99b 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2570,6 +2570,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
++@@ -2812,6 +2812,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
+  		patch --force --reject-file "$(abs_builddir)/app-store-compliance.rej" --strip 2 --directory "$(DESTDIR)$(LIBDEST)" --input "$(abs_srcdir)/$(APP_STORE_COMPLIANCE_PATCH)" || true ; \
+  	fi
+  	@ # Build PYC files for the 3 optimization levels (0, 1, 2)
+@@ -32,7 +34,7 @@ index a7dc9709d62..a1d460b36f4 100644
+  	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+  		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-o 0 -o 1 -o 2 $(COMPILEALL_OPTS) -d $(LIBDEST) -f \
+-@@ -2579,6 +2580,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
++@@ -2821,6 +2822,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
+  		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-o 0 -o 1 -o 2 $(COMPILEALL_OPTS) -d $(LIBDEST)/site-packages -f \
+  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+@@ -41,10 +43,10 @@ index a7dc9709d62..a1d460b36f4 100644
+  # bpo-21536: Misc/python-config.sh is generated in the build directory
+  # from $(srcdir)Misc/python-config.sh.in.
+ diff --git a/configure.ac b/configure.ac
+-index 597a44b331a..edac73ec5d3 100644
++index bd4446e9488..ad0781f9ee6 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1513,6 +1513,13 @@ fi
++@@ -1533,6 +1533,13 @@ fi
+  
+  AC_MSG_CHECKING([LDLIBRARY])
+  
+@@ -59,5 +61,5 @@ index 597a44b331a..edac73ec5d3 100644
+  # library that we build, but we do not want to link against it (we
+  # will find it with a -framework option). For this reason there is an
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0002-Add-an-option-to-disable-pydoc.patch b/package/python3/0002-Add-an-option-to-disable-pydoc.patch
+index 6692561971..294520f815 100644
+--- a/package/python3/0002-Add-an-option-to-disable-pydoc.patch
++++ b/package/python3/0002-Add-an-option-to-disable-pydoc.patch
+@@ -18,16 +18,18 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Makefile.pre.in | 9 ++++++++-
+  configure.ac    | 6 ++++++
+  2 files changed, 14 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index a1d460b36f4..81f3fd54ee4 100644
++index 486a35ed99b..c3732bedb30 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2281,7 +2281,9 @@ bininstall: commoninstall altbininstall
++@@ -2513,7 +2513,9 @@ bininstall: commoninstall altbininstall
+  	-rm -f $(DESTDIR)$(BINDIR)/idle3
+  	(cd $(DESTDIR)$(BINDIR); $(LN) -s idle$(VERSION) idle3)
+  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
+@@ -37,7 +39,7 @@ index a1d460b36f4..81f3fd54ee4 100644
+  	if test "x$(LIPO_32BIT_FLAGS)" != "x" ; then \
+  		rm -f $(DESTDIR)$(BINDIR)/python3-32$(EXE); \
+  		(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-32$(EXE) python3-32$(EXE)) \
+-@@ -2331,7 +2333,6 @@ LIBSUBDIRS=	asyncio \
++@@ -2564,7 +2566,6 @@ LIBSUBDIRS=	asyncio \
+  		logging \
+  		multiprocessing multiprocessing/dummy \
+  		pathlib \
+@@ -45,7 +47,7 @@ index a1d460b36f4..81f3fd54ee4 100644
+  		re \
+  		site-packages \
+  		sqlite3 \
+-@@ -2490,6 +2491,10 @@ TESTSUBDIRS=	idlelib/idle_test \
++@@ -2731,6 +2732,10 @@ TESTSUBDIRS=	idlelib/idle_test \
+  
+  COMPILEALL_OPTS=-j0
+  
+@@ -56,7 +58,7 @@ index a1d460b36f4..81f3fd54ee4 100644
+  TEST_MODULES=@TEST_MODULES@
+  
+  .PHONY: libinstall
+-@@ -2717,7 +2722,9 @@ libainstall: all scripts
++@@ -2959,7 +2964,9 @@ libainstall: all scripts
+  	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
+  	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
+  	$(INSTALL_SCRIPT) $(SCRIPT_IDLE) $(DESTDIR)$(BINDIR)/idle$(VERSION)
+@@ -67,10 +69,10 @@ index a1d460b36f4..81f3fd54ee4 100644
+  		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
+  		echo; echo "Installing support files for building shared extension modules on AIX:"; \
+ diff --git a/configure.ac b/configure.ac
+-index edac73ec5d3..7ed4fa578f3 100644
++index ad0781f9ee6..00d2b54ead5 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -4749,6 +4749,12 @@ AS_VAR_IF([posix_threads], [stub], [
++@@ -4789,6 +4789,12 @@ AS_VAR_IF([posix_threads], [stub], [
+    AC_DEFINE([HAVE_PTHREAD_STUBS], [1], [Define if platform requires stubbed pthreads support])
+  ])
+  
+@@ -84,5 +86,5 @@ index edac73ec5d3..7ed4fa578f3 100644
+  AH_TEMPLATE([ENABLE_IPV6], [Define if --enable-ipv6 is specified])
+  AC_MSG_CHECKING([if --enable-ipv6 is specified])
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0003-Add-an-option-to-disable-IDLE.patch b/package/python3/0003-Add-an-option-to-disable-IDLE.patch
+index afef612d30..3a386b7a29 100644
+--- a/package/python3/0003-Add-an-option-to-disable-IDLE.patch
++++ b/package/python3/0003-Add-an-option-to-disable-IDLE.patch
+@@ -17,16 +17,18 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Makefile.pre.in | 9 ++++++++-
+  configure.ac    | 6 ++++++
+  2 files changed, 14 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index 81f3fd54ee4..2d067730633 100644
++index c3732bedb30..2197bb18434 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2279,7 +2279,9 @@ bininstall: commoninstall altbininstall
++@@ -2511,7 +2511,9 @@ bininstall: commoninstall altbininstall
+  	-rm -f $(DESTDIR)$(LIBPC)/python3-embed.pc
+  	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION)-embed.pc python3-embed.pc)
+  	-rm -f $(DESTDIR)$(BINDIR)/idle3
+@@ -36,7 +38,7 @@ index 81f3fd54ee4..2d067730633 100644
+  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
+  ifeq (@PYDOC@,yes)
+  	(cd $(DESTDIR)$(BINDIR); $(LN) -s pydoc$(VERSION) pydoc3)
+-@@ -2327,7 +2329,6 @@ LIBSUBDIRS=	asyncio \
++@@ -2560,7 +2562,6 @@ LIBSUBDIRS=	asyncio \
+  		ensurepip ensurepip/_bundled \
+  		html \
+  		http \
+@@ -44,7 +46,7 @@ index 81f3fd54ee4..2d067730633 100644
+  		importlib importlib/resources importlib/metadata \
+  		json \
+  		logging \
+-@@ -2495,6 +2496,10 @@ ifeq (@PYDOC@,yes)
++@@ -2736,6 +2737,10 @@ ifeq (@PYDOC@,yes)
+  LIBSUBDIRS += pydoc_data
+  endif
+  
+@@ -55,7 +57,7 @@ index 81f3fd54ee4..2d067730633 100644
+  TEST_MODULES=@TEST_MODULES@
+  
+  .PHONY: libinstall
+-@@ -2721,7 +2726,9 @@ libainstall: all scripts
++@@ -2963,7 +2968,9 @@ libainstall: all scripts
+  	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
+  	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
+  	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
+@@ -66,10 +68,10 @@ index 81f3fd54ee4..2d067730633 100644
+  	$(INSTALL_SCRIPT) $(SCRIPT_PYDOC) $(DESTDIR)$(BINDIR)/pydoc$(VERSION)
+  endif
+ diff --git a/configure.ac b/configure.ac
+-index 7ed4fa578f3..d5dac4bf8bc 100644
++index 00d2b54ead5..5395e82384b 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -7927,6 +7927,12 @@ PY_STDLIB_MOD([xxlimited_35], [test "$TEST_MODULES" = yes], [test "$ac_cv_func_d
++@@ -8189,6 +8189,12 @@ PY_STDLIB_MOD([xxlimited_35], [test "$TEST_MODULES" = yes], [test "$ac_cv_func_d
+  # substitute multiline block, must come after last PY_STDLIB_MOD()
+  AC_SUBST([MODULE_BLOCK])
+  
+@@ -83,5 +85,5 @@ index 7ed4fa578f3..d5dac4bf8bc 100644
+  AC_CONFIG_FILES(m4_normalize([
+    Makefile.pre
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch b/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch
+index c52ff62831..faf990430c 100644
+--- a/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch
++++ b/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch
+@@ -11,12 +11,14 @@ Upstream: N/A
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  configure.ac | 13 ++++++-------
+  1 file changed, 6 insertions(+), 7 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index d5dac4bf8bc..6635aaa134d 100644
++index 5395e82384b..ec9a24c5311 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -95,6 +95,12 @@ AC_DEFUN([PY_CHECK_EMSCRIPTEN_PORT], [
+@@ -32,9 +34,9 @@ index d5dac4bf8bc..6635aaa134d 100644
+  AC_SUBST([BASECPPFLAGS])
+  if test "$srcdir" != . -a "$srcdir" != "$(pwd)"; then
+      # If we're building out-of-tree, we need to make sure the following
+-@@ -7595,13 +7601,6 @@ AS_VAR_IF([ac_cv_libatomic_needed], [yes],
+-            LIBATOMIC=${LIBATOMIC-"-latomic"}])
+- _RESTORE_VAR([CPPFLAGS])
++@@ -7701,13 +7707,6 @@ if test -n "$_PYTHREAD_NAME_MAXLEN"; then
++ fi
++ AC_SUBST([_PYTHREAD_NAME_MAXLEN])
+  
+ -
+ -# stdlib
+@@ -47,5 +49,5 @@ index d5dac4bf8bc..6635aaa134d 100644
+  dnl Modules that are not available on some platforms
+  AS_CASE([$ac_sys_system],
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch b/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch
+index df79837145..77c2f22bc5 100644
+--- a/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch
++++ b/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch
+@@ -14,24 +14,26 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Makefile.pre.in | 5 ++++-
+  configure.ac    | 7 +++++++
+  2 files changed, 11 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index 2d067730633..a45a76cce45 100644
++index 2197bb18434..c8f7ab1e6a9 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2336,7 +2336,6 @@ LIBSUBDIRS=	asyncio \
++@@ -2569,7 +2569,6 @@ LIBSUBDIRS=	asyncio \
+  		pathlib \
+  		re \
+  		site-packages \
+ -		sqlite3 \
++ 		string \
+  		sysconfig \
+  		tkinter \
+- 		tomllib \
+-@@ -2500,6 +2499,10 @@ ifeq (@IDLE@,yes)
++@@ -2741,6 +2740,10 @@ ifeq (@IDLE@,yes)
+  LIBSUBDIRS += idlelib idlelib/Icons
+  endif
+  
+@@ -43,10 +45,10 @@ index 2d067730633..a45a76cce45 100644
+  
+  .PHONY: libinstall
+ diff --git a/configure.ac b/configure.ac
+-index 6635aaa134d..8153b738b2f 100644
++index ec9a24c5311..e8e201206bc 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -4755,6 +4755,13 @@ AS_VAR_IF([posix_threads], [stub], [
++@@ -4795,6 +4795,13 @@ AS_VAR_IF([posix_threads], [stub], [
+    AC_DEFINE([HAVE_PTHREAD_STUBS], [1], [Define if platform requires stubbed pthreads support])
+  ])
+  
+@@ -61,5 +63,5 @@ index 6635aaa134d..8153b738b2f 100644
+  
+  AC_ARG_ENABLE(pydoc,
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
+index e67f06f78c..b928cd9435 100644
+--- a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
++++ b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
+@@ -11,8 +11,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ [ Adam Duskett: ported to Python 3.10.0 ]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+-[ Bernd Kuhls: ported to Python 3.11.4]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ [ Adam Duskett: ported to Python 3.12.1 ]
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+@@ -25,34 +25,34 @@ Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+  2 files changed, 12 insertions(+), 3 deletions(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index a45a76cce45..76d67ce7185 100644
++index c8f7ab1e6a9..2c91d0dda71 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2337,7 +2337,6 @@ LIBSUBDIRS=	asyncio \
+- 		re \
++@@ -2571,7 +2571,6 @@ LIBSUBDIRS=	asyncio \
+  		site-packages \
++ 		string \
+  		sysconfig \
+ -		tkinter \
+  		tomllib \
+  		turtledemo \
+  		unittest \
+-@@ -2445,7 +2444,6 @@ TESTSUBDIRS=	idlelib/idle_test \
+- 		test/test_pydoc \
++@@ -2681,7 +2680,6 @@ TESTSUBDIRS=	idlelib/idle_test \
+  		test/test_pyrepl \
++ 		test/test_string \
+  		test/test_sqlite3 \
+ -		test/test_tkinter \
+  		test/test_tomllib \
+  		test/test_tomllib/data \
+  		test/test_tomllib/data/invalid \
+-@@ -2467,7 +2465,6 @@ TESTSUBDIRS=	idlelib/idle_test \
++@@ -2703,7 +2701,6 @@ TESTSUBDIRS=	idlelib/idle_test \
+  		test/test_tools \
+  		test/test_tools/i18n_data \
+  		test/test_tools/msgfmt_data \
+ -		test/test_ttk \
+  		test/test_unittest \
+- 		test/test_unittest/testmock \
+- 		test/test_warnings \
+-@@ -2489,6 +2486,11 @@ TESTSUBDIRS=	idlelib/idle_test \
++ 		test/test_unittest/namespace_test_pkg \
++ 		test/test_unittest/namespace_test_pkg/bar \
++@@ -2730,6 +2727,11 @@ TESTSUBDIRS=	idlelib/idle_test \
+  		test/xmltestdata/c14n-20 \
+  		test/zipimport_data
+  
+@@ -65,10 +65,10 @@ index a45a76cce45..76d67ce7185 100644
+  
+  ifeq (@PYDOC@,yes)
+ diff --git a/configure.ac b/configure.ac
+-index 8153b738b2f..0cf06a50c71 100644
++index e8e201206bc..840976ec1bd 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -4768,6 +4768,13 @@ AC_ARG_ENABLE(pydoc,
++@@ -4808,6 +4808,13 @@ AC_ARG_ENABLE(pydoc,
+  	AS_HELP_STRING([--disable-pydoc], [disable pydoc]),
+  	[ PYDOC="${enableval}" ], [ PYDOC=yes ])
+  
+@@ -83,5 +83,5 @@ index 8153b738b2f..0cf06a50c71 100644
+  AH_TEMPLATE([ENABLE_IPV6], [Define if --enable-ipv6 is specified])
+  AC_MSG_CHECKING([if --enable-ipv6 is specified])
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch b/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch
+index 05bb126ba7..729cb5d624 100644
+--- a/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch
++++ b/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch
+@@ -13,24 +13,26 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Makefile.pre.in | 5 ++++-
+  configure.ac    | 7 +++++++
+  2 files changed, 11 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index 76d67ce7185..bfb6cb65354 100644
++index 2c91d0dda71..fb11e416731 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2322,7 +2322,6 @@ LIBSUBDIRS=	asyncio \
+- 		concurrent concurrent/futures \
++@@ -2555,7 +2555,6 @@ LIBSUBDIRS=	asyncio \
++ 		concurrent concurrent/futures concurrent/interpreters \
+  		csv \
+  		ctypes ctypes/macholib \
+ -		curses \
+  		dbm \
+  		email email/mime \
+  		encodings \
+-@@ -2491,6 +2490,10 @@ LIBSUBDIRS += tkinter
++@@ -2732,6 +2731,10 @@ LIBSUBDIRS += tkinter
+  TESTSUBDIRS += test/test_tkinter test/test_ttk
+  endif
+  
+@@ -42,10 +44,10 @@ index 76d67ce7185..bfb6cb65354 100644
+  
+  ifeq (@PYDOC@,yes)
+ diff --git a/configure.ac b/configure.ac
+-index 0cf06a50c71..0895dc57808 100644
++index 840976ec1bd..1d7ba91ccc9 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -4762,6 +4762,13 @@ AC_ARG_ENABLE(sqlite3,
++@@ -4802,6 +4802,13 @@ AC_ARG_ENABLE(sqlite3,
+  AS_IF([test "$SQLITE3" = "no"],
+        [PY_STDLIB_MOD_SET_NA([_sqlite3])])
+  
+@@ -60,5 +62,5 @@ index 0cf06a50c71..0895dc57808 100644
+  
+  AC_ARG_ENABLE(pydoc,
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0008-Add-an-option-to-disable-expat.patch b/package/python3/0008-Add-an-option-to-disable-expat.patch
+index 8f3143d61b..4093d6fa76 100644
+--- a/package/python3/0008-Add-an-option-to-disable-expat.patch
++++ b/package/python3/0008-Add-an-option-to-disable-expat.patch
+@@ -19,16 +19,18 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Makefile.pre.in |  5 ++++-
+  configure.ac    | 24 +++++++++++++-----------
+  2 files changed, 17 insertions(+), 12 deletions(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index bfb6cb65354..7a662ea4b32 100644
++index fb11e416731..c261b3f9cd7 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -2342,7 +2342,6 @@ LIBSUBDIRS=	asyncio \
++@@ -2576,7 +2576,6 @@ LIBSUBDIRS=	asyncio \
+  		urllib \
+  		venv venv/scripts venv/scripts/common venv/scripts/posix \
+  		wsgiref \
+@@ -36,7 +38,7 @@ index bfb6cb65354..7a662ea4b32 100644
+  		xmlrpc \
+  		zipfile zipfile/_path \
+  		zoneinfo \
+-@@ -2508,6 +2507,10 @@ ifeq (@SQLITE3@,yes)
++@@ -2749,6 +2748,10 @@ ifeq (@SQLITE3@,yes)
+  LIBSUBDIRS += sqlite3
+  endif
+  
+@@ -48,10 +50,10 @@ index bfb6cb65354..7a662ea4b32 100644
+  
+  .PHONY: libinstall
+ diff --git a/configure.ac b/configure.ac
+-index 0895dc57808..34e4d5dd244 100644
++index 1d7ba91ccc9..3980548b253 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -4058,17 +4058,19 @@ LIBS="$withval $LIBS"
++@@ -4065,17 +4065,19 @@ LIBS="$withval $LIBS"
+  [AC_MSG_RESULT([no])])
+  
+  # Check for use of the system expat library
+@@ -83,5 +85,5 @@ index 0895dc57808..34e4d5dd244 100644
+    LIBEXPAT_LDFLAGS=${LIBEXPAT_LDFLAGS-"-lexpat"}
+    LIBEXPAT_INTERNAL=
+ -- 
+-2.50.1
++2.47.3
+ 
+diff --git a/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch b/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
+index 1a11caeb49..78c0fe057c 100644
+--- a/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
++++ b/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
+@@ -15,13 +15,15 @@ done using a new m4 macro PY_CHECK_IOCTL.
+ 
+ Upstream: https://github.com/python/cpython/pull/142380
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Modules/termios.c |  8 ++++----
+  configure.ac      | 26 ++++++++++++++++++++++++++
+  2 files changed, 30 insertions(+), 4 deletions(-)
+ 
+ diff --git a/Modules/termios.c b/Modules/termios.c
+-index f2c5a4bafa7..dbfe922d1e8 100644
++index efb5fcc17fa..3177cb0747a 100644
+ --- a/Modules/termios.c
+ +++ b/Modules/termios.c
+ @@ -1115,7 +1115,7 @@ static struct constant {
+@@ -51,7 +53,7 @@ index f2c5a4bafa7..dbfe922d1e8 100644
+  #endif
+  #ifdef TCSETS
+ diff --git a/configure.ac b/configure.ac
+-index 34e4d5dd244..646aa24ecf3 100644
++index 3980548b253..48604024fcf 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -101,6 +101,26 @@ AC_DEFUN([PY_STDLIB_MOD_SET_NA], [
+@@ -81,7 +83,7 @@ index 34e4d5dd244..646aa24ecf3 100644
+  AC_SUBST([BASECPPFLAGS])
+  if test "$srcdir" != . -a "$srcdir" != "$(pwd)"; then
+      # If we're building out-of-tree, we need to make sure the following
+-@@ -7955,6 +7975,12 @@ AC_ARG_ENABLE(idle3,
++@@ -8217,6 +8237,12 @@ AC_ARG_ENABLE(idle3,
+  	AS_HELP_STRING([--disable-idle3], [disable idle3 IDE]),
+  	[ IDLE="${enableval}" ], [ IDLE=yes ])
+  
+diff --git a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+new file mode 100644
+index 0000000000..7a72ebb16c
+--- /dev/null
++++ b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+@@ -0,0 +1,55 @@
++From 528429e329047ee572248da0e1212f7cc1ef7d11 Mon Sep 17 00:00:00 2001
++From: Pablo Galindo Salgado <Pablogsal@gmail.com>
++Date: Thu, 25 Sep 2025 00:16:44 +0100
++Subject: [PATCH] gh-139275: Fix compilation of
++ Modules/_remote_debugging_module.c when the system doesn't have
++ process_vm_readv (#139307)
++
++Upstream: https://github.com/python/cpython/commit/1963e701001839389cfb1b11d803b0743f4705d7
++
++[ Bernd Kuhls: ported to Python 3.14.2]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ .../2025-09-24-17-32-52.gh-issue-139275.novrqf.rst              | 2 ++
++ Modules/_remote_debugging_module.c                              | 2 +-
++ Python/remote_debug.h                                           | 2 +-
++ 3 files changed, 4 insertions(+), 2 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst
++
++diff --git a/Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst b/Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst
++new file mode 100644
++index 00000000000..8cb4b972ad6
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst
++@@ -0,0 +1,2 @@
+++Fix compilation problems in ``_remote_debugging_module.c`` when the system
+++doesn't have ``process_vm_readv``. Patch by Pablo Galindo
++diff --git a/Modules/_remote_debugging_module.c b/Modules/_remote_debugging_module.c
++index b46538b76df..e86a27d5812 100644
++--- a/Modules/_remote_debugging_module.c
+++++ b/Modules/_remote_debugging_module.c
++@@ -812,7 +812,7 @@ _Py_RemoteDebug_GetAsyncioDebugAddress(proc_handle_t* handle)
++         PyErr_SetString(PyExc_RuntimeError, "Failed to find the AsyncioDebug section in the process.");
++         _PyErr_ChainExceptions1(exc);
++     }
++-#elif defined(__linux__)
+++#elif defined(__linux__) && HAVE_PROCESS_VM_READV
++     // On Linux, search for asyncio debug in executable or DLL
++     address = search_linux_map_for_section(handle, "AsyncioDebug", "_asyncio.cpython");
++     if (address == 0) {
++diff --git a/Python/remote_debug.h b/Python/remote_debug.h
++index 8f9b6cd4c49..b7d17a0f345 100644
++--- a/Python/remote_debug.h
+++++ b/Python/remote_debug.h
++@@ -881,7 +881,7 @@ _Py_RemoteDebug_GetPyRuntimeAddress(proc_handle_t* handle)
++             handle->pid);
++         _PyErr_ChainExceptions1(exc);
++     }
++-#elif defined(__linux__)
+++#elif defined(__linux__) && HAVE_PROCESS_VM_READV
++     // On Linux, search for 'python' in executable or DLL
++     address = search_linux_map_for_section(handle, "PyRuntime", "python");
++     if (address == 0) {
++-- 
++2.47.3
++
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index fddfcc1a4d..b71f6e7deb 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-31311/
+-md5  4c3517dd8b1fd76377dcb3e5e8f71ad6  Python-3.13.11.tar.xz
++# From https://www.python.org/downloads/release/python-3142/
++md5  19a31b2838db3b53f9f2db8782bf8773  Python-3.14.2.tar.xz
+ # Locally computed
+-sha256  16ede7bb7cdbfa895d11b0642fa0e523f291e6487194d53cf6d3b338c3a17ea2  Python-3.13.11.tar.xz
+-sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
++sha256  ce543ab854bc256b61b71e9b27f831ffd1bfd60a479d639f8be7f9757cf573e9  Python-3.14.2.tar.xz
++sha256  b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index d8ee11e8a8..31b5a4500e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_NUMPY_VERSION = 1.25.0
-+PYTHON_NUMPY_VERSION = 2.4.0
- PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
--PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
-+PYTHON_NUMPY_SITE = https://files.pythonhosted.org/packages/a4/7a/6a3d14e205d292b738db449d0de649b373a59edb0d0b4493821d0a3e8718
- PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
- PYTHON_NUMPY_LICENSE_FILES = \
- 	LICENSE.txt \
--	numpy/core/src/multiarray/dragon4.c \
--	numpy/core/include/numpy/libdivide/LICENSE.txt \
--	numpy/linalg/lapack_lite/LICENSE.txt \
--	tools/npy_tempita/license.txt
-+	numpy/_build_utils/tempita/LICENSE.txt \
-+	numpy/_core/src/multiarray/dragon4.c \
-+	numpy/_core/include/numpy/libdivide/LICENSE.txt \
-+	numpy/linalg/lapack_lite/LICENSE.txt
- PYTHON_NUMPY_CPE_ID_VENDOR = numpy
- PYTHON_NUMPY_CPE_ID_PRODUCT = numpy
- 
- PYTHON_NUMPY_DEPENDENCIES = host-python-cython python3
--HOST_PYTHON_NUMPY_DEPENDENCIES = host-python-cython
-+HOST_PYTHON_NUMPY_DEPENDENCIES = host-python-cython host-python-meson-python
- 
- PYTHON_NUMPY_CONF_ENV += \
- 	_PYTHON_SYSCONFIGDATA_NAME=$(PKG_PYTHON_SYSCONFIGDATA_NAME) \
--	PYTHONPATH=$(PYTHON3_PATH)
-+	PYTHONPATH="$(@D)/vendored-meson/meson:$(PYTHON3_PATH)"
-+
-+PYTHON_NUMPY_NINJA_ENV += \
-+	PYTHONPATH="$(@D)/vendored-meson/meson:$(PYTHON3_PATH)"
- 
- ifeq ($(BR2_PACKAGE_LAPACK),y)
- PYTHON_NUMPY_DEPENDENCIES += lapack
-@@ -38,6 +41,59 @@ else
- PYTHON_NUMPY_CONF_OPTS += -Dblas=""
- endif
- 
-+# Generated by running this test program under QEMU:
-+# https://github.com/numpy/numpy/blob/v1.26.4/numpy/core/meson.build#L376-L455
-+ifeq ($(BR2_arcle),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_LE
-+else ifeq ($(BR2_aarch64),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_QUAD_LE
-+else ifeq ($(BR2_aarch64_be),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_QUAD_BE
-+else ifeq ($(BR2_arm),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_LE
-+else ifeq ($(BR2_armeb),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_BE
-+else ifeq ($(BR2_i386),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = INTEL_EXTENDED_12_BYTES_LE
-+else ifeq ($(BR2_or1k),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_BE
-+else ifeq ($(BR2_m68k),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = MOTOROLA_EXTENDED_12_BYTES_BE
-+else ifeq ($(BR2_mips),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_BE
-+else ifeq ($(BR2_mipsel),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_LE
-+else ifeq ($(BR2_powerpc),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IBM_DOUBLE_DOUBLE_BE
-+else ifeq ($(BR2_powerpc64),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IBM_DOUBLE_DOUBLE_BE
-+else ifeq ($(BR2_powerpc64le),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IBM_DOUBLE_DOUBLE_LE
-+else ifeq ($(BR2_riscv),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_QUAD_LE
-+else ifeq ($(BR2_sh4)$(BR2_sh4a),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_LE
-+else ifeq ($(BR2_sh4eb)$(BR2_sh4aeb),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_BE
-+else ifeq ($(BR2_sparc),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_DOUBLE_BE
-+else ifeq ($(BR2_sparc64),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = IEEE_QUAD_BE
-+else ifeq ($(BR2_x86_64),y)
-+PYTHON_NUMPY_LONGDOUBLE_FORMAT = INTEL_EXTENDED_16_BYTES_LE
-+endif
-+
-+PYTHON_NUMPY_MESON_EXTRA_PROPERTIES = \
-+	longdouble_format='$(PYTHON_NUMPY_LONGDOUBLE_FORMAT)'
-+
-+HOST_PYTHON_NUMPY_SETUP_TYPE = setuptools
-+
-+HOST_PYTHON_NUMPY_CONF_ENV += \
-+	PYTHONPATH="$(@D)/vendored-meson/meson:$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
-+
-+HOST_PYTHON_NUMPY_NINJA_ENV += \
-+	PYTHONPATH="$(@D)/vendored-meson/meson:$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
-+
- # Rather than add a host-blas or host-lapack dependencies, just use unoptimized,
- # in-tree code.
- HOST_PYTHON_NUMPY_CONF_OPTS = -Dblas="" -Dlapack=""
-@@ -50,7 +106,7 @@ HOST_PYTHON_NUMPY_CONF_OPTS = -Dblas="" -Dlapack=""
- # config path for their package environment.
- define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
- 	$(SED) '/^pkgdir=/d;/^prefix=/i pkgdir=$(PYTHON3_PATH)/site-packages/numpy/core' \
--		$(PYTHON3_PATH)/site-packages/numpy/core/lib/npy-pkg-config/npymath.ini
-+		$(PYTHON3_PATH)/site-packages/numpy/_core/lib/npy-pkg-config/npymath.ini
- endef
- PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
- 
-@@ -59,4 +115,4 @@ PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FIL
- PYTHON_NUMPY_INSTALL_STAGING = YES
- 
- $(eval $(meson-package))
--$(eval $(host-meson-package))
-+$(eval $(host-python-package))
-
---===============5578875023007346927==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON3_VERSION_MAJOR = 3.13
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).11
++PYTHON3_VERSION_MAJOR = 3.14
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5578875023007346927==--
