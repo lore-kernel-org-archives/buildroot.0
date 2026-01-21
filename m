@@ -1,112 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A67EC44501
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 08:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 658BAC44501
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jan 2026 09:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24C97403FB;
-	Wed, 21 Jan 2026 08:41:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KuKNB0Mn2uBJ; Wed, 21 Jan 2026 08:41:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30F3841455
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1768984916;
-	bh=l414/mdOam1D8P75YNHOnxJvXVzz0ckT111L2g15xxo=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=a2WVlWm5Hfs8Jx9ek3fb2HeB08GN6ZyUpldfYDIYTPKRDtCJUTyk4cHX2x6BsRheA
-	 T9JDSjoEnEgLwiE1U7KO4SpOT9N3dfFwnD7E/GmsFRJ96gIqqIWd8a9l8rCYQ+uCpB
-	 /roZnXz64tCwmhSPM7+mIeJJC7hgzNlqYj9QCB1sok1ZWVWRjJQLUeNKx5rJMGdHM+
-	 L3pONkVUDBbyrd5b87aGxtnCOQyFO/Yp+bDU8TL/Fl6KnnL4MszwhGCH98vHZbE4au
-	 svXjFpa174l9ZdrTtHkzoJfnGnkpRRG+NzO8amQKYYxX0A3J3vvVP7TZg2ylItVjrB
-	 26xpl1gWxz0cg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30F3841455;
-	Wed, 21 Jan 2026 08:41:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F4138160
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:41:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA99D610FB
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:41:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E99B611D7;
+	Wed, 21 Jan 2026 09:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o6Jat3zvRRM7 for <buildroot@buildroot.org>;
- Wed, 21 Jan 2026 08:41:54 +0000 (UTC)
+ id hBflfXZtvELp; Wed, 21 Jan 2026 09:16:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D1B5611D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1768986989;
+	bh=5twKUGzDalJ5N2qSlIXKePvItsZZKLVAHHO4jWFNdRI=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=DNq3cifcWvDkzksRqyWIAA7MreSnAZcXdaJ+ljKUtXJiFWpDOK8ZtP/jfWIDNvzQ6
+	 56lKHbSt+9/pA59XYrf5AjG0QPX+Egp3d3iN4fBmsEKznHyrPYmkmfSms+RDot/iQx
+	 T6bHOvIgdH+8kRH3Ng4aCCQ41hbTtuhCqI9WcMw1k0YdQ2IcuisKw66/i/SS2x8q5r
+	 TqiorPKgwYDb2B0yZDMvpyBdXeYJFXXnbiFnZyOQ7DZQnxXvJ6cnFR7CpZMsCdpPMI
+	 6UxrZVQbJewy/lJEKfEvwLoE+zftw4jUzOk5uptXePdPPNprZoiqyrzsA1oDaIBzl/
+	 YOnAxLXBaFbAA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D1B5611D8;
+	Wed, 21 Jan 2026 09:16:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 190E6160
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 09:16:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EFD4240E87
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 09:16:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ai5nr_JYg3-8 for <buildroot@buildroot.org>;
+ Wed, 21 Jan 2026 09:16:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=nolange79@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 04669610F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04669610F9
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 04669610F9
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 08:41:53 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-4359249bbacso334552f8f.0
- for <buildroot@buildroot.org>; Wed, 21 Jan 2026 00:41:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1768984912; x=1769589712;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=lZdDyxRkSAi8JGi9Ufw2kaw7OR4jL8lpi28NmwpB/6s=;
- b=Wkd6iRk3sPcmoeTxvuxM74b/DQ8cFx+gC56e+9cgZ3AskPI3QYucjw94MO5za/myUG
- DfEBBlKPYjFXuTGBKjyGfN2SLOXtGoazXGuwmsTmEpgYyj0czy+/H0nFrBFKpaWymhMG
- JHmnU4vmnRN1rfHAnYaBKL0z9xRPK6ydLWpJoe9YZzZ0qKBNAJh3Lqn01AMhI7FRWQRU
- Iu24uAlW9jxKdoOjCKEXw0TccF4RgnbDPAEz/RuIvwzypK5TtKaM5kVwA6ypZP5d4jHK
- LqVK258j3xulX2spCo5juopGuAtmFahMdboLUAd2qvdE/K7I98zMsb3oXbqjb9KllnY/
- c+Ww==
-X-Gm-Message-State: AOJu0YxRnRVg1codYcqZuyzRBzAZp2yKmv9CNqCMekQAJJFMANMxlSNq
- xvCAZ/6DLxtvRajl7ufFkhiwJYmK+3mdyXhe0iTPO5w+VBNLq7JJxPjh/cZnrw==
-X-Gm-Gg: AZuq6aIZHkQiqQ1sXNemXDEZGE4mjG+suvFuBqhaXkLRvQZYx28ActVANErf0q04idM
- 6GDbdVj6Zk4V6LHjXGxtk/UMLZuxUReLcoh+z9TjhuaW+phRPbkl0huYtb+jS1csUqFdBQHM0j+
- zfJ/Dv/UnZca/iWFkwa6wqMiPNrZK/6yA2c1Bl6Yyj0xWLMi0W3rovn+mUXXmH6O4txYso8Rhlu
- cms6XKXukvuK6S/+ISSyUVwcfztX9kscgT2OvkZkXwhb7AhD/x5PC4LMMBdyqI1J1cfCd2FpyCn
- u1E0zW6PCc9TPP490+9kWGuttsZlAoAC1n16rIFn8oToHHANOJ3it6CXEYyWEaT6udnjIgQ9/sU
- FzLSLTPRsuksjqj5LFrxAcIcPlxRxVNu5hBeiG3W3JM5PWnSdOzZMcbHSo6bjbi0ajt7ynGytcP
- 3JUyyfZ6UPvclhxOgwGtS8K89YGxZvvZgkpjBBNy6V63D6NJpIufupEA==
-X-Received: by 2002:a05:6000:4387:b0:431:2ff:128f with SMTP id
- ffacd0b85a97d-4356953f817mr26012133f8f.6.1768984911865; 
- Wed, 21 Jan 2026 00:41:51 -0800 (PST)
-Received: from vcllano-01.. ([80.120.136.76]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43569921dddsm36249438f8f.6.2026.01.21.00.41.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 21 Jan 2026 00:41:51 -0800 (PST)
-From: Norbert Lange <nolange79@gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B81740D0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B81740D0E
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1B81740D0E
+ for <buildroot@buildroot.org>; Wed, 21 Jan 2026 09:16:25 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id A4F2C31E0B54; Wed, 21 Jan 2026 10:16:21 +0100 (CET)
+Date: Wed, 21 Jan 2026 10:16:21 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Cc: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 21 Jan 2026 09:41:48 +0100
-Message-ID: <20260121084148.3613545-1-nolange79@gmail.com>
-X-Mailer: git-send-email 2.47.3
+Message-ID: <aXCZZRkyVbbN8ou4@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1768984912; x=1769589712; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lZdDyxRkSAi8JGi9Ufw2kaw7OR4jL8lpi28NmwpB/6s=;
- b=SvN12QUMzD7wCsRstm+JOIJWl0TP1zc+qn/H0FcsKpEZDezpTKlVhqorsXY3+borOU
- 1saQ1GDg4IWq3Bj33GxitgcgoCxy5oj0qgJPiuvMY+77Xhm0jrX4wWtuP8qP/y4GelY3
- ZkW2P6IbLhi68cmQ9R4Pz13YMkteMhXSb2EG/v+eJvAK9ytV6eF9tZUF+WuVvhyk1bz5
- euY/P/kPreUudzOWCoXZaBUJmz4KMV668n6ichJQGuFwnMS8T4DB3wbXstRUqL6xjfE+
- Smy2ngRTQcxBHm88nk+UgOLQgOsGfvKhTwRYirCuWiqakU6zZIQbFqcSChhP5QPERt5u
- rHtg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1768986981; bh=UIOMmPgxXmbpTNE6u5eixJlvubq3F2zRw3S1Gy0+52g=;
+ h=Date:From:To:Subject:From;
+ b=OxQovNev4jG6+6ADsGCGyt0Hh/RyHZNPSp/5SFgYoXzCRmKly+zsD+Kc2vsX6B3p1
+ qi6/APB2DVpFeRCo+dUSp7tw9qF6yQwmLgaQ6lYWPB3h0zzst1/rzPhypFc8HQ4vv8
+ FZuXV+7kzLsQCnqD99Ekt84IcHswX32D28jXuK4G2V3UEPPe1W7Cw+ba+euDOWFsjE
+ 2v13a9V00CM0rc3ykU7oYzcSGeKTyLIfNUpqAI0dvf6rXt0yMmgewtyaKxrc5lrvPD
+ dfKXHd9o/8hmHeIsTlpPV8ZXgktQnlNRIBBZZQEXsLSJj+v5xOu+w+Zt4g/O/xF8BV
+ ih0ackugC0sxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=SvN12QUM
-Subject: [Buildroot] [PATCH 1/1] package/dbus-broker: install dbus.socket
- for session bus
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=OxQovNev
+Subject: [Buildroot] [PATCH] package/{glibc,
+ localedef}: security update for 2.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,46 +93,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The unit file for the per-user session bus was missing,
-copy the file from the dbus package and install it.
+Fixes following CVE's:
+CVE-2025-15281
+CVE-2026-0861
+CVE-2026-0915
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/dbus-broker/dbus-broker.mk   | 5 +++++
- package/dbus-broker/dbus-user.socket | 6 ++++++
- 2 files changed, 11 insertions(+)
- create mode 100644 package/dbus-broker/dbus-user.socket
+Should be backported to stable branches.
+---
+ package/glibc/glibc.hash       | 2 +-
+ package/glibc/glibc.mk         | 2 +-
+ package/localedef/localedef.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index 7e029879f9..b3723a1114 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -62,8 +62,13 @@ define DBUS_BROKER_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/share/dbus-1/system.conf
- 	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/dbus.socket \
- 		$(TARGET_DIR)/usr/lib/systemd/system/dbus.socket
-+	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/dbus-user.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/user/dbus.socket
-+	mkdir -p $(TARGET_DIR)/usr/lib/systemd/user/sockets.target.wants
- 	$(HOST_MAKE_ENV) ln -sf ../dbus.socket \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sockets.target.wants/dbus.socket
-+	$(HOST_MAKE_ENV) ln -sf ../dbus.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/user/sockets.target.wants/dbus.socket
- endef
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 538f8b69a7..a58bb7b9a7 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  a364a548ebda9c570f5bf62bf5e4ad3240a90056455b9edfbf1472a7254bd1c0  glibc-2.42-3-gbc13db73937730401d592b33092db6df806d193e.tar.gz
++sha256  f63ffa06cd17ee8ff891f6de41de6e189b96edc6b2be2807ae597291f4464388  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125.tar.gz
  
- $(eval $(meson-package))
-diff --git a/package/dbus-broker/dbus-user.socket b/package/dbus-broker/dbus-user.socket
-new file mode 100644
-index 0000000000..dc5ed8995d
---- /dev/null
-+++ b/package/dbus-broker/dbus-user.socket
-@@ -0,0 +1,6 @@
-+[Unit]
-+Description=D-Bus User Message Bus Socket
-+
-+[Socket]
-+ListenStream=%t/bus
-+ExecStartPost=-/usr/bin/systemctl --user set-environment DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 9c3ff7124e..e3453b8cc2 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.42-3-gbc13db73937730401d592b33092db6df806d193e
++GLIBC_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+ 
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index c34fe22b5e..254a79026a 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.42-3-gbc13db73937730401d592b33092db6df806d193e
++LOCALEDEF_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 -- 
 2.47.3
 
