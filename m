@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE387D6CFA1
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 19:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61EAED6CFA3
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 19:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8394F82207;
-	Thu, 22 Jan 2026 19:06:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2867A606B3;
+	Thu, 22 Jan 2026 19:07:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ghZDd0oooxhK; Thu, 22 Jan 2026 19:07:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52037606AA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1769108873;
+	bh=BdoALAjdyHcmkPK8vfkt1cx6CuXygIRv1Ku/tZTkB80=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=UPVWeeBDQrci9SKPpMpGcZNFn32LTua3W258K1zOhX8Gu54UILl3IwEt48eI4XuAy
+	 F16yJ6kI5jjniP51xvLuV79bSMafVr/LM57MiZRoP1vh4ktWKrt/9LzUJx6fCHKUkl
+	 uLtek0KNGe6GBadJapFwb5wUfH7jZqWdrJ+Qr+WTM3KK714nVIdhtIZUVT+M9jiwIU
+	 s3CHk8zMQFmi703E/HLOa+3Z2x3u3/WeypaiJW9Lwkex9VIQjun1/8o7GDDpqgRMvF
+	 aB1/zV0DhQ8LGgL0zKnV72gV0CeIeKLLvDkQ0LJMRRar6sAKFm7FPTfPAs3NHCHY3T
+	 ElWY+S7PXCaVQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52037606AA;
+	Thu, 22 Jan 2026 19:07:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27FCC122
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:07:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 171D182236
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:07:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TgxYUqhf95uN; Thu, 22 Jan 2026 19:06:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D4BD82209
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769108814;
-	bh=DGc5/Ev2AQQLe3ZWbqQBi9IdgkiPIrtfL4GK6Z7ayaE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=PtIbNRA86box1uQRpvY+TjhJ9HtGtBXQSI22F/akRYp13MB2NS5vzB7BfcL36aV5J
-	 iVGZBAtG1v7H+FD3CvccrCN0difFMfXoduS17p44psbr3Rk+TQM75c2SR5HP8c/ool
-	 IZhNl3egXqipS561rYclNwozVLy8tdoFdwD4/h9bck2Fex2SxtCnOBsn5MmQGsrFuA
-	 2MMWR6lPMEmsfQ0A8sDXqHK8edO0q6RLSqGhWwK3zYFUrW8jgQVBeTyH5BvdyF+Z8e
-	 IludoTA5kn/+UK+EcNU/oTiHmGEvYcbbqwRhjOFO2+SM4YWzhlKpmZxXkAdps6DeHA
-	 gojx5yn/PqKAA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D4BD82209;
-	Thu, 22 Jan 2026 19:06:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B64504DF
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:06:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98D05408EE
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:06:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y_oR_JhLtHyd for <buildroot@buildroot.org>;
- Thu, 22 Jan 2026 19:06:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85BAC408EB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85BAC408EB
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:06:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CB4B8750F; Thu, 22 Jan 2026 19:06:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 22 Jan 2026 20:04:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0a6abc8b193e5bdab5326324d7299c19d5d8c67
-X-Git-Newrev: 18de297a5ad3d1fc1b44f54ae69289ca10200ad5
-X-Patchwork-Hint: ignore
-Message-Id: <20260122190651.7CB4B8750F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{glibc,
- localedef}: security bump to version 2.42-51-gcbf39c26b
+ id BOXf6K_bobWN for <buildroot@buildroot.org>;
+ Thu, 22 Jan 2026 19:07:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1D2A882234
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D2A882234
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D2A882234
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:07:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 02B6419F5A5;
+ Thu, 22 Jan 2026 20:07:46 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 22 Jan 2026 20:07:46 +0100
+MIME-Version: 1.0
+Date: Thu, 22 Jan 2026 20:07:46 +0100
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <aXCZZRkyVbbN8ou4@waldemar-brodkorb.de>
+References: <aXCZZRkyVbbN8ou4@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <c713b9b822ff6883c7aa3cf6f3bb313d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1769108868;
+ bh=ZiVGcya3W8QtA48eo17GJaSWRLTfyIG0RCuZpimyzKY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Uc8DiV6XQwT8QD50q23nMCjZxUXLIzoUIbSHm2n9+R74f/tLQMmUd1yDPRTEzs2Lk
+ +tcICtz+QXp497AoVQs81yTSSR0APtJtWK5XkcvOgyrqUlsp3piZ5jmooXcQFyzy1u
+ hWYrC2+fPco6SqakSn9mVeTJs2fwGlDV4pIK23HzpCwT/9+ZKmlJekvNqgPlvjuxL7
+ 3cDnxfBmVxKC6151aVEA+hf/pdY6jfeeApMOMOWrTgOIDP1Ypm4zsHRoK0rHgilvrJ
+ fKjoPHxlgB7CJoY/3qtyUjYrCWLxkPdCYJH4ptxnss1I3Wp7SG5phg2RU0I3ZfHQjw
+ AcCzrFzRknJhw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Uc8DiV6X
+Subject: Re: [Buildroot] [PATCH] package/{glibc,
+ localedef}: security update for 2.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,87 +96,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18de297a5ad3d1fc1b44f54ae69289ca10200ad5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/01/2026 10:16, Waldemar Brodkorb wrote:
+> Fixes following CVE's:
+> CVE-2025-15281
+> CVE-2026-0861
+> CVE-2026-0915
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Fixes following CVE's:
+Applied to master, thanks.
+For info, I added extra information in the commit log:
+https://gitlab.com/buildroot.org/buildroot/-/commit/18de297a5ad3d1fc1b44f54ae69289ca10200ad5
 
-- CVE-2025-15281
-  wordexp with WRDE_REUSE and WRDE_APPEND may return uninitialized memory
-  https://www.cve.org/CVERecord?id=CVE-2025-15281
-  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2026-0003
-  fixed by upstream commit:
-  https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=cbf39c26b25801e9bc88499b4fd361ac172d4125
+Best regards,
 
-- CVE-2026-0861
-  Integer overflow in memalign leads to heap corruption
-  https://www.cve.org/CVERecord?id=CVE-2026-0861
-  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2026-0001
-  fixed by upstream commit:
-  https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=b0ec8fb689df862171f0f78994a3bdeb51313545
-
-- CVE-2026-0915
-  getnetbyaddr and getnetbyaddr_r leak stack contents to DNS resovler
-  https://www.cve.org/CVERecord?id=CVE-2026-0915
-  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2026-0002
-  fixed by upstream commit:
-  https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=453e6b8dbab935257eb0802b0c97bca6b67ba30e
-
-For a full list of changes, see:
-https://sourceware.org/git/?p=glibc.git;a=shortlog;h=cbf39c26b25801e9bc88499b4fd361ac172d4125
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Julien: add extra info in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 538f8b69a7..a58bb7b9a7 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  a364a548ebda9c570f5bf62bf5e4ad3240a90056455b9edfbf1472a7254bd1c0  glibc-2.42-3-gbc13db73937730401d592b33092db6df806d193e.tar.gz
-+sha256  f63ffa06cd17ee8ff891f6de41de6e189b96edc6b2be2807ae597291f4464388  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 9c3ff7124e..e3453b8cc2 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.42-3-gbc13db73937730401d592b33092db6df806d193e
-+GLIBC_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
- 
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index c34fe22b5e..254a79026a 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.42-3-gbc13db73937730401d592b33092db6df806d193e
-+LOCALEDEF_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
