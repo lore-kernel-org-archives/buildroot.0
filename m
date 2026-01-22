@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C82A5D6CFA5
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 20:31:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E19C9D6CFA5
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 20:32:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7011826EA;
-	Thu, 22 Jan 2026 20:31:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dlKZE2dQ1DwR; Thu, 22 Jan 2026 20:31:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87531826DA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769113905;
-	bh=gKw6cAxPv47xcB10uzm5kBeCjrEJPuE/E7m70MXq9zo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Zy0eZen/fUEG7MXFC3DMEdCXE42pRJwj5U706Tkj0WwLqJpwTyC1L2CTv7CCi7lnq
-	 oMMHUpsmD4eqH0XZ7lssP+uXrl5L/rOC82MxR5EDvDvtPVIgZlxSapEqYCbWWPPe37
-	 bLrfNTSHyJ+9RQgvuBBrip2qCRxOFA7clifarY5EaSMTmmNFGDJt7AFAjQYh3Vo37K
-	 BEFqWNRm4XUw5n+kYzVEUG8mtMjf3c57+DRDeOAmVSyH7EbN66vkcxTiCevfxBlOqG
-	 pTTVOdsx8fxNzvheM76aw9vo3aYjiI8L3G08ozxMDE2Ddn5ctLKXPR6Oxtra3WkLe/
-	 mT7GIdMUj2ypw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87531826DA;
-	Thu, 22 Jan 2026 20:31:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D1A71122
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 20:31:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B46CF40A16
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 20:31:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86AE440A1B;
+	Thu, 22 Jan 2026 20:32:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FAF0eprNvRn0 for <buildroot@buildroot.org>;
- Thu, 22 Jan 2026 20:31:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05D9840A11
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05D9840A11
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 20:31:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E45F0875A7; Thu, 22 Jan 2026 20:31:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 22 Jan 2026 21:15:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6860a94a09b42b896fd2a5a1f437cd1aa1a357a5
-X-Git-Newrev: bb556b1e1f5cf356cae34276837c39f26ce67329
-X-Patchwork-Hint: ignore
-Message-Id: <20260122203143.E45F0875A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-broker: bump version to 37
+ id IvHKiR5KQIFl; Thu, 22 Jan 2026 20:32:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CC8540A18
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1769113937;
+	bh=qmldZt6FF8zdhvFyFp/JivPwbejCwG2lu0kV2/vwp9M=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ZmeHKhTe8Xd8DC9tgVf2U3Emerd2uvmew2ory4klr7Ajlz3NBXnoaJWcopDxctCi+
+	 4VfA6yPLyf28lAksDPKEYBieP5EMFz5uXM/6MrjiMyrNpRI/CDAw+5XTOrJJkbnk8x
+	 zHAgIwyT4mQucM6IGB2VCjaSC5vqTtJZKqB/aIdCbvNdqPfcZU+wi1E8M0dCFH5k03
+	 fTEjI5X6NoivsCkujiCehH1pvlgMV36hT/d7L9XEQ7UzJRtNewlp5QRs+PoATN+zfz
+	 q1WJaYpAetMjaJ85CXk2xUTf0b84qX1wOtk/0LIh45/fZzmM+gWfj9tre3opPRA57u
+	 pIapWhMITvolQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC8540A18;
+	Thu, 22 Jan 2026 20:32:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8044D158
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 20:32:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A32D826E5
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 20:32:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MM6Ax3P5NSTG for <buildroot@buildroot.org>;
+ Thu, 22 Jan 2026 20:32:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7FEAE826DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FEAE826DE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7FEAE826DE
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 20:32:15 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id C50DB78035E;
+ Thu, 22 Jan 2026 21:32:11 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 22 Jan 2026 21:32:11 +0100
+MIME-Version: 1.0
+Date: Thu, 22 Jan 2026 21:32:11 +0100
+To: Norbert Lange <nolange79@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260121084049.3613479-1-nolange79@gmail.com>
+References: <20260121084049.3613479-1-nolange79@gmail.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <660e39fb4e232378f36e861bcc89815d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1769113932;
+ bh=b7itLNtvhWbKJAdD+0zdRrv4nQ8eWveGcSmR3kCNMGg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=cMowisKKnV0skfpdug//XDuu9dFeEXfsjJxmKFBvtc929qqbb8vwCNBRzcZAV3q3H
+ lEtHHoyFKVL9DBXyppGmVrfy5dhPaPY+EhuhIz5J9PoBxfSxUDzK8vQwnjxnB4h2jA
+ blL6weHf7epiFEzYshX5X6HEMbsIeHrmQVeP4ULXiHOYiRnb3g52JFvLKFuwUXvajm
+ oVCKQOHr7jZgTyFC/rq2MepD5FXFpNpKBTQOUwNfSSfVt0agxWuEv+hq0JOSAErywC
+ 4uKB+X2WLhhretNxPclZbvW/SGb5tESrHfZII3x8dzg85Prn4xbVfGDEmaCDHt7ouA
+ HoUACSDz2+AAw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cMowisKK
+Subject: Re: [Buildroot] [PATCH 1/1] package/dbus-broker: bump version to 37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,48 +94,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb556b1e1f5cf356cae34276837c39f26ce67329
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/01/2026 09:40, Norbert Lange wrote:
+> https://github.com/bus1/dbus-broker/releases/tag/v37
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 
-https://github.com/bus1/dbus-broker/releases/tag/v37
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/dbus-broker/dbus-broker.hash | 2 +-
- package/dbus-broker/dbus-broker.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
-index fd4f43d16e..f4abd668d3 100644
---- a/package/dbus-broker/dbus-broker.hash
-+++ b/package/dbus-broker/dbus-broker.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  d333d99bd2688135b6d6961e7ad1360099d186078781c87102230910ea4e162b  dbus-broker-36.tar.xz
-+sha256  f819a8db8795fa08c767612e3823fd594694a0990f2543ecf35d6a1a6bf2ab5b  dbus-broker-37.tar.xz
- sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
- sha256  ce7b8b8fb05126e556b3f9ed97fe21aa654e4ff411c00a9fd219ecbaae26abe0  subprojects/libcdvar-1/AUTHORS
- sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index 0bbdd304af..7e029879f9 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_BROKER_VERSION = 36
-+DBUS_BROKER_VERSION = 37
- DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
- DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
