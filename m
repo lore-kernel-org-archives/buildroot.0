@@ -1,86 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D57D6CFA1
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 18:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DE8D6CFA1
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 18:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 189DF81F67;
-	Thu, 22 Jan 2026 18:27:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8107840797;
+	Thu, 22 Jan 2026 18:34:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i5cM9RqPA0UG; Thu, 22 Jan 2026 18:27:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E2Rr6Wpd3ecw; Thu, 22 Jan 2026 18:34:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C273781EC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F7A34086D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769106442;
-	bh=dhL98vzBRCl3tmW5VdzABkj+K5johwE1sv9NgeoSKUY=;
+	s=default; t=1769106892;
+	bh=tBj4ySw+jIg1l+gXL8AHzYRZ2e14wXMi76nGTzhrE0s=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=HfbrIDLBDjoI68gwtuxpYhDi5D8eXCMnz1RUqKr/9GpOT08CULnNAh8ZSy+N/hyK+
-	 mEOc5rcG+DHlN65kNnkab52aVlKRjWr0OjtiB2+jxid3xKG2MMASkU6MY96Mt5BzUH
-	 0T/ORljzIcPq92GB6i+7xbmqm1kM6Q/Le3/uWN0UGg1OxcOMAzm8GpbeWEJOjmBYni
-	 KjUXu0kcmBwhhb7SiszyEuG2uFcEsdAtN+qk0EmfYphL77pYPVZ5+aHibzLIqnpuHu
-	 8GYWvSJiiWPf/GcQCvw+07wgEF9ozJgvfp5D1llEp4chwSGjTT4eNPb1wtLbRF2R8i
-	 mHc6tOCOUVDCQ==
+	b=V+uh4o6K8IclhpiztoYr9xIg6hcxODAyMivdN4FP9XXo8rDfmicfJrGKoY1xdNLTB
+	 IT9LMycQnWCEDPqkJjSBlxi00hyAii1ouWqrLdmL9uLN97ERJgsFoL/pTNgaPO+eei
+	 dQAeZ9X8vEw2GcadKMLo/ihf7wJtf+b9AI6Kg0mMF6gvViw6OFCkQjllTVN4xVDDbX
+	 PzrUSJvWn5cMLpIZPFqTrbIOAzSXmwUcmlUAJmAd/D/mEcwoslqmYBxz034pGdE78O
+	 DjF9audV+H5kr5Wwv7qvYzWNC3FRUMI1iOkx2Dl1uCj1zjsTCukht1jOnpvm2kBL2i
+	 qApfMpENBy4Tg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C273781EC1;
-	Thu, 22 Jan 2026 18:27:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F7A34086D;
+	Thu, 22 Jan 2026 18:34:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C6CD3158
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 18:27:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AC516122
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 18:34:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6CA360598
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 18:27:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CB44605C3
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 18:34:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OlxLN1611d97 for <buildroot@buildroot.org>;
- Thu, 22 Jan 2026 18:27:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ED149600B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED149600B8
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ED149600B8
- for <buildroot@buildroot.org>; Thu, 22 Jan 2026 18:27:19 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c7cb.dip0.t-ipconnect.de [79.214.199.203])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0DEFFA4C4626;
- Thu, 22 Jan 2026 19:27:15 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45850)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vizOj-000000000pG-1Fjf;
- Thu, 22 Jan 2026 18:27:13 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id smLBj-x33Zvx for <buildroot@buildroot.org>;
+ Thu, 22 Jan 2026 18:34:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A1E136067D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1E136067D
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A1E136067D
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 18:34:50 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-432d2c7a8b9so1280051f8f.2
+ for <buildroot@buildroot.org>; Thu, 22 Jan 2026 10:34:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1769106888; x=1769711688;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=6WOLuFSrtKhxFRJXnz2QzRDcf4ijQmPJ4XBjRQWAV9w=;
+ b=aSMiMGXOYaFhIWmwtvTERe8HcTySMA/ENUhZwUh4zPpxCstos4Ug/XPSuFmnymSOUa
+ wpun4jYTi81ny1CYf3eXt/51bK45nu6zl/uE/OIQEcMjVNuOE9v/Q6p6lqIwyA0Dd/5S
+ nu0iNgGA6TVT49EC0WqAD8lhTJ6pm2BgYZ6LegvnbDXFyN/TRWC9fqkcRP4I+x9Qrpgx
+ mMcZvHfr5dLVaj7g6+YjI/EUHnl8Ljs9csOY9bBB167LHNWece+yEQydhvI/EoW8pDGX
+ O6EfnpqxPFmMDZdDGgqctFXv3feXE9XqJ6CaQpnLHTr3QbVy3mWrKsGMEb523muJgFZD
+ spUg==
+X-Gm-Message-State: AOJu0YxwCTU82ofwNQONsU3kkbn3/RtLYw56eJtyRNO4cGaSo1kg7hEw
+ gQ0i0v/opmtfWbo1/6QvFAZGqCNzKQ2LNCCCL7oA7dUwi6+kAj/t5ErUik3eWNOFJAm1xWLN7tp
+ MLrjM
+X-Gm-Gg: AZuq6aI6tfdgSJHqKpJEFz60aT9TiLtIRHbSeRTgtqHLblxv13nXvevpNCIkxi1NQbR
+ xHdUk2bhK6deSlP6/7/lQL7TT2CU9vew9jHklJKrdfFmW5dj70VJGE+7+7ur7DOBuTbuwA0xOZk
+ /sOrf6r2HC1WSZ6BGSAU+VxNbe7FS1etwB04JgnCs8zWM4QxapLUiBAWpjFxKc4HsTpjfXLbdNe
+ gEOxUCzAmd6/lr6OMAfqkNzZUHX3uvQn4l8Np7flPDS2nYQ3MaeKcHtgL+e+KAggXHEfh71knaA
+ tOO8qka73vs8mzz6/ij/j4VwFYpxpq8PRfX2w2b5a2jJ+hOtsphP2VMhRFR2UBsv4EnG8Can6rA
+ Fkk/wCo3Mg0njyZ53oiP88pELm9+3zpOU7rdlZYQaANoDVz938jme6Yo7yVe3H3o5792B+DoFfM
+ 3vHZRT0WtR2kT/CnUQxSuE7U0vVIWk7cy/YiaqvHZIPPxx/GtXt3T/5ZrrD5fWvZaKKHnWJftkf
+ HsxEf0FwaoWq7pjauKS8/ZbS78Qp4WmRMwx8713tnVN
+X-Received: by 2002:a05:6000:2886:b0:430:f494:6a9c with SMTP id
+ ffacd0b85a97d-435b159cac4mr794949f8f.17.1769106888011; 
+ Thu, 22 Jan 2026 10:34:48 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com ([2.196.41.54])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-435b1c24f15sm532896f8f.18.2026.01.22.10.34.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 22 Jan 2026 10:34:47 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Thu, 22 Jan 2026 19:27:13 +0100
-Message-ID: <20260122182713.998581-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Thu, 22 Jan 2026 19:34:44 +0100
+Message-ID: <20260122183444.475411-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1769106435;
- bh=TTLXNfPAlK7q4YNZT4hhhQ6i/ktXWOxhtS6fJJa4WFg=;
- h=From:To:Cc:Subject:Date:From;
- b=Ad//O/7vJQHZRVS8Xqni99JGNrQzWMeDNVSKNhvYfpqkHgNAq07iQPpCIo/1mdKaC
- cSPR8IKp6Z/gr5oHg57s3dyJ2fp+0LISDUY0oRKcLYNBXF9yrO4jOONp+8Sxdy15lv
- MT5gaDSpRGiG8G7NacWelTq4g6VHZ+nje1ypheskxGtZlPtOw2h2FohkB37lWQFtba
- fW3V4E/VW/maAFCyn5PT9MItvWMfyZU7eLx3jt68GW5fEVE8A/F4gnq9ZViwZEH73p
- ns6MVydHOHsKC603HLNF9b4cMfrxC9KjP3d4TRGnYJBvjkSUfJHbTxgjAvCDOTUmUp
- zq2OLxeUnJW1g==
+ d=amarulasolutions.com; s=google; t=1769106888; x=1769711688;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6WOLuFSrtKhxFRJXnz2QzRDcf4ijQmPJ4XBjRQWAV9w=;
+ b=iMfNqFVtNyf75him6qEizHrcm+AhOCrLNXq5BR5ds1/9lk/zeVpwI4kpy6VbGMgBDw
+ QXqerrm/KTmfARa2aeM0jgfWjyLpJWLeuwiUtX3i5Psi/3a0Nnq3p/tYKvG09pPqF/1x
+ rkmKFdJe2ANeMQIDPFmgsdQiubdje3s/X1rWc=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=Ad//O/7v
-Subject: [Buildroot] [PATCH 1/1] package/drbd-utils: drbdmon needs sync_1
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=iMfNqFVt
+Subject: [Buildroot] [PATCH 1/1] board/stmicroelectronics/stm32f769-disco:
+ fix typo in readme.txt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,40 +125,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 99585db1e896d7a75e204335af86f0725a30d357 bumped the
-package from version 9.21.4 to 9.33.0.
+Add a missing space in the "Creating SD card" section of the
+documentation.
 
-Upstream added std::atomic to drbdmon with commit
-https://github.com/LINBIT/drbd-utils/commit/3baf945732fc144043822b50a2a03daad0994d44
-to version 9.25.0 causing build errors:
-
-/home/autobuild/autobuild/instance-2/output-1/per-package/drbd-utils/host/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/14.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld:
- MessageLogNotification.o: in function `MessageLogNotification::query_log_changed()':
- (.text+0xe8): undefined reference to `__atomic_exchange_1'
-
-Fixes:
-https://autobuild.buildroot.net/results/741/741606000c26bc994f243b0b865d26ff25592caa/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes: 1a1239fd286ec5602e6ea29a1799e26b6254202f ("configs/stm32f769_disco_sd_defconfig: new defconfig")
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/drbd-utils/drbd-utils.mk | 2 +-
+ board/stmicroelectronics/stm32f769-disco/readme.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
-index 657f9fafd8..82baba975d 100644
---- a/package/drbd-utils/drbd-utils.mk
-+++ b/package/drbd-utils/drbd-utils.mk
-@@ -20,7 +20,7 @@ else
- DRBD_UTILS_CONF_OPTS += --with-initscripttype=sysv
- endif
+diff --git a/board/stmicroelectronics/stm32f769-disco/readme.txt b/board/stmicroelectronics/stm32f769-disco/readme.txt
+index 8f4f79a86138..5b8fba7099ef 100644
+--- a/board/stmicroelectronics/stm32f769-disco/readme.txt
++++ b/board/stmicroelectronics/stm32f769-disco/readme.txt
+@@ -20,7 +20,7 @@ It will flash the U-boot bootloader.
+ Creating SD card
+ ----------------
  
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_HAS_SYNC_1),yy)
- DRBD_UTILS_CONF_OPTS += --with-drbdmon
- else
- DRBD_UTILS_CONF_OPTS += --without-drbdmon
+-Buildroot prepares an"sdcard.img" image in the output/images/ directory,
++Buildroot prepares an "sdcard.img" image in the output/images/ directory,
+ ready to be dumped on a SD card. Launch the following command as root:
+ 
+   dd if=output/images/sdcard.img of=/dev/<your-sd-device>
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
