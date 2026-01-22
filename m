@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95744D3F09A
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19F32D3F09E
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BAC6409E9;
-	Wed, 28 Jan 2026 17:20:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A67AA40A18;
+	Wed, 28 Jan 2026 17:20:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6yMQB3q-V4PE; Wed, 28 Jan 2026 17:20:47 +0000 (UTC)
+ id ByNOR9ceZm81; Wed, 28 Jan 2026 17:20:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F7D5409C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BEFA409E8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769620847;
-	bh=X3BmxYc9QGU6NdVFrB0VVBociPg2mQ2rYSvg9G6olmM=;
+	s=default; t=1769620849;
+	bh=M+s2nxJUacCExQSoeoEu73R5kUhCOum6Jc4s9lbgd0A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=K56XCaQQZycditJAsWY+IB+vDxzyVTwajLwGZidR5vPlRnDNgm6tG0sEXdx2f/eLu
-	 bJC/YW6hWcHbgbYpCPv7Ogzwqyi7w3vvC2vA7njZu+P6elBXHu5iRs5Ik7mc5RUC7a
-	 kESUy5rW0g7ePLWQlBGvPtrAmnl4G3vqg2U4XUycJppcNm9jbRIvaHIGLSIuN08ouy
-	 1RnpEDlrWr3aDL5P/JRPrMKbtLc4FmNOKTRnNRENjQVBLFHwo5FqXGwrQsz0QcIiMA
-	 rAVdEoRFY0nyam1yTvj0lwIuNioMsRLH9qJaQtGaedBPOMjuFRSrA03sA+6IkYSzJ4
-	 BM8Va8giRZJGA==
+	b=djIedepcMr7QTPMQrmgdvc0yvMyU8jrwGctpkzfuhqrvhm/tSKXn6n5QrjdvmOWPf
+	 46EX9I1osA4/gM71rgBInWwS5ejD7B5U8BVDitofdPQOMRuZ61OVretsHYnUCJ6X0b
+	 wXILr9VFDGWsSFdDogyhhgJy6PB3PqtVw8ywywgQIfkXP8LzrPnfphkQPEAbaEk2C/
+	 H2Ip8G+GePSf2/0ugv73XE3piUSWWxgLFTQPOwUu5xDq8gc6nAoj6FDq3aOcBymrTF
+	 4N/IiqADDUsdFp3oEsZypA1z+V1zLrJ1UVsh+t2V2cf8ol4PjRrzoEmZZQJYON9ixu
+	 22iBGW401SQUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F7D5409C0;
-	Wed, 28 Jan 2026 17:20:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 31442118
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BEFA409E8;
+	Wed, 28 Jan 2026 17:20:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86DAE118
  for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:20:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5ABC60784
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:20:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 684D5408E3
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:20:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YuKfNdQ-elng for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HZ4mKPu7XbNN for <buildroot@buildroot.org>;
  Wed, 28 Jan 2026 17:20:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1D1E60782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E919408BA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1D1E60782
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E919408BA
  for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:20:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BFB080749; Wed, 28 Jan 2026 17:20:37 +0000 (UTC)
+ id 632EE80749; Wed, 28 Jan 2026 17:20:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Jan 2026 15:51:09 +0100
+Date: Thu, 22 Jan 2026 15:50:51 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6484bd3cafdb6c582c65dde2c86c2ed21a99d1c3
-X-Git-Newrev: 0bfed46b26596e1dbe317b0706288e2f1499a62f
+X-Git-Oldrev: 174aca4dc78a4e9de0048ec35e9c305627369f32
+X-Git-Newrev: 87191f62b57932715557ae69ab794113c50f84ff
 X-Patchwork-Hint: ignore
-Message-Id: <20260128172037.8BFB080749@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/cvs: drop package
+Message-Id: <20260128172037.632EE80749@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/gconf: remove
+ package, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,180 +72,187 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3311247804005322997=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bfed46b26596e1dbe317b0706288e2f1499a62f
+--===============3311247804005322997==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=87191f62b57932715557ae69ab794113c50f84ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The CVS project is no longer maintained upstream. It no longer builds
-with GCC 14.x, has been failing to build for months in our
-autobuilders with nobody caring about it.
+gconf has not seen any release since 2013, and the last commit in
+https://gitlab.gnome.org/Archive/gconf is from 2015.
 
-We managed to fix the GCC 14.x build issue, then there are GCC 15.x,
-some of them fixed by Debian patches, but some not. Overall, this is
-too much effort, while upstream is completely dead.
+The package example application basic-gconf-app fails to build with a
+recent compiler such as GCC 14.x:
 
-So let's get rid of cvs entirely.
+basic-gconf-app.c:458:60: error: passing argument 1 of ‘gtk_dialog_get_content_area’ from incompatible pointer type [-Wincompatible-pointer-types]
 
-Fixes:
+It is not entirely clear since when this breakage takes place, but
+most likely since GCC 14.x was introduced. This issue can be
+reproduced including on 2025.02.x with the following defconfig:
 
-  https://autobuild.buildroot.net/results/59f6e77106ac98535688ff5b9392b0b3ad3041ae/
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_LIBGTK3=y
+BR2_PACKAGE_GCONF=y
+
+However, for the build issue to happen you need to run:
+
+$ make libgtk3
+$ make
+
+So that libgtk3 gets built before gconf. Indeed, there's a hidden
+dependency between the two, and the example programs of gconf only get
+build if libgtk3 is built before. We've however encountered the
+problem in a (real) bigger build where the dependency relationship of
+packages have caused libgtk3 to get built before gconf.
+
+Note that we could perhaps have fixed the problem by disabling the
+examples, but gconf is anyway so old and deprecated that it isn't
+worth the effort.
+
+There are no known autobuilder issues.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 700726db4b21219fbaa9907d1a8525cd3107b0a0)
+(cherry picked from commit 3e4e261a16280422daeb65ea8ddbd8c2df34db83)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Config.in.legacy      |  7 +++++++
- package/Config.in     |  1 -
- package/cvs/Config.in | 24 ---------------------
- package/cvs/cvs.hash  |  8 -------
- package/cvs/cvs.mk    | 58 ---------------------------------------------------
- 5 files changed, 7 insertions(+), 91 deletions(-)
+ Config.in.legacy         |  7 +++++++
+ DEVELOPERS               |  1 -
+ package/Config.in        |  1 -
+ package/gconf/Config.in  | 21 ---------------------
+ package/gconf/gconf.hash |  4 ----
+ package/gconf/gconf.mk   | 23 -----------------------
+ 6 files changed, 7 insertions(+), 50 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 053f5c7c77..cf8e57bc4d 100644
+index 31c349f912..286f024a71 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2025.02.11"
  
-+config BR2_PACKAGE_CVS
-+	bool "cvs has been removed"
++config BR2_PACKAGE_GCONF
++	bool "gconf package removed"
 +	select BR2_LEGACY
 +	help
-+	  The cvs project was no longer maintained upstream, broken
-+	  with GCC 14.x, so it was removed.
++	  gconf was no longer maintained upstream, so it has been
++	  dropped.
 +
- config BR2_PACKAGE_CRIU
- 	bool "criu has been removed"
+ config BR2_PACKAGE_LIBSVG
+ 	bool "libsvg package removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8081514f10..dede88c5ee 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1707,7 +1707,6 @@ F:	support/testing/tests/package/test_zfs.py
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/at-spi2-core/
+ F:	package/earlyoom/
+-F:	package/gconf/
+ F:	package/libnss/
+ F:	package/llvm-project/clang/
+ F:	package/llvm-project/lld/
 diff --git a/package/Config.in b/package/Config.in
-index 2dd7d4ec3e..917b662a71 100644
+index b6cbd03e08..fbb651c688 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -174,7 +174,6 @@ menu "Development tools"
- 	source "package/cppunit/Config.in"
- 	source "package/cukinia/Config.in"
- 	source "package/cunit/Config.in"
--	source "package/cvs/Config.in"
- 	source "package/cxxtest/Config.in"
- 	source "package/diffutils/Config.in"
- 	source "package/dos2unix/Config.in"
-diff --git a/package/cvs/Config.in b/package/cvs/Config.in
+@@ -2173,7 +2173,6 @@ menu "Other"
+ 	source "package/flatcc/Config.in"
+ 	source "package/fp16/Config.in"
+ 	source "package/fxdiv/Config.in"
+-	source "package/gconf/Config.in"
+ 	source "package/gdal/Config.in"
+ 	source "package/gemmlowp/Config.in"
+ 	source "package/gflags/Config.in"
+diff --git a/package/gconf/Config.in b/package/gconf/Config.in
 deleted file mode 100644
-index e8f0606ecc..0000000000
---- a/package/cvs/Config.in
+index a2371b3f23..0000000000
+--- a/package/gconf/Config.in
 +++ /dev/null
-@@ -1,24 +0,0 @@
--config BR2_PACKAGE_CVS
--	bool "cvs"
--	depends on BR2_USE_WCHAR
--	# needs fork()
--	depends on BR2_USE_MMU
--	select BR2_PACKAGE_NCURSES
+@@ -1,21 +0,0 @@
+-config BR2_PACKAGE_GCONF
+-	bool "gconf"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus, libglib2
+-	depends on BR2_USE_WCHAR # libglib2
+-	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_DBUS
+-	select BR2_PACKAGE_DBUS_GLIB
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBXML2
 -	help
--	  Concurrent Versions System - source code revision control
--	  tools.
+-	  GConf was a system used by the GNOME desktop environment for
+-	  storing configuration settings for the desktop and
+-	  applications. It is similar to the Windows Registry.
 -
--	  http://www.nongnu.org/cvs/
+-	  https://projects.gnome.org/gconf/
 -
--if BR2_PACKAGE_CVS
--
--config BR2_PACKAGE_CVS_SERVER
--	bool "server support"
--	help
--	  Enable cvs server code
--
--endif
--
--comment "cvs needs a toolchain w/ wchar"
+-comment "gconf needs a toolchain w/ threads, wchar, dynamic library"
 -	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-diff --git a/package/cvs/cvs.hash b/package/cvs/cvs.hash
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR \
+-		|| BR2_STATIC_LIBS
+diff --git a/package/gconf/gconf.hash b/package/gconf/gconf.hash
 deleted file mode 100644
-index 7b03a552d0..0000000000
---- a/package/cvs/cvs.hash
+index ad0064fa99..0000000000
+--- a/package/gconf/gconf.hash
 +++ /dev/null
-@@ -1,8 +0,0 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cvs/cvs_1.12.13-12%2Bsqueeze1.dsc
--sha256  b5961c2476b996e5758fa5e22b60af085adca41164cac0d8f68a1d3b49d4e4f1  cvs_1.12.13.orig.tar.gz
--sha256  d52a9232d9cf36302a150d782fc7e5b6f92f8115505ae8a7dc6acfc83e809d2f  cvs_1.12.13-12+squeeze1.diff.gz
--
--# Hash for license files, locally computed
--sha256  569c5b876327d899cf444b2277fe910128a38ca71d90755fe4125dd44f8ece02  COPYING
--sha256  da0e282103fb508894e78db519aab255e36971ce0bc87de585e3b05014b83b1e  COPYING.LIB
--sha256  ee9a2fbdb626c0ac57fd8e569f357eb2e6d6c80cc6f41efa8bd126d5ea589d72  lib/glob-libc.h
-diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+@@ -1,4 +0,0 @@
+-# From https://download.gnome.org/sources/GConf/3.2/GConf-3.2.6.sha256sum
+-sha256  1912b91803ab09a5eed34d364bf09fe3a2a9c96751fde03a4e0cfa51a04d784c  GConf-3.2.6.tar.xz
+-# License files, locally calculated
+-sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
+diff --git a/package/gconf/gconf.mk b/package/gconf/gconf.mk
 deleted file mode 100644
-index cf9127fc3a..0000000000
---- a/package/cvs/cvs.mk
+index b84fa96082..0000000000
+--- a/package/gconf/gconf.mk
 +++ /dev/null
-@@ -1,58 +0,0 @@
+@@ -1,23 +0,0 @@
 -################################################################################
 -#
--# cvs
+-# gconf
 -#
 -################################################################################
 -
--CVS_VERSION = 1.12.13
--CVS_SOURCE = cvs_$(CVS_VERSION).orig.tar.gz
--CVS_PATCH = cvs_$(CVS_VERSION)-12+squeeze1.diff.gz
--CVS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cvs
--CVS_LICENSE = GPL-1.0+, LGPL-2.0+, LGPL-2.1+ (glob)
--CVS_LICENSE_FILES = COPYING COPYING.LIB lib/glob-libc.h
--CVS_CPE_ID_VENDOR = gnu
--CVS_SELINUX_MODULES = apache cvs
--CVS_DEPENDENCIES = ncurses
+-GCONF_VERSION = 3.2.6
+-GCONF_SOURCE = GConf-$(GCONF_VERSION).tar.xz
+-GCONF_SITE = https://download.gnome.org/sources/GConf/3.2
+-GCONF_CONF_OPTS = --disable-orbit
+-GCONF_DEPENDENCIES = dbus dbus-glib libglib2 libxml2 \
+-	host-intltool $(TARGET_NLS_DEPENDENCIES)
+-GCONF_LICENSE = LGPL-2.0+
+-GCONF_LICENSE_FILES = COPYING
 -
--CVS_CONF_ENV = \
--	ac_cv_func_working_mktime=yes \
--	cvs_cv_func_printf_ptr=yes
--
--CVS_CONF_OPTS = \
--	--disable-old-info-format-support \
--	--with-editor=/bin/vi
--ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
--CVS_CONF_OPTS += --enable-server
+-ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-GCONF_CONF_OPTS += --enable-introspection
+-GCONF_DEPENDENCIES += gobject-introspection
 -else
--CVS_CONF_OPTS += --disable-server
+-GCONF_CONF_OPTS += --disable-introspection
 -endif
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--CVS_CONF_OPTS += --with-external-zlib
--endif
--
--define CVS_BZIP_UNPACK
--	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | $(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
--endef
--
--CVS_POST_PATCH_HOOKS += CVS_BZIP_UNPACK
--
--ifneq ($(CVS_PATCH),)
--define CVS_DEBIAN_PATCHES
--	if [ -d $(@D)/debian/patches ]; then \
--		(cd $(@D)/debian/patches && for i in *; \
--		 do $(SED) 's,^\+\+\+ .*cvs-$(CVS_VERSION)/,+++ cvs-$(CVS_VERSION)/,' $$i; \
--		 done; \
--		); \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*; \
--	fi
--endef
--endif
--
--CVS_POST_PATCH_HOOKS += CVS_DEBIAN_PATCHES
--
--define CVS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D $(@D)/src/cvs $(TARGET_DIR)/usr/bin/cvs
--endef
 -
 -$(eval $(autotools-package))
+
+--===============3311247804005322997==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3311247804005322997==--
