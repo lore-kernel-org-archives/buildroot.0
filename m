@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E3F7D6CFA1
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 19:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18084D6CFA3
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jan 2026 19:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0F8F606A3;
-	Thu, 22 Jan 2026 19:11:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3B2840910;
+	Thu, 22 Jan 2026 19:11:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sCGNhhlhaDK0; Thu, 22 Jan 2026 19:11:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pgXKk-9jH-cB; Thu, 22 Jan 2026 19:11:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E91A1606B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA42640918
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
 	s=default; t=1769109113;
-	bh=6RukOllsbrVqQ49OlX8X+oNexdHE8QT9jfF/VGWOb1M=;
+	bh=ukChi2ON7a6+59oaAD2Z2dgzK/F8AN3hRQuLpbTQuEA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IMeXdu0QvC8D8LLP3sibLqKYT+MVpmZC2wleBNUb+cOXtGGjwZS0JwFSm/mmgbLlx
-	 pOSYcPViIJRQhYZ80ksu9vLEm8dJ3YeqNiGc0plz+ezFUj532IBCOVHS5FNtEOKNcN
-	 HrCvtmv6BYlkVBo+z/OK9+dPjqwWBJ4QxrYak9oZgT8OBkahi8iF8lo4Ypy7z/fdiH
-	 bxi1+WyFUDUG60x3xGG1FembQ+71mpP/yHnbDvomAextLhXJOAjyKT/9NXiNpivfYX
-	 LOwtpU+lYNKsdhFb/0uUmaQhSKbH0HIeO1AcOSVziCvl0H5AG2uGSoh2niU5T50hKm
-	 3TM7uJsJm6Kag==
+	b=ZOh7g3Yk3hFk7mCmUJzYCJGreYBUbrGOspDGw99yRt7UmDj6ApmxmobrOAoHJa9Od
+	 RTFDD3/UgASAzKnUxpRoVKg647QkxvQd0PzgJXu31u7Y6foSZpubpu5kVY1E6Mcvnl
+	 bzJRaEuiMBapR6BTpgHvfWQGgWMDdweQ/dlfzGr8T3WP+F5Pch6kI12c45azxxy7Mh
+	 xwzteEziv1yrAyRLYweDS2FWtEag24fErCkEHyjzeZGDaNAs4Hiav2gnmf+Rn5kJ3i
+	 iNZc7spaIyqRFKAeo6k5XZVFsWjskGoAgYBxRjKjRTriacBDuUMbSoQurXxz8+Kh5a
+	 6hWrN1SKWJhHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E91A1606B1;
-	Thu, 22 Jan 2026 19:11:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6155F122
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA42640918;
+	Thu, 22 Jan 2026 19:11:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65EB771F
  for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52B9B606B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 503A440918
  for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:11:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sZ6zcQtMMKFe for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8cUiELpfmNLh for <buildroot@buildroot.org>;
  Thu, 22 Jan 2026 19:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D78606A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A28340910
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71D78606A3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A28340910
  for <buildroot@buildroot.org>; Thu, 22 Jan 2026 19:11:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A13787537; Thu, 22 Jan 2026 19:11:51 +0000 (UTC)
+ id 78D3F86967; Thu, 22 Jan 2026 19:11:51 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 22 Jan 2026 20:10:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa1bdd38ff6a868e28105cca75815fdbeb77b21c
-X-Git-Newrev: 3b521d33078fc4ff67935dedf180532969db39ec
+X-Git-Oldrev: 3b521d33078fc4ff67935dedf180532969db39ec
+X-Git-Newrev: 04b64c8502cdb809b10ec6c01e4d408fcdca4a14
 X-Patchwork-Hint: ignore
-Message-Id: <20260122191151.6A13787537@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pure-ftpd: bump version to 1.0.53
+Message-Id: <20260122191151.78D3F86967@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dnsmasq: bump version to 2.92
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,44 +76,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b521d33078fc4ff67935dedf180532969db39ec
+commit: https://git.buildroot.net/buildroot/commit/?id=04b64c8502cdb809b10ec6c01e4d408fcdca4a14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/jedisct1/pure-ftpd/blob/1.0.53/ChangeLog
+Changelog: https://thekelleys.org.uk/dnsmasq/CHANGELOG
 
-Updated license hash due to copyright year bump:
-https://github.com/jedisct1/pure-ftpd/commit/bb162a22de772a810f802da61c7b103ae701c28a
+Release notes:
+https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q1/018380.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pure-ftpd/pure-ftpd.hash | 4 ++--
- package/pure-ftpd/pure-ftpd.mk   | 2 +-
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
-index 2c7a1849ff..b31afb2956 100644
---- a/package/pure-ftpd/pure-ftpd.hash
-+++ b/package/pure-ftpd/pure-ftpd.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 212774cd10..258f0b1e93 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--sha256  b3b879468275e0344555458c8e62465dcf525205ecf9ad78c3f208557d0c1947  pure-ftpd-1.0.52.tar.bz2
--sha256  1ec531b1bc4035019545d6a83e260a5a56d3a6bec52895393e9f25965e608e85  COPYING
-+sha256  329a1d524476d7a137dcf65af04ec79ddf1c225e2c4ac4a2e884663ef4897fa1  pure-ftpd-1.0.53.tar.bz2
-+sha256  b0bc52c61f9265bc00c509bd40dab60950371166b59416a1484bf226f480796e  COPYING
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index fb247f51ca..bf2599ecaf 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.91.tar.xz.asc
+-sha256  f622682848b33677adb2b6ad08264618a2ae0a01da486a93fd8cd91186b3d153  dnsmasq-2.91.tar.xz
++# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz.asc
++sha256  4bf50c2c1018f9fbc26037df51b90ecea0cb73d46162846763b92df0d6c3a458  dnsmasq-2.92.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index dec7c9a86d..74fc053089 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PURE_FTPD_VERSION = 1.0.52
-+PURE_FTPD_VERSION = 1.0.53
- PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
- PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
+-DNSMASQ_VERSION = 2.91
++DNSMASQ_VERSION = 2.92
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = https://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
