@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65707D3F09D
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA584D3F083
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2051440BC2;
-	Wed, 28 Jan 2026 17:22:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD28440A8B;
+	Wed, 28 Jan 2026 17:22:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QzAas67XqEVi; Wed, 28 Jan 2026 17:22:09 +0000 (UTC)
+ id a6Ra4HkhfIZ8; Wed, 28 Jan 2026 17:22:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AABA340931
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC2C040966
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769620927;
-	bh=lNPSNdErcz9wrdk+Z9pUXiHA9TBn0TXuz52N0hADsfA=;
+	s=default; t=1769620931;
+	bh=CX4fxSD99iTDzKgX6bo+meaPt+2sUaHCfwQAI/CZVSA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eZp15UTvlOzdvhUv18xDphK9AiQfBeUcKQwB02y5jjRNM42vWvPJgcyivix9Al2/J
-	 oNAy8YVN9QZ5xyHPu+GDVrOSxTcwDmVlsuithHYOQ1rzBa0RGGR6/NhHpjp/Z0b0Ly
-	 fIwDqvHoFk5Apz5eUx4TAZ8x86wctn2bV3vwC7nj+Hr8AXWqTGbtlNbBQxZSXfdHfo
-	 KDOiwam7ma3Q9lByVHZ9yXxb9b5mc4CJkinS5TCAL72vAO5RjKIVHKVvZAU5AMFjCS
-	 bKyyo4ojuZYpOKXQjCtqqtQNMNawuSnxH0CnQhOxiKvaNSfkuif2vabr43wPBOp6j/
-	 CphT9xVZDse8g==
+	b=jXrUX154OfRUS7db5dbu4Lex7Z0oRPQ72oiVUtdESAAPBkZIhTpJGoaqDw8ALimoo
+	 yIT+RU8uBAm2EGtGnWLixRXGvF8dOJYVX1mCAoJC8P4mwoNkamq+QUQiyqGTTKQD/J
+	 7MvsyoLpIKdpdn+lNWl/kejI4v8MkvzD2drkYLWylj5m3xOWzSoIFo5w3YcfhSWaNs
+	 WQzH/7g2MQQkpCQkzWGz1I4rJmqzWYT8XWWQ4PoMfCMiq5D8bQtrCtJnlMvif8AFDM
+	 02cJHiEi5UHDuIFca0zNki+8HuEo6DDrp9DcIu6SGGOowOYArnkGrZAEPR6mlPdIvF
+	 NNnOxhs+am8CQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AABA340931;
-	Wed, 28 Jan 2026 17:22:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EC3611AD
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:21:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC2C040966;
+	Wed, 28 Jan 2026 17:22:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16A44118
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 697F460785
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:21:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CEEB60789
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:21:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hiYuert0lg6x for <buildroot@buildroot.org>;
+ id ttf69I1wNPax for <buildroot@buildroot.org>;
  Wed, 28 Jan 2026 17:21:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A4A060788
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1224A60784
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A4A060788
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1224A60784
  for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:21:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 646C8825A0; Wed, 28 Jan 2026 17:21:52 +0000 (UTC)
+ id 0BE20841F1; Wed, 28 Jan 2026 17:21:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Jan 2026 15:52:40 +0100
+Date: Thu, 22 Jan 2026 15:51:03 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 2a2d01a42a0db80a0d07c749ca1211a0a24b3564
-X-Git-Newrev: 74a922174da93a7ac6026401490e8cdc0712e6b7
+X-Git-Oldrev: cebab98dd6c1d1468a67be01188ba213aacddb48
+X-Git-Newrev: 8c5bc9a1c63b29c0d94e8c38b9cc8a958fad4890
 X-Patchwork-Hint: ignore
-Message-Id: <20260128172152.646C8825A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/lockdev: remove
+Message-Id: <20260128172152.0BE20841F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/criu: remove
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,208 +77,228 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74a922174da93a7ac6026401490e8cdc0712e6b7
+commit: https://git.buildroot.net/buildroot/commit/?id=8c5bc9a1c63b29c0d94e8c38b9cc8a958fad4890
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.11.x
 
-The package was removed from Debian in 2016:
-https://tracker.debian.org/news/738763/removed-103-16-from-unstable/
-"Obsolete and replaced by flock"
+The criu package was added in Nov 2023, and then bumped once in
+December 2023. Since then, it has never been bumped again, and all
+follow-up fixes were provided by other people than the original
+package submitter listed in the DEVELOPERS file.
 
-and causes build errors with musl.
+criu has seen several upstream releases since then, and most notably
+is causing a number of build issues in our autobuilders:
 
-Fixes:
-https://autobuild.buildroot.net/results/9fa/9fa9323bac3ee1720396bb34fefb3017125e5a85/
+  https://autobuild.buildroot.net/?reason=criu-3.19
 
+The package was never updated to those newer upstream releases, and
+the autobuilder issues have not been addressed.
+
+Therefore, let's drop this package.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f6e0678ba8c95a17b5ca7bedb05a0950ab727c9a)
+(cherry picked from commit 9cf28c6573da793357fa0b073fde9274e6dbb2c8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- Config.in.legacy                                   |  7 +++
- package/Config.in                                  |  1 -
- ...stall-static-library-and-headers-separate.patch | 44 ----------------
- package/lockdev/Config.in                          |  6 ---
- package/lockdev/lockdev.hash                       |  5 --
- package/lockdev/lockdev.mk                         | 58 ----------------------
- 7 files changed, 7 insertions(+), 115 deletions(-)
+ Config.in.legacy       |  8 ++++++
+ DEVELOPERS             |  1 -
+ package/Config.in      |  1 -
+ package/criu/Config.in | 52 ----------------------------------
+ package/criu/criu.hash |  3 --
+ package/criu/criu.mk   | 77 --------------------------------------------------
+ 6 files changed, 8 insertions(+), 134 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index c8b2b41921..96603f8ea7 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -634,7 +634,6 @@ package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch lib_p
- package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch lib_patch.Upstream
- package/lmbench/0004-Fix-garbage-pointer-for-lat_rpc-S-localhost.patch lib_patch.Upstream
- package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch lib_patch.Upstream
--package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch lib_patch.Upstream
- package/lockfile-progs/0001-sus3v-legacy.patch lib_patch.Sob lib_patch.Upstream
- package/lshw/0001-solve-Compile-error-when-g-version-is-less-than-5.patch lib_patch.Upstream
- package/ltrace/0001-arm-plt.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 182292eb18..1dbba17175 100644
+index 9f50c4c8bc..2268e5b1ed 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+@@ -146,6 +146,14 @@ endif
  
  comment "Legacy options removed in 2025.11.2"
  
-+config BR2_PACKAGE_LOCKDEV
-+	bool "lockdev removed"
++config BR2_PACKAGE_CRIU
++	bool "criu has been removed"
 +	select BR2_LEGACY
 +	help
-+	  lockdev was no longer maintained upstream, so it has been
-+	  dropped.
++	  criu was removed from Buildroot as it was insufficiently
++	  maintained. It can be re-added if someone volunteers to
++	  maintain it.
 +
- config BR2_PACKAGE_DBUS_TRIGGERD
- 	bool "dbus-triggerd removed"
+ config BR2_PACKAGE_GCONF
+ 	bool "gconf package removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a1c29a4e8e..f9fa952b05 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2241,7 +2241,6 @@ F:	support/testing/tests/package/test_python_pytest.py
+ F:	support/testing/tests/package/test_python_pytest_asyncio.py
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+-F:	package/criu/
+ F:	package/libcamera/
+ F:	package/libcamera-apps/
+ F:	package/libostree/
 diff --git a/package/Config.in b/package/Config.in
-index ef741b4a7a..20c9a2e155 100644
+index f428aadabb..79ce224ace 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1691,7 +1691,6 @@ menu "Filesystem"
- 	source "package/liblockfile/Config.in"
- 	source "package/libnfs/Config.in"
- 	source "package/libsysfs/Config.in"
--	source "package/lockdev/Config.in"
- 	source "package/physfs/Config.in"
- endmenu
- 
-diff --git a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch b/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+@@ -2821,7 +2821,6 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
+-	source "package/criu/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/criu/Config.in b/package/criu/Config.in
 deleted file mode 100644
-index d5a498a19e..0000000000
---- a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+index 04a2080041..0000000000
+--- a/package/criu/Config.in
 +++ /dev/null
-@@ -1,44 +0,0 @@
--From 0dcd2368c3e23a5cc1cc4a979d9c241ed9302236 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Sun, 4 Jan 2015 16:06:07 +0100
--Subject: [PATCH] Makefile: install static library and headers separately
+@@ -1,52 +0,0 @@
+-# criu only builds on certain architectures
+-config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	bool
+-	default y if BR2_ARM_CPU_ARMV6
+-	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_ARM_CPU_ARMV7M
+-	default y if BR2_ARM_CPU_ARMV8A && !BR2_aarch64_be
+-	default y if BR2_aarch64
+-	default y if BR2_x86_64
+-	default y if BR2_powerpc64le # Only support powerpc64 with LE
+-	# CRIU has "some" support for s390 but it is not included due to
+-	# BE/LE endian issues.
+-	depends on BR2_USE_MMU # libcap
+-	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
 -
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- Makefile | 12 +++++++-----
-- 1 file changed, 7 insertions(+), 5 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index e27dcbd..ecf52d1 100644
----- a/Makefile
--+++ b/Makefile
--@@ -45,12 +45,10 @@ perl-lib:	static
-- 	cd LockDev && make OPTIMIZE="-O2 -g -Wall"
-- 	cd LockDev && make test
-- 
---.PHONY: install install_dev install_dbg install_doc install_run 
---install:	install_dev install_dbg install_doc install_run
--+.PHONY: install install_dev install_dbg install_doc install_run install_static
--+install:	install_dev install_dbg install_doc install_run install_static
-- 
---install_dev:	${static} src/lockdev.h
---	install -m755 -d	${libdir}
---	install -m644 ${static}	${libdir}
--+install_dev:	src/lockdev.h
-- 	install -m755 -d	${incdir}
-- 	install -m644 src/lockdev.h	${incdir}
-- 	install -m644 src/ttylock.h	${incdir}
--@@ -69,6 +67,10 @@ install_doc:	docs/lockdev.3
-- 	install -m755 -d	${mandir}/man3
-- 	install -m644 docs/lockdev.3	${mandir}/man3
-- 
--+install_static:	${static}
--+	install -m755 -d	${libdir}
--+	install -m644 ${static}	${libdir}
--+
-- install_run:	${shared}
-- 	install -m755 -d	${libdir}
-- 	install -m644 ${shared}	${libdir}
---- 
--1.9.3
--
-diff --git a/package/lockdev/Config.in b/package/lockdev/Config.in
-deleted file mode 100644
-index 4b386f4ab0..0000000000
---- a/package/lockdev/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_LOCKDEV
--	bool "lockdev"
+-config BR2_PACKAGE_CRIU
+-	bool "criu"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+-	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+-	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
+-	depends on BR2_USE_WCHAR # libbsd
+-	select BR2_PACKAGE_HOST_PYTHON3_SSL
+-	select BR2_PACKAGE_PROTOBUF
+-	select BR2_PACKAGE_PROTOBUF_C
+-	select BR2_PACKAGE_LIBAIO
+-	select BR2_PACKAGE_LIBBSD
+-	select BR2_PACKAGE_LIBCAP
+-	select BR2_PACKAGE_LIBNET
+-	select BR2_PACKAGE_LIBNL
+-	select BR2_PACKAGE_PYTHON3
 -	help
--	  Library for locking devices.
+-	  Checkpoint/Restore In Userspace (CRIU), is a software
+-	  tool for the Linux operating system to make it possible
+-	  to freeze a running application and checkpoint it to
+-	  persistent storage as a collection of files.
 -
--	  No upstream site, primary site is Debian.
-diff --git a/package/lockdev/lockdev.hash b/package/lockdev/lockdev.hash
+-	  https://criu.org/Main_Page
+-
+-comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >= 8, headers >= 4.18, C++, dynamic library, wchar"
+-	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+-		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/criu/criu.hash b/package/criu/criu.hash
 deleted file mode 100644
-index e32466dfe7..0000000000
---- a/package/lockdev/lockdev.hash
+index c3fcdbc03f..0000000000
+--- a/package/criu/criu.hash
 +++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev/lockdev_1.0.3-1.6.dsc
--sha256  ccae635d7ac3fdd50897eceb250872b3d9a191d298f213e7f0c836910d869f82  lockdev_1.0.3.orig.tar.gz
--sha256  a5405c6ee5e97e45eeb1c81330a7e9f444a58bda5e6771fa30007516c115007e  lockdev_1.0.3-1.6.diff.gz
+@@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  LICENSE
-diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
+-sha256  990cdd147cb670a5d5d14216c2b5c2fc2b9a53ef19396569a6413807ba2a6aa2  criu-3.19.tar.gz
+-sha256  568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  COPYING
+diff --git a/package/criu/criu.mk b/package/criu/criu.mk
 deleted file mode 100644
-index e491b132d3..0000000000
---- a/package/lockdev/lockdev.mk
+index 3b72a1131e..0000000000
+--- a/package/criu/criu.mk
 +++ /dev/null
-@@ -1,58 +0,0 @@
+@@ -1,77 +0,0 @@
 -################################################################################
 -#
--# lockdev
+-# CRIU
 -#
 -################################################################################
 -
--LOCKDEV_VERSION_MAJOR = 1
--LOCKDEV_VERSION = $(LOCKDEV_VERSION_MAJOR).0.3
--LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
--LOCKDEV_PATCH = lockdev_$(LOCKDEV_VERSION)-1.6.diff.gz
--LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev
--LOCKDEV_LICENSE = LGPL-2.1
--LOCKDEV_LICENSE_FILES = LICENSE
--LOCKDEV_INSTALL_STAGING = YES
+-CRIU_VERSION = 3.19
+-CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
 -
--ifeq ($(BR2_STATIC_LIBS),y)
--LOCKDEV_BUILD_ARGS = static
--LOCKDEV_INSTALL_ARGS = install_static
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--LOCKDEV_BUILD_ARGS = static shared
--LOCKDEV_INSTALL_ARGS = install_run install_static
--else # BR2_SHARED_LIBS
--LOCKDEV_BUILD_ARGS = shared
--LOCKDEV_INSTALL_ARGS = install_run
+-CRIU_LICENSE = GPL-2.0, LGPL-2.1 (for lib/), MIT (for images/)
+-CRIU_LICENSE_FILES = COPYING images/LICENSE
+-
+-CRIU_DEPENDENCIES =\
+-	host-pkgconf \
+-	host-protobuf-c \
+-	host-python3 \
+-	host-python-pip \
+-	libaio \
+-	libbsd \
+-	libcap \
+-	libnet \
+-	libnl \
+-	protobuf \
+-	protobuf-c \
+-	python3
+-
+-CRIU_MAKE_ENV =\
+-	$(TARGET_MAKE_ENV) \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CROSS_COMPILE=$(TARGET_CROSS) \
+-	WERROR=0
+-
+-# Remap to match the used in criu.
+-ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
+-CRIU_MAKE_ENV += ARCH=x86
+-else ifeq ($(BR2_NORMALIZED_ARCH),"powerpc")
+-CRIU_MAKE_ENV += ARCH=ppc64
+-else ifeq ($(BR2_NORMALIZED_ARCH),"arm64")
+-CRIU_MAKE_ENV += ARCH=aarch64
+-else
+-CRIU_MAKE_ENV += ARCH=$(BR2_NORMALIZED_ARCH)
 -endif
 -
--# Make the code believe we are using a C library compatible with
--# glibc, which for the purpose of lockdev is actually true.
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--LOCKDEV_BUILD_ARGS += CFLAGS="$(TARGET_CFLAGS) -D__GNU_LIBRARY__"
+-ifeq ($(BR2_ARM_CPU_ARMV6),y)
+-CRIU_MAKE_ENV += SUBARCH=armv6
+-else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV7M),y)
+-CRIU_MAKE_ENV += SUBARCH=armv7
+-else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+-CRIU_MAKE_ENV += SUBARCH=armv8
 -endif
 -
--ifeq ($(BR2_SHARED_STATIC_LIBS)$(BR2_SHARED_LIBS),y)
--define LOCKDEV_CREATE_LINKS_STAGING
--	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
--	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_VERSION_MAJOR)
+-# Criu needs Kernel Checkpoint/restore support which is not enabled
+-# by default.
+-define CRIU_LINUX_CONFIG_FIXUPS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
 -endef
 -
--define LOCKDEV_CREATE_LINKS_TARGET
--	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_VERSION_MAJOR)
--endef
--endif
--
--define LOCKDEV_BUILD_CMDS
--	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(LOCKDEV_BUILD_ARGS)
--endef
--
--define LOCKDEV_INSTALL_STAGING_CMDS
--	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS) install_dev
--	$(LOCKDEV_CREATE_LINKS_STAGING)
+-define CRIU_BUILD_CMDS
+-	rm -rf $(@D)/images/google/protobuf/descriptor.proto
+-	cp -a  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto \
+-		$(@D)/images/google/protobuf/descriptor.proto
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr
 -endef
 -
--define LOCKDEV_INSTALL_TARGET_CMDS
--	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS)
--	$(LOCKDEV_CREATE_LINKS_TARGET)
+-define CRIU_INSTALL_TARGET_CMDS
+-	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=/usr \
+-		DESTDIR=$(TARGET_DIR) \
+-		install-criu \
+-		install-lib \
+-		install-compel
 -endef
 -
 -$(eval $(generic-package))
