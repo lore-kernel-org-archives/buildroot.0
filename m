@@ -1,86 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A52D7237B
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jan 2026 12:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 420F2D74ED9
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jan 2026 14:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2EA660850;
-	Fri, 23 Jan 2026 12:47:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A34F40AE5;
+	Fri, 23 Jan 2026 14:11:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T4tp_FyesyLe; Fri, 23 Jan 2026 14:11:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EE6340ADF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1769177469;
+	bh=1Fl5tnmF/7X1jkS2gk0Bi7vtiAlK5jwIAJAAjaRh0XI=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=qEUtFFryijOGnCGfujGelE8C9hRGuobfTcpysuh2xoe2LMjqoekl9S+6yv5+KBKvJ
+	 vj2WQTlSaIdXLYBo6XqqJNm+KcfLq6FX3kkwNIoJSKCGLDtegD7QYUgPzOM1vfYPex
+	 4LlSOAuhiFUiwK69HTBvWlCSwP7oTagtrrwrfJNhbbGgCy8HcRQGGDODOoLUgDRnAv
+	 lZOHYPYWpo8yGZn1z3pgsq93x5XtuyuxSX6erOHh+z7U6s67lQDJUUNMug+OTcydic
+	 vpko8VplSwE76NmdooiLnh9bCNFKt88LK8d8VHT2PeOqXDwV3jKlmaYs9RKRkKs7EX
+	 VUl7kvTDd5cQg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EE6340ADF;
+	Fri, 23 Jan 2026 14:11:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ACF93122
+ for <buildroot@buildroot.org>; Fri, 23 Jan 2026 14:11:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92CE56087A
+ for <buildroot@buildroot.org>; Fri, 23 Jan 2026 14:11:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VkeMTRtWlD4Q; Fri, 23 Jan 2026 12:47:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A80916084D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769172426;
-	bh=ub0qUiMVvkk7wm1GZD1MIiGhumSLH3ttOExkqZbleA0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=J/mUWtWcwNFwNCGH/zhcHN8D/zQfu0aw5QRG5kRndba9i3qKYtPlnI2OryBx97uaa
-	 deDm0+rDThavmnwtZAbKagDq5/EMbiAGE/ZQLTgtmqwDDvsrLSvQ0SWj3975H4DK+k
-	 F7ERvoRXUmX24EktRmJ68Rm9jCWOV1GXsxKc9AWxmShuyL+zBTuAHmFRq7qKJOrSki
-	 5c8tzmAIFqjbkwFX9Df7w3fiKW3A3ykMRHS8reuI1x6fYM73qXrhfkNplyi3W8PmPE
-	 jGpFwE/ZCxWKitmhc22jpD5okgauNKS+YUnwDCciZLSjmmJvW4axWNfFv3pakHxfU2
-	 kSUdeqrbwM2wg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A80916084D;
-	Fri, 23 Jan 2026 12:47:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8869D23F
- for <buildroot@buildroot.org>; Fri, 23 Jan 2026 12:47:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C7D640458
- for <buildroot@buildroot.org>; Fri, 23 Jan 2026 12:47:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6mtgmU4rKCJX for <buildroot@buildroot.org>;
- Fri, 23 Jan 2026 12:47:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8E3C140414
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E3C140414
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E3C140414
- for <buildroot@buildroot.org>; Fri, 23 Jan 2026 12:47:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 10F9B60128;
- Fri, 23 Jan 2026 13:46:59 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 23 Jan 2026 13:46:59 +0100
+ id Msu9F1zIrtn3 for <buildroot@buildroot.org>;
+ Fri, 23 Jan 2026 14:11:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0E2E660841
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E2E660841
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E2E660841
+ for <buildroot@buildroot.org>; Fri, 23 Jan 2026 14:11:05 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 3D03831E0BA7; Fri, 23 Jan 2026 15:10:59 +0100 (CET)
+Date: Fri, 23 Jan 2026 15:10:59 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <aXOBc0KVRl7qTTrK@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Date: Fri, 23 Jan 2026 13:46:59 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260123074449.3991189-1-bernd@kuhls.net>
-References: <20260123074449.3991189-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <df6aa629886fec7ed623b4fa041c9bce@free.fr>
-X-Sender: ju.o@free.fr
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1769172422;
- bh=76IkKLSalf9bUtdjnue4iMfRXe+E7HKSFDTw0hqD1Iw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ugn3tkz1dIhXb0cZTuiHl7GB5/RG78H1sYL1FTGBHUy1QIuFx3td4jdfFmCfByYAp
- vJcEs68pgKlHMnKZgu1aSXmnK8aPxLn1yLQ2OdEMDPxy4XfsIzWsNAknj0xmDu05MB
- kOgKMPPUSUuCds/7PHA9d8FAX4cYVAJGLew2RO+4y4/O1rybttCciachpEwLMsOHM7
- fBPeYpTrfO2ILMP+15Cd37Zh3Z/47ZJqFhOFTrdazvnLXe8PGKMkRt1ngQt5N2g16Y
- aRduPOYTZIZnqLWAwS8GLXOVuVhm3EQa36rgDYvl2xBmd93MVEFFb1CQJUzgF7L3Nu
- zTTG0HgQWHw7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ugn3tkz1
-Subject: Re: [Buildroot] [PATCH] package/cmake: bump version to 4.2.2
+ d=openadk.org; s=2022; 
+ t=1769177459; bh=f9PiAVl4XhXa4w0fqMCRrnZBgkoKLjqO5VwrNZTQv5Q=;
+ h=Date:From:To:Subject:From;
+ b=bCcEqijiEC4kShjYlkeI4wevsmRZJWStV1h5Qd7gBNNpPY6WXL7bJQ73r6WaCGdH0
+ hyAEAV7pLxZZSJ5kzoTUp65n1TWxnmqc1/nqfwApnjq+rklmvxaGywHZwGLgGIcbug
+ 0NZQbXxQ8PoX0ZIa9W8zC2gWLlqyL7tAIQBaEFyY0wV68XEsjtA1wfGEiH2ziklvUk
+ Qmw7agmiQ6EAdtlrmAulviDZVvle+MA3NNUcJFCKLixQUClE8aePDn+/gAT6rgVck7
+ LQGmz1UXQ12vc10Ky9sIZvaZwgIP+TWD1nygNoRZV0azMm0fbLu4H3HAZtWjqiEXLG
+ HrYx3+suXxfFA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=bCcEqiji
+Subject: [Buildroot] [PATCH 1/2 v2] package/strongswan: fix security related
+ bug
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,19 +88,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/01/2026 08:44, Bernd Kuhls wrote:
-> https://cmake.org/cmake/help/latest/release/4.2.html#id2
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Add patch for CVE-2025-62291.
+https://nvd.nist.gov/vuln/detail/CVE-2025-62291
 
-Applied to master, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...001-eap_mschapv2_failure_request_len.patch | 46 +++++++++++++++++++
+ package/strongswan/strongswan.mk              |  1 +
+ 2 files changed, 47 insertions(+)
+ create mode 100644 package/strongswan/0001-eap_mschapv2_failure_request_len.patch
+
+diff --git a/package/strongswan/0001-eap_mschapv2_failure_request_len.patch b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
+new file mode 100644
+index 0000000000..8442cc7816
+--- /dev/null
++++ b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
+@@ -0,0 +1,46 @@
++From dda24815d148b91209ebf2d27e3a7acefe9b6435 Mon Sep 17 00:00:00 2001
++From: Tobias Brunner <tobias@strongswan.org>
++Date: Thu, 9 Oct 2025 11:33:45 +0200
++Subject: [PATCH] eap-mschapv2: Fix length check for Failure Request packets on
++ the client
++
++For message lengths between 6 and 8, subtracting HEADER_LEN (9) causes
++`message_len` to become negative, which is then used in calls to malloc()
++and memcpy() that both take size_t arguments, causing an integer
++underflow.
++
++For 6 and 7, the huge size requested from malloc() will fail (it exceeds
++PTRDIFF_MAX) and the returned NULL pointer will cause a segmentation
++fault in memcpy().
++
++However, for 8, the allocation is 0, which succeeds.  But then the -1
++passed to memcpy() causes a heap-based buffer overflow (and possibly a
++segmentation fault when attempting to read/write that much data).
++Fortunately, if compiled with -D_FORTIFY_SOURCE=3 (the default on e.g.
++Ubuntu), the compiler will use __memcpy_chk(), which prevents that buffer
++overflow and causes the daemon to get aborted immediately instead.
++
++Fixes: f98cdf7a4765 ("adding plugin for EAP-MS-CHAPv2")
++Fixes: CVE-2025-62291
++Upstream: https://github.com/strongswan/strongswan/commit/c687ada6a6f68913651e355fd09f906893096b32
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c b/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
++index 21cc95a6a360..35faad2e0bb5 100644
++--- a/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
+++++ b/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
++@@ -974,7 +974,7 @@ static status_t process_peer_failure(private_eap_mschapv2_t *this,
++ 	data = in->get_data(in);
++ 	eap = (eap_mschapv2_header_t*)data.ptr;
++ 
++-	if (data.len < 3) /* we want at least an error code: E=e */
+++	if (data.len < HEADER_LEN + 3) /* we want at least an error code: E=e */
++ 	{
++ 		DBG1(DBG_IKE, "received invalid EAP-MS-CHAPv2 message: too short");
++ 		return FAILED;
++-- 
++2.43.0
++
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 9719242327..c0147c00df 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -12,6 +12,7 @@ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_CPE_ID_VENDOR = strongswan
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
+ STRONGSWAN_INSTALL_STAGING = YES
++STRONGSWAN_IGNORE_CVES += CVE-2025-62291
+ STRONGSWAN_CONF_OPTS += \
+ 	--without-lib-prefix \
+ 	--enable-led \
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
