@@ -1,83 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61D0AD715EE
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jan 2026 15:05:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F2AD715EC
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jan 2026 15:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAF1382207;
-	Sat, 24 Jan 2026 15:05:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C598840934;
+	Sat, 24 Jan 2026 15:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u_4e6_CLo_50; Sat, 24 Jan 2026 15:05:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hnNLLyF-6mkr; Sat, 24 Jan 2026 15:23:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24CF0821B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08B5D40A23
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769267150;
-	bh=4uuqNPwhvmbffAMlmmoDswlyjUpecoy7NhzzEvbUlDc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1769268201;
+	bh=+UZxFHZFhi88dRRLn8FjkB5x1LJG77OWTgx66fhVsgg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=VHle56G5ytVkiA2u9lFmWLS6FE6yE502Zzg+CfdaGQS++u5/fX2UzDetCDssDfmt8
-	 i5FGkLDgZq0X0EfNcyR76gpciYKjVacTRmR9zSd2cKYmOJPaddtRZ5sfN4i9tgqzp5
-	 q8+Sz1bQ/XXoa2DLSJRR9PtoAtZm2P5bTp5Rn74LBZVzZSFh7oYf6NXFdvsLZbze9Z
-	 j0vemxgSsxd9LqxnHRqRnjQ7VpqrShenepGzurE5N0l4crsp0dI1G6TsISPr6EKwNB
-	 oyCwT5OIFvsR2VBZl5q4vGtOxNrudnmQ+DvuKQDIjtwhIfyq9PvX/K5ZJ9UAJRCnly
-	 JBC5/7xImj9Hw==
+	b=Q0+z0rdZl7PwXjkAipQV5bLkhIxQ1W914Dk/M71JJOgNO8BhvKQRlepkyJDkY8u5Y
+	 UxOPzqKfn3Cy8x/hBL4KcUXlCWqnlvAlYDyQoKVLJQW1fdg0SWxkOmaCzC99GNhSlJ
+	 GsVtsSoBwdVSVCB8j+51+hwbLiD5NqBnb720Sw0FYnBe5LSO3pvq1jyoKWVmPAjS+v
+	 opdRoUWQPD+WTqpgjkz2VOYKc/+7n9oe8+ut75c+teE9rqzDrJrjT3hUtbc5RhXhFL
+	 bjkornCnGpTFEap6GJ3GKMOv9gOzsf37cb9aTMJEqnfiJvCoqugoULhaBsrxkhZ/e7
+	 rWQ+WWg1ahezg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24CF0821B9;
-	Sat, 24 Jan 2026 15:05:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 83081358
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 15:05:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08B5D40A23;
+	Sat, 24 Jan 2026 15:23:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80B8171F
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 15:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70E0760A6B
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 15:05:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F4E840594
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 15:23:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6REFrLas8VK8 for <buildroot@buildroot.org>;
- Sat, 24 Jan 2026 15:05:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 82E6D60A60
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82E6D60A60
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 82E6D60A60
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 15:05:46 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -777069069; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 24 Jan 2026 15:05:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vjfCn-000000018Tt-2ed1;
- Sat, 24 Jan 2026 16:05:41 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lS79_Q_DPYIH for <buildroot@buildroot.org>;
+ Sat, 24 Jan 2026 15:23:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 52E9840168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52E9840168
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 52E9840168
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 15:23:18 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-48049955f7fso25279045e9.0
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 07:23:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1769268196; x=1769872996;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=IvkZoo7yWl/kqvHoapS2RmbeTOtc/jjAk7kSb/wVZ6w=;
+ b=NHv9LUvQ248FX5g3uQfoplFgjdsVfWuf7nZtMHo1otDPRVePM5RYMqupuX+26G0Fti
+ sMtP/u/iE2QP1aWzv201vlewEWgi5l3TNjESuFcgDhNId2DqsSd6B7MvGmT4/u1vAQHM
+ JUXzIjyd6LRiBHmbIr90HnEQzR+SKVPhbAwFBFddqj9I2nUIDO3SrWRLeBkoETQuXizg
+ tZFvD34aUUwNISX7xEtF4nIm530rxRmK6bhxbPbTo1E2wsJJfbftDWZnGz277P0owRY2
+ FFji+fCoxt6u+P88Yc8SWxlivhUDNh1hS0gRY2qezZf+edrsJIa6SuG1snGZOELbLv/4
+ wFEA==
+X-Gm-Message-State: AOJu0Yz9FbjSE1hdA6T83cYxNhND7uPG9HBkpmvk8YeDYrTlIdYthS2D
+ Kj9hAFF6UAerKInCD+aNL7WRzLnzZgflL7CbIKUIrUr4Ect0Sec3uyX5qcIrbsD3g08laAOoF/O
+ uo2Nu
+X-Gm-Gg: AZuq6aIbH38ee2gDBxZXHmniZMoQL080yyy58gp9DB0w1Cb/cfJGyEdsOU4hJAkkHEQ
+ t1Wf0Sk/Up1aRnSn7mrG7qHBQRqFdiynAjMqV6RFmOM5byYHM5Cv3pMdjJNSOcaiS0xwehDOi3M
+ aDVRTOb7ifJg1AKTnRFIEr8nbzDDK/jb1H8+tVIGiCPrrcZq0sQ2f8SfXjjBdQKwdeeHnoUeLGB
+ TPxjmpSGmGhmsxpno8lUO7uYc1HLBoNOcx+ZWJlct+4qybuHkp6rL7ToX4Pf3tHnK1W3iMXGoyZ
+ QHdiZrP3WWQQC1qbE3RzcNaOYDgrmGCRhqH3XdFYLqv6i5s81eBCSSakMOnEwT4+caRgOtlRNMO
+ 66CyRKlFNYrVEx8mniUOXvx+D1SJsWl9b9V5RFbqD/c2NCBEBT/zJY+4FKugTVza9SuVmkNni+2
+ IKW6jpjtQwCl4QQzzJ/8Nzq+Nc/hLT02Wx+GQdpL1C/I8krmjW6AaliqgZol7TOtjcTyRmHwybb
+ ApZHcxMf5YyQ3rDDDC7AiyhDf/F6OyqyDgFQkEcGJZAZ8VoUEocSxO67jP9XczlxmtiFHSIuPVL
+ h52Fh4UDbRQ=
+X-Received: by 2002:a05:600c:45cd:b0:479:2f95:5179 with SMTP id
+ 5b1f17b1804b1-480511f46c5mr75454585e9.15.1769268195790; 
+ Sat, 24 Jan 2026 07:23:15 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-95-248-31-95.retail.telecomitalia.it. [95.248.31.95])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4804703b90bsm242262415e9.6.2026.01.24.07.23.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 24 Jan 2026 07:23:15 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jan 2026 16:05:39 +0100
-Message-ID: <20260124150540.270915-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Cc: linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sat, 24 Jan 2026 16:23:11 +0100
+Message-ID: <20260124152311.680810-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=t0x9c1svg0L0V9ZuB0FUEo1QJ2KiJyIpBpaSEgG1fvS9jAOpB6vhTuEWErXRXZ7Df/zt7xY6YAi9Qg9hHyiIvtx+Ghr5wAl2I9YDQF51xcWD9CaHXT0q2r+6tXX5YKVziCZ3nfhbhu3NQamnbYMus8fkB6BLgeymaT3tw1Tf7cQDzmIO8h6yhzM09ftUkzfbaJEFEENGQVMvbqlAFB4ugkuRsn+dS2dNZrgUN7FsK3aPcIcQRObldWpew5noopMMwvnE+ajIkvhW1r2nFvH40L5FZ7W0bZJR2BWfrwQMatlB3ZsZHbzDfzBfslVBdE/o1r5fKmeRIyFBjoS4QRnUSA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=Ksymy5jDOiJQ0kcPa2xIIWL1Z26N22bUH9gaY/KP4pc=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=t0x9c1sv
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/swig: add host-swig wrapper script
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1769268196; x=1769872996;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=IvkZoo7yWl/kqvHoapS2RmbeTOtc/jjAk7kSb/wVZ6w=;
+ b=qhmT/AAfjcDIdZg1NLSNRSEqQJq3DFVFEKvKIHn8SSXSK/dC6i2faTYFC+lTypEK86
+ gnm5ZWBEvFy7zhBv4qEKGIz0ljZ3NqF4Zxr2TAWEOc3NnkK3h4CnKIxXLm9bYLK8ij9J
+ S/SQG2Es5LFja1qubKZsUJIqyKKkzrLAx93e8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=qhmT/AAf
+Subject: [Buildroot] [PATCH 1/1] board/stmicroelectronics/stm32f4xx: exit
+ post-build.sh on error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,69 +127,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Swig has a compiled in absolute path to its data files, which can be
-overridden using the SWIG_LIB environment variable:
+Add 'set -eu' to ensure that command failures or unset variables are
+properly reported to the 'make' process. This prevents silent failures
+during the image generation phase.
 
-https://github.com/swig/swig/blob/v4.1.1/Source/Modules/main.cxx#L931-L945
-
-This unfortunately means that host-swig misbehaves when used in the SDK, as
-this points to the ${HOST_DIR}/bin of the build, which may not be available
-when the SDK is used.
-
-The issue was reported upstream but rejected in
-https://github.com/swig/swig/issues/253, so instead add a wrapper script
-which calculates a sensible SWIG_LIB relative to the wrapper location unless
-SWIG_LIB is set, similar to how we do it for E.G. gcc or pkgconf.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/swig/swig-wrapper.in |  8 ++++++++
- package/swig/swig.mk         | 15 +++++++++++++++
- 2 files changed, 23 insertions(+)
- create mode 100644 package/swig/swig-wrapper.in
+ board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/swig/swig-wrapper.in b/package/swig/swig-wrapper.in
-new file mode 100644
-index 0000000000..68be44231f
---- /dev/null
-+++ b/package/swig/swig-wrapper.in
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+# wrapper to make swig relocatable
-+
-+if [ -z "${SWIG_LIB}" ]; then
-+    export SWIG_LIB=${0%/*}/../share/swig/@SWIG_VERSION@
-+fi
-+
-+exec "${0}.br_real" "$@"
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index ad585c3f97..71e5e05f96 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -15,6 +15,21 @@ HOST_SWIG_CONF_OPTS = \
- SWIG_LICENSE = GPL-3.0+, BSD-2-Clause, BSD-3-Clause
- SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+diff --git a/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh b/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh
+index 4fcce6150071..2c5b6be098ac 100755
+--- a/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh
++++ b/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh
+@@ -1,4 +1,5 @@
+ #!/bin/sh
++set -eu
  
-+# Swig has a compiled in absolute path to its data files, so it does
-+# not work when copied somewhere else for the SDK. Issue was reported
-+# upstream but rejected in https://github.com/swig/swig/issues/253 so
-+# instead add a wrapper to work around this
-+
-+define HOST_SWIG_INSTALL_WRAPPER
-+	mv -f $(HOST_DIR)/bin/swig $(HOST_DIR)/bin/swig.br_real
-+	$(INSTALL) -m 0755 -D package/swig/swig-wrapper.in \
-+		$(HOST_DIR)/bin/swig
-+	$(SED) 's,@SWIG_VERSION@,$(SWIG_VERSION),g' \
-+		$(HOST_DIR)/bin/swig
-+endef
-+
-+HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_WRAPPER
-+
- # CMake looks first at swig3.0, then swig2.0 and then swig. However,
- # when doing the search, it will look into the PATH for swig2.0 first,
- # and then for swig.
+ # Busybox is built without network support
+ sed -i '/hostname/d' ${TARGET_DIR}/etc/inittab
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
