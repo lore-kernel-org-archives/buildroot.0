@@ -1,85 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE05AD715C7
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jan 2026 08:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8754D715E3
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jan 2026 10:44:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E12840AA5;
-	Sat, 24 Jan 2026 08:43:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DA4080F71;
+	Sat, 24 Jan 2026 10:44:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RQrdihcfhcaP; Sat, 24 Jan 2026 08:43:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id trHceBX_CikP; Sat, 24 Jan 2026 10:44:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9149340AA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6130580EC1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769244208;
-	bh=18Nxc+oKZ23urXTFl+2TWl4QNOB3uEV6pipeTGihY4c=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YDQDcKcVSfvLI7os2nKauZsGhUnmtjdj+9rWuqNVJQNhPkfrffRrd4+wzgQrtStVi
-	 aM88a8Yf/QFUea0eKkuRpKd+48jnqqshtWm3zi8wtnWXuTX/Gy5NxX9phnZLZDsihj
-	 8I/hM+pJ9K57zUruM7XSqgJPksl7Ty0lkF8v4VJs54hI9W/AKTZfSIvwyb865324sC
-	 kQBUFQSMatAq7dReDjDgS9Dv/ZUpv1ynu09OwW1XmlEjc/uusUtSWWmdxv5es2Kxpp
-	 SzoFl1qi/E28KFD7UF8qMOuiDgtV1iKfKOjFppv6l3ga0E27doHZgH0mAma1E4eaP4
-	 lItn6yQ45PoyQ==
+	s=default; t=1769251467;
+	bh=WCxjvrVBtcmPliT7qRIXc9htdM/NCud0xTQeIz2CHBc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=s6RA9F8f10zEkl6T6QTRUU0qI46wqi+JjWU+39fQ6JHBnqnNqvGQ8GO8V4G92/C6v
+	 PWrK/4ANir08XHinJS29VpQDIRZglfHmHyZvDZWerGY1iPL2IkOmjCmmZ994DKXU3r
+	 8T0a7jZ8LjjKE8zM/Mkj4BZV7Et40VNLtToZz3eS6kxfU47m0rnxSv0FMTDN2FA+QX
+	 LUowv+e0fVWdYHKf7slJL5orAyhsTFWtDKE8THsu2aEKxLgmrLBYkyQQQx9UxmyuWA
+	 5gZ4M+ZaCWCtsoLF5OnVB/bkXX8tt4xW4qE13F3T/+G2RwFSvGkPQ6e0B9pNEuL3+R
+	 i0ChWGKS9AIhQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9149340AA1;
-	Sat, 24 Jan 2026 08:43:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 92B83358
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 08:43:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6130580EC1;
+	Sat, 24 Jan 2026 10:44:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE69B358
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 10:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E55060866
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 08:43:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCF98404DF
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 10:44:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xIx9v_9uaMuf for <buildroot@buildroot.org>;
- Sat, 24 Jan 2026 08:43:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AA1BE6085A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA1BE6085A
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AA1BE6085A
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 08:43:25 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b95e.dip0.t-ipconnect.de [84.161.185.94])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ACCCCA4C492C
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 09:43:23 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58346)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vjZEp-000000003aS-2ujj
- for buildroot@buildroot.org; Sat, 24 Jan 2026 08:43:23 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xa1W0d-JA3J8 for <buildroot@buildroot.org>;
+ Sat, 24 Jan 2026 10:44:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7CD440025
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7CD440025
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 10:44:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AFB9E87591; Sat, 24 Jan 2026 10:44:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 24 Jan 2026 09:43:23 +0100
-Message-ID: <20260124084323.1068962-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1769244203;
- bh=jcxHyQ7XEC5Rwix2hVWpdiO3OrcVTetFaSEAdHp86K0=;
- h=From:To:Subject:Date:From;
- b=liKIyqdcKkS6bz+zFiGCu5AqcFErN09T+cG8ug3Zl/8sDX9dBgiwdUZi8IC25NyYJ
- llZiAM/ahSt4Tr+Q+SLK53opeTAsDiqMtXz+wyM4tEdrhyX7JHqPE9tfz7xfoE0F0r
- MLHQGV92/HHVzEPzapWd45TME/XsSoShP5dX7g/4ZkI3exRXoWXuJ42p6s0RJdUaN6
- Q0wzpkG0FELH6HVwBJ6oDdGIk3vkQDSSNan4rnqqfMlppGdzs96bbgp4amVGEItaPH
- OjQk4cBOGtfkbW1bpLq2pP5wpYyuQPuhKXTeffQWcbE3cnvfJc0i2DHtOtGHlZ58JU
- LbBo6mB/hbSQQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=liKIyqdc
-Subject: [Buildroot] [PATCH 1/1] package/linux-tools: fix pcitest
+Date: Sat, 24 Jan 2026 11:30:29 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d5e191fad75ddd88a3a0468fb0fe02f3ef258beb
+X-Git-Newrev: b64a2da6e028308d9b06e77d1d1471382f6f6bb7
+X-Patchwork-Hint: ignore
+Message-Id: <20260124104424.AFB9E87591@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.{12,
+ 18}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,80 +69,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 74d33f6f817f14f05c8e1600df3399d4d96c6320 bumped
-BR2_LINUX_KERNEL_LATEST_VERSION to 6.14 series that includes upstream
-commit https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=392188bb0f6ec5162edf457c062929a6abfa369a
-which moved tools/pci/ to tools/testing/selftests/pci_endpoint/.
-
-Use INSTALL_PATH instead of DESTDIR in PCI_INSTALL_TARGET_CMDS for these
-kernels due to upstream commit
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=392188bb0f6ec5162edf457c062929a6abfa369a
-that uses common makefile ../lib.mk which forces the use of INSTALL_PATH:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/lib.mk#n178
-
-Fixes:
-https://autobuild.buildroot.net/results/c4d/c4d08bd1dbaf448d8e2d0c8b252b233c85e92396/
+commit: https://git.buildroot.net/buildroot/commit/?id=b64a2da6e028308d9b06e77d1d1471382f6f6bb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/linux-tools/linux-tool-pci.mk.in | 31 ++++++++++++++++++------
- 1 file changed, 23 insertions(+), 8 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
-index 17246f5d7e..51f816fdc3 100644
---- a/package/linux-tools/linux-tool-pci.mk.in
-+++ b/package/linux-tools/linux-tool-pci.mk.in
-@@ -9,19 +9,34 @@ LINUX_TOOLS += pci
- PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
+diff --git a/linux/Config.in b/linux/Config.in
+index 3a1852c7e9..6b6c745e08 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
- define PCI_BUILD_CMDS
--	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
-+	$(Q)if test -f $(LINUX_DIR)/tools/testing/selftests/pci_endpoint/Makefile ; then \
-+		PCI_SUBDIR=tools/testing/selftests/pci_endpoint \
-+		TEST_GEN_PROGS="TEST_GEN_PROGS=pci_endpoint_test"; \
-+	elif grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
-+		PCI_SUBDIR=tools/pci; \
-+	else \
- 		echo "Your kernel version is too old and does not have install section in the pci tools." ; \
- 		echo "At least kernel 4.20 must be used." ; \
- 		exit 1 ; \
--	fi
--
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
--		$(PCI_MAKE_OPTS)
-+	fi ; \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/$${PCI_SUBDIR} \
-+		$(PCI_MAKE_OPTS) $${TEST_GEN_PROGS}
- endef
- 
-+# For install no need to recheck both cases: we know at least one
-+# exists, because that was checked at build time already; we just
-+# need to find which of the two: if not one, then the other.
- define PCI_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
--		$(PCI_MAKE_OPTS) \
--		DESTDIR=$(TARGET_DIR) \
-+	$(Q)if test -f $(LINUX_DIR)/tools/testing/selftests/pci_endpoint/Makefile ; then \
-+		PCI_INSTALL_OPT="INSTALL_PATH=$(TARGET_DIR)" \
-+		PCI_SUBDIR=tools/testing/selftests/pci_endpoint \
-+		TEST_GEN_PROGS="TEST_GEN_PROGS=pci_endpoint_test"; \
-+	else \
-+		PCI_INSTALL_OPT="DESTDIR=$(TARGET_DIR)" \
-+		PCI_SUBDIR=tools/pci; \
-+	fi ; \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/$${PCI_SUBDIR} \
-+		$(PCI_MAKE_OPTS) $${TEST_GEN_PROGS} \
-+		$${PCI_INSTALL_OPT} \
- 		install
- endef
--- 
-2.47.3
-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.18.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.18.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index a3e621f38d..64f8411046 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  472497197b2f68d4dbf1bc32cc6dc669ca220ff4c0eb0dc39a9cff9a88f9a31b  linux-6.18.6.tar.xz
+-sha256  ba3897a1c060b05a03cb4dda6f20d8c75e6f73c88b217744823a915056536eaf  linux-6.12.66.tar.xz
++sha256  b726a4d15cf9ae06219b56d87820776e34d89fbc137e55fb54a9b9c3015b8f1e  linux-6.18.7.tar.xz
++sha256  16805dc62e1fa5ef8a3f466f3f44a2efb171b5206d6840ced4ba5475cf12c432  linux-6.12.67.tar.xz
+ sha256  76af9d4fce24cc5a1c9f1fcbba2e23c4e87bbc8e20525b1691206801f24d14ba  linux-6.6.121.tar.xz
+ sha256  b41666bda7223600386a07ebe1802f5029da2fe81f6a85d691b6ec6a707e5a29  linux-6.1.161.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index dcf5d46505..4727ba2048 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -460,8 +460,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.15.198"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.161"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.121"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.66"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.6"	if BR2_KERNEL_HEADERS_6_18
++	default "6.12.67"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.7"	if BR2_KERNEL_HEADERS_6_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
