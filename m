@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D94D715EF
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jan 2026 16:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D5FD715EE
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jan 2026 16:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1426440AD5;
-	Sat, 24 Jan 2026 16:15:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 680FB60A7E;
+	Sat, 24 Jan 2026 16:20:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ORy1nFBDUb2K; Sat, 24 Jan 2026 16:15:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wb5dO4e6PXtc; Sat, 24 Jan 2026 16:20:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EE35409F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E25AB60A78
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769271349;
-	bh=tc4hDSE2kxWA66v6ormhKlI/yaX+BZU1q3zug3EuNJY=;
+	s=default; t=1769271629;
+	bh=s8A7UT6XXd1OesL+efc3sKwun2StKDppJIneIMR7Ro8=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=elpOwsdzcgnXCH14nBK78wxshkSmGh0cxJlsfT4ErnlpH1GqEDnbqu6aYfHZST5vU
-	 UqzRvR1OkXPg7Q9ejD59uWLahgpmuRQQWzplWbv6gZckAOzJSnAXUapBmWCbIZFzh3
-	 7A7cpFi/czryYDE8r8ugRtW9u2ibw41fkykdw3Ozh7gJ2keuMkN7Fx27/C0aYXmofc
-	 dbI2/Rl5/rQ0+Z15LnM5bglWWZCiQJA9KKZhSPLKYoe/ZfmWFAWQHjAKOz1Oj3Iq2a
-	 p4ehsh+ZLkw8Ld0C84FBrrD2L8D7JvIpZitULOWaUTI0Bg52/UjtoPml2E5xFIVv1Y
-	 ugMIWctmQUYzA==
+	b=XyCQ7KEA6Kl+9gHBToVDWhTuPX99HE6+Cj+TvV6Cwpy8OV9wJM+yNkwewxOVpHp7f
+	 RAvzBytVrb8YlOWN0hKb0iGrZvDWHnlVTSVTabo9ArERRHKk8Nhy03x/z6JFUtkp92
+	 nz2JjPhMRiHMaKjGvyz7wIRTLzdE7cORCkeLSbxU6E8NmAO5wFnkIBYKgKy/FaJBwJ
+	 HHW/4NfirYTmNI0RaKszK2BUvu1QW2+zK6Yc/axxKPOd0fQS942nsB70YvaO+FhDbQ
+	 8C0TTNHsM63qgaIYtN8UAqVV0S/AU7Z/ICrRoy3QRqTQJnP2429WZUEKlhEwFLHUI0
+	 RyEKDYerBmNCg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EE35409F7;
-	Sat, 24 Jan 2026 16:15:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 20F60358
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 16:15:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E25AB60A78;
+	Sat, 24 Jan 2026 16:20:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5408358
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 16:20:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEFBA81FFC
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 16:15:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1E83405BA
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 16:20:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UW3F8rnJpmQT for <buildroot@buildroot.org>;
- Sat, 24 Jan 2026 16:15:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6RzEY9iNwbfo for <buildroot@buildroot.org>;
+ Sat, 24 Jan 2026 16:20:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::442; helo=mail-wr1-x442.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0101481F67
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0101481F67
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com
- [IPv6:2a00:1450:4864:20::442])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0101481F67
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 16:15:46 +0000 (UTC)
-Received: by mail-wr1-x442.google.com with SMTP id
- ffacd0b85a97d-432d28870ddso1675071f8f.3
- for <buildroot@buildroot.org>; Sat, 24 Jan 2026 08:15:46 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C8B9940168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8B9940168
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8B9940168
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 16:20:26 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-47ee3a63300so35911345e9.2
+ for <buildroot@buildroot.org>; Sat, 24 Jan 2026 08:20:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1769271344; x=1769876144;
+ d=1e100.net; s=20230601; t=1769271624; x=1769876424;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=6Li7EwRfzNS2L+Gt7ALW+4VNUkIm2sIT9fS0uNavfN0=;
- b=qKrsZM3QkTiPFmRtCKObfsreyq4WPx1+ywLBwzFmUVGnnjFm7+XlQscTVM68Wqe2Xx
- ieavYERPl3P0tfubqy4vtvEIvelmxa/M2IqixxJ4uwUb12QKZQUXgjMr91ReU6OCgcQM
- P61wU4S5Lmts3AWEpAPg60OizVmVYP2V05+j92CTdsrHHB8XrsxBmTivakUiFbtz/gSB
- IhUF8jTwEZpqFBo1kFJkMmskmH/elZyp7BKivI5yaksBgZKRx/LnEH+FQyM2v7PH1bek
- /ubUeNccAsOEnJR0NnMF2RXDFxnafiMbziAbXgGFplGBf7aIvcZ9Ds8uAuwcxuwviVxo
- F6/w==
-X-Gm-Message-State: AOJu0YwuytFK2uah7DAvMTNAUqE2ctmvBEjKeYICIBbcEG8Ig8YcKpUx
- A4aLYVr4UinVJ3C1syzgIZgvHS4Tujl5CGpk41mlUnGmYhcgLec2D9+HH3mGHJ7/iF71IjpYftM
- alyW/ISU=
-X-Gm-Gg: AZuq6aJ3gLxs2ocP7rCPCn+totWyyFWkSbJ/4TaBeS0VsX0Eavv/aO0SpQb/zedsrM8
- 4NcJrZBR+aQKal45fLGcpYTAqBMljlQbmIpKkCyXH//RTxVlsG2WSloXWlnmhiIoINwI+IKi+rl
- emNVFAbbXvuHJ1ssDt4cEjaeNeKlXUkVlRvKHTmVIl3+VYgGd8gUftXoA0sdQvpugYUiW9+Fsva
- PgFpVmHeCHJMLBkgN4lMq7maaySMVoPzDSAbDBTRgofqHu3FvBTyp69jb1fxGDtCOVGwSL25YrW
- vXMsZe/EReSuvDgj/6bOIWw+S+DHtNFttSEA8MDZ76gdybPhT/k6vM9Ot7HO/jBU6U/NdSrQE5r
- p37mq92dVc9dthaw4fp1L42RkrBXrk5mBDNkGhI14CDUbq0+BFfK63xBAArytRX5VobmjmNoIHe
- E4y3it5GurN4jhDhHKDDZW2jfYuUXse3ggOP3ri51lhzN1Z9FtbQ0x47m9nBB6INDFTdma7kvt7
- UtA5tDv90X9FNtZMGImicthgnY0MOnZpZPlo0JckUjHFGQSk4EqS8/rhbOGLZm6Z0XQH69ozO9X
- 54UAvVTN65c=
-X-Received: by 2002:a5d:5887:0:b0:435:91ab:c6e4 with SMTP id
- ffacd0b85a97d-435b92f94camr9306215f8f.12.1769271344611; 
- Sat, 24 Jan 2026 08:15:44 -0800 (PST)
+ bh=s57SljO0FdPLFfIGI+D1N9yPzCBGZsG+Hu2YLKzc0WY=;
+ b=KNsjIkDoJWi3EPJ6n8RrNeBFkkMXDiZIUsUtx1xIp64aca+ZDab5YYsCaV5y151Ysc
+ ZD17+Bu2qbleuLm+ZCU8MVEdd5DXZvM+Gwz8tWMmrJsfUJ4GoO+ONKr2Hbzc3yqZ8mhU
+ laZOXWXTXK/dX1uTmmX4GmTSUVwOAZ5nHcIDOk4P1Sm220PqhX309vzLWA5pDU3OViG2
+ v+iQPO3ueeGt3uCtYKNLrMaRi3VSAaWgXoL0w9PB660p9EkkO9cbtMMDX8DpDLQJDeSs
+ 2HWWjq9mlahbgLdkiTn3KR6DXCejBfCoMnteNnpCsj6b8Tyfke+LU/HGX4WwjzwG+y41
+ EC5w==
+X-Gm-Message-State: AOJu0YxSmk3TcKjgHxHLJacgIidRCalkNycHDx9VQozzZO6C5EsJKAld
+ aMjowfhWY0hlcRAFIlPJt1mzpHneDotv19+PY+pTFEh+J1CrvIbYTQ4PbEThzUO82Cvf9HMUDRZ
+ 79KCE
+X-Gm-Gg: AZuq6aKcbVPkmJNtHG0JFUOK9QC3keEGe5/Vh8TXk4SQU/NspdIeMzZEGSh2ECm5nSA
+ ZV0WnAkQQA1+5xHUvizHfDJDdHVNJkblk3FmS89WBIgUl+VwN7qev7CXX6l5o4hCbOsJhSnpItD
+ zbc9Y/7rQk34NuWk9nPAXkoA03G2dDriukl5tVOsoBHkY48fOV4ory2zlnBjvjzNwOLjcMTTfpU
+ BIfI6279R3/7mkO60+wZ3b5xndFlZ5Tmu+eldiVPrr4KoX/2wZq3vjiaQNo1GivUBNYC1mXUVPw
+ k/PUF0WyD3yGZKguBKN8Cr3hr7jSkUGHkWj9M3h05T+Xard8SMv5ygswbzIhVrdhch8Wtdwh1MK
+ nzPWSU7PSqyAWPK5YH2R3EtNKHyVRjiYDsDDbJ8HJDlgZRaaNhoignTZxhhsGOLHA1KHsKBncnU
+ xOAXGELPAr/vOHp2oeJtLcVQAAhBhD2yR1P9sG/IzYcIKHL9PPIWbjntvODDHFUZo2M8kfX2LX4
+ Vvj7JykK9mB2wmP5pJ8khZi1tW0Yw4IFKxXCR7VOStasPaX1RV//Pwd/U2W4ezqQhVvkYhq1UHV
+ 0ZjjLMY7PKJbI6pfy/4Stg==
+X-Received: by 2002:a05:600c:a016:b0:47e:e712:aa88 with SMTP id
+ 5b1f17b1804b1-4804c9c144fmr117529285e9.31.1769271624482; 
+ Sat, 24 Jan 2026 08:20:24 -0800 (PST)
 Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
  (host-95-248-31-95.retail.telecomitalia.it. [95.248.31.95])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-435b1c02cd8sm14445344f8f.8.2026.01.24.08.15.43
+ 5b1f17b1804b1-4804d84589bsm136572315e9.3.2026.01.24.08.20.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Jan 2026 08:15:44 -0800 (PST)
+ Sat, 24 Jan 2026 08:20:24 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Michael Trimarchi <michael@amarulasolutions.com>,
  linux-amarula@amarulasolutions.com
-Date: Sat, 24 Jan 2026 17:15:40 +0100
-Message-ID: <20260124161540.2325660-1-dario.binacchi@amarulasolutions.com>
+Date: Sat, 24 Jan 2026 17:20:00 +0100
+Message-ID: <20260124162000.2396200-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1769271344; x=1769876144;
+ d=amarulasolutions.com; s=google; t=1769271624; x=1769876424;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6Li7EwRfzNS2L+Gt7ALW+4VNUkIm2sIT9fS0uNavfN0=;
- b=Z/C//c1HwZbnEWfcFF7VzuWW08/jHxW6HXSLSJjqlir9DVTs39dAZ06ujQMrIOTLbS
- glSdKKwW7BliB93QR9U+QSVUmYPb4pC2zLk4vkITBPjRDXOL4ET8/YCL43f9ornoZWs1
- WeD7RWAn+ImgMui4iOLyyI8TQmZQHM5RBVF3Q=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=s57SljO0FdPLFfIGI+D1N9yPzCBGZsG+Hu2YLKzc0WY=;
+ b=ZZ33O06SJJJRbpRitq60x1xVUPxucxub4n/W58QpRMrB7BD+rtspq07SJuMbxqaZ2f
+ b8kSmV1soAEi3CxX89JX07ADBmiw/o6W8AeLhbyvbppLE9xmi7EsbZxjvNBv7wYt0S0N
+ V4aw65Jah8Ku67+TvPlE9T3qSALwNzJ6LcG7Q=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=Z/C//c1H
-Subject: [Buildroot] [PATCH 1/1] board/bsh/imx8mn-bsh-smm-s2: exit
- post-build.sh on error
+ header.a=rsa-sha256 header.s=google header.b=ZZ33O06S
+Subject: [Buildroot] [PATCH 1/1] board/stmicroelectronics/stm32f769-disco:
+ exit post-build.sh on error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,20 +133,20 @@ during the image generation phase.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- board/bsh/imx8mn-bsh-smm-s2/post-build.sh | 2 ++
+ board/stmicroelectronics/stm32f769-disco/post-build.sh | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/board/bsh/imx8mn-bsh-smm-s2/post-build.sh b/board/bsh/imx8mn-bsh-smm-s2/post-build.sh
-index 49df4cd6fb10..ede1738ecbc5 100755
---- a/board/bsh/imx8mn-bsh-smm-s2/post-build.sh
-+++ b/board/bsh/imx8mn-bsh-smm-s2/post-build.sh
+diff --git a/board/stmicroelectronics/stm32f769-disco/post-build.sh b/board/stmicroelectronics/stm32f769-disco/post-build.sh
+index 45100509411b..293bf30cb3ff 100755
+--- a/board/stmicroelectronics/stm32f769-disco/post-build.sh
++++ b/board/stmicroelectronics/stm32f769-disco/post-build.sh
 @@ -1,4 +1,6 @@
  #!/bin/sh
 +set -eu
 +
- BOARD_DIR="$(dirname $0)"
+ BOARD_DIR="$(dirname "$0")"
  
- cp ${BOARD_DIR}/nand-full.lst ${BINARIES_DIR}
+ # Kernel is built without devpts support
 -- 
 2.43.0
 
