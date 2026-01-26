@@ -4,85 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 239FAD1951B
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jan 2026 20:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82819D1951A
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jan 2026 21:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8845660D9D;
-	Mon, 26 Jan 2026 20:54:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 298A460E0C;
+	Mon, 26 Jan 2026 21:04:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8uiC46vxNgMV; Mon, 26 Jan 2026 20:54:15 +0000 (UTC)
+ id 7zN15yyRX-CN; Mon, 26 Jan 2026 21:04:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 622F760DA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5787260E1C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769460855;
-	bh=m7Yt8X4YSTX5mr8+rrXIDBwkaEPm98BhHECg5r28qks=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kuqMnyz75lN2orB2dzmnPXHX3UqgkNQofn4rQD2LkkJ+KvuTMf/aWNovi52DRHCzf
-	 mxxd+bEzJ5ak7tnwAdUzDPpiKCNdR4b+PNZdgA7PyBYzOH/RrMjNCXDC/62FU1AU6+
-	 5qCid2E4fKSIcas1RCkemPGRFSigsdvMhTzucQj/FMr9AnYF6plPoWiAzZ5ZWsonnH
-	 MOsV3RMPe3NbBb5tzbUKJXayu2QpYog+FGljhtXDtsrpWNjcwYluPMRNhSm/hoCnQi
-	 FbPk4oO9mj5XGCIAOjwVdXNQgUfMS9SmweIYj9cG1bPBEX3qGCX1Xs9FLkRFpHH8WP
-	 Q6w60UkHVf0MQ==
+	s=default; t=1769461447;
+	bh=V2NjO2TMF0ev2KO+IULebEsWBVqvA3EvllnBxdAZr/o=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jClPO8EvzxIVWoHb8PE2r9r8ccAmaoZSH3AE8+wAsnt02tyjibXGHJ2jDxRyiEnNl
+	 dK2jJXNDCJMC6XlIey9tII8YZBjEGVcZqQQ6FNNNIdFHJGGCfOmRsL0YK0waSqVLIg
+	 ebD1FqnashE4/hSK0E/GDgvm5AigbpYBr8y3KGPJhP6Lq86ds513gwpwbyVNI0HEuY
+	 8WNJ8NSXvHHU7dUVogp4IRtNTRrRdyVpAZaEIc3h+l6Bwiie7PpmvF3QcumPtmsnGX
+	 SRGLem5ypfogKhtQAlVw1dhsOef2FMbjzW6IMod7pNx/e/QrRz6ykH5JX1eVsjOhbL
+	 CwyfHxxv1qg0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 622F760DA4;
-	Mon, 26 Jan 2026 20:54:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C0F2D2F4
- for <buildroot@buildroot.org>; Mon, 26 Jan 2026 20:54:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5787260E1C;
+	Mon, 26 Jan 2026 21:04:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27E9733A
+ for <buildroot@buildroot.org>; Mon, 26 Jan 2026 21:04:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF5DD40337
- for <buildroot@buildroot.org>; Mon, 26 Jan 2026 20:54:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46D3460E1C
+ for <buildroot@buildroot.org>; Mon, 26 Jan 2026 21:04:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5SNL4t4fnjFA for <buildroot@buildroot.org>;
- Mon, 26 Jan 2026 20:54:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D55E040316
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D55E040316
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D55E040316
- for <buildroot@buildroot.org>; Mon, 26 Jan 2026 20:54:10 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 5A97119F5C2;
- Mon, 26 Jan 2026 21:54:06 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 26 Jan 2026 21:54:06 +0100
-MIME-Version: 1.0
-Date: Mon, 26 Jan 2026 21:54:06 +0100
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260126133848.91886-1-thomas.perale@mind.be>
-References: <20260126133848.91886-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <95312902e0358ea081c09be7be78616e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1769460847;
- bh=wsrLD2BnJeNcsIUV1ksjMNqUda3q1x1fGwUtsixAfrc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mzcJjicSBdPlJAR15Vw/UlLZvEDNmAmwPK+4Iu2ld8XjFirdFy0pJVjLmlKHKbWhC
- EPtsS+wKPsbDqg68wnNDIAIOn1pO12djsIKmUh/GoIQwyTYYrMTF4vcAvDhheIjs/3
- WiqRX2uUsk7JMzwFmDJUNMT4Ws8z/CfrzzhYLhy861IsRvddvY6RtD2TWV0grdw3ED
- VoMj8J5kxViJqEMroWfAldEuYr5VOx2bVHlr4tZiWSbLEwxwlFX0ZySzenGCD4uuDC
- 2QGXSNbm8HO4CzYZWhA0EmZ1vPCl0yddd3pmTdydEPIYa6KR/3JM5xpzIjfj0wV9Or
- JYNACarcjZYOg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=mzcJjicS
-Subject: Re: [Buildroot] [2025.11.x PATCH]
- support/dependencies/check-host-cmake.mk: set host-cmake max version
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OD9KzSPJ7njs for <buildroot@buildroot.org>;
+ Mon, 26 Jan 2026 21:04:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4551F60E0C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4551F60E0C
+ for <buildroot@buildroot.org>; Mon, 26 Jan 2026 21:04:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2F0CF87731; Mon, 26 Jan 2026 21:04:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 26 Jan 2026 21:55:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eb63637dd0ca3fdd3c45d79525c706ee64ec03d3
+X-Git-Newrev: 54153e7ac859a6af36266a24bb49d7f1692b6761
+X-Patchwork-Hint: ignore
+Message-Id: <20260126210402.2F0CF87731@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/less: bump to version 691
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,58 +70,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=54153e7ac859a6af36266a24bb49d7f1692b6761
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch.
+For change log, see:
+https://www.greenwoodsoftware.com/less/news.691.html
 
-I agree with this change. I also suggest to add in the commit
-log a bit more information to give examples of which distributions
-switched to cmake 4, and also to to explicitly say this patch is
-explicitly meant for LTS branches only, and to explain why we don't
-want to apply such a patch on master. See my suggestions below.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/less/less.hash | 4 ++--
+ package/less/less.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 26/01/2026 14:38, Thomas Perale via buildroot wrote:
-> Since the introduction of CMake 4 in several distributions
-
-(such as Alpine [1] and Arch [2] Linux)
-
-> ,build errors
-> started occurring on those distributions for cmake packages that
-> included calls to cmake_minimum_required() or cmake_policy() with a
-> version older than 3.50 (see [1]).
-                      ~~~~
-Should this be "3.5"?
-
-> This patch enforce building host-cmake when the host system provides
-> CMake 4 or newer.
-
-I suggest to add here:
-"""
-Note: this patch is only meant for LTS maintenance branches in which
-the host-cmake was kept to a version less than 4.x. This is to avoid
-too many unnecessary package updates and patches. We also prefer not
-to apply it on the main master branch to make sure Buildroot packages
-will get updated or removed (if deprecated).
-"""
-
-> [1] 
-> https://cmake.org/cmake/help/latest/release/4.0.html#deprecated-and-removed-features
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-
-Best regards,
-
-Julien.
-
-[1] 
-https://gitlab.alpinelinux.org/alpine/aports/-/commit/21fe3cb10d65862648a7a65cc258899bfcae9b11
-[2] 
-https://gitlab.archlinux.org/archlinux/packaging/packages/cmake/-/commit/b634e8ded6d2d887450586f14f404f72518b97b9
+diff --git a/package/less/less.hash b/package/less/less.hash
+index 881849a42b..49dcaf28ef 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # using DSA key F153A7C833235259
+-# https://www.greenwoodsoftware.com/less/less-685.sig
+-sha256  2701041e767e697ee420ce0825641cedc8f20b51576abe99d92c1666d332e9dc  less-685.tar.gz
++# https://www.greenwoodsoftware.com/less/less-691.sig
++sha256  88b480eda1bb4f92009f7968b23189eaf1329211f5a3515869e133d286154d25  less-691.tar.gz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/less/less.mk b/package/less/less.mk
+index afb6987e73..6f78fb67c7 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LESS_VERSION = 685
++LESS_VERSION = 691
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
