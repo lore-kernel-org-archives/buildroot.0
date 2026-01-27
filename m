@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9595DD2FED9
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jan 2026 20:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97653D2FEE2
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jan 2026 20:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 597D860DD4;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A05E82286;
 	Tue, 27 Jan 2026 20:53:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A-xHx08bc4H4; Tue, 27 Jan 2026 20:53:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z5fkKlSWgZ3y; Tue, 27 Jan 2026 20:53:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89330606BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 556508227A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769547186;
-	bh=dO1zZGDftVqOAFJKO7u08+Vei7Zko2KKSmG4JZZCbok=;
+	s=default; t=1769547185;
+	bh=4x0cEO2tPtpBjytQCfrf8uYbo11zOKwmyHkEt83Cb/s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Kb784dHnTXlRRXdajoeo/tJg/senEM7IfWhJdC/pGqadjLlbOtHECyKxKIooSQiA0
-	 nbHVfQjONqCUfTRSidOZYCuSwG04FtNqDJg3KdSUctbU+PXVcq99GZDHygYBHPsAdF
-	 qc4+BwyWRlr1uG6kLfPC4maqOU2OBlCwocbnOkr7iWVroXoEik3Ub/1wgT8z8HgAP0
-	 hYqmBwcVrrVWaN2vs4GnPFfPQyEsxQxM9/ceyOKn0egfy7Vw24Yk76ZSOKZWTtP+1I
-	 5356lSm6N8sZ6CIlX6qPJ5cvrzOt6R1QTuxwISY/DT+cTPWheaM8SwAm5PXAl09ZPm
-	 IZa/4hOPHo9cg==
+	b=eW7STR4fs7erLqRzrLVmXBdNlE3jocgPZ/4/IVqX3IiA0YH0+JhxExsQFl4XUn9AF
+	 fJFIuS3GQ+5J4rjsGo0E+fl2rsz7TWAWcSS8pefael1rTQlY/gQKooV9hpIS8TYPuq
+	 PNQ0uT/s2xDswUfoT+CeuJnRMfUgKlJdj8ax3kUx99+U2zbOUQjOubCJ4J0ZzhYn9m
+	 bVtM/o2jcqsCvVtUlT48zpXULPsqGgqNf9B8s/EfVoXQnXLUvqKHTecg+5Wx+w4S9w
+	 PHNE6Jy5Hcj6G7uDF5jSNMKKbUA5agLh7qaj5Y/qTcQCUIED4xXCyzqGpznAG8OZyC
+	 w4PgWWhhcMDNw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89330606BB;
-	Tue, 27 Jan 2026 20:53:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B16A21AF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 556508227A;
+	Tue, 27 Jan 2026 20:53:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0251118
  for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F8D3407FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94E3E401E0
  for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:53:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wlSH81pEV6Ok for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2eIdmkDhEchT for <buildroot@buildroot.org>;
  Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 980BB4079D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA8E40181
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 980BB4079D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8CA8E40181
  for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8719387774; Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
+ id 799D887773; Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Jan 2026 21:32:33 +0100
+Date: Tue, 27 Jan 2026 21:32:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fdeced6692b12641097864399ab930b88cebff64
-X-Git-Newrev: fb523a75cfdf60906fc266a14475335937ea76ed
+X-Git-Oldrev: 54153e7ac859a6af36266a24bb49d7f1692b6761
+X-Git-Newrev: fdeced6692b12641097864399ab930b88cebff64
 X-Patchwork-Hint: ignore
-Message-Id: <20260127205302.8719387774@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: default to
- BR2_TARGET_GENERIC_PASSWD_* algo
+Message-Id: <20260127205302.799D887773@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] system/Config.in: do not reference md5 for
+ sha256 option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,70 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb523a75cfdf60906fc266a14475335937ea76ed
+commit: https://git.buildroot.net/buildroot/commit/?id=fdeced6692b12641097864399ab930b88cebff64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make busybox follow the BR2_TARGET_GENERIC_PASSWD_* system configuration
-option, E.G.
-
-cat defconfig
-BR2_x86_core2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_MUSL_BLEEDING_EDGE=y
-BR2_STATIC_LIBS=y
-BR2_TARGET_GENERIC_PASSWD_SHA512=y
-
-./target/usr/bin/mkpasswd --help
-BusyBox v1.37.0 (2026-01-27 17:31:51 CET) multi-call binary.
-
-Usage: mkpasswd [-P FD] [-m TYPE] [-S SALT] [PASSWORD] [SALT]
-
-Print crypt(3) hashed PASSWORD
-
-        -P N    Read password from fd N
-        -m TYPE des,md5,sha256/512 (default sha512)
-        -S SALT
-
-./target/usr/bin/mkpasswd test
-$6$VQ6lDdGRJOgs8Exs$gEWp1nN/FHCAgmoB6lD.fN13EKA40yV7WQmZJcFp114VrL/st74zP5iPsLHi5NFX/A6GAa1gD.yqzp5Lz3DKl/
+Commit bf3626002f ("system cfg: remove mkpasswd MD5 format option") dropped
+the MD5 option, so stop referring to it from the sha256 one to limit
+confusion.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/busybox/busybox.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ system/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d7eda71db6..446f93c36c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -176,6 +176,18 @@ define BUSYBOX_SET_CRYPT_SHA
- endef
- endif
+diff --git a/system/Config.in b/system/Config.in
+index 0652b94a3b..98bbd93092 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -67,7 +67,7 @@ choice
+ config BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	bool "sha-256"
+ 	help
+-	  Use SHA256 to encode passwords which is stronger than MD5.
++	  Use SHA256 to encode passwords.
  
-+ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256),y)
-+define BUSYBOX_SET_DEFAULT_PASSWD_ALGO
-+	$(call KCONFIG_SET_OPT,CONFIG_FEATURE_DEFAULT_PASSWD_ALGO,"sha256")
-+endef
-+endif
-+
-+ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
-+define BUSYBOX_SET_DEFAULT_PASSWD_ALGO
-+	$(call KCONFIG_SET_OPT,CONFIG_FEATURE_DEFAULT_PASSWD_ALGO,"sha512")
-+endef
-+endif
-+
- ifeq ($(BR2_USE_MMU),y)
- define BUSYBOX_SET_MMU
- 	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU)
-@@ -427,6 +439,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_MDEV)
- 	$(BUSYBOX_SET_CRYPT_SHA)
- 	$(BUSYBOX_LINUX_PAM)
-+	$(BUSYBOX_SET_DEFAULT_PASSWD_ALGO)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
+ config BR2_TARGET_GENERIC_PASSWD_SHA512
+ 	bool "sha-512"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
