@@ -4,120 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC6A7D2FEE1
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jan 2026 20:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9595DD2FED9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jan 2026 20:53:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C1C261101;
-	Tue, 27 Jan 2026 20:45:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 597D860DD4;
+	Tue, 27 Jan 2026 20:53:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YC9AsNm7yC5Q; Tue, 27 Jan 2026 20:45:54 +0000 (UTC)
+ id A-xHx08bc4H4; Tue, 27 Jan 2026 20:53:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FC44610F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89330606BB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769546754;
-	bh=4ekH0ntaL5XWahpDxjpcnXY9WDznjTZO+E0/6zFzYD8=;
-	h=From:Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=iBRls31dQtXAto06aKqWDhD7qfipzeU1kFgLUmWbCYSVkhIrQxEL9DaA0A+Gokbes
-	 ugmhL8m4L6vIhuXXdlSsLjCeQXZJA/0fOMvNvCG2bpUl19U7UY22XYspgV9RcYcmcu
-	 eCXCQ/7zIjW3GVvpqMsRYxHQH2dThpgp8quMWJaNPxCGO9e/cXFbrwR/Rol/24V2b3
-	 t8oHrOrPEuZLPwXMlRrHcce91GrJuKeoyRTY2S44VqQ+ccnTz5bioHFo4/0+jSw4DA
-	 KeJ1fuw1pxFRaJmxHVA2sDOatPL4zmB6/IsTeXY2/oGIqBF9U0uyd8kwi+E58VwCG6
-	 H2GrtMcwef4xQ==
+	s=default; t=1769547186;
+	bh=dO1zZGDftVqOAFJKO7u08+Vei7Zko2KKSmG4JZZCbok=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Kb784dHnTXlRRXdajoeo/tJg/senEM7IfWhJdC/pGqadjLlbOtHECyKxKIooSQiA0
+	 nbHVfQjONqCUfTRSidOZYCuSwG04FtNqDJg3KdSUctbU+PXVcq99GZDHygYBHPsAdF
+	 qc4+BwyWRlr1uG6kLfPC4maqOU2OBlCwocbnOkr7iWVroXoEik3Ub/1wgT8z8HgAP0
+	 hYqmBwcVrrVWaN2vs4GnPFfPQyEsxQxM9/ceyOKn0egfy7Vw24Yk76ZSOKZWTtP+1I
+	 5356lSm6N8sZ6CIlX6qPJ5cvrzOt6R1QTuxwISY/DT+cTPWheaM8SwAm5PXAl09ZPm
+	 IZa/4hOPHo9cg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FC44610F9;
-	Tue, 27 Jan 2026 20:45:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EF672160
- for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:45:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89330606BB;
+	Tue, 27 Jan 2026 20:53:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B16A21AF
+ for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D32318133F
- for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:45:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F8D3407FD
+ for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:53:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cI0wjyPtMmcm for <buildroot@buildroot.org>;
- Tue, 27 Jan 2026 20:45:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b12f; helo=mail-yx1-xb12f.google.com;
- envelope-from=judge.packham@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 04A9381305
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04A9381305
-Received: from mail-yx1-xb12f.google.com (mail-yx1-xb12f.google.com
- [IPv6:2607:f8b0:4864:20::b12f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 04A9381305
- for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:45:51 +0000 (UTC)
-Received: by mail-yx1-xb12f.google.com with SMTP id
- 956f58d0204a3-644715aad1aso356893d50.0
- for <buildroot@buildroot.org>; Tue, 27 Jan 2026 12:45:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769546750; cv=none;
- d=google.com; s=arc-20240605;
- b=WS8xvYYfnvtCIrcQHfuglsdX9Pzpt8F7qHgGn+ratinpYc0dkLweaY7obNc2EP5dE8
- yuQTMi97aa5DDti9xhDp+Wo14nYGeSemXw8kg2ne1/LciLZ9BhErPPDRNIEY+vxLmLUi
- D5dSdJJ5HtUY3N6JHkRJ8PawmfN0CZpOPuwIOyZcl+TbAAPx5yXnzjLnhO4np1ZASLAI
- iq8EUhV/65s73v5NzVKdIiqBsMlgQItXEONJoZeDv5467Qk1/RqpywM07KWF/ori2+9Q
- 8bLKntUJTYB8ap2F4iQDHV8FGubcFd69xoG+R/Ed0RJDTAVZRQ7/DWjFJn2hUt9xGii/
- taQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20240605; 
- h=to:subject:message-id:date:from:mime-version:dkim-signature;
- bh=YCuwVTPPGUysiV9He1y0gHZiGPUNBEBMMpeVgMh8kXM=;
- fh=itfsoOKBqaISs+ngHXp6xjXctk+izHM6cFlgXPwv7ZI=;
- b=R8szqfqOLtRiQHQV5Wsl4pvtngwRIT3u1Cb+13CTf4gnfcI403tcRABlpIdFsi6YTe
- rVE+joab2iX4SpmSH6xOO2K3QItOx1fehk4gd9PJHFH0VLx+3bJmOMa4vvISVWXHY49c
- ckWBesIP8Relg+6cclgH+2wRnQzTzN9KymGdy4iB360bSA78guJk+jyyyigGsF9oZMkN
- RAYU0i9VpnS1N5d5bNyANjlTRxak1cxlAgDC1pTPjIqnnuac/cRrPCxiRt0nu5WZL8vf
- 1yTNuvxZuApH+LJlCEbuAhhEN8Y33RjCr5i8nw6GqosfgRTB0rnVC6LqRwkCxzG9x4hV
- Aljw==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1769546750; x=1770151550;
- h=to:subject:message-id:date:from:mime-version:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=YCuwVTPPGUysiV9He1y0gHZiGPUNBEBMMpeVgMh8kXM=;
- b=dpidxDhERXin8wzSyZOzNJaxUcEXxEfitmsjWWjQGJoBFaEB5aDk3b9KfVF1i+r4M9
- JhipXNOPT/RlP4qLlLzyIRCDjfd/HfBHthZo5m1b1eztWZhUy6oqfVpsOSFS85ZHsLkA
- thlK5ooWDoPmwTU1hKagv26VEiry7/oSG5K/tGbR8cYPLnyhiiaP83SMZ5ZVkQStWYw8
- KP9t3dcENGBdEwm2jZRVQls29prXTgTd0hBG7ENjEYSvKBp+vyURbgclLwWULEsv0zUH
- i6JGvCfCemTLhRnYSe7g8Vz1vWBDiSuXICPHlUljqnPPWhQflWdZHAtZ355XMIGLY5xT
- 40Kw==
-X-Gm-Message-State: AOJu0YzkqhBbePJOCLky+GrzxwIwIzhKeHpzaw49LxBhIQ5Qkc8RiLC3
- suQztYPbPETOzztDLfFY+lfwfwNnMkhmPXf1lAw9vDnkulB7uFoxUnh+Lxjz5j6biZCtx4+ICzN
- nu9dcgbG6tBvX0ugYkkXQxZernutXgo5aj+dl
-X-Gm-Gg: AZuq6aKQQiz9F92KvIV8FnlXRePfKZCnW4/2Y+2xoYp0VoAhMs2IGeFGnzqkNoPG34a
- oOMRopOahbog+VuVo0KExFua6jIVqsF57tgzgJkCF8oStfoU1LD825s6ISVWV6bWmmjB6gdHp/6
- FaVETBBwGdUmxvGRie7e1psjVprXeERP7sHHWChJsilyJHKAOBOZ5au9VxY8xKca1a1k8zQ1bPp
- fEhRc2bT1OnzRr3PtOtKlSQP/dRPuUarWDihZtVyp/H0SlVPzaUYi6hzT+w8rR7n5zz9InzmQnd
- 8rRf
-X-Received: by 2002:a05:690e:1249:b0:641:f5bc:692b with SMTP id
- 956f58d0204a3-6498fb14ff2mr2178661d50.36.1769546750636; Tue, 27 Jan 2026
- 12:45:50 -0800 (PST)
-MIME-Version: 1.0
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 28 Jan 2026 09:45:39 +1300
-X-Gm-Features: AZwV_QhLjo_HiEeDcvN9WSF-781m7n6slV4Z6GSiNUwFHOHrckGqJ5kFoFPpz1U
-Message-ID: <CAFOYHZAeKaF89C8hGkiWz_qBT0Kq4n3bM=tmmSThhV2gBs75Qg@mail.gmail.com>
-To: buildroot <buildroot@buildroot.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1769546750; x=1770151550; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=YCuwVTPPGUysiV9He1y0gHZiGPUNBEBMMpeVgMh8kXM=;
- b=NACeIXUHEonZ+Cq+V4K36LBAJa5GsIMJe4e32DYu7qWcGRpKqvaGJQ7l0C87ro3I9V
- Jt9InRAW5YX2uX3pcijU0YxHiQffW4ND4fW69r/XB7lvGXMk0LHQdKLqkJ6JYfBPtW5V
- qVOHvGUmCfqyezU+6ICQ5haqKJk36I8OETIWeynWZFq7tuBzCYEEdm7vUzf/dQFG695m
- VuCUCmOJybX9FNlrSwBZ5vmm4CzaONHul9aNUwxAQFB3cNfJI4EvGxmPGYiETvisDD+M
- sCAg9DoBj5M+f18y2OMPPprmibjmcuizitVWWFnJVlXOtkAlDHivz1xy/gWqL4VwyZm4
- dpsA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NACeIXUH
-Subject: [Buildroot] crosstool-ng piggy packing off sources.buildroot.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wlSH81pEV6Ok for <buildroot@buildroot.org>;
+ Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 980BB4079D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 980BB4079D
+ for <buildroot@buildroot.org>; Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8719387774; Tue, 27 Jan 2026 20:53:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Jan 2026 21:32:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fdeced6692b12641097864399ab930b88cebff64
+X-Git-Newrev: fb523a75cfdf60906fc266a14475335937ea76ed
+X-Patchwork-Hint: ignore
+Message-Id: <20260127205302.8719387774@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: default to
+ BR2_TARGET_GENERIC_PASSWD_* algo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,29 +69,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Buildroot,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb523a75cfdf60906fc266a14475335937ea76ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some of you may have noticed that uclibc-ng.org is down. Probably yet
-another victim of the plague of web scrapers AI has unleashed on the
-world (or just people travelling to FODSEM and not noticing).
+Make busybox follow the BR2_TARGET_GENERIC_PASSWD_* system configuration
+option, E.G.
 
-Over at crosstool-ng our builds have hit download issues due to this
-(our builds probably don't help the situation, I've tried to get the
-github caching to behave but it seems stubbornly unable to update
-things when something changes).
+cat defconfig
+BR2_x86_core2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_MUSL_BLEEDING_EDGE=y
+BR2_STATIC_LIBS=y
+BR2_TARGET_GENERIC_PASSWD_SHA512=y
 
-I was wondering if it would be OK if I included sources.buildroot.net
-as a mirror for some of the packages we have in common? uclibc-ng is
-the one that is causing problems right now but I imagine there are
-others.
+./target/usr/bin/mkpasswd --help
+BusyBox v1.37.0 (2026-01-27 17:31:51 CET) multi-call binary.
 
-Thanks,
-Chris
+Usage: mkpasswd [-P FD] [-m TYPE] [-S SALT] [PASSWORD] [SALT]
+
+Print crypt(3) hashed PASSWORD
+
+        -P N    Read password from fd N
+        -m TYPE des,md5,sha256/512 (default sha512)
+        -S SALT
+
+./target/usr/bin/mkpasswd test
+$6$VQ6lDdGRJOgs8Exs$gEWp1nN/FHCAgmoB6lD.fN13EKA40yV7WQmZJcFp114VrL/st74zP5iPsLHi5NFX/A6GAa1gD.yqzp5Lz3DKl/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/busybox/busybox.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d7eda71db6..446f93c36c 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -176,6 +176,18 @@ define BUSYBOX_SET_CRYPT_SHA
+ endef
+ endif
+ 
++ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256),y)
++define BUSYBOX_SET_DEFAULT_PASSWD_ALGO
++	$(call KCONFIG_SET_OPT,CONFIG_FEATURE_DEFAULT_PASSWD_ALGO,"sha256")
++endef
++endif
++
++ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
++define BUSYBOX_SET_DEFAULT_PASSWD_ALGO
++	$(call KCONFIG_SET_OPT,CONFIG_FEATURE_DEFAULT_PASSWD_ALGO,"sha512")
++endef
++endif
++
+ ifeq ($(BR2_USE_MMU),y)
+ define BUSYBOX_SET_MMU
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU)
+@@ -427,6 +439,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_MDEV)
+ 	$(BUSYBOX_SET_CRYPT_SHA)
+ 	$(BUSYBOX_LINUX_PAM)
++	$(BUSYBOX_SET_DEFAULT_PASSWD_ALGO)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
