@@ -4,111 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA749D35673
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 05:41:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D01FFD35692
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 08:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E88CD830C1;
-	Wed, 28 Jan 2026 05:41:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97DFB81E50;
+	Wed, 28 Jan 2026 08:52:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m3_p5atRPPsV; Wed, 28 Jan 2026 05:41:49 +0000 (UTC)
+ id 8qvQzwDCms_c; Wed, 28 Jan 2026 08:52:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6067782F4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2DA481AD7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769578909;
-	bh=dE0g5HrbxmqTiYillmPtxlvqC6kzKlUQqXwCSiQgUKU=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=dJWN29iXUiTA7u5Pz/HRUT6tt/bUgrKXO8WA9lv001Bid4aydTi1xaU/JCpjoMG+0
-	 2n3DLsq6b+siJ5mK+k9+FVYIQvCvY1rJoVv3G7Ryv4c6D1q7DWOhjKNwrjC1nA4O9v
-	 cBZOR2k05l30wzzdS7COepeP9tXEg/bxF1kFMw2IGk7s1QVV9DEtD64CNVVbvNeXmU
-	 M1imKxXspqFQwfK0MS++/7I2mvj2/7gRBEPsgWrSEs9qTok37FppzaV6O8xexMIN+X
-	 4a6aMrZtgbjD+K91ZDEIVkg2LWvVmCIBNvzbNTkSeGIyfng6dVTgVa7nIzYA5/7yVS
-	 +UsODa3EVphBA==
+	s=default; t=1769590366;
+	bh=DU7qxDYJ36WopJP3qX8+yuEaODphuDhjPvbxPDS3cFY=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Eq6VYPRTNCqVQ63Book623v30k6Q8dj2F9m5MIhxd5cIfDNOtssB2NWGoRBjgafs4
+	 UHUymUp176GOyTOBVLpLPxNrgIiIqcghdW8CepVYhbXlFzeLIJD9+jHAZQzUmZ5mFO
+	 8mAWTU9jsuaRJfzPAx5mxcBSORztIGbO488FcQRalY9uLhIiDd+NMkQ0uzmglI8y+L
+	 x5MH12dunhOfUdLXY5b0k1vM63y8xQnNBGhxDJ13RPcTSv34+nEr4zzmg1HaFaRpZD
+	 2/s62TfxB3yocOn9c6Uzxgeeqng5zq9UHbzx5qKtVC0AM90cRSVm6lMMb8TpQ+KoZO
+	 IirXooqG94Ouw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6067782F4F;
-	Wed, 28 Jan 2026 05:41:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BCE24160
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 05:41:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2DA481AD7;
+	Wed, 28 Jan 2026 08:52:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9323D160
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A7ED40224
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 05:41:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8378C606FF
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:52:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id koNs-aPjAlPO for <buildroot@buildroot.org>;
- Wed, 28 Jan 2026 05:41:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::34; helo=mail-oa1-x34.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BDDD74017B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDDD74017B
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com
- [IPv6:2001:4860:4864:20::34])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BDDD74017B
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 05:41:47 +0000 (UTC)
-Received: by mail-oa1-x34.google.com with SMTP id
- 586e51a60fabf-40945a682b5so422067fac.1
- for <buildroot@buildroot.org>; Tue, 27 Jan 2026 21:41:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1769578906; x=1770183706;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=6QbLLKeKQNYcWN9SEYUGTPkVsyU8CtmSrLct5mebJIM=;
- b=TzJTFkphrmhraKhe7E4omz+OYSLETp+rN7n2FbHuyYbBZmm++EdVamlBBmrftbyex2
- MHjkAUrXaqAUgUqUYhBkB43EI+Uu6wzsubfqqaibWyU7IVWw5Q+vt9tN+LBYVYCNFZOu
- vwp4VsmYAWoSOPArhfHTbnWr9vnEYyEv/gg8clqNZKyBgHpvq7rPsLLI283k2DSMdWtk
- OgkALtFF6RiRthL0+8Y48NqfxNVkdtzqBYK8cLyHkFElCw97AE2LDVX11Uv5D1cipnY5
- 5Wzx2SSwj/hW6yqpKwRcIS/SCX57wfMppgsdGJjOs2uaB+rvrHEUXyx/LXuQscIkM/jF
- Gqog==
-X-Gm-Message-State: AOJu0Yyx0pmPm+oWPJXUALHyErYJBmG5S/kvBzLaaOUkICXQTLxW2RjB
- qGku8U9ByTdYlPStm+H4PV3eG3sxKprpksjs4LzC74zcp5XfXWbzaispsAfFgQ==
-X-Gm-Gg: AZuq6aLAp+t3UTchG8K0TL2IFlPjoxgnefymw+Ac0Nemx4CjQJ3+vXX0Gh9U4P36scl
- P6K6JrwvbbfD8yRWvuuXSxZZuyxQ0k6o0QvXG6hnNz8GiVQOmM5i/EpMVtXssn1WBwhVXowjTKY
- 9vto4ZsWmWfYcsCjYZY1g5UetlpcocGmZk/PECOhFFG19D4Meh/6D1Q7M+IA9xIbV+93jnh8TvF
- kKt0PB+Ytr3HrIzV+B7pr56gFyIhC4nogGtGKunW3DrYeti+1rUHHnJ73ZNd8FEmJbLuOjO+Zrc
- 1WvzwAJCpdtA+BRR1c9Rmt9o4ORs1TdZ4v6NdOHAoyNL0zgREL2CUWUN1YbjNyNT+CElRazxzeY
- pQDVjRko8TJSXzUCRw3wENti7l6fF+Ef74RVebbaBDZmykFqgFKDxMAoa5+yVe6azKJlkJwJQ
-X-Received: by 2002:a05:6870:219b:b0:3e8:9e31:7fbb with SMTP id
- 586e51a60fabf-4093ff5564cmr2459865fac.35.1769578904761; 
- Tue, 27 Jan 2026 21:41:44 -0800 (PST)
-Received: from localhost.localdomain ([2607:b80:2c1:810:a00:27ff:fed0:12cc])
- by smtp.gmail.com with ESMTPSA id
- 586e51a60fabf-4095749f332sm1203015fac.11.2026.01.27.21.41.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Jan 2026 21:41:43 -0800 (PST)
-From: Lance Fredrickson <lancethepants@gmail.com>
-X-Google-Original-From: Lance Fredrickson
-To: buildroot@buildroot.org
-Cc: lancethepants <lancethepants@gmail.com>, Dick Olsson <hi@senzilla.io>,
- Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 27 Jan 2026 22:40:58 -0700
-Message-ID: <20260128054100.3981396-1-lancethepants@gmail.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5kmeR1zstxjD for <buildroot@buildroot.org>;
+ Wed, 28 Jan 2026 08:52:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E3ED1606BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3ED1606BF
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E3ED1606BF
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:52:43 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1199863859; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 28 Jan 2026 08:52:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vl1Hx-0000000454u-4369;
+ Wed, 28 Jan 2026 09:52:37 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260127213112.1668038-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 27 Jan 2026 22:31:12 +0100")
+References: <20260127213112.1668038-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 28 Jan 2026 09:52:37 +0100
+Message-ID: <875x8m15m2.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1769578906; x=1770183706; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6QbLLKeKQNYcWN9SEYUGTPkVsyU8CtmSrLct5mebJIM=;
- b=MGq02Q5fEtiGKDlpvYgC50jqjOLBe3wZwfm0fYpNjIbcMx915o23vC6tDTbYEa3vdT
- 9DvsMw/srMUOXL3h4ecG7eNP/KhCatqVAtuOMW1RMgoxecAa1KyHTUiJ2p67Csmt214b
- sKwFCRh26CBvzoOjivO1gIjp7ZFgwuiOAVf6C/Sfjx7NceQIGY6QRLRxVjig9OHuKDfr
- Eu9M/3YoOFMof64cMBD8IACSaG1CVAXI3b0GMJAJjQJcDElu8fQ0X6MQywT0MTEvGmUj
- ATT06na7i8P4LDQMeOF4gj4O8Sjf/w2d29NjPiWLnXUU5G5DwLgNMlBXm8AKy5GzK7BI
- n2iw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=MGq02Q5f
-Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: add option to depend
- on host-uboot-tools for mkimage
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=fboYrFdTh9aCeUdyM3jWsvWuLPhPJWqJ0XHLo6kBqA9xhIdYbgkxONIzGhyOUIcegzvjk+e2wJRw71aItPqVZZQhzuWNvo5s9HuAaO0ry8aMLpJXAvlpWjtpMGL9kdPwYbQNlzRjg0hve2rdkH+rlt/FCzk3sEGsJUkN+RASrqFhUcAb1D3w/mmpgNloKrXHVKuk+Izsi8ZnC3EF+2ea0lLEDuPzW6YezjSSR35YTiV21K7fkmjyYj6vMagfFIvFqbREG4NNxd6/i5/3DuoIHI6EtHt7kMXkWkG8pCAhEvF5mshp/xCEYeJR/+8EcV0OiVVgIMaFh3HE3g6kRpoE4g==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=FGO/Dn9A/MieULf9X5tPODAeWI79Bcu1A+HFmAsQ+H4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=fboYrFdT
+Subject: Re: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,53 +97,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: lancethepants <lancethepants@gmail.com>
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Some ATF platform builds (e.g. Mediatek) require mkimage to produce
-bl2.img. Add a NEEDS_UBOOT_MKIMAGE config option similar to NEEDS_DTC.
+ > For release note, see:
+ > https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.4/docs/v2.8.4-ReleaseNotes
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
----
- boot/arm-trusted-firmware/Config.in               | 7 +++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 72684e5974..f431171ab0 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -252,6 +252,13 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC
- 	  Select this option if your ATF board configuration
- 	  requires the Device Tree compiler to be available.
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_UBOOT_MKIMAGE
-+	bool "Needs mkimage"
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS
-+	help
-+	  Select this option if your ATF board configuration
-+	  requires mkimage from u-boot-tools to be available.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
- 	bool "Needs arm-none-eabi toolchain"
- 	depends on BR2_aarch64
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index f5b1e5030e..df36f81575 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -36,6 +36,10 @@ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC),y)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-dtc
- endif
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_UBOOT_MKIMAGE),y)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
-+endif
-+
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN),y)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-toolchain
- endif
+Committed, thanks.
+
 -- 
-2.47.3
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
