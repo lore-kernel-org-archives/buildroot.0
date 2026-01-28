@@ -4,79 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C12D3F09E
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5398DD3F083
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56BFA40C0A;
-	Wed, 28 Jan 2026 17:24:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1E5F40C5E;
+	Wed, 28 Jan 2026 17:24:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZRq_-26A5MhQ; Wed, 28 Jan 2026 17:24:45 +0000 (UTC)
+ id Rzg4AfAG2Ogz; Wed, 28 Jan 2026 17:24:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27BC440A49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EF1240A06
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769621085;
-	bh=mH+yVUqZSFW20wGgDPCqinBRhhqCIU7v2ljUduBgq+A=;
+	s=default; t=1769621086;
+	bh=RTkAQdOO+EJH1bSHl4mVrGr47LxVQvxZEYfKtzlN/Ko=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=KLylz3NMNVe7DUm4JLO42wBlIZ4hEode+8TzdA6OXZt2A8S9D2tNvmv/OahUjmu1t
-	 oDSKVkOmow8AsBeSh+GpZ+OT4SKcJiDmWB33rGrv4iseLtccPVMu+wj2pF6UL5kA+F
-	 P9iTNEr2zlVJYGodZXXPvhl4xeK9s5doJ7w4BPUHmic8eN+h6NlK9CaXGAEw+gTIns
-	 7fsbrNlRxEr9rG9m97vxt7wULXdNFUeFcwP1Y1CZTq5VeQPwqC2LdNHOP9abjqn6TL
-	 thmw/6T8Ul4ZR0dvc4OYuRHFPpCc+YiuShLfn9BIVlPM0sBa/XgiXPzGaL0ok+xPb5
-	 j27hRNIwTBDbg==
+	b=b3PzC6Szwn67GbkbPedWdRnwOLD0y2fjqER0p7o1n4qceiwzqxjOui/4YcdrlaHfh
+	 FXxBdnmMgHF4SMOrURttLGEDpjNaWHRRMbps60dLlyT8fk21zhXZUQ38Fh5ZpgJhz1
+	 OjXnsz7ChuBhtk2WfM9jQWw2nZ3j7aELh7rhc71+/CftmNPRwE23YiEyqSUkYCGYTz
+	 M5bnZw6ypoLL5tBNcZjDWrDjosWfA90KXyB2RFqAiZTYvrwOYuvOQGM5OU9p1wf9G9
+	 E6lmQ4gYrmV711tepkuFhI/vrpcj68rcBoAOU2B1K7b/BqU/0y5JHPVBsTHzRi52J2
+	 zs/RHb9XO+yrQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27BC440A49;
-	Wed, 28 Jan 2026 17:24:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EF1240A06;
+	Wed, 28 Jan 2026 17:24:46 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C0611AD
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 41E541AD
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1BBA380C33
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2467280C42
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ZK-RlkyIhYK for <buildroot@buildroot.org>;
- Wed, 28 Jan 2026 17:24:29 +0000 (UTC)
+ id 6W_ebxDDYIhJ for <buildroot@buildroot.org>;
+ Wed, 28 Jan 2026 17:24:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC96B80C42
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC96B80C42
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D001B80C33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D001B80C33
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC96B80C42
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D001B80C33
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:31 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CDA60B97AB22; Wed, 28 Jan 2026 18:24:26 +0100 (CET)
+ with ESMTPSA id D5685B97AB22; Wed, 28 Jan 2026 18:24:29 +0100 (CET)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed, 28 Jan 2026 18:24:26 +0100
-Message-ID: <20260128172426.343009-1-arnout@rnout.be>
+Date: Wed, 28 Jan 2026 18:24:29 +0100
+Message-ID: <20260128172429.343111-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260106200115.1985522-3-bernd@kuhls.net>
-References: <20260106200115.1985522-3-bernd@kuhls.net>
+In-Reply-To: <20260106200115.1985522-10-bernd@kuhls.net>
+References: <20260106200115.1985522-10-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1769621067; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1769621070; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=SB4IkQpunwR4sHlmK33lpmOQTUoKQyFx7tgUHSS4VcM=;
- b=J/EDLcvkCW9t+qURKJQ/jfyzW9vtGhBsQDOSFo3wp1kdnVhk9TpFNYcLolz3KKOf7dR8yi
- QCS+vztXjzTwsosZv9w2aPrwHleE3dvtqWDulmucDuuBTRiw0HLxkYgIEvRwA83miM+YFi
- BJi7IisKKNoG0gtFubovmrUyZ+Gm4I0lebG+BXDjxLbdNl3KkQr7yCy5YxVctjmVLj9K2o
- U8A70OW3d+Ks6Fgd1O6k/DaW8VNYmTyHMNy7vKnhXtZHLbGjEe8UPdVfqGf3N8+35oBfb3
- 4zO8OKMHGTq7yotD3Z5ZIn9iLEzgybbaFeGwP3bo7gj8iCdD/qrgumwF+ArxVQ==
+ bh=DS5QaR2C37h6wJRbbT7bWSZex1fQT+w+CycHYTjSQ4c=;
+ b=VErjB70EpbYm8R9sMsV09StA0G4K2KAePpLLhDHvkhpd+pmHm5sdbusZpOfZgW7dMPeGiO
+ J6CBVmMjRGyz8s5B4cDP6WETuOf0/IVdnW676X+S+gNG/9gxva+qO/hVuXrkU3du4sx7/r
+ ER4EOFl8SfYXFvJR82wGjGy505Az7WiOF6NQlMvqTtfYQTl8nYxBNs/d3aLvZovoc/IxM0
+ JKH8xDNa4PhHcGM68b7QmpvJh3QASL0l2WKPc83ZW92w65z8pYfsBfLni8s6j7c3lHQHO4
+ baX/mvWAtEqF57dz049/w3oQWnd3phltX28HLvTEVHIKFBQHGgnnGpNoMEQCDg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=J/EDLcvk
-Subject: Re: [Buildroot] [PATCH v2 2/9] package/libsvg: remove package
+ header.a=rsa-sha256 header.s=dkim header.b=VErjB70E
+Subject: Re: [Buildroot] [PATCH v2 9/9] package/lockdev: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,179 +90,213 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gVGhpcyBwYWNrYWdlIGlzIG5vIGxvbmdlciBtYWludGFpbmVkLCBubyBy
-ZWxlYXNlIHNpbmNlIDIwMDUsIGFuZCBpdAo+IGhhcyBidWlsZCBpc3N1ZXMgYXMgaXQgdXNlcyB0
-b28gb2xkIFhNTCBBUElzOgo+IAo+IC9ob21lL3Rob21hcy9wcm9qZXRzL2J1aWxkcm9vdC9vdXRw
-dXQvaG9zdC9iaW4vLi4vYWFyY2g2NC1idWlsZHJvb3QtbGludXgtZ251L3N5c3Jvb3QvdXNyL2lu
-Y2x1ZGUvbGlieG1sMi9saWJ4bWwvU0FYLmg6MTg6NDogd2FybmluZzogI3dhcm5pbmcgImxpYnht
-bC9TQVguaCBpcyBkZXByZWNhdGVkIiBbLVdjcHBdCj4gICAgMTggfCAgICN3YXJuaW5nICJsaWJ4
-bWwvU0FYLmggaXMgZGVwcmVjYXRlZCIKPiAgICAgICB8ICAgIF5+fn5+fn4KPiAKPiBzdmdpbnQu
-aDo0Mjo5OiBlcnJvcjogdW5rbm93biB0eXBlIG5hbWUgJ3htbFBhcnNlckN0eHRQdHInCj4gICAg
-NDIgfCB0eXBlZGVmIHhtbFBhcnNlckN0eHRQdHIgc3ZnX3htbF9wYXJzZXJfY29udGV4dF90Owo+
-ICAgICAgIHwgICAgICAgICBefn5+fn5+fn5+fn5+fn5+Cj4gCj4gRml4ZXM6Cj4gCj4gICBodHRw
-czovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvODk1ZmRiYTJmM2ZjYWE0MmFhOTM5
-NDZmMjUzMjM1MWQzOWIxNjY0Ny8KPiAKPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25p
-IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+IFNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1
-aGxzIDxiZXJuZEBrdWhscy5uZXQ+CgpBcHBsaWVkIHRvIDIwMjUuMDIueCBhbmQgMjAyNS4xMS54
-LiBUaGFua3MKCj4gLS0tCj4gIC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICAyIC0tCj4gIENvbmZpZy5pbi5sZWdhY3kgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICA5ICsrKysrCj4gIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICB8ICAxIC0KPiAgcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDEgLQo+ICAuLi4vMDAwMS1maXgtZXhwYXQtc3RhdGljLWRlY2xhcmF0aW9u
-LnBhdGNoICAgfCAzNiAtLS0tLS0tLS0tLS0tLS0tLS0tCj4gIC4uLmZpbmVkLXN5bWJvbC1wbmdf
-c2V0X2dyYXlfMV8yXzRfdG9fOC5wYXRjaCB8IDMyIC0tLS0tLS0tLS0tLS0tLS0tCj4gIHBhY2th
-Z2UvbGlic3ZnL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICB8IDEyIC0tLS0tLS0KPiAg
-cGFja2FnZS9saWJzdmcvbGlic3ZnLmhhc2ggICAgICAgICAgICAgICAgICAgIHwgIDYgLS0tLQo+
-ICBwYWNrYWdlL2xpYnN2Zy9saWJzdmcubWsgICAgICAgICAgICAgICAgICAgICAgfCAyMyAtLS0t
-LS0tLS0tLS0KPiAgOSBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDExMyBkZWxldGlv
-bnMoLSkKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlic3ZnLzAwMDEtZml4LWV4cGF0
-LXN0YXRpYy1kZWNsYXJhdGlvbi5wYXRjaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9s
-aWJzdmcvMDAwMi1GaXgtdW5kZWZpbmVkLXN5bWJvbC1wbmdfc2V0X2dyYXlfMV8yXzRfdG9fOC5w
-YXRjaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJzdmcvQ29uZmlnLmluCj4gIGRl
-bGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYnN2Zy9saWJzdmcuaGFzaAo+ICBkZWxldGUgbW9k
-ZSAxMDA2NDQgcGFja2FnZS9saWJzdmcvbGlic3ZnLm1rCj4gCj4gZGlmZiAtLWdpdCBhLy5jaGVj
-a3BhY2thZ2VpZ25vcmUgYi8uY2hlY2twYWNrYWdlaWdub3JlCj4gaW5kZXggMDQyYTk2YTQ4Zi4u
-NTYyMjUxZWU0NiAxMDA2NDQKPiAtLS0gYS8uY2hlY2twYWNrYWdlaWdub3JlCj4gKysrIGIvLmNo
-ZWNrcGFja2FnZWlnbm9yZQo+IEBAIC01ODIsOCArNTgyLDYgQEAgcGFja2FnZS9saWJzaWdyb2tk
-ZWNvZGUvMDAwMy1jb25maWd1cmUtYWMtVXNlLXB5dGhvbjMtZW1iZWQtcGMtYXMtYS1mYWxsYmFj
-ay5wYXQKPiAgcGFja2FnZS9saWJzcGF0aWFsaW5kZXgvMDAwMS1hbGxvdy1idWlsZGluZy1zdGF0
-aWMtbGlicy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9saWJzcGF0aWFsaW5k
-ZXgvMDAwMi1DTWFrZUxpc3RzLnR4dC1maXgtQ01BS0VfQlVJTERfVFlQRS5wYXRjaCBsaWJfcGF0
-Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9saWJzcXVpc2gvMDAwMS1NYWtlZmlsZS1hZGQtZi1vcHRp
-b24tZm9yLWxuLXRvLXJlbW92ZS1leGlzdGluZy1kZXN0LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVh
-bQo+IC1wYWNrYWdlL2xpYnN2Zy8wMDAxLWZpeC1leHBhdC1zdGF0aWMtZGVjbGFyYXRpb24ucGF0
-Y2ggbGliX3BhdGNoLlVwc3RyZWFtCj4gLXBhY2thZ2UvbGlic3ZnLzAwMDItRml4LXVuZGVmaW5l
-ZC1zeW1ib2wtcG5nX3NldF9ncmF5XzFfMl80X3RvXzgucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFt
-Cj4gIHBhY2thZ2UvbGlidGFsbG9jLzAwMDEtYnVpbGR0b29scy13YWZzYW1iYS1hZGQtZGlzYWJs
-ZS1zdGFjay1wcm90ZWN0b3Itb3B0aS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAgcGFja2Fn
-ZS9saWJ0ZWxuZXQvMDAwMS1maXgtY29tcGlsYXRpb24td2l0aG91dC16bGliLnBhdGNoIGxpYl9w
-YXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdlL2xpYnRvbWNyeXB0LzAwMDEtZml4LUNWRS0yMDE5LTE3
-MzYyLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+IGRpZmYgLS1naXQgYS9Db25maWcuaW4ubGVn
-YWN5IGIvQ29uZmlnLmluLmxlZ2FjeQo+IGluZGV4IDAxMDIwM2M2OWQuLjk2MzFhZjVjMjYgMTAw
-NjQ0Cj4gLS0tIGEvQ29uZmlnLmluLmxlZ2FjeQo+ICsrKyBiL0NvbmZpZy5pbi5sZWdhY3kKPiBA
-QCAtMTQ2LDYgKzE0NiwxNSBAQCBlbmRpZgo+ICAKPiAgY29tbWVudCAiTGVnYWN5IG9wdGlvbnMg
-cmVtb3ZlZCBpbiAyMDI2LjAyIgo+ICAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQlNWRwo+ICsJ
-Ym9vbCAibGlic3ZnIHBhY2thZ2UgcmVtb3ZlZCIKPiArCXNlbGVjdCBCUjJfTEVHQUNZCj4gKwlo
-ZWxwCj4gKwkgIFRoZSBsaWJzdmcgcGFja2FnZSBoYXMgYmVlbiByZW1vdmVkLiBJdHMgbGF0ZXN0
-IHVwc3RyZWFtCj4gKwkgIHJlbGVhc2Ugd2FzIGZyb20gMjAwNSwgaXQgd2FzIGluY29tcGF0aWJs
-ZSB3aXRoIHJlY2VudAo+ICsJICBsaWJ4bWwyIHZlcnNpb25zLCBhbmQgaXQgd2Fzbid0IHVzZWQg
-YnkgYW55IG90aGVyIEJ1aWxkcm9vdAo+ICsJICBwYWNrYWdlIGV4Y2VwdCBsaWJzdmctY2Fpcm8s
-IGFsc28gcmVtb3ZlZC4KPiArCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJTVkdfQ0FJUk8KPiAg
-CWJvb2wgImxpYnN2Zy1jYWlybyBwYWNrYWdlIHJlbW92ZWQiCj4gIAlzZWxlY3QgQlIyX0xFR0FD
-WQo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IGRkYWQzN2My
-YzYuLjg0ZjdlYzViZWMgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BF
-UlMKPiBAQCAtNTkxLDcgKzU5MSw2IEBAIEY6CXBhY2thZ2Uvc3VueGktYm9hcmRzLwo+ICAKPiAg
-TjoJQ2Fyc3RlbiBTY2hvZW5lcnQgPGMuc2Nob2VuZXJ0QGdtYWlsLmNvbT4KPiAgRjoJcGFja2Fn
-ZS9saWJkdmJzaS8KPiAtRjoJcGFja2FnZS9saWJzdmcvCj4gIAo+ICBOOglDw6lkcmljIENow6lw
-aWVkIDxjZWRyaWMuY2hlcGllZEBnbWFpbC5jb20+Cj4gIEY6CXBhY2thZ2Uvem5jLwo+IGRpZmYg
-LS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggOWQx
-MWM5MzI1Mi4uZDhiYWU4ZGNlMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsr
-KyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAgLTE3NzIsNyArMTc3Miw2IEBAIG1lbnUgIkdyYXBo
-aWNzIgo+ICAJc291cmNlICJwYWNrYWdlL2xpYnFyZW5jb2RlL0NvbmZpZy5pbiIKPiAgCXNvdXJj
-ZSAicGFja2FnZS9saWJyYXcvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2xpYnJzdmcv
-Q29uZmlnLmluIgo+IC0Jc291cmNlICJwYWNrYWdlL2xpYnN2Zy9Db25maWcuaW4iCj4gIAlzb3Vy
-Y2UgInBhY2thZ2UvbGlidmEvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2xpYnZhLWlu
-dGVsLWRyaXZlci9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbGlidmRwYXUvQ29uZmln
-LmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnN2Zy8wMDAxLWZpeC1leHBhdC1zdGF0aWMt
-ZGVjbGFyYXRpb24ucGF0Y2ggYi9wYWNrYWdlL2xpYnN2Zy8wMDAxLWZpeC1leHBhdC1zdGF0aWMt
-ZGVjbGFyYXRpb24ucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAxMDg2
-Nzg1ZDBmLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9saWJzdmcvMDAwMS1maXgtZXhwYXQt
-c3RhdGljLWRlY2xhcmF0aW9uLnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDM2ICswLDAg
-QEAKPiAtTmV3ZXIgZXhwYXQgdmVyc2lvbnMgdXNlIGRpZmZlcmVudCBkZWNsYXJhdGlvbnMgb2Yg
-dGhlIGZvbGxvd2luZyBmdW5jdGlvbnM6Cj4gLQo+IC1zdGF0aWMgdm9pZCBfc3ZnX3BhcnNlcl9z
-YXhfc3RhcnRfZWxlbWVudCAoKTsKPiAtc3RhdGljIHZvaWQgX3N2Z19wYXJzZXJfc2F4X2VuZF9l
-bGVtZW50ICgpOwo+IC1zdGF0aWMgdm9pZCBfc3ZnX3BhcnNlcl9zYXhfY2hhcmFjdGVycyAoKTsK
-PiAtCj4gLVdlIG5lZWQgdG8gcGF0Y2ggdGhlIGxpYnN2ZyBzb3VyY2UgdG8gbm90IGZvbGxvdyBp
-bnRvIGEgYnVpbGQgZXJyb3IgbGlrZQo+IC0gICAic3RhdGljIGRlY2xhcmF0aW9uIG9mICdmb28n
-IGZvbGxvd3Mgbm9uLXN0YXRpYyBkZWNsYXJhdGlvbiIKPiAtYW5kIHVzZSB0aGUgZnVuY3Rpb25z
-IGZyb20gdGhlIGV4cGF0IGxpYnJhcnkgaW5zdGVhZCBmcm9tIHRoZSBsaWJzdmcgc291cmNlLgo+
-IC0KPiAtUGF0Y2ggYmFzZWQgb24KPiAtaHR0cDovL29lLWxpdGUub3JnL3JlZG1pbmUvcHJvamVj
-dHMveG9yZy9yZXBvc2l0b3J5L3JldmlzaW9ucy9jNGRmNzk1MWU4NDZlMWJlNzE4ZjM3ZjI0NTU2
-OTZhMWQwODYxZjNkL2VudHJ5L3JlY2lwZXMvY2Fpcm8vbGlic3ZnLTAuMS40L2djYzRfYW5kX2V4
-cGF0LnBhdGNoCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBDYXJzdGVuIFNjaG9lbmVydCA8Yy5zY2hv
-ZW5lcnRAZ21haWwuY29tPgo+IC1bRGFyaW86IG1ha2UgdGhlIHBhdGNoIHRvIGJlIGFwcGxpZWQg
-d2l0aCBmdXp6IGZhY3RvciAwXQo+IC1TaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFy
-aW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gLQo+IC1kaWZmIC1idXIgbGlic3Zn
-LTAuMS40fm9yaWcvc3JjL3N2Z19wYXJzZXJfZXhwYXQuYyBsaWJzdmctMC4xLjQvc3JjL3N2Z19w
-YXJzZXJfZXhwYXQuYwo+IC0tLS0gbGlic3ZnLTAuMS40fm9yaWcvc3JjL3N2Z19wYXJzZXJfZXhw
-YXQuYwkyMDA1LTAyLTE0IDExOjI2OjI2LjAwMDAwMDAwMCAtMDYwMAo+IC0rKysgbGlic3ZnLTAu
-MS40L3NyYy9zdmdfcGFyc2VyX2V4cGF0LmMJMjAwNi0wMi0xMCAyMTo1ODoyMC4wMDAwMDAwMDAg
-LTA2MDAKPiAtQEAgLTMwLDYgKzMwLDcgQEAKPiAtICNpbmNsdWRlICJzdmdpbnQuaCIKPiAtICNp
-bmNsdWRlICJzdmdfaGFzaC5oIgo+IC0gCj4gLSsjaWZuZGVmIExJQlNWR19FWFBBVAo+IC0gc3Rh
-dGljIHZvaWQKPiAtIF9zdmdfcGFyc2VyX3NheF9zdGFydF9lbGVtZW50ICh2b2lkCQkqY2xvc3Vy
-ZSwKPiAtIAkJCSAgICAgICBjb25zdCBYTUxfQ2hhcgkqbmFtZSwKPiAtQEAgLTQzLDYgKzQ0LDcg
-QEAKPiAtIF9zdmdfcGFyc2VyX3NheF9jaGFyYWN0ZXJzICh2b2lkCQkqY2xvc3VyZSwKPiAtIAkJ
-CSAgICBjb25zdCBYTUxfQ2hhcgkqY2gsCj4gLSAJCQkgICAgaW50CQkJbGVuKTsKPiAtKyNlbmRp
-Zgo+IC0gCj4gLSBzdGF0aWMgdm9pZAo+IC0gX3N2Z19wYXJzZXJfc2F4X3dhcm5pbmcgKHZvaWQJ
-CSpjbG9zdXJlLAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnN2Zy8wMDAyLUZpeC11bmRlZmlu
-ZWQtc3ltYm9sLXBuZ19zZXRfZ3JheV8xXzJfNF90b184LnBhdGNoIGIvcGFja2FnZS9saWJzdmcv
-MDAwMi1GaXgtdW5kZWZpbmVkLXN5bWJvbC1wbmdfc2V0X2dyYXlfMV8yXzRfdG9fOC5wYXRjaAo+
-IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IGQwYmJlYWIwNzQuLjAwMDAwMDAwMDAK
-PiAtLS0gYS9wYWNrYWdlL2xpYnN2Zy8wMDAyLUZpeC11bmRlZmluZWQtc3ltYm9sLXBuZ19zZXRf
-Z3JheV8xXzJfNF90b184LnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDMyICswLDAgQEAK
-PiAtRnJvbSAyMTNlNTc0OTk0N2ZhZDA4ZDk4NWVkYThkMDY4MzllZmVkZGE3OGVmIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQo+IC1Gcm9tOiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5u
-ZXQ+Cj4gLURhdGU6IFRodSwgNSBNYXIgMjAxNSAyMTo0Mjo1MiArMDEwMAo+IC1TdWJqZWN0OiBb
-UEFUQ0hdIEZpeCB1bmRlZmluZWQgc3ltYm9sIHBuZ19zZXRfZ3JheV8xXzJfNF90b184Cj4gLQo+
-IC1TaW5jZSBsaWJwbmctMS40LjAgdGhlIGZ1bmN0aW9uIHBuZ19zZXRfZ3JheV8xXzJfNF90b184
-KCkgd2FzCj4gLXJlbW92ZWQsIHRoZSByZXBsYWNlbWVudCBmdW5jdGlvbiBpcyBjYWxsZWQKPiAt
-cG5nX3NldF9leHBhbmRfZ3JheV8xXzJfNF90b184KCkgKHNlZSBbMV0pLgo+IC0KPiAtWzFdIGh0
-dHA6Ly9saWJwbmcuc291cmNlZm9yZ2UubmV0L0FOTk9VTkNFLTEuNC4wLnR4dAo+IC0KPiAtU2ln
-bmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pgo+IC0tLS0KPiAt
-IHNyYy9zdmdfaW1hZ2UuYyB8IDIgKy0KPiAtIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
-KSwgMSBkZWxldGlvbigtKQo+IC0KPiAtZGlmZiAtLWdpdCBhL3NyYy9zdmdfaW1hZ2UuYyBiL3Ny
-Yy9zdmdfaW1hZ2UuYwo+IC1pbmRleCBjZDhhOTVhLi5mMjU2OTQzIDEwMDc1NQo+IC0tLS0gYS9z
-cmMvc3ZnX2ltYWdlLmMKPiAtKysrIGIvc3JjL3N2Z19pbWFnZS5jCj4gLUBAIC0yNzEsNyArMjcx
-LDcgQEAgX3N2Z19pbWFnZV9yZWFkX3BuZyAoY29uc3QgY2hhcgkJKmZpbGVuYW1lLAo+IC0gCj4g
-LSAgICAgLyogZXhwYW5kIGdyYXkgYml0IGRlcHRoIGlmIG5lZWRlZCAqLwo+IC0gICAgIGlmIChj
-b2xvcl90eXBlID09IFBOR19DT0xPUl9UWVBFX0dSQVkgJiYgZGVwdGggPCA4KQo+IC0tCXBuZ19z
-ZXRfZ3JheV8xXzJfNF90b184IChwbmcpOwo+IC0rCXBuZ19zZXRfZXhwYW5kX2dyYXlfMV8yXzRf
-dG9fOCAocG5nKTsKPiAtIAo+IC0gICAgIC8qIHRyYW5zZm9ybSB0cmFuc3BhcmVuY3kgdG8gYWxw
-aGEgKi8KPiAtICAgICBpZiAocG5nX2dldF92YWxpZChwbmcsIGluZm8sIFBOR19JTkZPX3RSTlMp
-KQo+IC0tLSAKPiAtMi4xLjQKPiAtCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlic3ZnL0NvbmZp
-Zy5pbiBiL3BhY2thZ2UvbGlic3ZnL0NvbmZpZy5pbgo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0
-NAo+IGluZGV4IDc0MWVmMTBjN2EuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2xpYnN2Zy9D
-b25maWcuaW4KPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMTIgKzAsMCBAQAo+IC1jb25maWcgQlIy
-X1BBQ0tBR0VfTElCU1ZHCj4gLQlib29sICJsaWJzdmciCj4gLQlzZWxlY3QgQlIyX1BBQ0tBR0Vf
-TElCUE5HCj4gLQlzZWxlY3QgQlIyX1BBQ0tBR0VfSlBFRwo+IC0Jc2VsZWN0IEJSMl9QQUNLQUdF
-X0xJQlhNTDIgaWYgIUJSMl9QQUNLQUdFX0VYUEFUCj4gLQloZWxwCj4gLQkgIExpYnN2ZyBwcm92
-aWRlcyBhIHBhcnNlciBmb3IgU1ZHIGNvbnRlbnQgaW4gZmlsZXMgb3IgYnVmZmVycy4KPiAtCSAg
-TGlic3ZnIGRvZXMgbm90IGRvIGFueSByZW5kZXJpbmcsIGJ1dCBpbnN0ZWFkIHByb3ZpZGVzIGEK
-PiAtCSAgZnVuY3Rpb24tYmFzZWQgaW50ZXJmYWNlIHRoYXQgY2FuIGJlIHVzZWQgYnkgdmFyaW91
-cyByZW5kZXJpbmcKPiAtCSAgZW5naW5lcy4KPiAtCj4gLQkgIGh0dHA6Ly9jYWlyb2dyYXBoaWNz
-Lm9yZy9zbmFwc2hvdHMvCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlic3ZnL2xpYnN2Zy5oYXNo
-IGIvcGFja2FnZS9saWJzdmcvbGlic3ZnLmhhc2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCA0YTlkNDJhNjUxLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9saWJzdmcvbGli
-c3ZnLmhhc2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsNiArMCwwIEBACj4gLSMgRnJvbSBodHRw
-Oi8vY2Fpcm9ncmFwaGljcy5vcmcvc25hcHNob3RzL2xpYnN2Zy0wLjEuNC50YXIuZ3oubWQ1Cj4g
-LW1kNSAgY2UwNzE1ZTMwMTNmNzg1MDY3OTVmYmExNmU4NDU1ZDMgIGxpYnN2Zy0wLjEuNC50YXIu
-Z3oKPiAtCj4gLSMgTG9jYWxseSBjYWxjdWxhdGVkCj4gLXNoYTI1NiAgNGMzYmY5MjkyZTY3NmE3
-MmIxMjMzODY5MWJlNjRkMGYzOGNkN2YyZWE1ZThiNjdmYmJmNDVmMWVkNDA0YmM4ZiAgbGlic3Zn
-LTAuMS40LnRhci5nego+IC1zaGEyNTYgIGQyNDU4MDdmOTAwMzI4NzJkMTQzOGQ3NDFlZDIxZTI0
-OTBlMTE3NWRjOGFhM2FmYTVkZGI2YzhlNTI5YjU4ZTUgIENPUFlJTkcKPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9saWJzdmcvbGlic3ZnLm1rIGIvcGFja2FnZS9saWJzdmcvbGlic3ZnLm1rCj4gZGVs
-ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggNDVkNzMwZGIxZi4uMDAwMDAwMDAwMAo+IC0t
-LSBhL3BhY2thZ2UvbGlic3ZnL2xpYnN2Zy5tawo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwyMyAr
-MCwwIEBACj4gLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gLSMKPiAtIyBsaWJzdmcKPiAtIwo+
-IC0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+IC0KPiAtTElCU1ZHX1ZFUlNJT04gPSAwLjEuNAo+
-IC1MSUJTVkdfU0lURSA9IGh0dHA6Ly9jYWlyb2dyYXBoaWNzLm9yZy9zbmFwc2hvdHMKPiAtTElC
-U1ZHX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBsaWJwbmcganBlZwo+IC1MSUJTVkdfSU5T
-VEFMTF9TVEFHSU5HID0gWUVTCj4gLUxJQlNWR19MSUNFTlNFID0gTEdQTC0yLjArCj4gLUxJQlNW
-R19MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+IC0KPiAtIyBsaWJzdmcgbmVlZHMgYXQgbGFzdCBh
-IFhNTCBwYXJzZXIKPiAtaWZlcSAoJChCUjJfUEFDS0FHRV9FWFBBVCkseSkKPiAtTElCU1ZHX0NP
-TkZfT1BUUyArPSAtLXdpdGgtZXhwYXQKPiAtTElCU1ZHX0RFUEVOREVOQ0lFUyArPSBleHBhdAo+
-IC1lbHNlCj4gLUxJQlNWR19DT05GX09QVFMgKz0gLS13aXRoLWxpYnhtbDIKPiAtTElCU1ZHX0RF
-UEVOREVOQ0lFUyArPSBsaWJ4bWwyCj4gLWVuZGlmCj4gLQo+IC0kKGV2YWwgJChhdXRvdG9vbHMt
-cGFja2FnZSkpCj4gLS0gCj4gMi40Ny4zCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In reply of:
+> The package was removed from Debian in 2016:
+> https://tracker.debian.org/news/738763/removed-103-16-from-unstable/
+> "Obsolete and replaced by flock"
+> 
+> and causes build errors with musl.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/9fa/9fa9323bac3ee1720396bb34fefb3017125e5a85/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Applied to 2025.02.x and 2025.11.x. Thanks
+
+> ---
+>  Config.in.legacy                              |  7 +++
+>  package/Config.in                             |  1 -
+>  ...-static-library-and-headers-separate.patch | 44 --------------
+>  package/lockdev/Config.in                     |  6 --
+>  package/lockdev/lockdev.hash                  |  5 --
+>  package/lockdev/lockdev.mk                    | 58 -------------------
+>  6 files changed, 7 insertions(+), 114 deletions(-)
+>  delete mode 100644 package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+>  delete mode 100644 package/lockdev/Config.in
+>  delete mode 100644 package/lockdev/lockdev.hash
+>  delete mode 100644 package/lockdev/lockdev.mk
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index e97fd0ebb2..4d9e2df986 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
+>  
+>  comment "Legacy options removed in 2026.02"
+>  
+> +config BR2_PACKAGE_LOCKDEV
+> +	bool "lockdev removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  lockdev was no longer maintained upstream, so it has been
+> +	  dropped.
+> +
+>  config BR2_PACKAGE_DBUS_TRIGGERD
+>  	bool "dbus-triggerd removed"
+>  	select BR2_LEGACY
+> diff --git a/package/Config.in b/package/Config.in
+> index 52ca6d19d3..0f96ec2527 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1698,7 +1698,6 @@ menu "Filesystem"
+>  	source "package/liblockfile/Config.in"
+>  	source "package/libnfs/Config.in"
+>  	source "package/libsysfs/Config.in"
+> -	source "package/lockdev/Config.in"
+>  	source "package/physfs/Config.in"
+>  endmenu
+>  
+> diff --git a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch b/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+> deleted file mode 100644
+> index d5a498a19e..0000000000
+> --- a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -From 0dcd2368c3e23a5cc1cc4a979d9c241ed9302236 Mon Sep 17 00:00:00 2001
+> -From: Romain Naour <romain.naour@openwide.fr>
+> -Date: Sun, 4 Jan 2015 16:06:07 +0100
+> -Subject: [PATCH] Makefile: install static library and headers separately
+> -
+> -Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ----
+> - Makefile | 12 +++++++-----
+> - 1 file changed, 7 insertions(+), 5 deletions(-)
+> -
+> -diff --git a/Makefile b/Makefile
+> -index e27dcbd..ecf52d1 100644
+> ---- a/Makefile
+> -+++ b/Makefile
+> -@@ -45,12 +45,10 @@ perl-lib:	static
+> - 	cd LockDev && make OPTIMIZE="-O2 -g -Wall"
+> - 	cd LockDev && make test
+> - 
+> --.PHONY: install install_dev install_dbg install_doc install_run 
+> --install:	install_dev install_dbg install_doc install_run
+> -+.PHONY: install install_dev install_dbg install_doc install_run install_static
+> -+install:	install_dev install_dbg install_doc install_run install_static
+> - 
+> --install_dev:	${static} src/lockdev.h
+> --	install -m755 -d	${libdir}
+> --	install -m644 ${static}	${libdir}
+> -+install_dev:	src/lockdev.h
+> - 	install -m755 -d	${incdir}
+> - 	install -m644 src/lockdev.h	${incdir}
+> - 	install -m644 src/ttylock.h	${incdir}
+> -@@ -69,6 +67,10 @@ install_doc:	docs/lockdev.3
+> - 	install -m755 -d	${mandir}/man3
+> - 	install -m644 docs/lockdev.3	${mandir}/man3
+> - 
+> -+install_static:	${static}
+> -+	install -m755 -d	${libdir}
+> -+	install -m644 ${static}	${libdir}
+> -+
+> - install_run:	${shared}
+> - 	install -m755 -d	${libdir}
+> - 	install -m644 ${shared}	${libdir}
+> --- 
+> -1.9.3
+> -
+> diff --git a/package/lockdev/Config.in b/package/lockdev/Config.in
+> deleted file mode 100644
+> index 4b386f4ab0..0000000000
+> --- a/package/lockdev/Config.in
+> +++ /dev/null
+> @@ -1,6 +0,0 @@
+> -config BR2_PACKAGE_LOCKDEV
+> -	bool "lockdev"
+> -	help
+> -	  Library for locking devices.
+> -
+> -	  No upstream site, primary site is Debian.
+> diff --git a/package/lockdev/lockdev.hash b/package/lockdev/lockdev.hash
+> deleted file mode 100644
+> index e32466dfe7..0000000000
+> --- a/package/lockdev/lockdev.hash
+> +++ /dev/null
+> @@ -1,5 +0,0 @@
+> -# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev/lockdev_1.0.3-1.6.dsc
+> -sha256  ccae635d7ac3fdd50897eceb250872b3d9a191d298f213e7f0c836910d869f82  lockdev_1.0.3.orig.tar.gz
+> -sha256  a5405c6ee5e97e45eeb1c81330a7e9f444a58bda5e6771fa30007516c115007e  lockdev_1.0.3-1.6.diff.gz
+> -# Locally calculated
+> -sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  LICENSE
+> diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
+> deleted file mode 100644
+> index e491b132d3..0000000000
+> --- a/package/lockdev/lockdev.mk
+> +++ /dev/null
+> @@ -1,58 +0,0 @@
+> -################################################################################
+> -#
+> -# lockdev
+> -#
+> -################################################################################
+> -
+> -LOCKDEV_VERSION_MAJOR = 1
+> -LOCKDEV_VERSION = $(LOCKDEV_VERSION_MAJOR).0.3
+> -LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
+> -LOCKDEV_PATCH = lockdev_$(LOCKDEV_VERSION)-1.6.diff.gz
+> -LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev
+> -LOCKDEV_LICENSE = LGPL-2.1
+> -LOCKDEV_LICENSE_FILES = LICENSE
+> -LOCKDEV_INSTALL_STAGING = YES
+> -
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -LOCKDEV_BUILD_ARGS = static
+> -LOCKDEV_INSTALL_ARGS = install_static
+> -else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+> -LOCKDEV_BUILD_ARGS = static shared
+> -LOCKDEV_INSTALL_ARGS = install_run install_static
+> -else # BR2_SHARED_LIBS
+> -LOCKDEV_BUILD_ARGS = shared
+> -LOCKDEV_INSTALL_ARGS = install_run
+> -endif
+> -
+> -# Make the code believe we are using a C library compatible with
+> -# glibc, which for the purpose of lockdev is actually true.
+> -ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> -LOCKDEV_BUILD_ARGS += CFLAGS="$(TARGET_CFLAGS) -D__GNU_LIBRARY__"
+> -endif
+> -
+> -ifeq ($(BR2_SHARED_STATIC_LIBS)$(BR2_SHARED_LIBS),y)
+> -define LOCKDEV_CREATE_LINKS_STAGING
+> -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
+> -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_VERSION_MAJOR)
+> -endef
+> -
+> -define LOCKDEV_CREATE_LINKS_TARGET
+> -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_VERSION_MAJOR)
+> -endef
+> -endif
+> -
+> -define LOCKDEV_BUILD_CMDS
+> -	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(LOCKDEV_BUILD_ARGS)
+> -endef
+> -
+> -define LOCKDEV_INSTALL_STAGING_CMDS
+> -	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS) install_dev
+> -	$(LOCKDEV_CREATE_LINKS_STAGING)
+> -endef
+> -
+> -define LOCKDEV_INSTALL_TARGET_CMDS
+> -	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS)
+> -	$(LOCKDEV_CREATE_LINKS_TARGET)
+> -endef
+> -
+> -$(eval $(generic-package))
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
