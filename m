@@ -4,79 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A60B0D3F09D
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:24:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6891D3F09D
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 17:24:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A59C40B09;
-	Wed, 28 Jan 2026 17:24:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B163B40ADC;
+	Wed, 28 Jan 2026 17:24:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cH68HYnuzanu; Wed, 28 Jan 2026 17:24:29 +0000 (UTC)
+ id oOdH8lw03bMp; Wed, 28 Jan 2026 17:24:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58E2140A49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5620640A3B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769621069;
-	bh=8oU/G8IAtGlSOjkONrU3DCpd+CDAsrl2X8nO00Cx+JM=;
+	s=default; t=1769621070;
+	bh=wzl8lQcAU3v6y9Dkwkzp3JDkV1XTnObZi/wn9x2+Dk4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=dGpFucdeBUs14RPGRcqNURbu43VjnSE9r9ACrSrEvrZpbfpasm1W9ywcNt77ym3C1
-	 IArl5DtCiXiFFevynp4umKb0pcO4o22MdhbW7mtgXJ+suHLmmpxf3fXH9j6EelSxaa
-	 xxXgv7tsBtIo2e8AQztEi4xMdxg3daW9ng0GN/zKyBC023eSC0SvasdqZXGjoXs4CD
-	 7UnUStlBBm4RdK8oF6i/xXQsY10z3QvTwiwiL15cl4QZo+lrHOClo+JYdVWc0aYhUg
-	 Kiu0k74GJvldKKCa9v1JZXWNADB1yo2j02gfGU5UjK+9lHZAB3zfM1eBrhEukRzhgp
-	 MHLYVBmM4rDOQ==
+	b=IvZZWxJKqiDjzb1rJzy3MfX7VASjW3Ttz2JUkQrZ+Tp8n+ItOnK1oLcrHu/z7i1rH
+	 3BYwevhNkjJiBkta5N29//A9EpexlxfUC4uc9x4Tg4xasKtKbQWc0HtpeZ4j8dcV+5
+	 fjO+L/3YOSya2mgSg+dBRD997UxL8k+aFSkRPVODr6AKGAZq4ybg1B6e0MNiC11BjM
+	 XOwI/gYH6VBDFavFfSalKmZ74Q4PMa1pUe9ZIhdQK8Ie1L0AvsCs5oeaJMfuI81Y2l
+	 JzZPq4CmA2rXHG6fyfnIYNILbj25Oe0SvcHs2BlOBUnHURqstCzG8YRe+yt+CRIfxi
+	 wMudt0SXoPKtw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58E2140A49;
-	Wed, 28 Jan 2026 17:24:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C70C3118
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5620640A3B;
+	Wed, 28 Jan 2026 17:24:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 69AD5118
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC1ED60781
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AC6380C42
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u6GJawKqu5br for <buildroot@buildroot.org>;
- Wed, 28 Jan 2026 17:24:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mWiVJI3YNh0C for <buildroot@buildroot.org>;
+ Wed, 28 Jan 2026 17:24:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A64860614
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A64860614
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0ABAB80C33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ABAB80C33
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A64860614
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0ABAB80C33
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 17:24:23 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7BF6BB97AC78; Wed, 28 Jan 2026 18:24:20 +0100 (CET)
+ with ESMTPSA id 04264B97AC12; Wed, 28 Jan 2026 18:24:21 +0100 (CET)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed, 28 Jan 2026 18:24:19 +0100
-Message-ID: <20260128172419.342805-1-arnout@rnout.be>
+Date: Wed, 28 Jan 2026 18:24:21 +0100
+Message-ID: <20260128172421.342858-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260106200115.1985522-6-bernd@kuhls.net>
-References: <20260106200115.1985522-6-bernd@kuhls.net>
+In-Reply-To: <20260106200115.1985522-7-bernd@kuhls.net>
+References: <20260106200115.1985522-7-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1769621060; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1769621062; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=uwik75oavlnCTTi5BKeXO/N1yNgGwv/l/7n69HTc5OA=;
- b=AnAzsZcGzdrSQgZ13Ko6HmlEAP7ajXkEmpvReKRgYiERUd9HaHzkXp9BPg7G8X6NsUgEqC
- gAOs4IRjuRLke4XJ/fIg29d+es1diqetmKyk4qLa02aFIgrZ6FCtQSFBCy77MxlkcWn7+u
- ihXqyMrkSH8B8nQPdTuIQ+CLoBpX+TjYdBKJJmQZNqYFs9DVGkPI0L5pQI3sda3ROB0j8k
- aNh8BKgNZTtVsn2su19i+9roJgH02oYcOtJmyEG62KHOJalvIstcalZas+n5eLsUUu7fNI
- 379xPAjSZkOc4cl0je/Dh0d77o+fByFSxQSaSSl5dD+dHF0jzAYVl7lCBgUcJA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=3Qg/Y2wBTOAn9VXUpfSy5XTUgP/wuBEVSMHVYpt/3Pk=;
+ b=TdDGiPJu2Yrfurgjx4SpDp9MXcdpCktU0NXJfzVuwqaZHqDQZKjx4mPLrpC/sQx56pZFrU
+ 55UcRw1gXvJtyw22BsYU/fZG6zCpscoJDYxCg2J1qbNogadJ8Jry2eS6iMDmycKBKsQP+3
+ pkFpS2cBDMjFd5iJzqv/CqRNJsoFH/hs2pZvtwelmgejG8th2GcuWrT6GO3zYTs44w4/NT
+ nPG4weUYwbDYMsSO+tS9VFr8bbFbM678n3qu0NTrVnwPTTy3G+PD8H040gy4EtAJjS9RdO
+ +RdYAmwD69YaF6DHcUmF2Dc5IeIKrNIadNf7Kl0DqMpRsAhJFrrH8/aCcYpJKg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=AnAzsZcG
-Subject: Re: [Buildroot] [PATCH v2 5/9] package/cvs: drop package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=TdDGiPJu
+Subject: Re: [Buildroot] [PATCH v2 6/9] package/dbus-triggerd: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,174 +97,124 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The CVS project is no longer maintained upstream. It no longer builds
-> with GCC 14.x, has been failing to build for months in our
-> autobuilders with nobody caring about it.
+> Analysis of https://rg42.org/gitweb/?p=dbustriggerd.git:
+> last commit: 2014
 > 
-> We managed to fix the GCC 14.x build issue, then there are GCC 15.x,
-> some of them fixed by Debian patches, but some not. Overall, this is
-> too much effort, while upstream is completely dead.
+> Musl libc 1.2.5 removed the definition of the basename() function from
+> string.h and only provides it in libgen.h as the POSIX standard
+> defines it.
 > 
-> So let's get rid of cvs entirely.
+> Instead of fixing an unmaintainted package we remove it from buildroot,
+> no other package depends on it.
 > 
 > Fixes:
+> https://autobuild.buildroot.net/results/811/81170fe89e1f5b70c63657684de43175e621f762/
 > 
->   https://autobuild.buildroot.net/results/59f6e77106ac98535688ff5b9392b0b3ad3041ae/
+> dbus-triggerd.c:150:27: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+>   150 |     argv[argc++] = strdup(basename(handler_cmd));
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x and 2025.11.x. Thanks
 
 > ---
->  Config.in.legacy      |  7 ++++++
->  package/Config.in     |  1 -
->  package/cvs/Config.in | 24 ------------------
->  package/cvs/cvs.hash  |  8 ------
->  package/cvs/cvs.mk    | 58 -------------------------------------------
->  5 files changed, 7 insertions(+), 91 deletions(-)
->  delete mode 100644 package/cvs/Config.in
->  delete mode 100644 package/cvs/cvs.hash
->  delete mode 100644 package/cvs/cvs.mk
+>  Config.in.legacy                         |  7 +++++++
+>  package/Config.in                        |  1 -
+>  package/dbus-triggerd/Config.in          | 15 ---------------
+>  package/dbus-triggerd/dbus-triggerd.hash |  3 ---
+>  package/dbus-triggerd/dbus-triggerd.mk   | 21 ---------------------
+>  5 files changed, 7 insertions(+), 40 deletions(-)
+>  delete mode 100644 package/dbus-triggerd/Config.in
+>  delete mode 100644 package/dbus-triggerd/dbus-triggerd.hash
+>  delete mode 100644 package/dbus-triggerd/dbus-triggerd.mk
 > 
 > diff --git a/Config.in.legacy b/Config.in.legacy
-> index 062a9ebd5a..28919e8594 100644
+> index 28919e8594..e97fd0ebb2 100644
 > --- a/Config.in.legacy
 > +++ b/Config.in.legacy
 > @@ -146,6 +146,13 @@ endif
 >  
 >  comment "Legacy options removed in 2026.02"
 >  
-> +config BR2_PACKAGE_CVS
-> +	bool "cvs has been removed"
+> +config BR2_PACKAGE_DBUS_TRIGGERD
+> +	bool "dbus-triggerd removed"
 > +	select BR2_LEGACY
 > +	help
-> +	  The cvs project was no longer maintained upstream, broken
-> +	  with GCC 14.x, so it was removed.
+> +	  dbus-triggerd was no longer maintained upstream, so it has
+> +	  been dropped.
 > +
->  config BR2_PACKAGE_CRIU
->  	bool "criu has been removed"
->  	help
+>  config BR2_PACKAGE_CVS
+>  	bool "cvs has been removed"
+>  	select BR2_LEGACY
 > diff --git a/package/Config.in b/package/Config.in
-> index 628a1f0aa6..bbbc04226f 100644
+> index bbbc04226f..52ca6d19d3 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -173,7 +173,6 @@ menu "Development tools"
->  	source "package/cppunit/Config.in"
->  	source "package/cukinia/Config.in"
->  	source "package/cunit/Config.in"
-> -	source "package/cvs/Config.in"
->  	source "package/cxxtest/Config.in"
->  	source "package/diffutils/Config.in"
->  	source "package/dos2unix/Config.in"
-> diff --git a/package/cvs/Config.in b/package/cvs/Config.in
+> @@ -485,7 +485,6 @@ endmenu
+>  	source "package/dbus-cxx/Config.in"
+>  	source "package/dbus-glib/Config.in"
+>  	source "package/dbus-python/Config.in"
+> -	source "package/dbus-triggerd/Config.in"
+>  	source "package/dfu-programmer/Config.in"
+>  	source "package/dfu-util/Config.in"
+>  	source "package/dmidecode/Config.in"
+> diff --git a/package/dbus-triggerd/Config.in b/package/dbus-triggerd/Config.in
 > deleted file mode 100644
-> index e8f0606ecc..0000000000
-> --- a/package/cvs/Config.in
+> index 331c414704..0000000000
+> --- a/package/dbus-triggerd/Config.in
 > +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -config BR2_PACKAGE_CVS
-> -	bool "cvs"
-> -	depends on BR2_USE_WCHAR
-> -	# needs fork()
-> -	depends on BR2_USE_MMU
-> -	select BR2_PACKAGE_NCURSES
+> @@ -1,15 +0,0 @@
+> -config BR2_PACKAGE_DBUS_TRIGGERD
+> -	bool "dbus-triggerd"
+> -	depends on BR2_USE_MMU # fork(), dbus
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+> -	depends on BR2_PACKAGE_DBUS
 > -	help
-> -	  Concurrent Versions System - source code revision control
-> -	  tools.
+> -	  dbus-triggerd is a tool to trigger shell-commands upon
+> -	  receiving a given dbus-signal.
 > -
-> -	  http://www.nongnu.org/cvs/
+> -	  http://gareus.org/oss/dbustriggerd/start
 > -
-> -if BR2_PACKAGE_CVS
-> -
-> -config BR2_PACKAGE_CVS_SERVER
-> -	bool "server support"
-> -	help
-> -	  Enable cvs server code
-> -
-> -endif
-> -
-> -comment "cvs needs a toolchain w/ wchar"
+> -comment "dbus-triggerd needs a toolchain w/ threads"
 > -	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR
-> diff --git a/package/cvs/cvs.hash b/package/cvs/cvs.hash
+> -	depends on BR2_PACKAGE_DBUS
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/dbus-triggerd/dbus-triggerd.hash b/package/dbus-triggerd/dbus-triggerd.hash
 > deleted file mode 100644
-> index 7b03a552d0..0000000000
-> --- a/package/cvs/cvs.hash
+> index c5127133fb..0000000000
+> --- a/package/dbus-triggerd/dbus-triggerd.hash
 > +++ /dev/null
-> @@ -1,8 +0,0 @@
-> -# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cvs/cvs_1.12.13-12%2Bsqueeze1.dsc
-> -sha256  b5961c2476b996e5758fa5e22b60af085adca41164cac0d8f68a1d3b49d4e4f1  cvs_1.12.13.orig.tar.gz
-> -sha256  d52a9232d9cf36302a150d782fc7e5b6f92f8115505ae8a7dc6acfc83e809d2f  cvs_1.12.13-12+squeeze1.diff.gz
-> -
-> -# Hash for license files, locally computed
-> -sha256  569c5b876327d899cf444b2277fe910128a38ca71d90755fe4125dd44f8ece02  COPYING
-> -sha256  da0e282103fb508894e78db519aab255e36971ce0bc87de585e3b05014b83b1e  COPYING.LIB
-> -sha256  ee9a2fbdb626c0ac57fd8e569f357eb2e6d6c80cc6f41efa8bd126d5ea589d72  lib/glob-libc.h
-> diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+> @@ -1,3 +0,0 @@
+> -# Locally computed
+> -sha256  73dbd92e89eee223928b5cbf414affb5913f70c1ca7e3f8ab733a4696436dae3  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09-git4.tar.gz
+> -sha256  30d135650639af9019633690fc1aecbfc150aeeef9446347d4286a58338d10b0  dbus-triggerd.c
+> diff --git a/package/dbus-triggerd/dbus-triggerd.mk b/package/dbus-triggerd/dbus-triggerd.mk
 > deleted file mode 100644
-> index cf9127fc3a..0000000000
-> --- a/package/cvs/cvs.mk
+> index 7d73a6c98f..0000000000
+> --- a/package/dbus-triggerd/dbus-triggerd.mk
 > +++ /dev/null
-> @@ -1,58 +0,0 @@
+> @@ -1,21 +0,0 @@
 > -################################################################################
 > -#
-> -# cvs
+> -# dbus-triggerd
 > -#
 > -################################################################################
 > -
-> -CVS_VERSION = 1.12.13
-> -CVS_SOURCE = cvs_$(CVS_VERSION).orig.tar.gz
-> -CVS_PATCH = cvs_$(CVS_VERSION)-12+squeeze1.diff.gz
-> -CVS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cvs
-> -CVS_LICENSE = GPL-1.0+, LGPL-2.0+, LGPL-2.1+ (glob)
-> -CVS_LICENSE_FILES = COPYING COPYING.LIB lib/glob-libc.h
-> -CVS_CPE_ID_VENDOR = gnu
-> -CVS_SELINUX_MODULES = apache cvs
-> -CVS_DEPENDENCIES = ncurses
+> -DBUS_TRIGGERD_VERSION = ba3dbec805cb707c94c54de21666bf18b79bcc09
+> -DBUS_TRIGGERD_SITE = git://rg42.org/dbustriggerd.git
+> -DBUS_TRIGGERD_LICENSE = GPL-2.0+
+> -DBUS_TRIGGERD_LICENSE_FILES = dbus-triggerd.c
+> -DBUS_TRIGGERD_DEPENDENCIES = host-pkgconf dbus
 > -
-> -CVS_CONF_ENV = \
-> -	ac_cv_func_working_mktime=yes \
-> -	cvs_cv_func_printf_ptr=yes
-> -
-> -CVS_CONF_OPTS = \
-> -	--disable-old-info-format-support \
-> -	--with-editor=/bin/vi
-> -ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
-> -CVS_CONF_OPTS += --enable-server
-> -else
-> -CVS_CONF_OPTS += --disable-server
-> -endif
-> -ifeq ($(BR2_PACKAGE_ZLIB),y)
-> -CVS_CONF_OPTS += --with-external-zlib
-> -endif
-> -
-> -define CVS_BZIP_UNPACK
-> -	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | $(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
-> -	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
+> -define DBUS_TRIGGERD_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
 > -endef
 > -
-> -CVS_POST_PATCH_HOOKS += CVS_BZIP_UNPACK
-> -
-> -ifneq ($(CVS_PATCH),)
-> -define CVS_DEBIAN_PATCHES
-> -	if [ -d $(@D)/debian/patches ]; then \
-> -		(cd $(@D)/debian/patches && for i in *; \
-> -		 do $(SED) 's,^\+\+\+ .*cvs-$(CVS_VERSION)/,+++ cvs-$(CVS_VERSION)/,' $$i; \
-> -		 done; \
-> -		); \
-> -		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*; \
-> -	fi
-> -endef
-> -endif
-> -
-> -CVS_POST_PATCH_HOOKS += CVS_DEBIAN_PATCHES
-> -
-> -define CVS_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -D $(@D)/src/cvs $(TARGET_DIR)/usr/bin/cvs
+> -define DBUS_TRIGGERD_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
 > -endef
 > -
-> -$(eval $(autotools-package))
+> -$(eval $(generic-package))
 > -- 
 > 2.47.3
 > 
