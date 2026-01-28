@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61335D35692
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 08:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F249D35690
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jan 2026 08:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D312A407CC;
-	Wed, 28 Jan 2026 08:53:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CE2C81E9D;
+	Wed, 28 Jan 2026 08:58:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8YCv4Q7JipCO; Wed, 28 Jan 2026 08:53:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IJVLHQ5EhJIr; Wed, 28 Jan 2026 08:58:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE2D0407CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 422BB81EAA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769590398;
-	bh=IYPZ9CxfcHN4Q3DyH3AmD0XQEaqe2+5Uw/UjETypLA8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=mRtNCMRGI7h4tWQpoKeaCYsK8Z6EzLFohe/UaY/oFEZ/IWqEXp0Z2EAIBUMEVqPff
-	 8w/bLM4rJMR+uLOJi+uCInph2yymgW2Qgvgc10Buu6cpyNtAn3lE5ADiXMcfTJz5s8
-	 K8YOqAlAfVf95oayaHwznfbKHIPIMNVDLLZN/wm41VY1RGVY9Wrf8LBW8wAT6LNueJ
-	 d2uvih24yBlG9tg+psq354xE2uLBp+KSu9gdgRA42qt062CKFxssUUMJdnK4E30lzk
-	 EsN0TFrzA/tKL0mlnNHYE1LT6EiqMYDUBTxbTe4QlB8hCXZ/Uk1VSHojAFuJ+mFtYx
-	 jD7CiLSXz074g==
+	s=default; t=1769590706;
+	bh=V2alG5Elg9+cydHr2m9hm9HOoGOzNjkqbviDe78ffWc=;
+	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=Xzctc4pHN2q62Fbm3nqODbReJjegzlD8AmVlErYIZ8lrgKaQhp49Mwlg9EmFEjoyd
+	 MGogWiPgZr6VkNwq9PVMOpOzLUpstgW6FpOZCxULHmGns8mkiXacgaQDGFe1zwRXbl
+	 DdgsVMGYZhp+K86vcKUnaPKeygrIIOGsRvLgCFBoNGA8VApaelXQG5C6zEnNU31YWh
+	 ZyR2qXtOvVLqwo2Lir/f6NMkGqu8PyzMZrVwNIAVXj6ozaLQsoTaS7NxjzjaWtTOsZ
+	 G5j4mCKJmgSS1l2KCbh8Qhjw3c7JGbRLjpqQzC8b3g9kc7UduVBUXMjJzyuKcuKDFC
+	 AxfHntlGSoTkA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE2D0407CD;
-	Wed, 28 Jan 2026 08:53:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E137ED3
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:53:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 422BB81EAA;
+	Wed, 28 Jan 2026 08:58:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 345C6118
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C287A407CD
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:53:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EC50401F4
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:58:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BupmfSEGwVgH for <buildroot@buildroot.org>;
- Wed, 28 Jan 2026 08:53:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CC6X6QjYYjwW for <buildroot@buildroot.org>;
+ Wed, 28 Jan 2026 08:58:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19E81407CC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19E81407CC
- for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:53:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C6BB85C63; Wed, 28 Jan 2026 08:53:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1229040148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1229040148
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1229040148
+ for <buildroot@buildroot.org>; Wed, 28 Jan 2026 08:58:22 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1278275923; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 28 Jan 2026 08:58:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vl1NR-000000045gu-3mV1;
+ Wed, 28 Jan 2026 09:58:17 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 28 Jan 2026 09:51:14 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2caf72537a7a860ee0143ba9efd78f0adb5dd277
-X-Git-Newrev: 69b623e4a9aff9e1f68105af1170e1d9a546b906
-X-Patchwork-Hint: ignore
-Message-Id: <20260128085316.0C6BB85C63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cryptsetup: bump version to 2.8.4
+To: Chris Packham <judge.packham@gmail.com>
+In-Reply-To: <CAFOYHZD9MLCF=w0H6F39WGwwypfXrD4=zJ75wiVfdAnZ0J-niA@mail.gmail.com>
+ (Chris Packham's message of "Wed, 28 Jan 2026 10:11:39 +1300")
+References: <CAFOYHZAeKaF89C8hGkiWz_qBT0Kq4n3bM=tmmSThhV2gBs75Qg@mail.gmail.com>
+ <aXknYlAq4sBVhAv2@waldemar-brodkorb.de>
+ <CAFOYHZD9MLCF=w0H6F39WGwwypfXrD4=zJ75wiVfdAnZ0J-niA@mail.gmail.com>
+Date: Wed, 28 Jan 2026 09:58:17 +0100
+Message-ID: <871pja15cm.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=dQdp42oxJab8GJzGkHDkeapOsLUKE5n0MTmVwYKacmkOpuBWx5I8eB0BwKMkHGk7fCd0r1wKcLn7rGd1TD5uyqOeq6MVZ8bnPNYPQ6UZEjzrpbefcu9AcorNNIhPKMEBdczuDTAnT4zD3d8JR1OZ5Ma9POCSHbpND2PuQZRXaz008pKz7sbHrsEheibOO0s4586PUMggbvtmKmxo/Bv0d+GFZ1Dhrax1de4fPgjRM6bcZhZSQ/OBAOuFK7WaUsJ/Z5Bvf69aduQr1SIkapj7D0JKPuYNcm4OWejiCvTV2jKFxaydJ/rhosr3J5URnyw5vOpGXEJkENjycE/abF+Z0w==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=u4/goWIh7Znpc2w5p0bFWbW/3K+KaF0mhV7ENaAZCL8=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=dQdp42ox
+Subject: Re: [Buildroot] crosstool-ng piggy packing off sources.buildroot.net
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,49 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69b623e4a9aff9e1f68105af1170e1d9a546b906
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
-For release note, see:
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.4/docs/v2.8.4-ReleaseNotes
+Hi,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> I have installed a robots.txt, but it seems to be ignored.
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index bbc9171e77..49126a4a2f 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/sha256sums.asc
--sha256  4a8a23b8b9d1a3250452e40acead4421a03e45a38954ad0595634f4266aa800f  cryptsetup-2.8.3.tar.xz
-+sha256  443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83  cryptsetup-2.8.4.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  docs/licenses/COPYING.Apache-2.0
- sha256  28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5  docs/licenses/COPYING.CC-BY-SA-4.0
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index e8f2f1673a..6be05e6457 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.8
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
+ > Yeah we have exactly the same problem on crosstool-ng.org. I'm pretty
+ > close to turning off our hg/git interface, it's only historic so
+ > there's actually nothing new there (that doesn't seem to stop the
+ > bots). It's a shame that the side effect of all of this scraping is
+ > forcing people to centralise their source code hosting.
+
+
+ >> Any ideas are welcome!
+
+ > I'm waiting for the AI bubble to burst so we can go back to using our
+ > GPUs for bitcoin mining :P.
+
+Heh ;)
+
+We have had some success with putting Anubis in front of the services,
+but it is an arms race:
+
+https://anubis.techaro.lol/
+
+
+ >> I just started the webserver again.
+
+ > Thanks, I still think piggy packing off the buildroot mirror would at
+ > least lessen any load our builds are putting on your servers.
+
+Yes, it is fine to use sources.buildroot.net
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
