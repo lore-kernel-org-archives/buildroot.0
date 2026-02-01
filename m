@@ -4,60 +4,120 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7EABE6529D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 21:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F64CE6529D
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 21:00:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 617AA606C9;
-	Sun,  1 Feb 2026 21:00:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C5CC6066B;
+	Sun,  1 Feb 2026 21:00:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S5cufMnyridT; Sun,  1 Feb 2026 21:00:40 +0000 (UTC)
+ id oULh6YyMr6m6; Sun,  1 Feb 2026 21:00:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FF766064A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55A19606A7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769979640;
-	bh=vIHSZ2Xa3Zht0WnZ4QyhRbkkrb5QvpgzMP65YtAQVPU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jfLKY+NZaU3XF5Wx/yQoDukbxunzGRvE9xlhHnWQk924xVt/8IAitc/WMAvFRVh67
-	 9L/w30w36YwHIiB0RirD7EUgJdKks/o1r7ynu+ckx28VNcVBwpX/Ki7lzvx72MB303
-	 qONY1yUiV0xSc7/M2vwdjuFRRwZuiLmuGZplZ8oyZpEHCHF5wswb5y9xyPxA4xuDgI
-	 0cb5MVrwczsi5wZzMM9WrJg3N9ZWulBke5j4xeSvY4yzkNjmb0Imfo4BpNpg8sDBEi
-	 rLSNPR0jSxib8W9vk5WlpD7lK6hOUw+WU18ARcCxTWFn7Ied+qh5eFYKUKURm2JxzZ
-	 rXutYKkcOobTw==
+	s=default; t=1769979642;
+	bh=agAXp1Qx/W2DT8zAQDg7fnnApqaIEv2vBVOSMaWMOwg=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=QHbQm7Imtp1aOMVDMmXN/14vyw3SpCFAzu0ZlfG63isytN6nQQu3fKvxDCaJyfOgU
+	 psSKuLLMtHGbFJZxyupK+ybG+MHYXBzT2MLu1fgFFaknvWoA4/7a8omRIf+NvhZryZ
+	 u4VQA2cFgC/lgUqyebU0UDPZbFYTRDqFJqzwellfiJ3XK0b+Ct4PISb/W0Y2GTtF/v
+	 9x6eVl2cTFRdja6VjBbPKGm4uLM7Sw9OUcajnVqO3nCzUGBe8D4xuHbKW2OsnaSEMG
+	 HgnYDhX+a1H1OOj2D+P4qyOPB00qJv8UdfuXHP5mktc1e0WQXmid7AAfKH/r7otDLF
+	 VZQ8IRLNdFjjQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FF766064A;
-	Sun,  1 Feb 2026 21:00:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55A19606A7;
+	Sun,  1 Feb 2026 21:00:42 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DAB61E0
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 21:00:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9AA461E0
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 21:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 690D160623
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 21:00:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9657D60678
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 21:00:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yuk8rI-_Vhci for <buildroot@buildroot.org>;
- Sun,  1 Feb 2026 21:00:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65C53600CA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65C53600CA
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 21:00:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B17B861BE; Sun,  1 Feb 2026 21:00:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 1 Feb 2026 22:00:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6891a9f9e4c2aa8d643766ef9ee7e96adb4968e
-X-Git-Newrev: 5d0c5a86041a5a727aea07191ae4dcef3213c594
-X-Patchwork-Hint: ignore
-Message-Id: <20260201210036.4B17B861BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu: update defconfigs to Linux
- 6.18.7
+ id Am2d2ZZJe96x for <buildroot@buildroot.org>;
+ Sun,  1 Feb 2026 21:00:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF5E4600CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF5E4600CA
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF5E4600CA
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 21:00:38 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-4359a16a400so3261553f8f.1
+ for <buildroot@buildroot.org>; Sun, 01 Feb 2026 13:00:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1769979636; x=1770584436;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=SxaAZNrAUyijXxLIum5nDFZzFoFoVi6THEHf38TKXM0=;
+ b=rDhSTC2zxfzaqD4N9LAKZpPnF0oPKvZdA3A3170DGtM39NFvCWahUGWPkVNnikFziK
+ hzgGkxSM0c5nU5fukihyV5NFswMKalJJSNDXwZD5lrXX9HnhEWu4IZPYUvVgfR0QH7Ru
+ sFvKDFIT2u3TJYX2Z3yB7Oq0IKjFPkTCTD2Hz8qJOQd3VSjwpoD+88o70ySaAKeTQMT+
+ t9f5HgKNAtK7WI0voyzDfHQGPghxZ7vCfRUOKybAgvjuu9QA0OgScEo47c5Y2aPAtp6+
+ mxFUnZl//GG0KoytEPDVl3kvT5Nll4N6LE2w2cSBtXJPRRJJNGU1URrlLj5MQTc2VEu5
+ Cdqg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUiO4Z+oTq5QJ/LLS2Vevp1CQiyOVg4TdWa2J8CWR3wA8cKzRl7cdgdB8JIXyEGawyE49EbaUO7ujQ=@buildroot.org
+X-Gm-Message-State: AOJu0YzVckYzS1r5dEqfiNIiY8ku5867MEwInvL+A88kc42lvdRyZK3+
+ zq84gf9GkwX32EqawFiXeswpL0FYfnkU4Dn1iEtI/aFAPSfuul4or8fd7amuCkRIv2A=
+X-Gm-Gg: AZuq6aI19x79ybSweNW0G8EO6jnN9oUyUsEB12Iyx1b6baoBUU16eFNxxRYiZW5XxYm
+ JX1PX6ByRh5FrAynxYMyfAAW+uk43+S3kAY5SET8KFOUbS772QJZ7bIQWE7ig7gflczsaCmNOmK
+ c+jV+PXgv7gS3T9UctM3Fn63MgYQUAaGsfoQcf1w2XV9EUjg6gU5cNj/DiihBekgJwFplRnQp0S
+ FxFNTYsceG083InOTMX4UpO+CL5varzlcMWAcNrO3KPeUkzovbV3g70ZhG3F+wg675xaQSns8MK
+ ghFKFnZPC7fRU7VqQ37O+p5RuvEuDf5+XY9Qtt33HKIYaZf/IFMJsCfjFL6mH1rLCAvfAwtuZzA
+ 4MQX79v2KR2V/guwIyPwsgCgqMnBbI6j33SStZxA1bXLwu4Q3SgnQvAsE6CHsjWIUe7G0LItsoE
+ MGrJV48QJ67fp430COIY59zguEZeiivkT1fAGgYUIqrOZx
+X-Received: by 2002:a05:6000:2008:b0:430:fa58:a03d with SMTP id
+ ffacd0b85a97d-435f3ad87b4mr13297582f8f.63.1769979636332; 
+ Sun, 01 Feb 2026 13:00:36 -0800 (PST)
+Received: from [192.168.24.150] (170.127.92.92.rev.sfr.net. [92.92.127.170])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-435e131ce58sm37919032f8f.20.2026.02.01.13.00.34
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 01 Feb 2026 13:00:36 -0800 (PST)
+Message-ID: <8ccd5237-400b-459c-84b7-26fbf1492ee7@smile.fr>
+Date: Sun, 1 Feb 2026 22:00:33 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: Niklas Cassel <niklas.cassel@wdc.com>,
+ =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Mark Corbin <mark@dibsco.co.uk>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Dmitry Chestnykh <dm.chestnykh@gmail.com>, Joel Stanley <joel@jms.id.au>,
+ Dick Olsson <hi@senzilla.io>, Romain Naour <romain.naour@gmail.com>,
+ Alexander Egorenkov <egorenar@linux.ibm.com>, =?UTF-8?Q?C=C3=A9dric_Le_Goat?=
+ =?UTF-8?Q?er?= <clg@kaod.org>
+References: <20260129212516.3056603-1-ju.o@free.fr>
+Content-Language: fr
+In-Reply-To: <20260129212516.3056603-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1769979636; x=1770584436; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=SxaAZNrAUyijXxLIum5nDFZzFoFoVi6THEHf38TKXM0=;
+ b=Dy9h2kdNwe0blrZnmqjJADYwyzNpxSJOb24JQM9tGCNseq2LRa4GgfVptP+7sUmJXC
+ 627jrXkr5ykdlWm3f3qBqCVqUd6SC5eLF8MrbniOLuHMobyBOc8sjrXgvq7HVHWJ8KUe
+ +PhSoHWH0MWt9y7iAABbea/EoaiOnz8t+uAgM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=Dy9h2kdN
+Subject: Re: [Buildroot] [PATCH 1/1] configs/qemu: update defconfigs to
+ Linux 6.18.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,1059 +131,833 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d0c5a86041a5a727aea07191ae4dcef3213c594
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update all qemu defconfigs to the latest Kernel LTS version.
-
-configs/qemu_ppc_*defconfig now requires host-libelf, so this commit
-selects BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF for those.
-
-This commit also enables zstd-compressed modules support in
-qemu_loongarch64_virt_efi_defconfig, due to upstream commit [1] which
-added CONFIG_MODULE_COMPRESS_ZSTD=y in its arch defconfig.
-
-This commit also updates the custom hash file comment to add the
-upstream link.
-
-All updated defconfigs were tested (compiled and booted).
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=3c272a7551af1c10f6dbba0e71add7dccc7733fa
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- board/qemu/patches/linux/linux.hash         | 4 ++--
- configs/qemu_aarch64_ebbr_defconfig         | 4 ++--
- configs/qemu_aarch64_sbsa_defconfig         | 4 ++--
- configs/qemu_aarch64_virt_defconfig         | 4 ++--
- configs/qemu_arm_ebbr_defconfig             | 4 ++--
- configs/qemu_arm_versatile_defconfig        | 4 ++--
- configs/qemu_arm_vexpress_defconfig         | 4 ++--
- configs/qemu_arm_vexpress_tz_defconfig      | 4 ++--
- configs/qemu_loongarch64_virt_efi_defconfig | 6 ++++--
- configs/qemu_m68k_mcf5208_defconfig         | 4 ++--
- configs/qemu_m68k_q800_defconfig            | 4 ++--
- configs/qemu_microblazebe_mmu_defconfig     | 4 ++--
- configs/qemu_microblazeel_mmu_defconfig     | 4 ++--
- configs/qemu_mips32r2_malta_defconfig       | 4 ++--
- configs/qemu_mips32r2el_malta_defconfig     | 4 ++--
- configs/qemu_mips32r6_malta_defconfig       | 4 ++--
- configs/qemu_mips32r6el_malta_defconfig     | 4 ++--
- configs/qemu_mips64_malta_defconfig         | 4 ++--
- configs/qemu_mips64el_malta_defconfig       | 4 ++--
- configs/qemu_mips64r6_malta_defconfig       | 4 ++--
- configs/qemu_mips64r6el_malta_defconfig     | 4 ++--
- configs/qemu_or1k_defconfig                 | 4 ++--
- configs/qemu_ppc64_e5500_defconfig          | 4 ++--
- configs/qemu_ppc64_pseries_defconfig        | 4 ++--
- configs/qemu_ppc64le_powernv8_defconfig     | 4 ++--
- configs/qemu_ppc64le_pseries_defconfig      | 4 ++--
- configs/qemu_ppc_bamboo_defconfig           | 5 +++--
- configs/qemu_ppc_e500mc_defconfig           | 5 +++--
- configs/qemu_ppc_g3beige_defconfig          | 5 +++--
- configs/qemu_ppc_mac99_defconfig            | 5 +++--
- configs/qemu_ppc_mpc8544ds_defconfig        | 5 +++--
- configs/qemu_riscv32_nommu_virt_defconfig   | 4 ++--
- configs/qemu_riscv32_virt_defconfig         | 4 ++--
- configs/qemu_riscv64_nommu_virt_defconfig   | 4 ++--
- configs/qemu_riscv64_virt_defconfig         | 4 ++--
- configs/qemu_riscv64_virt_efi_defconfig     | 4 ++--
- configs/qemu_s390x_defconfig                | 4 ++--
- configs/qemu_sh4_r2d_defconfig              | 4 ++--
- configs/qemu_sh4eb_r2d_defconfig            | 4 ++--
- configs/qemu_sparc64_sun4u_defconfig        | 4 ++--
- configs/qemu_sparc_ss10_defconfig           | 4 ++--
- configs/qemu_x86_64_defconfig               | 4 ++--
- configs/qemu_x86_64_efi_defconfig           | 4 ++--
- configs/qemu_x86_defconfig                  | 4 ++--
- configs/qemu_xtensa_lx60_defconfig          | 4 ++--
- configs/qemu_xtensa_lx60_nommu_defconfig    | 4 ++--
- 46 files changed, 99 insertions(+), 92 deletions(-)
-
-diff --git a/board/qemu/patches/linux/linux.hash b/board/qemu/patches/linux/linux.hash
-index 9bcf1f561d..3c689260bb 100644
---- a/board/qemu/patches/linux/linux.hash
-+++ b/board/qemu/patches/linux/linux.hash
-@@ -1,5 +1,5 @@
--# sha256 locally computed
--sha256  e82fe40871743048226987bd349ef107168b15aab90140e872ca4ed470922e25  linux-6.12.47.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  b726a4d15cf9ae06219b56d87820776e34d89fbc137e55fb54a9b9c3015b8f1e  linux-6.18.7.tar.xz
- 
- # sha256 locally computed
- sha256  a76052c0c71d4025b117dcfc18ca7e189ac495a7645fa98c1bdaddca15cce815  xtensa_dc233c.tar.gz
-diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
-index 4dc2d1e396..15c68d2035 100644
---- a/configs/qemu_aarch64_ebbr_defconfig
-+++ b/configs/qemu_aarch64_ebbr_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-ebbr/post-image.sh support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-ebbr/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
-diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
-index 84ae76ca0b..57bc899e03 100644
---- a/configs/qemu_aarch64_sbsa_defconfig
-+++ b/configs/qemu_aarch64_sbsa_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_neoverse_n2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-sbsa/a
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-sbsa/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 6695f2b2d8..19c8b86ae6 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_arm_ebbr_defconfig b/configs/qemu_arm_ebbr_defconfig
-index dfd3f47578..1ccfa142ee 100644
---- a/configs/qemu_arm_ebbr_defconfig
-+++ b/configs/qemu_arm_ebbr_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a15=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/arm-ebbr/post-image.sh support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/arm-ebbr/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-ebbr/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index b00b309b05..7677e5fd05 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -1,5 +1,5 @@
- BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="versatile"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 9698b1c6c5..6dc116c1e7 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 5dca55fdce..300185838c 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a15=y
- BR2_ARM_FPU_VFPV3D16=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragment"
- BR2_PACKAGE_OPENSSL=y
-diff --git a/configs/qemu_loongarch64_virt_efi_defconfig b/configs/qemu_loongarch64_virt_efi_defconfig
-index 4a4cd93b52..0c1d046892 100644
---- a/configs/qemu_loongarch64_virt_efi_defconfig
-+++ b/configs/qemu_loongarch64_virt_efi_defconfig
-@@ -1,5 +1,5 @@
- BR2_loongarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-@@ -8,10 +8,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/loongarch64-virt-efi/post-image.sh boar
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/loongarch64-virt-efi/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-+BR2_PACKAGE_ZSTD=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
- # BR2_TARGET_ROOTFS_TAR is not set
-@@ -20,6 +21,7 @@ BR2_TARGET_GRUB2=y
- BR2_TARGET_GRUB2_LOONGARCH64_EFI=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_KMOD_ZSTD=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
-index 1850f67087..ac3df22579 100644
---- a/configs/qemu_m68k_mcf5208_defconfig
-+++ b/configs/qemu_m68k_mcf5208_defconfig
-@@ -1,6 +1,6 @@
- BR2_m68k=y
- BR2_m68k_cf5208=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-index 6e84e1e791..87b9629921 100644
---- a/configs/qemu_m68k_q800_defconfig
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -1,5 +1,5 @@
- BR2_m68k=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 5444380f25..cc6871e212 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -1,5 +1,5 @@
- BR2_microblazebe=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index e5bd065019..8945a775d0 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -1,5 +1,5 @@
- BR2_microblazeel=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
-index d5051f7c39..832d9f2242 100644
---- a/configs/qemu_mips32r2_malta_defconfig
-+++ b/configs/qemu_mips32r2_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips=y
- BR2_mips_32r2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
-index ce03bc21bd..b714a7fc6c 100644
---- a/configs/qemu_mips32r2el_malta_defconfig
-+++ b/configs/qemu_mips32r2el_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mipsel=y
- BR2_mips_32r2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
-index 6d026e2a50..9cebeeaf45 100644
---- a/configs/qemu_mips32r6_malta_defconfig
-+++ b/configs/qemu_mips32r6_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips=y
- BR2_mips_32r6=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
-index 5ea91f281e..d54ab1f15e 100644
---- a/configs/qemu_mips32r6el_malta_defconfig
-+++ b/configs/qemu_mips32r6el_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mipsel=y
- BR2_mips_32r6=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index f33cff7963..62dba0e369 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips64=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index c535228b53..0714a8e70c 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips64el=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
-index f514bacd83..c7eac226ea 100644
---- a/configs/qemu_mips64r6_malta_defconfig
-+++ b/configs/qemu_mips64r6_malta_defconfig
-@@ -1,7 +1,7 @@
- BR2_mips64=y
- BR2_mips_64r6=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
-index 83d9f109f9..606bb61a39 100644
---- a/configs/qemu_mips64r6el_malta_defconfig
-+++ b/configs/qemu_mips64r6el_malta_defconfig
-@@ -1,7 +1,7 @@
- BR2_mips64el=y
- BR2_mips_64r6=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
-index b97774d39c..19abf1efb7 100644
---- a/configs/qemu_or1k_defconfig
-+++ b/configs/qemu_or1k_defconfig
-@@ -1,5 +1,5 @@
- BR2_or1k=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
-index 88e3d99f90..3d37656bf5 100644
---- a/configs/qemu_ppc64_e5500_defconfig
-+++ b/configs/qemu_ppc64_e5500_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc64=y
- BR2_powerpc_e5500=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index e89f4e2b3e..a46cedbb1f 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc64=y
- BR2_powerpc_power7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
-index a999a767dc..5f1d7b78d9 100644
---- a/configs/qemu_ppc64le_powernv8_defconfig
-+++ b/configs/qemu_ppc64le_powernv8_defconfig
-@@ -1,5 +1,5 @@
- BR2_powerpc64le=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="powernv"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
-index 2c633f198d..4596d43682 100644
---- a/configs/qemu_ppc64le_pseries_defconfig
-+++ b/configs/qemu_ppc64le_pseries_defconfig
-@@ -1,5 +1,5 @@
- BR2_powerpc64le=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc_bamboo_defconfig b/configs/qemu_ppc_bamboo_defconfig
-index a71e368cc9..6e12047f85 100644
---- a/configs/qemu_ppc_bamboo_defconfig
-+++ b/configs/qemu_ppc_bamboo_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_440fp=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,10 +9,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/bamboo"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-bamboo/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- BR2_TARGET_ROOTFS_INITRAMFS=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
-diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
-index 632d6400e1..6ac6e1c135 100644
---- a/configs/qemu_ppc_e500mc_defconfig
-+++ b/configs/qemu_ppc_e500mc_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_e500mc=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,10 +9,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 0d2a1798ec..a8e9c379ba 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_750=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,10 +9,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
-diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
-index ecaa8d7ccc..55d201bdb9 100644
---- a/configs/qemu_ppc_mac99_defconfig
-+++ b/configs/qemu_ppc_mac99_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_7400=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,11 +9,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index d2a35bd70e..3e5a9a84fe 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_8548=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,10 +9,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- BR2_TARGET_ROOTFS_INITRAMFS=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
-diff --git a/configs/qemu_riscv32_nommu_virt_defconfig b/configs/qemu_riscv32_nommu_virt_defconfig
-index 5fa9a174bf..0f9ac77e41 100644
---- a/configs/qemu_riscv32_nommu_virt_defconfig
-+++ b/configs/qemu_riscv32_nommu_virt_defconfig
-@@ -1,7 +1,7 @@
- BR2_riscv=y
- BR2_RISCV_32=y
- # BR2_RISCV_USE_MMU is not set
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux-nommu.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index 4369d644cd..a57c94910c 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -1,6 +1,6 @@
- BR2_riscv=y
- BR2_RISCV_32=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_DEFCONFIG="rv32"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_OPENSBI=y
-diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
-index 6c3d2608cc..58d89eae5f 100644
---- a/configs/qemu_riscv64_nommu_virt_defconfig
-+++ b/configs/qemu_riscv64_nommu_virt_defconfig
-@@ -1,6 +1,6 @@
- BR2_riscv=y
- # BR2_RISCV_USE_MMU is not set
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux-nommu.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index f436dac143..0d91971d1c 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -1,5 +1,5 @@
- BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_OPENSBI=y
-diff --git a/configs/qemu_riscv64_virt_efi_defconfig b/configs/qemu_riscv64_virt_efi_defconfig
-index b9d622df05..4e698fcd5e 100644
---- a/configs/qemu_riscv64_virt_efi_defconfig
-+++ b/configs/qemu_riscv64_virt_efi_defconfig
-@@ -1,5 +1,5 @@
- BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/riscv64-virt-e
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/riscv64-virt-efi/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
-index cc85d87d35..5efc048c89 100644
---- a/configs/qemu_s390x_defconfig
-+++ b/configs/qemu_s390x_defconfig
-@@ -1,5 +1,5 @@
- BR2_s390x=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 7f22dab3c4..2311f7e06c 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -1,5 +1,5 @@
- BR2_sh=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
-index a1fc4a89e6..083c25ddb8 100644
---- a/configs/qemu_sh4eb_r2d_defconfig
-+++ b/configs/qemu_sh4eb_r2d_defconfig
-@@ -1,6 +1,6 @@
- BR2_sh=y
- BR2_sh4eb=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
-index a147b129e7..2a6d28aa42 100644
---- a/configs/qemu_sparc64_sun4u_defconfig
-+++ b/configs/qemu_sparc64_sun4u_defconfig
-@@ -1,5 +1,5 @@
- BR2_sparc64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 2f05c0947f..fb039e5523 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -1,5 +1,5 @@
- BR2_sparc=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 39d7793a04..ccaac0d0b9 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-diff --git a/configs/qemu_x86_64_efi_defconfig b/configs/qemu_x86_64_efi_defconfig
-index e487b68687..1fb3682354 100644
---- a/configs/qemu_x86_64_efi_defconfig
-+++ b/configs/qemu_x86_64_efi_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/x86_64-efi/pos
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64-efi/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index f8cb83a4b0..21e3d7657e 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_pentiumpro=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index 92c0795698..d2d6c92faf 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -1,7 +1,7 @@
- BR2_xtensa=y
- BR2_XTENSA_CUSTOM=y
- BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index bb5a7600dd..89b73ee1e6 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -2,7 +2,7 @@ BR2_xtensa=y
- BR2_XTENSA_CUSTOM=y
- BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
- # BR2_XTENSA_USE_MMU is not set
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLAoKTGUgMjkvMDEvMjAyNiDDoCAyMjoyNSwgSnVsaWVuIE9saXZhaW4gdmlh
+IGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgo+IFVwZGF0ZSBhbGwgcWVtdSBkZWZjb25maWdzIHRvIHRo
+ZSBsYXRlc3QgS2VybmVsIExUUyB2ZXJzaW9uLgo+IAo+IGNvbmZpZ3MvcWVtdV9wcGNfKmRlZmNv
+bmZpZyBub3cgcmVxdWlyZXMgaG9zdC1saWJlbGYsIHNvIHRoaXMgY29tbWl0Cj4gc2VsZWN0cyBC
+UjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfTElCRUxGIGZvciB0aG9zZS4KPiAKPiBUaGlzIGNv
+bW1pdCBhbHNvIGVuYWJsZXMgenN0ZC1jb21wcmVzc2VkIG1vZHVsZXMgc3VwcG9ydCBpbgo+IHFl
+bXVfbG9vbmdhcmNoNjRfdmlydF9lZmlfZGVmY29uZmlnLCBkdWUgdG8gdXBzdHJlYW0gY29tbWl0
+IFsxXSB3aGljaAo+IGFkZGVkIENPTkZJR19NT0RVTEVfQ09NUFJFU1NfWlNURD15IGluIGl0cyBh
+cmNoIGRlZmNvbmZpZy4KPiAKPiBUaGlzIGNvbW1pdCBhbHNvIHVwZGF0ZXMgdGhlIGN1c3RvbSBo
+YXNoIGZpbGUgY29tbWVudCB0byBhZGQgdGhlCj4gdXBzdHJlYW0gbGluay4KPiAKPiBBbGwgdXBk
+YXRlZCBkZWZjb25maWdzIHdlcmUgdGVzdGVkIChjb21waWxlZCBhbmQgYm9vdGVkKS4KPiAKPiBb
+MV0gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxl
+L2xpbnV4LmdpdC9jb21taXQvP2lkPTNjMjcyYTc1NTFhZjFjMTBmNmRiYmEwZTcxYWRkN2RjY2M3
+NzMzZmEKCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoK
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiAtLS0K
+PiAgYm9hcmQvcWVtdS9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggICAgICAgICB8IDQgKystLQo+
+ICBjb25maWdzL3FlbXVfYWFyY2g2NF9lYmJyX2RlZmNvbmZpZyAgICAgICAgIHwgNCArKy0tCj4g
+IGNvbmZpZ3MvcWVtdV9hYXJjaDY0X3Nic2FfZGVmY29uZmlnICAgICAgICAgfCA0ICsrLS0KPiAg
+Y29uZmlncy9xZW11X2FhcmNoNjRfdmlydF9kZWZjb25maWcgICAgICAgICB8IDQgKystLQo+ICBj
+b25maWdzL3FlbXVfYXJtX2ViYnJfZGVmY29uZmlnICAgICAgICAgICAgIHwgNCArKy0tCj4gIGNv
+bmZpZ3MvcWVtdV9hcm1fdmVyc2F0aWxlX2RlZmNvbmZpZyAgICAgICAgfCA0ICsrLS0KPiAgY29u
+Zmlncy9xZW11X2FybV92ZXhwcmVzc19kZWZjb25maWcgICAgICAgICB8IDQgKystLQo+ICBjb25m
+aWdzL3FlbXVfYXJtX3ZleHByZXNzX3R6X2RlZmNvbmZpZyAgICAgIHwgNCArKy0tCj4gIGNvbmZp
+Z3MvcWVtdV9sb29uZ2FyY2g2NF92aXJ0X2VmaV9kZWZjb25maWcgfCA2ICsrKystLQo+ICBjb25m
+aWdzL3FlbXVfbTY4a19tY2Y1MjA4X2RlZmNvbmZpZyAgICAgICAgIHwgNCArKy0tCj4gIGNvbmZp
+Z3MvcWVtdV9tNjhrX3E4MDBfZGVmY29uZmlnICAgICAgICAgICAgfCA0ICsrLS0KPiAgY29uZmln
+cy9xZW11X21pY3JvYmxhemViZV9tbXVfZGVmY29uZmlnICAgICB8IDQgKystLQo+ICBjb25maWdz
+L3FlbXVfbWljcm9ibGF6ZWVsX21tdV9kZWZjb25maWcgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3Mv
+cWVtdV9taXBzMzJyMl9tYWx0YV9kZWZjb25maWcgICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9x
+ZW11X21pcHMzMnIyZWxfbWFsdGFfZGVmY29uZmlnICAgICB8IDQgKystLQo+ICBjb25maWdzL3Fl
+bXVfbWlwczMycjZfbWFsdGFfZGVmY29uZmlnICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVt
+dV9taXBzMzJyNmVsX21hbHRhX2RlZmNvbmZpZyAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11
+X21pcHM2NF9tYWx0YV9kZWZjb25maWcgICAgICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVf
+bWlwczY0ZWxfbWFsdGFfZGVmY29uZmlnICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV9t
+aXBzNjRyNl9tYWx0YV9kZWZjb25maWcgICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X21p
+cHM2NHI2ZWxfbWFsdGFfZGVmY29uZmlnICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfb3Ix
+a19kZWZjb25maWcgICAgICAgICAgICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV9wcGM2
+NF9lNTUwMF9kZWZjb25maWcgICAgICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X3BwYzY0
+X3BzZXJpZXNfZGVmY29uZmlnICAgICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfcHBjNjRs
+ZV9wb3dlcm52OF9kZWZjb25maWcgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV9wcGM2NGxl
+X3BzZXJpZXNfZGVmY29uZmlnICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X3BwY19iYW1i
+b29fZGVmY29uZmlnICAgICAgICAgICB8IDUgKysrLS0KPiAgY29uZmlncy9xZW11X3BwY19lNTAw
+bWNfZGVmY29uZmlnICAgICAgICAgICB8IDUgKysrLS0KPiAgY29uZmlncy9xZW11X3BwY19nM2Jl
+aWdlX2RlZmNvbmZpZyAgICAgICAgICB8IDUgKysrLS0KPiAgY29uZmlncy9xZW11X3BwY19tYWM5
+OV9kZWZjb25maWcgICAgICAgICAgICB8IDUgKysrLS0KPiAgY29uZmlncy9xZW11X3BwY19tcGM4
+NTQ0ZHNfZGVmY29uZmlnICAgICAgICB8IDUgKysrLS0KPiAgY29uZmlncy9xZW11X3Jpc2N2MzJf
+bm9tbXVfdmlydF9kZWZjb25maWcgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfcmlzY3YzMl92
+aXJ0X2RlZmNvbmZpZyAgICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV9yaXNjdjY0X25v
+bW11X3ZpcnRfZGVmY29uZmlnICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X3Jpc2N2NjRfdmly
+dF9kZWZjb25maWcgICAgICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfcmlzY3Y2NF92aXJ0
+X2VmaV9kZWZjb25maWcgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV9zMzkweF9kZWZjb25m
+aWcgICAgICAgICAgICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X3NoNF9yMmRfZGVmY29u
+ZmlnICAgICAgICAgICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfc2g0ZWJfcjJkX2RlZmNv
+bmZpZyAgICAgICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV9zcGFyYzY0X3N1bjR1X2Rl
+ZmNvbmZpZyAgICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X3NwYXJjX3NzMTBfZGVmY29u
+ZmlnICAgICAgICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfeDg2XzY0X2RlZmNvbmZpZyAg
+ICAgICAgICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV94ODZfNjRfZWZpX2RlZmNvbmZp
+ZyAgICAgICAgICAgfCA0ICsrLS0KPiAgY29uZmlncy9xZW11X3g4Nl9kZWZjb25maWcgICAgICAg
+ICAgICAgICAgICB8IDQgKystLQo+ICBjb25maWdzL3FlbXVfeHRlbnNhX2x4NjBfZGVmY29uZmln
+ICAgICAgICAgIHwgNCArKy0tCj4gIGNvbmZpZ3MvcWVtdV94dGVuc2FfbHg2MF9ub21tdV9kZWZj
+b25maWcgICAgfCA0ICsrLS0KPiAgNDYgZmlsZXMgY2hhbmdlZCwgOTkgaW5zZXJ0aW9ucygrKSwg
+OTIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2JvYXJkL3FlbXUvcGF0Y2hlcy9saW51
+eC9saW51eC5oYXNoIGIvYm9hcmQvcWVtdS9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKPiBpbmRl
+eCA5YmNmMWY1NjFkLi4zYzY4OTI2MGJiIDEwMDY0NAo+IC0tLSBhL2JvYXJkL3FlbXUvcGF0Y2hl
+cy9saW51eC9saW51eC5oYXNoCj4gKysrIGIvYm9hcmQvcWVtdS9wYXRjaGVzL2xpbnV4L2xpbnV4
+Lmhhc2gKPiBAQCAtMSw1ICsxLDUgQEAKPiAtIyBzaGEyNTYgbG9jYWxseSBjb21wdXRlZAo+IC1z
+aGEyNTYgIGU4MmZlNDA4NzE3NDMwNDgyMjY5ODdiZDM0OWVmMTA3MTY4YjE1YWFiOTAxNDBlODcy
+Y2E0ZWQ0NzA5MjJlMjUgIGxpbnV4LTYuMTIuNDcudGFyLnh6Cj4gKyMgRnJvbSBodHRwczovL3d3
+dy5rZXJuZWwub3JnL3B1Yi9saW51eC9rZXJuZWwvdjYueC9zaGEyNTZzdW1zLmFzYwo+ICtzaGEy
+NTYgIGI3MjZhNGQxNWNmOWFlMDYyMTliNTZkODc4MjA3NzZlMzRkODlmYmMxMzdlNTVmYjU0YTli
+OWMzMDE1YjhmMWUgIGxpbnV4LTYuMTguNy50YXIueHoKPiAgCj4gICMgc2hhMjU2IGxvY2FsbHkg
+Y29tcHV0ZWQKPiAgc2hhMjU2ICBhNzYwNTJjMGM3MWQ0MDI1YjExN2RjZmMxOGNhN2UxODlhYzQ5
+NWE3NjQ1ZmE5OGMxYmRhZGRjYTE1Y2NlODE1ICB4dGVuc2FfZGMyMzNjLnRhci5nego+IGRpZmYg
+LS1naXQgYS9jb25maWdzL3FlbXVfYWFyY2g2NF9lYmJyX2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVt
+dV9hYXJjaDY0X2ViYnJfZGVmY29uZmlnCj4gaW5kZXggNGRjMmQxZTM5Ni4uMTVjNjhkMjAzNSAx
+MDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfYWFyY2g2NF9lYmJyX2RlZmNvbmZpZwo+ICsrKyBi
+L2NvbmZpZ3MvcWVtdV9hYXJjaDY0X2ViYnJfZGVmY29uZmlnCj4gQEAgLTEsMTIgKzEsMTIgQEAK
+PiAgQlIyX2FhcmNoNjQ9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9N
+XzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+
+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxP
+QURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0i
+Ym9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIGJvYXJkL3FlbXUvYWFyY2g2NC1lYmJyL3Bvc3QtaW1h
+Z2Uuc2ggc3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NS
+SVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykgLWMgYm9hcmQvcWVtdS9hYXJjaDY0LWViYnIvZ2Vu
+aW1hZ2UuY2ZnIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYu
+MTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIK
+PiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJRz15Cj4gIEJSMl9MSU5V
+WF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19I
+T1NUX1BZVEhPTjM9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfYWFyY2g2NF9zYnNhX2Rl
+ZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9hYXJjaDY0X3Nic2FfZGVmY29uZmlnCj4gaW5kZXggODRh
+ZTc2Y2EwYi4uNTdiYzg5OWUwMyAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfYWFyY2g2NF9z
+YnNhX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9hYXJjaDY0X3Nic2FfZGVmY29uZmln
+Cj4gQEAgLTEsNiArMSw2IEBACj4gIEJSMl9hYXJjaDY0PXkKPiAgQlIyX25lb3ZlcnNlX24yPXkK
+PiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKPiArQlIyX1BB
+Q0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRD
+SF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hB
+U0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlBTUEwIgo+IEBAIC05
+LDcgKzksNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3Qt
+aW1hZ2Uuc2ggYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvYQo+ICBCUjJfUk9PVEZTX1BPU1RfU0NS
+SVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykgLWMgYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvZ2Vu
+aW1hZ2UuY2ZnIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYu
+MTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIK
+PiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJRz15Cj4gIEJSMl9MSU5V
+WF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19I
+T1NUX1BZVEhPTjM9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfYWFyY2g2NF92aXJ0X2Rl
+ZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9hYXJjaDY0X3ZpcnRfZGVmY29uZmlnCj4gaW5kZXggNjY5
+NWYyYjJkOC4uMTljOGI4NmFlNiAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfYWFyY2g2NF92
+aXJ0X2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9hYXJjaDY0X3ZpcnRfZGVmY29uZmln
+Cj4gQEAgLTEsNSArMSw1IEBACj4gIEJSMl9hYXJjaDY0PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9M
+SU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFE
+RVJTX0NVU1RPTV82XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0
+Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9TWVNURU1f
+REhDUD0iZXRoMCIKPiBAQCAtNyw3ICs3LDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQ
+VD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FS
+R1M9IiQoQlIyX0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhf
+S0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lP
+Tl9WQUxVRT0iNi4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxV
+RT0iNi4xOC43Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3FlbXUvYWFyY2g2NC12aXJ0
+L2xpbnV4LmNvbmZpZyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+
+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfYXJtX2ViYnJfZGVmY29uZmlnIGIvY29uZmlncy9x
+ZW11X2FybV9lYmJyX2RlZmNvbmZpZwo+IGluZGV4IGRmZDNmNDc1NzguLjFjY2ZhMTQyZWUgMTAw
+NjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X2FybV9lYmJyX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZp
+Z3MvcWVtdV9hcm1fZWJicl9kZWZjb25maWcKPiBAQCAtMSwxMyArMSwxMyBAQAo+ICBCUjJfYXJt
+PXkKPiAgQlIyX2NvcnRleF9hMTU9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNf
+Q1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZf
+MTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJf
+RE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1ND
+UklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIGJvYXJkL3FlbXUvYXJtLWViYnIvcG9zdC1p
+bWFnZS5zaCBzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9T
+Q1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSAtYyBib2FyZC9xZW11L2FybS1lYmJyL2dlbmlt
+YWdlLmNmZyIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEy
+LjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4g
+IEJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQo+ICBCUjJfTElOVVhf
+S0VSTkVMX0NPTkZJR19GUkFHTUVOVF9GSUxFUz0iYm9hcmQvcWVtdS9hcm0tZWJici9saW51eC5m
+cmFnbWVudCIKPiAgQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+IGRpZmYg
+LS1naXQgYS9jb25maWdzL3FlbXVfYXJtX3ZlcnNhdGlsZV9kZWZjb25maWcgYi9jb25maWdzL3Fl
+bXVfYXJtX3ZlcnNhdGlsZV9kZWZjb25maWcKPiBpbmRleCBiMDBiMzA5YjA1Li43Njc3ZTVmZDA1
+IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9hcm1fdmVyc2F0aWxlX2RlZmNvbmZpZwo+ICsr
+KyBiL2NvbmZpZ3MvcWVtdV9hcm1fdmVyc2F0aWxlX2RlZmNvbmZpZwo+IEBAIC0xLDUgKzEsNSBA
+QAo+ICBCUjJfYXJtPXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82
+XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAg
+QlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FE
+X0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0
+dHlBTUEwIgo+IEBAIC04LDcgKzgsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJi
+b2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0i
+JChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZB
+TFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2
+LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJ2ZXJzYXRpbGUiCj4gIEJSMl9M
+SU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9xZW11L2FybS12ZXJzYXRp
+bGUvbGludXguZnJhZ21lbnQiCj4gIEJSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQo+IGRp
+ZmYgLS1naXQgYS9jb25maWdzL3FlbXVfYXJtX3ZleHByZXNzX2RlZmNvbmZpZyBiL2NvbmZpZ3Mv
+cWVtdV9hcm1fdmV4cHJlc3NfZGVmY29uZmlnCj4gaW5kZXggOTY5OGIxYzZjNS4uNmRjMTE2YzFl
+NyAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfYXJtX3ZleHByZXNzX2RlZmNvbmZpZwo+ICsr
+KyBiL2NvbmZpZ3MvcWVtdV9hcm1fdmV4cHJlc3NfZGVmY29uZmlnCj4gQEAgLTIsNyArMiw3IEBA
+IEJSMl9hcm09eQo+ICBCUjJfY29ydGV4X2E5PXkKPiAgQlIyX0FSTV9FTkFCTEVfTkVPTj15Cj4g
+IEJSMl9BUk1fRU5BQkxFX1ZGUD15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19D
+VVNUT01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8x
+OD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9E
+T1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlf
+UE9SVD0idHR5QU1BMCIKPiBAQCAtMTEsNyArMTEsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0Vf
+U0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJ
+UFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9M
+SU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9W
+RVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
+X1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJ2ZXhwcmVzcyIK
+PiAgQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfSU5U
+UkVFX0RUU19OQU1FPSJhcm0vdmV4cHJlc3MtdjJwLWNhOSIKPiBkaWZmIC0tZ2l0IGEvY29uZmln
+cy9xZW11X2FybV92ZXhwcmVzc190el9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfYXJtX3ZleHBy
+ZXNzX3R6X2RlZmNvbmZpZwo+IGluZGV4IDVkY2E1NWZkY2UuLjMwMDE4NTgzOGMgMTAwNjQ0Cj4g
+LS0tIGEvY29uZmlncy9xZW11X2FybV92ZXhwcmVzc190el9kZWZjb25maWcKPiArKysgYi9jb25m
+aWdzL3FlbXVfYXJtX3ZleHByZXNzX3R6X2RlZmNvbmZpZwo+IEBAIC0xLDcgKzEsNyBAQAo+ICBC
+UjJfYXJtPXkKPiAgQlIyX2NvcnRleF9hMTU9eQo+ICBCUjJfQVJNX0ZQVV9WRlBWM0QxNj15Cj4g
+LUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15Cj4gK0JSMl9QQUNL
+QUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9UT09MQ0hBSU5fQlVJ
+TERST09UX0NYWD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMi
+Cj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+IEBAIC0xMSw3ICsxMSw3IEBA
+IEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIK
+PiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJf
+TElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5V
+WF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5F
+TF9ERUZDT05GSUc9InZleHByZXNzIgo+ICBCUjJfTElOVVhfS0VSTkVMX0NPTkZJR19GUkFHTUVO
+VF9GSUxFUz0iYm9hcmQvcWVtdS9hcm0tdmV4cHJlc3MtdHovbGludXguZnJhZ21lbnQiCj4gIEJS
+Ml9QQUNLQUdFX09QRU5TU0w9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfbG9vbmdhcmNo
+NjRfdmlydF9lZmlfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X2xvb25nYXJjaDY0X3ZpcnRfZWZp
+X2RlZmNvbmZpZwo+IGluZGV4IDRhNGNkOTNiNTIuLjBjMWQwNDY4OTIgMTAwNjQ0Cj4gLS0tIGEv
+Y29uZmlncy9xZW11X2xvb25nYXJjaDY0X3ZpcnRfZWZpX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZp
+Z3MvcWVtdV9sb29uZ2FyY2g2NF92aXJ0X2VmaV9kZWZjb25maWcKPiBAQCAtMSw1ICsxLDUgQEAK
+PiAgQlIyX2xvb25nYXJjaDY0PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NV
+U1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4
+PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RP
+V05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9ST09URlNfREVWSUNFX0NSRUFUSU9O
+X0RZTkFNSUNfRVVERVY9eQo+IEBAIC04LDEwICs4LDExIEBAIEJSMl9ST09URlNfUE9TVF9JTUFH
+RV9TQ1JJUFQ9ImJvYXJkL3FlbXUvbG9vbmdhcmNoNjQtdmlydC1lZmkvcG9zdC1pbWFnZS5zaCBi
+b2FyCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSAtYyBi
+b2FyZC9xZW11L2xvb25nYXJjaDY0LXZpcnQtZWZpL2dlbmltYWdlLmNmZyIKPiAgQlIyX0xJTlVY
+X0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElO
+VVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VS
+TkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfVVNF
+X0FSQ0hfREVGQVVMVF9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfT1BF
+TlNTTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9MSUJFTEY9eQo+ICtCUjJfUEFD
+S0FHRV9aU1REPXkKPiAgQlIyX1RBUkdFVF9ST09URlNfRVhUMj15Cj4gIEJSMl9UQVJHRVRfUk9P
+VEZTX0VYVDJfU0laRT0iMjAwTSIKPiAgIyBCUjJfVEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNl
+dAo+IEBAIC0yMCw2ICsyMSw3IEBAIEJSMl9UQVJHRVRfR1JVQjI9eQo+ICBCUjJfVEFSR0VUX0dS
+VUIyX0xPT05HQVJDSDY0X0VGST15Cj4gIEJSMl9QQUNLQUdFX0hPU1RfRE9TRlNUT09MUz15Cj4g
+IEJSMl9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0tNT0RfWlNU
+RD15Cj4gIEJSMl9QQUNLQUdFX0hPU1RfTVRPT0xTPXkKPiAgQlIyX1BBQ0tBR0VfSE9TVF9RRU1V
+PXkKPiAgQlIyX1BBQ0tBR0VfSE9TVF9RRU1VX1NZU1RFTV9NT0RFPXkKPiBkaWZmIC0tZ2l0IGEv
+Y29uZmlncy9xZW11X202OGtfbWNmNTIwOF9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfbTY4a19t
+Y2Y1MjA4X2RlZmNvbmZpZwo+IGluZGV4IDE4NTBmNjcwODcuLmFjM2RmMjI1NzkgMTAwNjQ0Cj4g
+LS0tIGEvY29uZmlncy9xZW11X202OGtfbWNmNTIwOF9kZWZjb25maWcKPiArKysgYi9jb25maWdz
+L3FlbXVfbTY4a19tY2Y1MjA4X2RlZmNvbmZpZwo+IEBAIC0xLDYgKzEsNiBAQAo+ICBCUjJfbTY4
+az15Cj4gIEJSMl9tNjhrX2NmNTIwOD15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVS
+U19DVVNUT01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01f
+Nl8xOD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJS
+Ml9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VU
+VFlfUE9SVD0idHR5UzAiCj4gQEAgLTksNyArOSw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9T
+Q1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQ
+VF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
+UlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05f
+VkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4g
+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11L202OGstbWNm
+NTIwOC9saW51eC5jb25maWciCj4gIEJSMl9UQVJHRVRfUk9PVEZTX0lOSVRSQU1GUz15Cj4gZGlm
+ZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9tNjhrX3E4MDBfZGVmY29uZmlnIGIvY29uZmlncy9xZW11
+X202OGtfcTgwMF9kZWZjb25maWcKPiBpbmRleCA2ZTg0ZTFlNzkxLi44N2I5NjI5OTIxIDEwMDY0
+NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9tNjhrX3E4MDBfZGVmY29uZmlnCj4gKysrIGIvY29uZmln
+cy9xZW11X202OGtfcTgwMF9kZWZjb25maWcKPiBAQCAtMSw1ICsxLDUgQEAKPiAgQlIyX202OGs9
+eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJf
+UEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BB
+VENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tf
+SEFTSEVTPXkKPiAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC04
+LDcgKzgsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3Qt
+aW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklH
+KSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJ
+T049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+
+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9M
+SU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RP
+TV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9tNjhrLXE4MDAvbGludXguY29uZmlnIgo+ICBCUjJf
+VEFSR0VUX1JPT1RGU19FWFQyPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X21pY3JvYmxh
+emViZV9tbXVfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X21pY3JvYmxhemViZV9tbXVfZGVmY29u
+ZmlnCj4gaW5kZXggNTQ0NDM4MGYyNS4uY2M2ODcxZTIxMiAxMDA2NDQKPiAtLS0gYS9jb25maWdz
+L3FlbXVfbWljcm9ibGF6ZWJlX21tdV9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfbWlj
+cm9ibGF6ZWJlX21tdV9kZWZjb25maWcKPiBAQCAtMSw1ICsxLDUgQEAKPiAgQlIyX21pY3JvYmxh
+emViZT15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15Cj4g
+K0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9HTE9C
+QUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9D
+SEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5VUwwIgo+
+IEBAIC04LDcgKzgsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11
+L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVG
+Q09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEy
+LjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4g
+IEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVM
+X0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9taWNyb2JsYXplYmUtbW11L2xpbnV4LmNv
+bmZpZyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9MSU5VWF9CSU49eQo+IGRpZmYgLS1naXQgYS9jb25m
+aWdzL3FlbXVfbWljcm9ibGF6ZWVsX21tdV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfbWljcm9i
+bGF6ZWVsX21tdV9kZWZjb25maWcKPiBpbmRleCBlNWJkMDY1MDE5Li44OTQ1YTc3NWQwIDEwMDY0
+NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9taWNyb2JsYXplZWxfbW11X2RlZmNvbmZpZwo+ICsrKyBi
+L2NvbmZpZ3MvcWVtdV9taWNyb2JsYXplZWxfbW11X2RlZmNvbmZpZwo+IEBAIC0xLDUgKzEsNSBA
+QAo+ICBCUjJfbWljcm9ibGF6ZWVsPXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJT
+X0NVU1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82
+XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIy
+X0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRU
+WV9QT1JUPSJ0dHlVTDAiCj4gQEAgLTgsNyArOCw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9T
+Q1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQ
+VF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
+UlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05f
+VkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4g
+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11L21pY3JvYmxh
+emVlbC1tbXUvbGludXguY29uZmlnIgo+ICBCUjJfTElOVVhfS0VSTkVMX0xJTlVYX0JJTj15Cj4g
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9taXBzMzJyMl9tYWx0YV9kZWZjb25maWcgYi9jb25m
+aWdzL3FlbXVfbWlwczMycjJfbWFsdGFfZGVmY29uZmlnCj4gaW5kZXggZDUwNTFmN2MzOS4uODMy
+ZDlmMjI0MiAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfbWlwczMycjJfbWFsdGFfZGVmY29u
+ZmlnCj4gKysrIGIvY29uZmlncy9xZW11X21pcHMzMnIyX21hbHRhX2RlZmNvbmZpZwo+IEBAIC0x
+LDYgKzEsNiBAQAo+ICBCUjJfbWlwcz15Cj4gIEJSMl9taXBzXzMycjI9eQo+IC1CUjJfUEFDS0FH
+RV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJ
+TlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQv
+cWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIy
+X1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC05LDcgKzksNyBAQCBCUjJf
+Uk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJS
+Ml9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVY
+X0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElO
+VVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VS
+TkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfVVNF
+X0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0i
+Ym9hcmQvcWVtdS9taXBzMzJyMi1tYWx0YS9saW51eC5jb25maWciCj4gIEJSMl9MSU5VWF9LRVJO
+RUxfVk1MSU5VWD15Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9taXBzMzJyMmVsX21hbHRh
+X2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9taXBzMzJyMmVsX21hbHRhX2RlZmNvbmZpZwo+IGlu
+ZGV4IGNlMDNiYzIxYmQuLmI3MTRhN2ZjNmMgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X21p
+cHMzMnIyZWxfbWFsdGFfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9xZW11X21pcHMzMnIyZWxf
+bWFsdGFfZGVmY29uZmlnCj4gQEAgLTEsNiArMSw2IEBACj4gIEJSMl9taXBzZWw9eQo+ICBCUjJf
+bWlwc18zMnIyPXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEy
+PXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIy
+X0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZP
+UkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlT
+MCIKPiBAQCAtOSw3ICs5LDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQv
+cWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIy
+X0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NV
+U1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0i
+Ni4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43
+Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tF
+Uk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3FlbXUvbWlwczMycjJlbC1tYWx0YS9saW51
+eC5jb25maWciCj4gIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4gZGlmZiAtLWdpdCBhL2Nv
+bmZpZ3MvcWVtdV9taXBzMzJyNl9tYWx0YV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfbWlwczMy
+cjZfbWFsdGFfZGVmY29uZmlnCj4gaW5kZXggNmQwMjZlMmE1MC4uOWNlYmVlYWY0NSAxMDA2NDQK
+PiAtLS0gYS9jb25maWdzL3FlbXVfbWlwczMycjZfbWFsdGFfZGVmY29uZmlnCj4gKysrIGIvY29u
+Zmlncy9xZW11X21pcHMzMnI2X21hbHRhX2RlZmNvbmZpZwo+IEBAIC0xLDYgKzEsNiBAQAo+ICBC
+UjJfbWlwcz15Cj4gIEJSMl9taXBzXzMycjY9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hF
+QURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
+VE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+
+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1RBUkdFVF9HRU5FUklD
+X0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC05LDcgKzksNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1B
+R0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9T
+Q1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RP
+TV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJT
+SU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9
+eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9taXBz
+MzJyNi1tYWx0YS9saW51eC5jb25maWciCj4gIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4g
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9taXBzMzJyNmVsX21hbHRhX2RlZmNvbmZpZyBiL2Nv
+bmZpZ3MvcWVtdV9taXBzMzJyNmVsX21hbHRhX2RlZmNvbmZpZwo+IGluZGV4IDVlYTkxZjI4MWUu
+LmQ1NGFiMWYxNWUgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X21pcHMzMnI2ZWxfbWFsdGFf
+ZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9xZW11X21pcHMzMnI2ZWxfbWFsdGFfZGVmY29uZmln
+Cj4gQEAgLTEsNiArMSw2IEBACj4gIEJSMl9taXBzZWw9eQo+ICBCUjJfbWlwc18zMnI2PXkKPiAt
+QlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKPiArQlIyX1BBQ0tB
+R0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9E
+SVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hF
+Uz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlTMCIKPiBAQCAtOSw3ICs5
+LDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdl
+LnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykiCj4g
+IEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkK
+PiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMi40NyIKPiArQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43Igo+ICBCUjJfTElOVVhf
+S0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09O
+RklHX0ZJTEU9ImJvYXJkL3FlbXUvbWlwczMycjZlbC1tYWx0YS9saW51eC5jb25maWciCj4gIEJS
+Ml9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9taXBz
+NjRfbWFsdGFfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X21pcHM2NF9tYWx0YV9kZWZjb25maWcK
+PiBpbmRleCBmMzNjZmY3OTYzLi42MmRiYTBlMzY5IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVt
+dV9taXBzNjRfbWFsdGFfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9xZW11X21pcHM2NF9tYWx0
+YV9kZWZjb25maWcKPiBAQCAtMSw2ICsxLDYgQEAKPiAgQlIyX21pcHM2ND15Cj4gIEJSMl9NSVBT
+X05BQkk2ND15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15
+Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9H
+TE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JD
+RV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5UzAi
+Cj4gQEAgLTksNyArOSw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3Fl
+bXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9E
+RUZDT05GSUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYu
+MTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIK
+PiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4gIEJSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11L21pcHM2NC1tYWx0YS9saW51eC5jb25m
+aWciCj4gIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3Mv
+cWVtdV9taXBzNjRlbF9tYWx0YV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfbWlwczY0ZWxfbWFs
+dGFfZGVmY29uZmlnCj4gaW5kZXggYzUzNTIyOGI1My4uMDcxNGE4ZTcwYyAxMDA2NDQKPiAtLS0g
+YS9jb25maWdzL3FlbXVfbWlwczY0ZWxfbWFsdGFfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9x
+ZW11X21pcHM2NGVsX21hbHRhX2RlZmNvbmZpZwo+IEBAIC0xLDYgKzEsNiBAQAo+ICBCUjJfbWlw
+czY0ZWw9eQo+ICBCUjJfTUlQU19OQUJJNjQ9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hF
+QURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
+VE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+
+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1RBUkdFVF9HRU5FUklD
+X0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC05LDcgKzksNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1B
+R0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9T
+Q1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RP
+TV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJT
+SU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9
+eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9taXBz
+NjRlbC1tYWx0YS9saW51eC5jb25maWciCj4gIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4g
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9taXBzNjRyNl9tYWx0YV9kZWZjb25maWcgYi9jb25m
+aWdzL3FlbXVfbWlwczY0cjZfbWFsdGFfZGVmY29uZmlnCj4gaW5kZXggZjUxNGJhY2Q4My4uYzdl
+YWMyMjZlYSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfbWlwczY0cjZfbWFsdGFfZGVmY29u
+ZmlnCj4gKysrIGIvY29uZmlncy9xZW11X21pcHM2NHI2X21hbHRhX2RlZmNvbmZpZwo+IEBAIC0x
+LDcgKzEsNyBAQAo+ICBCUjJfbWlwczY0PXkKPiAgQlIyX21pcHNfNjRyNj15Cj4gIEJSMl9NSVBT
+X05BQkk2ND15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15
+Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9H
+TE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JD
+RV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5UzAi
+Cj4gQEAgLTEwLDcgKzEwLDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQv
+cWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIy
+X0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NV
+U1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0i
+Ni4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43
+Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tF
+Uk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3FlbXUvbWlwczY0cjYtbWFsdGEvbGludXgu
+Y29uZmlnIgo+ICBCUjJfTElOVVhfS0VSTkVMX1ZNTElOVVg9eQo+IGRpZmYgLS1naXQgYS9jb25m
+aWdzL3FlbXVfbWlwczY0cjZlbF9tYWx0YV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfbWlwczY0
+cjZlbF9tYWx0YV9kZWZjb25maWcKPiBpbmRleCA4M2Q5ZjEwOWY5Li42MDZiYjYxYTM5IDEwMDY0
+NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9taXBzNjRyNmVsX21hbHRhX2RlZmNvbmZpZwo+ICsrKyBi
+L2NvbmZpZ3MvcWVtdV9taXBzNjRyNmVsX21hbHRhX2RlZmNvbmZpZwo+IEBAIC0xLDcgKzEsNyBA
+QAo+ICBCUjJfbWlwczY0ZWw9eQo+ICBCUjJfbWlwc182NHI2PXkKPiAgQlIyX01JUFNfTkFCSTY0
+PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKPiArQlIy
+X1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIyX0dMT0JBTF9Q
+QVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNL
+X0hBU0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlTMCIKPiBAQCAt
+MTAsNyArMTAsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bv
+c3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09O
+RklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
+UlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3
+Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJS
+Ml9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NV
+U1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9taXBzNjRyNmVsLW1hbHRhL2xpbnV4LmNvbmZp
+ZyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9WTUxJTlVYPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9x
+ZW11X29yMWtfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X29yMWtfZGVmY29uZmlnCj4gaW5kZXgg
+Yjk3Nzc0ZDM5Yy4uMTlhYmYxZWZiNyAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfb3Ixa19k
+ZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfb3Ixa19kZWZjb25maWcKPiBAQCAtMSw1ICsx
+LDUgQEAKPiAgQlIyX29yMWs9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
+VE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9
+eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9X
+TkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+IEBA
+IC03LDcgKzcsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bv
+c3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09O
+RklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
+UlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3
+Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJS
+Ml9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NV
+U1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9vcjFrL2xpbnV4LmNvbmZpZyIKPiAgQlIyX1RB
+UkdFVF9ST09URlNfSU5JVFJBTUZTPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3BwYzY0
+X2U1NTAwX2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9wcGM2NF9lNTUwMF9kZWZjb25maWcKPiBp
+bmRleCA4OGUzZDk5ZjkwLi4zZDM3NjU2YmY1IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9w
+cGM2NF9lNTUwMF9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfcHBjNjRfZTU1MDBfZGVm
+Y29uZmlnCj4gQEAgLTEsNiArMSw2IEBACj4gIEJSMl9wb3dlcnBjNjQ9eQo+ICBCUjJfcG93ZXJw
+Y19lNTUwMD15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15
+Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9H
+TE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JD
+RV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5UzAi
+Cj4gQEAgLTksNyArOSw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3Fl
+bXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9E
+RUZDT05GSUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYu
+MTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIK
+PiAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9ImNvcmVuZXQ2NF9zbXAiCj4gIEJSMl9MSU5V
+WF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9xZW11L3BwYzY0LWU1NTAwL2xp
+bnV4LmZyYWdtZW50Igo+ICBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4g
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGM2NF9wc2VyaWVzX2RlZmNvbmZpZyBiL2NvbmZp
+Z3MvcWVtdV9wcGM2NF9wc2VyaWVzX2RlZmNvbmZpZwo+IGluZGV4IGU4OWY0ZTJiM2UuLmE0NmNl
+ZGJiMWYgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X3BwYzY0X3BzZXJpZXNfZGVmY29uZmln
+Cj4gKysrIGIvY29uZmlncy9xZW11X3BwYzY0X3BzZXJpZXNfZGVmY29uZmlnCj4gQEAgLTEsNiAr
+MSw2IEBACj4gIEJSMl9wb3dlcnBjNjQ9eQo+ICBCUjJfcG93ZXJwY19wb3dlcjc9eQo+IC1CUjJf
+UEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9I
+T1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0i
+Ym9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkK
+PiAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9Imh2YzAiCj4gQEAgLTksNyArOSw3IEBA
+IEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIK
+PiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJf
+TElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5V
+WF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5F
+TF9ERUZDT05GSUc9InBzZXJpZXMiCj4gIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4gIEJS
+Ml9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmln
+cy9xZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwYzY0bGVf
+cG93ZXJudjhfZGVmY29uZmlnCj4gaW5kZXggYTk5OWE3NjdkYy4uNWYxZDdiNzhkOSAxMDA2NDQK
+PiAtLS0gYS9jb25maWdzL3FlbXVfcHBjNjRsZV9wb3dlcm52OF9kZWZjb25maWcKPiArKysgYi9j
+b25maWdzL3FlbXVfcHBjNjRsZV9wb3dlcm52OF9kZWZjb25maWcKPiBAQCAtMSw1ICsxLDUgQEAK
+PiAgQlIyX3Bvd2VycGM2NGxlPXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NV
+U1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4
+PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RP
+V05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9Q
+T1JUPSJodmMwIgo+IEBAIC04LDcgKzgsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBU
+PSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJH
+Uz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9L
+RVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
+X1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVF
+PSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJwb3dlcm52Igo+ICBCUjJf
+TElOVVhfS0VSTkVMX1ZNTElOVVg9eQo+ICBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfTElC
+RUxGPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3BwYzY0bGVfcHNlcmllc19kZWZjb25m
+aWcgYi9jb25maWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNvbmZpZwo+IGluZGV4IDJjNjMz
+ZjE5OGQuLjQ1OTZkNDM2ODIgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X3BwYzY0bGVfcHNl
+cmllc19kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNv
+bmZpZwo+IEBAIC0xLDUgKzEsNSBAQAo+ICBCUjJfcG93ZXJwYzY0bGU9eQo+IC1CUjJfUEFDS0FH
+RV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJ
+TlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQv
+cWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIy
+X1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9Imh2YzAiCj4gQEAgLTgsNyArOCw3IEBAIEJSMl9S
+T09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIy
+X1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElOVVhf
+S0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5V
+WF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9ERUZD
+T05GSUc9InBzZXJpZXNfbGUiCj4gIEJSMl9MSU5VWF9LRVJORUxfVk1MSU5VWD15Cj4gIEJSMl9M
+SU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9x
+ZW11X3BwY19iYW1ib29fZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwY19iYW1ib29fZGVmY29u
+ZmlnCj4gaW5kZXggYTcxZTM2OGNjOS4uNmUxMjA0N2Y4NSAxMDA2NDQKPiAtLS0gYS9jb25maWdz
+L3FlbXVfcHBjX2JhbWJvb19kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfcHBjX2JhbWJv
+b19kZWZjb25maWcKPiBAQCAtMSw2ICsxLDYgQEAKPiAgQlIyX3Bvd2VycGM9eQo+ICBCUjJfcG93
+ZXJwY180NDBmcD15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8x
+Mj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJS
+Ml9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9G
+T1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5
+UzAiCj4gQEAgLTksMTAgKzksMTEgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9h
+cmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQo
+QlIyX0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVM
+X0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxV
+RT0iNi4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4x
+OC43Igo+ICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0iNDR4L2JhbWJvbyIKPiAgQlIyX0xJ
+TlVYX0tFUk5FTF9DT05GSUdfRlJBR01FTlRfRklMRVM9ImJvYXJkL3FlbXUvcHBjLWJhbWJvby9s
+aW51eC5mcmFnbWVudCIKPiAgQlIyX0xJTlVYX0tFUk5FTF9WTUxJTlVYPXkKPiArQlIyX0xJTlVY
+X0tFUk5FTF9ORUVEU19IT1NUX0xJQkVMRj15Cj4gIEJSMl9UQVJHRVRfUk9PVEZTX0lOSVRSQU1G
+Uz15Cj4gICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPiAgQlIyX1BBQ0tBR0Vf
+SE9TVF9RRU1VPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3BwY19lNTAwbWNfZGVmY29u
+ZmlnIGIvY29uZmlncy9xZW11X3BwY19lNTAwbWNfZGVmY29uZmlnCj4gaW5kZXggNjMyZDY0MDBl
+MS4uNmFjNmUxYzEzNSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfcHBjX2U1MDBtY19kZWZj
+b25maWcKPiArKysgYi9jb25maWdzL3FlbXVfcHBjX2U1MDBtY19kZWZjb25maWcKPiBAQCAtMSw2
+ICsxLDYgQEAKPiAgQlIyX3Bvd2VycGM9eQo+ICBCUjJfcG93ZXJwY19lNTAwbWM9eQo+IC1CUjJf
+UEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9I
+T1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0i
+Ym9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkK
+PiAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC05LDEwICs5LDEx
+IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5z
+aCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBC
+UjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4g
+LUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9M
+SU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tF
+Uk5FTF9ERUZDT05GSUc9ImNvcmVuZXQzMl9zbXAiCj4gIEJSMl9MSU5VWF9LRVJORUxfQ09ORklH
+X0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9xZW11L3BwYy1lNTAwbWMvbGludXguZnJhZ21lbnQiCj4g
+IEJSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiArQlIyX0xJTlVYX0tFUk5F
+TF9ORUVEU19IT1NUX0xJQkVMRj15Cj4gIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+ICAjIEJS
+Ml9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Cj4gIEJSMl9QQUNLQUdFX0hPU1RfUUVNVT15
+Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGNfZzNiZWlnZV9kZWZjb25maWcgYi9jb25m
+aWdzL3FlbXVfcHBjX2czYmVpZ2VfZGVmY29uZmlnCj4gaW5kZXggMGQyYTE3OThlYy4uYThlOWMz
+NzliYSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfcHBjX2czYmVpZ2VfZGVmY29uZmlnCj4g
+KysrIGIvY29uZmlncy9xZW11X3BwY19nM2JlaWdlX2RlZmNvbmZpZwo+IEBAIC0xLDYgKzEsNiBA
+QAo+ICBCUjJfcG93ZXJwYz15Cj4gIEJSMl9wb3dlcnBjXzc1MD15Cj4gLUJSMl9QQUNLQUdFX0hP
+U1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhf
+SEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11
+L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfVEFS
+R0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5UzAiCj4gQEAgLTksMTAgKzksMTEgQEAgQlIyX1JP
+T1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJf
+Uk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9L
+RVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVY
+X0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9D
+VVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJv
+YXJkL3FlbXUvcHBjLWczYmVpZ2UvbGludXguY29uZmlnIgo+ICBCUjJfTElOVVhfS0VSTkVMX1ZN
+TElOVVg9eQo+ICtCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfTElCRUxGPXkKPiAgQlIyX1RB
+UkdFVF9ST09URlNfRVhUMj15Cj4gICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQK
+PiAgQlIyX1BBQ0tBR0VfSE9TVF9RRU1VPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3Bw
+Y19tYWM5OV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfcHBjX21hYzk5X2RlZmNvbmZpZwo+IGlu
+ZGV4IGVjYWE4ZDdjY2MuLjU1ZDIwMWJkYjkgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X3Bw
+Y19tYWM5OV9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfcHBjX21hYzk5X2RlZmNvbmZp
+Zwo+IEBAIC0xLDYgKzEsNiBAQAo+ICBCUjJfcG93ZXJwYz15Cj4gIEJSMl9wb3dlcnBjXzc0MDA9
+eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJf
+UEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BB
+VENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tf
+SEFTSEVTPXkKPiAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC05
+LDExICs5LDEyIEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9z
+dC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05G
+SUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
+U0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDci
+Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIy
+X0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InBtYWMzMiIKPiAgQlIyX0xJTlVYX0tFUk5FTF9DT05G
+SUdfRlJBR01FTlRfRklMRVM9ImJvYXJkL3FlbXUvcHBjLW1hYzk5L2xpbnV4LmZyYWdtZW50Igo+
+ICBCUjJfTElOVVhfS0VSTkVMX1ZNTElOVVg9eQo+ICBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hP
+U1RfT1BFTlNTTD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9MSUJFTEY9eQo+ICBC
+UjJfVEFSR0VUX1JPT1RGU19DUElPPXkKPiAgQlIyX1RBUkdFVF9ST09URlNfRVhUMj15Cj4gICMg
+QlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9x
+ZW11X3BwY19tcGM4NTQ0ZHNfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwY19tcGM4NTQ0ZHNf
+ZGVmY29uZmlnCj4gaW5kZXggZDJhMzViZDcwZS4uM2U1YTlhODRmZSAxMDA2NDQKPiAtLS0gYS9j
+b25maWdzL3FlbXVfcHBjX21wYzg1NDRkc19kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVf
+cHBjX21wYzg1NDRkc19kZWZjb25maWcKPiBAQCAtMSw2ICsxLDYgQEAKPiAgQlIyX3Bvd2VycGM9
+eQo+ICBCUjJfcG93ZXJwY184NTQ4PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJT
+X0NVU1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82
+XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIy
+X0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRU
+WV9QT1JUPSJ0dHlTMCIKPiBAQCAtOSwxMCArOSwxMSBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0Vf
+U0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJ
+UFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9M
+SU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9W
+RVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
+X1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+
+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcWVtdS9wcGMtbXBj
+ODU0NGRzL2xpbnV4LmNvbmZpZyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9WTUxJTlVYPXkKPiArQlIy
+X0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX0xJQkVMRj15Cj4gIEJSMl9UQVJHRVRfUk9PVEZTX0lO
+SVRSQU1GUz15Cj4gICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPiAgQlIyX1BB
+Q0tBR0VfSE9TVF9RRU1VPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3Jpc2N2MzJfbm9t
+bXVfdmlydF9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfcmlzY3YzMl9ub21tdV92aXJ0X2RlZmNv
+bmZpZwo+IGluZGV4IDVmYTlhMTc0YmYuLjBmOWFjNzdlNDEgMTAwNjQ0Cj4gLS0tIGEvY29uZmln
+cy9xZW11X3Jpc2N2MzJfbm9tbXVfdmlydF9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVf
+cmlzY3YzMl9ub21tdV92aXJ0X2RlZmNvbmZpZwo+IEBAIC0xLDcgKzEsNyBAQAo+ICBCUjJfcmlz
+Y3Y9eQo+ICBCUjJfUklTQ1ZfMzI9eQo+ICAjIEJSMl9SSVNDVl9VU0VfTU1VIGlzIG5vdCBzZXQK
+PiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKPiArQlIyX1BB
+Q0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRD
+SF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hB
+U0hFUz15Cj4gIEJSMl9TWVNURU1fREhDUD0iZXRoMCIKPiBAQCAtOSw3ICs5LDcgQEAgQlIyX1JP
+T1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJf
+Uk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9L
+RVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVY
+X0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9D
+VVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJv
+YXJkL3FlbXUvcmlzY3YzMi12aXJ0L2xpbnV4LW5vbW11LmNvbmZpZyIKPiAgQlIyX1RBUkdFVF9S
+T09URlNfRVhUMj15Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9yaXNjdjMyX3ZpcnRfZGVm
+Y29uZmlnIGIvY29uZmlncy9xZW11X3Jpc2N2MzJfdmlydF9kZWZjb25maWcKPiBpbmRleCA0MzY5
+ZDY0NGNkLi5hNTdjOTQ5MTBjIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9yaXNjdjMyX3Zp
+cnRfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9xZW11X3Jpc2N2MzJfdmlydF9kZWZjb25maWcK
+PiBAQCAtMSw2ICsxLDYgQEAKPiAgQlIyX3Jpc2N2PXkKPiAgQlIyX1JJU0NWXzMyPXkKPiAtQlIy
+X1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0Vf
+SE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9
+ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15
+Cj4gIEJSMl9TWVNURU1fREhDUD0iZXRoMCIKPiBAQCAtOCw3ICs4LDcgQEAgQlIyX1JPT1RGU19Q
+T1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZT
+X1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9LRVJORUw9
+eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTl9WQUxVRT0iNi4xOC43Igo+ICBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0i
+cnYzMiIKPiAgQlIyX1RBUkdFVF9ST09URlNfRVhUMj15Cj4gIEJSMl9UQVJHRVRfT1BFTlNCST15
+Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9yaXNjdjY0X25vbW11X3ZpcnRfZGVmY29uZmln
+IGIvY29uZmlncy9xZW11X3Jpc2N2NjRfbm9tbXVfdmlydF9kZWZjb25maWcKPiBpbmRleCA2YzNk
+MjYwOGNjLi41OGQ4OWVhZTVmIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9yaXNjdjY0X25v
+bW11X3ZpcnRfZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9xZW11X3Jpc2N2NjRfbm9tbXVfdmly
+dF9kZWZjb25maWcKPiBAQCAtMSw2ICsxLDYgQEAKPiAgQlIyX3Jpc2N2PXkKPiAgIyBCUjJfUklT
+Q1ZfVVNFX01NVSBpcyBub3Qgc2V0Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19D
+VVNUT01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8x
+OD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9E
+T1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4g
+QEAgLTgsNyArOCw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUv
+cG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZD
+T05GSUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01f
+VkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIu
+NDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAg
+QlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4gIEJSMl9MSU5VWF9LRVJORUxf
+Q1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11L3Jpc2N2NjQtdmlydC9saW51eC1ub21tdS5j
+b25maWciCj4gIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+IGRpZmYgLS1naXQgYS9jb25maWdz
+L3FlbXVfcmlzY3Y2NF92aXJ0X2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9yaXNjdjY0X3ZpcnRf
+ZGVmY29uZmlnCj4gaW5kZXggZjQzNmRhYzE0My4uMGQ5MTk3MWQxYyAxMDA2NDQKPiAtLS0gYS9j
+b25maWdzL3FlbXVfcmlzY3Y2NF92aXJ0X2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9y
+aXNjdjY0X3ZpcnRfZGVmY29uZmlnCj4gQEAgLTEsNSArMSw1IEBACj4gIEJSMl9yaXNjdj15Cj4g
+LUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15Cj4gK0JSMl9QQUNL
+QUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hf
+RElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNI
+RVM9eQo+ICBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4gQEAgLTcsNyArNyw3IEBAIEJSMl9ST09U
+RlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JP
+T1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElOVVhfS0VS
+TkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9L
+RVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxf
+Q1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJD
+SF9ERUZBVUxUX0NPTkZJRz15Cj4gIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+ICBCUjJfVEFS
+R0VUX09QRU5TQkk9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfcmlzY3Y2NF92aXJ0X2Vm
+aV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfcmlzY3Y2NF92aXJ0X2VmaV9kZWZjb25maWcKPiBp
+bmRleCBiOWQ2MjJkZjA1Li40ZTY5OGZjZDVlIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9y
+aXNjdjY0X3ZpcnRfZWZpX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9yaXNjdjY0X3Zp
+cnRfZWZpX2RlZmNvbmZpZwo+IEBAIC0xLDUgKzEsNSBAQAo+ICBCUjJfcmlzY3Y9eQo+IC1CUjJf
+UEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9I
+T1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0i
+Ym9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkK
+PiAgQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+IEBAIC03LDcgKzcsNyBAQCBCUjJfUk9PVEZTX1BP
+U1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2ggYm9hcmQvcWVtdS9yaXNj
+djY0LXZpcnQtZQo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJ
+RykgLWMgYm9hcmQvcWVtdS9yaXNjdjY0LXZpcnQtZWZpL2dlbmltYWdlLmNmZyIKPiAgQlIyX0xJ
+TlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJf
+TElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhf
+S0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxf
+VVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQo+ICBCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiAg
+IyBCUjJfVEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNldAo+IGRpZmYgLS1naXQgYS9jb25maWdz
+L3FlbXVfczM5MHhfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3MzOTB4X2RlZmNvbmZpZwo+IGlu
+ZGV4IGNjODVkODdkMzUuLjVlZmMwNDhjODkgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X3Mz
+OTB4X2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9zMzkweF9kZWZjb25maWcKPiBAQCAt
+MSw1ICsxLDUgQEAKPiAgQlIyX3MzOTB4PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFE
+RVJTX0NVU1RPTV82XzEyPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RP
+TV82XzE4PXkKPiAgQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAg
+QlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9ST09URlNfREVWSUNFX0NS
+RUFUSU9OX0RZTkFNSUNfRVVERVY9eQo+IEBAIC04LDcgKzgsNyBAQCBCUjJfUk9PVEZTX1BPU1Rf
+SU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9ST09URlNfUE9T
+VF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4g
+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NV
+U1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9W
+RVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVM
+VF9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4gIEJS
+Ml9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfc2g0X3Iy
+ZF9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfc2g0X3IyZF9kZWZjb25maWcKPiBpbmRleCA3ZjIy
+ZGFiM2M0Li4yMzExZjdlMDZjIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVtdV9zaDRfcjJkX2Rl
+ZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9zaDRfcjJkX2RlZmNvbmZpZwo+IEBAIC0xLDUg
+KzEsNSBAQAo+ICBCUjJfc2g9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
+VE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9
+eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9X
+TkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BP
+UlQ9InR0eVNDMSIKPiBAQCAtOCw3ICs4LDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQ
+VD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FS
+R1M9IiQoQlIyX0RFRkNPTkZJRykiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhf
+S0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lP
+Tl9WQUxVRT0iNi4xMi40NyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxV
+RT0iNi4xOC43Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3FlbXUvc2g0LXIyZC9saW51
+eC5jb25maWciCj4gIEJSMl9MSU5VWF9LRVJORUxfWklNQUdFPXkKPiBkaWZmIC0tZ2l0IGEvY29u
+Zmlncy9xZW11X3NoNGViX3IyZF9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfc2g0ZWJfcjJkX2Rl
+ZmNvbmZpZwo+IGluZGV4IGExZmM0YTg5ZTYuLjA4M2MyNWRkYjggMTAwNjQ0Cj4gLS0tIGEvY29u
+Zmlncy9xZW11X3NoNGViX3IyZF9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfc2g0ZWJf
+cjJkX2RlZmNvbmZpZwo+IEBAIC0xLDYgKzEsNiBAQAo+ICBCUjJfc2g9eQo+ICBCUjJfc2g0ZWI9
+eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJf
+UEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BB
+VENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tf
+SEFTSEVTPXkKPiAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVNDMSIKPiBAQCAt
+OCw3ICs4LDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0
+LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJ
+RykiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJT
+SU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMi40NyIK
+PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43Igo+ICBCUjJf
+TElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fQ09ORklHX0ZJTEU9ImJvYXJkL3FlbXUvc2g0ZWItcjJkL2xpbnV4LmNvbmZpZyIKPiAgQlIy
+X0xJTlVYX0tFUk5FTF9aSU1BR0U9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfc3BhcmM2
+NF9zdW40dV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfc3BhcmM2NF9zdW40dV9kZWZjb25maWcK
+PiBpbmRleCBhMTQ3YjEyOWU3Li4yYTZkMjhhYTQyIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvcWVt
+dV9zcGFyYzY0X3N1bjR1X2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV9zcGFyYzY0X3N1
+bjR1X2RlZmNvbmZpZwo+IEBAIC0xLDUgKzEsNSBAQAo+ICBCUjJfc3BhcmM2ND15Cj4gLUJSMl9Q
+QUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hP
+U1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJi
+b2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+
+ICBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4gQEAgLTcsNyArNyw3IEBAIEJSMl9ST09URlNfUE9T
+VF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19Q
+T1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkK
+PiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxf
+Q1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NP
+TkZJRz15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11
+L3NwYXJjNjQtc3VuNHUvbGludXguY29uZmlnIgo+ICBCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkK
+PiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3NwYXJjX3NzMTBfZGVmY29uZmlnIGIvY29uZmln
+cy9xZW11X3NwYXJjX3NzMTBfZGVmY29uZmlnCj4gaW5kZXggMmYwNWMwOTQ3Zi4uZmIwMzllNTUy
+MyAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfc3BhcmNfc3MxMF9kZWZjb25maWcKPiArKysg
+Yi9jb25maWdzL3FlbXVfc3BhcmNfc3MxMF9kZWZjb25maWcKPiBAQCAtMSw1ICsxLDUgQEAKPiAg
+QlIyX3NwYXJjPXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEy
+PXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE4PXkKPiAgQlIy
+X0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3FlbXUvcGF0Y2hlcyIKPiAgQlIyX0RPV05MT0FEX0ZP
+UkNFX0NIRUNLX0hBU0hFUz15Cj4gIEJSMl9TWVNURU1fREhDUD0iZXRoMCIKPiBAQCAtNyw3ICs3
+LDcgQEAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdl
+LnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykiCj4g
+IEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkK
+PiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMi40NyIKPiArQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xOC43Igo+ICBCUjJfTElOVVhf
+S0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09O
+RklHX0ZJTEU9ImJvYXJkL3FlbXUvc3BhcmMtc3MxMC9saW51eC5jb25maWciCj4gIEJSMl9UQVJH
+RVRfUk9PVEZTX0VYVDI9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfeDg2XzY0X2RlZmNv
+bmZpZyBiL2NvbmZpZ3MvcWVtdV94ODZfNjRfZGVmY29uZmlnCj4gaW5kZXggMzlkNzc5M2EwNC4u
+Y2NhYWMwZDBiOSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfeDg2XzY0X2RlZmNvbmZpZwo+
+ICsrKyBiL2NvbmZpZ3MvcWVtdV94ODZfNjRfZGVmY29uZmlnCj4gQEAgLTEsNSArMSw1IEBACj4g
+IEJSMl94ODZfNjQ9eQo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZf
+MTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBC
+UjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURf
+Rk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+IEBAIC04LDcg
+KzgsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9xZW11L3Bvc3QtaW1h
+Z2Uuc2giCj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIK
+PiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049
+eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5V
+WF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9D
+T05GSUdfRklMRT0iYm9hcmQvcWVtdS94ODZfNjQvbGludXguY29uZmlnIgo+ICBCUjJfTElOVVhf
+S0VSTkVMX05FRURTX0hPU1RfTElCRUxGPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3g4
+Nl82NF9lZmlfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3g4Nl82NF9lZmlfZGVmY29uZmlnCj4g
+aW5kZXggZTQ4N2I2ODY4Ny4uMWZiMzY4MjM1NCAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVf
+eDg2XzY0X2VmaV9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVfeDg2XzY0X2VmaV9kZWZj
+b25maWcKPiBAQCAtMSw1ICsxLDUgQEAKPiAgQlIyX3g4Nl82ND15Cj4gLUJSMl9QQUNLQUdFX0hP
+U1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhf
+SEVBREVSU19DVVNUT01fNl8xOD15Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11
+L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfU1lT
+VEVNX0RIQ1A9ImV0aDAiCj4gQEAgLTgsNyArOCw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9T
+Q1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCBib2FyZC9xZW11L3g4Nl82NC1lZmkvcG9z
+Cj4gIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iJChCUjJfREVGQ09ORklHKSIKPiAgQlIy
+X0xJTlVYX0tFUk5FTD15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+IC1C
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjQ3Igo+ICtCUjJfTElO
+VVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjE4LjciCj4gIEJSMl9MSU5VWF9LRVJO
+RUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdf
+RklMRT0iYm9hcmQvcWVtdS94ODZfNjQtZWZpL2xpbnV4LmNvbmZpZyIKPiAgQlIyX0xJTlVYX0tF
+Uk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfeDg2
+X2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV94ODZfZGVmY29uZmlnCj4gaW5kZXggZjhjYjgzYTRi
+MC4uMjFlM2Q3NjU3ZSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3FlbXVfeDg2X2RlZmNvbmZpZwo+
+ICsrKyBiL2NvbmZpZ3MvcWVtdV94ODZfZGVmY29uZmlnCj4gQEAgLTEsNSArMSw1IEBACj4gIEJS
+Ml94ODZfcGVudGl1bXBybz15Cj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNU
+T01fNl8xMj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNl8xOD15
+Cj4gIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9xZW11L3BhdGNoZXMiCj4gIEJSMl9ET1dO
+TE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4gQEAg
+LTgsNyArOCw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9z
+dC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05G
+SUcpIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
+U0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDci
+Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIy
+X0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VT
+VE9NX0NPTkZJR19GSUxFPSJib2FyZC9xZW11L3g4Ni9saW51eC5jb25maWciCj4gIEJSMl9UQVJH
+RVRfUk9PVEZTX0VYVDI9eQo+IGRpZmYgLS1naXQgYS9jb25maWdzL3FlbXVfeHRlbnNhX2x4NjBf
+ZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3h0ZW5zYV9seDYwX2RlZmNvbmZpZwo+IGluZGV4IDky
+YzA3OTU2OTguLmQyZDZjOTJmYWYgMTAwNjQ0Cj4gLS0tIGEvY29uZmlncy9xZW11X3h0ZW5zYV9s
+eDYwX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZpZ3MvcWVtdV94dGVuc2FfbHg2MF9kZWZjb25maWcK
+PiBAQCAtMSw3ICsxLDcgQEAKPiAgQlIyX3h0ZW5zYT15Cj4gIEJSMl9YVEVOU0FfQ1VTVE9NPXkK
+PiAgQlIyX1hURU5TQV9PVkVSTEFZX0ZJTEU9Imh0dHBzOi8vZ2l0aHViLmNvbS9qY212YmtiYy94
+dGVuc2EtdG9vbGNoYWluLWJ1aWxkL3Jhdy85NTI5MWI3YzM5ZTZmNzkwZDBiMmYwNjJjOTQ1YTYz
+MDI5MGYyYzgxL292ZXJsYXlzL3h0ZW5zYV9kYzIzM2MudGFyLmd6Igo+IC1CUjJfUEFDS0FHRV9I
+T1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVY
+X0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcWVt
+dS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIyX1RB
+UkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC0xMCw3ICsxMCw3IEBAIEJSMl9S
+T09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAgQlIy
+X1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElOVVhf
+S0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5V
+WF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9VU0Vf
+Q1VTVE9NX0NPTkZJRz15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJi
+b2FyZC9xZW11L3h0ZW5zYS1seDYwL2xpbnV4LmNvbmZpZyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9J
+TUFHRV9UQVJHRVRfQ1VTVE9NPXkKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9xZW11X3h0ZW5zYV9s
+eDYwX25vbW11X2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV94dGVuc2FfbHg2MF9ub21tdV9kZWZj
+b25maWcKPiBpbmRleCBiYjVhNzYwMGRkLi44OWI3M2VlMWU2IDEwMDY0NAo+IC0tLSBhL2NvbmZp
+Z3MvcWVtdV94dGVuc2FfbHg2MF9ub21tdV9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVf
+eHRlbnNhX2x4NjBfbm9tbXVfZGVmY29uZmlnCj4gQEAgLTIsNyArMiw3IEBAIEJSMl94dGVuc2E9
+eQo+ICBCUjJfWFRFTlNBX0NVU1RPTT15Cj4gIEJSMl9YVEVOU0FfT1ZFUkxBWV9GSUxFPSJodHRw
+czovL2dpdGh1Yi5jb20vamNtdmJrYmMveHRlbnNhLXRvb2xjaGFpbi1idWlsZC9yYXcvOTUyOTFi
+N2MzOWU2Zjc5MGQwYjJmMDYyYzk0NWE2MzAyOTBmMmM4MS9vdmVybGF5cy94dGVuc2FfZGMyMzNj
+LnRhci5neiIKPiAgIyBCUjJfWFRFTlNBX1VTRV9NTVUgaXMgbm90IHNldAo+IC1CUjJfUEFDS0FH
+RV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJ
+TlVYX0hFQURFUlNfQ1VTVE9NXzZfMTg9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQv
+cWVtdS9wYXRjaGVzIgo+ICBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkKPiAgQlIy
+X1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eVMwIgo+IEBAIC0xMSw3ICsxMSw3IEBAIEJS
+Ml9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3FlbXUvcG9zdC1pbWFnZS5zaCIKPiAg
+QlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgo+ICBCUjJfTElO
+VVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9M
+SU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTIuNDciCj4gK0JSMl9MSU5VWF9L
+RVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTguNyIKPiAgQlIyX0xJTlVYX0tFUk5FTF9V
+U0VfQ1VTVE9NX0NPTkZJRz15Cj4gIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxF
+PSJib2FyZC9xZW11L3h0ZW5zYS1seDYwL2xpbnV4LW5vbW11LmNvbmZpZyIKPiAgQlIyX0xJTlVY
+X0tFUk5FTF9JTUFHRV9UQVJHRVRfQ1VTVE9NPXkKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
