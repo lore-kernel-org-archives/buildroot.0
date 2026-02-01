@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 947ECD172A2
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 20:41:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E46EEE6529E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 20:41:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 643B8606BA;
-	Sun,  1 Feb 2026 20:41:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B427560DEE;
+	Sun,  1 Feb 2026 20:41:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZCpv0BCCpBCK; Sun,  1 Feb 2026 20:41:00 +0000 (UTC)
+ id BrOMCak3WWX4; Sun,  1 Feb 2026 20:41:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BF5F606C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD23A60DA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769978460;
-	bh=uf3XnlwdZAA9Myts/ZROjiZfhZzgH1PXvPy11ZZUzBc=;
+	s=default; t=1769978461;
+	bh=dCYOk8oCIlctxbmQAk9Vi6j6QniCo2uAhvLMGV1HsoA=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=VIwcMF2hJ3Dx9gZZVjHqh8Ws2XigXPQ13SldmhO5JeqUvjo+MnEnpjX7ANC1cwo+C
-	 eNSW1eIeVA3lV8bu6ro9IAzzgokb3CIGLTkSIiMqIymQiluhE19vTauUzZfd2BfgHd
-	 /m1oIHD0S6RmaWF1zhBG+7IwlOHILAskAQ5i7/Z8xm0ybnieow+pars2j/hGk/BZD8
-	 EKuTVJvY0VShoLFkHhkOQtJt9eHSEjutKhLqcckLk2mBLN/QmbjusGLjwyGhq3TpRR
-	 FZMJy+lcfjlxDBFmUy/YQ11H3Iw3wcr4SyUtIaU+I/EzAXGYNLBs+xY+yvEzZ0ozDV
-	 KbaENjFX6nyVQ==
+	b=Xjly/MCpfMVMjKuCrlW/eJ5GYLKTKbcv8q1kvhMT45NCUaflaoPkWILgiRrHpWg0H
+	 fIsElL5WuvyUYZnBvQq/q56TSxvhwTE+5diePDl1MGCcyE1V+iw7s1rgdgsVtSiPeV
+	 RaGNATvpMsEA6e4i/LZdyonN8LdZc3Vtz9DzI4rIMXgXpKlvaVAvytEiRkWdML9zDj
+	 6TLVZPF1FtgneKiynKjmLytFi1tmQB6A3UXELkqS1Jihnr1iCUu2/UUVh4irvfUi0j
+	 ZneUpd4/TJ+JcvVUIOBPEbaJct7S2r8BEpELZKivKfBpcBtDHUHZ3FihMC9ZCHI54k
+	 TkKeGjM6v85Jg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BF5F606C5;
-	Sun,  1 Feb 2026 20:41:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 91D6323E
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD23A60DA3;
+	Sun,  1 Feb 2026 20:41:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0BE51E0
  for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 834FC606A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84C2E408FE
  for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NoFg1Wj_yUbn for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HXqH7TKkZujN for <buildroot@buildroot.org>;
  Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACFF760669
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C98BF408ED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACFF760669
+ by smtp4.osuosl.org (Postfix) with ESMTP id C98BF408ED
  for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 960C8846FE; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
+ id A98558616D; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Feb 2026 21:30:15 +0100
+Date: Sun, 1 Feb 2026 21:37:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3689f70f9ec9e5b14e7c26c6d81efdf24e5bbef
-X-Git-Newrev: cd45f51c5ff4bfb366c9169d96b75a9b597c1147
+X-Git-Oldrev: 224abedb068987ec73c99f3f85a17cfa97320443
+X-Git-Newrev: 2f6062b7a8e91a763994b8fa1b5804a25a2be9cc
 X-Patchwork-Hint: ignore
-Message-Id: <20260201204055.960C8846FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/usb_modeswitch_data: bump to
- version 20251207
+Message-Id: <20260201204055.A98558616D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: update e-mail for Frank
+ Vanbever
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,41 +76,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd45f51c5ff4bfb366c9169d96b75a9b597c1147
+commit: https://git.buildroot.net/buildroot/commit/?id=2f6062b7a8e91a763994b8fa1b5804a25a2be9cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Frank Vanbever <fvb@funkworks.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch_data/usb_modeswitch_data.hash | 4 ++--
- package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-index 9071a72490..5175f3ede5 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-@@ -1,5 +1,5 @@
- # From http://www.draisberghof.de/usb_modeswitch/
--md5  e8fce7eb949cbe16c61fb71bade4cc17  usb-modeswitch-data-20191128.tar.bz2
-+md5  4f91387d0f5e9c2e49cae82b0c9afedc  usb-modeswitch-data-20191128.tar.bz2
- # Locally calculated
--sha256  3f039b60791c21c7cb15c7986cac89650f076dc274798fa242231b910785eaf9  usb-modeswitch-data-20191128.tar.bz2
-+sha256  0bb12d64aee5e467c31af61a53fb828ff7aa59c54a82ca85eeede4c5690bfa66  usb-modeswitch-data-20251207.tar.bz2
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index a3a98ad7e7..6d9997131e 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 08c98ec53b..aff26f8012 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1218,7 +1218,7 @@ F:	package/sane-backends/
+ F:	package/upx/
+ F:	package/zxing-cpp/
  
--USB_MODESWITCH_DATA_VERSION = 20191128
-+USB_MODESWITCH_DATA_VERSION = 20251207
- USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
- USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
+-N:	Frank Vanbever <frank.vanbever@mind.be>
++N:	Frank Vanbever <fvb@funkworks.be>
+ F:	package/libmodsecurity/
+ F:	package/nginx-modsecurity/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
