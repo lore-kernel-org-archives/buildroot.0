@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B8AE65296
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 18:40:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33889E6529E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 18:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4874075C;
-	Sun,  1 Feb 2026 18:40:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECAA160F92;
+	Sun,  1 Feb 2026 18:40:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EF7f5sA2bp5d; Sun,  1 Feb 2026 18:40:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2646F60B3F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1769971229;
+	bh=O+BjnM5m3gkEcmGt8OWgl3/whpHschBLpeM2Ga/trU0=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=KPnRQzEHLQcK2tiUxyH5vT15RpY745Xe/lkm9Y5bKoLbiynAHpGSqX4/6AnCxZHq7
+	 W/yXK3PiqUpxK8uDtsXGIDjBVszq9FucCZkiFV+X+i44x3m+oF8HU1SB6org/RdFfT
+	 rFcUGOpJOdUfAy8SSgjf0bVS9Q8ojsoNaOC2UGYTmem7+oPMBoUfx3L6//8bFv1RLP
+	 8OQlogfalkfxZTpXkUlIEF9JdvWgGx7RRwVJ7blzn3jiNkwT9lw8Di6OLEvrq+aMpj
+	 2Mn8jyCncisuv9UJ4i+DKsp5ALr2Vt3NKGvzXcwjeC+xWd0XjLXJeCl0c6tEpmSyPW
+	 dwkboXafIwwgg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2646F60B3F;
+	Sun,  1 Feb 2026 18:40:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE2941E0
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:40:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B28A840766
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IOuxsgA-RRsr; Sun,  1 Feb 2026 18:39:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11B9440766
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769971199;
-	bh=zdlmaujrEdFy0owmRvesE1Yh4JgVkOoe7Jau2JjPbJg=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=MibtAKbxlSPzYlYHI78BgHUTM1pEncWW36msxXFDWq/QpEQudHTeD2sYIhun+WJAJ
-	 IcB0j+MuPJgKGT7BSI8mkClRWOLkQUBSq88trvkenhDUOxlH4mfstGWmh6sSJuxX6c
-	 iC/I+ZV4SKsKEeQGIai2AJJMXbn2lec6Cwqbk2dNDs43kD+1ONxlv0rCM1b1u2UszH
-	 01kgLdSHMxPARm3DcdzJOvrQCp8VN8d9KhteMEJ0DB55TfSPCEt65FBl/ccq3OSCYl
-	 YOjbEfgSn/Mctdrk2TZdlwVEeQx0u4A0zOQkdX8nDYjwHXhDFmz9ZqlxjvruzfsKsg
-	 +9DoAyazGMaqA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11B9440766;
-	Sun,  1 Feb 2026 18:39:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 485CE1E0
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D39981227
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7z8LIex242vt for <buildroot@buildroot.org>;
- Sun,  1 Feb 2026 18:39:57 +0000 (UTC)
+ id hE9IbcdgyYiZ for <buildroot@buildroot.org>;
+ Sun,  1 Feb 2026 18:40:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01AA4810DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01AA4810DA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 559DB4075C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 559DB4075C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01AA4810DA
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 559DB4075C
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:40:26 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0EE75A4C547A
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 19:39:50 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60144)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 525EEA4C547A;
+ Sun,  1 Feb 2026 19:40:19 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47808)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vmcMP-000000007VW-3jJF
- for buildroot@buildroot.org; Sun, 01 Feb 2026 18:39:49 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vmcMt-000000007at-0gAZ;
+ Sun, 01 Feb 2026 18:40:19 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  1 Feb 2026 19:39:49 +0100
-Message-ID: <20260201183949.3297871-1-bernd@kuhls.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun,  1 Feb 2026 19:40:18 +0100
+Message-ID: <20260201184018.3381183-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1769971190;
- bh=B1QffZ6w8fw8P31c3na2sZDea9hT1sOMLd77kE30sH8=;
- h=From:To:Subject:Date:From;
- b=Qju+zaYbrGAynd8OiyQUb1DLJ9/67Edhp1eJ0DwUYtDg3tz8ehebv0oEHKT8/YzrZ
- frPR1aouzWjViMQ92rBAAwT3kj5B2jFA/IsV0EfNoWFG5vaoALTfB6vc65n2RgJWFU
- PKlwo9TjVHH858e5h5TWtSSK0ZW3KV4sb2oxmycYzltrd4+u2KXxlFVty3+z5ZMLl2
- +1A+/TatzVCiKLaj5FWJ0MvCG1pDUc8wFs+uY1dMM0lyUKKOOhz1YPP8wOleP9yOWJ
- hSz+zf/faOMKHw65RUxeFBdNygc2pHbT+P0UvUGH6AhhX3wIPgiKxNN9cos/cjH173
- mnla2cJZ2QQYQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202511301023; t=1769971219;
+ bh=lC2L8uwzlVfvMSq3TuwKLyl0EyBWy8CEgKr7WV23gZg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=buZJHy4XIbY/tHqvBpsi5tZGfrTXdAC1tkvTIe04Amd36Uzu5KDKrGcPdqMzIRXJp
+ aZMPbNOPCn5oWjfeIeorIJ8VX7YEdfOIhveK1s3xxwLpGzOER59/Pr7tq5MiQq+S+c
+ WfWglVG1gt+I5P/B9QN3R7H01t/Kspk8tdxtVgIatQLgRQerhuWA6B9WTWvFOIoW4F
+ fMhZovwUKsq0+5Rd8pJ0VPw5j9muNC+Uwq19TfjLhAFZxyMQRehdmrM/u6w81MysyR
+ EUYAEGL1BVs/2Jy4yyipKX+T2ZCTljTQ9hTmoG+DJ7lfZLT+haQJUdUshpw8cBpwnl
+ 4YEujPFssb3Ig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=Qju+zaYb
-Subject: [Buildroot] [PATCH 1/1] package/transmission: bump version to 4.1.0
+ header.s=kas202511301023 header.b=buZJHy4X
+Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 4.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,90 +97,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/transmission/transmission/releases/tag/4.1.0
-
-Removed patch which is included in this release.
-
-Updated license hash due to copyright year bump:
-https://github.com/transmission/transmission/commit/5ce17df2e52eda39d61272590bdf4921c9bf7bc7
+https://cmake.org/cmake/help/latest/release/4.2.html#id21
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0001-bump-miniupnpc-to-2.2.8.patch        | 39 -------------------
- package/transmission/transmission.hash        |  4 +-
- package/transmission/transmission.mk          |  2 +-
- 3 files changed, 3 insertions(+), 42 deletions(-)
- delete mode 100644 package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch b/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
-deleted file mode 100644
-index f8fab5024f..0000000000
---- a/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?C=C5=93ur?= <coeur@gmx.fr>
--Date: Sat, 15 Jun 2024 07:24:06 +0800
--Subject: [PATCH] bump miniupnpc to 2.2.8 (#6907)
--
--* bump miniupnpc to 2.2.8
--
--* Avoid build error "ln: include/miniupnpc/.: Operation not permitted"
--
--Upstream: https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8
--
--[Bernd: rebased for version 4.0.6]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- Transmission.xcodeproj/project.pbxproj  | 2 +-
-- libtransmission/port-forwarding-upnp.cc | 9 +++++++--
-- third-party/miniupnp                    | 2 +-
-- 3 files changed, 9 insertions(+), 4 deletions(-)
--
--diff --git a/libtransmission/port-forwarding-upnp.cc b/libtransmission/port-forwarding-upnp.cc
--index 6d7bbc7f7c2..a4146e0df13 100644
----- a/libtransmission/port-forwarding-upnp.cc
--+++ b/libtransmission/port-forwarding-upnp.cc
--@@ -261,8 +261,13 @@ tr_port_forwarding_state tr_upnpPulse(
-- 
--         FreeUPNPUrls(&handle->urls);
--         auto lanaddr = std::array<char, TR_ADDRSTRLEN>{};
---        if (UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1) ==
---            UPNP_IGD_VALID_CONNECTED)
--+        if (
--+#if (MINIUPNPC_API_VERSION >= 18)
--+            UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1, nullptr, 0)
--+#else
--+            UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1)
--+#endif
--+            == UPNP_IGD_VALID_CONNECTED)
--         {
--             tr_logAddInfo(fmt::format(_("Found Internet Gateway Device '{url}'"), fmt::arg("url", handle->urls.controlURL)));
--             tr_logAddInfo(fmt::format(_("Local Address is '{address}'"), fmt::arg("address", lanaddr.data())));
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 3e470a002e..b6dcaf9ae5 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
-@@ -1,4 +1,4 @@
- # From https://transmissionbt.com/download
--sha256  2a38fe6d8a23991680b691c277a335f8875bdeca2b97c6b26b598bc9c7b0c45f  transmission-4.0.6.tar.xz
-+sha256  dcd28c1c9e6126229c4c17dbc9e95c9fd4aed7e76f4a1f2a74604c8cddec49d6  transmission-4.1.0.tar.xz
- # Locally calculated
--sha256  f56732960a61ecf3b9637404eef1a39221d2006336a98792b7b65a79f155449c  COPYING
-+sha256  9715b55d11caa499d34a6e23498c766fe1ece4ace57777553313e27d688dee78  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 1eab839fd3..e4b6d8d189 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 32c334c928..88744ac703 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v4.2/cmake-4.2.2-SHA-256.txt
+-sha256  bbda94dd31636e89eb1cc18f8355f6b01d9193d7676549fba282057e8b730f58  cmake-4.2.2.tar.gz
++# From https://cmake.org/files/v4.2/cmake-4.2.3-SHA-256.txt
++sha256  7efaccde8c5a6b2968bad6ce0fe60e19b6e10701a12fce948c2bf79bac8a11e9  cmake-4.2.3.tar.gz
  
--TRANSMISSION_VERSION = 4.0.6
-+TRANSMISSION_VERSION = 4.1.0
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_SITE = https://github.com/transmission/transmission/releases/download/$(TRANSMISSION_VERSION)
- TRANSMISSION_DEPENDENCIES = \
+ # Locally calculated
+ sha256  1e0d48f16c60f400838a96989684ae12cec35cb96688db11e8cb0204058cf4b8  LICENSE.rst
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 63ddb927fc..f5d1787d19 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 4.2
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = LICENSE.rst
 -- 
 2.47.3
 
