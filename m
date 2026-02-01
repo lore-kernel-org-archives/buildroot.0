@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 056E1E65298
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 18:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B8AE65296
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 18:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56D1860E6B;
-	Sun,  1 Feb 2026 18:39:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4874075C;
+	Sun,  1 Feb 2026 18:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xxqzg70a4_YI; Sun,  1 Feb 2026 18:39:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IOuxsgA-RRsr; Sun,  1 Feb 2026 18:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CCF660B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11B9440766
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769971176;
-	bh=yFNAfxtLXCVflFYGWMPExebQoP1KPqpaiNuL6zsPPt4=;
+	s=default; t=1769971199;
+	bh=zdlmaujrEdFy0owmRvesE1Yh4JgVkOoe7Jau2JjPbJg=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=f4E2TOkP/k92TORLm03RbBG0BJjVNFoGmyHp6nblDk+AwbUz/s7ZfmnJxZ3fIEcyc
-	 Fiy/oKW6V2stZvCxYOi+x40Lm8LoMDqMPsHEbXhCE6G5xD6yJffXL/arUn6Vn8BcNu
-	 7O3Ef+4fDjdlotEUHD2PxMw46ZnXlZSYmbCHi5bpW/Ip3DP7yjuyUeGGbJArTPF57j
-	 HA3+Z1lzLEq5NSGjgJA083cK9ypMnfbUhq5TXFQo+3pUnWZ421+8eYFAMSkgvZJqQp
-	 lInc5xMHmhKFX8ZiJGKRcgV1UJ4oCvF7zipeRHhMT7Q3za5FLEPZnIbqV33TWMKodz
-	 ysuTCKNNCV1lw==
+	b=MibtAKbxlSPzYlYHI78BgHUTM1pEncWW36msxXFDWq/QpEQudHTeD2sYIhun+WJAJ
+	 IcB0j+MuPJgKGT7BSI8mkClRWOLkQUBSq88trvkenhDUOxlH4mfstGWmh6sSJuxX6c
+	 iC/I+ZV4SKsKEeQGIai2AJJMXbn2lec6Cwqbk2dNDs43kD+1ONxlv0rCM1b1u2UszH
+	 01kgLdSHMxPARm3DcdzJOvrQCp8VN8d9KhteMEJ0DB55TfSPCEt65FBl/ccq3OSCYl
+	 YOjbEfgSn/Mctdrk2TZdlwVEeQx0u4A0zOQkdX8nDYjwHXhDFmz9ZqlxjvruzfsKsg
+	 +9DoAyazGMaqA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CCF660B00;
-	Sun,  1 Feb 2026 18:39:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DC27D23E
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11B9440766;
+	Sun,  1 Feb 2026 18:39:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 485CE1E0
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD01660B00
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D39981227
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XyfDDDhyX8Ac for <buildroot@buildroot.org>;
- Sun,  1 Feb 2026 18:39:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7z8LIex242vt for <buildroot@buildroot.org>;
+ Sun,  1 Feb 2026 18:39:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 14E8960AE6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E8960AE6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01AA4810DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01AA4810DA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 14E8960AE6
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 01AA4810DA
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:56 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8D93CA4C55A0
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 19:39:24 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43446)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0EE75A4C547A
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 19:39:50 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60144)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vmcLz-000000007Qn-2PiN
- for buildroot@buildroot.org; Sun, 01 Feb 2026 18:39:23 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vmcMP-000000007VW-3jJF
+ for buildroot@buildroot.org; Sun, 01 Feb 2026 18:39:49 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  1 Feb 2026 19:39:22 +0100
-Message-ID: <20260201183923.3271804-1-bernd@kuhls.net>
+Date: Sun,  1 Feb 2026 19:39:49 +0100
+Message-ID: <20260201183949.3297871-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1769971164;
- bh=nEmwWHe5OrQ95dm/H11/qmi0NnKfJ77KoZQRLG7dpLY=;
+ s=kas202511301023; t=1769971190;
+ bh=B1QffZ6w8fw8P31c3na2sZDea9hT1sOMLd77kE30sH8=;
  h=From:To:Subject:Date:From;
- b=luyS672CECDdzJo6rzmPSZBVkoiivYQoiI2t56IuSyFrIJ2kgozCX5DoFOQQQTfQp
- EqFMnbnkvVg/P6mvXFef2wuELLhDvORb6xLrzhxHuz29AqF829ysfWtyorhQbmUVWw
- wV6exXLi6oYPrAAckjRbv4/btDfZt5bdJeH/ef/MbqB5IC2Q+vIB7lXYj9DFSf6jx4
- aLlq1yokJYhiwpo8JWMBF/eeAdMraUynQbnTvdFClG9zcwq0pBcWcV6zEQLfyv3Lsp
- AcK8hY6ny6ElAwAnvDOiMg+Ytc+VtW/ouh2yL/7gGA+jJ9BLukllH2zeSFU7x0HZ4W
- Bh0cgTqqruanw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Qju+zaYbrGAynd8OiyQUb1DLJ9/67Edhp1eJ0DwUYtDg3tz8ehebv0oEHKT8/YzrZ
+ frPR1aouzWjViMQ92rBAAwT3kj5B2jFA/IsV0EfNoWFG5vaoALTfB6vc65n2RgJWFU
+ PKlwo9TjVHH858e5h5TWtSSK0ZW3KV4sb2oxmycYzltrd4+u2KXxlFVty3+z5ZMLl2
+ +1A+/TatzVCiKLaj5FWJ0MvCG1pDUc8wFs+uY1dMM0lyUKKOOhz1YPP8wOleP9yOWJ
+ hSz+zf/faOMKHw65RUxeFBdNygc2pHbT+P0UvUGH6AhhX3wIPgiKxNN9cos/cjH173
+ mnla2cJZ2QQYQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=luyS672C
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{6, 12,
- 18}.x series
+ header.s=kas202511301023 header.b=Qju+zaYb
+Subject: [Buildroot] [PATCH 1/1] package/transmission: bump version to 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,58 +96,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://github.com/transmission/transmission/releases/tag/4.1.0
+
+Removed patch which is included in this release.
+
+Updated license hash due to copyright year bump:
+https://github.com/transmission/transmission/commit/5ce17df2e52eda39d61272590bdf4921c9bf7bc7
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .../0001-bump-miniupnpc-to-2.2.8.patch        | 39 -------------------
+ package/transmission/transmission.hash        |  4 +-
+ package/transmission/transmission.mk          |  2 +-
+ 3 files changed, 3 insertions(+), 42 deletions(-)
+ delete mode 100644 package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e9ab0d67e0..955f6877f3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch b/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
+deleted file mode 100644
+index f8fab5024f..0000000000
+--- a/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?C=C5=93ur?= <coeur@gmx.fr>
+-Date: Sat, 15 Jun 2024 07:24:06 +0800
+-Subject: [PATCH] bump miniupnpc to 2.2.8 (#6907)
+-
+-* bump miniupnpc to 2.2.8
+-
+-* Avoid build error "ln: include/miniupnpc/.: Operation not permitted"
+-
+-Upstream: https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8
+-
+-[Bernd: rebased for version 4.0.6]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- Transmission.xcodeproj/project.pbxproj  | 2 +-
+- libtransmission/port-forwarding-upnp.cc | 9 +++++++--
+- third-party/miniupnp                    | 2 +-
+- 3 files changed, 9 insertions(+), 4 deletions(-)
+-
+-diff --git a/libtransmission/port-forwarding-upnp.cc b/libtransmission/port-forwarding-upnp.cc
+-index 6d7bbc7f7c2..a4146e0df13 100644
+---- a/libtransmission/port-forwarding-upnp.cc
+-+++ b/libtransmission/port-forwarding-upnp.cc
+-@@ -261,8 +261,13 @@ tr_port_forwarding_state tr_upnpPulse(
+- 
+-         FreeUPNPUrls(&handle->urls);
+-         auto lanaddr = std::array<char, TR_ADDRSTRLEN>{};
+--        if (UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1) ==
+--            UPNP_IGD_VALID_CONNECTED)
+-+        if (
+-+#if (MINIUPNPC_API_VERSION >= 18)
+-+            UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1, nullptr, 0)
+-+#else
+-+            UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1)
+-+#endif
+-+            == UPNP_IGD_VALID_CONNECTED)
+-         {
+-             tr_logAddInfo(fmt::format(_("Found Internet Gateway Device '{url}'"), fmt::arg("url", handle->urls.controlURL)));
+-             tr_logAddInfo(fmt::format(_("Local Address is '{address}'"), fmt::arg("address", lanaddr.data())));
+diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
+index 3e470a002e..b6dcaf9ae5 100644
+--- a/package/transmission/transmission.hash
++++ b/package/transmission/transmission.hash
+@@ -1,4 +1,4 @@
+ # From https://transmissionbt.com/download
+-sha256  2a38fe6d8a23991680b691c277a335f8875bdeca2b97c6b26b598bc9c7b0c45f  transmission-4.0.6.tar.xz
++sha256  dcd28c1c9e6126229c4c17dbc9e95c9fd4aed7e76f4a1f2a74604c8cddec49d6  transmission-4.1.0.tar.xz
+ # Locally calculated
+-sha256  f56732960a61ecf3b9637404eef1a39221d2006336a98792b7b65a79f155449c  COPYING
++sha256  9715b55d11caa499d34a6e23498c766fe1ece4ace57777553313e27d688dee78  COPYING
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 1eab839fd3..e4b6d8d189 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.18.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.18.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 64f8411046..2ba90714d3 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  b726a4d15cf9ae06219b56d87820776e34d89fbc137e55fb54a9b9c3015b8f1e  linux-6.18.7.tar.xz
--sha256  16805dc62e1fa5ef8a3f466f3f44a2efb171b5206d6840ced4ba5475cf12c432  linux-6.12.67.tar.xz
--sha256  76af9d4fce24cc5a1c9f1fcbba2e23c4e87bbc8e20525b1691206801f24d14ba  linux-6.6.121.tar.xz
-+sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-+sha256  d367c7504bd4da520dd01eb08125d2d0ac088bc8af4cd56d236f2074dd4225b7  linux-6.12.68.tar.xz
-+sha256  d48e0d9de04bef2fb9740bdb0124548bcab8867cdca00ff9712c110282b299d6  linux-6.6.122.tar.xz
- sha256  b41666bda7223600386a07ebe1802f5029da2fe81f6a85d691b6ec6a707e5a29  linux-6.1.161.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  5d4c0994580dd3bbd5ffc5fcb81c22dd305b844c9d8c7b176cc41b28f7e29743  linux-5.15.198.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4727ba2048..c80ff97208 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -459,9 +459,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.248"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.198"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.161"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.121"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.67"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.7"	if BR2_KERNEL_HEADERS_6_18
-+	default "6.6.122"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.68"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.8"	if BR2_KERNEL_HEADERS_6_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-TRANSMISSION_VERSION = 4.0.6
++TRANSMISSION_VERSION = 4.1.0
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_SITE = https://github.com/transmission/transmission/releases/download/$(TRANSMISSION_VERSION)
+ TRANSMISSION_DEPENDENCIES = \
 -- 
 2.47.3
 
