@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5899E6529D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 20:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65576E6529D
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 20:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A76FB60BCC;
-	Sun,  1 Feb 2026 20:40:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D26D60669;
+	Sun,  1 Feb 2026 20:40:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ogH7udCdlExS; Sun,  1 Feb 2026 20:40:14 +0000 (UTC)
+ id tVA9kXCzd4jh; Sun,  1 Feb 2026 20:40:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62D9C606ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5955F606A7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769978414;
-	bh=FQy7aLve3WbKrZwnp80BLa4THIYk3xcUWJdGLkEtNgM=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=OdmzEvskQ1xGYZ/3dejQfRDWmhJzLxIxbVXaitgh0ciGh1j1mnpD2uiiiwKn6t/ad
-	 xLUODaKThde6H7K3F8F0gf6CnosnV/VhsYneSseYA238nlz5z5ruXlAmOvzk2H+RoH
-	 aj5GzhNBQp/RYQn9vGJ17mS0xJf10KVJaUBvlm6V9bCz5J9ntWxIyoVKsuMGLdX0d7
-	 1ESde3Mj7gUw50Hn1n5RxR0vzCkkYuqH8XuoDZTj1vsObNRmArZpC4xntcUttvzmIf
-	 putIQDUOvpAnmUl7XqYazze6O7Durgqy3a1SaQ45kBP7SXJ6pCiXW/oEoHx4LuD2mB
-	 y14qskC3cSrLQ==
+	s=default; t=1769978457;
+	bh=pykDWNOpqzkWnkUq6TddZxVlF3xfZxCblN4UeHsA1o8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=jJIoDGj5CZqTnswzD/ZIIDYeH9sEatPldftTjbhPAK8A3JB2HIVWZoMgKGrPI6O9R
+	 XjFLepe5XA4/TaSlHI69blTrl373urgM3tiYMW27X/Ox7BiHJ9JQTUJY7puXMfdhTt
+	 qghJpZoxjnNndz2I8Ral5RkViR0kc04XmmnvnJy7oNP5a/tEN00sEUhLEvzHoYMnSx
+	 P/nfX04nWuULlY9cTPM5715JtBfro+RuTbpfROo0PCCWQ6rBhh2uFm7JdRAIo19aS4
+	 a17WqloVZDBFj7mTBt504UJhuqpm1Yy4nhpvQ2ep8Ly+W7UGR3JDvZmm3Nu1wPQb+v
+	 iXXRbFWdkVbIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62D9C606ED;
-	Sun,  1 Feb 2026 20:40:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A18DE23E
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5955F606A7;
+	Sun,  1 Feb 2026 20:40:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B21823E
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 911E560823
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54BB94011A
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wGRhbLeEsu-y for <buildroot@buildroot.org>;
- Sun,  1 Feb 2026 20:40:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YU9ceDHNyesJ for <buildroot@buildroot.org>;
+ Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8C076606C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C076606C5
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8C076606C5
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:11 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 892242624; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 01 Feb 2026 20:39:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmeEZ-00000005kDm-0oml;
- Sun, 01 Feb 2026 21:39:51 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77F414010B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77F414010B
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 698348616C; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260201184038.3445579-2-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 1 Feb 2026 19:40:38 +0100")
-References: <20260201184038.3445579-1-bernd@kuhls.net>
- <20260201184038.3445579-2-bernd@kuhls.net>
-Date: Sun, 01 Feb 2026 21:39:51 +0100
-Message-ID: <871pj49p0o.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=AdAn8/k2Pdu9wOA3zyOFlndriyeqZz2QgXAkFoRcMnfdRPegZtRiuDg9S7Bw8TiuLlr4Wh+G6Znqn9RGTrxQDS/hwYwAbTzgiYQT2NAlPjpKQGeNeNWKfrLJ6bW4Y1Hj0rgplL13doJGFZbWTXBNpY3ePuKq0F/uZeYCILgNOpINFdS6ZjU6epaf691c+w2zpC8KNhdYlmyk5+w+ods9ARd+DOERXU2YnXi4YjMeKbVLALhvxgAVAf8V4Wvbz/YTquPTOGk5hAtePbCFHb0zACwSptz5bTylihEoqPbNVYWhLkGqSGUt3Qle2YcauyfQdOC6kyWQ2XAxfG+ru7bKsA==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=D3rqQuDT4cqc22jKzHTAo6ToDP0ZRmbzEKgEjgJvmWs=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=AdAn8/k2
-Subject: Re: [Buildroot] [PATCH 2/2] package/intel-vpl-gpu-rt: bump version
- to 26.1.1
+To: buildroot@buildroot.org
+Date: Sun, 1 Feb 2026 21:09:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d76026af735368cece979dfc551382135797fea
+X-Git-Newrev: 33c09c71d57986dc58e20dd8487d07f052178cd7
+X-Patchwork-Hint: ignore
+Message-Id: <20260201204055.698348616C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/netdata: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,20 +69,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=33c09c71d57986dc58e20dd8487d07f052178cd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.1.1
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Buildroot commit 9cfcd906cff299ef83b48681e50bcef9df124ad4 bumped the
+package from 1.33.1 to 1.37.1. Upstream changed the optional C++ support
+into a mandatory dependency with commit
+https://github.com/netdata/netdata/commit/b6d2a3662dfb683e9e95203ef3b21f8e31238b06
+added to version 1.35.0 causing build errors with toolchains without
+C++ support:
 
-Committed, thanks.
+  GEN      netdatacli
+/bin/sh: line 1: no: command not found
+make[3]: *** [Makefile:5502: netdatacli] Error 127
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+https://autobuild.buildroot.org/results/7084a73d5727a86ca55eda3d1f01ea4d5b8ecf65/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Michael Cullen <michael@michaelcullen.name>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/netdata/Config.in                     | 10 +++++-----
+ support/testing/tests/package/test_netdata.py |  1 +
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+index 3603eb071c..527d4d39af 100644
+--- a/package/netdata/Config.in
++++ b/package/netdata/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NETDATA
+ 	bool "netdata"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+@@ -22,22 +23,21 @@ if BR2_PACKAGE_NETDATA
+ config BR2_PACKAGE_NETDATA_PROMETHEUS
+ 	bool "prometheus remote write backend"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_SNAPPY
+ 	help
+ 	  Enable prometheus remote write backend
+ 
+-comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
++comment "prometheus remote write backend needs a toolchain w/ gcc >= 8"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ endif
+ 
+-comment "netdata needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++comment "netdata needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
+index 6b616398d3..42bcbcdc6f 100644
+--- a/support/testing/tests/package/test_netdata.py
++++ b/support/testing/tests/package/test_netdata.py
+@@ -6,6 +6,7 @@ import infra.basetest
+ class TestNetdata(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
++        BR2_INSTALL_LIBSTDCPP=y
+         BR2_PACKAGE_NETDATA=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
