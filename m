@@ -1,115 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A38E7C719
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 12:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 056E1E65298
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 18:39:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA63880D86;
-	Sun,  1 Feb 2026 12:40:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56D1860E6B;
+	Sun,  1 Feb 2026 18:39:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w18UMKNcwMgv; Sun,  1 Feb 2026 12:40:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xxqzg70a4_YI; Sun,  1 Feb 2026 18:39:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1CFB840C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CCF660B00
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769949626;
-	bh=n1bluai7d1EawXZkKPPYxWi2Awf6SBN6Aa1uBJkK38Q=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1769971176;
+	bh=yFNAfxtLXCVflFYGWMPExebQoP1KPqpaiNuL6zsPPt4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=TWKwKrN7C+2/v6oW1R7QEH5qpla0NvuJytSp3wf/RxTyFdpFk4hG2xbtMXyYR9BMd
-	 y+9CWyqxvrOkNb1S2nGZKUfivoxdDN6Yiq6pi6VFNbZZkOqwsB7+FYqd+8vJetU72F
-	 vnQ58d1ll7JNOberuaqQImK5XZCoyeGUWTKRUb+tKcD1riqyfykL++b1QrTbUJqHKS
-	 PCBF5Om/zStsEcc1EhHAa5L6opVVM/t2v1bhBPa5sKRShMgtds2NQC9+xcuZVtW67h
-	 zikzOu/Yr99feO7u57FCOid2f4XR97XCXY/+8jUW/5CLVatPYO88GF1nzwxEsJuD+q
-	 gp+T8SRMHz7EQ==
+	b=f4E2TOkP/k92TORLm03RbBG0BJjVNFoGmyHp6nblDk+AwbUz/s7ZfmnJxZ3fIEcyc
+	 Fiy/oKW6V2stZvCxYOi+x40Lm8LoMDqMPsHEbXhCE6G5xD6yJffXL/arUn6Vn8BcNu
+	 7O3Ef+4fDjdlotEUHD2PxMw46ZnXlZSYmbCHi5bpW/Ip3DP7yjuyUeGGbJArTPF57j
+	 HA3+Z1lzLEq5NSGjgJA083cK9ypMnfbUhq5TXFQo+3pUnWZ421+8eYFAMSkgvZJqQp
+	 lInc5xMHmhKFX8ZiJGKRcgV1UJ4oCvF7zipeRHhMT7Q3za5FLEPZnIbqV33TWMKodz
+	 ysuTCKNNCV1lw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1CFB840C4;
-	Sun,  1 Feb 2026 12:40:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8858D1E0
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 12:40:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CCF660B00;
+	Sun,  1 Feb 2026 18:39:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC27D23E
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FD31840C4
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 12:40:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD01660B00
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hvg1QNdS0BCe for <buildroot@buildroot.org>;
- Sun,  1 Feb 2026 12:40:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=fvb@funkworks.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CC71F840C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC71F840C2
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CC71F840C2
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 12:40:23 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4806d23e9f1so39736055e9.2
- for <buildroot@buildroot.org>; Sun, 01 Feb 2026 04:40:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1769949621; x=1770554421;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+KbkPAYMPce+vj0xQ3GKsrYBJF5MF+bqFfwbWHjux34=;
- b=PoEawzE62V3lCkbiZniNPM6v7HsaIKVc3HWEzYWlpsQxIOMyRenHncLPhFRMzlCqdQ
- kEywi41KBs2RVN13wS7rY7P/UpRqxyIBGtlJ2I6HXtiSQ4+QBesSaT7HwhtKMPizWUbg
- CU7Q2IeMaRNcPx5zPb8vf2eUl8vc/kQUFBYUbfqJJIsfhqgbLSw7oFWy6Zdy5Nvca0zk
- T97mY7F3n7le3V13rO2GIxEhLM05qMZdo/inGgIYn3RZfzHPEm0mn/vyb7xmcGJfxfRq
- uK9ttEyrwCwxQbqrom+8TwjT7hXRUd8ieEha2y8cJ9jfBRffqJ3qpVSpVKAkJJZLKj9J
- r+2g==
-X-Gm-Message-State: AOJu0Yzzr2nAEHz8+8Lj10WJs0qRctnDiBdAojqufZIfC0SzvJo3jSRh
- 20EYdNSRrJvMha00eAKOxuEHckqNBx5WgcrptJkB+oeIysaznjLxKiKKnT1p7f79sUjOzhsWtep
- kFE3p5LkM
-X-Gm-Gg: AZuq6aJEW3IMitsQ4jaiIP9ObnwSpkiqofAD5MTBWxQWOTwfNvXDWV0SjYFNmwtOWFm
- 4deQRUYe5F79xHsoye0CBeGZ5cw09mxRGQhaNgp/XhZuYvhEzdES4BtNuDXVnvgT8SmxJOf58O0
- 9RTtKYn95E3RC691rPaXNwtFOUMKpJb9A6A4m5EPCCv/GTSY6YJ/pwRmiB7NPLLXxIYUSvXcTUV
- gUSOBsGtG6GSZDSA6udthUDF76Ql1Vc4muYpbL5qLK7NZ0txXGWHkRyrMsCZXQGEvmq7zwmR5Nn
- wU89+O/mPwqK0dSqXvT4PX5dUUxwuHox0Ef6uX0HXLMSvUrEsglUD6Rn8vpfEutl5bU0C5KeonG
- WrHZhG744rmF2VBn0sn+9T5HbTMml8LoqdV4YrMzhyPEeUhPyRUvD9JK/kPPCIH/lKhBJVPTbrl
- IxXdAXU3Lw17L/
-X-Received: by 2002:a05:600c:34ca:b0:480:3b4e:41ba with SMTP id
- 5b1f17b1804b1-482db48d595mr98625645e9.18.1769949620909; 
- Sun, 01 Feb 2026 04:40:20 -0800 (PST)
-Received: from tank.fosdem.net ([2001:67c:1810:f051:684b:abe9:4733:da16])
- by smtp.googlemail.com with ESMTPSA id
- 5b1f17b1804b1-480705956f1sm289923455e9.11.2026.02.01.04.40.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Feb 2026 04:40:20 -0800 (PST)
-From: Frank Vanbever <fvb@funkworks.be>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XyfDDDhyX8Ac for <buildroot@buildroot.org>;
+ Sun,  1 Feb 2026 18:39:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 14E8960AE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E8960AE6
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 14E8960AE6
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 18:39:32 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8D93CA4C55A0
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 19:39:24 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43446)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vmcLz-000000007Qn-2PiN
+ for buildroot@buildroot.org; Sun, 01 Feb 2026 18:39:23 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: fvb@funkworks.be
-Date: Sun,  1 Feb 2026 13:40:15 +0100
-Message-ID: <20260201124015.29808-1-fvb@funkworks.be>
-X-Mailer: git-send-email 2.48.1
+Date: Sun,  1 Feb 2026 19:39:22 +0100
+Message-ID: <20260201183923.3271804-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=funkworks-be.20230601.gappssmtp.com; s=20230601; t=1769949621; x=1770554421;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+KbkPAYMPce+vj0xQ3GKsrYBJF5MF+bqFfwbWHjux34=;
- b=UIwylCPucCoBg1zkTH2KhHRyNktiFIyyQ1OmzD9140Oevh+dQ1KtI3hpeQNYIYGcQG
- VfZ5X3lEr6gsmAWbGltLNE4ug+a4nncQoak1yuITUjtWVoHiSSl7xP/+dllr1Ce01bPw
- 2RXFx72G/zIU9e98ZhT7foha2ZYLWQ3ij3vXfc0AMQB+FXEnnHBzeFlSut92MqSWaDnB
- Nz4PiIcQ7W1k2TVnABByYdezAVULVcRKtpljCH9jkBLSYcq6SCG1Oi+xsclD3b7icm7z
- jAPuE1JkmBOi9y/MmMWv3ghF6c0Xznsz0OpwbXSRE0ZE+387h8X+JkH5k7RXjz+EHgUe
- rkLw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=funkworks.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1769971164;
+ bh=nEmwWHe5OrQ95dm/H11/qmi0NnKfJ77KoZQRLG7dpLY=;
+ h=From:To:Subject:Date:From;
+ b=luyS672CECDdzJo6rzmPSZBVkoiivYQoiI2t56IuSyFrIJ2kgozCX5DoFOQQQTfQp
+ EqFMnbnkvVg/P6mvXFef2wuELLhDvORb6xLrzhxHuz29AqF829ysfWtyorhQbmUVWw
+ wV6exXLi6oYPrAAckjRbv4/btDfZt5bdJeH/ef/MbqB5IC2Q+vIB7lXYj9DFSf6jx4
+ aLlq1yokJYhiwpo8JWMBF/eeAdMraUynQbnTvdFClG9zcwq0pBcWcV6zEQLfyv3Lsp
+ AcK8hY6ny6ElAwAnvDOiMg+Ytc+VtW/ouh2yL/7gGA+jJ9BLukllH2zeSFU7x0HZ4W
+ Bh0cgTqqruanw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=funkworks-be.20230601.gappssmtp.com
- header.i=@funkworks-be.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=UIwylCPu
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: update e-mail for Frank Vanbever
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=luyS672C
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{6, 12,
+ 18}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,26 +97,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Frank Vanbever <fvb@funkworks.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 08c98ec53b..aff26f8012 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1218,7 +1218,7 @@ F:	package/sane-backends/
- F:	package/upx/
- F:	package/zxing-cpp/
+diff --git a/linux/Config.in b/linux/Config.in
+index e9ab0d67e0..955f6877f3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
--N:	Frank Vanbever <frank.vanbever@mind.be>
-+N:	Frank Vanbever <fvb@funkworks.be>
- F:	package/libmodsecurity/
- F:	package/nginx-modsecurity/
- 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.18.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.18.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 64f8411046..2ba90714d3 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  b726a4d15cf9ae06219b56d87820776e34d89fbc137e55fb54a9b9c3015b8f1e  linux-6.18.7.tar.xz
+-sha256  16805dc62e1fa5ef8a3f466f3f44a2efb171b5206d6840ced4ba5475cf12c432  linux-6.12.67.tar.xz
+-sha256  76af9d4fce24cc5a1c9f1fcbba2e23c4e87bbc8e20525b1691206801f24d14ba  linux-6.6.121.tar.xz
++sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
++sha256  d367c7504bd4da520dd01eb08125d2d0ac088bc8af4cd56d236f2074dd4225b7  linux-6.12.68.tar.xz
++sha256  d48e0d9de04bef2fb9740bdb0124548bcab8867cdca00ff9712c110282b299d6  linux-6.6.122.tar.xz
+ sha256  b41666bda7223600386a07ebe1802f5029da2fe81f6a85d691b6ec6a707e5a29  linux-6.1.161.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  5d4c0994580dd3bbd5ffc5fcb81c22dd305b844c9d8c7b176cc41b28f7e29743  linux-5.15.198.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4727ba2048..c80ff97208 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -459,9 +459,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.248"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.198"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.161"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.121"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.67"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.7"	if BR2_KERNEL_HEADERS_6_18
++	default "6.6.122"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.68"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.8"	if BR2_KERNEL_HEADERS_6_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.48.1
+2.47.3
 
 _______________________________________________
 buildroot mailing list
