@@ -4,61 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E779E6529D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 20:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D1AEE65298
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 20:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12F3460EB3;
-	Sun,  1 Feb 2026 20:41:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BF2B60678;
+	Sun,  1 Feb 2026 20:53:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QAn3eFnN6l3u; Sun,  1 Feb 2026 20:41:09 +0000 (UTC)
+ id UqtsFOiCf-53; Sun,  1 Feb 2026 20:53:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25B146106D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 422F860BC5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769978469;
-	bh=sC0g4YT/IevuHFza2R/r6DvKTa2YWIudYH9wVhfD548=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=djMs/ZCIQfjqitsnIc3zAgEEC/iXO6N4QnDTtC7ReM1zrp2U4Trej16GQEeU4yoQO
-	 WlNvsc2nxDSFU1E70MO+hX8S9I79GAxQlLChMZf59Ju5hLdxOKjm96SuChgyZwK6ne
-	 3zIqa4NnEcjELddKC0EBUxGejvBgyWEZSUHF+mNJVlyM0bYepJrK3uAi+zZaBMnVDZ
-	 NYvWmEId/PyZjX9JVR0IRi/Te2IArjzDM5pjittL/XCN7SWW341RkRUkF+rFSu9eSP
-	 60pVtu+zexehlsmlRoPoAc5I8ZxP4iD2ji5EmL8+e668mDn8Dx0jRDNnRNm4glIIRX
-	 2BHWE8bfiGXLA==
+	s=default; t=1769979193;
+	bh=4OEgC6o/qX/4U0gl6LbnbyKd39YBWlTZpWw3DjCoLIo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=Er/XHoSqrFKW1E6Pw+jGlkXfqY/mqvOVXLTI3aBw0IutTUIjlqoHTrTc7DQx/qVxm
+	 cytE0R8/gjD3povbje2Xozcjy/u7zezyGtHXU38seyT7gT1POdgx1+3yPWn417Zx//
+	 mX55BFg7CUmNLwJ+zo2douCl843pjzSD2UhHbdi0iAPKHbnXPInEt2tbRa6c6OvWSK
+	 7l0PXviaT7JiC58Xn1L3mvyfjN8nF3qdmQUNSa8kiAxDJtAWeV9F6eX+cPSX2ctuqF
+	 I2dOO/wpTqKLkrOjaBreamMQAQeORBi7EF78QBg2UdCpfzfCjQx9MhB/niqAeVYTeY
+	 S5T2s7IXRQIWw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25B146106D;
-	Sun,  1 Feb 2026 20:41:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 422F860BC5;
+	Sun,  1 Feb 2026 20:53:13 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4541923E
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B6B4C1E0
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED0B68271D
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99631831BD
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:53:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LpoDJC2TdWNi for <buildroot@buildroot.org>;
- Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 970A1826C0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 970A1826C0
- for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F9DA8616F; Sun,  1 Feb 2026 20:40:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id IsX0gzOQxcQ9 for <buildroot@buildroot.org>;
+ Sun,  1 Feb 2026 20:53:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B00FB83183
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B00FB83183
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B00FB83183
+ for <buildroot@buildroot.org>; Sun,  1 Feb 2026 20:53:09 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-42fbbc3df8fso2868885f8f.2
+ for <buildroot@buildroot.org>; Sun, 01 Feb 2026 12:53:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1769979187; x=1770583987;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Ffnb3nAVDEsbe8W9jpVH4ABKayQtWoF1qdYEh1atbeY=;
+ b=ZsuenMDHfIe6cJPeOPItUy7F2s03teNfDn4SbxQgBNLwpYSVFGA4W4JwEhm36/0FBY
+ X+pXEHDiOILMt7wB1TRTl2dYLzQLcI+hNZDBq2Tyh8t5nHq5vlorrK5p75ohCRbJSG1s
+ 5XRwMM66eVmwEZ4O+mrGgVcgDyBhRDJ8xK/vLP/Cjr+C3esVONVBQx3nECMxKZUkZoTx
+ ne4MmW0FSdzTlknCF3IL6wZ/iNL1Ql36qH5Q8mrtE4kQhN7z7f+5+s8ZnQbOJAXVjfk0
+ voYTtdVizCxc+TN0oS8uK9iy+jgaZk/FeVoKGC1FLcroXxAV9Gkwl9uX8mbeiwzTk4u7
+ 5P/w==
+X-Gm-Message-State: AOJu0YzUw7HXQIAW66peMfcVYYRieUYNywtaEhvtGfBztLsevVdwDrZc
+ qdTrFsrZBJm/akL4ANNSj14xfytH/Z9B2LiFQXCs8HCRw1TglHwmxE98JGXTgpH/cLWYi+NbWc/
+ 3iANm0F4=
+X-Gm-Gg: AZuq6aLhG5Rrycu3fCa1sNxR0sMzMxW1e9C7LwwiWsYmQ6evXc24bcL81uJC6tmlGWk
+ d+yYKnyh6EDkxhrQTd8TuAZUyl4T/bST7kEDaOrYQ/jbglhtjC3Tq7zaKghIK2PtnCUUo192nFl
+ g69f6hhyVxikZNmcB1bEUrOR12yrfbg0xfEtuJ1T3tv3iYZbY63r93gLeCYKsAGjU/53gWLc09C
+ u6RcCxw73ChFH+E7aozxbOitbQdy6mt8e3lKIoe6H6JT7zOUBB2nBMs6vugkzOhPIoo76vwEKcz
+ MVvZTMhiaWUajTyXE94ynssndge124pFT+yW0sj3W5imWjiLvPz544zS07pCh1isrGXxFDRuT8D
+ Sit8O48tC/jc45XRF8BmkIl7bvH03tBXIVia7WLz9FGA65sYzSOpZIi8LQPtNYSxRDV6KS5V0O6
+ UzItSeQ1c/rN2vxF/FE8cYGIyYrNAgLkhuoPyW9YSGuS1ag426Mcb8LD9xaIevkFZbfbYNVilb1
+ +8KX0kbQtU=
+X-Received: by 2002:a05:6000:1884:b0:430:fb6d:1442 with SMTP id
+ ffacd0b85a97d-435f3aba254mr13949015f8f.62.1769979187236; 
+ Sun, 01 Feb 2026 12:53:07 -0800 (PST)
+Received: from dragon.wifiguest.local
+ (220.211-78-194.adsl-static.isp.belgacom.be. [194.78.211.220])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-435e10e46cesm38625843f8f.7.2026.02.01.12.53.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 01 Feb 2026 12:53:07 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Sun, 1 Feb 2026 21:27:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4367b88a0f83c75c870592aa3483c192e1ee7b91
-X-Git-Newrev: 91523ae39c9798e04162e25721826cc691d11cda
-X-Patchwork-Hint: ignore
-Message-Id: <20260201204055.7F9DA8616F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.{6, 12,
- 18}.x series
+Date: Sun,  1 Feb 2026 21:52:28 +0100
+Message-ID: <20260201205228.96782-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1769979187; x=1770583987; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ffnb3nAVDEsbe8W9jpVH4ABKayQtWoF1qdYEh1atbeY=;
+ b=Zp1GoNq47xSUVbkS4h5PXFyvud5RWJv9gRL8sidkv1zqZKBdnpF0n3V+W5NRlzoa0n
+ 5DhwW9sW4FUAZ520XnEnG4Imw2WmGhIgZTeM2d8VnRxQ5Kv2o5B4u0zmrJBV1b7bW5c1
+ LWZTkSzUeaZ4/3GVMEhfrcC8yZdWlx0n6pQeTrHh7Ku3k/QKxf78/jOn7DvEFB34tAG6
+ T/g933M5xJ22AxJRkiL4lThywvPTWsZmbKrAvlSBORUh1dpgsBszVmyhB9bKYARxdcbL
+ ajgIcUR/nQQn3RFn46nA25MR8Rdk0Tu0bTF6V6vZRRJ42db7ypqzH2IdgjGB5vz7BOBY
+ CMAg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Zp1GoNq4
+Subject: [Buildroot] [PATCH for 2025.02.x] Package/libopenssl: security bump
+ to v3.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,68 +120,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: thomas.perale@mind.be
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91523ae39c9798e04162e25721826cc691d11cda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This fixes the following vulnerabilities:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+CVE-2025-11187 - Improper validation of PBMAC1 parameters in PKCS#12 MAC verification.
+CVE-2025-15467 - Stack buffer overflow in CMS AuthEnvelopedData parsing.
+CVE-2025-15468 - NULL dereference in SSL_CIPHER_find() function on unknown cipher ID.
+CVE-2025-66199 - TLS 1.3 CompressedCertificate excessive memory allocation.
+CVE-2025-68160 - Heap out-of-bounds write in BIO_f_linebuffer on short writes.
+CVE-2025-69418 - Unauthenticated/unencrypted trailing bytes with low-level OCB function calls.
+CVE-2025-69419 - Out of bounds write in PKCS12_get_friendlyname() UTF-8 conversion.
+CVE-2025-69420 - Missing ASN1_TYPE validation in TS_RESP_verify_response() function.
+CVE-2025-69421 - NULL Pointer Dereference in PKCS12_item_decrypt_d2i_ex() function.
+CVE-2026-22795 - Missing ASN1_TYPE validation in PKCS#12 parsing.
+CVE-2026-22796 - ASN1_TYPE Type Confusion in the PKCS7_digest_from_attributes() function.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6b6c745e08..0ce6035e41 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index abcc6be8f8..ea288054e9 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openssl/openssl/releases/download/openssl-3.4.3/openssl-3.4.3.tar.gz.sha256
+-sha256  fa727ed1399a64e754030a033435003991aee36bda9a5b080995cb2ac5cf7f37  openssl-3.4.3.tar.gz
++# From https://github.com/openssl/openssl/releases/download/openssl-3.4.4/openssl-3.4.4.tar.gz.sha256
++sha256  7bdf55ac20f2779e99e5eca306f824fad2b37dee5a06cc35ed5a8b85a6060010  openssl-3.4.4.tar.gz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.18.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.18.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 64f8411046..2ba90714d3 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  b726a4d15cf9ae06219b56d87820776e34d89fbc137e55fb54a9b9c3015b8f1e  linux-6.18.7.tar.xz
--sha256  16805dc62e1fa5ef8a3f466f3f44a2efb171b5206d6840ced4ba5475cf12c432  linux-6.12.67.tar.xz
--sha256  76af9d4fce24cc5a1c9f1fcbba2e23c4e87bbc8e20525b1691206801f24d14ba  linux-6.6.121.tar.xz
-+sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-+sha256  d367c7504bd4da520dd01eb08125d2d0ac088bc8af4cd56d236f2074dd4225b7  linux-6.12.68.tar.xz
-+sha256  d48e0d9de04bef2fb9740bdb0124548bcab8867cdca00ff9712c110282b299d6  linux-6.6.122.tar.xz
- sha256  b41666bda7223600386a07ebe1802f5029da2fe81f6a85d691b6ec6a707e5a29  linux-6.1.161.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  5d4c0994580dd3bbd5ffc5fcb81c22dd305b844c9d8c7b176cc41b28f7e29743  linux-5.15.198.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4727ba2048..c80ff97208 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -459,9 +459,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.248"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.198"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.161"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.121"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.67"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.7"	if BR2_KERNEL_HEADERS_6_18
-+	default "6.6.122"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.68"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.8"	if BR2_KERNEL_HEADERS_6_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 24213871fe..8e3ae4cc21 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 3.4.3
++LIBOPENSSL_VERSION = 3.4.4
+ LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
+-- 
+2.51.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
