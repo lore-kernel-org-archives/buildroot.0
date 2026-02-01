@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8699FE7C715
-	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 09:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D34EE7C6FC
+	for <buildroot@archiver.kernel.org>; Sun,  1 Feb 2026 09:27:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4352760F46;
-	Sun,  1 Feb 2026 09:27:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FD6284219;
+	Sun,  1 Feb 2026 09:27:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C667fJOQaACB; Sun,  1 Feb 2026 09:27:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NjX27mZYPtU8; Sun,  1 Feb 2026 09:27:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65C8961116
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DE0F8421A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1769938048;
-	bh=RD+Mxkhl+HjU0p1L3jtEDiMupOwoioBPMYPSYsCrPdM=;
+	s=default; t=1769938049;
+	bh=H88agwTySyVKZ1BOQvzUsZzcXVKPMJouGxas58m0Mhg=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=e6PskqzvxZfgPOpsfYP+scXq/BqVNRaGrAgVti5W/39Rg8Gntpipa/8oodd9zNnKs
-	 KfEU301PdUTnCHv07ridA4uerMtWlI5rjh/lW+AodDyJzAoj8QZgjTdYTg8tMLTr7h
-	 5zu3+m7cumP6eTIWeMJib2L2aZCClMFu5rmjPRI4UAzOQDvxEP8U+OGplj6Vv4pSgN
-	 zW+sUinnCf7tfVAoxd+XROpye8uFtviQbPVe5EzkdYMc8+PVTlNHLkGrDOWAotMJcU
-	 8veqwJ6aSJJxt407p4yma3kCx+t9DkYNLep2UzxZILdmvOC9/nY8MTKRjel8Y12EcS
-	 95aqNsVYvghRA==
+	b=AXg9/iPqlTw7coXRd7J+54vDdM+spDrAHsMSU19ZGXG6nsEiG2EOBY/jMdKkMzsr4
+	 KWv3L0shAhMH0V9EDIYYRCxo0t1sjy9G6F519TVORwsf2Xla+B//iQsJRU7KbL5RaB
+	 E7fJ27GQSwanMado4MUgZwUtud02h9JokO30lVsg/z08VY1TXzKGp0N3ADuV+bDEUD
+	 67fjkvr2gNmJE97Wp4FR9CRMXpxjD7MtCraZ7y65F4HSQjf83YIXU/NTanRXNwm+Z+
+	 IZ27hbr6pFLYVKVdBrr4Z3vZVHvBh2S1/gVxcqdBY3GYjKaUUDYHMrlsvKanN3Z3Mw
+	 xmfL05kLcCJEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65C8961116;
-	Sun,  1 Feb 2026 09:27:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C6E134C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DE0F8421A;
+	Sun,  1 Feb 2026 09:27:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 560F234E
  for <buildroot@buildroot.org>; Sun,  1 Feb 2026 09:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 341FE40378
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E49B8421A
  for <buildroot@buildroot.org>; Sun,  1 Feb 2026 09:27:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U7JbG6LecG6Y for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B7_VGo1TaDWR for <buildroot@buildroot.org>;
  Sun,  1 Feb 2026 09:27:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 634EA4002A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6761484219
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 634EA4002A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6761484219
  for <buildroot@buildroot.org>; Sun,  1 Feb 2026 09:27:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58CE386115; Sun,  1 Feb 2026 09:27:25 +0000 (UTC)
+ id 4F63386114; Sun,  1 Feb 2026 09:27:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Feb 2026 10:24:23 +0100
+Date: Sun, 1 Feb 2026 10:22:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5715e7da20b37cb3b704bb1a18dd8a09e1fcbc28
-X-Git-Newrev: 5d76026af735368cece979dfc551382135797fea
+X-Git-Oldrev: b16009c06d9a62bd0ad036918f0cec94ba367f25
+X-Git-Newrev: 5715e7da20b37cb3b704bb1a18dd8a09e1fcbc28
 X-Patchwork-Hint: ignore
-Message-Id: <20260201092725.58CE386115@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/acmesystems_acqua_a5_*: bump to
- Linux 6.18.8
+Message-Id: <20260201092725.4F63386114@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/expat: security bump version to
+ 2.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,51 +76,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d76026af735368cece979dfc551382135797fea
+commit: https://git.buildroot.net/buildroot/commit/?id=5715e7da20b37cb3b704bb1a18dd8a09e1fcbc28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+https://github.com/libexpat/libexpat/blob/R_2_7_4/expat/Changes
+
+Fixes CVE-2026-24515 & CVE-2026-25210.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
- configs/acmesystems_acqua_a5_256mb_defconfig        | 2 +-
- configs/acmesystems_acqua_a5_512mb_defconfig        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/expat/expat.hash | 3 ++-
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-index 427bcedae7..f83883b936 100644
---- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
-+++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  d0a78bf3f0d12aaa10af3b5adcaed5bc767b5b78705e5ef885d5e930b72e25d5  linux-6.18.1.tar.xz
-+sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index 74ce958cd3..ca4ba27a28 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index d3912659db..240dfc46b6 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 9d99c38a45..7536e7cb1d 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/libexpat/libexpat/releases/tag/R_2_7_4
++sha256  9e9cabb457c1e09de91db2706d8365645792638eb3be1f94dbb2149301086ac0  expat-2.7.4.tar.xz
+ # Locally calculated
+-sha256  71df8f40706a7bb0a80a5367079ea75d91da4f8c65c58ec59bcdfbf7decdab9f  expat-2.7.3.tar.xz
+ sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 07aba205cf..215c34e9cf 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.7.3
++EXPAT_VERSION = 2.7.4
+ EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
