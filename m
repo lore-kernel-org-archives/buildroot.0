@@ -4,115 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D32E73158
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 11:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9AF5E7315B
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 11:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC32D81F36;
-	Mon,  2 Feb 2026 11:20:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 957068375B;
+	Mon,  2 Feb 2026 11:38:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xi3O746PotY0; Mon,  2 Feb 2026 11:20:19 +0000 (UTC)
+ id iIic33RO928I; Mon,  2 Feb 2026 11:38:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B1A781F93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93D698379C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770031219;
-	bh=Cn95g2cU8NpYdgzLOJK36T3w6YrES8m/4GfsjfyMqx4=;
-	h=Date:To:References:Cc:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SurzX/7ktjCxgx4szbV8WoFSb380c/uZDdTpJkat2cnudGiGTAuoScaoyrYd1fZPR
-	 q9M+lTNOzZEQccAw7H6HtgElBC3n9yPKJUaDN8F1vca1ztNdk+MmCFf2JEJ2kd7M50
-	 Jxcatbbf/jM+l73BhpwGjDQouj7DXhUD+2I0TwzqOKuXvbvNKb4Q8l7fgZxWYHiwJ0
-	 PIBRbIzbEX9+WFv5Wc2XjoFOxwES/eJn2K2YWn7SHaSyRS6hSjw5jiVB0XSPMF6KEa
-	 eTT/SQKi3Vkhy/azrtpE8NDCrYPa/UmKJLqFnL0Sgiz2AeOjVre1xbiP0A+UQNA/dU
-	 KfYp4O/60vP1w==
+	s=default; t=1770032338;
+	bh=e3G0GhehfZ40T5v2byVQ2O91nrdln3ecg9M6vTFO1Tk=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=QtVgz/oJugVTI8Ok/A5GqNVhzlcAJBymt7dkMaC/g5PknIQen+WbN4ieQuGeGVJP6
+	 h8oEVr91o5Fyx4F0W4lwvWv8fsyAha13PJLQ4wK0gABMNKSVe1tCuf4ttbXAWxJCyy
+	 o7XkCp1Zd/d5nztF+N5pzdR947S0cWHqDsHE4PxyEZY2PenKm/3K7U271VNjrNHlT2
+	 Wo4cL4kwtM9IWZmYl7QzhBGCwZERghEj+RZFGXlOGAILZqxvfircTdgZJK70+JDkOg
+	 Lr+nyFrdc36tQnqQ644Pdk+VCSWJJSJW1G/qnMZNXC1hfTQ6/+RMECYTP6BB7GSg+V
+	 uVBWhMciJFD7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B1A781F93;
-	Mon,  2 Feb 2026 11:20:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93D698379C;
+	Mon,  2 Feb 2026 11:38:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DA4921E0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:20:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 95FC41E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7D7740A84
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:20:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84ACC40A5A
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xfqV_NgeMbDl for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 11:20:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AB20840A54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB20840A54
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB20840A54
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:20:17 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4801c2fae63so32055485e9.2
- for <buildroot@buildroot.org>; Mon, 02 Feb 2026 03:20:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770031215; x=1770636015;
- h=content-transfer-encoding:in-reply-to:cc:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=YP+E7B0OBaf0feRlkw9nTMRkFOLWF4zfdREYWf8VLE8=;
- b=p97Zn8+75wyFqqDCf5yAsp379dGCPXRbQjVq8u2+UiVZm16NhTM9KNj+LQTyIaFcBX
- ekEWnKa6etbML4t3ZM2H5YTbG31qHes9dXdjkTwwBDkQ9bjP/RpoEHWPQYzgAfB3tIm/
- K1PBLaSfmESHo++RII+CyYJfEKId1NXxn+nXxlDlrM904BfBVmd2xsOyCAlUHuxFMk+O
- EMWENwOVLjY4sSvRsURQm0nSXGX+ffAZLwVyWqwjMR1B3npd5/Ym9bETXjf9KRTkgWel
- J7rduMLezOtF5fxwA79OdNfw7IQf0RvOMwN1x8Oe3pj36nUyOctvQx0MEJsXbCF0m8Pm
- rpaA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVUIpW1zKjkMc2B3nLW9pYWryQHrB3zb3iT3vwZSCiZA6nXH6qXPSNhYkmh2L66+PhRMcpdsaiO3QA=@buildroot.org
-X-Gm-Message-State: AOJu0YwmO6wCqinCDNnXtQQMEik6LCPVH9qEye/Nbk4J/J/qZJiR3uXw
- xj4SL2Y+TbSRK/p3D41eFIDOdJKuWf40V6lSqcVudgFHwdo7k5V4oH53ixp6eWdB7LlK9Zs8sm5
- WSYcoIOY=
-X-Gm-Gg: AZuq6aLBTLGAuYbRMEegZk2EMb63GPNgAiDfOEHE0LViTjcqQIUkHbm73Xw2WEs1nza
- DUKtjC5vC2sDCLA3t3Vn8W9Cq2O8EfgmCyBkdttKVqKpAgxHvo+8Pm2AzfLYEMT/U3K9KSgOI9I
- K1ShSPJTpOfrSMarr5WFwYKp36vzLb31CO7THTMFRauP6xHO0WsJVfbvUf3JDljUkMHXgh6qI++
- On2/8Y50YzPwwTCxRFfLRcfMHYobq76p2kZsFs3cYiFOlQtgi2x3Eod/IDhXbNEXwF1r2ZdACMa
- qJ7MGD0zhXxh7Is4O/CL1/Q0SW8J/ed3M69lVfoiIgfbVgmfT/Zz+oldu+eXtXUXl1o0Peo89wK
- WhelCUDSS7F3W2/P37MXoH6j4++pJEAvHYTw2iV5rRjcRYICaW9EDoMF1uo1JzuhI5xcYjdZ9Kx
- 09uAW+ZcR0KPFDwpAylUBKvt1sZoANUYAKy+/7ullb3ES1EJIwezi5GGDi6nIZGKI=
-X-Received: by 2002:a05:600c:628c:b0:480:2521:4d92 with SMTP id
- 5b1f17b1804b1-482db47ce39mr143401935e9.24.1770031215577; 
- Mon, 02 Feb 2026 03:20:15 -0800 (PST)
-Received: from [172.16.2.208] (host-109-89-232-55.dynamic.voo.be.
- [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-482e04ed4d2sm90284205e9.7.2026.02.02.03.20.15
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 02 Feb 2026 03:20:15 -0800 (PST)
-Message-ID: <5ad8d637-43dc-462a-97c4-69cd80e50de3@smile.fr>
-Date: Mon, 2 Feb 2026 12:20:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Buildroot Notifications <buildroot.notifications@gmail.com>,
- buildroot@buildroot.org
-References: <69798de3.050a0220.10c4f0.eab1@mx.google.com>
-Content-Language: fr
-Cc: Julien Olivain <ju.o@free.fr>
-In-Reply-To: <69798de3.050a0220.10c4f0.eab1@mx.google.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1770031215; x=1770636015; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:cc:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=YP+E7B0OBaf0feRlkw9nTMRkFOLWF4zfdREYWf8VLE8=;
- b=uDLxEMohSMB53KFyWkZHTMffxO9QmoTPJkO6XUm/MAIjWfgLoabVTrlEjnZ7RhWaUc
- zUimYqc67m3LHBmN9jwgEIff2MyPBXJ63PEASq7mxrI/7Mm6kei/rWqywc/bKsJ7dWn6
- lBQ/hA1nCOZYKwH5dNsZe4oYqChjivMF5cLTc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=uDLxEMoh
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2026-01-27
+ id dd2whT5ctelt for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 11:38:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 360A54099B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 360A54099B
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:38:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1D8498630F; Mon,  2 Feb 2026 11:38:56 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 2 Feb 2026 12:38:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b9a8f187e029ffeb040327d082dacf1fa373cc7d
+X-Git-Newrev: a0081aa1f8c332d5fb6dbb19de9e46cb39be4931
+X-Patchwork-Hint: ignore
+Message-Id: <20260202113856.1D8498630F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx: security bump to 1.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,49 +69,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sIEFsbCwKCkxlIDI4LzAxLzIwMjYgw6AgMDU6MTcsIEJ1aWxkcm9vdCBOb3RpZmljYXRp
-b25zIGEgw6ljcml0wqA6Cj4gSGVsbG8sCj4gCgo+IAo+IAo+IEdpdGxhYiBDSSByZXN1bHRzIGZv
-ciAyMDI2LTAxLTI3Cj4gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KPiAKPiBEZXRh
-aWwgb2YgcnVudGltZS10ZXN0IGZhaWx1cmVzIGZvciBtYXN0ZXIKPiAtLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAKPiAgICAgICAgICAgICAgcnVudGltZS10ZXN0
-IHwgICAgICAgICAgICAgICAgICAgICAgICBsaW5rIHRvIHRoZSBqb2IgICAgICAgICAgICAgICAg
-ICAgICAgICB8IG9ycGg/Cj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0t
-LQo+ICAgICAgICAgIFRlc3RQeXRob25QeWJpbmQgfCBodHRwczovL2dpdGxhYi5jb20vYnVpbGRy
-b290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzEyODU3NDEzOTY1IHwgICAgICAKPiAuLi5QeXRob25Q
-eTNNYWdpY1dvcm1ob2xlIHwgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRy
-b290Ly0vam9icy8xMjg1NzQxMzk0MSB8ICAgICAgCj4gICAgICAgICAgVGVzdFBocEx1YUx1YWpp
-dCB8IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTI4
-NTc0MTM4MTQgfCAgICAgIAo+ICAgICAgICAgICAgIFRlc3RQaHBMdWFMdWEgfCBodHRwczovL2dp
-dGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzEyODU3NDEzODEyIHwgICAg
-ICAKPiAgIFRlc3ROb2RlSlNNb2R1bGVIb3N0U3JjIHwgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxk
-cm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMjg1NzQxMzc2NiB8ICAgICAgCj4gICBUZXN0Tm9k
-ZUpTTW9kdWxlSG9zdEJpbiB8IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxk
-cm9vdC8tL2pvYnMvMTI4NTc0MTM3NjUgfCAgICAgIAo+ICAgICAgICAgICBUZXN0Tm9kZUpTQmFz
-aWMgfCBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzEy
-ODU3NDEzNzY0IHwgICAgICAKPiAgICAgICAgICAgICAgIFRlc3RNYXJpYURCIHwgaHR0cHM6Ly9n
-aXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMjg1NzQxMzczNCB8ICAg
-ICAgCj4gICAgICAgICAgICAgICBUZXN0Rmx1dHRlciB8IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWls
-ZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTI4NTc0MTM0MTYgfCAgICAgIAo+ICAgICAgVGVz
-dEZpcmV3YWxsZFN5c3RlbWQgfCBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWls
-ZHJvb3QvLS9qb2JzLzEyODU3NDEzNDEyIHwgT1JQSCAKPiAgICAgICAgICAgICAgIFRlc3RCaXRj
-b2luIHwgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8x
-Mjg1NzQxMzM3MyB8ICAgICAgCj4gICAgICAgICAgICAgICBUZXN0QXZvY2FkbyB8IGh0dHBzOi8v
-Z2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTI4NTc0MTMzNjQgfCBP
-UlBIIAo+IAoKVGVzdCBBdm9jYWRvIGZhaWwgZm9sbG93aW5nIHRoZSBweXRob24gMy4xNCB2ZXJz
-aW9uIGJ1bXAuCgpPdXIgYXZvY2FkbyB2ZXJzaW9uIGlzIHF1aXRlIG9sZCwgbmV3ZXIgdmVyc2lv
-biAoMTEyKykgc2VlbXMgdG8gaGF2ZSBmaXhlZApweXRob24gMy4xNCBzdXBwb3J0OgoKaHR0cHM6
-Ly9naXRodWIuY29tL2F2b2NhZG8tZnJhbWV3b3JrL2F2b2NhZG8vY29tbWl0L2MxZGU0NGZhYmMw
-NDdmMTQ5ZDZhOWY3NDJhZGVjZDhlZDVjZjkzOWQKCkkganVzdCBzZW50IGEgcGF0Y2g6Cmh0dHBz
-Oi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDI2MDIwMjExMTkyNy4xMzYxMDQtMS1yb21h
-aW4ubmFvdXJAc21pbGUuZnIvVC8jdQoKQmVzdCByZWdhcmRzLApSb21haW4KCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=a0081aa1f8c332d5fb6dbb19de9e46cb39be4931
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See here for changes:
+https://nginx.org/en/CHANGES-1.28
+
+Following security related issues are fixed:
+    *) Security: processing of a specially crafted login/password when using
+       the "none" authentication method in the ngx_mail_smtp_module might
+       cause worker process memory disclosure to the authentication server
+       (CVE-2025-53859).
+    *) Security: insufficient check in virtual servers handling with TLSv1.3
+       SNI allowed to reuse SSL sessions in a different virtual server, to
+       bypass client SSL certificates verification (CVE-2025-23419).
+    *) Security: processing of a specially crafted mp4 file by the
+       ngx_http_mp4_module might cause a worker process crash
+       (CVE-2024-7347).
+       Thanks to Nils Bars.
+    *) Security: when using HTTP/3, processing of a specially crafted QUIC
+       session might cause a worker process crash, worker process memory
+       disclosure on systems with MTU larger than 4096 bytes, or might have
+       potential other impact (CVE-2024-32760, CVE-2024-31079,
+       CVE-2024-35200, CVE-2024-34161).
+       Thanks to Nils Bars of CISPA.
+
+Update patch 0007, which does not apply cleanly.
+License file was changed, year was bumped to 2025.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch | 11 ++++-------
+ package/nginx/nginx.hash                                      |  4 ++--
+ package/nginx/nginx.mk                                        |  2 +-
+ 3 files changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch b/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
+index c10fcd11c9..4656634bd3 100644
+--- a/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
++++ b/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
+@@ -10,11 +10,11 @@ Signed-off-by: Martin Bark <martin@barkynet.com>
+  1 file changed, 4 insertions(+), 2 deletions(-)
+ 
+ diff --git a/src/os/unix/ngx_linux_config.h b/src/os/unix/ngx_linux_config.h
+-index 2f6129d..4244086 100644
++index d99358c93..612935524 100644
+ --- a/src/os/unix/ngx_linux_config.h
+ +++ b/src/os/unix/ngx_linux_config.h
+-@@ -55,10 +55,12 @@
+- #include <crypt.h>
++@@ -54,10 +54,12 @@
++ #include <sys/ioctl.h>
+  #include <sys/utsname.h>        /* uname() */
+  
+ -#include <dlfcn.h>
+@@ -27,7 +27,4 @@ index 2f6129d..4244086 100644
+ +#endif
+  
+  
+- #if (NGX_HAVE_POSIX_SEM)
+--- 
+-2.8.2
+-
++ #if (NGX_HAVE_CRYPT_H)
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 77220665f3..7b79036b20 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  69ee2b237744036e61d24b836668aad3040dda461fe6f570f1787eab570c75aa  nginx-1.26.3.tar.gz
++sha256  40e7a0916d121e8905ef50f2a738b675599e42b2224a582dd938603fed15788e  nginx-1.28.1.tar.gz
+ # License files, locally calculated
+-sha256  f19c4caea60247490199c5a6d0134281e3fb20b3d7577e6873c628597f5381d9  LICENSE
++sha256  77c01620abf36ed747b7eca4bd271e49023fe3a8e2b3525bcf4b09c8e3aa28e4  LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 6ca1ac2075..41490caee2 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.26.3
++NGINX_VERSION = 1.28.1
+ NGINX_SITE = https://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
