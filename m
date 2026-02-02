@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 302EFE73156
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 10:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 434ADE73153
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 10:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7605440A7B;
-	Mon,  2 Feb 2026 10:22:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F54180E0B;
+	Mon,  2 Feb 2026 10:24:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MHfpQLEDtL0d; Mon,  2 Feb 2026 10:22:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7EBuwpIVWfsD; Mon,  2 Feb 2026 10:24:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F0D840A16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71E6480DB8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770027762;
-	bh=c6tL8nvRSRq4jm70hWT3krZgLalSjMcQM148ISbqIMA=;
+	s=default; t=1770027886;
+	bh=vsvV+STFcOq0/fnt2e+Jxfo9QPnMYaqHyuIddkJEhEE=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=AYEuAVMehB4QtEs874PcNc7CTCOAgGmfbV8gis87eSKcgx8gDldHXvCAD9X8IFCEo
-	 i0A2GdjhKs0+bNmGxWGbCbA9i4D5wVEH5V+bOuUp+V9looBsUTpInFmTLSlAatdTCw
-	 JUkL+7nmch2uhUiOPEGNrRE6RNo8tZImX7SlyfakXrNuHfr2CoAGEOW/S94G9GBPOx
-	 EORHtTtNBEuXqBWVD9MdMNPFXQjETxozSwY8Q/AomeH2WPGQrdW2+qecvwskNRtSQE
-	 /YQbq+bUDUnM3JLfyf+7sfrCQAxwV8Y0MOmvoewdfH8ytVoSZFZMGASL58GtjcZmSg
-	 juF8Fpp8YySdQ==
+	b=Wku/HhJW84OYZ2Gx2Px2HMT7zFjU8XpF/A/HpopcPiCO5mj7ELHrFUk8ofXfA7fPB
+	 70vLy4+K1lZhYn2JBF/ldSv53ZC2FNU3QvOHQUhYOCIYr3QZlPOoaDeWTGz692Y6EU
+	 wD08TqSjHZ2lidXezLyHHH0td9A/pfUXLQ/0U4ppDYMZeHqW9Z/cwPGyUcEKKvt+Su
+	 UnFPADgxdMMsuoG2VSofvZAU0W8Fm3YXpekW80u7DS/sbhZXQRVM8/0685RB1g/akF
+	 AItL2JoCjeUu7ORny6nQLmbFkkvzcptKhKWjAgr+qbhsgrXG/TfTwbAtGphxSMGLYH
+	 5C1BUkYH4uEvA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F0D840A16;
-	Mon,  2 Feb 2026 10:22:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DFE7A149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:22:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71E6480DB8;
+	Mon,  2 Feb 2026 10:24:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 61770149
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C58DE60714
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:22:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2013D40266
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:24:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NDACh41IlcXx for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 10:22:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 65FaUDVRA5_h for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 10:24:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
  helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BD3CE60618
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD3CE60618
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 07F69401FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07F69401FE
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BD3CE60618
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:22:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 07F69401FE
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:24:43 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 15C094E42367
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:22:38 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 9CD0B4E42367;
+ Mon,  2 Feb 2026 10:24:41 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id DFDFE60767;
- Mon,  2 Feb 2026 10:22:37 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 725FB60767;
+ Mon,  2 Feb 2026 10:24:41 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 43EAD119A8888; Mon,  2 Feb 2026 11:22:36 +0100 (CET)
-Date: Mon, 2 Feb 2026 11:22:35 +0100
+ with ESMTPSA id D7A6C119A8888; Mon,  2 Feb 2026 11:24:39 +0100 (CET)
+Date: Mon, 2 Feb 2026 11:24:39 +0100
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: buildroot@buildroot.org, Leon Anavi <leon.anavi@konsulko.com>, 
  Luca Ceresoli <luca.ceresoli@bootlin.com>,
@@ -65,30 +65,30 @@ Cc: buildroot@buildroot.org, Leon Anavi <leon.anavi@konsulko.com>,
  Jagan Teki <jagan@amarulasolutions.com>,
  Lothar Felten <lothar.felten@gmail.com>, 
  Fabio Estevam <festevam@gmail.com>
-Message-ID: <aYB6cGiRy50rk5i6@windsurf>
+Message-ID: <aYB7OetRo_gDmOGA@windsurf>
 References: <20260114195451.3978704-1-giulio.benetti@benettiengineering.com>
- <20260114195451.3978704-10-giulio.benetti@benettiengineering.com>
+ <20260114195451.3978704-11-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260114195451.3978704-10-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20260114195451.3978704-11-giulio.benetti@benettiengineering.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1770027757; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=pgIPQ7WJXvql+kX03Ivj1tkAIhFVQI4XovFwOtsVC4M=;
- b=hO19C1z6rk41yreRMvuenQ9kEBK+yVgSp0GiqMF0UmBfWqK/uGcs4sJPcWt+/wYQ6GnP9v
- eOCOKv4sAv4hDADRcmt07lik5DKc47We3OF6bwuojiyqf+e/k7Bx5ZdV+dw5e493VP9J35
- x1vE6R9Seh99HHL1qbSUrI+WHqdEqYSlVvCZ/K8WXp/w3XJHPPFkQ3YdWhp9Fxoyca3fLO
- zwbjgcyAWELMqaxPi8XDCO68iir3Q8FhdXC+wMZTZzzcjde9nNQZwG81uR3qBj6D3iRNgt
- DsHHyWLPopo0Hbk0ZicApLpCcap4SglKJolHdH79tMzu3+cKf7K1lZ8J88kQBQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1770027880; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=14hkzNxzjajvOyBUd5KauRk7s46FjR4Z4p45eRI8klw=;
+ b=1tlq//ByDYMK6KN6kgIttuCR5LiBcBtSsBy37Aj+kRzpw0HbKUMR9RsVnf8GhpvrNJT1l7
+ 6dhCIcqNXh1Cv/v23W83fdfQfmovM21e76UG7VYSR+Ib3rsaIPP/hbRWolmBddUcAzVIV9
+ 9wQZkD8mLQAIibkn4dhZZBt65wPssYzsB1XGBOrdDoaXUKZj6gBzwrYhv9UthWv8bGbbgB
+ Y2Kk/MMbboYEhHY3VUdBasKdOtWX/x7fXy3T3u3kFJfaZbDzsjo7E429H47cZJevSYSTqF
+ qbiETfGgPSFsYy1wTdZ81/PhHweh7gKoQiRacS2Nvn5jgmUbfeR2aqhXUTVaRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=hO19C1z6
-Subject: Re: [Buildroot] [PATCH 09/17] board/olimex/axx-common: introduce
- folder to avoid files redundancy
+ header.a=rsa-sha256 header.s=dkim header.b=1tlq//By
+Subject: Re: [Buildroot] [PATCH 10/17] configs/olimex_a10_olinuxino: bump
+ Linux to 6.18.5 and U-Boot to 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,23 +107,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 14, 2026 at 08:54:42PM +0100, Giulio Benetti wrote:
-> All sunxi boards can be handled by the same exact fileset so let's
-> introduce axx-common folder with hash patches, overlay, genimage and a
-> linux local patch to be switched to by subsequent patches.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On Wed, Jan 14, 2026 at 08:54:43PM +0100, Giulio Benetti wrote:
+> The patch:
+> * bumps Linux kernel to version 6.18.5
+> * bumps U-Boot to version 2026.01
+> * forces check hashes
 
-If there's a common folder, I guess it should be named
-allwinner-common or something like that, because it's hard to realize
-from the name that axx-common refers to "Allwinner boards".
+Causes:
 
-However, I am not sure I am a fan of sharing the hash files. Indeed,
-it will only work if all those boards are always bumped all together,
-which may not be the case in the future: one contributor may only have
-access to just one board, or a subset of boards, and would therefore
-only be able to provide a defconfig bump for the subset of the boards
-he has access to.
+WARNING: configs/olimex_a10_olinuxino_lime_defconfig:0: lib_defconfig.ForceCheckHash was expected to fail, did you fix the file and forget to update .checkpackageignore?
 
 Thomas
 -- 
