@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76CD1E7315B
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 11:43:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CD4E7315A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 11:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3253E83103;
-	Mon,  2 Feb 2026 11:43:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7F9883C61;
+	Mon,  2 Feb 2026 11:43:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OjP03dNZh83o; Mon,  2 Feb 2026 11:43:05 +0000 (UTC)
+ id 1FksZbDmuJrR; Mon,  2 Feb 2026 11:43:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E2D78375B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5261583BA7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770032585;
-	bh=zqDgPhCbl2mTA8VoWK7gTTUpNUvtkNEpdGIbI+/OKn8=;
+	s=default; t=1770032588;
+	bh=FZVvHGzBlPN8L42v1sIa0un7QU0nowEKkd+N0YHy0R4=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=sgqHc1qkYdfNXb0zuKl5/weq/EEg+3CCpiqq3cJRINpezKFq/0+yT3w8VA/NbBsj2
-	 E/6jET+iNH89BRjC7oec+6aVc0jyP9XnhtIRIgHowlFHgtAEOinNDYd9jH/r0cAy36
-	 lyISfGRZapTvfnm82xCafSETSaYEl1U9higppUoi/sSIANXDHC4fxkxHfZzKYXetmt
-	 LTcLRSqdjztC+dckdPTTNdiuTGI1QNVUVK/SCUVl3AyXNL3SRM2VLxEFQaWJW5mchx
-	 56Kue98vBkqqcyo7olxuPmpAAxG3NWuTWvU3wTQcw4CsbwZc6j21/Y4J63DjwMEv7B
-	 AEwmSJWXOX21A==
+	b=Y2lYGnyMNUKq9ett+vW6GfsBO/Q9AJSwfB6e95C56XajbmGAN8CCOZj+ZbgreEejS
+	 cfsmJcmb/1jkLcZWwZfuUtb04c/niTiPX/SzsMCjz7LF27PCO0Ksbth1nh2Wsb18bK
+	 yeN2rIjKT92u97WV3eRSMG063EtNTlAy8Yrjx/3VqJMSWLbF22N+7BPZq6x5xUfLV4
+	 j++CIeV39ottexQa/RrRBkdQCeiILd/8+8r+ecCPCrCXMiuRLkS/qwhlER87rvFuOs
+	 +Y7cqGXF/aozB9qW1hjqHxpOWkggmpKJ58tWIlKZSWCCJHEuojeapRGF/0wySfLO4l
+	 7IlSl16EcySKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E2D78375B;
-	Mon,  2 Feb 2026 11:43:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BE0F23E
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:43:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5261583BA7;
+	Mon,  2 Feb 2026 11:43:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C402C1E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 067C160BD2
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:43:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA8E260BD2
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:43:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7SWZrU3aDD7H for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 11:43:02 +0000 (UTC)
+ id BrJdomkTSFKQ for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 11:43:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B46D460BBD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B46D460BBD
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B46D460BBD
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:43:01 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-42fbc544b09so4045761f8f.1
- for <buildroot@buildroot.org>; Mon, 02 Feb 2026 03:43:01 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A68F260BBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A68F260BBD
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A68F260BBD
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 11:43:05 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-43284ed32a0so2314904f8f.3
+ for <buildroot@buildroot.org>; Mon, 02 Feb 2026 03:43:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770032579; x=1770637379;
+ d=1e100.net; s=20230601; t=1770032584; x=1770637384;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=domsN9+YG7Xiv4R3Sk6tXQZT/vIumezrPmSXx6OEuK4=;
- b=OtwdPVjcCEfTtX8tR3VnySyRG1Lggv8dhdHoReQAqgKmnzkXpNaAiNAdmF3B6cwF0U
- M9Pq84L1J7GnPaLdUz20k5BXKBotSdPFE784zTr5UZIOyQzEVwiUD7wCa3/5fT4f1Sgl
- iXf8keRc9IJ2wtu+DURqIEHSuKmmtVi3fu14XRbWgDxU4A6z8vwnMGRvgnvw/OEa15oM
- ySSArZVzQmGRINQxilAq7ivNHEEcPgTMGkp42JFCXEvCGEb2Wq+C7kpmjBb+7FvD/tnq
- mWPPFKLzAKbb9D56EXBX/XuPq0jQKiLtwI+pxut+z7C6UDCVfBh2hf03yfdHnQS114iA
- tOmw==
-X-Gm-Message-State: AOJu0Yxke0BTG3je1orh6kD1e6EOazDvJ30fq/TYCOIvR5s9VSLY7Tww
- ZWevPPHpKUyALexDv4Dtu15az6JXWXzfGx71SIb8ADFZ/TsV+sNHwQ53BI9HJQ==
-X-Gm-Gg: AZuq6aIKbglx64M3gNVWkRB0V0gRWrDCYyd8UjQzCxdvLNM8KzNdzD/snUqnRgeru8b
- Wo79FzuhuNJYrYJfb3LvNGxHUlGNvgUJHbZ6jHNlmnSs11CH7kgmliTbwSYhZQE8O2kptgv3HmX
- TTVjJQkDa8AC7FkXqXUI1a2/m71DgLz7T8Vht3o+DiEAr3edJxs42/lZb4u3k/GGlNDrjcl0VyK
- VP64pzSazKiFGsAVhAvAiMoJPnC4zO40TLXnx7Pas5RxjH+wE+Kp7pFBTBUy/lbVQwW99XcgVHd
- qm8T30jHqpqdZDehu07kq6WALnuvpq6H94sEhTpe/e++4TI3ioAfynTvqz+yi3sVf4/WJb4NbZx
- 3hwyHFThcmfJbcZ0UAvDlNMDu3/9Ec3/w7Z/ynYJcICWnlkWSsphXFlANOx7wZn3nBlQv0axaHv
- wYwNVMlG50YMQ/hw==
-X-Received: by 2002:a05:6000:240c:b0:42f:b707:56dd with SMTP id
- ffacd0b85a97d-435f3aa79d9mr16000415f8f.33.1770032579374; 
- Mon, 02 Feb 2026 03:42:59 -0800 (PST)
+ bh=pEajMr18/rAKFjOChrMLjVz4KQ/Bx6p6xqHVgxD0ltY=;
+ b=oJSbX50pyKA+GFN/txHMuPPzGPQ/ee5v/kZYIgg//o4w+6gkxyA/KrH5U2rjqg36jD
+ /cPUmrLfOSqBEaBYEL/WWkUblmu8GwcH3Qm6y/ReATdqu+QXt8W7iTks1N/KybSrwWh2
+ UNW13hGxmYWuT3AiQwt1d92k40PEz1E9tdIXZCj7yFB+ua6BGmf+vtHbWIJwcnEsih10
+ CWVtXGvtOTJZvPByCZ3LFEynG+NZiwtxrcp7l/S1Nv+q1luNBrFNrBOVDK3dMIaqsPYA
+ Pkdh5uTBROVEnwZMFNNbBnkA1CVXsfFSbbb9BFE5aoU1LeEGN55g7I/bFiehEu60WX9/
+ YY2Q==
+X-Gm-Message-State: AOJu0YwylMZvezyHgrixUB5Dqk3MKJdvqAfrexkQhvHo6i/gNk/GjT5C
+ s4aXxdejywu7WcAI+GKm2swxeVgyZ4rgKXG2urEhEFQNjHiGNeDhl4DZjYrOqw==
+X-Gm-Gg: AZuq6aJy3vImPkItRrxMV75s0kbSUgRbYrvjEbrCV3sOLusXRzFXxvMOhKU82IVxH38
+ 1ALYOcsuLeoUIVt0uoB0HibbJdMWepu/O7soCuY1+BmaR+/Ke7X7TYmVPTK68FXUW4N/2sfK9Hg
+ SM29Yk58JXRY/SYCEcpK7/XLJWnPznW3jklunhE82D31W0zK4tk2u9R3v+DoKqg85rq/JJzaYs8
+ S5lpkF4gH8kX8+U4Qz4kfXdJi1mpw2tjmGjp7nrZiJxtYjp1WDm/qtSUxCTqH9yY7MawIeSDzWY
+ 2wQhRBPPJQOrAw5GuRF+Y+J5rU6OC0aolI10l5FenszjCkd+usIdH5C2VQ6vtSnPz909AFiRt3v
+ f3toG3eyekeos0g5ciCe1nyFcLd7fUkceiP/3Qr3sZoE73VIMxo4pBEArqNLk2PKzGyJubwuc6G
+ YXgl7O0Z8UMA+NRw==
+X-Received: by 2002:a05:6000:4308:b0:435:8f88:7226 with SMTP id
+ ffacd0b85a97d-435f3aaa871mr17954123f8f.40.1770032583461; 
+ Mon, 02 Feb 2026 03:43:03 -0800 (PST)
 Received: from freepad.iliad.local ([213.36.9.124])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-435e131cf4asm44246777f8f.28.2026.02.02.03.42.58
+ ffacd0b85a97d-435e131cf4asm44246777f8f.28.2026.02.02.03.43.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Feb 2026 03:42:58 -0800 (PST)
+ Mon, 02 Feb 2026 03:43:02 -0800 (PST)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: olteanv@gmail.com, thomas.petazzoni@bootlin.com,
  Maxime Leroy <maxime@leroys.fr>
-Date: Mon,  2 Feb 2026 12:42:50 +0100
-Message-ID: <20260202114253.283868-1-maxime@leroys.fr>
+Date: Mon,  2 Feb 2026 12:42:51 +0100
+Message-ID: <20260202114253.283868-2-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250830173313.164981-1-olteanv@gmail.com>
 References: <20250830173313.164981-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1770032579; x=1770637379; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1770032584; x=1770637384; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=domsN9+YG7Xiv4R3Sk6tXQZT/vIumezrPmSXx6OEuK4=;
- b=lGKn3rxZA+GaKlD3v8Is547pdB/Yu9BcdUrAdeQYpJJI07t2KpRDH5t10IehO+6AAz
- Ofx2LiQsoHr2TAOh2kKhdvuITlE2Smr0b+KPI2MN/lE/0kc+mZOh186echwqtn+CsdtP
- 7A/UqmknJO09em7U/AevYF2eYAtqVCZwAYPyqcqJqYmH3bHaAyMVBubHznQ8m1Ns0zit
- P2HufQCM1scLXeUn4z5/GJL6Zf5qLbYhnwxQxvG87RdX6DVRJ/oUKJKLVvZPCI05XL3M
- ysC81+gz25ZoEPTR7QYOM2HEKBrb5m5t6xKffhnBlDZV2F/Ak7sfOBxPvFhUYxJ2P8Iy
- DokQ==
+ bh=pEajMr18/rAKFjOChrMLjVz4KQ/Bx6p6xqHVgxD0ltY=;
+ b=l3HTo+MEXy1vrIemHdYWb7dW1vhjKBJNd7gf5dDfMSFfZUldAgJjPlLgEVdzMp8CO+
+ ZOwcLpazE0PiEYGQe8Q16L1b27Iepx5mzL6LoVHn6l+vcFKqilT9F7R94QgHFw6GeG+z
+ pK2c3eqriZ+XARpBv9PwSehVP0ACusCgh9WuMxPotIvWt9CJDz0ufwc2eLk5aQOd0JIh
+ Q2V73wYX4/Oo1HHQJfrNY/P/rK4B32xtwHG1vUbD4wPGxusCInYLumPKeKTBAF8K83eN
+ 6UlkwYlnevZa2A8mkt6+7EC0K9+QhWb1CjuwYvNofaPfSBS0AzaKGpgA4I5nhw1Nlj2K
+ mSGA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=lGKn3rxZ
-Subject: [Buildroot] [PATCH v5 0/3] Initial LX2160A-RDB support
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=l3HTo+ME
+Subject: [Buildroot] [PATCH v5 1/3] package/qoriq-restool: add runtime
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,73 +128,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch series adds Buildroot support for the NXP LX2160A-RDB, a
-16-core ARM Cortex-A72 platform with DPAA2 networking capabilities.
+The scripts shipped with restool require:
+- bash: they use #!/bin/bash shebang and bash-specific
+  features (shopt, declare -A)
 
-This is a continuation of Vladimir Oltean's v4 series:
-https://lore.kernel.org/buildroot/20250830173313.164981-1-olteanv@gmail.com/  
+The ls-append-dpl script also requires:
+- dtc programs: the script uses dtc and fdtget commands
 
-Uses NXP Linux Factory lf-6.12.34-2.1.0 components. Boots from SD card.
+Since dtc needs dynamic libraries, add the corresponding dependency.
 
-Tested on LX2160A-RDB rev2 hardware.
+Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+---
+ package/qoriq-restool/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-v4->v5:
-- Address Thomas Petazzoni's feedback about the large U-Boot environment
- https://lore.kernel.org/buildroot/20260102233308.49adad9a@windsurf/
-- Switch from distro boot scripts to U-Boot's bootstd framework
-- Shrink U-Boot environment from ~75 lines to ~18 lines
-- Disable EFI boot support via uboot.config since we use extlinux
-v3->v4:
-- add BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-v2->v3:
-- split U-Boot environment into 3 files
-- integrate lf-6.12.20-2.0.0 NXP BSP tag
-- fix the NXP component list in the README
-- move the DPAA2 udev rules from board/freescale/lx2160ardb/rootfs_overlay
-  to board/freescale/common/rootfs_overlay, on the premise that they do
-  no harm and are not board-specific.
-v1->v2: patch is new
-
-Maxime Leroy (2):
-  package/qoriq-restool: add runtime dependencies
-  package/qoriq-restool: bump to lf-6.12.34-2.1.0
-
-Vladimir Oltean (1):
-  board/lx2160ardb: new platform
-
- board/freescale/common/env-dpaa2.txt          |   7 +
- .../udev/rules.d/74-dpaa2-networking.rules    |  29 ++++
- board/freescale/lx2160ardb/extlinux.conf      |   4 +
- board/freescale/lx2160ardb/genimage.cfg       |  47 +++++++
- .../arm-trusted-firmware.hash                 |   2 +
- .../patches/linux-headers/linux-headers.hash  |   1 +
- .../lx2160ardb/patches/linux/linux.hash       |   2 +
- .../lx2160ardb/patches/uboot/uboot.hash       |   2 +
- board/freescale/lx2160ardb/post-build.sh      |  11 ++
- .../rcw_2200_750_3200_19_5_2_sd.rcw           |  67 +++++++++
- board/freescale/lx2160ardb/readme.txt         | 129 ++++++++++++++++++
- board/freescale/lx2160ardb/uboot-env.txt      |  11 ++
- board/freescale/lx2160ardb/uboot.config       |   2 +
- configs/lx2160ardb_defconfig                  |  59 ++++++++
- package/qoriq-restool/Config.in               |   9 ++
- package/qoriq-restool/qoriq-restool.hash      |   2 +-
- package/qoriq-restool/qoriq-restool.mk        |   2 +-
- 17 files changed, 384 insertions(+), 2 deletions(-)
- create mode 100644 board/freescale/common/env-dpaa2.txt
- create mode 100644 board/freescale/common/rootfs_overlay/etc/udev/rules.d/74-dpaa2-networking.rules
- create mode 100644 board/freescale/lx2160ardb/extlinux.conf
- create mode 100644 board/freescale/lx2160ardb/genimage.cfg
- create mode 100644 board/freescale/lx2160ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
- create mode 120000 board/freescale/lx2160ardb/patches/linux-headers/linux-headers.hash
- create mode 100644 board/freescale/lx2160ardb/patches/linux/linux.hash
- create mode 100644 board/freescale/lx2160ardb/patches/uboot/uboot.hash
- create mode 100755 board/freescale/lx2160ardb/post-build.sh
- create mode 100644 board/freescale/lx2160ardb/rcw_2200_750_3200_19_5_2_sd.rcw
- create mode 100644 board/freescale/lx2160ardb/readme.txt
- create mode 100644 board/freescale/lx2160ardb/uboot-env.txt
- create mode 100644 board/freescale/lx2160ardb/uboot.config
- create mode 100644 configs/lx2160ardb_defconfig
-
+diff --git a/package/qoriq-restool/Config.in b/package/qoriq-restool/Config.in
+index 600c2c958d..46330e8cac 100644
+--- a/package/qoriq-restool/Config.in
++++ b/package/qoriq-restool/Config.in
+@@ -1,6 +1,11 @@
+ config BR2_PACKAGE_QORIQ_RESTOOL
+ 	bool "qoriq-restool"
+ 	depends on BR2_aarch64 || BR2_aarch64_be
++	depends on !BR2_STATIC_LIBS # dtc
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # bash
++	select BR2_PACKAGE_BASH
++	select BR2_PACKAGE_DTC
++	select BR2_PACKAGE_DTC_PROGRAMS
+ 	help
+ 	  The DPAA2 architecture in Layerscape SoCs consists of
+ 	  networking resources that can be assembled into various
+@@ -19,3 +24,7 @@ config BR2_PACKAGE_QORIQ_RESTOOL
+ 	  that specified in the boot-time DPL file.
+ 
+ 	  https://github.com/nxp-qoriq/restool
++
++comment "qoriq-restool needs a toolchain w/ dynamic library"
++	depends on BR2_aarch64 || BR2_aarch64_be
++	depends on BR2_STATIC_LIBS
 -- 
 2.43.0
 
