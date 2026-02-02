@@ -1,109 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CBCE7FDEF
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 21:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4C5E7FDE0
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 22:09:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F8FF60793;
-	Mon,  2 Feb 2026 21:36:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D947A80D56;
+	Mon,  2 Feb 2026 22:09:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S0yunrENvImp; Mon,  2 Feb 2026 21:36:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1xqZY7bqaDz7; Mon,  2 Feb 2026 22:09:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 496C26079D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11C0680BC0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770068211;
-	bh=5tUauQovid+YDIalYMB8nFQCa1SB2s084Gw6OVKAsxw=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=qhN7q4d4czko+OYQF82C/VA8LJvG0+67wgmWtSNeSnBHfidSldbS69aszfiKtutAv
-	 TwCodF9SATNdeQ9iIKIpIMQAUfSl/ZkSt5r9ofsLSbQjFbA+wvnkVX2YITZH1I3jVL
-	 BAoE3w8PxcPo3EJgLyDhI1xrFsTmDQf1vz5NB9LA+7dk0TPU0vSvx8hJ5r9GeXLY/v
-	 zPe6yGqM57Fp5yI5ny6S/f/8KO7TOvDxFfFEThYBkDAKMveHDsR4vyANC0L5lEJ/it
-	 2FIXp/HWS1sEuMj7Gz6GJKdN+N2U3tQrRdyXsypy5uaBjEEV5Sifzkuqsv0dZt4pjD
-	 EGBlsyDG49Y7g==
+	s=default; t=1770070176;
+	bh=gkpeT9tcrDeSvuoetTteT/iljZvKvq3VA2TmiTC/vrE=;
+	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Hh/5SLywxdeIHw2yTRI1ycfpDigU6Rn7wm348FCSEjuBLX1kFx/lFbk5P+MCai8QG
+	 PS8adDRewrE4gwk1ph4bwMganjwokdg10C2fIJmv9mUKFRnyZXbUxUiLQVY7xs0SOb
+	 U8HpdggRJLkRmp+A2+jcwra6PIVz5jLlMg+NfRIsHSsmRrk8DqW75Kby58y6RdsQdz
+	 WP5iY5zGmauR7XB4Gi9v1VypzyjDadrwOOB7WhK6vq4IuB3tL8JSx8txiTSMVBVhEX
+	 RMkiCNR28Ayw+0NuUtcNJj+ejmObYSgqIZX5MC3KBbWjBvGWpRrwW5nUk3GmXxFZYK
+	 Pb7YV1FIBzv8Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 496C26079D;
-	Mon,  2 Feb 2026 21:36:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BAC4D1A6
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:36:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11C0680BC0;
+	Mon,  2 Feb 2026 22:09:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B76A41A6
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 22:09:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A77CB4078E
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:36:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B19EC4037E
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 22:09:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZc0E5C7mLr8 for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 21:36:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D4354076F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D4354076F
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D4354076F
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:36:47 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-47ff94b46afso1478585e9.1
- for <buildroot@buildroot.org>; Mon, 02 Feb 2026 13:36:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770068205; x=1770673005;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=O1BfuTpdNddCYQ+iKhwozeYwuNKXSLR1VRXNULtneH4=;
- b=M3Wvdjh+yhD2Ls8ULXkvaMuPJR0djJY4otTQysLlVkU5h2CAu+X2MmxNgr8/E8lr2H
- /SfKRMi3GMrjCLd/XgHfQo6CeO6vozqipN99G0+JUQV6Eow8YuvX1oHCeqPoVrr/vHNC
- R0zzle28/Xuux+NR+1at4AT3TjTTYBwnJMOEienZZu46fEjKT3ImTP7OLRySYMTrz7gh
- yWUH7P1XqZnrn7yo0bwVawmos9rtDwLMaXRUU+3QFHlrWTX0LbXIPCtLEXnMgOMuJyGE
- I9B7cyT0GApD6DTbFAG72YvAkUKPvcQm0BntUVBXr5t2J7nMoUMASI42CHD824HLqtdk
- qFEw==
-X-Gm-Message-State: AOJu0YyGMiu5/Dw7213qCMsWuxKw8Ezv6l6a9azyJVLCdXjvX2kajr/T
- +dY/ySIKkX7xdv/BClMTPdLJY3HmXW/KvXTpKgB80D0CEFSdma/WOfM3gO85XxDPFqFm6v9ec7S
- w8lLgUBY=
-X-Gm-Gg: AZuq6aI+IiDz2VZ9JkVyxwvZEUx2B3DAiLFX5iWLKs8091MdGSVPW5wLAsF3/ul07kU
- tgdTWhdyFnAVQlZ6XWw1vOqn70rUrUT1MZbIZq5XSSmEI0ZONhbMxQx69rS0vVnSybu/iKi5dd5
- wzxUWCFU0wwRhx7H+p3yPZwAjRZQZ/Cv5RljgmOPNK4wbDpBSUc4ajtG+z0K4tvfr1X61JAAIAA
- +dKnlqnC0QCqlQ9fBHQaLTQIA0+oTgtoMfV4flJZEBUFbgz3VSS9X+BId5fMuKa/MhdOnHmMyXR
- 85DitXwDpdusqmqcW+Aj9n7S09uNkTuD2KjJCjlM0IiHgXqDNpVYNO53TjS+AuR3xfns05Q43qc
- dF6veZEYCd3+Dgl/7ATaw5ErwvQV/r5BmVtUKmI2jjWPKwn5PT052JX7QnYuTOCyr7jTxBz6OYY
- CuJsYXJwGg81/yAc329qjEtquAvOOtMCHa9Zc=
-X-Received: by 2002:a05:600c:1406:b0:479:13e9:3d64 with SMTP id
- 5b1f17b1804b1-4830514ec0amr8751225e9.15.1770068205325; 
- Mon, 02 Feb 2026 13:36:45 -0800 (PST)
-Received: from P-NTS-Evian (41.126.92.92.rev.sfr.net. [92.92.126.41])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483051335dbsm14193955e9.11.2026.02.02.13.36.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Feb 2026 13:36:44 -0800 (PST)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Mon,  2 Feb 2026 22:36:37 +0100
-Message-ID: <20260202213637.396090-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.52.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6JLNzhFuqQgR for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 22:09:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.101;
+ helo=smtpdh16-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B0F2340362
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0F2340362
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0F2340362
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 22:09:30 +0000 (UTC)
+Received: from [192.168.50.220] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id n26ovv3RQzFIWn26pvMIc2; Mon, 02 Feb 2026 23:09:27 +0100
+Message-ID: <639e030b-5ebc-4412-963b-dbd0327d676f@benettiengineering.com>
+Date: Mon, 2 Feb 2026 23:09:26 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1770068205; x=1770673005; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=O1BfuTpdNddCYQ+iKhwozeYwuNKXSLR1VRXNULtneH4=;
- b=31SPIOB5ADihPt5eHSerc3Bh6kZkWU2n11POgE2QnJhzK2attZmPNDdPtom50mGQVX
- a/0vozyt9ZXeP7abLzk2yL1HS0TWlzhUr2tMQF21Z52Fa3mP0npcT6E2ORSJm1ZpJN6P
- T92Frp5dmnfvncYnMO9mem4qFWOjdiougggrQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=31SPIOB5
-Subject: [Buildroot] [PATCH] package/php-lua: add support for php >= 8.5
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Leon Anavi <leon.anavi@konsulko.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Fabrice Goucem <fabrice.goucem@oss.nxp.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Lothar Felten <lothar.felten@gmail.com>, Fabio Estevam <festevam@gmail.com>
+References: <20260114195451.3978704-1-giulio.benetti@benettiengineering.com>
+ <20260114195451.3978704-2-giulio.benetti@benettiengineering.com>
+ <aYB4i6UL6oI32BDV@windsurf>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <aYB4i6UL6oI32BDV@windsurf>
+X-CMAE-Envelope: MS4xfPZWzyptPQ4HEXu8XQERM3159+70XNKtAdr4WN+5e7MkL1wnXr43kc4b4kJ0kjCpPtB25K0NV3lv9Akj7n7T6CoxNLyHjkr7zV/aXaaKo89WgE8J68aX
+ UFK4FrPYEcHlx8EwXOGWGFljsF7Xc1iueIJ1i4J7Kg481l6FjSSkBdKfUCXxalCtfxmRHr1yEwMCqzQxUrlE0fF6pu5xtKCttA62Q0mkNjcyKiICCXgxATdw
+ co2ovcyYUhiWIR0T+lilMePpwZ+viAfYumfU9T3+vhF4W7XqIh6WhY1xbEVk1/CzesXUDS1aoUUaMU99hLCix09PdMpmtB94m4sKFElb74MUt2qec6R2mKa0
+ 4L5E6w9S1aBiXaWeWQSz4XqhIZ6nYw+Y9e089x/w98yldKZx1TrTz9ZcvL2Xf3+fM1dxZi/cMKPW6rVuoOMJkdef6eb/tVxqio6nXH0Dn1byhm8wA9E1Q3N+
+ Ymy+FgWq6bHtuLbO
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1770070167; bh=PEoHRiq2B8IabpQvPb/2GTD8w/HZrZOkrBmnzJx4r4E=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=OQ2PTWJ4Xhnf5+dU82nvsgd/tYN+T6+7+rcYVX2yZBbwZd9rLHy7NoB1ZOZsViIJg
+ Gv/S/4e4tm4LXQRqyaDDUylHXDjQkcWad7sZfvM3t88Kp7KUJhodTtwuPQ9pBgkjUy
+ bRJmFkqPH3p2pkCUSrjzDtzntaBAddkJhPBE09VFeS+VLGCrxfOaEPt5P2UbosZs46
+ bxIRAoJAKLfhgkVhsPiuGz8SCu91SbUgxGA6zTwjFJlJayUvQYat3OFxZscbl4X+6V
+ pQccYEtpLwQqtq/lla49yWxz6z5V8SaIzL9r/takcI6t7e/jy6trXIARQPub+rXF+J
+ 8sthoPDizoYBw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=OQ2PTWJ4
+Subject: Re: [Buildroot] [PATCH 01/17] configs/amarula_vyasa_rk3288: bump
+ Linux to 6.18.5 and U-Boot to 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,75 +102,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Our php package was recently update to 8.5 version [1] but this version
-removed some old function like zend_exception_get_default() [2].
-But php-lua still uses zend_exception_get_default().
+Hi Thomas,
 
-Replace zend_exception_get_default() by zend_ce_exception as suggested
-by php project.
+On 2/2/26 11:13, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, Jan 14, 2026 at 08:54:34PM +0100, Giulio Benetti wrote:
+>> The patch:
+>> * bumps Linux kernel to version 6.18.5
+>> * bumps U-Boot to version 2026.01
+>> * forces check hashes
+>> * switches to extlinux
+> 
+> Unless I'm missing something, this patch is not changing force check
+> hashes, and also I don't see anything related to extlinux.
+> 
+> Are you sure this commit log is matching the changes?
 
-[1] aedf131da66d2f2ebce64788deab07be17ce33eb
-[2] https://github.com/php/php-src/commit/a812a74c2e60a0ba080057067a7634e4da3f2b9b
+I'm very sorry you have reviewed the entire wrong patchset.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/12944797268 (TestPhpLuaLua)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/12944797270 (TestPhpLuaLuajit)
+I'm going to send them corrected soon.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .../0005-add-support-for-php-8.5.patch        | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/php-lua/0005-add-support-for-php-8.5.patch
-
-diff --git a/package/php-lua/0005-add-support-for-php-8.5.patch b/package/php-lua/0005-add-support-for-php-8.5.patch
-new file mode 100644
-index 0000000000..de0b00995d
---- /dev/null
-+++ b/package/php-lua/0005-add-support-for-php-8.5.patch
-@@ -0,0 +1,34 @@
-+From 2c8b642b70edf5b0602b10a25d3f04874e175276 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Mon, 2 Feb 2026 22:12:48 +0100
-+Subject: [PATCH] add support for php >= 8.5
-+
-+php removed zend_exception_get_default() and replaced by zend_ce_exception.
-+
-+[1] https://github.com/php/php-src/commit/a812a74c2e60a0ba080057067a7634e4da3f2b9b
-+
-+Upstream: upstream dead, custom patch
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ lua.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/lua.c b/lua.c
-+index 5889bc7..62f8f0a 100755
-+--- a/lua.c
-++++ b/lua.c
-+@@ -871,7 +871,11 @@ PHP_MINIT_FUNCTION(lua) {
-+ 
-+ 	INIT_CLASS_ENTRY(ce, "LuaException", NULL);
-+ 
-++#if ((PHP_MAJOR_VERSION == 5) && (PHP_MINOR_VERSION < 5)) || (PHP_MAJOR_VERSION < 5)
-+ 	lua_exception_ce = zend_register_internal_class_ex(&ce, zend_exception_get_default());
-++#else
-++	lua_exception_ce = zend_register_internal_class_ex(&ce, zend_ce_exception);
-++#endif
-+ 
-+ 	return SUCCESS;
-+ }
-+-- 
-+2.52.0
-+
+Best regards
 -- 
-2.52.0
+Giulio Benetti
+CEO&CTO@Benetti Engineering
+https://www.linkedin.com/company/benetti-engineering/
+https://www.linkedin.com/in/giulio-benetti-79975951/
 
 _______________________________________________
 buildroot mailing list
