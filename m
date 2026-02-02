@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3834FE73156
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 10:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D657E73156
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 10:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05855408BE;
-	Mon,  2 Feb 2026 10:30:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D5CB83276;
+	Mon,  2 Feb 2026 10:31:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PJsO-GRMiSyf; Mon,  2 Feb 2026 10:30:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WnqlwoWd2bbp; Mon,  2 Feb 2026 10:31:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BCE540A47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39F3983279
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770028246;
-	bh=6/b4xzO6YWzlW7KA7XT05OwjHewnIL7/QOVGy4vuzyQ=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=gGFvnIGSUsnNc7DpgwAvLjmNPQBc98ZtAsiyZvcWS2ZCSufrZ26LnWxuZMAJOAJ41
-	 Jmu0AlT3nShTJcQvus18iUvocvO1kg6o9OKPGJnQ4sW5HUbUvlWVfAupjPPF97yhiK
-	 N/RY8muK/mIcYoARuVOFQSwBOX1xLy1uh3p9xt5ISJFsulA/ePjJAuqyaZ1TNSP2cv
-	 Y5rvnsNASVq8LjwZi7Gox81fdto5ubgFeBuaH7k011ZsvEgQMCo26a/Y5R5XqAYNUj
-	 oc86OWshq3E5ni+ZEpAy2XkpYMjvunRan/nEUd6tfxPTEU0EJclqqTkHc5HhPMPBXL
-	 yTEEmtSGAJ9WA==
+	s=default; t=1770028300;
+	bh=cMIyFYVVdRLrZ8GMwtx+dz/dslG0YGMXOS7Ju/IKrIg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=OLscgSY+8CB7wpOv3A+T9xQBcH8U2AVsThJr1FxInsPll6Jc5KaHlD3feHq4bYr0c
+	 5uWq/rYG1pOfxoWfevEd6N/dWFlIE0jGoAKLFlcXiMcqLHIXrrJc/MrRcAVUGWymvc
+	 h+QW9fROBXX8IZZS0o3j3C1bGGg2YNlOMx85ZO9qhG78m+SzriS/qiUQq4RXF39Vgz
+	 GhxLN6muGqmgVq+Cx/VaI8QUDmawDHKVjsD0U1IYNtCLpyR6UkIBRJIM7nywjxjua5
+	 /TH8MaZNtOco7WvsNBrjj9IqpNj+braeqssaeD+q7tEIy7gGO3F5plqVcLsmVi77xS
+	 l2R9EwdW7zzYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BCE540A47;
-	Mon,  2 Feb 2026 10:30:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 70DA4149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:30:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39F3983279;
+	Mon,  2 Feb 2026 10:31:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9421149
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:31:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60EC660724
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:30:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8FFE83279
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:31:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U62M8eHBa1mT for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 10:30:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9OxeHNCNIZX6 for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 10:31:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5705060722
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5705060722
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5705060722
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:30:43 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 959810494; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Feb 2026 10:30:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmrCZ-00000005t2E-0QXP;
- Mon, 02 Feb 2026 11:30:39 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Fri, 16 Jan 2026 17:43:34 +0100")
-References: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de>
-Date: Mon, 02 Feb 2026 11:30:39 +0100
-Message-ID: <87zf5r4euo.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=f11kSfc7pMk8bUPzxyRTicVMmgpxREpLg/Zn4Ro4R7g9Pj5FlE6j+PVdzJCtkf47deS06ZlsezaTgr0CEL+eODB82T6CWsJgQPtpT7PAuu28eoKEI24v+imRwyW8XDvw1slxGrLkdPkgyMMtHjqYcctSI30UrbPmRf4E5JF1KhwbOYcx0xyUZfeiznMx7JbhaV9nCTTEPvgML8dzgec0+0P8dRoxuN7DV2B3464Z3GhSyC8e3F0vQl3YgqGpnupDpmbUTnEk9dmm4yTGFbco89jz2U+yHBqV6zk0qx1ysDk9KKIBTeEkR0wH18pSdZZySVYWl+Oi/XdfaH5PH2GUNg==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=rIGamKSRVlIgd4MVhFP0nrWpCRl28V9N8ULjj5VJvzg=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=f11kSfc7
-Subject: Re: [Buildroot] [PATCH v2] package/nginx: security bump to 1.28.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7903183276
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7903183276
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:31:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5CDD986306; Mon,  2 Feb 2026 10:31:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 2 Feb 2026 11:31:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6b4381dda28ea335ff278efda0d629ec70546b74
+X-Git-Newrev: b9a8f187e029ffeb040327d082dacf1fa373cc7d
+X-Patchwork-Hint: ignore
+Message-Id: <20260202103137.5CDD986306@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lzlib: switch to another fork
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,44 +68,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a8f187e029ffeb040327d082dacf1fa373cc7d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > See here for changes:
- > https://nginx.org/en/CHANGES-1.28
+LuaDist and their subprojects are dead
 
- > Following security related issues are fixed:
- >     *) Security: processing of a specially crafted login/password when using
- >        the "none" authentication method in the ngx_mail_smtp_module might
- >        cause worker process memory disclosure to the authentication server
- >        (CVE-2025-53859).
- >     *) Security: insufficient check in virtual servers handling with TLSv1.3
- >        SNI allowed to reuse SSL sessions in a different virtual server, to
- >        bypass client SSL certificates verification (CVE-2025-23419).
- >     *) Security: processing of a specially crafted mp4 file by the
- >        ngx_http_mp4_module might cause a worker process crash
- >        (CVE-2024-7347).
- >        Thanks to Nils Bars.
- >     *) Security: when using HTTP/3, processing of a specially crafted QUIC
- >        session might cause a worker process crash, worker process memory
- >        disclosure on systems with MTU larger than 4096 bytes, or might have
- >        potential other impact (CVE-2024-32760, CVE-2024-31079,
- >        CVE-2024-35200, CVE-2024-34161).
- >        Thanks to Nils Bars of CISPA.
+LuaDist was based on CMake, so back to luarocks infrastructure
 
- > Update patch 0007, which does not apply cleanly.
- > License file was changed, year was bumped to 2025.
+different tag scheme, but same source (ie. lzlib.c)
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+this obviously fixes CMake 4 compatibility.
 
-Committed, thanks.
+Fixes:
 
--- 
-Bye, Peter Korsgaard
+  https://autobuild.buildroot.net/results/c86c19a4b8fc4304244e33d4f132fea8e0043e06/
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lzlib/Config.in  |  3 +--
+ package/lzlib/lzlib.hash |  6 ++++--
+ package/lzlib/lzlib.mk   | 12 +++++-------
+ 3 files changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+index 59a2e6d5c9..16dd2c3144 100644
+--- a/package/lzlib/Config.in
++++ b/package/lzlib/Config.in
+@@ -1,10 +1,9 @@
+ config BR2_PACKAGE_LZLIB
+ 	bool "lzlib"
+-	depends on BR2_PACKAGE_LUA
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  This package provides a library to access zlib library
+ 	  functions and also to read/write gzip files using an
+ 	  interface similar to the base io package.
+ 
+-	  https://github.com/LuaDist/lzlib
++	  https://github.com/hishamhm/lzlib
+diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+index 4bb4c52c8c..61b094f100 100644
+--- a/package/lzlib/lzlib.hash
++++ b/package/lzlib/lzlib.hash
+@@ -1,3 +1,5 @@
++# computed by luarocks/buildroot
++sha256  860c893fc53d0a7830a54fa64f22a2b89260ca39c9a7dcb0890f6d3029f00ca5  lzlib-0.4.1.53-4.src.rock
++
+ # Locally calculated
+-sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
+-sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
++sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib/lzlib.c
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+index 74624d5019..4b869872b2 100644
+--- a/package/lzlib/lzlib.mk
++++ b/package/lzlib/lzlib.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-LZLIB_VERSION = 0.4.3
+-LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+-LZLIB_DEPENDENCIES = lua zlib
++LZLIB_VERSION = 0.4.1.53-4
++LZLIB_SUBDIR = lzlib
+ LZLIB_LICENSE = MIT
+-LZLIB_LICENSE_FILES = lzlib.c
+-LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+-	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
++LZLIB_LICENSE_FILES = $(LZLIB_SUBDIR)/lzlib.c
++LZLIB_DEPENDENCIES = zlib
+ 
+-$(eval $(cmake-package))
++$(eval $(luarocks-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
