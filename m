@@ -1,90 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A03E7DEF5
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 15:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C639CE7DEFA
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 15:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37D17407CC;
-	Mon,  2 Feb 2026 15:54:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DE0581839;
+	Mon,  2 Feb 2026 15:55:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mqOoMt5qths5; Mon,  2 Feb 2026 15:54:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wYvqJa-ypRYz; Mon,  2 Feb 2026 15:55:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D341408A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AECE81992
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770047647;
-	bh=QrPDQZxMi8QeTZSWAro7QFY7HD1+dWIIIi0rXPkFy1Q=;
+	s=default; t=1770047743;
+	bh=Qjb0b73tliT7yl3uo27heYr/gg9Pyr/oaMN98ygR8B8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=QEJYFIYuDWxxWP+4ERPHnXhZLk0TjGrLXrNrhFAb3pnhMOpES/f6DUiT+cweT45MD
-	 0DfzCikIkewwIRoe0PqVninwNQISzZwL/ICL93O8qLbW6f7mRiJvOZ25LehlGH8+00
-	 oliP/NumEvVZXN1pGvTjzbuECHsm/2EZq9fFch6r+7bzfgUsCp5EhGH0BIQxZ8mY0W
-	 l+mJpHPvUEztcc4BmsXSHBNKIAyxEjUi1H5d+nnjXS8v49mQmLjOkXBaIgHO5Tcvvh
-	 RwImJL9J2dv8xhj3usc6MPNcVbL3+LVApYv3DBH1L75FjIZaYKiZM8r89N9Ow7mZyE
-	 08NcU+HFMrMyw==
+	b=LhcXsUjiAYMnH+ybViSO9+IUyQWuIEkQP6mLJurlgxKyb4bVgYUL8o5q5o1gx0hca
+	 Qw1WZJApiYkI0Qg+b7yPg+j0E7jMmozhi0eTRYIfsIOqhRu2kwFvxgOZzVv/gDGTKw
+	 hkfp7BJ4EitiGCeKvWsAl+U80mKU8WhQuwPEqv/2bFmzZMqddge4JrcnQfhLPJwYDQ
+	 FaAoZbCQknxZNlG2JpEEnOwRpFlET35oOgRZUE+xUOyuhUFkFkjyKJnPKV8zMiW1OP
+	 0yl6V3/vT/2r8A092zpLJzdkTFPWMzzTYYOhr/tnRuwRNWctZGA09KeWDxD/AlLMCS
+	 8uEcN3oRL+bfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D341408A5;
-	Mon,  2 Feb 2026 15:54:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7091B1E0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:54:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AECE81992;
+	Mon,  2 Feb 2026 15:55:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BDBB21E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FA7E407CC
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:54:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE30E40A48
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XridzZGWWygM for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 15:54:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=207.54.77.50;
- helo=esa3.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
+ id YXW2SRFmNKQM for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 15:55:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=23.90.104.144;
+ helo=esa1.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 90276408A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90276408A5
-Received: from esa3.hc555-34.eu.iphmx.com (esa3.hc555-34.eu.iphmx.com
- [207.54.77.50])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90276408A5
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:54:03 +0000 (UTC)
-X-CSE-ConnectionGUID: 6T4B8GdvQ8Or48mxVYxxxw==
-X-CSE-MsgGUID: QZBWQELPR1mxvt9QZe6+Uw==
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46CAA407CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46CAA407CC
+Received: from esa1.hc555-34.eu.iphmx.com (esa1.hc555-34.eu.iphmx.com
+ [23.90.104.144])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 46CAA407CC
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:55:40 +0000 (UTC)
+X-CSE-ConnectionGUID: +bcktDnWTO23ox5kqf0SyQ==
+X-CSE-MsgGUID: 7sYR8N7GSUyvD2NxUmON9Q==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from unknown (HELO ces02_data.me-corp.lan) ([146.255.191.134])
- by esa3.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 02 Feb 2026 17:54:00 +0200
-X-CSE-ConnectionGUID: O/HZFOpAQFGJ0opMReKaQw==
-X-CSE-MsgGUID: X6Y7EXo0TR+5LTHYisbzRg==
-Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.6])
- by ces02_data.me-corp.lan with SMTP; 02 Feb 2026 17:56:15 +0200
+Received: from unknown (HELO ces04_data.me-crop.lan) ([146.255.191.134])
+ by esa1.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 02 Feb 2026 17:55:38 +0200
+X-CSE-ConnectionGUID: tgBYuTPgR3KaZ8ODk4jDTQ==
+X-CSE-MsgGUID: TG10feOoTfeoSRojDWnTJw==
+Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.2])
+ by ces04_data.me-crop.lan with SMTP; 02 Feb 2026 17:57:45 +0200
 Received: by epgd074.me-corp.lan (sSMTP sendmail emulation);
- Mon, 02 Feb 2026 17:53:59 +0200
+ Mon, 02 Feb 2026 17:55:36 +0200
 To: buildroot@buildroot.org
 Cc: guenther.harrasser@mobileye.com,
  Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Date: Mon,  2 Feb 2026 17:53:56 +0200
-Message-ID: <20260202155356.3330179-1-jimmy.wesolowski@mobileye.com>
+Date: Mon,  2 Feb 2026 17:55:35 +0200
+Message-ID: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
 In-Reply-To: <20260202154536.2910688-1-jimmy.wesolowski@mobileye.com>
 References: <20260202154536.2910688-1-jimmy.wesolowski@mobileye.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
- t=1770047643; x=1801583643;
+ t=1770047740; x=1801583740;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=srEJ0XPuh2bAsGrVdjjc7x3HVxgndHlxhNSAYaFgdMU=;
- b=sHQhK8/IVOZKmVQckwR07k6pxvZQ6W0H71V6mSSjHfeiZ1RezmZs9Doz
- FLWOpc/Zb6Ck/p6ar1b8rDSZKUwP+XGOJb3z+uTWYLusi3WljMGEcxKor
- Lb9itfijfy2SHDccPZPItUV02IS7BaQEhIAB/YhWvwuiCCDJbO0lLlDle
- Ao0Lq+xvNvj9RQTtC6BqBvZsa1116Ial6dpuFsTugLGXJBFjfGq7NOA8/
- neMdvDsfefKthm1lTY9KIuOLv8llfGx6E3Oz3GO5lket3pTgpfu+/PGK1
- naM0RML+jxalhieO99AHPIttQagBjFqFHnc2EDFB+3qpq8CjP6dkE9mJu
- g==;
+ bh=nPrZ8Mb1Jgf4vetbKO1KWr65HoYJLifgrSSXyxFWN7A=;
+ b=fBFMSDMZbBs0raPELRiuu54r791nlC4xkSI8WF90i4AQ5xrSM98nry99
+ 5z5iJeeLob/2eNhzaK67vuZv9LmhuooBtldzNuoJWgtGBwivay5x2lMYy
+ 7oy0ZAXkMMKM+0+fBrrXJkAAdf3/3iJEA0uVclBQX31LT5/3LAFEatUML
+ 1rYK+Ypg3cKU186B4PVg7ZHPBw4vFAZcDJGTeSU9kQEC1+dAnw9JhSCkf
+ Go9ThgRrVCl/kSTDL2jur+Aq/uK36cQHo7kpmFPGndMKq2r8Xu0G/r/LZ
+ ftl5TkjyS/sa0XcU5OjOj4IOIPkTViABz9HumQtgfK3o5Xb3kHt5ItxHS
+ A==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mobileye.com
@@ -115,7 +116,7 @@ recommended by MIPS
 One missing flag -s "-Tmsym32.ld" since linker script
 "msym32.ld" does not exist in the MIPS toolchain
 
-Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
 Acked-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 ---
  .../0001-skeleton-for-mips-i6500.patch        | 804 ++++++++++++++++++
