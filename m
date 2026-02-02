@@ -4,80 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B16AE7314E
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 10:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3834FE73156
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 10:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F33640870;
-	Mon,  2 Feb 2026 10:29:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05855408BE;
+	Mon,  2 Feb 2026 10:30:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e7N4f-d1c_5W; Mon,  2 Feb 2026 10:29:25 +0000 (UTC)
+ id PJsO-GRMiSyf; Mon,  2 Feb 2026 10:30:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28D54408BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BCE540A47
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770028165;
-	bh=rBl/NFxuaxf2aw+D01e+0ZdID8K7VoXuDMhTdEzRdqo=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=POKOL36nGg0kyEjTSzvUcqP2zWWqsNgi1jKJ7LGUh2J7R57ADL/iFs1lfnmaO0k8r
-	 o3NVWG+6nANOFS4+qIwFdrRTNMsVyExvmdqxVKSdP/ONgIOoxgtQeYCk/4oRAHrgba
-	 AyICus3Dv7pCSZl8kq3w1FhcgG9xAWlQUfshHGkAWoMEY4/PVLzBcog9nR81df6Slc
-	 79154Z7bWf2+3ffL5DjsoMg3pCciqy0l/GpIR3bwURHjM3MCG21+XHFJ0ef4JFIFZv
-	 KIez0MOIEIfibKO01Z95TMe0abogcqQzDIXkKH0MvtdHdk3To7q1nW8VZkTaW4O9dV
-	 4TojXoF/r6IlA==
+	s=default; t=1770028246;
+	bh=6/b4xzO6YWzlW7KA7XT05OwjHewnIL7/QOVGy4vuzyQ=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=gGFvnIGSUsnNc7DpgwAvLjmNPQBc98ZtAsiyZvcWS2ZCSufrZ26LnWxuZMAJOAJ41
+	 Jmu0AlT3nShTJcQvus18iUvocvO1kg6o9OKPGJnQ4sW5HUbUvlWVfAupjPPF97yhiK
+	 N/RY8muK/mIcYoARuVOFQSwBOX1xLy1uh3p9xt5ISJFsulA/ePjJAuqyaZ1TNSP2cv
+	 Y5rvnsNASVq8LjwZi7Gox81fdto5ubgFeBuaH7k011ZsvEgQMCo26a/Y5R5XqAYNUj
+	 oc86OWshq3E5ni+ZEpAy2XkpYMjvunRan/nEUd6tfxPTEU0EJclqqTkHc5HhPMPBXL
+	 yTEEmtSGAJ9WA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28D54408BD;
-	Mon,  2 Feb 2026 10:29:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A7EF01E0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:29:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BCE540A47;
+	Mon,  2 Feb 2026 10:30:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70DA4149
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95F1340265
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:29:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60EC660724
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CddgWtJrd7io for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 10:29:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D78AD401FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D78AD401FE
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D78AD401FE
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:29:21 +0000 (UTC)
-Received: from framework-OT (host-109-89-232-55.dynamic.voo.be [109.89.232.55])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id AA8F12C80134;
- Mon, 02 Feb 2026 11:29:19 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Norbert Lange <nolange79@gmail.com>,
-	Sen Hastings <sen@hastings.org>
-Date: Mon,  2 Feb 2026 11:29:31 +0100
-Message-ID: <20260202102931.3364406-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.52.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U62M8eHBa1mT for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 10:30:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5705060722
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5705060722
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5705060722
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 10:30:43 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 959810494; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 02 Feb 2026 10:30:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vmrCZ-00000005t2E-0QXP;
+ Mon, 02 Feb 2026 11:30:39 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Fri, 16 Jan 2026 17:43:34 +0100")
+References: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de>
+Date: Mon, 02 Feb 2026 11:30:39 +0100
+Message-ID: <87zf5r4euo.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770028159; bh=zwzkOXNEr4ZkV8aIbZUAx5f/3PyrRXpI0XklQ8OscZI=;
- h=From:To:Cc:Subject:Date;
- b=giVvWQdPJvNihmWFd26K3lR0VP4e/5FUWKdI1feuHdsCL3cYAPK3OnFWHmlnr2Xnw
- g0U5lUKmy3Qm41oRNS5AGShgcB0Ggbt6CmEMikezoNHrwmNPQB+7rp6q/49YVUCGUi
- GdFy2flv8+nncuSA4FYsC+dsMNuEzJ64oy3rNjsPsuHNxNSgZkE3K2Hrz/SJNO5hgm
- zn7bZ4V8+3/oB2G2KQE1ObEEsuo3nVgQlmRRA4UhRx/Gbz3XxS4YZ4Rp2FQV9NCVQ2
- yr/qxxB6/q1MeHyudan9ZLJtO5sh2GPMGgmxS9ctkm/BxZAuXffHcHLzlFc1y3M04a
- xawqCxK3Bkksg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=f11kSfc7pMk8bUPzxyRTicVMmgpxREpLg/Zn4Ro4R7g9Pj5FlE6j+PVdzJCtkf47deS06ZlsezaTgr0CEL+eODB82T6CWsJgQPtpT7PAuu28eoKEI24v+imRwyW8XDvw1slxGrLkdPkgyMMtHjqYcctSI30UrbPmRf4E5JF1KhwbOYcx0xyUZfeiznMx7JbhaV9nCTTEPvgML8dzgec0+0P8dRoxuN7DV2B3464Z3GhSyC8e3F0vQl3YgqGpnupDpmbUTnEk9dmm4yTGFbco89jz2U+yHBqV6zk0qx1ysDk9KKIBTeEkR0wH18pSdZZySVYWl+Oi/XdfaH5PH2GUNg==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=rIGamKSRVlIgd4MVhFP0nrWpCRl28V9N8ULjj5VJvzg=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=giVvWQdP
-Subject: [Buildroot] [PATCH] package/systemd: bump to 258.3
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=f11kSfc7
+Subject: Re: [Buildroot] [PATCH v2] package/nginx: security bump to 1.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,332 +92,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Noteable changes:
-  - Add -Dlibmount=enabled to host and target build. Disabling this
-    option disables building most of systemd's tools apart from
-    libsystemd.
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-  - remove gcrypt and gnutls from dependencies and build options.
-    openssl is the only supported crypto library now.
+ > See here for changes:
+ > https://nginx.org/en/CHANGES-1.28
 
-  - Disable nspawn build for host variant and add a Config.in option
-    for the target variant.
+ > Following security related issues are fixed:
+ >     *) Security: processing of a specially crafted login/password when using
+ >        the "none" authentication method in the ngx_mail_smtp_module might
+ >        cause worker process memory disclosure to the authentication server
+ >        (CVE-2025-53859).
+ >     *) Security: insufficient check in virtual servers handling with TLSv1.3
+ >        SNI allowed to reuse SSL sessions in a different virtual server, to
+ >        bypass client SSL certificates verification (CVE-2025-23419).
+ >     *) Security: processing of a specially crafted mp4 file by the
+ >        ngx_http_mp4_module might cause a worker process crash
+ >        (CVE-2024-7347).
+ >        Thanks to Nils Bars.
+ >     *) Security: when using HTTP/3, processing of a specially crafted QUIC
+ >        session might cause a worker process crash, worker process memory
+ >        disclosure on systems with MTU larger than 4096 bytes, or might have
+ >        potential other impact (CVE-2024-32760, CVE-2024-31079,
+ >        CVE-2024-35200, CVE-2024-34161).
+ >        Thanks to Nils Bars of CISPA.
 
-  - systemd now requires kernel >= 5.4 while the recommended kernel
-    version moved to >=5.7. This make systemd depend on
-    BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4, removing various dependencies
-    on older kernel header versions from sub options.
+ > Update patch 0007, which does not apply cleanly.
+ > License file was changed, year was bumped to 2025.
 
-  - The sha256sum of LICENSES/README.md changed due to various
-    license clarification, removal of some vendored files as well as
-    changing some file paths. Licensing did not actually change.
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-For changelog, see:
-https://github.com/systemd/systemd/blob/v258.3/NEWS
+Committed, thanks.
 
-test-pkg currently fails for the following toolchains:
-
-  - br-mips64r6-el-hf-glibc [33/35]: FAILED, complaining that STATX_MNT_ID
-    is not defined even though it should be available from the kernel
-    headers.
-
-  - br-powerpc64-power7-glibc [35/35]: FAILED, with an internal compiler
-    error.
-
-Buildroot internal toolchains for those architectures and building the
-same defconfig works though.
-
-Tested with `./support/testing/run-tests tests.init.test_systemd`
-All tests passed
-
-One of the tests now needs a bigger rootfs size.
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/systemd/Config.in                  | 38 ++++++++++------------
- package/systemd/systemd.hash               |  4 +--
- package/systemd/systemd.mk                 | 33 +++++++------------
- support/testing/tests/init/test_systemd.py |  1 +
- system/Config.in                           | 10 +++---
- 5 files changed, 38 insertions(+), 48 deletions(-)
-
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 931134911a..84bf554fee 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -21,7 +21,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on !BR2_STATIC_LIBS # kmod
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
- 	select BR2_ROOTFS_MERGED_USR
-@@ -54,13 +54,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  an elaborate transactional dependency-based service control
- 	  logic.  It can work as a drop-in replacement for sysvinit.
- 
--	  Kernel versions below 5.4 ("recommended baseline") have
-+	  Kernel versions below 5.7 ("recommended baseline") have
- 	  significant gaps in functionality and are not recommended
--	  for use with this version of systemd. (e.g. lack race-free
--	  process tracking by pidfd, systemd-networkd, and new mount
--	  API support).
-+	  for use with this version of systemd.
- 
--	  Systemd requires a Linux kernel >= 3.15 with the following
-+	  Systemd requires a Linux kernel >= 5.4 with the following
- 	  options enabled:
- 
- 	  - CONFIG_DEVTMPFS
-@@ -94,10 +92,10 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  The selection of other packages will enable some features:
- 
- 	  - acl package will add support for multi-seat.
--	  - xz and/or l4 packages will add compression support in
-+	  - bzip, lz4, xz,and/or zstd packages will add compression support in
- 	    journal and coredump.
- 	  - libcurl package will add support for systemd-journal-upload.
--	  - libgcrypt package will add support for journal sealing and
-+	  - openssl package will add support for journal sealing and
- 	    DNSSEC verification in resolved.
- 
- 	  Notice that systemd selects the fsck wrapper from util-linux
-@@ -246,7 +244,6 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 	depends on BR2_USE_MMU # cryptsetup -> lvm2
- 	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # fscrypt_key
- 	select BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-@@ -257,11 +254,11 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-homed.service.html
- 
--comment "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
-+comment "homed support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_SYSTEMD_HOSTNAMED
- 	bool "enable hostname daemon"
-@@ -285,9 +282,8 @@ config BR2_PACKAGE_SYSTEMD_HWDB
- 
- config BR2_PACKAGE_SYSTEMD_IMPORTD
- 	bool "enable import daemon"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_XZ
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -336,6 +332,14 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_NSPAWN
-+	bool "enable nspawn"
-+	help
-+	  systemd-nspawn is a tool to spawn a command or OS in
-+	  a lightweight container.
-+
-+	  https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html
-+
- config BR2_PACKAGE_SYSTEMD_NSRESOURCED
- 	bool "enable nsresourced"
- 	help
-@@ -358,8 +362,7 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
--	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	default y
- 	help
- 	  systemd-networkd is a system service that manages networks.
- 	  It detects and configures network devices as they appear, as
-@@ -370,9 +373,6 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
- 
--comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
--
- config BR2_PACKAGE_SYSTEMD_OOMD
- 	bool "enable out-of-memory killer"
- 	help
-@@ -481,8 +481,6 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 	  Control Kernel, a minimal approach to Access Control
- 	  implemented as a kernel LSM.
- 
--	  This feature requires a kernel >= 3.8.
--
- 	  When this feature is enabled, Systemd mounts smackfs and
- 	  manages security labels for sockets.
- 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index d68950f934..193c6b5eb0 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  5a2f477e6268630f6e2829c7bb3e442017549798a4122635817934eaa0c6ac10  systemd-257.10.tar.gz
-+sha256  a800facc2effb509bff67700ce1224da96a36fb658e29e03c843fb74fa1edbdc  systemd-258.3.tar.gz
- sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
- sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
- sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
-@@ -13,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
- sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
- sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
- sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
--sha256  768ecb25cb1e6e41672fc655571f45ba46a3f03fcbc6ab56c7a09ac5928eb37b  LICENSES/README.md
-+sha256  bce1d2e9bad517b493168b37604c5d02a7fb638b4d1b9fc730adafa06c603456  LICENSES/README.md
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6d04ee2581..7596edd13e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 257.10
-+SYSTEMD_VERSION = 258.3
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
-@@ -107,7 +107,8 @@ SYSTEMD_CONF_OPTS += \
- 	-Dbpf-framework=disabled \
- 	-Dvmlinux-h=disabled \
- 	-Dumount-path=/usr/bin/umount \
--	-Dxenctrl=disabled
-+	-Dxenctrl=disabled \
-+	-Dlibmount=enabled
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
- ifeq ($(BR2_OPTIMIZE_FAST),y)
-@@ -267,13 +268,6 @@ else
- SYSTEMD_CONF_OPTS += -Dlibcurl=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
--SYSTEMD_DEPENDENCIES += libgcrypt
--SYSTEMD_CONF_OPTS += -Dgcrypt=enabled
--else
--SYSTEMD_CONF_OPTS += -Dgcrypt=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
- SYSTEMD_DEPENDENCIES += p11-kit
- SYSTEMD_CONF_OPTS += -Dp11kit=enabled
-@@ -567,6 +561,12 @@ else
- SYSTEMD_CONF_OPTS += -Dsysupdate=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_NSPAWN),y)
-+SYSTEMD_CONF_OPTS += -Dnspawn=enabled
-+else
-+SYSTEMD_CONF_OPTS += -Dnspawn=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += -Dnetworkd=true
- SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
-@@ -595,22 +595,11 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- SYSTEMD_CONF_OPTS += \
--	-Dgnutls=disabled \
--	-Dopenssl=enabled \
- 	-Ddns-over-tls=openssl \
- 	-Ddefault-dns-over-tls=opportunistic
- SYSTEMD_DEPENDENCIES += openssl
--else ifeq ($(BR2_PACKAGE_GNUTLS),y)
--SYSTEMD_CONF_OPTS += \
--	-Dgnutls=enabled \
--	-Dopenssl=disabled \
--	-Ddns-over-tls=gnutls \
--	-Ddefault-dns-over-tls=opportunistic
--SYSTEMD_DEPENDENCIES += gnutls
- else
- SYSTEMD_CONF_OPTS += \
--	-Dgnutls=disabled \
--	-Dopenssl=disabled \
- 	-Ddns-over-tls=false \
- 	-Ddefault-dns-over-tls=no
- endif
-@@ -1015,7 +1004,9 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dp11kit=disabled \
- 	-Dlibfido2=disabled \
- 	-Dpcre2=disabled \
--	-Dsysupdated=disabled
-+	-Dsysupdated=disabled \
-+	-Dnspawn=disabled \
-+	-Dlibmount=enabled
- 
- HOST_SYSTEMD_DEPENDENCIES = \
- 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 7fdd5d1798..41545cbeed 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -210,6 +210,7 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
-         BR2_PACKAGE_SYSTEMD_SYSUSERS=y
-         BR2_PACKAGE_SYSTEMD_VCONSOLE=y
-         BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-         """
- 
-     def test_run(self):
-diff --git a/system/Config.in b/system/Config.in
-index 98bbd93092..95fd5f0816 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -123,24 +123,24 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8
- 	select BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
- 
--comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and target gcc >= 8"
-+comment "systemd needs a glibc toolchain w/ SSP, headers >= 5.4, host and target gcc >= 8"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HAS_SSP || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
- 		!BR2_HOST_GCC_AT_LEAST_8
- 
--comment "systemd highly recommends Linux >= 4.15"
-+comment "systemd highly recommends Linux >= 5.7"
- 	depends on BR2_INIT_SYSTEMD
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
- 
- comment "Special purpose (read help)"
- 
 -- 
-2.52.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
