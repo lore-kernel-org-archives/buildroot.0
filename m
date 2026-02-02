@@ -1,114 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A349E7DF19
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 18:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A75AFE7DF1A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 18:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 385DF6077A;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B65140BA5;
 	Mon,  2 Feb 2026 18:15:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FYIubu7vfwyH; Mon,  2 Feb 2026 18:15:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tuaPQbwc4Xgz; Mon,  2 Feb 2026 18:15:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4944360782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C48D40B7D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770056143;
-	bh=TlNaaoOoy1FycNGNs4Z1LxHJx/QobOr3SGN4xKYS6+8=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=PQA2SqzbP5yO2rwyOz5SxSH6C9vmbKvvqEYfKLZ6hmXNgGA8tedzPUUtj4kYbidB8
-	 qELvnYEvKU9In0glKC3FGDksJHCSY/91GiGNAw0Fj154j+Q8FEtblGBVR7g8tDosW9
-	 sM0+IkCm9x/1AgQXf50+e1rPM7MmoBu3teaLfER+r4hy2ae0BbRtXxQc+E+ddrl0FO
-	 sArhSzCgRI5/etJqP61bsO2e+Ga0BvulEGgs4pb5FRqXUPItpE7xrqBjCGZnyXDGMW
-	 4RUGFcLOmHWpco3/GsaGQh6Nq6TAI9VEqsjXJ3s7PlXISLRxneJ/TH4XJYr/EyOQ/u
-	 Kz4lzypLmEejw==
+	s=default; t=1770056142;
+	bh=jaV16Il5g9TBjV6ptpgjNs/en6eKbFb2+VNIeZcj1bs=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=o5cebkwlJOTRA8fJG1dsIlm9j9cnM8pWCx817SqouuDSGNbqtr6vpmu0fFd3/5edX
+	 Yoky85rNGwOaLxYW1OqNbHAzqzD3ncGuGp4eugMRNdu9w6nHk+Vn8ocR+zSV6fdb2z
+	 99GABC75EsRXcLW1bYekhE7YyviQpVtddfCrifL96dsFbnzfvxYAtXrJLBumFPW06U
+	 ZEx0hxFhpu01ZCz8Qpt0DP3gOJeZiQaE/Mpk2BYjd1wqyXgGXt8vDNeXgU8ffCC7fN
+	 UAXaGH6xFzOtXp72fBxMMdEVUWgU+zSSwh/Kh8xzHKfHXw+REVdsifJ3V2rL3RC9mN
+	 4UilUP2WUqE0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4944360782;
-	Mon,  2 Feb 2026 18:15:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id ECB37F4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C48D40B7D;
+	Mon,  2 Feb 2026 18:15:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56121F4
  for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF0C66077A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3853840358
  for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:15:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5xaQuhWxeHDa for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 18:15:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CaHeZdNDT7Kt for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 18:15:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AAF14607AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAF14607AA
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AAF14607AA
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:15:40 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4801c2fae63so36277385e9.2
- for <buildroot@buildroot.org>; Mon, 02 Feb 2026 10:15:40 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2B12D400C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B12D400C5
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2B12D400C5
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:15:39 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4806b43beb6so35213735e9.3
+ for <buildroot@buildroot.org>; Mon, 02 Feb 2026 10:15:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1770056138; x=1770660938;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=RmjvzmM3ep8bRQyP2YsmLNR31WtJ3OGVUPw46vt4/S8=;
- b=bLAjuhH9kgWGGQzCHJ1hwBtLsTvwX9c7fGvlvDqBmK0KFz8cnWF8MAX2zjsKNUqTLb
- PiBGyLWXnThaQ/jbuOLLSz8SPc353u/cFtou+ZHfnLj/8ZafM75cesG0f2pSuZHhU0lD
- TFqBVfSFEe4wqVEesuY+IQ5pY4codpCJ9PvkIQ9ufxG6Jc4bPoQMSC1dP6U5SwLn8q+n
- GhN+8oFnXbDtruFRgm8N9VwIZvGFMUm2HgD7rvnNZW30LOyT5TYtE/UEvfMJl/m8l3BT
- or89U0ixi8ZQuN6Kq4uQosx/9a2Si2d1spd9SJikfiibk/hsTeiq1dMKiyou86unj/r5
- 9Qog==
-X-Gm-Message-State: AOJu0YxxxFLAELnXOy9AmDjsV7F+Z0xtI+dDyJt3pLQUrpw0BMEzYJAi
- +ziY08ky7PanuBss5r9C28DXRt54IoKIHb+lzokohudefCNoNJIetYvVZgDkEbz7GpWPFhFi37N
- KppQjy9w=
-X-Gm-Gg: AZuq6aIPZql8dmSReEuG36+lek95ZELo1lM84X8+O4DtMeioPS8baL+ENqS6JkK9fCN
- CGZ8wM1xQwYi7mqDeoDVMtfziTTrEp3qLz1DFuV1G/PNfsT1yZNOQVUTKxjqXStdMtZCUR1pXgV
- d8jQq2lwoiBG+sf9S7Vm9hMHSfF9kUylVOUGlRvGVS+L3XaQXzpPk/8ghQz0PEkwdGrZRdMlHbG
- waE/sB1ED+2oKi6qyDu9BIEEbIY3xNHb8+UD9iu0r2JfSN/2gh71obzmsPaVBSzieEHAtWxs+jT
- diJEQt3pHY8/WyvIuqqA+jNDx+TlTtxuIPF4RPZCOb+qKkyJh74gntIZD7MQRezvqQVaMWztXJX
- hB362BYzMbF2CzPj/C01bs8w6Q2gvEZXRlPSfS9nNa5OeuLjpwq9nQaTd6NiiWD8KjPstBvCEx7
- 5nQ5oYzHaEkT8K0gz7Quozz/BbJJXzZF2dZtgQBdfu3TkfTxQB
-X-Received: by 2002:a05:600c:3148:b0:475:da1a:53f9 with SMTP id
- 5b1f17b1804b1-482db45deb2mr158403725e9.14.1770056138610; 
- Mon, 02 Feb 2026 10:15:38 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=+vR43HPPWUKl2JosrMHJl4WRyZGmdCX8I2k+Va+zbKA=;
+ b=Y+ghNKkh84xer6hxbjMTGIw0MytVqxzJso5yibrAqmjRllk3Y9cRIaLycXBFrbAZX1
+ WJoJbIDtdMx4VF6f6GeAFbTYLOxZwzLDEafUD9e6bTdscPWEWtspcwkN3ajCusksnOO7
+ 4lE5GAv6hGC/KdFFz9WjJVhnvxYedrVXkogpQHpy0FB4UhUkPE3g8QvEJJwQJYSYXEiq
+ EdYlkVf/hlaqvmOd+aOXULY5/jt/+8cu+FVpG0lTMLga9x6pR5Oj0bB4HtNUrewCalPg
+ /LTe2lJZyQxYAPvK+h+5PZ7xGlh4O2BWahwohmfVU2l14g27CQyDl28dhK/J1z+7zocI
+ BpDg==
+X-Gm-Message-State: AOJu0YyPjD/olOtLz/TmuWBI43DB+wAhLuy7T3rurwjrY8OR7iMfq9d2
+ 4cjGjeW+12uvqRTp7SMhd1dtgTL6Nm5RJ8cfN5BgyikOaqU45NuK1vyjlrZRmdmbXr9cTNLUZOv
+ PNAJ2Xak=
+X-Gm-Gg: AZuq6aJVxncdNJgv+COIWe3EZeFP6FtejpMw/Qmn5RdO3yBP6VLMq9zZud0OJYFEw6R
+ 8UimvIxJf1CUgnW7E9qmHDJqv5qbhDvdZytl4FXNj0xPOCdouCgb8G1t18qNyO1lcMXKaRJXftP
+ L6LkmGoJLSkCrAmbEr2iNSDsPXB+rg3wgyDenv5gQ9/1lBLvLq3Pz3I1dzcC2Pfnhcv/QGaKYzD
+ eIli7DsyIj7o/0ylx/+HfLiBNa0/o5X2j2a+GiiH3LNOdMILbgrnEjuMo5iWODw0GhyhylhKG/N
+ Ks8sbSDr2akeGXRNZ6L25GmSsVCHuiTrHLGj+XwILe5J9SBfFhIiwBQMvXHnFPjJAkoU2yeMfYN
+ iZoP3/pEpWDH2Hyqgv4/IvQG/zqfZCxQaEYnqJtWJPF++VPNp9MDQ1QuWdyZYtZCR0LMvg/Mfhm
+ S3uVtnDhf/YqJn6VW+JlUe7r6x1e1SF/nuqUkC/tvvHWFapEoc
+X-Received: by 2002:a05:600c:4fd5:b0:477:a219:cdb7 with SMTP id
+ 5b1f17b1804b1-482db213bc7mr166983795e9.0.1770056137984; 
+ Mon, 02 Feb 2026 10:15:37 -0800 (PST)
 Received: from P-NTS-Evian (host-109-89-232-55.dynamic.voo.be. [109.89.232.55])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4830511bfc6sm12452415e9.2.2026.02.02.10.15.38
+ 5b1f17b1804b1-4830511bfc6sm12452415e9.2.2026.02.02.10.15.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Feb 2026 10:15:38 -0800 (PST)
+ Mon, 02 Feb 2026 10:15:37 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Mon,  2 Feb 2026 19:15:27 +0100
-Message-ID: <20260202181527.2584850-2-romain.naour@smile.fr>
+Date: Mon,  2 Feb 2026 19:15:26 +0100
+Message-ID: <20260202181527.2584850-1-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260202181527.2584850-1-romain.naour@smile.fr>
-References: <20260202181527.2584850-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=smile.fr; s=google; t=1770056138; x=1770660938; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=RmjvzmM3ep8bRQyP2YsmLNR31WtJ3OGVUPw46vt4/S8=;
- b=0/WiiO7KDo7WwGTNL/v6aIvII4FmpSFtIzWSLqipkrSPaSdr4ty/LKqUsfJYLYU1NP
- n63wzVLmin4ah8c200SQbG82qxdBRl52KnCA6XS2Ke1RqpJVCWACOX2dHVcf1oikaZf3
- LSmYwUxH6R6jHlxkQqofyXrZ/GNqX+vmkYYLY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=+vR43HPPWUKl2JosrMHJl4WRyZGmdCX8I2k+Va+zbKA=;
+ b=iFq/mOl96/mpsHNXrjC8hlUP5TbZudSrCSl3N2NxupYeWHZpFJDdYefHd6LCID0Bnc
+ N76hYLUWd6D09EPJk3ZlVwY7MmQfglqBxDylqkorQDvczrHxhIbHkjlSRnWbddIm76tw
+ BtfTtIB9+Z+WVBEUEAcmlYlrV7A+MduGREEWQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=0/WiiO7K
-Subject: [Buildroot] [PATCH 2/2] package/python-zipstream-ng: select python
- zstd module
+ header.s=google header.b=iFq/mOl9
+Subject: [Buildroot] [PATCH 1/2] package/python3: add optional zstd support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,30 +122,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since zipstream-ng v1.9.0 the python zstd module introduced in python
-3.14 is required at runtime [1].
+Python 3.14 introduced a new zstd module [1][2] that requires zstd
+package as dependency.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/12857413941
+Packages that requires this new module should select
+BR2_PACKAGE_PYTHON3_ZSTD.
 
-[1] https://github.com/pR0Ps/zipstream-ng/commit/1e3754cb26a422e94984db38535139c2c92473af
+[1] https://docs.python.org/3/library/compression.zstd.html
+[2] https://peps.python.org/pep-0784/
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/python-zipstream-ng/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python3/Config.in  | 6 ++++++
+ package/python3/python3.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/python-zipstream-ng/Config.in b/package/python-zipstream-ng/Config.in
-index 2de36dd861..b60f2ebe41 100644
---- a/package/python-zipstream-ng/Config.in
-+++ b/package/python-zipstream-ng/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_ZIPSTREAM_NG
- 	bool "python-zipstream-ng"
-+	select BR2_PACKAGE_PYTHON3_ZSTD # runtime
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index cfc08bad86..423e5daabb 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -127,6 +127,12 @@ config BR2_PACKAGE_PYTHON3_ZLIB
  	help
- 	  A modern and easy to use streamable zip file generator.
+ 	  zlib support in Python3
  
++config BR2_PACKAGE_PYTHON3_ZSTD
++	bool "zstd module"
++	select BR2_PACKAGE_ZSTD
++	help
++	  zstd support in Python3
++
+ endmenu
+ 
+ endif
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 31b5a4500e..8195f4fd83 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -170,6 +170,12 @@ else
+ PYTHON3_CONF_ENV += py_cv_module_zlib=n/a
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON3_ZSTD),y)
++PYTHON3_DEPENDENCIES += zstd
++else
++PYTHON3_CONF_ENV += py_cv_module__zstd=n/a
++endif
++
+ ifneq ($(BR2_PACKAGE_PYTHON3_OSSAUDIODEV),y)
+ PYTHON3_CONF_ENV += py_cv_module_ossaudiodev=n/a
+ endif
 -- 
 2.52.0
 
