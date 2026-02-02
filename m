@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC36E73144
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99521E73146
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:24:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C49F3607BA;
-	Mon,  2 Feb 2026 08:23:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5725E40945;
+	Mon,  2 Feb 2026 08:24:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYYTTqHO8-2J; Mon,  2 Feb 2026 08:23:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oSXbaduZxRV2; Mon,  2 Feb 2026 08:24:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14C996076B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E5FA4091C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770020591;
-	bh=BtqPrBJJ2OhvyDcUEe5/aHoDRbkp8OKQNxa/iTZhJkg=;
+	s=default; t=1770020666;
+	bh=3Bjj6xrPRYNCC3RUt5IHOwbDFoBVDZ/x0U3GVbKu/O4=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=stox2pEWHTH8ydAwn+/8Gj4kTxzFWhVnUHHYiENEKAF2RgrjJJHwbwwbfZ/OtRPuN
-	 E2GFLxuYYBlFIHbIcvx1MUwsgjV4qfUhxrs7BCGhkHWddqzoO/DWIT1Dl57BVCY1nC
-	 mxkGf5mUHjFEZArf0DoDg7x2v9S9VnC7ttpAHgW+zc0YlLjpauOf/Q7HDh61zXv5eq
-	 rhAfjq1Pjlvh67B93nd9sHgUf4PXXrUrZR+Tf4qU0EVDejoe6fNwH6qeBjHUVDLqD0
-	 2Xif1/Q51Bi+TeX+RwS3wISbhhJrfI4Oqypi5Q6zp91BanB6YdTlf13CwkU7LEf+kz
-	 Bd0/Gy3wiEPiA==
+	b=Kb7BOYPCPhgX7eLLlzwobTdxLob/kTl6L5hpBNhe4euGyx8ZxcxIa9NoqpPNM1Vu2
+	 M+d3epSlgwrWacYjfuXjfbPlRA/Qqrya/cIGQPCtAhvino95H/9e2iU94C2TM07D90
+	 1/eIAf6M+Ddnk0mOOSHQMS7MQR6puq9E4cnJo+5+g3qs+76hPjSBaK5tUQiLtozGKm
+	 EsGq8/unPQ8ZJ9m1Lq5149I/gHPwnR5wZhAm66gqz94RQk/HAOPASNN2ByGLJEOiPH
+	 NAYq8oc/Ja0zD4Y0WZGIWkw3nDNJw6Ct3CPu0dXM6E0sMh7POtw+wNZdhYOFE1L6ti
+	 1fcZ44StCuFtg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14C996076B;
-	Mon,  2 Feb 2026 08:23:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DE600149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:23:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E5FA4091C;
+	Mon,  2 Feb 2026 08:24:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 431F4149
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C340960648
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:23:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3CDD9401D0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hX-Nchdqkv3w for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 08:23:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uc_vvexws-Sd for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 08:24:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B8AE46076B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8AE46076B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16FE84018B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16FE84018B
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B8AE46076B
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:23:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16FE84018B
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:23 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -113011797; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 159376985; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Feb 2026 08:23:05 +0000 (UTC)
+ Mon, 02 Feb 2026 08:24:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmpD6-00000005oER-0XIB;
- Mon, 02 Feb 2026 09:23:04 +0100
+ (envelope-from <peter@korsgaard.com>) id 1vmpEI-00000005oK2-3q5F;
+ Mon, 02 Feb 2026 09:24:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Spenser Gilliland <spenser@gillilanding.com>
-In-Reply-To: <20260201184137.3595514-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 1 Feb 2026 19:41:37 +0100")
-References: <20260201184137.3595514-1-bernd@kuhls.net>
-Date: Mon, 02 Feb 2026 09:23:04 +0100
-Message-ID: <87tsvz7dw7.fsf@dell.be.48ers.dk>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260201184202.3605253-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sun, 1 Feb 2026 19:42:02 +0100")
+References: <20260201184202.3605253-1-bernd@kuhls.net>
+Date: Mon, 02 Feb 2026 09:24:18 +0100
+Message-ID: <87pl6n7du5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=AaKwkin2RudZsR1j3ZNyREv2RaL1Wf9q1s11iUlXw3ntcr94x1XCP/g2lDmqGTgg2mKzvIRZABn4cL21F3F3o0G22Tt3tYIFguC65pCQdokfP2y5yjiRBGN6vZNrVHjfxfvHSJ8a03kYLWpyea2U5BHX7CtBIXMvAAnlxR6ndq4PVhs/30woK3djSBFlDKiwT2ME8kcCXzAnB4w4MlzGL6GAwdO4KVuNpIKoLpBECn3nkgHSv/4XdtApfbZl2/X94L7HIrEgY7+Gkvo+Uk9VzkDLtteiOTpa6V+PlwCM2M6i19lqwa/fYHjnZ9yVFDZN4EFxMe9f9Yg6m7UAqxab8Q==;
+ b=a69ZOdBNUryOLXLQol6bOWHkc/OsQ5hu50nzL1jcbqlhOPM8u/7FDa/A70rzXVW7TyVS7Db1bKT+ehbN3JL5BprbjpuZ0lqGpwQ7BcA70VgZ1/oH3UcY+T7PB0l0i75nbsuPcHzz30FRZpMGr5klN/kLKWqcHJEbzDRWpd4rWflENyehgOXRjfAQXp6C3kyIRO8bdkYT1cUROYuyp0J37PKGos2vzgtgy9KNzM+l+Huw9Vz1IzzOep6DeDJTBS3nUIbj+mRA2Qo/AeqVUpuIR7F7/X/l8+7CUvcaHLq0QqgPPsciRfeIUsAQlerSqp0tBC6bWHFxAcXXvBDaqvrnYw==;
  s=purelymail2; d=purelymail.com; v=1;
- bh=EAtbgtjwaxfLWpZyf5iwd9jGHbF2EATwbTVCm9CPkwE=;
+ bh=ES8M5TomYiGch2aSfd+GrvSL1/emjKEUv0S5UfbCQsk=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=AaKwkin2
-Subject: Re: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.16.0
+ header.a=rsa-sha256 header.s=purelymail2 header.b=a69ZOdBN
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgcrypt: bump version to
+ 1.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,28 +100,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
- > https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.16.0
+ > https://dev.gnupg.org/source/libgcrypt/browse/master/NEWS;libgcrypt-1.12.0
+ > https://dev.gnupg.org/T7643
 
-I see the release notes mentions several security-related bugfixes, so
-maybe this should be marked as a security bump?
+ > Updated license hash due to upstream commit
+ > https://dev.gnupg.org/rC67b8da4ef62734927e061327efa9a6f48616d114
 
- - Bug fixes:
-    Fix to heap buffer overflow in vp9_deblock, vp9_post_proc_frame, and
-    vp9_pack_bitstream.
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-    Fix to integer overflow in vp9_highbd_post_proc, vp9_rc_regulate_q,
-    tiny_ssim, and vp9_calc_pframe_target_size_one_pass_cbr.
-
-    Fix to use-of-uninitialized-value in vp9_highbd_post_proc, mfqe, and
-    vp8_datarate_test.
-
-    Fix to out-of-bounds in log_tile_cols_from_picsize_level.
-    Fix to double free on initialization failure in vpx_codec_enc_init_multi.
-    Fix to division-by-zero crash in vpxenc with 0 FPS numerator input.
-    Fix to various build failures for Arm/SVE2, macOS cross-compilation, and
-    Xcode 16.
-
-So I added that and committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
