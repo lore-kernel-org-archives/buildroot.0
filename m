@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 312FAE7FDE2
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 21:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D5DEE7FDD8
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 21:32:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0A3160DD1;
-	Mon,  2 Feb 2026 21:28:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D24AF40827;
+	Mon,  2 Feb 2026 21:32:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id weKRK9NpbheV; Mon,  2 Feb 2026 21:28:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id csH-Oq--OSXp; Mon,  2 Feb 2026 21:32:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D874060C26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E778740917
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770067719;
-	bh=X+KYJeFwCEQ8JH8kiFg2WkVNtu2FgYQXM0MMd2gSobg=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LNDQD/+g72WxuJzIifQY9NMCgW2l3LajQEc4XvcKCBhR1Epc15Fu3H3vrpCEcE8L3
-	 Wix1FrT9h9QEVEWnz1DcMeL33WunsOkzSXO2NWPtRwYReRtBfnge7WrYKSc4Y5OsWb
-	 IHPwzUsplimROq5WDOa5cdix406dlTZNkpsSFLXd09fdvi7/bh9EbhyOY3tG1ltOxj
-	 vBtaXDXEdr/YLO4Q1/qzpvM89ysxMvwthzFFGCtZb8SDSuBYSrcryYB8QTBgiXp90m
-	 tyrbngBkLQ9RsL/fuTB1pfJGzlgXqaA1k5DJUm5r6rSd3+2hPpo2PtKM96ivk4Pe6X
-	 dWiQ9Mg31alTg==
+	s=default; t=1770067948;
+	bh=p4hoPb6R9KDk0Hueih5YybvFlAAabWa1vAvKa73Tqi8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=d85C57B9PHKY1Lyx1YcgLN5XREKDNl8SVBwbA0puyg0sDeCw4RsPcO+LPG0P4AF0Y
+	 LJAM7fh3eFV9PJqzr2sFr+/RwfAnEufQg3rfALVnvM9G1iNf/mWP+iUnmdXDdUwToF
+	 0aaVRVg4OllePxevf2/+cmxNpeLnq0+kb5YSsb/Es3Jtil5m+lDpsR/SLxHQa4N9Zc
+	 b3TqYDooNCgU7vahZTtpSezryCUFMpqVNdnmr5Qe1aZWadPRn+GHlXe1OaXf6pQHWm
+	 gykqH+AJeQPVSCAGSwN/Kj1m5FrEY50p1MFEVAndXmMKcSBYMI22v5cGmPaSb3dIHu
+	 +NCq/FLSSEkTg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D874060C26;
-	Mon,  2 Feb 2026 21:28:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 170ECF5
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:28:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E778740917;
+	Mon,  2 Feb 2026 21:32:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33A83149
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:32:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C42FA60744
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:28:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E56182B1B
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:32:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zybmCm5dz2va for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 21:28:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9QcIbJKa_H9H for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 21:32:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DD81560760
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD81560760
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD81560760
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:28:29 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id CD9391A2B8F
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:28:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id A5D5360767;
- Mon,  2 Feb 2026 21:28:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id F086A119A8888; Mon,  2 Feb 2026 22:28:26 +0100 (CET)
-To: Buildroot List <buildroot@buildroot.org>
-Cc: Marcus Hoffmann <buildroot@bubu1.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  2 Feb 2026 22:28:11 +0100
-Message-ID: <20260202212814.2607588-6-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260202212814.2607588-1-thomas.petazzoni@bootlin.com>
-References: <20260202212814.2607588-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1770067707; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding:in-reply-to:references;
- bh=TC4qAWByXY+pdO496vJN6y3dMSyImLDaylnzbFM7Wo4=;
- b=jpqzkS1tlmmVrTaMtHC4MrDuha0trqpqT7Ax0mthLgapVNGLI8b0ViWKN530FDzKyPvasK
- 9SKVi2CKZXDkcP9o49mU6qnqkKHhL+pKTO1MESvySrstMtsVAg8oJC9TNl2s3Lgd41mlHD
- gkpjFnF4w03DJprkjqt9UhYY+NkyapAJXCvi3GvYvqMeueP/LLTDpEmZUFzavSjJR7Dgdh
- HsbRj81raCw2Mk+HegzZIQFvIwxRhAQaaceZexk9Cp3iaD7UHKeshPtEoHDxc6yN+PNgFx
- 0dn2Bz0erSoxBzX+fwRQvWR9e9PaJu8RwdKgKrLe14fZIRNtqddYKYnbKuPJKQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=jpqzkS1t
-Subject: [Buildroot] [PATCH 5/5] support/config-fragments/autobuild: add a
- really old toolchain
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48AE082AB9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48AE082AB9
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 21:32:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 31AF1864CE; Mon,  2 Feb 2026 21:32:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 2 Feb 2026 22:31:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 48b56d61bc49e97a807e808f9fdafccf29c85c5c
+X-Git-Newrev: 3c15318805c4f4ff21fb6543815a0542b22d86b3
+X-Patchwork-Hint: ignore
+Message-Id: <20260202213225.31AF1864CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: fix building with
+ libsseccomp and kernel headers < 5.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,66 +71,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7632106723199000979=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Testing with a really old toolchain is helpful to catch issues related
-to kernel headers version issues, gcc version issues, etc. We chose a
-glibc toolchain though as old musl or uClibc-ng versions tend to lack
-a number of features that are needed by modern software.
+--===============7632106723199000979==
+Content-Type: text/plain
 
-This toolchain is placed near the top of toolchain-configs.csv, so
-that it is used as part of the "base" set of toolchain that test-pkg
-uses, even without the -a option.
+commit: https://git.buildroot.net/buildroot/commit/?id=3c15318805c4f4ff21fb6543815a0542b22d86b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-test-pkg takes the 6 first toolchains of this CSV file for its base
-test, and actually the comment in toolchain-configs.csv was wrong
-since commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511, which removed a
-toolchain from the base set, but not realizing that test-pkg would
-anyway continue to test the first 6 toolchains.
+This is also fixed in systemd v258+.
 
+Fixes: https://autobuild.buildroot.net/results/8ff/8ff77e79cc7373f452c25212c7e2058368cdd05f/
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../autobuild/bootlin-aarch64-glibc-old.config           | 9 +++++++++
- support/config-fragments/autobuild/toolchain-configs.csv | 3 +++
- 2 files changed, 12 insertions(+)
- create mode 100644 support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
+ ...omp-only-add-bpf-syscall-to-seccomp-allow.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config b/support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
+diff --git a/package/systemd/0001-nspawn-seccomp-only-add-bpf-syscall-to-seccomp-allow.patch b/package/systemd/0001-nspawn-seccomp-only-add-bpf-syscall-to-seccomp-allow.patch
 new file mode 100644
-index 0000000000..1b811f267a
+index 0000000000..4a74083391
 --- /dev/null
-+++ b/support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
-@@ -0,0 +1,9 @@
-+BR2_aarch64=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/aarch64--glibc--bleeding-edge-2017.05-toolchains-1-2.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 3ea05775f8..7103d903c9 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -18,6 +18,9 @@ support/config-fragments/autobuild/bootlin-x86-64-musl.config,x86_64
- # Test a MMU toolchain without dynamic library support
- support/config-fragments/autobuild/br-arm-full-static.config,x86_64
- 
-+# Test a really old toolchain (gcc 6.x, headers 4.9)
-+support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config,x86_64
++++ b/package/systemd/0001-nspawn-seccomp-only-add-bpf-syscall-to-seccomp-allow.patch
+@@ -0,0 +1,46 @@
++From e6ab723c96b91e7c4c495fcef0654102fac26570 Mon Sep 17 00:00:00 2001
++From: Marcus Hoffmann <bubu@bubu1.eu>
++Date: Mon, 2 Feb 2026 18:26:19 +0100
++Subject: [PATCH] nspawn-seccomp: only add bpf syscall to seccomp allowlist if
++ headers define CAP_BPF
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- # Toolchains used by test-pkg only when the '-a' option is passed:
- support/config-fragments/autobuild/arm-aarch64.config,x86_64
- support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
--- 
-2.52.0
++When building systemd with kernel headers < 5.8 (which added CAP_BPF) it fails with:
++
++  ../src/nspawn/nspawn-seccomp.c: In function ‘add_syscall_filters’:
++  ../src/nspawn/nspawn-seccomp.c:114:19: error: ‘CAP_BPF’ undeclared (first use in this function)
++    114 |                 { CAP_BPF,            "bpf",                         },
++        |                   ^~~~~~~
++  ../src/nspawn/nspawn-seccomp.c:114:19: note: each undeclared identifier is reported only once for each function it appears in
++
++If the kernel headers don't define CAP_BPF, it's likely that the running
++kernel doesn't know about this capability either, so we can assume that
++we'd never allow this syscall anyway.
++
++So if CAP_BPF isn't defined, just skip this allow_list entry entirely.
++
++Signed-off-by: Marcus Hoffmann <bubu@bubu1.eu>
++Upstream: N/A - fixed in systemd >= 258 by introducing vendored kernel headers for this use-casea
++---
++ src/nspawn/nspawn-seccomp.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/nspawn/nspawn-seccomp.c b/src/nspawn/nspawn-seccomp.c
++index 6956689ab5..aaac6085b6 100644
++--- a/src/nspawn/nspawn-seccomp.c
+++++ b/src/nspawn/nspawn-seccomp.c
++@@ -108,7 +108,9 @@ static int add_syscall_filters(
++                 { CAP_SYS_BOOT,       "reboot"                       },
++                 { CAP_SYSLOG,         "syslog"                       },
++                 { CAP_SYS_TTY_CONFIG, "vhangup"                      },
+++#ifdef CAP_BPF
++                 { CAP_BPF,            "bpf",                         },
+++# endif
++ 
++                 /*
++                  * The following syscalls and groups are knowingly excluded:
++-- 
++2.52.0
++
+
+--===============7632106723199000979==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7632106723199000979==--
