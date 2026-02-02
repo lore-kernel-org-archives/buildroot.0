@@ -4,80 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81E72E73144
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86622E73148
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 09:01:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36A644082A;
-	Mon,  2 Feb 2026 08:47:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34B71406CE;
+	Mon,  2 Feb 2026 09:01:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r3LmECLFYkBA; Mon,  2 Feb 2026 08:47:36 +0000 (UTC)
+ id UO4YNVb_nR0G; Mon,  2 Feb 2026 09:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C30A40820
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC224076C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770022056;
-	bh=ii9UDGR8+lugXMthko4irJMRo2ntSO2I1hpGNxwCLSY=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=FDV6RnH768gWnXcTOV1t5xhzBKQ1zgTvNKJlmLu92+qUscHBFAsrg9AJK/doE8Wik
-	 XLvW+e5c/fyqtyJTR9N9AUjkLY2R3cEwquZ3jjAggrJBhJEHbjqcbHDHlHfX8rO3aB
-	 QWOf5NAQgPQWoQ7Sbn8biyu6mlD5JRDzM7rIDWk6uo2Rv7J4YFhcTMwRvW2rYuy8vb
-	 69okjauClcvTL1Uf5h10EUKqHfgG60mo8WHcGubLivphNcPGKtFlJG3NTyJEwQQ06r
-	 nDUmg8pM3Q8sKroZSW7h8a8sj/d+R7Djhs3ULHAqsav0+xhh9kDXk8uOK0fGS5n2bu
-	 vJD+uWedazyQA==
+	s=default; t=1770022894;
+	bh=E2qyIXkxFJID1gW0S8hop2upCLGVxD8KxD5oIHnglMg=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=gPelUqYfZ+9hF3LQy7DnTM/pHIQMirGVVBw7u4TOTf4yEMRbfW1+IpIohPXkjAGaa
+	 7SLME0nppLwJViS9vK0Qf+6hGVLk+1qP7N4rHG04K44BhFnSvmMOOMKckRpzUfXj9n
+	 IIJLa9BGI+GvLMNyDogWrZKL9kWxNwxZOAdBFLJbsy2FUmkVHTryaXtP6IcQCH4Ma6
+	 4HWZuU4eF7lf4pi3aRJhWIP2Y4be53rTAyBd2sZJ8WTk5vBM2RsQcfzx7z9XuzsjBG
+	 UANiteNQnzLkxJ43L4tvZ8kHzzHplDFpNE8PJsDJr1mzpnKu9TYFfDomtKiStkFFlr
+	 A/+ZS6NEvQQHQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C30A40820;
-	Mon,  2 Feb 2026 08:47:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 74212149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:47:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DC224076C;
+	Mon,  2 Feb 2026 09:01:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8AA8A23E
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 09:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CA7740817
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:47:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DEC3811C6
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 09:01:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_15nqMiytLM for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 08:47:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 533D340810
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 533D340810
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 533D340810
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:47:31 +0000 (UTC)
-Received: from framework-OT (host-109-89-232-55.dynamic.voo.be [109.89.232.55])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 74CDA2C80134;
- Mon, 02 Feb 2026 09:47:29 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Boerge Struempfel <boerge.struempfel@gmail.com>
-Date: Mon,  2 Feb 2026 09:46:53 +0100
-Message-ID: <20260202084741.1557662-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.52.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vivCiOyVBOua for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 09:01:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 68CC5811C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68CC5811C9
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 68CC5811C9
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 09:01:31 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 120946209; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 02 Feb 2026 09:01:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vmpoC-00000005pkd-01YB;
+ Mon, 02 Feb 2026 10:01:24 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260122185254.1054937-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Thu, 22 Jan 2026 19:52:54 +0100")
+References: <20260122185254.1054937-1-bernd@kuhls.net>
+Date: Mon, 02 Feb 2026 10:01:23 +0100
+Message-ID: <874inz7c4c.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770022049; bh=pfDFQMAckXTQiJcoL1u/48wimdtilzoe0M/15gS+AMk=;
- h=From:To:Cc:Subject:Date;
- b=LdS6TF/Ayl91I9pSur6gxBIvWKCxC3lEQI2gNhf4HnPpS2//FE/P0RCgjdqCoY7Hz
- ejxK0fARHI/2qn7wAmB5U6GSiEGScdwuetVAYPLEnx9Q3NoL2TUthVZGt5BEExN2Cs
- 1YAyan11+/RWwxQutVCBnyEYGwPTbEgmNAKw/7RDOTblt+vwuWo/D+38r24/jgdoKT
- 0i3RQT94o9PS0Hd4XN1Nk3+5Sm1LB6FKlJSNKotdmmh0NH+WmX4sCaVbKPP3nLlkQC
- MGbo638xeUZqPPmmeoFlQsUE9MdAYWLHlP4gszVtAbIz2y1z5qmE1jPMZnd7S5hwtR
- UW8RPvQm+2yjg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Fv1nroZ9IP3ucotRlLA66lekAKbC+OAcRt+hur7bkXaw66/UfWXQj3jZEIIartXiYh2UiP6/D8ptSLog5Ef2s2ubtSNglxdh1pLPkNnGC5c2VaU1mTuLvN5IRhlnvZzazBFQeKL0sS7RsQBc1fdA/yULRs36grIRKd8EQKk2btSOomoEvcHLtE28ADmlml0WnWkvmAV7HOaamX4TunepsrrD7msvujeUBc/vcwK7CWo64+Iw+cqScpqTUuyKcQe0n/3PadumQF3UbeE7WPKTGfXN6Ba1pOP7W+0lNNPoN9xLHxm+808IRfpVPzwrMi5PpHjbcbeCLGN6mvcLV8uDrA==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=qn33L4XP79i85LpzbLW7lLuGImVUF2bUX+ZNOrY3Oc4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=LdS6TF/A
-Subject: [Buildroot] [PATCH v2] package/libgpiod2: enable gpioset
- interactive when libedit is available
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=Fv1nroZ9
+Subject: Re: [Buildroot] [PATCH 1/1] package/uftp: needs libopenssl,
+ not libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,42 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
-v1 -> v2: Remove explicit option and always enable when libedit is
-          selected.
----
- package/libgpiod2/libgpiod2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
-index c5b53f631b..ae3bcfa207 100644
---- a/package/libgpiod2/libgpiod2.mk
-+++ b/package/libgpiod2/libgpiod2.mk
-@@ -24,6 +24,13 @@ else
- LIBGPIOD2_CONF_OPTS += --disable-tools
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+LIBGPIOD2_DEPENDENCIES += libedit
-+LIBGPIOD2_CONF_OPTS += --enable-gpioset-interactive
-+else
-+LIBGPIOD2_CONF_OPTS += --disable-gpioset-interactive
-+endif
-+
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- LIBGPIOD2_CONF_OPTS += --enable-bindings-cxx
- else
+ > Buildroot commit bumped libressl from version 3.8.4 to 3.9.2.
+ > Libressl 3.9.0 contains a breaking change:
+ > https://github.com/libressl/portable/releases/tag/v3.9.0
+ > "EVP_add_{cipher,digest}() were removed."
+
+ > Upstream was notified by Yegor but did not add any fixes:
+ > https://sourceforge.net/p/uftp-multicast/discussion/general/thread/c02c950dff/
+ > so we force the usage of libopenssl to fix a build error:
+
+ > encrypt_openssl.c: In function 'crypto_init':
+ > encrypt_openssl.c:77:5: error: implicit declaration of function
+ >  'EVP_add_cipher'; did you mean 'EVP_Cipher'?
+ >  [-Wimplicit-function-declaration]
+ >    77 |     EVP_add_cipher(EVP_aes_128_ccm());
+
+ > first caught by the autobuilders on 2024-08-09:
+ > https://autobuild.buildroot.net/results/7da/7dadc662e0a6642e40831a93b788e959498d8923/
+
+ > Fixes:
+ > https://autobuild.buildroot.net/results/a74/a74526181dfc90aff7f56457c430c1aa1d006e54/
+
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Another option would be to change the conditional in the .mk file to
+use:
+
+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+
+But OK, this is fine as well - Committed, thanks.
+
 -- 
-2.52.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
