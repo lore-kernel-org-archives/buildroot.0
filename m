@@ -1,87 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99521E73146
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:24:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9A2BE73145
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5725E40945;
-	Mon,  2 Feb 2026 08:24:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECF1981362;
+	Mon,  2 Feb 2026 08:24:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oSXbaduZxRV2; Mon,  2 Feb 2026 08:24:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id szxyS7pT61OH; Mon,  2 Feb 2026 08:24:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E5FA4091C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53EA2812AE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770020666;
-	bh=3Bjj6xrPRYNCC3RUt5IHOwbDFoBVDZ/x0U3GVbKu/O4=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Kb7BOYPCPhgX7eLLlzwobTdxLob/kTl6L5hpBNhe4euGyx8ZxcxIa9NoqpPNM1Vu2
-	 M+d3epSlgwrWacYjfuXjfbPlRA/Qqrya/cIGQPCtAhvino95H/9e2iU94C2TM07D90
-	 1/eIAf6M+Ddnk0mOOSHQMS7MQR6puq9E4cnJo+5+g3qs+76hPjSBaK5tUQiLtozGKm
-	 EsGq8/unPQ8ZJ9m1Lq5149I/gHPwnR5wZhAm66gqz94RQk/HAOPASNN2ByGLJEOiPH
-	 NAYq8oc/Ja0zD4Y0WZGIWkw3nDNJw6Ct3CPu0dXM6E0sMh7POtw+wNZdhYOFE1L6ti
-	 1fcZ44StCuFtg==
+	s=default; t=1770020692;
+	bh=UlivT/7U7tdYEhIeTXIyH88GQ+z0abHz5A8+jimtp9o=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=o+h0Go9E+CCuaYQAR5g+xpLILfuT/4ZGo2VHifSj9QHCcZrwMSpXS8Jf37U/NNJln
+	 GJ2Q/aDuGEXYiBgBVbR5E1K8I1d0c+EL9QCb+y6cme7XLhiQSz5mgBhXV2qFnzsK8U
+	 uS7N3AT2LdXN7qso7nz5+uTo66QqWw1XqcRMrCJhesxEUcrpulKfevMwUZKps2nWaY
+	 b8TUDBqFP14LvZ/y9Cn4183doyHn0chBGxyEuJCULZSehdbyvhGglue9cMD+rt3THP
+	 Zno6mldgt3ZwSPMMZTMx2Sq/tWoQGbl3jdE1n7r11pD8HcXI5f4y0S2YzdEUCoktFB
+	 SMId7Sj+EwXHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E5FA4091C;
-	Mon,  2 Feb 2026 08:24:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 431F4149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53EA2812AE;
+	Mon,  2 Feb 2026 08:24:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 832971E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CDD9401D0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67708401E8
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uc_vvexws-Sd for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 08:24:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id yVm1GoVYSoHI for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 08:24:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16FE84018B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16FE84018B
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 16FE84018B
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:23 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 159376985; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Feb 2026 08:24:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmpEI-00000005oK2-3q5F;
- Mon, 02 Feb 2026 09:24:18 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B06D401D0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B06D401D0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:24:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 855108623E; Mon,  2 Feb 2026 08:24:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260201184202.3605253-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 1 Feb 2026 19:42:02 +0100")
-References: <20260201184202.3605253-1-bernd@kuhls.net>
-Date: Mon, 02 Feb 2026 09:24:18 +0100
-Message-ID: <87pl6n7du5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=a69ZOdBNUryOLXLQol6bOWHkc/OsQ5hu50nzL1jcbqlhOPM8u/7FDa/A70rzXVW7TyVS7Db1bKT+ehbN3JL5BprbjpuZ0lqGpwQ7BcA70VgZ1/oH3UcY+T7PB0l0i75nbsuPcHzz30FRZpMGr5klN/kLKWqcHJEbzDRWpd4rWflENyehgOXRjfAQXp6C3kyIRO8bdkYT1cUROYuyp0J37PKGos2vzgtgy9KNzM+l+Huw9Vz1IzzOep6DeDJTBS3nUIbj+mRA2Qo/AeqVUpuIR7F7/X/l8+7CUvcaHLq0QqgPPsciRfeIUsAQlerSqp0tBC6bWHFxAcXXvBDaqvrnYw==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=ES8M5TomYiGch2aSfd+GrvSL1/emjKEUv0S5UfbCQsk=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=a69ZOdBN
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgcrypt: bump version to
- 1.12.0
+To: buildroot@buildroot.org
+Date: Mon, 2 Feb 2026 09:17:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 386c34cc38ddad5afb4e48029bd8ebb4d8b64fe4
+X-Git-Newrev: 7e5a961eb0b74399d81518ef3865c32b118ea6da
+X-Patchwork-Hint: ignore
+Message-Id: <20260202082450.855108623E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvpx: security bump to version
+ 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,25 +70,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7e5a961eb0b74399d81518ef3865c32b118ea6da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://dev.gnupg.org/source/libgcrypt/browse/master/NEWS;libgcrypt-1.12.0
- > https://dev.gnupg.org/T7643
+Brings additional optimizations and bugfixes:
 
- > Updated license hash due to upstream commit
- > https://dev.gnupg.org/rC67b8da4ef62734927e061327efa9a6f48616d114
+Fix to heap buffer overflow in vp9_deblock, vp9_post_proc_frame, and
+vp9_pack_bitstream.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fix to integer overflow in vp9_highbd_post_proc, vp9_rc_regulate_q,
+tiny_ssim, and vp9_calc_pframe_target_size_one_pass_cbr.
 
-Committed, thanks.
+Fix to use-of-uninitialized-value in vp9_highbd_post_proc, mfqe, and
+vp8_datarate_test.
 
--- 
-Bye, Peter Korsgaard
+Fix to out-of-bounds in log_tile_cols_from_picsize_level.
+Fix to double free on initialization failure in vpx_codec_enc_init_multi.
+Fix to division-by-zero crash in vpxenc with 0 FPS numerator input.
+Fix to various build failures for Arm/SVE2, macOS cross-compilation, and
+Xcode 16.
+
+https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.16.0
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libvpx/libvpx.hash | 2 +-
+ package/libvpx/libvpx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index 1082721f1a..33d15fe108 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  26fcd3db88045dee380e581862a6ef106f49b74b6396ee95c2993a260b4636aa  libvpx-1.15.2.tar.gz
++sha256  7a479a3c66b9f5d5542a4c6a1b7d3768a983b1e5c14c60a9396edc9b649e015c  libvpx-1.16.0.tar.gz
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index 4f4144f4ff..d6b84ffec3 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVPX_VERSION = 1.15.2
++LIBVPX_VERSION = 1.16.0
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
