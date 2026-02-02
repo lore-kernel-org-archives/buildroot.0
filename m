@@ -1,83 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3D58E7DEF1
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 14:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE4E7E7DEF0
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 14:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F7DE82419;
-	Mon,  2 Feb 2026 14:47:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91036407BB;
+	Mon,  2 Feb 2026 14:51:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CESA7GxK3vsw; Mon,  2 Feb 2026 14:47:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W2qpms82S3ZY; Mon,  2 Feb 2026 14:51:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B49D822FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFD6D40693
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770043644;
-	bh=v4GTQUv3XEeq0JfT9XuecW17zGVuQcIlyFqo2sfLFmw=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1770043896;
+	bh=Ab/qOoJDEDttD6RREhRBrdjf7VctUzUqd3qUxQBWJMM=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=MrGGrn7IHWEPdONUNdPd6tsT+OLCs53ha11j6zPYQfszpTYKscgrDgWhafZr10A8Y
-	 c8QwSDtGMXwVQuBz1lIOCcJcFddH5fRga5Rn3ZUMiNpgwAcBAWbsLTJ0pnBvbauSpN
-	 h4vaoUL6XS2HsHTChnFYWdLjaJOMY6RCoWwz5hx5mGnJPejOBE4asVQCBtkc/FxMpc
-	 xI8ErOTaQUsE+4/ViI1CjcEFaLXHHmlh8dFJJJL4sqBmBC1W5on85OjSAZr6KJgMz+
-	 n9iaTk1mX83WJOg8uLH96iJdzY18cai4SacKiqrUlZPDMJ5T1cpbaoil0yiVJWLkXU
-	 0P4h5QEeQDIAg==
+	b=kkh+QtFw9brIzeow2wwDmpddo99Q6Gs6q+2FpFfeLL/kKfeplCaslmhYolePWnzto
+	 O3xYTXUzSsuHA1qeZ/cAeJIdwSFlmDeV/WDnKOMu+BAsm5h6UtYchRYsQgwCj7NU6D
+	 d2vynfY5rkrh8N9SVwgTaGNBZ76lv5AassEF2SsXKaf1r/ASQaYKyMVNVOoI9k6K1E
+	 Jj19cBVcMn+amC8+rUJqyjJSzVqJOoT5nsvTtTVzvziPGG9qiLvLM64/9OUBI3Yu/N
+	 jc5lMdxrxxw0ttIxbNx8UQb971js1sXVaToivMH19CFwE35ASLqkCcVqMxcww0okaD
+	 ZNTYwVYT65lxA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B49D822FC;
-	Mon,  2 Feb 2026 14:47:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFD6D40693;
+	Mon,  2 Feb 2026 14:51:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 778C51E0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 14:47:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CC2DF23E
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 14:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C08B822FC
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 14:47:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5CE9822F1
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 14:51:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iNU1NqgEeQYw for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 14:47:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 50BB081701
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50BB081701
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 50BB081701
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 14:47:22 +0000 (UTC)
-Received: from home.juju.sh (unknown [109.89.232.55])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 02D6B19F57B;
- Mon,  2 Feb 2026 15:47:16 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>,
-	Julien Olivain <ju.o@free.fr>
-Date: Mon,  2 Feb 2026 15:47:04 +0100
-Message-ID: <20260202144704.980271-2-ju.o@free.fr>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260202144704.980271-1-ju.o@free.fr>
-References: <20260202144704.980271-1-ju.o@free.fr>
+ id CBOWr5wZZVBe for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 14:51:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A0C98822EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0C98822EE
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A0C98822EE
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 14:51:32 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 947374E423CA;
+ Mon,  2 Feb 2026 14:51:30 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 692A960767;
+ Mon,  2 Feb 2026 14:51:30 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 22682119A8891; Mon,  2 Feb 2026 15:51:28 +0100 (CET)
+Date: Mon, 2 Feb 2026 15:51:28 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <aYCydXJJM7dK-Udn@windsurf>
+References: <20251204223855.3571710-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770043640;
- bh=IdAqSppc7jfZYt4Z46jfRT8K0jZQa7sFqLvqOxJyKH8=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=lEjxr2A/3X0C2DV//daEtIw07aD7ZG8BGoNUwuPinQKCTT3fwBrE5USthnnMmPJXs
- JpPhhinFWmo7/+insp7jygdzYLS1izSCoL8m6vpyD5XQOx8Sd5Rm6SD61wJjzaFXqq
- p2/Y+T0dobKwFS1jjcBSij4kHDGS7j5LjCylLesyjnu8S9ANXaS90M6CyKABUI/d7d
- M/vzTcrH2ayRpvoVfJzUXy2qbyVmSxb4Fyk5C+aLE7W6oYzAU7wimhl/+5Bi6moK23
- DXa4rdJOBIHUmHbebN8S4fM5uphyw+p2xXHxnmlw2BxRvH8lcWCkrZwn/sdMCmaltF
- 419Hl9Zgt0oBQ==
+Content-Disposition: inline
+In-Reply-To: <20251204223855.3571710-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1770043889; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=7t353ElCTL8/m/bmXKXvSv1WaT7yAAAyzib8oIgrSzU=;
+ b=dnwAopRHGuNvWpMA/I/AzSgXjDrLe/LweJSNpQsnyC1fmrai2wxg31rRXuyf4WnCJ/yd2Y
+ ozTKCaWsK8orvL2HY1+nBHzDIecxOTdIIFJRo1VsLwAdqJ+l8vT0qRkCGqjDP0rmIZISG7
+ zuKDUiMDph5HGzjFN+787gkpu+7hdJbqu3/PF2T3uXHbnoJS26B6+HbZaauiOb5alMHFm/
+ qYmKtMMYJlxIIBdTmdKZB+drPOLjfgQBIc2pzyvyxX+ZKiqlnFZDGKEKZxeOPaUZHyQkOS
+ gnsefs4xmtYnCwCBsxQyJz5Gx5NyZyEsEtKhbLDIfk42/Vf8WT2YPZ9KFRu5TA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lEjxr2A/
-Subject: [Buildroot] [PATCH 2/2] package/qemu: bump to version 10.2.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=dnwAopRH
+Subject: Re: [Buildroot] [PATCH 1/1] package/vsftpd: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,50 +94,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://wiki.qemu.org/ChangeLog/10.2
+Hello,
 
-Note: this commit switches to the new qemu stable-10.2 branch series.
+On Thu, Dec 04, 2025 at 11:38:55PM +0100, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/661/661edeafc949390df397fd40a8035330238cbe8a/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The details in this commit message were a bit scarce. What is "newer
+gcc"? Also when I tried building vsftpd with gcc 15.x, it just worked,
+until I realized that it would only fail to build when OpenSSL was
+enabled. It would have been nice to have both bits of information
+mentioned in the commit message. So I improved a bit the commit
+message when applying.
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index ee70e67694..f8e750225f 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  fbaa7a0d7a9a1deb5695b125916746ec28fe0de6275d4454f3e3bbaf8b339b53  qemu-10.1.3.tar.xz
-+sha256  9e30ad1b8b9f7b4463001582d1ab297f39cfccea5d08540c0ca6d6672785883a  qemu-10.2.0.tar.xz
- sha256  dd3ce02338c3a48abb6ba59b48809f7108a8bd242cb0cc8be90daafa30707c28  COPYING
- sha256  31c90ce76b6f5aab90a205851e71d5c27e31c0aa3d7017a4383b98a6fe3f1faa  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 5cc98138d9..d7d7971941 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, check whether the list of supported targets
- # needs to be updated.
--QEMU_VERSION = 10.1.3
-+QEMU_VERSION = 10.2.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = https://download.qemu.org
- QEMU_SELINUX_MODULES = qemu virt
+Thanks!
+
+Thomas
 -- 
-2.52.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
