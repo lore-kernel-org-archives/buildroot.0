@@ -1,91 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0202E7DEF4
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 15:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB6ABE7DEF8
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 15:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CDF640B11;
-	Mon,  2 Feb 2026 15:19:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89CC6814A1;
+	Mon,  2 Feb 2026 15:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rlpA_Sp7aXEY; Mon,  2 Feb 2026 15:19:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U0B7yvKVyDlU; Mon,  2 Feb 2026 15:40:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77A0940B0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CA6F814B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770045569;
-	bh=7v51yP1tIYmGj0zUwU10bGLjvToLtLtPWsbFn/tMU8M=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=EETc5uuNTJ6R5h18Y2UXz15enyo9SXEI/av84JRLO3Mq8w9pw/CvwR2bo7BZQCEdJ
-	 ukm8bD6mN1QVjQuhJS0fn8wR0rp+oqzywYYXFD8emF9NKis1ZLfDYkfF+fV8q3XdqI
-	 8amDrninlYqCiihmAVQuNMQKti5d5TdYd2eqnQNdKE4S30v1QDYtu372dVfjPiJHJR
-	 MkgfGmYzSv/4Kbj9PMtciAkbiKlM94OpddTjuvxDcnXOUtD90sDwjw5fCqiScd5gYU
-	 LdfuK3VicuKOLvSgXYlDvg+ORVb/XHZETKlabUDVjt5UnVpwKtwyQ89ZEdZyprHm+l
-	 766doU0YJi2Qw==
+	s=default; t=1770046819;
+	bh=6EvVWaXPmSWhrnRbW5UBb1IguTRhJjqBt1SoIJJfbq0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=JhaZijRrEAOVHwKm2bFuC9MmyZVoUPtFQXzaxOKX8tJkztAdmvk3FMYTYW9UM4mf+
+	 4aOqMBh3PjLAjvP621xA3tMUILstH0h3JSDNw3ezolvNhHtgGel9KAaowXbVyh44Kf
+	 DkG23jrCh3O6sHYwjewk0mOoTwgMAFV23itgZ9kvQ7nupGtUCNSNb49vjlVUAEk/Tw
+	 0Md0nV+0sY7xb1HM4n0Lu5gwckGWCFc3mD/Y6zpK5C312nI+9fYqlej5DCehBqM/8g
+	 Iy5+YTqFbnXw3GtozOpYLVQobcVQcDtMjkAhCxDUo/O2NYGDREuMoolmDVx+dOUoGm
+	 F0eZz7mgcUkgQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77A0940B0B;
-	Mon,  2 Feb 2026 15:19:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CA6F814B5;
+	Mon,  2 Feb 2026 15:40:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B4ED1E0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:19:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 32CA823E
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86C68402C6
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:19:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08530402EE
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:40:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WdNne7WgzThu for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 15:19:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=23.90.104.144;
- helo=esa1.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
+ id dLOp4f_FuKA2 for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 15:40:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5F31B401E1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F31B401E1
-Received: from esa1.hc555-34.eu.iphmx.com (esa1.hc555-34.eu.iphmx.com
- [23.90.104.144])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F31B401E1
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:19:23 +0000 (UTC)
-X-CSE-ConnectionGUID: fNoc/4ArRgWvg0iz1VkTbw==
-X-CSE-MsgGUID: Us+bjToETrqMruIPqQdOxw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from unknown (HELO ces01_data.me-corp.lan) ([146.255.191.134])
- by esa1.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 02 Feb 2026 17:19:20 +0200
-X-CSE-ConnectionGUID: CZMvK/iUSK2NrRvUFrTwkA==
-X-CSE-MsgGUID: U2zX/1p8TnaUcf7HuuBBEw==
-Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.2])
- by ces01_data.me-corp.lan with SMTP; 02 Feb 2026 17:21:32 +0200
-Received: by epgd074.me-corp.lan (sSMTP sendmail emulation);
- Mon, 02 Feb 2026 17:19:19 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06699402C3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06699402C3
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 15:40:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E77BA863A5; Mon,  2 Feb 2026 15:40:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: guenther.harrasser@mobileye.com,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Date: Mon,  2 Feb 2026 17:19:08 +0200
-Message-ID: <20260202151908.1203336-1-jimmy.wesolowski@mobileye.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
- t=1770045564; x=1801581564;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=+PvLLLnxVZucVqDJRBM5ZeL7Ix4Qg1jIk7NzuyQ0jhM=;
- b=BUEZux7elVBHLIZ9OgwRHqUQrKAt3r4VZwlBG6IRI8KcAP+L31M9N8z1
- nH++sFtPiEd10AtnMvY/envgBCNn0hFqEWdnFDE8BM5o5aR93hqpKeXaj
- WZ6hRS0JvgmAasXhuMZtJYHz2JOpQ3tHsYXP6PDeu5lMKAg879l8hjB87
- T24hz9OeD3VwvbmY658BOlJiC8+TTIio5bguySQdjyTVttgFVWegN41o8
- yZLgFJGbdxplWzTEmvxbE5UsKKx3FK5q+RLT/hN4vAP611H/Mw3s4eA6/
- VuK63YoRsyFoG021mDDsT4Co8Snkt3csd25115jxdO0qxGJL+YRUlQdGs
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mobileye.com
-Subject: [Buildroot] [PATCH] package/libunwind: enable on riscv 64-bit glibc
+Date: Mon, 2 Feb 2026 16:21:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3d1b77f98a079cb6a36c185d6744e1f42bd04951
+X-Git-Newrev: 1822f07e94951c5a37f78c1009d54fc95d01d39c
+X-Patchwork-Hint: ignore
+Message-Id: <20260202154016.E77BA863A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glibc: enable hppa support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,43 +68,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org>
-Reply-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2475236442540107549=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+--===============2475236442540107549==
+Content-Type: text/plain
 
-Since version 1.8, libunwind supports 64-bit riscv,
-at least with glibc
+commit: https://git.buildroot.net/buildroot/commit/?id=1822f07e94951c5a37f78c1009d54fc95d01d39c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change-Id: Ia06dad0215baa34bef33f7693bd76ffb66f3a32a
-Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-(cherry picked from commit 180117f1ca693725f3b937341ac243a863f6746c)
-Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Add support for HPPA.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libunwind/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in          | 1 -
+ package/glibc/Config.in | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 08f7f879c9..dd8cc72926 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -26,7 +26,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
- 		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_sh || \
--		 BR2_i386 || BR2_x86_64)
-+		 BR2_i386 || BR2_x86_64 || (BR2_riscv && BR2_ARCH_IS_64))
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
- 		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
--- 
-2.43.0
+diff --git a/arch/Config.in b/arch/Config.in
+index d21e8cc8f5..bdfc2b092c 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -68,7 +68,6 @@ config BR2_aarch64_be
+ config BR2_hppa
+ 	bool "HPPA"
+ 	select BR2_USE_MMU
+-	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  Precision Architecture (a.k.a. PA-RISC) is a 32-bit
+ 	  (big endian) architecture developed by Hewlett Packard.
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index b066616a01..2bf44bb70b 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_armeb
+ 	default y if BR2_aarch64
+ 	default y if BR2_aarch64_be
++	default y if BR2_hppa
+ 	default y if BR2_i386
+ 	default y if BR2_loongarch64
+ 	default y if BR2_m68k_m68k
+
+--===============2475236442540107549==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2475236442540107549==--
