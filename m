@@ -1,80 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E0D8E7317E
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 13:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C97B0E73179
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 13:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55D7440697;
-	Mon,  2 Feb 2026 13:55:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 699DD606A2;
+	Mon,  2 Feb 2026 13:57:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gkrSwQNVMx6S; Mon,  2 Feb 2026 13:57:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CA7F606B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770040628;
+	bh=hDP7oBzEJ+Z6VBXQ2FTVb+EPBZqB+XFVlm+yiKAR/fw=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kDQF+fsDoh4AOx68g6eQH5aDegiqRKwAvX8Qve6l6XyO9nICYip88T90nqXYRbwGY
+	 7U47VtZ/TYNPgO8yk5QFySyU+oHQ8aWFV5PoDyEnteCl5/i9HAw8FED9ubz5oqrpDL
+	 +m27xddoybseiOZJJ73tgBOCIf3JlR86Z6Q2mYy+YtkYwYzi15wwa2OH9k3SmDcpsq
+	 yFaUdXKTjLbMKYdFmxF0uux0kjuVWAP899yjFZsfJkrMAEcN5wWxoze0alE9T1JVkw
+	 D6FlLHszBtgCvDj1OoM8NOhZz/CBRJ0wVSsY8Xls0rzDouqoYZikSYKfFuYJTqcQAj
+	 ZyGldScdOT3Jw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CA7F606B0;
+	Mon,  2 Feb 2026 13:57:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D78E623E
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:57:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C49D940802
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:57:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P1Dh4-P8Zgww; Mon,  2 Feb 2026 13:55:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B52F4068B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770040505;
-	bh=7+B8XRHvDYgSK+0MZDN9MYalM1bpKuMrOATr/mzu/QQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=lts+hi28op8ZyX/sOof61qTv5SIHNbQxSFovEFZa4PxE0bEfl8f6KWV4/BB8NLmLa
-	 3/yOaL2iZLO64nzXzxLAK2+P7vnIyslY3XvWcl5sDzSMYqZxORvMUGKwuD3G7K5Tmo
-	 4qXZZBeZ2W0yOsGyWKc2XjMwambMgfmzbU7xIKRxfZ8H4xADl4Qd9e8Dcy987vbNz+
-	 9/jHM1gFetOmt99smRU/+UixuKy3qas4OmNHclTixrf1z8tzjbGe0rmw7dIgpig7EO
-	 Ftwl0BMYgGesWWrK11WHKZbPebC7eL/jNFfrwUI+H/ivrThHOWuoh3GYCPtKTBEejR
-	 85OvU0oegTq/A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B52F4068B;
-	Mon,  2 Feb 2026 13:55:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A7BD149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:55:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88BEC40346
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:55:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FwFchlsX0yAD for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 13:55:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 77AB6403FC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77AB6403FC
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 77AB6403FC
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:55:02 +0000 (UTC)
-Received: from framework-OT (host-109-89-232-55.dynamic.voo.be [109.89.232.55])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id E0FD22C829D6;
- Mon, 02 Feb 2026 14:54:59 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Mon,  2 Feb 2026 14:55:11 +0100
-Message-ID: <20260202135512.3833917-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.52.0
+ id 1rX8mWiDG2PR for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 13:57:07 +0000 (UTC)
+X-Greylist: delayed 906 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 02 Feb 2026 13:57:06 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 65D44407F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65D44407F7
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
+ helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 65D44407F7
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:57:05 +0000 (UTC)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S035ANL.actianordic.se
+ (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61; Mon, 2 Feb
+ 2026 14:41:56 +0100
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.2507.061; Mon, 2 Feb 2026 14:41:56 +0100
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Rustam Abdullaev
+ <rustamabd@gmail.com>
+CC: "buildroot@buildroot.org" <buildroot@buildroot.org>, Andreas Ziegler
+ <br025@umbiko.net>, Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>, =?utf-8?B?TcOlcnRlbiBTdmFuZmVsZHQ=?=
+ <marten.svanfeldt@actia.se>
+Thread-Topic: [Buildroot] [PATCH v2 1/1] toolchain/toolchain-external:
+ introduce BR2_TOOLCHAIN_EXTERNAL_UPDATE_LINUX_HEADERS
+Thread-Index: AQHcd3Xaa/wGNkeRC0aV4gXUiH/JP7U1/2cAgDmUQYA=
+Date: Mon, 2 Feb 2026 13:41:55 +0000
+Message-ID: <5188f4ad-3451-4992-849f-c9ea92d23911@actia.se>
+References: <20251227211415.2269024-1-rustamabd@gmail.com>
+ <20251227232420.1644a29f@windsurf>
+In-Reply-To: <20251227232420.1644a29f@windsurf>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.12.12.59]
+x-esetresult: clean, is OK
+x-esetid: 37303A2956B1445E677C64
+Content-ID: <428608F90FF74E44BA7F2ABC26DC6154@actia.se>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770040500; bh=g7S5uYxe7zWYf3lkFkQ9xREPMRstmUER6OIgTNSakco=;
- h=From:To:Cc:Subject:Date;
- b=knl9AZXNW46vJeeoZATrM/edx9f8JUiKvJf0YM2m4679FO+lK5797A1X+535IvtvQ
- ZEgFV6aNgmGxKV5zfo02sKf2A6WyfIC+laMtthcqfXuZZl8GEQALPfMHeI5NJfo1Cv
- EjYF27Zgh5tSkglQfWRjIZjPVzoQcRSf2q4hb7A97yu6Jb0Gs3GtudXxokDkdYOeks
- dfVfUxWp6hoyT3PrtrSKIXWmX7ewfurqkGfTV09VwELxVxg1gGextf0xaPVHp18ZEh
- dUoaL3UtTmj7qOMd32Ahv1B+LD6jz6E37fYMcZZnkjrniMO72g+T5sgnAKG8FTnQLe
- XeXbNHCF8hR1Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=knl9AZXN
-Subject: [Buildroot] [2025.02.x] package/python-django: bump to 5.2.10
+ header.from=actia.se
+Subject: Re: [Buildroot] [PATCH v2 1/1] toolchain/toolchain-external:
+ introduce BR2_TOOLCHAIN_EXTERNAL_UPDATE_LINUX_HEADERS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,59 +96,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
+From: John Ernberg via buildroot <buildroot@buildroot.org>
+Reply-To: John Ernberg <john.ernberg@actia.se>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Django 5.1 support ended December 3, 2025, bump to 5.2 LTS that's
-supported until April 2028 [1].
+Hi Thomas, Rustam,
 
-[1] https://www.djangoproject.com/download/
+On 12/27/25 11:24 PM, Thomas Petazzoni via buildroot wrote:
+> Hello Rustam,
+> 
+> Thanks for your patch!
+> 
+> On Sat, 27 Dec 2025 21:14:15 +0000
+> Rustam Abdullaev <rustamabd@gmail.com> wrote:
+> 
+>> It is important to have matching kernel headers when building packages
+>> that make use of kernel features such as seccomp, as they depend on
+>> system call definitions in linux/unistd.h. A typical example of this is
+>> openssh - building it with the official ARM GNU toolchain and kernel 6.x
+>> results in a non-working sshd.
+> 
+> Do you have more details on this? Which version of the ARM GNU
+> toolchain? Which kernel header version do they use? Which kernel
+> version are you running?
+> 
+> Indeed, there are two cases:
+> 
+> - The kernel headers in the toolchain are newer than the kernel you're
+>    running => you are doing it wrong, and updating the headers in the
+>    toolchain are not going to fix the fact that your C library is built
+>    with headers that are too recent for your kernel (even though I admit
+>    glibc has some tolerance on this)
+> 
+> - The kernel headers in the toolchain are older than the kernel you're
+>    running and you're seeing breakage => this is a kernel bug as it
+>    shouldn't happen.
+> 
+> In both cases, your proposed patch should therefore not be needed.
+> 
+> Could you clarify which situation you're in, so that we can
+> understand better whether the use-case/issue you're having warrants
+> this additional complexity?
+> 
+>> Currently restricted to glibc-based toolchains as glibc is backward- and
+>> forward-compatible with different kernel versions while uClibc and musl
+>> are not.
+> 
+> Not sure why this matters here though. Could you clarify?
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+We ran into the same issue with the pre-compiled toolchain from ARM.
+We needed the CAN J1939 socket support in python, and python enables 
+this based on tests done on the installed kernel headers.
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 0c9b70959f..1c2b9bcd29 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  232748d1f2d6d1074f873dde91f7d75b  django-5.1.15.tar.gz
--sha256  46a356b5ff867bece73fc6365e081f21c569973403ee7e9b9a0316f27d0eb947  django-5.1.15.tar.gz
-+md5  98e667c17123f7bbd2d7d1db32f9ccdd  django-5.2.10.tar.gz
-+sha256  74df100784c288c50a2b5cad59631d71214f40f72051d5af3fdf220c20bdbbbe  django-5.2.10.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 32821e19a0..184f91bfa1 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.1.15
-+PYTHON_DJANGO_VERSION = 5.2.10
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/45/1ac68964193cfcc0b0912a0f68025d5bdb54f71ba7b8716e85b959874bd0
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/e6/e5/2671df24bf0ded831768ef79532e5a7922485411a5696f6d979568591a37
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
--- 
-2.52.0
+Since the J1939 support landed after Linux 4.20 we ended up spending 
+some hours figuring out how python enabled the CAN J1939 socket support.
 
+Having the ability to use kernel headers from the selected kernel would 
+alleviate such problems where the project depends on the installed 
+kernel headers to enable / disable features.
+
+Unless the python package is broken instead and should bundle the 
+necessary headers rather than depending on them being provided by the 
+toolchain?
+
+Best regards // John Ernberg
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
