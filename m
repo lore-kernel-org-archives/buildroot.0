@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D73E7DF08
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 16:46:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98DDEE7DF08
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 16:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EA1A40BA3;
-	Mon,  2 Feb 2026 16:46:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AD5B60B60;
+	Mon,  2 Feb 2026 16:47:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iYyydpwcHa8i; Mon,  2 Feb 2026 16:47:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CECE60BCF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770050874;
+	bh=/+gbSvLW7FBnvo0abi9F6SvTA0T7SkqVM3vgw4K/5bg=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=eDXfhrNMK22tfz7KaOu8oeTNEZVHNB1OCN6wihDxZu5ovdM8GT0Yw8xJdJuOFLE7w
+	 xyNKnr/MajaNdOURhm4MrX5N76foWkee9R2JKYvbpu4irwEQPH/jcaQsB2nYh2A44T
+	 UyglRNh+6F3LzESdG9Nwh5SGhcrXNBPw7NDaUftyvDIn5ZAMQ5Tl0yqz+VW/cizlRj
+	 VgV0H4AGsNTtjPU7YTgMVAqQKhPcG4BbGYOH+sBUJWAAE6kdRgflobskz6rg9pYZ/E
+	 d2R17BJT8ArJ2jyHi7kGdtZ8RFmrfUZYE1hOlGzdWYG1OsVYgcAHL7P+GoYLlnqXuc
+	 vtzHniW3P3GnQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CECE60BCF;
+	Mon,  2 Feb 2026 16:47:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 278321E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:47:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01A8640BAA
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:47:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UwMDKStwDuJ2; Mon,  2 Feb 2026 16:46:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FB8C40BA5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770050770;
-	bh=od/0lf7fGCuWUDocevLAehC9ymi33X9yzpxU+QOZudo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=mIXG4ysl59LRHHY9cDkHirGZ1+HCHWs2cwbaInY3k0Ar0Dze3LQI2lRWHqZxGOGov
-	 P7bipHKLSZoROpuo40rLSDs7rcJZ7rlLXtulu8IsSxJUwno79NvqV9FLJl4cfL5WX8
-	 Xke7f8SbKkwGeRHjJbcX6geWQ4Hvv754Rf23FZvbtuHM+uq9VDP4Uqs0IbYTBxvX+r
-	 /4SVdIhoggiZ95X0jhT0bxR7Of0zxTAuQ0BeLZHy/0UcjxeD9QpCtztSP81C87pT4g
-	 PolhbWsBLkNpY4fpz1Qt1cgB2PDu5+y2azv0UxFJITnny8Jsc2Q9Q/w63YIOCm2ptU
-	 8F/WPFTP8x5Vw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FB8C40BA5;
-	Mon,  2 Feb 2026 16:46:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BED861E0
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:46:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABBC7813EA
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:46:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i9zOiv4NXf1E for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 16:45:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 45D438146B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45D438146B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 45D438146B
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:45:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 5D29F13F8B9;
- Mon,  2 Feb 2026 17:45:52 +0100 (CET)
-Received: from host-109-89-232-55.dynamic.voo.be ([109.89.232.55:35762])
- via host-109-89-232-55.dynamic.voo.be ([109.89.232.55])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 02 Feb 2026 17:45:52 +0100
+ id HUK4Tp-iLT5f for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 16:47:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ED2FC40BA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED2FC40BA5
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ED2FC40BA5
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:47:51 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 152B1C237F3
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 16:47:54 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 11D9E60767;
+ Mon,  2 Feb 2026 16:47:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 135FC119A8888; Mon,  2 Feb 2026 17:47:47 +0100 (CET)
+Date: Mon, 2 Feb 2026 17:47:47 +0100
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Message-ID: <aYDVFgM4JG_N5Iyy@windsurf>
+References: <20251025123035.1136084-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Date: Mon, 02 Feb 2026 17:45:52 +0100
-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Cc: buildroot@buildroot.org, guenther.harrasser@mobileye.com
-In-Reply-To: <20260202141045.1913969-1-jimmy.wesolowski@mobileye.com>
-References: <20260119144010.1646792-1>
- <20260202141045.1913969-1-jimmy.wesolowski@mobileye.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <a062166d22db6b02629b21913b366fb2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770050754;
- bh=wwyzZr49ayfs+3x6dd0OcdqJfRgYAMQhcKWDfybs4gM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jWiVu1Sys8xx0KyTlL7yhYrkNczSMGtmeW63ml5Jcgtvbpwjae7ECybRONenk/jEx
- 31K3lQe7vn4b6JAMjSR6MEyc4vA9fun/rn6bFKw4vJd4csdLn48s8QQcGUX2IXT1qO
- TpVG6ic2wiwDF3FmZ0CCkNQTKupoGC7HpRX1MW1252bs9aNVGDreudyb8e3u1dL2rG
- 2OV2m8PSeOKxA/A6AwXZFzcYTvmTQ4nKrumdWQNz29/xT6RNkhSbXPuXhvTGrsYx3f
- qNchm5cvrV4ylMhomrM45LkO1SRTp29juwBJYyJYbxV4AWPqMr8TYkGz/VSG/ZbfVU
- J+LjmW2VY0C5A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jWiVu1Sy
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing/run-tests: specify
- multiprocessing method
+Content-Disposition: inline
+In-Reply-To: <20251025123035.1136084-1-dario.binacchi@amarulasolutions.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1770050868; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=L8/JLAdDzgq9SmF9YR135lXdtWMAh/ehKIWqfg3DRK8=;
+ b=vpJDwllbD2NgpojcTPjHAYRZPw1aG6MAGqX/NjJuDoUslQWLi+ivRb6BAyIHD07JSqiNoy
+ 5yIlg1R0pUPCRbuAV+kQL4m0FP2XWRuj7HfuqnFjZqGsg/5MFvPhfvDDCDu5TvV45/qGR2
+ V+K8ZJQvVoeFr969fiEX1k2MM+VtC4wq0WZQNMoFiqB7n7f/hdjDCWEbpmDQOprbJH7Cn6
+ tpQwYKKQhaFQrhGnB9cvrLF4kFIo7xUsF3m2651yw8gSdezoH32RJyItTWJLM2N6idr/dE
+ ERlfWiYyt0BtVrlBr+5yVH/M7uwYMee/nHceQT5N+xKK9wArlPTAHVK2X+NVsg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=vpJDwllb
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/libjaylink: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,37 +94,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jimmy,
-
-On 02/02/2026 15:10, Jimmy Durand Wesolowski via buildroot wrote:
-> Since Python 3.14, the multiprocessing library API has changed:
->> On POSIX platforms the default start method was changed from fork to
->> forkserver to retain the performance but avoid common multithreaded
->> process incompatibilities.
-> https://docs.python.org/3/library/multiprocessing.html
+On Sat, Oct 25, 2025 at 02:30:34PM +0200, Dario Binacchi wrote:
+> It is a shared library written in C to access SEGGER J-Link and
+> compatible devices.
 > 
-> Since this is expected to be under "if __name__ == '__main__'", we need
-> to have this in support/testing/run-tests regardless of how this will 
-> be
-> fixed in nose2.
+> https://gitlab.zapb.de/libjaylink/libjaylink
 > 
-> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Applied to master, thanks.
-
-For info, I slightly reworded the commit log. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/3d2141bceefda32bef06ddda594eaf8665913276
+Since this series got some feedback on PATCH 2/2, which were not
+addressed, I've marked it as Changes Requested.
 
 Best regards,
 
-Julien.
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
