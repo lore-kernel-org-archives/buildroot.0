@@ -1,88 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81943E73145
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88294E73146
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 08:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E4F2607A2;
-	Mon,  2 Feb 2026 08:34:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eQSi-zxtbHg0; Mon,  2 Feb 2026 08:33:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69554607A5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770021239;
-	bh=vHjLWMShB46bSvAg9LunExFibMhCiHtpPHvHiCmOy/s=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=GciABnVmXJpw+KGC4LjvVyeYdyf4THM+CD9oiYAeUUBdZQ9AQYae07nENm+1CI3+2
-	 5DjRULr08Y/JFqS8CortiPZXjJsdybrjKkzp377BP4BrlTMG8yj69h5ucscYGP/ne/
-	 RtUDW46+YNf5iOlnTt4UtJa0hX1Zx+GIUfNnC0RczERR4fFhbRZFAeqzMKLbPh1HQ0
-	 +oE93iRM/9seqykOoh3j6CSyCK1gtt1uCxegeEy5fdFdb+4Leg9SatE6O+LIIgpOBv
-	 9MfhKKaf6PNvyruUdpjxbWW62fdzYujFA38SyAU7Z/AugFBBrz/JgFRvcqCRQQ1Li/
-	 nKlVLIBMIej8Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69554607A5;
-	Mon,  2 Feb 2026 08:33:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BF026149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:33:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA2AC4093B
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:33:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 524544092A;
+	Mon,  2 Feb 2026 08:34:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LSeaI5sIO2Z6 for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 08:33:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8F3324092A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F3324092A
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F3324092A
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:33:56 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1811804189; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Feb 2026 08:33:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmpNZ-00000005okB-3SAv;
- Mon, 02 Feb 2026 09:33:53 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-In-Reply-To: <20260126130414.59175-4-thomas.perale@mind.be> (Thomas Perale via
- buildroot's message of "Mon, 26 Jan 2026 14:04:14 +0100")
-References: <20260126130414.59175-1-thomas.perale@mind.be>
- <20260126130414.59175-4-thomas.perale@mind.be>
-Date: Mon, 02 Feb 2026 09:33:53 +0100
-Message-ID: <878qdb7de6.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ id u7d9Blvjn16h; Mon,  2 Feb 2026 08:34:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76AFE4093B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770021244;
+	bh=AHHA4NFvGB5KwOvoc6DgIOoCcezR/BOdr7HwI5gDpMQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=B+i+BhKRPSSjJqMYGVXW5fwiTr17q2s0brZKjgciXOP7J/b1gTx7Vcm40nEQLLfMT
+	 cWr/M9ohKt1j7nu5h+LaS7Yc8/QKzdXOYjRNex88y3FIYTqy7CFxbR7z3ct1qOkUf9
+	 negveHSFKrj7ceXQ2w9rXB37ePyL0f/HksqJCsos3SHomC6Rzc6ueKYwamIqzz0T0i
+	 sM89SixqY+TgFhkatiJe9t0wpujtq7MBedtOIyHkRN6con6tBOQI2n544q8qaKv6Oa
+	 uO4CmTrQLJETqehJiQFeLXYIlHTOL392e3wejrcdDjjmT1GzbbQOVuEHwQ6/dBZxAM
+	 73fLdLBPwbcYQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76AFE4093B;
+	Mon,  2 Feb 2026 08:34:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A11F1E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:34:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66F0E4093B
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:34:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pd3kU-C_bV0r for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 08:34:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
+ envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3A92D4092A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A92D4092A
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3A92D4092A
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 08:34:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C1E641814B9; Mon,  2 Feb 2026 09:33:56 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Mon,  2 Feb 2026 09:31:52 +0100
+Message-ID: <20260202083207.1095362-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=dst13BQl1e+qADel6L7m2OipjI7qRgHoKLn6QfpqSt1MuDHVZf5iRhLzmtoX04Hyk6Nu6UaOeZjzN5XMAG2EXNAc4E9Y8YGoSVp2r0NBxt0DjzFgx2BP5sUImweyl7YPrADi1iZ5Hf2tBa2R7s81EdsUHNLf80fn4lk0LT6vdN+qcjCTI8L/ZD12coMqPZPFNCz1VbTkt6NROddiau+TXjrmkL+MhRpnUKqFuHAGIOxHgGuLPA0Lzl7StDQoU6ipmhtq9JUayQwFOEttrcU8H5H8vL+bq8KWZdNzZtlYmedeM+vHniprMMIUD9PhzPndYQOCKl+h1xQn51yZxN8r6w==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=0BmtnVAWHMqWr909hUxtkYllWxZwEsyBNpQg6JDHBAQ=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1770021237; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=G0g8y2c22/RoG45LesqWP7WR/7JjLj9PYXB6VagMxOc=;
+ b=ZwAc4Ad+Ry+BQXdhSux8Jx2Y7qK8GNyDJaUm5BxftKVjtJi3xLzjGNTXgWhgA+xKhOhlgk
+ 5kVmjjIqgHSc4yv21eh5BPi0+eWZxuHCBwEf+gEFnpRUIqDoh9YWPE5QV8DfjIySfBYt4E
+ mrxyR0qGCNXHRvY7lAZBuq4rq0b51ZI=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=dst13BQl
-Subject: Re: [Buildroot] [PATCH v2 4/4] utils/generate-cyclonedx: fix
- dependencies w/o virtual
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=ZwAc4Ad+
+Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 33.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,73 +82,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+contains mainly a fix for python-protobuf.
 
- > Since its introduction in [1], by default the `generate-cyclonedx`
- > script doesn't include buildroot's virtual packages in its 'components'
- > list, unless using the `--virtual` argument.
+Full Changelogs:
+- https://github.com/protocolbuffers/protobuf/releases/tag/v33.5
+- https://github.com/protocolbuffers/protobuf/releases/tag/v33.4
 
- > References to virtual packages present in the 'show-info' output are
- > filtered out in the resulting dependencies.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 4 ++--
+ package/python-protobuf/python-protobuf.mk   | 3 ++-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
 
- > This patch fix the default CycloneDX dependencies generation
- > without virtual packages to reference the packages that provide the
- > virtual package instead of just dropping the virtual package itself.
-
- > If we use the package `lbase64` that depends on the virtual package
- > `luainterpreter` as an example. The 'dependency' entry looks like the
- > following:
-
- > ```
- > {
- >   "ref": "lbase64",
- >   "dependsOn": [
- >     "host-skeleton",
- >     "skeleton-init-common",
- >     "skeleton-init-sysv",
- >     "toolchain-external-bootlin"
- >   ]
- > }
- > ```
-
- > The `luainterpreter` dependency is missing.
-
- > After applying this patch, package that provides the `luainterpreter` is
- > present:
-
- > ```
- > {
- >   "ref": "lbase64",
- >   "dependsOn": [
- >     "host-skeleton",
- >     "lua",
- >     "skeleton-custom",
- >     "skeleton-init-sysv"
- >   ]
- > }
- > ```
-
- > In the case of a virtual package provided by multiple packages all those
- > packages will be listed. This happens when generating an SBOM on the
- > entire Buildroot packages.
-
- > [1] dbab39e2d9 support/scripts/generate-cyclonedx.py: add script to generate CycloneDX-style SBOM
-
- > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
- > ---
- > v1 -> v2: use set to avoid duplication of dependencies
-
-Committed, thanks.
-
-Maybe we should start adding some tests to generate-cyclonedx?
-
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index adbcf1d227..7211fa7c87 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  1c9996fa0466206d5e4b8120b3fceb332369b64248e0649089aad586569d3896  protobuf-33.3.tar.gz
++sha256  c6c7c27fadc19d40ab2eaa23ff35debfe01f6494a8345559b9bb285ce4144dd1  protobuf-33.5.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index e77b1be08c..b2046e057b 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 33.3
++PROTOBUF_VERSION = 33.5
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 9f1950f20e..1141edf396 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/protobuf/json
+-md5  64d69417f4fe879daabc70137006c0ac  protobuf-6.33.3.tar.gz
+-sha256  c8794debeb402963fddff41a595e1f649bcd76616ba56c835645cab4539e810e  protobuf-6.33.3.tar.gz
++md5  5d9230257cd63f6f94ca3a7303b22413  protobuf-6.33.5.tar.gz
++sha256  6ddcac2a081f8b7b9642c09406bc6a4290128fce5f471cddd165960bb9119e5c  protobuf-6.33.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index df214550ba..167b94a646 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -6,7 +6,8 @@
+ 
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+ PYTHON_PROTOBUF_SOURCE = protobuf-6.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/cc/5c/f912bdebdd4af4160da6a2c2b1b3aaa1b8c578d0243ba8f694f93c7095f0
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/ba/25/7c72c307aafc96fa87062aa6291d9f7c94836e43214d43722e86037aac02
++
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
