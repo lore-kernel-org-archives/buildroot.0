@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DD0DE7316D
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 13:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C77F6E7316D
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 13:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0884E4082F;
-	Mon,  2 Feb 2026 13:27:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id akuXF5851dEs; Mon,  2 Feb 2026 13:27:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A55FA40817
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770038872;
-	bh=xNMVeziw++lSflbfMUzszN4lDde2ozD9ovGxeAkY3PE=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=j26QoptcE1jqpT41Ge7eoHRWTraxy8vfLPIVOpwlvx8jNWzDtsam8pCTHXUbwBQpk
-	 YwC3c+Z0GRWDHdjC00YckpYlNW+lNNoM4IBJtZyo+1N4nTRcTu4ecm0EJJ63NvaeGe
-	 TZml+DuLsUpnp7/QI5JBQthtsdEwkmy/h21nMhPzKSz3SpjhhgKwKcgmWqJFl8wEsS
-	 ZJWV18RAow47qEbfZhXnNJn24mh8pasm/DisdptPVedFzUqTXzgxmBZg8XVL+EgeHQ
-	 JiKns+q1hwXhCSdrP4jD49P6dJw+qkMAKNSI1QYc5rk9v/RO3PIianUmf0n7XvlScF
-	 k4O93tr3Wi+1g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A55FA40817;
-	Mon,  2 Feb 2026 13:27:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 638EF149
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:27:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48C62608C7
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:27:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00FF960BCF;
+	Mon,  2 Feb 2026 13:28:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dek6EFlqnams for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 13:27:50 +0000 (UTC)
+ id BSE1B7ZMSoWy; Mon,  2 Feb 2026 13:28:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98117608F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770038881;
+	bh=Z4VLyUIVjiWFzMZ5PpfLGf0I8RZckP8C9BlvBKsUlxM=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=lgrAufJzvaiLF62NFi/TGucAc+cz6sE5qr0nmkrDOuoI01sfB+9QgLd2jLJGDrGNs
+	 3ozkqAv3sInnNhZwiQ0pxK3FmCBjcO7MEpyKhoUSePX9COC3j48G1RqFPXEApobpg4
+	 6X8EKRNpSiI/POGUsBfy+w6sPPRzooqwO1NeHOWMzZsQX2R6JXWpQR+VmOsErRx22p
+	 FICWhGYCen8x6Kgl89bJAxH3CMS9Oy8yYHMqnmNlwXqhwteasZsH/UwgOtuZOG6yXS
+	 5vBeWOPwve0FsIzfoLFHMkjphbwMv99nXpY2iyN/4c7muAHm1b4CPMIWxXM+ZNYEbf
+	 lIsWbu45X2XXw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98117608F5;
+	Mon,  2 Feb 2026 13:28:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 739C21E0
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:27:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DD9A400D5
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:27:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vyp_X9giZC1H for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 13:27:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F88A607F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F88A607F3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 546DC400BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 546DC400BD
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F88A607F3
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:27:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 546DC400BD
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 13:27:58 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1367770933; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -263855422; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Feb 2026 13:27:46 +0000 (UTC)
+ Mon, 02 Feb 2026 13:27:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmtxx-000000065cL-2MGR;
- Mon, 02 Feb 2026 14:27:45 +0100
+ (envelope-from <peter@korsgaard.com>) id 1vmty3-000000065cq-2DlW;
+ Mon, 02 Feb 2026 14:27:51 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Jesse Taube <mr.bossman075@gmail.com>
 Cc: buildroot@buildroot.org,  Marcus Hoffmann <bubu@bubu1.eu>,  Thomas
  Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260112221927.3745398-2-Mr.Bossman075@gmail.com> (Jesse Taube's
- message of "Mon, 12 Jan 2026 17:19:27 -0500")
+In-Reply-To: <20260112221927.3745398-1-Mr.Bossman075@gmail.com> (Jesse Taube's
+ message of "Mon, 12 Jan 2026 17:19:26 -0500")
 References: <20260112221927.3745398-1-Mr.Bossman075@gmail.com>
- <20260112221927.3745398-2-Mr.Bossman075@gmail.com>
-Date: Mon, 02 Feb 2026 14:27:45 +0100
-Message-ID: <87qzr32s32.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Feb 2026 14:27:51 +0100
+Message-ID: <87ms1r2s2w.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ZX++p5/OPVcftsfK0nARP6hm0G8BtlXcZ1fbifxWYf51REh2Ok//ft5RnxDLctSLPmwVyj+vwnfy2lRkkECdb1FvGtWwfegJsaEEbnXIAgMkOvTuq0TKYra7KnANYfcuTb4G78oU9HdUPUUME7rYm4RDAzIGP7S6JN8OKEmT/a5C6Hf6NyP9jsl45++55WNHjTMfdCVOKwd3hPcqr5sqbRfMbj07AAlZLI4rKkaP78UDxdagRnAh6WawikvuWhE1gSedyRwUQF1/Jnw8K8njmMnQmmhS75QBIpKUeNe99YCetkFDrb3ArUJ14uGxBURvs3glHO/B75kcvaS9ZefBXQ==;
+ b=SCaLyQXmjT6co6Q3bVP2qC0yWBe0AeCWLAtmqbX2bX97E/KnjQQa4vMKN2T3BZdo1DCibQjfLbbZTHEzV7GtciCtD7xdiPjx9uNMPFeHzrGIuPU8wezmZJ3Mv/NTCtuX5IyUvvQve1WW4DLIC4uzpBYBegb6fBG9P8wf/oMZAGduJHrTRMs0+Tu1UgrOduECxDG6ffZmaF8BEHCVWB5xcuhImSLrKhF5XrsKcrCE1oT0myswm8nbV8QQrnansUlohWrxZDZolXgNnBxA0+ZUm42/eUYG9ymOTRSZgdPr0jSEBKPeImmB/M0PCDCWkrmWpJMw/sPvo2uO5kAkf2eqog==;
  s=purelymail2; d=purelymail.com; v=1;
- bh=lcv0MEDoGazeHFCUKbTkdQ2JJDISWrOKe5yHSKAaDWQ=;
+ bh=JwZ37LvqFtduZf4Kv5harwDTC1zmiBMK3JIjBEgpu8g=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=ZX++p5/O
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/picotool: Add host-picotool
+ header.a=rsa-sha256 header.s=purelymail2 header.b=SCaLyQXm
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/pico-sdk: Add host-pico-sdk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,10 +100,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Jesse" == Jesse Taube <mr.bossman075@gmail.com> writes:
 
- > Add a host-picotool package to picotool.
+ > Add a host-pico-sdk package to pico-sdk.
  > This will allow users to build rpi pico applications on the host system.
 
  > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+ > ---
+ > V1 -> V2:
+ >  - No change
 
 Committed, thanks.
 
