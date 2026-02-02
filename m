@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAB9E7DF0F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 18:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C508E7DF19
+	for <buildroot@archiver.kernel.org>; Mon,  2 Feb 2026 18:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CED5540B69;
-	Mon,  2 Feb 2026 18:18:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E2906077A;
+	Mon,  2 Feb 2026 18:18:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ztorQOZ4Ucqa; Mon,  2 Feb 2026 18:18:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9bZq1UKMwfIP; Mon,  2 Feb 2026 18:18:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 915CF40B81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81EFA607AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770056333;
-	bh=ztmu9iGrUoEgTuxz/R6DNhxTD8oI3PuvAA53GO8F2GI=;
+	s=default; t=1770056337;
+	bh=JwYs4P1oYuBqs9n6lMAkdnqKg/skMmRzCuiB7KHB7PQ=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=f1d7sbU5gkYIgJp9/su6y2DSL39O8eBBLFMrqt98HADmekUNuZAVzO5SWNsVk+ASC
-	 iNMfpR2Upc/+0b16dhWPq51ot06RDDmVt3GY0IXGvwCWCAlu5Boy61d+5KsSq7JrhE
-	 W7A+5MPYmXShJYxPIWB7dA5A/v5vGkLEyZ9KH09AIjJX6moEPydpyX8HqttAklh5bV
-	 MAGlGdyCTjvra+fL/rTxu/fGX4JSLGTNriZcTHJAaIMv5NwERWFeHWKf7YWImiGn1b
-	 OpnM2ETCFKfCVFka2lRNNDCmWCgOSkennfOKgXcNXERKVg8+xUbqZsKvYmMtyrmPPT
-	 fH1QJO1SKcElg==
+	b=bKSnwWp82ijUqPSaKWytUP0tZ+NZJxJff+gkgGD6KF7m1uT5Ryi9sGQ+SF4yFBYGt
+	 hsOF6lEI/hd2AWhRN5fdacFjw6uEslS63/IrduENhGcRLe/WflbNedweXh0PLZra7p
+	 VRDav1/Q1weW+NMF2LwysVXAyxbMtJ0xG5NaKS2mnBz7QG2nibT/NhZcXvqCJ7VsjV
+	 o964biwsvmajb4IP73FqPIbPWkrzL+Zt95ds+R2/i1BH+8L8ElbrLxW0PJyMm4alvF
+	 ZrgtBqR0eVRl5srMUhreVf6uMf27LmScUPjOD2XgYmuPGbqzVX5eY8awow0Nqj6krf
+	 +P2k3+wSts10g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 915CF40B81;
-	Mon,  2 Feb 2026 18:18:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C2109F4
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:18:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81EFA607AA;
+	Mon,  2 Feb 2026 18:18:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75D9FF5
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A30BA40B7D
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:18:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CFA940244
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:18:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7WyAmZ87zGNk for <buildroot@buildroot.org>;
- Mon,  2 Feb 2026 18:18:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fcAArWFmO7tw for <buildroot@buildroot.org>;
+ Mon,  2 Feb 2026 18:18:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8760740B69
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8760740B69
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 529AE400C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529AE400C5
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8760740B69
- for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:18:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 529AE400C5
+ for <buildroot@buildroot.org>; Mon,  2 Feb 2026 18:18:54 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -436717888; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1947329828; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Feb 2026 18:18:42 +0000 (UTC)
+ Mon, 02 Feb 2026 18:18:48 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vmyVT-00000007RdP-2S7K;
- Mon, 02 Feb 2026 19:18:39 +0100
+ (envelope-from <peter@korsgaard.com>) id 1vmyVa-00000007RdT-2cRD;
+ Mon, 02 Feb 2026 19:18:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20260105194056.2156773-2-bernd@kuhls.net> (Bernd Kuhls's message
- of "Mon, 5 Jan 2026 20:40:55 +0100")
+In-Reply-To: <20260105194056.2156773-3-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Mon, 5 Jan 2026 20:40:56 +0100")
 References: <20260105194056.2156773-1-bernd@kuhls.net>
- <20260105194056.2156773-2-bernd@kuhls.net>
-Date: Mon, 02 Feb 2026 19:18:39 +0100
-Message-ID: <87ms1ruhz4.fsf@dell.be.48ers.dk>
+ <20260105194056.2156773-3-bernd@kuhls.net>
+Date: Mon, 02 Feb 2026 19:18:46 +0100
+Message-ID: <87ikcfuhyx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=OgJPY2TiVwTBIfIMkQ5jCsai7hG8QpYUFptWCdERwl6DYW5V1TCzvhMGZxBUpyLLTw0gjBfJFiGGKPKzO8tQlvyM7ixpsiaKR76C3n3GfYVO5ZxTWJduikB3Rq6caOg+ag2fOSCfya5C7x7e+sAnAcCoYQqDP0xyCvfuojCBw+u9MH7R6UixlMho4qMf6bfnwQ3dzpJfFce3Fgn1gKUHu/Vz3J/LttHbWq1aajbMVZemx2HCxWG96wsQXaChiJrKdu0g45Lxjo4OZVU+lGkxkKAVcTY66e86IDjV3n0+io1tKINQXt7lllAesYlO90X7gFf7OXAAEtB3jxW5plTadw==;
+ b=hIBwj45jNNx8Z4Bd5mxnKzNsrRgx64mK1HU2vJKdZX+aj80NGArGHwafXD4C0W/aM+eTZ6vQmWEa7CzMcggbMZuYulM3sbjMZ2kf6+D5p5cAUtclLZoj4SjoAI5XiBN5BNV0fgmgb5CO+LcpBUwrLGe2jY/m0EjzSUjcKcsMYFcrQ/f3GwRe6j+/TO6/mXqWyynZI8Gvuf9y2Zx/dJULLvRsbynTr7xsWL4JRwsTnswCykXeFDlbhRKwPElGlgFC3V7Y0md407cCV4+dqftzrhr+8fI+XOqcyuIT9hL+2ztolIcDuywF6yptXqA4IRiEOUv+T8S/LWPoMKFLjQOZ7g==;
  s=purelymail2; d=purelymail.com; v=1;
- bh=dWkGMRE6oroyW0KaUfep7DgIk4FnydwIXv5XHOfxtGM=;
+ bh=ow4wiSmyLc4l6FDCMbeRQD9labsE39ZyM+B2QxpBRhU=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=OgJPY2Ti
-Subject: Re: [Buildroot] [PATCH 2/3] package/dc3dd: needs host-bison
+ header.a=rsa-sha256 header.s=purelymail2 header.b=hIBwj45j
+Subject: Re: [Buildroot] [PATCH 3/3] package/dc3dd: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,13 +100,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
+ > savewd.c:75:27: error: implicit declaration of function 'fork' [-Wimplicit-function-declaration]
+ >    75 |           wd->val.child = fork ();
+
  > Fixes:
- > https://autobuild.buildroot.net/results/f11/f11b0b9154e9979f3f2d7ea84a019f7719565e8f/
+ > https://autobuild.buildroot.net/results/40a/40a90638f90260ca2cb51bac03b0f8fb23a6ccc4/
 
- >     ../build-aux/ylwrap: line 176: bison: command not found
-
- > The build error occured already in 2024:
- > https://autobuild.buildroot.net/results/dea/dea779bbbbc08c7192f89073b93db768c41832f4/
+ > The build error occured already in January 2025:
+ > https://autobuild.buildroot.net/results/9f3/9f3fefe5578dc41272e460146b566ac20f6cde75/
  > so a backport to the LTS branches should be considered.
 
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
