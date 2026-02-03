@@ -4,83 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 894A2E8305C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 07:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90D4DE8305C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 07:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00960405E2;
-	Tue,  3 Feb 2026 07:57:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A586405DE;
+	Tue,  3 Feb 2026 07:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HFbMunUG_cZd; Tue,  3 Feb 2026 07:57:38 +0000 (UTC)
+ id qWPvZ4Hvjm5D; Tue,  3 Feb 2026 07:58:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61D81405CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87EEB405E2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770105458;
-	bh=l1K0icfVg4XX9EztargYzj/xXSEaUuTyCGB3JIZTA5U=;
+	s=default; t=1770105507;
+	bh=j8DfoNXz0xqi727Yo4kazvjEj75ltLWbI7ao2zcmGLo=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=plBci6qskANu2bUb3hI6cS9BrIkOH4QxADXioqe94X4IKwn1lyZJeAIr+i9QPqDfW
-	 wIhVYc0Yc25pB3yZu+L+wbpy7F2ry7tXKZARpPvLmhuha4hq9P1fmRr0rkLV2Dbq5k
-	 AZUEpPbTTmb+dVH7IWmWGrz4H5cpsbFIz7hX50Bh6QyHFJIZuDFk1M8tynC052YkUT
-	 CXsvKtbOf+xFR5iISzhzU6kNEujuFT8kpDHsBTyrfz6ijVmxIjH91Je3SU/4mfR/cN
-	 2Vm9C2R1TwqWLtjEaNev3l9zVxH7rxVFuJmr42mXeB6ArrHl/1fbqYob5jWi7tJMV/
-	 PPDPDX66cD1PQ==
+	b=lWUqwwNVRo28LqF7txEjtSWijwUNZNS+0e2XNwe42J+AJZTwdESwqBhKeEQvJDzw2
+	 i6dZ7sUoJuQfTGVr2/jiFtYOige7IxE+5T6VqEGx/c5d/b93ccA+PEDAo55caqyO1y
+	 gZb1niqkKA0TxbMTXfiVYG05mMoqYKxTBc+OIok9fHrLAm9N4R91OMhpDrsCp1RBH+
+	 0+mc7yaC9c1SPhfroKulQNRv1RDer8iJpvtY8K4nhAbWSTo/WjlijDHLa1HZtpTN77
+	 FUNKaTd447HoyiF3FBTuZWatuNy1OBj+FkgyUt7v4BIZLgUDiOj8+MsSAOdo5qIW8v
+	 Y376K376gAk7w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61D81405CD;
-	Tue,  3 Feb 2026 07:57:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5891DF4
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 07:57:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87EEB405E2;
+	Tue,  3 Feb 2026 07:58:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8777F4
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 07:58:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52DB040345
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 07:57:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 953E2405E2
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 07:58:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zE8VSiXunLhC for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 07:57:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7CA14401EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CA14401EB
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7CA14401EB
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 07:57:34 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DC9C9A4C0E30;
- Tue,  3 Feb 2026 08:57:31 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47748)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vnBHv-0000000039a-1eSI;
- Tue, 03 Feb 2026 07:57:31 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oC9MJO8DOiDH for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 07:58:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0CB8B405DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CB8B405DE
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CB8B405DE
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 07:58:24 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1679212467; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 03 Feb 2026 07:58:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vnBIj-00000008AE4-0YPn;
+ Tue, 03 Feb 2026 08:58:21 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue,  3 Feb 2026 08:57:31 +0100
-Message-ID: <20260203075731.22481-1-bernd@kuhls.net>
+Date: Tue,  3 Feb 2026 08:58:18 +0100
+Message-ID: <20260203075820.1945913-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1770105451;
- bh=gBNhzRiJqPdH1LAI/BzyQFhJ0mkMR5U3K8qgZHSAOFE=;
- h=From:To:Cc:Subject:Date:From;
- b=Is/6q0tSmB3NWPUehJTdG506bSaG9SZqiP/aDfgVlSkFL7nwaLYqg+yN5QsThbkxQ
- Z33aIFspYkVZUMOu/MooP6My3CaWjKCPH1ui9rMEAFp7Wn4TWEizKnpySen28bUpfP
- 1S+mDM3SVPQGZvd+I+WqVAsPjSJuEOf//DyXxsRWspnNf5l+dRiP8fwRzILGFKg3v/
- KgH2wPbW2BfdAVNIn+3sAO8KFQhdCcCbJ/LIlmJjsjpdCGz1g0N3P5Qees7steyHPN
- MtmXwy+j5C9soc3st5E8QiMzHWwl4gHsVpiLAetaePh5fyYcSSzxJcY2VMpk08UjYZ
- +7mKI6MaqjXMA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=XJYZK0Rj08QHEXvc5wujeD8ySZr7eUoKweyYWvm01MywNxqwvAjwy+Nyalqi/6XWVYL+RzsROa0AEee5nb2T0d6d739eA4R3p7jccVhmf2kVl3q3UNyenMueWuSdLv8eCTz9RkHP9kIFg6/l3JbnZcHuQa3cfJrRqDrf1jZkwCHyq/tTcX5g1xtBcQP4+uiaYyXc3vg7rqR+S9kyL7WhO9GOXVAvdU1ePzdDEkp6ZluJ5cYsUkTsNqkaW48+K10+7Fbj+leF1u3cjkYUMb7oTXFqmjxA//lBQSouZzrwIN9mxaLPQQI8yc5jpikSyCBKL+5+moTQlUP5yZ+QlaS2rw==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=3j3HHzTENq8Xy8+Dp/Xtb+cu+WXaICYIiA+44zCC+nE=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=Is/6q0tS
-Subject: [Buildroot] [PATCH 1/1] package/php-lua: add comment for lua
- dependency
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=XJYZK0Rj
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/mpg123: add sdl2 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,32 +89,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+mpg123 supports (and prefers) SDL2 as well for the sdl backends since 1.26.9
+with:
+
+https://github.com/madebr/mpg123/commit/792615f6512a0908081b5a2e98ca61f8677ed452
+
+So support that here as well.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-While testing the php 8.5 bump I did not notice this package because it
-did not show up in menuconfig.
+ package/mpg123/mpg123.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/php-lua/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/php-lua/Config.in b/package/php-lua/Config.in
-index 923de2d799..9f43533fad 100644
---- a/package/php-lua/Config.in
-+++ b/package/php-lua/Config.in
-@@ -6,3 +6,6 @@ config BR2_PACKAGE_PHP_LUA
- 	  OO-API to lua variables and functions.
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 2f04e0f979..23e061614d 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -64,10 +64,10 @@ MPG123_DEPENDENCIES += portaudio
+ MPG123_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0`"
+ endif
  
- 	  https://pecl.php.net/package/lua
-+
-+comment "php-lua needs the lua interpreter"
-+	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
+-ifeq ($(BR2_PACKAGE_SDL),y)
++ifneq ($(BR2_PACKAGE_SDL)$(BR2_PACKAGE_SDL2),)
+ MPG123_AUDIO += sdl
+ MPG123_CONF_OPTS += --with-default-audio=sdl
+-MPG123_DEPENDENCIES += sdl
++MPG123_DEPENDENCIES += $(if $(BR2_PACKAGE_SDL2),sdl2,sdl)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
 -- 
 2.47.3
 
