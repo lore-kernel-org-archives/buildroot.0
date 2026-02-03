@@ -4,85 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C490E6E7F3
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 10:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D342E6E7EE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 10:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4508F83705;
-	Tue,  3 Feb 2026 10:38:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A2EC81357;
+	Tue,  3 Feb 2026 10:40:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aXMn_hf-HMmc; Tue,  3 Feb 2026 10:38:20 +0000 (UTC)
+ id Vc73XhiN47-p; Tue,  3 Feb 2026 10:40:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5623483B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28C4181371
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770115100;
-	bh=u3FH2+GxKw1xnEQF/c77dtN2RxR+2NEWvoq2ynbehBg=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RS0N8q5765FHPf94bLKekleHs6zdQrB7zFYNtvp1k1oGqwkhpqCGKbjaF3DsQ0i8Z
-	 jKCeoNQk7+2NMyKCC9M7MiiXgVfgsllkHfsHuzp1JTeG11jM7fwnnJ4zqRu+9B4apL
-	 conoop03TpD8XJCOQwQ3ead4PyFwak09qNJfEGVGNK2m8LCSfuQwrFrc3lU6HmYh7H
-	 OU+Liz+34hpPxDLu3G2OBIAAn0HO8MR1TU+1JF7+pTifDaXe8RsOS+8I7vWRoXoeV2
-	 nqjA9lD1CQsRdkOaBKWXTcKH2MZ2Mbd1p84rScJUHPSyAbr+5XLMc1ISuFHI56CGYd
-	 3QaL++WoSrpxg==
+	s=default; t=1770115209;
+	bh=H/2JIi+K6AUNnvQHrVYhFRuSqv9UU/b0IN8U3MWnjPw=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=h2vPV3ss9pNTJgxPuRX9ESa4fAVnAPKc/qmt36Zfc5UrCaz0OiQ98fAOQL79+KYp+
+	 xLaI0zNlFawmSO3hGtv31x37hK0fYtzaKzWWzbpbLyW0z1dl9EsRkJYw/e+5MM17nw
+	 u+tRKOUHISd6uTdU/1KsdbU5evE1oTj31yNCIgvrdD1TmJrcr8NHiYV6ZvVHZENLU4
+	 TS5xIKyT67pWyShBlw2hKYVm08oSZ1YOteorfLzeoasM0RTWV22UJAukA+kWo5doIN
+	 4sDNrsBfnzPvbZJb/1igmbmNR6bsOJq1rcX9Ct3ERONB4mLd89GwUbrLMOWY57VN7h
+	 8KQRykScJPFWQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5623483B5B;
-	Tue,  3 Feb 2026 10:38:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28C4181371;
+	Tue,  3 Feb 2026 10:40:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 27757F4
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:38:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 87C04F5
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0770E83B5B
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:38:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7336781371
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r05RYS2lO2A1 for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 10:38:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2BB8483705
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BB8483705
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2BB8483705
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:38:17 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id AB431C211C9
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:38:20 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 7C31560728;
- Tue,  3 Feb 2026 10:38:15 +0000 (UTC)
+ id G2XAA4hSUMeM for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 10:40:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 652CC81357
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 652CC81357
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 652CC81357
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 10:40:06 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 292BA119A8891; Tue,  3 Feb 2026 11:38:13 +0100 (CET)
-Date: Tue, 3 Feb 2026 11:38:13 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <aYHQCtfvNsDw3THR@windsurf>
-References: <20260203075820.1945913-1-peter@korsgaard.com>
+ with ESMTPSA id BB3D5B97AD2D; Tue,  3 Feb 2026 11:40:04 +0100 (CET)
+Message-ID: <266cb52e-8a3b-4e69-be7e-e9683de17fca@rnout.be>
+Date: Tue, 3 Feb 2026 11:40:02 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260203075820.1945913-1-peter@korsgaard.com>
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+References: <20250929092431.8974-1-fiona.klute@gmx.de>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250929092431.8974-1-fiona.klute@gmx.de>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1770115094; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=L6JfZPuDmVV0mQPoI02M7/Gq6wIiJ1UxBeePWP4oDAU=;
- b=c+UaInne6ImLwOlM9zPVbz09gvH3wIUS1IUWZQfoM+E6/4Cf4Oje/2RGzXbaei8hLn8U0p
- 42gAEpeBLXQO39qOCKkyy76+xJgq4erhBryna7w48EPSalV5zKy8XGIqJytAKh+OpM/kDx
- VJJtwBFqio6nOJI0L6liUc5qGhWAqpOw+ppDCy/FyBPzM22Zt7JpiKcIIS2evrcFHjyuy2
- WwUTDGX7KxMR21B3QY1ariRWYsgecRsOcGTsrUmFLvmu3KJwVEhkFnmoY+rnLDjhUG/hUu
- Oj4tfF76VCYlDp/E/2ZlItscpHPKhtyDNk4SRtgWXb7his/a82vwkjuQaednPQ==
+ d=rnout.be; s=dkim; 
+ t=1770115205; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=DCFUK6jnb2gvEoGFW/09B8yGf8i9wCodyg+Bz/RVr0c=;
+ b=CsbRWjHnwHbnLnOrujhits+8a8BK8WuSDI8dtOqdCvcUXQpPswwWJNfLgg06Y0Q5k/Opi6
+ BrWNs0PWgD6Hp0krxulV0O0hGWi1k6qtj61pwkbKeMytEQnoBeKd63tJf/JplRF3CHvqi3
+ /68x5zfz4CR733AKAnx4/8qurVz3IZIZomQ7SLeSXBgUqZPLZMmlCz0swHJp2V5c6oARxl
+ xC7dYO+TO7NQDnUxd9wcTBRRjiVNAVUUFnC/IGmXjSOdvKeiGOYYUhuZIaI62pU/j1H4T2
+ hJrruumRQrsEvBOqFY9p+D/GtKA7swuaelU5SdZ30LJeR7QbBE4gU7nrc85Sng==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=c+UaInne
-Subject: Re: [Buildroot] [PATCH] package/mpg123: add sdl2 support
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=CsbRWjHn
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: add check-package-external
+ target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,30 +89,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Feb 03, 2026 at 08:58:18AM +0100, Peter Korsgaard wrote:
-> mpg123 supports (and prefers) SDL2 as well for the sdl backends since 1.26.9
-> with:
-> 
-> https://github.com/madebr/mpg123/commit/792615f6512a0908081b5a2e98ca61f8677ed452
-> 
-> So support that here as well.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  Hi Fiona,
 
-Applied, thanks!
+On 29/09/2025 11:24, Fiona Klute via buildroot wrote:
+> The new target provides a convenient way to run utils/check-package on
+> any external trees, using .checkpackageignore files from the
+> respective trees if present.
+> 
+> While .checkpackageignore should be used as little as possible, in a
+> few cases adding overrides for false-positives to the affected files
+> is not feasible, a practical example of this is a Markdown file
+> misidentified as Python by libmagic (likely due to code blocks).
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+  Applied to master, thanks.
+
+  We discussed it at the BR meeting, looked at the other options (like always 
+checking externals as well), but ended up with the conclusion that your proposal 
+actually covers the likely use cases best.
+
+  We also didn't find a better name so it stays check-package-external.
+
+  There are two things still missing:
+
+- Mentioning it in the manual (I'm not even sure if check-package is already 
+mentioned...)
+
+- Adding a runtime test of the feature (including with and without the ignore file).
+
+  Also one small modification, see below.
+
+> ---
+> I've considered wrapping this into the existing check-package target,
+> but there are a few reasons not to:
+> 
+> 1. Some people might not want to subject their external trees to
+> check-package at all, and would be annoyed by the warnings.
+> 
+> 2. BR2_EXTERNAL support for utils/docker-run is still pending (see [1]).
+> 
+> 3. The older shellcheck and flake8 versions in the Buildroot base
+> container image used by utils/docker-run produce some false positives
+> for my external trees, so I want to keep using the (newer) local
+> versions for checking those, but use the container for upstream
+> patches. That is more convenient with separate targets.
+> 
+> If anyone's wondering about the "Markdown misidentified as Python"
+> example: It looks like "__init__(self):" appearing in a code block
+> makes libmagic consider the file Python.
+> 
+>   Makefile | 20 +++++++++++++++++++-
+>   1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index b8678ea15b..cdc7ac0e4e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -125,7 +125,8 @@ endif
+>   noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+>   	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
+>   	randpackageconfig allyespackageconfig allnopackageconfig \
+> -	print-version olddefconfig distclean manual manual-% check-package
+> +	print-version olddefconfig distclean manual manual-% check-package \
+> +	check-package-external
+>   
+>   # Some global targets do not trigger a build, but are used to collect
+>   # metadata, or do various checks. When such targets are triggered,
+> @@ -1262,10 +1263,27 @@ release:
+>   print-version:
+>   	@echo $(BR2_VERSION_FULL)
+>   
+> +# $(1): br2-external path
+> +# $(2): br2-external description
+> +define check-package-external
+> +	@$(call MESSAGE,"Checking packages in $(2)")
+> +	$(Q)if [ -r "$(1)/.checkpackageignore" ]; then \
+> +		ignore="--ignore-list=$(1)/.checkpackageignore" ; \
+> +	fi ; \
+> +	$(TOPDIR)/utils/check-package \
+> +		--br2-external $${ignore} \
+
+  If "ignore" is set in the environment and there is no ignore file, this could 
+create problems. So I've added an else branch to the condition above and set to 
+to "".
+
+  Regards,
+  Arnout
+
+
+> +		`git -C $(1) ls-tree -r --format='$(1)/%(path)' HEAD`
+> +endef
+> +
+>   check-package:
+>   	$(Q)./utils/check-package `git ls-tree -r --name-only HEAD` \
+>   		--ignore-list=$(TOPDIR)/.checkpackageignore
+>   
+> +check-package-external:
+> +	$(foreach name,$(BR2_EXTERNAL_NAMES),\
+> +		$(call check-package-external,$(BR2_EXTERNAL_$(name)_PATH),\
+> +			$(BR2_EXTERNAL_$(name)_DESC))$(sep))
+> +
+>   .PHONY: .checkpackageignore
+>   .checkpackageignore:
+>   	$(Q)./utils/check-package --failed-only `git ls-tree -r --name-only HEAD` \
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
