@@ -4,59 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D746E8B367
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 21:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9FDBE8B368
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 21:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E238D60901;
-	Tue,  3 Feb 2026 21:42:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EC5B60901;
+	Tue,  3 Feb 2026 21:43:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3C7iRNBnyZ0u; Tue,  3 Feb 2026 21:42:50 +0000 (UTC)
+ id tPZBRBQTcize; Tue,  3 Feb 2026 21:43:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6E8160905
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 718E960A41
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770154970;
-	bh=wikvZJckaEYoaOKd+Om+AZlbP3/vxGmOpHbzk4AodOU=;
+	s=default; t=1770154983;
+	bh=IWhe6HKCLla8GiW7BY2H+1QyI2Z2ppQ47BiAna6EGQE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IIAUUi91MDDUOL1yoqpTR2Ng8/sJxVwl8/uwePOWCvu7B6OvAFmoaNDxEj6prWiSm
-	 qf+FX7AF9AUPr2odV0cyC5gTzt8HTTM4D/XONezbNYZYInhJrzkW2m1PdvrUZA3Hx8
-	 L5kwe35e7LZyEB4DQwbn3WfsYXDHj9zowGg95J4HoSKsnaXvPQUgW7CxmHSsdOkHaH
-	 CL/jGAAD4RKkLhYdRq4T2sckazHfsSoqHy6+9fjdc6HpSLYppikR3/aIdPlZYDcq9R
-	 CS5IHqSSWx52+0xpA06WeMWo04Sk8LDjryD6UDqUEdtpp/xHTWwk6vifBee0b/zs9m
-	 q4ek5aDgOPf5A==
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=irsLv30DIOUwUDq6DcUYYwnh01AxP2TZuZ2CxScmfRu6+k90kdDm1oFksycDQ9rgK
+	 QGmqIEsnfWoBdL7LlEFb72KvrbTRFxH3Afbf1/fxzzK5N0t077tY3huVJVHlcr5PLD
+	 xq3iO5j97DAMwnoxhysRrZ4Q6XUOpcxChriVNtKLTmvnT+F4BvDJHUDjQxmn3wt+9o
+	 fl3uoBubwLEXzT61lsl2KC1ulKfHDS7QikESumRADHYQeC5SPE5EMexvquj8YnfJUd
+	 u56Su24VEFMD2Umqo8ZFTQPQPC3b2VZTixuenw/a4XqfSAB+DWd5BnDafrh4XTv/w2
+	 dmfRGDFS6bI3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6E8160905;
-	Tue,  3 Feb 2026 21:42:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AB6A9F5
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 21:42:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 718E960A41;
+	Tue,  3 Feb 2026 21:43:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 831F9F5
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 21:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DEC240C1C
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 21:42:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F8EA4030E
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 21:43:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uutXWyPh8ZW8 for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 21:42:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X6oEszv6faDo for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 21:43:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A093640C1B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A093640C1B
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 21:42:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 868098674F; Tue,  3 Feb 2026 21:42:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A313440185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A313440185
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A313440185
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 21:43:01 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 43E1A19F59C;
+ Tue,  3 Feb 2026 22:42:55 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 03 Feb 2026 22:42:55 +0100
 To: buildroot@buildroot.org
-Date: Tue, 3 Feb 2026 22:40:51 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83815826469ac94b76b5aee8c61af95989f91f46
-X-Git-Newrev: 130b5a124cd992f9bedd190b3d3b0c6e1033454a
-X-Patchwork-Hint: ignore
-Message-Id: <20260203214247.868098674F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spandsp: fix build with gcc >= 14.x
+Date: Tue,  3 Feb 2026 22:42:54 +0100
+Message-ID: <20260203214254.335146-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.52.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1770154979;
+ bh=VdeKlh+R5jKTbpX67u1C46Wy0cODXTiddxB11Z/nqqo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ceVErXxF/NEd9XP/wQTV9+YRlj++kTwS3bf7UdOQzfwUPmg1Uvg2ZiDbT2BpNoAPh
+ rNVkIJE94lA9lE08gHrmTkNorB0/Mf4U9KU/2IZlAK86YVCWdFB+WnaohnDQJc3VLJ
+ 2JTjQM+tFGIkxQ2SUkETzgFP/6rsDoLofq077xeRvg/kNXYiyn1SX6dZJRdtE5mLpI
+ 3VXFk0w/6I4OzOrn3qZmub7clbC9BpkalLGZzUEDoF8GGxnE88+51UHjpy6f0wAbG3
+ xvYur48AwXQdpWXDVffp7zoBMw8Ovc99WQyGPqRiEn7wJ8O6cBZIfgBUSmjdjVh5if
+ R+kt0dc9BbyFQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ceVErXxF
+Subject: [Buildroot] [PATCH] package/pico-sdk: fix host install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,154 +88,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Jesse Taube <mr.bossman075@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=130b5a124cd992f9bedd190b3d3b0c6e1033454a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+We've not been using HOST/usr for years now, and 'make check-package'
+finds and reports the issue:
 
-Added upstream patch to fix build error.
-The build error does not occur with gcc-13.x.
+    $ ./utils/docker-run make check-package
+    package/pico-sdk/pico-sdk.mk:23: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/
+    package/pico-sdk/pico-sdk.mk:24: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/
 
-The first build error of this kind was recorded 2024-08-23:
-https://autobuild.buildroot.net/results/492/4927e93e40ec8bcda107f4bc3d8aa83024deb674/
+Fixes: ceb800d3c63fe91628f42ce749c211ebef278628
+Fixes: 926381d360082e926cb6be28cb1e97639d26ea0f
 
-Fixes:
-https://autobuild.buildroot.net/results/48a/48af80bdda62ca70d73bc01e0939f548c3736c0d/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jesse Taube <mr.bossman075@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Changes-to-address-V.17-fixed-point-issue.patch | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ package/pico-sdk/pico-sdk.mk | 4 ++--
+ package/picotool/picotool.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
-new file mode 100644
-index 0000000000..39aaa5a5d4
---- /dev/null
-+++ b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
-@@ -0,0 +1,116 @@
-+From 239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b Mon Sep 17 00:00:00 2001
-+From: Steve Underwood <steveu@coppice.org>
-+Date: Fri, 18 Aug 2023 01:24:21 +0100
-+Subject: [PATCH] Changes to address V.17 fixed point issue.
-+
-+Upstream: https://github.com/freeswitch/spandsp/commit/239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/spandsp/private/v17rx.h |  2 +-
-+ src/v17rx.c                 | 30 +++++++++++++++++++-----------
-+ 2 files changed, 20 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/spandsp/private/v17rx.h b/src/spandsp/private/v17rx.h
-+index 8ea7a9fe..8613b5a5 100644
-+--- a/src/spandsp/private/v17rx.h
-++++ b/src/spandsp/private/v17rx.h
-+@@ -97,7 +97,7 @@ struct v17_rx_state_s
-+ 
-+     /*! \brief A measure of how much mismatch there is between the real constellation,
-+         and the decoded symbol positions. */
-+-    int32_t training_error;
-++    int64_t training_error;
-+ 
-+     /*! \brief The proportional part of the carrier tracking filter. */
-+     int32_t carrier_track_p;
-+diff --git a/src/v17rx.c b/src/v17rx.c
-+index a823dad2..295d26a9 100644
-+--- a/src/v17rx.c
-++++ b/src/v17rx.c
-+@@ -64,6 +64,10 @@
-+ #include "spandsp/dds.h"
-+ #include "spandsp/complex_filters.h"
-+ 
-++#if defined(SPANDSP_USE_FIXED_POINT)
-++#define SPANDSP_USE_FIXED_POINTx
-++#endif
-++
-+ #include "spandsp/v29rx.h"
-+ #include "spandsp/v17tx.h"
-+ #include "spandsp/v17rx.h"
-+@@ -389,7 +393,7 @@ static __inline__ void put_bit(v17_rx_state_t *s, int bit)
-+ /*- End of function --------------------------------------------------------*/
-+ 
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-static __inline__ uint32_t dist_sq(const complexi16_t *x, const complexi16_t *y)
-++static __inline__ uint32_t dist_sq(const complexi32_t *x, const complexi32_t *y)
-+ {
-+     return (int32_t) (x->re - y->re)*(x->re - y->re) + (int32_t) (x->im - y->im)*(x->im - y->im);
-+ }
-+@@ -954,11 +958,12 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+         else if (s->training_count >= V17_TRAINING_SEG_2_LEN)
-+         {
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %d\n", s->training_error);
-++            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %ld\n", s->training_error);
-++            if (s->training_error < (int64_t) FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
-+ #else
-+             span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %f\n", s->training_error);
-+-#endif
-+             if (s->training_error < FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
-++#endif
-+             {
-+                 s->training_error = FP_SCALE(0.0f);
-+                 s->training_count = 0;
-+@@ -1055,19 +1060,20 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+         /*endif*/
-+         if (++s->training_count >= V17_TRAINING_SHORT_SEG_2_LEN)
-+         {
-++            /* TODO: This was increased by a factor of 10 after studying real world failures.
-++                     However, it is not clear why this is an improvement, If something gives
-++                     a huge training error, surely it shouldn't decode too well? */
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %d\n", s->training_error);
-+             s->carrier_track_i = 100;
-+             s->carrier_track_p = 500000;
-++            if (s->training_error < (int64_t) (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-+ #else
-+             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %f\n", s->training_error);
-+             s->carrier_track_i = 100.0f;
-+             s->carrier_track_p = 500000.0f;
-+-#endif
-+-            /* TODO: This was increased by a factor of 10 after studying real world failures.
-+-                     However, it is not clear why this is an improvement, If something gives
-+-                     a huge training error, surely it shouldn't decode too well? */
-+             if (s->training_error < (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-++#endif
-+             {
-+                 s->training_count = 0;
-+                 if (s->bits_per_symbol == 2)
-+@@ -1136,11 +1142,13 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+ #endif
-+         if (++s->training_count >= V17_TRAINING_SEG_4_LEN)
-+         {
-+-            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-+-            {
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %d)\n", s->bit_rate, s->training_error);
-++            if (s->training_error < (int64_t) V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-++            {
-++                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %ld)\n", s->bit_rate, s->training_error);
-+ #else
-++            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-++            {
-+                 span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %f)\n", s->bit_rate, s->training_error);
-+ #endif
-+                 /* We are up and running */
-+@@ -1157,7 +1165,7 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+             {
-+                 /* Training has failed. Park this modem. */
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %d)\n", s->training_error);
-++                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %ld)\n", s->training_error);
-+ #else
-+                 span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %f)\n", s->training_error);
-+ #endif
+diff --git a/package/pico-sdk/pico-sdk.mk b/package/pico-sdk/pico-sdk.mk
+index 5bcf71650d..dfb29d2320 100644
+--- a/package/pico-sdk/pico-sdk.mk
++++ b/package/pico-sdk/pico-sdk.mk
+@@ -20,8 +20,8 @@ define PICO_SDK_INSTALL_STAGING_CMDS
+ endef
+ 
+ define HOST_PICO_SDK_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/usr/share/pico-sdk
+-	cp -r $(@D)/* $(HOST_DIR)/usr/share/pico-sdk
++	mkdir -p $(HOST_DIR)/share/pico-sdk
++	cp -r $(@D)/* $(HOST_DIR)/share/pico-sdk
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/picotool/picotool.mk b/package/picotool/picotool.mk
+index bca9489665..cf8e294835 100644
+--- a/package/picotool/picotool.mk
++++ b/package/picotool/picotool.mk
+@@ -12,7 +12,7 @@ PICOTOOL_LICENSE_FILES = LICENSE.TXT
+ PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(STAGING_DIR)/usr/share/pico-sdk
+ PICOTOOL_DEPENDENCIES = libusb pico-sdk
+ 
+-HOST_PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(HOST_DIR)/usr/share/pico-sdk
++HOST_PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(HOST_DIR)/share/pico-sdk
+ HOST_PICOTOOL_DEPENDENCIES = host-libusb host-pico-sdk
+ 
+ $(eval $(cmake-package))
+-- 
+2.52.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
