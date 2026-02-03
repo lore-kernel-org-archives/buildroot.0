@@ -4,83 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40DFE87853
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 18:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D08F6E87852
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 18:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 766AE6063A;
-	Tue,  3 Feb 2026 18:10:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A03246063A;
+	Tue,  3 Feb 2026 18:10:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2nDzRDg1jOMr; Tue,  3 Feb 2026 18:10:31 +0000 (UTC)
+ id rM0BjpHEyqkK; Tue,  3 Feb 2026 18:10:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F725608C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5684608C3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770142231;
-	bh=zv8EsoVrnJAoaALlNHsrfK8GsjWqM74AerZLCB5cuiY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=R/IpjCuJiru2kDu7xtv9D/G3GhAuN46qVJ8qj3c55Lj2H79cEKP9a4SkXo6/ziJw1
-	 FlVtzWnNpDLjH+XX/3EmbA72K8sWHtxPHgyGFdS4De8nETPzT4moTYfwnaFxi39IoG
-	 kEPbBUol5BfJwEsLUfilhPLQYHSuBZerkR5xOcaxKDsC2bcgxVWpoPvt2gwSemBC8K
-	 sg9mFWtaVaeDnnaUJicb9lDNogcxz/l7C7KF76qo2stwhW/8J3S4K2oIzCH1Qz9Qwf
-	 kaVSYtnhkELiu+Dk91JDDDwLDH/80Ias1+H7QIm/B7HNXDcoZMrMblbHZgl6Rjg/Iy
-	 ucCG9fPJLx+SA==
+	s=default; t=1770142248;
+	bh=0vqTZ8Ymqwv6ALTh3K6F6UozZBsnAXqdtcRKWh1HFmw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=TM7B+t1BXsvmMuRoehSyN0s6yn6r5qHnrNLCTxYFKnW/T48kDFJ77XwjIJv7dowdp
+	 SjWSIP8pSnI5ncCdGraQ/a1UWM6K7//T2i3pHnCqWiUnTGCPvgq24rRGteymVAX5rL
+	 iTy/mWFn2bYa+d/pWpANb1rQyGcH6HAzu7g3k0+GZDxyP9FqcRpQ4f0raTNAZbAkVM
+	 yQXk3vHzMNfDLJRpxzeJQuKjlAcUZCZto6+5Yy+Lut3lc+D8Aub1xmlLhgnJzqdl15
+	 N83P00YXF7XX3q9yO4AOwZJ2/7noidpCTwI9X1LeMeINp3vpiPQYTRLGaFN13ghCON
+	 yathb2ANl14UQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F725608C2;
-	Tue,  3 Feb 2026 18:10:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 964FC13D
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 18:10:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5684608C3;
+	Tue,  3 Feb 2026 18:10:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6EC0513D
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 18:10:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 848A14037D
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 18:10:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58B7840BBB
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 18:10:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id An59hMslBPcL for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 18:10:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DC3240205
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DC3240205
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6DC3240205
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 18:10:29 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8626DA4C56AE;
- Tue,  3 Feb 2026 19:10:13 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47822)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vnKqp-000000002Qe-2BRq;
- Tue, 03 Feb 2026 18:10:11 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JMgdfkL1q0wg for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 18:10:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BB8240BAE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BB8240BAE
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 18:10:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7FB9E8670B; Tue,  3 Feb 2026 18:10:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>
-Date: Tue,  3 Feb 2026 19:10:10 +0100
-Message-ID: <20260203181011.2433975-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1770142213;
- bh=NrjqCqW22XCh7954UjamoFQY6BYiZdPiHmuxgezBbFA=;
- h=From:To:Cc:Subject:Date:From;
- b=kfmunwQDdCwHgvUQPMi8CW4rQBqEDQyWOXbYcyV7jgoOhScGHoW59yN8oB3jSg3Bi
- HmfW9ac5/6HYawrJRpb2RKGjZZJKED8QlcyRYt14wPZ0OAoj/u/W+/6TTmBjlUbOxp
- +9kGMg4eR5vSeVCUFR4nHN7K7zXmKUX068rqUt2Iu0jjlUIbjG4dfF976MvtA/qP6X
- ghMp4mTvz8KEUQzXJjK5uTtwpKP8Trhbzhv3//7rPtoOOQN6xHQldzwPPelfFzJ1bK
- xKZOok1yGn+HEfHQCkOVSefUuxGJpCwT4ZH5EFnxvLhC3ATBbmo+xyuXoR9XdqcfjN
- eiHedrpTRlANw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=kfmunwQD
-Subject: [Buildroot] [PATCH 1/2] package/tcf-agent: rename patch
+Date: Tue, 3 Feb 2026 19:06:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1d10e677b8fe8cb757dccba8c42b746f52c1a5a4
+X-Git-Newrev: 74ac7a38be67a3f136315746a203de83a9f20bc2
+X-Patchwork-Hint: ignore
+Message-Id: <20260203181046.7FB9E8670B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/ti-k3-r5-loader: add defconfig
+ fragment support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,29 +69,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 408352207c18084c331b23aa739cde98cd52d000 added
-0001-fix-uClibc-ng-compile.patch while another patch numbered 0001
-already existed.
-Rename the patch former for proper numbering of patches.
+commit: https://git.buildroot.net/buildroot/commit/?id=74ac7a38be67a3f136315746a203de83a9f20bc2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+There are multiple defconfig fragments we can select to modify the final
+tiboot3.bin image to support different boot methods or enable features
+supported by a board. Allow the ti-k3-r5-loader package to select
+defconfig gragments during a build
+
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- ...x-uClibc-ng-compile.patch => 0002-fix-uClibc-ng-compile.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/tcf-agent/{0001-fix-uClibc-ng-compile.patch => 0002-fix-uClibc-ng-compile.patch} (100%)
+ boot/ti-k3-r5-loader/Config.in          | 6 ++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0002-fix-uClibc-ng-compile.patch
-similarity index 100%
-rename from package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-rename to package/tcf-agent/0002-fix-uClibc-ng-compile.patch
--- 
-2.47.3
-
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+index b4fb46e55b..7eb471e6d5 100644
+--- a/boot/ti-k3-r5-loader/Config.in
++++ b/boot/ti-k3-r5-loader/Config.in
+@@ -95,6 +95,12 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the TI K3 R5 Loader configuration file.
+ 
++config BR2_TARGET_TI_K3_R5_LOADER_CONFIG_FRAGMENT_FILES
++	string "Additional configuration fragment files"
++	help
++	  A space-separated list of configuration fragment files,
++	  that will be merged to the tiboot3.bin configuration file.
++
+ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_DTS_PATH
+ 	string "Device Tree Source file paths"
+ 	help
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index db5c3cdaf8..178db5c0f3 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -77,6 +77,7 @@ TI_K3_R5_LOADER_MAKE_OPTS = \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
+ 	BINMAN_INDIRS=$(BINARIES_DIR)
+ 
++TI_K3_R5_LOADER_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CONFIG_FRAGMENT_FILES))
+ TI_K3_R5_LOADER_TIBOOT3_BIN = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_TIBOOT3_BIN))
+ 
+ define TI_K3_R5_LOADER_INSTALL_TIBOOT3_BIN
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
