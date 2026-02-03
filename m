@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB61AE8305D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 08:15:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91666E8305D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 08:15:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A64FC8100D;
-	Tue,  3 Feb 2026 08:15:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6691F607EE;
+	Tue,  3 Feb 2026 08:15:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ebid7uTxAXfR; Tue,  3 Feb 2026 08:15:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BpbTNgn4E_A8; Tue,  3 Feb 2026 08:15:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB39881046
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C6E760804
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770106511;
-	bh=mCMvto8lJslOTQmplgfJps1L1oJKkBuzThF+3NsKqec=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	s=default; t=1770106515;
+	bh=FGwGAIONho7+dYZKtpXxTIrDOvzTTOjBNfWGAzQTUgU=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=aReEZrcoF4eNR3xqBO65VkQkFoX8SjIabPPQ532Op92t2U+aNtm6q9X0AaW3HXq2/
-	 OyEVylpYXTx41cnE4xdyvwMNWDR/gks+deXx7wqDKLNZthHRTUdUoaHU8jMQDBrpMT
-	 mqROKkpM6sPRZJ+rfSU43AF6K+MQOSXb5Zr4HrXmUeIubcsDSsmB17Mz2szIWjhmtt
-	 QK1E3Z9imqk4BvlfF3bkdj+7lgAdpJmWOYpnchpNY2mSZC3DxW2FhWOIRPb0On1Thv
-	 cib1zD4Yu+1URUvB+ufJ+VHkNcmVdOYf2VsVsJryUIDEIbv40pVgAh1AquB40jZxPZ
-	 y/+qfE4JYxBvg==
+	b=fE94m4WdcjsObUO638x5D3uKJdy8dAoZ6ABog4E5DA2QxfPHReRVFDGpev3RnIr6j
+	 8QnNAluJcelu+3CxvkLoalXmhZR9t3LoW/St1QQrNJ9jBwpiZaxHFoagTAnu59mnf0
+	 TOqp1pwTwEQrOQUKqWzZYe+5Z0WOpv6aKzu8ln2h5OK7WaxC8v5WFHabWnzS3OWfIu
+	 FCiIGw417GEmaFxkHRe0ymbmOVht0Mj2vcVvrfjGLyEZ4zLmoztF5CoS6+gusAS4d+
+	 m07ThwKBeOFxfLAaPryzuK+PUZbY6xbV+IdlBFbYWArzclKSskLz2SfRHO6Gl4KnPM
+	 90Jr5RUITri5A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB39881046;
-	Tue,  3 Feb 2026 08:15:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BF726F5
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:15:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C6E760804;
+	Tue,  3 Feb 2026 08:15:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94A60F4
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB05E81046
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:15:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76B58607EE
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:15:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id USEueoXbnQpP for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 08:15:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X2H0-D-Gi-m6 for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 08:15:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=herve.codina@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 769E48100D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 769E48100D
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 769E48100D
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:15:08 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1381735473; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 03 Feb 2026 08:15:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vnBYw-00000008BBT-0isR;
- Tue, 03 Feb 2026 09:15:06 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Marcus Hoffmann
- <buildroot@bubu1.eu>
-In-Reply-To: <20260202212814.2607588-6-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Mon, 2 Feb 2026 22:28:11 +0100")
-References: <20260202212814.2607588-1-thomas.petazzoni@bootlin.com>
- <20260202212814.2607588-6-thomas.petazzoni@bootlin.com>
-Date: Tue, 03 Feb 2026 09:15:06 +0100
-Message-ID: <87ms1qnsz9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE3DA60804
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE3DA60804
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EE3DA60804
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:15:11 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 76C3AC211D2;
+ Tue,  3 Feb 2026 08:15:13 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5C95D60767;
+ Tue,  3 Feb 2026 08:15:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A6F9A119A8891; Tue,  3 Feb 2026 09:15:04 +0100 (CET)
+Date: Tue, 3 Feb 2026 09:15:03 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20260203091503.0226ba36@bootlin.com>
+In-Reply-To: <20260203075731.22481-1-bernd@kuhls.net>
+References: <20260203075731.22481-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=RauzB9wMavzw8BIfGSR5j0pU2QemEbymkFEP8zmggKEpsWLaCJGia15y9fQNXCC+27Wr5EP7t7uX60US+KuSQbR19hQC+OCl4aayR9GAlXJSGyoDyG5yMtRjrFoytYD2tvRLFh5vSXPQC0z68z/KIAhnrAQuzyKqSZw6N0aYdEwzNu5LYXsEtBsLGIKcw1vCC4Vs8QuVnz1xMjCy3KHriDWkClICQtHddfDUF9N0hX7UTBlryCjO/hBhkf+UjAYhYTTNAAXNWXIorsTG3XCxT3EfcVPcfmJLK0wYM+DtosO4m6e+mN28cFWjIzQ3RudSqRHY5jWLabnhG9Sidf5poA==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=BebGTOpC1uFy/ouiCv5HMSpFtiIuul6loX5KrtwelMM=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=RauzB9wM
-Subject: Re: [Buildroot] [PATCH 5/5] support/config-fragments/autobuild: add
- a really old toolchain
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1770106507; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=UE6b9MB63/agg26EvVaefrei7qFHbzsXp+hTxVOfY7w=;
+ b=O1/mX18k+e6ZKSRGUl9/xuDBR/tZQuaUNWrJ565+Pbzdyg3gqt5iZV/+Ej0bZ9XpgabDgA
+ voRFdmj8tL4fWp9TRD1BeBA2FLDD7Lu5wRmcm76NNGJAXdQfqmb5FeMGkrzrgnP6p2BDsH
+ fFU2jIFCoOAJpA2b0mTB/GGqdMpgM/aJXosCKObBkuSeysNg9VjNPCjjJxSsVLLAjr6ssY
+ 0goJ9KMOh5HH4w7wy48VwDIzWPr6JtXRCPgRGgnBEC3ktDBnPvKK5M/GUg/Qb7UZZ9eZKu
+ SSDiuYnBTKuUyVsmKzq+DmtI/woaX8fyqpyGECSC9+HU/fqJfalb59x/Bcrd1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=O1/mX18k
+Subject: Re: [Buildroot] [PATCH 1/1] package/php-lua: add comment for lua
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,35 +95,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Herve Codina via buildroot <buildroot@buildroot.org>
+Reply-To: Herve Codina <herve.codina@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
-
- > Testing with a really old toolchain is helpful to catch issues related
- > to kernel headers version issues, gcc version issues, etc. We chose a
- > glibc toolchain though as old musl or uClibc-ng versions tend to lack
- > a number of features that are needed by modern software.
-
- > This toolchain is placed near the top of toolchain-configs.csv, so
- > that it is used as part of the "base" set of toolchain that test-pkg
- > uses, even without the -a option.
-
- > test-pkg takes the 6 first toolchains of this CSV file for its base
- > test, and actually the comment in toolchain-configs.csv was wrong
- > since commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511, which removed a
- > toolchain from the base set, but not realizing that test-pkg would
- > anyway continue to test the first 6 toolchains.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQmVybmQsCgpPbiBUdWUsICAzIEZlYiAyMDI2IDA4OjU3OjMxICswMTAwCkJlcm5kIEt1aGxz
+IDxiZXJuZEBrdWhscy5uZXQ+IHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8
+YmVybmRAa3VobHMubmV0Pgo+IC0tLQo+IFdoaWxlIHRlc3RpbmcgdGhlIHBocCA4LjUgYnVtcCBJ
+IGRpZCBub3Qgbm90aWNlIHRoaXMgcGFja2FnZSBiZWNhdXNlIGl0Cj4gZGlkIG5vdCBzaG93IHVw
+IGluIG1lbnVjb25maWcuCj4gCj4gIHBhY2thZ2UvcGhwLWx1YS9Db25maWcuaW4gfCAzICsrKwo+
+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvcGhwLWx1YS9Db25maWcuaW4gYi9wYWNrYWdlL3BocC1sdWEvQ29uZmlnLmluCj4gaW5kZXgg
+OTIzZGUyZDc5OS4uOWY0MzUzM2ZhZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3BocC1sdWEvQ29u
+ZmlnLmluCj4gKysrIGIvcGFja2FnZS9waHAtbHVhL0NvbmZpZy5pbgo+IEBAIC02LDMgKzYsNiBA
+QCBjb25maWcgQlIyX1BBQ0tBR0VfUEhQX0xVQQo+ICAJICBPTy1BUEkgdG8gbHVhIHZhcmlhYmxl
+cyBhbmQgZnVuY3Rpb25zLgo+ICAKPiAgCSAgaHR0cHM6Ly9wZWNsLnBocC5uZXQvcGFja2FnZS9s
+dWEKPiArCj4gK2NvbW1lbnQgInBocC1sdWEgbmVlZHMgdGhlIGx1YSBpbnRlcnByZXRlciIKPiAr
+CWRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0hBU19MVUFJTlRFUlBSRVRFUgoKSW5kZWVkLgoKQWNr
+ZWQtYnk6IEhlcnZlIENvZGluYSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgoKVGhhbmtzIGEg
+bG90LgoKQmVzdCByZWdhcmRzLApIZXJ2w6kKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
