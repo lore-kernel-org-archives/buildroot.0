@@ -1,81 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6539E8783D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 14:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB9DBE87839
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 14:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B733F83C16;
-	Tue,  3 Feb 2026 14:56:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E628605A0;
+	Tue,  3 Feb 2026 14:57:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b_jYRxuPa0Ch; Tue,  3 Feb 2026 14:56:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aMUULbUeMeBZ; Tue,  3 Feb 2026 14:57:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5F3083C2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AE726070C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770130598;
-	bh=6leZyZ4uf0JKFfKLz8J5bF3Aiqoo+5vLumYj5KkMgX0=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=c7QdKCSheEBhinhBq1Z7Bci70fWqbGXLYK+HH3FjLXhH3njjkR6gqx8EWggpVdj5U
-	 JXCnOq9B9eYOfU+CN5kofILvtuyQ+TcT9+iykFz56AwbGMONe4hZ7rHAq0OfEzxBPp
-	 HbcaTZI2T3d/qUuqIPxCrfqw7j/0pMmFnshSXPkiNpbdRf0wrN+M5s7bLeLikrksac
-	 l0c3EZetjPR5LecBNTulUjE+/CVm76MOIh14uB6wsuEW7A6mg2qb1qbrvSEfR66W0x
-	 jhslvyIza+MOOd8rcLIAVawZznQ+zrElWnKNH7BMZkZESuG5ZekVW3gL371VEpWycu
-	 sIMWcK6quMIyQ==
+	s=default; t=1770130636;
+	bh=P+XVBeDq8A+w7u1INA6qQLTJMKx4clswFh6LIKo74Ik=;
+	h=From:Date:References:In-Reply-To:To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=PgVH2S2eeGiNXliL/KkXDalDtcgw0VZoh5G/mvDU2phFA8Y3jaayO4c8qceN4TGac
+	 2N7O38ia+jU/lBz88DZiqY1W+whv/6HhNI+IvkWO/bonmgqQBp1irlWUZhHw4lOw+p
+	 zjhzBcIgTRes+mFFrY7Woa77CInHfZLXdhve9c24ew2QtnYzeZW0PSsVAEMD9rApMN
+	 w8RmNcSl9Knxq5EZ+Y69xb5PybY/XhbWN3+40TADPP41JEA5hJp5SDdd8EXeTjzLso
+	 MjoVhgDG/Roe1X21Gk0RGwXfxE1EJQED4Jd0C86ek+urM5t2haaF4xCUn3/O6pJVoZ
+	 dDf46YocF88zg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5F3083C2C;
-	Tue,  3 Feb 2026 14:56:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 35189F5
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:56:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AE726070C;
+	Tue,  3 Feb 2026 14:57:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF09B13D
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:57:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1EE1440352
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:56:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC5F76070C
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:57:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eGETkF6CrRhb for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 14:56:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1FD7240338
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FD7240338
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1FD7240338
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:56:34 +0000 (UTC)
-Received: from home.juju.sh (unknown [109.89.232.55])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id C1BFB19F5A5;
- Tue,  3 Feb 2026 15:56:29 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Marcus Hoffmann <bubu@bubu1.eu>,
-	Julien Olivain <ju.o@free.fr>
-Date: Tue,  3 Feb 2026 15:56:20 +0100
-Message-ID: <20260203145620.806729-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.52.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kFpytMKsyegi for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 14:57:14 +0000 (UTC)
+X-Greylist: delayed 598 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 03 Feb 2026 14:57:14 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 979C6605A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 979C6605A0
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.38.119;
+ helo=11.mo582.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
+ receiver=<UNKNOWN> 
+Received: from 11.mo582.mail-out.ovh.net (11.mo582.mail-out.ovh.net
+ [188.165.38.119])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 979C6605A0
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:57:14 +0000 (UTC)
+Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.249.188])
+ by mo582.mail-out.ovh.net (Postfix) with ESMTP id 4f55h40d53z5vtr
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 14:38:28 +0000 (UTC)
+Received: from ghost-submission-7d8d68f679-5twcp (unknown [10.110.101.93])
+ by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id AE6F710015F;
+ Tue,  3 Feb 2026 14:38:27 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.98])
+ by ghost-submission-7d8d68f679-5twcp with ESMTPSA
+ id DBaCFGAIgmkRehQA2wKZ7w:T8
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Tue, 03 Feb 2026 14:38:27 +0000
+X-OVh-ClientIp: 90.126.104.208
+From: =?utf-8?q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue, 03 Feb 2026 15:38:18 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770130592;
- bh=MUNuNx2+ehg3CGnqw7M+3i4a6UbrAL38r1ixBtmE5Z0=;
- h=From:To:Cc:Subject:Date:From;
- b=bwh4wqngQO8l1ZrzRWKDbqyZVeAwId1o/o209kc2dbD58OrjuJe1KsqkVFGxr0mpz
- ABzikA5ZoIJoaB/0MbDCFbkCM14Bsfr5emlXMMyMozqmO4XGfdRljFNYLt6f1KvYMM
- zNqi4wEz0lgrZepq5v+3jqdt5jKyjJjKM5hLs+DGWWx5SpGJagrdjutny1LK5Zpbyn
- sNviQlXZOQzhm+erTcI6i4DR+DF/ofCox3OA9j/WcZLprLNDetBHCNJWBLIJiVq2Ap
- 3x60UlvHlHrAoIDiXtTd3YQ3ECgGqfkYMaZlSFOnhQu+Wd7lDg566ESmOXqwQ8r5lo
- buorInskD/Pqw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bwh4wqng
-Subject: [Buildroot] [PATCH 1/1] package/pico{tool,
- -sdk}: install sdk files to $(HOST_DIR)/share
+Message-Id: <20260203-bump-imx-packages-lf-6-12-49-2-2-0-v1-7-548f3fc77a59@armadeus.com>
+References: <20260203-bump-imx-packages-lf-6-12-49-2-2-0-v1-0-548f3fc77a59@armadeus.com>
+In-Reply-To: <20260203-bump-imx-packages-lf-6-12-49-2-2-0-v1-0-548f3fc77a59@armadeus.com>
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.3
+X-Ovh-Tracer-Id: 604326777304181621
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTFR6Hs/Lkwa25FSwhn4cx65/69OWS1yyehCdGUP1UuxFLzyyfQkv/Wy/UyrN2853hOMVGJ0lkYrIQhh4Eu1Zul3jdGNbHZKgQdqViE9yYVc7cY6dzXqX0cmloLnrpxM5VXlVDzGoDbeLjq4jiAjbPAfEthW/3blWnezyNLucPkJhOALntjJK+a9QTaAmL1a+sgfoF2SgOKFNbilU06FLsz+vUP0G3Gtk02CX2rete6BAEZr4SxNi42if8C+WkAm7DXAmCymRy8lDk7kl3oAvTrn6NU79ZkGGfJkN+9NE+VB6jWTr81E0C6n4gJ8QBctNRbOcBRM23FKOkYIkUHIlb8FHKygOVVbqUH68GL8JKsPqDCUVbXVaU4emaRekhOIUPFtD6bRWMxa5pduSrKGvS34/QZAC2yLhOVYnc8TNqVb8zY2XpnaZJvfnE9pB/2RzM9W3W6PLXyPimwCog3D3uGPF/i1w7sIDV6z2Of31QSPz8XsliL/3BJx7d7GxvuSqfPOsmzURL2YGpNpcNDtj3EWZjTSGCgY2TU7BcKrw4OuP8BSAAx/qXcbM/ZvVwKremNV9BuFfdoR6VHGUyySvFBlX4OX6VwUYvh64dvK3139dH+NoONbxR34otfDsekkYeNtw7pDny+L2wR030JZnWWDM8BdcMtxISN5VZrKhywLFA
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=K3vPGSHNSYa3Hhg/4QvVpoJiPP56JODD4Asti3pfhbA=; 
+ c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
+ t=1770129508; v=1;
+ b=NyzdnDkxhz4igI4wVqCkwlT2tNmZ63DGw2yvwCjgKjS8jrszQkucKu25hU/orLymua8JmvKL
+ niBQH4oh8xYuubH+3YKI4JlhjStMju7HzST48dQi1sS8xm0ZWRZ136tF/LZIoNPa3X0642DhbZG
+ 0bShmAwV5P7G7KaFUzu2DEk0yowqDp1GK8tCrO9ZuoEe89FptXL5UQx1sBVbeA6IFB5l7LnuuFY
+ qvxvK4xR3sYn/odem+Fj4Yq7XD8f6f8hksndOnAllkIt5fXQMghL7j/gBZoAYGcmfKSfk7Ja0TV
+ YK5os+he3oRywrt67FfXxGWYacIAh6akxhTOgjbk6mHjA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
+ header.s=ovhmo103079-selector1 header.b=NyzdnDkx
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-98R002b01988da-f6d2-4f1f-ab69-3eaccc465bcf,
+ 004BD5E907DC429EAD4B1A0856BA767B03FD8B65)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH 7/9] package/freescale-imx/imx-vpu-hantro-vc:
+ bump version to 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,70 +109,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Erik Larsson <karl.erik.larsson@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commits [1] and [2] are installing host SDK files
-"$(HOST_DIR)/usr/share".
-
-check-package (see [3]) reports the error:
-
-    package/pico-sdk/pico-sdk.mk:23: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/
-    package/pico-sdk/pico-sdk.mk:24: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/
-    package/picotool/picotool.mk:15: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/
-
-This commit installs the host SDK files to "$(HOST_DIR)/share" to fix
-this error.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/12970341499
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/ceb800d3c63fe91628f42ce749c211ebef278628
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/926381d360082e926cb6be28cb1e97639d26ea0f
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/29a0dd4a3006c06d4b8d82821bd74b8b9f26715a
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/pico-sdk/pico-sdk.mk | 4 ++--
- package/picotool/picotool.mk | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/pico-sdk/pico-sdk.mk b/package/pico-sdk/pico-sdk.mk
-index 5bcf71650d..dfb29d2320 100644
---- a/package/pico-sdk/pico-sdk.mk
-+++ b/package/pico-sdk/pico-sdk.mk
-@@ -20,8 +20,8 @@ define PICO_SDK_INSTALL_STAGING_CMDS
- endef
- 
- define HOST_PICO_SDK_INSTALL_CMDS
--	mkdir -p $(HOST_DIR)/usr/share/pico-sdk
--	cp -r $(@D)/* $(HOST_DIR)/usr/share/pico-sdk
-+	mkdir -p $(HOST_DIR)/share/pico-sdk
-+	cp -r $(@D)/* $(HOST_DIR)/share/pico-sdk
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/picotool/picotool.mk b/package/picotool/picotool.mk
-index bca9489665..cf8e294835 100644
---- a/package/picotool/picotool.mk
-+++ b/package/picotool/picotool.mk
-@@ -12,7 +12,7 @@ PICOTOOL_LICENSE_FILES = LICENSE.TXT
- PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(STAGING_DIR)/usr/share/pico-sdk
- PICOTOOL_DEPENDENCIES = libusb pico-sdk
- 
--HOST_PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(HOST_DIR)/usr/share/pico-sdk
-+HOST_PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(HOST_DIR)/share/pico-sdk
- HOST_PICOTOOL_DEPENDENCIES = host-libusb host-pico-sdk
- 
- $(eval $(cmake-package))
--- 
-2.52.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyB2ZXJzaW9uIGlzIGFsaWduZWQgd2l0aCBOWFAgTGludXggQlNQIHZlcnNpb24gIkxGNi4x
+Mi40OV8yLjIuMCIuCgpMaWNlbnNlIGhhc2hlcyBjaGFuZ2VkIGJlY2F1c2UgdGhlIExBX09QVF9O
+WFBfU29mdHdhcmVfTGljZW5zZSBjaGFuZ2VkCmZyb20gInY1NyBKdWx5IDIwMjQiIHRvICJ2NjMg
+TWF5IDIwMjUiLgoKU2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGll
+bi5zenltYW5za2lAYXJtYWRldXMuY29tPgotLS0KIHBhY2thZ2UvZnJlZXNjYWxlLWlteC9pbXgt
+dnB1LWhhbnRyby12Yy9pbXgtdnB1LWhhbnRyby12Yy5oYXNoIHwgNiArKystLS0KIHBhY2thZ2Uv
+ZnJlZXNjYWxlLWlteC9pbXgtdnB1LWhhbnRyby12Yy9pbXgtdnB1LWhhbnRyby12Yy5tayAgIHwg
+NCArKy0tCiAyIGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkK
+CmRpZmYgLS1naXQgYS9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvaW14LXZwdS1oYW50cm8tdmMvaW14
+LXZwdS1oYW50cm8tdmMuaGFzaCBiL3BhY2thZ2UvZnJlZXNjYWxlLWlteC9pbXgtdnB1LWhhbnRy
+by12Yy9pbXgtdnB1LWhhbnRyby12Yy5oYXNoCmluZGV4IDFiMTQ0N2MzNGVmYi4uMTJlZWIyZjIx
+NDNkIDEwMDY0NAotLS0gYS9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvaW14LXZwdS1oYW50cm8tdmMv
+aW14LXZwdS1oYW50cm8tdmMuaGFzaAorKysgYi9wYWNrYWdlL2ZyZWVzY2FsZS1pbXgvaW14LXZw
+dS1oYW50cm8tdmMvaW14LXZwdS1oYW50cm8tdmMuaGFzaApAQCAtMSw1ICsxLDUgQEAKICMgTG9j
+YWxseSBjb21wdXRlZDoKLXNoYTI1NiAgNzEzYmEzNzVmMjU0OTA3MjdmY2M2MmJhYjVkNTUwOGY3
+NGRlMDMyMDRiNGMxNTM0NjRiNjk2YjY1MmM1YzdkZiAgaW14LXZwdS1oYW50cm8tdmMtMS4xMC4x
+LWMwMjQ0YTEuYmluCi1zaGEyNTYgIDYwMWZhNzkwYzViNGQwMzU3OWJkMTgyZmI0ZDY1YTZmMzI5
+YTMyZmFmNDlkYjIyZjk4ZTQ2MDgyMjFlODYxZjcgIENPUFlJTkcKLXNoYTI1NiAgYzNkOWE3YjJh
+NWE3ZGI1ZGE2OTBlOWMxMDgxYjk4YjY2NTgwMmMzZWZiYmJhN2ZiMjM3MzM5Mzk1YTkyZjYwNyAg
+RVVMQQorc2hhMjU2ICAwNGQyYTljNWM3NTgwNGExMWE0NTAwYTAxMzNkZmM3ZDhlODRmNzQyNTRj
+ZWU1MmM0MjA3NWY1ZWNjMjI5NTUwICBpbXgtdnB1LWhhbnRyby12Yy0xLjExLjAtNWUxOGE4NC5i
+aW4KK3NoYTI1NiAgMzAwMWNmODQwMThjNWNiMTBkMTgzYTY3OGY2ZWM4YTkyOGM3OTc2MTZiYTA2
+YjM5OGQ3Y2E5M2MwNzc5YWFhMiAgQ09QWUlORworc2hhMjU2ICBhODI5YjEwOWEwYTQwNmE2YTJm
+ZWMxOTk3NWEzMzJmZWNhMjI1MDk4Y2U2NmJmYWIyMjIwYzY2MDhkYjhmY2U1ICBFVUxBCiBzaGEy
+NTYgIGE2ZjAyOTdhZDhhYjQ5MDYyMjk5NTdjMmM3YzRiZjgyNWQ1NDNkOTlmZmI1YmRhZmMyZGU1
+YThkODg0ZWI4OGIgIFNDUi50eHQKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZnJlZXNjYWxlLWlteC9p
+bXgtdnB1LWhhbnRyby12Yy9pbXgtdnB1LWhhbnRyby12Yy5tayBiL3BhY2thZ2UvZnJlZXNjYWxl
+LWlteC9pbXgtdnB1LWhhbnRyby12Yy9pbXgtdnB1LWhhbnRyby12Yy5tawppbmRleCBiMjhlNjFi
+ZDhhNzcuLjBlOGUyZGM4NjBjZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9mcmVlc2NhbGUtaW14L2lt
+eC12cHUtaGFudHJvLXZjL2lteC12cHUtaGFudHJvLXZjLm1rCisrKyBiL3BhY2thZ2UvZnJlZXNj
+YWxlLWlteC9pbXgtdnB1LWhhbnRyby12Yy9pbXgtdnB1LWhhbnRyby12Yy5tawpAQCAtNCw4ICs0
+LDggQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUlNWF9WUFVfSEFOVFJPX1ZDX1ZF
+UlNJT04gPSAxLjEwLjEKLUlNWF9WUFVfSEFOVFJPX1ZDX1JFVklTSU9OID0gYzAyNDRhMQorSU1Y
+X1ZQVV9IQU5UUk9fVkNfVkVSU0lPTiA9IDEuMTEuMAorSU1YX1ZQVV9IQU5UUk9fVkNfUkVWSVNJ
+T04gPSA1ZTE4YTg0CiBJTVhfVlBVX0hBTlRST19WQ19TSVRFID0gJChGUkVFU0NBTEVfSU1YX1NJ
+VEUpCiBJTVhfVlBVX0hBTlRST19WQ19TT1VSQ0UgPSBpbXgtdnB1LWhhbnRyby12Yy0kKElNWF9W
+UFVfSEFOVFJPX1ZDX1ZFUlNJT04pLSQoSU1YX1ZQVV9IQU5UUk9fVkNfUkVWSVNJT04pLmJpbgog
+SU1YX1ZQVV9IQU5UUk9fVkNfREVQRU5ERU5DSUVTID0gbGludXgKCi0tIAoyLjUyLjAKCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
