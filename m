@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C14EE6E80C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 11:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FEFEE6E80F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 11:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5C1D83529;
-	Tue,  3 Feb 2026 11:09:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC4A2406BF;
+	Tue,  3 Feb 2026 11:12:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jF_m2MRrDIXi; Tue,  3 Feb 2026 11:09:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ib2ierWbTJDz; Tue,  3 Feb 2026 11:12:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E489D83C47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01CB4406F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770116960;
-	bh=cdxhN1MEZbsm9s+oXuRYc6mg9z1aHZDowMYh43xxU3U=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	s=default; t=1770117131;
+	bh=4Zl5kIo8uWW1jZFhBwUopFwnzZ41hpCHtxNo28ETkTQ=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=NqJDsEGJLAI9cofJeBSypkaMcGOUXvnf2lLkA+2gCIw/e+oqykX4kD01ZH/1L6STV
-	 jlD7NB6tcZl2WDRuBGo9Gv5T/QHQs1eCdfdw2/IXMRgSDxZFap6qpSb0Ls6ymSBTja
-	 oiaZZHIlqAG+hKcHQTAH2AR7yryieBvcMYGA7trefkmrFs4oi9M2F4/604w4JNNDfh
-	 cbAVCgPjGLTAABZx82Zt1SiGnBtbRMXFXEQn7nhstGNS5ifpI+HqSUVVSF8DvW9pfS
-	 pEaCP6ELt18jSCO38F5e+e1nfAJ3lsSCYdNwx9ZKIreD7QDk2rYN4l3ENKoj+pObYG
-	 nsgQoCQzH/zVQ==
+	 From:Reply-To:From;
+	b=CN5x9RShHeBeWuoDGsXgyS4sIXBTM4Uw4Ef62Iwl/J+6iU8usEBLJPk0kQxDUHdTn
+	 FdrEN9lgzyYK2ZuB5RFrMM5JLlF20okGXDGKMATkNlCKVuOUyBJ40WGHJrEWLvx/Rp
+	 xU6DwZcyjrnPtqDsH4/aIEMHSnSSoGhesJiSNdFOsWCZ63EeFXdsfwHJqqpsZOWQrY
+	 5XOBr2SNrL+Hm+5JRiT6U2QAB6JiO0CXH1o5hbNajDdE2oxYeO3uh8/Vs8pMR9RedG
+	 Gm+L9x1OgoMFhERLI5F/I03MKWCNg9DcnvMTfyeYn7NTb/YFKp2vxLwfVtImy70Tox
+	 CkS0ZFbW+pi9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E489D83C47;
-	Tue,  3 Feb 2026 11:09:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C86B0F5
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:09:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01CB4406F7;
+	Tue,  3 Feb 2026 11:12:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2577CF5
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:12:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6D1C40C70
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:09:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0876A6112B
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:12:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A5-XewsHh3jb for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 11:09:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
- helo=smtpcmd12132.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E50EF405B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E50EF405B9
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E50EF405B9
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:09:15 +0000 (UTC)
-Received: from [192.168.50.220] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id nEHRvZzcdP2aDnEHRv2FhW; Tue, 03 Feb 2026 12:09:13 +0100
-Message-ID: <06124f2c-2b89-4d0a-9e5e-6596ac5e123c@benettiengineering.com>
-Date: Tue, 3 Feb 2026 12:09:13 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6bPJk6mTpA3V for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 11:12:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D357610B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D357610B2
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1D357610B2
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:12:05 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id D4E761A2BBE;
+ Tue,  3 Feb 2026 11:12:02 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 9A3AD60728;
+ Tue,  3 Feb 2026 11:12:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 4A99F119A8891; Tue,  3 Feb 2026 12:12:01 +0100 (CET)
+Date: Tue, 3 Feb 2026 12:11:59 +0100
+To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Message-ID: <aYHXtmunYUm5W8Xy@windsurf>
+References: <20250808133112.3212687-1-elmehdi.younes@smile.fr>
+ <20250808133112.3212687-2-elmehdi.younes@smile.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-References: <20251227132148.704963-1-giulio.benetti@benettiengineering.com>
- <87zf5qmc8d.fsf@dell.be.48ers.dk>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <87zf5qmc8d.fsf@dell.be.48ers.dk>
-X-CMAE-Envelope: MS4xfGO26zL4NYi+YK2F5/tjYU8dOfwOziDgPaN2figdgUb7h5k/lnkxYDdXD7edjos3AOJgqFUarmy0/yi3VYo8XQt9TX+CQuof9o2f8b82a2UYlCyLVrAt
- 6DBA/wxYi1MBHN3Sz0sHB/69Yu/pI4irtr3PdZweKaayEhMMy6lLTkJXhfWvTocUw4hHG86Bun33Y8/q+lzVM8wNqQOs2GvxpguGxhXo8AqWClnWcLAn0ma6
- Xw5RSE+Y/rD7/GIY/6a8aA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1770116953; bh=KbREELagK7HXN+CnyHsyxhGxAVr1NxYzxx316mbYU3k=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=gU1l/rgcolLq2g9Ypae2mBvcxge+ZVhkLO16E6bEpP/hTV84gJvRWh0bmFCJnKJCn
- vJHfnKkvcREEoesq89T9l5BVb9ob0bkA0mmc3rBTQha/z+ADWaVcfG3y9Iozm30sK5
- OJswwfmIUieObyUkWtNsbKOUntQHa+ObeNyfrqAw27jEUe5iPsDRC+K0ULSdY2P2wz
- N8d0DTb1+1Jn7Tk9wdWFejjgZReemkNrQKxGGVys4QJqVhR/ecy/ZttmpTaDIiM1j7
- O9tmy+ydldEnysaZSCfSu44W1oSDnkZ+Iuck3oeosRcKv4YYTxr6M38YYjcAMrN4Fb
- g13aOluksT7/w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=gU1l/rgc
-Subject: Re: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.1
+Content-Disposition: inline
+In-Reply-To: <20250808133112.3212687-2-elmehdi.younes@smile.fr>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1770117122; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=jbY1igYRwKSGVYgqcGR7mJKWPzaZpa+ZRQPrRJnQB4k=;
+ b=tK+aKpw5EvaL0oMi1lL0mPQGNuHWbJ285HSVbS0yK/f0oby0gJ9YzRWa2sA5k/o2m28x3y
+ p6wQxuYNcikRXWMQIxUMS/fGbrQw8TKXPmIifacpfztSiikdBTz/eEt32yBiDI8np0G6Z2
+ 41GnQ3hADXaCtye2SFE1yeHZjEz+w7aYYTYQKsyiI7jzfnP+xx/xXBbkFA6yV1AqTHqfn8
+ xDL3SvJCMm4vd1/KiW4TXwwFscfN65DinagdOIcylRCd2WYypTxMW0mhLPvovxNE2mxEuC
+ bZxOpH25Ss11/6i1vj0ugitAMWaG7NQz1Tcci58eN1q9WwMpQt81/BPdtvIikg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=tK+aKpw5
+Subject: Re: [Buildroot] [RFC PATCH 1/5] package/rust-bindgen: add
+ host-clang dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,50 +96,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hello Mehdi,
 
-On 2/3/26 10:02, Peter Korsgaard wrote:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
-> 
->   > For change log, see:
->   > https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=a768fcc0aafbe50a37d2d06bba23eb6671d3a9b3
-> 
->   > NOTE: Tag v0.5.13.1 has not been emitted.
-> 
-> Could you report that upstream please?
+Sorry for the long delay in getting back to you!
 
-I've sent an e-mail to their ML:
-https://lore.kernel.org/dash/7c705a63-90a7-4437-8c75-24a117e66b1c@benettiengineering.com/T/#u
-
->   > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->   > ---
->   >  package/dash/dash.hash | 6 +++---
->   >  package/dash/dash.mk   | 2 +-
->   >  2 files changed, 4 insertions(+), 4 deletions(-)
+On Fri, Aug 08, 2025 at 03:31:08PM +0200, El Mehdi YOUNES via buildroot wrote:
+> According to the official requirements, bindgen needs libclang to
+> parse C/C++ headers. Until now the tool was used mainly by Mesa and
+> worked, but Rust-for-Linux explicitly relies on bindgen + libclang,
+> otherwise we can't activate Rust for linux.
 > 
->   > diff --git a/package/dash/dash.hash b/package/dash/dash.hash
->   > index 4697d958a3..df0f6044bf 100644
->   > --- a/package/dash/dash.hash
->   > +++ b/package/dash/dash.hash
->   > @@ -1,7 +1,7 @@
->   > -# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.tar.gz.sha512sum
->   > +# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.1.tar.gz.sha512sum
->   >  # After checking pgp signature
->   >  # using key 9F9D45FE50AE361530983792C7271D0A49B18BA7
->   > -sha512  428de1f65ab77d5fee88bbf4ba8642d77abfda223a4ede423d09db9faa4f0347199b3be841d63b93a7ed68f714ef54ff41b2dc936e4b7ebb19b74499ed4e6a01  dash-0.5.13.tar.gz
->   > +sha512  6b3d67f76e74853349fe99121b2ee96d32da9863042744e03984eb6a01bf437eee2f2e81fbdd0436090abfecacc2f5589960820c3d0d5f3dd580948d38d5dc1d 260512 dash-0.5.13.1.tar.gz
+> See
+> https://rust-lang.github.io/rust-bindgen/requirements.html
 > 
-> That clearly does not work.
+> Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 
-A bad copy and paste, thanks for fixing it.
+We have finally applied your patch! However, we improved the commit
+log to clarify further what happens, why it worked today without any
+issue, and we also added a comment in .mk explaining why we use a
+build time dependency for what really is a run-time dependency.
 
+See:
+
+ https://gitlab.com/buildroot.org/buildroot/-/commit/34ed3bbf0a5f2576043ff627c76df584ea936a71
+
+for the final commit.
+
+Thanks a lot!
+
+Thomas
 -- 
-Giulio
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
