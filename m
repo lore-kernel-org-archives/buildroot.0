@@ -4,85 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D441E87829
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 13:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A612AE8782F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 13:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5FBD4812C4;
-	Tue,  3 Feb 2026 13:50:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7207181EA1;
+	Tue,  3 Feb 2026 13:52:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e-tso1WICh8L; Tue,  3 Feb 2026 13:50:11 +0000 (UTC)
+ id Xd6yv6yqBTRg; Tue,  3 Feb 2026 13:52:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A44C812C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77213821C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770126611;
-	bh=L2A8IPkOb1HRM46wZlDEkekqSJx1QpZ2ur23IsrTZ2A=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=pBJO+uBh+Ns7wjAzmg4KyRe+Nn08D1o4u86Rlj1ewOtZuJcnLzcrZby7PYUKgOATf
-	 23i9WXxX7kE9fb0uSamuMYWIn7VYKcUkNiBfq1+OfOEitRqs9mtCOWHKi03oZAZmyf
-	 Zx+ljkFlIUFy82ASYXyyzddxR8tOP3MigDiQx5omUxtHFoGSdnDXxJvryelt8ghht8
-	 K8dIkf1TjWbMXVppHW2Vx/1Ev+GRsjmPj6ZCqqZJJqa/txmzgH6L8nRX3tZcens7tV
-	 WQMlDQzHd1Z3y3qDFdfQCEqV68wnL9RWO37EBHZ+DCkfUT7TEjt1WcQU+cahXRpFpl
-	 8wFnv8r5Icchg==
+	s=default; t=1770126763;
+	bh=ZGpG70bV6Vg8opAMXSvS9DlNzk5aCfhIR8lk/b8tXiM=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=digwcB6tTbMvKu8ILusxyp9gdPM8whXArzhjPyXmFObb+hL4OeU+dSpXGoa7S7T5c
+	 n31uZMulqHSGN8LEk1xfAijYYaO03Wx72O/vAqC4gtaMp5o7VhuNXki9E7VIAyzDM7
+	 TIxaAUG4QRwLvxtukXyzVvIwUuY6QVTJCKbMnDxiduD23sCQ/l65a/8yc1AEWq/B+/
+	 DEnC8ZI7p4gckiIbGALqPCSvEkjyxDW6QN060ltRXSQD/yAVnML/BFo3PzzVs/zm2y
+	 uOM9P/myY/vvGiBiszDb5gLrxJtRxTQIzRWYdvj6ME7XqJ+16J3SHoT/zufNplhrXG
+	 SdaaYcxJx4IJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A44C812C6;
-	Tue,  3 Feb 2026 13:50:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FFD613D
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:50:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77213821C4;
+	Tue,  3 Feb 2026 13:52:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10B2B13D
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A980812C6
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:50:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E52E16083E
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:52:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OhCBluSTApVG for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 13:50:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 15671812C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15671812C4
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15671812C4
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:50:08 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 43907C211C9
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:50:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0F4EC60728;
- Tue,  3 Feb 2026 13:50:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 18FC1119A8891; Tue,  3 Feb 2026 14:50:04 +0100 (CET)
-Date: Tue, 3 Feb 2026 14:50:03 +0100
-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Message-ID: <aYH8O522wgwXYglG@windsurf>
-References: <20250808133112.3212687-1-elmehdi.younes@smile.fr>
- <20250808133112.3212687-5-elmehdi.younes@smile.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jsw5C1jGrQGM for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 13:52:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A6AF3606F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6AF3606F1
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A6AF3606F1
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 13:52:40 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-4359249bbacso550173f8f.0
+ for <buildroot@buildroot.org>; Tue, 03 Feb 2026 05:52:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1770126758; x=1770731558;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=hgtCTPLj6HzKryXWazxy0aKFHoSwf1H7XXm6RGm5hTM=;
+ b=izglbHjVjU1LjUBLD/c44cYBMAZ45FUH5EexQ2Ve6nd0/6FNZBPMwa97bvTuxNyZuK
+ mrtzYtJWLQ94iM6ijIWqCj12mAE4/JFaTddOTSGkZj+4rYofonifBa3rpBm2nz4YLuUj
+ kXrLaJWKxgpzCKdAzqLWjTwBIhRuP5Q8DTD9l6LzNIr8oVXK6mmpHdr9obrsBtlgKxop
+ Fis8wVNoFjvPt/ubeI5GseZ6wuWTt1gQ1lweFkS8tofyIZEHjTfxHX+L5OtsmFsiYiEQ
+ RDDjL0ixZF53sNo2mNviCjSlIQmKATX07i2yZb13RssA5sCw0lqKXg+YBzuhsQhkFsL6
+ zo+Q==
+X-Gm-Message-State: AOJu0YxtxcCGHmfulensRHxcKEU0yhkaQQO9T8C2l1cvZ0kMvvHKsxzn
+ P5fCCytOmC7aNfA0cpn0EfEKAp/be2njr/gxR2sqON5ju+zUBEzl/BHH9UrtxrN2ynyEgNTfZWx
+ TsTSr
+X-Gm-Gg: AZuq6aJhGAa9RijcTGTyvheD+Z6UBwOOqRPgemM8Box2TKyzLZLVgGLdsruj1iEcc6u
+ xZqrRRTIVhlOpHnZ/8MROhfytooJ1U6KjZh7pMt7fNIWj7TdSL5qa0KCW5fxzuJiE7zRnJ8bMXK
+ oUTZdpz0S3oAXxLkyXDupdK9KzMzP29ZFK1Jq9pewKIqtowoeJFry7TO2H8yxJnZPSWzm53vjH5
+ kc688Md3DK+cEgSII68weq42y8iw0K8vawyCSk/WCaMu5HtTnjIXyvduWTjxXpAVriWpMQxRy+z
+ bc6dVjq6NjGH8c4aCZym4BS3tQSfa1+MZoLsVtiGJ9wpu3zkM3pgANC2pLl13jLMcUnGJjsSFF6
+ ykIGDDef6Qi+/u8tHwodlGx0Xh3uohBWWKcw6MLvbV2+Vs7Acb2fdAyQ+FzTFTw66mFwh9oUoKC
+ mgGa5kOwZnmOmVlf+EtWW6u9IGaGsgswlWymW3W/Xl4HM=
+X-Received: by 2002:a05:6000:603:b0:432:b953:b02b with SMTP id
+ ffacd0b85a97d-4361143916cmr5331547f8f.16.1770126757719; 
+ Tue, 03 Feb 2026 05:52:37 -0800 (PST)
+Received: from mindpad (host-109-89-232-55.dynamic.voo.be. [109.89.232.55])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-435e10e4757sm54227388f8f.5.2026.02.03.05.52.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 03 Feb 2026 05:52:36 -0800 (PST)
+To: buildroot@buildroot.org
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	titouan.christophe@mind.be
+Date: Tue,  3 Feb 2026 14:52:31 +0100
+Message-ID: <20260203135235.184869-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250808133112.3212687-5-elmehdi.younes@smile.fr>
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1770126605; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=pVyGLBqyuK9/mv1AhjcBHxDBxhaZmwfMd1P58vE4aZo=;
- b=bWw82hvgJxnXdynGp77j+XYstPUuOAMSLVNPjmtlrRpOddlQNf57qTXm+cX+HKJIlLb/sr
- +NokG20PUZl/9N5wE3yx7a7tGtX71wv92/03APGTIAbAX2s7rbeR8pw1DoEeduzrz9lgt3
- Cnhf7dq4PyOrs+1AxNUK6khlhx3yW7TEkhLxvPf8ZfiyR5yiAlutf8XqXX/XLQ7qz4NwCt
- P2BYwm1spqkO6jHBBJ0tlGM78NmP+n/W6N8w21cx8haN48dMAdONZU1Q+Px3Yof3HWemdg
- btzUsikjGU8hidlOgvurB81W+qIVWXAST4KbegtcKxHWXAJGggAcnKNYIBz/Hg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=bWw82hvg
-Subject: Re: [Buildroot] [RFC PATCH 4/5] linux: split HOSTCC from flags
+ d=mind.be; s=google; t=1770126758; x=1770731558; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hgtCTPLj6HzKryXWazxy0aKFHoSwf1H7XXm6RGm5hTM=;
+ b=C7eEm7aVtmIlCOxGNG+8N3Xh9CHFHUDUQVdk6bRkp+vfIahOVlR+icQrRHPrX35yYC
+ 5IgyHOj01BN5zQxjhtXYmD6UM5uxOX0yRu4/+Ih88YcmTzXjAWm6y91/7KHkn35pTiH1
+ fg94j6tt155ZVdfAG2ls0CqOXq5W27cKhv3Bps8cvfwi2yZS55da5+sFE/LlfRrPQkYY
+ f0ok1K2D8d9wLZRie/yHsUxK2FTGgE1Ev45x9PDZyILDp+iYQ3mLjDSaoYbiS2l9us1U
+ CPFeGquX7MFSic670qIzBse4664X3xPn3QfvZeIF5tK5I02J6ucgJjX0WMVbFMP/kAtD
+ mlBQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=C7eEm7aV
+Subject: [Buildroot] [PATCH v2 1/5] utils/generate-cyclonedx: move license
+ download in a function
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,56 +120,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Mehdi,
+Move the code that retrieve the SPDX licenses into a function instead of
+doing it top-level.
 
-Thanks for your patch!
+This allows to pass the CycloneDX version as a function argument instead
+of defining it as a top-level constant.
+In next commit, the CycloneDX spec version might not be known when the
+top-level code is executed.
 
-On Fri, Aug 08, 2025 at 03:31:11PM +0200, El Mehdi YOUNES via buildroot wrote:
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ utils/generate-cyclonedx | 46 ++++++++++++++++++++++++++++------------
+ 1 file changed, 33 insertions(+), 13 deletions(-)
 
-> Since Linux v4.19, Kbuild provides explicit variables for host flags, so splitting
-> compiler vs flags is supported upstream (see:
->   https://github.com/torvalds/linux/commit/96f14fe738b69dd97a33efe3cc8ab330af5fd1f1
->   https://github.com/torvalds/linux/commit/b90a368000abe5e015e0b045ca2ff7c2173b94c0
->   https://github.com/torvalds/linux/commit/f92d19e0ef9bbbb2984845682e740934ad45473b).
-> 
-> But with this change we can have problems with older kernel versions
-> (< 4.19), as the Buildroot commit below warned when avoiding HOSTCFLAGS
-> to not override internal kernel flags:
->   https://gitlab.com/buildroot.org/buildroot/-/commit/dde090c299b0357fdb1a4ec44ad8d332ac57f65e
-
-Since your change as-is would break Linux < 4.19, here is the
-suggestion that we have after discussing at the Buildroot Developers
-Meeting: make things condition based on
-BR2_LINUX_KERNEL_RUST_SUPPORT. Something along the lines of:
-
-ifeq ($(BR2_LINUX_KERNEL_RUST_SUPPORT),y)
-LINUX_MAKE_FLAGS += \
-	HOSTCC="$(HOSTCC)" \
-	HOSTCFLAGS="$(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS)))" \
-	HOSTLDFLAGS="$(HOST_LDFLAGS)"
-else
-LINUX_MAKE_FLAGS += \
-	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS))) $(HOST_LDFLAGS)"
-endif
-
-Of course, if someone enables BR2_LINUX_KERNEL_RUST_SUPPORT with a
-kernel < 4.19 it would fail to build, but that's acceptable as it's
-stupid to do this since Linux 4.19 did not have any Rust support.
-
-Thanks!
-
-Thomas
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 2b6c6d63d3..93b648e481 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -21,12 +21,10 @@ import re
+ 
+ 
+ CYCLONEDX_VERSION = "1.6"
+-SPDX_SCHEMA_URL = f"https://raw.githubusercontent.com/CycloneDX/specification/{CYCLONEDX_VERSION}/schema/spdx.schema.json"
+ 
+ brpath = Path(__file__).parent.parent
+ 
+ cyclonedxpath = Path(os.getenv("BR2_DL_DIR", brpath / "dl")) / "cyclonedx"
+-SPDX_SCHEMA_PATH = cyclonedxpath / f"spdx-{CYCLONEDX_VERSION}.schema.json"
+ 
+ BR2_VERSION_FULL = (
+     subprocess.check_output(
+@@ -41,20 +39,40 @@ BR2_VERSION_FULL = (
+ # 'resolved_with_pedigree'.
+ VULN_WITH_PEDIGREE = set()
+ 
++# List of supported SPDX license expression.
+ SPDX_LICENSES = []
+ 
+-if not SPDX_SCHEMA_PATH.exists():
+-    # Download the CycloneDX SPDX schema JSON, and cache it locally
+-    cyclonedxpath.mkdir(parents=True, exist_ok=True)
+-    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
+ 
+-try:
+-    with SPDX_SCHEMA_PATH.open() as f:
+-        SPDX_LICENSES = json.load(f).get("enum", [])
+-except json.JSONDecodeError:
+-    # In case of error the license will just not be matched to the SPDX names
+-    # but the SBOM generation still work.
+-    print(f"Failed to load the SPDX licenses file: {SPDX_SCHEMA_PATH}", file=sys.stderr)
++def br2_retrieve_spdx_licenses(version: str):
++    """Populate the list of supported SPDX licenses for a given CycloneDX
++    version. If the list is not present locally it will be downloaded
++    externally.
++
++    Args:
++        version (str): CycloneDX version
++
++    Returns:
++        None
++    """
++    SPDX_SCHEMA_URL = "https://raw.githubusercontent.com/CycloneDX/specification/{}/schema/spdx.schema.json"
++
++    ret = []
++    path = cyclonedxpath / f"spdx-{version}.schema.json"
++
++    if not path.exists():
++        # Download the CycloneDX SPDX schema JSON, and cache it locally
++        cyclonedxpath.mkdir(parents=True, exist_ok=True)
++        urllib.request.urlretrieve(SPDX_SCHEMA_URL.format(version), path)
++
++    try:
++        with path.open() as f:
++            ret = json.load(f).get("enum", [])
++    except json.JSONDecodeError:
++        # In case of error the license will just not be matched to the SPDX names
++        # but the SBOM generation still work.
++        print(f"Failed to load the SPDX licenses file: {path}", file=sys.stderr)
++
++    return ret
+ 
+ 
+ def split_top_level_comma(subj):
+@@ -404,6 +422,8 @@ def main():
+         parser.print_help()
+         sys.exit(1)
+ 
++    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
++
+     show_info_dict = json.load(args.in_file)
+ 
+     # Remove rootfs and virtual packages if not explicitly included
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.52.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
