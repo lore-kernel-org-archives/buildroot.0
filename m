@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C74BBE6E809
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 11:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C14EE6E80C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 11:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9766241138;
-	Tue,  3 Feb 2026 11:07:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5C1D83529;
+	Tue,  3 Feb 2026 11:09:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y1v_CI93gIfJ; Tue,  3 Feb 2026 11:07:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jF_m2MRrDIXi; Tue,  3 Feb 2026 11:09:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A731B40BA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E489D83C47
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770116868;
-	bh=1Sdxvx/O8pmxvM9kLupt28CKD+rxKW3tL7qgx3ta0jU=;
+	s=default; t=1770116960;
+	bh=cdxhN1MEZbsm9s+oXuRYc6mg9z1aHZDowMYh43xxU3U=;
 	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=Ieah1o/y8nvoKDpkIOwB8S8QX4AoVnnFEaL0Hz0F7OCpXwQLHJzPBUNnL5DbONYLa
-	 1rJ13brFf8yUjC2KC7dWewryVHLH0Do8HYl1f/2QPXQqgCUmDS4ebTwXggs8+FigRb
-	 2hSHa6XjDJlYn07k4RQUDFYu2aAeCDQp293yRvv1BY1K4boKR4nBAJP99AWq0g9/o8
-	 stVe8UwcuIRXU4XeIwVcAXEETtVAZ7j1Fm5Mx63xag01SGhqS+waIesa+nM6t3InRt
-	 C+aDngnjKpoAhN2ehk8nyNnnfvQg94BsAbLog6SarqFMAmQ0rbhE51oO+REgXqPOj9
-	 sUWmrSBYy1xEw==
+	b=NqJDsEGJLAI9cofJeBSypkaMcGOUXvnf2lLkA+2gCIw/e+oqykX4kD01ZH/1L6STV
+	 jlD7NB6tcZl2WDRuBGo9Gv5T/QHQs1eCdfdw2/IXMRgSDxZFap6qpSb0Ls6ymSBTja
+	 oiaZZHIlqAG+hKcHQTAH2AR7yryieBvcMYGA7trefkmrFs4oi9M2F4/604w4JNNDfh
+	 cbAVCgPjGLTAABZx82Zt1SiGnBtbRMXFXEQn7nhstGNS5ifpI+HqSUVVSF8DvW9pfS
+	 pEaCP6ELt18jSCO38F5e+e1nfAJ3lsSCYdNwx9ZKIreD7QDk2rYN4l3ENKoj+pObYG
+	 nsgQoCQzH/zVQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A731B40BA3;
-	Tue,  3 Feb 2026 11:07:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E489D83C47;
+	Tue,  3 Feb 2026 11:09:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AD966F5
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:07:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C86B0F5
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B924405B9
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:07:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6D1C40C70
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:09:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qFc7f2eqUL9b for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 11:07:46 +0000 (UTC)
+ id A5-XewsHh3jb for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 11:09:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
  helo=smtpcmd12132.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3EC84042D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3EC84042D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E50EF405B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E50EF405B9
 Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3EC84042D
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:07:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E50EF405B9
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 11:09:15 +0000 (UTC)
 Received: from [192.168.50.220] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id nEFyvZy7PP2aDnEFzv2EWQ; Tue, 03 Feb 2026 12:07:43 +0100
-Message-ID: <d9205709-68c8-49a4-a4b9-98b19d62616b@benettiengineering.com>
-Date: Tue, 3 Feb 2026 12:07:42 +0100
+ id nEHRvZzcdP2aDnEHRv2FhW; Tue, 03 Feb 2026 12:09:13 +0100
+Message-ID: <06124f2c-2b89-4d0a-9e5e-6596ac5e123c@benettiengineering.com>
+Date: Tue, 3 Feb 2026 12:09:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: buildroot@buildroot.org
-References: <20260104172232.3437646-1-giulio.benetti@benettiengineering.com>
- <aYHQjwF-IrYqiszL@windsurf>
+References: <20251227132148.704963-1-giulio.benetti@benettiengineering.com>
+ <87zf5qmc8d.fsf@dell.be.48ers.dk>
 Content-Language: en-US
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <aYHQjwF-IrYqiszL@windsurf>
-X-CMAE-Envelope: MS4xfOfzUMZgOmdpRKqSU4jCdrEhvE18/26lvJSIUri1CUp0Dbjb16RMBo7oCanqhIrrSNEhYYVW6QvDUrSEaQyI2DvWDy/Ypu3z0RzcB97o/9JAZ3Rq5YB4
- QF1RILbhykxgK6WsfyAErKal9elVtQsYc+xK5Azq5ohuwIouLv0JEcYEOUZ2nLDm2d5+OH2oX4pA9/q75uz7Xb9t28Araky4UF2QQbDN62h7WDQIxyTAmd6V
- Ca++x2EM53M3go+8qlGTo2r+8YdweENFb/GWr+6QLRk=
+In-Reply-To: <87zf5qmc8d.fsf@dell.be.48ers.dk>
+X-CMAE-Envelope: MS4xfGO26zL4NYi+YK2F5/tjYU8dOfwOziDgPaN2figdgUb7h5k/lnkxYDdXD7edjos3AOJgqFUarmy0/yi3VYo8XQt9TX+CQuof9o2f8b82a2UYlCyLVrAt
+ 6DBA/wxYi1MBHN3Sz0sHB/69Yu/pI4irtr3PdZweKaayEhMMy6lLTkJXhfWvTocUw4hHG86Bun33Y8/q+lzVM8wNqQOs2GvxpguGxhXo8AqWClnWcLAn0ma6
+ Xw5RSE+Y/rD7/GIY/6a8aA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1770116863; bh=G0ZE5DfCHGJsJaUXzirkcXos+s+cVSfYylpaQrkg48g=;
+ t=1770116953; bh=KbREELagK7HXN+CnyHsyxhGxAVr1NxYzxx316mbYU3k=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=PhEEpZ49hSSJdJpDeY06x6MoAbSgQAOfjHTLGjD4t7zieP4RH9zA3Z1vujIsyJbmv
- 6UbWBh9dBdCfk4wg4lBrRELz7zt6fQEOcEu3XHFvw30x9JhmeZt2jERXS742fS7YPD
- dV7kNS0qRyOX5pJ+eQskhtX9G0Aa1IBs8DHneROc8l15vHXub58QVXyX9KcAsozKFP
- 0bdLHAOXfhBsp2H+oR0Uv2h9kmP5YuVjECL72jD/0e9RDJ2zod9GgSsGHjg9SACLnp
- Y7rLbi1GSZPjKjwz3pz9k3UPTokWNrKZpZGT53du/VfPe/vBD2geGDiGjCIax0V9nZ
- fOge9hkZ/7tpQ==
+ b=gU1l/rgcolLq2g9Ypae2mBvcxge+ZVhkLO16E6bEpP/hTV84gJvRWh0bmFCJnKJCn
+ vJHfnKkvcREEoesq89T9l5BVb9ob0bkA0mmc3rBTQha/z+ADWaVcfG3y9Iozm30sK5
+ OJswwfmIUieObyUkWtNsbKOUntQHa+ObeNyfrqAw27jEUe5iPsDRC+K0ULSdY2P2wz
+ N8d0DTb1+1Jn7Tk9wdWFejjgZReemkNrQKxGGVys4QJqVhR/ecy/ZttmpTaDIiM1j7
+ O9tmy+ydldEnysaZSCfSu44W1oSDnkZ+Iuck3oeosRcKv4YYTxr6M38YYjcAMrN4Fb
+ g13aOluksT7/w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=PhEEpZ49
-Subject: Re: [Buildroot] [PATCH] package/bind: security bump version to
- 9.20.17
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=gU1l/rgc
+Subject: Re: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,39 +100,42 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-On 2/3/26 11:41, Thomas Petazzoni wrote:
-> Hello,
+On 2/3/26 10:02, Peter Korsgaard wrote:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 > 
-> On Sun, Jan 04, 2026 at 06:22:25PM +0100, Giulio Benetti wrote:
->> Release notes:
->> https://ftp.isc.org/isc/bind9/9.20.17/doc/arm/html/notes.html
->>
->> Changelog:
->> https://ftp.isc.org/isc/bind9/9.20.17/doc/arm/html/changelog.html
->>
->> No new CVEs fixed compared to version 9.18.41.
+>   > For change log, see:
+>   > https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=a768fcc0aafbe50a37d2d06bba23eb6671d3a9b3
 > 
-> I'm confused: your title says it's a security bump, but your commit
-> message says there are "no new CVEs fixed compared to version 9.18.41"
-> (which is the version that we have in Buildroot right now).
+>   > NOTE: Tag v0.5.13.1 has not been emitted.
 > 
-> So is this a security bump, or not?
+> Could you report that upstream please?
 
-I've re-checked and found out that in version 9.20.17 CVEs [1][2] are
-fixed, while in version 9.18.41 not. So this is a Security Bump and
-commit log must contain at the end:
+I've sent an e-mail to their ML:
+https://lore.kernel.org/dash/7c705a63-90a7-4437-8c75-24a117e66b1c@benettiengineering.com/T/#u
 
-'Fixes CVE-2025-40775 & CVE-2025-40777.'
+>   > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   > ---
+>   >  package/dash/dash.hash | 6 +++---
+>   >  package/dash/dash.mk   | 2 +-
+>   >  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+>   > diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+>   > index 4697d958a3..df0f6044bf 100644
+>   > --- a/package/dash/dash.hash
+>   > +++ b/package/dash/dash.hash
+>   > @@ -1,7 +1,7 @@
+>   > -# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.tar.gz.sha512sum
+>   > +# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.1.tar.gz.sha512sum
+>   >  # After checking pgp signature
+>   >  # using key 9F9D45FE50AE361530983792C7271D0A49B18BA7
+>   > -sha512  428de1f65ab77d5fee88bbf4ba8642d77abfda223a4ede423d09db9faa4f0347199b3be841d63b93a7ed68f714ef54ff41b2dc936e4b7ebb19b74499ed4e6a01  dash-0.5.13.tar.gz
+>   > +sha512  6b3d67f76e74853349fe99121b2ee96d32da9863042744e03984eb6a01bf437eee2f2e81fbdd0436090abfecacc2f5589960820c3d0d5f3dd580948d38d5dc1d 260512 dash-0.5.13.1.tar.gz
+> 
+> That clearly does not work.
 
-I've compared these twos:
-https://ftp.isc.org/isc/bind9/9.20.17/doc/arm/html/changelog.html
-https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/changelog.html
+A bad copy and paste, thanks for fixing it.
 
-Just sent a V2.
-
-[1]: https://kb.isc.org/docs/cve-2025-40777
-[2]: https://kb.isc.org/docs/cve-2025-40775
-
+-- 
 Giulio
 _______________________________________________
 buildroot mailing list
