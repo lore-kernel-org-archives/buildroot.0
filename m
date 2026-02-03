@@ -1,62 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5446AE83062
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 08:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCFBE8305F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 08:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8276A40B65;
-	Tue,  3 Feb 2026 08:28:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61B8C81140;
+	Tue,  3 Feb 2026 08:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MCVO86LIgGLu; Tue,  3 Feb 2026 08:28:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N1a8Fkc_I1-I; Tue,  3 Feb 2026 08:29:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E23F840A50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BFB680FAB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770107308;
-	bh=GlsTS1l58lWfOo0C5DmKzYfmuvL3/HndEcn9MeSFc7Y=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FZYu799D63VKyBqIogswajCnG3M1DPpWzUxtQ41sfJPFvFM0zWaM0cQYX/LnXpZI0
-	 06Eui5gbD6VbC6jJCMg949UsMNAmmQDreQuUheoNY0gkvgg9K8bER9km+t/PZJ0oFk
-	 lxPekO2O4CiA/Mc7auh+jdkAE3usKlJSdv2KUcow3kuG59MB/G2WOoRqea90VSR0re
-	 ze968Tx4hIqKqMPKZRMeuzcLlG2bQcCYiabdAFNQACKBg9oPcKlXnLuuPClr/pFK0Z
-	 ZccgV9iMQnpJoadLlMwCokJXdbbjQfovlpUm9OZ3NGw6pJT26eFbmSUi3tWVQ5GogR
-	 e+t2qRj8cfBEQ==
+	s=default; t=1770107398;
+	bh=zu3m0qu26Bl5BRoJwtNnyO0/ilqQP/Z/lZD9tZUenak=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=dyd76OamKSwGCzs/ivNAJXAUToIkPNls4e2tfXMpBDDjorfWtPT1SCk5zmDkDROgN
+	 qwIW0B/qqjXdQ08LBvvsGiRpE9fn6le8K9xM+byWN48vj8h/0poPPWRk/dVGppLIyX
+	 IyjVJYSNadgvXNI1D9MfPpfu2B1DseHNPetJuxhHYgg3eK3IQcS5dEF8pYwoZDqS6T
+	 mRicURD77YjEhRTM4UCljKHzZzehJV8pyREmMlzQZwxmsk50skrPnpfJhIj9eq5j4W
+	 8Z6Mrx4w5yyr1b2jqN6G0nE95Pf6h+VpE9bIaFLNdyAuQ/12HbDArrKRuKDqJV2zLP
+	 ZxhdVDZWcOeAQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E23F840A50;
-	Tue,  3 Feb 2026 08:28:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 61354F4
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:28:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BFB680FAB;
+	Tue,  3 Feb 2026 08:29:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D98B5F4
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 403B240345
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:28:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B87AF80C7C
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LbJsz72hNxHQ for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 08:28:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F37AF40253
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F37AF40253
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:28:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D9BAA8658E; Tue,  3 Feb 2026 08:28:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 3 Feb 2026 09:27:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 85d47bbc40bb9b62d2b59b6f5653f6e69c494372
-X-Git-Newrev: abad652feef21d29760e0f4016806d380a725c52
-X-Patchwork-Hint: ignore
-Message-Id: <20260203082824.D9BAA8658E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add aichat runtime test
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VtvLYNj_VCja for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 08:29:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 35C0C80C72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35C0C80C72
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 35C0C80C72
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 08:29:53 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 480612003AE;
+ Tue,  3 Feb 2026 09:29:48 +0100 (CET)
+Received: from host-109-89-232-55.dynamic.voo.be ([109.89.232.55:39076])
+ via host-109-89-232-55.dynamic.voo.be ([109.89.232.55])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 03 Feb 2026 09:29:48 +0100
+MIME-Version: 1.0
+Date: Tue, 03 Feb 2026 09:29:48 +0100
+To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Julien Olivain via
+ buildroot <buildroot@buildroot.org>, Alexander Shirokov
+ <shirokovalexs@gmail.com>
+In-Reply-To: <e3de047e16c5cef704e38aaf77c38ef2@free.fr>
+References: <20260106231110.991548-1-ju.o@free.fr>
+ <20260107150725.10c0fba7@windsurf>
+ <e3de047e16c5cef704e38aaf77c38ef2@free.fr>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <35ff2e66e3b8d0a2af778fea4bdc75da@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1770107391;
+ bh=uk+pPGOt6SgQBj18rMkx7iHZ9Qij4kUbzWLixP2C9FU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=X5bTaNBlxqSk8+s863O0dE9FUuzKkMAP0CAY6Mw6NbSzaOL+pJh/KAJkA8JJWVB9O
+ X0jYgNvFVqf/LLePdwNbMz0RQMPBddKpbu3ygMDm6weTgGTuayvnvqJuvvK63IUiU2
+ 35BcO/VQQVY4gQpLNJP3EQdgCd8bR06cTdg2mh4+ZeXr1pZt6iKC2H777DgzEmmyI/
+ Miqgb0RAzB1zRef1kNE8CtxQVwjTFROpyVpg6cg0AjIkqSfvuqE+nbp9DEwwmUNQno
+ 2n4NJoj0FSe0MqQeCGCLPwXN1JQngLqqm34J4lcUFEODXfA3fMzsA3ow4KZaT3L42N
+ 75rLqdLapPCKA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=X5bTaNBl
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add aichat runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,168 +100,104 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abad652feef21d29760e0f4016806d380a725c52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Cc: Alexander Shirokov <shirokovalexs@gmail.com>
-Tested-by: Alexander Shirokov <shirokovalexs@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                         |   2 +
- support/testing/tests/package/test_aichat.py       | 108 +++++++++++++++++++++
- .../rootfs-overlay/root/.config/aichat/config.yaml |  11 +++
- 3 files changed, 121 insertions(+)
+On 07/01/2026 19:20, Julien Olivain via buildroot wrote:
+> Hi Thomas,
+> 
+> On 07/01/2026 15:07, Thomas Petazzoni wrote:
+>> Hello Julien,
+>> 
+>> Thanks for the patch! Obviously looks good, just one question.
+>> 
+>> On Wed,  7 Jan 2026 00:11:10 +0100
+>> Julien Olivain via buildroot <buildroot@buildroot.org> wrote:
+>> 
+>>> +    def test_run(self):
+>>> +        self.login()
+>>> +
+>>> +        # Check the program can execute.
+>>> +        self.assertRunOk("aichat --version")
+>>> +
+>>> +        # We define a Hugging Face model to be downloaded.
+>>> +        # We choose a relatively small model, for testing.
+>>> +        hf_model = "ggml-org/gemma-3-270m-it-GGUF"
+>> 
+>> Does this mean that the model will be downloaded by llama-server when
+>> we run it? I don't think we expect tests to require a network
+>> connection to the Internet, and download "random stuff".
+>> 
+>> Or did I misunderstand your comment?
+> 
+> Your understanding is correct:
+> llama-server has the capability to download the model from Internet
+> if not available locally. This is what is happening here.
+> 
+> I am not sure if there was a strict rule forbidding public network
+> to runtime tests.
+> 
+> I think Yann started to add runtime tests with such public network
+> requirement a while back. See [1] [2] [3] [4]. I'm just following
+> his steps ;) This is also what motivated commit [5] for example.
+> 
+> I think the argumentation was that the test runner needs Internet
+> connectivity anyway to download source packages. Most runtime tests
+> does not require network connection, so I though it was more a fact
+> than a strict rule. Some tests (like podman, etc.) will have a better
+> coverage if they are working with their online repositories.
+> 
+> Regarding the data and its source, I would not exactly call that
+> "random stuff". Hugging Face [6] is a reference repository used
+> by llama.cpp. Also, this model [7] in particular is a smaller
+> version of the llama.cpp example in [8]. Note that ggml-org [9]
+> is reference library for llama.cpp.
+> 
+> Do you want me to send a v2 adding this justification?
+> 
+> Or do you prefer to (re?)open the topic to strictly forbid network
+> in runtime tests?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8290ccc281..4f7f034df7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1856,6 +1856,8 @@ F:	support/testing/tests/package/test_4th.py
- F:	support/testing/tests/package/test_acl.py
- F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
-+F:	support/testing/tests/package/test_aichat.py
-+F:	support/testing/tests/package/test_aichat/
- F:	support/testing/tests/package/test_apache.py
- F:	support/testing/tests/package/test_attr.py
- F:	support/testing/tests/package/test_audio_codec_base.py
-diff --git a/support/testing/tests/package/test_aichat.py b/support/testing/tests/package/test_aichat.py
-new file mode 100644
-index 0000000000..7c978315c9
---- /dev/null
-+++ b/support/testing/tests/package/test_aichat.py
-@@ -0,0 +1,108 @@
-+import json
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestAiChat(infra.basetest.BRTest):
-+    rootfs_overlay = \
-+        infra.filepath("tests/package/test_aichat/rootfs-overlay")
-+    config = f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.3"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_AICHAT=y
-+        BR2_PACKAGE_CA_CERTIFICATES=y
-+        BR2_PACKAGE_LIBCURL=y
-+        BR2_PACKAGE_LIBCURL_CURL=y
-+        BR2_PACKAGE_LLAMA_CPP=y
-+        BR2_PACKAGE_LLAMA_CPP_SERVER=y
-+        BR2_PACKAGE_LLAMA_CPP_TOOLS=y
-+        BR2_PACKAGE_OPENSSL=y
-+        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="1024M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+    """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(
-+            arch="aarch64",
-+            kernel=kern,
-+            kernel_cmdline=["root=/dev/vda"],
-+            options=[
-+                "-M", "virt",
-+                "-cpu", "cortex-a57",
-+                "-smp", "4",
-+                "-m", "2G",
-+                "-drive", f"file={img},if=virtio,format=raw",
-+                "-net", "nic,model=virtio",
-+                "-net", "user"
-+            ]
-+        )
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+
-+        # Check the program can execute.
-+        self.assertRunOk("aichat --version")
-+
-+        # We define a Hugging Face model to be downloaded.
-+        # We choose a relatively small model, for testing.
-+        hf_model = "ggml-org/gemma-3-270m-it-GGUF"
-+
-+        # We define a common knowledge question to ask to the model.
-+        prompt = "What is the capital of the United Kingdom?"
-+
-+        # We define an expected keyword, to be present in the answer.
-+        expected_answer = "london"
-+
-+        # We set few llama-server options:
-+        llama_opts = "--log-file /tmp/llama-server.log"
-+        # We set a fixed seed, to reduce variability of the test
-+        llama_opts += " --seed 123456789"
-+        llama_opts += f" --hf-repo {hf_model}"
-+
-+        # We start a llama-server in background, which will expose an
-+        # openai-compatible API to be used by aichat.
-+        cmd = f"( llama-server {llama_opts} &>/dev/null & )"
-+        self.assertRunOk(cmd)
-+
-+        # We wait for the llama-server to be ready. We query the
-+        # available models API to check the server is ready. We expect
-+        # to see the our model. We also add an extra "echo" to add an
-+        # extra newline.
-+        cmd = "curl http://127.0.0.1:8080/v1/models && echo"
-+        for attempt in range(20 * self.timeout_multiplier):
-+            time.sleep(5)
-+            # To debug the llama-server startup, uncomment the
-+            # following line:
-+            # self.assertRunOk("cat /tmp/llama-server.log")
-+            out, ret = self.emulator.run(cmd)
-+            if ret == 0:
-+                models_json = "".join(out)
-+                models = json.loads(models_json)
-+                model_name = models['models'][0]['name']
-+                if model_name == hf_model:
-+                    break
-+        else:
-+            self.fail("Timeout while waiting for llama-server.")
-+
-+        # We ask our question and check the expected answer is present
-+        # in the output. We pipe the output in "cat" to suppress the
-+        # aichat UTF-8 spinner (aichat stdout will not be a tty).
-+        cmd = f"aichat '{prompt}' | cat"
-+        out, ret = self.emulator.run(cmd, timeout=120)
-+        self.assertEqual(ret, 0)
-+        out_str = "\n".join(out).lower()
-+        self.assertIn(expected_answer, out_str)
-diff --git a/support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml b/support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml
-new file mode 100644
-index 0000000000..f6a054696e
---- /dev/null
-+++ b/support/testing/tests/package/test_aichat/rootfs-overlay/root/.config/aichat/config.yaml
-@@ -0,0 +1,11 @@
-+# see https://github.com/sigoden/aichat/blob/main/config.example.yaml
-+
-+model: llama-server:ggml-org/gemma-3-270m-it-GGUF
-+stream: false
-+highlight: false
-+clients:
-+- type: openai-compatible
-+  name: llama-server
-+  api_base: http://127.0.0.1:8080/v1
-+  models:
-+  - name: ggml-org/gemma-3-270m-it-GGUF
+After discussing during the Buildroot Dev Days 2026, we decided
+that runtime tests should avoid using network whenever possible.
+But in cases where a tool functionality depends on the network,
+it could be used.
+
+So for this reason, I applied this patch.
+
+>> Thomas
+>> --
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering and training
+>> https://bootlin.com
+> 
+> Best regards,
+> 
+> Julien.
+> 
+> [1] 
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/support/testing/tests/package/test_distribution_registry.py#L80-85
+> [2] 
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/support/testing/tests/package/test_docker_compose.py#L42-43
+> [3] 
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/support/testing/tests/package/test_podman.py#L97-98
+> [4] 
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/support/testing/tests/package/test_skopeo.py#L50-54
+> [5] 
+> https://gitlab.com/buildroot.org/buildroot/-/commit/cf8641b73e7f1577637bfef0ece78dd519b25d19
+> [6] https://huggingface.co/
+> [7] https://huggingface.co/ggml-org/gemma-3-270m-it-GGUF
+> [8] 
+> https://github.com/ggml-org/llama.cpp/blob/b7271/README.md?plain=1#L53
+> [9] https://github.com/ggml-org
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
