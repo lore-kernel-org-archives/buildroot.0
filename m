@@ -4,113 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 727BFE87841
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 15:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88B67E8783D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 15:36:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38BCC40C00;
-	Tue,  3 Feb 2026 15:36:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4ACD9405EE;
+	Tue,  3 Feb 2026 15:36:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZKwP7VY4KhYr; Tue,  3 Feb 2026 15:36:43 +0000 (UTC)
+ id anW-eGVT3pFC; Tue,  3 Feb 2026 15:36:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F35040BC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5462140C30
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770133003;
-	bh=/EUwsyobSYvmTMuEll7FA6YeSUDJr26kbtV1nHqIul8=;
+	s=default; t=1770133006;
+	bh=HcJToqbj2UuchzA4xC21WUU88zi7+C6Wz1dwK29/OFo=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=r8VvUyfl5ObjOt1fa8wTh/+FwTV3LOCxqkrv2dtHnKJK6C2qNGz3znLhUU1y7N+BW
-	 HJxCCGoUapj8ZQfDUJWr1tOBGgq6QDriFHNEqyYgfFQ47VPmXPtsN1/Ob5OOnKkJJE
-	 y//0YVbLw6IBjlr8QCJm77aV+is7McLV47URTU7B8QeTjc7Y2d/e0ESDzyVyFI4Lh2
-	 WDT1q4qlgMVnljzz1Eif7LGwyjW/ajymxBf/3ljl+8i6RgVS1n4NeK+6XgB5789wj5
-	 1wfG1m+22ybwdfUzgZP5xAtS2CXWSdlvuCPqmvT17I+d2p8LKvsI+DSr1XH+pxTj2r
-	 0JfPfSYwpK43A==
+	b=bilLO4/h8e/jP30F7eLg2xk4xG0WgUfzKeZVsrLCqM7cSFgNXMxds4tg3VJqxQ2RQ
+	 2oeSvQCqKFx2IyHFpOOLfXAATv/QRUiKN6lPWiatz6Z6mWYPwCY6aDX1TpWHwzUZJn
+	 RRixLmWI7kVGjSk4UYvIi3bVuTa8kJQvinGOvS1511zKmK1FPmkHpVdZp94yRO7YQD
+	 Mw2ohCQlNGBWUgNHp2ByAWNRBvu/nT7KMPY9x24S6MdHl/LzLG4J2su2EU8gJEJNlF
+	 012Ke1iuclaTlJtg2mKnMxpuplrlVsECm3/7SanXrX2FYwRH9c+SmT3DbL0DzLIesb
+	 8QKkl6gNSlIAQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F35040BC5;
-	Tue,  3 Feb 2026 15:36:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D0C00F4
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 15:36:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5462140C30;
+	Tue,  3 Feb 2026 15:36:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3C53F4
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 15:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEBC640A80
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 15:36:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A492183C8B
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 15:36:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Aub_RWFzBYXK for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 15:36:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GM1DcN9e0YSB for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 15:36:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=laurentiumihalcea111@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F08A6405C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F08A6405C9
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F08A6405C9
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 15:36:39 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-47fedb7c68dso59047005e9.2
- for <buildroot@buildroot.org>; Tue, 03 Feb 2026 07:36:39 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ACB2883C98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACB2883C98
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACB2883C98
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 15:36:43 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4801c2fae63so44537255e9.2
+ for <buildroot@buildroot.org>; Tue, 03 Feb 2026 07:36:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770132997; x=1770737797;
+ d=1e100.net; s=20230601; t=1770133001; x=1770737801;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=D62NId16QlNG1wL7A7V8DDxXHF5+qTTfuvIWjPTdxh8=;
- b=c8BnmAJdSCp0H9Rriu8ptcW5FZKtfuK8nIs6pxXgcgIFjeepz4jppnmWlb57eP77Pg
- 0L/dbMeisfXOGtg+mbnwUmBMC+P5bLL63uAJWEAym/Jw6FsAq8a80/auSrGQ10cH5QKL
- 1W0xhALsC0n6GaVQca+w3wpLNlQxyjtbWtLrdyAyV+LOOfknEWHWoC8RHB5k2zuwACwu
- J3zveGK90I+gTiUoLJHOph2LRVSFvi/A3BMHkdDyr0gBcymAvDocNUQJy8UFSy3NtRd8
- 1x6FIUqFfWRYteiJKh5/dHh97d9196Ns8khug5EfZfSH9wHFjg8ffqXtvJ3FGoxvleeU
- gKfA==
-X-Gm-Message-State: AOJu0YyoPQ3+W3GB/7q6bmIRfkb7fPUUrsRlZN3/ceiDjqfiWEMIMfvc
- WElDdbwiRT6/G/pFLBggaTjKhjyj2hF8L45vu2uCc/xBc8/G4smeLw8IHzITrQuu
-X-Gm-Gg: AZuq6aLhxCeyOmNo7IVsf1aDcOQObTzzegGuolDaOyuJWK18Fd+5Hl1b+yAwN6fHAZ4
- kQI4k+NPGYLI9FPID6WsbbS4Q9wsXjjcHAVSMyPwfrk1iIDhE5RGIG5oVbp4cRXr0t+i/khEg+i
- UK9ih6K+QimU9XF1DZb1xh0JdMaZFb71r2FvUXzd7uR7AuQygmw1z7VP0f6e2y5Q37/d/v6BSN1
- hu+PglT9LMyHOp8Udb/8C9fco0c6g1sAG3/0rp/+Ys3yElA3lpKOgK9JMiMfljBhmLOnbglZI7m
- eBgzl18tiEJo/NMUH/wK/8HBstUafZ4Ec/dxTVV14y81B+mfz71mW2NsdhxiNltQIAR4/FWVG4Z
- RiabirqmFNeNzW+2zyvwnyHfIJxUzOTt1SfK/C4AEOwqAiM5RgbVCn/6JIrqyGdOubIrPSBeHEk
- WM21vLt7nZfVdDLXtyi146v8NnMK/iWQ4Eh/yczA==
-X-Received: by 2002:a05:600c:4e4f:b0:477:89d5:fdb2 with SMTP id
- 5b1f17b1804b1-4830e931dfamr771505e9.14.1770132997015; 
- Tue, 03 Feb 2026 07:36:37 -0800 (PST)
+ bh=c/+YxzM1HKwCpvahaW11IGTgrACF4YQjOHG4dMnqAMo=;
+ b=ADk+2WWgphe5IOlplfWiTkTf4J97sDiAfPVa9JOxOsjGsUslgR898aEtR1kzEcxD2y
+ JmHSjCU9binEef6IkpH2EGuJ+AsNTW4yv3Thbn1sJFkhA/h2wZN/EAeJc2Fxt+CpPO5w
+ kN9XnE1AwCOPh94Qi27xr3zy7ME7fX0q7Ar5eUYLBh6syXx/8reRe8KXLiMaMJv7lji8
+ zXP2cZObHt5aocP13bcYhQrsj95EpLAT0Cus7yFTxWUCAzoVy8QmZXY6YZEPkVNQZqed
+ nUHrsMzFIqxSgxaK49muaUK+HNIfVPvIJodoHYSnCN2ZBHNIPlsqlBwvUAwE/sQCHJfh
+ LFHA==
+X-Gm-Message-State: AOJu0YzWNi+zYyGTg81hPrhm5PEKAdVBz2HbpJKnB41nbjyTPz9cqlPS
+ Mdk0VBAD4oTJ6eJelpjTTqQD1aQ2/KIdN+ilsn67zToskFHoL6DSewML4G0UA6SS
+X-Gm-Gg: AZuq6aIMTPRUFWgF//b62VHgGR6vJbnoEbO6b0BFhfFzLCSwFVR7rl9y3jeDkt9G0i0
+ onI0EycaRAut9Mt4BRu1iQA4XARYBHlK8NAZazHVCEyHT0xvsUr7os4Ip60LMiymWFa4tWpJlY6
+ 7jTZ+3ObwVvzcdegUMsZVzJPrZsDEz+E6APTMdqa69Uo3mFTEjvUy+mPPDETji/Mbye50d/Ia1c
+ kep395M8sLsbzmN0w3X2pJXG9XOXGo/Ucnb+Bk4BdmnHbrKU5lc/fD2lb8JENXeux2WueBy83eb
+ JyI97YpCGc/yY9zoW2/+kloanM4yDEg4tAQm+jVZY2LleA4MYQfensxd+1Rxpcy7Drh4fIxFpig
+ Aby8Dcfy/TWzermHp8+3nDdg9Iarz+KK9/CwmzgO6rJOcI8fT8n7Kk3oHh0JQ5MZ+TPtMfCrqSX
+ C+a2nJseLGcWbcbdefm85vk+PBiyIcBqn84XtvJPrg+LNO6oAp
+X-Received: by 2002:a05:600c:3b16:b0:479:35e7:a0e3 with SMTP id
+ 5b1f17b1804b1-4830e993349mr274855e9.30.1770133001135; 
+ Tue, 03 Feb 2026 07:36:41 -0800 (PST)
 Received: from SMW024614.wbi.nxp.com ([128.77.115.157])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48305161534sm62812055e9.12.2026.02.03.07.36.35
+ 5b1f17b1804b1-48305161534sm62812055e9.12.2026.02.03.07.36.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Feb 2026 07:36:36 -0800 (PST)
+ Tue, 03 Feb 2026 07:36:40 -0800 (PST)
 From: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  3 Feb 2026 07:36:10 -0800
-Message-ID: <20260203153617.80012-4-laurentiumihalcea111@gmail.com>
+Date: Tue,  3 Feb 2026 07:36:12 -0800
+Message-ID: <20260203153617.80012-6-laurentiumihalcea111@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260203153617.80012-1-laurentiumihalcea111@gmail.com>
 References: <20260203153617.80012-1-laurentiumihalcea111@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1770132997; x=1770737797; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1770133001; x=1770737801; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=D62NId16QlNG1wL7A7V8DDxXHF5+qTTfuvIWjPTdxh8=;
- b=QZQJ9T95y+0fnD5uYLpDY/Tn+buRbT6oOyaO6oYzTucKyO62GQhRcmFmLfv6c8puhW
- CivYi2jb74wUdBLrxJdLSvkPfnizI/G2SgqDE0xl7BSZ9DvyyJEZNhJl7elfD7wEyWxR
- goFDLaZAV08yhymvGUV506JI3iho8kItZXKw4Vw7dzTQOH2GvrAdXqvgHbe912/G+Vqo
- B/JiX20uaHSqD/JO+bawVjpqUSolkkSZg1SzCR/7ZA8WTwBW2l08AEcUL/5hAmV5oGva
- XmXWLoLSQHaHUpy89mZTeGLnHKKZ9aye/7oQQUVy3ESUtjYfQg9WGbfgNYLKURJMjHm/
- Llxg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=c/+YxzM1HKwCpvahaW11IGTgrACF4YQjOHG4dMnqAMo=;
+ b=eFYr6blJikedXPuoepHZzfQvsdvn/glZY0JM0EonIPqhGTdL+hj4D/Qf4gxUG363ak
+ ooCQ1SkS3PVSjk3aj97qrC7NQXbEHT3Y8GOCg7Ou9/7xAP9UJCaUFLf85PMRvSqqit9q
+ 3MWlztaaSl5fJZnD+drvpL6FDACfiBzQRqQUUP1fErmfu0gbeOOM4YRvZCvJ/DHqoQP4
+ 0dkci2uK53PMaXhYeojDD6u+2JOtg3YUTB8krPU5XI3TlKGPEu2PwKPOJYTvFVSoVHkS
+ iJTcetlFmXDDKpHysMiyYRb9s+iVacI5s1Gr/t+Gf/6PTh9uxtjyN+vIj4C3x0XIXX1E
+ f2ZA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=QZQJ9T95
-Subject: [Buildroot] [PATCH 03/10] package/freescale-imx/imx-sm: add SM
- package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=eFYr6blJ
+Subject: [Buildroot] [PATCH 05/10] package/freescale-imx/firmware-ele-imx:
+ bump to version 2.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,116 +133,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
 
-Add System Manager (SM) package.
+This version is aligned with NXP Linux BSP version "lf-6.12.49-2.2.0".
+This is mostly needed because newer package versions also include the
+ELE firmware for the i.MX95 B0 SoC.
 
 Signed-off-by: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
 ---
- DEVELOPERS                               |  3 +++
- package/freescale-imx/Config.in          |  1 +
- package/freescale-imx/imx-sm/Config.in   | 15 +++++++++++
- package/freescale-imx/imx-sm/imx-sm.hash |  4 +++
- package/freescale-imx/imx-sm/imx-sm.mk   | 33 ++++++++++++++++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/freescale-imx/imx-sm/Config.in
- create mode 100644 package/freescale-imx/imx-sm/imx-sm.hash
- create mode 100644 package/freescale-imx/imx-sm/imx-sm.mk
+ .../freescale-imx/firmware-ele-imx/firmware-ele-imx.hash    | 6 +++---
+ package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk  | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 08c98ec53b..a31458f9d7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2111,6 +2111,9 @@ F:	package/open-lldp/
- N:	Laurent Vivier <laurent@vivier.eu>
- F:	package/petitboot/
+diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+index 55e1864e31..f064ef1830 100644
+--- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
++++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a2f16e43e8aff9cf018d0962b70313940f77079b314331ab3980c4c5f44249cb  firmware-ele-imx-2.0.1-0a66c34.bin
+-sha256  3f4a12c82a84bd1c3578c9c986d6371a61d3399525e76288ecbbae01daf0ae26  COPYING
+-sha256  38f1408d6e935c564efd9119c313269e643c1a85cab1d930c3c5bd70bc261769  EULA
++sha256  c3ae4a1e1a41da441bd61483ef011ac24bf624aa6bad36f879b5dfa435647b4c  firmware-ele-imx-2.0.4-93492e0.bin
++sha256  3001cf84018c5cb10d183a678f6ec8a928c797616ba06b398d7ca93c0779aaa2  COPYING
++sha256  a829b109a0a406a6a2fec19975a332feca225098ce66bfab2220c6608db8fce5  EULA
+ sha256  8721a617a5d4c7f366aaf857ebda21eb4c9fc9175dc92b70f627c611d403ec8e  SCR.txt
+diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+index 8f25f4b5b5..a844ca0d94 100644
+--- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
++++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+N:	Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>
-+F:	package/freescale-imx/imx-sm/
-+
- N:	Lee Jones <lee.jones@linaro.org>
- F:	boot/afboot-stm32/
+-FIRMWARE_ELE_IMX_VERSION = 2.0.1
+-FIRMWARE_ELE_IMX_REVISION = 0a66c34
++FIRMWARE_ELE_IMX_VERSION = 2.0.4
++FIRMWARE_ELE_IMX_REVISION = 93492e0
+ FIRMWARE_ELE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_ELE_IMX_SOURCE = firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION)-$(FIRMWARE_ELE_IMX_REVISION).bin
  
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index c885b4fc23..30c0d69970 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -218,6 +218,7 @@ source "package/freescale-imx/firmware-imx/Config.in"
- source "package/freescale-imx/firmware-upower/Config.in"
- source "package/freescale-imx/imx-sc-firmware/Config.in"
- source "package/freescale-imx/imx-seco/Config.in"
-+source "package/freescale-imx/imx-sm/Config.in"
- source "package/freescale-imx/imx-vpu-hantro-daemon/Config.in"
- source "package/freescale-imx/imx-vpu-hantro-vc/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
-diff --git a/package/freescale-imx/imx-sm/Config.in b/package/freescale-imx/imx-sm/Config.in
-new file mode 100644
-index 0000000000..b06d797f99
---- /dev/null
-+++ b/package/freescale-imx/imx-sm/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IMX_SM
-+	bool "imx-sm"
-+	help
-+	  imx-sm contains the source code for the System Manager (SM)
-+	  firmware used on NXP SoCs such as MX95 and MX943.
-+
-+	  https://github.com/nxp-imx/imx-sm
-+
-+if BR2_PACKAGE_IMX_SM
-+config BR2_PACKAGE_IMX_SM_CFG
-+	string "Target configuration"
-+	default "mx95evk"
-+	help
-+	  Which configuration to use in the build process.
-+endif # BR2_PACKAGE_IMX_SM
-diff --git a/package/freescale-imx/imx-sm/imx-sm.hash b/package/freescale-imx/imx-sm/imx-sm.hash
-new file mode 100644
-index 0000000000..b566c6047f
---- /dev/null
-+++ b/package/freescale-imx/imx-sm/imx-sm.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  3efe6a9e8b5f87cade9f2fe3116473d7629098487227da34c224a3846ee3aa51  imx-sm-lf-6.12.49-2.2.0.tar.gz
-+sha256  ea2ae6b89b80c3c7cd0b4d0b86d84d927e1fc3e3ef81f65e6917162f13c78542  LICENSE.txt
-+sha256  181f7f133c5b38874f0d3a41d9bbd03e724f8a8db864a403eeb40ccc19025775  SCR.txt
-diff --git a/package/freescale-imx/imx-sm/imx-sm.mk b/package/freescale-imx/imx-sm/imx-sm.mk
-new file mode 100644
-index 0000000000..666a10be3c
---- /dev/null
-+++ b/package/freescale-imx/imx-sm/imx-sm.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# imx-sm
-+#
-+################################################################################
-+
-+IMX_SM_VERSION = lf-6.12.49-2.2.0
-+IMX_SM_SITE = $(call github,nxp-imx,imx-sm,$(IMX_SM_VERSION))
-+IMX_SM_LICENSE = BSD-3-Clause
-+IMX_SM_LICENSE_FILES = LICENSE.txt SCR.txt
-+
-+IMX_SM_DEPENDENCIES += host-arm-gnu-toolchain
-+
-+IMX_SM_OUTPUT_BIN = m33_image.bin
-+
-+# note: we don't use the TOOLS variable here as recommended by the SM
-+# documentation because buildroot adds the "host-" prefix to the
-+# toolchain's directory name, which wouldn't work. Instead, we use
-+# SM_CROSS_COMPILE, which is normally based on TOOLS.
-+IMX_SM_MAKE_OPTS = \
-+	SM_CROSS_COMPILE=$(HOST_DIR)/bin/arm-none-eabi-
-+
-+define IMX_SM_BUILD_CMDS
-+	$(IMX_SM_MAKE_OPTS) $(MAKE) -C $(@D) config=$(BR2_PACKAGE_IMX_SM_CFG) cfg
-+	$(IMX_SM_MAKE_OPTS) $(MAKE) -C $(@D) config=$(BR2_PACKAGE_IMX_SM_CFG) all
-+endef
-+
-+# the output binary is used to build the boot container
-+define IMX_SM_INSTALL_TARGET_CMDS
-+	cp $(@D)/build/$(BR2_PACKAGE_IMX_SM_CFG)/$(IMX_SM_OUTPUT_BIN) $(BINARIES_DIR)/$(IMX_SM_OUTPUT_BIN)
-+endef
-+
-+$(eval $(generic-package))
 -- 
 2.43.0
 
