@@ -1,119 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2D7FE87849
-	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 16:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26ECE8784D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Feb 2026 17:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3D6A40BCE;
-	Tue,  3 Feb 2026 16:54:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tdjx05WI0UDx; Tue,  3 Feb 2026 16:54:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A982B40BC5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770137671;
-	bh=OvHP1nLD/noXRNVTuT3L7oNeujsnmAoOy59o4d4WjwY=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=Iw1BSAz0c9PBawRwho18nmNbkLldvExqQ+X7MfYMxYjh2Yh8RHXWzt1iPhFA7iq3T
-	 d5qsofrLA0f7PreGTLO3ajrMA9H/17cYQaOIX8qY1P8DbvE513B0nUsm1OvLhuart3
-	 /q/TrSr6zX485WYBn5H8DhQt4L2S7YHF/cQnmoEQkcIMSSJTNMADKA1FrCbA5E8dLN
-	 kt0DBhtwxRw8EynuRnc3zcPx3jQxRCm2wW4BcfUwb0SXZj3IZeQdJQg448BaA6rPa5
-	 vSUSQq05NtetHMNkq11LRxkBWgr1oymqbqx/OEoRkK6y9o1TceUwssBidOUFGx9dc7
-	 BpbDMP7Zb+6Og==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A982B40BC5;
-	Tue,  3 Feb 2026 16:54:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 50919F4
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 16:54:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D83D6085F
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 16:54:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F2D3608C5;
+	Tue,  3 Feb 2026 17:04:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7R2Dtoa4Y77d for <buildroot@buildroot.org>;
- Tue,  3 Feb 2026 16:54:29 +0000 (UTC)
+ id m8XKrHPpInwR; Tue,  3 Feb 2026 17:04:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3300860717
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770138249;
+	bh=ouZkrGLAEHpVC3t8fk5izrk+sTFeCWQ89gSuM9jS8Bk=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=D4xt4ONzoT4haVDbPBPKPBhUA8ynhBbsKlBfWv1FC/hIfu6EugVTJ//V8RTszD+7/
+	 8Qk80oGzHJLzeeiQR2PtOksNerYBYhPs3GBYbunjNwmwDzo2zagj26/u521/4zeTYe
+	 rqvt9U2yZ6ap5ngMFRRttpaXtZVWWYIXcl+thCNFTmr5c8P5gOACyFxYj4OPMSp7hW
+	 kL1KURxhffH2maG4KhraIQNMKUX8kU4RQohuBnDPVJljh/wmWBRyf5SYy/3P91+TjS
+	 EvSPEZ0f9YC3IczYTbsEqLr9kMeGBa2O+veq56tmDsjLj722UDyDeFR7ehvyFAym/p
+	 fffjhU36vPxfg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3300860717;
+	Tue,  3 Feb 2026 17:04:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70489F4
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 17:04:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5220840BA5
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 17:04:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JAq5CYRI4CKQ for <buildroot@buildroot.org>;
+ Tue,  3 Feb 2026 17:04:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 133766068D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 133766068D
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 133766068D
- for <buildroot@buildroot.org>; Tue,  3 Feb 2026 16:54:28 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-43596062728so2383f8f.1
- for <buildroot@buildroot.org>; Tue, 03 Feb 2026 08:54:28 -0800 (PST)
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 33092407BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33092407BE
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33092407BE
+ for <buildroot@buildroot.org>; Tue,  3 Feb 2026 17:04:05 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-47ee3a63300so64414805e9.2
+ for <buildroot@buildroot.org>; Tue, 03 Feb 2026 09:04:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770137666; x=1770742466;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
+ d=1e100.net; s=20230601; t=1770138244; x=1770743044;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rat+/eoGlDTrb1Tfw+jF7VCsuxKXpxngJZ8uWhVH8JM=;
- b=RN+2+KY6J+eXnunrxhKTdlOdvrqLjIEH1iJJKXLgGoP3eIs8CcNFHcOYT5j2SNUhSq
- 8rPcjWv5vs1xesyUnSSjqFxQBsR6IG4fJe14qvTuL/pB7Ge6bKBT2JvVd2XC6chJisPV
- ONgPLmc4RCKZ/LmEbXGmTSG+bQhxmfizhS9ovxKbdxCjUuN92yOiFam2MwdrWkFjSv6U
- AwMbtxCDoqsiqMWiHur6rny7rfwKcp1qxvXNaamKBm9PB9ezkUtxBzQ80IlQIqsp84y+
- hzZBRppCH1hf7q0XK3/xpIEL1WgC2hAUUg4TNq/jFZr3dmobz18h7Tow3CiA1TomN0ih
- d/wg==
+ bh=LoUM4xVq7okiyT8CASCye0+SRVUIZBKNCGv6S4mCIWY=;
+ b=iyKYHqT/KPlfeO5uv7+UNwDj+MHnOaLUo48tsUBDHLStUpAxDte9T+ALDefjuIGTcJ
+ c2E+84plxsOP6y2o9ssjQI7fD5uovdEfcWKSu7zjHAOnCjD2A0E19PiAi4OJolnXMEMd
+ hwWMQFJsDP+u/3k/4TrVpwXoKsDA6GHPtgjo6PqlpCPCtA2IY62w+qU8Xil9UiplFapX
+ o3gFNbnao6kSVzwfSJLLfA2p2DH8ndLihXDA6rehZd9nMYnGc5BwOloeOry12X8wLiPf
+ oWkG6a5iP67D+0sp+wYKDE5CYPMNTff9GIXbo99ZxEWBO6D/Rn9g4VSWk4zwtM+B/Ch2
+ ki1A==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUXWO9zsnO69+d1xOcbNdVzCIlDMve4gpbz3x0lb/VOi9pCH/WaDxVdTnc1obUk56St2q5MDP32bao=@buildroot.org
-X-Gm-Message-State: AOJu0Yzyot9W6cQvB85+SUsocvTD2ekQ8qpuKGLZTfrwNr7asz47kz8p
- zJMmes1tCBxiN0Mn1iMUHrF1NROk0Q3neXzoqN2zqj/Lnn+guJFziORTC6HJSC+sgGXmRqj4JW/
- kW0c3row=
-X-Gm-Gg: AZuq6aIY/60GfvrHGkn46yGpq5u26cVugpe4WBTxUIf5gaC6auZykn8hkBkNi1Ysh1t
- 43uxAMCu7yVIzoXXnC8hJmCcBIwR02aIgJh3gAlGaS4cIhYO+kM+xC08u8fttAFEO/GTi70gD2I
- CoVk62IFQya33Ij3cp3Xq4ynkgEzm0GqMSOqARZsZoOvhNLCtlc/Hd/57gmUqdDhJQQ3H6NnJxU
- HmptIGbDDDR0zxS31LvTZYPwQc8nSIBtC23I2wjtZZoaIwysOG0AtaMEYMjOQlmKbCsMYmqFB4B
- 9wufcvMo1pt43hNuPLZVHTSnb23xVYVv/lwQvFMbxrxUCQAnGyJFo8qM9oJbsbEeGyeD2DkA9Da
- zIXiSHbA2d1v5cjQv/Es1Y+vgAniiRVcZx3PsA5N6SmpXDso9yQwOO0r4QqU87MWplvIPVrb+vR
- OgNirlLQYUThA4UzLw+H9ksAKlEfvD8+CpfLfIev5lQfaZPg5M6PL/rvF8YiM=
-X-Received: by 2002:a05:6000:25c6:b0:431:c06:bc82 with SMTP id
- ffacd0b85a97d-4361130ea29mr6769617f8f.12.1770137666306; 
- Tue, 03 Feb 2026 08:54:26 -0800 (PST)
-Received: from [172.16.2.211] (host-109-89-232-55.dynamic.voo.be.
+ AJvYcCXxfrrTKjIQi5APe7Gi6zI2H5UFux9xCZb/jjY/91OTHFpuq9c2lz6QUI8/r8g1Jd94q71QgNxgrnQ=@buildroot.org
+X-Gm-Message-State: AOJu0Yza905OXGWMQ0NxZc1tWPFrkrPEdWQAH14LuUCaHFkAPiSGa7TK
+ gPvbEM47em3pVVMVNts2qKGXy5elBcv8Dp1pytk9X+S0ks3QxzIQ8XwfsxRGebMZeKAQqxVEFsk
+ SiYfC2Vg=
+X-Gm-Gg: AZuq6aKsxXYJ/8rJoGnf9t1eWHw3kz0QdbbrLIp9H633RE0WEzSFAQLBnmDEKz03jii
+ 4VUqZDI8T4cVlhgQOy7ShFZ4KdXq+sz14fHQPprrz6eaDurlUVb/0R93PM+xsAFGKKk9ltpHJiC
+ 1MrE3aehbjGi+q3v3VzAEetd13haQc4gluRS4ucQmRoxPUXXywSYuwjsxmkeEn8XNHzZfnBSeZW
+ 6g3019/pjBmdWOGiy7EEPIOK2qAqXAlyahD6aQz5ydiYojcFVN7CE6cUQPCVLeRv3q59egIeNrA
+ BXvFJ2ytXQVwJrJ42FIv4CZavgwT7bp2l4cX4p9xuRu7kgNUa8V6mMA9T1KREJqjJ5Ijj1oM1oq
+ +MwZ8cQnoQ4038dS7KuJFbT3MzNBIJg0vLYVo25AzZYO6TKy4xZ/I0o7TtPXxb+jjwFd132ley6
+ HPFhbQUDGrIxPhoL4fD2hbQL8S5mcSu0j4byLud9PxtGI+Qf2L7myW
+X-Received: by 2002:a05:600c:4fd0:b0:482:f564:d60f with SMTP id
+ 5b1f17b1804b1-4830e93049fmr4556945e9.15.1770138243836; 
+ Tue, 03 Feb 2026 09:04:03 -0800 (PST)
+Received: from [172.16.2.208] (host-109-89-232-55.dynamic.voo.be.
  [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-435e1322f40sm51387939f8f.34.2026.02.03.08.54.25
+ 5b1f17b1804b1-4830eb3c3e8sm1178295e9.13.2026.02.03.09.04.03
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 03 Feb 2026 08:54:26 -0800 (PST)
-Message-ID: <3f1678d6-4664-43b7-ab6a-b32a7493abf8@mind.be>
-Date: Tue, 3 Feb 2026 17:54:25 +0100
+ Tue, 03 Feb 2026 09:04:03 -0800 (PST)
+Message-ID: <d2ef7e4f-64fc-491a-9a6f-c1fd6db206d5@smile.fr>
+Date: Tue, 3 Feb 2026 18:04:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-References: <20260203135235.184869-1-thomas.perale@mind.be>
-Content-Language: en-US
-In-Reply-To: <20260203135235.184869-1-thomas.perale@mind.be>
+To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+Cc: bernd@kuhls.net, romain.naour@gmail.com, thomas.devoogdt@barco.com,
+ thomas.petazzoni@bootlin.com
+References: <20251226101445.2b29f439@windsurf>
+ <20260103084002.2045193-1-thomas@devoogdt.com>
+Content-Language: fr, en-US
+In-Reply-To: <20260103084002.2045193-1-thomas@devoogdt.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770137666; x=1770742466; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=rat+/eoGlDTrb1Tfw+jF7VCsuxKXpxngJZ8uWhVH8JM=;
- b=WhAgABfVjTF74HvdnnORf2DpB9haXaGdaQJ95l/COKbQNM2OfyaEtUQa/c8/ZY75zs
- d/21Eor+kv3KD2K5JfOup9Q5incqMyqiDdeFr/HaLojo4gs/88YDOGE1Vecwv2DGUAwN
- qOaaNvwP3eC9HboQb3UsRT1H267fpzHR7Ng7bRVxnGBpGJk2ZoA8PLEz8WXAaR82beF2
- I6aWpnOKK6B5wtPGzwUW44/lnKS4up+rGE00Ed1W1KLuTNWvuguGLprrXFOom0hPCujE
- ZM6yqNz3Lj9noqBk89UFAoxXdlBORk0A2nPwyTxEo3/htfMdrDfzvYdJo1C3GIEAbSop
- JlEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WhAgABfV
-Subject: Re: [Buildroot] [PATCH v2 1/5] utils/generate-cyclonedx: move
- license download in a function
+ d=smile.fr; s=google; t=1770138244; x=1770743044; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=LoUM4xVq7okiyT8CASCye0+SRVUIZBKNCGv6S4mCIWY=;
+ b=H2t4P8lRU60B/zABn7ubr1mwOsETGbqRx2Ew5iX9ZatDntXiE1AgapbILqxfUkhnd2
+ HQtXL5qVt0J/CQfJW1HxhXS45d8JAY8pCDLOsu4+OoSrRAVo97htpi3MiYdRfkWEWRf+
+ Ecxj50VXGw/I3ZEwDWl6ZuOYtv0WDFG9gTeIw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=H2t4P8lR
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/mesa3d: explicitly enable
+ llvm for host-mesa3d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,110 +125,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-
-On 3/02/26 14:52, Thomas Perale wrote:
-> Move the code that retrieve the SPDX licenses into a function instead of
-> doing it top-level.
->
-> This allows to pass the CycloneDX version as a function argument instead
-> of defining it as a top-level constant.
-> In next commit, the CycloneDX spec version might not be known when the
-> top-level code is executed.
->
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Acked-by: Titouan Christophe <titouan.christophe@mind.be>
-> ---
->   utils/generate-cyclonedx | 46 ++++++++++++++++++++++++++++------------
->   1 file changed, 33 insertions(+), 13 deletions(-)
->
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 2b6c6d63d3..93b648e481 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -21,12 +21,10 @@ import re
->   
->   
->   CYCLONEDX_VERSION = "1.6"
-> -SPDX_SCHEMA_URL = f"https://raw.githubusercontent.com/CycloneDX/specification/{CYCLONEDX_VERSION}/schema/spdx.schema.json"
->   
->   brpath = Path(__file__).parent.parent
->   
->   cyclonedxpath = Path(os.getenv("BR2_DL_DIR", brpath / "dl")) / "cyclonedx"
-> -SPDX_SCHEMA_PATH = cyclonedxpath / f"spdx-{CYCLONEDX_VERSION}.schema.json"
->   
->   BR2_VERSION_FULL = (
->       subprocess.check_output(
-> @@ -41,20 +39,40 @@ BR2_VERSION_FULL = (
->   # 'resolved_with_pedigree'.
->   VULN_WITH_PEDIGREE = set()
->   
-> +# List of supported SPDX license expression.
->   SPDX_LICENSES = []
->   
-> -if not SPDX_SCHEMA_PATH.exists():
-> -    # Download the CycloneDX SPDX schema JSON, and cache it locally
-> -    cyclonedxpath.mkdir(parents=True, exist_ok=True)
-> -    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
->   
-> -try:
-> -    with SPDX_SCHEMA_PATH.open() as f:
-> -        SPDX_LICENSES = json.load(f).get("enum", [])
-> -except json.JSONDecodeError:
-> -    # In case of error the license will just not be matched to the SPDX names
-> -    # but the SBOM generation still work.
-> -    print(f"Failed to load the SPDX licenses file: {SPDX_SCHEMA_PATH}", file=sys.stderr)
-> +def br2_retrieve_spdx_licenses(version: str):
-> +    """Populate the list of supported SPDX licenses for a given CycloneDX
-> +    version. If the list is not present locally it will be downloaded
-> +    externally.
-> +
-> +    Args:
-> +        version (str): CycloneDX version
-> +
-> +    Returns:
-> +        None
-> +    """
-> +    SPDX_SCHEMA_URL = "https://raw.githubusercontent.com/CycloneDX/specification/{}/schema/spdx.schema.json"
-> +
-> +    ret = []
-> +    path = cyclonedxpath / f"spdx-{version}.schema.json"
-> +
-> +    if not path.exists():
-> +        # Download the CycloneDX SPDX schema JSON, and cache it locally
-> +        cyclonedxpath.mkdir(parents=True, exist_ok=True)
-> +        urllib.request.urlretrieve(SPDX_SCHEMA_URL.format(version), path)
-> +
-> +    try:
-> +        with path.open() as f:
-> +            ret = json.load(f).get("enum", [])
-> +    except json.JSONDecodeError:
-> +        # In case of error the license will just not be matched to the SPDX names
-> +        # but the SBOM generation still work.
-> +        print(f"Failed to load the SPDX licenses file: {path}", file=sys.stderr)
-> +
-> +    return ret
->   
->   
->   def split_top_level_comma(subj):
-> @@ -404,6 +422,8 @@ def main():
->           parser.print_help()
->           sys.exit(1)
->   
-> +    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
-> +
->       show_info_dict = json.load(args.in_file)
->   
->       # Remove rootfs and virtual packages if not explicitly included
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLCBCZXJuZCwKCkxlIDAzLzAxLzIwMjYgw6AgMDk6NDAsIFRob21hcyBEZXZv
+b2dkdCBhIMOpY3JpdMKgOgo+IExMVk0gaXMgYWxyZWFkeSBpbXBsaWNpdGx5IGVuYWJsZWQgZm9y
+IGhvc3QtbWVzYTNkIHdoZW4KPiBCUjJfUEFDS0FHRV9NRVNBM0RfTkVFRFNfUFJFQ09NUF9DT01Q
+SUxFUiBpcyBzZWxlY3RlZC4gVGhpcyBibGluZAo+IG9wdGlvbiBpcyBhdXRvbWF0aWNhbGx5IGVu
+YWJsZWQgd2hlbiBMTFZNIGlzIHJlcXVpcmVkIGJ5IGRyaXZlcnMgc3VjaAo+IGFzIGludGVsLWly
+aXMsIHBhbmZyb3N0LCBpbWFnaW5hdGlvbiwgb3IgaW50ZWwtdnVsa2FuLgo+IAo+IFRoZSBCUjJf
+UEFDS0FHRV9NRVNBM0RfTExWTSBvcHRpb24gYWxzbyBpbmRlcGVuZGVudGx5IHNlbGVjdHMgaG9z
+dC1sbHZtLAo+IGJ1dCB0aGlzIGNoYW5nZSBtYWtlcyB0aGUgZGVwZW5kZW5jeSBtb3JlIGV4cGxp
+Y2l0IGZvciBob3N0LW1lc2EzZAo+IGJ1aWxkcy4KPiAKPiBOb3RlIHRoYXQgZGlzYWJsaW5nIExM
+Vk0gaXMgbm90IHBvc3NpYmxlIGZvciBob3N0LW1lc2EzZCwgYXMgdGhlIGJ1aWxkCj4gd2lsbCBm
+YWlsIHdpdGg6Cj4gLi4vLi4vLi4vYnItdGVzdC1wa2cvYm9vdGxpbi1hcm12NS11Y2xpYmMvYnVp
+bGQvaG9zdC1tZXNhM2QtMjUuMy4yL21lc29uLmJ1aWxkOjg0NzozOiBFUlJPUjogRmVhdHVyZSBs
+bHZtIGNhbm5vdCBiZSBkaXNhYmxlZDogQ0xDIHJlcXVpcmVzIExMVk0KCkluZGVlZCwgaG9zdC1t
+ZXNhM2QgaXMgb25seSByZXF1aXJlZCB0byBwcm92aWRlIHN1cHBvcnQgZm9yIGRyaXZlciBzZXR0
+aW5nCkJSMl9QQUNLQUdFX01FU0EzRF9ORUVEU19QUkVDT01QX0NPTVBJTEVSLgoKaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvYnVpbGRyb290LzIwMjYwMTAzMDg0MDAyLjIwNDUxOTMtMi10aG9tYXNA
+ZGV2b29nZHQuY29tLwoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCkJlc3QgcmVnYXJkcywK
+Um9tYWluCgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZv
+b2dkdC5jb20+Cj4gLS0tCj4gdjI6IEV4cGxpY2l0bHkgYWRkZWQgdGhlIGxsdm0gZmxhZyB0byBo
+b3N0LW1lc2EzZCBjb25maWd1cmF0aW9uLAo+ICAgICBzZWUgaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvYnVpbGRyb290LzIwMjUxMjI2MTAxNDQ1LjJiMjlmNDM5QHdpbmRzdXJmLy4KPiAgICAgQGJr
+dWhscywgSSBjYW4gc2VlIHRoYXQgQ0xDIHN1cHBvcnQgaXMgbmVlZGVkIHRvIGNvbXBpbGUgdGhl
+IGludGVsLWlyaXMKPiAgICAgZHJpdmVyLCAoY29tbWl0IDMxNzI2MGYgInBhY2thZ2Uve21lc2Ez
+ZCwgbWVzYTNkLWhlYWRlcnN9OiBidW1wIHZlcnNpb24gdG8KPiAgICAgMjUuMC42IikgYnV0IGNh
+biB5b3UgZWxhYm9yYXRlIHdoeSB0aGlzIGlzIHJlcXVpcmVkIGZvciB0aGUgZ2VuZXJpYwo+ICAg
+ICBob3N0LW1lc2EzZD8gUGVyaGFwcyBzb21lIGxsdm0gcmVsYXRlZCBsb2dpYyBzaG91bGQgYmUg
+YWRkZWQgZm9yIHRoZSBob3N0Lgo+IC0tLQo+ICBwYWNrYWdlL21lc2EzZC9tZXNhM2QubWsgfCAy
+ICsrCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rIGIvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rCj4gaW5k
+ZXggZTQxYmY2OGQ4ZWMuLjA5YjA5ODYyOGFiIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWVzYTNk
+L21lc2EzZC5tawo+ICsrKyBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+IEBAIC0yOTcsNiAr
+Mjk3LDcgQEAgSE9TVF9NRVNBM0RfQ09ORl9PUFRTID0gXAo+ICAJLURnYWxsaXVtLWRyaXZlcnM9
+JChzdWJzdCAkKHNwYWNlKSwkKGNvbW1hKSwkKEhPU1RfTUVTQTNEX0dBTExJVU1fRFJJVkVSUy15
+KSkgXAo+ICAJLUR0b29scz0kKHN1YnN0ICQoc3BhY2UpLCQoY29tbWEpLCQoSE9TVF9NRVNBM0Rf
+VE9PTFMpKSBcCj4gIAktRGluc3RhbGwtbWVzYS1jbGM9dHJ1ZSBcCj4gKwktRGxsdm09ZW5hYmxl
+ZCBcCj4gIAktRG1lc2EtY2xjPWVuYWJsZWQgXAo+ICAJLURwbGF0Zm9ybXM9IFwKPiAgCS1EcHJl
+Y29tcC1jb21waWxlcj1lbmFibGVkIFwKPiBAQCAtMzA2LDYgKzMwNyw3IEBAIEhPU1RfTUVTQTNE
+X0NPTkZfT1BUUyA9IFwKPiAgSE9TVF9NRVNBM0RfREVQRU5ERU5DSUVTID0gXAo+ICAJaG9zdC1s
+aWJjbGMgXAo+ICAJaG9zdC1saWJkcm0gXAo+ICsJaG9zdC1sbHZtIFwKPiAgCWhvc3QtcHl0aG9u
+LW1ha28gXAo+ICAJaG9zdC1weXRob24tcHl5YW1sIFwKPiAgCWhvc3Qtc3BpcnYtdG9vbHMKCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
