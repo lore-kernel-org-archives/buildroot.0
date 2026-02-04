@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CEFE83EF4
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 08:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C6FDE83EF5
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36979407CB;
-	Wed,  4 Feb 2026 08:57:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E120F816D9;
+	Wed,  4 Feb 2026 09:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0AzLr2Jn07Pt; Wed,  4 Feb 2026 08:57:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ccUswmatlEQ8; Wed,  4 Feb 2026 09:11:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0EA4407F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04857816DF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770195422;
-	bh=mVaSo7cygUdUjh9fZP+X6+5Fuqxt9bbGDym6aPBa8iE=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=TeMuUFwLHo+i7E/LNbmBW8j01RezjQr8qhlUNmoAOYAIwqB+Vpbu11VfimI4O1U5Z
-	 HqnvHywQyvJ7fcVWVYqgvjq2dMe4zHdTy6Zz5LrIJbSYZCIbbzqTsOYc2Ym/CtPppY
-	 +xS3QX1oJGtq9I0ABAybCs2jdbQMvbBPKlR+kaO3tTahlii0PavdAldBtMQTtlnU4X
-	 /CmOEHQlyHqnV/O3juphls3daZbEVc38t4qRrEMMFtECXWteTshUQpWt4z9TFqvP9i
-	 Za3LjX+oKB3Bt+MrrTcac5fePAt3JzVHBEFThHG1dnsymTgcwT0DtsdifHIScTw7Hq
-	 3COTO4dqHQ/QQ==
+	s=default; t=1770196298;
+	bh=MuKkqqR5bWudoZE5uuK0C9PuzdT6nwHlsQWZGLlkK1g=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jXpTdWCEjNVfXuGEhdzbsJJSTzuovBzPUKm/GsC9B5eu9RXA9T3tYSPjPRXQA/5sV
+	 Lc1yfj+y9a1d/5DWZaY70p3XdanaRIpMyB+GFr3zwfMrN9Z9vzT5VP9IMLvmBgy1s0
+	 CGvcMoL6R5ok++AmkvERKbtB3rBWoz/xKNHSIvZh9tGxrppHCqwvMIITZ0sw+ve9ta
+	 AwYL9B3xjLU8gxsWO7Q6Xyo/NIJCltMEkd+tYmAWlsX+llVgIFOHadOKJOjYQPqYkJ
+	 vkqHXIA1IDlWktVGUPxbLRi1IX7LNftEELg2/SLhIDCprQtGFEFf1NObJoJDnoUhl+
+	 M4trQlleKPNXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0EA4407F7;
-	Wed,  4 Feb 2026 08:57:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id F1B9D17A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 08:57:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04857816DF;
+	Wed,  4 Feb 2026 09:11:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3744FF4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBA1860A4F
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 08:56:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19801816DF
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JBcO1aUMVcuJ for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 08:56:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4vZHi41A8lmF for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 09:11:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F2A1660A89
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2A1660A89
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F2A1660A89
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 08:56:58 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id CF4D04E423F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 08:56:55 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id A391160745;
- Wed,  4 Feb 2026 08:56:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 39773119A865B; Wed,  4 Feb 2026 09:56:54 +0100 (CET)
-Date: Wed, 4 Feb 2026 09:56:53 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, 
- Thomas Perale <thomas.perale@mind.be>
-Message-ID: <aYMJx0dgzwrcP_9O@windsurf>
-References: <20260125114310.246433-1-ju.o@free.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260125114310.246433-1-ju.o@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1770195415; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=IwiEmhuicDRRbqurvCIKntwKRLja9O8s7xMvAonYsgs=;
- b=xEXyBqIho2DEkG1xT4g+Ll2aaosBUilI4o/IYHSAqxcM/xS232GWCumIO9Smrxw08CXu99
- 90auZV367BDhYnNR3FrlJuy153mxofAUXBbRYTB09+kJBBb+54JCw6hYNb9YTj9vneCqKQ
- lHIZGHTYDPxfT8KDQ1X44w4JaRaNsKdkzcRLrzirsToFafnQM3k7tsx4ZSWafKbCDQqTqa
- 5XT0/Y888QJAIcdwL488DCQ9Jpkq1W5ES5cRblecQkKcojFVpjmUmuwJi4TVfFWwko05E8
- khpobvWrGR83NteAjw39V8jov5vdY1SB1vgB7xEmbjSKCBCezNhzYokGCFxgFA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=xEXyBqIh
-Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: add CVE-2025-15281
- CVE-2026-0861 CVE-2026-0915 to _IGNORE_CVES
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4882D816D9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4882D816D9
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:11:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2E4C5867CB; Wed,  4 Feb 2026 09:11:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Feb 2026 10:11:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 574aa2cfee19c7dfe505a303dd45b17a966bbdaa
+X-Git-Newrev: 22ec30b5149bb9966c6d2b67b90ad80f4ca175e8
+X-Patchwork-Hint: ignore
+Message-Id: <20260204091135.2E4C5867CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xinetd: fix build failure due to
+ missing BR2_PACKAGE_LIBTIRPC_RPCDB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,38 +71,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jan 25, 2026 at 12:43:10PM +0100, Julien Olivain via buildroot wrote:
-> Commit [1] bumped glibc from 2.42-3-gbc13db739 to 2.42-51-gcbf39c26b
-> to fix some CVEs, but forgot to add those CVEs to GLIBC_IGNORE_CVES.
-> This was needed because the GLIBC_CPE_ID_VERSION used for CVE checks
-> remains to the same value "2.42" which is marked as vulnerable to
-> those CVEs.
-> 
-> This commit adds those _IGNORE_CVES with the corresponding upstream
-> commit references, to make sure they will not be reported by the
-> "make pkg-stats" command.
-> 
-> Fixes:
-> - [1]
-> 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/18de297a5ad3d1fc1b44f54ae69289ca10200ad5
-> 
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> Cc: Thomas Perale <thomas.perale@mind.be>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/22ec30b5149bb9966c6d2b67b90ad80f4ca175e8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied, thanks!
+Package xinetd requires libtirpc rpcdb option enabled since the bump of
+libtirpc to version 1.3.7 with buildroot commit
+3f3d6e43de9b4aac7df8545fd811171256f878d3 which includes upstream commit:
+https://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=7cea8ad66aecc21e6caae330b5d31075af399193
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes:
+https://autobuild.buildroot.net/results/4db/4db625d395f38636b67adbbf6286c6c9da155f62/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xinetd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/xinetd/Config.in b/package/xinetd/Config.in
+index f509905f1c..9637016f7e 100644
+--- a/package/xinetd/Config.in
++++ b/package/xinetd/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XINETD
+ 	bool "xinetd"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no ecvt/fcvt
++	select BR2_PACKAGE_LIBTIRPC_RPCDB if BR2_PACKAGE_LIBTIRPC
+ 	help
+ 	  xinetd is a secure replacement for inetd. It was originally
+ 	  written by panos@cs.colorado.edu.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
