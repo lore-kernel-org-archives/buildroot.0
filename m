@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA90BE9536D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 10:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FC7EE95375
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 10:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B425240C4D;
-	Wed,  4 Feb 2026 10:27:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HLDpVXSdIrmp; Wed,  4 Feb 2026 10:27:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0722C4060B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770200863;
-	bh=d2oBvBXsTqNoagOqBv0UpFvd5zK3BdbxKShBrg9bIUs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=gjNKQn0dNWlHph+UR6nh3sn3whwI6KVPLJt/0J1iK6warG8+gDsunMM0cTC5pghiO
-	 2WSJfgwT8YZudN4/kCN6moB71pSuDEg1Cz6DMuv4IBX5mp0SzznEujkhOiH4WrLRAr
-	 WxhRT+avMaImBSNHED/0dqghggoKODiX7fn912OPKsj9MeC12poRje+LEAqq+l6/6T
-	 jfKNFMk2kpyuPz2pWCXPhWf98m4dh3n8kJcarbfoQQO8ie8+lP9XKxQ4A7qhJe8tQA
-	 Oi8rWlvrFKuDQa3AsswH9XBYtANPaG3Zh5xC7+r0/Sv3uhtLrUaeIjHIbSrB6NRsB8
-	 bquUu3df+ZtcA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0722C4060B;
-	Wed,  4 Feb 2026 10:27:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 40CA8F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 10:27:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E17C60A6F
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 10:27:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04356606AA;
+	Wed,  4 Feb 2026 10:32:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8kv0qBtS3hXf for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 10:27:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DEFA5606AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEFA5606AA
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DEFA5606AA
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 10:27:40 +0000 (UTC)
-Received: from [172.18.235.89] (ip-185-104-138-159.ptr.icomera.net
- [185.104.138.159])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 6C2312C829CD;
- Wed, 04 Feb 2026 11:27:38 +0100 (CET)
-Message-ID: <25c14b31-4d7d-46ea-ae04-aa09ee901d49@bubu1.eu>
-Date: Wed, 4 Feb 2026 11:27:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Cc: =?UTF-8?Q?Andr=C3=A9_Zwing?= <nerv@dawncrow.de>
-References: <20260117183656.3790665-1-ju.o@free.fr>
-Content-Language: en-US
-In-Reply-To: <20260117183656.3790665-1-ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770200858; bh=2cnYEKSCDSQRyeAyzY3nDD2asoZuNSlaxYSbISrHSvw=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=giCgxh1ZMQNK7vBPNSzcWDzUR1gnRkbeZ36Lf6tk6DQkZH6sgCvoX5uJP//v9Yjle
- rIdx+f/Q2BKG8Iw7Wx28hYf5hm/Zdo6sZ0JPTey6gp0Lv5RjE6LR1EV+xOhBJHl/V2
- 71SLkOJqiy0CIFy+/E0iggxieghA0OWtEaGCcxDx8EjRIuiZPPzoXS525bMRut1KmK
- nARB8gqMtIi+Rl6C3GNRZCaFbkc9k4VSjp3rDb0cRtOH/6c4pX3q0Cmunrbe333MQh
- Lap/0rnuubAmhYyU5jegFzzXI4TnLC5RZsQ31PHboukDE0kVC6XIRiqyHcNsVPRUPg
- QrPK4dUmUBJrA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=giCgxh1Z
-Subject: Re: [Buildroot] [PATCH 1/1] package/wine: bump to version 11.0
+ id eDdTVY25QIij; Wed,  4 Feb 2026 10:32:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E87BE60A6F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770201135;
+	bh=XxIB6X/CfnLBcZuNPHCKwp0vmFjC8moLP3OCft5S9sU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=H0FjbLZ0p9awP1xuxq6AoUZND2Xs3gQG6JQAOWzQWGzZVg8URaGVqYMil8Hmteb1a
+	 YLQ9Mv5ZtY5h8jkZZBLDAWzIPIGGn3HZvu+wL2TBZ+jDBrhwLq+m7d+gyuYGURA792
+	 TE9TGJMnxzL7qF6ePqBOjWoS9pUAlO9hWLb7eeko+KF6zDM0ldGXarMIVT0ih8yZCL
+	 DzRSUGso3VFcRqBrCA0cCsoIPjm5frE9hZKwN9LHlyRxz/PsYlokB4w5a6qEMagZnY
+	 NqTj0FpZPvBWF5bS6jL4/GzqeY0cmNp183U6oAMLhLnfmW/0LRQjSyeiCUCjLQ2VM4
+	 QbZoZyH0HiMqg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E87BE60A6F;
+	Wed,  4 Feb 2026 10:32:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 66FD5173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 10:32:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 49C8D60A6F
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 10:32:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pS63YlPjdHVz for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 10:32:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9533B606AA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9533B606AA
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 10:32:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6664D86878; Wed,  4 Feb 2026 10:32:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Feb 2026 11:31:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fefc82a35bc99b24c2f4923ecbd41fb5997d37b1
+X-Git-Newrev: 21311f79c61050bbb289fba1328bd4df1abdd52d
+X-Patchwork-Hint: ignore
+Message-Id: <20260204103212.6664D86878@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/screen: fix usage with readonly
+ rootfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,40 +69,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 1/17/26 19:36, Julien Olivain via buildroot wrote:
-> For release notes, see:
-> https://gitlab.winehq.org/wine/wine/-/releases/wine-11.0
-> 
-> The --without-osmesa configure option was removed upstream, in
-> commit [1]. This commit removes the options from _CONF_OPTS.
-> 
-> Also, since upstream commit [2], the /usr/bin/wine program became
-> a "tool". It needs to be enabled when cross-compiling. As suggested
-> in [3], this commit adds --enable-tools in WINE_CONF_OPTS.
-> 
-> This commit also updates the LICENSE file hash, after year
-> update in [4].
-> 
-> [1] https://gitlab.winehq.org/wine/wine/-/commit/370e7d9a50593077e958f3efcc70254990bfe6f3
-> [2] https://gitlab.winehq.org/wine/wine/-/commit/6d28db86c9c2559e67a4820175416aff20f7abec
-> [3] https://bugs.winehq.org/show_bug.cgi?id=57847
-> [4] https://gitlab.winehq.org/wine/wine/-/commit/ab59cc16c56fa7400c2076990b53ea95f6889902
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/12754203663
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/21311f79c61050bbb289fba1328bd4df1abdd52d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Buildroot commit 4769724ee2bebd671f6a9372fb8922a8c22c5079 bumped the
+package from 4.9.1 to 5.0.0 which includes a major rewrite of the
+configure script
+https://cgit.git.savannah.gnu.org/cgit/screen.git/log/src/configure.ac?h=v.4.9.1
+https://cgit.git.savannah.gnu.org/cgit/screen.git/log/src/configure.ac?h=v.5.0.0
 
-Marcus
+By default, screen puts the socket directory in $HOME/.screen, which
+is not writable when the rootfs is readonly:
+
+ # screen
+ Cannot access /root/.screen: No such file or directory
+
+The --enable-socket-dir option added in upstream commit
+https://cgit.git.savannah.gnu.org/cgit/screen.git/commit/?id=78a961188f7da528c7cefcc63e07f35f04e69a93
+allows to configure this, and actually its default value of
+/run/screen is sensible, so we fix the problem by simply passing
+--enable-socket-dir, and rely on its default setting.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/issues/123
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/screen/screen.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 74453faff8..c85abaf411 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -13,7 +13,7 @@ SCREEN_SELINUX_MODULES = screen
+ SCREEN_DEPENDENCIES = ncurses
+ SCREEN_AUTORECONF = YES
+ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
+-SCREEN_CONF_OPTS = --enable-colors256
++SCREEN_CONF_OPTS = --enable-colors256 --enable-socket-dir
+ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+ 
+ ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
