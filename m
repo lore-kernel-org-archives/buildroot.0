@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47567E9D403
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49960E9D3FB
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB871605A3;
-	Wed,  4 Feb 2026 15:34:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12B1F605A3;
+	Wed,  4 Feb 2026 15:35:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K-brYfbRH2gg; Wed,  4 Feb 2026 15:34:44 +0000 (UTC)
+ id zKNibTfpf3eI; Wed,  4 Feb 2026 15:35:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06352605BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12AAB6060C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770219284;
-	bh=HoFHmPUWEu7xGhlxG0SmfNRRUBzvSOuZqI3Xh6ffhpQ=;
+	s=default; t=1770219333;
+	bh=jHCFDZEuF4a/f3cp3byY8C+oWcZoY1XgRzrH7Ja0rpg=;
 	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Xw5zHW+VIoAwilXk85AsqgL51ToUZWFU171omTYC7chzPDNdHLqV3pSciwGLkMnWy
-	 fLY9qHn8lKC6IizMMVV1NWPDuA1yPgE1eYG6OQhK0ZrLZSG/rOZa4vtAagbfSukWoG
-	 I0DcXYF1M7CotGJ1ETVeWonMva5rW87UHbSilV64uk6b7d9Ui6JqKrwU/7G3elXpMe
-	 0lPg0HQL5ro57HeV6Ipekovdkl5HorwHMnnG8Ww4BlrqOddCubSMQE5BvpcUkZ8mer
-	 /Qc4cwt2RphM7FVr9humcApqdcWiPk42ACuywLklIAvIL8bmahqh2flQPkSyqD6wOJ
-	 TJA8goFEfqcvA==
+	b=EOTT8O/lxOXc9fQ4RHB5nPN1K1MWV8pWDwfM/yETw48ND6AXIPLMeXwnMighVtDBj
+	 LYxqY0ydK9Eb2R5hv26II7OUIHchwLASWeBk78LAkJh6ZtzkroXHjwY8QSEk3I0xnV
+	 eLBHv5izRSmwXe0bn/VjL//bXHgw2TpDiplQZonbTXzDTyZPexekEuBBFVBcVcuskS
+	 19+44TNAQO0NM+34vxJOA6VY/bONY/4ksO1Y7P1648ds8kwAw3LMLFMKLeRhifaJhh
+	 ACzObE3rz/9V664jz273ZIUBoj8W/Va7ypQ2IHGX8+b5TOpkAC9K3PpR/HT5KhoKFH
+	 8Gshzw0Z4L9wQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06352605BD;
-	Wed,  4 Feb 2026 15:34:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9AB27F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:34:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12AAB6060C;
+	Wed,  4 Feb 2026 15:35:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F457F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B5C760093
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:34:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FCA482865
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M7G8-w_W3RKV for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 15:34:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XfVmfXRsZpVQ for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 15:35:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 73B7A605A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73B7A605A3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2BD8E82331
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BD8E82331
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 73B7A605A3
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:34:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2BD8E82331
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:35:29 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 1B8A231E0BBD; Wed, 04 Feb 2026 16:34:37 +0100 (CET)
-Date: Wed, 4 Feb 2026 16:34:37 +0100
+ id E152E31E0BBD; Wed, 04 Feb 2026 16:35:27 +0100 (CET)
+Date: Wed, 4 Feb 2026 16:35:27 +0100
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <aYNnDVerq-_9JZDn@waldemar-brodkorb.de>
+Message-ID: <aYNnP1uFAqo1fta0@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1770219277; bh=SQ0b9HYAulEWsIzK026dLMnE2ua+PFT8Q3hj3vJXkMQ=;
+ t=1770219327; bh=Oiy20lZe9lWAYhfbvcdRhnb3cYNlxkNSjg/zmo7rH28=;
  h=Date:From:To:Subject:From;
- b=KURL1Pt3HD3AWvCxzEgo8K63ohnNL/xeUD/B3a8izfseS/lXDwHgaeQbqu1r0qr+W
- igQ1k24jXcumTgaA3Z5kzjbgkjLtXG8Jwa45+DwVhZ3fKpYRdzYBxoe3Is6E/FKpJY
- WwBJNiQT0ehBOMR5K/JzqwE8iTQEl6Pq/r7p0yJWQkZAeYPIt54m47K21h7tUrntDX
- jVyDkzDeR34tsu8cX2y7yeKPqYL2fCxniREiR8c5J/XdKLQ1pXTTsoXG/7o+QNZ22p
- 8CyYym/dI9FTovhmJ3CQFP7jRE67XcG9TrtmJhW7DWj+UL+kUz2OPFp5ipu5ZUrW/D
- atjemeEmHeD0Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=CyfuQrzwGJ6hpW+GUeFedu7mHqw4XC+GbEFa3kBLNAfQuaPghJVgv8TJLEi50Y6Gt
+ v4deXRgDsbGjlmdftkgHzrro1ry21L6HJwKBTcaZmAUc6u7zvlwxVB2IyA+cOLIQMI
+ SDzQ+pCxj/IKt4D18KcJsT/YVulVWntPftkU0VFHjBSke8ChyA6IaF0KhMQOEvqTHD
+ pOiV+OAEgki8x6ALn0Kkec+byqy9sVT06ZdGfb2Q59NMc8ao/f65abKRHnjI/IF3JM
+ bbEnnhKLNrgqcH+WayXnkYAL/LpTrDB1iHzyk9Mxw58zyqUZbqa1kP3k94fSIgYMdR
+ zm0Lb25eNxvFg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-Subject: [Buildroot] [PATCH v3 1/2] package/strongswan: update to 6.0.4
+Subject: [Buildroot] [PATCH v3 2/2] package/strongswan: add Linux kernel
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,48 +87,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for Changes:
-https://github.com/strongswan/strongswan/releases/tag/6.0.4
+See here for options required by Strongswan to work properly:
+https://docs.strongswan.org/docs/latest/install/kernelModules.html
+
+We only enable a subset, which is the bare minimum to start
+charon IKEv2 daemon. For advanced users this might be not enough.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-v1->v2:
-  - remove patch 0001 and CVE ignore
-v2->v3:
- - another split of patches requested by Markus H.
----
- package/strongswan/strongswan.hash | 6 +++---
- package/strongswan/strongswan.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/strongswan/strongswan.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index f6b16fc8a2..7a6939b979 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,7 +1,7 @@
--# From http://download.strongswan.org/strongswan-5.9.14.tar.bz2.md5
--md5  21ca3fc7c18456405d03b77266ba630a  strongswan-5.9.14.tar.bz2
-+# From http://download.strongswan.org/strongswan-6.0.4.tar.bz2.md5
-+md5  f6b78a99e95179b6a65df218d75da7ca  strongswan-6.0.4.tar.bz2
- # Calculated based on the hash above
--sha256  728027ddda4cb34c67c4cec97d3ddb8c274edfbabdaeecf7e74693b54fc33678  strongswan-5.9.14.tar.bz2
-+sha256  79576bb61b9a406cea9eb73d0c565cc6254a6b6d2e7198f44758d2d7c61a7aec  strongswan-6.0.4.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
 diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index caf214cefa..63ebd275e3 100644
+index 63ebd275e3..1e9e96367f 100644
 --- a/package/strongswan/strongswan.mk
 +++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -114,4 +114,16 @@ STRONGSWAN_CONF_OPTS += \
+ 	--disable-connmark \
+ 	--disable-forecast
  
--STRONGSWAN_VERSION = 5.9.14
-+STRONGSWAN_VERSION = 6.0.4
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPL-2.0+
++# bare minimum to start charon
++define STRONGSWAN_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETLINK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INET_AH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INET_ESP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM_USER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM_INTERFACE)
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.47.3
 
