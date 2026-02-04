@@ -1,126 +1,125 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87ADBEA794A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 23:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ADEFEA7943
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 23:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 148278268B;
-	Wed,  4 Feb 2026 23:16:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03A7960EB2;
+	Wed,  4 Feb 2026 23:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z96GpgSRPtII; Wed,  4 Feb 2026 23:16:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YuBu2kNz_MB7; Wed,  4 Feb 2026 23:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DE982690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B845660FCF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770246973;
+	s=default; t=1770247342;
 	bh=goucokJnh/MSYSNqu4AQclmm8oR4HlCXB8pEo33g2eQ=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=Lv6DYvBUzbY/Db9pkYqLH1bUXS8WMlaNrlHQ2yRFMEgQg2plAS0W4p/HMleu+5pUf
-	 1j3oORCh9Z5h//eskUtHeKXaAz6leAI8ODp/Nvho27kyRKrKzzhdieImUr7KnlE3U6
-	 D3d7jPpw2dA1/dqiEwvLU8e8hbxJh7kRTtVbnzxU37c5hIRDAfh5EX7CJS8sdLKG+Y
-	 2xcXJVROofCISlM3L/nwPlpBvHYdZyIsHOL4rS+lh0qhKCihRb0jigTnm+Dbi8P9e4
-	 34ej5/6vkNq2umLGD5+EGux6LSpdrIWej3dD5ecU+ZG3pZfPP6ZbVZ7O/eWm2sPaFE
-	 9OUHB2k7sn1/g==
+	b=TSW/XrqlyBsYCI9019PZpWiUrislbvXEZy/KED+3Ij7qBE3ibslHTJUHtZGRDnv7v
+	 zEBXhFIrePclxLvuIifzYN4u5dQ/vUKb0f3N9rhHSr8yxagTnvyq1jhKb5ynR4D9Qv
+	 6e2g8lRnMvF8ZjKIc0BpMGnPWrurCAt9WW6YKp2Ak8P7ShNbn5BrAuNHQgzeb3oot6
+	 0WsoCUOK1SJxDAUMm1JwqwU+p+dF5WpbN4yZSsoiMIJFhIeXoTXV4JWPkChfuxcRIU
+	 rY4wFTIHtkQKTJCfscFRBS7FIjv1TrKNdAmodLnT5pitsNGOIjR/sft0p+iqMTXAYO
+	 PLGXbyPleRGmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04DE982690;
-	Wed,  4 Feb 2026 23:16:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A98BF5
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:16:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B845660FCF;
+	Wed,  4 Feb 2026 23:22:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 856F2173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38E7340D7A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:16:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 719A283EB8
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CAfOt44GQwsL for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 23:16:11 +0000 (UTC)
-X-Greylist: delayed 386 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 04 Feb 2026 23:16:11 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 433E840D88
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 433E840D88
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=170.10.153.107;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X8mpLvtPh_sN for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 23:22:16 +0000 (UTC)
+X-Greylist: delayed 398 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 04 Feb 2026 23:22:15 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E113183E88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E113183E88
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=170.10.151.107;
  helo=usb-smtp-delivery-107.mimecast.com; envelope-from=jkastelic@thinksrs.com;
  receiver=<UNKNOWN> 
 Received: from usb-smtp-delivery-107.mimecast.com
- (usb-smtp-delivery-107.mimecast.com [170.10.153.107])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 433E840D88
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:16:11 +0000 (UTC)
-Received: from mail-yx1-f71.google.com (mail-yx1-f71.google.com
- [74.125.224.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (usb-smtp-delivery-107.mimecast.com [170.10.151.107])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E113183E88
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:22:15 +0000 (UTC)
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- usb-mta-36-a79IbZchOoCUBMn77KPoEg-1; Wed, 04 Feb 2026 15:09:41 -0800
-X-MC-Unique: a79IbZchOoCUBMn77KPoEg-1
-X-Mimecast-MFC-AGG-ID: a79IbZchOoCUBMn77KPoEg_1770246580
-Received: by mail-yx1-f71.google.com with SMTP id
- 956f58d0204a3-649b2db7b8fso726444d50.0
- for <buildroot@buildroot.org>; Wed, 04 Feb 2026 15:09:41 -0800 (PST)
+ usb-mta-45-iU5Ex-JoM-SwhE0LBP4jYQ-1; Wed, 04 Feb 2026 15:15:33 -0800
+X-MC-Unique: iU5Ex-JoM-SwhE0LBP4jYQ-1
+X-Mimecast-MFC-AGG-ID: iU5Ex-JoM-SwhE0LBP4jYQ_1770246932
+Received: by mail-yw1-f199.google.com with SMTP id
+ 00721157ae682-79431a41d9bso5245857b3.3
+ for <buildroot@buildroot.org>; Wed, 04 Feb 2026 15:15:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770246580; x=1770851380;
+ d=1e100.net; s=20230601; t=1770246931; x=1770851731;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
  bh=VJf4WUwO+l6Pyo7d0oX+8zhAeNfgMADA02xDVeJAr0I=;
- b=EeWKXyFyXLOBFl/c4M4MfbDd0RotrM4UaV/jzFQKsM556XhP3uK1Sy0j0tYgtDH4jh
- suq1FESgnozqndO8V4DSXu0XNDS/13pAQWA5U9rldQg88mLfSparoBwBELJpFYPvJZg0
- wOxO4/oaQNV416w+06H7/qK4xDXKyfrpCbIQRQBdh2HmMrhO/aDLVjgDRemQ4myOHd+P
- xWcFSMGPdNBZ5mUrpXNyaQ8CxoRS8e+l+UTSJIe8U+0dp+oAusuZoTA1sGADBK4nrGuE
- m4swE6D32Noak3fqEMVsY9e24Cf+vo/vp+cMB76BdnnOCZbm4f8cnCjGLoRTtKYgUuH5
- kTrw==
-X-Gm-Message-State: AOJu0Yx0wf/8tkDhwffPjLx18stUCMTLm/WTtjWxVH6n4JYEHni8iCC8
- C/bTobZ2xmKu+7j8tBeL+ubKsqyNKW9HhxllzgOFGPChkWw/CGfmsGBhNYHBDq4tW9Yo/IsHpRj
- ty3yDi5BpSk4BWM6TtYwFLlU8TQi3jDneONRf5xm0/AxAN3000iA4ARuNpKTNE+wyTYI=
-X-Gm-Gg: AZuq6aLmvyC+WlyaaG4TzZwRu34dJgcEkjpPrZv3NvWat9cvf3q3o0J4naCi9WtWMNt
- NGg8vuXYJhfD7xhG9BLorrxzUfCvxqrpkJ+s/mg9Z7G3+PRblMn9bKLZDF+Z3e3GiMaExS1JSdd
- 7vKiMUKBbJE4tmGMBjY4dJYaRawD990b7WdHIJwVIAGH6pUjmBNw1GZ/dIGP3maITw2S5Y2mb6d
- padDVGCcVxQxAUFnoOoaLynFin6uK4g5+Yd6eAiVDiyy4/G1hg3l8bQ5TtHoofd+eWKRVsMaX6Y
- 8WIhfSRWn8mU2kwI1GnQb5AzvtEl9w+qq1IaA4Anu0gO2WvwjMQoE0qUvLdIHfp+Ajvzeos4HTf
- q9pIAUnuhfqGCZoKhHQdvPri7kT/86EYcOPv28bsHJtKLhi8S8Mu/WaraNMiW6uBkfENJlb6hJY
- qFC6786qR2My8=
-X-Received: by 2002:a53:5004:0:b0:649:b468:d8b5 with SMTP id
- 956f58d0204a3-649db33f470mr3341787d50.29.1770246579890; 
- Wed, 04 Feb 2026 15:09:39 -0800 (PST)
-X-Received: by 2002:a53:5004:0:b0:649:b468:d8b5 with SMTP id
- 956f58d0204a3-649db33f470mr3341771d50.29.1770246579470; 
- Wed, 04 Feb 2026 15:09:39 -0800 (PST)
+ b=Ebpg+LKBWKpBT6b2skIC/pQv8lCekZsFYNTS9b8u7KyfCmv+icGA7++RMCXyb1VWbe
+ zqjPvvN3X2v1oMWHPqoJGnvpne7/G/FmOLB+eLVEoq8C9U9VRcNqF549kkPOEg3GbDRg
+ 7yekDCymqZTQL7Op76vYWI/fiz4dGpn7E09ge2f7hNYM3JwG9SFbJ58fbjq6brAWrjiv
+ RKbmggDj6JdHRx5YJA0pkwb0bsZLPKkAdq/02VHtrxrROTEU+3Wml2U2CmGVs0gqLTyy
+ W3RcDTTEehaToBqsEKRY9DWxUIQ9WQ59isF4jtwpahlxQ0v4Z3BfmT0bix/mi3rYrwiO
+ Jhdw==
+X-Gm-Message-State: AOJu0Yw7IC/rYQy+e+mmLnARhj6Oie0j+bAW5/BCoF9aj8EtWXZJv2co
+ rX4ZWUZqrZOLNrKwrTGpcLJI0L1TSwJvRxad82QV000R8dId/elQZ8qB919iJ4Uukly7OI0/WdV
+ ISHHTZHgKIxbbRVlh4UaaaLTkRu5tMqQjh7ylHWUgBDHreFZspkw5B2qvnZis852BF50=
+X-Gm-Gg: AZuq6aLgnYNPSv44pwxK/s0aRkccaZOAqUYiMl5XESa2+Ht7IHNSAuRcqovLhS5+scQ
+ mkgg0Dj/lE71/Dk886J+dfySXznbsukajBZhfxImkwgszili0SeesCLtIq0Vg+4kAjXgNggS+9a
+ /yp+Nkx8ztsoe9ZPh1hqPDNSDJc1Fb/azab8iDGKkJmWTr8omZBVg6JnBdvzypL2jr4h5Kq5Au/
+ yY73J9vNf4QwCoDJl2rD/J2sV0Gjsugcfd45qqaRQE2iLUQ+LbTLY+KNmk4wi3gMniFZw8IYJza
+ ZDxSGRgSVj1uJLeRpKuwZmOLvrDS5DP/GIdQfIpD/k9bhUJwyfia1KJAXxBWOQv03DnRYqRhs2j
+ LUeQI2UXUb0Dr9rbgSIy2DBdhFuCq10y5TllAYgk8uyvHhwOS16I/4fgDJkqkqtDK2Q5O6mOO4D
+ JY37VpQ3/i/6Y=
+X-Received: by 2002:a05:690c:734a:b0:794:b2be:f488 with SMTP id
+ 00721157ae682-794fe74782cmr35775867b3.36.1770246931533; 
+ Wed, 04 Feb 2026 15:15:31 -0800 (PST)
+X-Received: by 2002:a05:690c:734a:b0:794:b2be:f488 with SMTP id
+ 00721157ae682-794fe74782cmr35775757b3.36.1770246931156; 
+ Wed, 04 Feb 2026 15:15:31 -0800 (PST)
 Received: from SRS1720.corp.thinksrs.com
  (107-207-172-155.lightspeed.wlfrct.sbcglobal.net. [107.207.172.155])
  by smtp.gmail.com with ESMTPSA id
- 956f58d0204a3-649dc4b8034sm3739111d50.9.2026.02.04.15.09.38
+ 00721157ae682-794fefd00b5sm32657137b3.43.2026.02.04.15.15.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Feb 2026 15:09:38 -0800 (PST)
+ Wed, 04 Feb 2026 15:15:30 -0800 (PST)
 To: buildroot@buildroot.org
-Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
- Jakob Kastelic <jkastelic@thinksrs.com>
-Date: Wed,  4 Feb 2026 15:09:30 -0800
-Message-Id: <20260204230930.1596375-1-jkastelic@thinksrs.com>
+Cc: Jakob Kastelic <jkastelic@thinksrs.com>
+Date: Wed,  4 Feb 2026 15:15:27 -0800
+Message-Id: <20260204231527.1654719-1-jkastelic@thinksrs.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: uo3MJQd0mLoYz6NPHkud-Cm_452OeUURcXOipsxTnTs_1770246580
+X-Mimecast-MFC-PROC-ID: T-m56svB5YT4Wvvjik1US6TJfqgB0XspzAEGKUcTtRY_1770246932
 X-Mimecast-Originator: thinksrs.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=thinksrs.com; 
- s=mimecast20220819; t=1770246969;
+ s=mimecast20220819; t=1770247333;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding;
  bh=F8kQIyAmCQ9uUaLkGiGjRPpb+5eLTxwpaIBhhX8MGBU=;
- b=lCGtu2KdV2OYfzL3Y9eX0uSA7KdHotbGldYX2gRtoS/mQHFuxSfkTIGZqrydKCAEfvb94S
- vSKU+HUjhAND3urA1Z4P0pLFqg4VROUiZoE4+BZX7zjpxRnwmdCDr6ayY1lwzTVy3fkJ0E
- e/3uPjaLDwMcND3+6IMuZgsDcuBP9cU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=KWBAdBtmwdwvQcxKRCLBwPnZEyEGMvR33bR01mPSADy9ONNB6RDFbo/5mtxMevaf4jM4cM
+ QMSk2GrDrXGTx2dZSUmxXAjQDll9jXblO0P6RFeU52PWhqgFc0OucyTW77UJ7CW2yAJlkw
+ +bQcplY0Fg9UUCfJ9ArHKwJYjB31WUI=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=thinksrs.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=thinksrs.com header.i=@thinksrs.com header.a=rsa-sha256
- header.s=mimecast20220819 header.b=lCGtu2Kd
+ header.s=mimecast20220819 header.b=KWBAdBtm
 Subject: [Buildroot] [PATCH 1/1] optee: bump to 4.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
