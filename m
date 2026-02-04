@@ -4,88 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF96CE9D40B
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 16:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F809E9D409
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 16:24:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89BDD60A63;
-	Wed,  4 Feb 2026 16:22:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EA0860E20;
+	Wed,  4 Feb 2026 16:24:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zdmToY1e_OdV; Wed,  4 Feb 2026 16:22:02 +0000 (UTC)
+ id CENXBLl4yDEh; Wed,  4 Feb 2026 16:24:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D8DA60DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07A5560F0A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770222122;
-	bh=HQRFKxe1GwLk9RZNF8QRR2AhJHs6ixltBH92wv3lsMo=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=d7AthjP6VmfjM6QrZRebdmrrBpeic2jI6qSov/B+bd8yS6EUvDOipwlUa4s0vKLwD
-	 RJR7HkDBCqGx1ZWO40uzMWeLkft8Cei174XcefZ98WmEBl/b5pBuHu6GlkQBVIY8dT
-	 TRzQ50KrAPu2PrWY4doU6hmPNjvrgdL7aHH+ZngeTjiPqmh+IENrAaQ6GWEIgYmlnK
-	 eXmSs7zFGQna5Kdip53X3cY8Ev5Pg/SjNHiF/OEAHVOwC9Da1lkpqaCCMZU1RgatFO
-	 Dot+PZN5ZcKN0zOgBTEcjexbCUcNar8bLSIja6UTsF6u4RuIJF3uqYcn8G2KJdhGpR
-	 1Jx/bcNAnYreA==
+	s=default; t=1770222267;
+	bh=D0AUhqdub3Ge4duoQG4JYGjzw9iWSuUludz3mM93Cx0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=fnH2HzwnF8Djw0h5AA9eYbRWTRToIjXPQKRYcd5HeglJOsz+sineSO7T6VE0mKWdw
+	 NTseuaSWV+nK5bYTj3/ogdisTLLL/e7jLJcPPfeRRRh0jYN5U1Nv77yCVvUjpUgDXm
+	 2Ab9I5dcdcvz5ZvyHOBMVEw1fzoNEoubmLKOhj6zQZneKp/tVQwC/A4V5LbiaNmaGy
+	 lVumo6vJAg9nJnHNnaJ0OCdYyN5Lmpkcc8oha3akjmrD7yXPzldymttRieMqWh6KDM
+	 +IevYRyEFEpcljC3c1YvDq0ivYmsQOivDkIldHrbxxDtDcZrcHx8ziyAJOxS4vULon
+	 8ky+FCNWwa6aQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D8DA60DED;
-	Wed,  4 Feb 2026 16:22:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BEACDF5
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:22:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07A5560F0A;
+	Wed,  4 Feb 2026 16:24:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F197F5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A173960DED
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:22:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C4BE405B2
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:24:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RL5c0_XmwJMo for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 16:22:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VAgsFUa9OqeA for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 16:24:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C553160A63
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C553160A63
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C553160A63
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:21:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B4D66402DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4D66402DB
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4D66402DB
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:24:24 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 4C04A1A2BEA;
- Wed,  4 Feb 2026 16:21:57 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 55083C24381
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 16:24:27 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0FF6F60767;
- Wed,  4 Feb 2026 16:21:57 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 82F9160705;
+ Wed,  4 Feb 2026 16:24:21 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 35FA5119A865B; Wed,  4 Feb 2026 17:21:55 +0100 (CET)
-Date: Wed, 4 Feb 2026 17:21:55 +0100
-To: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
-Message-ID: <aYNvzzbE_lY8YybW@windsurf>
-References: <20250911212752.266940-1-alex.bennee@linaro.org>
- <20250911212752.266940-5-alex.bennee@linaro.org>
+ with ESMTPSA id AFC99119A8891; Wed,  4 Feb 2026 17:24:20 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Wed,  4 Feb 2026 17:24:10 +0100
+Message-ID: <20260204162412.159086-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250911212752.266940-5-alex.bennee@linaro.org>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1770222116; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=ge+BgpiDOO1wvt25/vBfkX5SZBXJtN1kJ1JY/lbBOrw=;
- b=lGuZD6qTq9ODzGuVtL6rItbY5sfCMp9yAFoenYWXk/D5Z96lJyOb/0WiEwkTcFUnaJXnHC
- 2zqcSvUcbLk223ZpxRttD4D20Lxuk2Lxl7WtLTyfXVhGpoBXYfaJX75N0hT/FyH0wMDboQ
- o85rckNJ4QJ/wh1aBzSCFw5ZRjG2ByvF9sz/DHT6t8WQdZ47fFvpjCLgYIiL6V7lAGI2NV
- 4Wu5Gu5hhIdpAI2Kqvra7QFPgmexPMGY2vD9MSHOcLxmyWSU5ueMJny+9fo9nsrBDTShwQ
- DdkzHdLIJ5bqEFny/mYgEcHUqnjjhp/uWTfXNJqtf5aHcuJtDEe+QUxmVJCqJA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1770222261; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=XnybFu9al8laQ2jN1hfetqsrb3lBLtM59PjI9dGYrTI=;
+ b=d8i002rUDBmpojbeX5XBmTQPyrPj8aiHDz8TCarXjbz7GIRxHwI8ofXKF05PpI8tutHdxB
+ Lw/aFvpu1nFdx5xQpkRwJcRjnvu7FXT4A1kkiCIBQqjfyEdWsEFh1rVYdh2Y5hGAUksCaa
+ CYqsNgQYV87nzs+ZaVxMa9yn+BzLLP2jqtma7N1AA6lpKs8o/cllqlm+sR/3vtmBVJFrcA
+ o7YLqAMq+6bWHE5DZC8T6ghFhMtjpNwSUpjmlG+JdhPuqzk/sPSvYY+hk499w0BR1Rjooi
+ RY5LgFxeYYK3ymB1OEhn3FDh1hmmTUlNT9M7RWFiXQIDYV3GUUcEjBqoTlc0TA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=lGuZD6qT
-Subject: Re: [Buildroot] [PATCH v5 4/9] package/qemu: introduce kvm and tcg
- system options
+ header.s=dkim header.b=d8i002rU
+Subject: [Buildroot] [PATCH 1/2] package/uclibc: rename
+ UCLIBC_INSTALL_UTILS_STAGING to UCLIBC_INSTALL_HOST_UTILS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,63 +93,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alex,
+The UCLIBC_INSTALL_UTILS_STAGING is really badly named, as it doesn't
+install anything to STAGING_DIR. Instead, it installs the host variant
+of ldd and ldconfig into $(HOST_DIR)/bin. Therefore, rename it to
+UCLIBC_INSTALL_HOST_UTILS.
 
-We have finally applied your patch, with a few tweaks, see below.
+This is important as a follow-up commit will re-introduce a
+UCLIBC_INSTALL_UTILS_STAGING variable which really installs things
+into STAGING_DIR.
 
-On Thu, Sep 11, 2025 at 10:27:44PM +0100, Alex Benn=E9e wrote:
->  if BR2_PACKAGE_QEMU_SYSTEM
->  =
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uclibc/uclibc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +config BR2_PACKAGE_QEMU_SYSTEM_KVM
-> +	bool "Enable KVM system virtualisation"
-> +	default y
-> +	help
-> +	  Say 'y' here to enable a QEMU with KVM support.
-> +	  If unsure, say 'y'
-> +
-> +config BR2_PACKAGE_QEMU_SYSTEM_TCG
-> +	bool "Enable TCG system emulation"
-> +	default y
-> +	help
-> +	  Say 'y' here to enable QEMU binaries which can emulate foreign
-> +	  architectures using the TCG JIT.
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index e1cf12fa68..dea5445b16 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -463,7 +463,7 @@ endef
+ 
+ # STATIC has no ld* tools, only getconf
+ ifeq ($(BR2_STATIC_LIBS),)
+-define UCLIBC_INSTALL_UTILS_STAGING
++define UCLIBC_INSTALL_HOST_UTILS
+ 	$(INSTALL) -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/bin/ldd
+ 	ln -sf ldd $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-ldd
+ 	$(INSTALL) -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/bin/ldconfig
+@@ -478,7 +478,7 @@ define UCLIBC_INSTALL_STAGING_CMDS
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
+ 		install_runtime install_dev
+-	$(UCLIBC_INSTALL_UTILS_STAGING)
++	$(UCLIBC_INSTALL_HOST_UTILS)
+ endef
+ 
+ # Checks to give errors that the user can understand
+-- 
+2.52.0
 
-If both options are disabled, no qemu binary is built at all. The
-build doesn't fail, but it means that existing packages, such as
-libvirt that select qemu + qemu-system might be confused. So we've
-added a select BR2_PACKAGE_QEMU_SYSTEM_TCG if
-!BR2_PACKAGE_QEMU_SYSTEM_KVM under the BR2_PACKAGE_QEMU_SYSTEM option,
-ensuring that at least one of the two gets enabled.
-
->  config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
->  	bool "Select individual emulator targets"
-> -	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
-> +	depends on BR2_PACKAGE_QEMU_SYSTEM_TCG || BR2_PACKAGE_QEMU_LINUX_USER
->  	help
-> -	  By default, all targets (system and/or user, subject to the
-> -	  corresponding options, above) are built. If you only need a
-> -	  subset of the emulated targets, say 'y' here and enable at
-> -	  least one target, below.
-> +	  By default, all targets system targets are built when TCG is
-
-This updated only accounted for TCG, but this option also appears for
-user-mode emulation. So we've simplified since to "By default, all
-system targets are built".
-
-Applied with those changes, thanks!
-
-Thomas
--- =
-
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
