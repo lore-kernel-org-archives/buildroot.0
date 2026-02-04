@@ -1,89 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60F0AEA7943
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 20:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DBEEEA7946
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 20:33:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C13E825DF;
-	Wed,  4 Feb 2026 20:06:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3EB940988;
+	Wed,  4 Feb 2026 20:33:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTb37sLIEXyr; Wed,  4 Feb 2026 20:06:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WtIHiUwGjsYa; Wed,  4 Feb 2026 20:33:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3951083641
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 010AE407BB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770235564;
-	bh=3QnPHpWccKEgYSTdrU2e4LSLZSjVmHuuLETPIu58DUI=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=WTZcFkdwXGmRi2hlXG98yOWqVl+2haXZPqzYi/gyDB8ZNdOFH1NF6gFh17x00O3qs
-	 gYaxIIP4uWqIs71ugqUJsHhGIiDECSSrMjEMWrBTxKqhQWA6ULDwCruRtV8aYINOlg
-	 dRkDOTHVVvKOYddzv69a53t0WOt1MKixAtlxNNC+7Lb6IDY4MpwFz5byCPGQ7Qrt+d
-	 7u27W9SNx6VT3DYOk99xKow/YFWuwC7NSVQF4gz+Co1lL6gv5djjeUzVol4v+MLJn3
-	 kMSMJyhD0fwMwcyFca5c2cGLif8Q0KIFkFGWn6TNfgc4AtDPZB5UMYczajIvkTQMWP
-	 w65ZbSvCiYIVQ==
+	s=default; t=1770237186;
+	bh=+T/GuYHwMl6GYVQPvGx57r8TlAgK1ROzCRtJ2E5sL5E=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=DCTiLRC5lCJ/7aEYqe/0QMkZ8RCKXwOErENDYd0OnB2dLLtfrvmtZu93V7nqsi2X5
+	 ASESWA5EmNqOyBb+zdkk3TjXv5ksD9zH+qFR0M/GDFmpw9+e6oTvn0HlO3DBwZ3DrO
+	 V4Tr5QYxnDEf7ngHi87MdEMi6xdeqrdJvPM48nwwaTU6u5IA4pNO/TW3VpzleQKXGs
+	 KLNgvH64Oc9FJPkGrGMEiBEU0BfL2ZYQLr9+69iphw8i5+Bi9iMDc6Twjm/eLgvcxI
+	 cQwuCQOxQVGaHiWwkgR6gjiGrCCXPLB/dinH+jD3Cc6SkcPMZierDxhta4y1Nwjdmu
+	 yvsXB1jmnPTSQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3951083641;
-	Wed,  4 Feb 2026 20:06:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5CACA17A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:06:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 010AE407BB;
+	Wed,  4 Feb 2026 20:33:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08D03F5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55F8660E07
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:06:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB0F44042B
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:33:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fB9m7dVPlTpf for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 20:06:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E8B3160AF9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8B3160AF9
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E8B3160AF9
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:05:59 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5408CA4C565A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 21:05:45 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42250)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vnj8D-000000008Jp-0qts
- for buildroot@buildroot.org; Wed, 04 Feb 2026 20:05:45 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PaVLLuJDtBW1 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 20:33:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
+ envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AEC874033C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEC874033C
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AEC874033C
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:33:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 8E8C51814B9; Wed,  4 Feb 2026 21:32:58 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed,  4 Feb 2026 21:05:44 +0100
-Message-ID: <20260204200544.3753631-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260204200544.3753631-1-bernd@kuhls.net>
-References: <20260204200544.3753631-1-bernd@kuhls.net>
+Date: Wed,  4 Feb 2026 21:32:47 +0100
+Message-ID: <20260204203250.3141089-1-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1770235545;
- bh=G/zbkMY8A4MI+/3nFRgo/m1yP0P1XoPJXrEj85yZgKw=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=rQ5Dacn8LUdip7ziYf7/ZI4tpQnGqZbzUHVwCWg7ZfGUnvhKF0PSIXxumFjbe1sKO
- MSs2qF+FWuzE3zX4N/FvDFJNxHVyDhWIo+VrUWCp0JCzqurKLVYHKr+mx/sDcn99vI
- WFfhF1CCEswcltPSvU8hRKpKHD570tPWL/J3EpLExBAxwhWYTJQCbsp5kg8QUk8eK9
- ea6JuwbzbVMtH01t3EIFlUvK72qnTG+5j/Vyih3Rm9vRN0/2+uz9szKPSw9SEjCQ5U
- vBHvSdLjHcHMCSVi0JzWjiC3XbDt1qGUpmIrupInLbtHNndQ14UiFDMFMjWo7J21di
- Qt5i/Uf5+bv4Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=rQ5Dacn8
-Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-mythtv: bump version to
- 21.2.14-Omega
+ d=heine.tech; s=dkim; 
+ t=1770237179; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=sfDpP1xNOWclrs2Aqhhv1R/x7DzBx9fwdSmRlUTaiU0=;
+ b=ujCvbouxGGhss2GVntqwvUlXYu5oteXIx5CKbfBKPos6vUZEAEYA3rK7wRos/2epegDFfc
+ zicyedsVedvv9y2ptoGlgy7RmWYkartldm25GkDykBl6tRmyF601vBjGxGbCCaRGZsr+i6
+ FMlGPgEO255PXTNTM7KcA/iWifatdNs=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=ujCvboux
+Subject: [Buildroot] [PATCH] package/gqrx: drop boost dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,43 +81,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/janbar/pvr.mythtv/blob/21.2.14-Omega/pvr.mythtv/changelog.txt
+gqrx only used boost to support older versions of gnuradio since v2.12 [0].
+it dropped that support entirely since v2.16 [1].
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+So with the bump to v2.17.7 in 6cf4f6cdb663d224bef0b96fedc183b27781a28b
+this dependency can be removed.
+
+[0] https://github.com/gqrx-sdr/gqrx/commit/43931aa5860932832d52e4e42cbca47bb0a412ba
+[1] https://github.com/gqrx-sdr/gqrx/commit/5052dbc060076a5b3883ab823ec3fd2e327a42dd
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gqrx/Config.in | 2 --
+ package/gqrx/gqrx.mk   | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index dcb363a095..a8b6ca79b6 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8cec35fe171a388fa9eab4366d5e1f6fcca869a995bc3ea4e3566a38a2db75c4  kodi-pvr-mythtv-21.2.3-Omega.tar.gz
-+sha256  c34a54d06aefef1c4c250ab766c459becc1fdaf42782da75cf749b71585bf6dd  kodi-pvr-mythtv-21.2.14-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index d4c70013cc..78ea3041b7 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index 25a8a77d2f..f2ad2197b4 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -24,8 +24,6 @@ config BR2_PACKAGE_GQRX
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # gnuradio -> boost-atomic
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # gnuradio
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
+-	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_GNURADIO
+ 	select BR2_PACKAGE_GNURADIO_ANALOG
+ 	select BR2_PACKAGE_GNURADIO_AUDIO
+diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
+index 745edad959..6e64649985 100644
+--- a/package/gqrx/gqrx.mk
++++ b/package/gqrx/gqrx.mk
+@@ -8,7 +8,7 @@ GQRX_VERSION = 2.17.7
+ GQRX_SITE = $(call github,csete,gqrx,v$(GQRX_VERSION))
+ GQRX_LICENSE = GPL-3.0+, Apache-2.0
+ GQRX_LICENSE_FILES = COPYING LICENSE-CTK
+-GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr libsndfile qt5base qt5svg
++GQRX_DEPENDENCIES = gnuradio gr-osmosdr libsndfile qt5base qt5svg
  
--KODI_PVR_MYTHTV_VERSION = 21.2.3-Omega
-+KODI_PVR_MYTHTV_VERSION = 21.2.14-Omega
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
+ GQRX_CONF_OPTS = \
+ 	-DFORCE_QT5=ON \
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
