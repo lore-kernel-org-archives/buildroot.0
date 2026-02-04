@@ -4,80 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDFACE95397
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:35:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964D8E95396
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CAC960BD9;
-	Wed,  4 Feb 2026 12:35:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A04C60A80;
+	Wed,  4 Feb 2026 12:36:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tB5aUjF3igu5; Wed,  4 Feb 2026 12:35:26 +0000 (UTC)
+ id SizRhPfVhW23; Wed,  4 Feb 2026 12:36:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7111760B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6046660AB7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770208526;
-	bh=z7XzmtCbqRJFakLM4fFEYtnANL8EJyvrnV21Ki+WCm8=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1770208578;
+	bh=woQdqYQr1hrQb621du5nYDpu8D2c7ZQhbuAX27GvttM=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=hONOnXn/VGOJFk9vyT2R2ppqsUnrb0M2PDg3PZGZj49eVDRlKix5+nPs4OAJqAxQN
-	 tGIVg1tg0SQrypQN4UmOWejAWp02egOyncwFOAW4XdpFrrHjVtsJqNIC9wyqEqJYrX
-	 LktdmANfh0PFmKSGmsB12b0uW7qzPdG0iOeK/hm2cYX2WIIKHu4Q995yvPl9SCuO90
-	 FQ9FfCdcKe8vqFCurpesk5UlYmZaKZu/uENPFvzvoxj/eUmA010v5+kxk9lP5jMkr1
-	 JeS+bFsFQvURrQ6DB5iQrfRzK3z2xFuRdD+zz4fhp7gx/WnKxlBzpYQspa7tiOiHj7
-	 M/NaS5axZWM2Q==
+	b=aLlb/n+oJffhvoJyFSBONjYL79VW28PeAHgho4m8pdDSDxk37B/MrN5GIK+DNbTX8
+	 +DGbWE6wIoE6SluRk8yyROStNUo/u/75yZ85P9NZGC55+4+83F9iIZvkCTIwQTCnBZ
+	 /P/TUyT+f/byw29L0x6T9m7xkxsgp+HCV0dSD1cBiEBtSOOIviWYjw0PhKd+UmBeNF
+	 eUBAntjXDp6Op+ljPH5vtOlBLwy3jKlWsHkGXJ5uPjsLUn0K1smuylUgWCjVywXBIl
+	 CA7qHiPxHAoxwm9YRIBBImpAtIFEZiR8jtGm0NuB16FK71GbT/3yNXpJYg0A7iwjjN
+	 bZEWu1k76LCKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7111760B74;
-	Wed,  4 Feb 2026 12:35:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 58A2D173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:35:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6046660AB7;
+	Wed,  4 Feb 2026 12:36:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48162F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46E76405F7
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:35:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3371E40363
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:36:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iaQ6DVzkRqd7 for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 12:35:24 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 63CF5405F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63CF5405F0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 63CF5405F0
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:35:22 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 25986BDE3A79;
- Wed, 04 Feb 2026 13:35:19 +0100 (CET)
+ id qFoT6tVPcZs1 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 12:36:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.50;
+ helo=mail-wr1-f50.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CAF53400FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAF53400FB
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com
+ [209.85.221.50])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CAF53400FB
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:36:15 +0000 (UTC)
+Received: by mail-wr1-f50.google.com with SMTP id
+ ffacd0b85a97d-432d28870ddso472796f8f.3
+ for <buildroot@buildroot.org>; Wed, 04 Feb 2026 04:36:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1770208574; x=1770813374;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=nqtz78UQTskiyV66z8c6TXHsZlVav3zvjGq4N6eC5h0=;
+ b=mnfYiRL5K2cOm4wXoeUrWFogw/bhXl7B8LPjWLrq/RYvqag5O71VLkDWO/X2jYMzQn
+ 5XWhDZaEroNIKBaTJR49u5Di6qOJxLXBRofnw6EjtoxN3WnH9nWM0VLbGTxBpqmT77yG
+ LA24NbaX1GtCbszwcD1SQiJwSaTJet5l1rfNocHA8tn2Ko+nTv0ZFOagoW5cR7JqAPVG
+ oJE81na2hmCyY8+nFnyFQANHxQV0e6Gl2M852fFRoqd3TJ2oSXeulbmarJCa3O/KnB7m
+ 0zzJe6OMOryOK3u0kKimOWAhCbsUWcyNLCl/7+QSw6YWA/L/x1fdIoPpOcNC1yFyk3vc
+ iMDg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWJcq2iwdWmEVvvC1byjfh2af26nwgYnexsL701MVjWSLzwjUehbvcV9Wcx+lljN6qYc8fxrKV/MGU=@buildroot.org
+X-Gm-Message-State: AOJu0Yw0Q7Zb1pv2NlliQ9pZynFm2QZ1qhiQE02WD/6e9zu46pxN3jwS
+ iv+9uZ8EpOAleNRqJ7Y7x+Pc+zEbwN7MNNQVHYj2c1Y05tqj/jGFxtp+
+X-Gm-Gg: AZuq6aK9sSY1TJVMt76Ph4gAdZfXpYG+l518NOL/WtZYDYyBy/mQlnoNz+xlz35ZrpF
+ MafRNa5V2HGy57EmDQ3wvTW2aOihQO+rlDrPJOgJ+TkOVkozOu4dRSKdsWal+c+92UMuKpYL5gI
+ 8mGghyX73uD/oR1Q4gzFFG8tnPzC4GRx3zFN4Ehhro4N3YJK/mUGA8j37mlWj7kgr0qoOrePZ17
+ f8md0pkw6xZzKJOzwlLU6oacrK82R3cwDFnOpNxyMFgvdC1vUiQprE2HaHCv1zN9we6EnK3ZPVs
+ NNvIpfluCE0BTV2JaWsG/ryKZ+qhdr6w7rbmCB+zuPwy3MFH5kNhd6Mb7RLcedxPs7CA12Tqvoj
+ NyqVf/ozPgZ99zSONS+ZXKO2Kej3Uz4AXU9XpLtrrNM72TxLLmoPE0nw70BWMOXe6bgQeMu0J6U
+ 77UsETcj0+Ybvz+iWKv6i/KM2FZLjrcrXdEif9sOM7sT8OMeaAN3y2Hj4zrhyOcoyCHCNGCm/dC
+ zvWaoJQbCSDgZpLkQ==
+X-Received: by 2002:a05:6000:400d:b0:435:e3c6:554d with SMTP id
+ ffacd0b85a97d-43618059d02mr3672580f8f.52.1770208573279; 
+ Wed, 04 Feb 2026 04:36:13 -0800 (PST)
+Received: from KORLIN44614.. (host-109-89-232-55.dynamic.voo.be.
+ [109.89.232.55]) by smtp.googlemail.com with ESMTPSA id
+ ffacd0b85a97d-43618064813sm6338305f8f.38.2026.02.04.04.36.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 Feb 2026 04:36:12 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: thomas@devoogdt.com
+Cc: bernd@kuhls.net, buildroot@buildroot.org, romain.naour@gmail.com,
+ romain.naour@smile.fr, thomas.devoogdt@barco.com,
+ thomas.petazzoni@bootlin.com
+Date: Wed,  4 Feb 2026 13:36:09 +0100
+Message-ID: <20260204123609.3607193-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CACXRmJgF31hdsS_wY2tt6ok=CqMXbWwmy227s42jPw_tOZcPyw@mail.gmail.com>
+References: <CACXRmJgF31hdsS_wY2tt6ok=CqMXbWwmy227s42jPw_tOZcPyw@mail.gmail.com>
 MIME-Version: 1.0
-Date: Wed, 04 Feb 2026 12:35:18 +0000
-From: Andreas Ziegler <br025@umbiko.net>
-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Cc: buildroot <buildroot@buildroot.org>, guenther.harrasser@mobileye.com,
- Vladimir Kondratiev <vladimir.kondratiev@intel.com>, Chris Packham
- <judge.packham@gmail.com>
-In-Reply-To: <mailman.20273.1770054247.2009750.buildroot@buildroot.org>
-References: <mailman.20273.1770054247.2009750.buildroot@buildroot.org>
-Message-ID: <838e68729209415796298901bc72a55d@umbiko.net>
-X-Sender: br025@umbiko.net
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1770208519; bh=TIc9hB5ZvCobqXBaqxCfwJlMl06de+WhelDttbBtUCc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=B+UsPX4yFU9WgWxhch+x9x3hkvMdYn06TMtjP1mnvEFDV9QMRlV26H4a8DAkPQiqN
- c00I1fcOvp0viEDNZQdMR1j56vgcHPc9NxQjLpoIyHaF/2loxwbUEzz+EBYIUPEVZ6
- 9CvMJ7NjTMiWKqj04QOcNw9gO1iRTaCtX+QJYnFI=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=B+UsPX4y
-Subject: Re: [Buildroot] [PATCH] package/coremark: port for mips-i6500
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v3] package/mesa3d: fix compilation with
+ host-llvm enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,148 +112,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jimmy, all
+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-[add Chris Packham -> DEVELOPERS file]
+Meson's custom LLVM parser uses llvm-config with a default search path of
+/usr/bin, causing it to detect the host system's llvm-config (version 18.1.3)
+instead of the buildroot-compiled one. This forces all LLVM-related packages to
+match version 18.1.3, but since the host system lacks llvmspirvlib, the build
+fails. This patch forces Meson to use the buildroot-compiled llvm-config.
 
-This change is normally something that would be handled in a private 
-overlay (e.g. BR2_EXTERNAL). Also Buildroot will never pick up these 
-modifications, unless you also add logic to 
-package/coremark/coremark.mk.
+Note that LLVM_CONFIG is a CMake option, not a Meson one. This is because
+Meson has custom dependency resolution logic for LLVM (see
+https://mesonbuild.com/Dependencies.html#llvm). The EXTRA_BINARIES mechanism
+cannot be used here, as it only applies to cross-compilation scenarios, which
+does not apply to host-mesa3d builds.
 
-More remarks below:
+Reproduction (On BR2 tag: 2025.05.3):
 
-On 2026-02-02 16:53, Jimmy Durand Wesolowski wrote:
-> 
-> Compile for MIPS I6500 CPU 64-bit, with all compiler flags as
-> recommended by MIPS
-> 
-> One missing flag -s "-Tmsym32.ld" since linker script
-> "msym32.ld" does not exist in the MIPS toolchain
-> 
-> Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> Acked-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-> ---
->  .../0001-skeleton-for-mips-i6500.patch        | 804 ++++++++++++++++++
->  ...iler-flags-customized-for-mips-i6500.patch |  35 +
->  2 files changed, 839 insertions(+)
->  create mode 100644 package/coremark/0001-skeleton-for-mips-i6500.patch
->  create mode 100644 
-> package/coremark/0002-Compiler-flags-customized-for-mips-i6500.patch
-> 
-> diff --git a/package/coremark/0001-skeleton-for-mips-i6500.patch 
-> b/package/coremark/0001-skeleton-for-mips-i6500.patch
-> new file mode 100644
-> index 0000000000..e71dc980c8
-> --- /dev/null
-> +++ b/package/coremark/0001-skeleton-for-mips-i6500.patch
-> @@ -0,0 +1,804 @@
-> +From c8f187ca290e65f9d6b14ef5ad57fa61f7f8b95f Mon Sep 17 00:00:00 2001
-> +From: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> +Date: Wed, 27 Feb 2019 09:55:55 +0200
-> +Subject: [PATCH 1/2] skeleton for mips i6500
-> +
-> +port for mips-i6500 created, copied from linux64
-> +
-> +Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> +---
-> + mips-i6500/core_portme.c   | 336 
-> +++++++++++++++++++++++++++++++++++++
-> + mips-i6500/core_portme.h   | 291 ++++++++++++++++++++++++++++++++
-> + mips-i6500/core_portme.mak | 140 ++++++++++++++++
-> + 3 files changed, 767 insertions(+)
-> + create mode 100755 mips-i6500/core_portme.c
-> + create mode 100755 mips-i6500/core_portme.h
-> + create mode 100755 mips-i6500/core_portme.mak
+BR2_x86_64=y
+BR2_x86_atom=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_LLVM=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
 
-A more elegant way to create the baseline would be to add an appropriate 
-rsync command to COREMARK_POST_EXTRACT_HOOKS.
+Fixes:
 
-<patch body removed>
+llvm-config found: YES (/usr/bin/llvm-config-18) 18.1.3
+Run-time dependency LLVM (modules: bitwriter, core, coverage, engine, executionengine, instcombine, irreader, libdriver, linker, lto, mcdisassembler, mcjit, native, option, scalaropts, target, transformutils, all-targets, coroutines, frontenddriver, frontendhlsl, lto, windowsdriver) found: YES 18.1.3
+Dependency LLVMSPIRVLib found: NO. Found 15.0.0.0 but need: '>= 18.1' ; matched: '>= 15.0.0.0', '< 18.2'
+Run-time dependency llvmspirvlib found: NO (tried cmake)
 
-> diff --git 
-> a/package/coremark/0002-Compiler-flags-customized-for-mips-i6500.patch 
-> b/package/coremark/0002-Compiler-flags-customized-for-mips-i6500.patch
-> new file mode 100644
-> index 0000000000..1fdef1f300
-> --- /dev/null
-> +++ 
-> b/package/coremark/0002-Compiler-flags-customized-for-mips-i6500.patch
-> @@ -0,0 +1,35 @@
-> +From 59542343c82a936326345455036d33ba30a646c5 Mon Sep 17 00:00:00 2001
-> +From: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> +Date: Wed, 27 Feb 2019 10:05:52 +0200
-> +Subject: [PATCH 2/2] Compiler flags customized for mips-i6500
-> +
-> +Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> +---
-> + mips-i6500/core_portme.mak | 7 +++++--
-> + 1 file changed, 5 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/mips-i6500/core_portme.mak b/mips-i6500/core_portme.mak
-> +index 5cfabee32658..8e0ac11d7854 100755
-> +--- a/mips-i6500/core_portme.mak
-> ++++ b/mips-i6500/core_portme.mak
-> +@@ -24,13 +24,16 @@ OUTFLAG= -o
-> + CC = gcc
-> + # Flag: CFLAGS
-> + #	Use this flag to define compiler options. Note, you can add 
-> compiler options from the command line using XCFLAGS="other flags"
-> +-PORT_CFLAGS = -O2
-> ++PORT_CFLAGS := -DRTELinux -DITERATIONS=0 -DUSE_PTHREAD  
-> -DMULTITHREAD=4
-> ++PORT_CFLAGS += -O3 -funroll-all-loops -falign-jumps=16 
-> -falign-loops=16 -falign-functions=16 -finline-functions 
-> -finline-limit=1000
-> ++PORT_CFLAGS += -fgcse-sm -fgcse-las -EL -mtune=i6500 -mabi=64 -mmsa
+output/build/host-mesa3d-25.0.6/meson.build:1882:21: ERROR: Dependency lookup for LLVMSPIRVLib with method 'pkgconfig' failed: Invalid version, need 'LLVMSPIRVLib' ['>= 18.1'] found '15.0.0.0'.
 
-Why not use the project's CFLAGS? You might always wonder why the rest 
-of the stuff is so much slower than the coremark score suggests ...
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+v3: Added reproduction info.
+    Actually, I saw the issue first on 2025.02.x with these commits cherry-picked:
+    - 317260f336b65ff0b41a953882cb8cccb789e010
+    - 8b5dd49c5b2eb52e71ba9dff67b1ba54d0e00ac3
+    - 4890415aa9e918bdbb52414e0e53f29e93315291
+    - b08bc5b9e94269adb4a1c5771c8c26c8c87e5b5a
+---
+ package/mesa3d/mesa3d.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> + FLAGS_STR = "$(PORT_CFLAGS) $(XCFLAGS) $(XLFLAGS) $(LFLAGS_END)"
-> + CFLAGS = $(PORT_CFLAGS) -I$(PORT_DIR) -I. 
-> -DFLAGS_STR=\"$(FLAGS_STR)\"
-> + #Flag: LFLAGS_END
-> + #	Define any libraries needed for linking or other flags that should 
-> come at the end of the link line (e.g. linker scripts).
-> + #	Note: On certain platforms, the default clock_gettime 
-> implementation is supported but requires linking of librt.
-> +-LFLAGS_END += -lrt
-> ++LFLAGS_END += -lrt -lpthread -static
-> ++#-Tmsym32.ld
-> + # Flag: PORT_SRCS
-> + # Port specific source files can be added here
-> + PORT_SRCS = $(PORT_DIR)/core_portme.c
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index db46d7bc7c2..b5300df2ba3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -292,6 +292,9 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION),y)
+ HOST_MESA3D_TOOLS += imagination
+ endif
+ 
++HOST_MESA3D_CONF_ENV = \
++	LLVM_CONFIG="$(HOST_DIR)/bin/llvm-config"
++
+ HOST_MESA3D_CONF_OPTS = \
+ 	-Dglvnd=disabled \
+ 	-Dgallium-drivers=$(subst $(space),$(comma),$(HOST_MESA3D_GALLIUM_DRIVERS-y)) \
+-- 
+2.43.0
 
-Shouldn't pthread and static normally come from the Buildroot 
-configuration?
-
-Unless the sequence of library includes is significant (PORT_CFLAGS ... 
-LFLAGS_END), you might just override PORT_CFLAGS and be done.
-
-COREMARK_CFLAGS = \
-	$(TARGET_CFLAGS) \
-	-DUSE_CLOCK=1 \
-	-DMEM_LOCATION='\"initramfs\"'
-
-define COREMARK_BUILD_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
-		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
-		PORT_DIR=linux EXE= link
-endef
-
-> +--
-> +2.19.1
-> --
-> 2.43.0
-
-Kind regards,
-Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
