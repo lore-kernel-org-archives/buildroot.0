@@ -1,79 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BCFBE9539B
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 13:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7C1DE9539A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 13:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CFC060C07;
-	Wed,  4 Feb 2026 13:25:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F51A40C8D;
+	Wed,  4 Feb 2026 13:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iODsB-ftl0ch; Wed,  4 Feb 2026 13:25:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JYnHHgFlpuVo; Wed,  4 Feb 2026 13:30:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B22860D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9495E40C96
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770211502;
-	bh=WuJMwpqh3QI5qms9HRymgrYYQidb7VwpCHOu2/8DSp4=;
-	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=rwfnWD6NZbemCzP+rTv957wJsdrPSmbZ5bxB5CPtYiiV+GaZZVS39Z7US+0ac+Kkv
-	 Xtr720cu3JdxtvL3Y8I0u29eAIdyGhyrOdm5aMGSOI3NBJu16t/GWJnkVn37Nr+VLJ
-	 85XgOPu9C30zcG5RDtYj7jMfkzkYGEZGjboRGI6HtSOVCdSc0RC3ikqXci3hUyRNCf
-	 trTTsvHDb5eu1mjNepWcVuCiT4ybuLlliqqe6jCHcB0Sj/0UpDYhwy5EUUgnc0K5Xn
-	 LHRvBwIYXEYj/b8vmaJF3l70RSGFe1ugeC9ass6kUMTvnEZuihzUa+5mRjOC5ACEYQ
-	 jXBi1ho08mHrA==
+	s=default; t=1770211844;
+	bh=TJaGdwmksAcGn6tHijlQLYFIKPd1IfVao8X4BrQxOtw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=BUDei6nUSLEQb69x6yABMKSI5G1Xz3AJdMSlXuDIlPuo3TtfsCcEWGQgbBoMNYPyT
+	 rf54rdXsNmbgrrhyeDMMSxLRbOt1skH8SJhk+f4Tsh6ElQ3kdU4NdqWug19cLGsNKy
+	 DX1pY6jUxKLq75Z50kCV/NghHvuy+LrCOFhH6U8yqfa038LJkeoSKvqvA6UduT9OJw
+	 1yrcHzZy75DdME4d+SMyz5HlIdSfXOyXQBsUusWoI/9QmBEvSSWFdpfN0PRzBdvKbP
+	 0c4DOo6Ctu0lFOhigut8zwYaFvA2qDHdOmDtViMeiyMCuCxstNUYu0hilpFgQZbsR1
+	 WUg4q46SLtgOg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B22860D5E;
-	Wed,  4 Feb 2026 13:25:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 253C8F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:25:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9495E40C96;
+	Wed,  4 Feb 2026 13:30:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93356F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:30:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 076C960D5E
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:25:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BF6F40C8D
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:30:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VWpSIFpGUXTS for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 13:25:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1FE1D60D50
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FE1D60D50
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1FE1D60D50
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:24:59 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 00D1131E0B83; Wed, 04 Feb 2026 14:24:57 +0100 (CET)
-Date: Wed, 4 Feb 2026 14:24:57 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Message-ID: <aYNIqX6Q7ujuS02V@waldemar-brodkorb.de>
-References: <aXOEn7q16Jh2oEax@waldemar-brodkorb.de>
- <0f4949da-8d9e-4e8f-8474-f4bbb2c7c164@bubu1.eu>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <0f4949da-8d9e-4e8f-8474-f4bbb2c7c164@bubu1.eu>
-X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1770211498; bh=Y/Et/WOg43FnbyolSSxwBRm8nC+Vnc3hMFmncvw4Ufo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iIX5rZEV1MH6ERUUgR9zcIakmnd0hdPt4z7AbWYTA/0F/qEMgP+4TuK57EBlDtwxs
- V7bU7OUAiNPXgd69rl1psavYk8Uc8at7tjQ21614hkVTrZEcTqiZODEuYtVxGenrvo
- 64rbNo2+s7UleQXOlUlrH6TmMiQSBgIERX0H3KAusKfjyDjE9bsM1iPRRMAy2YYVIn
- EoYPVefL4DTm4S3IxvvzNM2/QtLlVc7VRzRYsIYci62LZRghWBcdNEBH3c2LoFBylr
- K/+hREl9ruBUY5uziGYy5rVsVlon5hsbRg5DhU6zaMmRLYMvwNCupZwReLFY+g/qv8
- baFRs6nyIJuPQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: Re: [Buildroot] [PATCH 2/2 v3] package/strongswan: update to 6.0.4
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U5x6tEeMLLv2 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 13:30:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A893740C78
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A893740C78
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:30:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 972D6868F8; Wed,  4 Feb 2026 13:30:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Feb 2026 14:25:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5a63ee3c09e95bfd7afd7822a1a9254e361b940f
+X-Git-Newrev: 302a325f1f15d80aa0675841f50b2f8964680cb6
+X-Patchwork-Hint: ignore
+Message-Id: <20260204133042.972D6868F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/brotli: fix LoongArch64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,37 +68,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Marcus,
-Marcus Hoffmann wrote,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/302a325f1f15d80aa0675841f50b2f8964680cb6
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-> Hi Waldemar,
-> 
-> On 1/23/26 15:24, Waldemar Brodkorb wrote:
-> > See here for Changes:
-> > https://github.com/strongswan/strongswan/releases/tag/6.0.4
-> > 
-> > Enable minimal required kernel config options.
-> 
-> Is this actually related to the version bump? If not it should probably go
-> into a separate commit.
+Buildroot commit 473c9400a0c7be14e7eb8ba617697a76286915b3 bumped brotli
+to version 1.2.0 causing build errors on loongarch64. The build error
+does not occur with brotli 1.1.0.
 
-It is not, I just realized that Strongswan does not work without it
-for the defconfig I used.
- 
-> Also do you have a reference you can link to that documents the required
-> kernel options? Adding a comment to that would make updating the package and
-> re-checking the required kernel options easier.
+Fixes:
+https://autobuild.buildroot.net/results/57f/57f61a5fd17432bba05e4f1865f82cc2f4626d3c/
 
-I have no reference, I just added the options by try-and-error.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...sable-BROTLI_MODEL-macro-for-some-targets.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-best regards
- Waldemar
+diff --git a/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
+new file mode 100644
+index 0000000000..d35b4b3336
+--- /dev/null
++++ b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
+@@ -0,0 +1,46 @@
++From e230f474b87134e8c6c85b630084c612057f253e Mon Sep 17 00:00:00 2001
++From: Evgenii Kliuchnikov <eustas@google.com>
++Date: Mon, 3 Nov 2025 07:20:19 -0800
++Subject: [PATCH] disable BROTLI_MODEL macro for some targets
++
++PiperOrigin-RevId: 827486322
++
++Upstream: https://github.com/google/brotli/commit/e230f474b87134e8c6c85b630084c612057f253e
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ c/common/platform.h | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/c/common/platform.h b/c/common/platform.h
++index b59f9b809..e1254d5ca 100644
++--- a/c/common/platform.h
+++++ b/c/common/platform.h
++@@ -213,6 +213,10 @@ To apply compiler hint, enclose the branching condition into macros, like this:
++ #define BROTLI_TARGET_MIPS64
++ #endif
++ 
+++#if defined(__ia64__) || defined(_M_IA64)
+++#define BROTLI_TARGET_IA64
+++#endif
+++
++ #if defined(BROTLI_TARGET_X64) || defined(BROTLI_TARGET_ARMV8_64) || \
++     defined(BROTLI_TARGET_POWERPC64) || defined(BROTLI_TARGET_RISCV64) || \
++     defined(BROTLI_TARGET_LOONGARCH64) || defined(BROTLI_TARGET_MIPS64)
++@@ -665,13 +669,14 @@ BROTLI_UNUSED_FUNCTION void BrotliSuppressUnusedFunctions(void) {
++ #undef BROTLI_TEST
++ #endif
++ 
++-#if BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3)
+++#if !defined(BROTLI_MODEL) && BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3) && \
+++    !defined(BROTLI_TARGET_IA64) && !defined(BROTLI_TARGET_LOONGARCH64)
++ #define BROTLI_MODEL(M) __attribute__((model(M)))
++ #else
++ #define BROTLI_MODEL(M) /* M */
++ #endif
++ 
++-#if BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
+++#if !defined(BROTLI_COLD) && BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
++ #define BROTLI_COLD __attribute__((cold))
++ #else
++ #define BROTLI_COLD /* cold */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
