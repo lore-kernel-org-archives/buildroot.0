@@ -4,72 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D36A1EA7943
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 19:52:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04DECEA7943
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 19:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B43783806;
-	Wed,  4 Feb 2026 19:52:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1A8C8133C;
+	Wed,  4 Feb 2026 19:55:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kxOmQGda-_m4; Wed,  4 Feb 2026 19:52:13 +0000 (UTC)
+ id Sx3UPaiikZlx; Wed,  4 Feb 2026 19:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF37838B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3A75812FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770234733;
-	bh=gWtq5Np6ZMOr4J+gntYXYEBR66NdPXdf2/YXZfjWwRA=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=UFSqkEzRHIwI2+FzklsrqvLnA15Sufmgwc4sFiyn6e9Zby3cEN5/wcOT6tFoebtSS
-	 eHjyKp2QOADqJszpWBAx4kKof5K/kGNTsrha7we497Gd2kDQEGHv2MWDorCTTjalsI
-	 kaDEfkNqhzI5ymMO2NQblVkh7dsgCCKU63bqUBhbDEMFb1K7kAwRWC8f1FKkIEuRLn
-	 aVkyEzsFc383uSyBPnfL7/Y0lPB0mrCmNhlyaOQ1LoNtUeeRLAK3mweSYvJTSlABmN
-	 eza4MxK36fNkDt0na4jBIXkK7SeNvbQo2qaNrgHHUMhSPNy/vFJZpvyNWlMI1F5QBB
-	 clxN9Ubu6AMpg==
+	s=default; t=1770234909;
+	bh=nbuTKQEsG4a3W9WePphpNDiRDE6hykDv9afv+iKNcrs=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=b82CZqba1mrdXhrNhLfJVTw8JqNpvTOUkQeQC5msVQ7oRyYt6TkCxhKKH5Xr32xFp
+	 KBFAYi/FOLj2Sl5CifdAFwWhnHNxUQlOFer+Hd4WeJsEXQpm0mVzJuac6QKUVp1Wua
+	 L8vqLvRKVz4baYnAjTSwTKvEvCCh6eaK/c2U5fcmYsozDwk7kCIcK0T9zxT7swirGq
+	 Sd8bbEvIevv9Mj/uJzIf9kHLmZXDDMhFPFnXRyTI+XQ9Y9aULaookLRWhw/5jgp0/U
+	 5XM4Rdse1K5FijxyOTo3vTnXegx+N78BMX3F3/aFQPPdakUDInW3LX/BkGjsizEoQQ
+	 GpJH4MBsdyLpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAF37838B6;
-	Wed,  4 Feb 2026 19:52:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 54D5017A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:52:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3A75812FF;
+	Wed,  4 Feb 2026 19:55:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A8A35173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4052B838B6
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:52:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D4D84030F
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:55:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0JbxXgAJiqJ for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 19:52:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ED16983806
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED16983806
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ED16983806
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:52:10 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id B6CFE31E0C0A; Wed, 04 Feb 2026 19:05:58 +0100 (CET)
-Date: Wed, 4 Feb 2026 19:05:58 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <aYOKhsGmWtZsI5Xy@waldemar-brodkorb.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yyjmp1V1U94X for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 19:55:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 71B2A40275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71B2A40275
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 71B2A40275
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:55:05 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 76CCC4E423F6
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:00:08 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3011360705;
+ Wed,  4 Feb 2026 17:00:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 126F4119A865B; Wed,  4 Feb 2026 18:00:06 +0100 (CET)
+Date: Wed, 4 Feb 2026 18:00:06 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+Message-ID: <aYN7C3WqtgyIlDWF@windsurf>
+References: <20251229094010.2472544-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1770228358; bh=rAC+6jkZdtRU/q3UPx6MCWUUTDx7sB4vw5r2TXUdNHQ=;
- h=Date:From:To:Subject:From;
- b=rSluBbRuH7bcHDADsEyQE9TVg0IQwjOtBrxMruOjtJV5jSwKd/Me3dOE3LabijvPf
- w3+kI5DKoMOJ+nNY28mriKgD0QIC2S0ZOKkyBeLbehXFcxwbQl5kdXIPYFdfjNByF+
- V3VwHQ2qnlEU6KJRnTyHqu4ttnoXvn+LKskO/t29Pf3WDLceOj02Y1y9053en2CqwM
- ruNxvYc3D9ozSqQBO80P/tWdDw7QvR56mR9pckyj9C7kwpri5WxPzRe5P4PGpPq65v
- xTagFJgZVvx/sFwWXh2BcIRKI4cm9c10vyGNTqQk0mmH7nPx0onhQZv0cFSV0FR+7V
- ETztTIev/RyqA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH] package/asterisk: bump to 22.8.1
+In-Reply-To: <20251229094010.2472544-1-giulio.benetti@benettiengineering.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1770224407; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=WVAfALvAyvTqpEt6GJxoG+0B+sv8LAKGL7e/DG3t3H4=;
+ b=HiI8XdgQIsaNU8GKATk2HxOjEokWk/SyIcm2Nf3tR9ub3XgFm8etoxKudFC/AkhL5+MZEW
+ 7RHq2AUgSXVpjT4YJPnROPj5Vkno2jHqA42509vKWRavgBZvrbkCCllPTc6Hp7AlWvP8IE
+ iCAW0bAeR/VtRF7wLKeBDAnkQqpvH5SpVoBUw2XjKO4kQ1c1xfVr1bS8QxiQd7gRtFXTjX
+ H/b+mIPmtfMBkoheYgYMfIVDoawWEZbYXW9rV7ijce9s0OtN+ryaWiP6f8FrQvKE1EwToW
+ HR/Nm6Ma0bPHlPd0IbSdiwIJRCCbD4clXqDDsA8ihGpRhwdLS+dWu8JoZAKxTA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=HiI8XdgQ
+Subject: Re: [Buildroot] [PATCH v3] package/dash: fix build failure due to
+ wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,50 +95,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for Changes:
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.1.html
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.0.html
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.7.0.html
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.6.0.html
+On Mon, Dec 29, 2025 at 10:40:10AM +0100, Giulio Benetti wrote:
+> Since commit [1] package dash requires wchar so let's depend on it to
+> fix build failure. Doing so makes default non-busybox shell dash to
+> depend on wchar. This is too restrictive since this way wchar becomes
+> mandatory, so let's switch default non-busybox shell to bash.
+> 
+> [1]:
+> https://git.kernel.org/pub/scm/utils/dash/dash.git/commit/?id=c0674f487c7aec2a3bdf6795cea7e60c9530c360
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/e9108ebd9fb8c471add1c5a7f581757175fa5f15/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks a lot, applied!
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 26175667c3..f1573f6575 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8a94650b6f348af1f1c9cce7ed3585d280f3a31b0d3820084a42b03712df95d5  asterisk-22.5.2.tar.gz
-+sha256  4f30af0695a0131fc091d85e7b91e22504609434b3fbd263898c7354d41959c9  asterisk-22.8.1.tar.gz
- 
- # Locally computed
- sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 9a071fb8e0..b59f2bf5aa 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 22.5.2
-+ASTERISK_VERSION = 22.8.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
