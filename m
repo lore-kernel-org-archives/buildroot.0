@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56975E9D41B
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49671E9D41A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:09:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 297E761301;
-	Wed,  4 Feb 2026 17:09:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 203EC61311;
+	Wed,  4 Feb 2026 17:09:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 75f4KwqUcB2t; Wed,  4 Feb 2026 17:09:46 +0000 (UTC)
+ id k7gddBnq2vW9; Wed,  4 Feb 2026 17:09:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EA6360FAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEAEA61318
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770224986;
-	bh=LzIT9Znv1LlO1g4c28efLLzpDdQOFq3ErsOXaX3tS7Y=;
+	s=default; t=1770224989;
+	bh=1VVJ69mTho20xG3M2O4zgR+2jv84zDYWXBxJ0uN3UJ4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=San1Kc+69ZID06739VKOF0EUTi91BJamhD9zrOoJHROVeFP4lS6gVU0uPIS1EvYjv
-	 nGSNkSktTNQRJOtAjzJ0fo1x3BaO1RRGQpOYstR42oknJvxSX8erdDnOl12veOiSMV
-	 LlZdxxfre3d78TY9OB3zinGCJAWi0AMsbLBnH+NuL40/9GpUDAwTeVQTClOJHi+VTB
-	 M3zoGAXXjOGsM/bnmBPjsMFIS1SmoGWcSNkxzBH8XSN8MUkrE5LQv9brfKFnfxn5Iv
-	 D1cHCNq3/eBgvD+RhdCO/8CoKNbcausf0LwfmPHI6ZKJrJ3ydInDI1CeyCkkZvDwPp
-	 OgJf/KwA7zJQQ==
+	b=j5n4Vm7HAfM9c/sNFyu8+2wwT924x7TUAhQ8Bxti5GOjb/j3VYExXOwoHPJwZuOCt
+	 GSDjZjMzi2gKWgDdEB7QllbyjeoEgT6PcDYW3YEi1DS5GguOCEAKbStlVsJWVlzvB8
+	 PqHvXQ5cB4fDTfcZvQHBd9CrI+kAhmdm4BwrjQsDWJvMl0bqFbHmvcguL3aro7xvX8
+	 D1bKqnLOBfol+wZJXyeLYDO/ckW0cCPkWGITEbEsn1Cap7GxiDioA7ZkPMDToJJ/yk
+	 Q5jA0nx4Y80aXLNyoCk1H8oH8v+in1p+64naDPImBtSNEdIYRTBpxFj+142KPLkFQX
+	 +odgR5Q4SKG7w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EA6360FAC;
-	Wed,  4 Feb 2026 17:09:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEAEA61318;
+	Wed,  4 Feb 2026 17:09:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B467C173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:08:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D405F5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 588214054F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BA3F405A2
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v7gWiJ6MqgGU for <buildroot@buildroot.org>;
+ id 6zoR-DD9oAby for <buildroot@buildroot.org>;
  Wed,  4 Feb 2026 17:07:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B30B9405BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E0D7405A9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B30B9405BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E0D7405A9
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A84BA8697C; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
+ id 82EFA8697C; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 17:44:31 +0100
+Date: Wed, 4 Feb 2026 17:42:24 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: aa08c742a805c8c62318a4d96f9cfcba46b2111f
-X-Git-Newrev: 62d625b2ee2a2541afdf9c79b2bf91ff2eaec290
+X-Git-Oldrev: 8bdbdf06c4ca40ec7b0f5b3b592bc8d9a5aa1ac9
+X-Git-Newrev: 84b9ddb6ef2402774537a20e14fabd9ae226df7a
 X-Patchwork-Hint: ignore
-Message-Id: <20260204170748.A84BA8697C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/expat: security
- bump version to 2.7.4
+Message-Id: <20260204170748.82EFA8697C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/cryptsetup: bump
+ version to 2.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/62d625b2ee2a2541afdf9c79b2bf91ff2eaec290
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/84b9ddb6ef2402774537a20e14fabd9ae226df7a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-https://github.com/libexpat/libexpat/blob/R_2_7_4/expat/Changes
+For release note, see:
+https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.4/docs/v2.8.4-ReleaseNotes
 
-Fixes CVE-2026-24515 & CVE-2026-25210.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5715e7da20b37cb3b704bb1a18dd8a09e1fcbc28)
+(cherry picked from commit 69b623e4a9aff9e1f68105af1170e1d9a546b906)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/expat/expat.hash | 3 ++-
- package/expat/expat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 9d99c38a45..7536e7cb1d 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/libexpat/libexpat/releases/tag/R_2_7_4
-+sha256  9e9cabb457c1e09de91db2706d8365645792638eb3be1f94dbb2149301086ac0  expat-2.7.4.tar.xz
- # Locally calculated
--sha256  71df8f40706a7bb0a80a5367079ea75d91da4f8c65c58ec59bcdfbf7decdab9f  expat-2.7.3.tar.xz
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 07aba205cf..215c34e9cf 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index bbc9171e77..49126a4a2f 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/sha256sums.asc
+-sha256  4a8a23b8b9d1a3250452e40acead4421a03e45a38954ad0595634f4266aa800f  cryptsetup-2.8.3.tar.xz
++sha256  443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83  cryptsetup-2.8.4.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  docs/licenses/COPYING.Apache-2.0
+ sha256  28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5  docs/licenses/COPYING.CC-BY-SA-4.0
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index e8f2f1673a..6be05e6457 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--EXPAT_VERSION = 2.7.3
-+EXPAT_VERSION = 2.7.4
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+ CRYPTSETUP_VERSION_MAJOR = 2.8
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
