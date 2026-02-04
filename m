@@ -1,111 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C6B6E95396
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BE48E95396
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:44:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A60680BA9;
-	Wed,  4 Feb 2026 12:44:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7FA560717;
+	Wed,  4 Feb 2026 12:44:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nyyRvk53dYTE; Wed,  4 Feb 2026 12:44:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d1OXvDnI51LC; Wed,  4 Feb 2026 12:44:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11E4C80B56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9EF9607F0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770209071;
-	bh=6bZ+LN0U1WjjPa/OeEHX2T53e2u27kPv3VQCem0wbvc=;
-	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Bpn2VDkaqZ5mpJ4l1oLcAGN5yuV92ebVvTthE3dWtqvMquyOvRLO6gN1CRx+eiXq6
-	 MjJfMD7eyiU+uGluEQscUKZoLsq8gg3MBxMCaU9z4Z/lHSBtEDwDV9vxJtcZHt3k4i
-	 oo8ZCgX51SYhY99ag1EHImhj1jh6gCDDnJ+g3ifrhIQeHXWXsBFESCBX2iuDeNRWBE
-	 0lsluE7ckD2SwdTGJBCtD0pdKrOIRs6QQu1hmhC3Uch6bV2i5LUGBOWJ9/3CKAW+tU
-	 T8wXFFY5YOufATq52s72vVvifEzW2gxtayxoazJT9xMsWPifJBiNMdXZBYoqCKrEbk
-	 uIKFG+rYh3qOg==
+	s=default; t=1770209073;
+	bh=CtuwIQ8LSz5w+8y4XFaIl1GYzFnD0+rrKgX982n+cIs=;
+	h=From:To:CC:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=hVJg59VfdEo75zpavR2BOx0zDBxkreE0A7C1ZJAs3Chx9glALNOwHBvKaWPnwq1FE
+	 Q02j0yfNmhYYnsgg91o3bfnbnVDj7QETPTIJj8LZxyJgNyzydxlRXPumwFw9eXGw3N
+	 UGNIxKGnjnEd2akaYzx51M7BuFIWSefKMf9sU0/5O+Swnl6srOXUpcgrkDavYmRDk/
+	 BoEczOInSMW/6JIgBjenwr1NdlI7lRqWnGS0SX22kyN1hGvxZLl0Pjtv/UyCQcV/ZX
+	 zkpY79UG/vG+Wt2KJYFOIDi+ZgvdPfMC6dkqy6WFW5xGuHyt60CP1IV8e3bz3dIYY0
+	 Zfp0rT93KsYrQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11E4C80B56;
-	Wed,  4 Feb 2026 12:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9EF9607F0;
+	Wed,  4 Feb 2026 12:44:33 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B93C6F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:44:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6147BF4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98820405F0
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:44:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 412A8400FB
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:44:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ODnzeDev5qaA for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 12:44:28 +0000 (UTC)
-X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 04 Feb 2026 12:44:27 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 12D5D400FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12D5D400FB
+ id Gz4HO5fWpgH4 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 12:44:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 180AA40363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 180AA40363
 Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 12D5D400FB
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:44:27 +0000 (UTC)
-X-CSE-ConnectionGUID: b4RyeEgRQEO2lU8ZagndUQ==
-X-CSE-MsgGUID: v/+VSJloR7Ku725TX77r5Q==
-Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 180AA40363
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:44:28 +0000 (UTC)
+X-CSE-ConnectionGUID: jSCuCbeNROKB47Rm7G900A==
+X-CSE-MsgGUID: mYAw8SFXReSl0KqONKtKVw==
+Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 04 Feb 2026 13:37:17 +0100
-Received: from unknown (HELO OPE16NORMBX605.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 13:37:17 +0100
+ 04 Feb 2026 13:37:20 +0100
+Received: from unknown (HELO OPE16NORMBX507.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 13:37:20 +0100
 Received: from OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] by
- OPE16NORMBX605.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ OPE16NORMBX507.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.35; Wed, 4 Feb 2026 13:37:15 +0100
+ 15.2.2562.35; Wed, 4 Feb 2026 13:37:19 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
- Wed, 4 Feb 2026 13:37:13 +0100
+ Wed, 4 Feb 2026 13:37:18 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 04 Feb 2026 13:37:13 +0100
-X-CSE-ConnectionGUID: NfSR15+WTg25psJkzv2k2g==
-X-CSE-MsgGUID: CRcvfeGOTmGYGqHQO51kng==
-X-IronPort-AV: E=Sophos;i="6.21,272,1763420400"; d="scan'208";a="388617679"
+ Wed, 04 Feb 2026 13:37:17 +0100
+X-CSE-ConnectionGUID: juqLwwyJTkCQoSoz9Mm3FA==
+X-CSE-MsgGUID: rfK2QyNsS5Ko/nHJrqMGsQ==
+X-IronPort-AV: E=Sophos;i="6.21,272,1763420400"; d="scan'208";a="389103464"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-CC: Heiko Thiery <heiko.thiery@gmail.com>, "Yann E . MORIN"
- <yann.morin@orange.com>
-Date: Wed, 4 Feb 2026 13:37:13 +0100
-Message-ID: <cover.1770208629.git.yann.morin@orange.com>
+CC: <yann.morin@orange.com>, Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 4 Feb 2026 13:37:15 +0100
+Message-ID: <4c48662c61c8013e554a69d28bdc2216e32a5973.1770208629.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1770208629.git.yann.morin@orange.com>
+References: <cover.1770208629.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX607.corporate.adroot.infra.ftgroup
- (10.115.27.31) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX601.corporate.adroot.infra.ftgroup
+ (10.115.26.29) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1770209068; x=1801745068;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=CvWCXBC2GD/+MwPw7L25xwF6rXrrVEZfrmNl1rmNFrI=;
- b=pVSHhyLXSTK3rnudhzP5J+RJS1lH29Lyf8Kydv6oH65K2URgrI/gx3mS
- cEdlPpT3SPmBkB9HzKnHpibBLKMU2wHh6pEdBCasiFhXyu7iguUGtO6FZ
- L295UYKlmpY53VJR7NnlnDEJtLokHE1+4JyWyZoqYiNr72iQMGjPrWASh
- 1CTYknTG18L0MEuncbdQwE6MnW5DoVYvpcL8H2lVvGGupbzFRhjbLagNt
- TEYPUGveedkCkrss2ET+K8/BMtDM4Ase/4rb0DH+Oh2sGUw26S6CWbw5u
- rswpwNwP3/UDRAzkpNXgbDH2kwUHRgEFMZpxRDezJn/Sx/PGLCfeVOtF4
+ t=1770209069; x=1801745069;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=xrumCI7yVA4WJYZzAN7io3ojdW94TWrV2Jjpu0WSkDA=;
+ b=W7baiv6iEKY5frjdTWrj2SHwjXxuxqFGdEyqY1IMZjOSEeL5Vx/u/Zqz
+ mV7Da9oGa9pPDH0PQkfkHhaWlHmelaBFJVLlz01egAZO/nJvgnbyoRjpB
+ rr13SFf31Yxe1xZA8iRInmPTWfN9qPwuJAAnvF/TQujquy0mtt0tIoVwp
+ ZARDb4kzzE8JQU2a+uUHi9HW9T4WvsXBA5gYuq27FBZfEhk+Z+5jFjhDT
+ NK+KZ07QNDWdiGZKpsZclfZe9B5aKvXvkQClEuveVYvDlhCaQ54rYyCD6
+ shJUrss1j2YXPFgF6cWKtfxGlN8XRl8BcTFt6VvV7MxhkCWGLap5wBFP2
  A==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=pVSHhyLX
-Subject: [Buildroot] [PATCH 0/3] package/blake3: add target variant
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=W7baiv6i
+Subject: [Buildroot] [PATCH 2/3] package/blake3: bump to version 1.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,49 +122,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Hello All!
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/blake3/blake3.hash | 2 +-
+ package/blake3/blake3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This small series extends blake3 to being a target package, in addition
-to being a host package.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 27fed8e7ba87671161c6ae9ab4aeb20533ede93d
-
-  beaglev_fire: remove fdt set from boot script (2026-02-04 12:03:13 +0100)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to b2d5a34a036132c546c17f2f3687b8ccf7c0e967
-
-  package/blake3: add target support (2026-02-04 13:36:54 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/blake3: explicitly disable threading & examples
-      package/blake3: bump to version 1.8.3
-      package/blake3: add target support
-
- package/Config.in          |  1 +
- package/blake3/Config.in   |  8 ++++++++
- package/blake3/blake3.hash |  2 +-
- package/blake3/blake3.mk   | 12 +++++++++++-
- 4 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100644 package/blake3/Config.in
-
---
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+diff --git a/package/blake3/blake3.hash b/package/blake3/blake3.hash
+index 6bcfefb2b8..6e7d02db6c 100644
+--- a/package/blake3/blake3.hash
++++ b/package/blake3/blake3.hash
+@@ -1,5 +1,5 @@
+ # sha256 computed locally
+-sha256  6b51aefe515969785da02e87befafc7fdc7a065cd3458cf1141f29267749e81f  blake3-1.8.2.tar.gz
++sha256  5a11e3f834719b6c1cae7aced1e848a37013f6f10f97272e7849aa0da769f295  blake3-1.8.3.tar.gz
+ sha256  00fcc7a934ddbc9ece2a7cc063ac788e284b703b1d705ccbba72d462aa97921e  LICENSE_A2
+ sha256  a5695f57ea0c221e0e8b7d784ff774c35e88c3d3270353646a925880bb3492cc  LICENSE_A2LLVM
+ sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSE_CC0
+diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
+index 1055a2c073..a2094fc4c0 100644
+--- a/package/blake3/blake3.mk
++++ b/package/blake3/blake3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BLAKE3_VERSION = 1.8.2
++BLAKE3_VERSION = 1.8.3
+ BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,$(BLAKE3_VERSION))
+ BLAKE3_SUBDIR = c
+ BLAKE3_LICENSE = Apache-2.0 or Apache-2.0 with exceptions or CC0-1.0
+-- 
+2.34.1
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
