@@ -4,61 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96160E95363
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC41E9536E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B02B60A55;
-	Wed,  4 Feb 2026 09:50:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96A8C60A9C;
+	Wed,  4 Feb 2026 09:55:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QR5Y8CIFXF3H; Wed,  4 Feb 2026 09:50:08 +0000 (UTC)
+ id qxmb6Vi6iQC4; Wed,  4 Feb 2026 09:55:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7015560A97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD97360A9F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770198608;
-	bh=TBcw9HQTIhNCoaPMvM8wJUfVcFFi8AgiJDKm323Q/Hg=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=gJeHc/wfA8MRMDHfWQq1m4FdRSGKswTwQOeBY+e15IWJsJBp7IUW5sWx+yjF5YQvm
-	 HAVQU9a8XIdMsY9hjM7R6hPT4AYV5QRHZjo2p0buqfWKxvUzOldXVBt4Z3IgHZBX26
-	 u6PJvXyjxkDgYkKF4GOIt4mgODnSee+dCUvDOjCgzbxFsHpckumEDLpOcQuGXgAynD
-	 HDNZn3kTufGjbaIVQa+cNAemwvamEYUMUTaVVqUv85ekMdIlUyWESwsmPRUMIa6LUV
-	 DiD1HljWoyw9abaZNT4Hdj+9/iLevbp9uB8NasZ2LatjIrbodyd240WWZxPPgnfmKL
-	 OY5Way0CiCWqQ==
+	s=default; t=1770198920;
+	bh=xLsZCI2+68wl/ePWtkg2fj1XmLVHG7C+H0PMCCJ76OI=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Bbe17SXxTAUZplDlv5mFTg0SsjLwwOWDSUTAuudDszSapJE1lKVowQJjMGnHN948k
+	 xotro64ErfbbGHKqTTvHVIj6ix8YhET4nbnAlfHH/7bJuBZR+ISyo1/shRh+svT+Hf
+	 /tVybIgdDJsBDDFTPSktQBSk3yine9q4OGoocapi+Fli6b6xukGKLdq/5GFxgzVxSF
+	 U/gKq5gmlQBEfYl/TM05ZZoAvsJzuzqra8NUB8/fxhmuYCJv+Yuip7QbbQseXc83cI
+	 mDyGfS/FcJJsO49JO09vldQN9ibp+0ZpJT+snr5O+mBjENw4HOnfWZQtyGUg6mBprM
+	 erz7SZdoQi2ag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7015560A97;
-	Wed,  4 Feb 2026 09:50:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E4F1DF4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:50:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD97360A9F;
+	Wed,  4 Feb 2026 09:55:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32097F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D32D44016B
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:50:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E3E681A65
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:55:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MIK3J40axoFy for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 09:50:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ab1aX_l7jK_X for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 09:55:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDAE840209
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDAE840209
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:50:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3E228683E; Wed,  4 Feb 2026 09:50:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 037F381A5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 037F381A5C
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 037F381A5C
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:55:17 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -662445930; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 04 Feb 2026 09:55:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vnZbN-00000009Wfp-2g0w;
+ Wed, 04 Feb 2026 10:55:13 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 10:47:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 96f01932be024eebad8e6edef121641eeb16ffd7
-X-Git-Newrev: fbad192a4dd9e2ebaff1d023d781b345cff731a0
-X-Patchwork-Hint: ignore
-Message-Id: <20260204095005.C3E228683E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: security bump version to
- 9.18.44
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <520804aa-cb63-4ca5-9355-76e3497376c6@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 4 Feb 2026 10:49:19 +0100")
+References: <20260203110659.2127935-1-giulio.benetti@benettiengineering.com>
+ <87ldhahxqv.fsf@dell.be.48ers.dk>
+ <eec3c48e-3ac5-482a-a85f-074ccf485fe6@benettiengineering.com>
+ <87v7gc7sds.fsf@dell.be.48ers.dk>
+ <520804aa-cb63-4ca5-9355-76e3497376c6@benettiengineering.com>
+Date: Wed, 04 Feb 2026 10:55:13 +0100
+Message-ID: <87ms1o7rzy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=nT5bS78MU7tc/0HICH2/Trc2ySbPlj2tNUYyPfqQDAjMwve/JvQSG3mLr3GjBKV1tAwDrU+3QdsGWZenbj/TL9d4cYs3MVJR2fp7gZrowAPResRBQzkag8EPrD9+gk3VVB7liMR2Fmw4hS6MAnhEYHqUZr2Mk5usRFVQeZhBgJURZJ9YBV2TPWcNzqhzYrXHMZYd8ELImOWxIQVx35lSCk6UTdQsNQo3OU8ks0asTMa8xm1ePwCXevUwJi8pnmlm+5x+u+tmmmtRzfgi5QzTAOjHZ/IRKiVYJhcgwF0stSpYDXTm4i0awOMgUdZXKm6fAXqsRlG69+P9IcqT712xrQ==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=vFs7fQlqkCerUPsEnX6SaWKkbeUjZXZs2932N0QKBsw=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=nT5bS78M
+Subject: Re: [Buildroot] [PATCH v2] package/bind: security bump version to
+ 9.20.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,54 +97,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fbad192a4dd9e2ebaff1d023d781b345cff731a0
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/notes.html
+ > On 2/4/26 10:46, Peter Korsgaard wrote:
+ >> > That's why I've pointed only those 2 CVEs. Was it correct?
+ >> No, they were fixes for issues only introduced in the 9.20.x series,
+ >> so
+ >> we were never vulnerable to them.
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/changelog.html
+ > But if we were bumping to 9.20.17 they were required, correct?
 
-Fixes CVE-2025-13878.
+Yes, if we were to move to 9.20.x then we should naturally not move to a
+version that introduces new known vulnerabilities - But as the version
+we used before was not vulnerable to those issues it would be wrong to
+say that the version bump fixes those two issues (E.G. the LTS
+maintainers would think that they have to go to 9.20.x to fix security
+issues, which is not the case).
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Otherwise really I don't get it
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index d601e87b75..aaf3519ced 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.41/bind-9.18.41.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.44/bind-9.18.44.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  6ddc1d981511c4da0b203b0513af131e5d15e5f1c261145736fe1f35dd1fe79d  bind-9.18.41.tar.xz
-+sha256  81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d  bind-9.18.44.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 8b336ab781..041541b037 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.18.41
-+BIND_VERSION = 9.18.44
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
+Hopefully the above makes it more clear?
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
