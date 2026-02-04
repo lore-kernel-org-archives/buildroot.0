@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBE6DE95360
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 615CCE95363
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AAA060A55;
-	Wed,  4 Feb 2026 09:48:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C8B560B48;
+	Wed,  4 Feb 2026 09:49:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 53iMtyNg4cpe; Wed,  4 Feb 2026 09:48:57 +0000 (UTC)
+ id AjDFUOCTLimX; Wed,  4 Feb 2026 09:49:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CC6160A7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A95560A55
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770198537;
-	bh=HwBQ0idpNpm+Kjx1ngWTxYRXEU49jV2tUbfPnXjk/PY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=hSsYRMDPD0Ua7xC8x2hTkGRveettsCxiFBl/pkN8oyVmnasOKO+ZFo1QajQiN1mTe
-	 k1azv3sq/64SXjeYk7darBzS6nb+O7aBQIfeJxTRAw61A9LXJrh7JphslPCI+et90b
-	 S4Ot8CflxBw+Zv3vdpYD6pO/MuJGFJZBnfalR1KLEGMiRVFOoAsiJRc7cxtAtILZOg
-	 66puRmFw5kbrSDIuMBB3qyXxJWG+28GbtEZMdu5jPKzyQ+tBYEVAQhl/BY/DBtjqgo
-	 BQMGaR6TgL+d5qMh9tOjWvC8/MBlVAVK7Grr/pQKYCkDVUyjy/4QhybZzose3gSGSf
-	 n9r74J2tDngZQ==
+	s=default; t=1770198549;
+	bh=bbIeaNMGhy5Si+pKKyJvD9l5/7otf7Twi8s2ezelsic=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=TCbGYY6MGo/r63PTgr/+c4Lw5ON0JSqm0WWTlvvjEz8X9qH9tI22VRJcC/+SfUCqs
+	 /BPp5wEofeFjQCrcTWsiSpirC/e+K2M68gMWgkmgazgmx0bhEPOaPxxyhhBvrLCrdP
+	 bsqHptIelrxSZ/Coh4DtAzONWfTmrGw6oFNi+a5Fqd1MfbrIMJSW6suMwKK11sHq4S
+	 fZMZxBFCPT3TLN+rzmlH1xHXuGH6wDN6T3SHLUJJ6iBbJgfAlxh+EYOOfLVX8a7tKt
+	 EcVJIbrEn40ts7d5Le+ZewQdNAaYANUed2EhIouCMn7409wgSr9lehMzVv9SKHSKOV
+	 6s2SfBuw6rKmA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CC6160A7C;
-	Wed,  4 Feb 2026 09:48:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 143D5173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:48:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A95560A55;
+	Wed,  4 Feb 2026 09:49:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80743173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:49:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 036784016B
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:48:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D39683BFD
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:49:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pIMX0u2ll-AK for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 09:48:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aEyVzHXWGFie for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 09:49:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1172A4005C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1172A4005C
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:48:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC91886828; Wed,  4 Feb 2026 09:48:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3573083BFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3573083BFC
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3573083BFC
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:49:06 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1948995141; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 04 Feb 2026 09:49:04 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vnZVP-00000009WOa-1WK0;
+ Wed, 04 Feb 2026 10:49:03 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 10:47:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b31a28dce605b0088e9b72fb38616cb941661be
-X-Git-Newrev: 96f01932be024eebad8e6edef121641eeb16ffd7
-X-Patchwork-Hint: ignore
-Message-Id: <20260204094854.EC91886828@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: fix powerpc64 build
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260204092207.3009275-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 4 Feb 2026 10:22:06 +0100")
+References: <87ldhahxqv.fsf@dell.be.48ers.dk>
+ <20260204092207.3009275-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 04 Feb 2026 10:49:03 +0100
+Message-ID: <87qzr07sa8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=fEuTI3x48tdxPdbh0t8Gpj/aGrXLSktFhod80LTWfgBAGxWsCE3tOrcsT0A4xL51T2DTbVGfcxHw2HDKuckitwWPuZoFszxrnzxiUEmXdmmvYTubLCD722UqbRpBEqVzO3ukbh89bDc8zNDv4iYgvIPgnOiJsHpbbAytH3NxBsqkxSk42RYIHXMjp3f4vMUsQ45reVEqQk1cBkMImfZgFKEHnnv7LKto9BVdfAkj2dejY9FPVqFsooRv4xDYH4WYfk/y1zZpWFAtA+F4FKUOOl7hqwYbOrYhXoiW2t7a8/VFxz+PYOc7q82KHtX/npB8KSII+VQZz9JcbzPRe3s2DQ==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=kVYCsUcvEiSQ11Fcz7gyVs1qNzuk0Fpwkgj/jc/m/+0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=fEuTI3x4
+Subject: Re: [Buildroot] [PATCH] package/bind: security bump version to
+ 9.18.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,111 +94,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/96f01932be024eebad8e6edef121641eeb16ffd7
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Buildroot commit f710640be5869bb3716e254916ae614f79002f2f bumped the
-package to version 3.6.0 that includes upstream commit
-https://github.com/openssl/openssl/commit/8f24a148e6f112045cf110c3e3f4e2415d9c11fe
-which causes build errors on powerpc64.
+ > Release notes:
+ > https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/notes.html
 
-The upstream commit was also backported to older libopenssl branches:
-https://github.com/openssl/openssl/pull/28990#issuecomment-3675219918
-but its first appearance on the buildroot master branch was with said
-bump to 3.6.0.
+ > Changelog:
+ > https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/changelog.html
 
-This patch adds an upstream patch to fix the problem.
+ > Fixes CVE-2025-13878.
 
-Fixes:
-https://autobuild.buildroot.net/results/b28/b286ad40f2240a85b9cd0dc44e089d1d6babd3ea/
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-gcm-ppc.pl-Removed-.localentry-directive.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+Committed, thanks.
 
-diff --git a/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
-new file mode 100644
-index 0000000000..7c507a2687
---- /dev/null
-+++ b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
-@@ -0,0 +1,69 @@
-+From 5aaa7e5fdc59e88a13d2911cb86d814d4e2669da Mon Sep 17 00:00:00 2001
-+From: Danny Tsen <dtsen@us.ibm.com>
-+Date: Wed, 28 Jan 2026 07:23:13 -0500
-+Subject: [PATCH] aes-gcm-ppc.pl: Removed .localentry directive
-+
-+Otherwise there is mixing of  ELFv1 ABI and ELFv2 ABI directives
-+and PPC64 big endian builds fail.
-+
-+Fixes #29815
-+
-+Signed-off-by: Danny Tsen <dtsen@us.ibm.com>
-+
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+Reviewed-by: Shane Lontis <shane.lontis@oracle.com>
-+Reviewed-by: Tomas Mraz <tomas@openssl.org>
-+MergeDate: Tue Feb  3 08:39:50 2026
-+(Merged from https://github.com/openssl/openssl/pull/29827)
-+
-+Upstream: https://github.com/openssl/openssl/commit/5aaa7e5fdc59e88a13d2911cb86d814d4e2669da
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ crypto/modes/asm/aes-gcm-ppc.pl | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/crypto/modes/asm/aes-gcm-ppc.pl b/crypto/modes/asm/aes-gcm-ppc.pl
-+index 68918a9305a2b..fd5dcc22a6117 100644
-+--- a/crypto/modes/asm/aes-gcm-ppc.pl
-++++ b/crypto/modes/asm/aes-gcm-ppc.pl
-+@@ -409,7 +409,6 @@
-+ ################################################################################
-+ .align 4
-+ aes_gcm_crypt_1x:
-+-.localentry	aes_gcm_crypt_1x,0
-+ 
-+ 	cmpdi	5, 16
-+ 	bge	__More_1x
-+@@ -492,7 +491,6 @@
-+ ################################################################################
-+ .align 4
-+ __Process_partial:
-+-.localentry	__Process_partial,0
-+ 
-+ 	# create partial mask
-+ 	vspltisb 16, -1
-+@@ -564,7 +562,6 @@
-+ .global ppc_aes_gcm_encrypt
-+ .align 5
-+ ppc_aes_gcm_encrypt:
-+-.localentry     ppc_aes_gcm_encrypt,0
-+ 
-+ 	SAVE_REGS
-+ 	LOAD_HASH_TABLE
-+@@ -752,7 +749,6 @@
-+ .global ppc_aes_gcm_decrypt
-+ .align 5
-+ ppc_aes_gcm_decrypt:
-+-.localentry	ppc_aes_gcm_decrypt, 0
-+ 
-+ 	SAVE_REGS
-+ 	LOAD_HASH_TABLE
-+@@ -1032,7 +1028,6 @@
-+ .size   ppc_aes_gcm_decrypt,.-ppc_aes_gcm_decrypt
-+ 
-+ aes_gcm_out:
-+-.localentry	aes_gcm_out,0
-+ 
-+ 	mr	3, 11			# return count
-+ 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
