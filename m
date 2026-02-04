@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4602BE9D41B
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32D30E9D41B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:09:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 179B0612BF;
-	Wed,  4 Feb 2026 17:09:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06066612C9;
+	Wed,  4 Feb 2026 17:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v3cuUNk2BBDy; Wed,  4 Feb 2026 17:09:23 +0000 (UTC)
+ id QK13aUmrF-Ro; Wed,  4 Feb 2026 17:09:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B447612C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F158A612D2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770224963;
-	bh=AvJyNymWCsVgJYt/6UpJ1V56TVLO+3rwwmX53tEV6yE=;
+	s=default; t=1770224966;
+	bh=BMWjqLHjQ8okc/o9DJi45ZlYrw8H3JNoayLQlJnrM1E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rF+U7RvsfWDCJgLmPpjTj2zKFRU4XBVjCxLxOJMnEpkY526/NUkxjv5G7mBgwo5Sk
-	 PLvkh7Dbo0SiKKSI7kKXtz9aDmGuPevdzYeT/EQq8GKehwO2odlQpA0Hgwg1QsFOHM
-	 n5H+qPOdl9rTxrDcG6l/vF1uQGuoBdl6NdOXTRrSVPov/hmr010FbcOOVmtObv31ra
-	 imAquMZYd2pxALi2pLm6iPiEoYwoGnl2CV7W2S1SHB+73zWN+6cfR1kjXkluA8ehmM
-	 H7cfouRXaPw11HJ0RyVoeNjkTEQaqW8pOkSyrSBUre7gXNWIriLwReGq2oXr6Xramo
-	 gXsZYMr3ZILQQ==
+	b=nGMH3C2GUSlkE34g7DnT8/vRHcMRdwZCO3/LVRthJtVwfqn+msOqx/EvUnkw+CASg
+	 51cLIWBHFRq/Mt5ISBvkzfcVSw7tQxXjIRslUOvuHmPc1U0GRdkQTsnG7o64iLdiZo
+	 dnv5fKP2piz0+MME5oXzBb+Rfht8avuMIos5PzPP/pyG7QpE3ca6PmdcdckYGY594u
+	 oIfHJ2q9EKJhFJMtAVscfmiHnP/IEdZqpte5TGa89JTdV0N+QuPsOpBf5epjGL/x4H
+	 8SkkA/Dlf1nnkQJWX4r9gnQyhxKazDwn71uzcfZWUYP3FDisYuUGuc4ff6d9QntylX
+	 OVZnholnABicw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B447612C6;
-	Wed,  4 Feb 2026 17:09:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F158A612D2;
+	Wed,  4 Feb 2026 17:09:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5ED19F5
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:08:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 617B7F5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7B7F4056F
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0576840571
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9xod5Gtk-3Ns for <buildroot@buildroot.org>;
+ id 5qHaF1_SfGee for <buildroot@buildroot.org>;
  Wed,  4 Feb 2026 17:07:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 325B840576
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 458874057B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 325B840576
+ by smtp4.osuosl.org (Postfix) with ESMTP id 458874057B
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2742286977; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
+ id 3A5218697A; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 17:35:11 +0100
+Date: Wed, 4 Feb 2026 17:35:43 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: f4e8a597aae477f322ae25a434734b1333cfc970
-X-Git-Newrev: 4d4a90b211c38260589c935b71848090d7698039
+X-Git-Oldrev: 74822b1db5279cdbf87d176ed5f6ab614b1f58ae
+X-Git-Newrev: 5178621ab0b1571f526f90d16019c93b8f3af59c
 X-Patchwork-Hint: ignore
-Message-Id: <20260204170748.2742286977@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x]
- board/bsh/imx8mn-bsh-smm-s2: exit post-build.sh on error
+Message-Id: <20260204170748.3A5218697A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] system/Config.in: do not
+ reference md5 for sha256 option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,32 +77,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4d4a90b211c38260589c935b71848090d7698039
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5178621ab0b1571f526f90d16019c93b8f3af59c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Add 'set -eu' to ensure that command failures or unset variables are
-properly reported to the 'make' process. This prevents silent failures
-during the image generation phase.
+Commit bf3626002f ("system cfg: remove mkpasswd MD5 format option") dropped
+the MD5 option, so stop referring to it from the sha256 one to limit
+confusion.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fb847e83797022dceedbcf92c5c2c72cffc32883)
+(cherry picked from commit fdeced6692b12641097864399ab930b88cebff64)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/bsh/imx8mn-bsh-smm-s2/post-build.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ system/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/bsh/imx8mn-bsh-smm-s2/post-build.sh b/board/bsh/imx8mn-bsh-smm-s2/post-build.sh
-index 49df4cd6fb..ede1738ecb 100755
---- a/board/bsh/imx8mn-bsh-smm-s2/post-build.sh
-+++ b/board/bsh/imx8mn-bsh-smm-s2/post-build.sh
-@@ -1,4 +1,6 @@
- #!/bin/sh
-+set -eu
-+
- BOARD_DIR="$(dirname $0)"
+diff --git a/system/Config.in b/system/Config.in
+index 0652b94a3b..98bbd93092 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -67,7 +67,7 @@ choice
+ config BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	bool "sha-256"
+ 	help
+-	  Use SHA256 to encode passwords which is stronger than MD5.
++	  Use SHA256 to encode passwords.
  
- cp ${BOARD_DIR}/nand-full.lst ${BINARIES_DIR}
+ config BR2_TARGET_GENERIC_PASSWD_SHA512
+ 	bool "sha-512"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
