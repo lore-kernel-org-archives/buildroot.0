@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2240AE9539A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 13:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F5AAE9539A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 13:14:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA43B40BFA;
-	Wed,  4 Feb 2026 13:13:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE17E827FA;
+	Wed,  4 Feb 2026 13:13:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yA1-UCwlniWT; Wed,  4 Feb 2026 13:13:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nImEyQa9U3Sq; Wed,  4 Feb 2026 13:13:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E019B40C24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFC8482865
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770210818;
-	bh=7bTIW00lr5xMY/ETd0yXjPQC+Lxt3DVwtlD8kLImC6M=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Fwh8tXSjToMip6y2BBhwMOKp5JpSxgSseGYBMDDAY9MMr/rJWqdThSgTdN3uaIDg/
-	 XF7mrGzSz4tOTVc5aZeGChqEk6Fwk7csO+upiwpXBPg2TbtvfCUyH4NKKtkHpRwtdM
-	 MFXmaBZAQBxbxg2hdQC3EBVhHu0EPxYUr41U3mTnaC6A8W7i1hgbQq0QF6LUmf5z5k
-	 y8WKkzsqrSszYtgXqdpru3gFBxWlVzT8FD9dTDxiPSIrcdvWTW6Rq/cMqZnwq8Qwgv
-	 Jd/Y8cV3oobhoouIRSEk2+OJNBdL4xYiAZqROTGRCkW3HuoH74P6qOYMqfO/7ue3+e
-	 194JAtwtPyUeA==
+	s=default; t=1770210839;
+	bh=lRVz/GFg5XeLkoue2sjiS5/LWtp0fQsMM1xWUx9v1LU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mmGdVhpO9VozkIJH1eJ5tfeCplzgVCt99GejXgQGZnKW0VPSdK4tIgxB+URcYNVrq
+	 6QUt8Uy29eNWYYKaMsKgR7zwxBRjtdClV5MAcaNfWCA1fQ+jasTn/+v7CEMWEChP+1
+	 /WMMzED4diKNdN05wbAV5XPCNQ4wq12jORsH572GOE+dA+nqB7Wi9iXVfo310GE5RH
+	 0dGtMNm0fEAnqdQ4KTtNhE98zWYZrUz3TXdLkLkVYkI5f+3Se/KYZL6BGW9VrA5TqB
+	 Ig1J6SY1Nu6K7Dxr7Ed7WiPhkXOnMvj/AZqW332G9d1rpR7UPHNSbl7W4EROtIaluT
+	 AkhnJ2Cmxi0rw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E019B40C24;
-	Wed,  4 Feb 2026 13:13:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DAA87F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFC8482865;
+	Wed,  4 Feb 2026 13:13:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65D06F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D408160AC8
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4887140363
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iv-2wfoQkD5a for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 13:13:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hx6QkegR55k7 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 13:13:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E105760ABB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E105760ABB
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E105760ABB
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:35 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 1DF9A1A2BE5
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E227C60745;
- Wed,  4 Feb 2026 13:13:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 34847119A8891; Wed,  4 Feb 2026 14:13:32 +0100 (CET)
-Date: Wed, 4 Feb 2026 14:13:31 +0100
-To: Joachim Wiberg <troglobit@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <aYNFw5uzI8QWyF0-@windsurf>
-References: <20251216093534.2558659-1-troglobit@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20251216093534.2558659-1-troglobit@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1770210812; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=Gq5rpizo8NviwBlnyA32bgc+mVdf4N/1mvCuYM7/soQ=;
- b=sqg1AoHp6q78D/5k1aZUbMC/rr+B04B4ytTIlikJAIIzgkSpkueOJqYF87Rd+dnpu7bKjW
- N7jipcOzoRKhSM/J7jHy981gJUrbgib1a4iwYFK3u3UBkrmC6PmOqo+uu9i/ElHMPNNdQd
- ZqCOY/wA2VTreJwUNvjBpo2kddEWmJGCCm5CGsU4YnsZICiI41A5UlSsMtldJ/Gv3CLwDM
- TQfmWAgsDu2GIPRzPtMkBMVDITpS6NVX5eA7CYe0fNLcXp8NnTgPoCZc3FzIX72r4eJ1Bl
- TkpCBKxWZJxE47RMWIWnQKcKaEtbUD6UznuR7gD8faKV/xoFlg5PB9RwcB0vQQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=sqg1AoHp
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/libite: fix missing deps,
- requires fork()
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02FAC400FB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02FAC400FB
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 13:13:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DAE33868EE; Wed,  4 Feb 2026 13:13:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Feb 2026 14:13:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8e7a54f7ef121a2236c3d722d0adca26860c4cfa
+X-Git-Newrev: b009935e27aaeb4b0e527391e75d47407e77ec83
+X-Patchwork-Hint: ignore
+Message-Id: <20260204131356.DAE33868EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strongswan: add patch to fix
+ CVE-2025-62291
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,46 +69,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Joachim,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b009935e27aaeb4b0e527391e75d47407e77ec83
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks for the patch. I've updated the commit title to:
+https://nvd.nist.gov/vuln/detail/CVE-2025-62291
 
-  package/libite: add dependency on MMU, requires fork()
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Marcus: add comment pointing to patch before _IGNORE_CVES]
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ .../0001-eap_mschapv2_failure_request_len.patch    | 46 ++++++++++++++++++++++
+ package/strongswan/strongswan.mk                   |  2 +
+ 2 files changed, 48 insertions(+)
 
-which is a bit more useful.
-
-On Tue, Dec 16, 2025 at 10:35:33AM +0100, Joachim Wiberg wrote:
-> Unfortunately, parts of the library is not very no-MMU friendly atm.
-> The below check fails due to runbg.c requiring fork().
-> 
-> $ ./utils/test-pkg -c libite.config -p libite
->                     bootlin-armv5-uclibc [1/6]: OK
->                      bootlin-armv7-glibc [2/6]: OK
->                    bootlin-armv7m-uclibc [3/6]: FAILED
->                      bootlin-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: OK
->                              arm-aarch64 [6/6]: OK
-> 
-> The dependency was introduced in libite v2.6.0, so this patch should
-> probably be backported to v2025.02.x.
-
-Why "probably": it should be backported. So I've dropped the
-"probably".
-
-Applied with those changes, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/strongswan/0001-eap_mschapv2_failure_request_len.patch b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
+new file mode 100644
+index 0000000000..8442cc7816
+--- /dev/null
++++ b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
+@@ -0,0 +1,46 @@
++From dda24815d148b91209ebf2d27e3a7acefe9b6435 Mon Sep 17 00:00:00 2001
++From: Tobias Brunner <tobias@strongswan.org>
++Date: Thu, 9 Oct 2025 11:33:45 +0200
++Subject: [PATCH] eap-mschapv2: Fix length check for Failure Request packets on
++ the client
++
++For message lengths between 6 and 8, subtracting HEADER_LEN (9) causes
++`message_len` to become negative, which is then used in calls to malloc()
++and memcpy() that both take size_t arguments, causing an integer
++underflow.
++
++For 6 and 7, the huge size requested from malloc() will fail (it exceeds
++PTRDIFF_MAX) and the returned NULL pointer will cause a segmentation
++fault in memcpy().
++
++However, for 8, the allocation is 0, which succeeds.  But then the -1
++passed to memcpy() causes a heap-based buffer overflow (and possibly a
++segmentation fault when attempting to read/write that much data).
++Fortunately, if compiled with -D_FORTIFY_SOURCE=3 (the default on e.g.
++Ubuntu), the compiler will use __memcpy_chk(), which prevents that buffer
++overflow and causes the daemon to get aborted immediately instead.
++
++Fixes: f98cdf7a4765 ("adding plugin for EAP-MS-CHAPv2")
++Fixes: CVE-2025-62291
++Upstream: https://github.com/strongswan/strongswan/commit/c687ada6a6f68913651e355fd09f906893096b32
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c b/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
++index 21cc95a6a360..35faad2e0bb5 100644
++--- a/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
+++++ b/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
++@@ -974,7 +974,7 @@ static status_t process_peer_failure(private_eap_mschapv2_t *this,
++ 	data = in->get_data(in);
++ 	eap = (eap_mschapv2_header_t*)data.ptr;
++ 
++-	if (data.len < 3) /* we want at least an error code: E=e */
+++	if (data.len < HEADER_LEN + 3) /* we want at least an error code: E=e */
++ 	{
++ 		DBG1(DBG_IKE, "received invalid EAP-MS-CHAPv2 message: too short");
++ 		return FAILED;
++-- 
++2.43.0
++
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 9719242327..caf214cefa 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -12,6 +12,8 @@ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_CPE_ID_VENDOR = strongswan
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
+ STRONGSWAN_INSTALL_STAGING = YES
++# 0001-eap_mschapv2_failure_request_len.patch
++STRONGSWAN_IGNORE_CVES += CVE-2025-62291
+ STRONGSWAN_CONF_OPTS += \
+ 	--without-lib-prefix \
+ 	--enable-led \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
