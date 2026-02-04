@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A9AE9D41A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:08:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7BD0E9D41A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:09:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8B736126C;
-	Wed,  4 Feb 2026 17:08:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EFEC6103E;
+	Wed,  4 Feb 2026 17:09:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TmY3LBW7zlN4; Wed,  4 Feb 2026 17:08:56 +0000 (UTC)
+ id D1r2mdllzCsP; Wed,  4 Feb 2026 17:08:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7797D61277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FCFE6127E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770224936;
-	bh=cZsH5WRs+wV2FKt+nEnMAT/cmb0tsER7xypBqf5It/w=;
+	s=default; t=1770224939;
+	bh=a8EPBaHoJ2Y5uf9/FxTX6lcZXT+bCq/XFPlgEWnS6ew=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GdhOw3zFspchq7TQK6TYN0i9xIS1ZgywbJzasJm71+I+pFAnVzYRJjNNt+/8JzSWQ
-	 IiCOkZ/aZpLVJPCSVnLUTboNeEWEFYtf0TcLQc6zo0YP0X4doKiz7Rx3zFnzqNUb1o
-	 z5e1sFtvQKhwV8x9U+FWUnsSo9Feg691JegRnsIygTMvX3Gl8b5SCtMSBC8INhAt5T
-	 IsFdhhs0b3Ag5dZ1wBpkPhZWLQ6Bhsjnd8yB1gv6bmXZRWRJSswT7/Z3R1cAVr5Ics
-	 3Q48ZIe1D9MZN+bwUF+uyaoegHTFTv3vn41HCIdJP2H5uFx/+ukv76uE/YYR27MyWa
-	 7PDvwvuKkzFJA==
+	b=TgCEbrCXLYIP2PbJryHZ139ekM3sVlqT6Wzds5PryHhCID1wFIQBivnOnBQSjlN7+
+	 saTbjU5VRwvjDFHLDPmXjDkGsoqgLjrS8vw8IfByjJrrV22tR5JPvCjJ2N7L+Y4p56
+	 paJJQt4GiaHGfUlAqq14PaczAOXvUhzfAiYCzoBQn8VlmzP7OLpaykNyQRvWldXXdS
+	 CDTwX5MAIZPHUqwhiX4mGbs7oWKS3VbVHFwpKqLX2nF/ATXhye5757lKE/QxEe9oMW
+	 N2w2pcufblyYNy/w7qcbh/QBf33hAvPRvs2RR70kOJ2hUI8+q23dOx4Nkl5t2GtAzY
+	 Ob4YdXhaWygWQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7797D61277;
-	Wed,  4 Feb 2026 17:08:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FCFE6127E;
+	Wed,  4 Feb 2026 17:08:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E8DD173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DDAEF5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C3EA4054D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 478DE40562
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QvLX_coI30vb for <buildroot@buildroot.org>;
+ id 9eJzfnDxtVWs for <buildroot@buildroot.org>;
  Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D89E040567
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F14804056A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D89E040567
+ by smtp4.osuosl.org (Postfix) with ESMTP id F14804056A
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D6E486977; Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
+ id E45938697A; Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 17:28:25 +0100
+Date: Wed, 4 Feb 2026 17:32:34 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 15865764abc1ca4eacb39fdd9f98d07eec3980aa
-X-Git-Newrev: 52ff864c5889a2a20f8f71b504ecb6a85b6660f1
+X-Git-Oldrev: 678ec663ed713e621004f167cf4abe927aa4068d
+X-Git-Newrev: f9255641795381605c301ac2821031c01761d7fe
 X-Patchwork-Hint: ignore
-Message-Id: <20260204170747.9D6E486977@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] support/testing:
- test_python.py: disable interpreter colors
+Message-Id: <20260204170747.E45938697A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] board/ti/common/am6xx:
+ remove debug flag from post-build script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,38 +77,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/52ff864c5889a2a20f8f71b504ecb6a85b6660f1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f9255641795381605c301ac2821031c01761d7fe
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Python 3.14 (not yet in Buildroot) introduced colors, enabled by
-default, when the output is a terminal. This behavior can make the
-pexpect pattern matching more difficult in some cases. See:
-https://docs.python.org/3.14/using/cmdline.html#controlling-color
+Remove the '-x' option from the shebang, which was a leftover from the
+debugging phase and not intended for the final submission.
 
-This commit globally disables the Python interpreter colors in the base
-runtime Python test, by setting the NO_COLOR=1 environment variable.
-
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3a6e2b4a0395f6e049cd847cf16406a4d0d998ad)
+(cherry picked from commit d2dcd7547c9dc4357e588cf5425ccd6242d91cf8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_python.py | 3 +++
- 1 file changed, 3 insertions(+)
+ board/ti/common/am6xx/post-build.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index c9ecf9acda..e815376d21 100644
---- a/support/testing/tests/package/test_python.py
-+++ b/support/testing/tests/package/test_python.py
-@@ -17,6 +17,9 @@ class TestPythonBase(infra.basetest.BRTest):
-                            kernel="builtin",
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
-+        # Disable Python colors for all Python tests, to make pexpect
-+        # pattern matching easier.
-+        self.assertRunOk("export NO_COLOR=1")
+diff --git a/board/ti/common/am6xx/post-build.sh b/board/ti/common/am6xx/post-build.sh
+index d066e28fd0..e3ff4d7f12 100755
+--- a/board/ti/common/am6xx/post-build.sh
++++ b/board/ti/common/am6xx/post-build.sh
+@@ -1,4 +1,4 @@
+-#!/bin/sh -x
++#!/bin/sh
  
-     def version_test(self, version, timeout=-1):
-         cmd = self.interpreter + " --version 2>&1 | grep '^{}'".format(version)
+ # genimage will need to find the extlinux.conf
+ # in the binaries directory
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
