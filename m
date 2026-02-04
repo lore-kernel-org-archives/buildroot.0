@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837F5E83EF7
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F38BE83EF9
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 09:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C1006077E;
-	Wed,  4 Feb 2026 09:15:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6270A60A99;
+	Wed,  4 Feb 2026 09:22:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-RPGa1a2yyj; Wed,  4 Feb 2026 09:15:37 +0000 (UTC)
+ id w9nLpv_ROPvs; Wed,  4 Feb 2026 09:22:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54A5360A83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71B3260A83
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770196537;
-	bh=N+r26iGUMsekwIMmzeyygVbwxWXKfBNj9qvHwL/nzjQ=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	s=default; t=1770196935;
+	bh=SyD8y5jO97aKv1vPk2SqxET767+m64upMPtPVg4tGSw=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=UIlJJjh+OZT2vc8we1bk/IMECqJKN0S9o8yj+VCLlnJn1IXbXoJKzKWMvMtnAoCFS
-	 H1qq3M/rfEDgPqXEAdLobab2dfraAYcsXdfaVNyogBo4+vi8Uw4XdIZ8V5/kLsl6wV
-	 ZeHK0gssm6JGToxjDkC4cI6gi/xNtd1bIRG38h8U+e5S9MKZ0dbf09Lkpul6c5k8PS
-	 lnbyxn82g2kEjb7gQcxzPgQkxpTXWQ3rzUJCU85pxkrqF2HlFuUx/lBUVOe6fozRRl
-	 lk9X0Arxl83wY9HfqXd75Kac+Xh++zt2KKNebMDUWto05ChRuHskt6vT0zd+DcSDAa
-	 DVG28PZH+BhJA==
+	b=TZ7Bj5KvMR2wEVRjC+PZH6FXc88/+Cot9PQ0dPKWjuSrhcXXX79Q46/pEexKNia/M
+	 c+oJHnY0B5NNr3PhIGUl4mpG1cCs2tc23f0VXDlBtN+9JOzZgovRWYcJ8Q9SHtbNlP
+	 d7EXtra9DtpqsCMTm8sf+kBxTloYixNSEw0uxGqEq3CV3DZ49mGJMp577RIp3dXw3/
+	 d+qwEkFxKIxRWaa9hfwdurw1gr1MNtMZwg8gTA5qyEpzqG7RGFxB/UeNiERm2j14eh
+	 BP8pcxvHX5o5UIAk/TmVQfRLAPmPbtof8mDcLqc9KDxWtOMJNHR6/R/mtYxoCa1Qu3
+	 ZcpalqOXaETbg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54A5360A83;
-	Wed,  4 Feb 2026 09:15:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C2603F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:15:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71B3260A83;
+	Wed,  4 Feb 2026 09:22:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB54EF4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE6AB40423
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:15:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B52034078F
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V5GbQdvuKYtW for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 09:15:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.132;
- helo=smtpdh18-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YAXHuYSU3cVo for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 09:22:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.133;
+ helo=smtpdh18-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C4AC24021A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4AC24021A
-Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C4AC24021A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:15:32 +0000 (UTC)
-Received: from [192.168.50.220] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id nYyuvEBEm5StenYyuvqgj7; Wed, 04 Feb 2026 10:15:28 +0100
-Message-ID: <eec3c48e-3ac5-482a-a85f-074ccf485fe6@benettiengineering.com>
-Date: Wed, 4 Feb 2026 10:15:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260203110659.2127935-1-giulio.benetti@benettiengineering.com>
- <87ldhahxqv.fsf@dell.be.48ers.dk>
-Content-Language: en-US
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1AB6740759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AB6740759
+Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1AB6740759
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 09:22:11 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id nZ5NvEJTm5StenZ5NvqmLT; Wed, 04 Feb 2026 10:22:09 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org,
+	Peter Korsgaard <peter@korsgaard.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed,  4 Feb 2026 10:22:06 +0100
+Message-ID: <20260204092207.3009275-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 In-Reply-To: <87ldhahxqv.fsf@dell.be.48ers.dk>
-X-CMAE-Envelope: MS4xfMOaekVFnEX9R26yMi0BvMLtjHtxs0bZX5Byyv7wtV0wvWYmoNUWd4Y2An1PIvx3Nrkn7444b84ZdklTdN7a+vXaovsuT990/y9VAAcitBnoE7CLPbuK
- JjxtrGJ0xTXv4OqJ8VF1SapMYnlsThfoAKYG1MfRAfWQqbA06By1xgGQ0EAnnXlzLkV3CqFcTfvQ/gn0dxY2mJiXt1BlGZr5ZJq+xbVQnpsxrdVT0CgUcFTU
- pbz/qsJ5UhMt222zZvPNahWqdmhDKiv1UCHZBdGskYEP6RPdCQMEkMxqFPvimha2
+References: <87ldhahxqv.fsf@dell.be.48ers.dk>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfOMcsLkZ9wdIhbz0SImyqjYk/y0ADVcBs3SstcjWNO+7Ypf5dUNTtdNMWP4XeFkqMsdF0nQ39X2GYCkvWea5GHEEkdsCo2fuhmTDnBwurcfbHTSRSuBB
+ BJmC0TiuDFp3QdM4cbmcayefbnQo8Y4TgbaFArpaGTUg/yt7IfHIg2sIAstXI1smSyu6CrcdaITaz8kyiNYKjT2NZ26huF4PNEdS8BKGmnLghneao8SvkDRf
+ TyAWvLNV9tDeVS8LnZV03aKExy7/FqDnfu4Bn+pRwDne+afa9d6KR+AXjufjIGue1NPSXhr9XLhK+9T2hetDBQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1770196528; bh=CGZZN18rnfun8hx/h1OkDv7xk/LeiXqv2d5LepOEzrg=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=W836FKGbQvaX5mM3tlvBneik2vRAH6CF1wXWd8rX8tuBT1oSUIhO1chzwOyyV/TnC
- H8bISWMxRQ1kg8qZL0NW2WBTXmtZrdWNj7XiHrBrhsuK1p60bb3cE3ZIJU4f3ByQ+Z
- RFZstJI8OmwJ8WlCFSp7rDBE/8/biQvWzItsWzEX/2KSJhVlW98ec4vuN9NYUNLgCg
- YQcEFpKMzZZA+HxT4KolSQ6ThTO+FEyQAzKeooqu71x6Ur8MIkUn64RqOU1O2i/0Yj
- oeCBfi2nLYbwgCSFod/KC46xLCgZ5H34yGQHR3Ju+BjGnUhV9ynfuU40szvUMehRM7
- zUIQsNMeIKFrw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1770196929; bh=anesJW+xi8ywrnqW9kvChk2T27LMnQ/9Lpod97wfvTE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=H7ZmKNvMVTeqNHgIduSQIhBR1HODMRo3moAESX5hbqJM4GNTgFXfs2bWI3DX+BoYs
+ LwhxI4nrnAiht9iucyRjFQVU3ebgzAXVEtIg9aZV3Gv/8DaIiE5CcDrYd9XKPu1wyo
+ DJ/gkEOA+hOkV3ANYNkjQ/8mvmrxGJ3lGhjyY/zqrtG0OVHQAri34XvMbDJbS8+Y1F
+ M6LsqnTwAFEAnJU0SWW1218OXnDj7HDS1ilK6KfbgJnpMSUkwDzWqNOsrEcJqAJJkn
+ 5y0DwWt3crPi4PmsoHGORcTlEuLbaS6bakBPCA09lHo2EdECdmsvO2LnByUa+UK/kY
+ g9DSixtTadQ3Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=W836FKGb
-Subject: Re: [Buildroot] [PATCH v2] package/bind: security bump version to
- 9.20.17
+ header.s=a1 header.b=H7ZmKNvM
+Subject: [Buildroot] [PATCH] package/bind: security bump version to 9.18.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,62 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Peter,
+Release notes:
+https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/notes.html
 
-On 2/3/26 12:28, Peter Korsgaard wrote:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
-> 
->   > Release notes:
->   > https://ftp.isc.org/isc/bind9/9.20.17/doc/arm/html/notes.html
-> 
->   > Changelog:
->   > https://ftp.isc.org/isc/bind9/9.20.17/doc/arm/html/changelog.html
-> 
-> How about instead first bumping to 9.18.44, which also includes security
-> fixes and can be backported to 2025.02.x before moving to 9.20.x?
-rrrrrrrrrrr>
-> https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/notes.html#security-fixes
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.44/doc/arm/html/changelog.html
 
-then I'm going to send a patch for this.
+Fixes CVE-2025-13878.
 
-> 
->   > Fixes CVE-2025-40775 & CVE-2025-40777.
-> 
-> Those are both 9.20.x-only issues:
-> 
-> https://kb.isc.org/docs/cve-2025-40775
-> https://kb.isc.org/docs/cve-2025-40777
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Yes but comparing version 9.18.41 and version 9.20.17
-the only new CVEs were only those 2:
-
-in branch 9.18.x up to version 9.18.41 CVEs are:
-https://kb.isc.org/docs/cve-2025-8677
-https://kb.isc.org/docs/cve-2025-40778
-https://kb.isc.org/docs/cve-2025-40780
-https://kb.isc.org/docs/cve-2024-12705
-https://kb.isc.org/docs/cve-2024-11187
-
-while in branch 9.20.x up to version 9.20.17 CVEs are:
-https://kb.isc.org/docs/cve-2025-8677
-https://kb.isc.org/docs/cve-2025-40778
-https://kb.isc.org/docs/cve-2025-40780
-https://kb.isc.org/docs/cve-2025-40777
-https://kb.isc.org/docs/cve-2025-40775
-https://kb.isc.org/docs/cve-2024-12705
-https://kb.isc.org/docs/cve-2024-11187
-
-That's why I've pointed only those 2 CVEs. Was it correct?
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index d601e87b75..aaf3519ced 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.41/bind-9.18.41.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.44/bind-9.18.44.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  6ddc1d981511c4da0b203b0513af131e5d15e5f1c261145736fe1f35dd1fe79d  bind-9.18.41.tar.xz
++sha256  81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d  bind-9.18.44.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 8b336ab781..041541b037 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.18.41
++BIND_VERSION = 9.18.44
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering
-https://www.linkedin.com/company/benetti-engineering/
-https://www.linkedin.com/in/giulio-benetti-79975951/
+2.47.3
 
 _______________________________________________
 buildroot mailing list
