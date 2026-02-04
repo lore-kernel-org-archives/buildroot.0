@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C214AE9D41A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 754D8E9D416
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:07:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96DA46110B;
-	Wed,  4 Feb 2026 17:07:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A07361124;
+	Wed,  4 Feb 2026 17:07:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a3-cPFW7Kk10; Wed,  4 Feb 2026 17:07:12 +0000 (UTC)
+ id Y7bEruoEMyTC; Wed,  4 Feb 2026 17:07:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7545861115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36BCE6111F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770224832;
-	bh=/s140LG80vIy9Wl+tH8N1DCNpCXuZicb3MCHUvDr4ks=;
+	s=default; t=1770224835;
+	bh=+R84rmfy3gurnkC/DYQjGEhqvYMtR/szhgbwPytpVbE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=R/cf6d7ieisXV3vuyAocOKbo3OM2KzLPUYC0vkexmLzw6C3d+mUe/mNmVBqu+ErNd
-	 DNy9jgpH8le4wNjTquDMcaWWsCUrU9O4KnGAU+kn5kXmjK4ZhcPFuKQv+UqfFHbJGl
-	 qQC8hRyWhncVwuQJI5r24PJ20WGA5KkoeEO6n24NqAjwKdnDVnSy4UaPmvM+p2wHr0
-	 1P+bpIqEqiZJJqZMqOoFsSLH50obQEVBEDu35iO7EZG9b23EZmw/w1aaQoLFwhRJ5O
-	 /UEC/GiQcIRMI+fooaIWHlsO7dwchw/xR9u0UPMvvPVsr0ail5gPW4O39qXbt9SEfr
-	 NTLBXJBvG60Pw==
+	b=a4Jg4llEAuBRI6bPorY0NK2rAdKQYa6GaelSh9fBoMzWXWR6dme38zy34ccJ8QBp1
+	 X1zIIRH4dgM5sk9KYVAm1Q1G8I5Y9MCnbNK8PN+NJ2Xwyf4ascbv9vZuCh1oMw3A5n
+	 JUJ3eQBbPZ8qINn9kU0TyHeo1xioyExGVIAcvGnyxe/Ftjpp1EmjZEC96XfCQ+Re4Q
+	 vN5SvUDzm7Jmmix5q/hs2/4E7kpin4pCKa3oB6OUB4oNm6eESZW83Idf3zbn4qWRkT
+	 AD0MtM3YX5wObdGqzgpKTvexYvbMelPUjdzF/Cb/rO42QOCguTXRGFRCin9WpGWt9y
+	 JtEWijTk2CQaw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7545861115;
-	Wed,  4 Feb 2026 17:07:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 458E2F5
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36BCE6111F;
+	Wed,  4 Feb 2026 17:07:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FB73173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9577683C43
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E42160D76
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iGQjSxJpo5oH for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EEQYP3OErobu for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 17:06:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66C3F83C69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335D860F69
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 66C3F83C69
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 335D860F69
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 36E9486976; Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
+ id 2946186979; Wed,  4 Feb 2026 17:06:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 17:26:42 +0100
+Date: Wed, 4 Feb 2026 17:42:24 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9d4a0cdebd0ad838d12ef19c0da9b3c5355db145
-X-Git-Newrev: 717fe4cf60cb00addcee6ab25da9b90862d0175f
+X-Git-Oldrev: b63ea0d41b6f04f23d69de5b4292affd8a991d4a
+X-Git-Newrev: e04741990f21b6fae5dbb7b559fd009d68d05ecc
 X-Patchwork-Hint: ignore
-Message-Id: <20260204170637.36E9486976@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mcelog: fix musl
- build with gcc >= 14.x
+Message-Id: <20260204170638.2946186979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cryptsetup: bump
+ version to 2.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,120 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/717fe4cf60cb00addcee6ab25da9b90862d0175f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e04741990f21b6fae5dbb7b559fd009d68d05ecc
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes:
-https://autobuild.buildroot.net/results/902/9020e4fda8cbc4f9886d5e8725f6df8d99716241/
+For release note, see:
+https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.4/docs/v2.8.4-ReleaseNotes
 
-The build error does not occur with gcc-13.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a042ea816a44a72084fe90effc912787f1a2a673)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 69b623e4a9aff9e1f68105af1170e1d9a546b906)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...ver-Correct-prameter-type-for-connect-API.patch | 43 ++++++++++++++++++++++
- .../0002-client.c-fix-build-w-musl-libc.patch      | 42 +++++++++++++++++++++
- 2 files changed, 85 insertions(+)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch b/package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch
-new file mode 100644
-index 0000000000..cc9d0e84c6
---- /dev/null
-+++ b/package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch
-@@ -0,0 +1,43 @@
-+From c17897deb52daab300c585a6a6c2456d062d80cf Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 11 May 2024 22:50:19 -0700
-+Subject: [PATCH] server: Correct prameter type for connect() API
-+
-+connect() function expects the second argument to be point to sockaddr
-+as per man sockaddr
-+
-+int connect (int, const struct sockaddr *, socklen_t);
-+
-+Fixes build failures with -Wincompatible-pointer-types when using GCC-14
-+and musl
-+
-+Fixes
-+| server.c: In function 'server_ping':
-+| server.c:308:33: error: passing argument 2 of 'connect' from incompatible pointer type [-Wincompatible-pointer-types]
-+|   308 |                 if (connect(fd, un, sizeof(struct sockaddr_un)) < 0)
-+|       |                                 ^~
-+|       |                                 |
-+|       |                                 struct sockaddr_un *
-+
-+Signed-off-by: Andi Kleen <ak@linux.intel.com>
-+
-+Upstream: https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=c17897deb52daab300c585a6a6c2456d062d80cf
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ server.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/server.c b/server.c
-+index 54c7d57..51b7d3a 100644
-+--- a/server.c
-++++ b/server.c
-+@@ -305,7 +305,7 @@ static int server_ping(struct sockaddr_un *un)
-+ 	if (sigsetjmp(ping_timeout_ctx, 1) == 0) {
-+ 		ret = -1;
-+ 		alarm(initial_ping_timeout);
-+-		if (connect(fd, un, sizeof(struct sockaddr_un)) < 0)
-++		if (connect(fd, (const struct sockaddr *)un, sizeof(struct sockaddr_un)) < 0)
-+ 			goto cleanup;
-+ 		if (write(fd, PAIR("ping\n")) < 0)
-+ 			goto cleanup;
-diff --git a/package/mcelog/0002-client.c-fix-build-w-musl-libc.patch b/package/mcelog/0002-client.c-fix-build-w-musl-libc.patch
-new file mode 100644
-index 0000000000..f7334c8c6f
---- /dev/null
-+++ b/package/mcelog/0002-client.c-fix-build-w-musl-libc.patch
-@@ -0,0 +1,42 @@
-+From a90e39f896a2f1b76ad3c304b69c451ec92a687a Mon Sep 17 00:00:00 2001
-+From: Brahmajit Das <brahmajit.xyz@gmail.com>
-+Date: Mon, 12 Jun 2023 10:55:28 +0000
-+Subject: [PATCH] client.c: fix build w/ musl libc
-+
-+Without the patch, I'm getting the following error:
-+
-+client.c:47:2: error: call to undeclared library function 'strncpy' with type
-+      'char *(char *, const char *, unsigned long)'; ISO C99 and later do not support implicit function declarations
-+      [-Wimplicit-function-declaration]
-+        strncpy(sun.sun_path, path, sizeof(sun.sun_path)-1);
-+        ^
-+client.c:47:2: note: include the header <string.h> or explicitly provide a declaration for 'strncpy'
-+client.c:60:19: error: call to undeclared library function 'memcmp' with type 'int
-+      (const void *, const void *, unsigned long)'; ISO C99 and later do not support implicit function declarations
-+      [-Wimplicit-function-declaration]
-+                        if (n >= 5 && !memcmp(buf + n - 5, "done\n", 5)) {
-+                                       ^
-+client.c:60:19: note: include the header <string.h> or explicitly provide a declaration for 'memcmp'
-+2 errors generated.
-+
-+Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
-+
-+Upstream: https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=a90e39f896a2f1b76ad3c304b69c451ec92a687a
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ client.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/client.c b/client.c
-+index 883b1de..7119ed9 100644
-+--- a/client.c
-++++ b/client.c
-+@@ -19,6 +19,7 @@
-+ #include <sys/socket.h>
-+ #include <sys/un.h>
-+ #include <unistd.h>
-++#include <string.h>
-+ #include "mcelog.h"
-+ #include "client.h"
-+ #include "paths.h"
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index bbc9171e77..49126a4a2f 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/sha256sums.asc
+-sha256  4a8a23b8b9d1a3250452e40acead4421a03e45a38954ad0595634f4266aa800f  cryptsetup-2.8.3.tar.xz
++sha256  443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83  cryptsetup-2.8.4.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  docs/licenses/COPYING.Apache-2.0
+ sha256  28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5  docs/licenses/COPYING.CC-BY-SA-4.0
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index e8f2f1673a..6be05e6457 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 2.8
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
