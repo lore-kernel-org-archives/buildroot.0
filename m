@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E41AE9D3F9
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D771FE9D3F9
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 496F18184F;
-	Wed,  4 Feb 2026 15:06:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA30060D66;
+	Wed,  4 Feb 2026 15:09:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nYnYZDiV2aRs; Wed,  4 Feb 2026 15:06:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w43aLJ9J5xfC; Wed,  4 Feb 2026 15:09:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B23A281852
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18FBA60D6D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770217603;
-	bh=SqJjrr6AQA29MPJitiOUGIYbrVtIonxBBYb6ZLn1fUs=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	s=default; t=1770217771;
+	bh=rTtlwsZLU44X7BQvfHtbMx9fmDO1YffH48yGGanGaM0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=QcCP/avSWoGtbSq/QAjlTVH4B39ns8lH5yMeViP6GGgoXkMH0nMBwNJ3iNwReOZCq
-	 67VFQXuojBgakToVrFC+n/pNQnoaQpM9CtMv9bSveLmPDHK4fapkOmg2a4Us3aExOe
-	 r2UXeQKdAm7Yeh6ucq26kmOBRtydpE9OsnG1Sg8ySDd61KFREH09FTUGvLmaDZGSjs
-	 btHcOp9sz8MikFHMFeT1pIhpeF891a2Be20pKETM3k0VUaNU9DKJwzZma6C3H/geam
-	 6L9zdWjVfn7cB1Gc61j5R+MNOdFbotteB8tr8s7X51z+hXn83yqinYnKuQrwXmBhZJ
-	 Etfptc9O0/vKg==
+	b=CCS04mtn7z4PHnUq/H/+nrXEpfSG/N3icmI5zCUtzdg/V/yj2ajXGcxVC6zEnaAeI
+	 wEIfLHOJLuOKkqtOHr5V7S1835EuLqKIrV6my/hEnaw4cWUdFOjN7GFOFvsCYxQ29s
+	 hnzy904v7UqBJGk82LcZUJWnVy8a3CaE26p0vUw5bNBdP8+vsl4ep5jlPCh2l0nIc4
+	 bSS1pkjfYzLQZJ92NYgMA5a6dy6VCipbwkMFNoCrx6lcAwoxLIxGBh9OnnAqKSESvd
+	 /Y/sZaJt2t26/peOVzojfiL9xGXMpf+LGZ0YHHK0CSQ79mdo/w+u5/Ytt2Z7TpiLZS
+	 ZDP93q7YsnecA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B23A281852;
-	Wed,  4 Feb 2026 15:06:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D5E1173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:06:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18FBA60D6D;
+	Wed,  4 Feb 2026 15:09:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71241F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88D5640667
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:06:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51CCB40504
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ou8pszV6V-5u for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 15:06:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 75EF8401DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75EF8401DD
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 75EF8401DD
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:06:41 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -237910899; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 04 Feb 2026 15:06:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vneSh-0000000Cpl6-3YES;
- Wed, 04 Feb 2026 16:06:35 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260204150049.3057699-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 4 Feb 2026 16:00:48 +0100")
-References: <20260204150049.3057699-1-peter@korsgaard.com>
-Date: Wed, 04 Feb 2026 16:06:35 +0100
-Message-ID: <87ldh85z0k.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Af07ANHvTw9p for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 15:09:28 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
+ envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B13E6402B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B13E6402B7
+Received: from serv15.avernis.de (serv15.avernis.de
+ [IPv6:2a01:4f8:151:30a2::163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B13E6402B7
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:09:27 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 6E8EDBDE6140;
+ Wed, 04 Feb 2026 16:09:23 +0100 (CET)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=rb9oTPw7aKA4d7VwZ2132ZnmtzB1WX5FRfEWAA9MwV6mWuN1estQdVcWynViGJtQijYTwiwnKJJNohzMIWgkGtR8NGGTfeu28hjei60Q1blQAbo/1sEvkrVRVnnjEs9kYAuBjvZ/nftnEdFPisFrZTr0x2RCwBJMrYPPKysz0NdA8ridMg11S5I3fIwr+Na3WssljB437NGFmWwBEOQ6URw0uLGeu/qMKg1m3eZQPN+fve4Cok+tybNHrY8vk2KOI0Nxstj7xcRnBVZcN7nDz2qwqjCyUuckJUtHu+/t6FdDueLpLhh/pvknkMeOvDOuuZACEvJ1BHc4CR5DTanZWA==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=sJCTbhdORFfMQCoYWEHRLGiryY/M4GH6kX78bauT20Q=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Date: Wed, 04 Feb 2026 15:09:23 +0000
+From: Andreas Ziegler <br025@umbiko.net>
+To: Jimmy Wesolowski <Jimmy.Wesolowski@mobileye.com>
+Cc: buildroot <buildroot@buildroot.org>, Guenther Harrasser
+ <Guenther.Harrasser@mobileye.com>, Vladimir Kondratiev
+ <vladimir.kondratiev@intel.com>, Chris Packham <judge.packham@gmail.com>
+In-Reply-To: <DB9PR09MB4987A693711BB09B0A9C21B9F698A@DB9PR09MB4987.eurprd09.prod.outlook.com>
+References: <mailman.20273.1770054247.2009750.buildroot@buildroot.org>
+ <838e68729209415796298901bc72a55d@umbiko.net>
+ <DB9PR09MB4987A693711BB09B0A9C21B9F698A@DB9PR09MB4987.eurprd09.prod.outlook.com>
+Message-ID: <88c8fa9045273004c1714475b06491a8@umbiko.net>
+X-Sender: br025@umbiko.net
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1770217763; bh=ibxI8te5KUbTo4w710vvNgB85NCqIDnJgKBq9iBimbg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=bCIWHyOHQYefJHp93ZkwVrfzc3oWN+AgGAcWDOyfb0aPvBGsKv2Bt0TrGDKUvuRgL
+ kAJAizVOcLOFIv8Qfm1icc663qrtIhEhhOr35q8bSXCI+VAU3jqpoWQy2hmj774LO8
+ c1RGa7nCf3AhWmsYXXDf3ABjuekuZez4L7ibJnl8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=rb9oTPw7
-Subject: Re: [Buildroot] [PATCH] package/{glibc,
- localedef}: move to sourceware.org git repo
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=bCIWHyOH
+Subject: Re: [Buildroot] [PATCH] package/coremark: port for mips-i6500
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,37 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hi Jimmy,
 
- > As described in https://gitlab.com/buildroot.org/buildroot/-/issues/160, the
- > github mirror is getting shut down - So move to the sourceware.org git repo.
+On 2026-02-04 13:22, Jimmy Wesolowski wrote:
+> Hi Andreas,
+> 
+> 
+> Thank you very much for the review, and I am sorry for the terrible 
+> format, Office does
+> not allow proper inline answering.
+> 
+> We are indeed using a BR2_EXTERNAL, but we are in the process of 
+> upstreaming.
+> However, you are absolutely right, I did not pay attention to the patch 
+> itself, and that
+> makes my Acked-By more than a mistake.
+> I will adapt according to your comments and resend once fixed.
 
- > The github mirror was originally used because of performance and reliability
- > issues with sourceware, but that seems be resolved now after server/RAM
- > upgrades - E.G. from the sourceware news:
+No sweat, everything is fine.
 
- > April 22, 2024
- >     server2.sourceware.org now has 512GB RAM, thanks Red Hat.
+Upstreaming this particular change might add significant complexity to 
+the coremark package. The Buildroot maintainers might veto this 
+eventually, because coremark is a rather simple package, with probably 
+not much coverage in the community. But go ahead, I'm glad to assist and 
+test if possible.
 
- > https://sourceware.org/
+> 
+> Thank you again.
+> Best regards,
+> 
 
- > So change back to fetch glibc (and localedef) from sourceware.org over git.
+<cut>
 
- > Notice: The git archiving leads to slightly different paths and permissions
- > in the tarball, but the file content is identical:
-
- > mkdir a && tar -C a -x --strip-components -f \
-
-This should naturally be --strip-components=1 (both lines). Maybe
-something that can be fixed when applying.
-
--- 
-Bye, Peter Korsgaard
+Kind regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
