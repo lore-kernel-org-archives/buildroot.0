@@ -1,75 +1,121 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B804E9538F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36493E9538F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04B6681BC6;
-	Wed,  4 Feb 2026 12:18:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0053C60A6F;
+	Wed,  4 Feb 2026 12:27:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9AkkryeP4qhc; Wed,  4 Feb 2026 12:18:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jn-goHkaFLLG; Wed,  4 Feb 2026 12:27:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBEC981BCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD44D60A7C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770207516;
-	bh=Ho0SW359QRiEdGZjeX1thmnU8z/QildJDbwyDa66/j0=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=ocF+jHg2mwn1yUkEWAktqPvRJrNLCW9ycK4QKumXUjshfRS3/QLLNSO/HEZTmLOkM
-	 2Fs/IpRIZskwlQ4ExMPMIZrTIbIP5hosU8HaewTrZ+LVLBhA17FT06q78uqwaDAxBV
-	 uht5SlZM4jKsm3PNGOYDtapljBmHvzG9SwJ5LMJL7X18TDzZIjfKBe5mqiQmFPOvzR
-	 exM04dR+PUPy23wvkii62Wv2iKiM8M2/AhTMwmnDA0XyGZTebNiFb4h+HGjivJXTZT
-	 RYMbn5Bj6QCnQttArOPmcBi4IRFwf+w0SZH8c8Tpqdlvoawm6vU8CP7uYL+UbX5CDr
-	 74RqgGWzcpPlQ==
+	s=default; t=1770208071;
+	bh=/wsqvluS3960vwpc5DxiMqFOz+6+By2lNa9JSJelp5s=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=NX1OBdk1PDhVeIG+zKTyAkopTgGEOFiq/3ka9Q1K/xL28ut/MnqRW92g06RAALNt2
+	 a0xga+lHd9Ko5JD6IAYzv6o41BeVCAjH7yn96Q4gSEiooxJvyrc7q8ioGcbVWrLE9K
+	 t5BEOdMkR0MQNEpXU13Hv61lbrgneIPQiHlpu7SoYlj7PvoeW9NW5pEU3P/tR8AUGE
+	 kIJQHxup59v5i6v7vCq89oiOvQPMz2HGtoPOk3lvUvWy2BcYR910OTueJvxzmytedB
+	 bBjGXJvLlsn9suOx/HHVhoBe7uALCXnx08ExfhE5lesvTZuJj6ftZP9Lzx2mDFG/iq
+	 3rgENiEDCxaRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBEC981BCB;
-	Wed,  4 Feb 2026 12:18:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A0A47173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:18:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD44D60A7C;
+	Wed,  4 Feb 2026 12:27:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DD0E173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:27:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8070081BCB
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:18:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C600400FB
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:27:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dk6y_krU2kiX for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 12:18:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 138B081BC6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 138B081BC6
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 138B081BC6
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:18:31 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 5A4F531E0B83; Wed, 04 Feb 2026 13:18:30 +0100 (CET)
-Date: Wed, 4 Feb 2026 13:18:30 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <aYM5FlILmzX3apKt@waldemar-brodkorb.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Al3mjWfHPtx5 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 12:27:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.222.172;
+ helo=mail-qk1-f172.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CBB104007D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBB104007D
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com
+ [209.85.222.172])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CBB104007D
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:27:47 +0000 (UTC)
+Received: by mail-qk1-f172.google.com with SMTP id
+ af79cd13be357-8c5265d06c3so90837685a.1
+ for <buildroot@buildroot.org>; Wed, 04 Feb 2026 04:27:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1770208066; x=1770812866;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=YISQB3Y3lRgSRF6UWW271U4J4oPgXIlSmbs6SpQWZSc=;
+ b=teADEnUIs7CjZgdpCUS+2bGIm5jzAOJX1WMVoDDmCRvdt4W5NAPFwFawBqfOHyCZFN
+ 9KmPNXo9ZPFQK2TOOMwO1c8CNTGRMDxQH0bktvXJcNtZjFMQ8WK2fzAYZ+2I7e6k4DGp
+ TnwURKaWHb2qeUcW3LOJ2u1fhaokIv60ECFBZoT7S++5GbztBR341maHYMPgscKI0Wyn
+ LdmcSKybJ/DoyilNrLFkWxi9pTg78D0pqXIiwpaj63/pPhqnr6ak2E7jzDOdtlJGlwP3
+ 9/4h2MTw/VJDYhqcG2vgzzS1XAJfgJtlcwHKPted7ixtaFHugsrXblzPPE8cVr1kElF8
+ jUeQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVbpd44rWnGqsu5Jlv5BraYZXYFxjHcVOB16C0qMxnju6BgrFLtkTtewCP+wRunV86/QHf27a1HawQ=@buildroot.org
+X-Gm-Message-State: AOJu0Yx8hOGkUmoLe/RVwtTYIi8pqjtuAt2TOSNibDp9SZIwaD6bRybR
+ 8NhnMbSdZ/BJl3pM3WFB70enhC4MFyMb5dXE2NgBt7LV0ZPwuPOwVXQo/usrHu5G
+X-Gm-Gg: AZuq6aIbE0zq/VNiVipfQBbKu9WBI2iQIReLugrK5qGd6q0DwUoDVGRkPmiHuKjXAz0
+ DnFQwL+5utOzx3VRYWivOZNyO0bXIrLE3uhDpIGi1B/fj9ibjFavC8H69vssEim+Lv3QcQbzW84
+ uW0mmLGaZ9voPMbStR9TUd6EiVi2J3ytfsA7ckUWslIgyy005n1x6YP+WEb1h5fnFBnGWIObLXG
+ r0A1xnHxzcyw919QsDuqQG1ygAxFDG2sdCPs3hKSdp02ApV3QUqBSUoTXhbHv2c05Sgh/tyOe3T
+ b7HWKcBMsPaGBWgReGPlMvP4Fs780N5/YU9bHIRpzMiP0WrIGhKdX/p17d1+Y10NbXxN+IBYYdV
+ xJDXvV/9Mb25sdh24DuknlKV6oTInMMHcbYNQ26Ny5e9zqtfuePlZ2dWr6fOHYvOleI6WyN4Yqp
+ kIaoEtCl1SLbZmeCIsGn2XXtdcMdqIGTf8prwm+1km/zi6FD0vbSRxOVj61TamuTy6yNE1+s2Jj
+ Y1RozA=
+X-Received: by 2002:a05:620a:4111:b0:8c6:c983:dddb with SMTP id
+ af79cd13be357-8ca1fe97a97mr708041585a.0.1770208066081; 
+ Wed, 04 Feb 2026 04:27:46 -0800 (PST)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com.
+ [209.85.219.42]) by smtp.gmail.com with ESMTPSA id
+ af79cd13be357-8ca2fd2df44sm174251985a.30.2026.02.04.04.27.45
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 04 Feb 2026 04:27:45 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id
+ 6a1803df08f44-894a2309a29so9871766d6.1
+ for <buildroot@buildroot.org>; Wed, 04 Feb 2026 04:27:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUi9jWiRsocGEBzvTRJYX38jFIDOd3dq5BE3tYQpcc+2FGkTs46VUu1+cadI2tSdfDn6E438hGBDpo=@buildroot.org
+X-Received: by 2002:a05:6214:21ac:b0:894:5b77:ca26 with SMTP id
+ 6a1803df08f44-8952210f133mr32297616d6.14.1770208065099; Wed, 04 Feb 2026
+ 04:27:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1770207510; bh=a2vB2WrkR4u+rZyyLd7uu15fA3f6OKynYZ1qwjEj5Ac=;
- h=Date:From:To:Subject:From;
- b=M8Z0WEhvLnsbS8uZOh1g181drvR3/C3BL711cr5Qx+QU6V0lbCxlCeaeiXW9aHOCA
- JCJviIsXXlyV+bXgUJ36f1bXi4tB+fY+vnTqr75iVk2A4RwyqLuFF7QAn0bkJ+/I4t
- OOrM3itgZtUbmsYtPmPKN77xJ0bOGIW36v2uWC9IJsgaAelcRiVz7Ocs+6qiNUx39D
- kAjNDzjM1t9dazE4T4M3rsYZgV32cE29OkGvsDdLq4IE87M56ViE+W2vZf+JXEhD9u
- HhydFk/m35CI/im2vVbncsCO4OGUdjrAGstNLY086Jnj4IQRWzWL+/i0NnR8dcfkVf
- VX6bULfTtFZHg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+References: <20251226101445.2b29f439@windsurf>
+ <20260103084002.2045193-1-thomas@devoogdt.com>
+ <20260103084002.2045193-2-thomas@devoogdt.com>
+ <dc38e220-92ea-4cd7-a178-2792ebc289a6@smile.fr>
+ <CACXRmJiaRH-8v_ngEN=c4Ld+cbeQr43Y22Tz2g9YJTY-uEDroQ@mail.gmail.com>
+ <95ad9b01-8e54-4b5a-8b8a-bea23502b345@smile.fr>
+In-Reply-To: <95ad9b01-8e54-4b5a-8b8a-bea23502b345@smile.fr>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Wed, 4 Feb 2026 13:27:34 +0100
+X-Gmail-Original-Message-ID: <CACXRmJgF31hdsS_wY2tt6ok=CqMXbWwmy227s42jPw_tOZcPyw@mail.gmail.com>
+X-Gm-Features: AZwV_Qg8qP4__0IRLhmv1LSdydj4xdbcNb6KGJpXs9arowmRvshdFQ8UMTRN7So
+Message-ID: <CACXRmJgF31hdsS_wY2tt6ok=CqMXbWwmy227s42jPw_tOZcPyw@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org,
+ bernd@kuhls.net, romain.naour@gmail.com, thomas.devoogdt@barco.com, 
+ thomas.petazzoni@bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH v3 4/5] package/firefox: new package
+ header.from=devoogdt.com
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/mesa3d: fix compilation with
+ host-llvm enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,352 +127,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Popular Webbrowser.
-
-Tested on Raspberry PI4 (aarch64) and Qemu X86_64.
-You need some fonts to be installed to make use of it,
-f.e. Dejavu fonts.
-To compile firefox you need a machine with approximately 24 GB of RAM.
-
-The system PNG library can not be used, because it does not have APNG
-support.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1->v2:
-  - update to latest esr
-  - use system nss
-v2->v3:
-  - update to latest esr
-  - do not use system ICU, Buildroot version is too new
-  - add explicitely host rust dependency
-  - add python3.14 compatibility patch from LFS project
----
- package/Config.in                            |   1 +
- package/firefox/0001-python_3.14_fixes.patch | 115 +++++++++++++++++++
- package/firefox/Config.in                    |  56 +++++++++
- package/firefox/firefox.hash                 |   3 +
- package/firefox/firefox.mk                   |  95 +++++++++++++++
- 5 files changed, 270 insertions(+)
- create mode 100644 package/firefox/0001-python_3.14_fixes.patch
- create mode 100644 package/firefox/Config.in
- create mode 100644 package/firefox/firefox.hash
- create mode 100644 package/firefox/firefox.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 2f9fa35fb2..84c3a98114 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -397,6 +397,7 @@ comment "X applications"
- 	source "package/dillo/Config.in"
- 	source "package/docker/Config.in"
- 	source "package/feh/Config.in"
-+	source "package/firefox/Config.in"
- 	source "package/mupdf/Config.in"
- 	source "package/nodm/Config.in"
- 	source "package/pcmanfm/Config.in"
-diff --git a/package/firefox/0001-python_3.14_fixes.patch b/package/firefox/0001-python_3.14_fixes.patch
-new file mode 100644
-index 0000000000..7dffcc2ab4
---- /dev/null
-+++ b/package/firefox/0001-python_3.14_fixes.patch
-@@ -0,0 +1,115 @@
-+Submitted By:            Douglas R. Reno <renodr at linuxfromscratch dot org>
-+Date:                    2025-11-24
-+Initial Package Version: 140.5.0
-+Upstream Status:         Applied in mainline Firefox
-+Origin:                  Upstream (phabricator D261511, 261512, 262335)
-+Description:             Fixes building Firefox, Thunderbird, and Spidermonkey
-+                         with Python 3.14 by adjusting to various API changes.
-+                         This includes ast.Str being removed, and changing to
-+                         ast.Constant.
-+
-+Upstream: committed in mainline
-+Signed-Off-By: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Naurp firefox-140.5.0.orig/python/mach/mach/command_util.py firefox-140.5.0/python/mach/mach/command_util.py
-+--- firefox-140.5.0.orig/python/mach/mach/command_util.py	2025-11-24 11:23:51.750623267 -0600
-++++ firefox-140.5.0/python/mach/mach/command_util.py	2025-11-24 11:24:21.308238189 -0600
-+@@ -292,7 +292,7 @@ class DecoratorVisitor(ast.NodeVisitor):
-+             kwarg_dict = {}
-+ 
-+             for name, arg in zip(["command", "subcommand"], decorator.args):
-+-                kwarg_dict[name] = arg.s
-++                kwarg_dict[name] = arg.value
-+ 
-+             for keyword in decorator.keywords:
-+                 if keyword.arg not in relevant_kwargs:
-+diff -Naurp firefox-140.5.0.orig/python/mozbuild/mozbuild/frontend/reader.py firefox-140.5.0/python/mozbuild/mozbuild/frontend/reader.py
-+--- firefox-140.5.0.orig/python/mozbuild/mozbuild/frontend/reader.py	2025-11-24 11:23:51.768015306 -0600
-++++ firefox-140.5.0/python/mozbuild/mozbuild/frontend/reader.py	2025-11-24 11:24:52.533651548 -0600
-+@@ -470,7 +470,7 @@ class TemplateFunction:
-+             return c(
-+                 ast.Subscript(
-+                     value=c(ast.Name(id=self._global_name, ctx=ast.Load())),
-+-                    slice=c(ast.Index(value=c(ast.Str(s=node.id)))),
-++                    slice=c(ast.Index(value=c(ast.Constant(value=node.id)))),
-+                     ctx=node.ctx,
-+                 )
-+             )
-+@@ -1039,8 +1039,8 @@ class BuildReader:
-+                 else:
-+                     # Others
-+                     assert isinstance(target.slice, ast.Index)
-+-                    assert isinstance(target.slice.value, ast.Str)
-+-                    key = target.slice.value.s
-++                    assert isinstance(target.slice.value, ast.Constant)
-++                    key = target.slice.value.value
-+             elif isinstance(target, ast.Attribute):
-+                 assert isinstance(target.attr, str)
-+                 key = target.attr
-+@@ -1051,11 +1051,11 @@ class BuildReader:
-+             value = node.value
-+             if isinstance(value, ast.List):
-+                 for v in value.elts:
-+-                    assert isinstance(v, ast.Str)
-+-                    yield v.s
-++                    assert isinstance(v, ast.Constant)
-++                    yield v.value
-+             else:
-+-                assert isinstance(value, ast.Str)
-+-                yield value.s
-++                assert isinstance(value, ast.Constant)
-++                yield value.value
-+ 
-+         assignments = []
-+ 
-+diff -Naurp firefox-140.5.0.orig/python/mozbuild/mozbuild/vendor/rewrite_mozbuild.py firefox-140.5.0/python/mozbuild/mozbuild/vendor/rewrite_mozbuild.py
-+--- firefox-140.5.0.orig/python/mozbuild/mozbuild/vendor/rewrite_mozbuild.py	2025-11-24 11:23:51.759248622 -0600
-++++ firefox-140.5.0/python/mozbuild/mozbuild/vendor/rewrite_mozbuild.py	2025-11-24 11:24:52.533818626 -0600
-+@@ -327,15 +327,13 @@ def assignment_node_to_source_filename_l
-+     """
-+     if isinstance(node.value, ast.List) and "elts" in node.value._fields:
-+         for f in node.value.elts:
-+-            if not isinstance(f, ast.Constant) and not isinstance(f, ast.Str):
-++            if not isinstance(f, ast.Constant):
-+                 log(
-+                     "Found non-constant source file name in list: ",
-+                     ast_get_source_segment(code, f),
-+                 )
-+                 return []
-+-        return [
-+-            f.value if isinstance(f, ast.Constant) else f.s for f in node.value.elts
-+-        ]
-++        return [f.value for f in node.value.elts]
-+     elif isinstance(node.value, ast.ListComp):
-+         # SOURCES += [f for f in foo if blah]
-+         log("Could not find the files for " + ast_get_source_segment(code, node.value))
-+diff -Naurp firefox-140.5.0.orig/python/mozbuild/mozbuild/vendor/vendor_python.py firefox-140.5.0/python/mozbuild/mozbuild/vendor/vendor_python.py
-+--- firefox-140.5.0.orig/python/mozbuild/mozbuild/vendor/vendor_python.py	2025-11-24 11:23:51.759208183 -0600
-++++ firefox-140.5.0/python/mozbuild/mozbuild/vendor/vendor_python.py	2025-11-24 13:07:12.726375733 -0600
-+@@ -40,6 +40,10 @@ EXCLUDED_PACKAGES = {
-+     # modified 'dummy' version of it so that the dependency checks still succeed, but
-+     # if it ever is attempted to be used, it will fail gracefully.
-+     "ansicon",
-++    # jsonschema 4.17.3 is incompatible with Python 3.14+,
-++    # but later versions use a dependency with Rust components, which we thus can't vendor.
-++    # For now we apply the minimal patch to jsonschema to make it work again.
-++    "jsonschema",
-+ }
-+ 
-+ 
-+diff -Naurp firefox-140.5.0.orig/third_party/python/jsonschema/jsonschema/validators.py firefox-140.5.0/third_party/python/jsonschema/jsonschema/validators.py
-+--- firefox-140.5.0.orig/third_party/python/jsonschema/jsonschema/validators.py	2025-11-24 11:23:51.358876258 -0600
-++++ firefox-140.5.0/third_party/python/jsonschema/jsonschema/validators.py	2025-11-24 13:07:12.726605890 -0600
-+@@ -875,8 +875,11 @@ class RefResolver:
-+             return None
-+         uri, fragment = urldefrag(url)
-+         for subschema in subschemas:
-++            id = subschema["$id"]
-++            if not isinstance(id, str):
-++                continue
-+             target_uri = self._urljoin_cache(
-+-                self.resolution_scope, subschema["$id"],
-++                self.resolution_scope, id,
-+             )
-+             if target_uri.rstrip("/") == uri.rstrip("/"):
-+                 if fragment:
-diff --git a/package/firefox/Config.in b/package/firefox/Config.in
-new file mode 100644
-index 0000000000..266bfa2309
---- /dev/null
-+++ b/package/firefox/Config.in
-@@ -0,0 +1,56 @@
-+config BR2_PACKAGE_FIREFOX
-+	bool "firefox"
-+	depends on BR2_aarch64 || BR2_x86_64
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_DAV1D
-+	select BR2_PACKAGE_DBUS_GLIB
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_HARFBUZZ
-+	select BR2_PACKAGE_HOST_RUST
-+	select BR2_PACKAGE_HOST_NODEJS
-+	select BR2_PACKAGE_HOST_NODEJS_SRC
-+	select BR2_PACKAGE_HOST_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
-+	select BR2_PACKAGE_HOST_PYTHON3_CURSES
-+	select BR2_PACKAGE_HOST_PYTHON3_SQLITE
-+	select BR2_PACKAGE_HOST_PYTHON3_SSL
-+	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_ICU
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBAOM
-+	select BR2_PACKAGE_LIBGTK3
-+	select BR2_PACKAGE_LIBNSPR
-+	select BR2_PACKAGE_LIBNSS
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_LIBVPX
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBICE
-+	select BR2_PACKAGE_XLIB_LIBSM
-+	help
-+	  Popular webbrowser.
-+
-+	  https://www.firefox.com
-+
-+comment "firefox needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+
-+comment "firefox needs an OpenGL (GLX) provider"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/firefox/firefox.hash b/package/firefox/firefox.hash
-new file mode 100644
-index 0000000000..0b72224a59
---- /dev/null
-+++ b/package/firefox/firefox.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  608a739071726f30236f7100ec5e30e1b8ec342d4e91e715948c287909cb1529  firefox-140.7.0esr.source.tar.xz
-+sha256  d10965daab0b819bef778c629a94cdd094ffb4ede37239b3d263884a574352c0  toolkit/content/license.html
-diff --git a/package/firefox/firefox.mk b/package/firefox/firefox.mk
-new file mode 100644
-index 0000000000..db604fb9d5
---- /dev/null
-+++ b/package/firefox/firefox.mk
-@@ -0,0 +1,95 @@
-+################################################################################
-+#
-+# firefox
-+#
-+################################################################################
-+
-+FIREFOX_VERSION = 140.7.0esr
-+FIREFOX_SOURCE = firefox-$(FIREFOX_VERSION).source.tar.xz
-+FIREFOX_SITE = https://ftp.mozilla.org/pub/firefox/releases/$(FIREFOX_VERSION)/source
-+FIREFOX_LICENSE = MPL-2.0
-+FIREFOX_LICENSE_FILES = toolkit/content/license.html
-+FIREFOX_DEPENDENCIES = \
-+	host-rustc \
-+	host-nodejs \
-+	host-cbindgen \
-+	host-clang \
-+	host-nasm \
-+	alsa-lib \
-+	dav1d \
-+	dbus-glib \
-+	fontconfig \
-+	harfbuzz \
-+	jpeg \
-+	libaom \
-+	libgtk3 \
-+	libnspr \
-+	libnss \
-+	libevent \
-+	libvpx \
-+	pango \
-+	pixman \
-+	zlib \
-+	xlib_libXcomposite \
-+	xlib_libXcursor \
-+	xlib_libXdamage \
-+	xlib_libXrandr \
-+	xlib_libICE \
-+	xlib_libSM
-+
-+FIREFOX_CONF_OPTS = \
-+	--enable-application=browser \
-+      	--enable-official-branding \
-+	--enable-hardening \
-+	--disable-accessibility \
-+	--disable-audio-backends \
-+	--disable-webrtc \
-+	--disable-printing \
-+	--without-wasm-sandboxed-libraries \
-+	--disable-profiling \
-+	--disable-pulseaudio \
-+	--disable-crashreporter \
-+	--disable-tests \
-+	--without-system-icu \
-+	--with-system-av1 \
-+	--with-system-ffi \
-+	--with-system-jpeg \
-+	--with-system-libevent \
-+	--with-system-libvpx \
-+	--with-system-nspr \
-+	--with-system-nss \
-+	--with-system-pixman \
-+	--with-system-zlib \
-+	--with-clang-path=$(HOST_DIR)/bin/clang
-+
-+# build directory can't be the directory where configure are there, so..
-+define FIREFOX_CONFIGURE_CMDS
-+	(mkdir -p $(@D)/build; cd $(@D)/build; rm -rf config.cache; \
-+		PATH=$(BR_PATH) \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		CROSS_COMPILE=1 \
-+		../configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--with-toolchain-prefix=$(GNU_TARGET_NAME)- \
-+		--prefix=/usr \
-+		$(FIREFOX_CONF_OPTS) \
-+	)
-+endef
-+
-+define FIREFOX_BUILD_CMDS
-+	$(MAKE) -C $(@D)/build \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		all
-+endef
-+
-+define FIREFOX_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/build \
-+		DESTDIR=$(TARGET_DIR) \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUm9tYWluLCBBbGwsCgpPcCB3byA0IGZlYiAyMDI2IG9tIDA5OjU0IHNjaHJlZWYgUm9tYWlu
+IE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Ogo+Cj4gSGkgVGhvbWFzLCBBbGwsCj4KPiBM
+ZSAwNC8wMi8yMDI2IMOgIDA3OjExLCBUaG9tYXMgRGV2b29nZHQgYSDDqWNyaXQgOgo+ID4gSGkg
+Um9tYWluLAo+ID4KPiA+IFJlc2VuZGluZyBpdCwgYXMgbXkgb3RoZXIgbWFpbCBhZGRyZXNzIGlz
+IG5vdCB0cnVzdGVkIGJ5IHRoZSBtYWlsaW5nIGxpc3QuCj4KPiBQbGVhc2UsIGF2b2lkIHRvcCBw
+b3N0aW5nIHdoZW4gdGhlIG1haWxpbmcgbGlzdCBpcyBpbiBDYy4+CgpPawoKPiA+IEkgbm90aWNl
+ZCB0aGlzIHByb2JsZW0gd2hlbiBjb21waWxpbmcgdGhlIDIwMjUuMDIgYnJhbmNoLCB3aGljaCBp
+cyBzdGlsbCBvbiBMTFZNCj4gPiAxNS4wLjcuIE15IFBDIHNoaXBzIHdpdGggTExWTSAxOC4xLjMu
+IFNvLCBCUiB3YXMgdHJ5aW5nIHRvIHVzZSBhIG5ld2VyIGNvbmZpZwo+ID4gdmVyc2lvbiAoMTgu
+MS4zKSBhcyBpdCB3YXMgc2hpcHBpbmcuIFNlZSBlcnJvciBsb2cuIEluIHRoZSBtZWFudGltZSwg
+bWFzdGVyIGhhcwo+ID4gZXZvbHZlZCwgYW5kIHNoaXBzIHdpdGggTExWTSAyMS4xLjgsIHdpdGgg
+dGhhdCBjb21iaW5hdGlvbiwgbm8gcHJvYmxlbSBwZXJzaXN0cwo+ID4gYXMgdGhlIGF2YWlsYWJs
+ZSB2ZXJzaW9ucyBhcmUgYWx3YXlzIG5ld2VyIHRoYW4gbXkgb3duIFBDLgo+ID4KPiA+IFNvIGlu
+IHNob3J0LCB5b3Ugd29uJ3Qgc2VlIGFueSBwcm9ibGVtIGlmIHlvdXIgaG9zdCBMTFZNIGlzIG9s
+ZGVyIHRoYW4gdGhlCj4gPiB2ZXJzaW9uIHdoaWNoIGlzIHRyeWluZyB0byBiZSBidWlsdC4KPiA+
+Cj4gPiBCdXQgd2hhdCBJIGRvbid0IHVuZGVyc3RhbmQgaXMgd2h5IHRoZSByaWdodCBMTFZNIGlz
+IGZvdW5kIG9uIHlvdXIgaG9zdCBQQy4gQQo+ID4gcXVpY2sgbG9vayBhdCBodHRwczovL2dpdGxh
+Yi5mcmVlZGVza3RvcC5vcmcvbWVzYS9tZXNhLy0vYmxvYi9tYWluL21lc29uLmJ1aWxkPwo+ID4g
+cmVmX3R5cGU9aGVhZHMgPGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9tZXNhL21lc2Ev
+LS9ibG9iL21haW4vCj4gPiBtZXNvbi5idWlsZD9yZWZfdHlwZT1oZWFkcz4gZG9lc24ndCB0ZWFj
+aCBtZSBhbnl0aGluZy4gQW5kIGZvciBtZXNvbiwgSSBkb24ndAo+ID4gc2VlIHJlY2VudCBjb21t
+aXRzIHRoYXQgbWlnaHQgaGF2ZSBjaGFuZ2VkIHNvbWV0aGluZyBodHRwczovL2dpdGh1Yi5jb20v
+Cj4gPiBtZXNvbmJ1aWxkL21lc29uL2NvbW1pdHMvbWFzdGVyL21lc29uYnVpbGQvZGVwZW5kZW5j
+aWVzL2RhdGEvQ01ha2VMaXN0c0xMVk0udHh0Cj4gPiA8aHR0cHM6Ly9naXRodWIuY29tL21lc29u
+YnVpbGQvbWVzb24vY29tbWl0cy9tYXN0ZXIvbWVzb25idWlsZC9kZXBlbmRlbmNpZXMvCj4gPiBk
+YXRhL0NNYWtlTGlzdHNMTFZNLnR4dD4uCj4KPiBUaGUgMjAyNS4wMi54IExUUyBicmFuY2ggc3Rp
+bGwgdXNlIG1lc2EzZCAyNC4wLjkgYW5kIHRoZSBob3N0IHZhcmlhbnQKPiAoaG9zdC1tZXNhM2Qp
+IGlzIG5vdCBhdmFpbGFibGUgeWV0LiBTbywgSXQgc2VlbXMgeW91ciBwcm9qZWN0IGJhY2twb3J0
+ZWQgbWVzYTNkCj4gMjUuMC42IChtZXJnZWQgaW4gMjAyNS4wNSkgdG8gQnVpbGRyb290IDIwMjUu
+MDIueC4KPgo+IENhbiB5b3UgcHJvdmlkZSBhIHdheSB0byByZXByb2R1Y2UgdGhlIGlzc3VlIHdp
+dGggYSBkZWZjb25maWc/IG9uIDIwMjUuMDUgbWF5YmUgPwoKSSB3YXMgYWJsZSB0byByZXByb2R1
+Y2UgaXQgb24gMjAyNS4wNS54LApvciBieSBmaXJzdCBjaGVycnktcGlja2luZyBvbiAyMDI1LjAy
+Lng6Ci0gMzE3MjYwZjMzNmI2NWZmMGI0MWE5NTM4ODJjYjhjY2NiNzg5ZTAxMAotIDhiNWRkNDlj
+NWIyZWI1MmU3MWJhOWRmZjY3YjFiYTU0ZDBlMDBhYzMKLSA0ODkwNDE1YWE5ZTkxOGJkYmI1MjQx
+NGUwZTUzZjI5ZTkzMzE1MjkxCi0gYjA4YmM1YjllOTQyNjlhZGI0YTFjNTc3MWM4YzI2YzhjODdl
+NWI1YQosIGFuZCB0aGVuIHRvIGNvbXBpbGUgdGhpcyBjb25maWc6CgpCUjJfeDg2XzY0PXkKQlIy
+X3g4Nl9hdG9tPXkKQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15CkJSMl9UT09MQ0hBSU5fRVhURVJO
+QUxfQk9PVExJTl9YODZfNjRfR0xJQkNfU1RBQkxFPXkKQlIyX0xJTlVYX0tFUk5FTD15CkJSMl9M
+SU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQpCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJT
+SU9OX1ZBTFVFPSI2LjEuMjQiCkJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQpC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvcGMvbGludXguY29uZmln
+IgpCUjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFSR0VUPXkKQlIyX0xJTlVYX0tFUk5FTF9ORUVE
+U19IT1NUX09QRU5TU0w9eQpCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfTElCRUxGPXkKQlIy
+X1BBQ0tBR0VfTUVTQTNEPXkKQlIyX1BBQ0tBR0VfTUVTQTNEX0xMVk09eQpCUjJfUEFDS0FHRV9N
+RVNBM0RfR0FMTElVTV9EUklWRVJfSTkxNT15CkJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RS
+SVZFUl9JUklTPXkKQlIyX1BBQ0tBR0VfTUVTQTNEX09QRU5HTF9FR0w9eQpCUjJfUEFDS0FHRV9N
+RVNBM0RfT1BFTkdMX0VTPXkKClRoZW4gSSBnZXQ6CgpgYGAKbGx2bS1jb25maWcgZm91bmQ6IFlF
+UyAoL3Vzci9iaW4vbGx2bS1jb25maWctMTgpIDE4LjEuMwpSdW4tdGltZSBkZXBlbmRlbmN5IExM
+Vk0gKG1vZHVsZXM6IGJpdHdyaXRlciwgY29yZSwgY292ZXJhZ2UsIGVuZ2luZSwKZXhlY3V0aW9u
+ZW5naW5lLCBpbnN0Y29tYmluZSwgaXJyZWFkZXIsIGxpYmRyaXZlciwgbGlua2VyLCBsdG8sCm1j
+ZGlzYXNzZW1ibGVyLCBtY2ppdCwgbmF0aXZlLCBvcHRpb24sIHNjYWxhcm9wdHMsIHRhcmdldCwK
+dHJhbnNmb3JtdXRpbHMsIGFsbC10YXJnZXRzLCBjb3JvdXRpbmVzLCBmcm9udGVuZGRyaXZlciwg
+ZnJvbnRlbmRobHNsLApsdG8sIHdpbmRvd3Nkcml2ZXIpIGZvdW5kOiBZRVMgMTguMS4zCkRlcGVu
+ZGVuY3kgTExWTVNQSVJWTGliIGZvdW5kOiBOTy4gRm91bmQgMTUuMC4wLjAgYnV0IG5lZWQ6ICc+
+PSAxOC4xJwo7IG1hdGNoZWQ6ICc+PSAxNS4wLjAuMCcsICc8IDE4LjInClJ1bi10aW1lIGRlcGVu
+ZGVuY3kgbGx2bXNwaXJ2bGliIGZvdW5kOiBOTyAodHJpZWQgY21ha2UpCgpvdXRwdXQvYnVpbGQv
+aG9zdC1tZXNhM2QtMjUuMC42L21lc29uLmJ1aWxkOjE4ODI6MjE6IEVSUk9SOiBEZXBlbmRlbmN5
+Cmxvb2t1cCBmb3IgTExWTVNQSVJWTGliIHdpdGggbWV0aG9kICdwa2djb25maWcnIGZhaWxlZDog
+SW52YWxpZAp2ZXJzaW9uLCBuZWVkICdMTFZNU1BJUlZMaWInIFsnPj0gMTguMSddIGZvdW5kICcx
+NS4wLjAuMCcuCgpBIGZ1bGwgbG9nIGNhbiBiZSBmb3VuZCBhdAovaG9tZS90aG9tYXMvRG9jdW1l
+bnRzL2V4dGVybmFsL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1tZXNhM2QtMjUuMC42L2J1
+aWxkcm9vdC1idWlsZC9tZXNvbi1sb2dzL21lc29uLWxvZy50eHQKbWFrZVsxXTogKioqIFtwYWNr
+YWdlL3BrZy1nZW5lcmljLm1rOjI2MzoKL2hvbWUvdGhvbWFzL0RvY3VtZW50cy9leHRlcm5hbC9i
+dWlsZHJvb3Qvb3V0cHV0L2J1aWxkL2hvc3QtbWVzYTNkLTI1LjAuNi8uc3RhbXBfY29uZmlndXJl
+ZF0KRXJyb3IgMQptYWtlOiAqKiogW01ha2VmaWxlOjgzOiBfYWxsXSBFcnJvciAyCmBgYAoKSSB3
+aWxsIHVwZGF0ZSB0aGUgcGF0Y2guCgo+IEkgYmVsaWV2ZSB0aGF0IHRoaXMgY2hhbmdlIGlzIGNv
+cnJlY3QgYnV0IGNhbiB5b3UgaW1wcm92ZSB0aGUgY29tbWl0IGxvZyB0bwo+IGV4cGxhaW4gaG93
+IHRvIHJlcHJvZHVjZSB0aGUgaXNzdWUuCj4KPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWluCj4KPgo+
+ID4KPiA+Cj4gPiBLciwKPiA+Cj4gPiBUaG9tYXMgRGV2b29nZHQKPiA+Cj4gPiBPcCBkaSAzIGZl
+YiAyMDI2IG9tIDE4OjUwIHNjaHJlZWYgUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUu
+ZnIKPiA+IDxtYWlsdG86cm9tYWluLm5hb3VyQHNtaWxlLmZyPj46Cj4gPgo+ID4gICAgIEhlbGxv
+IFRob21hcywgQWxsLAo+ID4KPiA+ICAgICBMZSAwMy8wMS8yMDI2IMOgIDA5OjQwLCBUaG9tYXMg
+RGV2b29nZHQgYSDDqWNyaXQgOgo+ID4gICAgID4gRnJvbTogVGhvbWFzIERldm9vZ2R0IDx0aG9t
+YXMuZGV2b29nZHRAYmFyY28uY29tCj4gPiAgICAgPG1haWx0bzp0aG9tYXMuZGV2b29nZHRAYmFy
+Y28uY29tPj4KPiA+ICAgICA+Cj4gPiAgICAgPiBNZXNvbidzIGN1c3RvbSBMTFZNIHBhcnNlciB1
+c2VzIGxsdm0tY29uZmlnIHdpdGggYSBkZWZhdWx0IHNlYXJjaCBwYXRoIG9mCj4gPiAgICAgPiAv
+dXNyL2JpbiwgY2F1c2luZyBpdCB0byBkZXRlY3QgdGhlIGhvc3Qgc3lzdGVtJ3MgbGx2bS1jb25m
+aWcgKHZlcnNpb24gMTguMS4zKQo+ID4gICAgID4gaW5zdGVhZCBvZiB0aGUgYnVpbGRyb290LWNv
+bXBpbGVkIG9uZS4gVGhpcyBmb3JjZXMgYWxsIExMVk0tcmVsYXRlZAo+ID4gICAgIHBhY2thZ2Vz
+IHRvCj4gPiAgICAgPiBtYXRjaCB2ZXJzaW9uIDE4LjEuMywgYnV0IHNpbmNlIHRoZSBob3N0IHN5
+c3RlbSBsYWNrcyBsbHZtc3BpcnZsaWIsIHRoZSBidWlsZAo+ID4gICAgID4gZmFpbHMuIFRoaXMg
+cGF0Y2ggZm9yY2VzIE1lc29uIHRvIHVzZSB0aGUgYnVpbGRyb290LWNvbXBpbGVkIGxsdm0tY29u
+ZmlnLgo+ID4gICAgID4KPiA+ICAgICA+IE5vdGUgdGhhdCBMTFZNX0NPTkZJRyBpcyBhIENNYWtl
+IG9wdGlvbiwgbm90IGEgTWVzb24gb25lLiBUaGlzIGlzIGJlY2F1c2UKPiA+ICAgICA+IE1lc29u
+IGhhcyBjdXN0b20gZGVwZW5kZW5jeSByZXNvbHV0aW9uIGxvZ2ljIGZvciBMTFZNIChzZWUKPiA+
+ICAgICA+IGh0dHBzOi8vbWVzb25idWlsZC5jb20vRGVwZW5kZW5jaWVzLmh0bWwjbGx2bSA8aHR0
+cHM6Ly9tZXNvbmJ1aWxkLmNvbS8KPiA+ICAgICBEZXBlbmRlbmNpZXMuaHRtbCNsbHZtPikuIFRo
+ZSBFWFRSQV9CSU5BUklFUyBtZWNoYW5pc20KPiA+ICAgICA+IGNhbm5vdCBiZSB1c2VkIGhlcmUs
+IGFzIGl0IG9ubHkgYXBwbGllcyB0byBjcm9zcy1jb21waWxhdGlvbiBzY2VuYXJpb3MsIHdoaWNo
+Cj4gPiAgICAgPiBkb2VzIG5vdCBhcHBseSB0byBob3N0LW1lc2EzZCBidWlsZHMuCj4gPiAgICAg
+Pgo+ID4gICAgID4gRml4ZXM6Cj4gPiAgICAgPgo+ID4gICAgID4gICBsbHZtLWNvbmZpZyBmb3Vu
+ZDogWUVTICgvdXNyL2Jpbi9sbHZtLWNvbmZpZy0xOCkgMTguMS4zCj4gPgo+ID4gICAgIGxsdm0t
+Y29uZmlnIGlzIGluc3RhbGxlZCBvbiBteSBob3N0Cj4gPgo+ID4gICAgICQgd2hpY2ggbGx2bS1j
+b25maWcKPiA+ICAgICAvdXNyL2Jpbi9sbHZtLWNvbmZpZwo+ID4KPiA+ICAgICAkIGxsdm0tY29u
+ZmlnIC0tdmVyc2lvbgo+ID4gICAgIDE5LjEuNwo+ID4KPiA+ICAgICBCdXQgYnVpbGRpbmcgaG9z
+dC1tZXNhM2QgaXMgYWJsZSB0byBmaW5kIHRoZSBvbmUgYnVpbHQgYnkgQnVpbGRyb290IGFuZAo+
+ID4gICAgIGluc3RhbGxlZCBpbiBIT1NUX0RJUjoKPiA+Cj4gPiAgICAgbGx2bS1jb25maWcgZm91
+bmQ6IFlFUyAoWy4uLl0vaG9zdC9iaW4vbGx2bS1jb25maWcpIDIxLjEuOAo+ID4KPiA+ICAgICA+
+ICAgUnVuLXRpbWUgZGVwZW5kZW5jeSBMTFZNIChtb2R1bGVzOiBiaXR3cml0ZXIsIGNvcmUsIGNv
+dmVyYWdlLCBlbmdpbmUsCj4gPiAgICAgZXhlY3V0aW9uZW5naW5lLCBpbnN0Y29tYmluZSwgaXJy
+ZWFkZXIsIGxpYmRyaXZlciwgbGlua2VyLCBsdG8sCj4gPiAgICAgbWNkaXNhc3NlbWJsZXIsIG1j
+aml0LCBuYXRpdmUsIG9wdGlvbiwgc2NhbGFyb3B0cywgdGFyZ2V0LCB0cmFuc2Zvcm11dGlscywK
+PiA+ICAgICBhbGwtdGFyZ2V0cywgY29yb3V0aW5lcywgZnJvbnRlbmRkcml2ZXIsIGZyb250ZW5k
+aGxzbCwgbHRvLCB3aW5kb3dzZHJpdmVyKQo+ID4gICAgIGZvdW5kOiBZRVMgMTguMS4zCj4gPiAg
+ICAgPiAgIERlcGVuZGVuY3kgTExWTVNQSVJWTGliIGZvdW5kOiBOTy4gRm91bmQgMTUuMC4wLjAg
+YnV0IG5lZWQ6ICc+PSAxOC4xJyA7Cj4gPiAgICAgbWF0Y2hlZDogJz49IDE1LjAuMC4wJywgJzwg
+MTguMicKPiA+ICAgICA+ICAgUnVuLXRpbWUgZGVwZW5kZW5jeSBsbHZtc3BpcnZsaWIgZm91bmQ6
+IE5PICh0cmllZCBjbWFrZSkKPiA+ICAgICA+Cj4gPiAgICAgPiAgIG91dHB1dC9idWlsZC9ob3N0
+LW1lc2EzZC0yNS4wLjYvbWVzb24uYnVpbGQ6MTg4MjoyMTogRVJST1I6IERlcGVuZGVuY3kKPiA+
+ICAgICBsb29rdXAgZm9yIExMVk1TUElSVkxpYiB3aXRoIG1ldGhvZCAncGtnY29uZmlnJyBmYWls
+ZWQ6IEludmFsaWQgdmVyc2lvbiwKPiA+ICAgICBuZWVkICdMTFZNU1BJUlZMaWInIFsnPj0gMTgu
+MSddIGZvdW5kICcxNS4wLjAuMCcuCj4gPgo+ID4gICAgIGlzIHRoaXMgaXNzdWUgc3BlY2lmaWMg
+dG8gdGhpcyBtZXNhM2QgdmVyc2lvbiAoMjUuMC42KSA/Cj4gPgo+ID4gICAgIFdlIGFyZSB1c2lu
+ZyBtZXNhM2QgMjUuMy40IGFscmVhZHkuCj4gPgo+ID4gICAgID4KPiA+ICAgICA+ICAgQSBmdWxs
+IGxvZyBjYW4gYmUgZm91bmQgYXQgL2hvbWUvdGhvbWFzL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQv
+aG9zdC0KPiA+ICAgICBtZXNhM2QtMjUuMC42L2J1aWxkcm9vdC1idWlsZC9tZXNvbi1sb2dzL21l
+c29uLWxvZy50eHQKPiA+ICAgICA+ICAgbWFrZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmlj
+Lm1rOjI2MyA8aHR0cDovL3BrZy1nZW5lcmljLm1rOjI2Mz46IC8KPiA+ICAgICBob21lL3Rob21h
+cy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL2hvc3QtbWVzYTNkLTI1LjAuNi8uc3RhbXBfY29uZmln
+dXJlZF0gRXJyb3IgMQo+ID4gICAgID4gICBtYWtlOiAqKiogW01ha2VmaWxlOjgzOiBfYWxsXSBF
+cnJvciAyCj4gPiAgICAgPgo+ID4gICAgID4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0
+IDx0aG9tYXMuZGV2b29nZHRAYmFyY28uY29tCj4gPiAgICAgPG1haWx0bzp0aG9tYXMuZGV2b29n
+ZHRAYmFyY28uY29tPj4KPiA+ICAgICA+IC0tLQo+ID4gICAgID4gdjI6IE1vdmVkIHBhdGNoIHRv
+IHRoZSBnZW5lcmljIGhvc3QtbWVzYTNkIHNlY3Rpb24uCj4gPiAgICAgPiAgICAgQWxzbyB1cGRh
+dGVkIHRoZSBnaXQgbWVzc2FnZSB3cnQgTExWTV9DT05GSUcgb3B0aW9uLgo+ID4gICAgID4gLS0t
+Cj4gPiAgICAgPiAgcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rIDxodHRwOi8vbWVzYTNkLm1rPiB8
+IDMgKysrCj4gPiAgICAgPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQo+ID4gICAg
+ID4KPiA+ICAgICA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsgPGh0dHA6
+Ly9tZXNhM2QubWs+IGIvcGFja2FnZS9tZXNhM2QvCj4gPiAgICAgbWVzYTNkLm1rIDxodHRwOi8v
+bWVzYTNkLm1rPgo+ID4gICAgID4gaW5kZXggMDliMDk4NjI4YWIuLmRhMzgwYjNiMzg5IDEwMDY0
+NAo+ID4gICAgID4gLS0tIGEvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rIDxodHRwOi8vbWVzYTNk
+Lm1rPgo+ID4gICAgID4gKysrIGIvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rIDxodHRwOi8vbWVz
+YTNkLm1rPgo+ID4gICAgID4gQEAgLTI5Miw2ICsyOTIsOSBAQCBpZmVxICgkKEJSMl9QQUNLQUdF
+X01FU0EzRF9WVUxLQU5fRFJJVkVSX0lNQUdJTkFUSU9OKSx5KQo+ID4gICAgID4gIEhPU1RfTUVT
+QTNEX1RPT0xTICs9IGltYWdpbmF0aW9uCj4gPiAgICAgPiAgZW5kaWYKPiA+ICAgICA+Cj4gPiAg
+ICAgPiArSE9TVF9NRVNBM0RfQ09ORl9FTlYgPSBcCj4gPiAgICAgPiArICAgICBMTFZNX0NPTkZJ
+Rz0iJChIT1NUX0RJUikvYmluL2xsdm0tY29uZmlnIgo+ID4KPiA+ICAgICBPdGhlcndpc2UgbG9v
+a3Mgb2sgZm9yIG1lLgo+ID4KPiA+ICAgICBCZXN0IHJlZ2FyZHMsCj4gPiAgICAgUm9tYWluCj4g
+Pgo+ID4KPiA+ICAgICA+ICsKPiA+ICAgICA+ICBIT1NUX01FU0EzRF9DT05GX09QVFMgPSBcCj4g
+PiAgICAgPiAgICAgICAtRGdsdm5kPWRpc2FibGVkIFwKPiA+ICAgICA+ICAgICAgIC1EZ2FsbGl1
+bS1kcml2ZXJzPSQoc3Vic3QgJChzcGFjZSksJChjb21tYSksCj4gPiAgICAgJChIT1NUX01FU0Ez
+RF9HQUxMSVVNX0RSSVZFUlMteSkpIFwKPiA+Cj4gPgo+ID4KPgo+CgpLciwKClRob21hcyBEZXZv
+b2dkdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
