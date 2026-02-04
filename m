@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DC41E83F1F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 14:02:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C65BE87845
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 14:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3769E40740;
-	Wed,  4 Feb 2026 14:02:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2407A60A72;
+	Wed,  4 Feb 2026 14:02:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sk1QOBPryzpJ; Wed,  4 Feb 2026 14:02:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l555BXuLzHHO; Wed,  4 Feb 2026 14:02:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EE5F40742
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2653960B77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770213732;
-	bh=tO7kpkXeLWu+XNNa5ySVuDQgHLTf4+KHyr27PhZJ16I=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MBEV79J9K2wTs0z5JHOrImMt9NZ2SLk3NdfhCUVtT9OfCHuSoejaqF7BjDn7uZbSe
-	 +s3THEvb4QiSbHDQKY/WN2fGotFKVOXckt3GSczRGsxIfEfzrDvHuu2lLErMW0eCCm
-	 SjmRei5jfbuJ6naXFI/CbbVsYqnEDtiOc63vf16pKGz3ROlcfbpJG5JokLa7fBNPMA
-	 tPxC/7K91+j95T7CNDWZqXTheACQ+9HVxZBbxj5fnUFNhY1Fro/p/oo/pIPsF58H9Z
-	 pYEFxyB5oRoU0PTYkoMULcp1g5o04Pcz4+okdWk4hxfOlm2r1IZsE3+LSTnv4nCcSA
-	 +COYVgpkb95kQ==
+	s=default; t=1770213742;
+	bh=eik31on5rcUCwj+4uVuv+NFiIhR5pOz+k9F7bSNrYbU=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=mNprPHw0dIxWtNsvGWwo6QIUUZFjX7yRh7toC6zKQq0tDGTEEdPcLU+jtnInq8qd3
+	 OAgQ59LtSUMEV2u8+0fd7NoomclEuyRA+5s4qnuhRQy3jNcaKlzYu6zIJg9FqCavGL
+	 JUsMvz8gqAyfCmNi0k39250UKDBcuJ7Ah7OyJN/qzFJ9y3NLGoY61inQG2jwS7g1LZ
+	 rwxRXFjCIyLjHgpiR9VxYwcHRpjMpijg9wN44UR/6r7TsKLbcRgbZY4pUmiSCnrS5w
+	 9UmCfb/jequire6LAmjj62FOI6VB7n87d8OftQUOFuU6bp6MsQU+WXgL8RoDJZxMEg
+	 F3mGlzcb9yM3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EE5F40742;
-	Wed,  4 Feb 2026 14:02:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 92DD8F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 14:02:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2653960B77;
+	Wed,  4 Feb 2026 14:02:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72366F5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 14:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 796FC40742
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 14:02:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CB5F83B56
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 14:02:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 38KfscXoLRDF for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 14:02:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wnECTl5tcdEm for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 14:02:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F36940740
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F36940740
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 14:02:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 619DC86900; Wed,  4 Feb 2026 14:02:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 14:58:45 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 302a325f1f15d80aa0675841f50b2f8964680cb6
-X-Git-Newrev: 06eacc370d643d1c55e5bc49edf9bfa66876f34f
-X-Patchwork-Hint: ignore
-Message-Id: <20260204140209.619DC86900@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/brltty: fix musl build
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8807583AE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8807583AE6
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8807583AE6
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 14:02:19 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id EFB40C2439A;
+ Wed,  4 Feb 2026 14:02:22 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 0D82C60745;
+ Wed,  4 Feb 2026 14:02:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id E7E16119A8891; Wed,  4 Feb 2026 15:02:11 +0100 (CET)
+Date: Wed, 4 Feb 2026 15:02:10 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Mario Lang <mlang@blind.guru>
+Message-ID: <aYNRVxpnjfR0JNpr@windsurf>
+References: <20260104110506.353384-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260104110506.353384-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1770213732; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=XrxsWazKa+63S+qFnaQo6Hq4cI/mUfCXaaRUr5F+iN0=;
+ b=iiJc416r18QXwH0LvITj6+fPx6RSZMeBPNuWZzc/43FP1do8lVESCiNfVJQ4NGw4zFxK5N
+ 5ysPCFvicsuWiXREeX8KKpc/vwa+QkOqxBTfd2c+hzI8qj8l+lCBgeJURL7d8C2T3lCflh
+ PoroIuzrUzUp+Sb7Fb42T9+wbivN/hysCBqiUYEPi7LbWxSwt5hYcc2hOUeo2sjCQP9qCy
+ SDu6bd8/rfSMdaoduUuOclObvebxxnQtiYvpUi9IvdJwoFAJ+rS3mEe/WeSliYFTQeWyqM
+ ALOF1WzpH8nVCNg5R5lLLG0sPRs83VeX0x+MWXZzTtK/9OupPeM9Nme3QnBCEA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=iiJc416r
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/brltty: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,149 +95,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/06eacc370d643d1c55e5bc49edf9bfa66876f34f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, Jan 04, 2026 at 12:05:06PM +0100, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da/
+> 
+> The build error was not introduced by the recent bump to 6.8. The oldest
+> build error with the previous brltty version 6.6 used in buildroot dates
+> back to 2023:
+> https://autobuild.buildroot.net/results/78a/78a7fe6edfb84c2b15fff32aa475c975ecd5bdbc/
+> 
+> and with brltty 6.4 to 2022:
+> https://autobuild.buildroot.net/results/a5b/a5b338ce9865fc7afaecd9b671e6a8f290548374/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes:
-https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da/
+Applied, thanks!
 
-The build error was not introduced by the recent bump to 6.8. The oldest
-build error with the previous brltty version 6.6 used in buildroot dates
-back to 2023:
-https://autobuild.buildroot.net/results/78a/78a7fe6edfb84c2b15fff32aa475c975ecd5bdbc/
-
-and with brltty 6.4 to 2022:
-https://autobuild.buildroot.net/results/a5b/a5b338ce9865fc7afaecd9b671e6a8f290548374/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../brltty/0004-check-for-functions-inb-outb.patch | 98 ++++++++++++++++++++++
- package/brltty/brltty.mk                           |  1 +
- 2 files changed, 99 insertions(+)
-
-diff --git a/package/brltty/0004-check-for-functions-inb-outb.patch b/package/brltty/0004-check-for-functions-inb-outb.patch
-new file mode 100644
-index 0000000000..64f2a2d7a7
---- /dev/null
-+++ b/package/brltty/0004-check-for-functions-inb-outb.patch
-@@ -0,0 +1,98 @@
-+From 876bdd3153c791a51422a43403143ff10acb6e82 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 3 Jan 2026 15:35:48 +0100
-+Subject: [PATCH] check for functions inb & outb
-+
-+Musl C library provides sys/io.h but inb and outb are missing on some
-+archs. This patch adds a configure check ported from sane-backends:
-+https://github.com/solanoalves/sane-backend/blob/059b97962ecb1b1ab068f524988d16c5b55bbd29/configure.ac#L314
-+to fix build errors detected by buildroot autobuilders:
-+https://autobuild.buildroot.net/results/76d/76d18437241d1281566b76ed1cec2ba99c3532da//build-end.log
-+
-+./ports_glibc.c: In function 'readPort1':
-+./ports_glibc.c:54:10: error: implicit declaration of function 'inb' [-Wimplicit-function-declaration]
-+   54 |   return inb(port);
-+      |          ^~~
-+./ports_glibc.c: In function 'writePort1':
-+./ports_glibc.c:63:3: error: implicit declaration of function 'outb' [-Wimplicit-function-declaration]
-+   63 |   outb(value, port);
-+      |   ^~~~
-+
-+Upstream: https://github.com/brltty/brltty/commit/85cadac951cda709ce53d49923114595c16a8f16
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Programs/ports_glibc.c |  4 ++--
-+ config.h.in            |  3 +++
-+ configure.ac           | 19 +++++++++++++++++++
-+ 3 files changed, 24 insertions(+), 2 deletions(-)
-+
-+diff --git a/Programs/ports_glibc.c b/Programs/ports_glibc.c
-+index 4233f9ea0..4a57f626d 100644
-+--- a/Programs/ports_glibc.c
-++++ b/Programs/ports_glibc.c
-+@@ -50,7 +50,7 @@ disablePorts (unsigned short int base, unsigned short int count) {
-+ 
-+ unsigned char
-+ readPort1 (unsigned short int port) {
-+-#ifdef HAVE_SYS_IO_H
-++#ifdef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
-+   return inb(port);
-+ #else /* HAVE_SYS_IO_H */
-+   return 0;
-+@@ -59,7 +59,7 @@ readPort1 (unsigned short int port) {
-+ 
-+ void
-+ writePort1 (unsigned short int port, unsigned char value) {
-+-#ifdef HAVE_SYS_IO_H
-++#ifdef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
-+   outb(value, port);
-+ #endif /* HAVE_SYS_IO_H */
-+ }
-+diff --git a/config.h.in b/config.h.in
-+index 537d3af92..edea70cea 100644
-+--- a/config.h.in
-++++ b/config.h.in
-+@@ -331,6 +331,9 @@ extern "C" {
-+ /* Define this if the header file sys/io.h exists. */
-+ #undef HAVE_SYS_IO_H
-+ 
-++/* Define to 1 if you have the <sys/io.h> providing inb,outb. */
-++#undef BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB
-++
-+ /* Define this if the header file sys/modem.h exists. */
-+ #undef HAVE_SYS_MODEM_H
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index b78d482f6..0a2a70dd0 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -961,6 +961,25 @@ AC_CHECK_FUNCS([shmget shm_open])
-+ AC_CHECK_FUNCS([getpeereid getpeerucred getzoneid])
-+ AC_CHECK_FUNCS([mempcpy wmempcpy])
-+ 
-++dnl sys/io.h might provide ioperm but not inb,outb (like for
-++dnl non i386/x32/x86_64 with musl libc)
-++if test "${ac_cv_header_sys_io_h}" = "yes"; then
-++  AC_MSG_CHECKING([for inb,outb (provided by sys/io.h)])
-++  AC_LINK_IFELSE(
-++    [AC_LANG_PROGRAM([[#include <sys/io.h>]],
-++      [[inb(0);outb(0,0);]])],
-++    [AC_MSG_RESULT([yes])
-++      brltty_cv_have_sys_io_h_with_inb_outb="yes"],
-++    [AC_MSG_RESULT([no])
-++      brltty_cv_have_sys_io_h_with_inb_outb="no"
-++      AC_MSG_WARN([sys/io.h does not provide inb,outb (non i386/x32/x86_64 arch?)])])
-++  if test "$brltty_cv_have_sys_io_h_with_inb_outb" = "yes"; then
-++    AC_DEFINE(BRLTTY_HAVE_SYS_IO_H_WITH_INB_OUTB, 1, [Define to 1 if you have the <sys/io.h> providing inb,outb.])
-++  fi
-++else
-++  brltty_cv_have_sys_io_h_with_inb_outb="no"
-++fi
-++
-+ case "${host_os}"
-+ in
-+    cygwin*|mingw*)
-+-- 
-+2.47.3
-+
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 5e24288cbb..4952210121 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -40,6 +40,7 @@ BRLTTY_CONF_OPTS = \
- # Autoreconf is needed because we're patching configure.ac in
- # 0001-Fix-linking-error-on-mips64el and
- # 0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.
-+# 0004-check-for-functions-inb-outb.patch
- # However, a plain autoreconf doesn't work, because this package
- # is only autoconf-based.
- define BRLTTY_AUTOCONF
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
