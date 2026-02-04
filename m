@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE030E9538F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC946E9538F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:15:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F3B6608C2;
-	Wed,  4 Feb 2026 12:13:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9966260A55;
+	Wed,  4 Feb 2026 12:15:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QMLaajFOl_dU; Wed,  4 Feb 2026 12:13:51 +0000 (UTC)
+ id jj5bjxF6N-nU; Wed,  4 Feb 2026 12:15:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74CA360A55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9978860A5E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770207231;
-	bh=iBlLT779Jh+bJMQ5BMm6Yb38lOsJhH/m6inm3jK23dM=;
+	s=default; t=1770207358;
+	bh=6Fyj4Hm89Q8a22Xj337/7SXTyU7veMpULAZ9EW2C0BY=;
 	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=cMaiAj2ahOAVHUBv+EzxTS+EEmNRe19A12llqTFpA9T7L5jZNOQP+9keVxlVM+egL
-	 FTuy0V7thSeO81cfOWLD91rIqms/b3J6bSllpnLfdk/R3x8LmS5hlfaZihAmrt27r1
-	 DIkSV9e7NqM7sDPUieDI5/V2iFWsYWXPwaE/MQrhjLlnO7LOf7OU+1HQbUJdb8ldhK
-	 gWlpp1qOpA1p4glvH8So8uOoBkOfN3gRJ7VJrZKftH7MRCiiz8IEyATjNaEiS3nU3a
-	 9FovRVb9mo/R9IvcSvpkLzmyoYG++93WYuTuUyWdsXLRprpMxx07jn8AXlt8RROiFs
-	 1nuuwlkSvw/bQ==
+	b=QBvkt024O/b7NtMH7mFFhcuOVW4qn9YPBsbam+uIMt/cd4sSKDszM+vsbu1ZjBzBZ
+	 356eL5Tn1cXWtDTeyev685hpjuWDxke12YTW4ySYkfHVdTwxnlVSh3AnkThtn6rRpf
+	 ETnsDyul4q8dUBw3jgEmxjGMMZ8NJATwh0OVOGgJpG8RfEO0bUoWuQkb/WoET0qyAR
+	 dMB07arnTz/k1+z8bajvSUMEH/9pIFFOxuABby+YiTXuwPkDIquqXlhLwUTDaLZ6VW
+	 Sy7qHorw2yNalMJWhjW5Noe6GuzbM3xSfY4/QVPCgdeLGbAPWB1v31EOi0BK03CsPF
+	 driYj3k2bGb6g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74CA360A55;
-	Wed,  4 Feb 2026 12:13:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 59946F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:13:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9978860A5E;
+	Wed,  4 Feb 2026 12:15:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A6B0AF4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41F9740AE2
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:13:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8795981AD1
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:15:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y5Na2S9vyFid for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 12:13:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d57l2y6X83bD for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 12:15:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 22A0440AE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22A0440AE1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5E14881A6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E14881A6F
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 22A0440AE1
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:13:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5E14881A6F
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:15:56 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id EF26531E0B83; Wed, 04 Feb 2026 13:13:45 +0100 (CET)
-Date: Wed, 4 Feb 2026 13:13:45 +0100
+ id 5FAE131E0B83; Wed, 04 Feb 2026 13:15:54 +0100 (CET)
+Date: Wed, 4 Feb 2026 13:15:54 +0100
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <aYM3-YJ9EDSSoiQx@waldemar-brodkorb.de>
+Message-ID: <aYM4eqS91bacIELq@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1770207225; bh=rLDd16yAi/7oSFQJ0CTt0xGF5UPnZ2dA9r6yFecdGNU=;
+ t=1770207354; bh=xwz5PWJFuOD3pQxUkt3ZCYIJ5z0ad66dAmsOJvg5f40=;
  h=Date:From:To:Subject:From;
- b=mQh+CmnwFFxX5T4FKCePyk0QT81D4MPzqPMSfUOMr/OGYEOugR22dMhH+jkvykib9
- urWwYB8bNC/0JVBWLcdUTCHPCk1NwELbtsSVSgwj0+yShn+m6tCS/wqUG9QZ879Lvt
- Sz+x6wWWm0haDiQTyOiUvWfd/Z5UyJUp5Np4B7RWPqHNasOtwPyq38HcpLnfu44oKD
- FDAsjWYqRq39byPRy1yuob33PaG5MFmlgop7t8Toee6yqGO4anZGjkQjUXHgmEPYNA
- hnJvu6CVaFf1oBDyh+EU7W9jzaSBXt903thgnWWaZNy8GxrEfYxxfGihGiFih9/Q7b
- hR3Q2py4akCeg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=rouC39aHgne/3HG5updTVYb8vkHMcf8Fd8d3q6/1GkPsonwsT5+HK68lRU19Gq/oF
+ L4sp2pwUQZ0RL0/D8o9Jr8v5b2wxjs5NXwm15GSKCTeQyt1xyRcE6Fo7CrZO2xmg1U
+ hz/S/SrYSZDfPcCTULSqQKf+nqJ5ebY+I/e6ipymDojwoLAzt9ywBc8xvx3geOPNVJ
+ c+lzHkQSM7YWYJ5ADA9TXe7b/BJFwRS2w8BbVqNjMgQVLLMoXBu5D0qSnmEkaep9tI
+ i8fV/Aqs4qspeZvKp6V7wSZ7cvlvqLcI6BOYfOn4B6rf2nYZ7Et4zzDstEMiYD5Ri3
+ +utJFXqbRNFRQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-Subject: [Buildroot] [PATCH v3 1/5] package/libaom: new package
+Subject: [Buildroot] [PATCH v3 2/5] package/cbindgen: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,92 +86,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This contains a reference version of the Alliance for Open Media video codec.
-This codec is a patent free alternative to H.265, and is starting to be
-used throughout the internet.
-This library is used by firefox.
+cbindgen creates C/C++11 headers for Rust libraries which expose a public C API.
+This is a requirement to build firefox.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
  no changes
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libaom/Config.in   |  8 ++++++++
- package/libaom/libaom.hash |  2 ++
- package/libaom/libaom.mk   | 15 +++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/libaom/Config.in
- create mode 100644 package/libaom/libaom.hash
- create mode 100644 package/libaom/libaom.mk
+ DEVELOPERS                     |  1 +
+ package/cbindgen/cbindgen.hash |  3 +++
+ package/cbindgen/cbindgen.mk   | 13 +++++++++++++
+ 3 files changed, 17 insertions(+)
+ create mode 100644 package/cbindgen/cbindgen.hash
+ create mode 100644 package/cbindgen/cbindgen.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 13bf5244fe..e964886da6 100644
+index e964886da6..9012ab523e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3431,6 +3431,7 @@ F:	package/asterisk/
+@@ -3428,6 +3428,7 @@ F:	board/stmicroelectronics/stm32f746-disco/
+ F:	configs/qemu_riscv32_nommu_virt_defconfig
+ F:	configs/stm32f746_disco_sd_defconfig
+ F:	package/asterisk/
++F:	package/cbindgen/
  F:	package/evilwm/
  F:	package/fbv/
  F:	package/libpam-pkcs11/
-+F:	package/libaom/
- F:	package/mksh/
- F:	package/ruby/
- F:	package/uclibc/
-diff --git a/package/Config.in b/package/Config.in
-index 258ad1883d..2f9fa35fb2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1930,6 +1930,7 @@ menu "Multimedia"
- 	source "package/dav1d/Config.in"
- 	source "package/kvazaar/Config.in"
- 	source "package/libaacs/Config.in"
-+	source "package/libaom/Config.in"
- 	source "package/libass/Config.in"
- 	source "package/libbdplus/Config.in"
- 	source "package/libbluray/Config.in"
-diff --git a/package/libaom/Config.in b/package/libaom/Config.in
+diff --git a/package/cbindgen/cbindgen.hash b/package/cbindgen/cbindgen.hash
 new file mode 100644
-index 0000000000..8ff06219be
+index 0000000000..fc86c122a1
 --- /dev/null
-+++ b/package/libaom/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBAOM
-+	bool "libaom"
-+	help
-+	  This contains a reference version of the Alliance for Open Media
-+	  video codec. This codec is a patent free alternative to H.265,
-+	  and is starting to be used throughout the internet.
-+
-+	  https://aomedia.org/
-diff --git a/package/libaom/libaom.hash b/package/libaom/libaom.hash
++++ b/package/cbindgen/cbindgen.hash
+@@ -0,0 +1,3 @@
++# Locally generated
++sha256  61db56782dad6fbf1972ddbe13907bf57ef571dc4c10759eafcba11d49970840  0.29.0.tar.gz
++sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  LICENSE
+diff --git a/package/cbindgen/cbindgen.mk b/package/cbindgen/cbindgen.mk
 new file mode 100644
-index 0000000000..5d5a8b0e32
+index 0000000000..917d2bd91f
 --- /dev/null
-+++ b/package/libaom/libaom.hash
-@@ -0,0 +1,2 @@
-+sha256  19e45a5a7192d690565229983dad900e76b513a02306c12053fb9a262cbeca7d  libaom-3.13.1.tar.gz
-+sha256  4764a286d8b2faeaf42f4418e7d7a28d58fc8fd4d00a3d0a7f44b0a4099de7f2  LICENSE
-diff --git a/package/libaom/libaom.mk b/package/libaom/libaom.mk
-new file mode 100644
-index 0000000000..733cc24c94
---- /dev/null
-+++ b/package/libaom/libaom.mk
-@@ -0,0 +1,15 @@
++++ b/package/cbindgen/cbindgen.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# libaom
++# cbindgen
 +#
 +################################################################################
 +
-+LIBAOM_VERSION = 3.13.1
-+LIBAOM_SITE = https://storage.googleapis.com/aom-releases
-+LIBAOM_DEPENDENCIES = host-nasm
-+LIBAOM_INSTALL_STAGING = YES
-+LIBAOM_LICENSE = BSD-2-Clause
-+LIBAOM_LICENSE_FILES = LICENSE
-+LIBAOM_SUPPORTS_IN_SOURCE_BUILD = NO
++CBINDGEN_VERSION = 0.29.0
++CBINDGEN_SOURCE = $(CBINDGEN_VERSION).tar.gz
++CBINDGEN_SITE = https://github.com/mozilla/cbindgen/archive/refs/tags
++CBINDGEN_LICENSE = MPL-2.0
++CBINDGEN_LICENSE_FILES = LICENSE
 +
-+$(eval $(cmake-package))
++$(eval $(host-cargo-package))
 -- 
 2.47.3
 
