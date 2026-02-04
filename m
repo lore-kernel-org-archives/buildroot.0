@@ -1,106 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964D8E95396
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D83CE95396
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 12:38:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A04C60A80;
-	Wed,  4 Feb 2026 12:36:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5A7881234;
+	Wed,  4 Feb 2026 12:38:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YKQPBIwKWQnW; Wed,  4 Feb 2026 12:38:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9EF88125B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770208726;
+	bh=fzCwiJ/AeI1VKc3tVJ/qJI0fpRpXN32S8hrIvbYOTxc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=AcexD0iIxnujktQLkRgdBS6masuASvxrbjCpYFxWrdZRnmolPiEwi+kXfeXXjyfKq
+	 OBvy/ULYegr2UepEMFyVg76ytTyze76cAk6MvX6LOn+Y1RS/jhY/eFRBYnwHQ9sYex
+	 bk6Lyx8NJpGtcyaJSFtwLg+mdbRoPjEoqvhrfdkwj2ityMm/t26r2M6sZ8aXtZ0fiH
+	 9HKq2H2VThFBO7A/7CvpxNGuHp3HT4kN4QYCwmKw/lxtOp3k/1A73QxmXuk/yb6hL+
+	 HCrSgqiLtL1WLMp35Ik1ftF/WlkzYZbNrPBJsYh69JzTcM2UWplZV49t7/Pd1dz4ff
+	 2JEdl8jIgUDUA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9EF88125B;
+	Wed,  4 Feb 2026 12:38:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3045EF4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:38:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E83260C08
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:38:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SizRhPfVhW23; Wed,  4 Feb 2026 12:36:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6046660AB7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770208578;
-	bh=woQdqYQr1hrQb621du5nYDpu8D2c7ZQhbuAX27GvttM=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=aLlb/n+oJffhvoJyFSBONjYL79VW28PeAHgho4m8pdDSDxk37B/MrN5GIK+DNbTX8
-	 +DGbWE6wIoE6SluRk8yyROStNUo/u/75yZ85P9NZGC55+4+83F9iIZvkCTIwQTCnBZ
-	 /P/TUyT+f/byw29L0x6T9m7xkxsgp+HCV0dSD1cBiEBtSOOIviWYjw0PhKd+UmBeNF
-	 eUBAntjXDp6Op+ljPH5vtOlBLwy3jKlWsHkGXJ5uPjsLUn0K1smuylUgWCjVywXBIl
-	 CA7qHiPxHAoxwm9YRIBBImpAtIFEZiR8jtGm0NuB16FK71GbT/3yNXpJYg0A7iwjjN
-	 bZEWu1k76LCKQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6046660AB7;
-	Wed,  4 Feb 2026 12:36:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48162F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:36:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3371E40363
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:36:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qFoT6tVPcZs1 for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 12:36:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.50;
- helo=mail-wr1-f50.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ id 3Cz0Ve5eKwT2 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 12:38:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CAF53400FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAF53400FB
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com
- [209.85.221.50])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CAF53400FB
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:36:15 +0000 (UTC)
-Received: by mail-wr1-f50.google.com with SMTP id
- ffacd0b85a97d-432d28870ddso472796f8f.3
- for <buildroot@buildroot.org>; Wed, 04 Feb 2026 04:36:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770208574; x=1770813374;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=nqtz78UQTskiyV66z8c6TXHsZlVav3zvjGq4N6eC5h0=;
- b=mnfYiRL5K2cOm4wXoeUrWFogw/bhXl7B8LPjWLrq/RYvqag5O71VLkDWO/X2jYMzQn
- 5XWhDZaEroNIKBaTJR49u5Di6qOJxLXBRofnw6EjtoxN3WnH9nWM0VLbGTxBpqmT77yG
- LA24NbaX1GtCbszwcD1SQiJwSaTJet5l1rfNocHA8tn2Ko+nTv0ZFOagoW5cR7JqAPVG
- oJE81na2hmCyY8+nFnyFQANHxQV0e6Gl2M852fFRoqd3TJ2oSXeulbmarJCa3O/KnB7m
- 0zzJe6OMOryOK3u0kKimOWAhCbsUWcyNLCl/7+QSw6YWA/L/x1fdIoPpOcNC1yFyk3vc
- iMDg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWJcq2iwdWmEVvvC1byjfh2af26nwgYnexsL701MVjWSLzwjUehbvcV9Wcx+lljN6qYc8fxrKV/MGU=@buildroot.org
-X-Gm-Message-State: AOJu0Yw0Q7Zb1pv2NlliQ9pZynFm2QZ1qhiQE02WD/6e9zu46pxN3jwS
- iv+9uZ8EpOAleNRqJ7Y7x+Pc+zEbwN7MNNQVHYj2c1Y05tqj/jGFxtp+
-X-Gm-Gg: AZuq6aK9sSY1TJVMt76Ph4gAdZfXpYG+l518NOL/WtZYDYyBy/mQlnoNz+xlz35ZrpF
- MafRNa5V2HGy57EmDQ3wvTW2aOihQO+rlDrPJOgJ+TkOVkozOu4dRSKdsWal+c+92UMuKpYL5gI
- 8mGghyX73uD/oR1Q4gzFFG8tnPzC4GRx3zFN4Ehhro4N3YJK/mUGA8j37mlWj7kgr0qoOrePZ17
- f8md0pkw6xZzKJOzwlLU6oacrK82R3cwDFnOpNxyMFgvdC1vUiQprE2HaHCv1zN9we6EnK3ZPVs
- NNvIpfluCE0BTV2JaWsG/ryKZ+qhdr6w7rbmCB+zuPwy3MFH5kNhd6Mb7RLcedxPs7CA12Tqvoj
- NyqVf/ozPgZ99zSONS+ZXKO2Kej3Uz4AXU9XpLtrrNM72TxLLmoPE0nw70BWMOXe6bgQeMu0J6U
- 77UsETcj0+Ybvz+iWKv6i/KM2FZLjrcrXdEif9sOM7sT8OMeaAN3y2Hj4zrhyOcoyCHCNGCm/dC
- zvWaoJQbCSDgZpLkQ==
-X-Received: by 2002:a05:6000:400d:b0:435:e3c6:554d with SMTP id
- ffacd0b85a97d-43618059d02mr3672580f8f.52.1770208573279; 
- Wed, 04 Feb 2026 04:36:13 -0800 (PST)
-Received: from KORLIN44614.. (host-109-89-232-55.dynamic.voo.be.
- [109.89.232.55]) by smtp.googlemail.com with ESMTPSA id
- ffacd0b85a97d-43618064813sm6338305f8f.38.2026.02.04.04.36.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Feb 2026 04:36:12 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: thomas@devoogdt.com
-Cc: bernd@kuhls.net, buildroot@buildroot.org, romain.naour@gmail.com,
- romain.naour@smile.fr, thomas.devoogdt@barco.com,
- thomas.petazzoni@bootlin.com
-Date: Wed,  4 Feb 2026 13:36:09 +0100
-Message-ID: <20260204123609.3607193-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CACXRmJgF31hdsS_wY2tt6ok=CqMXbWwmy227s42jPw_tOZcPyw@mail.gmail.com>
-References: <CACXRmJgF31hdsS_wY2tt6ok=CqMXbWwmy227s42jPw_tOZcPyw@mail.gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v3] package/mesa3d: fix compilation with
- host-llvm enabled
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4797E60B74
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4797E60B74
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 12:38:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2F32E868D5; Wed,  4 Feb 2026 12:38:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Feb 2026 13:38:28 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 27fed8e7ba87671161c6ae9ab4aeb20533ede93d
+X-Git-Newrev: c0fd48dc2651a8c60ca82bef760670b3a62ab621
+X-Patchwork-Hint: ignore
+Message-Id: <20260204123844.2F32E868D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbsd: fix build with uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,84 +68,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c0fd48dc2651a8c60ca82bef760670b3a62ab621
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Meson's custom LLVM parser uses llvm-config with a default search path of
-/usr/bin, causing it to detect the host system's llvm-config (version 18.1.3)
-instead of the buildroot-compiled one. This forces all LLVM-related packages to
-match version 18.1.3, but since the host system lacks llvmspirvlib, the build
-fails. This patch forces Meson to use the buildroot-compiled llvm-config.
+Since the bump of libbsd from 0.11.7 to 0.12.2 in Buildroot commit
+c555b6565f2747047603dc8022f81b7ea14b4890, the build of libbsd was
+broken on uClibc, due to changes in libbsd.
 
-Note that LLVM_CONFIG is a CMake option, not a Meson one. This is because
-Meson has custom dependency resolution logic for LLVM (see
-https://mesonbuild.com/Dependencies.html#llvm). The EXTRA_BINARIES mechanism
-cannot be used here, as it only applies to cross-compilation scenarios, which
-does not apply to host-mesa3d builds.
-
-Reproduction (On BR2 tag: 2025.05.3):
-
-BR2_x86_64=y
-BR2_x86_atom=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.24"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_LLVM=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
+In order to fix this, we add a patch (submitted upstream), which is
+based on a suggestion from libbsd's maintainer, itself based on an
+initial proposal from Dario Binacchi.
 
 Fixes:
 
-llvm-config found: YES (/usr/bin/llvm-config-18) 18.1.3
-Run-time dependency LLVM (modules: bitwriter, core, coverage, engine, executionengine, instcombine, irreader, libdriver, linker, lto, mcdisassembler, mcjit, native, option, scalaropts, target, transformutils, all-targets, coroutines, frontenddriver, frontendhlsl, lto, windowsdriver) found: YES 18.1.3
-Dependency LLVMSPIRVLib found: NO. Found 15.0.0.0 but need: '>= 18.1' ; matched: '>= 15.0.0.0', '< 18.2'
-Run-time dependency llvmspirvlib found: NO (tried cmake)
+  https://autobuild.buildroot.net/results/384022450a09b7d731e3817c812e30e15187344b/
 
-output/build/host-mesa3d-25.0.6/meson.build:1882:21: ERROR: Dependency lookup for LLVMSPIRVLib with method 'pkgconfig' failed: Invalid version, need 'LLVMSPIRVLib' ['>= 18.1'] found '15.0.0.0'.
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v3: Added reproduction info.
-    Actually, I saw the issue first on 2025.02.x with these commits cherry-picked:
-    - 317260f336b65ff0b41a953882cb8cccb789e010
-    - 8b5dd49c5b2eb52e71ba9dff67b1ba54d0e00ac3
-    - 4890415aa9e918bdbb52414e0e53f29e93315291
-    - b08bc5b9e94269adb4a1c5771c8c26c8c87e5b5a
----
- package/mesa3d/mesa3d.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...01-configure.ac-add-support-for-uClibc-ng.patch | 88 ++++++++++++++++++++++
+ package/libbsd/libbsd.mk                           |  1 +
+ 2 files changed, 89 insertions(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index db46d7bc7c2..b5300df2ba3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -292,6 +292,9 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION),y)
- HOST_MESA3D_TOOLS += imagination
- endif
- 
-+HOST_MESA3D_CONF_ENV = \
-+	LLVM_CONFIG="$(HOST_DIR)/bin/llvm-config"
+diff --git a/package/libbsd/0001-configure.ac-add-support-for-uClibc-ng.patch b/package/libbsd/0001-configure.ac-add-support-for-uClibc-ng.patch
+new file mode 100644
+index 0000000000..8993df9349
+--- /dev/null
++++ b/package/libbsd/0001-configure.ac-add-support-for-uClibc-ng.patch
+@@ -0,0 +1,88 @@
++From 5ce5a4aa22e90301816bd1f24c24be64592dc01c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 4 Feb 2026 11:54:30 +0100
++Subject: [PATCH] configure.ac: add support for uClibc-ng
 +
- HOST_MESA3D_CONF_OPTS = \
- 	-Dglvnd=disabled \
- 	-Dgallium-drivers=$(subst $(space),$(comma),$(HOST_MESA3D_GALLIUM_DRIVERS-y)) \
--- 
-2.43.0
-
++The proposed support is based on the comment at
++https://gitlab.freedesktop.org/libbsd/libbsd/-/merge_requests/32#note_3252386,
++with the following changes:
++
++- Assume explicit_bzero() is available, since it's been available
++  since uClibc-ng 1.0.47, which has been released years ago.
++
++- Assume reallocarry() is NOT available, because its availability
++  depends on the exact malloc() implementation configured in
++  uClibc-ng. See
++  https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/77c8c358b52e875c8f4568ecf6c327b95dddbd05
++  for details.
++
++Upstream: https://gitlab.freedesktop.org/libbsd/libbsd/-/merge_requests/33
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure.ac | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 50 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 2a15d72..d131861 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -214,6 +214,56 @@ AS_CASE([$host_os],
++     abi_vis=yes
++     abi_wcsl=yes
++   ],
+++  [*-uclibc*], [
+++    api_time_macros=no
+++    abi_accmode=yes
+++    abi_arc4random=yes
+++    abi_arc4random_stir=yes
+++    abi_asprintf=no
+++    abi_bsd_getopt=yes
+++    abi_closefrom=yes
+++    abi_consttime_memequal=yes
+++    abi_err=no
+++    abi_errc=yes
+++    abi_expand_number=yes
+++    # Available since uClibc-ng 1.0.47
+++    abi_explicit_bzero=yes
+++    abi_explicit_memset=yes
+++    abi_fgetln=yes
+++    abi_flopen=yes
+++    abi_fmtcheck=yes
+++    abi_fpurge=yes
+++    abi_freezero=yes
+++    abi_funopen=yes
+++    abi_getbsize=yes
+++    abi_getpeereid=yes
+++    abi_humanize_number=yes
+++    abi_id_from_name=yes
+++    abi_inet_net_pton=no
+++    abi_md5=no
+++    abi_name_from_id=yes
+++    abi_nlist=yes
+++    abi_pidfile=yes
+++    abi_proctitle=yes
+++    abi_progname=yes
+++    abi_readpassphrase=yes
+++    # Depending on the uClibc-ng configuration, reallocarray() may or
+++    # may not be available so assume it isn't.
+++    abi_reallocarray=no
+++    abi_reallocf=ues
+++    abi_recallocarray=yes
+++    abi_stringlist=yes
+++    abi_sort=yes
+++    abi_strl=no
+++    abi_strmode=yes
+++    abi_strnstr=yes
+++    abi_strtonum=yes
+++    abi_strtox=yes
+++    abi_timeconv=yes
+++    abi_transparent_libmd=no
+++    abi_vis=yes
+++    abi_wcsl=yes
+++  ],
++   [darwin*], [
++     api_time_macros=no
++ 
++-- 
++2.52.0
++
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 557b49fca6..af285e05b0 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -13,5 +13,6 @@ LIBBSD_LICENSE_FILES = COPYING
+ LIBBSD_CPE_ID_VENDOR = freedesktop
+ LIBBSD_INSTALL_STAGING = YES
+ LIBBSD_DEPENDENCIES = libmd
++LIBBSD_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
