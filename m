@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0C5E9D416
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 359E2E9D418
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 347B76109E;
-	Wed,  4 Feb 2026 17:06:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09AAA610C8;
+	Wed,  4 Feb 2026 17:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w-3Z6IoB_7an; Wed,  4 Feb 2026 17:06:52 +0000 (UTC)
+ id k2v4Y2Y3jmbj; Wed,  4 Feb 2026 17:06:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7D3E610B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8522610CF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770224812;
-	bh=xmPyl7g31vN0GhKEYSyCAu3RN6FZ6IWF/vFvVjAEjn4=;
+	s=default; t=1770224815;
+	bh=3bvs+YWyoePW1Oj7K87cFfcbZ4G4xXjEmryt+6fkngM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=p2TqYryicoLT+4i+1zKMefEgvaZE++ant/2YY9QdacX1q9xE5e/x6sRZkpB8q807K
-	 zgpgz4grBUp9m5PBwyzIX3Y9DPb+sFXQGOwRsR63t7BdHAp2zplskZSl+B+gk0PY/d
-	 CIPOj0I4Y8yDVU4uVs2Zl1uXNJgPzf129wsOxDm9sdZkkALqlR/oUiWn5P6oujBZD1
-	 VNL0RaWCYf55rtDxpp2PGY6qhIFD2fiWeSDuCmQNVCQ8x6iMQqKHTgorJ+1OuRBRCD
-	 iFbTxhFjZwPokvKa+RG7CgZfjVUZXjOqoRKr8XicXblAHBaG7KojUPRHQcQrkkWNc5
-	 l8fFhdjRA+O+g==
+	b=kGFGRJ/S1hPhCw+EbDwJSwJWkX38DYS9SzDYal8ToFe4SIBtcrcQZrZq7dVnOqSfS
+	 aKuH9usySMTzL0qSoGpHgkLmnpnX+p50LDH+2bDoSKW1/5yxa90dv1VJMJk4ywE7aJ
+	 26uvmTF3fGqTg7Xo8AZgJrk8pYKVV+0+byk2dk/ZMyaSoQBUnBZ46tWf0NAfw3bSTU
+	 UyTt2MRQipqU8iz+RkHVSDfyKhBnc4aWl+3Q5X7O6p4pUioI26EXLJd6JEmRKkxwn1
+	 c980sRuCthDblFBdB89/4KFKn/uRA5Ift1Ca2yHALnoiNfJ57cvCNJuZY7tnEhAnQH
+	 Fu6wMD7O+MunQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7D3E610B2;
-	Wed,  4 Feb 2026 17:06:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 62564173
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8522610CF;
+	Wed,  4 Feb 2026 17:06:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9531F5
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7757583F3C
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD374403E0
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GxK_ULT7jyc8 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XGrZFtows5pf for <buildroot@buildroot.org>;
  Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5092583C48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D392740377
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5092583C48
+ by smtp4.osuosl.org (Postfix) with ESMTP id D392740377
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2941B8696B; Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
+ id A591F86979; Wed,  4 Feb 2026 17:06:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 17:25:33 +0100
+Date: Wed, 4 Feb 2026 17:32:40 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 44dda069403004e7c06b2f31f7f3a16879647c27
-X-Git-Newrev: 9d4a0cdebd0ad838d12ef19c0da9b3c5355db145
+X-Git-Oldrev: a19f7f9ecb6388e1950eb2df6c7aa4dbba8e6c5d
+X-Git-Newrev: dff1de6497cc187d8cef368f8a52fca5b5ae1976
 X-Patchwork-Hint: ignore
-Message-Id: <20260204170637.2941B8696B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/php: bump to
- v8.3.30
+Message-Id: <20260204170637.A591F86979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ board/stmicroelectronics/stm32f746-disco: exit post-build.sh on error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9d4a0cdebd0ad838d12ef19c0da9b3c5355db145
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dff1de6497cc187d8cef368f8a52fca5b5ae1976
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This is a bugfix release for the 8.3 branch, backporting some fixes from the
-8.5.2 release, mainly memory safety related.
+Add 'set -eu' to ensure that command failures or unset variables are
+properly reported to the 'make' process. This prevents silent failures
+during the image generation phase.
 
-See the release notes: https://www.php.net/ChangeLog-8.php#8.3.30
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-(cherry picked from commit 04ce8230f44457f9f4355d68990e8fe03b1099ec)
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 3eec14e664c475b6574d2858a3c63b7c6126e91e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/stmicroelectronics/stm32f746-disco/post-build.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 02ebf1b0f6..dc5f0e7a3c 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  f7950ca034b15a78f5de9f1b22f4d9bad1dd497114d175cb1672a4ca78077af5  php-8.3.29.tar.xz
-+sha256  67f084d36852daab6809561a7c8023d130ca07fc6af8fb040684dd1414934d48  php-8.3.30.tar.xz
+diff --git a/board/stmicroelectronics/stm32f746-disco/post-build.sh b/board/stmicroelectronics/stm32f746-disco/post-build.sh
+index 03e9dcae82..74c59fdb72 100755
+--- a/board/stmicroelectronics/stm32f746-disco/post-build.sh
++++ b/board/stmicroelectronics/stm32f746-disco/post-build.sh
+@@ -1,4 +1,6 @@
+ #!/bin/sh
++set -eu
++
+ BOARD_DIR="$(dirname "$0")"
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 37dabdcd1a..d184186cee 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.3.29
-+PHP_VERSION = 8.3.30
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${TARGET_DIR}"/boot/extlinux/extlinux.conf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
