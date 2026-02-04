@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 109F5E9D3FB
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09B0FE9D3FB
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:38:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D33D3605A3;
-	Wed,  4 Feb 2026 15:37:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1CF260DBF;
+	Wed,  4 Feb 2026 15:38:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ukB-ILOQbObj; Wed,  4 Feb 2026 15:37:09 +0000 (UTC)
+ id qveKgZ3eV7th; Wed,  4 Feb 2026 15:38:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD9E6060C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A271760DDB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770219429;
-	bh=vJYjmo8KxL0Mat+JGkPWPwgoxYv+5Li3j+X1+M9dm54=;
+	s=default; t=1770219498;
+	bh=QHJyJB8/vSj7uK5ibFiz5Ibyq8xUO+x1lMcxM3Jod/c=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=E2R07lHN8uWrPzQGRCSyvTklqWd9N8EFHsjWtzjiOpUQgeMdLCS8zjToRji9ADuin
-	 iEtVC9LANAwxU/OOb60t2L8B0gt7az/cUKBa0cdIdwJjWuMCTG4CvpBT9itINuxBeC
-	 0i+TkCionohwMs8+SxoPEKHXoIe58kFsU7LDCirgQAoEWjOMgFNVLyaJtUKFSisdZo
-	 UpsaRwQUUJeOd8BXwn0osiP1VM9KZyazw9Xql3xyqYnvQN6uCyDQDxNEqq1uuLQJyo
-	 T+KMWkNrjfTWKLqiViAYGDIu2CE3hGlr1zsa2R7wFUi+XOP4I31CLALwkCrYpoJq27
-	 KWGzVNLHu0NAw==
+	b=BSplqFbr4btBouAMPTVZHpNxaaLNWzngHxdCoMAypcXAAPV36fLmZ35HzQa6KQU6w
+	 wTJqbdRbPSUHOujqP5zUTf4cvd5wqp2ieQtWwvbiDRrzerpeyunfoI3Dd9hMzfGRlQ
+	 Px60tg3SPDW8qSE6mJSxGsg+X0Pye9DcawDqDeicyOAZ3ZIpadTjsLoZ1QHWab/XQA
+	 fmFXh61X/tmT+nG5VcKBtMiRUFmgqe/AiW21ekV+XLw7TUKY9CnqDdDQZrMe7MaLhe
+	 NJnYKebCL7mAhNqewIjp+M/XscdBiItpVCsRXtgG3K7BdoDpi9iWpKY1zHJL77b0yb
+	 Spw8XvI9SC8AA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBD9E6060C;
-	Wed,  4 Feb 2026 15:37:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D8E2F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:37:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A271760DDB;
+	Wed,  4 Feb 2026 15:38:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A42BF4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04B1D4066E
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:37:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED79B401DD
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:38:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A40V9LbZsn-4 for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 15:37:07 +0000 (UTC)
+ id 8EYRmWODhDyY for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 15:38:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E0C9404F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8DF740670
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E0C9404F6
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:37:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8DF740670
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:38:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C85D86934; Wed,  4 Feb 2026 15:37:07 +0000 (UTC)
+ id DC58B8693A; Wed,  4 Feb 2026 15:38:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 16:35:19 +0100
+Date: Wed, 4 Feb 2026 16:37:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 137d6e249d9625ed9b58d6c8fea011901b413438
-X-Git-Newrev: 46ce2e7480b936cab36cddeac98efe96e9c2ff97
+X-Git-Oldrev: 46ce2e7480b936cab36cddeac98efe96e9c2ff97
+X-Git-Newrev: 1634ee6d161ed478866ae620fd5dc8c774be94f3
 X-Patchwork-Hint: ignore
-Message-Id: <20260204153707.1C85D86934@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qemu: introduce kvm and tcg system
- options
+Message-Id: <20260204153815.DC58B8693A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "package/cjson: add a patch to
+ allow cross-compilation with sysroot."
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,122 +72,223 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2946621055700127062=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2946621055700127062==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/46ce2e7480b936cab36cddeac98efe96e9c2ff97
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1634ee6d161ed478866ae620fd5dc8c774be94f3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-When building system binaries you may not even want TCG support if you
-are only intending to use KVM. Provide the options so the user can
-select only what they need.
+This reverts commit e57c73bd5a67fa62fea7d9219a1ba751571f1756. It
+shouldn't have been pushed in the first place. We had concerns about
+the change, and replied to the patch contributor accordingly:
 
-With only KVM selected the QEMU build will generally only build the
-binary for your target system. We keep TCG support on by default so as
-not to break existing defconfigs.
+  https://lore.kernel.org/buildroot/aYNbUNuNUs12ulgB@windsurf/
 
-Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/Config.in | 25 ++++++++++++++++++++-----
- package/qemu/qemu.mk   | 14 +++++++++++++-
- 2 files changed, 33 insertions(+), 6 deletions(-)
+ ...ageConfigHelpers-to-generate-config.cmake.patch | 191 ---------------------
+ 1 file changed, 191 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index ff7423bc4c..e16eafe446 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -54,11 +54,27 @@ config BR2_PACKAGE_QEMU_SYSTEM
- 	depends on !BR2_STATIC_LIBS # dtc
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_QEMU_FDT if !BR2_PACKAGE_QEMU_CHOOSE_TARGETS
-+	# Make sure at least one of tcg or kvm is enabled
-+	select BR2_PACKAGE_QEMU_SYSTEM_TCG if !BR2_PACKAGE_QEMU_SYSTEM_KVM
- 	help
- 	  Say 'y' to build system emulators/virtualisers.
- 
- if BR2_PACKAGE_QEMU_SYSTEM
- 
-+config BR2_PACKAGE_QEMU_SYSTEM_KVM
-+	bool "Enable KVM system virtualisation"
-+	default y
-+	help
-+	  Say 'y' here to enable a QEMU with KVM support.
-+	  If unsure, say 'y'
-+
-+config BR2_PACKAGE_QEMU_SYSTEM_TCG
-+	bool "Enable TCG system emulation"
-+	default y
-+	help
-+	  Say 'y' here to enable QEMU binaries which can emulate foreign
-+	  architectures using the TCG JIT.
-+
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
-@@ -130,12 +146,11 @@ config BR2_PACKAGE_QEMU_LINUX_USER
- 
- config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
- 	bool "Select individual emulator targets"
--	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
-+	depends on BR2_PACKAGE_QEMU_SYSTEM_TCG || BR2_PACKAGE_QEMU_LINUX_USER
- 	help
--	  By default, all targets (system and/or user, subject to the
--	  corresponding options, above) are built. If you only need a
--	  subset of the emulated targets, say 'y' here and enable at
--	  least one target, below.
-+	  By default, all targets system targets are built. If you
-+	  only need a subset of the emulated targets, say 'y' here and
-+	  enable at least one target, below.
- 
- if BR2_PACKAGE_QEMU_CHOOSE_TARGETS
- 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 1672ac8f19..97f8e22091 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -48,6 +48,19 @@ QEMU_VARS = LIBTOOL=$(HOST_DIR)/bin/libtool
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_DEPENDENCIES += pixman
- QEMU_OPTS += --enable-system
-+
-+ifeq ($(BR2_PACKAGE_QEMU_SYSTEM_KVM), y)
-+QEMU_OPTS += --enable-kvm
-+else
-+QEMU_OPTS += --disable-kvm
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QEMU_SYSTEM_TCG), y)
-+QEMU_OPTS += --enable-tcg
-+else
-+QEMU_OPTS += --disable-tcg
-+endif
-+
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64) += aarch64-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-softmmu
-@@ -333,7 +346,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-whpx \
- 			--disable-xen \
- 			--enable-attr \
--			--enable-kvm \
- 			--enable-vhost-net \
- 			--disable-download \
- 			--disable-hexagon-idef-parser \
-
---===============2946621055700127062==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch b/package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch
+deleted file mode 100644
+index 04248afbd9..0000000000
+--- a/package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch
++++ /dev/null
+@@ -1,191 +0,0 @@
+-From 2b0a994b5832439cf704147c5b485b9a4c7fbc24 Mon Sep 17 00:00:00 2001
+-From: Charles Chan <charles@zeerd.com>
+-Date: Fri, 22 Dec 2023 11:14:36 +0800
+-Subject: [PATCH] Use CMakePackageConfigHelpers to generate config.cmake
+-Signed-off-by: Charles Chan <charles@zeerd.com>
+-Upstream: https://github.com/DaveGamble/cJSON/pull/812/commits/2b0a994b5832439cf704147c5b485b9a4c7fbc24
+-
+----
+- CMakeLists.txt                                | 72 ++++++++++---------
+- .../{cJSONConfig.cmake.in => Config.cmake.in} | 15 ++--
+- library_config/cJSONConfigVersion.cmake.in    | 11 ---
+- 3 files changed, 48 insertions(+), 50 deletions(-)
+- rename library_config/{cJSONConfig.cmake.in => Config.cmake.in} (57%)
+- delete mode 100644 library_config/cJSONConfigVersion.cmake.in
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index f23ec631..fe10d6fe 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -142,25 +142,25 @@ endif()
+- configure_file("${CMAKE_CURRENT_SOURCE_DIR}/library_config/libcjson.pc.in"
+-     "${CMAKE_CURRENT_BINARY_DIR}/libcjson.pc" @ONLY)
+- 
+--install(FILES cJSON.h DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/cjson")
+--install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson.pc" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+-+install(FILES cJSON.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/cjson")
+-+install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+- install(TARGETS "${CJSON_LIB}"
+--    EXPORT "${CJSON_LIB}"
+--    ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+--    LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+--    RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}"
+--    INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+-+    EXPORT "${CJSON_LIB}-targets"
+-+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+- )
+- if (BUILD_SHARED_AND_STATIC_LIBS)
+-     install(TARGETS "${CJSON_LIB}-static"
+--    EXPORT "${CJSON_LIB}" 
+--    ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+--    INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+-+    EXPORT "${CJSON_LIB}-targets"
+-+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+- )
+- endif()
+- if(ENABLE_TARGET_EXPORT)
+-     # export library information for CMake projects
+--    install(EXPORT "${CJSON_LIB}" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/cJSON")
+-+    install(EXPORT "${CJSON_LIB}-targets" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON")
+- endif()
+- 
+- if(ENABLE_CJSON_VERSION_SO)
+-@@ -194,24 +194,24 @@ if(ENABLE_CJSON_UTILS)
+-         "${CMAKE_CURRENT_BINARY_DIR}/libcjson_utils.pc" @ONLY)
+- 
+-     install(TARGETS "${CJSON_UTILS_LIB}"
+--        EXPORT "${CJSON_UTILS_LIB}"
+--        ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+--        LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+--        RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}"
+--        INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+-+        EXPORT "${CJSON_UTILS_LIB}-targets"
+-+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-+        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+-     )
+-     if (BUILD_SHARED_AND_STATIC_LIBS)
+--        install(TARGETS "${CJSON_UTILS_LIB}-static" 
+--        EXPORT "${CJSON_UTILS_LIB}" 
+--        ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+--        INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+-+        install(TARGETS "${CJSON_UTILS_LIB}-static"
+-+        EXPORT "${CJSON_UTILS_LIB}-targets"
+-+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-+        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+-         )
+-     endif()
+--    install(FILES cJSON_Utils.h DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/cjson")
+--    install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson_utils.pc" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+-+    install(FILES cJSON_Utils.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/cjson")
+-+    install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson_utils.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+-     if(ENABLE_TARGET_EXPORT)
+--      # export library information for CMake projects
+--      install(EXPORT "${CJSON_UTILS_LIB}" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/cJSON")
+-+        # export library information for CMake projects
+-+        install(EXPORT "${CJSON_UTILS_LIB}-targets" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON")
+-     endif()
+- 
+-     if(ENABLE_CJSON_VERSION_SO)
+-@@ -223,18 +223,22 @@ if(ENABLE_CJSON_UTILS)
+- endif()
+- 
+- # create the other package config files
+--configure_file(
+--    "${CMAKE_CURRENT_SOURCE_DIR}/library_config/cJSONConfig.cmake.in"
+--    ${PROJECT_BINARY_DIR}/cJSONConfig.cmake @ONLY)
+--configure_file(
+--    "${CMAKE_CURRENT_SOURCE_DIR}/library_config/cJSONConfigVersion.cmake.in"
+--    ${PROJECT_BINARY_DIR}/cJSONConfigVersion.cmake @ONLY)
+--
+- if(ENABLE_TARGET_EXPORT)
+--    # Install package config files
+--    install(FILES ${PROJECT_BINARY_DIR}/cJSONConfig.cmake
+-+    include(CMakePackageConfigHelpers)
+-+    write_basic_package_version_file(
+-         ${PROJECT_BINARY_DIR}/cJSONConfigVersion.cmake
+--        DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/cJSON")
+-+        VERSION ${NCHL_VERSION}
+-+        COMPATIBILITY AnyNewerVersion)
+-+
+-+    configure_package_config_file(
+-+        "${PROJECT_SOURCE_DIR}/library_config/Config.cmake.in"
+-+        "${PROJECT_BINARY_DIR}/cJSONConfig.cmake"
+-+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON"
+-+        )
+-+    install(FILES
+-+            ${PROJECT_BINARY_DIR}/cJSONConfigVersion.cmake
+-+            ${PROJECT_BINARY_DIR}/cJSONConfig.cmake
+-+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON")
+- endif()
+- 
+- option(ENABLE_CJSON_TEST "Enable building cJSON test" ON)
+-diff --git a/library_config/cJSONConfig.cmake.in b/library_config/Config.cmake.in
+-similarity index 57%
+-rename from library_config/cJSONConfig.cmake.in
+-rename to library_config/Config.cmake.in
+-index 909f7a9a..2784b7ab 100644
+---- a/library_config/cJSONConfig.cmake.in
+-+++ b/library_config/Config.cmake.in
+-@@ -1,9 +1,12 @@
+-+@PACKAGE_INIT@
+-+include(CMakeFindDependencyMacro)
+-+
+- # Whether the utils lib was build.
+- set(CJSON_UTILS_FOUND @ENABLE_CJSON_UTILS@)
+- 
+- # The include directories used by cJSON
+--set(CJSON_INCLUDE_DIRS "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
+--set(CJSON_INCLUDE_DIR "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
+-+set(CJSON_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+-+set(CJSON_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+- 
+- get_filename_component(_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+- 
+-@@ -11,19 +14,21 @@ get_filename_component(_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+- set(CJSON_LIBRARY "@CJSON_LIB@")
+- if(@ENABLE_TARGET_EXPORT@)
+-   # Include the target
+--  include("${_dir}/cjson.cmake")
+-+    include("${CMAKE_CURRENT_LIST_DIR}/cjson-targets.cmake")
+- endif()
+- 
+- if(CJSON_UTILS_FOUND)
+-   # The cJSON utils library
+--  set(CJSON_UTILS_LIBRARY @CJSON_UTILS_LIB@)
+-+  set(CJSON_UTILS_LIBRARY "@CJSON_UTILS_LIB@")
+-   # All cJSON libraries
+-   set(CJSON_LIBRARIES "@CJSON_UTILS_LIB@" "@CJSON_LIB@")
+-   if(@ENABLE_TARGET_EXPORT@)
+-     # Include the target
+--    include("${_dir}/cjson_utils.cmake")
+-+    include("${CMAKE_CURRENT_LIST_DIR}/cjson_utils-targets.cmake")
+-   endif()
+- else()
+-   # All cJSON libraries
+-   set(CJSON_LIBRARIES "@CJSON_LIB@")
+- endif()
+-+
+-+check_required_components("@CMAKE_PROJECT_NAME@")
+-diff --git a/library_config/cJSONConfigVersion.cmake.in b/library_config/cJSONConfigVersion.cmake.in
+-deleted file mode 100644
+-index 22ffec0f..00000000
+---- a/library_config/cJSONConfigVersion.cmake.in
+-+++ /dev/null
+-@@ -1,11 +0,0 @@
+--set(PACKAGE_VERSION "@PROJECT_VERSION@")
+--
+--# Check whether the requested PACKAGE_FIND_VERSION is compatible
+--if("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")
+--  set(PACKAGE_VERSION_COMPATIBLE FALSE)
+--else()
+--  set(PACKAGE_VERSION_COMPATIBLE TRUE)
+--  if ("${PACKAGE_VERSION}" VERSION_EQUAL "${PACKAGE_FIND_VERSION}")
+--    set(PACKAGE_VERSION_EXACT TRUE)
+--  endif()
+--endif()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2946621055700127062==--
