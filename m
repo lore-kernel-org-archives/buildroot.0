@@ -4,72 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49960E9D3FB
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 109F5E9D3FB
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12B1F605A3;
-	Wed,  4 Feb 2026 15:35:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D33D3605A3;
+	Wed,  4 Feb 2026 15:37:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zKNibTfpf3eI; Wed,  4 Feb 2026 15:35:33 +0000 (UTC)
+ id ukB-ILOQbObj; Wed,  4 Feb 2026 15:37:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12AAB6060C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD9E6060C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770219333;
-	bh=jHCFDZEuF4a/f3cp3byY8C+oWcZoY1XgRzrH7Ja0rpg=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=EOTT8O/lxOXc9fQ4RHB5nPN1K1MWV8pWDwfM/yETw48ND6AXIPLMeXwnMighVtDBj
-	 LYxqY0ydK9Eb2R5hv26II7OUIHchwLASWeBk78LAkJh6ZtzkroXHjwY8QSEk3I0xnV
-	 eLBHv5izRSmwXe0bn/VjL//bXHgw2TpDiplQZonbTXzDTyZPexekEuBBFVBcVcuskS
-	 19+44TNAQO0NM+34vxJOA6VY/bONY/4ksO1Y7P1648ds8kwAw3LMLFMKLeRhifaJhh
-	 ACzObE3rz/9V664jz273ZIUBoj8W/Va7ypQ2IHGX8+b5TOpkAC9K3PpR/HT5KhoKFH
-	 8Gshzw0Z4L9wQ==
+	s=default; t=1770219429;
+	bh=vJYjmo8KxL0Mat+JGkPWPwgoxYv+5Li3j+X1+M9dm54=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=E2R07lHN8uWrPzQGRCSyvTklqWd9N8EFHsjWtzjiOpUQgeMdLCS8zjToRji9ADuin
+	 iEtVC9LANAwxU/OOb60t2L8B0gt7az/cUKBa0cdIdwJjWuMCTG4CvpBT9itINuxBeC
+	 0i+TkCionohwMs8+SxoPEKHXoIe58kFsU7LDCirgQAoEWjOMgFNVLyaJtUKFSisdZo
+	 UpsaRwQUUJeOd8BXwn0osiP1VM9KZyazw9Xql3xyqYnvQN6uCyDQDxNEqq1uuLQJyo
+	 T+KMWkNrjfTWKLqiViAYGDIu2CE3hGlr1zsa2R7wFUi+XOP4I31CLALwkCrYpoJq27
+	 KWGzVNLHu0NAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12AAB6060C;
-	Wed,  4 Feb 2026 15:35:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F457F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:35:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBD9E6060C;
+	Wed,  4 Feb 2026 15:37:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D8E2F4
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:37:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FCA482865
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:35:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04B1D4066E
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:37:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XfVmfXRsZpVQ for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 15:35:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2BD8E82331
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BD8E82331
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2BD8E82331
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:35:29 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id E152E31E0BBD; Wed, 04 Feb 2026 16:35:27 +0100 (CET)
-Date: Wed, 4 Feb 2026 16:35:27 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A40V9LbZsn-4 for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 15:37:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E0C9404F6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E0C9404F6
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:37:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1C85D86934; Wed,  4 Feb 2026 15:37:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <aYNnP1uFAqo1fta0@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1770219327; bh=Oiy20lZe9lWAYhfbvcdRhnb3cYNlxkNSjg/zmo7rH28=;
- h=Date:From:To:Subject:From;
- b=CyfuQrzwGJ6hpW+GUeFedu7mHqw4XC+GbEFa3kBLNAfQuaPghJVgv8TJLEi50Y6Gt
- v4deXRgDsbGjlmdftkgHzrro1ry21L6HJwKBTcaZmAUc6u7zvlwxVB2IyA+cOLIQMI
- SDzQ+pCxj/IKt4D18KcJsT/YVulVWntPftkU0VFHjBSke8ChyA6IaF0KhMQOEvqTHD
- pOiV+OAEgki8x6ALn0Kkec+byqy9sVT06ZdGfb2Q59NMc8ao/f65abKRHnjI/IF3JM
- bbEnnhKLNrgqcH+WayXnkYAL/LpTrDB1iHzyk9Mxw58zyqUZbqa1kP3k94fSIgYMdR
- zm0Lb25eNxvFg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH v3 2/2] package/strongswan: add Linux kernel
+Date: Wed, 4 Feb 2026 16:35:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 137d6e249d9625ed9b58d6c8fea011901b413438
+X-Git-Newrev: 46ce2e7480b936cab36cddeac98efe96e9c2ff97
+X-Patchwork-Hint: ignore
+Message-Id: <20260204153707.1C85D86934@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: introduce kvm and tcg system
  options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -82,47 +69,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2946621055700127062=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for options required by Strongswan to work properly:
-https://docs.strongswan.org/docs/latest/install/kernelModules.html
+--===============2946621055700127062==
+Content-Type: text/plain
 
-We only enable a subset, which is the bare minimum to start
-charon IKEv2 daemon. For advanced users this might be not enough.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/46ce2e7480b936cab36cddeac98efe96e9c2ff97
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+When building system binaries you may not even want TCG support if you
+are only intending to use KVM. Provide the options so the user can
+select only what they need.
+
+With only KVM selected the QEMU build will generally only build the
+binary for your target system. We keep TCG support on by default so as
+not to break existing defconfigs.
+
+Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strongswan/strongswan.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/qemu/Config.in | 25 ++++++++++++++++++++-----
+ package/qemu/qemu.mk   | 14 +++++++++++++-
+ 2 files changed, 33 insertions(+), 6 deletions(-)
 
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 63ebd275e3..1e9e96367f 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -114,4 +114,16 @@ STRONGSWAN_CONF_OPTS += \
- 	--disable-connmark \
- 	--disable-forecast
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index ff7423bc4c..e16eafe446 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -54,11 +54,27 @@ config BR2_PACKAGE_QEMU_SYSTEM
+ 	depends on !BR2_STATIC_LIBS # dtc
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_QEMU_FDT if !BR2_PACKAGE_QEMU_CHOOSE_TARGETS
++	# Make sure at least one of tcg or kvm is enabled
++	select BR2_PACKAGE_QEMU_SYSTEM_TCG if !BR2_PACKAGE_QEMU_SYSTEM_KVM
+ 	help
+ 	  Say 'y' to build system emulators/virtualisers.
  
-+# bare minimum to start charon
-+define STRONGSWAN_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETLINK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET_AH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET_ESP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM_USER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM_INTERFACE)
-+endef
+ if BR2_PACKAGE_QEMU_SYSTEM
+ 
++config BR2_PACKAGE_QEMU_SYSTEM_KVM
++	bool "Enable KVM system virtualisation"
++	default y
++	help
++	  Say 'y' here to enable a QEMU with KVM support.
++	  If unsure, say 'y'
 +
- $(eval $(autotools-package))
--- 
-2.47.3
++config BR2_PACKAGE_QEMU_SYSTEM_TCG
++	bool "Enable TCG system emulation"
++	default y
++	help
++	  Say 'y' here to enable QEMU binaries which can emulate foreign
++	  architectures using the TCG JIT.
++
+ config BR2_PACKAGE_QEMU_BLOBS
+ 	bool "Install binary blobs"
+ 	default y
+@@ -130,12 +146,11 @@ config BR2_PACKAGE_QEMU_LINUX_USER
+ 
+ config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
+ 	bool "Select individual emulator targets"
+-	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
++	depends on BR2_PACKAGE_QEMU_SYSTEM_TCG || BR2_PACKAGE_QEMU_LINUX_USER
+ 	help
+-	  By default, all targets (system and/or user, subject to the
+-	  corresponding options, above) are built. If you only need a
+-	  subset of the emulated targets, say 'y' here and enable at
+-	  least one target, below.
++	  By default, all targets system targets are built. If you
++	  only need a subset of the emulated targets, say 'y' here and
++	  enable at least one target, below.
+ 
+ if BR2_PACKAGE_QEMU_CHOOSE_TARGETS
+ 
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 1672ac8f19..97f8e22091 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -48,6 +48,19 @@ QEMU_VARS = LIBTOOL=$(HOST_DIR)/bin/libtool
+ ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
+ QEMU_DEPENDENCIES += pixman
+ QEMU_OPTS += --enable-system
++
++ifeq ($(BR2_PACKAGE_QEMU_SYSTEM_KVM), y)
++QEMU_OPTS += --enable-kvm
++else
++QEMU_OPTS += --disable-kvm
++endif
++
++ifeq ($(BR2_PACKAGE_QEMU_SYSTEM_TCG), y)
++QEMU_OPTS += --enable-tcg
++else
++QEMU_OPTS += --disable-tcg
++endif
++
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64) += aarch64-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-softmmu
+@@ -333,7 +346,6 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-whpx \
+ 			--disable-xen \
+ 			--enable-attr \
+-			--enable-kvm \
+ 			--enable-vhost-net \
+ 			--disable-download \
+ 			--disable-hexagon-idef-parser \
+
+--===============2946621055700127062==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2946621055700127062==--
