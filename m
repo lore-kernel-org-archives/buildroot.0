@@ -4,82 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE680EA7941
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 19:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26755EA7940
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 19:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FA8D8129B;
-	Wed,  4 Feb 2026 19:31:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6C4E81359;
+	Wed,  4 Feb 2026 19:32:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uOWRMb5X0Txs; Wed,  4 Feb 2026 19:31:53 +0000 (UTC)
+ id wpTG60VYACrE; Wed,  4 Feb 2026 19:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1AD9812EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E1E6821BA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770233513;
-	bh=Lrfmc5lYSMe6LSD5mNGeb3tHopd0hVK3MBg7WLXWP18=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=nH4Td8kUN41IsoVAZctiPxvTFWOpDXwbnQkZ5jyGwbmtJtop6Z9a2dz1PfuWfK2EN
-	 IrgqTPKmky3YOwcLcCx2QidTypp+wberh1NC+Gg/Pd0jJu4TAVtlonS+mVsosM7PMH
-	 Rj2WsuXJItjO+iOPDUG/MoTFvP/52x9g5Ngi0QyGhgOx6uBBCtcyHiy4tJuOxQ67mj
-	 5/V+UyEvntLpZVBmshH+L4pdMLiQ9uEbn1OqiZNZGx/WujV55g97sNEOpLAHD24FkA
-	 W5gZ5MEEz/2xlAXMS3egEHapqphRF4aYCmm7w/0KOLKxcKB1xf/Rf9isSJ9WbS+aCI
-	 wwW4pH1pK3mig==
+	s=default; t=1770233530;
+	bh=AoZTcWT9g4aECYD8s47XQnekQS1dtVohAqt6Mgun/Kw=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=B+HOFpN92fso4ctSk6cVbSfXZqnooSrNUFqcgbYm47aEBD2S3dEQUTgPVMc575bDN
+	 6pCeoStSflpDC1kulWPT+kXKagtUVKr4IzvjzVkJ/19BdVHrdKpS50V7fPTjGy/HF3
+	 hRqzUd5JzJnl0nmKzeUJxu3r+v2EpBC7smnPYTiuPCWRTLB5Rqbp9JaC3aLXsOsGJr
+	 89JwJ0L+Bq7Nnw7mbLh+WNx1bmkMJWx3ZkoMnW/BHgaygNVy1kmJzxxDuQmB93dKhk
+	 93WwrUQ6BzHaYNGxojKsG9aeJU7kBfZV+llFCdu7om1pLuRXs6yymjDWIant7eJ+YR
+	 wDISswu1k5D8A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1AD9812EB;
-	Wed,  4 Feb 2026 19:31:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E1E6821BA;
+	Wed,  4 Feb 2026 19:32:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EB28317A
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:31:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0634017A
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCC47404EC
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:31:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF4D7409EA
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:32:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lKasa9kHjZH2 for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 19:31:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2ABE340781
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ABE340781
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2ABE340781
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:31:49 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3DE4AA4C57AE
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 20:31:47 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57496)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vnibK-000000002EG-3dnP
- for buildroot@buildroot.org; Wed, 04 Feb 2026 19:31:46 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id SATub853RTyH for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 19:32:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E90EE40791
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E90EE40791
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E90EE40791
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 19:32:06 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-385c2f88618so1709711fa.2
+ for <buildroot@buildroot.org>; Wed, 04 Feb 2026 11:32:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1770233525; x=1770838325;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=JwiQtuIX7S8iF6W8+/lm+in5lPmEBpVQIKyXe79ZfA4=;
+ b=B6y/mcOENmAIKmeosD9IAn4phNL/jQImz3ZFL6dpwrQXLs14K0Ks6oXiRDAbhAKvhU
+ PLYGyHsZfz7laXK7g4MIq330sxChtMP7GXvTEuMFpU5TrIUkcmugd9IbdSMVCGWBQ8qj
+ odMF/WM+5UBL20D6bz8VW6X3SUt13Dth6zgmRdXuEK9L9ZiM6lYWRuvmTosIDkpz/oFQ
+ T3AFN9bKtaYS9Jmo/wcD6P2IPtL6J13DgJOhG2mAgqGGp319IsK4JJkR5cbpyVBpZlLL
+ pEc2rZ0TKYkl2BHArvhdd4TAqOso9Pqeh1sIcu07t/yO4SGenlWJHZUEYD0TvmeXMS6m
+ tINg==
+X-Gm-Message-State: AOJu0YyyCT3suqdxNC9NcV0Zo24RvMiPqkrmbP4UVkd8XRdO3lOkvKPe
+ 3QTpW+ZgLsLKVrHLDDyyVKLW1w2mkZfn2c/9iucs/VxqHlCqVxIpQcCW5l2CLPHExuMsXvdCi/H
+ dJVKLSPg=
+X-Gm-Gg: AZuq6aInQt06ECPAN0rJXJwGYgpX/glQRCDH5fNhUPWpCDLiqDwOKvmWlbXSZjDiwWf
+ U8sR/I3Ut9DHXkuRY6JLWn2S3BP03a7fdI7g4CDEAl7ZKjXNNgEWWnv3AFshjGfRfLbSS8SrgAs
+ b47dKA6yVuY9O9pPD4ggdULvnRSPe5v8lL7XPX08iJWUH1BNrf5n4LGslNnuPqOQY19mNncCDgE
+ W+nfVXU/IZ6csUYSrlpCM3zccyMbfa8UYCo/hUD4y1CTCl5qbRSvdWkdWWUX5jb+Yz2Df2iS88e
+ uRhlPdfCVZd+FYkUHfU/ixEAzUQmgdmku7658MouQ7G62RUZPCmAxenbzkDBJFjXiULaST9OIIK
+ euqb7CV8Orhip6B+UNvoOGJZjcZndygEvbNKWwOBjZnbDjTzeInM2XS9sjxe6rHnD4tTh4Jg6Cn
+ kawB7tV1egio3xAVUQxxl1kGhvaos1ku5CFbk4P2S3fVmc1lLqmmvixERpvfloGwuDXTPylpomf
+ yqxMg==
+X-Received: by 2002:a05:600c:8b88:b0:480:4a90:1b00 with SMTP id
+ 5b1f17b1804b1-4830e96d623mr45022485e9.20.1770226436861; 
+ Wed, 04 Feb 2026 09:33:56 -0800 (PST)
+Received: from P-NTS-Evian
+ (2a02-8440-9501-c6d4-0a70-6c91-93ab-53a1.rev.sfr.net.
+ [2a02:8440:9501:c6d4:a70:6c91:93ab:53a1])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4361805edcfsm7535429f8f.35.2026.02.04.09.33.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 Feb 2026 09:33:56 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed,  4 Feb 2026 20:31:46 +0100
-Message-ID: <20260204193146.1519393-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Romain Naour <romain.naour@smile.fr>,
+	Julien Olivain <ju.o@free.fr>
+Date: Wed,  4 Feb 2026 18:33:49 +0100
+Message-ID: <20260204173349.315559-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1770233507;
- bh=8wCUEx18xhCkn2fDs0lTr8XLitlOxF+oJqY+N4FZ4yg=;
- h=From:To:Subject:Date:From;
- b=JNqvcVoKjagg9wd6zED+GQflZ3dg7Ci+OY5O2nIPWfJG564Gc/qVwOqfGwXj7Ehos
- pnzzyeggDMa8SMeYF3dof4fbd0f1U47j/QQ4R31XrORkSTxkVUDlz+gA72uCsT74qx
- 7iGNHyTKwsOyAbUwinZ0oKZxoSkHvz4L4qUyMTcNPEGWELzVoPWSjiPyMsGxrf5H1I
- XWNc1q0XcR/GawYhdWYEKDAkWjyKAqISpxydtOznPazC9Sl/TOmftjhc9Lv0Ad0EIk
- O3Fd20l4IiRtiqcYuU9I21fOShgEFYVKigCQQwBlP62LPBukGeBAOIfcYsjsN/qSPF
- u1k/5dJRmMlrQ==
+ d=smile.fr; s=google; t=1770233525; x=1770838325; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JwiQtuIX7S8iF6W8+/lm+in5lPmEBpVQIKyXe79ZfA4=;
+ b=ftQgj/RTffnUNQZsn7BEweqyqQVW250hMPN6C+XvVIpWMTRhWCAa/1FcBObLEdhROF
+ 19nvw8cEibaIKDM6WqsRd2uJjO39Kc2RcQz8UI1o0MJzAGMmKRO4YI80aAKalfsL35of
+ zbrlD1dfKVd7N/RmkYCjrnkY1WzDNCWkExtck=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=JNqvcVoK
-Subject: [Buildroot] [PATCH v2 1/1] package/spandsp: bump version
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=ftQgj/RT
+Subject: [Buildroot] [PATCH] Revert "package/pkg-cmake.mk: add
+ Platform/Buildroot-Initialize.cmake"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,350 +120,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which is included in this release.
+Since commit [1] some cmake packages fail to build when cmake from the
+host is used.
 
-Added patches to fix build of host utils and added dependency to
-host-tiff. Otherwise build errors will occur when the host does not
-provide tiffio.h.
-These changes are necessary due to changes introduced by this version
-bump which includes upstream commit
-https://github.com/freeswitch/spandsp/commit/a60119408c465ad0eb24b0fb83da1b476cb5b169
-added in 2023. No LTS backport needed in buildroot.
+>>> openjpeg 2.5.4 Configuring
 
-Switched to github helper to download the current git tree instead of
-using outdated tarball snapshots.
+CMake Error at [...]/host/share/buildroot/Platform/Buildroot-Initialize.cmake:1 (include):
+  include could not find requested file:
 
-The currently used tarball contains the git tree as of 2020-08-14:
-https://github.com/freeswitch/spandsp/commit/6ec23e5a7e411a22d59e5678d12c4d2942c4a4b6
+    Platform/Linux-Initialize
+Call Stack (most recent call first):
+  /usr/share/cmake-3.25/Modules/CMakeSystemSpecificInitialize.cmake:21 (include)
+  CMakeLists.txt:20 (project)
 
-The newest tarball provided by upstream
-https://files.freeswitch.org/downloads/libs/spandsp-3.0.0-0d2e6ac65e.tar.gz
-contains the git tree as of 2023-06-16:
-https://github.com/freeswitch/spandsp/tree/0d2e6ac65e0e8f53d652665a743015a88bf048d4
+This reverts commit [1] ef9f0a07ed40970a7de4c608a5708ef6ceb75131 for
+the time being.
 
-and lacks the fix for gcc-14.x added to buildroot in patch 0002.
-
-Build-tested using this defconfig:
-
-BR2_x86_64=y
-BR2_x86_corei7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_INIT_NONE=y
-BR2_PACKAGE_BLUEZ_ALSA=y
-BR2_PACKAGE_FREESWITCH=y
-BR2_PACKAGE_WIRESHARK=y
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-v2: fixed build error when host does not provide tiffio.h (Thomas)
+ package/pkg-cmake.mk                    | 2 --
+ support/misc/Buildroot-Initialize.cmake | 1 -
+ 2 files changed, 3 deletions(-)
+ delete mode 100644 support/misc/Buildroot-Initialize.cmake
 
- ...es-to-address-V.17-fixed-point-issue.patch | 116 ------------------
- ...to-provide-custom-CPPFLAGS_FOR_BUILD.patch |  36 ++++++
- ...e-CPPFLAGS_FOR_BUILD-for-build-tools.patch |  87 +++++++++++++
- package/spandsp/spandsp.hash                  |   2 +-
- package/spandsp/spandsp.mk                    |   6 +-
- 5 files changed, 127 insertions(+), 120 deletions(-)
- delete mode 100644 package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
- create mode 100644 package/spandsp/0002-Permit-to-provide-custom-CPPFLAGS_FOR_BUILD.patch
- create mode 100644 package/spandsp/0003-Propagate-CPPFLAGS_FOR_BUILD-for-build-tools.patch
-
-diff --git a/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index f572bdebb3..ba287d244a 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -287,8 +287,6 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+ 		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
+ 	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
+ 		$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
+-	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot-Initialize.cmake \
+-		$(HOST_DIR)/share/buildroot/Platform/Buildroot-Initialize.cmake
+ endef
+ 
+ TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
+diff --git a/support/misc/Buildroot-Initialize.cmake b/support/misc/Buildroot-Initialize.cmake
 deleted file mode 100644
-index 39aaa5a5d4..0000000000
---- a/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
+index 3451562f08..0000000000
+--- a/support/misc/Buildroot-Initialize.cmake
 +++ /dev/null
-@@ -1,116 +0,0 @@
--From 239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b Mon Sep 17 00:00:00 2001
--From: Steve Underwood <steveu@coppice.org>
--Date: Fri, 18 Aug 2023 01:24:21 +0100
--Subject: [PATCH] Changes to address V.17 fixed point issue.
--
--Upstream: https://github.com/freeswitch/spandsp/commit/239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/spandsp/private/v17rx.h |  2 +-
-- src/v17rx.c                 | 30 +++++++++++++++++++-----------
-- 2 files changed, 20 insertions(+), 12 deletions(-)
--
--diff --git a/src/spandsp/private/v17rx.h b/src/spandsp/private/v17rx.h
--index 8ea7a9fe..8613b5a5 100644
----- a/src/spandsp/private/v17rx.h
--+++ b/src/spandsp/private/v17rx.h
--@@ -97,7 +97,7 @@ struct v17_rx_state_s
-- 
--     /*! \brief A measure of how much mismatch there is between the real constellation,
--         and the decoded symbol positions. */
---    int32_t training_error;
--+    int64_t training_error;
-- 
--     /*! \brief The proportional part of the carrier tracking filter. */
--     int32_t carrier_track_p;
--diff --git a/src/v17rx.c b/src/v17rx.c
--index a823dad2..295d26a9 100644
----- a/src/v17rx.c
--+++ b/src/v17rx.c
--@@ -64,6 +64,10 @@
-- #include "spandsp/dds.h"
-- #include "spandsp/complex_filters.h"
-- 
--+#if defined(SPANDSP_USE_FIXED_POINT)
--+#define SPANDSP_USE_FIXED_POINTx
--+#endif
--+
-- #include "spandsp/v29rx.h"
-- #include "spandsp/v17tx.h"
-- #include "spandsp/v17rx.h"
--@@ -389,7 +393,7 @@ static __inline__ void put_bit(v17_rx_state_t *s, int bit)
-- /*- End of function --------------------------------------------------------*/
-- 
-- #if defined(SPANDSP_USE_FIXED_POINTx)
---static __inline__ uint32_t dist_sq(const complexi16_t *x, const complexi16_t *y)
--+static __inline__ uint32_t dist_sq(const complexi32_t *x, const complexi32_t *y)
-- {
--     return (int32_t) (x->re - y->re)*(x->re - y->re) + (int32_t) (x->im - y->im)*(x->im - y->im);
-- }
--@@ -954,11 +958,12 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
--         else if (s->training_count >= V17_TRAINING_SEG_2_LEN)
--         {
-- #if defined(SPANDSP_USE_FIXED_POINTx)
---            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %d\n", s->training_error);
--+            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %ld\n", s->training_error);
--+            if (s->training_error < (int64_t) FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
-- #else
--             span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %f\n", s->training_error);
---#endif
--             if (s->training_error < FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
--+#endif
--             {
--                 s->training_error = FP_SCALE(0.0f);
--                 s->training_count = 0;
--@@ -1055,19 +1060,20 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
--         /*endif*/
--         if (++s->training_count >= V17_TRAINING_SHORT_SEG_2_LEN)
--         {
--+            /* TODO: This was increased by a factor of 10 after studying real world failures.
--+                     However, it is not clear why this is an improvement, If something gives
--+                     a huge training error, surely it shouldn't decode too well? */
-- #if defined(SPANDSP_USE_FIXED_POINTx)
--             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %d\n", s->training_error);
--             s->carrier_track_i = 100;
--             s->carrier_track_p = 500000;
--+            if (s->training_error < (int64_t) (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-- #else
--             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %f\n", s->training_error);
--             s->carrier_track_i = 100.0f;
--             s->carrier_track_p = 500000.0f;
---#endif
---            /* TODO: This was increased by a factor of 10 after studying real world failures.
---                     However, it is not clear why this is an improvement, If something gives
---                     a huge training error, surely it shouldn't decode too well? */
--             if (s->training_error < (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
--+#endif
--             {
--                 s->training_count = 0;
--                 if (s->bits_per_symbol == 2)
--@@ -1136,11 +1142,13 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-- #endif
--         if (++s->training_count >= V17_TRAINING_SEG_4_LEN)
--         {
---            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
---            {
-- #if defined(SPANDSP_USE_FIXED_POINTx)
---                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %d)\n", s->bit_rate, s->training_error);
--+            if (s->training_error < (int64_t) V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
--+            {
--+                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %ld)\n", s->bit_rate, s->training_error);
-- #else
--+            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
--+            {
--                 span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %f)\n", s->bit_rate, s->training_error);
-- #endif
--                 /* We are up and running */
--@@ -1157,7 +1165,7 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
--             {
--                 /* Training has failed. Park this modem. */
-- #if defined(SPANDSP_USE_FIXED_POINTx)
---                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %d)\n", s->training_error);
--+                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %ld)\n", s->training_error);
-- #else
--                 span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %f)\n", s->training_error);
-- #endif
-diff --git a/package/spandsp/0002-Permit-to-provide-custom-CPPFLAGS_FOR_BUILD.patch b/package/spandsp/0002-Permit-to-provide-custom-CPPFLAGS_FOR_BUILD.patch
-new file mode 100644
-index 0000000000..ad0bf67a9d
---- /dev/null
-+++ b/package/spandsp/0002-Permit-to-provide-custom-CPPFLAGS_FOR_BUILD.patch
-@@ -0,0 +1,36 @@
-+From 0617f8d89ad5102f569c1d2b0483179fdfb1a83a Mon Sep 17 00:00:00 2001
-+From: Christian Marangi <ansuelsmth@gmail.com>
-+Date: Thu, 20 Nov 2025 16:39:06 +0100
-+Subject: [PATCH] Permit to provide custom CPPFLAGS_FOR_BUILD
-+
-+In the context of cross compilation the CPPFLAGS for the target might be
-+different than the one for build tools.
-+
-+Permit to provide custom CPPFLAGS_FOR_BUILD value to handle this
-+scenario.
-+
-+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-+
-+Upstream: https://github.com/freeswitch/spandsp/pull/112
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index fa87245..450b8fa 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -61,7 +61,7 @@ then
-+     # are not the same, we set reasonable default values for the tools.
-+ 
-+     CC_FOR_BUILD=${CC_FOR_BUILD-gcc}
-+-    CPPFLAGS_FOR_BUILD="\$(CPPFLAGS)"
-++    CPPFLAGS_FOR_BUILD=${CPPFLAGS_FOR_BUILD-"\$(CPPFLAGS)"}
-+     CC=${CC-${host_alias}-gcc}
-+     CFLAGS=${CFLAGS-"-g -O2"}
-+     CXX=${CXX-${host_alias}-c++}
-+-- 
-+2.47.3
-+
-diff --git a/package/spandsp/0003-Propagate-CPPFLAGS_FOR_BUILD-for-build-tools.patch b/package/spandsp/0003-Propagate-CPPFLAGS_FOR_BUILD-for-build-tools.patch
-new file mode 100644
-index 0000000000..81d37fe758
---- /dev/null
-+++ b/package/spandsp/0003-Propagate-CPPFLAGS_FOR_BUILD-for-build-tools.patch
-@@ -0,0 +1,87 @@
-+From 350d67a8d470d645c3c8811b8e17fe6f5b7ad93b Mon Sep 17 00:00:00 2001
-+From: Christian Marangi <ansuelsmth@gmail.com>
-+Date: Thu, 20 Nov 2025 16:40:44 +0100
-+Subject: [PATCH] Propagate CPPFLAGS_FOR_BUILD for build tools
-+
-+On building build tools, only CC_FOR_BUILD is used with
-+CPPFLAGS_FOR_BUILD never actually passed. This was probably an oversight
-+when CPPFLAGS_FOR_BUILD was introduced.
-+
-+This is especially needed on cross compilation where the header are
-+placed on a standard location.
-+
-+To address this case, and make building build tool more robust, actually
-+pass the CPPFLAGS_FOR_BUILD for each tool.
-+
-+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-+
-+Upstream: https://github.com/freeswitch/spandsp/pull/112
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/Makefile.am | 24 ++++++++++++------------
-+ 1 file changed, 12 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index f5c7cc9..52634b8 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -395,43 +395,43 @@ noinst_HEADERS = cielab_luts.h \
-+                  v34_tables.h
-+ 
-+ make_at_dictionary$(EXEEXT): $(top_srcdir)/src/make_at_dictionary.c
-+-	$(CC_FOR_BUILD) -o make_at_dictionary$(EXEEXT) $(top_srcdir)/src/make_at_dictionary.c -DHAVE_CONFIG_H -I$(top_builddir)/src
-++	$(CC_FOR_BUILD) -o make_at_dictionary$(EXEEXT) $(top_srcdir)/src/make_at_dictionary.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src
-+ 
-+ make_cielab_luts$(EXEEXT): $(top_srcdir)/src/make_cielab_luts.c
-+-	$(CC_FOR_BUILD) -o make_cielab_luts$(EXEEXT) $(top_srcdir)/src/make_cielab_luts.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_cielab_luts$(EXEEXT) $(top_srcdir)/src/make_cielab_luts.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_math_fixed_tables$(EXEEXT): $(top_srcdir)/src/make_math_fixed_tables.c
-+-	$(CC_FOR_BUILD) -o make_math_fixed_tables$(EXEEXT) $(top_srcdir)/src/make_math_fixed_tables.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_math_fixed_tables$(EXEEXT) $(top_srcdir)/src/make_math_fixed_tables.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_modem_filter$(EXEEXT): $(top_srcdir)/src/make_modem_filter.c $(top_srcdir)/src/filter_tools.c
-+-	$(CC_FOR_BUILD) -o make_modem_filter$(EXEEXT) $(top_srcdir)/src/make_modem_filter.c $(top_srcdir)/src/filter_tools.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_modem_filter$(EXEEXT) $(top_srcdir)/src/make_modem_filter.c $(top_srcdir)/src/filter_tools.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_modem_godard_descriptor$(EXEEXT): $(top_srcdir)/src/make_modem_godard_descriptor.c $(top_srcdir)/src/filter_tools.c
-+-	$(CC_FOR_BUILD) -o make_modem_godard_descriptor$(EXEEXT) $(top_srcdir)/src/make_modem_godard_descriptor.c $(top_srcdir)/src/filter_tools.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_modem_godard_descriptor$(EXEEXT) $(top_srcdir)/src/make_modem_godard_descriptor.c $(top_srcdir)/src/filter_tools.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_t43_gray_code_tables$(EXEEXT): $(top_srcdir)/src/make_t43_gray_code_tables.c
-+-	$(CC_FOR_BUILD) -o make_t43_gray_code_tables$(EXEEXT) $(top_srcdir)/src/make_t43_gray_code_tables.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_t43_gray_code_tables$(EXEEXT) $(top_srcdir)/src/make_t43_gray_code_tables.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_v17_v32_constellation_map$(EXEEXT): $(top_srcdir)/src/make_v17_v32_constellation_map.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c
-+-	$(CC_FOR_BUILD) -o make_v17_v32_constellation_map$(EXEEXT) $(top_srcdir)/src/make_v17_v32_constellation_map.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_v17_v32_constellation_map$(EXEEXT) $(top_srcdir)/src/make_v17_v32_constellation_map.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_v17_v32_convolutional_encoder$(EXEEXT): $(top_srcdir)/src/make_v17_v32_convolutional_encoder.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c
-+-	$(CC_FOR_BUILD) -o make_v17_v32_convolutional_encoder$(EXEEXT) $(top_srcdir)/src/make_v17_v32_convolutional_encoder.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_v17_v32_convolutional_encoder$(EXEEXT) $(top_srcdir)/src/make_v17_v32_convolutional_encoder.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_v29_constellation_map$(EXEEXT): $(top_srcdir)/src/make_v29_constellation_map.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c
-+-	$(CC_FOR_BUILD) -o make_v29_constellation_map$(EXEEXT) $(top_srcdir)/src/make_v29_constellation_map.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_v29_constellation_map$(EXEEXT) $(top_srcdir)/src/make_v29_constellation_map.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_v34_convolutional_coders$(EXEEXT): $(top_srcdir)/src/make_v34_convolutional_coders.c
-+-	$(CC_FOR_BUILD) -o make_v34_convolutional_coders$(EXEEXT) $(top_srcdir)/src/make_v34_convolutional_coders.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_v34_convolutional_coders$(EXEEXT) $(top_srcdir)/src/make_v34_convolutional_coders.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_v34_probe_signals$(EXEEXT): $(top_srcdir)/src/make_v34_probe_signals.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c
-+-	$(CC_FOR_BUILD) -o make_v34_probe_signals$(EXEEXT) $(top_srcdir)/src/make_v34_probe_signals.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-++	$(CC_FOR_BUILD) -o make_v34_probe_signals$(EXEEXT) $(top_srcdir)/src/make_v34_probe_signals.c $(top_srcdir)/src/g711.c $(top_srcdir)/src/alloc.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -lm
-+ 
-+ make_v34_shell_map$(EXEEXT): $(top_srcdir)/src/make_v34_shell_map.c
-+ 	$(CC_FOR_BUILD) -o make_v34_shell_map$(EXEEXT) $(top_srcdir)/src/make_v34_shell_map.c -DHAVE_CONFIG_H -I$(top_builddir)/src
-+ 
-+ make_v34_tx_pre_emphasis_filters$(EXEEXT): $(top_srcdir)/src/make_v34_tx_pre_emphasis_filters.c $(top_srcdir)/tools/meteor-engine.c
-+-	$(CC_FOR_BUILD) -o make_v34_tx_pre_emphasis_filters$(EXEEXT) $(top_srcdir)/src/make_v34_tx_pre_emphasis_filters.c $(top_srcdir)/tools/meteor-engine.c -DHAVE_CONFIG_H -I$(top_builddir)/src -I$(top_builddir)/tools -lm
-++	$(CC_FOR_BUILD) -o make_v34_tx_pre_emphasis_filters$(EXEEXT) $(top_srcdir)/src/make_v34_tx_pre_emphasis_filters.c $(top_srcdir)/tools/meteor-engine.c $(CPPFLAGS_FOR_BUILD) -DHAVE_CONFIG_H -I$(top_builddir)/src -I$(top_builddir)/tools -lm
-+ 
-+ # We need to run make_at_dictionary, so it generates the
-+ # at_interpreter_dictionary.h file
-+-- 
-+2.47.3
-+
-diff --git a/package/spandsp/spandsp.hash b/package/spandsp/spandsp.hash
-index d38b069198..3fa19144e8 100644
---- a/package/spandsp/spandsp.hash
-+++ b/package/spandsp/spandsp.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  a11beed46b488a4cac3b0c42042ad28448bcee4c0027a82d5449180bbb178836  spandsp-3.0.0-6ec23e5a7e.tar.gz
-+sha256  667e3af3f59c9d40140cb4c3a86f7af0ea80aa7e637417f079d6d6881f91d404  spandsp-797760168945c96e91af55bde9d4edaea2e654f9.tar.gz
- sha256  366576cb0b869cd9e95a4882878607314650488ac635e5df0692180382e9666a  COPYING
-diff --git a/package/spandsp/spandsp.mk b/package/spandsp/spandsp.mk
-index 4735212f31..002c4a8778 100644
---- a/package/spandsp/spandsp.mk
-+++ b/package/spandsp/spandsp.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--SPANDSP_VERSION = 3.0.0-6ec23e5a7e
--SPANDSP_SITE = https://files.freeswitch.org/downloads/libs
-+SPANDSP_VERSION = 797760168945c96e91af55bde9d4edaea2e654f9
-+SPANDSP_SITE = $(call github,freeswitch,spandsp,$(SPANDSP_VERSION))
- SPANDSP_LICENSE = LGPL-2.1 (library), GPL-2.0 (test suite)
- SPANDSP_LICENSE_FILES = COPYING
- # We're patching configure.ac
- SPANDSP_AUTORECONF = YES
- 
--SPANDSP_DEPENDENCIES = tiff host-pkgconf
-+SPANDSP_DEPENDENCIES = tiff host-tiff host-pkgconf
- SPANDSP_INSTALL_STAGING = YES
- SPANDSP_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
- 
+@@ -1 +0,0 @@
+-include(Platform/Linux-Initialize)
 -- 
-2.47.3
+2.52.0
 
 _______________________________________________
 buildroot mailing list
