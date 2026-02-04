@@ -1,86 +1,127 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B20D9EA7944
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 21:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87ADBEA794A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 23:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D39AC40D35;
-	Wed,  4 Feb 2026 21:28:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Io09LSTiwsdv; Wed,  4 Feb 2026 21:28:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 497CF40C88
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770240504;
-	bh=g96mJ/0W/gtbDGLpN6oRmiiDlf1kGFy8UF5SOiFr2B0=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=HmdT07QFyPQ4ujHkAEiNTq/vYGAZ9vW2m9EJ28M0xKlrWcWs0dHWxyY7NntvBbRDE
-	 W82bctYEpEOhrtzZ+rT07OInTovmMmQwHq01XF/Ryn0jZLoqFgzOS1C2QL0GCP3K6V
-	 Tx0ayjdQ4enYqdbvT6kOs3BC3Ia8XR3M9Sq5poMTzGb+NM2sn9uX7CQIir9zB3rXzo
-	 C/Bj1UoEPYhT/JfOklhLif6t4PMtCCmuUqtCgMyoHqOzbAig7QHbwXpYe/yuLbbcxw
-	 A75T3BPkMG+yRQJA5hUkEJFk5ItepYRhP4/2gqLNwWNDVqfjduKMFYnhB2EvvpElvT
-	 o4xL+Delftc5Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 497CF40C88;
-	Wed,  4 Feb 2026 21:28:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 65847173
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 21:28:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45DB683641
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 21:28:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 148278268B;
+	Wed,  4 Feb 2026 23:16:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yHKvNnedRjcS for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 21:28:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7BF76834E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BF76834E8
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7BF76834E8
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 21:28:19 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C9925A4C21DB;
- Wed,  4 Feb 2026 22:28:16 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46980)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vnkQ4-0000000063l-2LVx;
- Wed, 04 Feb 2026 21:28:16 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id z96GpgSRPtII; Wed,  4 Feb 2026 23:16:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DE982690
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770246973;
+	bh=goucokJnh/MSYSNqu4AQclmm8oR4HlCXB8pEo33g2eQ=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=Lv6DYvBUzbY/Db9pkYqLH1bUXS8WMlaNrlHQ2yRFMEgQg2plAS0W4p/HMleu+5pUf
+	 1j3oORCh9Z5h//eskUtHeKXaAz6leAI8ODp/Nvho27kyRKrKzzhdieImUr7KnlE3U6
+	 D3d7jPpw2dA1/dqiEwvLU8e8hbxJh7kRTtVbnzxU37c5hIRDAfh5EX7CJS8sdLKG+Y
+	 2xcXJVROofCISlM3L/nwPlpBvHYdZyIsHOL4rS+lh0qhKCihRb0jigTnm+Dbi8P9e4
+	 34ej5/6vkNq2umLGD5+EGux6LSpdrIWej3dD5ecU+ZG3pZfPP6ZbVZ7O/eWm2sPaFE
+	 9OUHB2k7sn1/g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04DE982690;
+	Wed,  4 Feb 2026 23:16:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4A98BF5
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:16:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38E7340D7A
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:16:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CAfOt44GQwsL for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 23:16:11 +0000 (UTC)
+X-Greylist: delayed 386 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 04 Feb 2026 23:16:11 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 433E840D88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 433E840D88
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=170.10.153.107;
+ helo=usb-smtp-delivery-107.mimecast.com; envelope-from=jkastelic@thinksrs.com;
+ receiver=<UNKNOWN> 
+Received: from usb-smtp-delivery-107.mimecast.com
+ (usb-smtp-delivery-107.mimecast.com [170.10.153.107])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 433E840D88
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 23:16:11 +0000 (UTC)
+Received: from mail-yx1-f71.google.com (mail-yx1-f71.google.com
+ [74.125.224.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ usb-mta-36-a79IbZchOoCUBMn77KPoEg-1; Wed, 04 Feb 2026 15:09:41 -0800
+X-MC-Unique: a79IbZchOoCUBMn77KPoEg-1
+X-Mimecast-MFC-AGG-ID: a79IbZchOoCUBMn77KPoEg_1770246580
+Received: by mail-yx1-f71.google.com with SMTP id
+ 956f58d0204a3-649b2db7b8fso726444d50.0
+ for <buildroot@buildroot.org>; Wed, 04 Feb 2026 15:09:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1770246580; x=1770851380;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=VJf4WUwO+l6Pyo7d0oX+8zhAeNfgMADA02xDVeJAr0I=;
+ b=EeWKXyFyXLOBFl/c4M4MfbDd0RotrM4UaV/jzFQKsM556XhP3uK1Sy0j0tYgtDH4jh
+ suq1FESgnozqndO8V4DSXu0XNDS/13pAQWA5U9rldQg88mLfSparoBwBELJpFYPvJZg0
+ wOxO4/oaQNV416w+06H7/qK4xDXKyfrpCbIQRQBdh2HmMrhO/aDLVjgDRemQ4myOHd+P
+ xWcFSMGPdNBZ5mUrpXNyaQ8CxoRS8e+l+UTSJIe8U+0dp+oAusuZoTA1sGADBK4nrGuE
+ m4swE6D32Noak3fqEMVsY9e24Cf+vo/vp+cMB76BdnnOCZbm4f8cnCjGLoRTtKYgUuH5
+ kTrw==
+X-Gm-Message-State: AOJu0Yx0wf/8tkDhwffPjLx18stUCMTLm/WTtjWxVH6n4JYEHni8iCC8
+ C/bTobZ2xmKu+7j8tBeL+ubKsqyNKW9HhxllzgOFGPChkWw/CGfmsGBhNYHBDq4tW9Yo/IsHpRj
+ ty3yDi5BpSk4BWM6TtYwFLlU8TQi3jDneONRf5xm0/AxAN3000iA4ARuNpKTNE+wyTYI=
+X-Gm-Gg: AZuq6aLmvyC+WlyaaG4TzZwRu34dJgcEkjpPrZv3NvWat9cvf3q3o0J4naCi9WtWMNt
+ NGg8vuXYJhfD7xhG9BLorrxzUfCvxqrpkJ+s/mg9Z7G3+PRblMn9bKLZDF+Z3e3GiMaExS1JSdd
+ 7vKiMUKBbJE4tmGMBjY4dJYaRawD990b7WdHIJwVIAGH6pUjmBNw1GZ/dIGP3maITw2S5Y2mb6d
+ padDVGCcVxQxAUFnoOoaLynFin6uK4g5+Yd6eAiVDiyy4/G1hg3l8bQ5TtHoofd+eWKRVsMaX6Y
+ 8WIhfSRWn8mU2kwI1GnQb5AzvtEl9w+qq1IaA4Anu0gO2WvwjMQoE0qUvLdIHfp+Ajvzeos4HTf
+ q9pIAUnuhfqGCZoKhHQdvPri7kT/86EYcOPv28bsHJtKLhi8S8Mu/WaraNMiW6uBkfENJlb6hJY
+ qFC6786qR2My8=
+X-Received: by 2002:a53:5004:0:b0:649:b468:d8b5 with SMTP id
+ 956f58d0204a3-649db33f470mr3341787d50.29.1770246579890; 
+ Wed, 04 Feb 2026 15:09:39 -0800 (PST)
+X-Received: by 2002:a53:5004:0:b0:649:b468:d8b5 with SMTP id
+ 956f58d0204a3-649db33f470mr3341771d50.29.1770246579470; 
+ Wed, 04 Feb 2026 15:09:39 -0800 (PST)
+Received: from SRS1720.corp.thinksrs.com
+ (107-207-172-155.lightspeed.wlfrct.sbcglobal.net. [107.207.172.155])
+ by smtp.gmail.com with ESMTPSA id
+ 956f58d0204a3-649dc4b8034sm3739111d50.9.2026.02.04.15.09.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 Feb 2026 15:09:38 -0800 (PST)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  4 Feb 2026 22:28:16 +0100
-Message-ID: <20260204212816.1493261-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
+ Jakob Kastelic <jkastelic@thinksrs.com>
+Date: Wed,  4 Feb 2026 15:09:30 -0800
+Message-Id: <20260204230930.1596375-1-jkastelic@thinksrs.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: uo3MJQd0mLoYz6NPHkud-Cm_452OeUURcXOipsxTnTs_1770246580
+X-Mimecast-Originator: thinksrs.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1770240496;
- bh=/28oosTelZzbVYkhyzedUx5wQ+yJaxwevDFDVkr3p0s=;
- h=From:To:Cc:Subject:Date:From;
- b=GD1sbh1QNtcW2RNCAWZhhF8zKdrsRAofuIrC+zK/52Q0BSsG+UTemNwEssdrd+nfc
- QxQ1DxyCWn06w3nZG5J4uK56DqGxumPl8WFlODm8jZKpx6rQn01/EeLC/uX3BIarsu
- ATz5dGhMtHUKo8buKoVnrsc1hUx/z9gakUW0rUMQKYRza6bPph72iW7bCsYW2G2rOj
- jWca5+rODvKV4n3f+smsBALUdDhceIc6Ge8RJ3p1jKDK4Yc4z/BU7LwEEFXF6UxXZl
- U5frXraUofMjZkJLg4pWDXermWCZFtDnD3nJEYk1YHu5Vgiu/8OvRTcAdlVCMB/GI3
- EbyeeJyMvYiNg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=GD1sbh1Q
-Subject: [Buildroot] [PATCH 1/1] package/cegui: remove package
+ d=thinksrs.com; 
+ s=mimecast20220819; t=1770246969;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=F8kQIyAmCQ9uUaLkGiGjRPpb+5eLTxwpaIBhhX8MGBU=;
+ b=lCGtu2KdV2OYfzL3Y9eX0uSA7KdHotbGldYX2gRtoS/mQHFuxSfkTIGZqrydKCAEfvb94S
+ vSKU+HUjhAND3urA1Z4P0pLFqg4VROUiZoE4+BZX7zjpxRnwmdCDr6ayY1lwzTVy3fkJ0E
+ e/3uPjaLDwMcND3+6IMuZgsDcuBP9cU=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=thinksrs.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=thinksrs.com header.i=@thinksrs.com header.a=rsa-sha256
+ header.s=mimecast20220819 header.b=lCGtu2Kd
+Subject: [Buildroot] [PATCH 1/1] optee: bump to 4.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,241 +133,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Jakob Kastelic via buildroot <buildroot@buildroot.org>
+Reply-To: Jakob Kastelic <jkastelic@thinksrs.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package has no buildroot maintainer and causes many build errors:
-https://autobuild.buildroot.net/?reason=cegui%
+Unfortunately, if all optee-related packages are not updated at the same
+time, optee-test will not build.
 
-We remove the package for now, no other package depends on it.
+The version bump is needed since optee-examples and optee-test can no
+longer compile (compatibility with CMake < 3.5 has been removed from
+CMake).
 
-Fixes:
-https://autobuild.buildroot.net/results/248/248fabed54239e3f4cfe68c3b964a2b6a52c9dd5/
-and many more.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Jakob Kastelic <jkastelic@thinksrs.com>
 ---
- Config.in.legacy                           |  8 ++
- package/Config.in                          |  1 -
- package/cegui/0001-Fix-cmake-4-build.patch | 28 -------
- package/cegui/Config.in                    | 24 ------
- package/cegui/cegui.hash                   |  3 -
- package/cegui/cegui.mk                     | 95 ----------------------
- 6 files changed, 8 insertions(+), 151 deletions(-)
- delete mode 100644 package/cegui/0001-Fix-cmake-4-build.patch
- delete mode 100644 package/cegui/Config.in
- delete mode 100644 package/cegui/cegui.hash
- delete mode 100644 package/cegui/cegui.mk
+ boot/optee-os/Config.in                    | 4 ++--
+ boot/optee-os/optee-os.hash                | 2 +-
+ package/optee-client/Config.in             | 4 ++--
+ package/optee-client/optee-client.hash     | 2 +-
+ package/optee-examples/Config.in           | 4 ++--
+ package/optee-examples/optee-examples.hash | 2 +-
+ package/optee-test/Config.in               | 4 ++--
+ package/optee-test/optee-test.hash         | 2 +-
+ 8 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4539b19bbe..a8550d9a2c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 4bd7debefd..af08375b9a 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
- comment "Legacy options removed in 2026.02"
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
+ 	help
+@@ -79,7 +79,7 @@ endif
  
-+config BR2_PACKAGE_CEGUI
-+	bool "cegui"
-+	select BR2_LEGACY
-+	help
-+	  cegui was removed from Buildroot as it was insufficiently
-+	  maintained. It can be re-added if someone volunteers to
-+	  maintain it.
-+
- config BR2_PACKAGE_DVDRW_TOOLS
- 	bool "dvdrw-tools removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 6284bea7f4..3fc9056a33 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -334,7 +334,6 @@ comment "Graphic applications"
- 	source "package/wmenu/Config.in"
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "4.6.0"		if BR2_TARGET_OPTEE_OS_LATEST
++	default "4.9.0"		if BR2_TARGET_OPTEE_OS_LATEST
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+index c86bd1e0d9..3db5c85cf1 100644
+--- a/boot/optee-os/optee-os.hash
++++ b/boot/optee-os/optee-os.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0c947c6972bf50c483cb993af01041d4094b1e03711c7246cdde6ba2ffc351fe  optee-os-4.6.0.tar.gz
++sha256  9400e16c45bfa45f15585b2c933b86c449e7de05def0ecaaa62a4f38973a3a45  optee-os-4.9.0.tar.gz
+ sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index ac3b680743..04849ffce4 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_OPTEE_CLIENT_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
  
- comment "Graphic libraries"
--	source "package/cegui/Config.in"
- 	source "package/efl/Config.in"
- 	source "package/fb-test-app/Config.in"
- 	source "package/fbdump/Config.in"
-diff --git a/package/cegui/0001-Fix-cmake-4-build.patch b/package/cegui/0001-Fix-cmake-4-build.patch
-deleted file mode 100644
-index 952b17e494..0000000000
---- a/package/cegui/0001-Fix-cmake-4-build.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 6c0e6d8ffb3c13cd7fb08c8ef217daf45eabdf99 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Tue, 2 Dec 2025 20:38:29 +0100
--Subject: [PATCH] Fix cmake 4 build
--
--Upstream: https://github.com/cegui/cegui/pull/1334
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 418931822..645ff6cf7 100755
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,7 +1,7 @@
-- ################################################################################
-- # Top-level CMakeLists.txt file for Crazy Eddie's GUI System
-- ################################################################################
---cmake_minimum_required(VERSION 3.1)
--+cmake_minimum_required(VERSION 3.5)
-- 
-- if (APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
--     set( CMAKE_OSX_ARCHITECTURES ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE STRING "Build architectures for Mac OS X")
---- 
--2.47.3
--
-diff --git a/package/cegui/Config.in b/package/cegui/Config.in
-deleted file mode 100644
-index 20b865835b..0000000000
---- a/package/cegui/Config.in
-+++ /dev/null
-@@ -1,24 +0,0 @@
--comment "cegui needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 5"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
--			|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--			|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
--
--config BR2_PACKAGE_CEGUI
--	bool "cegui"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11 PR59987
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_GLM
--	select BR2_PACKAGE_LIBGLFW if BR2_PACKAGE_HAS_LIBGL # SampleBrowser dependency
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	help
--	  Crazy Eddie's GUI System is a free library providing windowing
--	  and widgets for graphics APIs / engines where such
--	  functionality is not natively available, or severely lacking.
--	  The library is object orientated, written in C++, and targeted
--	  at games developers who should be spending their time creating
--	  great games, not building GUI sub-systems!
--
--	  http://www.cegui.org.uk/
-diff --git a/package/cegui/cegui.hash b/package/cegui/cegui.hash
-deleted file mode 100644
-index be0939148c..0000000000
---- a/package/cegui/cegui.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  9460cbbe7fc3bb3cf6abfd7f5a9c5f135b20e9898400bd698a5fa0d0fe879865  cegui-e7a03afc70c6182a091ff31accb9d77c6bdf6f60.tar.gz
--sha256  cc869e2ece8ad039f6d7fd17259db4ea0ae0a502d02a1bb506c0168deb12e40d  COPYING
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-deleted file mode 100644
-index 9b2a1704b6..0000000000
---- a/package/cegui/cegui.mk
-+++ /dev/null
-@@ -1,95 +0,0 @@
--################################################################################
--#
--# cegui
--#
--################################################################################
--
--CEGUI_VERSION = e7a03afc70c6182a091ff31accb9d77c6bdf6f60
--CEGUI_SITE = $(call github,cegui,cegui,$(CEGUI_VERSION))
--CEGUI_LICENSE = MIT
--CEGUI_LICENSE_FILES = COPYING
--CEGUI_INSTALL_STAGING = YES
--CEGUI_CONF_OPTS = \
--	-DCEGUI_BUILD_RESOURCE_PROVIDER_MINIZIP=OFF \
--	-DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=OFF \
--	-DCEGUI_BUILD_RENDERER_IRRLICHT=OFF \
--	-DCEGUI_BUILD_RENDERER_OGRE=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
--	-DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
--	-DCEGUI_USE_FRIBIDI=OFF \
--	-DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
--	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
--CEGUI_DEPENDENCIES = glm \
--	$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
--	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
--	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
--	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
--
--# libepoxy support cannot be enabled together with libglew
--ifeq ($(BR2_PACKAGE_LIBGLEW)$(BR2_PACKAGE_LIBGLU),yy)
--CEGUI_DEPENDENCIES += libglew libglu
--CEGUI_CONF_OPTS += -DCEGUI_USE_GLEW=ON -DCEGUI_USE_EPOXY=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL=ON \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=ON
--else ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
--CEGUI_DEPENDENCIES += libepoxy
--# old OpenGL renderer module is only supported using GLEW
--CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON -DCEGUI_USE_GLEW=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF -DCEGUI_USE_GLEW=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_EXPAT),y)
--CEGUI_DEPENDENCIES += expat
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_EXPAT=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_EXPAT=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_IMAGE),yy)
--CEGUI_DEPENDENCIES += sdl2 sdl2_image
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_IMAGECODEC_SDL2=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_IMAGECODEC_SDL2=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_PCRE),y)
--CEGUI_DEPENDENCIES += pcre
--CEGUI_CONF_OPTS += -DCEGUI_REGEX_MATCHER=PCRE
--else
--CEGUI_CONF_OPTS += -DCEGUI_REGEX_MATCHER=std
--endif
--
--ifeq ($(BR2_PACKAGE_FREETYPE),y)
--CEGUI_DEPENDENCIES += freetype
--CEGUI_CONF_OPTS += -DCEGUI_USE_FREETYPE=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_USE_FREETYPE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBXML2),y)
--CEGUI_DEPENDENCIES += libxml2
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_PUGIXML),y)
--CEGUI_DEPENDENCIES += pugixml
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_PUGIXML=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_PUGIXML=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_TINYXML2),y)
--CEGUI_DEPENDENCIES += tinyxml2
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=OFF
--endif
--
--$(eval $(cmake-package))
+ config BR2_PACKAGE_OPTEE_CLIENT_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	help
+ 	  Use the latest release tag from the optee-client official Git
+ 	  repository.
+@@ -60,7 +60,7 @@ config BR2_PACKAGE_OPTEE_CLIENT_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_CLIENT_AS_OS
+-	default "4.6.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	default "4.9.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL
+ 
+ config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index a5d98521a3..f6150aaf6c 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a970338c9f69861901336716d89684646e4480b9970996a5b3581ae7d49fdaa3  optee-client-4.6.0.tar.gz
++sha256  2ef152f25b682e59c3684d6d73d7c5a138495615f6b045e95266eb3d0bc0d04e  optee-client-4.9.0.tar.gz
+ sha256  fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 702adc84db..fca9aca07c 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -42,7 +42,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 
+ config BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	help
+ 	  Use the latest release tag from the optee-examples official
+ 	  Git repository.
+@@ -72,7 +72,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+-	default "4.6.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
++	default "4.9.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_TARBALL
+ 
+ endif # BR2_PACKAGE_OPTEE_EXAMPLES
+diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
+index 54b98868d7..df3bbcbf66 100644
+--- a/package/optee-examples/optee-examples.hash
++++ b/package/optee-examples/optee-examples.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6891390aefa2046d500d3ffec05c327d7763e89645b2e99ef2330b561ba645f5  optee-examples-4.6.0.tar.gz
++sha256  b95a3d72f2b266aedde0ed9b855f9c59cd0b2608df59b27e3f46935dfb6f919c  optee-examples-4.9.0.tar.gz
+ sha256  6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
+diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
+index dd1160ea48..8631d12cef 100644
+--- a/package/optee-test/Config.in
++++ b/package/optee-test/Config.in
+@@ -48,7 +48,7 @@ config BR2_PACKAGE_OPTEE_TEST_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 
+ config BR2_PACKAGE_OPTEE_TEST_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	help
+ 	  Use the latest release tag from the optee-test official Git
+ 	  repository.
+@@ -77,7 +77,7 @@ config BR2_PACKAGE_OPTEE_TEST_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_TEST_AS_OS
+-	default "4.6.0"		if BR2_PACKAGE_OPTEE_TEST_LATEST
++	default "4.9.0"		if BR2_PACKAGE_OPTEE_TEST_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL
+ 
+ endif # BR2_PACKAGE_OPTEE_TEST
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index 058d95e29b..80e1b36571 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  db4de73fa955a7db70a64a2c4ad1d2c48ddcb54c369821aba670fec6131a6f61  optee-test-4.6.0.tar.gz
++sha256  b7158740dc4ea2f585363097ebd60a265eef0e078674d70636b1731be94780cc  optee-test-4.9.0.tar.gz
+ sha256  2b36458cd0292200e406a608efe7dfda17aae39646a86b730a2776b61d0fa410  LICENSE-BSD
+ sha256  a094472b51f57d0403953d087e410793519cb6f3a7cea2be34eb44e09a426a73  LICENSE-GPL
+ sha256  a562ab14c307d0e02b7bf6f1bdb0d1cf789409e6375a500e15dc7a0503e5c2c3  LICENSE.md
 -- 
-2.47.3
+2.34.1
 
 _______________________________________________
 buildroot mailing list
