@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D771FE9D3F9
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95794E9D3FB
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 15:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA30060D66;
-	Wed,  4 Feb 2026 15:09:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 667C681518;
+	Wed,  4 Feb 2026 15:11:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bGAfjemmEC_1; Wed,  4 Feb 2026 15:11:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 670948175C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770217879;
+	bh=OqdXyL1vMP62OVs0SC8qkvOHUa1pvyxlDt+dsJHXfHI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=f4cWly+fxc9axih/3yXaN600mJ1yhpgSwwDDahjKCFwLjpO0IpIzctk8aqBjUcypt
+	 JdHBd13CSAu8Erz7Bmp1EgqoTy9114hwGmgO9tNrnfnn7OxhnR3+Pdxq/VaOcBXCMp
+	 n4ZrygqqpopF/aMigk3QgbOXMIvs1gYV8Xo1P7IraSKB8B4MRpcdcVQJKg75d8O/yj
+	 IBFy5cu4waR7EvyQJ6nBKXKdaDqfYTveN1Usw6zXUTq+ox/WAuP7bT7CKO9/xGsCz1
+	 6gaH8rqBAPAFesChJSIVyWKHtHp+88yWCxkbBgUnsWHu+1TGRnNqCkUlc7E+46kVQ7
+	 SeiNSgXWWywmg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 670948175C;
+	Wed,  4 Feb 2026 15:11:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 779FB173
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:11:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64B9260D98
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:11:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w43aLJ9J5xfC; Wed,  4 Feb 2026 15:09:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18FBA60D6D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770217771;
-	bh=rTtlwsZLU44X7BQvfHtbMx9fmDO1YffH48yGGanGaM0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=CCS04mtn7z4PHnUq/H/+nrXEpfSG/N3icmI5zCUtzdg/V/yj2ajXGcxVC6zEnaAeI
-	 wEIfLHOJLuOKkqtOHr5V7S1835EuLqKIrV6my/hEnaw4cWUdFOjN7GFOFvsCYxQ29s
-	 hnzy904v7UqBJGk82LcZUJWnVy8a3CaE26p0vUw5bNBdP8+vsl4ep5jlPCh2l0nIc4
-	 bSS1pkjfYzLQZJ92NYgMA5a6dy6VCipbwkMFNoCrx6lcAwoxLIxGBh9OnnAqKSESvd
-	 /Y/sZaJt2t26/peOVzojfiL9xGXMpf+LGZ0YHHK0CSQ79mdo/w+u5/Ytt2Z7TpiLZS
-	 ZDP93q7YsnecA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18FBA60D6D;
-	Wed,  4 Feb 2026 15:09:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 71241F4
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:09:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 51CCB40504
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:09:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Af07ANHvTw9p for <buildroot@buildroot.org>;
- Wed,  4 Feb 2026 15:09:28 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
- envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B13E6402B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B13E6402B7
-Received: from serv15.avernis.de (serv15.avernis.de
- [IPv6:2a01:4f8:151:30a2::163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B13E6402B7
- for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:09:27 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 6E8EDBDE6140;
- Wed, 04 Feb 2026 16:09:23 +0100 (CET)
-MIME-Version: 1.0
-Date: Wed, 04 Feb 2026 15:09:23 +0000
-From: Andreas Ziegler <br025@umbiko.net>
-To: Jimmy Wesolowski <Jimmy.Wesolowski@mobileye.com>
-Cc: buildroot <buildroot@buildroot.org>, Guenther Harrasser
- <Guenther.Harrasser@mobileye.com>, Vladimir Kondratiev
- <vladimir.kondratiev@intel.com>, Chris Packham <judge.packham@gmail.com>
-In-Reply-To: <DB9PR09MB4987A693711BB09B0A9C21B9F698A@DB9PR09MB4987.eurprd09.prod.outlook.com>
-References: <mailman.20273.1770054247.2009750.buildroot@buildroot.org>
- <838e68729209415796298901bc72a55d@umbiko.net>
- <DB9PR09MB4987A693711BB09B0A9C21B9F698A@DB9PR09MB4987.eurprd09.prod.outlook.com>
-Message-ID: <88c8fa9045273004c1714475b06491a8@umbiko.net>
-X-Sender: br025@umbiko.net
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1770217763; bh=ibxI8te5KUbTo4w710vvNgB85NCqIDnJgKBq9iBimbg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=bCIWHyOHQYefJHp93ZkwVrfzc3oWN+AgGAcWDOyfb0aPvBGsKv2Bt0TrGDKUvuRgL
- kAJAizVOcLOFIv8Qfm1icc663qrtIhEhhOr35q8bSXCI+VAU3jqpoWQy2hmj774LO8
- c1RGa7nCf3AhWmsYXXDf3ABjuekuZez4L7ibJnl8=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=bCIWHyOH
-Subject: Re: [Buildroot] [PATCH] package/coremark: port for mips-i6500
+ id immDzZzi_jQB for <buildroot@buildroot.org>;
+ Wed,  4 Feb 2026 15:11:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A9E60D92
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1A9E60D92
+ for <buildroot@buildroot.org>; Wed,  4 Feb 2026 15:11:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9278B821C9; Wed,  4 Feb 2026 15:11:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Feb 2026 16:10:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e4e71c6c83924716b826a4eb1096eefbfcaecd5f
+X-Git-Newrev: 137d6e249d9625ed9b58d6c8fea011901b413438
+X-Patchwork-Hint: ignore
+Message-Id: <20260204151116.9278B821C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: assume AArch64
+ supports KVM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,46 +69,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1987670894022186461=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jimmy,
+--===============1987670894022186461==
+Content-Type: text/plain
 
-On 2026-02-04 13:22, Jimmy Wesolowski wrote:
-> Hi Andreas,
-> 
-> 
-> Thank you very much for the review, and I am sorry for the terrible 
-> format, Office does
-> not allow proper inline answering.
-> 
-> We are indeed using a BR2_EXTERNAL, but we are in the process of 
-> upstreaming.
-> However, you are absolutely right, I did not pay attention to the patch 
-> itself, and that
-> makes my Acked-By more than a mistake.
-> I will adapt according to your comments and resend once fixed.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/137d6e249d9625ed9b58d6c8fea011901b413438
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-No sweat, everything is fine.
+Although it is possible to configure an AArch64 CPU without support
+for EL2 in practice all the common AArch64 have supported
+virtualisation from the start.
 
-Upstreaming this particular change might add significant complexity to 
-the coremark package. The Buildroot maintainers might veto this 
-eventually, because coremark is a rather simple package, with probably 
-not much coverage in the community. But go ahead, I'm glad to assist and 
-test if possible.
+If we really wanted to be strict we could blacklist known non-EL2 CPUs
+but AFAICT all the current ones in the config have EL2.
 
-> 
-> Thank you again.
-> Best regards,
-> 
+I should also note KVM on Arm is deprecated and was removed from the
+kernel in v6.10.
 
-<cut>
+Reviewed-by: Jesse Taube <jesse@rivosinc.com>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kvm-unit-tests/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Kind regards,
-Andreas
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index 0d66a08dd7..817d3c4a8f 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -1,13 +1,13 @@
+ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
+ 	bool
+ 	# On ARM, it needs virtualization extensions and little endian CPUs
+-	default y if (BR2_arm || BR2_aarch64) && \
++	default y if BR2_arm && \
+ 		(BR2_cortex_a7 || BR2_cortex_a12 || \
+ 		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
+ 		BR2_cortex_a17 || BR2_cortex_a17_a7 || \
+-		BR2_cortex_a55 || BR2_cortex_a75 || \
+-		BR2_cortex_a75_a55 || BR2_cortex_a76 || \
+-		BR2_cortex_a76_a55)
++		BR2_cortex_a76 || BR2_cortex_a76_a55)
++	# For AArch64 we can assume all v8.0+ support virtualization
++	default y if BR2_aarch64
+ 	default y if BR2_riscv
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc64 || BR2_powerpc64le
+
+--===============1987670894022186461==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1987670894022186461==--
