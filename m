@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCB90E9D41A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1F18E9D41B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Feb 2026 17:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF575611F8;
-	Wed,  4 Feb 2026 17:08:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C98AE611EE;
+	Wed,  4 Feb 2026 17:08:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TAwnvmGsWQdF; Wed,  4 Feb 2026 17:08:17 +0000 (UTC)
+ id GGWrvKqCK-dd; Wed,  4 Feb 2026 17:08:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58261611F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4AE9611FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770224897;
-	bh=X4d8tHg5MXjMPFKCKDip2nvOgj9PTslymQIopzpyH+c=;
+	s=default; t=1770224900;
+	bh=QvPWPWt3/k/4U2Dqh2SxTIq/O7CL+vPGg/dxBB/LpgI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=h6KXAHtIXNT31R2iyF4RIl6hOHg3KXdwfnzDYjxgnM+EvaSa9WSEWaRHROsud1oGM
-	 WLyWIahuqYlENenY17NkZvgGqPsTApc1Yz62W0qnjVo3kxDC2uyM1Acb2J27zf1aEK
-	 yJlL67KpNlvQEwpfTqQmgG5x5sMaxU38SCvJQaMWJsLFz6mC29Zq/z+IjnPnX5aLs1
-	 ba2y8cyJ4dFrscWMf1kbEkPNlWs/GZWcuPvLN/7IbJSb78GhzBzpTWfhkzF6khvRhD
-	 H1ovXZwm3x7SiPRtiDeeVwd3Fm99U+Ld/2uQnRTmaLSvUPeWnrDHxcAx8lBVwyMqqO
-	 MlYni2rqMJnBA==
+	b=pi0uqY2ZMEZIVQKtJra65b7tTj5mXT2lnT/p7zSkHIclvBEA3J3ziSJGt4m8jku+E
+	 NByGVtIO4bLuRGpYLk/YxmiUMkl/EaBvqMVwAVKK8dUpSPlaoUprGkLY5C0zSdWA/R
+	 GTQY8UUvaXEmEmzoyx1zE9P5hzHsrI8Av4cVyRdTzw7lZ5mOTjZxBxDNdpNouVerj7
+	 7pbHhdo/H5nnrbcE6j6jaMzCFKffi1RqIA01WQ92ccV7KsU1DnV2d0CARVXdw5NSpt
+	 uwKIBrYfNsm6U2hrdZZ2G+OMQ0ahRO61UOb9HQgUZNvCzC7ybzfI02EvUDFpyGeU43
+	 PSRXIqiPcD7tQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58261611F3;
-	Wed,  4 Feb 2026 17:08:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 753BF2EB
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4AE9611FD;
+	Wed,  4 Feb 2026 17:08:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88F8D2ED
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63983405F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68F6D83C6B
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wCf-as1847L6 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ua8MkfquBt0O for <buildroot@buildroot.org>;
  Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80DC440080
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DF4B83C43
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80DC440080
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DF4B83C43
  for <buildroot@buildroot.org>; Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59D0D8697A; Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
+ id 6C87E8697E; Wed,  4 Feb 2026 17:07:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Feb 2026 17:24:21 +0100
+Date: Wed, 4 Feb 2026 17:27:42 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: a4001260d6daa0ba7ee53da4a46502a8d9a4293e
-X-Git-Newrev: 2ae91fd40e8d0445ceaee3214e67641b2b29fd4f
+X-Git-Oldrev: aa94a00b94c77313b8317f451e1a6c13b278473b
+X-Git-Newrev: f08922568a0163c94dd1c54ac9d99465ad6f6760
 X-Patchwork-Hint: ignore
-Message-Id: <20260204170747.59D0D8697A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/php: bump version
- to 8.4.17
+Message-Id: <20260204170747.6C87E8697E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] linux: fix
+ 'architectures' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2ae91fd40e8d0445ceaee3214e67641b2b29fd4f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f08922568a0163c94dd1c54ac9d99465ad6f6760
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Release notes: https://news-web.php.net/php.announce/480
+Found by codespell.
 
-Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_4
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 04ce8230f44457f9f4355d68990e8fe03b1099ec)
+(cherry picked from commit f9a40c726f54df86382b10bcc74e81c487d7410f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 4a9d2e4bb4..23ca842b72 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php?source=Y
--sha256  f66f8f48db34e9e29f7bfd6901178e9cf4a1b163e6e497716dfcb8f88bcfae30  php-8.4.16.tar.xz
-+sha256  28b234e347286158cae921d61283eb1169d89bc9d2e5f5976567260ff38b0bfa  php-8.4.17.tar.xz
+diff --git a/linux/Config.in b/linux/Config.in
+index db74f4c337..a06cc9e650 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -473,7 +473,7 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
+ 	  match the vendor subdirectory used by the board in the kernel
+ 	  (e.g. arch/arm64/boot/dts/rockchip/).
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7524187649..aa6050c1a7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.4.16
-+PHP_VERSION = 8.4.17
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-	  While most architechtures make use of vendor subdirectories,
++	  While most architectures make use of vendor subdirectories,
+ 	  like arm, arm64 and riscv, some architectures like powerpc
+ 	  and xtensa do not.
+ 	  In this case, BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should point to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
