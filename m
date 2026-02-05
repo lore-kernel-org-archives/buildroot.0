@@ -4,109 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F83ECD992
-	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 19:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E77EECD998
+	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 19:15:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18CE76080E;
-	Thu,  5 Feb 2026 19:04:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47289610E2;
+	Thu,  5 Feb 2026 19:15:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iX9bJpn1a7L5; Thu,  5 Feb 2026 19:04:20 +0000 (UTC)
+ id tKvg5OXM_kmr; Thu,  5 Feb 2026 19:15:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1782E60B5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D41B610A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770318260;
-	bh=JDdogy6l9pjQgMWoFKpGcrFB0sm5RQKwdfJB9NnkRDI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=sYOpwypNlW0b/RXOixbJB7IiV6mxsfs9U9Inpmb8By4tJ27Iuls1zMR/XXBz/oUAe
-	 hVwcJmHFp43GqguAAdj/OWOpyULH2vdJNS2DnDiCd8pVUKfrqd7eV8M66iVVnRPfgn
-	 QVA1N/nqDxmV5MAg+xgj7W8yeoqvYyzuNgy/w59WduqHbA2ptmGIKcQl5sF2xtR4JQ
-	 5ziQGB/lXHPzwR98e4D6CIQ2te4paYaXHTcv0G4y/xIHo+6aT4jtGy2l/e99zek1da
-	 qwTjgBTXagOrtkWaKu3k7psrOsvXE3hzbB2uCDynVGPgHcPFya+MgC08PYyS5Qmivv
-	 zdVXpZO1ufw0Q==
+	s=default; t=1770318905;
+	bh=3o/PZIHQ6witTQF+De6ZQefc27QcTPiCN1OJX9xDUgw=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=My5Yn0Chwg49YhjJw2gQHIGhX7wjUz0wcIzhPPTMssyhdNNEJusL+pl28PPd3RwgX
+	 LIwt8nhyd2pUbu+9g82KJu4ug2fvqyfSTlbBWAV6WIVxteH68PUTdpkOgyHmXUvDOH
+	 N5+IAGEauxSHq9HMFAwD3L1K5IKBptr4cetHMW7kTFDjCfBS3eV9amj1KjwfhtMpHt
+	 2tIGFAbTYJz4Di4FqWcoL0xQsiVp6D40jL1QW/7kUFZ0JFB68YupyINYTKh5SuMXAO
+	 ujsVBjBtIgJJV/LWuYsuMcrVbBjAVuTxk0ycMTrWBTs2cyW0hSVFHd4GkvKNpA06tl
+	 rgCDxwpgthMFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1782E60B5F;
-	Thu,  5 Feb 2026 19:04:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B1B117A
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 19:04:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D41B610A9;
+	Thu,  5 Feb 2026 19:15:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB479173
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 19:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B1BB84038
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 19:04:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D24F6610A9
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 19:15:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U5aKWxFRI5Tn for <buildroot@buildroot.org>;
- Thu,  5 Feb 2026 19:04:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D7C7E84049
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C7E84049
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D7C7E84049
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 19:04:15 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-b8d7f22d405so192632966b.0
- for <buildroot@buildroot.org>; Thu, 05 Feb 2026 11:04:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770318254; x=1770923054;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=HB5tX680wiXGExXubtwTrQfuIvJ+tfSZYxnE11AL0ms=;
- b=VKCmS4MmkBS5SpLOq49Bkt0g3B+aLNOP+RkNRlz+6Y1wne1lMq8739IN3KAC/Xx+dc
- t9RJ3q/fZO5rTJaL5R+iPLs2hGzb1HLFClEEFMyEFm6zyzjtOafGSPM/qlNjJDdvIwvw
- fFb7K323Gxkmjz/iyBU0Lyc7zzvh6lEu+jI89/QYCe8F4dLPDVBO5e1sj3TsRKMnWRYJ
- Vv3cNCYdT47oDwOscF1ifYYjvrShFM9WGp6CLHlAMhNMH6qutTnuNS36Cc109tHQS34W
- K1MLtTUasB7riCPsvpJWk234aAqa1jWffvqpr3GIBFlBZx9JL0wwLPfUQ/otPL/pTTYY
- ltPQ==
-X-Gm-Message-State: AOJu0Ywqpnq8v5AC1PnYdHu1wjfFb+riCbCwYkhz5kZZRyPrHI6zP+gD
- m2w2rV+DWD6/POFQUkGvEcEOTYkGYC5haNbsEO0/eCx2mWveVUSU/10wc43h2JPlT22Pkz7O4U0
- dK0FP
-X-Gm-Gg: AZuq6aLgMNrHcbUnwhN0Ikk8Y4pqmcYwKFhEjLsfV7/tJlYC/nE9QuLqziHIJkpx+36
- /S+gPmkaqEE/tYKGsFfz1JuZhz3RGcWUIWzi86Lu6/bO2Wzg7HR/FeWileG5/jX+FvWLE000wAw
- afl7Nc8tdGkB0mxnKzLWldEXarX1sp4CB/00qhqQXvg0W2AsEectGuAf6vsN3C0fwzSQmZeR138
- ccf3rrqGRo2M7turf1Uk4XTOZEOfMQ0TBoYdPddRRwUW79dxg6fFdhzQNRq2QIlKwbzGmbbCtoc
- xo51miP543XVaX6AChK2GRp3HC8jw+oYSNNvaIkiGHvGJw8b6UOH9qlcVmIET4lzrNGZdISChau
- K4ovIgtrmg8QR2iJdYQSllMMdBTEoGg15d3ZQ/JRLj4n80RDrfKjj0bqfQhuObCOS7X37V3eox8
- zvI/Nj/h6yubQ=
-X-Received: by 2002:a17:906:f582:b0:b87:7485:b4a8 with SMTP id
- a640c23a62f3a-b8eded6565fmr4161666b.0.1770318253658; 
- Thu, 05 Feb 2026 11:04:13 -0800 (PST)
-Received: from mindpad ([2a02:a020:3cd:38cd:72a6:ccff:fe7d:afc3])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b8edae32664sm10103666b.58.2026.02.05.11.04.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Feb 2026 11:04:13 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pCByHDF-a3EV for <buildroot@buildroot.org>;
+ Thu,  5 Feb 2026 19:15:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CABDC60F92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CABDC60F92
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CABDC60F92
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 19:15:02 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 336D1A4C5882
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 20:15:00 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55262)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vo4od-0000000089e-46Ft
+ for buildroot@buildroot.org; Thu, 05 Feb 2026 19:14:59 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu,  5 Feb 2026 20:04:10 +0100
-Message-ID: <20260205190410.523140-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
+Date: Thu,  5 Feb 2026 20:14:59 +0100
+Message-ID: <20260205191459.1727293-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770318254; x=1770923054; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HB5tX680wiXGExXubtwTrQfuIvJ+tfSZYxnE11AL0ms=;
- b=QpolOMcLjMFej7cdLRNfrV66OEjlY7wRVnlYw4KGPOfaAAykUeC1AyKPEI7fZkuV1p
- HW9ynU+7XXYlG4OrSlstVE2H/n6G7LzewfHlvEsBmm8/n/p3kC26MfE/70TeEp0Jl/03
- /jaG6McqSHKFNSbtYj7pI7fJRXSjuKNypQnPjPue4dgjVbSSspfDicqdxFzYcs31be+t
- TKz6jTAoUZkRGDOz1PK09mHggp5QnPn/MDprnv3NAXlr1GkPpUmThLlyzPc6krQ0Zsg6
- BA4pxn6bbxK5ss5gIBFzdVjWJ4qwIhWCT2BUE0TLgCEKHabLvm51NZXdmBLig2Z/bcwS
- t5gg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1770318900;
+ bh=g5unme6kEM4Cra5e/kaZy/KE6jVHUYOOcdwjoJ3+2xw=;
+ h=From:To:Subject:Date:From;
+ b=Wo1fjbt/mDYxY0mkPp9LlEl/rtkv8DfczVcPTp+blwuOpV+izP4B1ZvIYDQrn+uKh
+ h6chyp9rCG/72iQBYQhV4e/Pi8/ElE05NuIKsBT51KqiGwiSDQroxu+GKAqMhpnjUF
+ j8+SNZAOOrWM+Ad6YTY8OVHab+ChC895sIE1I4RWz9yL7Eo42Y1H5CPv3oKLyRr8Y7
+ THBhAE85FTw+S/G1NW85a6+weSvgO5WprjXdwmbI5We95XthzyTbsEhSML+MOXNXFU
+ DSWhOzmdCCl95cUVP7TBsPnqn1M/QhEyTD4c00+5i+HMPt3BwdLEch/LQbyY6FgeWx
+ qZkZKCvgPLYOw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=QpolOMcL
-Subject: [Buildroot] [PATCH 1/1] package/strongswan: fix patch header
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Wo1fjbt/
+Subject: [Buildroot] [PATCH 1/1] package/cppdb: remove remaining patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,40 +91,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit [1] introduced a patch to fix CVE-2025-62291. Since [2] the
-security patches neeed to reference the vulnerability with the `CVE: `
-trailer in the patch header.
+Buildroot commit 5eb9f8aee52c8dc9355f0ab096df9e56e9459f46 added patch
+0002 to fix the cmake 4 build.
 
-[1] b009935e27 package/strongswan: add patch to fix CVE-2025-62291
-[2] 1167d0ff3d docs/manual: mention CVE trailer
+V1-5 of the patch which removed the package were sent earlier to the
+mailinglist than the cmake 4-fix. Since v6 it should have removed patch
+0002 as well but this was missed so buildroot commit
+b7143b2e22dc6d5f6bc0f7fe745118db7dbcb787 of v9 of the package removal
+patch left patch 0002 behind.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Remove patch 0002 now to really remove the cppdb package.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/strongswan/0001-eap_mschapv2_failure_request_len.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...s.txt-fix-compatibility-with-CMake-4.patch | 24 -------------------
+ 1 file changed, 24 deletions(-)
+ delete mode 100644 package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
 
-diff --git a/package/strongswan/0001-eap_mschapv2_failure_request_len.patch b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
-index 8442cc7816..7442c123c4 100644
---- a/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
-+++ b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
-@@ -21,7 +21,7 @@ Ubuntu), the compiler will use __memcpy_chk(), which prevents that buffer
- overflow and causes the daemon to get aborted immediately instead.
- 
- Fixes: f98cdf7a4765 ("adding plugin for EAP-MS-CHAPv2")
--Fixes: CVE-2025-62291
-+CVE: CVE-2025-62291
- Upstream: https://github.com/strongswan/strongswan/commit/c687ada6a6f68913651e355fd09f906893096b32
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- ---
+diff --git a/package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch b/package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
+deleted file mode 100644
+index 3bba81f563..0000000000
+--- a/package/cppdb/0002-CMakeLists.txt-fix-compatibility-with-CMake-4.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From 27003c60a05dd3921538323a53b1650e289cba8c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Wed, 17 Dec 2025 22:27:33 +0100
+-Subject: [PATCH] CMakeLists.txt: fix compatibility with CMake 4
+-
+-Upstream: N/A, dead upstream
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 5e81b09..32ff3a6 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 2.6)
+-+cmake_minimum_required(VERSION 3.5)
+- project(cppdb)
+- 
+- set(CPPDB_MAJOR 0)
+--- 
+-2.52.0
+-
 -- 
-2.52.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
