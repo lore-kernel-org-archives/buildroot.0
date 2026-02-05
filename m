@@ -1,76 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF57FE83F1F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 15:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C56ECD983
+	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 16:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A9E28414E;
-	Thu,  5 Feb 2026 15:22:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LwrK1rbNM_AK; Thu,  5 Feb 2026 15:22:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 917B48415D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770304965;
-	bh=p2JSgRzWNzqb6TXVSG2zEih5vxgTYnsxFa4YPcysvwE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fqWfQ55Y1IZH6N/jJOmne89+3MNRWevk5ZLZyUiHkHHaz7ej1XS0dht27SOQel8OV
-	 lhYYiarJE/tzMNm7YFOHG7dNjU+abWreYO6TL4UbHfRIxV0jcZ++iu7ELC0WNK2Ydm
-	 YwYNQkTFH2BczQ4PSdx8zAMEkjZa4TRaEcF1ScpppzLNzo3LfVd+HR7fdq2YHKuesM
-	 ++0yGUvxSeaPpizD6dlWBXZFnrQtwmDv7kb3E+1ZrSOayB+BMvu4dZBe/JS5rI27NO
-	 jb2yU/br1yPFdybmq9qlVcFd5f8+yj/m+Jbdg9NhKLusEWH+5HgH4SeF+w2X1Uprf/
-	 dckbJDxqRoxrg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 917B48415D;
-	Thu,  5 Feb 2026 15:22:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AEEAB173
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 15:22:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9383640D3C
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 15:22:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B8BD41239;
+	Thu,  5 Feb 2026 16:20:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v1acCxIj6BSz for <buildroot@buildroot.org>;
- Thu,  5 Feb 2026 15:22:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
- helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 095C240C55
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 095C240C55
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 095C240C55
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 15:22:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DA37C1814B9; Thu,  5 Feb 2026 16:22:39 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Thu,  5 Feb 2026 16:22:09 +0100
-Message-ID: <20260205152211.3297942-2-buildroot@heine.tech>
-X-Mailer: git-send-email 2.43.0
+ id PWHQLVaWZW-W; Thu,  5 Feb 2026 16:20:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BC8E4121C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770308411;
+	bh=6gJo76vbxvbhuZuDu6fQoigUwBRF7ezffPUBmEUMQrs=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=GP0x1goiUdhcVgBK6wE2EO+GD8Hi4n5iscvcQxbeEvCMYkn3AmYCoEJMVJj9Vy9sY
+	 UANLP12hjJDViMQoaWzIv6Ni4uoSJ8rELyv2pjOrl9XRGa+Gl0Vdme5zdbfgugmaen
+	 +04saX41s+FDaWcPiQ9TGaKt8Y+ra1bUtI2466qKvqkRfB+eka80cPPqJtiKYL1AFw
+	 za/sYNZ02+fyGukF6j366R+RXeoYtRkYba25sb2b5lQDCmDR6HoPHVC1gG38uQV6nd
+	 wikXvwoU+GrTIr4n090RH40dQrRxdAA1T+ra3wvOCkAJcFspAPYIzg2+dBn6SA+YFK
+	 +ayK/nWaaWFmQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BC8E4121C;
+	Thu,  5 Feb 2026 16:20:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B589D17A
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 16:20:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99F634121C
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 16:20:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gZbtsVobGHWH for <buildroot@buildroot.org>;
+ Thu,  5 Feb 2026 16:20:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 918974121A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 918974121A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 918974121A
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 16:20:07 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2047778046; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 05 Feb 2026 16:20:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vo25G-0000000EO96-3ei0;
+ Thu, 05 Feb 2026 17:19:58 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Andreas Ziegler <br025@umbiko.net>
+In-Reply-To: <20260204185926.1073422-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Wed, 4 Feb 2026 19:59:26 +0100")
+References: <20260204185926.1073422-1-bernd@kuhls.net>
+Date: Thu, 05 Feb 2026 17:19:58 +0100
+Message-ID: <87cy2jp3gx.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1770304960; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=TLPdcdFrvjwGZvvAmgmUHD2XzIOLyaPn0Cpr43n1pDc=;
- b=RQ7YIu4fGxtwrXO3hNbOGN0J7YsMtERbArKsZrhVdSv6e4mk9q/jx3VQIMnaN0/ULzaCHc
- PbavXgtyR/6lIFEA5hKe6ott97clqUgtS1PS6AF6NyqWzAOTTn5U82r9tj6zYVagLPd1Y0
- CucIlPBaJByj7MuFfdG+bpUyn+9OcUM=
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Wu7WVvgF4LvUDr6BDRcafyKLUyIw71LlkT6TRy3fDqfwnpmkqWO6dQc5vW5O84k0Q7WQRVBsC0V4PKOxzF+DAVwew4jejRwlJ8SBzDZusFYj9OGYlO/daMR3DJtI4lCdb1yHovsVePekIyLngjAexIgIL6Lkg5OEbnWoHO5chPUAv+/zyE6hTybhJNFx3gtjqDkq1j8dq0HI+/nsO0cq6SyRbk4bpquvbhgZ9WASWBq74uvgme/0z/997NyiYN1bIc/mQiOj4FOdye3n/KEP7U0dV6Zpj0sKc7vwukAwkhAKks7RiKmGmktUut7CYWIz5VtnrbtAvSPHUVEm4fF+Zw==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=NMcfuly4jH1gVP0ha11AWeKQajpTheO/xS5WHge4SwI=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=RQ7YIu4f
-Subject: [Buildroot] [PATCH] package/boost: remove dependencies on
- Boost.DateTime
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=Wu7WVvgF
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: bump version to 0.24.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,64 +92,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Boost.DateTime is header-only since 1.77.0
-The Boost Release Notes[0] didn't mention it but it was introduced in
-the documentation of DateTime in this commit: [1]
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-This was bumped in buildroot in d39d8f7cee9b4634e6f490020204f63fae419e8e
+ > https://www.musicpd.org/news/2026/01/mpd-0-24-8-released/
+ > https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.24.8/NEWS
 
-So analog to the "header-only" move of Boost.System we have now to
-gradually phase out the dependencies on this library. Ideally before
-the stub is removed as it now happened for Boost.System in 1.89.0.
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-[0] https://www.boost.org/releases/1.77.0/
-[1] https://github.com/boostorg/date_time/commit/33dc6136f193a100c753c819694d6d11e9ab4123
+Committed, thanks.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/boost/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index a9ab4836b5..7b78345798 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -95,6 +95,9 @@ config BR2_PACKAGE_BOOST_DATE_TIME
- 	  A set of date-time libraries based on generic programming
- 	  concepts.
- 
-+	  This library is header only since boost 1.77.0. Building a
-+	  stub library is still supported for backward compatibility.
-+
- config BR2_PACKAGE_BOOST_EXCEPTION
- 	bool "boost-exception"
- 	help
-@@ -200,7 +203,6 @@ config BR2_PACKAGE_BOOST_LOG
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST_ATOMIC
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_REGEX
- 	select BR2_PACKAGE_BOOST_THREAD
-@@ -359,7 +361,6 @@ config BR2_PACKAGE_BOOST_WAVE
- 	depends on !BR2_m68k_cf
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
 -- 
-2.43.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
