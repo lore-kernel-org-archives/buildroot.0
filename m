@@ -4,110 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD800EC1E94
-	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 10:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A50FEC1E99
+	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 10:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80A454117E;
-	Thu,  5 Feb 2026 10:26:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA2D406A4;
+	Thu,  5 Feb 2026 10:31:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dG0xPU-FcAnz; Thu,  5 Feb 2026 10:26:02 +0000 (UTC)
+ id 3TpgV2avVJtY; Thu,  5 Feb 2026 10:31:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD4C40D2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B36040355
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770287162;
-	bh=u/4C/eOEPX8mUkYsRwNe9My4VX8Wf+b0pgoOpobkMPs=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Xi4xoJOnWhI6Z4sWcctwHDGu6ZOk74njvuAWe6r3KntZVRNlxcb8x/rEqfbj9eOe6
-	 pWc1zu33WOpKDdFpTKkwtRozOydiLvkvrH+bGocwAW/xZSaaG7vB1ql7/cl3Tixkam
-	 U69QddYDgqfjoUWlmY9cMzUlOApwWo4CN1n3Htm+lgaVVaK5V0ykCy9gKVocyMw3W9
-	 AdUEkl/p7Cr8QWVpqlARRm0YfEWd0IrQjYJosty53UFwUKF91rOpDKoPjVTHSu8gjG
-	 Wfz62CBAI2lbElfMpu4YEhJd7ohHU6SFI0klBid2bYxsqvU0utusHrHWVhrzJ7uMcd
-	 fNv9p5hi9WpvA==
+	s=default; t=1770287481;
+	bh=BqetikSkjZlNiHUGjiEJ73XKDeHn9RqaADyWoLbjl9k=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=E2Zd0eZxH3JR8j73pTEwGQoosBtDt9JKrr7N6Oudx/dxt7vexmQ/pF4QM7veVZ3aO
+	 yALTBds9kwShIXpr40EtYfbo6ggSsNH6oBBC8mTf1P1K66JMzc+TosJ2j72CTuMx/v
+	 rDosBBEedHvegBASDtZT84B775SziT1+y0LEJW+Rd09nxqUYlSCCj5Za0l90T14ayF
+	 yPJILtYQjFJiR5J1Z/l08uuankJH0bCLpHA/UbGIS6e2SQMSuV4Y9GGE9imnkaPrxd
+	 v/mOStho1FvqkZdXEWeORU3ICGTZEIkJ7ZVImbSc9f3V/GdZXTndtlmnOoy6QmfC9h
+	 kqXzx0Ob+9ogA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDD4C40D2E;
-	Thu,  5 Feb 2026 10:26:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9362D17A
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 10:26:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B36040355;
+	Thu,  5 Feb 2026 10:31:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA96B17A
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 10:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84C8940CC7
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 10:26:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C89E0402F3
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 10:31:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C1TiZa5xnmvF for <buildroot@buildroot.org>;
- Thu,  5 Feb 2026 10:26:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12f; helo=mail-lf1-x12f.google.com;
- envelope-from=lazzer@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0FBC40D2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0FBC40D2E
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com
- [IPv6:2a00:1450:4864:20::12f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0FBC40D2E
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 10:26:00 +0000 (UTC)
-Received: by mail-lf1-x12f.google.com with SMTP id
- 2adb3069b0e04-59b710d46ceso798759e87.3
- for <buildroot@buildroot.org>; Thu, 05 Feb 2026 02:26:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770287158; x=1770891958;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
- :date:message-id:reply-to;
- bh=TJnFMWXm5XkvGwyZOyiuvI7OTuSQJ9nvpeBfm9AKTmM=;
- b=Z5/cVev++UmGrmAKmlB9RhBwvOHjDRvFVMG7DWAHsye4O21BoAzIXiD73MTTgXbH9O
- uiiy/rePE5ZKBC+IFPzUe3xAjoYrIwOYso5+0np4kpqrELqG/sGhy3wQtNpTz9bESAgV
- YwhJuOmtwuZb0/K6dtlJPMljgAJTukJkAJPdfulAQuBvuW9HiuXiM3xWk1yK3U78O73B
- YGiqMXLNqaCNwQAtrFU25SgZvzQL92dv2b6ew8CPTsei6yk2Hl/ekfKG2e+pM8EBJ8hT
- 4b4I8qzl13yd6grb0ImNyf1trDaLjRrJkK18tK1DC/jauKHwdmAgzYIMhNIgZSqQVRc9
- /H6Q==
-X-Gm-Message-State: AOJu0YxZkzZbQVJcjsOFzXg4k7ZerjamMItZhdxZa7awqcE5IGSXUclu
- uQJ/LcG/HffPUszMZtcFr7DvnyXSbTk8I+uvBzW7J8vPvKcmPUDuglbw4vKkXA==
-X-Gm-Gg: AZuq6aJN5DhB4Pmz3O3oIvBAi/Cj506v2OeCI+WOm9ajstvVky3Vntzd7YuzWnkS7Ze
- DIzpKAHsJ+6fIBvGXITUuFPty+cZu9dFijnf0ZWdNmqvFMO8564Xu0w+bwDhEec1cICwt70m6PV
- 5FFH2keSDYIbSWS9pH3xQ6jmdyVgswFe8BAFZffXl/gORGunQood/Ba82wKH46Pmkf4v73t2CZM
- Wpz98dZuIFK0+aFXxNuxEu+vBrlqi7bvi1DHZfLyc1vs8Q0jxs8psENmJq4KD6yKvS4DIC2gggH
- JNEARsx+6SVfGGgeNIJDIye3jqY+TRlRB4UTrYPb8HmsAZxpI4J1JCuXN4bq0IK8BToR4A6lYiI
- P62CJ+ULohPNlmGr7ZWGhoj9co9G/O/Aquvn1jFAzOIltpsh0JwI49bvzSfXSyhsz4nxKrwmmr9
- CskBHXynj8zVBi2UcufBf7XIxkr0SACKXbHOMM5DVdEmVG+w==
-X-Received: by 2002:a05:6512:695:b0:59e:239c:93a with SMTP id
- 2adb3069b0e04-59e38c088a9mr2279057e87.13.1770287157808; 
- Thu, 05 Feb 2026 02:25:57 -0800 (PST)
-Received: from tollan.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
- [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-38692050f59sm10144471fa.37.2026.02.05.02.25.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Feb 2026 02:25:57 -0800 (PST)
-From: =?UTF-8?q?Mattias=20Walstr=C3=B6m?= <lazzer@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v4-sjlqUbnXw for <buildroot@buildroot.org>;
+ Thu,  5 Feb 2026 10:31:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=162.248.234.2;
+ helo=mail.xes-mad.com; envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ABD0E40166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABD0E40166
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ABD0E40166
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 10:31:17 +0000 (UTC)
+Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
+ by mail.xes-mad.com (Postfix) with ESMTP id 5AF78203B6;
+ Thu,  5 Feb 2026 04:31:16 -0600 (CST)
+From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Cc: Vadim Kochan <vadim4j@gmail.com>,
- =?UTF-8?q?Mattias=20Walstr=C3=B6m?= <lazzer@gmail.com>
-Date: Thu,  5 Feb 2026 11:25:54 +0100
-Message-ID: <20260205102554.1028552-1-lazzer@gmail.com>
+Date: Thu,  5 Feb 2026 04:31:11 -0600
+Message-ID: <20260205103111.168900-1-vfazio@xes-inc.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Organization: Wires
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1770287158; x=1770891958; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TJnFMWXm5XkvGwyZOyiuvI7OTuSQJ9nvpeBfm9AKTmM=;
- b=OmyjrBIsxvEw4mO1i5n/PZrljTRV016UW5cjaiQBDSxP2chVCPfz0HevB4lkAMmFDW
- 5mSjEaj0OPSIvB22IHYrELYajODzni5ax7vPJwhYaKHH4KiQL6n6+27cccSeAlRxkoQ+
- VAU6viD4y+UGSGBVEZjVxH8mAD28q0LqfPvhdGKC6kKhx3QbSdqpXCODkOnAbHJsmD41
- pXFNsShKIRoLYYZM+u0+D1+tVXzVTnDT3FB4gPLuP2MKqbk4CAmXP4y9puCAoKiHT4UZ
- hT74FeCLalYXNDTc8MrqaHrWXsZnIbspzdUSk5rmzlWAM62rNuP+8gMplvwfQTVD3eJh
- m8Cg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=xes-inc.com; s=mail; 
+ t=1770287476; bh=APk023lYMhIianwsd89ALLXxPWkduQnySXt9D4Gfz+g=;
+ h=From:To:Cc:Subject:Date:From;
+ b=T8kfQ+96VpAOd2yc3qwTGbW8Tw5u7SFVr1nmmaNxawAnRCrYDHrlnbJr7gXWPS3hx
+ DLn4jQiF8lPFFISUbTtO4JEDU+ZBESsRQsLyuy4RXKuK6XpcgXewL/Gcvut0rXMlWm
+ mEG8yrX0ubPMUB2auKrUg4y+QS4UAxUhbeiAHE5Y=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OmyjrBIs
-Subject: [Buildroot] [PATCH 1/1] package/frr: Bump version to 10.5.1
+ header.from=xes-inc.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
+ header.s=mail header.b=T8kfQ+96
+Subject: [Buildroot] [PATCH v2 1/1] package/python3: bump to version 3.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,33 +82,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Vincent Fazio <vfazio@xes-inc.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogTWF0dGlhcyBXYWxzdHLDtm0gPGxhenplckBnbWFpbC5jb20+Ci0tLQog
-cGFja2FnZS9mcnIvZnJyLmhhc2ggfCAyICstCiBwYWNrYWdlL2Zyci9mcnIubWsgICB8IDIgKy0K
-IDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvZnJyL2Zyci5oYXNoIGIvcGFja2FnZS9mcnIvZnJyLmhhc2gKaW5kZXgg
-M2JhMDM0NjA2ZC4uZTg5YjUwNDJhOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9mcnIvZnJyLmhhc2gK
-KysrIGIvcGFja2FnZS9mcnIvZnJyLmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIExvY2FsbHkgY2Fs
-Y3VsYXRlZAotc2hhMjU2ICBhODRiOTczZTcxMzM0OWRjYTA5ZTIwMDlmMzNkYzQ5OTU2NGYyZTlm
-YWJhMDFjMGQzY2JhOTIwNDgwMmIwY2Q1ICBmcnItMTAuNS4wLnRhci5negorc2hhMjU2ICBmY2Rk
-MWQzMjZiMmViZDFjYzRiNjA3ZmUxNjgxZDQ3Njg2NTM3MWFjMDAyOGZjNTU5NWE3NWMwMGYzNzAx
-ODllICBmcnItMTAuNS4xLnRhci5negogc2hhMjU2ICA3YmYwNTM5NTdkNmMzOGUzOWEwNmExMTJj
-NjBmZjM1YjIyOGQzYmQwM2VkYmU4YzlhMDM1MDhiMDUxMTI4ZDE2ICBDT1BZSU5HCiBzaGEyNTYg
-IGY5ZTBjMjFmYWY3MzhkYTU4NjI4MWMwYmVhYWQzY2Q1NjIwNGMxOTA4NWExMGZlMDVlNGQzZDdm
-OGI1ODYzZDIgIGRvYy9saWNlbnNlcy9CU0QtMi1DbGF1c2UKIHNoYTI1NiAgYWNhMjk3YjhmZDNh
-NDNlM2JiMjAwZjFlMmUwNDNjMGRiNmM4OTczMjVmNWZmN2YyM2Y3NTMwMzAyYTZiZjcxMyAgZG9j
-L2xpY2Vuc2VzL0JTRC0zLUNsYXVzZQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9mcnIvZnJyLm1rIGIv
-cGFja2FnZS9mcnIvZnJyLm1rCmluZGV4IGFmOTQ3OTNiZDEuLjQ4ODY4MzcyNDUgMTAwNjQ0Ci0t
-LSBhL3BhY2thZ2UvZnJyL2Zyci5taworKysgYi9wYWNrYWdlL2Zyci9mcnIubWsKQEAgLTQsNyAr
-NCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1GUlJfVkVSU0lPTiA9IDEwLjUu
-MAorRlJSX1ZFUlNJT04gPSAxMC41LjEKIEZSUl9TSVRFID0gJChjYWxsIGdpdGh1YixGUlJvdXRp
-bmcsZnJyLGZyci0kKEZSUl9WRVJTSU9OKSkKIEZSUl9MSUNFTlNFID0gR1BMLTIuMCsKIEZSUl9M
-SUNFTlNFX0ZJTEVTID0gXAotLSAKMi40My4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+https://www.python.org/downloads/release/python-3143/
+https://docs.python.org/release/3.14.3/whatsnew/changelog.html
+
+Update the hash file to use the sha256 hash provided by upstream.
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+---
+v2 changes:
+* fix release URL
+* drop md5 hash since the sha256 hash is provided by upstream
+___
+ ...h-139275-Fix-compilation-of-Modules-_remote_debuggi.patch | 3 ++-
+ package/python3/python3.hash                                 | 5 ++---
+ package/python3/python3.mk                                   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+index 7a72ebb16c..716d9d3e8a 100644
+--- a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
++++ b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+@@ -8,6 +8,7 @@ Subject: [PATCH] gh-139275: Fix compilation of
+ Upstream: https://github.com/python/cpython/commit/1963e701001839389cfb1b11d803b0743f4705d7
+ 
+ [ Bernd Kuhls: ported to Python 3.14.2]
++[ Vincent Fazio: update to apply cleanly to 3.14.3 ]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  .../2025-09-24-17-32-52.gh-issue-139275.novrqf.rst              | 2 ++
+@@ -41,7 +42,7 @@ diff --git a/Python/remote_debug.h b/Python/remote_debug.h
+ index 8f9b6cd4c49..b7d17a0f345 100644
+ --- a/Python/remote_debug.h
+ +++ b/Python/remote_debug.h
+-@@ -881,7 +881,7 @@ _Py_RemoteDebug_GetPyRuntimeAddress(proc_handle_t* handle)
++@@ -886,7 +886,7 @@ _Py_RemoteDebug_GetPyRuntimeAddress(proc_handle_t* handle)
+              handle->pid);
+          _PyErr_ChainExceptions1(exc);
+      }
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index b71f6e7deb..b674b589bd 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,4 @@
+-# From https://www.python.org/downloads/release/python-3142/
+-md5  19a31b2838db3b53f9f2db8782bf8773  Python-3.14.2.tar.xz
++# From https://www.python.org/downloads/release/python-3143/
++sha256  a97d5549e9ad81fe17159ed02c68774ad5d266c72f8d9a0b5a9c371fe85d902b  Python-3.14.3.tar.xz
+ # Locally computed
+-sha256  ce543ab854bc256b61b71e9b27f831ffd1bfd60a479d639f8be7f9757cf573e9  Python-3.14.2.tar.xz
+ sha256  b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8195f4fd83..a240349d3e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.14
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
