@@ -1,85 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7280FECD997
-	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 21:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4BAECD9A6
+	for <buildroot@archiver.kernel.org>; Thu,  5 Feb 2026 21:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F78460034;
-	Thu,  5 Feb 2026 21:11:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3079080FB5;
+	Thu,  5 Feb 2026 21:29:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PLVwWCeu7PZp; Thu,  5 Feb 2026 21:11:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xa2HZ5V6O-5y; Thu,  5 Feb 2026 21:29:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25D13605AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 801FF80FE8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770325897;
-	bh=7Ke7sFho2ASwg/zAYdXehs2jGjkKBtxwmyn51VWr5SQ=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=W38E7LtIxeQAOxvEN0qwU2KDCkbyGtblfEVM35EXEo1zo9Y5uwEbMgevTMH2RzPCe
-	 /Vp1kR3+FjNmpyT1sak/1c7RaDTlrzTmwIUTfaOvw/Tl1QItmOuJYjIKWU0hL9uyj2
-	 taDUxwtwdmZ7/Mt+4xuxljngxeBjprW6tbBiDf+VM9kjHS30stdZQ19TliVzYHGlOX
-	 K3fD9xjPED1P+jUja2gNrFEYZXH5XOOQWvtYJxfo1OOlevPsgvTXzSXGMWokolLWzr
-	 aVhhfEfIaS5xprO1sviaQk0z6+k9qbqZ553ayuVdnhJWR1hmK9p+fmO71ENQZuKuzP
-	 ZCal7bnuao7VA==
+	s=default; t=1770326989;
+	bh=y0UprwepR5zxmb+6tO0xa9Rl2b72ZGs9BxX1wTY9+80=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=BuSuu1IoKBgOmvxPEkSTwWglZFclv4gPq4TFGxcC5Ui/1bBDYxe/qq/xOErhgcAXd
+	 +pPhc8ySgKPW46i1MQBOagZ9p8fofcJUD9dx3JbooTxxZm89/2C/zz8MjWh89S/8VO
+	 CdaJPgQEFMZ8Yz1+KMPHil8cKhJg36lZla/j2fQUxbhA7CecnAZev0dEPxTFGLh8YV
+	 aAZCGpKVFXOQBRUNfrDEGwVoEsgWnFz369KU451VJIFSbcSixJNkF3+0z8eTXYk4rS
+	 LRx1hUak6lqUcDxLiD8F6k34ziqXPVnVZwNAY2pMxb/XLaleWVjIHGYLzVfwmykPlw
+	 wZX1OxgTYfZBg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25D13605AF;
-	Thu,  5 Feb 2026 21:11:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C364470
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 21:11:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 801FF80FE8;
+	Thu,  5 Feb 2026 21:29:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B24C6470
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 21:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CD154084C
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 21:11:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2640141774
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 21:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HJ8gjCx_azCo for <buildroot@buildroot.org>;
- Thu,  5 Feb 2026 21:11:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 033AF40175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 033AF40175
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 033AF40175
- for <buildroot@buildroot.org>; Thu,  5 Feb 2026 21:11:34 +0000 (UTC)
-Received: from [192.168.178.91] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id BC6732C8330D;
- Thu, 05 Feb 2026 22:11:32 +0100 (CET)
-Message-ID: <7dfd0d95-485d-46ac-9b7b-65d88670866d@bubu1.eu>
-Date: Thu, 5 Feb 2026 22:11:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
-References: <20260205103500.169542-1-vfazio@xes-inc.com>
-Content-Language: en-US
-In-Reply-To: <20260205103500.169542-1-vfazio@xes-inc.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770325893; bh=lvd24Jn8hnbIfaG74z4mrJxB37cwDjHfZ/IMLm1q+vw=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=EXOVaPvJcwci8FAhfK8utz3lQM4t6Q/TM8z7YyA4MCsy7r1mW8PIW06vaZrb3rzLG
- Thqcz6U3mThJ7wmPhbUUbfWTt8bXYHp+MQiHZYJD8U7Y8UwJdWIRcXB+5lvhjy0uNB
- PsMTa62nVkuWOYAijmilav0MOa776u7GLCgrDnNTxAGK88y0yFZ5sXs6stoiOxIQo0
- 8MMlPROsK9jlAfZNlL/lY1AsqPo9WjOU1WRBOEQKyTpyntgZV0goVXRtvSvERaFsDf
- fYZYKBOU6iJkRreK1d4ceXYBkL0B5SIbIlG6XACfKU2CfMVy0F+DtT0oYaF3DAgcDH
- d/bASGeWeB25g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=EXOVaPvJ
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/python3: bump to version
- 3.14.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fvaVGSNiKFJo for <buildroot@buildroot.org>;
+ Thu,  5 Feb 2026 21:29:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5662441821
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5662441821
+ for <buildroot@buildroot.org>; Thu,  5 Feb 2026 21:29:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2836E86A3F; Thu,  5 Feb 2026 21:29:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 5 Feb 2026 22:18:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d6ce4e260263ef293b7a5dc7052ec56615ffd9eb
+X-Git-Newrev: 94a817a58909e1cfe0c1f63b63754079f1866523
+X-Patchwork-Hint: ignore
+Message-Id: <20260205212945.2836E86A3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/asterisk: bump to 22.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,49 +70,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Titouan Christophe <titouan.christophe@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Vincent,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/94a817a58909e1cfe0c1f63b63754079f1866523
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 2/5/26 11:35, Vincent Fazio wrote:
-> https://www.python.org/downloads/release/python-3143/
-> https://docs.python.org/release/3.14.3/whatsnew/changelog.html
+See here for Changes:
+https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.1.html
+https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.0.html
+https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.7.0.html
+https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.6.0.html
 
-Just wanting to note, that this is a security update, from the above link:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Security
-
-     gh-144125: BytesGenerator will now refuse to serialize (write) 
-headers that are unsafely folded or delimited; see 
-verify_generated_headers. (Contributed by Bas Bloemsaat and Petr 
-Viktorin in gh-121650).
-
-     gh-143935: Fixed a bug in the folding of comments when flattening 
-an email message using a modern email policy. Comments consisting of a 
-very long sequence of non-foldable characters could trigger a forced 
-line wrap that omitted the required leading space on the continuation 
-line, causing the remainder of the comment to be interpreted as a new 
-header field. This enabled header injection with carefully crafted inputs.
-
-     gh-143925: Reject control characters in data: URL media types.
-
-     gh-143919: Reject control characters in http.cookies.Morsel fields 
-and values.
-
-     gh-143916: Reject C0 control characters within 
-wsgiref.headers.Headers fields, values, and parameters.
-
-
-[...]
-
-Marcus
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 26175667c3..f1573f6575 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  8a94650b6f348af1f1c9cce7ed3585d280f3a31b0d3820084a42b03712df95d5  asterisk-22.5.2.tar.gz
++sha256  4f30af0695a0131fc091d85e7b91e22504609434b3fbd263898c7354d41959c9  asterisk-22.8.1.tar.gz
+ 
+ # Locally computed
+ sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 9a071fb8e0..b59f2bf5aa 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 22.5.2
++ASTERISK_VERSION = 22.8.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
