@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36E55EB28D6
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6084FEB28E4
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B8E5611E3;
-	Fri,  6 Feb 2026 08:11:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2650C611F1;
+	Fri,  6 Feb 2026 08:12:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MnTc5yI5bsKW; Fri,  6 Feb 2026 08:11:56 +0000 (UTC)
+ id rniKFPKGfscX; Fri,  6 Feb 2026 08:11:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B3F861173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D40CF611D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770365516;
-	bh=fG+hGG/yD8xekT8O4wwPLiZzo5NrWsqNSC65c2fmZz8=;
+	s=default; t=1770365517;
+	bh=tcN9/wQOSUrzpbNt0hSPYkkcYKcqFAhuvJIxn1XOWf4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=PxyX3GAjrczFJixxiOGao89vOvwGiGh6ODI6R4VqW+Ndcw62AeYBhYWvQSfH88dQF
-	 ZRCNGNDTUOuiVyJVFE820xkFXRr/mRncchITgXL9TrxGnoGzhPA2fcMB5T/GGVqsl2
-	 C59lr28JzOIF2H3XW5IGz9n6IFOjNntB3n90opA4eDXtsyiJR18m0g85sby+8TEUqY
-	 ZKvCxviyWGiEfsBs2GS9B+2WjmeVRgag2NwDXtO7vKOW8toa5qSxQbXDeKOvX8uBUu
-	 FpMZ33J1c4jQ5MPm31G7Q8KwsjE0jpgRHxYyzk0JyUDu89i9hhAfdACLz2y9DCtsTA
-	 wmx6MstK3C1Bw==
+	b=rpu+I0UWtMdoBZUVsZ1TgHMVAaeMHaM8rkc0GMdkV+HJyODdoYLz6YMloZmYwT+tu
+	 oIQFohUR/QybccNLPiW8igqBNrqWBapakzp8XcSzh1Ybq0A14OVqWiEM3Yg5bTplRy
+	 u9fFZvdvNWEHZe2XiMSIqtw1CPaT2kcbDUyDiARf/i3a4sPq6Nbt4ch4Jiga6DVkQR
+	 9YKJrYjoqW9MBY8UP9mnLiofRqVo0Y4f1bw6DmHKcQr7xOzVRbB1agCpxDMtYx7sdP
+	 mRXuBMGaCAnlXmIB0E2UoFzwXUsnCZKWYwOZN39kFPOVdwyMZ6vy1JteGLR3aowWJY
+	 5OnwhIABJOSsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B3F861173;
-	Fri,  6 Feb 2026 08:11:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D40CF611D3;
+	Fri,  6 Feb 2026 08:11:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7EE9C173
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CE8A6219
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F0B36117B
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9E7F611D3
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0CqhP9Ze8SMC for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 08:11:52 +0000 (UTC)
+ id 0LdLbjPiBD5s for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 08:11:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 36E8861175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E8861175
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 36E8861175
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1ACCD61161
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ACCD61161
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1ACCD61161
  for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:52 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4806dffc64cso15387305e9.1
- for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:11:51 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4806bf39419so16974665e9.1
+ for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:11:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770365510; x=1770970310;
+ d=1e100.net; s=20230601; t=1770365511; x=1770970311;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=2s5Br2E2BsKfjdRtLbMv14++0jBcPfKpawa5Uxj7fkY=;
- b=iSxD4Nc+8a7sbDicAENk4/ftjklywV1tnxbzcAh7N3HopIfqwyWMzA/qpH+yQsP6Dc
- FtA+JdZI3g+954oFWzfOYGTM8GDPaDLbuYuQ1gO91o9yxS+CkzX2TgE93ay0e+Yo1dAa
- troc3k5gZwm8YEhq/oxxitPD4jYu0pKw/ywPGQ1AtP3imiDQPCxU8DaYKP+RWcecjHGi
- KZYSePgON97RtMyrDmaR1U41bA8KlWGfA+FFsL1oifxkrVBawcWFo3588k0Hu196y49s
- 5cY9bP9F/zq7io9qpCZlhK699zCfPy29JeFAinZqTTe6Xdrkb/JVemqR5m1OF40vSMyM
- yk4w==
+ bh=hmTZdnvY/HqnBTEsEuUkvTWO384OLUsenWLEsXe+lrQ=;
+ b=c8lAmPNgPKijhAOTkON0Dnf3rEuojF+haf8sn6gDBvv/S08HKtcTbQiPo0BKq2VciP
+ d1iuAIypWMPa3Ipb7txIkrANkPXdsj3sVSmdO8wWi3Vt7W/Re2vOCf3l9Sgwg8FY5S5Z
+ Wz2lir9CcduHOSrOVzJVUFtWWOWETTjSNTNrNyiqfuoxdOJ9Exb1AUt/O+RdFRpJvFKs
+ 8HXgm3LoRpOFfqfPg4lH5b1KNKh2KVE6AuBDOMkWEzYmL17gNkhOhdOXfqCtLuEHVSlh
+ IYhIw47xGKz+SY/ZKW7QmyFWdA+lk3QQMVsanRl5Nkdzmagh1MshEF1YMYg4SAoN+6dq
+ X6Bw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVLeCGxLCN40gVNh1LKkJL8h+I8Ki47GjVJ7k+kvZYnGFhgXvQoiaWWdH+pceiE1TXMu+yi+IzramE=@buildroot.org
-X-Gm-Message-State: AOJu0YxERd1kAE30/Gf66ipVn/xcuxkkD857ZxOElkbcFKsSccy1k3Vw
- syQaVKTvlQ+BzG/LWI9qwMuR0FGiFPln5khTSDvwS/A1WwzywMHuqRx7Ad5B+NMaUf8=
-X-Gm-Gg: AZuq6aI3pw9LQPoOYEqxBP/nKhMqm9qbRvQ7q6QjKSSeTDZh7ym3Ri58/HxWXLI0H6p
- tZvA1ej5y5GxvNl7cnjnNQMs1rRSB4UmebWho2rfGv0z2+uOViioRc7C6q0kkO6Gwa0K56ypyvc
- KLYksdO0Xr3NH44ZOqLFNJaTgRVVkvVtbkz3hOj/LbvbOf5JEth9PUf5Ql5Upi8v68ImDJH5kFl
- b34CpRmqakD5ti2za0IBYgjpuGpku3x5uun16VnJM2hlNFl1EGm6w9uRbG7O/EIYpb4qtayoffy
- jjufFij6QCTGUWw/7bmt1R+mA0RJwcXfKscRa7KviMcrEN047bGC4IWZIjnv7vwxkmhVuFfL1k4
- dCrG5CzcH4BsbM9PFlgeuYKIweZA3RgF6vEum52XajgrdlAFrytBsEyP45vfglT03FIsfhbk/Vr
- yBLWs=
-X-Received: by 2002:a05:6000:2c13:b0:435:a0f5:c271 with SMTP id
- ffacd0b85a97d-4362967ded6mr2524180f8f.31.1770365510045; 
+ AJvYcCXj/pZJYklCeB0sgNl6SvVyEsd9lYXPHlFzw8GnQ0/IAzlNT/L04VGso74gVZI7ZtEdfvLMpYoSd4s=@buildroot.org
+X-Gm-Message-State: AOJu0YwCuOb6aLm1mXaZasn8NhjRmfHyorSNxX6AnieUiGyaIzXr/eO1
+ rj9DsCSE9psD+HJgSlaEjwZGtZ3hLAPhP1x0am26L33z6ew6MYcl5YXlrVddi9aqFKvtr++cJ2Y
+ V6xVQ
+X-Gm-Gg: AZuq6aI3q0ALHJDK2ocNafQyCpIXG2yC26OfvIvactXZIun2dd2IBhhWrC38oWI0tuX
+ G3ipuTmiIyeLtOCrWglLy9DMXWxiz94yXuALkG0YDU7pPJoaMxO7G+Qsoodn7Fqt8TNuUZ5sic+
+ xCRzfupz/3qZqxPh/9XyURllUCcME5yghJOEj34hWhIQmvGCq5bznYMPY0wWGjYsarnYOurkRe0
+ nzLx7s1nn1/+NHTdwXtwX67bDApdWx3gKc6ES9Et6tw0Z263D3SvNVVP9IhYElaLhtHVRBWb1zG
+ TOsQsnf3Qn23zGpOqdAK2HrGo1Zzxi4sStp7JwZmUaT/wORthmejyT0OEhsXM2eWoDdnbq/CPx5
+ VhWexrCTYr5b9K1fTOvk8LZ3WIKYMsCOZYwNPLzT5ZntC5ubg28P3HJykLMz7cNPcqyRrrJKtwb
+ 2qP8U=
+X-Received: by 2002:a05:600c:3794:b0:47e:e051:79ee with SMTP id
+ 5b1f17b1804b1-483178e12d0mr48113605e9.3.1770365510841; 
  Fri, 06 Feb 2026 00:11:50 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-436296b2d43sm3977677f8f.8.2026.02.06.00.11.49
+ ffacd0b85a97d-43629730992sm3678962f8f.21.2026.02.06.00.11.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Feb 2026 00:11:49 -0800 (PST)
-To: Danomi Manchego <danomimanchego123@gmail.com>
+ Fri, 06 Feb 2026 00:11:50 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  6 Feb 2026 09:11:49 +0100
-Message-ID: <20260206081149.32086-1-thomas.perale@mind.be>
+Date: Fri,  6 Feb 2026 09:11:50 +0100
+Message-ID: <20260206081150.32140-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260117180751.465-1-danomimanchego123@gmail.com>
-References: <20260117180751.465-1-danomimanchego123@gmail.com>
+In-Reply-To: <20260118170731.3366652-1-bernd@kuhls.net>
+References: <20260118170731.3366652-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770365510; x=1770970310; darn=buildroot.org;
+ d=mind.be; s=google; t=1770365511; x=1770970311; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2s5Br2E2BsKfjdRtLbMv14++0jBcPfKpawa5Uxj7fkY=;
- b=DMe2Bomdb4m7U4ddN+rOUGr9zf33fy9QttrhxVQg1x3obRXstKCtkXrM+VgYw/MPTv
- 5s1AGjZR2aWeprVO8w9W38gJREzfJs5A1AWHKPePMpBK8O4nRbWJJgLmIokG0mDCYLNr
- cyyxUTZGEfC5ArCTH79x4hqVOKqIQ8WarDaZgurqThE0q5s6vYSmcbkMm2hr5Whujzex
- MTAbzUlmq8UuUB1Kil2li6Ll+IeeR/Buxz+EgwRZ9HMnx+Q6jYsgD9JjaynAFcbsPYj6
- dy+01EGwSFeo+vP+LcsfIRBNwdfW2x7fi7VkjTW5xrZNXjLBwaBslI2MTTZA62dLQPeJ
- JOKA==
+ bh=hmTZdnvY/HqnBTEsEuUkvTWO384OLUsenWLEsXe+lrQ=;
+ b=aIGaONflVi6T0LhcxN9+/zHSH9lYEQkIRKQu9JSX7V/K3Vg+DMR1HuGFrln3YP+lHp
+ vU4+ckerYF0he8HKGHUxQljxgfvpvF0ySDkv59XoBPGRbSNnWtCwmJkB3+QpxLonKjqc
+ Tq1ApDX3sT5TgrYfAYAsRgGSFVkvRLxuaOov3yml5dZpRgPHnMkRH3VHvyDgEPmPkyb+
+ wm7OqMq+k6OitD9WJnd557lIwN4JvCDujFbyebHbLq10zGlg4CuZrLztV2Met8YRILfR
+ MejMB3U7+X7/+ZhXbT7doHEiTzAJFXzTaWu5yYOPKMTX9OIOJJhXRydWA+1EmpKDjJf1
+ rNRg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DMe2Bomd
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: drop unsupported
- system ffi option
+ header.a=rsa-sha256 header.s=google header.b=aIGaONfl
+Subject: Re: [Buildroot] [PATCH 1/2] package/mcelog: fix musl build with gcc
+ >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,42 +132,121 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The --with-system-ffi was removed back in Python-3.12.0.  From the
-> release notes:
+> Fixes:
+> https://autobuild.buildroot.net/results/902/9020e4fda8cbc4f9886d5e8725f6df8d99716241/
 > 
->   - gh-100540: Removed the ``--with-system-ffi`` ``configure`` option;
->     ``libffi`` must now always be supplied by the system on all non-Windows
->     platforms.  The option has had no effect on non-Darwin platforms for
->     several releases, and in 3.11 only had the non-obvious effect of invoking
->     ``pkg-config`` to find ``libffi`` and never setting
->     ``-DUSING_APPLE_OS_LIBFFI``.  Now on Darwin platforms ``configure`` will
->     first check for the OS ``libffi`` and then fall back to the same
->     processing as other platforms if it is not found.
+> The build error does not occur with gcc-13.
 > 
-> The commit drops the now defunct option.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/python3/python3.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  ...orrect-prameter-type-for-connect-API.patch | 43 +++++++++++++++++++
+>  .../0002-client.c-fix-build-w-musl-libc.patch | 42 ++++++++++++++++++
+>  2 files changed, 85 insertions(+)
+>  create mode 100644 package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch
+>  create mode 100644 package/mcelog/0002-client.c-fix-build-w-musl-libc.patch
 > 
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 0189a505b4..a92e969f39 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -206,7 +206,6 @@ PYTHON3_CONF_OPTS += \
->  	--without-ensurepip \
->  	--without-cxx-main \
->  	--with-build-python=$(HOST_DIR)/bin/python3 \
-> -	--with-system-ffi \
->  	--disable-pydoc \
->  	--disable-test-modules \
->  	--disable-tk \
+> diff --git a/package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch b/package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch
+> new file mode 100644
+> index 0000000000..cc9d0e84c6
+> --- /dev/null
+> +++ b/package/mcelog/0001-server-Correct-prameter-type-for-connect-API.patch
+> @@ -0,0 +1,43 @@
+> +From c17897deb52daab300c585a6a6c2456d062d80cf Mon Sep 17 00:00:00 2001
+> +From: Khem Raj <raj.khem@gmail.com>
+> +Date: Sat, 11 May 2024 22:50:19 -0700
+> +Subject: [PATCH] server: Correct prameter type for connect() API
+> +
+> +connect() function expects the second argument to be point to sockaddr
+> +as per man sockaddr
+> +
+> +int connect (int, const struct sockaddr *, socklen_t);
+> +
+> +Fixes build failures with -Wincompatible-pointer-types when using GCC-14
+> +and musl
+> +
+> +Fixes
+> +| server.c: In function 'server_ping':
+> +| server.c:308:33: error: passing argument 2 of 'connect' from incompatible pointer type [-Wincompatible-pointer-types]
+> +|   308 |                 if (connect(fd, un, sizeof(struct sockaddr_un)) < 0)
+> +|       |                                 ^~
+> +|       |                                 |
+> +|       |                                 struct sockaddr_un *
+> +
+> +Signed-off-by: Andi Kleen <ak@linux.intel.com>
+> +
+> +Upstream: https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=c17897deb52daab300c585a6a6c2456d062d80cf
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + server.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/server.c b/server.c
+> +index 54c7d57..51b7d3a 100644
+> +--- a/server.c
+> ++++ b/server.c
+> +@@ -305,7 +305,7 @@ static int server_ping(struct sockaddr_un *un)
+> + 	if (sigsetjmp(ping_timeout_ctx, 1) == 0) {
+> + 		ret = -1;
+> + 		alarm(initial_ping_timeout);
+> +-		if (connect(fd, un, sizeof(struct sockaddr_un)) < 0)
+> ++		if (connect(fd, (const struct sockaddr *)un, sizeof(struct sockaddr_un)) < 0)
+> + 			goto cleanup;
+> + 		if (write(fd, PAIR("ping\n")) < 0)
+> + 			goto cleanup;
+> diff --git a/package/mcelog/0002-client.c-fix-build-w-musl-libc.patch b/package/mcelog/0002-client.c-fix-build-w-musl-libc.patch
+> new file mode 100644
+> index 0000000000..f7334c8c6f
+> --- /dev/null
+> +++ b/package/mcelog/0002-client.c-fix-build-w-musl-libc.patch
+> @@ -0,0 +1,42 @@
+> +From a90e39f896a2f1b76ad3c304b69c451ec92a687a Mon Sep 17 00:00:00 2001
+> +From: Brahmajit Das <brahmajit.xyz@gmail.com>
+> +Date: Mon, 12 Jun 2023 10:55:28 +0000
+> +Subject: [PATCH] client.c: fix build w/ musl libc
+> +
+> +Without the patch, I'm getting the following error:
+> +
+> +client.c:47:2: error: call to undeclared library function 'strncpy' with type
+> +      'char *(char *, const char *, unsigned long)'; ISO C99 and later do not support implicit function declarations
+> +      [-Wimplicit-function-declaration]
+> +        strncpy(sun.sun_path, path, sizeof(sun.sun_path)-1);
+> +        ^
+> +client.c:47:2: note: include the header <string.h> or explicitly provide a declaration for 'strncpy'
+> +client.c:60:19: error: call to undeclared library function 'memcmp' with type 'int
+> +      (const void *, const void *, unsigned long)'; ISO C99 and later do not support implicit function declarations
+> +      [-Wimplicit-function-declaration]
+> +                        if (n >= 5 && !memcmp(buf + n - 5, "done\n", 5)) {
+> +                                       ^
+> +client.c:60:19: note: include the header <string.h> or explicitly provide a declaration for 'memcmp'
+> +2 errors generated.
+> +
+> +Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
+> +
+> +Upstream: https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/?id=a90e39f896a2f1b76ad3c304b69c451ec92a687a
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + client.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/client.c b/client.c
+> +index 883b1de..7119ed9 100644
+> +--- a/client.c
+> ++++ b/client.c
+> +@@ -19,6 +19,7 @@
+> + #include <sys/socket.h>
+> + #include <sys/un.h>
+> + #include <unistd.h>
+> ++#include <string.h>
+> + #include "mcelog.h"
+> + #include "client.h"
+> + #include "paths.h"
 > -- 
-> 2.43.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
