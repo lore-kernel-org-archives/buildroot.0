@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A24EB28E2
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F0CEB28E2
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44DBC61288;
-	Fri,  6 Feb 2026 08:12:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AC566126F;
+	Fri,  6 Feb 2026 08:12:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uNqX_fFFUVEH; Fri,  6 Feb 2026 08:12:21 +0000 (UTC)
+ id 1o7_cTQg7LPJ; Fri,  6 Feb 2026 08:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 545786126D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AB1161272
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770365538;
-	bh=0c8dIaDyvcBUEjxMUPALJsp4ox2sPPDI4hKXoXvtzmo=;
+	s=default; t=1770365539;
+	bh=1fpFJ5sHTXnz0U7sZKspJ5rNE8JSaVm0xb1J1PUbaFM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=gMtkc4n/X3cQSCv1Yu3Hat6Z2GJlg9Xr4qYMh1Fbsswswk+0mr6jJKfrClO6ESd7V
-	 iM5fjS4pwJ7PGaibAWOY1rK3MOaCJxVT4HfwVSo4xN7UYEH7Em867eCPRp2SMQGVfV
-	 CC6Ga8RRzdkYdWIdC0pwsAOrTIjF5ywx2r4wUUzL+0+WqkJgTf+P5ZyhMy07j4rsJJ
-	 BbhO8vwFWu5C3RVP4kVgng2SeuVCVdawbNVLijwHGuoY/dHZWP4cLGbBYRC3y1Ch3i
-	 0RgsZvvsbXAupzlE6TOa2R964j7BPiiqH+L7p9Cx2qxjKKl7y/7eeqyboGPJ62LHQA
-	 wP7HRlmkXwK+g==
+	b=I3X9F6sSfeBvnPq9S/2ixZWK4jP2vWYGKQ25LRE5NkkzNRstES4xAeEIghbjmYrWe
+	 fljepnHvIO9dHF5C+/lWeNcigvf+TzdOeKZrHYO20olU4jqj9EMU9yREXPK15+M15f
+	 PW2FjayH3SM0ZePyGdITz75MEPvvxmMvKlVYzUHkjKOxV3PqGJnGBJaqk1PS+RHr9C
+	 a0qus8AXL2cJTwq0vije87oOcSjdlZQ5LZ0A6aQBicIk/IZfmpQ499Dv8GevocwmRP
+	 PX1Hfpm1H0FPp7NhrAmBozcOvlJ1SKwUm5c/AJBt2tfa34HpcsRLG+vIF/jJEA2qhn
+	 7Ph1aVpqitOZQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 545786126D;
-	Fri,  6 Feb 2026 08:12:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B59DA219
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AB1161272;
+	Fri,  6 Feb 2026 08:12:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2746219
  for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A139B61202
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC272408C6
  for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lnp2zYisikuv for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 08:12:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Un2kieYdX-Sz for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 08:12:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 15E8A611FC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15E8A611FC
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 15E8A611FC
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:03 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4806e0f6b69so13410095e9.3
- for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:03 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C0DB7408AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0DB7408AF
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C0DB7408AF
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:04 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-47ee937ecf2so17077325e9.0
+ for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770365522; x=1770970322;
+ d=1e100.net; s=20230601; t=1770365523; x=1770970323;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=kRedvEiEPoyrKCvpYQELsBZVwoz9SBJPDZ/Ys8oNsv0=;
- b=ZYTlSdBIE893ZGqY3yi61lc8yHY3doopHt9GLNIxYUJGFU/0BOKO4vl4AnLYK2FQHg
- GDfpnd5+/RxK8kJ84c462OiNqodx27KFSLrNgjgIYIbYSrQTcx4CU0UhhQp0wiZMGsO+
- KVzyys1P4DoEbVizOveLx1zHgoZBOdhKGq8rpDEfpLMS1QV21ozSx+Gaga7Lfk9oOzxB
- Nzuv5Zo9mcOOFpOjnHBtlCLAGIfsEvVl+huzr9FsYQu9yPCFLXHMy0iS8p022IhGKb/p
- OO+vi/PW++jCy8Ex51znFdwf4VN6dHDJi9gohJrbIfP1j2Ro01jYQNdRKPlGUoJ3Nv1W
- 2qsg==
+ bh=saBI5LvSvlZr7gHdivIszxLm1uS8AcTvjYsZ8+jUUp0=;
+ b=fjAl6cngP1O3NzfSGsMIiZtHOoylW5eGzx8bCPPiFnx2O8CzVEDp18lTDeXfPWeXKz
+ q7Gt50YS602tmhRjLCSyl615elBfM6RSspU+DhmqWHoBpYoXKKX1lS+0Q7Tz15X4lG5s
+ KGSgjM4o7Pvmi4lAyPIwk2eaKr6aP97r76xb8Npdxt9islD0I1U2ly8Xa8nHTwfHelav
+ mdALIcM3xQwxP/S34DSrzntkkgq3QJ2tKuOolI99Tgx6ZRzp2o9Fw27izdtljBEgE/r6
+ OD96czPxXkczaRZQhuaGZZf0cX6+0kxsaktzTH7REgkqIgp9sx7u+dNn6sVdC3vGnxql
+ 89yg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWU81mCdb91cl7qH0AGSkaysJeN+9wHCqIEOLE1N6VKIGE76TEMoefePxBIjFUzWz+K8eT25Oi2ms0=@buildroot.org
-X-Gm-Message-State: AOJu0YyMYeOAGtMCxOKQYryZ/fz5gL9MchSzzeQGTyKSgL+AYt6iDtcJ
- e4Yv8VjwXQB5C6A4lTyA160sv68In7vCsGoc+Ia81U66fui1UNaZV61f4kQVN34eu10=
-X-Gm-Gg: AZuq6aJSXgyxMAa0oNxpp2DC3cyVFZvoEr3JzGJ8JsZfbqjed66mZ64kD1yYOzbTfZ/
- wntrTqHH9QbNvnroGRXTbA0/YEmAheyxeJG7h1z+9qlYz8WNYeihP4FuD3NH1hTfYqw/E0aw2cq
- +s1rGMOXW++12raZJ4/d63JucRMI7sxmFKHzuz1Pj5wKZotscwR5xyRZW6+fevZeKZivSikqme7
- I/EPduSrEemo67ZpAJF9Thff/eq2OhROSQWM0Dk7L9eY15DjfdY4Up7M36nJPjB1KKSmLz/Vuaq
- xs/kx3FVtE7xZTQxasa8Bs2nUmAgoLc7iaSMdPjryL8AaAPJgu7mJq3mqzmbM6vJrRvoa5TyZPE
- jRgd2wVyD8KNAWtt/Lk71agV0VHrKafRU9irz6EfMSX93fZicZ6+27gx4zu4cdFLlRrgjILiU9v
- bLayw=
-X-Received: by 2002:a05:600c:3e16:b0:480:4b59:9327 with SMTP id
- 5b1f17b1804b1-483201d6007mr27254275e9.1.1770365521861; 
- Fri, 06 Feb 2026 00:12:01 -0800 (PST)
+ AJvYcCUhSUuPnFP2GBlk6VQCEOdjdjbu4PSpqOxkucZQN5d5hqA+xCZGXhIjbMvEvUR4GbFXPP8EYn3K/WM=@buildroot.org
+X-Gm-Message-State: AOJu0YyXhlVBgHM5UDJcggBYWVfAsBsZ0GM/07JeXzNXCbGUVJ1LWfzu
+ YyH5lBmBuMaTb4UD1r6reWoSf7Cfm3aBbMKCmfxWn2N7ss+SSFTFVnIINGkdMwxzSes=
+X-Gm-Gg: AZuq6aL41FpxpEkuNSnHanoNEib6hWbpK0S8bnH1vZ8wVXzHGnJAWeYEga3Fu80RrOS
+ eMgTIiHW0Hxsr58iZH8wcFg+V0fWUWi7kGKoY46rE3Lh1la+RAX4K3aIRqHM1Yhl8M3V7+DqcEO
+ EEbfCGhcGOoxh8e5KXYHCSGQSGfVdRaMaFm2Y2Yf3hlwZTrsKqFBZjdkbp2PchG7h8dKjEVKgvU
+ SSRfyHrw+LxDyyWgGlVQC5IMeLKwJPvbOiLEQNmlgjLBCL9VKQkunCBhDmarNq1jvu7ucBrR9a5
+ k0L4BmocAzsHgfzv70dUbwurfQQ/z3n6I5VIqhjnZM+ZCz24M1vl9ZwD5K8ZOZGAWVc7Ms+3IOB
+ DmjAEaW+Yt7bhELZH6Zl/kHK8WJruqUIvVqBMfpmAu58I6BWENE/r16ZPkERKBF1WyeBCbyJOnU
+ 8corg=
+X-Received: by 2002:a05:600c:3e14:b0:46f:a2ba:581f with SMTP id
+ 5b1f17b1804b1-483203db77emr24268605e9.16.1770365522768; 
+ Fri, 06 Feb 2026 00:12:02 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483228ed4f8sm20541405e9.0.2026.02.06.00.12.01
+ 5b1f17b1804b1-4832040a3cesm23245445e9.3.2026.02.06.00.12.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Feb 2026 00:12:01 -0800 (PST)
+ Fri, 06 Feb 2026 00:12:02 -0800 (PST)
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  6 Feb 2026 09:12:01 +0100
-Message-ID: <20260206081201.32793-1-thomas.perale@mind.be>
+Date: Fri,  6 Feb 2026 09:12:02 +0100
+Message-ID: <20260206081202.32847-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260124152311.680810-1-dario.binacchi@amarulasolutions.com>
-References: <20260124152311.680810-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20260124153325.1060846-1-dario.binacchi@amarulasolutions.com>
+References: <20260124153325.1060846-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770365522; x=1770970322; darn=buildroot.org;
+ d=mind.be; s=google; t=1770365523; x=1770970323; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=kRedvEiEPoyrKCvpYQELsBZVwoz9SBJPDZ/Ys8oNsv0=;
- b=CgBIL6xAPgdDzPFuATra6lIY+3S0IkHZtxTnaczylnr00STepHNUxgXCsh5MSCpuaS
- QvwcZu3inqY5Hhowmrl586UHRPproei3RZBN+TQZnd1mTCuCtiFrPO4DWSc9Yg9A3yto
- +V3BtNRgI1z/j7KHwWxaO52p3EumiTjUp0amHUasQZYBvfVL/a3PsPsN5Pj7cWRV0cSM
- 4A85vzEYBAgpawEPI2v2vaEGYUZj099TMYw5pFzCj5e6FPUFOq8UkH7VboNz9BtMo5K2
- Ze7Mf4MrubBXtrurWob8R5lbAKKg1lR2GyQZKA3nUk7OhIO4870MidCwJx8md+Gkehqq
- N0pw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=saBI5LvSvlZr7gHdivIszxLm1uS8AcTvjYsZ8+jUUp0=;
+ b=FtqJxuaTqO6lf+9HEASP9ho2npE6QmjZgUy/n1o1rXQH1AYjoEd2S+THi7vSfxmm2i
+ 9F5a4nO8ODzuAmlqP80w/K/VDpmuy54F1Rdj4+0Xr7sojJa2nM5gQARQwVlGCVThgE4k
+ hcztEUQza1d+5eVJmxU6tjEGD3t//feI3qC1uimwvbGwfBmtTqzyeSGmpxprK2vRRjAf
+ nAyRuBTpaI+Oaap0G/51UF9WEawpcm+ZWSad32nBHwWoI/JrkQWMeOTPOxg/Dpw+bRHY
+ 2GDEMaYGG7V8UHQihSXqOqAB89aqKWr0CdS8FKCK5Otl9RtBCX/dgkYDk+8fDsOfEQZg
+ BEbg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CgBIL6xA
-Subject: Re: [Buildroot] [PATCH 1/1] board/stmicroelectronics/stm32f4xx:
- exit post-build.sh on error
+ header.a=rsa-sha256 header.s=google header.b=FtqJxuaT
+Subject: Re: [Buildroot] [PATCH 1/1]
+ board/stmicroelectronics/stm32f746-disco: exit post-build.sh on error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,19 +140,20 @@ In reply of:
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh | 1 +
->  1 file changed, 1 insertion(+)
+>  board/stmicroelectronics/stm32f746-disco/post-build.sh | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh b/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh
-> index 4fcce6150071..2c5b6be098ac 100755
-> --- a/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh
-> +++ b/board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh
-> @@ -1,4 +1,5 @@
+> diff --git a/board/stmicroelectronics/stm32f746-disco/post-build.sh b/board/stmicroelectronics/stm32f746-disco/post-build.sh
+> index 03e9dcae8215..74c59fdb72dd 100755
+> --- a/board/stmicroelectronics/stm32f746-disco/post-build.sh
+> +++ b/board/stmicroelectronics/stm32f746-disco/post-build.sh
+> @@ -1,4 +1,6 @@
 >  #!/bin/sh
 > +set -eu
+> +
+>  BOARD_DIR="$(dirname "$0")"
 >  
->  # Busybox is built without network support
->  sed -i '/hostname/d' ${TARGET_DIR}/etc/inittab
+>  install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${TARGET_DIR}"/boot/extlinux/extlinux.conf
 > -- 
 > 2.43.0
 > 
