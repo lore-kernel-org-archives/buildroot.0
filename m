@@ -4,60 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 285C1EE6B44
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 17:37:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C898EE6B46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 19:32:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAD4940903;
-	Fri,  6 Feb 2026 17:36:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29AF841A5D;
+	Fri,  6 Feb 2026 19:32:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sn8KtvlwKXXb; Fri,  6 Feb 2026 17:36:59 +0000 (UTC)
+ id rbrI-aaTZzl5; Fri,  6 Feb 2026 19:32:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9BB740938
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9609941821
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770399418;
-	bh=r3d57Bn9Ck/YRRE056N5YP47QHLMLbPv9MEruBZcrkY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=kCWEYaU4QWIu1wssLB93CKnsmH3r25VbC2nc2H2OuxktyoTpCJelCXNE5h7iT5Y0d
-	 yDElvgJNc4nWDdnD75AphytEeg28W4JUJkWHyfHcwDpmMHYcRpfnVXTNXe7xNqVrco
-	 BDjw5b15YEPBw15X6pmDZFNgBFYn8J6ZF4umHUn0To3MfTIz2anAn5moF6+yKt0coz
-	 JDipwkPa7o60VqH7b52tufbrw//RVDHenol5QR9q2SOpJ+ktPWPNAuglEJeWu7Lua0
-	 zNA6U9eaujZCBH3D6WFuJB5IhcZbCccb1LJMGTO3fVCTbEStBXscv6WUxSwlvIrSxu
-	 CBsFZylQzXDzg==
+	s=default; t=1770406343;
+	bh=RjUWwoa7ZgwNRlywqtnjKTpE635J81WVGkcESH1XN1M=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=hjdjjjbjz4hmqUpIa4FYNHU51u7aTAbTgewxcmMT+Rm/toOqZhwu234CE6kVB4T70
+	 sJox8i2C+91hleJNrGIfGRvjjNc6uT6YJuGea1x8UxdoCqNPV2SF1lk5usiDgnKOeN
+	 8eK/p2lfCTaBzQew9ErXvH2bCPjSJbFEYjZhWU0P/ah816yBkhgTNiyfiV47FkIodm
+	 HzgIbKWoT2RpwEB5ShXohGOFGfBJaooIDYEbS3u/bFtbH3ZzpKt1fJ2Cfy20jXh1mk
+	 IJP/opDOlZUjL9jv+Ulqzmi2d9jvmmzaQmwaMUxcyCY/BD70ro8SUGuWcV7CtoAQjl
+	 whFK5qAGkPvQQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9BB740938;
-	Fri,  6 Feb 2026 17:36:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BDB432EB
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:36:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9609941821;
+	Fri,  6 Feb 2026 19:32:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E167F173
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 19:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF21461127
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:36:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3F6741821
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 19:32:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YhcZk4geWDdQ for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 17:36:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 04LwfjGwAalo for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 19:32:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.57.108;
+ helo=mail.villagedupre.fr; envelope-from=pyk@foss.peewhy.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCC3D61125
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCC3D61125
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:36:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9EC0986A8E; Fri,  6 Feb 2026 17:36:56 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6C78C4151F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C78C4151F
+Received: from mail.villagedupre.fr (villagedupre.fr [163.172.57.108])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C78C4151F
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 19:32:17 +0000 (UTC)
+Received: from sejong (82-64-130-240.subs.proxad.net [82.64.130.240])
+ by villagedupre.fr (OpenSMTPD) with ESMTPSA id 4450fe0d
+ (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO); 
+ Fri, 6 Feb 2026 19:32:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Feb 2026 18:36:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: febdbea58be3b5c25b1673d8457fa933b9cb812a
-X-Git-Newrev: 20d5e36fe86322fa93b285bbe2c658f163368423
-X-Patchwork-Hint: ignore
-Message-Id: <20260206173656.9EC0986A8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swig: add host-swig wrapper script
+Cc: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
+Date: Fri,  6 Feb 2026 20:32:03 +0100
+Message-ID: <20260206193203.1985834-1-pyk@foss.peewhy.fr>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=foss.peewhy.fr
+Subject: [Buildroot] [PATCH] package/nvme: bump package to version 2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,77 +73,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Pierre-Yves Kerbrat via buildroot <buildroot@buildroot.org>
+Reply-To: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20d5e36fe86322fa93b285bbe2c658f163368423
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Changelog:
+https://github.com/linux-nvme/nvme-cli/releases/tag/v2.16
 
-Swig has a compiled in absolute path to its data files, which can be
-overridden using the SWIG_LIB environment variable:
-
-https://github.com/swig/swig/blob/v4.1.1/Source/Modules/main.cxx#L931-L945
-
-This unfortunately means that host-swig misbehaves when used in the SDK, as
-this points to the ${HOST_DIR}/bin of the build, which may not be available
-when the SDK is used.
-
-The issue was reported upstream but rejected in
-https://github.com/swig/swig/issues/253, so instead add a wrapper script
-which calculates a sensible SWIG_LIB relative to the wrapper location unless
-SWIG_LIB is set, similar to how we do it for E.G. gcc or pkgconf.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: add quotes to make shellcheck happy]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
 ---
- package/swig/swig-wrapper.in |  8 ++++++++
- package/swig/swig.mk         | 15 +++++++++++++++
- 2 files changed, 23 insertions(+)
+ package/nvme/nvme.hash | 2 +-
+ package/nvme/nvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/swig/swig-wrapper.in b/package/swig/swig-wrapper.in
-new file mode 100644
-index 0000000000..61c885fc90
---- /dev/null
-+++ b/package/swig/swig-wrapper.in
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+# wrapper to make swig relocatable
-+
-+if [ -z "${SWIG_LIB}" ]; then
-+    export SWIG_LIB="${0%/*}/../share/swig/@SWIG_VERSION@"
-+fi
-+
-+exec "${0}.br_real" "$@"
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index ad585c3f97..71e5e05f96 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -15,6 +15,21 @@ HOST_SWIG_CONF_OPTS = \
- SWIG_LICENSE = GPL-3.0+, BSD-2-Clause, BSD-3-Clause
- SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
+index c6fb9c9aa891..b9cb0f9ca558 100644
+--- a/package/nvme/nvme.hash
++++ b/package/nvme/nvme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  93282c426f22dd1ea6d172dec8af043c4e9ff80189becfbbb5378fe1ca0a74ad  nvme-2.15.tar.gz
++sha256  989682ed7b250a2c7a8127e362ffc5d29f5c370127abe405be09c73216da2b97  nvme-2.16.tar.gz
+ sha256  a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753  LICENSE
+diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+index 9f2b086d2a07..afb7d2711204 100644
+--- a/package/nvme/nvme.mk
++++ b/package/nvme/nvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Swig has a compiled in absolute path to its data files, so it does
-+# not work when copied somewhere else for the SDK. Issue was reported
-+# upstream but rejected in https://github.com/swig/swig/issues/253 so
-+# instead add a wrapper to work around this
-+
-+define HOST_SWIG_INSTALL_WRAPPER
-+	mv -f $(HOST_DIR)/bin/swig $(HOST_DIR)/bin/swig.br_real
-+	$(INSTALL) -m 0755 -D package/swig/swig-wrapper.in \
-+		$(HOST_DIR)/bin/swig
-+	$(SED) 's,@SWIG_VERSION@,$(SWIG_VERSION),g' \
-+		$(HOST_DIR)/bin/swig
-+endef
-+
-+HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_WRAPPER
-+
- # CMake looks first at swig3.0, then swig2.0 and then swig. However,
- # when doing the search, it will look into the PATH for swig2.0 first,
- # and then for swig.
+-NVME_VERSION = 2.15
++NVME_VERSION = 2.16
+ NVME_SITE = $(call github,linux-nvme,nvme-cli,v$(NVME_VERSION))
+ NVME_LICENSE = GPL-2.0+
+ NVME_LICENSE_FILES = LICENSE
+-- 
+2.51.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
