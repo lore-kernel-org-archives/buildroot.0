@@ -4,115 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B843EB28E2
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD1CEB28E2
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B121D611F6;
-	Fri,  6 Feb 2026 08:12:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A86AE61208;
+	Fri,  6 Feb 2026 08:12:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xmmnPx0-wkXA; Fri,  6 Feb 2026 08:11:59 +0000 (UTC)
+ id sU2rChgjmHKz; Fri,  6 Feb 2026 08:12:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53C5F611EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 425A2611FC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770365519;
-	bh=myASdurK6Qdfw7UUauaPsIottYuJVr1BokTQfM7S32k=;
+	s=default; t=1770365521;
+	bh=IFWRPBROhrgKVeEuOTDNhEPvxNhjim6bEKF+Gz2wQCo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BL6p4AlBCAO+6Fd4dBkpYT7nFIgXcerB5nhzd6q2+hQzjzMBBlgd76ZQDChyb9Ec0
-	 KuJigfalovx+Sl+srHKSHacNvMSvjikN40jzoBp38+K7DC7lCDfPsuNJf9uORS1OlM
-	 t669GGmeagF2hcUdtt0H8zkK9pyuxS8FmDOls8Vean2eyfUo3Oh++x0DqROuAhmewz
-	 vXh99/cOOdgQqNFkeLjOb/Yc26Ac+i/ZTBTbyFQ6YKVrPMgYV5J/GqLrmCRBJAF2l1
-	 Wpj8BCbiiWjp/0e1KAiLJXKtYQhIQq8P1ahl0kuO/+ML3nOOVUAJzeoHYa9jRSrKac
-	 un2Yv3DZ3JnDA==
+	b=KxKVIDQczBPOAIJIGSvsb7v4GGnK9wiS5RI3blBtIjfWxG3DZg/5XySKo7pjgT4va
+	 +Ve8kmKkz3RBy4BTR+O6s8YKRQNpa7suwBiniVqnh4ilFX08jxlY1+4I5AflpCwfEw
+	 KmGdN0p6HmA67688yZS3RB0OonfO1WTZCknMl8zsJRkjU9LJ0pmFN/J8he/Qnp3VBw
+	 0yqEcCK030UFLSU66WfZ/MnCgOwrWQQcwe7HPobA6s/IG/JinjuXxxaO1jADIynLrU
+	 DtfPZyiT+QsVP/Jw4HkbNCuzg3JiEy8HjMwkqmAupjOBIn3St+NaocgqyKOjfOlAR0
+	 SjQPfnczFpx0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53C5F611EB;
-	Fri,  6 Feb 2026 08:11:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 43065173
+	by smtp3.osuosl.org (Postfix) with ESMTP id 425A2611FC;
+	Fri,  6 Feb 2026 08:12:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0001173
  for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32AF5611D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id C537D40A1D
  for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id To8lWgYl3rae for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 08:11:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wgUCAyTXG2Ps for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 08:11:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B09B661175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B09B661175
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B09B661175
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:53 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4805ef35864so15309735e9.0
- for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:11:53 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 94960409F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94960409F9
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 94960409F9
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:11:54 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4806bf39419so16974845e9.1
+ for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:11:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1770365512; x=1770970312;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=0oOVAYfwp4jR523V0Blv8vYQbGUravFBzC3bRo2uaQI=;
- b=DTHeW0gNGFBMLBuYXqdykbdA6lp0kYHe4n4L3iL0iv0gRHjJG9bt+YUYLrXCvK097B
- a57M+eMjv/IpKE68OdESAuhLwLxwlFQR/H5jXMJHvF4S6cXJAybhbhVaahJt3J35NOn4
- LIjaF8vB330se2LT822Xlq+V1FATzJVevZYRLoIlsfVjnUJrkLKK5pmgGWVlZjSVjKx8
- 1ohbxb9oiSKkXAuU0nY/2Lax0cALGX62/JTEK0FiVXsY2Dls6uBJ90LPu5TVmj9pGvMb
- VlGrZ9a0o+B2ydkcNcNjulF24lCxzqg4AUQoHczdzSxaC1MXD6eKzJYxxb8dga5WAt5v
- X76w==
+ bh=uiLJTJE5f2uYR31TM+9O8iBltim2nzSDZAsabXhEWpg=;
+ b=wUdIDfgri4RNo2aBIq5d+TgWZEHvRSdLqDnfqFylAfq76v4glLzdzSJvurY7YGhp4v
+ 53N12ETORwf+EbEUEbicC1ghaJrOOhyhVe0hM0B6Oz4ILoOTD+klNRVpLk2IY7HPmMU6
+ rwixF2BG/0xSBD1Xd0Ba4/wTbrYxapKwlwU8GOpQo6o3MT+fLM0qa9nyk8s2IOMspKn4
+ EM6wpq1yRNWcOA4uRP+gKeRvLGV8zMfXKokPyoZOpMLK4NjB4aEL6pbBrqphceV6X60v
+ QaBXjQV/OBhLW+kJQdrYjg1IMg3XLmEbQkr209/xN/ThTCf7T/QPOGWMATURMHL5L3DG
+ 5BAA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVNSqFO2ThVi/bCB3Z++f+s9bzzOJj3crcbzaQkc67gt9p+zYhjtFYTZjXDG5s5DdLaqpvEcJz6hPs=@buildroot.org
-X-Gm-Message-State: AOJu0YwQbJO/FsyriqG4RRYTK3K2x1AXL8hHxgxgHAsxqOy/RWRSaHzx
- 6LaN0aGb5PZE9YvzjZfc9eX4Z+2O2JU9fQ7iXZ0xdscz6LqiTTivWMODziPKGDdjNMLfE4lMuVh
- KqDez
-X-Gm-Gg: AZuq6aI9e1Lrm7ttKPj08ttSSeZL5ni5uArHp78zpdb6xw2saWgXAMbCW6v1CiYkAV8
- VypnxRIESZvnP9AwSRHaW3pu8UUr0g1VVrTTA9Id0B3WbeTUzmaiNbGdhf7GVPHNTNaDmN0Lsgk
- dlepv6T/TzCVCWbRLNjBYFzfqJPw+j9y5PZgMKe0ODsUesodyDvfyKy5K5VF1n4Ifm2SRcLJKcd
- zGwgMiXkg0dezN3rY4zD8ouarjMpGqqPHIWN8MLQsmox7uGm7W7i5vlqJk/Hl0zKXfp+W/JyItC
- dt7sCjj2lgTwTwJB7Y6wrqbXTRVffCi9uzM1bOb0AYMbHZdQIxcCVhcRHcojLarB6GyDmANb7ub
- YqQlLjqbMUCTEX6u++KGJHACdIhO1mNgv499l7jL0JkfmatuCRSsoCzNI0H3QzVZbTTIA1l3izQ
- jhxVo=
-X-Received: by 2002:a05:600c:4f07:b0:482:eec4:772 with SMTP id
- 5b1f17b1804b1-4832021da15mr24981505e9.32.1770365511700; 
- Fri, 06 Feb 2026 00:11:51 -0800 (PST)
+ AJvYcCVeqxdRfgtQUs/zIWxv1Dq50HzC6B8aMFLurHEmMc2Vn965nFLY5ZYULQc5neZlJqc0Z4R4nJPvCxE=@buildroot.org
+X-Gm-Message-State: AOJu0YyczLir3IKKh29xn/eZHQVVKMIp3ARtCmxydEMAXpEPZNr5jtWM
+ PyVRVMJ+4t5H5Pel0O3QvbtmC4Nm2rYP2NdvmcD4tH3s6K72qDEbhX0QHeGugZPirms=
+X-Gm-Gg: AZuq6aK76Pf6ZAiweaCAHtBZgTJ19aN2x6kfP/hCRhAAOYI1ZAGVzvE2crODILIDZJU
+ oKQtes6fWwY64YB8QYIeOYi8jlr2FZc8APexmAoRwCSmE6oYJNgHHFawc29SpA07Sl//P/rpJSo
+ Hf0v4uhhOEejSGAZhd7vHa408BJGyXjJoMqsmZbvE4xe5Xw290ftUACNSK11Rc1j8QDr3qgTS22
+ KMYo4E1ftJfKWbPpbttm6Pwh6BgbkSBr+cwynWgzhD+xofN7JiSvuEk4SC7Rrgu8G/r0TYMzqiA
+ 3g5bOz+i/DfHZHD3KcXX0o2rRS73MK1MLxbDpcGumTT+wUenr6bYJGd6dW3avt/scAiZ9oLhUXv
+ K3NEW7QQPF7FhXPEQrWf45N6L62Rasg0efMRuWwELqRtjOgEKDtoqafhSxd/GO/Ji4oosuUF6oH
+ azgMY=
+X-Received: by 2002:a7b:c3d5:0:b0:47e:e38b:a83 with SMTP id
+ 5b1f17b1804b1-483178ebf8emr50608535e9.7.1770365512533; 
+ Fri, 06 Feb 2026 00:11:52 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4832039d238sm23289045e9.0.2026.02.06.00.11.51
+ 5b1f17b1804b1-48320719bd2sm33265725e9.11.2026.02.06.00.11.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Feb 2026 00:11:51 -0800 (PST)
-To: Julien Olivain <ju.o@free.fr>
+ Fri, 06 Feb 2026 00:11:52 -0800 (PST)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  6 Feb 2026 09:11:50 +0100
-Message-ID: <20260206081151.32189-1-thomas.perale@mind.be>
+Date: Fri,  6 Feb 2026 09:11:51 +0100
+Message-ID: <20260206081151.32243-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260118152251.248976-1-ju.o@free.fr>
-References: <20260118152251.248976-1-ju.o@free.fr>
+In-Reply-To: <20260119103809.2880459-1-peter@korsgaard.com>
+References: <20260119103809.2880459-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1770365512; x=1770970312; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=0oOVAYfwp4jR523V0Blv8vYQbGUravFBzC3bRo2uaQI=;
- b=QOkYy5epa4FEWUPZUIEt6fxV49ISndGKBrdL+mgRczj6f0PVy4QopCJOs4I3lHjx07
- ZRnslFziyjywNfxMNBD3f1AZI9DvV/c6CWurzg7hea/7owt0+vUEP6KZUM7RctohjqC8
- FIkkX0eXr0EB3BJdOvVEZ7uwv2y5m1DzMaXNDDm35HNbeEpvN6AmSKOjX9Y7EQLWYiEO
- j91h5b2CgMeuEa6FAHY27/vPj5xfhk5EdqZQseL4RoN8p91lwzxiJVoD+TMy8lCRvtVc
- U1BcMJXxA+yaeqgzKC2+it/7M0uc6AEJsqbJAlHwuG9xZwsNbzmRToogeXq7BTSdy3ol
- IV1w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=uiLJTJE5f2uYR31TM+9O8iBltim2nzSDZAsabXhEWpg=;
+ b=Et0c4R6PvH6TRcVnMjTZr3Sg3jiVaS45KvLB+o0xNAkGVTssylAWf2lvmZCi3Ha65Y
+ yDkphyXWjOmRPzTUAsLk0dsuIFQKM8V8Dt2y+5Q1iJzX1y++bzSMo9E0AvoGWmd3BIc6
+ +8hi8DFQcXlYEIELIiYg6j92u5YdjcpPpPdeILh5PiClbHzgZb2kDOn6xyqoEKL11xEc
+ yhq7rP8GO7WGQLdHDlj3yQIU+RIWsu+bnUKG/ACuvqnDb5Emm8UU/YD47hXosnc9DG/w
+ hfthtugOyoMVMARzksPbdHXbt0RVNioOhsQ25gMqIuP6VEYXUhqfgyMUb4HVgy3nYy27
+ ybYg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=QOkYy5ep
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: test_python.py:
- disable interpreter colors
+ header.a=rsa-sha256 header.s=google header.b=Et0c4R6P
+Subject: Re: [Buildroot] [PATCH] package/python-urllib3: security bump to
+ version 2.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,46 +131,52 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Python 3.14 (not yet in Buildroot) introduced colors, enabled by
-> default, when the output is a terminal. This behavior can make the
-> pexpect pattern matching more difficult in some cases. See:
-> https://docs.python.org/3.14/using/cmdline.html#controlling-color
+> Fixes the following vulnerability:
 > 
-> This commit globally disables the Python interpreter colors in the base
-> runtime Python test, by setting the NO_COLOR=1 environment variable.
+> CVE-2026-21441: Decompression-bomb safeguards bypassed when following HTTP
+> redirects (streaming API)
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> https://github.com/urllib3/urllib3/security/advisories/GHSA-38jv-5279-wg99
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
-> For example, the python varlink runtime test fails when updating
-> Python to 3.14 for that reason.
-> https://gitlab.com/buildroot.org/buildroot/-/blob/master/support/testing/tests/package/test_python_varlink.py#L30
+>  package/python-urllib3/python-urllib3.hash | 4 ++--
+>  package/python-urllib3/python-urllib3.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> This patch might be useful, before updating to Python 3.14,
-> proposed in:
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=486958
-> ---
->  support/testing/tests/package/test_python.py | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-> index c9ecf9acda..e815376d21 100644
-> --- a/support/testing/tests/package/test_python.py
-> +++ b/support/testing/tests/package/test_python.py
-> @@ -17,6 +17,9 @@ class TestPythonBase(infra.basetest.BRTest):
->                             kernel="builtin",
->                             options=["-initrd", cpio_file])
->          self.emulator.login()
-> +        # Disable Python colors for all Python tests, to make pexpect
-> +        # pattern matching easier.
-> +        self.assertRunOk("export NO_COLOR=1")
+> diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+> index 76fe4e5fc9..858b8ca3a3 100644
+> --- a/package/python-urllib3/python-urllib3.hash
+> +++ b/package/python-urllib3/python-urllib3.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/urllib3/json
+> -md5  838e0ffee00ec870a3ba6727a7832ab8  urllib3-2.6.2.tar.gz
+> -sha256  016f9c98bb7e98085cb2b4b17b87d2c702975664e4f060c6532e64d1c1a5e797  urllib3-2.6.2.tar.gz
+> +md5  2c381874816fe551f50a2551abae62b3  urllib3-2.6.3.tar.gz
+> +sha256  1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed  urllib3-2.6.3.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
+> diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+> index d57473566b..7f7f0b03d2 100644
+> --- a/package/python-urllib3/python-urllib3.mk
+> +++ b/package/python-urllib3/python-urllib3.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
 >  
->      def version_test(self, version, timeout=-1):
->          cmd = self.interpreter + " --version 2>&1 | grep '^{}'".format(version)
+> -PYTHON_URLLIB3_VERSION = 2.6.2
+> +PYTHON_URLLIB3_VERSION = 2.6.3
+>  PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+> -PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/1e/24/a2a2ed9addd907787d7aa0355ba36a6cadf1768b934c652ea78acbd59dcd
+> +PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3
+>  PYTHON_URLLIB3_LICENSE = MIT
+>  PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+>  PYTHON_URLLIB3_CPE_ID_VENDOR = python
 > -- 
-> 2.52.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
