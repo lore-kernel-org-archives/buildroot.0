@@ -4,60 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5D1AEE20BA
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 17:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DDCEE6B44
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 17:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B127843DA;
-	Fri,  6 Feb 2026 17:22:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5217835B1;
+	Fri,  6 Feb 2026 17:36:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hTS66EMClo0i; Fri,  6 Feb 2026 17:22:20 +0000 (UTC)
+ id 5S5-ldlywS0H; Fri,  6 Feb 2026 17:36:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86850843DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9A4F83566
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770398540;
-	bh=Q3+AtFABrcUMWose1gYB0+i0TWB7FCqCwvYovD8mZVM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YU7bXJZREXjfdmVQJ1aLtyeR9BV6OMlkBNYhU0zVryP+9cWDpqMywEvinTzQTkDoQ
-	 jVA8acIsRMDxzsSzX0/KQD2iZPcz1xKX9keovshTfjlS4w3oUpfCvplHL2hthQb92X
-	 2eQNl+KhNjuSQ1eVNQpGqdsY1HYetDOewY6eJ0RHOjuCKmzNXqnR9h4uvqY5nMiWSR
-	 S2GiEo4Le4olPN0m92Q0aoVxO3agHM5YirJMptogrnx9hiUM/qLDW81gmeG2iVIBJd
-	 1wY3Ivy+ZTvKNaM6Yu+Qh74mT2zhOjMv4TgaYEvGdy6K+sNLzr58pCXTbnyapo+wyO
-	 3DsXcCpmdmueA==
+	s=default; t=1770399387;
+	bh=Udm8QL8MqOzYnt37qbk4Aex2wwCTjer3GlAstoKdXqU=;
+	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=R6q7nxudMGa3S6+DKCMaR7/xann6QXuG/lZEcz45ovyHLjk+3hELEdIIgQLdsupLj
+	 I68bQaPl/DWb5k/C4ZTj0jBjK7IbbZETNu7xZUEmaBjDV2bH2zLZOXUDx5eVoWR6ld
+	 pEYsgO43rLqtaQniFz6g7dMJ6Tw/dE8bEUqiFlD3Gcw/Y19QwEwAVZAQCYq19To545
+	 LXn1x/coZA9xKEz7PKhnyBvV39sDR/wmGVwlmCBFDNxr9ZYnD9oyZavtAFyND/QF8D
+	 jsAJJnMMDG6H5GS78ngGQ5xrN8HPZYOJTZ+v3FCJ3kvv4oIjzTBETgXrvpXSm8JJ0g
+	 pDweJbxWgZfCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86850843DC;
-	Fri,  6 Feb 2026 17:22:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C1A9378
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:22:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9A4F83566;
+	Fri,  6 Feb 2026 17:36:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8337D2EB
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:36:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AE39843EC
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:22:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2638961125
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:36:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JK6ic6ICAB4N for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 17:22:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VuVHGkxufJ38 for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 17:36:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E214843E2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E214843E2
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:22:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B3CD86A82; Fri,  6 Feb 2026 17:22:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F12B861130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12B861130
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F12B861130
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 17:36:19 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1139884342; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 06 Feb 2026 17:36:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1voPkd-0000000FPDw-1qMa;
+ Fri, 06 Feb 2026 18:36:15 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Feb 2026 18:16:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94a817a58909e1cfe0c1f63b63754079f1866523
-X-Git-Newrev: 63f2d211381344127b03f39eff535de5b3042a7f
-X-Patchwork-Hint: ignore
-Message-Id: <20260206172217.2B3CD86A82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/memcached: bump version to 1.6.40
+In-Reply-To: <20260124150540.270915-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 24 Jan 2026 16:05:39 +0100")
+References: <20260124150540.270915-1-peter@korsgaard.com>
+Date: Fri, 06 Feb 2026 18:36:15 +0100
+Message-ID: <87ecmxkc4w.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=WFROs+ME3JxrJ3V7BMCRQYAOBI7/lsCDjCrtYh8iVgWPbHU2B9enUjOH8QmMIeAqnWJO9Wsx1ZRljhxrtxqZ0J7RRnMZm/nt9jyJbjsvTTo5SrnNP9hSV3feTTcroSsPD4J7GSPqbEAuIksWqwtRaHx7piNwf8TfkZw6YPzRqkrQ/U2C0O9aVAhimu5VQ6GXHqIGKAH25beIacttws+pNrvr0gUyzglrn92eMfeqdu/WcVQ8RoyLlDu5HMXcZWgzH4KeSqAEfiqJVROn6aOaYDPFqWI4pkY2OfZBrp5byxI/iUgw0x2ONslrBmbiD3FnYoFxRbsV9AY8dWn7bvTgMw==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=B2GUfJ0Cb/hRy4a+RuA2zWJvwbn4Ys/KXF+VDpzDmTY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=WFROs+ME
+Subject: Re: [Buildroot] [PATCH] package/swig: add host-swig wrapper script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,52 +91,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/63f2d211381344127b03f39eff535de5b3042a7f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Release notes are available here:
-https://github.com/memcached/memcached/wiki/ReleaseNotes
+ > Swig has a compiled in absolute path to its data files, which can be
+ > overridden using the SWIG_LIB environment variable:
 
-Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > https://github.com/swig/swig/blob/v4.1.1/Source/Modules/main.cxx#L931-L945
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 781897b6b7..fc6ad5eb88 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.29.tar.gz.sha1
--sha1  a9699aed111d86b6e37b3ce5e6ef4e7539582d5f  memcached-1.6.29.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.40.tar.gz.sha1
-+sha1  f2513db7079ee4c6558eb11fabb55e1adf1fdf38  memcached-1.6.40.tar.gz
- 
- # Locally computed
--sha256  269643d518b7ba2033c7a1f66fdfc560d72725a2822194d90c8235408c443a49  memcached-1.6.29.tar.gz
-+sha256  a3d360e9da2221a49bf9aae4e6880f2d44da6b2a2fae39b1911b9ca76488fbfd  memcached-1.6.40.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index a01d5aa9d6..d3ec9d36d7 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.6.29
-+MEMCACHED_VERSION = 1.6.40
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ > This unfortunately means that host-swig misbehaves when used in the SDK, as
+ > this points to the ${HOST_DIR}/bin of the build, which may not be available
+ > when the SDK is used.
+
+ > The issue was reported upstream but rejected in
+ > https://github.com/swig/swig/issues/253, so instead add a wrapper script
+ > which calculates a sensible SWIG_LIB relative to the wrapper location unless
+ > SWIG_LIB is set, similar to how we do it for E.G. gcc or pkgconf.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  package/swig/swig-wrapper.in |  8 ++++++++
+ >  package/swig/swig.mk         | 15 +++++++++++++++
+ >  2 files changed, 23 insertions(+)
+ >  create mode 100644 package/swig/swig-wrapper.in
+
+ > diff --git a/package/swig/swig-wrapper.in b/package/swig/swig-wrapper.in
+ > new file mode 100644
+ > index 0000000000..68be44231f
+ > --- /dev/null
+ > +++ b/package/swig/swig-wrapper.in
+ > @@ -0,0 +1,8 @@
+ > +#!/bin/sh
+ > +# wrapper to make swig relocatable
+ > +
+ > +if [ -z "${SWIG_LIB}" ]; then
+ > +    export SWIG_LIB=${0%/*}/../share/swig/@SWIG_VERSION@
+
+Added quotes around this to make shellcheck happy and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
