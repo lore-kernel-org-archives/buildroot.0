@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B22EB28E2
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39BFCEB28E5
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC4A612C3;
-	Fri,  6 Feb 2026 08:12:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3787C61262;
+	Fri,  6 Feb 2026 08:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7VA6Hi14KOgn; Fri,  6 Feb 2026 08:12:30 +0000 (UTC)
+ id ngxPbMevRRur; Fri,  6 Feb 2026 08:12:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EDDC61289
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8632B61176
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770365543;
-	bh=bSQaB5pIayB2yOKsCaZiZgFEX5vbZBdukSq0Z56VcJ0=;
+	s=default; t=1770365548;
+	bh=vSrFvTCbOiNkUkvXe5DFM+kJHpbtgCifdRudZIC2/AQ=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=MYwfOwy+IqJMnyhizACWvTIjkPQxQXdoQZeLKdWH1V3/54ep8kIdpeVq/tHLDztcP
-	 FI04YBKQf2UE1lALfn5WPBDDucj/GNJv3MuRCG9CR1rY3NP6E7ttuw8I1rppIaK+NG
-	 cH+Y0ifJg5zkTVp461BvV2tdiiF8mvamukqMdwo+s40fCZuWHFcYjmxn+TL0LJMKhK
-	 Wu/6lwa9I4HFtj1TpKFPmKdymAIATf1szS3zjCdX3NEFZh7PNxVauxh/8Mtixw0OJj
-	 gX0xK8gH3pK0FGaGt4pdNddANWkbLGUw2KQsb7mPczYchipJOhwoVTVE/KGjPncsEI
-	 TndhQ2iIAceeQ==
+	b=bxLHpLdNaL0Dmcd9KXa5VwRckOthg6KVfIZ03Ga+xEAckX8ul8neRWneOMajl/qEv
+	 9PLc4TCupsh0Vveq2mUyD4QbWLKIIgECFQU1NkMt44qAfg1TpGCv3guSSMPnlP4tND
+	 SZpOg8YnsXPSZuto0aVOh2SjgHS/AhmGq08cuYzHFeV/0rHSStlVq2GvuJMFKphq32
+	 PFoGeRYlt8dh8OOagar3yjiYgQV3Ue1zYMSdRiVYYxiRpBpxZQG+s3tzM0ugE8mm6f
+	 D+KVcox67nwUIclEBc+Fgf7anAeW0CuazynZsQr/1aF4PSJhe7t/Ip/k/FA7XUhoaa
+	 Fjy4nL+Jg8ASw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EDDC61289;
-	Fri,  6 Feb 2026 08:12:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 35D86173
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8632B61176;
+	Fri,  6 Feb 2026 08:12:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 078BD173
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2550684040
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D24E61246
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jcsctvCzWMTg for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 08:12:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OvyapiSXSAnE for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 08:12:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3A4A834C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3A4A834C7
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3A4A834C7
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:07 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-4362c635319so197827f8f.2
- for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:07 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 65AE46123B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65AE46123B
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 65AE46123B
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:10 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48069a48629so16564715e9.0
+ for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770365526; x=1770970326;
+ d=1e100.net; s=20230601; t=1770365528; x=1770970328;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=00V66idYmuXhBjx/kAJrwFY1bf8iDMn7uEU5/9hWEyk=;
- b=rY2fsk4Zy7AGNAsLunry5x1EIbOgG1ylSaftSR1wOjv565lplmM0ftvszyLu1UjwBG
- ywICFAubsxWNNQHZU5yYA/YGJlAgOqblRl+ztX+AdiPOEh83KGb5pPfLhezu5rdB+NA9
- zGVJIs8sY5Uog7aazvEJ995wc6Ws5Ns2+GVWsXJlSkuf9ho2QePp95SNnWYnIDdvBffU
- fq84+q55zfFJ3AleoNJaRw+KFqwW42DEOpsdKAJGdZpNG5It4NcY2WgtrzIcfk+2uS/N
- ceH+eTuR7dspgkVe5mc2Adr4GudiQ8+ZdgCD5fdN02lVb9z3DOH9dC0kzuRV4Y5Y3Ig+
- OOaA==
+ bh=KrDUtPD/H3Kg9XT6oKuABh6tzexBN3oFrnvDMIbXF3Q=;
+ b=gmSmLkyyCRgt1iy/G4xOe37GK34kUSI57SDagUz5a6POeBGZNIgy0YY9g0K+DvoMTn
+ Cq7V9x5F62Q2lPmN6wI3/y2YDUrfwi95i25Kjv2DSAPzBxN7mgFxSI76UtfMiuEWVz9c
+ yCSRVY1bpcd4dQPVNWIzz1DQWH7BitoZ5GgS+PjSpbjo6AaEC0/79sWTsh1Y+KwApjx+
+ g4Yc9gQw6FKyeR4NK0/3NzJr/Cn69nogQBQD4h1NQFa5PnyWcJGRPkADuQbTFqbImH5R
+ kf6ULJIGRJgn5xX1nMFkSOTLPz6eaaAdUqkPMmjUWvd0bWjAsakwe1cur7mtdztVjiV7
+ x+PQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVYAFb51anaApmn5htvYI22lzri/mt4T0pxTQ1jTTrpg+bppeyjKq/zSAOZOnG0YQNQPPVKYU4kyuk=@buildroot.org
-X-Gm-Message-State: AOJu0YxWF2r7mgYW5aL1riKgU316smfp4ZYO75MoaEM6KhvLFfWjtI04
- vUjKGxgqBEmOXMwBAaKQAIdjy7GmejVSMeDmfxyd1sGsZmogUF3aXUNRAOyDNp7Si9UOlQBEi8K
- U+t1x
-X-Gm-Gg: AZuq6aJnCtB43vlzx9pECk7Cl2b9G9wHaciUZ57f2IgcaOfqbHFDkKGtAzLV+CwpEPK
- tkW4Rma2ZVQvu5274J6Sf/VmajDX3M+i3V6S+Fs1sj+olUqBEr8Omhe9siugtU//oSP7pYBTbOo
- R7Qs9e7NRnIk89l+D/WOPZLFrXvRk6pakmI4VeNuJeepJjEdyOItZSg0yCFqrqnD47Vo5KFIKKD
- GNlbhu8leRgvkGRimd+egDTZiKqUTUbErAYLwPVG3UGqgqGKMP2pknUximVVKDzzk7QLIEEI+HC
- KFeIbgjU59Ze9Orp8Zu8dyh25eaH2jOB3qG45HPauECNbiKcCbsb/ew13Y+zAKgqgyNfsbPceKb
- CchT15owi1ANsupkvmFRtAEQ7wKMh0yN1p1SO2F90sUTxpqrWD+mAMFE8s2nYQJcPD9wZOpIyiX
- gS8bendyi8omxcbA==
-X-Received: by 2002:a05:6000:1887:b0:432:8504:befd with SMTP id
- ffacd0b85a97d-4362934c520mr2912961f8f.32.1770365525712; 
- Fri, 06 Feb 2026 00:12:05 -0800 (PST)
+ AJvYcCXgl44V5VdxplfLNyKqxaOQ9bJvzcCvEXNwuJALzC6ugfF50WtNEN7dy3f+resNRb5ZezWDrz0Kq98=@buildroot.org
+X-Gm-Message-State: AOJu0YwzfMCq7OoKbDUnAFWa756yLXVxhM9ELMOpAr7IPF+rRCOfbp84
+ PjAcUXCTU43n8l8EY/hCD9/zgGemAE6mCDs4lnRD/r7HN/s5MUEGV9O3GhaOUqmgVFzBwKZTAyT
+ vUI/5
+X-Gm-Gg: AZuq6aIoPNlRnjdiSJFCHxxtC66PXMKP6z3ChcEH/Nv/ZjZSDYSCzsieJAKmxOSJJej
+ NLMP7v19/02yBlIsmBKy3kR3SQF5AiJVFTK3FIJNd1pbuz7MMkhfcNI7QMNOxb9+WY8VlnYaPie
+ P61YOelGcl3vc7MC6HEQfLEQWnedR4XBbjENYnkMDWl8UkqsltKMudHO8UnPWUSaRCe0BD54zbL
+ trVSWg99Pxt/UbAo1+WBdtgN1/sZd2Z8csM0r2ETvB4Esnt2KcGtOYSOO4hKo114xnmyynVan26
+ VEPfznPwYP2hKwaIzW7UI6gwP5/gt8x/k0NYbkK7wZaI6MpcjPHQI8FoVsjmpBjWNiy9UzWwrNk
+ ou7UI3DcbygEHkT1jqT4QuvH5OpQU7p9mZesv9zpwi9itCHMnI8C2ARdsOPVomHcE70XzcpCVyj
+ OoXW0=
+X-Received: by 2002:a05:600c:1387:b0:477:af07:dd1c with SMTP id
+ 5b1f17b1804b1-4832022a235mr29742485e9.35.1770365528308; 
+ Fri, 06 Feb 2026 00:12:08 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43629756bc3sm3707926f8f.39.2026.02.06.00.12.05
+ 5b1f17b1804b1-483203d5ef7sm20877415e9.1.2026.02.06.00.12.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Feb 2026 00:12:05 -0800 (PST)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 06 Feb 2026 00:12:08 -0800 (PST)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  6 Feb 2026 09:12:04 +0100
-Message-ID: <20260206081204.33020-1-thomas.perale@mind.be>
+Date: Fri,  6 Feb 2026 09:12:07 +0100
+Message-ID: <20260206081207.33195-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260125104501.433268-1-bernd@kuhls.net>
-References: <20260125104501.433268-1-bernd@kuhls.net>
+In-Reply-To: <20260127213112.1668038-1-giulio.benetti@benettiengineering.com>
+References: <20260127213112.1668038-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770365526; x=1770970326; darn=buildroot.org;
+ d=mind.be; s=google; t=1770365528; x=1770970328; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=00V66idYmuXhBjx/kAJrwFY1bf8iDMn7uEU5/9hWEyk=;
- b=Z7PkO87vndoxyxm5H8svWvuJCzLGkjCy//fy3YuTr16Z6hwXj3yTZRX94j7nIrpwiQ
- 0d2bAQTIFJiyLCcjZyUUloExxj/3sRw7bhV/GsNA7h9+VpTdCZMOTtFWnxMuIm2ZEoXI
- v2HWZRr9+Pgn/mRcU1fRW0hyAox92mAUE8nh5CC56XhoW+eFUOfJqWN1Wxgr/2/Rqf6C
- X7JI4T09MUR3qZxA7OJO70q/qeVrqPyZbiiflYKRNC7Cga/OaenHBoK52ty8SJqxxhE1
- mpgR1RGV3nDre6Ip9mest17xtxENvj4RIddh+mhGvr4Hzu2S7Iy7lCqW6pP78MRNVm//
- Bbow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=KrDUtPD/H3Kg9XT6oKuABh6tzexBN3oFrnvDMIbXF3Q=;
+ b=X2N4OgQ4weXIh8rwMoKBGZ2eTqDa4mS16NvtF0cFUhm4SL79484+4k5zfjyyJJ4PYY
+ f+tN93m1hT7yluux1LLcf/f7MeiZhWRIUwUrKeq4YanMWUi5DghMkEEWc9q0xEu6DhHn
+ ZykSkOIKIE/FeZLxugEQz0ki8FE0kRwt6c70UpoFMM18OQ35watcplMDfPLVJcrjF3TY
+ 0whYrdaZsA0LJgroMwdfj2zZ4nqG5OZKuE1bcaB/BYYTJNqmEUIuOf+U/DITO7vxSlDC
+ nF6w1TsAVTiUnjXLagPjuE4dy8FmhjT7dSPW7dn7PJMX4syGICPuBEbK+p+rpHfEen2o
+ YAYw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Z7PkO87v
-Subject: Re: [Buildroot] [PATCH 1/1] package/netdata: needs C++
+ header.a=rsa-sha256 header.s=google header.b=X2N4OgQ4
+Subject: Re: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,80 +131,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit 9cfcd906cff299ef83b48681e50bcef9df124ad4 bumped the
-> package from 1.33.1 to 1.37.1. Upstream changed the optional C++ support
-> into a mandatory dependency with commit
-> https://github.com/netdata/netdata/commit/b6d2a3662dfb683e9e95203ef3b21f8e31238b06
-> added to version 1.35.0 causing build errors with toolchains without
-> C++ support:
+> For release note, see:
+> https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.4/docs/v2.8.4-ReleaseNotes
 > 
->   GEN      netdatacli
-> /bin/sh: line 1: no: command not found
-> make[3]: *** [Makefile:5502: netdatacli] Error 127
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/7084a73d5727a86ca55eda3d1f01ea4d5b8ecf65/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/netdata/Config.in                     | 10 +++++-----
->  support/testing/tests/package/test_netdata.py |  1 +
->  2 files changed, 6 insertions(+), 5 deletions(-)
+>  package/cryptsetup/cryptsetup.hash | 2 +-
+>  package/cryptsetup/cryptsetup.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/netdata/Config.in b/package/netdata/Config.in
-> index 3603eb071c..527d4d39af 100644
-> --- a/package/netdata/Config.in
-> +++ b/package/netdata/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_NETDATA
->  	bool "netdata"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_MMU # fork()
->  	depends on !BR2_STATIC_LIBS # libuv
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-> @@ -22,22 +23,21 @@ if BR2_PACKAGE_NETDATA
->  config BR2_PACKAGE_NETDATA_PROMETHEUS
->  	bool "prometheus remote write backend"
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-> -	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
->  	select BR2_PACKAGE_PROTOBUF
->  	select BR2_PACKAGE_SNAPPY
->  	help
->  	  Enable prometheus remote write backend
+> diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+> index bbc9171e77..49126a4a2f 100644
+> --- a/package/cryptsetup/cryptsetup.hash
+> +++ b/package/cryptsetup/cryptsetup.hash
+> @@ -1,5 +1,5 @@
+>  # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/sha256sums.asc
+> -sha256  4a8a23b8b9d1a3250452e40acead4421a03e45a38954ad0595634f4266aa800f  cryptsetup-2.8.3.tar.xz
+> +sha256  443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83  cryptsetup-2.8.4.tar.xz
+>  sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+>  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  docs/licenses/COPYING.Apache-2.0
+>  sha256  28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5  docs/licenses/COPYING.CC-BY-SA-4.0
+> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+> index e8f2f1673a..6be05e6457 100644
+> --- a/package/cryptsetup/cryptsetup.mk
+> +++ b/package/cryptsetup/cryptsetup.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
 >  
-> -comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-> +comment "prometheus remote write backend needs a toolchain w/ gcc >= 8"
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
->  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
->  
->  endif
->  
-> -comment "netdata needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-> +comment "netdata needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.9"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-> +		|| !BR2_INSTALL_LIBSTDCPP \
->  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
-> index 6b616398d3..42bcbcdc6f 100644
-> --- a/support/testing/tests/package/test_netdata.py
-> +++ b/support/testing/tests/package/test_netdata.py
-> @@ -6,6 +6,7 @@ import infra.basetest
->  class TestNetdata(infra.basetest.BRTest):
->      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
->          """
-> +        BR2_INSTALL_LIBSTDCPP=y
->          BR2_PACKAGE_NETDATA=y
->          BR2_TARGET_ROOTFS_CPIO=y
->          # BR2_TARGET_ROOTFS_TAR is not set
+>  CRYPTSETUP_VERSION_MAJOR = 2.8
+> -CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
+> +CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+>  CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+>  CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+>  CRYPTSETUP_DEPENDENCIES = \
 > -- 
 > 2.47.3
 > 
