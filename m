@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02516EE6B69
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 22:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C085CEE6B69
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 22:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EFFC41B82;
-	Fri,  6 Feb 2026 22:15:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8511840664;
+	Fri,  6 Feb 2026 22:16:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8c95Lj9beKJo; Fri,  6 Feb 2026 22:15:26 +0000 (UTC)
+ id ZsDjp4AOgLcK; Fri,  6 Feb 2026 22:16:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D4ED418EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D03440563
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770416126;
-	bh=wLCQydy2OjKhSRt1bZ8VIWkyFsrYP4wUKKJUGmnht+s=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=R+gfan0Uo7jNliYTEd62nKknDNuIHjdtKTZm4+IG40Ui9P23zi5KSXpDnQn4i27hf
-	 SE94c/gRIgOwrkSfvL4cSfJz0OFHFTBWiBTuB+wuDt50psJyphYBoNz2mceha28cwX
-	 EnFaAlZpNNomLlhOAJXJrLRyBe+mYOBrgxao/LL47+c1F20mqJApWBqzKT69AplC6Q
-	 wb1rRTyyaz+p8n8OOfNYjKaqTT5nulVy2M+oR7VnkBIb697VnSCV3pCOauojMitEPO
-	 50d6AJgVXK3xtNQaKbt+X+WhzcwvKpqCfQbTnlGPGL6HEs1ibgck4gTUNUSNYBpUUC
-	 22wv7qyq5ajMQ==
+	s=default; t=1770416185;
+	bh=ihC22JesX8/G8LKqD/cD/IUQLwj2TQYoyYUFgKfVqRY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=CpdbdfVdFyBXiEL74iPx2AMOSXItMcE34RfVWgNymPdRFn6o1nvYWqjJhpSrduf7z
+	 ZmV2wiqFjIwpStCEVHOLtNYR2a301eItgiqV8Sd8fTy6m3xE2eEGeBtguoCTH1snZA
+	 Fbhxk0G2+IXQpyU8tM8vd/TgbPngRpC3xvCzGrEKtLkgHaZier/NxDUZEP4jOLOTYx
+	 TlO4cUw4Y4NQ0oxepavoEgNi1gExPefshm+sKrB1CMiAhf/WkKwYT7KL6abNvTkiLO
+	 7gWvPkY7VfWdcTRqwwJC1c9bEVtggZTSp9Qetfsswg+XsBac/LRGarcL5GWLkPaL+s
+	 RR7HO6KMxSaTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D4ED418EE;
-	Fri,  6 Feb 2026 22:15:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C69F2C5
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 22:15:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D03440563;
+	Fri,  6 Feb 2026 22:16:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C57F173
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 22:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08DAF4014E
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 22:15:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E4CA8437B
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 22:16:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WqkQFy37fqjq for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 22:15:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA1C040132
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA1C040132
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EA1C040132
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 22:15:22 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0ed3.dip0.t-ipconnect.de [91.58.14.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 41DF0A4C590C;
- Fri,  6 Feb 2026 23:15:19 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42240)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1voU6h-000000004H6-0Pmr;
- Fri, 06 Feb 2026 22:15:18 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3qvNs_7eb-Cg for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 22:16:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6770284376
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6770284376
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 22:16:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 55BC886B1F; Fri,  6 Feb 2026 22:16:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  6 Feb 2026 23:15:18 +0100
-Message-ID: <20260206221518.1833343-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +++++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1770416119;
- bh=wA3Zm2mtWyglUdCTXcNN0Ai2XHGSmDyHGciiVOAR4qM=;
- h=From:To:Cc:Subject:Date:From;
- b=aW1QG7qO9oSx1h5RzTRaAjPWqtaf0N5l5XrreQ2VHBz0x2n9gF0ztfQBQ3pbcrBkL
- NZ/29BX/YlBULWP9GXkraYF42fCx1zQJZRdgeOWMB2GOO3DsBYi6vfwWpbYWQzCCI7
- 3KLhno2+exAfulMo0xVRLcvkC/e5rKZ/H/L4rfDoIBfXoGwvZwCpGEbfvedV5MX2BO
- KIppmsQ3CL8nnumLwc5FElFCRq+9PTcZu6CJMCGmUQUts2LG7wwTWd3YclZLtHLpUN
- Vf4sBQuAaSxbyqGDvcMMnVb3lMRCemqgTeCmKifAzNRylh3rREzqUdyvJNxtNIzTq8
- VlCbZrUDlybGw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=aW1QG7qO
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 25.3.5
+Date: Fri, 6 Feb 2026 23:13:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d892c5afad921bc7c6a012b07c3e5c0eb9e94c84
+X-Git-Newrev: 6b7b895d10a8156e96f17742c6b05eb6fd47ca40
+X-Patchwork-Hint: ignore
+Message-Id: <20260206221622.55BC886B1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {boot/optee-os,
+ package/optee-*}: bump version to 4.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,63 +69,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.freedesktop.org/archives/mesa-announce/2026-February/000837.html
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b7b895d10a8156e96f17742c6b05eb6fd47ca40
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Unfortunately, if all optee-related packages are not updated at the same
+time, optee-test will not build. This commit bumps all the optee
+components at once.
+
+The version bump is needed since optee-examples and optee-test can no
+longer compile (compatibility with CMake < 3.5 has been removed from
+CMake).
+
+For release details, see:
+https://github.com/OP-TEE/optee_os/blob/4.9.0/CHANGELOG.md#op-tee---version-490-2026-01-16
+
+Signed-off-by: Jakob Kastelic <jkastelic@thinksrs.com>
+[Julien: add link to release details]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ boot/optee-os/Config.in                    | 4 ++--
+ boot/optee-os/optee-os.hash                | 2 +-
+ package/optee-client/Config.in             | 4 ++--
+ package/optee-client/optee-client.hash     | 2 +-
+ package/optee-examples/Config.in           | 4 ++--
+ package/optee-examples/optee-examples.hash | 2 +-
+ package/optee-test/Config.in               | 4 ++--
+ package/optee-test/optee-test.hash         | 2 +-
+ 8 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 933f7ab731..263c79ec38 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 4bd7debefd..af08375b9a 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 25.3.4
-+MESA3D_HEADERS_VERSION = 25.3.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f76043488e..346738458a 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2026-January/000834.html
--sha256  3a0fc6ec070b45ae25dc2ccb5e52fae1d89141f7c39c4a91fe4eaa80dfff9deb  mesa-25.3.4.tar.xz
--sha512  3043bebebebc90ba443bbc96d71fbae41c76504d54ff6a44a48ad7c3a132db09e3ad1ae607c49f1d58b724a8b6e4263b68ee5722f8b98328481eb2e82164ac3a  mesa-25.3.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2026-February/000837.html
-+sha256  be472413475082df945e0f9be34f5af008baa03eb357e067ce5a611a2d44c44b  mesa-25.3.5.tar.xz
-+sha512  3db3d3c98bf476a5827705b82733d9964ec511b30882ec7e9edaddc65a5dea5e6bfb33bdcd4f97752d7a3ae9e306e8703982686cbd869567b4194decdb2f5a89  mesa-25.3.5.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b5300df2ba..64b8113e6f 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
+ 	help
+@@ -79,7 +79,7 @@ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 25.3.4
-+MESA3D_VERSION = 25.3.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.47.3
-
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "4.6.0"		if BR2_TARGET_OPTEE_OS_LATEST
++	default "4.9.0"		if BR2_TARGET_OPTEE_OS_LATEST
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+index c86bd1e0d9..3db5c85cf1 100644
+--- a/boot/optee-os/optee-os.hash
++++ b/boot/optee-os/optee-os.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0c947c6972bf50c483cb993af01041d4094b1e03711c7246cdde6ba2ffc351fe  optee-os-4.6.0.tar.gz
++sha256  9400e16c45bfa45f15585b2c933b86c449e7de05def0ecaaa62a4f38973a3a45  optee-os-4.9.0.tar.gz
+ sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index ac3b680743..04849ffce4 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_OPTEE_CLIENT_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 
+ config BR2_PACKAGE_OPTEE_CLIENT_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	help
+ 	  Use the latest release tag from the optee-client official Git
+ 	  repository.
+@@ -60,7 +60,7 @@ config BR2_PACKAGE_OPTEE_CLIENT_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_CLIENT_AS_OS
+-	default "4.6.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	default "4.9.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL
+ 
+ config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index a5d98521a3..f6150aaf6c 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a970338c9f69861901336716d89684646e4480b9970996a5b3581ae7d49fdaa3  optee-client-4.6.0.tar.gz
++sha256  2ef152f25b682e59c3684d6d73d7c5a138495615f6b045e95266eb3d0bc0d04e  optee-client-4.9.0.tar.gz
+ sha256  fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 702adc84db..fca9aca07c 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -42,7 +42,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 
+ config BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	help
+ 	  Use the latest release tag from the optee-examples official
+ 	  Git repository.
+@@ -72,7 +72,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+-	default "4.6.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
++	default "4.9.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_TARBALL
+ 
+ endif # BR2_PACKAGE_OPTEE_EXAMPLES
+diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
+index 54b98868d7..df3bbcbf66 100644
+--- a/package/optee-examples/optee-examples.hash
++++ b/package/optee-examples/optee-examples.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6891390aefa2046d500d3ffec05c327d7763e89645b2e99ef2330b561ba645f5  optee-examples-4.6.0.tar.gz
++sha256  b95a3d72f2b266aedde0ed9b855f9c59cd0b2608df59b27e3f46935dfb6f919c  optee-examples-4.9.0.tar.gz
+ sha256  6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
+diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
+index dd1160ea48..8631d12cef 100644
+--- a/package/optee-test/Config.in
++++ b/package/optee-test/Config.in
+@@ -48,7 +48,7 @@ config BR2_PACKAGE_OPTEE_TEST_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 
+ config BR2_PACKAGE_OPTEE_TEST_LATEST
+-	bool "4.6.0"
++	bool "4.9.0"
+ 	help
+ 	  Use the latest release tag from the optee-test official Git
+ 	  repository.
+@@ -77,7 +77,7 @@ config BR2_PACKAGE_OPTEE_TEST_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_TEST_AS_OS
+-	default "4.6.0"		if BR2_PACKAGE_OPTEE_TEST_LATEST
++	default "4.9.0"		if BR2_PACKAGE_OPTEE_TEST_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL
+ 
+ endif # BR2_PACKAGE_OPTEE_TEST
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index 058d95e29b..80e1b36571 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  db4de73fa955a7db70a64a2c4ad1d2c48ddcb54c369821aba670fec6131a6f61  optee-test-4.6.0.tar.gz
++sha256  b7158740dc4ea2f585363097ebd60a265eef0e078674d70636b1731be94780cc  optee-test-4.9.0.tar.gz
+ sha256  2b36458cd0292200e406a608efe7dfda17aae39646a86b730a2776b61d0fa410  LICENSE-BSD
+ sha256  a094472b51f57d0403953d087e410793519cb6f3a7cea2be34eb44e09a426a73  LICENSE-GPL
+ sha256  a562ab14c307d0e02b7bf6f1bdb0d1cf789409e6375a500e15dc7a0503e5c2c3  LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
