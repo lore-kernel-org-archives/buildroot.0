@@ -1,117 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36E0EEB28D6
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B396CEB28F1
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D268261162;
-	Fri,  6 Feb 2026 08:12:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19CD241947;
+	Fri,  6 Feb 2026 08:59:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w2-xiG2Q-ytl; Fri,  6 Feb 2026 08:12:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VS7mAc5tESvx; Fri,  6 Feb 2026 08:59:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 677DD612BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8465640D7E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770365555;
-	bh=0t/jHSaigCJHxUeWbLqM/t3FUMkzrxq8SONTo8+Xpso=;
+	s=default; t=1770368388;
+	bh=QVkyEPt9rk6L1U8sRxku3rc6NuuGtrGraoMrvRwL6fo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=fR2V5uWu+klFPf9l4Kl/qUhu5cDy39ZYyR3Nd8cxGziuI94bHFvrdhdNEMO3yT2al
-	 chZlA83h5KTOe6lUMBqxWAVZmkLiXhXOPUqNcQAeejF69cBNZ9qBDrw4XfJwJ0Y1PR
-	 fHOvMThitvL3hgESIxWcYtbODqCto0ikJ5WIlgfu6i1iMmvk7GJZYo9JKxDLOexFNx
-	 IrcVuVfr11wqngPMTSVCSSjjr77SZ66SZtjnRBAjEdpzARYf+3poQs68hpWa+YkkOh
-	 0iF8AJs7eXL8Ok27M+ewO5ZJNtqDdcI4TjFZGk4jrZBEVVTzBtvPr3YvgXDbxK6kL0
-	 8iqjjmbzZXLUw==
+	b=n2viR9+Wbh+6k5MTp8/xI8qI2JXSmRwDB+HQ90v1tx/VZJWItDqQxG8giVPGrJaaf
+	 thqZaKTteoCfhte18ER2OYE6MwpHJBm9Yb6WuLLJ6pb7HtbEKoOl/kYzxOFt6gW2KQ
+	 kNESbx/HXzpAQL/t2nEz1BazgfBiwrWsqrhpMOM1o/36ZwWoA8eVSYN0ZggXkT0+1h
+	 yNUkqxDxwv333BTQKUuZ8vy5MkA/yQrHcLrBP8zp1pqEhlRo3ThqiovCRE+7UWVLEM
+	 Se/Wuhcyejfwg6uUvkdX8iX84VAMNe9Gj9OmNROgKN2t+zVSUrMrT+aoChPc9DL3pY
+	 dvE7KmjsiNtTQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 677DD612BC;
-	Fri,  6 Feb 2026 08:12:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D40C219
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8465640D7E;
+	Fri,  6 Feb 2026 08:59:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EE102EB
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:59:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 277CE408AF
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE5A360F26
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:59:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JcX7l3BRg5Ld for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 08:12:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E6C7C4018D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6C7C4018D
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E6C7C4018D
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:14 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-4362c635319so197918f8f.2
- for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770365533; x=1770970333;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=3gcuTJk1HjbBhLSyZfWvDPuG5vuvnzHJTRLm2OQsMtQ=;
- b=QPhkwcH8dxP5HOmzmYNSmFnWnquQrvSu3QEY8MX768GT7hb3LIRqLPddvK1P3Xg2CT
- vcoT1940hiz5L9SLnM5korkFzKpSijJY4xuhT0OidwAj2voMutJTMs+wgVPDanzV9s4o
- x4hftybI9gs0J4SEwtTqK23JmJTwbL0voBj9TgIByJ1eh4XrBSkDLpCneMvEWhyhQdB/
- LAC5eupv/djTV7GhdzFep5Vr3LQLqT4hUu4FNW69lkKx32OlZN8bpXW5xb1q9y7cwhur
- XCAMdH/zYdxJ/ijcWfNjU468K0iS4V6bXOpxHDko2/Uuac0ByxllzBy0saxCCTSfWPmi
- tN7Q==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXbfPGSLEzt9MoJrRmqO5+n8SqnmbralwaZ3NTQ0A5kVmI1uZWVDtHvL+K2D0+Gt7FwLVzRTHJPRLw=@buildroot.org
-X-Gm-Message-State: AOJu0YwVVS6mL03FnjFaUJVw5QBKOpoG6rzV40z8eqcDgcKn+jGjhtLm
- RFSscyrfFlVIfW5lQPHt0tKL3x4Z/IGUbuGlAsMFwO+GDpIRHAVqMfoHTILiruUMHZM=
-X-Gm-Gg: AZuq6aK3qCnam7M9OWpOSW0Pm1zDuLDSiSpYdk//sgDXlHjxSlHBdkGfdWEU5rqko8P
- YiT+jg/nHy2MmkBqWmTuAoKr6KaIPLlWfB5NslATH46wvSRKhm1v2lkaixw9cGiw2YLKgjHb9sv
- h6Ry3C+tDeDJkx2fqe2kpELMuVNBN4sMfbIWz+PT9jDu0t0Z6OfYV7vjyiqSjmSz7GQgZJ8r8At
- kvJEmK7NYlzT0feZ0uRjmeF/BrcAihYlDLF41kjr0ithAMo0+zREfA2tGApNYpCMlwz2tC94z8p
- KV2/EuLLCFRFHxTbG5S4JuS6dMVUMArflFVTjMoMZYoVZ1nkpsgqDVfdb2Nve3+4bg8OMB8lhlq
- R4l4pcbZc4hGe0kdyD+AJ/RMm/2Zj61pHEGDrIW9QRvGjd1rTz+McfFliYevY9ffMyZOZKT4FkW
- e+F+4=
-X-Received: by 2002:a05:6000:2c08:b0:435:a48a:123f with SMTP id
- ffacd0b85a97d-4362937b167mr3168974f8f.42.1770365532791; 
- Fri, 06 Feb 2026 00:12:12 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-436296bdc11sm3989983f8f.14.2026.02.06.00.12.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Feb 2026 00:12:12 -0800 (PST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri,  6 Feb 2026 09:12:12 +0100
-Message-ID: <20260206081212.33465-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260201093357.981428-1-bernd@kuhls.net>
-References: <20260201093357.981428-1-bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id okuepvPDrxeg for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 08:59:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.57.108;
+ helo=mail.villagedupre.fr; envelope-from=pyk@foss.peewhy.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3E70460F1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E70460F1D
+Received: from mail.villagedupre.fr (villagedupre.fr [163.172.57.108])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3E70460F1D
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:59:40 +0000 (UTC)
+Received: from sejong (82-64-130-240.subs.proxad.net [82.64.130.240])
+ by villagedupre.fr (OpenSMTPD) with ESMTPSA id 85c234f8
+ (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO); 
+ Fri, 6 Feb 2026 08:59:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
+Date: Fri,  6 Feb 2026 09:59:07 +0100
+Message-ID: <20260206085907.55734-1-pyk@foss.peewhy.fr>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <dadf142b65d555320d468640356df43b@free.fr>
+References: <dadf142b65d555320d468640356df43b@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770365533; x=1770970333; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3gcuTJk1HjbBhLSyZfWvDPuG5vuvnzHJTRLm2OQsMtQ=;
- b=d4mvXrLOrMgclkV/yyWeyanrNJFjWvP0nhO4Fm/u1EshDRQAY8V4SZ3Ona1eRbyRJG
- sp4iNZfNqx4Df9Es/PU5sFqpJVBO/G3iAE4rKfIL4NO3u/LbcCBeUZ2GJaT+sycOG2b4
- HEF8mLDDDdlWY6DL50ILYzRHGz1Ob359mk+J+TTVN6y7c0Rqr2r0YSRzRS6yfxr8AYS0
- AE1DAYMB3AHSVTPotWwgsyWS1tjwsNcdU+0R1GfA+65cplnWr/LVQk2O2XukY+EO0P3J
- XuoYTxhZvEv819uY4h5nfYcyartx5O6C5/bakNST+YTanxUwvJBDbt/RLrDYhP5Kdz8u
- uyMA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=d4mvXrLO
-Subject: Re: [Buildroot] [PATCH 1/1] package/nodejs: security bump version
- to 22.22.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=foss.peewhy.fr
+Subject: [Buildroot] [PATCH v2] package/libcamera: bump to v0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,101 +78,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Pierre-Yves Kerbrat via buildroot <buildroot@buildroot.org>
+Reply-To: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> https://github.com/nodejs/node/blob/v22.22.0/doc/changelogs/CHANGELOG_V22.md
-> 
-> List of security fixes:
-> 
-> 22.22.0:
-> (CVE-2025-59465) add TLSSocket default error handler
-> (CVE-2025-55132) disable futimes when permission model is enabled lib,
-> permission:
-> (CVE-2025-55130) require full read and write to symlink APIs src:
-> (CVE-2025-59466) rethrow stack overflow exceptions in async_hooks src,
-> lib:
-> (CVE-2025-55131) refactor unsafe buffer creation to remove zero-fill
-> toggle tls:
-> (CVE-2026-21637) route callback exceptions through error handlers
-> 
-> 22.17.1:
-> (CVE-2025-27210) Windows Device Names (CON, PRN, AUX) Bypass Path
-> Traversal Protection in path.normalize()
-> 
-> Version 22.18.0 includes
-> https://github.com/nodejs/node/commit/a2d2d36bb1c8a5599cda5c5ed7b65ded2abee72d
-> which fixes build errors with python 3.14
-> "ImportError: cannot import name 'FancyURLopener' from 'urllib.request'"
-> introduced by buildroot commit a0a6abc8b193e5bdab5326324d7299c19d5d8c67.
-> 
-> Updated license hash due to upstream commits:
-> https://github.com/nodejs/node/commit/ec60473ab1e4980bf6388b0d5ab34fb86b3ec466
-> https://github.com/nodejs/node/commit/0b5613f9fe38fd0f500d0bd147fa7d442189c7e2
-> https://github.com/nodejs/node/commit/0edf17198fe118c6cc39746feb8707a91d739f94
-> 
-> Switched _SITE to https.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/da8/da82dc03cf0d42463fff1b5d9bf7a3c18cbf44dd/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Changelog:
+https://git.linuxtv.org/libcamera.git/tag/?h=v0.7.0
 
-Applied to 2025.02.x & 2025.11.x. Thanks
+Add missing licenses hash:
+- LICENSES/Apache-2.0.txt
+Added with: https://git.linuxtv.org/libcamera.git/commit/LICENSES/Apache-2.0.txt?id=ce02faa088dd3128a097b0f7ac6ce4e507e89f98
+- LICENSES/CC-BY-4.0.txt
+Added with: https://git.linuxtv.org/libcamera.git/commit/LICENSES/CC-BY-4.0.txt?id=b4e31a88d304e09e200af9d1e00760074cc854c2
 
-> ---
->  package/nodejs/nodejs.hash | 14 +++++++-------
->  package/nodejs/nodejs.mk   |  4 ++--
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-> index e087d8a7f9..c3372f443c 100644
-> --- a/package/nodejs/nodejs.hash
-> +++ b/package/nodejs/nodejs.hash
-> @@ -1,8 +1,8 @@
-> -# From https://nodejs.org/dist/v22.15.1/SHASUMS256.txt.asc
-> -sha256  f4ae8ddf7487dfaf7da92fef463ee55cc29d8772d62891361dc3fc8b8e469205  node-v22.15.1-linux-arm64.tar.xz
-> -sha256  6947386b4c8373b625c6a49b5571bf2226dac7c7b560a9a561a1f81bf71a25ef  node-v22.15.1-linux-armv7l.tar.xz
-> -sha256  da07858c6404dbe7c627bd7baea33c7825640652ad24468a6feb23c770cf7ce4  node-v22.15.1-linux-ppc64le.tar.xz
-> -sha256  7dca2ab34ec817aa4781e2e99dfd34d349eff9be86e5d5fbaa7e96cae8ee3179  node-v22.15.1-linux-x64.tar.xz
-> -sha256  c19f0177d21c621746625e5f37590bd0d79a72043b77b53784cba5f145e7263e  node-v22.15.1.tar.xz
-> +# From https://nodejs.org/dist/v22.22.0/SHASUMS256.txt.asc
-> +sha256  1bf1eb9ee63ffc4e5d324c0b9b62cf4a289f44332dfef9607cea1a0d9596ba6f  node-v22.22.0-linux-arm64.tar.xz
-> +sha256  a8b4f15f6e1f371422f1f7abcca4c46bd7abc1c732c274bc5cb108b841c1f0ff  node-v22.22.0-linux-armv7l.tar.xz
-> +sha256  d83b9957431cc18e1fc143a4b99f89cde7b8a18f53ef392231b4336afd058865  node-v22.22.0-linux-ppc64le.tar.xz
-> +sha256  9aa8e9d2298ab68c600bd6fb86a6c13bce11a4eca1ba9b39d79fa021755d7c37  node-v22.22.0-linux-x64.tar.xz
-> +sha256  4c138012bb5352f49822a8f3e6d1db71e00639d0c36d5b6756f91e4c6f30b683  node-v22.22.0.tar.xz
->  # Locally calculated
-> -sha256  1ae62e2015784ba438db7b04ebd33f3c4ff3efdb824c111c4ececd99945fd52d  LICENSE
-> +sha256  e991d81497a85bb24fc6bffae0a3637a6accd6c6bc5ce1f2c5698bd555cf9d49  LICENSE
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 310face2d2..9f01d60baa 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -5,9 +5,9 @@
->  ################################################################################
->  
->  # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
-> -NODEJS_COMMON_VERSION = 22.15.1
-> +NODEJS_COMMON_VERSION = 22.22.0
->  NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
-> -NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
-> +NODEJS_COMMON_SITE = https://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
->  
->  NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
->  NODEJS_LICENSE_FILES = LICENSE
-> -- 
-> 2.47.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
+
+---
+Changes v1 -> v2:
+- add missing licenses libcamera.mk
+- reorder licenses entries alphabetically
+---
+ package/libcamera/libcamera.hash |  4 +++-
+ package/libcamera/libcamera.mk   | 29 +++++++++++++++++------------
+ 2 files changed, 20 insertions(+), 13 deletions(-)
+
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 4e79be844e60..bddff77cda21 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,10 +1,12 @@
+ # Locally computed
+-sha256  85d85409d6e04bcf2e1ed57d9b59ebcc9fb770e5d39690d7ac233e9784835b89  libcamera-v0.6.0-git4.tar.gz
++sha256  9e684bfcb8679e5e7ec7fb0da9dec68e71f0b75a6b0c8edcd892b26a92726a92  libcamera-v0.7.0-git4.tar.gz
+ 
+ # license files
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSES/Apache-2.0.txt
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+ sha256  e11af671c491efac2f94c1d752bea92f4308ca2450c7d11e582e4b48c40e4de1  LICENSES/BSD-3-Clause.txt
+ sha256  6a573fb2f9082662978cf21fb153096df0a1981deaea7dbc10a11046fe005d9f  LICENSES/CC0-1.0.txt
++sha256  d557539df68e771cc1eedcc91d13f70fca930e508d11eedcafa4b15db49e3744  LICENSES/CC-BY-4.0.txt
+ sha256  ec3732087acf8c52429a020d6bba362ff578705bdb53365a21744485ec15b0e6  LICENSES/CC-BY-SA-4.0.txt
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
+ sha256  606aa26338f69ce178f1cbc648b7574aec4b5bbaeb20f4df36ff49010cb8fbbd  LICENSES/GPL-2.0-or-later.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index e86e05328c1c..67a4bdaeb1dd 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.6.0
++LIBCAMERA_VERSION = v0.7.0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
+@@ -23,23 +23,28 @@ LIBCAMERA_CONF_OPTS = \
+ 	-Dwerror=false
+ LIBCAMERA_INSTALL_STAGING = YES
+ LIBCAMERA_LICENSE = \
+-	LGPL-2.1+ (library), \
+-	GPL-2.0+ (utils), \
+-	MIT (qcam/assets/feathericons), \
++	Apache-2.0 (library),\
+ 	BSD-2-Clause (raspberrypi), \
+-	GPL-2.0 with Linux-syscall-note or BSD-3-Clause (linux kernel headers), \
++	BSD-3-Clause (utils library), \
++	CC-BY-4.0 (doc), \
++	CC-BY-SA-4.0 (doc), \
+ 	CC0-1.0 (meson build system), \
+-	CC-BY-SA-4.0 (doc)
++	GPL-2.0 with Linux-syscall-note or BSD-3-Clause (linux kernel headers), \
++	GPL-2.0+ (utils), \
++	LGPL-2.1+ (library), \
++	MIT (qcam/assets/feathericons)
+ LIBCAMERA_LICENSE_FILES = \
+-	LICENSES/LGPL-2.1-or-later.txt \
+-	LICENSES/GPL-2.0-or-later.txt \
+-	LICENSES/MIT.txt \
++	LICENSES/Apache-2.0.txt \
+ 	LICENSES/BSD-2-Clause.txt \
+-	LICENSES/GPL-2.0-only.txt \
+-	LICENSES/Linux-syscall-note.txt \
+ 	LICENSES/BSD-3-Clause.txt \
++	LICENSES/CC-BY-4.0.txt \
++	LICENSES/CC-BY-SA-4.0.txt \
+ 	LICENSES/CC0-1.0.txt \
+-	LICENSES/CC-BY-SA-4.0.txt
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/LGPL-2.1-or-later.txt \
++	LICENSES/Linux-syscall-note.txt \
++	LICENSES/MIT.txt
+ 
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y)
+ LIBCAMERA_CXXFLAGS = -faligned-new
+-- 
+2.51.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
