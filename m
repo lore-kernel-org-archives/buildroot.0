@@ -4,115 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDD0EB28D6
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B22EB28E2
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 08:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E801C61278;
-	Fri,  6 Feb 2026 08:12:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC4A612C3;
+	Fri,  6 Feb 2026 08:12:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9nYTxIjJ33Aw; Fri,  6 Feb 2026 08:12:34 +0000 (UTC)
+ id 7VA6Hi14KOgn; Fri,  6 Feb 2026 08:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44C7A61294
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EDDC61289
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770365546;
-	bh=XtrUGkU5SwxnfRihDcVLE8XuPnhB13ijlC+Gpmsd5wI=;
+	s=default; t=1770365543;
+	bh=bSQaB5pIayB2yOKsCaZiZgFEX5vbZBdukSq0Z56VcJ0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DPRiV/T4Os0cooarVbrYUeqjwFAC8T77jhI2GV12Mn6RAFOLtFZ0mZq4EEaBC+zpa
-	 MORwLDZwkejyzvrl3hqGDYI+jN33Pzi6E5OVWszMRCpBB9EQgMBZHVihYITpvqgYRH
-	 SikNs2ekLn8Gxwa1oc8rwIgDmQhF8Qq2szICDX9JXgk4hPbF7EboBo4Ju2M/iq0lkN
-	 AtHXX72VG05iebPWlieOE5KJtWdX5Cjb25tkRQI9y2c9mX6g44F7ntcjTIJ/1MUewO
-	 uWIbpowgt4nZ1Rxfai9hU7E9jrHSpJIQWPFrwC/PFHteiWaXGTRp2BtZVpeYSnB5LL
-	 n5wdLqI7NRBJg==
+	b=MYwfOwy+IqJMnyhizACWvTIjkPQxQXdoQZeLKdWH1V3/54ep8kIdpeVq/tHLDztcP
+	 FI04YBKQf2UE1lALfn5WPBDDucj/GNJv3MuRCG9CR1rY3NP6E7ttuw8I1rppIaK+NG
+	 cH+Y0ifJg5zkTVp461BvV2tdiiF8mvamukqMdwo+s40fCZuWHFcYjmxn+TL0LJMKhK
+	 Wu/6lwa9I4HFtj1TpKFPmKdymAIATf1szS3zjCdX3NEFZh7PNxVauxh/8Mtixw0OJj
+	 gX0xK8gH3pK0FGaGt4pdNddANWkbLGUw2KQsb7mPczYchipJOhwoVTVE/KGjPncsEI
+	 TndhQ2iIAceeQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44C7A61294;
-	Fri,  6 Feb 2026 08:12:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 09BD6378
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA6176123E
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CdaI5zsOF_PE for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 08:12:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::343; helo=mail-wm1-x343.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 854466122C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 854466122C
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
- [IPv6:2a00:1450:4864:20::343])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 854466122C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EDDC61289;
+	Fri,  6 Feb 2026 08:12:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 35D86173
  for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:09 +0000 (UTC)
-Received: by mail-wm1-x343.google.com with SMTP id
- 5b1f17b1804b1-47ee937ecf2so17078005e9.0
- for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:09 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2550684040
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jcsctvCzWMTg for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 08:12:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3A4A834C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3A4A834C7
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3A4A834C7
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 08:12:07 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-4362c635319so197827f8f.2
+ for <buildroot@buildroot.org>; Fri, 06 Feb 2026 00:12:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770365527; x=1770970327;
+ d=1e100.net; s=20230601; t=1770365526; x=1770970326;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qEdLUcJYysaQ7nRrjiMxO7rYtWnLS6bh2/Odi5uR6pY=;
- b=BE/0DIHf4o2NMimUUef15hqoSigX21h7Wd+o+4BDHqgpbMGfGG1hk2jkRRs01JQ6SV
- GcQMO4KB5Bitzp2uZs6+8C6/hgoZv/XCylNeNV4OSIS/VTTjozFpMxTnfq0jkStnBm6J
- fBI+2aG3kHzCWknjnxGj4gnle16Sl+cT/ZhxMq6Y+4TCmrJu4njwA0s42XgLY29GZEcT
- fZ7tjq3mojsffUN2tuWD0tj7nTe9x5kKUEN4sscuuas8gDKtkbJQChGqNsRAzvbWI81Y
- Qm8CeGZSuDWsbqBmAaxgDmECZpmhRVDBKpOE8hRbES1P4/COUgSnAoIwWE6FDYNG8l16
- CbzQ==
+ bh=00V66idYmuXhBjx/kAJrwFY1bf8iDMn7uEU5/9hWEyk=;
+ b=rY2fsk4Zy7AGNAsLunry5x1EIbOgG1ylSaftSR1wOjv565lplmM0ftvszyLu1UjwBG
+ ywICFAubsxWNNQHZU5yYA/YGJlAgOqblRl+ztX+AdiPOEh83KGb5pPfLhezu5rdB+NA9
+ zGVJIs8sY5Uog7aazvEJ995wc6Ws5Ns2+GVWsXJlSkuf9ho2QePp95SNnWYnIDdvBffU
+ fq84+q55zfFJ3AleoNJaRw+KFqwW42DEOpsdKAJGdZpNG5It4NcY2WgtrzIcfk+2uS/N
+ ceH+eTuR7dspgkVe5mc2Adr4GudiQ8+ZdgCD5fdN02lVb9z3DOH9dC0kzuRV4Y5Y3Ig+
+ OOaA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX2vxEv4bzOAlp/wUF5Et8n8RNstBuHPYiRrD40ka0S2Y3DQw6kBlZHPCMbsDp+OuF6oej6oIbY0M0=@buildroot.org
-X-Gm-Message-State: AOJu0YxvN9OWlU0nYOIEJguiQo+xvDCnrUfmKhHLg1bjG2fBiz6P5yXU
- 8eJAosmnPgwoivqqW85VQixchEMRz/pIxGP5uZmb2VDHaP2L/8NDjH9VGsdAomq/EGkUqx84N7g
- 5/QJDvMk=
-X-Gm-Gg: AZuq6aLAAOew94T79ztmfYtiMK72MhpK15IggtWbydSuJT5qDQdJEPGu6i3Yy+fsoG4
- 4sqtl5naTZE/5uNljRdWniVnfYkqV+3PVeiEiBlV8TGI2TQR8UBM7i0YqA4pK28p2VwJn3TxMBH
- EsvSyvAU1TGWHFlyH/UwqnEJidEYMP2mdqRB1OfKFTnPBPfqoj/g/CYYn4L/Vm6dNjo8fBUyOUa
- FlhietkLg79e/BMDnxV27sCxygyUY7DhL4BYbUJ8xybOuCScwdLEDlqnLR62K5x+NJW8Z3eRO7E
- 2t+OCdFxoVXWUmymgYvQFD/AXUJ1GTrxzYrkZprkSQwDh+pSdIEQGkSlcgwF58+mb1/2GGpCFUZ
- YWZtROP2ZaWPp9lHFiWHB6KqZthf3rgCwUyf5NfLErDi9Q47XXCf4vmYykUJRExO6Ha6ZGFF2nj
- jyRBI=
-X-Received: by 2002:a05:600c:810c:b0:47e:e59c:67c5 with SMTP id
- 5b1f17b1804b1-483203ab857mr30353845e9.8.1770365527470; 
- Fri, 06 Feb 2026 00:12:07 -0800 (PST)
+ AJvYcCVYAFb51anaApmn5htvYI22lzri/mt4T0pxTQ1jTTrpg+bppeyjKq/zSAOZOnG0YQNQPPVKYU4kyuk=@buildroot.org
+X-Gm-Message-State: AOJu0YxWF2r7mgYW5aL1riKgU316smfp4ZYO75MoaEM6KhvLFfWjtI04
+ vUjKGxgqBEmOXMwBAaKQAIdjy7GmejVSMeDmfxyd1sGsZmogUF3aXUNRAOyDNp7Si9UOlQBEi8K
+ U+t1x
+X-Gm-Gg: AZuq6aJnCtB43vlzx9pECk7Cl2b9G9wHaciUZ57f2IgcaOfqbHFDkKGtAzLV+CwpEPK
+ tkW4Rma2ZVQvu5274J6Sf/VmajDX3M+i3V6S+Fs1sj+olUqBEr8Omhe9siugtU//oSP7pYBTbOo
+ R7Qs9e7NRnIk89l+D/WOPZLFrXvRk6pakmI4VeNuJeepJjEdyOItZSg0yCFqrqnD47Vo5KFIKKD
+ GNlbhu8leRgvkGRimd+egDTZiKqUTUbErAYLwPVG3UGqgqGKMP2pknUximVVKDzzk7QLIEEI+HC
+ KFeIbgjU59Ze9Orp8Zu8dyh25eaH2jOB3qG45HPauECNbiKcCbsb/ew13Y+zAKgqgyNfsbPceKb
+ CchT15owi1ANsupkvmFRtAEQ7wKMh0yN1p1SO2F90sUTxpqrWD+mAMFE8s2nYQJcPD9wZOpIyiX
+ gS8bendyi8omxcbA==
+X-Received: by 2002:a05:6000:1887:b0:432:8504:befd with SMTP id
+ ffacd0b85a97d-4362934c520mr2912961f8f.32.1770365525712; 
+ Fri, 06 Feb 2026 00:12:05 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48317d7a924sm166174735e9.10.2026.02.06.00.12.07
+ ffacd0b85a97d-43629756bc3sm3707926f8f.39.2026.02.06.00.12.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Feb 2026 00:12:07 -0800 (PST)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Fri, 06 Feb 2026 00:12:05 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  6 Feb 2026 09:12:06 +0100
-Message-ID: <20260206081206.33141-1-thomas.perale@mind.be>
+Date: Fri,  6 Feb 2026 09:12:04 +0100
+Message-ID: <20260206081204.33020-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260127163528.283380-2-peter@korsgaard.com>
-References: <20260127163528.283380-2-peter@korsgaard.com>
+In-Reply-To: <20260125104501.433268-1-bernd@kuhls.net>
+References: <20260125104501.433268-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770365527; x=1770970327; darn=buildroot.org;
+ d=mind.be; s=google; t=1770365526; x=1770970326; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qEdLUcJYysaQ7nRrjiMxO7rYtWnLS6bh2/Odi5uR6pY=;
- b=h3hgv1ni0GOfl4iJzQtE7SYA6bbPjGK+gLKILUXlUl0s1MeUEtfYeq5KGoV2zloaJ+
- +Bm6Gw/bPGGuF3X6SjTSXS/K2tZAHgNGYCmdO+7IDR9lzDgMkEFcxAL2mDFtK7LwvppC
- 6eztgmIH2uu4jRYGwT7lpbTWpownau7PxGf0Lgd1rM/AOGqI3MRzFA8ycbNUGEgGTOC9
- +9T7cSoJqfsM06vAv++q/FyecaTzcs3tyZ4xKSbiYr7I6utIGZnvF0V5l0YVLF5p8x08
- ZaFvF4uFcOIHcBuhL1vYp0qdPsWhI6D+8usjsfegl4CyWYSjtqxobGg/NNCXiVEG+f1W
- b60Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=00V66idYmuXhBjx/kAJrwFY1bf8iDMn7uEU5/9hWEyk=;
+ b=Z7PkO87vndoxyxm5H8svWvuJCzLGkjCy//fy3YuTr16Z6hwXj3yTZRX94j7nIrpwiQ
+ 0d2bAQTIFJiyLCcjZyUUloExxj/3sRw7bhV/GsNA7h9+VpTdCZMOTtFWnxMuIm2ZEoXI
+ v2HWZRr9+Pgn/mRcU1fRW0hyAox92mAUE8nh5CC56XhoW+eFUOfJqWN1Wxgr/2/Rqf6C
+ X7JI4T09MUR3qZxA7OJO70q/qeVrqPyZbiiflYKRNC7Cga/OaenHBoK52ty8SJqxxhE1
+ mpgR1RGV3nDre6Ip9mest17xtxENvj4RIddh+mhGvr4Hzu2S7Iy7lCqW6pP78MRNVm//
+ Bbow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=h3hgv1ni
-Subject: Re: [Buildroot] [PATCH 2/2] package/busybox: default to
- BR2_TARGET_GENERIC_PASSWD_* algo
+ header.a=rsa-sha256 header.s=google header.b=Z7PkO87v
+Subject: Re: [Buildroot] [PATCH 1/1] package/netdata: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,69 +131,80 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Make busybox follow the BR2_TARGET_GENERIC_PASSWD_* system configuration
-> option, E.G.
+> Buildroot commit 9cfcd906cff299ef83b48681e50bcef9df124ad4 bumped the
+> package from 1.33.1 to 1.37.1. Upstream changed the optional C++ support
+> into a mandatory dependency with commit
+> https://github.com/netdata/netdata/commit/b6d2a3662dfb683e9e95203ef3b21f8e31238b06
+> added to version 1.35.0 causing build errors with toolchains without
+> C++ support:
 > 
-> cat defconfig
-> BR2_x86_core2=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_MUSL_BLEEDING_EDGE=y
-> BR2_STATIC_LIBS=y
-> BR2_TARGET_GENERIC_PASSWD_SHA512=y
+>   GEN      netdatacli
+> /bin/sh: line 1: no: command not found
+> make[3]: *** [Makefile:5502: netdatacli] Error 127
 > 
-> ./target/usr/bin/mkpasswd --help
-> BusyBox v1.37.0 (2026-01-27 17:31:51 CET) multi-call binary.
+> Fixes:
+> https://autobuild.buildroot.org/results/7084a73d5727a86ca55eda3d1f01ea4d5b8ecf65/
 > 
-> Usage: mkpasswd [-P FD] [-m TYPE] [-S SALT] [PASSWORD] [SALT]
-> 
-> Print crypt(3) hashed PASSWORD
-> 
->         -P N    Read password from fd N
->         -m TYPE des,md5,sha256/512 (default sha512)
->         -S SALT
-> 
-> ./target/usr/bin/mkpasswd test
-> $6$VQ6lDdGRJOgs8Exs$gEWp1nN/FHCAgmoB6lD.fN13EKA40yV7WQmZJcFp114VrL/st74zP5iPsLHi5NFX/A6GAa1gD.yqzp5Lz3DKl/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/busybox/busybox.mk | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  package/netdata/Config.in                     | 10 +++++-----
+>  support/testing/tests/package/test_netdata.py |  1 +
+>  2 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index d7eda71db6..446f93c36c 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -176,6 +176,18 @@ define BUSYBOX_SET_CRYPT_SHA
->  endef
+> diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+> index 3603eb071c..527d4d39af 100644
+> --- a/package/netdata/Config.in
+> +++ b/package/netdata/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_NETDATA
+>  	bool "netdata"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on !BR2_STATIC_LIBS # libuv
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+> @@ -22,22 +23,21 @@ if BR2_PACKAGE_NETDATA
+>  config BR2_PACKAGE_NETDATA_PROMETHEUS
+>  	bool "prometheus remote write backend"
+>  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> -	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+>  	select BR2_PACKAGE_PROTOBUF
+>  	select BR2_PACKAGE_SNAPPY
+>  	help
+>  	  Enable prometheus remote write backend
+>  
+> -comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
+> -	depends on !BR2_INSTALL_LIBSTDCPP || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> +comment "prometheus remote write backend needs a toolchain w/ gcc >= 8"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+>  	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+>  
 >  endif
 >  
-> +ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256),y)
-> +define BUSYBOX_SET_DEFAULT_PASSWD_ALGO
-> +	$(call KCONFIG_SET_OPT,CONFIG_FEATURE_DEFAULT_PASSWD_ALGO,"sha256")
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
-> +define BUSYBOX_SET_DEFAULT_PASSWD_ALGO
-> +	$(call KCONFIG_SET_OPT,CONFIG_FEATURE_DEFAULT_PASSWD_ALGO,"sha512")
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_USE_MMU),y)
->  define BUSYBOX_SET_MMU
->  	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU)
-> @@ -427,6 +439,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
->  	$(BUSYBOX_SET_MDEV)
->  	$(BUSYBOX_SET_CRYPT_SHA)
->  	$(BUSYBOX_LINUX_PAM)
-> +	$(BUSYBOX_SET_DEFAULT_PASSWD_ALGO)
->  	$(BUSYBOX_SET_INIT)
->  	$(BUSYBOX_SET_WATCHDOG)
->  	$(BUSYBOX_SET_SELINUX)
+> -comment "netdata needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
+> +comment "netdata needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.9"
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+> +		|| !BR2_INSTALL_LIBSTDCPP \
+>  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
+> index 6b616398d3..42bcbcdc6f 100644
+> --- a/support/testing/tests/package/test_netdata.py
+> +++ b/support/testing/tests/package/test_netdata.py
+> @@ -6,6 +6,7 @@ import infra.basetest
+>  class TestNetdata(infra.basetest.BRTest):
+>      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+>          """
+> +        BR2_INSTALL_LIBSTDCPP=y
+>          BR2_PACKAGE_NETDATA=y
+>          BR2_TARGET_ROOTFS_CPIO=y
+>          # BR2_TARGET_ROOTFS_TAR is not set
 > -- 
 > 2.47.3
 > 
