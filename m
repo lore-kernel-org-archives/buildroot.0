@@ -1,62 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0DDEEE6B60
-	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 21:36:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8078AEE6B60
+	for <buildroot@archiver.kernel.org>; Fri,  6 Feb 2026 21:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46DF240A3C;
-	Fri,  6 Feb 2026 21:36:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D438611C3;
+	Fri,  6 Feb 2026 21:37:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tRRqUZQifes3; Fri,  6 Feb 2026 21:36:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id povJkdyVVejH; Fri,  6 Feb 2026 21:37:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55B5140A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5817860FAA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770413810;
-	bh=418eplElHWb+AvLjZRaw5E4ec9hRlMFNlOFX+d5aAwE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a9J+IRQKXJGEimRUfCQBdv0sCUqVKcn9ar5WyKwe4veadSKtmKqEhi7h1nOOcUHV1
-	 +3WDNzC0tdwKuNO0FAirHHPnTvrzKZSMUYkQSgakntYz227dcgMIQxdOCeKE7zh/Z0
-	 cmt3MP7FfpVfQi4wSHLwzTO+/EEzqGzPzUtPkKHGxetd0NvaBVY56UT60ggLjXfpyB
-	 satXwrENjaEYEjGlHjFywGtevHElTfNwlEzUBnRvZD9FH18TXnyL8jgEuQxcNVbIoL
-	 WxoNWThw6tsWYf3qOwfFz77T4yCCtXx0I8JFrBsIBA/KGq7ww17uUkztlOJ1tEXEwq
-	 jggYc3Yvd6COg==
+	s=default; t=1770413836;
+	bh=jdbr1CYsY7hPYT/JFyT2J4cbSjBSmVOmb1fmsVCKCgg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ZTfRG0JVX2DqPGSBZiNz8D0oTH7TKgxo9uUb0RQQyQGiKvkiT4dzuwXv8e5PAjDB9
+	 WsFrO4J9OyyevmfvEcvwY1Zz7uPcqh9F3xLZtpwPFLLxyyeigW660v2pQiG2+ROWgp
+	 +tCKJZ/xw4S81R3DmLNgkfr22Z509EltOP/1dg7EBTm0+3i6DtSC8YSqcUZvya4eSF
+	 6OLdSGYDcyfcBsAG8HOZib+0eq0VygCnfQrvne8YlZeNEjwblI1y0ZK8iuKlw8C+e2
+	 zwyDHHq0GGjqo16r77w39U7n4KCxHxaQrZgNn5duMcV/0a/h7gXzQjtpSvtPu1kfVP
+	 2MYt1zUUl0AHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55B5140A98;
-	Fri,  6 Feb 2026 21:36:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D6EB12C5
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 21:36:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5817860FAA;
+	Fri,  6 Feb 2026 21:37:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D305B219
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 21:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B94D6840E8
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 21:36:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDC4A60FAA
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 21:37:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dn5TYrfj8P8z for <buildroot@buildroot.org>;
- Fri,  6 Feb 2026 21:36:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDD72840DC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDD72840DC
- for <buildroot@buildroot.org>; Fri,  6 Feb 2026 21:36:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF80C86AD4; Fri,  6 Feb 2026 21:36:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 6 Feb 2026 22:28:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 48186093fd355ede91151b2342e222cef303a6ca
-X-Git-Newrev: 10033b62c498418d9cb5dbc5d07026bd3cc398dd
-X-Patchwork-Hint: ignore
-Message-Id: <20260206213648.BF80C86AD4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera: bump to v0.7.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xgYR0-Wo8ahV for <buildroot@buildroot.org>;
+ Fri,  6 Feb 2026 21:37:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BE25D60FA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE25D60FA3
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE25D60FA3
+ for <buildroot@buildroot.org>; Fri,  6 Feb 2026 21:37:14 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id C0AD419F5AF;
+ Fri,  6 Feb 2026 22:37:08 +0100 (CET)
+Received: from 77.109.103.251.adsl.dyn.edpnet.net ([77.109.103.251:59612])
+ via 77.109.103.251.adsl.dyn.edpnet.net ([77.109.103.251])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 06 Feb 2026 22:37:08 +0100
+MIME-Version: 1.0
+Date: Fri, 06 Feb 2026 22:37:08 +0100
+To: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
+Cc: buildroot@buildroot.org, Kieran Bingham
+ <kieran.bingham@ideasonboard.com>, Marcus Folkesson
+ <marcus.folkesson@gmail.com>
+In-Reply-To: <20260206145618.337231-1-pyk@foss.peewhy.fr>
+References: <20260206105242.0f66fb07@pc-1>
+ <20260206145618.337231-1-pyk@foss.peewhy.fr>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <8233ca320c46b90e70f91fc85e55871e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1770413832;
+ bh=5YkuxnrXaopWsdLgAT+DxAOhmN9XIUO5O5JaqSyfNwk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YhJf8+w83E3jZDJ9a+NZOO+kljhLCIsw+mhXVx5l3qsWY/zmve0t6p8AZEfir+Gol
+ aIetu4xi1ro7SgwKQ7IAJmPRBNC4CYLEOIZchoaES/7eXSaysPlwNthPaJYXv/Vm51
+ 5OK+2Kaq7SVXxmh1g1T5dnYWqVXNfRdyquybSxpFno2ExqcWmLQfoLc3LMcL7br3C5
+ pyfYuK9LKHcKk2V2ya1eF5l0i68LBO2QabIu4s1hEmZNAkI5X4lPax0epJ5v06kQ9N
+ nhD5RijQ2kr7UAKIcM98/jAc/vAy5/DJe6BElSg9pSqIvxctcYRMeL2bBXwEqmYXwZ
+ 6rBZCdxVh84OA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YhJf8+w8
+Subject: Re: [Buildroot] [PATCH v3] package/libcamera: bump to v0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,88 +98,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/10033b62c498418d9cb5dbc5d07026bd3cc398dd
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 06/02/2026 15:56, Pierre-Yves Kerbrat via buildroot wrote:
+> Changelog:
+> https://git.linuxtv.org/libcamera.git/tag/?h=v0.7.0
+> 
+> Signed-off-by: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
 
-Changelog:
-https://git.linuxtv.org/libcamera.git/tag/?h=v0.7.0
-
-This commit also reorder _LICENSE and _LICENSE_FILES to make
-license maintenance easier.
-
-Signed-off-by: Pierre-Yves Kerbrat <pyk@foss.peewhy.fr>
-[Julien: add commit log comment about license reordering]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libcamera/libcamera.hash |  2 +-
- package/libcamera/libcamera.mk   | 24 ++++++++++++------------
- 2 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 4e79be844e..e00e1257ad 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  85d85409d6e04bcf2e1ed57d9b59ebcc9fb770e5d39690d7ac233e9784835b89  libcamera-v0.6.0-git4.tar.gz
-+sha256  9e684bfcb8679e5e7ec7fb0da9dec68e71f0b75a6b0c8edcd892b26a92726a92  libcamera-v0.7.0-git4.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index e86e05328c..e8f502b253 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = v0.6.0
-+LIBCAMERA_VERSION = v0.7.0
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
-@@ -23,23 +23,23 @@ LIBCAMERA_CONF_OPTS = \
- 	-Dwerror=false
- LIBCAMERA_INSTALL_STAGING = YES
- LIBCAMERA_LICENSE = \
--	LGPL-2.1+ (library), \
--	GPL-2.0+ (utils), \
--	MIT (qcam/assets/feathericons), \
- 	BSD-2-Clause (raspberrypi), \
--	GPL-2.0 with Linux-syscall-note or BSD-3-Clause (linux kernel headers), \
-+	CC-BY-SA-4.0 (doc), \
- 	CC0-1.0 (meson build system), \
--	CC-BY-SA-4.0 (doc)
-+	GPL-2.0 with Linux-syscall-note or BSD-3-Clause (linux kernel headers), \
-+	GPL-2.0+ (utils), \
-+	LGPL-2.1+ (library), \
-+	MIT (qcam/assets/feathericons)
- LIBCAMERA_LICENSE_FILES = \
--	LICENSES/LGPL-2.1-or-later.txt \
--	LICENSES/GPL-2.0-or-later.txt \
--	LICENSES/MIT.txt \
- 	LICENSES/BSD-2-Clause.txt \
--	LICENSES/GPL-2.0-only.txt \
--	LICENSES/Linux-syscall-note.txt \
- 	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/CC-BY-SA-4.0.txt \
- 	LICENSES/CC0-1.0.txt \
--	LICENSES/CC-BY-SA-4.0.txt
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-2.0-or-later.txt \
-+	LICENSES/LGPL-2.1-or-later.txt \
-+	LICENSES/Linux-syscall-note.txt \
-+	LICENSES/MIT.txt
- 
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y)
- LIBCAMERA_CXXFLAGS = -faligned-new
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
