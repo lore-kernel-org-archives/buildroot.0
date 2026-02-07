@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6ADCEE0AE8
-	for <buildroot@archiver.kernel.org>; Sat,  7 Feb 2026 21:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40A22EE0AE8
+	for <buildroot@archiver.kernel.org>; Sat,  7 Feb 2026 21:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E1B5606BA;
-	Sat,  7 Feb 2026 21:28:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11AB761257;
+	Sat,  7 Feb 2026 21:29:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9n8O3QnauIOb; Sat,  7 Feb 2026 21:28:36 +0000 (UTC)
+ id KUgLDTgbIjdK; Sat,  7 Feb 2026 21:29:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E072B60689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF98606E8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770499716;
-	bh=mFVj4FzgXyxxhh/R3GTQom4Azy96WsmzeROcJR2GmKk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fM+9MWn7UB0rOzq9niATsOZAlvzF0D5UUGKGlovB8HREP0gAntH62tFdA8IQKpv2A
-	 uyZ9IMhQEbe5dK2SwNvEog3D7/Fh96yMctPEG6WIsEZhM7mSU7qTB+XZy4KX9G0RK5
-	 xDGNXIm0OzPLZhmvf84eh9KJcynqrInNuHmbL+7QitOZ9q6jm3yQa6ap+L/mTvlzuj
-	 2LcDPTDbmzMeIv6ohYJTXZZJiGfaM7KJiG73hRXR+54MonWWp8q8XHRxf/GGdCXXN8
-	 /Zwb/zHvU4pjw4wLy2JFJ0Mzg06eJVF22sQwH8/oFl+YN5A84ZnEyu1JBpnRTWdM11
-	 0xNDJAtErMC9g==
+	s=default; t=1770499743;
+	bh=/ivJBEQGplUBlnMPVzcnqxo1ixaW1QlYA57hx4tv/ac=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Xx13WJHAC17sadlMSGxIn6FseMhV7y1KOE4SxPHjtop35VQcxb/TUaPrtGCs3zAJY
+	 fMeIDELXO2vLVzycS6NY2gmzLGdPYsBbtppcVUGHpkLG7049GtfYPO+hZY8FbMvQ0P
+	 C2mOl3JTC8CNCvwsMuJCx9tOfBd6cn7U3I4ngY4LeBTuEUTx0a473JeNgggOPgoYRA
+	 poFaTfYXcJO+aO6kyTlu+Xu3Ymo7z86A4xsQErlwwZCZgOgsGmYgFoWZ6rDan/ei2J
+	 pHbyPrrfPjLqLngYIfw9guvwWMvhqnEYTuz3guVOv+7cTuzhWMnhqIbcsqgK2HBqox
+	 JHzjRrt5AERsQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E072B60689;
-	Sat,  7 Feb 2026 21:28:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 79225379
- for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:28:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FF98606E8;
+	Sat,  7 Feb 2026 21:29:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60915173
+ for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B8E96068A
- for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:28:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4ECE640862
+ for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:29:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NmjF_CoxgVCe for <buildroot@buildroot.org>;
- Sat,  7 Feb 2026 21:28:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C81060689
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C81060689
- for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:28:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E21786A4E; Sat,  7 Feb 2026 21:28:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 7 Feb 2026 22:19:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39e618441981da3da173c9f717c7dc5977760c95
-X-Git-Newrev: 7e72901eefeab51c7f718d4c8ce0d10d08f1c657
-X-Patchwork-Hint: ignore
-Message-Id: <20260207212832.7E21786A4E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shadow: ensure that SHA support is
- enabled when requested
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 31V9axbcvm2r for <buildroot@buildroot.org>;
+ Sat,  7 Feb 2026 21:29:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6C39C403BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C39C403BB
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6C39C403BB
+ for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:29:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 5ACF62003C3;
+ Sat,  7 Feb 2026 22:28:56 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 07 Feb 2026 22:28:56 +0100
+MIME-Version: 1.0
+Date: Sat, 07 Feb 2026 22:28:56 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <20260204135639.2603782-1-peter@korsgaard.com>
+References: <20260204135639.2603782-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.12
+Message-ID: <5f3f7fdc71b7f3fe029b287c7afdf554@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1770499738;
+ bh=eAk0JDMvnhyxMcxdZv+Wby2Lk9eqC0ZZ+UFf8qjbOcs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=IomYbqEUkwjW5d7nrVtFRtNhxopoqNsw6kykUip1wFjfjfabLkyXaD+GKtKoSPotN
+ nraA6zJ6NeYSkuGcNElJg8+Z25b3yxomi90PEmfxm8cBiBTqNDv11bL4rvCY0oj/Kw
+ pftEZpem7vDBYHgTLXjSbXCelASsGsSwnHkiGm5UF7M7JtZNBdMSCbF6FyYrPg27GP
+ +0nQxIumCun7rMxx/RTykSb8OaBKEJX8QI/5vBqXo/M+jGRWG1EkYhjpxt8sxwr+nB
+ Tf2zcDCU8PO7xY8H1yVNg6mWG8DQuJbb5dLFKMV7jMi2Y/RLFB1hTEq8ubt5V3V1yj
+ sxT7B77V7PBKg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=IomYbqEU
+Subject: Re: [Buildroot] [PATCH 1/2] package/shadow: default to
+ BR2_TARGET_GENERIC_PASSWD_ algo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,43 +96,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e72901eefeab51c7f718d4c8ce0d10d08f1c657
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/02/2026 14:56, Peter Korsgaard wrote:
+> Make shadow follow the the BR2_TARGET_GENERIC_PASSWD_* system 
+> configuration
+> option when changing password rather than DES.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/issues/134
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Ensure that the SHA_CRYPT option is enabled when the system configuration is
-set to SHA256/512, as otherwise passwd complains when a password is changed:
-
-passwd
-...
-Invalid ENCRYPT_METHOD value: 'SHA512'.
-Defaulting to DES.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/shadow/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
-index bbbea811ce..93216bd14c 100644
---- a/package/shadow/Config.in
-+++ b/package/shadow/Config.in
-@@ -3,6 +3,9 @@ menuconfig BR2_PACKAGE_SHADOW
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_SHADOW_SHA_CRYPT if \
-+	       (BR2_TARGET_GENERIC_PASSWD_SHA256 || \
-+	        BR2_TARGET_GENERIC_PASSWD_SHA512)
- 	help
- 	  Utilities to deal with user accounts.
- 
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
