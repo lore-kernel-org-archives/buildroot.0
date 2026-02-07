@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40A22EE0AE8
-	for <buildroot@archiver.kernel.org>; Sat,  7 Feb 2026 21:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22F45EE0AF1
+	for <buildroot@archiver.kernel.org>; Sat,  7 Feb 2026 21:45:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11AB761257;
-	Sat,  7 Feb 2026 21:29:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCA3B8331B;
+	Sat,  7 Feb 2026 21:45:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KUgLDTgbIjdK; Sat,  7 Feb 2026 21:29:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vSuzKcFF2ghr; Sat,  7 Feb 2026 21:45:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF98606E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7056783330
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770499743;
-	bh=/ivJBEQGplUBlnMPVzcnqxo1ixaW1QlYA57hx4tv/ac=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Xx13WJHAC17sadlMSGxIn6FseMhV7y1KOE4SxPHjtop35VQcxb/TUaPrtGCs3zAJY
-	 fMeIDELXO2vLVzycS6NY2gmzLGdPYsBbtppcVUGHpkLG7049GtfYPO+hZY8FbMvQ0P
-	 C2mOl3JTC8CNCvwsMuJCx9tOfBd6cn7U3I4ngY4LeBTuEUTx0a473JeNgggOPgoYRA
-	 poFaTfYXcJO+aO6kyTlu+Xu3Ymo7z86A4xsQErlwwZCZgOgsGmYgFoWZ6rDan/ei2J
-	 pHbyPrrfPjLqLngYIfw9guvwWMvhqnEYTuz3guVOv+7cTuzhWMnhqIbcsqgK2HBqox
-	 JHzjRrt5AERsQ==
+	s=default; t=1770500749;
+	bh=mccUSkjAruSzdM4I/evhYF3j7CaksXUmKKJaBCDuIIg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=fOQWdMo/AUvjMSp/h4NO/UzKbbSiyO5kXnxdVyUbBrvRU+l22VuktTBGLCE/M3ShG
+	 Cb4MN6o6XciGGz9/wEHT21y2NSqLO12oGxZ4ROvTOFyLC7BNx+lvb9xec68KqUTyNl
+	 f7Bw92bbNKyQkRy+BTRaKng1mp7TxLY041ZjIXHqwClXayE9crfF8g6wqGcZD0Yu8T
+	 MHgrQeJvWBzf+jb59wVRZLX2C5AFm2zP9trzHOHrIFznSmIBmjRV+ZjHKLqSMOXMOB
+	 my0WTIVwv8oElEZSzcTasW3lHMCtqnfZBm/brM4Ltmil08jBVPgcsoWZJtV1OP3lAM
+	 F+izThLBwiJ+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FF98606E8;
-	Sat,  7 Feb 2026 21:29:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 60915173
- for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:29:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7056783330;
+	Sat,  7 Feb 2026 21:45:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 563F4173
+ for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4ECE640862
- for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:29:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C95741BC0
+ for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 31V9axbcvm2r for <buildroot@buildroot.org>;
- Sat,  7 Feb 2026 21:29:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6C39C403BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C39C403BB
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C39C403BB
- for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:29:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 5ACF62003C3;
- Sat,  7 Feb 2026 22:28:56 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 07 Feb 2026 22:28:56 +0100
-MIME-Version: 1.0
-Date: Sat, 07 Feb 2026 22:28:56 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Raphael Pavlidis <raphael.pavlidis@gmail.com>
-In-Reply-To: <20260204135639.2603782-1-peter@korsgaard.com>
-References: <20260204135639.2603782-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.12
-Message-ID: <5f3f7fdc71b7f3fe029b287c7afdf554@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770499738;
- bh=eAk0JDMvnhyxMcxdZv+Wby2Lk9eqC0ZZ+UFf8qjbOcs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=IomYbqEUkwjW5d7nrVtFRtNhxopoqNsw6kykUip1wFjfjfabLkyXaD+GKtKoSPotN
- nraA6zJ6NeYSkuGcNElJg8+Z25b3yxomi90PEmfxm8cBiBTqNDv11bL4rvCY0oj/Kw
- pftEZpem7vDBYHgTLXjSbXCelASsGsSwnHkiGm5UF7M7JtZNBdMSCbF6FyYrPg27GP
- +0nQxIumCun7rMxx/RTykSb8OaBKEJX8QI/5vBqXo/M+jGRWG1EkYhjpxt8sxwr+nB
- Tf2zcDCU8PO7xY8H1yVNg6mWG8DQuJbb5dLFKMV7jMi2Y/RLFB1hTEq8ubt5V3V1yj
- sxT7B77V7PBKg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=IomYbqEU
-Subject: Re: [Buildroot] [PATCH 1/2] package/shadow: default to
- BR2_TARGET_GENERIC_PASSWD_ algo
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N2ZBqOGwK2e1 for <buildroot@buildroot.org>;
+ Sat,  7 Feb 2026 21:45:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EB2041BBF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EB2041BBF
+ for <buildroot@buildroot.org>; Sat,  7 Feb 2026 21:45:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6011D86ABD; Sat,  7 Feb 2026 21:45:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 7 Feb 2026 22:33:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bd3c23999c5dba32ce51bba32cfd7a5e69daa149
+X-Git-Newrev: 16a0560152c65b0c312912188573e9def9374654
+X-Patchwork-Hint: ignore
+Message-Id: <20260207214546.6011D86ABD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/blake3: add target support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,22 +70,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/02/2026 14:56, Peter Korsgaard wrote:
-> Make shadow follow the the BR2_TARGET_GENERIC_PASSWD_* system 
-> configuration
-> option when changing password rather than DES.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/issues/134
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/16a0560152c65b0c312912188573e9def9374654
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+Blake3 unconditionally enables C++ support, which unconditionally
+requires C++20 when built with cmake >= 3.12, even when this is not
+required.
+
+Fixing this does not look trivial, and rather than botching the build,
+just require C++20, available from gcc 8.x onward.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/Config.in        | 1 +
+ package/blake3/Config.in | 8 ++++++++
+ package/blake3/blake3.mk | 6 ++++++
+ 3 files changed, 15 insertions(+)
+
+diff --git a/package/Config.in b/package/Config.in
+index 6284bea7f4..8346ef1a0e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2121,6 +2121,7 @@ menu "Other"
+ 	source "package/avro-c/Config.in"
+ 	source "package/basu/Config.in"
+ 	source "package/bdwgc/Config.in"
++	source "package/blake3/Config.in"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
+diff --git a/package/blake3/Config.in b/package/blake3/Config.in
+new file mode 100644
+index 0000000000..afad6541d9
+--- /dev/null
++++ b/package/blake3/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_BLAKE3
++	bool "blake3"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8  # C++20
++	help
++	  BLAKE3 is a cryptographic hash function.
++
++	  https://github.com/BLAKE3-team/BLAKE3
+diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
+index a2094fc4c0..9218e5bbba 100644
+--- a/package/blake3/blake3.mk
++++ b/package/blake3/blake3.mk
+@@ -10,6 +10,11 @@ BLAKE3_SUBDIR = c
+ BLAKE3_LICENSE = Apache-2.0 or Apache-2.0 with exceptions or CC0-1.0
+ BLAKE3_LICENSE_FILES = LICENSE_A2 LICENSE_A2LLVM LICENSE_CC0
+ 
++BLAKE3_INSTALL_STAGING = YES
++
++BLAKE3_CONF_OPTS = \
++	-DBLAKE3_USE_TBB=OFF \
++	-DBLAKE3_EXAMPLES=OFF
+ HOST_BLAKE3_CONF_OPTS = \
+ 	-DBLAKE3_USE_TBB=OFF \
+ 	-DBLAKE3_EXAMPLES=OFF
+@@ -23,4 +28,5 @@ HOST_BLAKE3_CONF_OPTS += \
+ 	-UCMAKE_C_COMPILER_LAUNCHER \
+ 	-UCMAKE_CXX_COMPILER_LAUNCHER
+ 
++$(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
