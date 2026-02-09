@@ -4,83 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CF08E94603
-	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 20:32:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCB7BE94603
+	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 20:32:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1273860E73;
-	Mon,  9 Feb 2026 20:32:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 799FE612C1;
+	Mon,  9 Feb 2026 20:32:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lh5zSKtukoM4; Mon,  9 Feb 2026 20:32:30 +0000 (UTC)
+ id RpV4USkrx1bP; Mon,  9 Feb 2026 20:32:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A15660E84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AF3360E09
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770669150;
-	bh=e8rwO6WNVCKjBA9aX/mH7sTY4HeOPGJ8bmZ7tJwS6Cc=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1770669163;
+	bh=Gw9GpOSJGMJ7kcEnP9p5pEaJKFrXqbsDFHcMfAj4pKA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=DtEHw1+h4hN1gyhBv9UEDN1ToW/2ZfH3q6zJPMr9J40Nygq7Xc7mzfjSaxQJaF+WJ
-	 XEjBPga6DwsYYjSAqXrNRa2JEUMsGRvBwFVEdnneM7A8OICmW9fAqpvWk3jtoHrV5q
-	 muu4C6ZRb+vUFBGKCBKY4W8tzCIcuGAykLXZ95uq7a50PmFwpHPqUW8OgqQcefIzF8
-	 Kd3YFZJZZX/mzhkPdS9OESjYgrSIQHNBvwU6ZHfmvCfwWqFUT8ev+z3C0oeb19a5px
-	 rjlThVCmhJdt6Xv201DhnCI2z1VrWtlS1JZMA/TinqzxTW5Lp6z1f/diOhYIXBBFWg
-	 g7iXE30BFfDjQ==
+	b=fHtCSpQrcOYu1g4jKgGSPHrvXopsjCIeZ9/qg4pRJuRYJgycsT2bqjxQUkvSGyItt
+	 rykdMjY0+V2ud1wF9jEBWg0OkeFlOFqYZGzaWM8yR2wDUKB5ZgbrG2zB8uQPjoOt9i
+	 ZcmE5OxbXmX+hXaOgiCtA/97SPjqAHBvcHpyMAMaS+r19TTfyuyQm6YbiZvh9FNLPv
+	 QxI9Fgh7lKE2XYFXvKuWM2MudwadjBOzhdqTl7qEzgAhOfizDT8Wiors/3/qryQOMY
+	 cQZrqjsIhqf4peBBtkPLhh1gOggPk0XERjf4jEzu3x9U8nVU5izIICmzcyxlyjP+nG
+	 KZE15+r1z/Ujw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A15660E84;
-	Mon,  9 Feb 2026 20:32:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 807B4F2
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:32:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AF3360E09;
+	Mon,  9 Feb 2026 20:32:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C879E219
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:32:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 625B540919
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:32:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD4404010A
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:32:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2OKbd5TAXsT for <buildroot@buildroot.org>;
- Mon,  9 Feb 2026 20:32:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N-ZqjT7qJE12 for <buildroot@buildroot.org>;
+ Mon,  9 Feb 2026 20:32:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 37B97408DB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37B97408DB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9B2F6400CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B2F6400CE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 37B97408DB
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:32:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9B2F6400CE
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:32:40 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b67.dip0.t-ipconnect.de [91.58.11.103])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A6667A4C07FE;
- Mon,  9 Feb 2026 21:32:12 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:32924)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8E1A5A4C0860
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 21:32:27 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37864)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vpXvX-0000000026i-4B96;
- Mon, 09 Feb 2026 20:32:12 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vpXvm-0000000029N-3m8R
+ for buildroot@buildroot.org; Mon, 09 Feb 2026 20:32:27 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Dimitrios Siganos <dimitris@siganos.org>
-Date: Mon,  9 Feb 2026 21:32:12 +0100
-Message-ID: <20260209203212.3837393-1-bernd@kuhls.net>
+Date: Mon,  9 Feb 2026 21:32:27 +0100
+Message-ID: <20260209203227.3837422-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: ++++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1770669132;
- bh=wY4rj6fkic0loc/Fc0qHuJwWtwLGbswdJ+KCD86sRkI=;
- h=From:To:Cc:Subject:Date:From;
- b=qZbqfeNEsdjPh12owGx7X+h8foU7PE5Y4PbWfMzDQyUG0t4JU2OSUWWeebg+Orlsx
- snuNtseUUM4H5s6iSwiAL3IH2+44StUQNraTNBE7wD/oWrWsEoPUFm/wRDL3RyowtO
- a6k/2hWu/1YMUj+iIPRxGB9A/7oMYhMMTeBk5GPP0HeBbcl7kUS4OrxBxt9Xx/ZPXW
- znJyVBJ+m9LjCtSI3vPo0Flrb85mR/CgKxqFUcpeNHMAdZiCx5YB2ynNO+2LVzHoFz
- VhoxuGFj9WuewujpPQbfaqb5QDJ0CgNbdVVCKLndZtD7bFKlg5gZVr1hPKdPQiNDSs
- JHe1v6g+aII6w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202511301023; t=1770669147;
+ bh=E166OltlGFSS04f5dE5NdZjXpjgjKKjJmRbWSC8zmkU=;
+ h=From:To:Subject:Date:From;
+ b=oxekAk1Fpeie13Kk7Sv6dDddMjVP5Z2V29j3IXQShonVnU93Fy5NdpRRYVS+9FLV9
+ Y/Xkj0i6QG5rdOEr4YB7yG+yaLpDGLQZotKdME5i+K6GG7+g9bf7UxkuYYqStOX3X6
+ N/t5kKEzpaLT1pNiy9hbHEPhaJePy3jA3Gs3ML9oybGHO/ZtAm4B907QE/S8elfQix
+ 90GmUFpoQjvFGIH39xfXcmnBMFJsOrp+UV8qkKh9ilyFyVU+dDsjNxDm3KQAZyKnv1
+ U6uhGBTdFGoAEqZRCSQw05czQkQMh/ObzqiC/57WLLXQOITxzOhmcf8EPd7H8f0qfj
+ oAbpaos9h6HnA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=qZbqfeNE
-Subject: [Buildroot] [PATCH 1/1] package/wireless-regdb: bump version to
- 2026.02.04
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=oxekAk1F
+Subject: [Buildroot] [PATCH 1/1] package/libheif: bump version to 1.21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,37 +95,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.infradead.org/pipermail/wireless-regdb/2026-February/001830.html
+https://github.com/strukturag/libheif/releases/tag/v1.21.2
+
+Use sha256 tarball hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libheif/libheif.hash | 3 ++-
+ package/libheif/libheif.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 4b2c67965f..39fc1a78d5 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  d4c872a44154604c869f5851f7d21d818d492835d370af7f58de8847973801c3  wireless-regdb-2025.10.07.tar.xz
-+sha256  0ff48a5cd9e9cfe8e815a24e023734919e9a3b7ad2f039243ad121cf5aabf6c6  wireless-regdb-2026.02.04.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 055238be5e..31bc9e9a22 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index 3da82e3e27..0daabcb5dc 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/strukturag/libheif/releases/tag/v1.21.2
++sha256  75f530b7154bc93e7ecf846edfc0416bf5f490612de8c45983c36385aa742b42  libheif-1.21.2.tar.gz
+ # Locally computed:
+-sha256  9799b4b1c19006f052bcf399c761cc147e279762683cefaf16871dbb9b4ea2a1  libheif-1.21.1.tar.gz
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index acd302d847..b96dca4d98 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2025.10.07
-+WIRELESS_REGDB_VERSION = 2026.02.04
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-LIBHEIF_VERSION = 1.21.1
++LIBHEIF_VERSION = 1.21.2
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 -- 
 2.47.3
 
