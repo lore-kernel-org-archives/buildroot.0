@@ -1,210 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D0DCE7E0C3
-	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 11:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B514E81BC1
+	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 13:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A09B80F64;
-	Mon,  9 Feb 2026 11:09:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iDVPqe1KmRex; Mon,  9 Feb 2026 11:09:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE80580EE8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770635395;
-	bh=y6k5b0YxQ0HbzKUFik3Haf8ZGYhhQqwdzJBRf6slZEQ=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=Cnu+TfMzVeec3lzsjHvsiCYpE0ZytBnIaXWnymPQZCHudRRtIBAevLGwYcaZzYd3u
-	 7UVDZh0XGlWodA0zCaBfJV35KIG+No9qKRpFPW0k/F+JQInZwWpAKozyjNin1P5kJk
-	 jjd4L+Lv/oNw7lkEZ75xHIopLLzOqJ5eRtMFsuCIy10kFnL/bMoGK9UQyw5/1u3x5N
-	 0UtBQg0+uTHCKZMyC5F95LyNsh7sTGLy2bhkLm3CJojPe6Mq1TjoF7R0svGnd8gNMh
-	 dBQaX7jwY0z1U/9h9IBfJrER12fi1HUZxLHJK5LkTHcaIxEEX6qUXk9sEVCzmL8oHs
-	 uOZtJkE26vH8Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE80580EE8;
-	Mon,  9 Feb 2026 11:09:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BC4322A2
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 11:09:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E238608FC
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 11:09:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF316608AA;
+	Mon,  9 Feb 2026 13:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B_6_87Gwwa4t for <buildroot@buildroot.org>;
- Mon,  9 Feb 2026 11:09:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DA1D9606ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA1D9606ED
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DA1D9606ED
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 11:09:51 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.102.203]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2f9b-1voazz0SJ5-009lKA; Mon, 09
- Feb 2026 12:09:48 +0100
-Message-ID: <51a2df8a-1b8e-471d-b3c5-ef73240ac226@gmx.de>
-Date: Mon, 9 Feb 2026 12:09:46 +0100
+ id 3Bm3qBRJZ8-6; Mon,  9 Feb 2026 13:20:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD34860A9E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770643249;
+	bh=OUQfynmU2sglzkiXZJbDc/VT+Ty92RVRoN0mGs6lh98=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kZuYpWwXRmC4/25yPMsMiGO4fA5RvL/korBeIP7t5NAftDyF3l4PY8s7LahGAkKR+
+	 l1FjE87cosX2XBuXI7CMSzFFmnwWm03VGGpyO4NxvIc51pLiDlGCzsa7qTaJmZVf9V
+	 2fQemsbZHA4/YZ/XHhFQBNIJSgKoqTE+k1ZJEffYzvm3/6HF8qcfaucjYoiaUeQy5P
+	 WPpI/exD1MWOjPwkfvC35SfHO1S5INcYAPbxOBRMV720ihar6Uu/gn5Z5DpdrqWTqi
+	 Oar8473QAYEq32TDeEsKlN4hwYzHlskSVtQCJ8PqIs30ZgeYpuqaQPl90+eGfEESoK
+	 2XPnmGNy8Rpqw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD34860A9E;
+	Mon,  9 Feb 2026 13:20:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BA322A2
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:20:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 88600821BD
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:20:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fzkcN3kGmWQt for <buildroot@buildroot.org>;
+ Mon,  9 Feb 2026 13:20:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=207.54.77.171;
+ helo=esa4.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4EA7181D65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EA7181D65
+Received: from esa4.hc555-34.eu.iphmx.com (esa4.hc555-34.eu.iphmx.com
+ [207.54.77.171])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4EA7181D65
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:20:41 +0000 (UTC)
+X-CSE-ConnectionGUID: H84gHkNoQXOBAeFMBAtv1g==
+X-CSE-MsgGUID: la7SwyJ8RsKnwiNU5zCB7A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from unknown (HELO ces04_data.me-crop.lan) ([146.255.191.134])
+ by esa4.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 09 Feb 2026 15:20:39 +0200
+X-CSE-ConnectionGUID: 99cu75kQQ0+q+6QYvzxlKg==
+X-CSE-MsgGUID: Rnwb6YzLQ0GXq9L5/VxRbA==
+Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.6])
+ by ces04_data.me-crop.lan with SMTP; 09 Feb 2026 15:22:55 +0200
+Received: by epgd074.me-corp.lan (sSMTP sendmail emulation);
+ Mon, 09 Feb 2026 15:20:37 +0200
+To: buildroot@buildroot.org
+Cc: guenther.harrasser@mobileye.com, Chris Packham <judge.packham@gmail.com>,
+ Andreas Ziegler <br025@umbiko.net>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Date: Mon,  9 Feb 2026 15:20:34 +0200
+Message-ID: <20260209132034.3298699-1-jimmy.wesolowski@mobileye.com>
+In-Reply-To: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
+References: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Flaviu Nistor <flaviu.nistor@gmail.com>, buildroot@buildroot.org
-References: <20260209070709.4499-1-flaviu.nistor@gmail.com>
- <20260209070709.4499-2-flaviu.nistor@gmail.com>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
- ppqPES8FiSl+M00Xe5icsLsi4mkBujgbuSDiugjNyqeOH5iqtg69xTd/r5DRMqt0K93GzmIj
- 7ipWA+fomAMyX9FK3cHLBgoSLeb+Qj28W1cH94NGmpKtBxCkKfT+mjWvYUEwVdviMymdCAJj
- Iabr/QJ3KVZ7UPWr29IJ9Dv+SwW7VRjhXVQ5IwSBMDaTnzDOUILTxnHptB9ojn7t6bFhub9w
- xWXJQCsNkp+nUDESRwBeNLm4G5D3NFYVTg4qOQYLI/k/H1N3NEgaDuZ81NfhQJTIFVx+h0eT
- pjuQ4vATShJWea6N7ilLlyw7K81uuQoFB6VcG5hlAQWMejuHI4UBb+35r7fIFsy95ZwjxKqE
- QVS8P7lBKoihXpjcxRZiynx/Gm2nXm9ZmY3fG0fuLp9PQK9SpM9gQr/nbqguBoRoiBzONM9H
- pnxibwqgskVKzunZOXZeqyPNTC63wYcQXhidWxB9s+pBHP9FR+qht//8ivI29aTukrj3WWSU
- Q2S9ejpSyELLhPT9/gbeDzP0dYdSBiQjfd5AYHcMYQ0fSG9Tb1GyMsvh4OhTY7QwDz+1zT3x
- EzB0I1wpKu6m20C7nriWnJTCwXE6XMX7xViv6h8ev+uUHLoMEwARAQABzSBGaW9uYSBLbHV0
- ZSA8ZmlvbmEua2x1dGVAZ214LmRlPsLBlAQTAQgAPgIbIwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBOTTE4/i2fL6gVL9ke6nJs4hI1pYBQJn9S5IBQkQ6+MhAAoJEO6nJs4hI1pYvz0P
- /34nPCo/g0WbeJB6N75/1EkM9gDD1+lT4GdFEYYnCzslSxrIsL3kWuzG2kpqrErU8i7Ao/B2
- iE3J9NinRe613xlVUy2CU1VKaekm3YTkcfR7u8G/STNEQ42S46+3JRBMlLg1YldRsfVXq8tc
- jdwo193h4zrEeEmUDm8n43BPBhhwNRf+igtI8cNVyn9nBt6BrDnSswg497lrRjGjoP2zTkLT
- Q/Sb/6rCHoyFAxVcicA7n2xvaW0Pg0rTOrtA9mVku5J3zqyS4ABtoUwPmyoTLa7vpZdC33hy
- g7+srYNdo9a1i9OKF+CK9q/4auf3bMMeJB472Q5N8yuthM+Qx8ICySElyVDYSbbQIle/h/L7
- XYgm4oE1CxwiVCi8/Y/GOqhHt+RHLRGG1Ic+btNTiW+R+4W4yGUxL7qLwepIMY9L/0UcdnUa
- OBJk4waEX2mgOTmyjKR0FAGtaSH1ebz2UbY6pz5H9tZ4BIX7ZcQN0fLZLoi/SbbF+WJgT4cd
- 8BooqbaNRoglaNCtTsJ7oyDesL9l0pzQb/ni1HGAXKW3WBq49r7uPOsDBP8ygyoAOYw4b/TX
- qUjJYpp9HcoQHv0sybSbXCFUMnL1E5WUhy8bBjA9fNtU43Fv3OR2n5/5xSn6o33XVMYMtkrN
- 0AvEfAOGGOMJWktEYA7rxy0TQiy0ttUq0eQszsFNBGQ1Nr0BEADTlcWyLC5GoRfQoYsgyPgO
- Z4ANz31xoQf4IU4i24b9oC7BBFDE+WzfsK5hNUqLADeSJo5cdTCXw5Vw3eSSBSoDP0Q9OUdi
- PNEbbblZ/tSaLadCm4pyh1e+/lHI4j2TjKmIO4vw0K59Kmyv44mW38KJkLmGuZDg5fHQrA9G
- 4oZLnBUBhBQkPQvcbwImzWWuyGA+jDEoE2ncmpWnMHoc4Lzpn1zxGNQlDVRUNnRCwkeclm55
- Dz4juffDWqWcC2NrY5KkjZ1+UtPjWMzRKlmItYlHF1vMqdWAskA6QOJNE//8TGsBGAPrwD7G
- cv4RIesk3Vl2IClyZWgJ67pOKbLhu/jz5x6wshFhB0yleOp94I/MY8OmbgdyVpnO7F5vqzb1
- LRmfSPHu0D8zwDQyg3WhUHVaKQ54TOmZ0Sjl0cTJRZMyOmwRZUEawel6ITgO+QQS147IE7uh
- Wa6IdWKNQ+LGLocAlTAi5VpMv+ne15JUsMQrHTd03OySOqtEstZz2FQV5jSS1JHivAmfH0xG
- fwxY6aWLK2PIFgyQkdwWJHIaacj0Vg6Kc1/IWIrM0m3yKQLJEaL5WsCv7BRfEtd5SEkl9wDI
- pExHHdTplCI9qoCmiQPYaZM5uPuirA5taUCJEmW9moVszl6nCdBesG2rgH5mvgPCMAwsPOz9
- 7n+uBiMk0ZSyTQARAQABwsF8BBgBCAAmAhsMFiEE5NMTj+LZ8vqBUv2R7qcmziEjWlgFAmf1
- LrEFCQeCXvQACgkQ7qcmziEjWljtgBAAnsoRDd6TlyntiKS8aJEPnFjcFX/LqujnCT4/eIn1
- bpbIjNbGH9Toz63H5JkqqXWcX1TKmlZGHZT2xU/fKzjcyTJzji9JP+z1gQl4jNESQeqO1qEO
- kqYe6/hZ5v/yCjpv2Y1sqBnPXKcm21fkyzUwYKPuX9O1Sy1VmP1rMzIRQHXnNapJJWn0wJAW
- 079YqdX1NzESJyj4stoLxIcDMkIEvOy3uhco8Bm8wS88MquJoR0KlyBR30QZy9KoxmTiWKws
- Mn6sy4aX9nac3W0pD+EyR+j/J9SWSvOENAmn4Km+ONxz93+oVLWb+KHtQQloxOsadO0wwiaZ
- xUT7vJcxSgjrHugSs+mOLznX/D8PfG/+tYLFlddphcOGldzH0rxKfs53BplAUe+LEZY1AU8p
- 0WDK2h097ZQ0eZiVZlvAKSjwsjow2tpqwamtfNKrFg/GFRbNZcoQuYsf3vBW1CiZ5JQ6Vh2A
- bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
- 6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
- FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20260209070709.4499-2-flaviu.nistor@gmail.com>
-X-Provags-ID: V03:K1:4XhxtOQ0jJpuqoTgMcfaLQFa0emC6qolqotCrEczlOZMaCukbCL
- 3QCT8CxwGjIm0VAqKLoGG3PUpwX38sS1dviOzjHVBwFYZnz6FqTloQBrRP/QWzCuaibx9ih
- SEx8KFJRA7f/Ha1rG6udPvXoUwKfSLylHFAbl6CKv2TdpWwd6uAzHnfOF+dJ07m4uD1EwDc
- cySdId1fV8Q+FDj6EcYNQ==
-UI-OutboundReport: notjunk:1;M01:P0:hHHsbLtawq8=;X6TDmsTUbVdvlSsGbK54UKl5jtQ
- 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
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1770635388; x=1771240188; i=fiona.klute@gmx.de;
- bh=/n3TkfwkBohgpSQdcF5zdsky5pzigf8ula3eMbO4aIs=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=TE+RWWL2YsPrW02MEtlumDKxSh/kAprtqT2o/zg6F/l4/vQ2ymB8A6T8gOznDr0v
- ftmQEcoZK7lwwD5RMuFtqUqJHevnuuMzaldA8zUGt6phh/RNIvE3Uov79OY3MsS4O
- 7pX2/+RXkVDXamS8l12JRy5wLBnE/YMkZeVkwAtwlqmioiGyHxx+GzNpBNqA9mzyh
- Ok7cy4h0dHnCMjAXIeh22dVGgAcS510aCzYOTx14FDngfrBxYVOXWrZ4IWVKhgny7
- tbOQtLrhWkJN5tgK5qHsAW0tqS0kdRKCdoAWWVkNYIxCr644zo5Ft30JwE2lnm3fL
- sSJp07NJZG4pYtxBEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
+ t=1770643244; x=1802179244;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=SUIVnXdw6CznZRXkldA4v8RuQrWg7whn7LMuVi17Iz0=;
+ b=ETDeWDq4q8fFNlkjlf3HuKWuGxnVNQmPQTSF9i1n6mGz70jLOQA/Ri7M
+ XrYfTeYOwteYwRQXsMcQ+Xa72dP2Tsg8kpYjPv8uKfH54+Lsv4eQXjyTS
+ xP4ZOi2KtvjQMzNYw58kcDSGimhHzow0Gpxel8KO0hD3lDZEQfLhpy3uE
+ Ynxlw7f6Gsrs+KBEjHnOGbWz2I98Slmu3oUnAFYQjTxqzg1sK0qZVK1RZ
+ XyoC4Gel5ajs/Kn+0FqIFct9n6uisCMAS8TSQdUqTWxQZBVNWRIeieXHX
+ FUVGCWx+UiJ9lNfjlFsiPiL2Vo8Ah9ggRRfSg6wMM/lFHUEry9/LFLkC5
+ g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=TE+RWWL2
-Subject: Re: [Buildroot] [PATCH 1/1] linux/linux.mk: add kernel commit hash
+ header.from=mobileye.com
+Subject: [Buildroot] [PATCH v2 1/1] package/coremark: port for mips-i6500
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -216,58 +101,899 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org>
+Reply-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Flaviu!
+From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
 
-Am 09.02.26 um 08:07 schrieb Flaviu Nistor:
-> Add also the kernel commit hash to the kernel release string
-> in case LINUX_DIR is a valid git repo. Using uname, this allows
-> easy identification of the commit hash used to build the kernel.
-> 
-> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
-> ---
->   linux/linux.mk | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index c61089bfe0..7833304013 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -12,6 +12,11 @@ LINUX_CPE_ID_VENDOR = linux
->   LINUX_CPE_ID_PRODUCT = linux_kernel
->   LINUX_CPE_ID_PREFIX = cpe:2.3:o
->   
-> +# Get git commit hash if LINUX_DIR is a valid git repo or
-> +# an empty string which will be passed via LINUX_MAKE_FLAGS
-> +LINUX_GIT_COMMIT_HASH = $(shell cd $(LINUX_DIR) 2>/dev/null && git rev-parse --short HEAD 2>/dev/null)
-> +LINUX_LOCALVERSION = $(if $(LINUX_GIT_COMMIT_HASH),-g$(LINUX_GIT_COMMIT_HASH),)
-> +
->   # Compute LINUX_SOURCE and LINUX_SITE from the configuration
->   ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
->   LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-> @@ -164,7 +169,8 @@ LINUX_MAKE_FLAGS = \
->   	CROSS_COMPILE="$(TARGET_CROSS)" \
->   	WERROR=0 \
->   	REGENERATE_PARSERS=1 \
-> -	DEPMOD=$(HOST_DIR)/sbin/depmod
-> +	DEPMOD=$(HOST_DIR)/sbin/depmod \
-> +	LOCALVERSION="$(LINUX_LOCALVERSION)"
+Compile for MIPS I6500 CPU 64-bit, with all compiler flags as
+recommended by MIPS
 
-Wouldn't setting CONFIG_LOCALVERSION_AUTO=y in your kernel config 
-achieve pretty much the same thing, without adding to localversion for 
-everyone's builds?
+One missing flag -s "-Tmsym32.ld" since linker script
+"msym32.ld" does not exist in the MIPS toolchain
 
-Best regards,
-Fiona
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 
->   ifeq ($(BR2_REPRODUCIBLE),y)
->   LINUX_MAKE_ENV += \
+---
+Changes v1 -> v2:
+  - do not add mips-i6500 through a patch, but copy it through rsync
+    in POST_EXTRACT_HOOKS (suggested by
+    Andreas Ziegler <br025@umbiko.net>)
+  - allow specifying a port directory to use through kconfig, such as
+    mips-i6500. The default stays linux for 32-bits architecture,
+    linux64 for 64.
+  - allow passing extra PORT_CFLAGS through kconfig  (suggested by
+    Andreas Ziegler <br025@umbiko.net>)
+
+Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+---
+ package/coremark/Config.in                  |  19 ++
+ package/coremark/coremark.mk                |  23 +-
+ package/coremark/mips-i6500/core_portme.c   | 336 ++++++++++++++++++++
+ package/coremark/mips-i6500/core_portme.h   | 291 +++++++++++++++++
+ package/coremark/mips-i6500/core_portme.mak | 140 ++++++++
+ 5 files changed, 805 insertions(+), 4 deletions(-)
+ create mode 100755 package/coremark/mips-i6500/core_portme.c
+ create mode 100755 package/coremark/mips-i6500/core_portme.h
+ create mode 100755 package/coremark/mips-i6500/core_portme.mak
+
+diff --git a/package/coremark/Config.in b/package/coremark/Config.in
+index f0e13eda63..bb29a8093f 100644
+--- a/package/coremark/Config.in
++++ b/package/coremark/Config.in
+@@ -6,3 +6,22 @@ config BR2_PACKAGE_COREMARK
+ 	  used in embedded systems
+ 
+ 	  https://www.eembc.org/coremark/
++
++if BR2_PACKAGE_COREMARK
++config BR2_PACKAGE_COREMARK_PORT
++        string "coremark port directory"
++        default "linux" if !BR2_ARCH_IS_64
++	default "linux64" if BR2_ARCH_IS_64
++        help
++          Path to the platform specific port directory.
++	  This allow using a different platform specific port than the
++	  default indicated if the support is available in CoreMark.
++
++config BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA
++	string "coremark port extra CFLAGS"
++	default ""
++	help
++	  Additional CFLAGS to pass to CoreMark platform specific port.
++	  Any additional flags indicated here will be added to the
++	  CFLAGS_PORT variable.
++endif
+diff --git a/package/coremark/coremark.mk b/package/coremark/coremark.mk
+index 9ea8693e71..3c367ff90b 100644
+--- a/package/coremark/coremark.mk
++++ b/package/coremark/coremark.mk
+@@ -9,14 +9,29 @@ COREMARK_SITE = $(call github,eembc,coremark,v$(COREMARK_VERSION))
+ COREMARK_LICENSE = Apache-2.0
+ COREMARK_LICENSE_FILES = LICENSE.md
+ 
++COREMARK_CFLAGS = \
++        $(TARGET_CFLAGS) \
++	$(call qstrip,$(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++COREMARK_CFLAGS += -DUSE_PTHREAD
++endif # BR2_TOOLCHAIN_HAS_THREADS=y
++
++define COREMARK_MIPS_I6500
++	rsync --archive --update \
++		$(COREMARK_PKGDIR)/mips-i6500/ $(@D)/mips-i6500/
++endef # COREMARK_MIPS_I6500
++
++COREMARK_POST_EXTRACT_HOOKS += $(if $(BR2_MIPS_NABI64),COREMARK_MIPS_I6500)
++
+ define COREMARK_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
+-		PORT_CFLAGS="$(TARGET_CFLAGS)" \
+-		PORT_DIR=linux$(if $(BR2_ARCH_IS_64),64) EXE= link
+-endef
++		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
++		PORT_DIR=$(BR2_PACKAGE_COREMARK_PORT) EXE= link
++endef # COREMARK_BUILD_CMDS
+ 
+ define COREMARK_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/coremark $(TARGET_DIR)/usr/bin/coremark
+-endef
++endef # COREMARK_INSTALL_TARGET_CMDS
+ 
+ $(eval $(generic-package))
+diff --git a/package/coremark/mips-i6500/core_portme.c b/package/coremark/mips-i6500/core_portme.c
+new file mode 100755
+index 0000000000..951826064e
+--- /dev/null
++++ b/package/coremark/mips-i6500/core_portme.c
+@@ -0,0 +1,336 @@
++/*
++Copyright 2018 Embedded Microprocessor Benchmark Consortium (EEMBC)
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++    http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++
++Original Author: Shay Gal-on
++*/
++
++#include <stdio.h>
++#include <stdlib.h>
++#include "coremark.h"
++#if CALLGRIND_RUN
++#include <valgrind/callgrind.h>
++#endif
++
++#if (MEM_METHOD==MEM_MALLOC)
++#include <malloc.h>
++/* Function: portable_malloc
++	Provide malloc() functionality in a platform specific way.
++*/
++void *portable_malloc(size_t size) {
++	return malloc(size);
++}
++/* Function: portable_free
++	Provide free() functionality in a platform specific way.
++*/
++void portable_free(void *p) {
++	free(p);
++}
++#else
++void *portable_malloc(size_t size) {
++	return NULL;
++}
++void portable_free(void *p) {
++	p=NULL;
++}
++#endif
++
++#if (SEED_METHOD==SEED_VOLATILE)
++#if VALIDATION_RUN
++	volatile ee_s32 seed1_volatile=0x3415;
++	volatile ee_s32 seed2_volatile=0x3415;
++	volatile ee_s32 seed3_volatile=0x66;
++#endif
++#if PERFORMANCE_RUN
++	volatile ee_s32 seed1_volatile=0x0;
++	volatile ee_s32 seed2_volatile=0x0;
++	volatile ee_s32 seed3_volatile=0x66;
++#endif
++#if PROFILE_RUN
++	volatile ee_s32 seed1_volatile=0x8;
++	volatile ee_s32 seed2_volatile=0x8;
++	volatile ee_s32 seed3_volatile=0x8;
++#endif
++	volatile ee_s32 seed4_volatile=ITERATIONS;
++	volatile ee_s32 seed5_volatile=0;
++#endif
++/* Porting: Timing functions
++	How to capture time and convert to seconds must be ported to whatever is supported by the platform.
++	e.g. Read value from on board RTC, read value from cpu clock cycles performance counter etc.
++	Sample implementation for standard time.h and windows.h definitions included.
++*/
++/* Define: TIMER_RES_DIVIDER
++	Divider to trade off timer resolution and total time that can be measured.
++
++	Use lower values to increase resolution, but make sure that overflow does not occur.
++	If there are issues with the return value overflowing, increase this value.
++	*/
++#if USE_CLOCK
++	#define NSECS_PER_SEC CLOCKS_PER_SEC
++	#define EE_TIMER_TICKER_RATE 1000
++	#define CORETIMETYPE clock_t
++	#define GETMYTIME(_t) (*_t=clock())
++	#define MYTIMEDIFF(fin,ini) ((fin)-(ini))
++	#define TIMER_RES_DIVIDER 1
++	#define SAMPLE_TIME_IMPLEMENTATION 1
++#elif defined(_MSC_VER)
++	#define NSECS_PER_SEC 10000000
++	#define EE_TIMER_TICKER_RATE 1000
++	#define CORETIMETYPE FILETIME
++	#define GETMYTIME(_t) GetSystemTimeAsFileTime(_t)
++	#define MYTIMEDIFF(fin,ini) (((*(__int64*)&fin)-(*(__int64*)&ini))/TIMER_RES_DIVIDER)
++	/* setting to millisces resolution by default with MSDEV */
++	#ifndef TIMER_RES_DIVIDER
++	#define TIMER_RES_DIVIDER 1000
++	#endif
++	#define SAMPLE_TIME_IMPLEMENTATION 1
++#elif HAS_TIME_H
++	#define NSECS_PER_SEC 1000000000
++	#define EE_TIMER_TICKER_RATE 1000
++	#define CORETIMETYPE struct timespec
++	#define GETMYTIME(_t) clock_gettime(CLOCK_REALTIME,_t)
++	#define MYTIMEDIFF(fin,ini) ((fin.tv_sec-ini.tv_sec)*(NSECS_PER_SEC/TIMER_RES_DIVIDER)+(fin.tv_nsec-ini.tv_nsec)/TIMER_RES_DIVIDER)
++	/* setting to 1/1000 of a second resolution by default with linux */
++	#ifndef TIMER_RES_DIVIDER
++	#define TIMER_RES_DIVIDER 1000000
++	#endif
++	#define SAMPLE_TIME_IMPLEMENTATION 1
++#else
++	#define SAMPLE_TIME_IMPLEMENTATION 0
++#endif
++#define EE_TICKS_PER_SEC (NSECS_PER_SEC / TIMER_RES_DIVIDER)
++
++#if SAMPLE_TIME_IMPLEMENTATION
++/** Define Host specific (POSIX), or target specific global time variables. */
++static CORETIMETYPE start_time_val, stop_time_val;
++
++/* Function: start_time
++	This function will be called right before starting the timed portion of the benchmark.
++
++	Implementation may be capturing a system timer (as implemented in the example code)
++	or zeroing some system parameters - e.g. setting the cpu clocks cycles to 0.
++*/
++void start_time(void) {
++	GETMYTIME(&start_time_val );
++#if CALLGRIND_RUN
++	CALLGRIND_START_INSTRUMENTATION
++#endif
++#if MICA
++    asm volatile("int3");/*1 */
++#endif
++}
++/* Function: stop_time
++	This function will be called right after ending the timed portion of the benchmark.
++
++	Implementation may be capturing a system timer (as implemented in the example code)
++	or other system parameters - e.g. reading the current value of cpu cycles counter.
++*/
++void stop_time(void) {
++#if CALLGRIND_RUN
++	 CALLGRIND_STOP_INSTRUMENTATION
++#endif
++#if MICA
++    asm volatile("int3");/*1 */
++#endif
++	GETMYTIME(&stop_time_val );
++}
++/* Function: get_time
++	Return an abstract "ticks" number that signifies time on the system.
++
++	Actual value returned may be cpu cycles, milliseconds or any other value,
++	as long as it can be converted to seconds by <time_in_secs>.
++	This methodology is taken to accomodate any hardware or simulated platform.
++	The sample implementation returns millisecs by default,
++	and the resolution is controlled by <TIMER_RES_DIVIDER>
++*/
++CORE_TICKS get_time(void) {
++	CORE_TICKS elapsed=(CORE_TICKS)(MYTIMEDIFF(stop_time_val, start_time_val));
++	return elapsed;
++}
++/* Function: time_in_secs
++	Convert the value returned by get_time to seconds.
++
++	The <secs_ret> type is used to accomodate systems with no support for floating point.
++	Default implementation implemented by the EE_TICKS_PER_SEC macro above.
++*/
++secs_ret time_in_secs(CORE_TICKS ticks) {
++	secs_ret retval=((secs_ret)ticks) / (secs_ret)EE_TICKS_PER_SEC;
++	return retval;
++}
++#else
++#error "Please implement timing functionality in core_portme.c"
++#endif /* SAMPLE_TIME_IMPLEMENTATION */
++
++ee_u32 default_num_contexts=MULTITHREAD;
++
++/* Function: portable_init
++	Target specific initialization code
++	Test for some common mistakes.
++*/
++void portable_init(core_portable *p, int *argc, char *argv[])
++{
++#if PRINT_ARGS
++	int i;
++	for (i=0; i<*argc; i++) {
++		ee_printf("Arg[%d]=%s\n",i,argv[i]);
++	}
++#endif
++	if (sizeof(ee_ptr_int) != sizeof(ee_u8 *)) {
++		ee_printf("ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
++	}
++	if (sizeof(ee_u32) != 4) {
++		ee_printf("ERROR! Please define ee_u32 to a 32b unsigned type!\n");
++	}
++#if (MAIN_HAS_NOARGC && (SEED_METHOD==SEED_ARG))
++	ee_printf("ERROR! Main has no argc, but SEED_METHOD defined to SEED_ARG!\n");
++#endif
++
++#if (MULTITHREAD>1) && (SEED_METHOD==SEED_ARG)
++	int nargs=*argc,i;
++	if ((nargs>1) && (*argv[1]=='M')) {
++		default_num_contexts=parseval(argv[1]+1);
++		if (default_num_contexts>MULTITHREAD)
++			default_num_contexts=MULTITHREAD;
++		/* Shift args since first arg is directed to the portable part and not to coremark main */
++		--nargs;
++		for (i=1; i<nargs; i++)
++			argv[i]=argv[i+1];
++		*argc=nargs;
++	}
++#endif /* sample of potential platform specific init via command line, reset the number of contexts being used if first argument is M<n>*/
++	p->portable_id=1;
++}
++/* Function: portable_fini
++	Target specific final code
++*/
++void portable_fini(core_portable *p)
++{
++	p->portable_id=0;
++}
++
++#if (MULTITHREAD>1)
++
++/* Function: core_start_parallel
++	Start benchmarking in a parallel context.
++
++	Three implementations are provided, one using pthreads, one using fork and shared mem, and one using fork and sockets.
++	Other implementations using MCAPI or other standards can easily be devised.
++*/
++/* Function: core_stop_parallel
++	Stop a parallel context execution of coremark, and gather the results.
++
++	Three implementations are provided, one using pthreads, one using fork and shared mem, and one using fork and sockets.
++	Other implementations using MCAPI or other standards can easily be devised.
++*/
++#if USE_PTHREAD
++ee_u8 core_start_parallel(core_results *res) {
++	return (ee_u8)pthread_create(&(res->port.thread),NULL,iterate,(void *)res);
++}
++ee_u8 core_stop_parallel(core_results *res) {
++	void *retval;
++	return (ee_u8)pthread_join(res->port.thread,&retval);
++}
++#elif USE_FORK
++static int key_id=0;
++ee_u8 core_start_parallel(core_results *res) {
++	key_t key=4321+key_id;
++	key_id++;
++	res->port.pid=fork();
++	res->port.shmid=shmget(key, 8, IPC_CREAT | 0666);
++	if (res->port.shmid<0) {
++		ee_printf("ERROR in shmget!\n");
++	}
++	if (res->port.pid==0) {
++		iterate(res);
++		res->port.shm=shmat(res->port.shmid, NULL, 0);
++		/* copy the validation values to the shared memory area  and quit*/
++		if (res->port.shm == (char *) -1) {
++			ee_printf("ERROR in child shmat!\n");
++		} else {
++			memcpy(res->port.shm,&(res->crc),8);
++			shmdt(res->port.shm);
++		}
++		exit(0);
++	}
++	return 1;
++}
++ee_u8 core_stop_parallel(core_results *res) {
++	int status;
++	pid_t wpid = waitpid(res->port.pid,&status,WUNTRACED);
++	if (wpid != res->port.pid) {
++		ee_printf("ERROR waiting for child.\n");
++		if (errno == ECHILD) ee_printf("errno=No such child %d\n",res->port.pid);
++		if (errno == EINTR) ee_printf("errno=Interrupted\n");
++		return 0;
++	}
++	/* after process is done, get the values from the shared memory area */
++	res->port.shm=shmat(res->port.shmid, NULL, 0);
++	if (res->port.shm == (char *) -1) {
++		ee_printf("ERROR in parent shmat!\n");
++		return 0;
++	}
++	memcpy(&(res->crc),res->port.shm,8);
++	shmdt(res->port.shm);
++	return 1;
++}
++#elif USE_SOCKET
++static int key_id=0;
++ee_u8 core_start_parallel(core_results *res) {
++	int bound, buffer_length=8;
++	res->port.sa.sin_family = AF_INET;
++	res->port.sa.sin_addr.s_addr = htonl(0x7F000001);
++	res->port.sa.sin_port = htons(7654+key_id);
++	key_id++;
++	res->port.pid=fork();
++	if (res->port.pid==0) { /* benchmark child */
++		iterate(res);
++		res->port.sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
++		if (-1 == res->port.sock) /* if socket failed to initialize, exit */   {
++			ee_printf("Error Creating Socket");
++		} else {
++			int bytes_sent = sendto(res->port.sock, &(res->crc), buffer_length, 0,(struct sockaddr*)&(res->port.sa), sizeof (struct sockaddr_in));
++			if (bytes_sent < 0)
++				ee_printf("Error sending packet: %s\n", strerror(errno));
++			close(res->port.sock); /* close the socket */
++		}
++		exit(0);
++	}
++	/* parent process, open the socket */
++	res->port.sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
++	bound = bind(res->port.sock,(struct sockaddr*)&(res->port.sa), sizeof(struct sockaddr));
++	if (bound < 0)
++		ee_printf("bind(): %s\n",strerror(errno));
++	return 1;
++}
++ee_u8 core_stop_parallel(core_results *res) {
++	int status;
++	int fromlen=sizeof(struct sockaddr);
++	int recsize = recvfrom(res->port.sock, &(res->crc), 8, 0, (struct sockaddr*)&(res->port.sa), &fromlen);
++	if (recsize < 0) {
++		ee_printf("Error in receive: %s\n", strerror(errno));
++		return 0;
++	}
++	pid_t wpid = waitpid(res->port.pid,&status,WUNTRACED);
++	if (wpid != res->port.pid) {
++		ee_printf("ERROR waiting for child.\n");
++		if (errno == ECHILD) ee_printf("errno=No such child %d\n",res->port.pid);
++		if (errno == EINTR) ee_printf("errno=Interrupted\n");
++		return 0;
++	}
++	return 1;
++}
++#else /* no standard multicore implementation */
++#error "Please implement multicore functionality in core_portme.c to use multiple contexts."
++#endif /* multithread implementations */
++#endif
+diff --git a/package/coremark/mips-i6500/core_portme.h b/package/coremark/mips-i6500/core_portme.h
+new file mode 100755
+index 0000000000..d18a431ec8
+--- /dev/null
++++ b/package/coremark/mips-i6500/core_portme.h
+@@ -0,0 +1,291 @@
++/*
++Copyright 2018 Embedded Microprocessor Benchmark Consortium (EEMBC)
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++    http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++
++Original Author: Shay Gal-on
++*/
++
++/* Topic: Description
++	This file contains configuration constants required to execute on different platforms
++*/
++#ifndef CORE_PORTME_H
++#define CORE_PORTME_H
++/************************/
++/* Data types and settings */
++/************************/
++/* Configuration: HAS_FLOAT
++	Define to 1 if the platform supports floating point.
++*/
++#ifndef HAS_FLOAT
++#define HAS_FLOAT 1
++#endif
++/* Configuration: HAS_TIME_H
++	Define to 1 if platform has the time.h header file,
++	and implementation of functions thereof.
++*/
++#ifndef HAS_TIME_H
++#define HAS_TIME_H 1
++#endif
++/* Configuration: USE_CLOCK
++	Define to 1 if platform has the time.h header file,
++	and implementation of functions thereof.
++*/
++#ifndef USE_CLOCK
++#define USE_CLOCK 0
++#endif
++/* Configuration: HAS_STDIO
++	Define to 1 if the platform has stdio.h.
++*/
++#ifndef HAS_STDIO
++#define HAS_STDIO 1
++#endif
++/* Configuration: HAS_PRINTF
++	Define to 1 if the platform has stdio.h and implements the printf function.
++*/
++#ifndef HAS_PRINTF
++#define HAS_PRINTF 1
++#endif
++
++/* Configuration: CORE_TICKS
++	Define type of return from the timing functions.
++ */
++#if defined(_MSC_VER)
++#include <windows.h>
++typedef size_t CORE_TICKS;
++#elif HAS_TIME_H
++#include <time.h>
++typedef clock_t CORE_TICKS;
++#else
++#error "Please define type of CORE_TICKS and implement start_time, end_time get_time and time_in_secs functions!"
++#endif
++
++/* Definitions: COMPILER_VERSION, COMPILER_FLAGS, MEM_LOCATION
++	Initialize these strings per platform
++*/
++#ifndef COMPILER_VERSION
++ #ifdef __GNUC__
++ #define COMPILER_VERSION "GCC"__VERSION__
++ #else
++ #define COMPILER_VERSION "Please put compiler version here (e.g. gcc 4.1)"
++ #endif
++#endif
++#ifndef COMPILER_FLAGS
++ #define COMPILER_FLAGS FLAGS_STR /* "Please put compiler flags here (e.g. -o3)" */
++#endif
++#ifndef MEM_LOCATION
++ #define MEM_LOCATION "Please put data memory location here\n\t\t\t(e.g. code in flash, data on heap etc)"
++ #define MEM_LOCATION_UNSPEC 1
++#endif
++
++/* Data Types:
++	To avoid compiler issues, define the data types that need ot be used for 8b, 16b and 32b in <core_portme.h>.
++
++	*Imprtant*:
++	ee_ptr_int needs to be the data type used to hold pointers, otherwise coremark may fail!!!
++*/
++typedef signed short ee_s16;
++typedef unsigned short ee_u16;
++typedef signed int ee_s32;
++typedef double ee_f32;
++typedef unsigned char ee_u8;
++typedef unsigned int ee_u32;
++typedef unsigned long long ee_ptr_int;
++typedef size_t ee_size_t;
++/* align an offset to point to a 32b value */
++#define align_mem(x) (void *)(4 + (((ee_ptr_int)(x) - 1) & ~3))
++
++/* Configuration: SEED_METHOD
++	Defines method to get seed values that cannot be computed at compile time.
++
++	Valid values:
++	SEED_ARG - from command line.
++	SEED_FUNC - from a system function.
++	SEED_VOLATILE - from volatile variables.
++*/
++#ifndef SEED_METHOD
++#define SEED_METHOD SEED_ARG
++#endif
++
++/* Configuration: MEM_METHOD
++	Defines method to get a block of memry.
++
++	Valid values:
++	MEM_MALLOC - for platforms that implement malloc and have malloc.h.
++	MEM_STATIC - to use a static memory array.
++	MEM_STACK - to allocate the data block on the stack (NYI).
++*/
++#ifndef MEM_METHOD
++#define MEM_METHOD MEM_MALLOC
++#endif
++
++/* Configuration: MULTITHREAD
++	Define for parallel execution
++
++	Valid values:
++	1 - only one context (default).
++	N>1 - will execute N copies in parallel.
++
++	Note:
++	If this flag is defined to more then 1, an implementation for launching parallel contexts must be defined.
++
++	Two sample implementations are provided. Use <USE_PTHREAD> or <USE_FORK> to enable them.
++
++	It is valid to have a different implementation of <core_start_parallel> and <core_end_parallel> in <core_portme.c>,
++	to fit a particular architecture.
++*/
++#ifndef MULTITHREAD
++#define MULTITHREAD 1
++#endif
++
++/* Configuration: USE_PTHREAD
++	Sample implementation for launching parallel contexts
++	This implementation uses pthread_thread_create and pthread_join.
++
++	Valid values:
++	0 - Do not use pthreads API.
++	1 - Use pthreads API
++
++	Note:
++	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
++*/
++#ifndef USE_PTHREAD
++#define USE_PTHREAD 0
++#endif
++
++/* Configuration: USE_FORK
++	Sample implementation for launching parallel contexts
++	This implementation uses fork, waitpid, shmget,shmat and shmdt.
++
++	Valid values:
++	0 - Do not use fork API.
++	1 - Use fork API
++
++	Note:
++	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
++*/
++#ifndef USE_FORK
++#define USE_FORK 0
++#endif
++
++/* Configuration: USE_SOCKET
++	Sample implementation for launching parallel contexts
++	This implementation uses fork, socket, sendto and recvfrom
++
++	Valid values:
++	0 - Do not use fork and sockets API.
++	1 - Use fork and sockets API
++
++	Note:
++	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
++*/
++#ifndef USE_SOCKET
++#define USE_SOCKET 0
++#endif
++
++/* Configuration: MAIN_HAS_NOARGC
++	Needed if platform does not support getting arguments to main.
++
++	Valid values:
++	0 - argc/argv to main is supported
++	1 - argc/argv to main is not supported
++*/
++#ifndef MAIN_HAS_NOARGC
++#define MAIN_HAS_NOARGC 0
++#endif
++
++/* Configuration: MAIN_HAS_NORETURN
++	Needed if platform does not support returning a value from main.
++
++	Valid values:
++	0 - main returns an int, and return value will be 0.
++	1 - platform does not support returning a value from main
++*/
++#ifndef MAIN_HAS_NORETURN
++#define MAIN_HAS_NORETURN 0
++#endif
++
++/* Variable: default_num_contexts
++	Number of contexts to spawn in multicore context.
++	Override this global value to change number of contexts used.
++
++	Note:
++	This value may not be set higher then the <MULTITHREAD> define.
++
++	To experiment, you can set the <MULTITHREAD> define to the highest value expected, and use argc/argv in the <portable_init> to set this value from the command line.
++*/
++extern ee_u32 default_num_contexts;
++
++#if (MULTITHREAD>1)
++#if USE_PTHREAD
++	#include <pthread.h>
++	#define PARALLEL_METHOD "PThreads"
++#elif USE_FORK
++	#include <unistd.h>
++	#include <errno.h>
++	#include <sys/wait.h>
++	#include <sys/shm.h>
++	#include <string.h> /* for memcpy */
++	#define PARALLEL_METHOD "Fork"
++#elif USE_SOCKET
++	#include <sys/types.h>
++	#include <sys/socket.h>
++	#include <netinet/in.h>
++	#include <arpa/inet.h>
++	#include <sys/wait.h>
++	#include <stdio.h>
++	#include <stdlib.h>
++	#include <string.h>
++	#include <unistd.h>
++	#include <errno.h>
++	#define PARALLEL_METHOD "Sockets"
++#else
++	#define PARALLEL_METHOD "Proprietary"
++	#error "Please implement multicore functionality in core_portme.c to use multiple contexts."
++#endif /* Method for multithreading */
++#endif /* MULTITHREAD > 1 */
++
++typedef struct CORE_PORTABLE_S {
++#if (MULTITHREAD>1)
++	#if USE_PTHREAD
++	pthread_t thread;
++	#elif USE_FORK
++	pid_t pid;
++	int shmid;
++	void *shm;
++	#elif USE_SOCKET
++	pid_t pid;
++	int sock;
++	struct sockaddr_in sa;
++	#endif /* Method for multithreading */
++#endif /* MULTITHREAD>1 */
++	ee_u8	portable_id;
++} core_portable;
++
++/* target specific init/fini */
++void portable_init(core_portable *p, int *argc, char *argv[]);
++void portable_fini(core_portable *p);
++
++#if (SEED_METHOD==SEED_VOLATILE)
++ #if (VALIDATION_RUN || PERFORMANCE_RUN || PROFILE_RUN)
++  #define RUN_TYPE_FLAG 1
++ #else
++  #if (TOTAL_DATA_SIZE==1200)
++   #define PROFILE_RUN 1
++  #else
++   #define PERFORMANCE_RUN 1
++  #endif
++ #endif
++#endif /* SEED_METHOD==SEED_VOLATILE */
++
++#endif /* CORE_PORTME_H */
+diff --git a/package/coremark/mips-i6500/core_portme.mak b/package/coremark/mips-i6500/core_portme.mak
+new file mode 100755
+index 0000000000..7b64977062
+--- /dev/null
++++ b/package/coremark/mips-i6500/core_portme.mak
+@@ -0,0 +1,140 @@
++# Copyright 2018 Embedded Microprocessor Benchmark Consortium (EEMBC)
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#    http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# Original Author: Shay Gal-on
++
++#File: core_portme.mak
++
++# Flag: OUTFLAG
++#	Use this flag to define how to to get an executable (e.g -o)
++OUTFLAG= -o
++# Flag: CC
++#	Use this flag to define compiler to use
++CC = gcc
++# Flag: CFLAGS
++#	Use this flag to define compiler options. Note, you can add compiler options from the command line using XCFLAGS="other flags"
++PORT_CFLAGS = -O2
++FLAGS_STR = "$(PORT_CFLAGS) $(XCFLAGS) $(XLFLAGS) $(LFLAGS_END)"
++CFLAGS = $(PORT_CFLAGS) -I$(PORT_DIR) -I. -DFLAGS_STR=\"$(FLAGS_STR)\"
++#Flag: LFLAGS_END
++#	Define any libraries needed for linking or other flags that should come at the end of the link line (e.g. linker scripts).
++#	Note: On certain platforms, the default clock_gettime implementation is supported but requires linking of librt.
++LFLAGS_END += -lrt
++# Flag: PORT_SRCS
++# Port specific source files can be added here
++PORT_SRCS = $(PORT_DIR)/core_portme.c
++# Flag: LOAD
++#	Define this flag if you need to load to a target, as in a cross compile environment.
++
++# Flag: RUN
++#	Define this flag if running does not consist of simple invocation of the binary.
++#	In a cross compile environment, you need to define this.
++
++#For flashing and using a tera term macro, you could use
++#LOAD = flash ADDR
++#RUN =  ttpmacro coremark.ttl
++
++#For copying to target and executing via SSH connection, you could use
++#LOAD = scp $(OUTFILE)  user@target:~
++#RUN = ssh user@target -c
++
++#For native compilation and execution
++LOAD = echo Loading done
++RUN =
++
++OEXT = .o
++EXE = .exe
++
++# Flag: SEPARATE_COMPILE
++# Define if you need to separate compilation from link stage.
++# In this case, you also need to define below how to create an object file, and how to link.
++ifdef SEPARATE_COMPILE
++
++LD		= gcc
++OBJOUT 	= -o
++LFLAGS 	=
++OFLAG 	= -o
++COUT 	= -c
++# Flag: PORT_OBJS
++# Port specific object files can be added here
++PORT_OBJS = $(PORT_DIR)/core_portme$(OEXT)
++PORT_CLEAN = *$(OEXT)
++
++$(OPATH)%$(OEXT) : %.c
++	$(CC) $(CFLAGS) $(XCFLAGS) $(COUT) $< $(OBJOUT) $@
++
++endif
++
++# Target: port_prebuild
++# Generate any files that are needed before actual build starts.
++# E.g. generate profile guidance files. Sample PGO generation for gcc enabled with PGO=1
++#  - First, check if PGO was defined on the command line, if so, need to add -fprofile-use to compile line.
++#  - Second, if PGO reference has not yet been generated, add a step to the prebuild that will build a profile-generate version and run it.
++#  Note - Using REBUILD=1
++#
++# Use make PGO=1 to invoke this sample processing.
++
++ifdef PGO
++ ifeq (,$(findstring $(PGO),gen))
++  PGO_STAGE=build_pgo_gcc
++  CFLAGS+=-fprofile-use
++ endif
++ PORT_CLEAN+=*.gcda *.gcno gmon.out
++endif
++
++.PHONY: port_prebuild
++port_prebuild: $(PGO_STAGE)
++
++.PHONY: build_pgo_gcc
++build_pgo_gcc:
++	$(MAKE) PGO=gen XCFLAGS="$(XCFLAGS) -fprofile-generate -DTOTAL_DATA_SIZE=1200" ITERATIONS=10 gen_pgo_data REBUILD=1
++
++# Target: port_postbuild
++# Generate any files that are needed after actual build end.
++# E.g. change format to srec, bin, zip in order to be able to load into flash
++.PHONY: port_postbuild
++port_postbuild:
++
++# Target: port_postrun
++# 	Do platform specific after run stuff.
++#	E.g. reset the board, backup the logfiles etc.
++.PHONY: port_postrun
++port_postrun:
++
++# Target: port_prerun
++# 	Do platform specific after run stuff.
++#	E.g. reset the board, backup the logfiles etc.
++.PHONY: port_prerun
++port_prerun:
++
++# Target: port_postload
++# 	Do platform specific after load stuff.
++#	E.g. reset the reset power to the flash eraser
++.PHONY: port_postload
++port_postload:
++
++# Target: port_preload
++# 	Do platform specific before load stuff.
++#	E.g. reset the reset power to the flash eraser
++.PHONY: port_preload
++port_preload:
++
++# FLAG: OPATH
++# Path to the output folder. Default - current folder.
++OPATH = ./
++MKDIR = mkdir -p
++
++# FLAG: PERL
++# Define perl executable to calculate the geomean if running separate.
++PERL=/usr/bin/perl
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
