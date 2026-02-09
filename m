@@ -1,86 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0F8AE9461B
-	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 22:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20098E94622
+	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 23:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFA464115A;
-	Mon,  9 Feb 2026 22:33:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kqmkw152hccv; Mon,  9 Feb 2026 22:33:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89D6C40DB4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770676436;
-	bh=cx58Ta1O768jW40Ru2ueOPhT3+ixW3TphXMvntIW3j4=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=TgrRImKNfcEu3rtjyRBE4/K8+n3nQ8kG7GH64Z0JCtVTYsttwW9+JUsP3TlTECAqR
-	 91j2zEYIG/kWOXPsRdgeVbMFjZCOBDtRuOAbVZvFraTzh8vBfyUadJYgjjn7CfMYug
-	 nuN9GBQXkwvBXNP2wt0dG7jKynutu7GHWQvfUWbGzbcQyAivGwhDxVTG4LncoHipP8
-	 A5+u0G93xBLeIAFv0r5wPjdlp7H6FAcanJqEoeUvzQ+RINyC/IPMJxg3iIRdn1b20c
-	 0bq52fEHmvEMMnQYmUVRVfFET0flGGjUiKQOqxvAu7Crr0KXT7Rfqp7H5KXYdJUxMB
-	 UZl0dYBojLB7A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89D6C40DB4;
-	Mon,  9 Feb 2026 22:33:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 86205F2
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 22:33:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6844160807
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 22:33:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAD6760E07;
+	Mon,  9 Feb 2026 23:50:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QmDx7TW9-vYd for <buildroot@buildroot.org>;
- Mon,  9 Feb 2026 22:33:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B9762605E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9762605E8
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B9762605E8
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 22:33:53 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 2C97719F57B;
- Mon,  9 Feb 2026 23:33:45 +0100 (CET)
+ id UacOx6uSEb1H; Mon,  9 Feb 2026 23:50:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C147460DC2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770681031;
+	bh=EJJXBj2AOx489t2dn7EeQdpuPOK0eYjuNVJFV7DMHEU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=OuXHFsgnrpelB/OA2ceZDYu16VF9WphC2LKqv0CTORLdIrnuXuDJWJ8BdrLmGp5Bf
+	 JLuhp7/CEPSDnVY96o561Z6tNymqjzMlVX/1PxRMuMutE7goiHjNclGLM6f9WSHeq9
+	 Qm2dihkA6wUmO/2L0UGYAMrrp2yZ5TOyJGfyzPNdG2pbrKN+9IdZZTGZ2fMkhYcmeL
+	 S7ZHsI7P2YThzTK2X0wI0g0X7GpPJSAiKMphlqGqJ89+DjDwQAGn+o8bea8mo8uVtw
+	 EmWXspY8GSgc4E/WaPJvkftC/eBpf51NatNCk8zAh1xkvyP9+GA0AiTDL2GY9TLbq8
+	 pq6uHeJZRdTcg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C147460DC2;
+	Mon,  9 Feb 2026 23:50:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6139F1A9
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 23:50:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 463E840C50
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 23:50:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dzr-QJAYBcZU for <buildroot@buildroot.org>;
+ Mon,  9 Feb 2026 23:50:29 +0000 (UTC)
+X-Greylist: delayed 426 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 09 Feb 2026 23:50:27 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0357440C40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0357440C40
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.117;
+ helo=smtpcmd03117.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0357440C40
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 23:50:27 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id pauUvTM0K5gYjpauUvmo5v; Tue, 10 Feb 2026 00:43:18 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Eric Le Bihan <eric.le.bihan.dev@free.fr>, Julien Olivain <ju.o@free.fr>,
- Philippe Proulx <eeppeliteloop@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  9 Feb 2026 23:32:59 +0100
-Message-ID: <20260209223259.1002212-6-ju.o@free.fr>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260209223259.1002212-1-ju.o@free.fr>
-References: <20260209223259.1002212-1-ju.o@free.fr>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 10 Feb 2026 00:29:01 +0100
+Message-ID: <20260209232901.2915903-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfITdtEYa+Sb2CdVByxHH/nap0rP6mtGaQQ7B+ympVD7ISUvV/fwa2kWANs9XDTwRhSVzTYk8PdMIlXkpcU6s/qPkvGjhd0N5M3qQkzFwJ6ghDSMpZTnx
+ ZWWNVbwxNtC88iO2j83bDhx5CkPlx4r9NjsRC5MEbiADT+xusEw6VhqtzN82KqjO9FyhXDWZmojlKXJLtWeszX3YJsrOCFtz5OekfUKaNIL3/3QuYZpsko9Z
+ KmF+K+m3rduufeXSQBqMAamqeYTosFvLmNyAWjDf9tA=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770676432;
- bh=NL0lUXXZj9QX56Xmgipr9li7VDZ1RPyCFZRDEF8G3Cs=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Ry0uA+EyBDokmYIhrijYpJEvuXJuDZO/iOhgT+5+6+WVbx+Bqiu525gSa8qpFfpXl
- utnxxB0fst4IWo53lm0aXczV0UfbOGCTR7YBuqzHQtrhh+NRTvnrn784VsLgIr6YOy
- COAFyrBIJ7U1cUe4RXejiakHg+hLGB2tdldAnOtYCwX/RCntSzpIc4PGsgEX5zJs+e
- BX61lFLMaqeALFNFiuvvx+gHw4T+jT4XJ3CGUHwcmakSrNqYLhxwFLTEhWez6o46hi
- JlHdsSZmYC1IE4oRAtsO65pie0ERfvIXx/vESKhjfKXzkUil4Qnyynn+IhE+GR7i4E
- kETXxDUujr2+g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ry0uA+Ey
-Subject: [Buildroot] [PATCH 6/6] support/testing: fs: new xfs runtime test
+ d=aruba.it; s=a1; 
+ t=1770680598; bh=ZghVzFwlkTpZZNxv6MiBoJLhVsgk678OXbdgV1eEwzM=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=bSiGJYIjE7YIzoCNUXLSLWAMJfFPqu1yo61xg1WmVIAdl3ENYVC/+tdfLPiDZDvPW
+ l+NiEfirIuF8WmmDvnBAuPWS2trA4QIrwuSmK9UqNlD8sALVeA/DPcBwUlqpG5tB1d
+ PCMgYLVZMP0wqBiw2WsWEWmIUv/r+gBCm/eWokrNhoJBAt12hhOqGsK1lgdfn0z2UH
+ rwCTkqVAQBYruz3F2FUt/DXIffQBGY13KQlCIHFWB43kxErKTwq+JtCRk5mPikJpBT
+ ZSyoh2m7KaUfx3iFP8Bb1tbX8VsjRZp0wYNrC+iY9Hsra63niCVyPUTkQo+ACYS3Ab
+ 3Pf+/E3esK6nA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=bSiGJYIj
+Subject: [Buildroot] [PATCH] package/zlib-ng: bump to 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,110 +92,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch series tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/13047320475
-https://gitlab.com/jolivain/buildroot/-/jobs/13047322702
-https://gitlab.com/jolivain/buildroot/-/pipelines/2315409055
----
- DEVELOPERS                                    |  2 +
- support/testing/tests/fs/test_xfs.py          | 55 +++++++++++++++++++
- .../tests/fs/test_xfs/linux-xfs.fragment      |  1 +
- 3 files changed, 58 insertions(+)
- create mode 100644 support/testing/tests/fs/test_xfs.py
- create mode 100644 support/testing/tests/fs/test_xfs/linux-xfs.fragment
+Release Notes: https://github.com/zlib-ng/zlib-ng/releases/tag/2.3.3
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 225d1ac917..7b5f5282fd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1844,6 +1844,8 @@ F:	support/testing/tests/fs/test_btrfs.py
- F:	support/testing/tests/fs/test_btrfs/
- F:	support/testing/tests/fs/test_erofs.py
- F:	support/testing/tests/fs/test_erofs/
-+F:	support/testing/tests/fs/test_xfs.py
-+F:	support/testing/tests/fs/test_xfs/
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/sample_python_hwdata.py
-diff --git a/support/testing/tests/fs/test_xfs.py b/support/testing/tests/fs/test_xfs.py
-new file mode 100644
-index 0000000000..283c88f34c
---- /dev/null
-+++ b/support/testing/tests/fs/test_xfs.py
-@@ -0,0 +1,55 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestXfs(infra.basetest.BRTest):
-+    kern_frag = \
-+        infra.filepath("tests/fs/test_xfs/linux-xfs.fragment")
-+    xfs_label = "BR_TEST"
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.9"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_XFS=y
-+        BR2_TARGET_ROOTFS_XFS_LABEL="{xfs_label}"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        disk = os.path.join(self.builddir, "images", "rootfs.xfs")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        bootargs = ["root=/dev/vda"]
-+        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
-+                     "-drive", f"file={disk},if=virtio,format=raw"]
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=bootargs,
-+                           options=qemu_opts)
-+        self.emulator.login()
-+
-+        # We check our root filesystem is in xfs format.
-+        cmd = "mount | grep '/dev/root on / type xfs'"
-+        self.assertRunOk(cmd)
-+
-+        # We try to write data on the root filesystem.
-+        msg = "Hello Buildroot"
-+        fname = "/root/file.txt"
-+        self.assertRunOk(f"echo '{msg}' > {fname}")
-+
-+        # We sync and drop all caches, to make sure we will read back
-+        # from the filsystem.
-+        self.assertRunOk("sync")
-+        self.assertRunOk("echo 3 > /proc/sys/vm/drop_caches")
-+
-+        # We check we can read back out data.
-+        out, ret = self.emulator.run(f"cat {fname}")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], msg)
-diff --git a/support/testing/tests/fs/test_xfs/linux-xfs.fragment b/support/testing/tests/fs/test_xfs/linux-xfs.fragment
-new file mode 100644
-index 0000000000..32f7f6d872
---- /dev/null
-+++ b/support/testing/tests/fs/test_xfs/linux-xfs.fragment
-@@ -0,0 +1 @@
-+CONFIG_XFS_FS=y
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/zlib-ng/zlib-ng.hash | 2 +-
+ package/zlib-ng/zlib-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index a9f879ea18..b317906474 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6a0561b50b8f5f6434a6a9e667a67026f2b2064a1ffa959c6b2dae320161c2a8  zlib-ng-2.3.2.tar.gz
++sha256  f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1  zlib-ng-2.3.3.tar.gz
+ sha256  6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee  LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index 275c5b86f0..59e4e15282 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZLIB_NG_VERSION = 2.3.2
++ZLIB_NG_VERSION = 2.3.3
+ ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
