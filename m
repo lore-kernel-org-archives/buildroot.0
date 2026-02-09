@@ -1,95 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B514E81BC1
-	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 13:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48AB9E81BB1
+	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 13:31:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF316608AA;
-	Mon,  9 Feb 2026 13:20:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Bm3qBRJZ8-6; Mon,  9 Feb 2026 13:20:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD34860A9E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770643249;
-	bh=OUQfynmU2sglzkiXZJbDc/VT+Ty92RVRoN0mGs6lh98=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kZuYpWwXRmC4/25yPMsMiGO4fA5RvL/korBeIP7t5NAftDyF3l4PY8s7LahGAkKR+
-	 l1FjE87cosX2XBuXI7CMSzFFmnwWm03VGGpyO4NxvIc51pLiDlGCzsa7qTaJmZVf9V
-	 2fQemsbZHA4/YZ/XHhFQBNIJSgKoqTE+k1ZJEffYzvm3/6HF8qcfaucjYoiaUeQy5P
-	 WPpI/exD1MWOjPwkfvC35SfHO1S5INcYAPbxOBRMV720ihar6Uu/gn5Z5DpdrqWTqi
-	 Oar8473QAYEq32TDeEsKlN4hwYzHlskSVtQCJ8PqIs30ZgeYpuqaQPl90+eGfEESoK
-	 2XPnmGNy8Rpqw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD34860A9E;
-	Mon,  9 Feb 2026 13:20:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BA322A2
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:20:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88600821BD
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:20:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FB17838D3;
+	Mon,  9 Feb 2026 13:31:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fzkcN3kGmWQt for <buildroot@buildroot.org>;
- Mon,  9 Feb 2026 13:20:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=207.54.77.171;
- helo=esa4.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4EA7181D65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EA7181D65
-Received: from esa4.hc555-34.eu.iphmx.com (esa4.hc555-34.eu.iphmx.com
- [207.54.77.171])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4EA7181D65
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:20:41 +0000 (UTC)
-X-CSE-ConnectionGUID: H84gHkNoQXOBAeFMBAtv1g==
-X-CSE-MsgGUID: la7SwyJ8RsKnwiNU5zCB7A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from unknown (HELO ces04_data.me-crop.lan) ([146.255.191.134])
- by esa4.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 09 Feb 2026 15:20:39 +0200
-X-CSE-ConnectionGUID: 99cu75kQQ0+q+6QYvzxlKg==
-X-CSE-MsgGUID: Rnwb6YzLQ0GXq9L5/VxRbA==
-Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.6])
- by ces04_data.me-crop.lan with SMTP; 09 Feb 2026 15:22:55 +0200
-Received: by epgd074.me-corp.lan (sSMTP sendmail emulation);
- Mon, 09 Feb 2026 15:20:37 +0200
-To: buildroot@buildroot.org
-Cc: guenther.harrasser@mobileye.com, Chris Packham <judge.packham@gmail.com>,
- Andreas Ziegler <br025@umbiko.net>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Date: Mon,  9 Feb 2026 15:20:34 +0200
-Message-ID: <20260209132034.3298699-1-jimmy.wesolowski@mobileye.com>
-In-Reply-To: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
-References: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
+ id 2O_hWjiqLOoC; Mon,  9 Feb 2026 13:31:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8932483C19
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770643913;
+	bh=NyXPKFdHi+hzCr0z+wm4A1fliAMANRxYYrnfb0bl5d4=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=EsGQJcnhiouvxTZ5sAG1zY/1Uh0VMKz1v9A4fp8sVoEUOTyLtS+F0mLeI0IM0mr8l
+	 QDpAdm/qwAFy2FpQzTc1OUhsk4Pc8Ef/Yq52BGRzVr0ViMpSHfGBYSfYHCmwhM4h9l
+	 7CBcnH5OdtSKICMe3AF8T4KvBHK00EWGbQNEX+P5jUqCW0+xL1oXkW7tg8ij3j22wT
+	 w8sCDebUV9sAMtwwzgwLkEVpkJdkamrj5dOXhdDNP0N1oEw1i0ZfjCZtyLWHnLviBk
+	 ZBpmfbMafOHKNa9Nmifeo/egYf+7G4BWAohwkxSvfK5jba5jdg54WVYJAnkOkJyE6V
+	 ZAwdLn6r/25lw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8932483C19;
+	Mon,  9 Feb 2026 13:31:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F7D91A9
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:31:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4477E40D5D
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:31:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NSqy6l8U5FDD for <buildroot@buildroot.org>;
+ Mon,  9 Feb 2026 13:31:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 35F3B40BFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35F3B40BFD
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 35F3B40BFD
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 13:31:51 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48329eb96a7so12136335e9.3
+ for <buildroot@buildroot.org>; Mon, 09 Feb 2026 05:31:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1770643909; x=1771248709;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ScCiuWKohZ3cmgPjQl/UO32tyD1HESeEPpRQNgufszs=;
+ b=C5mVcL3XQKhyQdeaSGz6piWTF/KuPka1HAf5ru0KT/mSKrtuSNnpCnkJ8Zbczhi2Jn
+ hbdUIZehyPSj7c6+NIqMzjAZWt1pcgT8Clvs7YG0WZhHH2/MkeIxzaASEYILEugINaqu
+ bE10YhYuqrqaOfuloUeCuJc2/6Lqh9+MKKixdALdAfn86R39TtO3oOfrKM75C9Mf9MZx
+ bAY8Ag0VDjXPr3xBfjjry9Qotdp8Br/STAhge2HBkDd61xzSjjUCtugoyyqEylNzoXfY
+ A/Wu491GmJ+1Cdpy3+Q6FTllZ4qzJnKbBObAU3Aokmiul2MdRWgLQo9QoWmYPKm5Z7fg
+ +g3A==
+X-Gm-Message-State: AOJu0YxgAYQf/yl+KFtp2RRb01SeGGuuoRGbjG80qzJ89PEBJy+0xCEg
+ GtooP7HXqsx225Q/Ez7ye0pE2YR8nLhZY+pTttvZP2iCjzUtez/9ucRJwHdSlw==
+X-Gm-Gg: AZuq6aKEIQEbqRz2V9K9iSEaUhPzF+Ut5aJ3ljef1PXrNG/0QTCdlIxlOnWd7gTo6A/
+ 3ifn9INzG+GW6x/YoLGzJaxEIv1sKGIpZ38xVF37LSy+UtO9DSVLwxAfQJa69hKh2pY9baLBhKz
+ kJWF+fW5nZuB/rAbPkcld2KHHiXbSAptk/Po/gapa5a3uCgS7vK08GwasCPD8KMN+e88o8+FInC
+ 5iYm1ol8hpWG2dMGDQw1kEZG1zMs71xI39KghU0LiNutIO4x9E8rzFDnHSO2BZUzUrJLWUzWOz1
+ kupsOne4uS0YBIJibNWOI74U0pPixGm1fz3kXSG1BIZvg+bmlajOpBwTBGGvAC7lomqWqSWGE4C
+ Wx+7Oy9BL+nDLD6z1gL600jQbfc8sY7/UL6+k6YXApK2RlNnf6ac+mO3wVV9c4AT5lSuakId2GZ
+ BXcf5Vv0qOe9DtKjkznT34drzl6qqkQ6eT7PWCrO4+C6YACSaAgqATT1Ytu0E=
+X-Received: by 2002:a05:600c:35c7:b0:47e:e2eb:bc22 with SMTP id
+ 5b1f17b1804b1-483209291fbmr166021455e9.5.1770643908413; 
+ Mon, 09 Feb 2026 05:31:48 -0800 (PST)
+Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-48317d8342dsm290199155e9.12.2026.02.09.05.31.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 09 Feb 2026 05:31:48 -0800 (PST)
+From: Flaviu Nistor <flaviu.nistor@gmail.com>
+To: buildroot@buildroot.org,
+	Fiona Klute <fiona.klute@gmx.de>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>
+Date: Mon,  9 Feb 2026 15:31:36 +0200
+Message-ID: <20260209133136.163189-1-flaviu.nistor@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <51a2df8a-1b8e-471d-b3c5-ef73240ac226@gmx.de>
+References: <51a2df8a-1b8e-471d-b3c5-ef73240ac226@gmx.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
- t=1770643244; x=1802179244;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=SUIVnXdw6CznZRXkldA4v8RuQrWg7whn7LMuVi17Iz0=;
- b=ETDeWDq4q8fFNlkjlf3HuKWuGxnVNQmPQTSF9i1n6mGz70jLOQA/Ri7M
- XrYfTeYOwteYwRQXsMcQ+Xa72dP2Tsg8kpYjPv8uKfH54+Lsv4eQXjyTS
- xP4ZOi2KtvjQMzNYw58kcDSGimhHzow0Gpxel8KO0hD3lDZEQfLhpy3uE
- Ynxlw7f6Gsrs+KBEjHnOGbWz2I98Slmu3oUnAFYQjTxqzg1sK0qZVK1RZ
- XyoC4Gel5ajs/Kn+0FqIFct9n6uisCMAS8TSQdUqTWxQZBVNWRIeieXHX
- FUVGCWx+UiJ9lNfjlFsiPiL2Vo8Ah9ggRRfSg6wMM/lFHUEry9/LFLkC5
- g==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mobileye.com
-Subject: [Buildroot] [PATCH v2 1/1] package/coremark: port for mips-i6500
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1770643909; x=1771248709; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ScCiuWKohZ3cmgPjQl/UO32tyD1HESeEPpRQNgufszs=;
+ b=Qssgs3z5yVMkydmOcdZGfq/9vypM1n3DKR6R1Lt73VwgH3/Y+OwrBJUqhpRv2xAOib
+ cwDXtHWi67WqfW2zgg6B7WojkhN5pU1yvf2oY1pO/WkwCV3WZe4uZMlpBg5FqbP5i6Hs
+ 0Po1xVkhUjcb/LqMwTKO3GtakLf/Q25qe350RL/kWqr65vIj2YkKRD4GQ1Znrg2swZtP
+ txeUZ4JDuqFFbktKr2r9Up2R3eGDQgwi/Gsggyes2ZA0llJjcTTxwuM0PTO7jvlQSn5L
+ FBcKDqRcQQDcGfs2Hm15RkTco8ySFfHCdhgien5myQcctOKjEpmdkR/xW3uPGCArMtUp
+ Cylg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Qssgs3z5
+Subject: Re: [Buildroot] [PATCH 1/1] linux/linux.mk: add kernel commit hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,900 +122,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org>
-Reply-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Hello Fiona!
 
-Compile for MIPS I6500 CPU 64-bit, with all compiler flags as
-recommended by MIPS
+On 09.02.26 at 13:09, Fiona Klute wrote:
+>Hi Flaviu!
+>
+>Am 09.02.26 um 08:07 schrieb Flaviu Nistor:
+>> Add also the kernel commit hash to the kernel release string
+>> in case LINUX_DIR is a valid git repo. Using uname, this allows
+>> easy identification of the commit hash used to build the kernel.
+>>=20
+>> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+>> ---
+>>   linux/linux.mk | 8 +++++++-
+>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index c61089bfe0..7833304013 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -12,6 +12,11 @@ LINUX_CPE_ID_VENDOR =3D linux
+>>   LINUX_CPE_ID_PRODUCT =3D linux_kernel
+>>   LINUX_CPE_ID_PREFIX =3D cpe:2.3:o
+>>  =20
+>> +# Get git commit hash if LINUX_DIR is a valid git repo or
+>> +# an empty string which will be passed via LINUX_MAKE_FLAGS
+>> +LINUX_GIT_COMMIT_HASH =3D $(shell cd $(LINUX_DIR) 2>/dev/null && git rev=
+-parse --short HEAD 2>/dev/null)
+>> +LINUX_LOCALVERSION =3D $(if $(LINUX_GIT_COMMIT_HASH),-g$(LINUX_GIT_COMMI=
+T_HASH),)
+>> +
+>>   # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+>>   ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+>>   LINUX_TARBALL =3D $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCAT=
+ION))
+>> @@ -164,7 +169,8 @@ LINUX_MAKE_FLAGS =3D \
+>>   =09CROSS_COMPILE=3D"$(TARGET_CROSS)" \
+>>   =09WERROR=3D0 \
+>>   =09REGENERATE_PARSERS=3D1 \
+>> -=09DEPMOD=3D$(HOST_DIR)/sbin/depmod
+>> +=09DEPMOD=3D$(HOST_DIR)/sbin/depmod \
+>> +=09LOCALVERSION=3D"$(LINUX_LOCALVERSION)"
 
-One missing flag -s "-Tmsym32.ld" since linker script
-"msym32.ld" does not exist in the MIPS toolchain
+>Wouldn't setting CONFIG_LOCALVERSION_AUTO=3Dy in your kernel config=20
+>achieve pretty much the same thing, without adding to localversion for=20
+>everyone's builds?
+>
+You are right, making sure to set this in the kernel config file would
+end in the same result. Thanks for the reply and pointing this out.
 
-Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Best regards,
+Flaviu
 
----
-Changes v1 -> v2:
-  - do not add mips-i6500 through a patch, but copy it through rsync
-    in POST_EXTRACT_HOOKS (suggested by
-    Andreas Ziegler <br025@umbiko.net>)
-  - allow specifying a port directory to use through kconfig, such as
-    mips-i6500. The default stays linux for 32-bits architecture,
-    linux64 for 64.
-  - allow passing extra PORT_CFLAGS through kconfig  (suggested by
-    Andreas Ziegler <br025@umbiko.net>)
-
-Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
----
- package/coremark/Config.in                  |  19 ++
- package/coremark/coremark.mk                |  23 +-
- package/coremark/mips-i6500/core_portme.c   | 336 ++++++++++++++++++++
- package/coremark/mips-i6500/core_portme.h   | 291 +++++++++++++++++
- package/coremark/mips-i6500/core_portme.mak | 140 ++++++++
- 5 files changed, 805 insertions(+), 4 deletions(-)
- create mode 100755 package/coremark/mips-i6500/core_portme.c
- create mode 100755 package/coremark/mips-i6500/core_portme.h
- create mode 100755 package/coremark/mips-i6500/core_portme.mak
-
-diff --git a/package/coremark/Config.in b/package/coremark/Config.in
-index f0e13eda63..bb29a8093f 100644
---- a/package/coremark/Config.in
-+++ b/package/coremark/Config.in
-@@ -6,3 +6,22 @@ config BR2_PACKAGE_COREMARK
- 	  used in embedded systems
- 
- 	  https://www.eembc.org/coremark/
-+
-+if BR2_PACKAGE_COREMARK
-+config BR2_PACKAGE_COREMARK_PORT
-+        string "coremark port directory"
-+        default "linux" if !BR2_ARCH_IS_64
-+	default "linux64" if BR2_ARCH_IS_64
-+        help
-+          Path to the platform specific port directory.
-+	  This allow using a different platform specific port than the
-+	  default indicated if the support is available in CoreMark.
-+
-+config BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA
-+	string "coremark port extra CFLAGS"
-+	default ""
-+	help
-+	  Additional CFLAGS to pass to CoreMark platform specific port.
-+	  Any additional flags indicated here will be added to the
-+	  CFLAGS_PORT variable.
-+endif
-diff --git a/package/coremark/coremark.mk b/package/coremark/coremark.mk
-index 9ea8693e71..3c367ff90b 100644
---- a/package/coremark/coremark.mk
-+++ b/package/coremark/coremark.mk
-@@ -9,14 +9,29 @@ COREMARK_SITE = $(call github,eembc,coremark,v$(COREMARK_VERSION))
- COREMARK_LICENSE = Apache-2.0
- COREMARK_LICENSE_FILES = LICENSE.md
- 
-+COREMARK_CFLAGS = \
-+        $(TARGET_CFLAGS) \
-+	$(call qstrip,$(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+COREMARK_CFLAGS += -DUSE_PTHREAD
-+endif # BR2_TOOLCHAIN_HAS_THREADS=y
-+
-+define COREMARK_MIPS_I6500
-+	rsync --archive --update \
-+		$(COREMARK_PKGDIR)/mips-i6500/ $(@D)/mips-i6500/
-+endef # COREMARK_MIPS_I6500
-+
-+COREMARK_POST_EXTRACT_HOOKS += $(if $(BR2_MIPS_NABI64),COREMARK_MIPS_I6500)
-+
- define COREMARK_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
--		PORT_CFLAGS="$(TARGET_CFLAGS)" \
--		PORT_DIR=linux$(if $(BR2_ARCH_IS_64),64) EXE= link
--endef
-+		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
-+		PORT_DIR=$(BR2_PACKAGE_COREMARK_PORT) EXE= link
-+endef # COREMARK_BUILD_CMDS
- 
- define COREMARK_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/coremark $(TARGET_DIR)/usr/bin/coremark
--endef
-+endef # COREMARK_INSTALL_TARGET_CMDS
- 
- $(eval $(generic-package))
-diff --git a/package/coremark/mips-i6500/core_portme.c b/package/coremark/mips-i6500/core_portme.c
-new file mode 100755
-index 0000000000..951826064e
---- /dev/null
-+++ b/package/coremark/mips-i6500/core_portme.c
-@@ -0,0 +1,336 @@
-+/*
-+Copyright 2018 Embedded Microprocessor Benchmark Consortium (EEMBC)
-+
-+Licensed under the Apache License, Version 2.0 (the "License");
-+you may not use this file except in compliance with the License.
-+You may obtain a copy of the License at
-+
-+    http://www.apache.org/licenses/LICENSE-2.0
-+
-+Unless required by applicable law or agreed to in writing, software
-+distributed under the License is distributed on an "AS IS" BASIS,
-+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-+See the License for the specific language governing permissions and
-+limitations under the License.
-+
-+Original Author: Shay Gal-on
-+*/
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include "coremark.h"
-+#if CALLGRIND_RUN
-+#include <valgrind/callgrind.h>
-+#endif
-+
-+#if (MEM_METHOD==MEM_MALLOC)
-+#include <malloc.h>
-+/* Function: portable_malloc
-+	Provide malloc() functionality in a platform specific way.
-+*/
-+void *portable_malloc(size_t size) {
-+	return malloc(size);
-+}
-+/* Function: portable_free
-+	Provide free() functionality in a platform specific way.
-+*/
-+void portable_free(void *p) {
-+	free(p);
-+}
-+#else
-+void *portable_malloc(size_t size) {
-+	return NULL;
-+}
-+void portable_free(void *p) {
-+	p=NULL;
-+}
-+#endif
-+
-+#if (SEED_METHOD==SEED_VOLATILE)
-+#if VALIDATION_RUN
-+	volatile ee_s32 seed1_volatile=0x3415;
-+	volatile ee_s32 seed2_volatile=0x3415;
-+	volatile ee_s32 seed3_volatile=0x66;
-+#endif
-+#if PERFORMANCE_RUN
-+	volatile ee_s32 seed1_volatile=0x0;
-+	volatile ee_s32 seed2_volatile=0x0;
-+	volatile ee_s32 seed3_volatile=0x66;
-+#endif
-+#if PROFILE_RUN
-+	volatile ee_s32 seed1_volatile=0x8;
-+	volatile ee_s32 seed2_volatile=0x8;
-+	volatile ee_s32 seed3_volatile=0x8;
-+#endif
-+	volatile ee_s32 seed4_volatile=ITERATIONS;
-+	volatile ee_s32 seed5_volatile=0;
-+#endif
-+/* Porting: Timing functions
-+	How to capture time and convert to seconds must be ported to whatever is supported by the platform.
-+	e.g. Read value from on board RTC, read value from cpu clock cycles performance counter etc.
-+	Sample implementation for standard time.h and windows.h definitions included.
-+*/
-+/* Define: TIMER_RES_DIVIDER
-+	Divider to trade off timer resolution and total time that can be measured.
-+
-+	Use lower values to increase resolution, but make sure that overflow does not occur.
-+	If there are issues with the return value overflowing, increase this value.
-+	*/
-+#if USE_CLOCK
-+	#define NSECS_PER_SEC CLOCKS_PER_SEC
-+	#define EE_TIMER_TICKER_RATE 1000
-+	#define CORETIMETYPE clock_t
-+	#define GETMYTIME(_t) (*_t=clock())
-+	#define MYTIMEDIFF(fin,ini) ((fin)-(ini))
-+	#define TIMER_RES_DIVIDER 1
-+	#define SAMPLE_TIME_IMPLEMENTATION 1
-+#elif defined(_MSC_VER)
-+	#define NSECS_PER_SEC 10000000
-+	#define EE_TIMER_TICKER_RATE 1000
-+	#define CORETIMETYPE FILETIME
-+	#define GETMYTIME(_t) GetSystemTimeAsFileTime(_t)
-+	#define MYTIMEDIFF(fin,ini) (((*(__int64*)&fin)-(*(__int64*)&ini))/TIMER_RES_DIVIDER)
-+	/* setting to millisces resolution by default with MSDEV */
-+	#ifndef TIMER_RES_DIVIDER
-+	#define TIMER_RES_DIVIDER 1000
-+	#endif
-+	#define SAMPLE_TIME_IMPLEMENTATION 1
-+#elif HAS_TIME_H
-+	#define NSECS_PER_SEC 1000000000
-+	#define EE_TIMER_TICKER_RATE 1000
-+	#define CORETIMETYPE struct timespec
-+	#define GETMYTIME(_t) clock_gettime(CLOCK_REALTIME,_t)
-+	#define MYTIMEDIFF(fin,ini) ((fin.tv_sec-ini.tv_sec)*(NSECS_PER_SEC/TIMER_RES_DIVIDER)+(fin.tv_nsec-ini.tv_nsec)/TIMER_RES_DIVIDER)
-+	/* setting to 1/1000 of a second resolution by default with linux */
-+	#ifndef TIMER_RES_DIVIDER
-+	#define TIMER_RES_DIVIDER 1000000
-+	#endif
-+	#define SAMPLE_TIME_IMPLEMENTATION 1
-+#else
-+	#define SAMPLE_TIME_IMPLEMENTATION 0
-+#endif
-+#define EE_TICKS_PER_SEC (NSECS_PER_SEC / TIMER_RES_DIVIDER)
-+
-+#if SAMPLE_TIME_IMPLEMENTATION
-+/** Define Host specific (POSIX), or target specific global time variables. */
-+static CORETIMETYPE start_time_val, stop_time_val;
-+
-+/* Function: start_time
-+	This function will be called right before starting the timed portion of the benchmark.
-+
-+	Implementation may be capturing a system timer (as implemented in the example code)
-+	or zeroing some system parameters - e.g. setting the cpu clocks cycles to 0.
-+*/
-+void start_time(void) {
-+	GETMYTIME(&start_time_val );
-+#if CALLGRIND_RUN
-+	CALLGRIND_START_INSTRUMENTATION
-+#endif
-+#if MICA
-+    asm volatile("int3");/*1 */
-+#endif
-+}
-+/* Function: stop_time
-+	This function will be called right after ending the timed portion of the benchmark.
-+
-+	Implementation may be capturing a system timer (as implemented in the example code)
-+	or other system parameters - e.g. reading the current value of cpu cycles counter.
-+*/
-+void stop_time(void) {
-+#if CALLGRIND_RUN
-+	 CALLGRIND_STOP_INSTRUMENTATION
-+#endif
-+#if MICA
-+    asm volatile("int3");/*1 */
-+#endif
-+	GETMYTIME(&stop_time_val );
-+}
-+/* Function: get_time
-+	Return an abstract "ticks" number that signifies time on the system.
-+
-+	Actual value returned may be cpu cycles, milliseconds or any other value,
-+	as long as it can be converted to seconds by <time_in_secs>.
-+	This methodology is taken to accomodate any hardware or simulated platform.
-+	The sample implementation returns millisecs by default,
-+	and the resolution is controlled by <TIMER_RES_DIVIDER>
-+*/
-+CORE_TICKS get_time(void) {
-+	CORE_TICKS elapsed=(CORE_TICKS)(MYTIMEDIFF(stop_time_val, start_time_val));
-+	return elapsed;
-+}
-+/* Function: time_in_secs
-+	Convert the value returned by get_time to seconds.
-+
-+	The <secs_ret> type is used to accomodate systems with no support for floating point.
-+	Default implementation implemented by the EE_TICKS_PER_SEC macro above.
-+*/
-+secs_ret time_in_secs(CORE_TICKS ticks) {
-+	secs_ret retval=((secs_ret)ticks) / (secs_ret)EE_TICKS_PER_SEC;
-+	return retval;
-+}
-+#else
-+#error "Please implement timing functionality in core_portme.c"
-+#endif /* SAMPLE_TIME_IMPLEMENTATION */
-+
-+ee_u32 default_num_contexts=MULTITHREAD;
-+
-+/* Function: portable_init
-+	Target specific initialization code
-+	Test for some common mistakes.
-+*/
-+void portable_init(core_portable *p, int *argc, char *argv[])
-+{
-+#if PRINT_ARGS
-+	int i;
-+	for (i=0; i<*argc; i++) {
-+		ee_printf("Arg[%d]=%s\n",i,argv[i]);
-+	}
-+#endif
-+	if (sizeof(ee_ptr_int) != sizeof(ee_u8 *)) {
-+		ee_printf("ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
-+	}
-+	if (sizeof(ee_u32) != 4) {
-+		ee_printf("ERROR! Please define ee_u32 to a 32b unsigned type!\n");
-+	}
-+#if (MAIN_HAS_NOARGC && (SEED_METHOD==SEED_ARG))
-+	ee_printf("ERROR! Main has no argc, but SEED_METHOD defined to SEED_ARG!\n");
-+#endif
-+
-+#if (MULTITHREAD>1) && (SEED_METHOD==SEED_ARG)
-+	int nargs=*argc,i;
-+	if ((nargs>1) && (*argv[1]=='M')) {
-+		default_num_contexts=parseval(argv[1]+1);
-+		if (default_num_contexts>MULTITHREAD)
-+			default_num_contexts=MULTITHREAD;
-+		/* Shift args since first arg is directed to the portable part and not to coremark main */
-+		--nargs;
-+		for (i=1; i<nargs; i++)
-+			argv[i]=argv[i+1];
-+		*argc=nargs;
-+	}
-+#endif /* sample of potential platform specific init via command line, reset the number of contexts being used if first argument is M<n>*/
-+	p->portable_id=1;
-+}
-+/* Function: portable_fini
-+	Target specific final code
-+*/
-+void portable_fini(core_portable *p)
-+{
-+	p->portable_id=0;
-+}
-+
-+#if (MULTITHREAD>1)
-+
-+/* Function: core_start_parallel
-+	Start benchmarking in a parallel context.
-+
-+	Three implementations are provided, one using pthreads, one using fork and shared mem, and one using fork and sockets.
-+	Other implementations using MCAPI or other standards can easily be devised.
-+*/
-+/* Function: core_stop_parallel
-+	Stop a parallel context execution of coremark, and gather the results.
-+
-+	Three implementations are provided, one using pthreads, one using fork and shared mem, and one using fork and sockets.
-+	Other implementations using MCAPI or other standards can easily be devised.
-+*/
-+#if USE_PTHREAD
-+ee_u8 core_start_parallel(core_results *res) {
-+	return (ee_u8)pthread_create(&(res->port.thread),NULL,iterate,(void *)res);
-+}
-+ee_u8 core_stop_parallel(core_results *res) {
-+	void *retval;
-+	return (ee_u8)pthread_join(res->port.thread,&retval);
-+}
-+#elif USE_FORK
-+static int key_id=0;
-+ee_u8 core_start_parallel(core_results *res) {
-+	key_t key=4321+key_id;
-+	key_id++;
-+	res->port.pid=fork();
-+	res->port.shmid=shmget(key, 8, IPC_CREAT | 0666);
-+	if (res->port.shmid<0) {
-+		ee_printf("ERROR in shmget!\n");
-+	}
-+	if (res->port.pid==0) {
-+		iterate(res);
-+		res->port.shm=shmat(res->port.shmid, NULL, 0);
-+		/* copy the validation values to the shared memory area  and quit*/
-+		if (res->port.shm == (char *) -1) {
-+			ee_printf("ERROR in child shmat!\n");
-+		} else {
-+			memcpy(res->port.shm,&(res->crc),8);
-+			shmdt(res->port.shm);
-+		}
-+		exit(0);
-+	}
-+	return 1;
-+}
-+ee_u8 core_stop_parallel(core_results *res) {
-+	int status;
-+	pid_t wpid = waitpid(res->port.pid,&status,WUNTRACED);
-+	if (wpid != res->port.pid) {
-+		ee_printf("ERROR waiting for child.\n");
-+		if (errno == ECHILD) ee_printf("errno=No such child %d\n",res->port.pid);
-+		if (errno == EINTR) ee_printf("errno=Interrupted\n");
-+		return 0;
-+	}
-+	/* after process is done, get the values from the shared memory area */
-+	res->port.shm=shmat(res->port.shmid, NULL, 0);
-+	if (res->port.shm == (char *) -1) {
-+		ee_printf("ERROR in parent shmat!\n");
-+		return 0;
-+	}
-+	memcpy(&(res->crc),res->port.shm,8);
-+	shmdt(res->port.shm);
-+	return 1;
-+}
-+#elif USE_SOCKET
-+static int key_id=0;
-+ee_u8 core_start_parallel(core_results *res) {
-+	int bound, buffer_length=8;
-+	res->port.sa.sin_family = AF_INET;
-+	res->port.sa.sin_addr.s_addr = htonl(0x7F000001);
-+	res->port.sa.sin_port = htons(7654+key_id);
-+	key_id++;
-+	res->port.pid=fork();
-+	if (res->port.pid==0) { /* benchmark child */
-+		iterate(res);
-+		res->port.sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-+		if (-1 == res->port.sock) /* if socket failed to initialize, exit */   {
-+			ee_printf("Error Creating Socket");
-+		} else {
-+			int bytes_sent = sendto(res->port.sock, &(res->crc), buffer_length, 0,(struct sockaddr*)&(res->port.sa), sizeof (struct sockaddr_in));
-+			if (bytes_sent < 0)
-+				ee_printf("Error sending packet: %s\n", strerror(errno));
-+			close(res->port.sock); /* close the socket */
-+		}
-+		exit(0);
-+	}
-+	/* parent process, open the socket */
-+	res->port.sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-+	bound = bind(res->port.sock,(struct sockaddr*)&(res->port.sa), sizeof(struct sockaddr));
-+	if (bound < 0)
-+		ee_printf("bind(): %s\n",strerror(errno));
-+	return 1;
-+}
-+ee_u8 core_stop_parallel(core_results *res) {
-+	int status;
-+	int fromlen=sizeof(struct sockaddr);
-+	int recsize = recvfrom(res->port.sock, &(res->crc), 8, 0, (struct sockaddr*)&(res->port.sa), &fromlen);
-+	if (recsize < 0) {
-+		ee_printf("Error in receive: %s\n", strerror(errno));
-+		return 0;
-+	}
-+	pid_t wpid = waitpid(res->port.pid,&status,WUNTRACED);
-+	if (wpid != res->port.pid) {
-+		ee_printf("ERROR waiting for child.\n");
-+		if (errno == ECHILD) ee_printf("errno=No such child %d\n",res->port.pid);
-+		if (errno == EINTR) ee_printf("errno=Interrupted\n");
-+		return 0;
-+	}
-+	return 1;
-+}
-+#else /* no standard multicore implementation */
-+#error "Please implement multicore functionality in core_portme.c to use multiple contexts."
-+#endif /* multithread implementations */
-+#endif
-diff --git a/package/coremark/mips-i6500/core_portme.h b/package/coremark/mips-i6500/core_portme.h
-new file mode 100755
-index 0000000000..d18a431ec8
---- /dev/null
-+++ b/package/coremark/mips-i6500/core_portme.h
-@@ -0,0 +1,291 @@
-+/*
-+Copyright 2018 Embedded Microprocessor Benchmark Consortium (EEMBC)
-+
-+Licensed under the Apache License, Version 2.0 (the "License");
-+you may not use this file except in compliance with the License.
-+You may obtain a copy of the License at
-+
-+    http://www.apache.org/licenses/LICENSE-2.0
-+
-+Unless required by applicable law or agreed to in writing, software
-+distributed under the License is distributed on an "AS IS" BASIS,
-+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-+See the License for the specific language governing permissions and
-+limitations under the License.
-+
-+Original Author: Shay Gal-on
-+*/
-+
-+/* Topic: Description
-+	This file contains configuration constants required to execute on different platforms
-+*/
-+#ifndef CORE_PORTME_H
-+#define CORE_PORTME_H
-+/************************/
-+/* Data types and settings */
-+/************************/
-+/* Configuration: HAS_FLOAT
-+	Define to 1 if the platform supports floating point.
-+*/
-+#ifndef HAS_FLOAT
-+#define HAS_FLOAT 1
-+#endif
-+/* Configuration: HAS_TIME_H
-+	Define to 1 if platform has the time.h header file,
-+	and implementation of functions thereof.
-+*/
-+#ifndef HAS_TIME_H
-+#define HAS_TIME_H 1
-+#endif
-+/* Configuration: USE_CLOCK
-+	Define to 1 if platform has the time.h header file,
-+	and implementation of functions thereof.
-+*/
-+#ifndef USE_CLOCK
-+#define USE_CLOCK 0
-+#endif
-+/* Configuration: HAS_STDIO
-+	Define to 1 if the platform has stdio.h.
-+*/
-+#ifndef HAS_STDIO
-+#define HAS_STDIO 1
-+#endif
-+/* Configuration: HAS_PRINTF
-+	Define to 1 if the platform has stdio.h and implements the printf function.
-+*/
-+#ifndef HAS_PRINTF
-+#define HAS_PRINTF 1
-+#endif
-+
-+/* Configuration: CORE_TICKS
-+	Define type of return from the timing functions.
-+ */
-+#if defined(_MSC_VER)
-+#include <windows.h>
-+typedef size_t CORE_TICKS;
-+#elif HAS_TIME_H
-+#include <time.h>
-+typedef clock_t CORE_TICKS;
-+#else
-+#error "Please define type of CORE_TICKS and implement start_time, end_time get_time and time_in_secs functions!"
-+#endif
-+
-+/* Definitions: COMPILER_VERSION, COMPILER_FLAGS, MEM_LOCATION
-+	Initialize these strings per platform
-+*/
-+#ifndef COMPILER_VERSION
-+ #ifdef __GNUC__
-+ #define COMPILER_VERSION "GCC"__VERSION__
-+ #else
-+ #define COMPILER_VERSION "Please put compiler version here (e.g. gcc 4.1)"
-+ #endif
-+#endif
-+#ifndef COMPILER_FLAGS
-+ #define COMPILER_FLAGS FLAGS_STR /* "Please put compiler flags here (e.g. -o3)" */
-+#endif
-+#ifndef MEM_LOCATION
-+ #define MEM_LOCATION "Please put data memory location here\n\t\t\t(e.g. code in flash, data on heap etc)"
-+ #define MEM_LOCATION_UNSPEC 1
-+#endif
-+
-+/* Data Types:
-+	To avoid compiler issues, define the data types that need ot be used for 8b, 16b and 32b in <core_portme.h>.
-+
-+	*Imprtant*:
-+	ee_ptr_int needs to be the data type used to hold pointers, otherwise coremark may fail!!!
-+*/
-+typedef signed short ee_s16;
-+typedef unsigned short ee_u16;
-+typedef signed int ee_s32;
-+typedef double ee_f32;
-+typedef unsigned char ee_u8;
-+typedef unsigned int ee_u32;
-+typedef unsigned long long ee_ptr_int;
-+typedef size_t ee_size_t;
-+/* align an offset to point to a 32b value */
-+#define align_mem(x) (void *)(4 + (((ee_ptr_int)(x) - 1) & ~3))
-+
-+/* Configuration: SEED_METHOD
-+	Defines method to get seed values that cannot be computed at compile time.
-+
-+	Valid values:
-+	SEED_ARG - from command line.
-+	SEED_FUNC - from a system function.
-+	SEED_VOLATILE - from volatile variables.
-+*/
-+#ifndef SEED_METHOD
-+#define SEED_METHOD SEED_ARG
-+#endif
-+
-+/* Configuration: MEM_METHOD
-+	Defines method to get a block of memry.
-+
-+	Valid values:
-+	MEM_MALLOC - for platforms that implement malloc and have malloc.h.
-+	MEM_STATIC - to use a static memory array.
-+	MEM_STACK - to allocate the data block on the stack (NYI).
-+*/
-+#ifndef MEM_METHOD
-+#define MEM_METHOD MEM_MALLOC
-+#endif
-+
-+/* Configuration: MULTITHREAD
-+	Define for parallel execution
-+
-+	Valid values:
-+	1 - only one context (default).
-+	N>1 - will execute N copies in parallel.
-+
-+	Note:
-+	If this flag is defined to more then 1, an implementation for launching parallel contexts must be defined.
-+
-+	Two sample implementations are provided. Use <USE_PTHREAD> or <USE_FORK> to enable them.
-+
-+	It is valid to have a different implementation of <core_start_parallel> and <core_end_parallel> in <core_portme.c>,
-+	to fit a particular architecture.
-+*/
-+#ifndef MULTITHREAD
-+#define MULTITHREAD 1
-+#endif
-+
-+/* Configuration: USE_PTHREAD
-+	Sample implementation for launching parallel contexts
-+	This implementation uses pthread_thread_create and pthread_join.
-+
-+	Valid values:
-+	0 - Do not use pthreads API.
-+	1 - Use pthreads API
-+
-+	Note:
-+	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
-+*/
-+#ifndef USE_PTHREAD
-+#define USE_PTHREAD 0
-+#endif
-+
-+/* Configuration: USE_FORK
-+	Sample implementation for launching parallel contexts
-+	This implementation uses fork, waitpid, shmget,shmat and shmdt.
-+
-+	Valid values:
-+	0 - Do not use fork API.
-+	1 - Use fork API
-+
-+	Note:
-+	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
-+*/
-+#ifndef USE_FORK
-+#define USE_FORK 0
-+#endif
-+
-+/* Configuration: USE_SOCKET
-+	Sample implementation for launching parallel contexts
-+	This implementation uses fork, socket, sendto and recvfrom
-+
-+	Valid values:
-+	0 - Do not use fork and sockets API.
-+	1 - Use fork and sockets API
-+
-+	Note:
-+	This flag only matters if MULTITHREAD has been defined to a value greater then 1.
-+*/
-+#ifndef USE_SOCKET
-+#define USE_SOCKET 0
-+#endif
-+
-+/* Configuration: MAIN_HAS_NOARGC
-+	Needed if platform does not support getting arguments to main.
-+
-+	Valid values:
-+	0 - argc/argv to main is supported
-+	1 - argc/argv to main is not supported
-+*/
-+#ifndef MAIN_HAS_NOARGC
-+#define MAIN_HAS_NOARGC 0
-+#endif
-+
-+/* Configuration: MAIN_HAS_NORETURN
-+	Needed if platform does not support returning a value from main.
-+
-+	Valid values:
-+	0 - main returns an int, and return value will be 0.
-+	1 - platform does not support returning a value from main
-+*/
-+#ifndef MAIN_HAS_NORETURN
-+#define MAIN_HAS_NORETURN 0
-+#endif
-+
-+/* Variable: default_num_contexts
-+	Number of contexts to spawn in multicore context.
-+	Override this global value to change number of contexts used.
-+
-+	Note:
-+	This value may not be set higher then the <MULTITHREAD> define.
-+
-+	To experiment, you can set the <MULTITHREAD> define to the highest value expected, and use argc/argv in the <portable_init> to set this value from the command line.
-+*/
-+extern ee_u32 default_num_contexts;
-+
-+#if (MULTITHREAD>1)
-+#if USE_PTHREAD
-+	#include <pthread.h>
-+	#define PARALLEL_METHOD "PThreads"
-+#elif USE_FORK
-+	#include <unistd.h>
-+	#include <errno.h>
-+	#include <sys/wait.h>
-+	#include <sys/shm.h>
-+	#include <string.h> /* for memcpy */
-+	#define PARALLEL_METHOD "Fork"
-+#elif USE_SOCKET
-+	#include <sys/types.h>
-+	#include <sys/socket.h>
-+	#include <netinet/in.h>
-+	#include <arpa/inet.h>
-+	#include <sys/wait.h>
-+	#include <stdio.h>
-+	#include <stdlib.h>
-+	#include <string.h>
-+	#include <unistd.h>
-+	#include <errno.h>
-+	#define PARALLEL_METHOD "Sockets"
-+#else
-+	#define PARALLEL_METHOD "Proprietary"
-+	#error "Please implement multicore functionality in core_portme.c to use multiple contexts."
-+#endif /* Method for multithreading */
-+#endif /* MULTITHREAD > 1 */
-+
-+typedef struct CORE_PORTABLE_S {
-+#if (MULTITHREAD>1)
-+	#if USE_PTHREAD
-+	pthread_t thread;
-+	#elif USE_FORK
-+	pid_t pid;
-+	int shmid;
-+	void *shm;
-+	#elif USE_SOCKET
-+	pid_t pid;
-+	int sock;
-+	struct sockaddr_in sa;
-+	#endif /* Method for multithreading */
-+#endif /* MULTITHREAD>1 */
-+	ee_u8	portable_id;
-+} core_portable;
-+
-+/* target specific init/fini */
-+void portable_init(core_portable *p, int *argc, char *argv[]);
-+void portable_fini(core_portable *p);
-+
-+#if (SEED_METHOD==SEED_VOLATILE)
-+ #if (VALIDATION_RUN || PERFORMANCE_RUN || PROFILE_RUN)
-+  #define RUN_TYPE_FLAG 1
-+ #else
-+  #if (TOTAL_DATA_SIZE==1200)
-+   #define PROFILE_RUN 1
-+  #else
-+   #define PERFORMANCE_RUN 1
-+  #endif
-+ #endif
-+#endif /* SEED_METHOD==SEED_VOLATILE */
-+
-+#endif /* CORE_PORTME_H */
-diff --git a/package/coremark/mips-i6500/core_portme.mak b/package/coremark/mips-i6500/core_portme.mak
-new file mode 100755
-index 0000000000..7b64977062
---- /dev/null
-+++ b/package/coremark/mips-i6500/core_portme.mak
-@@ -0,0 +1,140 @@
-+# Copyright 2018 Embedded Microprocessor Benchmark Consortium (EEMBC)
-+#
-+# Licensed under the Apache License, Version 2.0 (the "License");
-+# you may not use this file except in compliance with the License.
-+# You may obtain a copy of the License at
-+#
-+#    http://www.apache.org/licenses/LICENSE-2.0
-+#
-+# Unless required by applicable law or agreed to in writing, software
-+# distributed under the License is distributed on an "AS IS" BASIS,
-+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-+# See the License for the specific language governing permissions and
-+# limitations under the License.
-+#
-+# Original Author: Shay Gal-on
-+
-+#File: core_portme.mak
-+
-+# Flag: OUTFLAG
-+#	Use this flag to define how to to get an executable (e.g -o)
-+OUTFLAG= -o
-+# Flag: CC
-+#	Use this flag to define compiler to use
-+CC = gcc
-+# Flag: CFLAGS
-+#	Use this flag to define compiler options. Note, you can add compiler options from the command line using XCFLAGS="other flags"
-+PORT_CFLAGS = -O2
-+FLAGS_STR = "$(PORT_CFLAGS) $(XCFLAGS) $(XLFLAGS) $(LFLAGS_END)"
-+CFLAGS = $(PORT_CFLAGS) -I$(PORT_DIR) -I. -DFLAGS_STR=\"$(FLAGS_STR)\"
-+#Flag: LFLAGS_END
-+#	Define any libraries needed for linking or other flags that should come at the end of the link line (e.g. linker scripts).
-+#	Note: On certain platforms, the default clock_gettime implementation is supported but requires linking of librt.
-+LFLAGS_END += -lrt
-+# Flag: PORT_SRCS
-+# Port specific source files can be added here
-+PORT_SRCS = $(PORT_DIR)/core_portme.c
-+# Flag: LOAD
-+#	Define this flag if you need to load to a target, as in a cross compile environment.
-+
-+# Flag: RUN
-+#	Define this flag if running does not consist of simple invocation of the binary.
-+#	In a cross compile environment, you need to define this.
-+
-+#For flashing and using a tera term macro, you could use
-+#LOAD = flash ADDR
-+#RUN =  ttpmacro coremark.ttl
-+
-+#For copying to target and executing via SSH connection, you could use
-+#LOAD = scp $(OUTFILE)  user@target:~
-+#RUN = ssh user@target -c
-+
-+#For native compilation and execution
-+LOAD = echo Loading done
-+RUN =
-+
-+OEXT = .o
-+EXE = .exe
-+
-+# Flag: SEPARATE_COMPILE
-+# Define if you need to separate compilation from link stage.
-+# In this case, you also need to define below how to create an object file, and how to link.
-+ifdef SEPARATE_COMPILE
-+
-+LD		= gcc
-+OBJOUT 	= -o
-+LFLAGS 	=
-+OFLAG 	= -o
-+COUT 	= -c
-+# Flag: PORT_OBJS
-+# Port specific object files can be added here
-+PORT_OBJS = $(PORT_DIR)/core_portme$(OEXT)
-+PORT_CLEAN = *$(OEXT)
-+
-+$(OPATH)%$(OEXT) : %.c
-+	$(CC) $(CFLAGS) $(XCFLAGS) $(COUT) $< $(OBJOUT) $@
-+
-+endif
-+
-+# Target: port_prebuild
-+# Generate any files that are needed before actual build starts.
-+# E.g. generate profile guidance files. Sample PGO generation for gcc enabled with PGO=1
-+#  - First, check if PGO was defined on the command line, if so, need to add -fprofile-use to compile line.
-+#  - Second, if PGO reference has not yet been generated, add a step to the prebuild that will build a profile-generate version and run it.
-+#  Note - Using REBUILD=1
-+#
-+# Use make PGO=1 to invoke this sample processing.
-+
-+ifdef PGO
-+ ifeq (,$(findstring $(PGO),gen))
-+  PGO_STAGE=build_pgo_gcc
-+  CFLAGS+=-fprofile-use
-+ endif
-+ PORT_CLEAN+=*.gcda *.gcno gmon.out
-+endif
-+
-+.PHONY: port_prebuild
-+port_prebuild: $(PGO_STAGE)
-+
-+.PHONY: build_pgo_gcc
-+build_pgo_gcc:
-+	$(MAKE) PGO=gen XCFLAGS="$(XCFLAGS) -fprofile-generate -DTOTAL_DATA_SIZE=1200" ITERATIONS=10 gen_pgo_data REBUILD=1
-+
-+# Target: port_postbuild
-+# Generate any files that are needed after actual build end.
-+# E.g. change format to srec, bin, zip in order to be able to load into flash
-+.PHONY: port_postbuild
-+port_postbuild:
-+
-+# Target: port_postrun
-+# 	Do platform specific after run stuff.
-+#	E.g. reset the board, backup the logfiles etc.
-+.PHONY: port_postrun
-+port_postrun:
-+
-+# Target: port_prerun
-+# 	Do platform specific after run stuff.
-+#	E.g. reset the board, backup the logfiles etc.
-+.PHONY: port_prerun
-+port_prerun:
-+
-+# Target: port_postload
-+# 	Do platform specific after load stuff.
-+#	E.g. reset the reset power to the flash eraser
-+.PHONY: port_postload
-+port_postload:
-+
-+# Target: port_preload
-+# 	Do platform specific before load stuff.
-+#	E.g. reset the reset power to the flash eraser
-+.PHONY: port_preload
-+port_preload:
-+
-+# FLAG: OPATH
-+# Path to the output folder. Default - current folder.
-+OPATH = ./
-+MKDIR = mkdir -p
-+
-+# FLAG: PERL
-+# Define perl executable to calculate the geomean if running separate.
-+PERL=/usr/bin/perl
--- 
-2.43.0
-
+>Best regards,
+>Fiona
+>
+>>   ifeq ($(BR2_REPRODUCIBLE),y)
+>>   LINUX_MAKE_ENV +=3D \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
