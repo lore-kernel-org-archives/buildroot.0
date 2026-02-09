@@ -1,91 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CBCAE7E0D5
-	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 19:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ED88E94602
+	for <buildroot@archiver.kernel.org>; Mon,  9 Feb 2026 20:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F252683BC6;
-	Mon,  9 Feb 2026 19:56:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BADDF60E68;
+	Mon,  9 Feb 2026 20:31:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hkbGAqKU0SAU; Mon,  9 Feb 2026 19:56:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CLgB-TY2XRk7; Mon,  9 Feb 2026 20:31:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2224783C1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA0A760E45
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770667011;
-	bh=iVYjrT4U036wZ/VmoltMddiyR2BROo49K3WbKTINjIg=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=JvLQKgzUYDvghyvMlpftT/b6XoaRovd6oYGTKJhramyZ80pIkPWWBcBStrwaN9kID
-	 MQo7TDkESmoKjVJVucmPbVsgxvQ6jgLcNp3k7YvJZZ6z06Q6MRcUKPaynsxl5beNSJ
-	 DnIpNylb7zXM2WNYi6dtDQZ9U9Vq3mVzP4heWd5KvyxvsHAsWDO6A08KfbK28Z3WAw
-	 qQhGAA/S0lwWotqLjaMODaqw0m057QPAX1aPT/BQkRdi6ItPEjGA7hMpJB4uxPUYw7
-	 N39MRWcN5pGIjoow3iYqzaLVseez/xGDuYjdd1O3i4+th9xt2+BQEkIJI2QkZc9tXa
-	 AcsyYcHcS4NVw==
+	s=default; t=1770669114;
+	bh=epD4XvTLRirdlDmUmW83C2qGh6PSFajYpRVJNYiD+JA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=fhDsQICszsMaqmksAYkC3YYaDMMuTW+Qmfd/IN4cRaFgr4n3nyi6kI02AWs6/3mYf
+	 VpnNiErmw1la3Y/lc0Hnd4RTpe2f9GwO60uJe4BmEcbCJi0Zajk12w8BgYkF8wIgc1
+	 vQoAqOJIgi1AjBOXychrGrIPDHTJohQnIT0iA/DavUBjwV1ndRjeEUbTlX8lhsL/Jz
+	 7bE3+hBYfRE1VPpPNspBTARG0lnoBvgqQINrIi4q8j1kcao50tYOpvgZPszM/WLlpe
+	 N3+Vu5+pEg0KpwaaS5stdSHaGVsnfBpscItyydfxpGdn6m6W9iK/+P0vh3Q/o6ruw4
+	 8V66/gViHb9Yw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2224783C1E;
-	Mon,  9 Feb 2026 19:56:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D135B1A9
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 19:56:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA0A760E45;
+	Mon,  9 Feb 2026 20:31:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF14AF2
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B691283BC6
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 19:56:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B95F7400CE
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:31:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tJruS7pWNITe for <buildroot@buildroot.org>;
- Mon,  9 Feb 2026 19:56:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VEEuQVFvLQVF for <buildroot@buildroot.org>;
+ Mon,  9 Feb 2026 20:31:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7886483C1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7886483C1E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B993400BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B993400BD
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7886483C1E
- for <buildroot@buildroot.org>; Mon,  9 Feb 2026 19:56:48 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a038f.dip0.t-ipconnect.de [91.58.3.143])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E2643A4C06BA;
- Mon,  9 Feb 2026 20:56:33 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36644)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B993400BD
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 20:31:51 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0b67.dip0.t-ipconnect.de [91.58.11.103])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6DD5EA4C09DB
+ for <buildroot@buildroot.org>; Mon,  9 Feb 2026 21:31:48 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46248)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vpXN3-000000003gY-0fet;
- Mon, 09 Feb 2026 19:56:33 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vpXv9-0000000021p-1Uct
+ for buildroot@buildroot.org; Mon, 09 Feb 2026 20:31:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  9 Feb 2026 20:56:33 +0100
-Message-ID: <20260209195633.384345-2-bernd@kuhls.net>
+Date: Mon,  9 Feb 2026 21:31:47 +0100
+Message-ID: <20260209203147.3837192-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260209195633.384345-1-bernd@kuhls.net>
-References: <20260209195633.384345-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1770666993;
- bh=gmGm1ia1oSyvTXuJgoSZ7MyfEaxCB50DzjkTgFhbmDk=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=XD33ERyPfcCLDJZyTalybnHcn+80Z4pdz9eCOzNLCGhGrEiPVep4nB5lkVNWc+wMP
- UXqCmK5gKVVUCDoasHOq2ilVCAvgis/RgkF40XLjMSVq4DdivnIpZiHlzIOi1Wy6gv
- yaKOP4CdXmhwZhilo+7dojoCix5cMsXRSBMpCefvGVxjqbYvRA6BtL0RPw+fVA7hqF
- XczRC4j9qa1xukThYWMzoSpPL4x2U5Vmd6+bs474W2OdvtPTKQRY72HBOjdow/tEOW
- TcljXAXSxU43Hvb4CyEurP8hwKM0mTLMYdI5hW0kuWLOxftfybtgHyQBxYUzxBmR71
- uWjuSkHxD/c4A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202511301023; t=1770669108;
+ bh=LT4N7oshI/Iqai3HjnkhgaLJ8iFpmW1hXVQZZcl2V6c=;
+ h=From:To:Subject:Date:From;
+ b=kola7Bz8/N4srjI6d2r4KNft/xXg0kpM1HzJ/04hNpCwzODBWXt4jGtYobRPFBWdh
+ JWhX0OwCrHNaC338ij0cc4LmhEtskgIv7qviu8pF/JsXKr4SU1JDlfhJBjzFxVzBhT
+ Yh3on2q3eUukNrHwNVajqlRCyx1nryKzdVmL6/eJTukSK9KiwG5wroE/nksSxDypn2
+ l4GmN2apojsw2bcR+kLL+gOowhttn9caR12D0WKpnOMFovuKl4URBecGa+ZPcm1lfi
+ X0/ssfy9S7LVO0M5IJXqCIy/179khZmViSe2uJjRu+l4QzGKQC+tuldA1ty3Al1y8G
+ /yGWkjYhu9RiA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=XD33ERyP
-Subject: [Buildroot] [PATCH v2 2/2] linux: bump latest version to 6.19
+ header.s=kas202511301023 header.b=kola7Bz8
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.6.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,46 +96,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For an overview of changes in 6.19, see:
-https://kernelnewbies.org/Linux_6.19
+https://github.com/OpenVPN/openvpn/releases/tag/v2.6.18
+https://github.com/OpenVPN/openvpn/releases/tag/v2.6.19
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v2: updated symlink (Fiona)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- linux/{6.18.9 => 6.19} | 0
- linux/Config.in        | 6 +++---
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename linux/{6.18.9 => 6.19} (100%)
-
-diff --git a/linux/6.18.9 b/linux/6.19
-similarity index 100%
-rename from linux/6.18.9
-rename to linux/6.19
-diff --git a/linux/Config.in b/linux/Config.in
-index 48e5fc57ab..b4bb1263d0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,8 +28,8 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 1fad2163c8..d172689685 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  4cc8e63f710d3001493b13d8a32cf22a214d5e4f71dd37d93831e2fd3208b370  openvpn-2.6.17.tar.gz
++sha256  13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf  openvpn-2.6.19.tar.gz
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 9740374bee..9dc4ef4714 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (6.18)"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_18 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	bool "Latest version (6.19)"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_19 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	# mips always generates an ITB image
- 	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.18.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.19" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+-OPENVPN_VERSION = 2.6.17
++OPENVPN_VERSION = 2.6.19
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 -- 
 2.47.3
 
