@@ -1,122 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B646EA3F3A
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 11:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC63FE7E0DB
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 11:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFC4E4118E;
-	Tue, 10 Feb 2026 11:14:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7642382E9C;
+	Tue, 10 Feb 2026 11:23:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NI6Sb44CLoLp; Tue, 10 Feb 2026 11:14:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vwqihY1wBSCU; Tue, 10 Feb 2026 11:23:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE7D741190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90F6E83C01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770722057;
-	bh=u8zXYcc3k3kM+Uynb8SCuWaUnx4xxgNNgqWDKivqzvQ=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=oPYuZTOwoplSGJpS0bpH6Quv8qes/m/oqcs59TJcPofmxCfS4yxyGPBQMO9YmtSB0
-	 /AxbkfPJFJWgo05LGlzyuqjfWyE+zG8H/wuHOGroxeu1Hm1Cv42VRHRXXDgwl6bTFr
-	 ndRCv29OfNgS3GiTpj+z3KdMrnIQ69UVJ22fLj6Vv7mSzOT8WdHYmfBkiiBv+Zwc+n
-	 9lTBAfUnKX0LMbzIDGj/rWn0Hhpx53r1Nm6Rx+engYsTRvdtZwUar3AWd59IZV6s4d
-	 194ZaeRjoA6E1jazFYXu/QsI8+lEf+A0ronYIw8DGHxUfLQIIeFac1OGI/l4LvjmRq
-	 970bUnpRJHEvA==
+	s=default; t=1770722606;
+	bh=mMVbvKfl64aTa1tzvXqgHW2UM8kIPPFdLZx/VGCnrgY=;
+	h=From:Date:To:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=qn0gCmt5RiawTfOYgooQ8BTkqeSFdQc65xSGvEXc0Fo81T3J1CyrMxk8ezuiYuRdm
+	 FFz1Y0wsBsVw7seKfRJY+hycyMt92ZUXK5HgLeLc/EnOUqTA1Wr9XUau2qv2QOzHmh
+	 RBemHzdGRdwD7xa/Q1JLVSn0Wi5I2d7b2qaxUZccT0H6uegfB/tG35lFyUbfxPAVIJ
+	 5Yju6A86l00haO0bKL549HoCUT23xxEpvOkFnBKfkZTXteohHY8V5H9Wtc7+gsKYvM
+	 Kl1W325l/nLCrFXx9yDhPfMl4LJymUjba56uQhxv/zI+FpBUKneLlR55DxXc6UeWZY
+	 s129w7vS9p0ag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE7D741190;
-	Tue, 10 Feb 2026 11:14:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90F6E83C01;
+	Tue, 10 Feb 2026 11:23:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EC6DBF2
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 11:14:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7655B219
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 11:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D121C402F3
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 11:14:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73B0D402F3
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 11:23:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ixv5L1K4JqzR for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 11:14:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C7851401FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7851401FD
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C7851401FD
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 11:14:13 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-64b7318f1b0so5068840a12.2
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 03:14:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770722052; x=1771326852;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Hx1VBG9YUEBYWbhXhxMVRUS1YfjjQXliVtm7nO/imdU=;
- b=izrIxg0WKkk7WJ3qvGijdHboMBMZjOJ/2pBluQfHqqwUee2cNJHLkm0w3u8YOZ3tns
- pffeb7whoprr/BXT4lNazirPr5ndkebVz79GWm6rpdnBEPlUZWmchU6Fh0ThgbOMU9G/
- kWU29HLOWnDyNApKU/zHPysgLwVBKGWDH9I63zq0ST9YslXOVmjDsLs8eYQZ3JWRUOEu
- GRgGWW/wVVt+DNBUKtJLfHH1Vqrnsx5Zn/3tvPvNHzeDwwJyNMUR1msqdVCB0AAqsDi1
- Vnm1NIsvco4BzPbgpPPYaxovulPa6hAxYbnZ0HmdKqe5kICZQslRbFnUk7pPUhfYHK6D
- aDNw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV0LEp7M77+BqnwKCC8VXCbjyVl2/Fte7w8JXYeX+5Px2Ft0ibf2TOUAbivpESexKTWoAJryrf9pyA=@buildroot.org
-X-Gm-Message-State: AOJu0YzwvTQz8ZElE/Z3unNmsXVbzLZ5kJdLMthIb1Svr0qyoSCmAwcC
- 8djRiNZovhJY3PojVCDYKEla95a73UNbQq+pBDlGXC3ixLhpuRepE5AheJPp+GbJnRuqBAMTj90
- 561mjLS4=
-X-Gm-Gg: AZuq6aKbaKKQda610W1cWJWoq6tk1SY0JUDLGyD4B7LWSLWVvNzxBqCsXtMMqPBEDwQ
- gGfLDTNK0QdrVOB7ivg3g+8Vruxa1uM4mA7RvjyDrh4DPg2oWvS2qkXXnPE/xvnU6EQ9CWjJAeV
- s1/tVlkwUdt51QFSrOr5m6i5Wly8CbAuU4UHmnIZBRx3cnHB2J9aZfTnZWTJxXbamdNOHW5Tet5
- eEpaZ0eIaCuqBwYUSZ5ZdHiO+uS+VN9AYOyMAHB5PA2/5H3fmrrsMT5u0wI7pKZLFQ1qYwCfxu/
- nPa6zDvCuhHXEtZWLlQjg4bwXhKCUDxUleSNHnV6+lT39vAV/mzL/IPm2clbm30GLIvjmRHhz6P
- mOB11GODgHNLs2go3lBu+D4bsleeR3ncxGXkaJ2GDiq0fo6BA5RyFrCo5fJBZgQUyO80z/HaDFy
- 0HOa1bukphOIL0dZ3t+upNEkfV4jqJ7dI7q1GttTExP5uQPubJAi6Qbw1vfQY3PD2Wdl2RrlMxX
- GR2yyGLAlY=
-X-Received: by 2002:a05:6402:2690:b0:658:b837:7953 with SMTP id
- 4fb4d7f45d1cf-65984147d9emr7664328a12.12.1770722050902; 
- Tue, 10 Feb 2026 03:14:10 -0800 (PST)
-Received: from ?IPV6:2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a?
- ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-65983e5f42esm3807743a12.0.2026.02.10.03.14.10
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 10 Feb 2026 03:14:10 -0800 (PST)
-Message-ID: <547c9175-b7de-42aa-a363-52f18c344877@mind.be>
-Date: Tue, 10 Feb 2026 12:14:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: yann.morin@orange.com
+ id oibJaxt7vmQu for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 11:23:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F140C401FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F140C401FD
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F140C401FD
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 11:23:22 +0000 (UTC)
+X-CSE-ConnectionGUID: Pv2Z6R4VRCytjyyx7VS8hg==
+X-CSE-MsgGUID: ts5hiSTvSGqQkju8nZFP+w==
+Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 10 Feb 2026 12:23:20 +0100
+Received: from unknown (HELO OPE16NORMBX607.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 12:23:19 +0100
+Received: from OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] by
+ OPE16NORMBX607.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Tue, 10 Feb 2026 12:23:19 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
+ Tue, 10 Feb 2026 12:23:18 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Tue, 10 Feb 2026 12:23:17 +0100
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: 5VdgfGmxQUOiMfehtcaOYQ==
+X-CSE-MsgGUID: O+yTM7swSzK4X9I6LWeIPA==
+X-IronPort-AV: E=Sophos;i="6.21,283,1763420400"; d="scan'208";a="394275916"
+Date: Tue, 10 Feb 2026 12:23:17 +0100
+To: Titouan Christophe <titouan.christophe@mind.be>
+Message-ID: <aYsVJQJPozEGM4z1@yd-6wlzhs3>
 References: <3c42d6a8803c28ce34156eee659e25875b916075.1770703119.git.yann.morin@orange.com>
  <87tsvpqeqz.fsf@dell.be.48ers.dk> <aYrcaeU2kIm4a7sD@yd-6wlzhs3>
- <8ea6c2c9-ab1e-4262-878c-bbbefa35b554@mind.be> <aYsIfWMrnwXvDB2b@yd-6wlzhs3>
-Content-Language: en-US
-In-Reply-To: <aYsIfWMrnwXvDB2b@yd-6wlzhs3>
+ <8ea6c2c9-ab1e-4262-878c-bbbefa35b554@mind.be>
+ <aYsIfWMrnwXvDB2b@yd-6wlzhs3>
+ <547c9175-b7de-42aa-a363-52f18c344877@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <547c9175-b7de-42aa-a363-52f18c344877@mind.be>
+X-Originating-IP: [10.115.26.53]
+X-ClientProxiedBy: OPE16NORMBX507.corporate.adroot.infra.ftgroup
+ (10.115.27.27) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770722052; x=1771326852; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Hx1VBG9YUEBYWbhXhxMVRUS1YfjjQXliVtm7nO/imdU=;
- b=ZQZKvd2JXLWGRhy/89lY91ZJ0+I/562nigplVpyZc6JHY3NQ3mSJdmVZfeHHgqFr/5
- 5cKpsbcXQ+kbqPSeES+VQzDhqzzCJwL7xQDJC68FAupVYa1pDXTKEBM/H/MemQWCz1ZX
- 1Gn2NYVk4SB2dH3CfNc6VdyYbb+yK3nCL6MuWZ/RMDFJEOjxd1MNgvneA+YXssDPjoP0
- oUHCsu7alPPM86q3yVug53KSct7Tl3WZpESWfJoU9dvlvqTTBwKCXr1hc/TeseElTGIE
- OubRCDNkKL0JNr9CX2yYYhtqfnw30oC0o9MVOuj0hlJIjqvwyUzTo5qQBvf+allByY2X
- iW3w==
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1770722603; x=1802258603;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=GikLQ94QbT/UaegNiXmN9CAxHB0Dd4OB0c1ItKSiD8o=;
+ b=FRBfAG+MXkkyLcyt58XDcYwVSnJXc9qjzzlx4nVB5ys72AgOfHGRlLiu
+ xHLRI/AOkkh7+axMhhg5WJ+p8AKy6MtEYTVVcalUGGh2+U8RVnwUkaDBb
+ rRnT9i7xa7UYsZdliq+ck6HERoRItTdz0Rl8Q2ePwceEDik99r38dlVaZ
+ vtAlzf1lbtef/GHgscJxVnbTMU7eqgNfck/T0+NTc1t4cMn1a+EUzdkBw
+ 7v/qwipJyebtHq3GDdXXTmUHpR/tHdTSjzHRqvJyLrYYJPRSBPEBGDvWu
+ 7Xtd4QxELnxlV/u8+rcOVTEa69BMaUERbRjbzzwtfbJp8zyo9OWE+3MLn
+ A==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=ZQZKvd2J
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=FRBfAG+M
 Subject: Re: [Buildroot] [PATCH] DEVELOPPERS: adopt mosquitto
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -129,69 +119,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Scott Fan <fancp2007@gmail.com>, buildroot@buildroot.org
+Cc: Scott
+ Fan <fancp2007@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rebonjour,
+Titouan, All,
 
-On 10/02/26 11:29, yann.morin@orange.com wrote:
-> Titouan, All,
->
-> ...
->
->> so I haven't touched that patch
->> since last week. You can find my work in progress over there: https://gitlab.com/essensium-mind/buildroot/-/commit/114db281da52b342a95d2aea6199bbf9c2e20cdb
->> . As you can see, I still need to redact the patches messages, send them
->> upstream, etc
-> OK, I see things I haven't yet stumbled upon, while I also hit a few
-> other walls already.
-On top of my head:
-- cjson is now a required dependency
-- the http api is enabled by default, so we must disable it if 
-libmicrohttpd is not selected
-- similarly for the client shell (?) which uses libeditline
->
->> At the moment, it "almost works":
->>
->> |./utils/test-pkg -p mosquitto bootlin-armv5-uclibc [1/6]: OK
->> bootlin-armv7-glibc [2/6]: OK bootlin-armv7m-uclibc [3/6]: FAILED
->> bootlin-x86-64-musl [4/6]: FAILED br-arm-full-static [5/6]: FAILED
->> bootlin-aarch64-glibc-old [6/6]: FAILED|
->>
->> For the remaining failures:
->> - Is getrandom() supported on musl ?
-> Yes it is, at least since 1.0.2, 11 years ago. Thing is, the mosquitto
-> code is... not accounting for that case.
-We can then update that patch 
-https://gitlab.com/essensium-mind/buildroot/-/blob/114db281da52b342a95d2aea6199bbf9c2e20cdb/package/mosquitto/0001-Fix-build-with-uclibc.patch
->> - We may need to exclude no-MMU platforms from now on (armv7m) ? As there
->> has been some rework in mosquitto's memory allocator
-> I think it is acceptable to drop noMMU builds...
->
->> - Old glibc is not supported (because of getrandom())
-> Not sure how we can catter for that case. And anyway, getrandom() has
-> been available since glibc 2.25, released in 20217.
-> In Mosquitto, getrandom is only used when TLS (openssl) is not
-> available; when openssl is available, then that gets used. Maybe we can
-> instruct people that have old glibc to enable openssl as a fallback...
-Yes that works too
->
->> I hope to make this move forward "soon", otherwise feel free to reuse the
->> commit I just linked above ;-)
-> Would you mind if I inject the interesting bits from your patch into
-> mine, and credit you as a Co-developped-by ?
-Sure, please go ahead :)
+On 2026-02-10 12:14 +0100, Titouan Christophe spake thusly:
+[--SNIP--]
+> On top of my head:
+> - cjson is now a required dependency
+> - the http api is enabled by default, so we must disable it if libmicrohttpd
+> is not selected
 
->
-> Regards,
-> Yann E. MORIN.
->
+Yet it still compiles fine without it.
 
+> - similarly for the client shell (?) which uses libeditline
+
+Ditto.
+
+But those two I saw in your patch, indeed, so I'll carry them.
+
+[--SNIP--]
+> > > For the remaining failures:
+> > > - Is getrandom() supported on musl ?
+> > Yes it is, at least since 1.0.2, 11 years ago. Thing is, the mosquitto
+> > code is... not accounting for that case.
+> We can then update that patch https://gitlab.com/essensium-mind/buildroot/-/blob/114db281da52b342a95d2aea6199bbf9c2e20cdb/package/mosquitto/0001-Fix-build-with-uclibc.patch
+
+Nope. I have a better one: check at configure time whether getrandom()
+is available. It works for all C libraries (but is untested for win32),
+of course).
+
+I also already fixed the fact that C++ was mandatory; I made it
+optional.
+
+Similarly to getrandom(), the check for getaddrinfo_a() was borked, I
+fixed it.
+
+On to the next issue! ;-)
+
+[--SNIP--]
+> > Would you mind if I inject the interesting bits from your patch into
+> > mine, and credit you as a Co-developped-by ?
+> Sure, please go ahead :)
+
+Wonderful, thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
