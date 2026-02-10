@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5346EB26F5
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 18:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26B85EB26F7
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 18:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A748083B60;
-	Tue, 10 Feb 2026 18:09:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B42A680A87;
+	Tue, 10 Feb 2026 18:34:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BtP4xt3qIp0r; Tue, 10 Feb 2026 18:08:59 +0000 (UTC)
+ id bkaNu0quOXLJ; Tue, 10 Feb 2026 18:34:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E66B5822B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC97880AD1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770746939;
-	bh=mfHGnYYQjugGPcYI1OBDyzS/IEH7oaTbqeHqKVR2kJ8=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Arl7dlhNmfFIB2hYwBGmdBVktGQ070GEtxl5G91X/D5Q2sx8ZyoO5YLXNLR/c82n2
-	 Fg+p5l6Pj8qeyKBOZxT1LsP+aRzDCcwKHs5nLbMp9FXyQOm4oOXS1ZxqQa73g/XXpK
-	 bMS//tRkdLd/76JWWwh+2lHJ07A48ti3ywx1eSIC2ajmfGiryepXL0ZOysaNsGb4ny
-	 1MUX7AdY3mYVnCnM9gFrfGTA9UUsAvTDicp2D4C85ARFTF0TG6YUd4ICjjlcH5AqKk
-	 Irw411OutEJBFglDmVwxWLZGKUBP4C7Vng5SQYEIiaEId9NJ7YCsnqncC6TctGjhCG
-	 I13LfSjJn43cA==
+	s=default; t=1770748473;
+	bh=+MGC4h+2sN/+7vHhq9SbNXVz3yQ858ClITBLZKGpvTQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Tdw4ZLrEqqMQvMfCUb6wfk1hNFvEzEC6WsKbunuA6CgIMFXE7QZS1FhMJ+uz/41P+
+	 uH/S9smWTZMvp60gQ19LY29NM+Sza39Dxft1i0kxiXFQ6dAZFUYRyIfLX2XT7efcyx
+	 OKsTkHLBhGOr1INSJJxHzcmCQhIlR+tHAmW2Kle2E0tuxERYHIO58XloQZpfX6J85F
+	 BZQAoHRK961xk/S5KNu5ti74IhWOikVg4wgh7rNDJBPWnFRJHIplSYXkEz7k/ZheKf
+	 JDOof2WO2xbfHQF+V73JV8q/1hJd8cjv/DM8cJDxxJ12X1ZxVDm9NWX4QukI/fpr0v
+	 NOoE/X32rHd7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E66B5822B1;
-	Tue, 10 Feb 2026 18:08:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B9F7123D
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC97880AD1;
+	Tue, 10 Feb 2026 18:34:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6963123D
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C21660C17
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A4ED4116E
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:34:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nl5Rpq_hmtqh for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 18:08:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AA59060907
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA59060907
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AA59060907
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:56 +0000 (UTC)
-Received: from [192.168.178.91] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id EFED82C801B0;
- Tue, 10 Feb 2026 19:08:53 +0100 (CET)
-Message-ID: <feff37c3-c836-4626-8d6c-1650005eae1d@bubu1.eu>
-Date: Tue, 10 Feb 2026 19:09:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: Dimitrios Siganos <dimitris@siganos.org>
-References: <20260209203212.3837393-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260209203212.3837393-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770746934; bh=k1kETTEasNV+flXAA0/b1kwzMp8JuZpYBysgBHgA1IQ=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=rjGPNIuveYOBscvwnrrMLNQWGAGZvh4leoSNrFDnRtPSUMpt70weLyMcTXsnfEXxo
- qeMu4YDBigJFPj3kCgjnJgjKIlliSZHOI/2zwOGU9zOVYaFZl9iUJHIucJzaEVfwkZ
- lSJo288UUxsnzgAICCwet3s2SkZGQ8CrQqk6kOq/wg+ebN6a8zxlh60VGYQhHTaurp
- cjp+T2JHA03mU+fEV3RoyqDKQ5nr9L/zz7dm9maSo8IMrXI5soOh5Df2ofDj8cur65
- XOqzHL9czwvBPDeIHuBM3JJAXM1U5bjSiDLlAgGXUjshHH03R52l4GqFUv2zKhYhpm
- 3CIX7HsWtVDtw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=rjGPNIuv
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireless-regdb: bump version to
- 2026.02.04
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hXJ4rQKLryhd for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 18:34:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94C0D41163
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94C0D41163
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:34:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 75AB986BB8; Tue, 10 Feb 2026 18:34:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 10 Feb 2026 19:21:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5bd15ee7d488a8192ed0a12440ea49feee9c695b
+X-Git-Newrev: 80cbcfaeadd2474c71112b4dc9fb0673c9152519
+X-Patchwork-Hint: ignore
+Message-Id: <20260210183431.75AB986BB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zlib-ng: bump to 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,20 +70,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2/9/26 21:32, Bernd Kuhls wrote:
-> https://lists.infradead.org/pipermail/wireless-regdb/2026-February/001830.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/80cbcfaeadd2474c71112b4dc9fb0673c9152519
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Release Notes: https://github.com/zlib-ng/zlib-ng/releases/tag/2.3.3
 
-Marcus
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/zlib-ng/zlib-ng.hash | 2 +-
+ package/zlib-ng/zlib-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index a9f879ea18..b317906474 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6a0561b50b8f5f6434a6a9e667a67026f2b2064a1ffa959c6b2dae320161c2a8  zlib-ng-2.3.2.tar.gz
++sha256  f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1  zlib-ng-2.3.3.tar.gz
+ sha256  6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee  LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index 275c5b86f0..59e4e15282 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZLIB_NG_VERSION = 2.3.2
++ZLIB_NG_VERSION = 2.3.3
+ ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
