@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 273B6E94623
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 00:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1641FE94625
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 00:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0F5960E84;
-	Tue, 10 Feb 2026 00:07:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC3EC612C3;
+	Tue, 10 Feb 2026 00:08:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6TiCTiFs8AF2; Tue, 10 Feb 2026 00:07:58 +0000 (UTC)
+ id w21AHkPhGykj; Tue, 10 Feb 2026 00:08:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A1A060FE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9790612BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770682078;
-	bh=I3PnUU4LAfsawjJ8TUAgqBqsKd3qG1mISDpt1CDrDuU=;
+	s=default; t=1770682080;
+	bh=0IEYt5dfAEfLCb42GBVnKJCWNMO5WCA/lPjmEigUwd4=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=j9YBBylnL4spbrzFJqmmSVqEFKoiXELQ93E+fUyTiFyqivpl1oXjxhkMIovDT0tEz
-	 N1RZXZOOYdKGNzxqi1oAkSSo8LztDfD59qequ0yQ2aWzyqm/kKPKiLHhw7u2NNAcXi
-	 w7bcdMukqmpEHzNX3vb00d6Ki/08jM1pfvgdB4zoF1f2On8lzFrTcNO67pVOHmK7Da
-	 SQaFH6O6ahKx/pU5ZY3c5fR5z5Y+inJo76j2vwHf4LaJzDwtz29zaYGBLcHCDirRge
-	 J4SoLKAn0jtU5dUZEbnGkg42ZYug0sgHzEOG9Im80y3WJo4aa8kH4HTh4XiTyrL2bf
-	 rkkdD11YfzvKQ==
+	b=rSHQvxkl88WN2D9WG65Id87sCFJnJnjE+w1ZI5ZLHeRp5j84ZL5exiqXSXEFRs37l
+	 zWmra2x+v2tVCnMSav3zOpK4OPp/PQdU2BEBOmjQV8I0VdADPdW6ypCUQLrx6cT/2Y
+	 39RJKJGl/gW0qFQD6sdJi/O7VL3ZK93MKSfuYRL4OkPEV3H7+Tcl7cDmIj2vaoLcGD
+	 pky6H0+k5IxQT4wyIq53GqoLS3yJym6VPlDNk9MXrxhGdQy0ApF9nqDWJxLL7RDrUP
+	 WtQDpcTjWGE2wIyO0U3KS7GFRZKEjez7idot3Rgs+LgPa9iOEKTJdL7n4efkM/1z14
+	 Tm+iTFT9yKz0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A1A060FE3;
-	Tue, 10 Feb 2026 00:07:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9790612BC;
+	Tue, 10 Feb 2026 00:08:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13BD0219
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E9731A9
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 779EC40C5D
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0331240C33
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NHYq0j0ZL4dR for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 00:07:47 +0000 (UTC)
+ id ADxPjRxWPqLV for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 00:07:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.117;
  helo=smtpcmd03117.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6306F40C33
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6306F40C33
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9F6D040C4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F6D040C4E
 Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6306F40C33
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9F6D040C4E
  for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:47 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id pbI7vTZGv5gYjpbI9vmsgc; Tue, 10 Feb 2026 01:07:45 +0100
+ id pbI7vTZGv5gYjpbI9vmsgm; Tue, 10 Feb 2026 01:07:45 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Feb 2026 01:07:30 +0100
-Message-ID: <20260210000739.3810940-5-giulio.benetti@benettiengineering.com>
+Date: Tue, 10 Feb 2026 01:07:31 +0100
+Message-ID: <20260210000739.3810940-6-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260210000739.3810940-1-giulio.benetti@benettiengineering.com>
 References: <20260210000739.3810940-1-giulio.benetti@benettiengineering.com>
@@ -69,22 +69,22 @@ X-CMAE-Envelope: MS4xfBtf0e1gav9S9A8FedqnhBd3yaiw9mKo6rJyVByk31MXhnexwb3XJBAzuCv
  Gqg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1770682065; bh=e8qGnirDV2C3fIRKvVLjp7zezkTA247OCMyuVHw1gpw=;
+ t=1770682065; bh=TUAaVHbHncUKJX2rudK/JiYX8rgomjmGiiXxQ515UNI=;
  h=From:To:Subject:Date:MIME-Version;
- b=kXuMB7lPfzyvB4EvMqTA3FNsA3iR34vaDjDbMvwjXi3i2O7MCmy7pj2gk9x08SJoh
- 7I13LprUmoRkIpZExFK/sSCZ8JmfBH6a3YhppXC62+GFCSaP3g9S1c+I5wKseLUMhw
- N3v5vlN95FV0fwg0dZ16awfEKXYqwgOkTQu0ciNTM4+h5fK5KBDw8+k9oUz25wuGCd
- fvIyAwTtulaBstsxxVsFNQxjCou3rhO26YV8SJZf4APeJlIcr3UM3k1QWG6Cbc8ERl
- YkewU3fSX5dNmeLjn+qgCXwL8hzUCqyDk9slul56hP5dJw2ajkuDpnHHpWxK8zG070
- pIb5Tus8FJBaw==
+ b=bcIx6Kz2/WkK8EEad1xNa7ztpGt0HTOxOQ42z3a/bKD4FQ94iazOt2tRGVjXtQ/tA
+ APUSxG+q7gQEHjn3VhInqyly3ZegK1/rWC+y4jdTtNO+aBA0MI95QgRszitYC55R2a
+ Okjvneb3LPrYc9w3DPIbdMpqwvmPmlyMJau+FK4864ehIYaivigvNDj0SyyflvFvLP
+ U49MI6u8FnSQJN1FLKQllsO+BKJ9OM45Y6OQIxlXxvdApHzCpv2XAA6XLbAnszYrj2
+ y1uYPx/wssFlN72MlOljyJ9ockuafRBwb07cJ0W0t29aTsm+fORm0jUt4hnmXnapXg
+ W1x0M+T9qpbEg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=kXuMB7lP
-Subject: [Buildroot] [PATCH v2 04/13] configs/bananapi_m2_ultra: bump Linux
- to 6.18.8 and U-Boot to 2026.01
+ header.a=rsa-sha256 header.s=a1 header.b=bcIx6Kz2
+Subject: [Buildroot] [PATCH v2 05/13] configs/freescale_imx6ullevk: bump
+ Linux and U-Boot to lf-6.12.49-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,98 +109,57 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 The patch:
-* bumps Linux kernel to version 6.18.8
-* bumps U-Boot to version 2026.01
-* forces check hashes
+* bumps Linux kernel to version lf-6.12.49-2.2.0
+* bumps U-Boot to version lf-6.12.49-2.2.0
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- .checkpackageignore                                   |  1 -
- .../patches/linux-headers/linux-headers.hash          |  1 +
- .../bananapi-m2-ultra/patches/linux/linux.hash        |  2 ++
- .../bananapi-m2-ultra/patches/uboot/uboot.hash        |  2 ++
- configs/bananapi_m2_ultra_defconfig                   | 11 +++++++----
- 5 files changed, 12 insertions(+), 5 deletions(-)
- create mode 120000 board/bananapi/bananapi-m2-ultra/patches/linux-headers/linux-headers.hash
- create mode 100644 board/bananapi/bananapi-m2-ultra/patches/linux/linux.hash
- create mode 100644 board/bananapi/bananapi-m2-ultra/patches/uboot/uboot.hash
+ board/freescale/imx6ullevk/patches/linux/linux.hash | 2 +-
+ board/freescale/imx6ullevk/patches/uboot/uboot.hash | 2 +-
+ configs/freescale_imx6ullevk_defconfig              | 5 +++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 38cd0b2711..2aa2f8ff2b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -90,7 +90,6 @@ configs/atmel_sama5d4_xplained_mmc_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig lib_defconfig.ForceCheckHash
- configs/avenger96_defconfig lib_defconfig.ForceCheckHash
- configs/avnet_rzboard_v2l_defconfig lib_defconfig.ForceCheckHash
--configs/bananapi_m2_ultra_defconfig lib_defconfig.ForceCheckHash
- configs/bananapi_m2_zero_defconfig lib_defconfig.ForceCheckHash
- configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
- configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/bananapi/bananapi-m2-ultra/patches/linux-headers/linux-headers.hash b/board/bananapi/bananapi-m2-ultra/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/bananapi/bananapi-m2-ultra/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/bananapi/bananapi-m2-ultra/patches/linux/linux.hash b/board/bananapi/bananapi-m2-ultra/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..b1a0042a91
---- /dev/null
-+++ b/board/bananapi/bananapi-m2-ultra/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-diff --git a/board/bananapi/bananapi-m2-ultra/patches/uboot/uboot.hash b/board/bananapi/bananapi-m2-ultra/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..b6a925ea4e
---- /dev/null
-+++ b/board/bananapi/bananapi-m2-ultra/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
-diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
-index b67a9d3f5d..190481837e 100644
---- a/configs/bananapi_m2_ultra_defconfig
-+++ b/configs/bananapi_m2_ultra_defconfig
-@@ -1,16 +1,18 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
-+BR2_GLOBAL_PATCH_DIR="board/bananapi/bananapi-m2-ultra/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/bananapi/bananapi-m2-ultra/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-ultra/genimage.cfg"
+diff --git a/board/freescale/imx6ullevk/patches/linux/linux.hash b/board/freescale/imx6ullevk/patches/linux/linux.hash
+index b4f534dcc8..b138642633 100644
+--- a/board/freescale/imx6ullevk/patches/linux/linux.hash
++++ b/board/freescale/imx6ullevk/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  4c1147a9bbe4bf36fbcbd8b1e6b0d73ec0da3c454821c58a61d32d3879afc146  linux-imx-lf-6.12.3-1.0.0.tar.gz
++sha256  2166d92e5631ee11bd249d492a1f4009c7635ee36b835fa55384b4ce41e8a63f  linux-imx-lf-6.12.49-2.2.0.tar.gz
+diff --git a/board/freescale/imx6ullevk/patches/uboot/uboot.hash b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
+index 309a684c2d..5d57adfa22 100644
+--- a/board/freescale/imx6ullevk/patches/uboot/uboot.hash
++++ b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  18a32d6c79538e4f90746674873b196f9c48be24caef0ab5c1bec920a1816825  uboot-imx-lf-6.12.3-1.0.0.tar.gz
++sha256  212ea4d8d442153ab732ab724282fef64450e9dab5cfe9565eec4f618e305a80  uboot-imx-lf-6.12.49-2.2.0.tar.gz
+diff --git a/configs/freescale_imx6ullevk_defconfig b/configs/freescale_imx6ullevk_defconfig
+index 3d9e0869ac..99bbff605b 100644
+--- a/configs/freescale_imx6ullevk_defconfig
++++ b/configs/freescale_imx6ullevk_defconfig
+@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.57"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.12.3-1.0.0)/linux-imx-lf-6.12.3-1.0.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.12.49-2.2.0)/linux-imx-lf-6.12.49-2.2.0.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6ullevk/linux_sdma.fragment"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-r40-bananapi-m2-ultra"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-r40-bananapi-m2-ultra"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-@@ -18,11 +20,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+@@ -22,9 +22,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m2_berry"
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.12.3-1.0.0)/uboot-imx-lf-6.12.3-1.0.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.12.49-2.2.0)/uboot-imx-lf-6.12.49-2.2.0.tar.gz"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 +BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.47.3
 
