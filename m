@@ -1,85 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90FD0EA812E
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 15:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ABD5EA813E
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 16:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31E8E81320;
-	Tue, 10 Feb 2026 15:45:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C029060B43;
+	Tue, 10 Feb 2026 16:16:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kK6dLwVH3Mtm; Tue, 10 Feb 2026 15:45:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G3RB3vHKfXLQ; Tue, 10 Feb 2026 16:16:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76926812A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1D1C60C23
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770738316;
-	bh=Wu7U3tRiXjLboriFHqfw1j3GaKLFWPbIPlsE3XNzgE4=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	s=default; t=1770740177;
+	bh=Jzg90lpqb67Yy1OU+bMUXIc8Fl9TeH1Og5ep7m2stoY=;
+	h=From:To:CC:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=g3Md5dDAojiJk6DXwhejgddWLOzl9/KNEhHCi2Y1ik+SC2n1YL4IW9MyCwppE0RJV
-	 1YtlX2EXYMToxbrklGrzJ3l1zEHpnL3wPdEm7SOqjnTdIGjSRyBbCTmbaYSj6iJJ4q
-	 bsc+PESx2DQtwboJeWNzr6k/3nKrDI07cJdK02+lZsrKe5SNA5gxgMRRDJ75ngp5rv
-	 Aq0i3q9OtmR30+nMeV+saooH08RltsfVgokQRBmKfHjvhrXdPYdOSnapuNgvSmqqFr
-	 LipGYC6TZpc1FCbLoQJdu3xpQRlklIUOdq0fop4UNsbxeGPn4mBUhv/E3SSrIqS8uP
-	 4l/u5ZMmyc6IA==
+	b=OyXTLNnhakMtY+FdkapdVuAkznQmyOyJ73SboSSSFDAJYYVVlsbRmFAO1P5SRHSSg
+	 SCkTaEfD2MC2QGG8o1q8f9fgR1pnM2KAaD1qASlYUqWi9V+Dm4gGdhdDG6dELH+5B1
+	 g3ndENWHhORA9g04NcJ1X5lQ+onrTvVWsNM6uv+wyroN4gEI+S+iGKkrrm5g4RiDer
+	 5TFNP1oXvltjm6f4TjbFD5pFLLnjSrReprOO4nX9jUhU/YNSCzWIX8VIM3Gpqz4ry/
+	 ygpDISj8OHlZfpVtbpw/LZXP3oCA9bshPZkqhxCMfijeIhZLobt8sjJ3qJ/edNF0Ut
+	 koSGOEe07lgmg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76926812A8;
-	Tue, 10 Feb 2026 15:45:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C624219
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 15:45:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1D1C60C23;
+	Tue, 10 Feb 2026 16:16:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B5F59F2
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 618408127D
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 15:45:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A70424070D
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:16:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vqXPNnFCxH1z for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 15:45:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7506F812A8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7506F812A8
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7506F812A8
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 15:45:13 +0000 (UTC)
-Received: from [192.168.178.91] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 6D47C2C801B0;
- Tue, 10 Feb 2026 16:45:11 +0100 (CET)
-Message-ID: <cca72048-2c9c-44a8-b964-340dbd148aa4@bubu1.eu>
-Date: Tue, 10 Feb 2026 16:45:23 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id raU44ST1-dtM for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 16:16:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EEC9240593
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEC9240593
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EEC9240593
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:16:13 +0000 (UTC)
+X-CSE-ConnectionGUID: jIfnkyw/TK+eiWsYJnCYJg==
+X-CSE-MsgGUID: ult994PQSXmrwzGfvNWjMQ==
+Received: from unknown (HELO opfedv3rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 10 Feb 2026 17:16:12 +0100
+Received: from unknown (HELO OPE16NORMBX608.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0e.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 17:16:12 +0100
+Received: from OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] by
+ OPE16NORMBX608.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Tue, 10 Feb 2026 17:16:12 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
+ Tue, 10 Feb 2026 17:16:10 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Tue, 10 Feb 2026 17:16:10 +0100
+X-CSE-ConnectionGUID: IHVXq4s/SR27cQFNcoxPzg==
+X-CSE-MsgGUID: kVOebaTnRvmYTWyFFgi/3g==
+X-IronPort-AV: E=Sophos;i="6.21,283,1763420400"; d="scan'208";a="391129953"
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: <yann.morin@orange.com>
+Date: Tue, 10 Feb 2026 17:16:09 +0100
+Message-ID: <5d305bac33be19c373e64be58be905819db3dbf4.1770740165.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1770740165.git.yann.morin@orange.com>
+References: <cover.1770740165.git.yann.morin@orange.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20260209203132.3837056-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260209203132.3837056-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770738311; bh=UrYE8jtm59baCSp1r1TSkBpEsFUapaNF9pdZIR43x84=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=tbSbYN9eG/M4PCP5229Le8rce5VOpueJCWSM1uiWqI+ExEZ2bEEg0wM7XOFh4Ashk
- 3xyWuFpXUXyqyODR1C4CbddOnewGOP9rQteeG+CxnPIq7d1uFKpZ1ayHnHRFkl4eHX
- 7H0SHpXfon+YMaeGZKYIYmqD55SVm8nPdUPmfhF55QKClsGxGv5f7SpDfyfdzmcYgD
- edvkErJ7zWjQz5zuUe8MY6knBfZD+LPzBSG8AbMLBgDD9vasVrTdZDPYPh5C6ZIkub
- BN9BgB4ZAS8qGhjTpxg5asM7tw7oJwPQ9lDTq4mdzp8CtQghThdxQR7J7fNXVqaTz6
- MT+sMrBZDMHWg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=tbSbYN9e
-Subject: Re: [Buildroot] [PATCH 1/1] package/m4: bump version to 1.4.21
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX608.corporate.adroot.infra.ftgroup
+ (10.115.27.32) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1770740174; x=1802276174;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=I/ADEqpaGLJWKk4mLJ26VwgF6ONyOnia6GicGVs/Wf0=;
+ b=o4V/Q7lMbruxIiM9Vp6rHhSSXPr862M/GvvniPFMF0LqxcIZtHlLCbaC
+ C9dsxODxCaRPnzCxwEMegtu2NPFSMqM8Who2mSskV71PoyM0zM5ns+VFR
+ tYZH7J2NY5JsU1tfw/xbUd2yIcvElDEq2yuW/7TtCMaGcAHxfRuYvOfv7
+ UEPBWl+wwCrpz9HWvAO84GZQUyLHP3EiFYw/VbZaN6LpPs38Ap0oI0WCJ
+ 8V+k5QHvRNw5F+T+QxwA0sAtDMS3BV1SIy+PlYODqo0lZ7MuUMuHSyqkv
+ 9Fm3uqKQe1RVrrlZYQRMjyXIqQ/oL8y4stcW5r813l2LND3gUWFgj1tOv
+ A==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=o4V/Q7lM
+Subject: [Buildroot] [PATCH 1/2] package/cjson: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,22 +115,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2/9/26 21:31, Bernd Kuhls wrote:
-> https://lists.gnu.org/archive/html/m4-announce/2026-02/msg00000.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Applied to master, thanks!
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+---
+ package/cjson/cjson.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Marcus
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index cb4525d1a4..fb43994aed 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -31,4 +31,11 @@ else
+ CJSON_CONF_OPTS += -DENABLE_CJSON_UTILS=OFF
+ endif
+ 
++HOST_CJSON_CONF_OPTS = \
++	-DENABLE_CJSON_TEST=OFF \
++	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF \
++	-DBUILD_SHARED_AND_STATIC_LIBS=OFF \
++	-DENABLE_CJSON_UTILS=OFF
++
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.34.1
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
