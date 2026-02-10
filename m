@@ -4,88 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82FEDEB271F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 22:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE993EB271F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 22:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3AEF60EB3;
-	Tue, 10 Feb 2026 22:52:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 826D560E03;
+	Tue, 10 Feb 2026 22:54:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CwYLEgXqAi1K; Tue, 10 Feb 2026 22:52:10 +0000 (UTC)
+ id vrDXDwEDlIZI; Tue, 10 Feb 2026 22:54:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA01F60B89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EDE560A98
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770763930;
-	bh=eMpGQJAG/4nH/P9GGpx9qkUAnLvdBogFTMnBAHVZutQ=;
+	s=default; t=1770764055;
+	bh=Sw63yO2Cn7DMTZ6osakcdO2PveY9qYY8aKQeeYfGeYE=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=WbptABdyNHB8zuVNHaP4cGFpT+TptmoGCgZ5E9tgXeudh+vLQe7SnOi5N8SBp2No9
-	 2gSJguTa0GUNs4VPRE4x46IKsOhdlhvdKxM2TIPiVb6gXxT6Zc7NSMY4HQp2AZmysm
-	 BUbOYiHpJY7fXnasKHqOEnWTOjATvaVD9iJdfogTL2QNtKFrQiRHuSG/w/tV/k2Icr
-	 Q/LhXx1BvW7wvxEH+BFnYuDMTg7GrBgGBc8+s4Mu7BN7ifPQy/ZygoJou0ehiyodPY
-	 hpD2LtHJonTU+vy53DPKAYpkUPgaQWcODWAEe/4fOjUoWKVOKDdtmh4JjOH8y8vb9X
-	 TDMmch0dI8Z7g==
+	b=CyUIacWGrqyAmRscunR53C1NdfprGv9eS0f4iTGnzqYZuuYuGVVMmOVrQCa623Imh
+	 AagR0pIY1Nzs8YQVGmCRRyKSA4QLNOpg9gjNFM+KvCykxVP3Bk38/AK0jRxaDMmgbB
+	 8t6AAWx1PDzVrw73yQisXsEntizPcsXDS/1vckrTYRwZph+9LeBtrNy6oQsQ5xTzu1
+	 8Uj0SubxXpGh52laP1VDEHjjzsq/Ck7YosrjrdOl4CJ5bb7WvtQ+7p7q2j2OmULYzU
+	 RGHmYsajL+EucamQfUFpwoZtPZc8F0pPF2+9j/v2gEafKCMJ43aPOa2PSUGd6PQ6s3
+	 GDbmUWfp3j6Bg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA01F60B89;
-	Tue, 10 Feb 2026 22:52:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EDE560A98;
+	Tue, 10 Feb 2026 22:54:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B2D6A23D
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 22:52:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 055D4F2
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 22:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFFCF409C9
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 22:52:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA7E440C59
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 22:54:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kNhrPSf8B4zi for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 22:52:07 +0000 (UTC)
+ id IMoBwrRwW_s0 for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 22:54:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
  helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 04104408F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04104408F7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D383B40C42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D383B40C42
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 04104408F7
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 22:52:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D383B40C42
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 22:54:12 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 2D708C8F455;
- Tue, 10 Feb 2026 22:52:12 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 5200EC8F1EC;
+ Tue, 10 Feb 2026 22:54:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 89CE6606BD;
- Tue, 10 Feb 2026 22:52:03 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id BB9C9606BD;
+ Tue, 10 Feb 2026 22:54:10 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E131F10B90957; Tue, 10 Feb 2026 23:52:01 +0100 (CET)
-Date: Tue, 10 Feb 2026 23:52:01 +0100
-To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: buildroot@buildroot.org, tim.hammer@nav-timing.safrangroup.com, 
- nicolas.carrier@nav-timing.safrangroup.com
-Message-ID: <aYu2ayHWQbTTzjb7@windsurf>
-References: <20251016-openscap-v3-0-d7b28e958f5f@bootlin.com>
- <20251016-openscap-v3-1-d7b28e958f5f@bootlin.com>
+ with ESMTPSA id C51C710B90957; Tue, 10 Feb 2026 23:54:09 +0100 (CET)
+Date: Tue, 10 Feb 2026 23:54:09 +0100
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org, alexis.lothore@bootlin.com
+Message-ID: <aYu2lh_Ef3zYGnzM@windsurf>
+References: <aYRiIxIb0-E_Pd6s@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20251016-openscap-v3-1-d7b28e958f5f@bootlin.com>
+In-Reply-To: <aYRiIxIb0-E_Pd6s@waldemar-brodkorb.de>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1770763922; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=XFpiNBeqDMdjgBpV4AacER6gVScw9LWJ919Kv4ZIbDI=;
- b=IR069e0xNrWkpg5mVwMWZUXN5sZPqxCAF31D9CccOcoKkn2nU6tMvpiRtAzm7E02Ar4NEF
- JCg3z1s3CMAwykZzGbqCkvyf9xfLj+Azgv9I3OyfVO9AJZWWWUwghzDm0FF0+27sz7MpcB
- J7SHOrLYNREAbBFDn2cp+qHptHgBt19zUhOHOnCj36cAVq5IJmDksrhUSuOa9QigW8KoEQ
- wXLQ51PY1+zzhvycmwlLgf/aFLc8ghpjwxOGzesuitwe2hQC7jSX2epnRFgiLTwuKDSKBD
- W0alxo5J2p0Knrzr5w274luP+flbqH2eNNNUnhAvtzxru++1y7IZkDbw9tnC6w==
+ t=1770764050; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=c6mby3yIMP0fuRj1ofkZDnhhr/iZkrw9OkMO1TCdMSU=;
+ b=KTYymniRMOXKEvfpYIK55JT5EHye84ofo5R8B3QtLi1jvgPQurRjqmmPgsPPBsgKDok+7I
+ h+7+yzB5rWy3kh/TQM+99ZNT/igtXUV3iM8XzZLEHzGzcNlGUShu2BP60MUC80Yxfj5x5w
+ JMfzRfSpVadp+ivOd9AfHNrzv9FvaACpseMGqXk6R4u0FTkSJNeGvf9+lL2Dsy8fo6KZTY
+ 2ujO85qzhhkH1EoC6lhfahIVMNE8b52AAXSF7AzEg/7F9k6mlV4jeTjnoV0Mfx/ZW5umpS
+ rAZjjsYuhkhYfwhIQCcEA0B7DiOH+l42MyjDI7elOceC7lEqRrHAwAD0AIr5yg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=IR069e0x
-Subject: Re: [Buildroot] [PATCH v3 1/5] package/libxmlsec1: new package
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=KTYymniR
+Subject: Re: [Buildroot] [PATCH v4] package/libxmlsec1: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,34 +95,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Oct 16, 2025 at 04:46:34PM +0200, Alexis Lothor=E9 via buildroot wr=
-ote:
+Hello,
+
+On Thu, Feb 05, 2026 at 10:25:55AM +0100, Waldemar Brodkorb wrote:
 > Introduce the libxmlsec1 library package. libxmlsec implements XML
 > security standards.
-> =
+> 
+> The library has only a few mandatory dependencies (libxml2 and a crypto
+> library). It needs one of the following cryptographic libraries:
+> OpenSSL, NSS, or Gcrypt/GNUTLS. Default to openssl for now to keep the
+> package simple.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-> The library has only a few mandatory dependencies(libxml2 and libxslt
-> and a crypto library).  It needs one of the following cryptographic
-> libraries: OpenSSL, NSS, or Gcrypt/GNUTLS. Default to openssl for now to
-> keep the package simple.
-> =
+Sorry Waldemar, I'm seeing your patch now after having applied the one
+from Alexis. Could you send any updates as patches on top of master?
 
-> Signed-off-by: Alexis Lothor=E9 <alexis.lothore@bootlin.com>
+> diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
+> new file mode 100644
+> index 0000000000..ce3384e7b7
+> --- /dev/null
+> +++ b/package/libxmlsec1/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBXMLSEC1
+> +	bool "libxmlsec1"
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_OPENSSL
 
-Thanks, applied, after updating to 1.3.9, since 1.3.7 was not building
-here (most likely due to gcc 15.x, but I haven't really investigated
-much since 1.3.9 built just fine).
+I see you did not select libxslt here, while Alexis did so in his
+patch. So I assume libxslt is not mandatory?
 
-Thanks!
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +LIBXMLSEC1_CONF_ENV += LIBS=-latomic
+> +endif
+
+Alexis patch did not have this. I assume it fixes issue on SPARC ?
+
+> +$(eval $(autotools-package))
+
+Your patch did not have the host variant, which Alexis needed.
+
+Best regards,
 
 Thomas
--- =
-
+-- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
 https://bootlin.com
