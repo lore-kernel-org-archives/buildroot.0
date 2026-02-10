@@ -4,81 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1BFBEB26E0
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 16:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C77CEB26E9
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 16:49:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D03A740565;
-	Tue, 10 Feb 2026 16:46:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CA7B4121E;
+	Tue, 10 Feb 2026 16:49:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TjsKSS-MWb7v; Tue, 10 Feb 2026 16:46:20 +0000 (UTC)
+ id KX6Ed1X67qCd; Tue, 10 Feb 2026 16:48:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B8E74043A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0527B40B4D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770741980;
-	bh=doLGlfu+5BrNkafqSLVYF+niPTdL65k9lpmoh8A/Ql0=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=ge5OP9emg7ZzqoXUZXckZpPQac2pF/51gx5ZvSKVXPwQqzi898ImJW1kOqdmLjbY2
-	 f/XrviBCSLM2xWcoQJvg0OFTMBjJvRle2xU5xaOf1Dx1maZEWhkOvgx8PcBcnXMBTc
-	 xkIMcUao7G7FpCK0T2eLtJYwvANnCoc1f1Er1pDM/3r7iZL+GNzOtjL1HTDGKnRUIA
-	 BGT8EW0XyoJIRia461t5A9Wc4CJO65xx4mFip6vECGB2KbuGsngPTs55linsl7nQkf
-	 Fv/en4rFum0lsb1BB73YTwp1n2ZG0HPQy3vK0E5OSew2YB8+WlD+R8oO+qacpEW9Vp
-	 whdAvK9Efiidg==
+	s=default; t=1770742139;
+	bh=vExgdzOp6S3/wY0+kG/IVDVlBb6Pyx+FB8KK1tYBDE4=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ZKHlR7XAPa5YR4K2omNi7epItfa7HNLpE6Qc45kg/rzf8T97M2rExt7QYN5PZVwSP
+	 Y5mGiQDacVB8acQuUNRJ9orF9y69zUS7DM8PV0KldDt/cRh5+lsjAQN4+N02Kdxi9o
+	 BymnpVHZ47SUpOY8sw4jxCGIUX0IDJRc48I0TXgxj//CYdoQ6aFA10QRs1iN7yPiBl
+	 KqtUxGCJrsbI9c3z/J55b13OznI9xe9XteBATF2s9bo9U7/wplXEwJ5UiDFAZMhujm
+	 knlQWDprRxBLYhJHxF4RAMpzzJey5J/8m1ssIXO7/+sEJNnYpBWYMop1FqPq2KuzfR
+	 YgCmpsIzwHhnA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B8E74043A;
-	Tue, 10 Feb 2026 16:46:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D9E3EF2
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:46:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0527B40B4D;
+	Tue, 10 Feb 2026 16:48:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 742E71A9
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB32D83D7B
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:46:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 655894082D
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:48:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oSeompGN8utq for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 16:46:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EF1FD8121C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF1FD8121C
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF1FD8121C
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:46:17 +0000 (UTC)
-Received: from [192.168.178.91] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 935C22C801B0;
- Tue, 10 Feb 2026 17:46:15 +0100 (CET)
-Message-ID: <8f34f44b-d1de-43b9-bec6-2f162dedb076@bubu1.eu>
-Date: Tue, 10 Feb 2026 17:46:28 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7O60fL2fg8wt for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 16:48:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
+ helo=smtpcmd02102.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DAADF404F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAADF404F3
+Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DAADF404F3
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 16:48:55 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id pquyvTgY7lZ8Ppquyv8VBV; Tue, 10 Feb 2026 17:48:52 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 10 Feb 2026 17:48:51 +0100
+Message-ID: <20260210164851.189380-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20260209195320.368734-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260209195320.368734-1-bernd@kuhls.net>
+X-CMAE-Envelope: MS4xfBAj36KZCsDLipT5CTfLpzIjbwVaT8GDBMKnrPrs6giA+wNn2XQAmxAyA+NOoGQnUrG0d8jeBR2uzSIAixKM7/GDXtj4qqKT5z1Yiwuzw5qfwjQsy9xM
+ 4c0kzmvni6QHM/m4OJLzrNb72FNYN1IyixKKhdfsxIU+jsPJBGpAe/2ftpwm9+egi0N9qu6QvNZiu7Gi/raTG9zCrgsiKejy0p1PAsvHOOOF5pR6kQygM3Y4
+ IY/zjQlIP45sL+AiEf5061IFLRNl2GQgwK1p9rzQ9Ig=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770741975; bh=Ewuko0s1xUk3rGeQdz2ccL7WuuB5pha40lswfQVGLTM=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=jms0D84tbP2fwhiCWsqQt6f4j+HBbf+CGkeZEEDuVtlPzY+NlVxxI/bO+7C7EksSO
- DbCe3XB3gmpE+hzG0NGi3U2aqBhji3P8xzMpgSS5GuHAT+kKP+q0Ysg3OwaO3cqz6c
- K/xiJg+c+yv+wS7xvTYUidv3wZzq5TAIxt2zXpBTx1oS+GtUhRujms4G77Y+WUiUXm
- LnB7+vCvywk4Hy7FBtulPy5bHp4xylsiS09n79kWPz+uXM6kN8IGmD1971pantAnE3
- ecrTzyz83waAVi6mC7Z/Vqnp5PvrvhUa0MdFhYRXSgnI0GyEEOGxjab3UUSvflWhAa
- gmYhKmAQI9wZw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=jms0D84t
-Subject: Re: [Buildroot] [PATCH 1/1] package/make: fix build with gcc 15.x
+ d=aruba.it; s=a1; 
+ t=1770742132; bh=mfG4+mw58mx2wxuiY94hNbdOuER9PwEtuy0hPRLIeoY=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=WIGH+e/I+Qff8uHZ3JuXLa6/E89/Mn25vCvv1oLq7pi+7a4OpBCQbEheEc3JYnNRz
+ Eq4xrfPx5CBsLNA7rg6wYSX4qxuDZ7AF72IUXXFeoPkhiuk/ml1ZjxsO/JaUIp8HTL
+ YcmS3yaWxzbPPuQtfdV8N1l2G8PVC8xpCCcOwWYz1dU7Rkxb0OIIsKL1zPZA4lLp9U
+ U6s5vHfeJZlYzezFg095u5WVXDBbFfUhl0x54vx/42xrp0MPDQo3iHjGND5cZ6yl80
+ wyss8zki/fygXVrHdXtC32CTG6Z3o8vZaqKVRTH/BB7kCc68KvXPCptZmPGEXxaYAr
+ CmHyAtk9Rh7OQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=WIGH+e/I
+Subject: [Buildroot] [PATCH] package/mali-driver: bump to version 2026-02-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,49 +90,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+This version builds up to Linux version 6.19.
 
-On 2/9/26 20:53, Bernd Kuhls wrote:
-> https://www.mail-archive.com/bug-make@gnu.org/msg16254.html
-> "GNU Make avoids importing Gnulib modules, since it will make
->   bootstrapping harder.
+Fixes:
+still not happened
 
-I don't think this part is relevant at all to your patch, right?
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/mali-driver/mali-driver.hash | 2 +-
+ package/mali-driver/mali-driver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->   [...]
->   So, you should be able to compile with -std=gnu99."
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/e92/e9250f1bdbbd7c65a8bd108f32ad9eef73a3eacf/
+diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
+index c6b027f1a3..0c0de10dac 100644
+--- a/package/mali-driver/mali-driver.hash
++++ b/package/mali-driver/mali-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bbfd78d3342fe8bdef5e37659740f69818aa1b3be3a75e5bb085223d87a2a1d4  mali-driver-ef3da788030833289040e4396bff010edcc2289b.tar.gz
++sha256  cafcf9af1c8ce5045dc0f077c51b87d204ddad6cf7e5db22bbf6a3d4356be972  mali-driver-5c13ca89d83dec3e51ed1880dff726838bfdecd3.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
+index 40ae03a1df..77ef8963a5 100644
+--- a/package/mali-driver/mali-driver.mk
++++ b/package/mali-driver/mali-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MALI_DRIVER_VERSION = ef3da788030833289040e4396bff010edcc2289b
++MALI_DRIVER_VERSION = 5c13ca89d83dec3e51ed1880dff726838bfdecd3
+ MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
+ MALI_DRIVER_DEPENDENCIES = linux
+ MALI_DRIVER_LICENSE = GPL-2.0
+-- 
+2.47.3
 
-I can confirm that, but I'd ideally like to understand what's going on 
-here a bit more. The failure seems to only occur with gcc 15 and musl 
-libc. It builds fine with gcc 15 and both glibc and uclib-ng.
-
-Could you try to find out more why this is specifically a musl problem?
-
-Alpine has a patch that looks relevant as well, but unfortunately 
-without any details: 
-https://github.com/alpinelinux/aports/blob/master/main/make/getopt-gcc15.patch
-
-But maybe a version of this could be submitted to make upstream to have 
-it fixed on all C libraries?
-
-Or maybe this is the correct fix for now, but still we should find out 
-more why this is only happening with musl.
-
-
- > [...]
-
-Best,
-Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
