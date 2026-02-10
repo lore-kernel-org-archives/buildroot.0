@@ -4,80 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A50BEA3F16
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 07:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E71BAEA3F18
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 08:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CA7580D02;
-	Tue, 10 Feb 2026 07:50:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 969FE81545;
+	Tue, 10 Feb 2026 08:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0XBoGu4DiUaA; Tue, 10 Feb 2026 07:50:09 +0000 (UTC)
+ id S09hNkAWRyRL; Tue, 10 Feb 2026 08:01:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A1CA80D44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63BD081422
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770709809;
-	bh=tt/k+IxXPGl9MNNNrM8CP+f5y+4iGbZ/A5JQQeA4RRY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=MbqqJzIP3ojkUVAeYNt+kaYx7S2QEjPkNSa5vZPo7LdvC6fAOnw1G0/XYX0kW7Mwc
-	 9aU5dnF71L6jNSmdmiaykTgMfrmJkquzl2yEK5elx0jfz8vLkYOFqn1/4nvH03iwV0
-	 GpHKK40KJ3gpxEv2sK2Ul0yg1RMZxJE1bmOUQH/CBkUik9qyxOMlUf9bnX2egoNeOK
-	 BaliI15pBjH+4lSDkZ5GqWPZuM3yTS35S6JxC6wIRoVG1oNLhzLNknCZjinY77DyL/
-	 L4lrmCQlvoZlH4/BjNv26CuijA/jxDBSBGENy5GsIvI/NVDP+n/ZeuuB79wYuosQKY
-	 NAmf0Nro7bCqQ==
+	s=default; t=1770710481;
+	bh=EV20xNQVBaR3SslWdG2ZvUvuyP6Lxul0yHceUM+T5xo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=lp8tQd4e5sgshSy5uoqoFwm0l3/EwCv0TmquLaxEuFuvVAETkFjJDw4+Qji6D3f7p
+	 d+JvEVehejnFc132ryKx3Rj22i/yo6Liz89KI2z1pai/Q/LASBDzAounkxpOLtGe/T
+	 oru0M9nRjhI6HVCc+C6yd4rYizv3vb4CDDLWKgrUcdX8wTXx6vVDFL3XrIVb7UebH8
+	 mxrD1Q3v6Jlk5TcWOXbxcoCLYRJzzGSGjkmBxQS8TpntIR7pufRpF8wNb1rzo2W+mJ
+	 T8Gg3hkIw/X0S9FoX4yAFBXk7JBOqqWRkgrBuLCQA2kQDk13qYTQ/gwbAnqM3tZmZw
+	 d2SVlCV5PFyiQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A1CA80D44;
-	Tue, 10 Feb 2026 07:50:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A457A219
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:50:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63BD081422;
+	Tue, 10 Feb 2026 08:01:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 214DDF2
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2251980CFA
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:50:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EE9840D9A
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a_bv0M3LKott for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 07:50:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0794580CE8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0794580CE8
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0794580CE8
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:50:00 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1853273034; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 10 Feb 2026 07:49:58 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vpiVR-00000002ZR3-1UH7;
- Tue, 10 Feb 2026 08:49:57 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 10 Feb 2026 08:49:53 +0100
-Message-ID: <20260210074955.612849-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id golWUkAN4uZs for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 08:01:18 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 18DA840D99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18DA840D99
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 18DA840D99
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:16 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 5DF43BDE032E;
+ Tue, 10 Feb 2026 09:01:12 +0100 (CET)
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=qra+KU0r+eQLPPt84a21+2HKyZDmlle8Nx1/aB7RCPDGmNjlL2tZt0wdQAlnPYcHjwvV61KgnBGLurjB/ofdxYgTEOzTtGqhvLUBrol5Qq2OlHkA++pCyztnwQjsz76mNzWurxy/0tAdNGFdN/kBfzfUcNL7aGhEbADSxSfiVLOQedGkvhPi59AafXZoCBU1thOzkqrXV9R6zRm2IrDL9ulUFOju8J7jQxodCoYF54uz4LxIfCWKDZJ7cQ5GILl+5fiQAwhGW0/29y4QXJ9vDswKw1f4A7SS9VL51cJCPb1K9BtRUG/WOZpqp3V3MIDtWtR5TwKziugg53QprSN24w==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=pDLe8UvkHvPkZVeRQKhXEvJ4SVpMh7IsDF4H1wBlCqU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Tue, 10 Feb 2026 08:01:12 +0000
+From: Andreas Ziegler <br025@umbiko.net>
+To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Cc: buildroot@buildroot.org, guenther.harrasser@mobileye.com, Chris Packham
+ <judge.packham@gmail.com>, Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>
+In-Reply-To: <20260209132034.3298699-1-jimmy.wesolowski@mobileye.com>
+References: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
+ <20260209132034.3298699-1-jimmy.wesolowski@mobileye.com>
+Message-ID: <a16c18964c63e254812e4baa5cd57b84@umbiko.net>
+X-Sender: br025@umbiko.net
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1770710472; bh=Djy3ymeHYdZBTt7BNid/Cjbx5OdNTKev/22Iy3+xYIk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=387AKOO5/Y8zpiNPR58g7SLuK36gxukTTsyAzNzPjqrqQEg4nxer1gCrkSWZWnojb
+ ADpLB9d781pF6MTa+9f2FcK4iN1eZZ0R6Q2pagfqAhP2RHrvdMk1jMjMghFBzHBOjE
+ S4YMM9e4VP+M/Q3OrLjXJY3aYx1jsyLh+ki1E0iA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=qra+KU0r
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/go: security bump to version 1.25.7
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=387AKOO5
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/coremark: port for mips-i6500
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,94 +90,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Christian Stewart <christian@aperture.us>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerabilities:
+Hi Jimmy, Vladimir, all
 
-CVE-2025-61732: cmd/cgo: remove user-content from doc strings in cgo ASTs
+thank you for the update, technical remarks below.
 
-A discrepancy between how Go and C/C++ comments were parsed allowed for code
-smuggling into the resulting cgo binary.
+Most important: You do not need the extra files in the mips-i6500 
+directory. They are identical to the ones in linux64, except for white 
+space and the copyright inserted in the file headers.
 
-To prevent this behavior, the cgo compiler will no longer parse
-user-provided doc comments.
+This would reduce your patch to the addition of EXTRA_CFLAGS, which is 
+probably what most people use when adapting this package. It also covers 
+my current customization.
 
-CVE-2025-68121: crypto/tls: unexpected session resumption when using
-Config.GetConfigForClient
+Please also check the output of utils/checkpackage package/coremark/*
 
-Config.GetConfigForClient is documented to use the original Config's session
-ticket keys unless explicitly overridden.  This can cause unexpected
-behavior if the returned Config modifies authentication parameters, like
-ClientCAs: a connection initially established with the parent (or a sibling)
-Config can be resumed, bypassing the modified authentication requirements.
+On 2026-02-09 13:20, Jimmy Durand Wesolowski wrote:
+> From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+> 
+> Compile for MIPS I6500 CPU 64-bit, with all compiler flags as
+> recommended by MIPS
+> 
+> One missing flag -s "-Tmsym32.ld" since linker script
+> "msym32.ld" does not exist in the MIPS toolchain
 
-If ClientAuth is VerifyClientCertIfGiven or RequireAndVerifyClientCert (on
-the server) or InsecureSkipVerify is false (on the client), crypto/tls now
-checks that the root of the previously-verified chain is still in
-ClientCAs/RootCAs when resuming a connection.
+Since the actual flags are part of the configuration (EXTRA_CFLAGS), you 
+might choose a more appropriate commit message.
 
-Go 1.26 Release Candidate 2, Go 1.25.6, and Go 1.24.12 had fixed a similar
-issue related to session ticket keys being implicitly shared by
-Config.Clone.  Since this fix is broader, the Config.Clone behavior change
-has been reverted.
+> 
+> Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - do not add mips-i6500 through a patch, but copy it through rsync
+>     in POST_EXTRACT_HOOKS (suggested by
+>     Andreas Ziegler <br025@umbiko.net>)
+>   - allow specifying a port directory to use through kconfig, such as
+>     mips-i6500. The default stays linux for 32-bits architecture,
+>     linux64 for 64.
+>   - allow passing extra PORT_CFLAGS through kconfig  (suggested by
+>     Andreas Ziegler <br025@umbiko.net>)
+> 
+> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+> ---
+>  package/coremark/Config.in                  |  19 ++
+>  package/coremark/coremark.mk                |  23 +-
+>  package/coremark/mips-i6500/core_portme.c   | 336 ++++++++++++++++++++
+>  package/coremark/mips-i6500/core_portme.h   | 291 +++++++++++++++++
+>  package/coremark/mips-i6500/core_portme.mak | 140 ++++++++
+>  5 files changed, 805 insertions(+), 4 deletions(-)
+>  create mode 100755 package/coremark/mips-i6500/core_portme.c
+>  create mode 100755 package/coremark/mips-i6500/core_portme.h
+>  create mode 100755 package/coremark/mips-i6500/core_portme.mak
 
-Note that VerifyPeerCertificate still behaves as documented: it does not
-apply to resumed connections.  Applications that use
-Config.GetConfigForClient or Config.Clone and do not wish to blindly resume
-connections established with the original Config must use VerifyConnection
-instead (or SetSessionTicketKeys or SessionTicketsDisabled).
+The mips-i6500 files are unnecessary.
 
-For more details, see the announcement:
-https://groups.google.com/g/golang-announce/c/K09ubi9FQFk
+> diff --git a/package/coremark/Config.in b/package/coremark/Config.in
+> index f0e13eda63..bb29a8093f 100644
+> --- a/package/coremark/Config.in
+> +++ b/package/coremark/Config.in
+> @@ -6,3 +6,22 @@ config BR2_PACKAGE_COREMARK
+>  	  used in embedded systems
+> 
+>  	  https://www.eembc.org/coremark/
+> +
+> +if BR2_PACKAGE_COREMARK
+> +config BR2_PACKAGE_COREMARK_PORT
+> +        string "coremark port directory"
+> +        default "linux" if !BR2_ARCH_IS_64
+> +	default "linux64" if BR2_ARCH_IS_64
+> +        help
+> +          Path to the platform specific port directory.
+> +	  This allow using a different platform specific port than the
+> +	  default indicated if the support is available in CoreMark.
+> +
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+This block is not necessary.
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 6134ec5f75..9a9a5a571a 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  58cbf771e44d76de6f56d19e33b77d745a1e489340922875e46585b975c2b059  go1.25.6.src.tar.gz
--sha256  59fe62eee3cca65332acef3ebe9b6ff3272467e0a08bf7f68f96334902bf23b9  go1.25.6.linux-386.tar.gz
--sha256  f022b6aad78e362bcba9b0b94d09ad58c5a70c6ba3b7582905fababf5fe0181a  go1.25.6.linux-amd64.tar.gz
--sha256  738ef87d79c34272424ccdf83302b7b0300b8b096ed443896089306117943dd5  go1.25.6.linux-arm64.tar.gz
--sha256  679f0e70b27c637116791e3c98afbf8c954deb2cd336364944d014f8e440e2ae  go1.25.6.linux-armv6l.tar.gz
--sha256  bee02dbe034b12b839ae7807a85a61c13bee09ee38f2eeba2074bd26c0c0ab73  go1.25.6.linux-ppc64le.tar.gz
--sha256  3d97cc5670a0da9cb177037782129f0bf499ecb47abc40488248548abd2c2c35  go1.25.6.linux-s390x.tar.gz
-+sha256  178f2832820274b43e177d32f06a3ebb0129e427dd20a5e4c88df2c1763cf10a  go1.25.7.src.tar.gz
-+sha256  2866517e9ca81e6a2e85a930e9b11bc8a05cfeb2fc6dc6cb2765e7fb3c14b715  go1.25.7.linux-386.tar.gz
-+sha256  12e6d6a191091ae27dc31f6efc630e3a3b8ba409baf3573d955b196fdf086005  go1.25.7.linux-amd64.tar.gz
-+sha256  ba611a53534135a81067240eff9508cd7e256c560edd5d8c2fef54f083c07129  go1.25.7.linux-arm64.tar.gz
-+sha256  1ba07e0eb86b839e72467f4b5c7a5597d07f30bcf5563c951410454f7cda5266  go1.25.7.linux-armv6l.tar.gz
-+sha256  42124c0edc92464e2b37b2d7fcd3658f0c47ebd6a098732415a522be8cb88e3f  go1.25.7.linux-ppc64le.tar.gz
-+sha256  c6b77facf666dc68195ecab05dbf0ebb4e755b2a8b7734c759880557f1c29b0c  go1.25.7.linux-s390x.tar.gz
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 91e5fbf347..a9c7d1ddc6 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.25.6
-+GO_VERSION = 1.25.7
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
--- 
-2.47.3
+> +config BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA
+> +	string "coremark port extra CFLAGS"
+> +	default ""
+> +	help
+> +	  Additional CFLAGS to pass to CoreMark platform specific port.
+> +	  Any additional flags indicated here will be added to the
+> +	  CFLAGS_PORT variable.
+> +endif
+> diff --git a/package/coremark/coremark.mk 
+> b/package/coremark/coremark.mk
+> index 9ea8693e71..3c367ff90b 100644
+> --- a/package/coremark/coremark.mk
+> +++ b/package/coremark/coremark.mk
+> @@ -9,14 +9,29 @@ COREMARK_SITE = $(call 
+> github,eembc,coremark,v$(COREMARK_VERSION))
+>  COREMARK_LICENSE = Apache-2.0
+>  COREMARK_LICENSE_FILES = LICENSE.md
+> 
+> +COREMARK_CFLAGS = \
+> +        $(TARGET_CFLAGS) \
+> +	$(call qstrip,$(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +COREMARK_CFLAGS += -DUSE_PTHREAD
+> +endif # BR2_TOOLCHAIN_HAS_THREADS=y
+> +
+> +define COREMARK_MIPS_I6500
+> +	rsync --archive --update \
+> +		$(COREMARK_PKGDIR)/mips-i6500/ $(@D)/mips-i6500/
+> +endef # COREMARK_MIPS_I6500
+> +
+> +COREMARK_POST_EXTRACT_HOOKS += $(if 
+> $(BR2_MIPS_NABI64),COREMARK_MIPS_I6500)
 
+The POST_EXTRACT_HOOK is not needed.
+
+> +
+>  define COREMARK_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
+> -		PORT_CFLAGS="$(TARGET_CFLAGS)" \
+> -		PORT_DIR=linux$(if $(BR2_ARCH_IS_64),64) EXE= link
+> -endef
+
+PORT_DIR should stay as is. But you need to specify COREMARK_CFLAGS 
+instead of TARGET_CFLAGS.
+
+> +		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
+> +		PORT_DIR=$(BR2_PACKAGE_COREMARK_PORT) EXE= link
+> +endef # COREMARK_BUILD_CMDS
+> 
+>  define COREMARK_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D $(@D)/coremark $(TARGET_DIR)/usr/bin/coremark
+> -endef
+> +endef # COREMARK_INSTALL_TARGET_CMDS
+> 
+>  $(eval $(generic-package))
+
+<...>
+
+Kind regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
