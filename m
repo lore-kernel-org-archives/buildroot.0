@@ -4,109 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE390EA3F0D
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 07:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A50BEA3F16
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 07:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B194D825C3;
-	Tue, 10 Feb 2026 07:21:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CA7580D02;
+	Tue, 10 Feb 2026 07:50:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4i1oKlRJO5i; Tue, 10 Feb 2026 07:21:21 +0000 (UTC)
+ id 0XBoGu4DiUaA; Tue, 10 Feb 2026 07:50:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0A15825C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A1CA80D44
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770708081;
-	bh=aYpXF5ELWisznenhOQiZ+Yi0bET1As/JtpLOykFxKwM=;
-	h=From:Date:To:CC:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=NhG/vhsXd3M6V1O68i+TaLfHzZIJAgHfMc7GY08qgLBi0gWq+B12nu6w+lcHM1irq
-	 ls+xepnlUNVEUKeC6vboXGOYB9PvA4rDDy8g9DN6SAjKL6yftqr2nCdiGjyYJZMYon
-	 +C+0IfCj0uO9YiB70XuKOUR073xoPxT8gabG4HeMUqw4xG5fwX/t/PnC8t5r6ems0K
-	 h3CECxzCsFM98JjDdqWslIDpoeg8TXe2GK1ywvLk2K3D/VMx9BJp1f8WcQjiFd3gHj
-	 XbaFoTxGcBkG+BZ9sVvldo+hkCWrp7x9GC2iOl7quLopgAsQ9XVuKaZYVAdGH7hVlP
-	 kLo9wURvrJ3fw==
+	s=default; t=1770709809;
+	bh=tt/k+IxXPGl9MNNNrM8CP+f5y+4iGbZ/A5JQQeA4RRY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=MbqqJzIP3ojkUVAeYNt+kaYx7S2QEjPkNSa5vZPo7LdvC6fAOnw1G0/XYX0kW7Mwc
+	 9aU5dnF71L6jNSmdmiaykTgMfrmJkquzl2yEK5elx0jfz8vLkYOFqn1/4nvH03iwV0
+	 GpHKK40KJ3gpxEv2sK2Ul0yg1RMZxJE1bmOUQH/CBkUik9qyxOMlUf9bnX2egoNeOK
+	 BaliI15pBjH+4lSDkZ5GqWPZuM3yTS35S6JxC6wIRoVG1oNLhzLNknCZjinY77DyL/
+	 L4lrmCQlvoZlH4/BjNv26CuijA/jxDBSBGENy5GsIvI/NVDP+n/ZeuuB79wYuosQKY
+	 NAmf0Nro7bCqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0A15825C6;
-	Tue, 10 Feb 2026 07:21:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DF62CF2
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:21:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A1CA80D44;
+	Tue, 10 Feb 2026 07:50:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A457A219
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD91940D4F
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:21:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2251980CFA
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3V1A6YF9Uqa for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 07:21:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a_bv0M3LKott for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 07:50:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EDDF40D03
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EDDF40D03
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7EDDF40D03
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:21:19 +0000 (UTC)
-X-CSE-ConnectionGUID: SpvWo4FrSpyZfguN0fLmug==
-X-CSE-MsgGUID: kChk4ILmTReO8zRVbIto4w==
-Received: from unknown (HELO opfedv1rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 10 Feb 2026 08:21:16 +0100
-Received: from unknown (HELO OPE16NORMBX607.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0a.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 08:21:15 +0100
-Received: from OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] by
- OPE16NORMBX607.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.35; Tue, 10 Feb 2026 08:21:15 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
- Tue, 10 Feb 2026 08:21:14 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 10 Feb 2026 08:21:13 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: 2ztjvNXdQWmetCKPwLmGwA==
-X-CSE-MsgGUID: QPA7qIfWRFKN1YM/3qpsCw==
-X-IronPort-AV: E=Sophos;i="6.21,166,1763420400"; d="scan'208";a="392923918"
-Date: Tue, 10 Feb 2026 08:21:13 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-CC: <titouan.christophe@mind.be>, <buildroot@buildroot.org>, Scott Fan
- <fancp2007@gmail.com>
-Message-ID: <aYrcaeU2kIm4a7sD@yd-6wlzhs3>
-References: <3c42d6a8803c28ce34156eee659e25875b916075.1770703119.git.yann.morin@orange.com>
- <87tsvpqeqz.fsf@dell.be.48ers.dk>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0794580CE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0794580CE8
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0794580CE8
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 07:50:00 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1853273034; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 10 Feb 2026 07:49:58 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vpiVR-00000002ZR3-1UH7;
+ Tue, 10 Feb 2026 08:49:57 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 10 Feb 2026 08:49:53 +0100
+Message-ID: <20260210074955.612849-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87tsvpqeqz.fsf@dell.be.48ers.dk>
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX605.corporate.adroot.infra.ftgroup
- (10.115.27.29) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1770708079; x=1802244079;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=LYqQVjyoRN1nm0lPwPJt1QIt0Nm/6oVbhAO8q6a4a6g=;
- b=JXTrImmK4lPornh7pbLvzyjtxR8d5VnriilL1TO7LlD0LXpqoHapSi2v
- X9g57b2PkmiprBYrpTjuDvSXeMettX5xhw3R2ZLjXDFvs8GxGlNnLZQuA
- gwjyqK+u/N3VJSYFogtqpCUjIdSpptaPPCa5ascUwQYfI0PkEMKhfBJL2
- SLrKTbSqgSlD+t687McRImQceapESZTcPbpJUz4PHErbp+js1OyERnTLF
- f33qU+gZiPUU+tnJT4UcbbHQf7hS306DuOhtCIamv3JrK5mnEQ1j/LNAi
- JtRxyKWy6+WNo8zu9l3srK4KZcJEh8N8KTUj8Rpq0rNuXOswD+mbdGZnd
- g==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=qra+KU0r+eQLPPt84a21+2HKyZDmlle8Nx1/aB7RCPDGmNjlL2tZt0wdQAlnPYcHjwvV61KgnBGLurjB/ofdxYgTEOzTtGqhvLUBrol5Qq2OlHkA++pCyztnwQjsz76mNzWurxy/0tAdNGFdN/kBfzfUcNL7aGhEbADSxSfiVLOQedGkvhPi59AafXZoCBU1thOzkqrXV9R6zRm2IrDL9ulUFOju8J7jQxodCoYF54uz4LxIfCWKDZJ7cQ5GILl+5fiQAwhGW0/29y4QXJ9vDswKw1f4A7SS9VL51cJCPb1K9BtRUG/WOZpqp3V3MIDtWtR5TwKziugg53QprSN24w==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=pDLe8UvkHvPkZVeRQKhXEvJ4SVpMh7IsDF4H1wBlCqU=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=JXTrImmK
-Subject: Re: [Buildroot] [PATCH] DEVELOPPERS: adopt mosquitto
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=qra+KU0r
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.25.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,65 +89,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Fixes the following vulnerabilities:
 
-On 2026-02-10 07:44 +0100, Peter Korsgaard spake thusly:
-> >>>>>   <yann.morin@orange.com> writes:
->  > mosquitto 2.1.x has been released recently, but has changed quite a bit,
->  > which needs quite a bit of tinkering in the .mk file. This commit also
->  > serves as a sign that I am working on the version bump.
-> Great, please coordinate with Titouan who was also working on it during
-> the Buildroot dev days.
+CVE-2025-61732: cmd/cgo: remove user-content from doc strings in cgo ASTs
 
-Sure thing!
+A discrepancy between how Go and C/C++ comments were parsed allowed for code
+smuggling into the resulting cgo binary.
 
-Titouan: were you working on migrating to using cmake, or were you
-planning on doing just the bump first?
+To prevent this behavior, the cgo compiler will no longer parse
+user-provided doc comments.
 
-I dived head-first into the cmake conversion, because in the end I found
-that it made things easier (the Makefile-based build was anyway borken,
-so the switch to cmake was inevitable I believe; and it helps clean up
-the .mk a bit while at it).
+CVE-2025-68121: crypto/tls: unexpected session resumption when using
+Config.GetConfigForClient
 
-Hopefully I can send an RFC patch by the end of the day...
+Config.GetConfigForClient is documented to use the original Config's session
+ticket keys unless explicitly overridden.  This can cause unexpected
+behavior if the returned Config modifies authentication parameters, like
+ClientCAs: a connection initially established with the parent (or a sibling)
+Config can be resumed, bypassing the modified authentication requirements.
 
-> Also notice that upstream released 2.1.2 yesterday with more build
-> fixes:
-> https://mosquitto.org/blog/2026/02/version-2-1-2-released/
+If ClientAuth is VerifyClientCertIfGiven or RequireAndVerifyClientCert (on
+the server) or InsecureSkipVerify is false (on the client), crypto/tls now
+checks that the root of the previously-verified chain is still in
+ClientCAs/RootCAs when resuming a connection.
 
-Yeah, there has been 2.1.0, soon folowed by an untaged-but-released
-2.1.0.1, then 2.1.1, now 2.1.2... I was planning on waiting a bit for
-the dust to settle before actually sending the bump, specifically
-because of all those fixes.
+Go 1.26 Release Candidate 2, Go 1.25.6, and Go 1.24.12 had fixed a similar
+issue related to session ticket keys being implicitly shared by
+Config.Clone.  Since this fix is broader, the Config.Clone behavior change
+has been reverted.
 
-Regards,
-Yann E. MORIN.
+Note that VerifyPeerCertificate still behaves as documented: it does not
+apply to resumed connections.  Applications that use
+Config.GetConfigForClient or Config.Clone and do not wish to blindly resume
+connections established with the original Config must use VerifyConnection
+instead (or SetSessionTicketKeys or SessionTicketsDisabled).
 
+For more details, see the announcement:
+https://groups.google.com/g/golang-announce/c/K09ubi9FQFk
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 6134ec5f75..9a9a5a571a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  58cbf771e44d76de6f56d19e33b77d745a1e489340922875e46585b975c2b059  go1.25.6.src.tar.gz
+-sha256  59fe62eee3cca65332acef3ebe9b6ff3272467e0a08bf7f68f96334902bf23b9  go1.25.6.linux-386.tar.gz
+-sha256  f022b6aad78e362bcba9b0b94d09ad58c5a70c6ba3b7582905fababf5fe0181a  go1.25.6.linux-amd64.tar.gz
+-sha256  738ef87d79c34272424ccdf83302b7b0300b8b096ed443896089306117943dd5  go1.25.6.linux-arm64.tar.gz
+-sha256  679f0e70b27c637116791e3c98afbf8c954deb2cd336364944d014f8e440e2ae  go1.25.6.linux-armv6l.tar.gz
+-sha256  bee02dbe034b12b839ae7807a85a61c13bee09ee38f2eeba2074bd26c0c0ab73  go1.25.6.linux-ppc64le.tar.gz
+-sha256  3d97cc5670a0da9cb177037782129f0bf499ecb47abc40488248548abd2c2c35  go1.25.6.linux-s390x.tar.gz
++sha256  178f2832820274b43e177d32f06a3ebb0129e427dd20a5e4c88df2c1763cf10a  go1.25.7.src.tar.gz
++sha256  2866517e9ca81e6a2e85a930e9b11bc8a05cfeb2fc6dc6cb2765e7fb3c14b715  go1.25.7.linux-386.tar.gz
++sha256  12e6d6a191091ae27dc31f6efc630e3a3b8ba409baf3573d955b196fdf086005  go1.25.7.linux-amd64.tar.gz
++sha256  ba611a53534135a81067240eff9508cd7e256c560edd5d8c2fef54f083c07129  go1.25.7.linux-arm64.tar.gz
++sha256  1ba07e0eb86b839e72467f4b5c7a5597d07f30bcf5563c951410454f7cda5266  go1.25.7.linux-armv6l.tar.gz
++sha256  42124c0edc92464e2b37b2d7fcd3658f0c47ebd6a098732415a522be8cb88e3f  go1.25.7.linux-ppc64le.tar.gz
++sha256  c6b77facf666dc68195ecab05dbf0ebb4e755b2a8b7734c759880557f1c29b0c  go1.25.7.linux-s390x.tar.gz
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 91e5fbf347..a9c7d1ddc6 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.25.6
++GO_VERSION = 1.25.7
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.47.3
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
