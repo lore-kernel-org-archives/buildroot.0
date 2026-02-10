@@ -4,81 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E71BAEA3F18
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 08:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FAEEA3F13
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 08:02:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 969FE81545;
-	Tue, 10 Feb 2026 08:01:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8120D813FE;
+	Tue, 10 Feb 2026 08:02:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S09hNkAWRyRL; Tue, 10 Feb 2026 08:01:21 +0000 (UTC)
+ id cEzPrtm-O2HH; Tue, 10 Feb 2026 08:02:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63BD081422
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7437F81545
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770710481;
-	bh=EV20xNQVBaR3SslWdG2ZvUvuyP6Lxul0yHceUM+T5xo=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=lp8tQd4e5sgshSy5uoqoFwm0l3/EwCv0TmquLaxEuFuvVAETkFjJDw4+Qji6D3f7p
-	 d+JvEVehejnFc132ryKx3Rj22i/yo6Liz89KI2z1pai/Q/LASBDzAounkxpOLtGe/T
-	 oru0M9nRjhI6HVCc+C6yd4rYizv3vb4CDDLWKgrUcdX8wTXx6vVDFL3XrIVb7UebH8
-	 mxrD1Q3v6Jlk5TcWOXbxcoCLYRJzzGSGjkmBxQS8TpntIR7pufRpF8wNb1rzo2W+mJ
-	 T8Gg3hkIw/X0S9FoX4yAFBXk7JBOqqWRkgrBuLCQA2kQDk13qYTQ/gwbAnqM3tZmZw
-	 d2SVlCV5PFyiQ==
+	s=default; t=1770710523;
+	bh=vNoukGwTdWOcglMn1dPhUxUdYzidXSSfxfE0Wp5jwz4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=P0spQH9kJGiHFT3ZuYX9ejAd/Mdg6qBalMYAZH3GFLv7GXx3fy0BNX6lR/Ld9/vXw
+	 dGRUWyJkouXHVF1VKqrJtKR2/0Ltr5g3GRoih/htY3m6fLRRzDxyweP6g9ds+VhZC0
+	 LAU1ORxRRpAmznsIGwE6sgiB6J6j7WS3yYDOCO00HMRjdUNFLpBuUT/aMoLdlv58iq
+	 k2hiDVe8ZHLqCHXveKIYcXXWsOg78woP2wM6kZ4n1ESNLxcElVnPZ7oHSxp81SoJ2h
+	 omvGmtZFD/adveG9sphSrR49iAuzszZL4e85LOSs2ghUCV33+bJdf3MkufoBWcCnir
+	 IIc7J8EhO8AkQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63BD081422;
-	Tue, 10 Feb 2026 08:01:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 214DDF2
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7437F81545;
+	Tue, 10 Feb 2026 08:02:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88FCDF2
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EE9840D9A
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 791648156A
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:02:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id golWUkAN4uZs for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 08:01:18 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 18DA840D99
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18DA840D99
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 18DA840D99
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:16 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 5DF43BDE032E;
- Tue, 10 Feb 2026 09:01:12 +0100 (CET)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3pHlFJDuAHWK for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 08:02:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E2410813FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2410813FE
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E2410813FE
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 08:01:59 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1098891293; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 10 Feb 2026 08:01:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vpih0-00000003DlQ-2rdy;
+ Tue, 10 Feb 2026 09:01:54 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 10 Feb 2026 09:01:52 +0100
+Message-ID: <20260210080153.767847-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Tue, 10 Feb 2026 08:01:12 +0000
-From: Andreas Ziegler <br025@umbiko.net>
-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-Cc: buildroot@buildroot.org, guenther.harrasser@mobileye.com, Chris Packham
- <judge.packham@gmail.com>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>
-In-Reply-To: <20260209132034.3298699-1-jimmy.wesolowski@mobileye.com>
-References: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
- <20260209132034.3298699-1-jimmy.wesolowski@mobileye.com>
-Message-ID: <a16c18964c63e254812e4baa5cd57b84@umbiko.net>
-X-Sender: br025@umbiko.net
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1770710472; bh=Djy3ymeHYdZBTt7BNid/Cjbx5OdNTKev/22Iy3+xYIk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=387AKOO5/Y8zpiNPR58g7SLuK36gxukTTsyAzNzPjqrqQEg4nxer1gCrkSWZWnojb
- ADpLB9d781pF6MTa+9f2FcK4iN1eZZ0R6Q2pagfqAhP2RHrvdMk1jMjMghFBzHBOjE
- S4YMM9e4VP+M/Q3OrLjXJY3aYx1jsyLh+ki1E0iA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=brlCsBpzQPhCY2xW60G+ukOA9P7TRqJLDiwTNr0kg+LLbnhiGUmH7y8TshKMKa+yxQWLEEPhafyKZ4pg/w2T+aCizl3wPiGqQX+a33OkMDzIr22N65mxlnp5DdO3Wol+RxH24351nUDmVgAPoILLnaIyFRtCSvHvtlsPKV3BDpcxwepDX30x1xh6HEd8qmiZmKvSwEn5a9AYOdcPjbMr2SalCN5Qho4dKh4oRkukALgAt/54VKsZvk0pGeNSuC0wODocLUvidfuanPBGi6Zv+o4IP3EgfkFF+U6w+0G76hwOZBffxJAklPJKKhIu8tVeaqmqoU7bW8Ht39vymfkyww==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=PLz63v8KR+tzX58AvXYKrX/wuZVCJsqaUrFqhB68s3g=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=387AKOO5
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/coremark: port for mips-i6500
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=brlCsBpz
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/gnutls: security bump to version 3.8.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,149 +89,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jimmy, Vladimir, all
+Fixes the following security vulnerabilities:
 
-thank you for the update, technical remarks below.
+CVE-2026-1584: libgnutls: Fix NULL pointer dereference in PSK binder
+verification
 
-Most important: You do not need the extra files in the mips-i6500 
-directory. They are identical to the ones in linux64, except for white 
-space and the copyright inserted in the file headers.
+A TLS 1.3 resumption attempt with an invalid PSK binder value in ClientHello
+could lead to a denial of service attack via crashing the server.
+The updated code guards against the problematic dereference.
 
-This would reduce your patch to the addition of EXTRA_CFLAGS, which is 
-probably what most people use when adapting this package. It also covers 
-my current customization.
+CVE-2025-14831: libgnutls: Fix name constraint processing performance issue
 
-Please also check the output of utils/checkpackage package/coremark/*
+Verifying certificates with pathological amounts of name constraints
+could lead to a denial of service attack via resource exhaustion.
+Reworked processing algorithms exhibit better performance characteristics.
 
-On 2026-02-09 13:20, Jimmy Durand Wesolowski wrote:
-> From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> 
-> Compile for MIPS I6500 CPU 64-bit, with all compiler flags as
-> recommended by MIPS
-> 
-> One missing flag -s "-Tmsym32.ld" since linker script
-> "msym32.ld" does not exist in the MIPS toolchain
+For more details, see the release notes:
+https://lists.gnupg.org/pipermail/gnutls-help/2026-February/004914.html
 
-Since the actual flags are part of the configuration (EXTRA_CFLAGS), you 
-might choose a more appropriate commit message.
+Drop now upstreamed 0001-audit-crau-fix-compilation-with-gcc-11.patch:
+https://gitlab.com/gnutls/gnutls/-/commit/f5666f8f1f653cfe2bef808a9c9b61534f279ed1
 
-> 
-> Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - do not add mips-i6500 through a patch, but copy it through rsync
->     in POST_EXTRACT_HOOKS (suggested by
->     Andreas Ziegler <br025@umbiko.net>)
->   - allow specifying a port directory to use through kconfig, such as
->     mips-i6500. The default stays linux for 32-bits architecture,
->     linux64 for 64.
->   - allow passing extra PORT_CFLAGS through kconfig  (suggested by
->     Andreas Ziegler <br025@umbiko.net>)
-> 
-> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
-> ---
->  package/coremark/Config.in                  |  19 ++
->  package/coremark/coremark.mk                |  23 +-
->  package/coremark/mips-i6500/core_portme.c   | 336 ++++++++++++++++++++
->  package/coremark/mips-i6500/core_portme.h   | 291 +++++++++++++++++
->  package/coremark/mips-i6500/core_portme.mak | 140 ++++++++
->  5 files changed, 805 insertions(+), 4 deletions(-)
->  create mode 100755 package/coremark/mips-i6500/core_portme.c
->  create mode 100755 package/coremark/mips-i6500/core_portme.h
->  create mode 100755 package/coremark/mips-i6500/core_portme.mak
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...dit-crau-fix-compilation-with-gcc-11.patch | 67 -------------------
+ package/gnutls/gnutls.hash                    |  4 +-
+ package/gnutls/gnutls.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 70 deletions(-)
+ delete mode 100644 package/gnutls/0001-audit-crau-fix-compilation-with-gcc-11.patch
 
-The mips-i6500 files are unnecessary.
+diff --git a/package/gnutls/0001-audit-crau-fix-compilation-with-gcc-11.patch b/package/gnutls/0001-audit-crau-fix-compilation-with-gcc-11.patch
+deleted file mode 100644
+index 0551d5c4fd..0000000000
+--- a/package/gnutls/0001-audit-crau-fix-compilation-with-gcc-11.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 2bbae7644a2292410b53f98fd0035c40bf8750a5 Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Sun, 23 Nov 2025 18:17:19 +0100
+-Subject: [PATCH] audit: crau: fix compilation with gcc < 11
+-
+-If the CRAU_MAYBE_UNUSED macro is unset, the crau.h file tries to
+-automatically detect an appropriate value for it.
+-
+-This autodetection is using the cpp special operator
+-`__has_c_attribute` [1], introduced in gcc 11 [2].
+-
+-When compiling with a gcc older than version 11, the compilation fails
+-with the error:
+-
+-    In file included from audit.h:22,
+-                     from audit.c:26:
+-    crau/crau.h:255:23: error: missing binary operator before token "("
+-         __has_c_attribute (__maybe_unused__)
+-                           ^
+-
+-This has been observed, for example, in Rocky Linux 8.10, which
+-contains a gcc v8.5.0.
+-
+-The issue happens because the test for the `__has_c_attribute`
+-availability and the test for the `__maybe_unused__` attribute
+-are in the same directive. Those tests should be separated in
+-two different directives, following the same logic described in
+-the `__has_builtin` documentation [3].
+-
+-This issue was found in Buildroot, after updating gnutls to
+-version 3.8.11 in [4].
+-
+-This commit fixes the issue by splitting the test in two.
+-
+-[1] https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fc_005fattribute.html
+-[2] https://gcc.gnu.org/gcc-11/changes.html#c
+-[3] https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fbuiltin.html
+-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/81dbfe1c2ae848b4eb1f896198d13455df50e548
+-
+-Upstream: https://gitlab.com/gnutls/gnutls/-/merge_requests/2045
+-Reported-by: Neal Frager <neal.frager@amd.com>
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- lib/crau/crau.h | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/lib/crau/crau.h b/lib/crau/crau.h
+-index 0d4f9f13e..53d33555b 100644
+---- a/lib/crau/crau.h
+-+++ b/lib/crau/crau.h
+-@@ -251,9 +251,10 @@ void crau_data(struct crau_context_stack_st *stack, ...)
+- # else
+- 
+- #  ifndef CRAU_MAYBE_UNUSED
+--#   if defined(__has_c_attribute) && \
+--    __has_c_attribute (__maybe_unused__)
+--#    define CRAU_MAYBE_UNUSED [[__maybe_unused__]]
+-+#   if defined(__has_c_attribute)
+-+#    if __has_c_attribute (__maybe_unused__)
+-+#     define CRAU_MAYBE_UNUSED [[__maybe_unused__]]
+-+#    endif
+- #   elif defined(__GNUC__)
+- #    define CRAU_MAYBE_UNUSED __attribute__((__unused__))
+- #   endif
+--- 
+-2.51.1
+-
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 03297c3321..209b6aa220 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.11.tar.xz.sig
+-sha256  91bd23c4a86ebc6152e81303d20cf6ceaeb97bc8f84266d0faec6e29f17baa20  gnutls-3.8.11.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.12.tar.xz.sig
++sha256  a7b341421bfd459acf7a374ca4af3b9e06608dcd7bd792b2bf470bea012b8e51  gnutls-3.8.12.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+ sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 9eef594cc9..0844bfe50d 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).11
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
+-- 
+2.47.3
 
-> diff --git a/package/coremark/Config.in b/package/coremark/Config.in
-> index f0e13eda63..bb29a8093f 100644
-> --- a/package/coremark/Config.in
-> +++ b/package/coremark/Config.in
-> @@ -6,3 +6,22 @@ config BR2_PACKAGE_COREMARK
->  	  used in embedded systems
-> 
->  	  https://www.eembc.org/coremark/
-> +
-> +if BR2_PACKAGE_COREMARK
-> +config BR2_PACKAGE_COREMARK_PORT
-> +        string "coremark port directory"
-> +        default "linux" if !BR2_ARCH_IS_64
-> +	default "linux64" if BR2_ARCH_IS_64
-> +        help
-> +          Path to the platform specific port directory.
-> +	  This allow using a different platform specific port than the
-> +	  default indicated if the support is available in CoreMark.
-> +
-
-This block is not necessary.
-
-> +config BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA
-> +	string "coremark port extra CFLAGS"
-> +	default ""
-> +	help
-> +	  Additional CFLAGS to pass to CoreMark platform specific port.
-> +	  Any additional flags indicated here will be added to the
-> +	  CFLAGS_PORT variable.
-> +endif
-> diff --git a/package/coremark/coremark.mk 
-> b/package/coremark/coremark.mk
-> index 9ea8693e71..3c367ff90b 100644
-> --- a/package/coremark/coremark.mk
-> +++ b/package/coremark/coremark.mk
-> @@ -9,14 +9,29 @@ COREMARK_SITE = $(call 
-> github,eembc,coremark,v$(COREMARK_VERSION))
->  COREMARK_LICENSE = Apache-2.0
->  COREMARK_LICENSE_FILES = LICENSE.md
-> 
-> +COREMARK_CFLAGS = \
-> +        $(TARGET_CFLAGS) \
-> +	$(call qstrip,$(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
-> +
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +COREMARK_CFLAGS += -DUSE_PTHREAD
-> +endif # BR2_TOOLCHAIN_HAS_THREADS=y
-> +
-> +define COREMARK_MIPS_I6500
-> +	rsync --archive --update \
-> +		$(COREMARK_PKGDIR)/mips-i6500/ $(@D)/mips-i6500/
-> +endef # COREMARK_MIPS_I6500
-> +
-> +COREMARK_POST_EXTRACT_HOOKS += $(if 
-> $(BR2_MIPS_NABI64),COREMARK_MIPS_I6500)
-
-The POST_EXTRACT_HOOK is not needed.
-
-> +
->  define COREMARK_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
-> -		PORT_CFLAGS="$(TARGET_CFLAGS)" \
-> -		PORT_DIR=linux$(if $(BR2_ARCH_IS_64),64) EXE= link
-> -endef
-
-PORT_DIR should stay as is. But you need to specify COREMARK_CFLAGS 
-instead of TARGET_CFLAGS.
-
-> +		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
-> +		PORT_DIR=$(BR2_PACKAGE_COREMARK_PORT) EXE= link
-> +endef # COREMARK_BUILD_CMDS
-> 
->  define COREMARK_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D $(@D)/coremark $(TARGET_DIR)/usr/bin/coremark
-> -endef
-> +endef # COREMARK_INSTALL_TARGET_CMDS
-> 
->  $(eval $(generic-package))
-
-<...>
-
-Kind regards,
-Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
