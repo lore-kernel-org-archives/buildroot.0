@@ -1,62 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50479EB26F5
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 18:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5346EB26F5
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 18:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA5DC60B26;
-	Tue, 10 Feb 2026 18:08:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A748083B60;
+	Tue, 10 Feb 2026 18:09:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BtP4xt3qIp0r; Tue, 10 Feb 2026 18:08:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E66B5822B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770746939;
+	bh=mfHGnYYQjugGPcYI1OBDyzS/IEH7oaTbqeHqKVR2kJ8=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Arl7dlhNmfFIB2hYwBGmdBVktGQ070GEtxl5G91X/D5Q2sx8ZyoO5YLXNLR/c82n2
+	 Fg+p5l6Pj8qeyKBOZxT1LsP+aRzDCcwKHs5nLbMp9FXyQOm4oOXS1ZxqQa73g/XXpK
+	 bMS//tRkdLd/76JWWwh+2lHJ07A48ti3ywx1eSIC2ajmfGiryepXL0ZOysaNsGb4ny
+	 1MUX7AdY3mYVnCnM9gFrfGTA9UUsAvTDicp2D4C85ARFTF0TG6YUd4ICjjlcH5AqKk
+	 Irw411OutEJBFglDmVwxWLZGKUBP4C7Vng5SQYEIiaEId9NJ7YCsnqncC6TctGjhCG
+	 I13LfSjJn43cA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E66B5822B1;
+	Tue, 10 Feb 2026 18:08:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9F7123D
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C21660C17
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RzC3JZWcky73; Tue, 10 Feb 2026 18:08:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE45F6081C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770746909;
-	bh=jaDO/jo5WNyQavK2eMQcgIdGm6qs3h0N6+HmGDLBT0Q=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VpTjbSTcgXfwqB6as0ouXd93sZgGliKYyFYoExpzx8eFY98YiBCe0JiUoPVU6Lk7v
-	 FIm7ZKf8jB8bdLMEWzneb5BCjQDL2Z7YG4QmOggiyknPvQpBOpFSKWs5IPwXOaEB7j
-	 oDAnVagnRg41TVuZ44XbWA5/eTsYftDE3RdxtRiHFvebBzz1RguX7XOBoqPbMuKnpJ
-	 YE+UaBIg1YcYsT3CZ2b6V5ZbXCS25+YIkzU6e7z7I79zZeF6ckrxWSkDMlVKyirfYp
-	 X/bZTPHsB2qFVdje4bPK/ywYJpU9LDb5Xxk0+BpAy7ELGLpqCqx79IT1F5IVG92fAT
-	 7+VwCG84dfs5g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE45F6081C;
-	Tue, 10 Feb 2026 18:08:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6967823D
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A85040A47
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OUER0GbRr4Db for <buildroot@buildroot.org>;
- Tue, 10 Feb 2026 18:08:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEF2640A46
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEF2640A46
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BCEE586BB0; Tue, 10 Feb 2026 18:08:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 10 Feb 2026 19:07:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 875d6aedbc639484e9203c5bcda1a55ecb7ad4c9
-X-Git-Newrev: 5bd15ee7d488a8192ed0a12440ea49feee9c695b
-X-Patchwork-Hint: ignore
-Message-Id: <20260210180825.BCEE586BB0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireless-regdb: bump version to
+ id Nl5Rpq_hmtqh for <buildroot@buildroot.org>;
+ Tue, 10 Feb 2026 18:08:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AA59060907
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA59060907
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA59060907
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 18:08:56 +0000 (UTC)
+Received: from [192.168.178.91] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id EFED82C801B0;
+ Tue, 10 Feb 2026 19:08:53 +0100 (CET)
+Message-ID: <feff37c3-c836-4626-8d6c-1650005eae1d@bubu1.eu>
+Date: Tue, 10 Feb 2026 19:09:06 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Dimitrios Siganos <dimitris@siganos.org>
+References: <20260209203212.3837393-1-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20260209203212.3837393-1-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1770746934; bh=k1kETTEasNV+flXAA0/b1kwzMp8JuZpYBysgBHgA1IQ=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=rjGPNIuveYOBscvwnrrMLNQWGAGZvh4leoSNrFDnRtPSUMpt70weLyMcTXsnfEXxo
+ qeMu4YDBigJFPj3kCgjnJgjKIlliSZHOI/2zwOGU9zOVYaFZl9iUJHIucJzaEVfwkZ
+ lSJo288UUxsnzgAICCwet3s2SkZGQ8CrQqk6kOq/wg+ebN6a8zxlh60VGYQhHTaurp
+ cjp+T2JHA03mU+fEV3RoyqDKQ5nr9L/zz7dm9maSo8IMrXI5soOh5Df2ofDj8cur65
+ XOqzHL9czwvBPDeIHuBM3JJAXM1U5bjSiDLlAgGXUjshHH03R52l4GqFUv2zKhYhpm
+ 3CIX7HsWtVDtw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=rjGPNIuv
+Subject: Re: [Buildroot] [PATCH 1/1] package/wireless-regdb: bump version to
  2026.02.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,47 +94,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5bd15ee7d488a8192ed0a12440ea49feee9c695b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 2/9/26 21:32, Bernd Kuhls wrote:
+> https://lists.infradead.org/pipermail/wireless-regdb/2026-February/001830.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
 
-https://lists.infradead.org/pipermail/wireless-regdb/2026-February/001830.html
+Applied to master, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 4b2c67965f..39fc1a78d5 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  d4c872a44154604c869f5851f7d21d818d492835d370af7f58de8847973801c3  wireless-regdb-2025.10.07.tar.xz
-+sha256  0ff48a5cd9e9cfe8e815a24e023734919e9a3b7ad2f039243ad121cf5aabf6c6  wireless-regdb-2026.02.04.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 055238be5e..31bc9e9a22 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2025.10.07
-+WIRELESS_REGDB_VERSION = 2026.02.04
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
