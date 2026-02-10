@@ -1,87 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34C2DE94625
-	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 00:07:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36B41E94626
+	for <buildroot@archiver.kernel.org>; Tue, 10 Feb 2026 00:07:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1A17827FD;
-	Tue, 10 Feb 2026 00:07:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC0DF60ABF;
+	Tue, 10 Feb 2026 00:07:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jzM51FGifHN6; Tue, 10 Feb 2026 00:07:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b6KjDokJw1JQ; Tue, 10 Feb 2026 00:07:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D24DB83C51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D87AC60ACB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770682069;
-	bh=JZqaOj2FKMWS5AZZouOcYWbCs4rBTUSUs3TUdfR+ht0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=XREffR+Yyf6HCwPDBTaE8Bh/T00/JF2Qtq7cL6AzaYru6/FRARmDz4yMcdtVK8wIv
-	 /YXqNHX2kpoXG3icz5SwnvKFnu6gKLiJoeo8p5Vt/c4NZU55vTSt2MkGBZ5D/1ZVy6
-	 bJyiOcbL9s1tRM5+5tfe+ZVh3J4fwfCGwDuF+cJqdCe2tHAyh1znlMwM4wiDIer6R+
-	 sYprsDk00mCoEdsHexPIZuWHiwxxlD+isO8k3GCSi6SBKa65Wra930/1KK8/RcIMxY
-	 g14eFvkHmagRZoAFy9Kkq56AqOWw/mVNQntfHQEMAiuABvnDuyxGSiKnCfs/TU0JvW
-	 JZFuPEY7N7v0g==
+	s=default; t=1770682071;
+	bh=H5LsNXnDL672z3wyh5+XbOfeRBxQvCyDOXNoe7+TeL0=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=WLT+/vuAFToFpTYpvgpm9BhmBkup2oUcBrRTGAYBC+g7ZSwb5gv5Y7QTHbVbD4WYv
+	 W03z1Ino46ESFDStdv6Or7DINXTLHkVgJdT9DN7gDyp/Tl2R7dsAcN6x2X+ZWAEdTd
+	 RMQj6rg0ZpptVLstvJIGH/mS03vPtAEU3b3TBLvCR2xFk/MTh/JjTJXx8vyRfmAXvT
+	 AP3DIumczZtGIwCM0ZtbLzhgGDwXfZ9kSoHCh1WvtKuwFIBvgIGR3SoLE5y4L6ETcw
+	 K2ZaACJLg4UHj3we38uUrxqeoGmsU79YiQswiOtGtwDdqdr6z1neRpOIMJ6dU370ED
+	 CsUg/3VHalXTQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D24DB83C51;
-	Tue, 10 Feb 2026 00:07:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 95B7D219
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D87AC60ACB;
+	Tue, 10 Feb 2026 00:07:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ECCD23D
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8346640C59
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCEEF60ACB
  for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lpD04L1d_WyH for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yqF4v9Q1QQuu for <buildroot@buildroot.org>;
  Tue, 10 Feb 2026 00:07:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.117;
  helo=smtpcmd03117.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA7D840C2D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA7D840C2D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2C4D960ACA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C4D960ACA
 Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA7D840C2D
- for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2C4D960ACA
+ for <buildroot@buildroot.org>; Tue, 10 Feb 2026 00:07:46 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id pbI7vTZGv5gYjpbI7vmsfr; Tue, 10 Feb 2026 01:07:44 +0100
+ id pbI7vTZGv5gYjpbI8vmsgS; Tue, 10 Feb 2026 01:07:45 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Feb 2026 01:07:26 +0100
-Message-ID: <20260210000739.3810940-1-giulio.benetti@benettiengineering.com>
+Date: Tue, 10 Feb 2026 01:07:29 +0100
+Message-ID: <20260210000739.3810940-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260210000739.3810940-1-giulio.benetti@benettiengineering.com>
+References: <20260210000739.3810940-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJ2IqfWDInyav9qhFZgZkjH5kRuBDtLtbGekXDHdoZ0+Iv8m6V3LqutOhQot5QsO6GruIOav2HxHYxcRVY/PpCYFvb/PvP93inmW5AbTx/VfD/RMnI9C
- aWr+Y4NpC8bKxvejzqsHQlb1b2wn4QNs8xv0dsnaWW8q6rqCkqez40y2Do5F4Ym2RYaRQmTIM5mkC/xFYxtrz4uItkPQBzYBSVTpGTF45fvrptgwgqp4h2WD
- 0NJLRPacDqWu6zIgHY2akW4t0Fvr4rUrfBIG2+2UqXOwvLF4p1O41+9mD+2I9G6RqgV8DHvC2F4P+FeXHIodjoaNQAC47Qb+LvVZp/tGytDVyf0DjVJ6K9eb
- w+YW259OTogW1j5X2cz0lNwDv6/XRIsqc9ujEkc6uc4IpcT6PLa/5zmyBZ73DpiWB0UJD+JUkshYNJ8y3GtdyW3tiOOSmh1ppPODISNHGVZxKsOBzI+i/qTV
- P61mMkSv26jcuRwSfKsQV25u9fd+wK5RVRPlEvCz+9b3xMYAtLFvucUs8o7lWHYNfVzenhW8TDLdGa5TEayp4FMdNsFxI9+g3q2W6Tv2Oh0ToqojKyFkh/22
- vKQ=
+X-CMAE-Envelope: MS4xfBtf0e1gav9S9A8FedqnhBd3yaiw9mKo6rJyVByk31MXhnexwb3XJBAzuCvCCRVf3IIu9vKC3zzlh11duY0gO1MQv9Fo97JO/T1aAs4VprYeP4jZBXMm
+ OTzOBtQtt+SZTZtFWSYDSX626Qz8olY5iBdX5miO2QvcscWx5BNc+ncznNBFD+4E8gqPlQsp1B1LWrym2nEO1dTqsO2I3qD5CTYr5AgW8LsPh9TFBq/6f6Dq
+ XfPdLu4A+Lvckl/KaTiAFcqmBmlfhN5wE/XYkp8qw6fVmRflUGvAg1E34H0/36QZRRLg2RtFvGciH0EgLalkz4xg/4ifrk+6JH15iWP4vidXDCyJOmY9ErFS
+ ZhWhR/5NkB0/m7wx8sFv1N1T7RxFyCazXbX0m67JtkKg1dJk3uTJ2gEpgWblsHViTLG6i5Y9YKClmcKDUO9l/Ldn2m2DLo9TKVsNp+FcMlvEOTOh39iDfqGA
+ N3JNfBam2ehheYj2N3FOuRuqLAuHALgbyBFqct3S8DhTiNcKEIVQEDdgmDRKBBfe4IYm6ObvOp4h993C+GVNo7bJSzZRaexDdozzUhEozYCKWOTLSQdfdxIT
+ Gqg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1770682064; bh=BFiKnPFaa9i9YWzX8jzALc6//e0B1QrSIwAspoT6m1c=;
+ t=1770682065; bh=2VatOysnePDK9kOqDKC9FlCbWzfwHHI7rjiKyMoGlfw=;
  h=From:To:Subject:Date:MIME-Version;
- b=QgakiJJxxnLzHHQxztOloaBSYgGUbN9sMlc3HquFFFsFMLltOzXUKF6D/xD/PPRoB
- WeE/Mv+c/cRsaC35VUQE8ytCZZn5llJD24nopAcapOdQ8xa0V0ynfIRZxA/EcNHLNQ
- qDOSgGr4RvsSqzsc/lsssoPymNkrpUeLa10DqJV4fjx2PFs7ej4lEcpKXXf6eV8ZTi
- n/Vaw0Q32HRAOfcMQsiKMK93pZabJ/VtglyREfhjjVSMsQmGjDxfzWbPjIUIvIvl9c
- c7Jkm1MbhWaKy/U3b9h+kL3P6xJScOghb6TIvfxJmNmUOt9BCQEflZPnMZuao7C96g
- Nf9RbvLpoGvdw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=HPhLCXHTe8V24USFkyP+qMuTPw9dF+rUwBpqmorEL+NjZRkP2WWSJLP0yJBrRB2CQ
+ TjHu5afIzm59xhr97sAzdfN7Kbjh9T3knW0p+anwqOZESmJvY6uFCEt6JHouQtlcZ2
+ gOiG6rA0DVZ5gmpmQhKNZq+AZoPHVnIQSuURGCBAzNOQp+rUSaHxOtNQ/rusZWCda9
+ mc2+X/kEgMay8BOLtGj65A0N9Wv8l6TKmH9CKdfSZhCbuiL/THOKUVBTOAzi+Mb67T
+ DMeHEZsoH/VORnxfucymwOlPrSDmaco/u1PFBAdrYh9POvfEFaara9eED0W3GQHmSk
+ KI7dZ6BFxgYyA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=QgakiJJx
-Subject: [Buildroot] [PATCH v2 00/13] Boards Linux/Uboot versions bumps
+ header.s=a1 header.b=HPhLCXHT
+Subject: [Buildroot] [PATCH v2 03/13] configs/bananapi_m2_berry: bump Linux
+ to 6.18.8 and U-Boot to 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,147 +109,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All,
+The patch:
+* bumps Linux kernel to version 6.18.8
+* bumps U-Boot to version 2026.01
+* forces check hashes
 
-this patchset bumps Linux/Uboot versions and moves boards to extlinux if
-not already using it as well as force check hashes.
-I've built and tested them all except a10_olinuxino since I don't have it
-and I expect it to work.
-
-Best regards
-Giulio
-
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-V1->V2:
-* removed common folders for bananapi and olimex and related softlink
-* solved all .checkpackageignore errors
-* reworded all patches according to the change of extlinux/force hash
-All 3 pointed by Thomas Petazzoni
----
-
-Giulio Benetti (13):
-  configs/amarula_vyasa_rk3288: bump Linux to 6.18.8 and U-Boot to
-    2026.01
-  configs/asus_tinker_rk3288: bump Linux to 6.18.8 and U-Boot to 2026.01
-  configs/bananapi_m2_berry: bump Linux to 6.18.8 and U-Boot to 2026.01
-  configs/bananapi_m2_ultra: bump Linux to 6.18.8 and U-Boot to 2026.01
-  configs/freescale_imx6ullevk: bump Linux and U-Boot to
-    lf-6.12.49-2.2.0
-  configs/imx6ullevk: bump Linux to 6.18.8 and U-Boot to 2026.01
-  configs/mangopi_mq1rdw2: bump Linux to 6.18.8 and U-Boot to 2026.01
-  configs/olimex_a10_olinuxino: bump Linux to 6.18.8 and U-Boot to
-    2026.01
-  configs/olimex_a13_olinuxino: bump Linux to 6.18.8 and U-Boot to
-    2026.01
-  board/olimex/a20_olinuxino: move rootfs_overlay to rootfs_overlay_mali
-  configs/olimex_a20_olinuxino_micro: bump Linux to 6.18.8 and U-Boot to
-    2026.01
-  configs/olimex_a33_olinuxino: bump Linux to 6.18.8 and U-Boot to
-    2026.01
-  configs/olimex_a64_olinuxino: bump Linux to 6.18.8 and U-Boot to
-    2026.01
-
- .checkpackageignore                            | 13 -------------
- board/amarula/vyasa/patches/linux/linux.hash   |  2 +-
- board/amarula/vyasa/patches/uboot/uboot.hash   |  2 +-
- .../patches/linux-headers/linux-headers.hash   |  1 +
- board/asus/tinker/patches/linux/linux.hash     |  2 ++
- board/asus/tinker/patches/uboot/uboot.hash     |  2 ++
- .../patches/linux-headers/linux-headers.hash   |  1 +
- .../bananapi-m2-berry/patches/linux/linux.hash |  2 ++
- .../bananapi-m2-berry/patches/uboot/uboot.hash |  2 ++
- .../patches/linux-headers/linux-headers.hash   |  1 +
- .../bananapi-m2-ultra/patches/linux/linux.hash |  2 ++
- .../bananapi-m2-ultra/patches/uboot/uboot.hash |  2 ++
- .../imx6ullevk/patches/linux/linux.hash        |  3 ++-
- .../imx6ullevk/patches/uboot/uboot.hash        |  3 ++-
- .../patches/linux-headers/linux-headers.hash   |  1 +
- board/mangopi/mq1rdw2/patches/linux/linux.hash |  2 ++
- board/mangopi/mq1rdw2/patches/uboot/uboot.hash |  2 ++
- board/olimex/a10_olinuxino/boot.cmd            |  1 -
- .../patches/linux-headers/linux-headers.hash   |  1 +
- .../a10_olinuxino/patches/linux/linux.hash     |  2 ++
- .../a10_olinuxino/patches/uboot/uboot.hash     |  2 ++
- board/olimex/a10_olinuxino/post-build.sh       |  1 -
- .../rootfs_overlay/boot/extlinux/extlinux.conf |  4 ++++
- board/olimex/a13_olinuxino/boot.cmd            |  7 -------
- board/olimex/a13_olinuxino/genimage.cfg        | 18 ------------------
- .../patches/linux-headers/linux-headers.hash   |  1 +
- .../a13_olinuxino/patches/linux/linux.hash     |  2 ++
- .../a13_olinuxino/patches/uboot/uboot.hash     |  2 ++
- board/olimex/a13_olinuxino/post-build.sh       |  7 -------
- .../rootfs_overlay/boot/extlinux/extlinux.conf |  4 ++++
- board/olimex/a20_olinuxino/boot.cmd            |  5 -----
- .../a20_olinuxino/patches/linux/linux.hash     |  1 +
- board/olimex/a20_olinuxino/post-build.sh       |  3 ---
- .../rootfs_overlay/boot/extlinux/extlinux.conf |  4 ++--
- .../boot/extlinux/extlinux.conf                |  4 ++++
- board/olimex/a33_olinuxino/boot.cmd            |  5 -----
- .../patches/linux-headers/linux-headers.hash   |  1 +
- .../a33_olinuxino/patches/linux/linux.hash     |  2 ++
- .../a33_olinuxino/patches/uboot/uboot.hash     |  2 ++
- board/olimex/a33_olinuxino/post-build.sh       |  2 --
- .../rootfs_overlay/boot/extlinux/extlinux.conf |  4 ++++
- board/olimex/a64-olinuxino/boot.cmd            |  6 ------
- board/olimex/a64-olinuxino/genimage.cfg        | 18 ------------------
- .../patches/linux-headers/linux-headers.hash   |  1 +
- .../a64-olinuxino/patches/linux/linux.hash     |  2 ++
- .../a64-olinuxino/patches/uboot/uboot.hash     |  2 ++
- .../rootfs_overlay/boot/extlinux/extlinux.conf |  4 ++++
- configs/amarula_vyasa_rk3288_defconfig         |  9 +++++----
- configs/asus_tinker_rk3288_defconfig           | 11 +++++++----
- configs/bananapi_m2_berry_defconfig            | 11 +++++++----
- configs/bananapi_m2_ultra_defconfig            | 11 +++++++----
- configs/freescale_imx6ullevk_defconfig         |  5 +++--
- configs/imx6ullevk_defconfig                   |  9 ++++++---
- configs/mangopi_mq1rdw2_defconfig              |  9 ++++++---
- configs/olimex_a10_olinuxino_lime_defconfig    | 16 ++++++++--------
- configs/olimex_a13_olinuxino_defconfig         | 14 ++++++++------
- configs/olimex_a20_olinuxino_lime2_defconfig   |  2 +-
- configs/olimex_a20_olinuxino_lime_defconfig    |  2 +-
- configs/olimex_a20_olinuxino_micro_defconfig   | 16 ++++++++--------
- configs/olimex_a33_olinuxino_defconfig         | 16 ++++++++--------
- configs/olimex_a64_olinuxino_defconfig         | 15 ++++++++-------
- 61 files changed, 152 insertions(+), 155 deletions(-)
- create mode 120000 board/asus/tinker/patches/linux-headers/linux-headers.hash
- create mode 100644 board/asus/tinker/patches/linux/linux.hash
- create mode 100644 board/asus/tinker/patches/uboot/uboot.hash
+ .checkpackageignore                                   |  1 -
+ .../patches/linux-headers/linux-headers.hash          |  1 +
+ .../bananapi-m2-berry/patches/linux/linux.hash        |  2 ++
+ .../bananapi-m2-berry/patches/uboot/uboot.hash        |  2 ++
+ configs/bananapi_m2_berry_defconfig                   | 11 +++++++----
+ 5 files changed, 12 insertions(+), 5 deletions(-)
  create mode 120000 board/bananapi/bananapi-m2-berry/patches/linux-headers/linux-headers.hash
  create mode 100644 board/bananapi/bananapi-m2-berry/patches/linux/linux.hash
  create mode 100644 board/bananapi/bananapi-m2-berry/patches/uboot/uboot.hash
- create mode 120000 board/bananapi/bananapi-m2-ultra/patches/linux-headers/linux-headers.hash
- create mode 100644 board/bananapi/bananapi-m2-ultra/patches/linux/linux.hash
- create mode 100644 board/bananapi/bananapi-m2-ultra/patches/uboot/uboot.hash
- create mode 120000 board/mangopi/mq1rdw2/patches/linux-headers/linux-headers.hash
- create mode 100644 board/mangopi/mq1rdw2/patches/linux/linux.hash
- create mode 100644 board/mangopi/mq1rdw2/patches/uboot/uboot.hash
- delete mode 120000 board/olimex/a10_olinuxino/boot.cmd
- create mode 120000 board/olimex/a10_olinuxino/patches/linux-headers/linux-headers.hash
- create mode 100644 board/olimex/a10_olinuxino/patches/linux/linux.hash
- create mode 100644 board/olimex/a10_olinuxino/patches/uboot/uboot.hash
- delete mode 120000 board/olimex/a10_olinuxino/post-build.sh
- create mode 100644 board/olimex/a10_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
- delete mode 100644 board/olimex/a13_olinuxino/boot.cmd
- create mode 120000 board/olimex/a13_olinuxino/patches/linux-headers/linux-headers.hash
- create mode 100644 board/olimex/a13_olinuxino/patches/linux/linux.hash
- create mode 100644 board/olimex/a13_olinuxino/patches/uboot/uboot.hash
- delete mode 100755 board/olimex/a13_olinuxino/post-build.sh
- create mode 100644 board/olimex/a13_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
- delete mode 100644 board/olimex/a20_olinuxino/boot.cmd
- delete mode 100755 board/olimex/a20_olinuxino/post-build.sh
- create mode 100644 board/olimex/a20_olinuxino/rootfs_overlay_mali/boot/extlinux/extlinux.conf
- delete mode 100644 board/olimex/a33_olinuxino/boot.cmd
- create mode 120000 board/olimex/a33_olinuxino/patches/linux-headers/linux-headers.hash
- create mode 100644 board/olimex/a33_olinuxino/patches/linux/linux.hash
- create mode 100644 board/olimex/a33_olinuxino/patches/uboot/uboot.hash
- delete mode 100755 board/olimex/a33_olinuxino/post-build.sh
- create mode 100644 board/olimex/a33_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
- delete mode 100644 board/olimex/a64-olinuxino/boot.cmd
- create mode 120000 board/olimex/a64-olinuxino/patches/linux-headers/linux-headers.hash
- create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux.hash
- create mode 100644 board/olimex/a64-olinuxino/patches/uboot/uboot.hash
- create mode 100644 board/olimex/a64-olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 62e3998a66..38cd0b2711 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -90,7 +90,6 @@ configs/atmel_sama5d4_xplained_mmc_defconfig lib_defconfig.ForceCheckHash
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig lib_defconfig.ForceCheckHash
+ configs/avenger96_defconfig lib_defconfig.ForceCheckHash
+ configs/avnet_rzboard_v2l_defconfig lib_defconfig.ForceCheckHash
+-configs/bananapi_m2_berry_defconfig lib_defconfig.ForceCheckHash
+ configs/bananapi_m2_ultra_defconfig lib_defconfig.ForceCheckHash
+ configs/bananapi_m2_zero_defconfig lib_defconfig.ForceCheckHash
+ configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/bananapi/bananapi-m2-berry/patches/linux-headers/linux-headers.hash b/board/bananapi/bananapi-m2-berry/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-berry/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/bananapi/bananapi-m2-berry/patches/linux/linux.hash b/board/bananapi/bananapi-m2-berry/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..b1a0042a91
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-berry/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
+diff --git a/board/bananapi/bananapi-m2-berry/patches/uboot/uboot.hash b/board/bananapi/bananapi-m2-berry/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..b6a925ea4e
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-berry/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
+diff --git a/configs/bananapi_m2_berry_defconfig b/configs/bananapi_m2_berry_defconfig
+index 200257ac0d..35909fbb99 100644
+--- a/configs/bananapi_m2_berry_defconfig
++++ b/configs/bananapi_m2_berry_defconfig
+@@ -1,16 +1,18 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_TOOLCHAIN_EXTERNAL=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
++BR2_GLOBAL_PATCH_DIR="board/bananapi/bananapi-m2-berry/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Berry"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bananapi/bananapi-m2-berry/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-berry/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.57"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v40-bananapi-m2-berry"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-v40-bananapi-m2-berry"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+@@ -18,11 +20,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m2_berry"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -- 
 2.47.3
 
