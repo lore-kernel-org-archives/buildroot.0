@@ -4,78 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396E9ECD6D7
-	for <buildroot@archiver.kernel.org>; Wed, 11 Feb 2026 18:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E499ECD6D6
+	for <buildroot@archiver.kernel.org>; Wed, 11 Feb 2026 20:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42E6E8409F;
-	Wed, 11 Feb 2026 18:31:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E19918401D;
+	Wed, 11 Feb 2026 20:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tagfT44QXCSL; Wed, 11 Feb 2026 18:30:58 +0000 (UTC)
+ id QDtzfqBdUPuu; Wed, 11 Feb 2026 20:17:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A27FC8402E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04B608401E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770834658;
-	bh=/LXsBcZtuBuPr/spsHRMw3VTG2t6zaa/y3iNin0aGEw=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=llrE346AMw275ujUTjPfPxlVRHETlavgROIQJNPjvpwOsmevhX7sqegauaVNFJh59
-	 HZoSSEY40Bvf3NDx39jjTr95hMQ96k0szuSsUoaYVmbpqvgVTOdT/EAZ95DjXq5d2E
-	 oIqxP7zCedj3q3X3nCdMLnnVEEavA+kgdLv6MAuOUTTDfcNCHTp9XD0OCuv9mIx+kL
-	 JrwiL1/m7s2vJCwr78PDIkFBRXk2iYomVvRWCAI87bjF8Yj6OSho1OUptjqBCDhVg7
-	 9G2gIwfAN0wT2pg4VJB0GK+qVB+yyU64jG6l/pJ076r1qpZsRd54xjtqj1h/5CFHUo
-	 Fn7TyFseI/rHg==
+	s=default; t=1770841030;
+	bh=ZPnuy30ew+/Mcvi5mtUJb5aeQ5T5C0SCk418Yf41n7g=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=D3tShl0L9VMBAnqWTMoeqHREVWB7C2XE7fgbKf4aAL4v6w87jXWyCBCBebxnEsuAl
+	 ufQbc7A2MwlEqbxFUkU2syhmmqeAEYc7VnwWF1Sli98eiNrraFvNrZ4s+m/MTpNRsU
+	 bqAjdrTyamkw+syy/HAH+zWYDIzBVtR9jGVRTMxAXNHvR30EIka79TwLXk3skbz88z
+	 Tgf57s5jfXCRmsALIll5NmGhxzm3QfpfssJKwGBobfwKVmneN14mwDDuP6n4iKxO45
+	 Ff+k9F79n20Y4mdWfRV3uxvalXVaBDCjBQC+j9Dd+cBhSboC7UEi//lAXV2cHiZXeh
+	 NFtOAGwwpqyzw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A27FC8402E;
-	Wed, 11 Feb 2026 18:30:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 809331F6
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 18:30:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04B608401E;
+	Wed, 11 Feb 2026 20:17:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B75FB23D
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 20:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D22461125
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 18:30:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8956408F7
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 20:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XVPrZ1IWM7nN for <buildroot@buildroot.org>;
- Wed, 11 Feb 2026 18:30:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85FC561115
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85FC561115
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 85FC561115
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 18:30:55 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 98A9A19F5AF;
- Wed, 11 Feb 2026 19:30:51 +0100 (CET)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sbk2e47W_apM for <buildroot@buildroot.org>;
+ Wed, 11 Feb 2026 20:17:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7BDF408CD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7BDF408CD
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 20:17:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B640086C03; Wed, 11 Feb 2026 20:17:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Wed, 11 Feb 2026 19:30:47 +0100
-Message-ID: <20260211183047.216472-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.53.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770834653;
- bh=l7laK+CNmYFkumvrMyTL9YSxhhz3bxUF04fQuYY3olw=;
- h=From:To:Cc:Subject:Date:From;
- b=b5LASumAt6lSWZO4jMpFSfIFWtTran3u/Bf5JHc5wXgIJaiqfADGN3tYJ0ASOliQT
- ooa5nt9/AYzIG5+PWt11XlofIwb2/HQZOxnhi4pldU+xX2z9Xqu+XYd+/BM939EMS8
- JPm+PUx76fEbWvt8/QepOKSpkas5+8hk7SLXXbp2fTQsNFED9n8DTCsfQkjtQM4raO
- BAwyJQrfMRk3oneihI4xhLnMwqiG7XgPEXeBxuO5YpGaBDd3nbDRawaF0KlFG+pKko
- 04V2eik9ZQvjBBG2JzHWgb6SPZN0lKa1KllKvlFpF1yYmbPRttaKSjC2SOxzGgkHOk
- qFQUu3mBxTybQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=b5LASumA
-Subject: [Buildroot] [PATCH 1/1] docs/website/{download,
- news}.html: fix date and url typos
+Date: Wed, 11 Feb 2026 21:09:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f8e89786f92ac65e10c76b8ce3b0d833cfbaf48f
+X-Git-Newrev: 267fac241c80054bd1b96ed1f2b1a569a96f0985
+X-Patchwork-Hint: ignore
+Message-Id: <20260211201706.B640086C03@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump version to 6.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,59 +70,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Buildroot commit [1] introduced two small typos, while doing the
-updates to announce new releases.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/267fac241c80054bd1b96ed1f2b1a569a96f0985
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The version 2025.02.10 release date is 2026-01-20 (and not 2022).
-See the original announce [2].
+Updated license hash due to copyright year bump:
+https://github.com/strace/strace/commit/4d6755b556fb00fe5c33b09b08f951bad956c580
 
-The 2025.02.10 archive link in news.html has also a missing dot.
+This bump includes two upstream commits
+https://github.com/strace/strace/commit/bf9384561f295340f85c69deb307740fc9dc28f0
+https://github.com/strace/strace/commit/822b5e840dbf4a80262eaea455d9bc7b6a00d245
 
-This commit fixes those typo in order to fix the website.
+that fix build errors introduced by the bump of linux-headers to version
+6.19 with buildroot commit 566150745bf61fdc1aee68fcf319bc4e8942960a.
+This bump is not included in any buildroot LTS branch so no backport
+necessary.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/21dda0665e5de8ddb2a09f199679b2c4be1384fc
-[2] https://lore.kernel.org/buildroot/9b9654f8-6cdd-4108-b932-79509e455148@rnout.be/
+Fixes:
+https://autobuild.buildroot.net/results/7a3/7a35bfcae87b1fbe1d6e0c4271a364ce330c1d51/
 
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- docs/website/download.html | 2 +-
- docs/website/news.html     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strace/strace.hash | 8 ++++----
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 9078194355..6221cfe871 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -79,7 +79,7 @@
-               Changelog
-             </a>
-           </td>
--          <td>2022-01-20</td>
-+          <td>2026-01-20</td>
-           <td>
-             <a href="/downloads/buildroot-2025.02.10.tar.gz">
-               <img src="images/zip.png" width="24" alt="">
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 38599d66ef..00bb718940 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -42,7 +42,7 @@
- 	  file for more details, read the
- 	  <a href="https://lore.kernel.org/buildroot/9b9654f8-6cdd-4108-b932-79509e455148@rnout.be/T/#u">announcement</a>
- 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
--	  <a href="/downloads/buildroot-2025.02.10tar.xz">2025.02.10 release</a>.</p>
-+	  <a href="/downloads/buildroot-2025.02.10.tar.xz">2025.02.10 release</a>.</p>
-       </div>
-     </div>
-   </li>
--- 
-2.53.0
-
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 268045ef1d..63c32a53ef 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking signature with RSA key from
+-# https://raw.githubusercontent.com/strace/strace/refs/tags/v6.18/GPG-KEY
+-# https://strace.io/files/6.18/strace-6.18.tar.xz.asc
+-sha256  0ad5dcba973a69e779650ef1cb335b12ee60716fc7326609895bd33e6d2a7325  strace-6.18.tar.xz
+-sha256  ca2a0994c57e48b16828008c80cdb626e471b6b59116a8443b2ce4e3c77ddc3b  COPYING
++# https://raw.githubusercontent.com/strace/strace/refs/tags/v6.19/GPG-KEY
++# https://strace.io/files/6.19/strace-6.19.tar.xz.asc
++sha256  e076c851eec0972486ec842164fdc54547f9d17abd3d1449de8b120f5d299143  strace-6.19.tar.xz
++sha256  b897cf6bb865cdd72f49fba6ca7b66ad075b9bc51d3cf372923220ce18b5350f  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 5230b4d60c..3f9e68820c 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 6.18
++STRACE_VERSION = 6.19
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
