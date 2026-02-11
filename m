@@ -4,77 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C8E9E9E310
-	for <buildroot@archiver.kernel.org>; Wed, 11 Feb 2026 14:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF33DE9E30D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Feb 2026 14:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6078480DE8;
-	Wed, 11 Feb 2026 14:19:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1315822C5;
+	Wed, 11 Feb 2026 14:33:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hbMOj_3qQMf9; Wed, 11 Feb 2026 14:19:36 +0000 (UTC)
+ id HvheTk3tUzFW; Wed, 11 Feb 2026 14:33:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9F7D80C27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7ABA820B8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770819575;
-	bh=QtsAEuczhPFyKgXx4eGw3KAEWQMyqzyFGtjcIZrZyzI=;
+	s=default; t=1770820401;
+	bh=M3VphqvZGqzbhAwCvhxE2FUDFsvFABnmKNoaLhFHkMM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=k7rjQiHuPKdewyHo1tULouudSrJmJq7b8hlZRtfcbnEwcCWPg/MzPpJLyixbfOcgM
-	 21StR56FA6wMxfVWEQa+/EDdXasyGeBEjGWaoloa14YeDkpvy/y5ron9LEFxfBy7HI
-	 zOjNFz2ro0VPixUs70ImvMG7Ri+UgSgxc3AGLG4td2PYZTm3YP6gOhqpDV47FmHo2C
-	 MUV1dY3VT5UE5hEFg0g3Y++KFkZJ4daxEjwpnbcO6JK5SmYtpZHWnZ27IwigSL3LsN
-	 7y6GWWT87V7BhZ6CbaAMp1B8w0ihk081OYplyJtYqooZTfQY0euKonlmspaMOjDCUu
-	 JOYmbHxlAG67Q==
+	b=XL0S7n0r/RNiKyoEADz/dBrwUAM8MrAkHl5IcerNTcncD5UV7jvKsCzLcuzUCc53K
+	 bQxjJZmrPW6vJY46drZ8yuahcto8fpAYCT2FH3eSRo0GUE77W3jzl8ehZQAQWj4XuZ
+	 FxCw5BFrLYF7coF++BzqmB9JU8baOeSVWvRKoFa4SE8JWvOEjKJCqTzMGkxxZFqWeW
+	 gMeXBjgu1vBvm8tX5n7I9M5P2Y8ecYXgdaxiOuAELI7kIgqY+kYpy7HPR8/yM+HWix
+	 NgXcfVVk+PdcKcECcosmXDQI1KPs117xNqrk1zHNKvc8CCpx7et9uUT2DB0d2sKshV
+	 W8PV0d2oML6jQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9F7D80C27;
-	Wed, 11 Feb 2026 14:19:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7366E1F6
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:19:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7ABA820B8;
+	Wed, 11 Feb 2026 14:33:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A41021F6
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 585A9400D8
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:19:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 913E54052F
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:33:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ASKnWpaeUI9M for <buildroot@buildroot.org>;
- Wed, 11 Feb 2026 14:19:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6EF5E400CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EF5E400CC
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6EF5E400CC
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:19:33 +0000 (UTC)
-Received: from framework-OT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id D4D512C82930;
- Wed, 11 Feb 2026 15:19:30 +0100 (CET)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IkVMhcR7hffP for <buildroot@buildroot.org>;
+ Wed, 11 Feb 2026 14:33:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2DDA2404F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DDA2404F2
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2DDA2404F2
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:33:19 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 2669E1814B9; Wed, 11 Feb 2026 15:33:16 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed, 11 Feb 2026 15:19:43 +0100
-Message-ID: <20260211141944.3610996-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.53.0
+Date: Wed, 11 Feb 2026 15:32:34 +0100
+Message-ID: <20260211143236.4018275-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770819571; bh=7oAgPqbFCHRQg9h/rSloODvR7++qbTblsi/YqSD6n4c=;
- h=From:To:Cc:Subject:Date;
- b=S6w6oHCKzd6m/cXQEA/+I+aPC++cQGRtsXa0s8Z1xbnGETTh+YmzGmLruZukteHKu
- vYdenmE+U5liTRRLrikXcz3abC4ZUYo0m6DWv0eUaPT/I0ZJZ5TbSiEtfrRFcI9NWg
- IoTwTwpLmHOhLEKcd7dMUvUFam6LvO0lDUy4ypogYS80aw9pX0fC/uEMmpyovxwJrn
- aIbbYt0DIcRUIBqBhndO26QjzM8y4BkD0pOuneTnYyIOWPgM/o4YMEU9Cxs41Sra2e
- Sr9tBcqjMrC0hKwAoYko4KHmLZcJnk6JfUNmF1OUTWmBjylRzTo9YnXiFPLlj5+pwc
- j2Zc4yZFF13jA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=S6w6oHCK
-Subject: [Buildroot] [PATCH] package/python-django: security bump to 6.0.2
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1770820396; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=aGPuCbCdAbelPbO3VA5Rzu+fuiaD1VhODNTBRX4R4M0=;
+ b=KqQWunZPVPRuyrimyFmbK0CtZ+djMAy6n2Ja3aZrwcKOIrkxRcFrUjOb4TMZjNNxT0oL7n
+ r2TV3HjsEpFNI0XzhptF0go/VZm+ZnNEHHcjAQY70aNr6i7bNSH3LQHo+DpZNf5+osXrsP
+ lbZ3k55zCGifdSO7SXOAYnkmarJ7NRc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=KqQWunZP
+Subject: [Buildroot] [PATCH v2] package/log4cxx: fix ENABLE_ESMTP flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,69 +81,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>,
- "manuel.diener" <manuel.diener@othermo.de>,
- Oli Vogt <oli.vogt.pub01@gmail.com>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "manuel.diener" <manuel.diener@othermo.de>
+commit cf686670b99ae0388b27867db64516c09b2de91f introduced a patch that
+was later included in a release which made the usage of libesmtp
+configurable. Later the switch was moved to the main CMakeLists.mk [0].
 
-Fixes the following security issues:
-- CVE-2025-13473 (low): Username enumeration through timing difference in mod_wsgi authentication handler
-- CVE-2025-14550 (moderate): Potential denial-of-service vulnerability via repeated headers when using ASGI
-- CVE-2026-1207 (high): Potential SQL injection via raster lookups on PostGIS
-- CVE-2026-1285 (moderate): Potential denial-of-service vulnerability in django.utils.text.Truncator HTML methods
-- CVE-2026-1287 (high): Potential SQL injection in column aliases via control characters
-- CVE-2026-1312 (high): Potential SQL injection via QuerySet.order_by and FilteredRelation
+while the patch introduced the build flag LOG4CXX_ENABLE_ESMTP the
+change to the .mk file used LOG4CXX_ENABLE_LIBESMTP.
 
-See the release notes here:
-https://docs.djangoproject.com/en/dev/releases/6.0.2/
-Also includes the bugfixes from version 6.0.1:
-https://docs.djangoproject.com/en/dev/releases/6.0.1/
+So correct this.
 
-Signed-off-by: Manuel Diener <manuel.diener@othermo.de>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Fixes:
+CMake Warning:
+  Manually-specified variables were not used by the project:
+  LOG4CXX_ENABLE_LIBESMTP
+
+[0] https://github.com/apache/logging-log4cxx/blob/rel/v1.3.1/CMakeLists.txt#L93
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 388b9df82c..f1ddcc7128 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  2f0e8520f6cf3cd6bbc81ec4226f11c7  django-6.0.tar.gz
--sha256  7b0c1f50c0759bbe6331c6a39c89ae022a84672674aeda908784617ef47d8e26  django-6.0.tar.gz
-+md5  0836ceb8f1f4694f87f0a698c64bd00e  django-6.0.2.tar.gz
-+sha256  3046a53b0e40d4b676c3b774c73411d7184ae2745fe8ce5e45c0f33d3ddb71a7  django-6.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  de642dff9b1019c2c7209032fb94ea92060084efb0bc4238d81a2219e21c7382  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index d6d9bba0eb..18871163d6 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+V2:
+- use correct param name in commit message
+- add reference to current CMakeLists.mk
+---
+ package/log4cxx/log4cxx.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+index f4fb3854f3..57f9b1e844 100644
+--- a/package/log4cxx/log4cxx.mk
++++ b/package/log4cxx/log4cxx.mk
+@@ -23,10 +23,10 @@ LOG4CXX_DEPENDENCIES += boost
+ endif
  
--PYTHON_DJANGO_VERSION = 6.0
-+PYTHON_DJANGO_VERSION = 6.0.2
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/15/75/19762bfc4ea556c303d9af8e36f0cd910ab17dff6c8774644314427a2120
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/26/3e/a1c4207c5dea4697b7a3387e26584919ba987d8f9320f59dc0b5c557a4eb
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js), CC-BY-4.0 (admin svg files)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+ ifeq ($(BR2_PACKAGE_LIBESMTP),y)
+-LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=ON
++LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_ESMTP=ON
+ LOG4CXX_DEPENDENCIES += libesmtp
+ else
+-LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=OFF
++LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_ESMTP=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
 -- 
-2.53.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
