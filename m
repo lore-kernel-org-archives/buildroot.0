@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF33DE9E30D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Feb 2026 14:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 070ABE9E311
+	for <buildroot@archiver.kernel.org>; Wed, 11 Feb 2026 14:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1315822C5;
-	Wed, 11 Feb 2026 14:33:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B110B82289;
+	Wed, 11 Feb 2026 14:53:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HvheTk3tUzFW; Wed, 11 Feb 2026 14:33:21 +0000 (UTC)
+ id 5MvBp1t_le6l; Wed, 11 Feb 2026 14:53:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7ABA820B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFA6D82152
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770820401;
-	bh=M3VphqvZGqzbhAwCvhxE2FUDFsvFABnmKNoaLhFHkMM=;
+	s=default; t=1770821623;
+	bh=JgQ3rPohK7lAgPKrodPpcnnIYSiINvXk+8BXv1PuSyk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=XL0S7n0r/RNiKyoEADz/dBrwUAM8MrAkHl5IcerNTcncD5UV7jvKsCzLcuzUCc53K
-	 bQxjJZmrPW6vJY46drZ8yuahcto8fpAYCT2FH3eSRo0GUE77W3jzl8ehZQAQWj4XuZ
-	 FxCw5BFrLYF7coF++BzqmB9JU8baOeSVWvRKoFa4SE8JWvOEjKJCqTzMGkxxZFqWeW
-	 gMeXBjgu1vBvm8tX5n7I9M5P2Y8ecYXgdaxiOuAELI7kIgqY+kYpy7HPR8/yM+HWix
-	 NgXcfVVk+PdcKcECcosmXDQI1KPs117xNqrk1zHNKvc8CCpx7et9uUT2DB0d2sKshV
-	 W8PV0d2oML6jQ==
+	b=iCSrcPYGD/nWi9bP2J2KNCi5MEEZ8+CO78zuuI0Bl6IzYXVXzs+h4hoSAKsejOQhN
+	 IPdMt85vYS0qT/n4f9T8PMdiYEOHjLpJa5OxsDn4gBTgjcjNoIMHPL9rOxhd0D/zJl
+	 LMMrM0AtSSmDquAZGvZbta05s/Q91eUUw+PE79WhREawJhSjrN4DZW0ot6SUpU571/
+	 u/dW1bsKIOXi83/M6q7rQJBZnCdYyS70nK7kLdI+mh5upgPZcxG/dLIo8Il8cTcESM
+	 vdqc/MNao7Wu8Hqw5tKKDHr8ojeou5a8gtb8K7O64XNUHz+/MtbmaQqFuUrA2iOmn5
+	 SVhk36z5XxECg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7ABA820B8;
-	Wed, 11 Feb 2026 14:33:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A41021F6
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:33:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFA6D82152;
+	Wed, 11 Feb 2026 14:53:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D034E1F6
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:53:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 913E54052F
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:33:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B551040E88
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:53:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IkVMhcR7hffP for <buildroot@buildroot.org>;
- Wed, 11 Feb 2026 14:33:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1g6HtfxuEaNS for <buildroot@buildroot.org>;
+ Wed, 11 Feb 2026 14:53:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
  helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2DDA2404F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DDA2404F2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00B3F40272
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00B3F40272
 Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2DDA2404F2
- for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:33:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 00B3F40272
+ for <buildroot@buildroot.org>; Wed, 11 Feb 2026 14:53:37 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2669E1814B9; Wed, 11 Feb 2026 15:33:16 +0100 (CET)
+ with ESMTPSA id 3F1931814B9; Wed, 11 Feb 2026 15:53:34 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed, 11 Feb 2026 15:32:34 +0100
-Message-ID: <20260211143236.4018275-2-buildroot@heine.tech>
+Date: Wed, 11 Feb 2026 15:53:02 +0100
+Message-ID: <20260211145304.4018549-2-buildroot@heine.tech>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=heine.tech; s=dkim; 
- t=1770820396; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=aGPuCbCdAbelPbO3VA5Rzu+fuiaD1VhODNTBRX4R4M0=;
- b=KqQWunZPVPRuyrimyFmbK0CtZ+djMAy6n2Ja3aZrwcKOIrkxRcFrUjOb4TMZjNNxT0oL7n
- r2TV3HjsEpFNI0XzhptF0go/VZm+ZnNEHHcjAQY70aNr6i7bNSH3LQHo+DpZNf5+osXrsP
- lbZ3k55zCGifdSO7SXOAYnkmarJ7NRc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1770821615; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=oPMhiE/cyBgOltH+uquS7bXf2ZehCOhLBSZp9hVrvJo=;
+ b=OyhbHTvtsIuFrpVxd4Yh7VGhAyhg61wtznOyISiGV+l4djxphynBJ0XliAZ5ExmE9aR2+6
+ g2jC2o+59XX88z917erv3h3QIAYaXILPSNFsPr+Xon51mia+WMIqTBaEwAlslPq7rSjmlV
+ nBwlhPSezX7JrdolLMcUPanuTly1/Bg=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=KqQWunZP
-Subject: [Buildroot] [PATCH v2] package/log4cxx: fix ENABLE_ESMTP flag
+ header.s=dkim header.b=OyhbHTvt
+Subject: [Buildroot] [PATCH] package/log4cxx: bump to version 1.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,50 +89,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit cf686670b99ae0388b27867db64516c09b2de91f introduced a patch that
-was later included in a release which made the usage of libesmtp
-configurable. Later the switch was moved to the main CMakeLists.mk [0].
+Changelog:
+https://logging.apache.org/log4cxx/1.6.1/changelog.html
 
-while the patch introduced the build flag LOG4CXX_ENABLE_ESMTP the
-change to the .mk file used LOG4CXX_ENABLE_LIBESMTP.
-
-So correct this.
-
-Fixes:
-CMake Warning:
-  Manually-specified variables were not used by the project:
-  LOG4CXX_ENABLE_LIBESMTP
-
-[0] https://github.com/apache/logging-log4cxx/blob/rel/v1.3.1/CMakeLists.txt#L93
+Remove dependency on Boost.DateTime because since Boost 1.77 it's
+not a dependency of Boost.Thread anymore and that's the only thing
+log4cxx actually requires as fallback.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
 ---
+ package/log4cxx/Config.in    | 1 -
+ package/log4cxx/log4cxx.hash | 4 ++--
+ package/log4cxx/log4cxx.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-V2:
-- use correct param name in commit message
-- add reference to current CMakeLists.mk
----
- package/log4cxx/log4cxx.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
+index d9daf27eb6..8305217a48 100644
+--- a/package/log4cxx/Config.in
++++ b/package/log4cxx/Config.in
+@@ -14,7 +14,6 @@ config BR2_PACKAGE_LOG4CXX
+ 	select BR2_PACKAGE_BOOST if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST_CHRONO if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+-	select BR2_PACKAGE_BOOST_DATE_TIME if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	help
+ 	  Apache log4cxx is a logging framework for C++ patterned
+diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
+index d9e9af18cf..f6770e287c 100644
+--- a/package/log4cxx/log4cxx.hash
++++ b/package/log4cxx/log4cxx.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.apache.org/logging/log4cxx/1.3.1/apache-log4cxx-1.3.1.tar.gz.sha512
+-sha512  0956fd034fd1a98d2e48ed461578c1e85da02d176850a580195b6a60b959feaf402a2743cc84ccb5d467dd924ee46422b8a7b39d2be9ee131e4e275e65ba839c  apache-log4cxx-1.3.1.tar.gz
++# From https://downloads.apache.org/logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz.sha512
++sha512  6ee406314bd7ab02a46c98cc8a0d5ad5aec8928a23716a81a152775ca315cd3b950d600b2e221d5b4a88416ae9bbda1215fae43626107feea4df2f3e074303ad  apache-log4cxx-1.6.1.tar.gz
+ # Locally computed
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
 diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index f4fb3854f3..57f9b1e844 100644
+index 4b85adbf92..57f9b1e844 100644
 --- a/package/log4cxx/log4cxx.mk
 +++ b/package/log4cxx/log4cxx.mk
-@@ -23,10 +23,10 @@ LOG4CXX_DEPENDENCIES += boost
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBESMTP),y)
--LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=ON
-+LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_ESMTP=ON
- LOG4CXX_DEPENDENCIES += libesmtp
- else
--LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=OFF
-+LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_ESMTP=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+-LOG4CXX_VERSION = 1.3.1
++LOG4CXX_VERSION = 1.6.1
+ LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
+ LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
+ LOG4CXX_INSTALL_STAGING = YES
 -- 
 2.43.0
 
