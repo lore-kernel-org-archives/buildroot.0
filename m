@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64DC0EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EC1DEF99D0
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E42141E4C;
-	Fri, 13 Feb 2026 19:35:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2B33613B0;
+	Fri, 13 Feb 2026 19:35:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DUeJaqHo5tM3; Fri, 13 Feb 2026 19:35:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XsdUTR4WUpOD; Fri, 13 Feb 2026 19:35:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5482241E49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BF38613A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011338;
-	bh=CeqZ6LXB4RMhWDb8tUgwSUYPKe23vJdl/fhJ56gzflA=;
+	s=default; t=1771011339;
+	bh=m63ZOBGXzZCmwOG6mKaladoAdPdE8H38wah10mx2IBI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qEEQALheNaO3oQaN/AM/JuzeoMtwFna27ALfMi+xN/Q5o1jbOZOT0n5wjAmaykxu+
-	 SaN37GUpJcaF1hGgXR+YOFYLQjmduGZ0v4L+1xvwQ/QyFnsGnVni96ZW0immLTp1KZ
-	 N02M9XzIq/IgiRcnQ2gr4rqFPktEK3S/+ABzl2FhWAslKBmC8WSKeF4DtNklH4pjYC
-	 KWnR9fCSmRIeDSPhflVuGo3zzzx4kHKa68k/+C4R320Go0SiQ3Sp1oKjCrH0sjPL/G
-	 LnVIGTqaE6LIcm7UbeVJlQUJutOpfNECHfkxi7X/FV0Ffp5+o/qUjDHaGlRT0CI2Bs
-	 01uH3ZDpqUaFg==
+	b=kqYpJiKF2hvgm05VaXHFPgfSnALprsI52xSbRo4noLv4z/lIFJn39p5MMbk47BjFq
+	 Pwcn0b1g3bXODlM/5B3Ef5SJ4LRHCk+L2LFGblAUsEPplysNJfw5MuTqTzECfui8jf
+	 tSiYzhRPxH4Nkclb4Hbh/0QDnleyop2tVhBfPkbkfni1SzW4qQvoonAjq6YYXdCASD
+	 fsnu1/izgz7AxP3mQee+FmMsCs2OWERmZEaPG69aRKO1m3vGB5IIxQ92TopJB9b0jj
+	 iLMLOQ54dTteWxJTg3uBfHtt6QecDmrl/siGg9RnAJFHHDA3Yirr1ooQRAM5qaR6QN
+	 ut1uFlq73QV5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5482241E49;
-	Fri, 13 Feb 2026 19:35:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 262E4283
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BF38613A9;
+	Fri, 13 Feb 2026 19:35:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78123EC
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E86A741E3A
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1CF940380
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pw7YblcEq6hj for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nrh2DpvdkXFJ for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82EB41E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CBD6403B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D82EB41E22
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CBD6403B1
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C96FE83B01; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ id 224778268D; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:24:22 +0100
+Date: Thu, 12 Feb 2026 14:29:31 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7de76477128d5f8a07f837bae677b2548ead3f64
-X-Git-Newrev: 291c3360a6fe9803683d3e469fc4f044ad9e3aa0
+X-Git-Oldrev: bc944f1937a77d271749897263a43cbd0da590a3
+X-Git-Newrev: cceae105f084abb520489182a1165243640ac87a
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193526.C96FE83B01@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/berkeleydb: fix
- non-threaded build
+Message-Id: <20260213193527.224778268D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] arm-trusted-firmware: Add
+ support for custom license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,73 +77,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/291c3360a6fe9803683d3e469fc4f044ad9e3aa0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cceae105f084abb520489182a1165243640ac87a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Building berkeleydb is broken with a non-threaded toolchain with gcc >=
-14.x:
+The ATF package was not providing any license file when a custom
+Linux version was selected.
 
-../src/rep/rep_method.c:1740:25: error: implicit declaration of function
- '__repmgr_get_nsites'; did you mean '__rep_get_nsites'?
- [-Wimplicit-function-declaration]
- 1740 |                 return (__repmgr_get_nsites(env, n));
+Fix this by adding a Kconfig option to specify the license file,
+with a default value set to the commonly used license paths.
 
-According to src/repmgr/repmgr_util.c, line 503+, the function
-'__repmgr_get_nsites' mentioned in the gcc error message "may only be
-called after threads have been started".
-This source file repmgr_util.c belongs to REPMGR_OBJS according to
-dist/Makefile.in, line 249+, which is, according to dist/configure.ac,
-line 956, only build if thread support is present.
-
-In a non-threaded build '__repmgr_get_nsites' does not exist causing the
-build error.
-
-To fix the build error we disable replication for non-threaded
-toolchains.
-
-Using gcc 13.x the build error does not occur, tested with this
-defconfig:
-
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_GCC_VERSION_13_X=y
-BR2_PACKAGE_BERKELEYDB=y
-
-Using this minimal gcc 14.x-based defconfig
-
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_BERKELEYDB=y
-
-the build error can be reproduced.
-
-The oldest build error of this kind, afaics, dates back to 2024-06-13:
-https://autobuild.buildroot.net/results/e0d/e0d6bdbef01bee277b0da83605b2906af876058a/
-
-Fixes:
-https://autobuild.buildroot.net/results/792/792ed942d17bb8d00cd321536a102f6dd63b6a8a/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9a1a71be21e6c45383800824863b75cb08b029a8)
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+[Arnout: use a single Kconfig option with conditional prompt]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 77670c33d24b7766bf3d7a090510e2863180d286)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/berkeleydb/berkeleydb.mk | 1 +
- 1 file changed, 1 insertion(+)
+ boot/arm-trusted-firmware/Config.in               | 8 ++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 9 +++------
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index 6c487400ae..46838ca85c 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -45,6 +45,7 @@ define BERKELEYDB_CONFIGURE_CMDS
- 		--with-pic \
- 		--enable-o_direct \
- 		$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-mutexsupport,--disable-mutexsupport) \
-+		$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-replication,--disable-replication) \
- 	)
- endef
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index c8deede9cd..fa60807851 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -74,6 +74,14 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION
  
+ endif
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LICENSE_FILES
++	string "ATF license files" if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT || \
++		BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
++	default "docs/license.rst"
++	help
++	  A space-separated list of license files related to the ATF
++	  package.
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM
+ 	string "ATF platform"
+ 	help
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index decfd4748f..bb113741d6 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -18,14 +18,11 @@ else
+ # Handle stable official ATF versions
+ ARM_TRUSTED_FIRMWARE_SITE = https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git
+ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
+-# The licensing of custom or from-git versions is unknown.
+-# This is valid only for the latest (i.e. known) version.
+-ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_8_VERSION),y)
+-ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+-ARM_TRUSTED_FIRMWARE_LICENSE_FILES = docs/license.rst
+-endif
+ endif
+ 
++ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
++ARM_TRUSTED_FIRMWARE_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LICENSE_FILES))
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE):$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT),y:y)
+ BR_NO_CHECK_HASH_FOR += $(ARM_TRUSTED_FIRMWARE_SOURCE)
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
