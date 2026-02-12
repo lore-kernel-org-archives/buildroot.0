@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EFB6EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF49EF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7023441F01;
-	Fri, 13 Feb 2026 19:36:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD75684640;
+	Fri, 13 Feb 2026 19:36:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PeWi4YBqi8QK; Fri, 13 Feb 2026 19:36:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w7vEhzNrBvMr; Fri, 13 Feb 2026 19:36:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ECFC41F02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 057A284558
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011407;
-	bh=XTg5h5a0ezXX42Y5vb/tJTPbwSZKx02HrnAfvRCcGGQ=;
+	s=default; t=1771011410;
+	bh=aW/66w2P5+wd1Ibh47UmHXQ2pFB+3PW+2cWNdDpqgeI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XIkK3l/LS9jKdrnLvmTW/bVz8qf0XhrrChQ5hyGQmEpSLCCZyluCqa6OETVyTOpgZ
-	 cO9PlR+tt9hU0MqT3fJOkCi3N9maZrQ8qFK8wdqFiMtcj8xLUsElkjRQeLkRAGgp4n
-	 gP5138doVXgUou0L8Oi9/wnXhK+C5CQ6Ncd/iPdQmzXfeCb5oGlkmbzwslfNIbHv/V
-	 PGsMulWtILIwf9d3PLVSHVoGf8L4L8mf/sFVzoZbFqAjVsSO04kD2GZYPA2g2fr6MU
-	 31R6iFoNc5alKRUQZrRnkjg9YL/dCpOPeGPCsiSvjbpf6pOFLgOyDKudJqC+1aIojh
-	 th2XhDoQ6Z66A==
+	b=EjjkESJNeYgX58OA+k1X7FBpk8G0/0u2MBSWN8dw2PyE50PC4dEX0JM5p81YeHl8j
+	 BN9Z5AAiiTHflx295jQld17NSvQDEnJvipWuQYq8zag3KyHMjXcN+cEgv5U4kWVhl/
+	 rc660KBLReI43UHzxMvuLPYsqnZb1zNEvOsd/lW2VoAPp7j1YSkS14SIi4BvD/wVbv
+	 /prrM1lSCot9CjW+pLHLJPWVPLgZ00xUYT9KoqbX9Z/zuNqunJmXT8P+5re7C4ggPG
+	 pCIdCuY9W2Rm/DbnOt1GrxAXBqoqB/vOClSup6cXB2kzYDBj0xqnLPYgedT/sgqCHD
+	 2FMvgqDMYJxZw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ECFC41F02;
-	Fri, 13 Feb 2026 19:36:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0675269
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 057A284558;
+	Fri, 13 Feb 2026 19:36:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1104769
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B9DA41E55
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B1E8844E6
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jt6w9Tl3grQr for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jvT_4Rr68eMH for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D48A241E29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3976784548
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D48A241E29
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3976784548
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C99EF83545; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+ id 2ECF381EB5; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:32:08 +0100
+Date: Thu, 12 Feb 2026 14:58:51 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9a9e6df3f402bd86abda6cc67e085357bfbac870
-X-Git-Newrev: 1738d5111450c91a85c18f9bb16958311dfdf8b2
+X-Git-Oldrev: d550a8ec49c5a0f77d28b614de6e8ca599b8d747
+X-Git-Newrev: 5225221daa844a9fdf52df9a4fd5873811ce1538
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193529.C99EF83545@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mupdf: update
- release hashes comment
+Message-Id: <20260213193528.2ECF381EB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/safeclib:
+ properly format upstream information in patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,48 +72,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0220597063178288726=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0220597063178288726==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1738d5111450c91a85c18f9bb16958311dfdf8b2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5225221daa844a9fdf52df9a4fd5873811ce1538
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The old URL now leads to an HTTP 404 not found error.
-Update it to the new one which contains the hashes for the current
-release as well as older ones.
+Patch 0001 has the upstream information, just not properly formatted,
+so we fix this.
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 6fed872e083c5d5d490977b2bffbd68ebd141f1b)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Thomas: extracted from a bigger patch from Bernd]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c15b507838f7d7315610340fcfd1656a62e02cf2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mupdf/mupdf.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore                                           | 1 -
+ package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
-index 580235eeca..80de6f3b2c 100644
---- a/package/mupdf/mupdf.hash
-+++ b/package/mupdf/mupdf.hash
-@@ -1,4 +1,4 @@
--# From https://mupdf.com/downloads/index.html:
-+# From https://mupdf.com/releases:
- sha1  d79600bccd70ab9d0e8ee19dae4e275f2af95ced  mupdf-1.23.9-source.tar.lz
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b8b0935866..f2b8fc6c8d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -993,7 +993,6 @@ package/rubix/0001-dont-use-legacy-functions.patch lib_patch.Upstream
+ package/rubix/0002-misc-fixes.patch lib_patch.Sob lib_patch.Upstream
+ package/rygel/S99rygel Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/s6-linux-init/0001-configure-add-D_GNU_SOURCE.patch lib_patch.Upstream
+-package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch lib_patch.Upstream
+ package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch lib_patch.Upstream
+ package/samba4/0002-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch lib_patch.Upstream
+ package/samba4/S91smb Shellcheck lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch b/package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch
+index 3cb37b96f5..75f4c2bf90 100644
+--- a/package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch
++++ b/package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch
+@@ -7,8 +7,7 @@ some armv7 buildroot variants fail on asm.
+ we already probe for that, so use it.
+ Fixes GH #115
  
- # Locally computed:
-
---===============0220597063178288726==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-[Retrieved from:
+-https://github.com/rurban/safeclib/commit/9c739800a8915d5f2a73c840190920e95ffa1c5c]
++Upstream: https://github.com/rurban/safeclib/commit/9c739800a8915d5f2a73c840190920e95ffa1c5c
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  tests/perf_private.h | 49 +++++++++++++++++++++++++-------------------
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0220597063178288726==--
