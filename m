@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBFCFEEA864
-	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 22:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4024AEEA865
+	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 22:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8EDF81E99;
-	Thu, 12 Feb 2026 22:06:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC9D684010;
+	Thu, 12 Feb 2026 22:35:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OwYG4dzpBtrd; Thu, 12 Feb 2026 22:06:11 +0000 (UTC)
+ id SmPbetWeqWKx; Thu, 12 Feb 2026 22:35:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2207281D68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ADC281D24
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770933971;
-	bh=ixykNnq6JVjbKZBkgjCI7O1hjf+FRTotHdnp+Ww7y3k=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hQWdM9/6C5kA9Bw9aJGmXSeGXpx62zf5hoPkjrpq/B/q8xrzMX8BRxNv8DhC5IpqR
-	 pdNY7rGIjt732435Tu3yfEfM40/LaPjpfsKUffd7rxo+OuqQEwZaby7Wzjkh7R9Kop
-	 7V2ggdiZQ0+b71XuwdrIA58cd5b17zrFmxqdj0JmkPF5WiD7EP5mAJdXYG43Gq4pf5
-	 azvrUExau9f46JANwgFRqAcBQIhGN1XeZ0LRJiLIUUPV8kpwLVum2U/OSBLD8Z5KJc
-	 wCMv4MgGB7O/Pcav6XpkhYIUvtu1NqOlCLMhahsAbD4MUCfkZbqD8da6vA7CmzVrL/
-	 Gi7XHb6TCCY9Q==
+	s=default; t=1770935711;
+	bh=c9RQ4bUFqHVIzimo1eIzH9x+mS0jvTbxG6vqoS70JcA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=KDCTksCZKHE1g9hOWwzLSZ9cxRczg8aBT8tIRLcnin3WQtwxyj9rOkzvYqFLuRbo6
+	 VH6mqp+fehf2wnBxjVToXs2CNkyG4LSgUSIOPjgfAuMcS07lzxSARRYTZbBOjnSzhU
+	 YLnG8tM9qvrm75o0LcsscbJnpQ5a8Bl+m7eaWj8hKxTXMRqYHlU825j8Xg9iRDR/eT
+	 MjLgMb3R9NFSq5IfVMrElzUleSIpg2ZwKlysn+yHElBTGf4T/+kcfqFNNBOpceoQFk
+	 exUx2OAatax1YAplSAH1aA9wI55Fa8OwKAOmrE6rpW+Af2igzCZZNGJyJNi0KC9KUW
+	 qtETVWr44OBEQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2207281D68;
-	Thu, 12 Feb 2026 22:06:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2591D1CA
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 22:06:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4ADC281D24;
+	Thu, 12 Feb 2026 22:35:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07EBB1CA
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 22:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1404481CBA
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 22:06:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD6426125D
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 22:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZnpVwuw-24Su for <buildroot@buildroot.org>;
- Thu, 12 Feb 2026 22:06:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3440581852
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3440581852
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3440581852
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 22:06:08 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id F3A4813F879;
- Thu, 12 Feb 2026 23:06:04 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 12 Feb 2026 23:06:04 +0100
-MIME-Version: 1.0
-Date: Thu, 12 Feb 2026 23:06:04 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
- <alexis.lothore@bootlin.com>
-In-Reply-To: <20260212205815.1029590-1-thomas.petazzoni@bootlin.com>
-References: <20260212205815.1029590-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <84d769f2ca440a28044225e0d87b669c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1770933967;
- bh=Ta6KP66/BMu31cCb47s6Gpyxix4iCB0GaUQIemBf1B8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=XmhAmlj09yMKZwYSZv7CQjLXN9riocX1/WVQZ3UJDO4nDtuzAjajND/gSoo6ho4H1
- 6NVefeCqwy+VUp8KFBeViCkbkG2Y5hKphUgNZfgXmIpocKKj1JP6ElJHKfX1YnIffh
- Nn+wrGxkXMsEuZtEpCK1431uxa8WYj/hqM97O2GIf2DUiJeVGSAaqDYJ/k8syouKiF
- uqPByXcD8qYSwmCrHR+Inoyi+UZys1gHSaUFXauwQ/25Gn5uvYMX93QVEataezebeI
- wX8GYD5oGAta7haEqxTxTZ+X0P2LIHxOFt1jSc8cSYZEW3ZWH9J/MZmCl7pB6JlRCC
- 4v3TAevbOTIbw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XmhAmlj0
-Subject: Re: [Buildroot] [PATCH] package/libxmlsec1: drop mandatory libxslt
- dependency
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hDN1DNxDoVNz for <buildroot@buildroot.org>;
+ Thu, 12 Feb 2026 22:35:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2578F61247
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2578F61247
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 22:35:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0788386CAE; Thu, 12 Feb 2026 22:35:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 12 Feb 2026 23:34:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 431950769d5ca14f2c490e328a38cbf163ce2a18
+X-Git-Newrev: d8798806f7e283e7da256357883de18bc79e4079
+X-Patchwork-Hint: ignore
+Message-Id: <20260212223509.0788386CAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: reapply "libcurl: add
+ host variant"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,25 +69,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5690111745550167413=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/02/2026 21:58, Thomas Petazzoni via buildroot wrote:
-> Commit 7eeb574f0ec86e372bcc8a551e8e9bb88b8d6555 introduced the
-> libxmlsec1 making libxslt a mandatory dependency, which it isn't.
-> 
-> This commit therefore make libxslt an optional dependency of the
-> target libxmlsec1 package, and drops the dependency entirely for the
-> host package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--===============5690111745550167413==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d8798806f7e283e7da256357883de18bc79e4079
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+libcurl host build support has initially been added with 736e0fc5d610
+("libcurl: add host variant") while adding support for host-cargo build,
+and reverted with 69e84008abf8 ("Revert "libcurl: add host variant"")
+when standalone cargo build has been removed.
+
+In order to bring in an upcoming commit a new host package that
+depends on libcurl, re-enable host-libcurl build support.
+
+This reverts commit w9e84008abf87eaeeb3f2d53c880cf33492a3bf8, with the
+exception of the post-patch hook which is no longer needed.
+
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcurl/libcurl.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index d9a712bcb6..7ebf26c3b1 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -185,4 +185,16 @@ endef
+ LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+ endif
+ 
++HOST_LIBCURL_DEPENDENCIES = host-openssl
++HOST_LIBCURL_CONF_OPTS = \
++	--disable-manual \
++	--disable-ntlm-wb \
++	--disable-curldebug \
++	--with-ssl \
++	--without-gnutls \
++	--without-mbedtls \
++	--without-nss \
++	--without-libpsl
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+
+--===============5690111745550167413==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5690111745550167413==--
