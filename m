@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EE67EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B2FEF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0CA48456E;
-	Fri, 13 Feb 2026 19:37:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22C1541FB4;
+	Fri, 13 Feb 2026 19:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lH9Uh1J2uYte; Fri, 13 Feb 2026 19:37:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E2hMJspcssOL; Fri, 13 Feb 2026 19:37:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14DB3845C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 382DD41FBB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011475;
-	bh=tC/SfoSFmmAkO4yNaY8tkXx9tK26Af04S5XgCyiBP3c=;
+	s=default; t=1771011476;
+	bh=OIwjihi6DFpIJgfZetjnYjbFvlTyTpSXgVppwqjZUbw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rUJkwi7Mxsm3Vi3RF2t30G5jiNLTc6rQ0GoDCpK2+x0NJJZQnubLyAr2RtP9CvwKz
-	 5ECNV9Fw2C8KQCgz6rreFgk48QumYlITanoFMTpcV1Uaiaaa18gGuul7f1r69g2npQ
-	 /hL53uKDpnFIBHcSct3OGs61SlUu+pfkgw6wa0jjyWahC+FBdPjWzw7MLMnC4Sf7LO
-	 KygZJZXxa3QFLavjp7X5vct5MaIy+o8o3y4aWDIdLhJW3kAJS33G8qOpFQHkVeBVI8
-	 L/KqCWOoHQyATlMDKAQHg600Y290JY3DM8D8bmrZBCZtFqwBiR8quQlebKYgzqePLY
-	 F7pgpligyGDuA==
+	b=so8QdQtRzDqeGbjq8+l2kGpzKhbInrjGOzER5mSER+3LHqbUQRAekEHErm31gJGuP
+	 rP7aWS6cxOlfFQ3qlm/KESuxaQZ6gNR5iF/7inciBtFJIgG9buSVlp2VRC18csrjNS
+	 V/wcbRJX7tUhN6KITt1a5yfCGul9iMFjpisK4IIgDIs4vQRsj8A9+3uNG0ReM79HdI
+	 QVVA17RI+oi/85HjSxSeeW89HP5C9Feiv8V9FRtj6AudpnISAvU5Z16OpCUFPID9t8
+	 A0wKCPVHnt04yeC3xctwfZQq9OtnRADYBIMSl979KDo99kzU1AO2rh3Aim4J+KY+pZ
+	 L3jWZ80S02YXQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14DB3845C8;
-	Fri, 13 Feb 2026 19:37:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 382DD41FBB;
+	Fri, 13 Feb 2026 19:37:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 441CA69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D12BEC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 351BE4133A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 423D04134B
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4RULdK2M0lVp for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
+ id GPOf5ONstjAN for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB6D9412CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79543412DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB6D9412CB
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79543412DC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0758857B3; Fri, 13 Feb 2026 19:37:01 +0000 (UTC)
+ id 6E0AF81665; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:27:51 +0100
+Date: Thu, 12 Feb 2026 14:36:28 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 6673c79b99949024b1e74ba17b76d96d4a24d9f2
-X-Git-Newrev: ba6335ebe87d7bdda19472df23d79b2e4fbebb5e
+X-Git-Oldrev: 292c8cf89023748ab7f8b6c816f2ba3c38bf37c3
+X-Git-Newrev: f407daec2ec74565050b7ec560c7e64ce128cc73
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193701.C0758857B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] optee-os: Add support for
- custom license files
+Message-Id: <20260213193702.6E0AF81665@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/dc3dd: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,59 +76,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ba6335ebe87d7bdda19472df23d79b2e4fbebb5e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f407daec2ec74565050b7ec560c7e64ce128cc73
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-The OP-TEE OS package was not providing any license file when a custom
-Linux version was selected.
+savewd.c:75:27: error: implicit declaration of function 'fork' [-Wimplicit-function-declaration]
+   75 |           wd->val.child = fork ();
 
-Fix this by adding a Kconfig option to specify the license file,
-with a default value set to the commonly used license paths.
+Fixes:
+https://autobuild.buildroot.net/results/40a/40a90638f90260ca2cb51bac03b0f8fb23a6ccc4/
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-[Arnout: use a single Kconfig option with conditional prompt]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 71e8ca62ddf898c6278ec5d89af32afebf54ac9d)
+The build error occurred already in January 2025:
+https://autobuild.buildroot.net/results/9f3/9f3fefe5578dc41272e460146b566ac20f6cde75/
+so a backport to the LTS branches should be considered.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4df3fa1ab50fb280f011550edc5b178e7a4a0482)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- boot/optee-os/Config.in   | 8 ++++++++
- boot/optee-os/optee-os.mk | 4 +---
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ package/dc3dd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index e737d2a0ac..4bd7debefd 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -86,6 +86,14 @@ config BR2_TARGET_OPTEE_OS_VERSION
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
+index bd181b7065..b4b7dfd691 100644
+--- a/package/dc3dd/Config.in
++++ b/package/dc3dd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DC3DD
+ 	bool "dc3dd"
++	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_RISCV_32
+ 	depends on !BR2_arc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_DC3DD
+ 	  https://sourceforge.net/projects/dc3dd/
  
-+config BR2_TARGET_OPTEE_OS_LICENSE_FILES
-+	string "OP-TEE OS license files" if BR2_TARGET_OPTEE_OS_CUSTOM_GIT || \
-+		BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
-+	default "LICENSE"
-+	help
-+	  A space-separated list of license files related to the
-+	  OPTEE-OS package.
-+
- config BR2_TARGET_OPTEE_OS_NEEDS_DTC
- 	bool "OP-TEE OS needs dtc"
- 	select BR2_PACKAGE_HOST_DTC
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 25c917e2fc..1639597407 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -6,9 +6,7 @@
- 
- OPTEE_OS_VERSION = $(call qstrip,$(BR2_TARGET_OPTEE_OS_VERSION))
- OPTEE_OS_LICENSE = BSD-2-Clause
--ifeq ($(BR2_TARGET_OPTEE_OS_LATEST),y)
--OPTEE_OS_LICENSE_FILES = LICENSE
--endif
-+OPTEE_OS_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_LICENSE_FILES))
- 
- OPTEE_OS_CPE_ID_PREFIX = cpe:2.3:o
- OPTEE_OS_CPE_ID_VENDOR = linaro
+ comment "dc3dd needs a glibc or uClibc toolchain w/ threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_RISCV_32
+ 	depends on !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
