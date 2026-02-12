@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7FD2EF99D1
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA2C8EF99D2
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D8648471C;
-	Fri, 13 Feb 2026 19:37:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A66FE41E60;
+	Fri, 13 Feb 2026 19:37:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DjZMDWXVMBJj; Fri, 13 Feb 2026 19:37:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W4SfeqCCqql2; Fri, 13 Feb 2026 19:37:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A30E984722
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1D0441E64
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011465;
-	bh=XlyHfNq1NzgNTPX44lltJBknzad2vhXwhCVOQtabB7E=;
+	s=default; t=1771011466;
+	bh=5u5aTuwpOWMftcWZbLqInLo38zukkR089msJV7iSFt8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AE0VJBTf3czLVfvCLQtLitSVPFjORQchzxvg97FxGef1JZKRPs8LaYvcvrU6eoIDR
-	 fmQgp9af/s2qxU5GrmG+uvDkYeybFPSOhGYtGr5VL4x/nHPGyX6U9cA4GfF+Bpn0Vj
-	 G3C74178Wyj/0KhkTTHhXQRgfrFl1/1TCjOJlmIV/8MnwwYVtoS6QYe+Nlf1V2gloY
-	 ZtIkxb5m3Mkgu6AEWPXj3i23Cg1CjqR/s9LlFUfYMCTf3S6bbKQdKl/tP4x/xFbh4z
-	 oSgAI4kAqllsWSApZJV88juhEGHvdhnjrkT4LDgsFoRybp7kENDhLuJqwwjafP1Cei
-	 FF7Or9V1z8AmA==
+	b=EK+QRTY+xajJtA7RYZqpnQ+ZOOYuyy0jM4iMUCqsEnn/2C6B6WR8k4EH2LbISetqV
+	 K3P1R7oSjfGlsXzpPTf47GWNJ9CkJhPG2qEFXVBsH+kYg+Ucw9VFtY5VhoPbgvJtFJ
+	 qlGEiROitcgou8FZkSog4vvn6HF7v3RLNvnzvVIaGfgeR7iyG7FlxY8JOmocCcgPey
+	 2Yo5/AIvgnHlmCspSaosX/0Dv4Ubcb1BU+0B9ruIk/6+IAd5RHgxQrKAdPvHw6KSHG
+	 z3bymsj2otwX7DMtyjeW+pG6H8qkqkaMXoHZd40aMYQfckQtewK8Is/sIqtXp4o1KO
+	 /SKAXj+OSRQCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A30E984722;
-	Fri, 13 Feb 2026 19:37:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1D0441E64;
+	Fri, 13 Feb 2026 19:37:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 23E63283
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2726F283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23EA6412D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50B0641303
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yGEJhKQzUCsn for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
+ id ZpfaZE4m7stW for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A10F412A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FB8F403B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A10F412A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FB8F403B1
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F09783593; Fri, 13 Feb 2026 19:37:01 +0000 (UTC)
+ id 24E8F83593; Fri, 13 Feb 2026 19:37:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:21:53 +0100
+Date: Thu, 12 Feb 2026 14:11:49 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: ba1df855214722ba48b55007cd810bf928de3fe6
-X-Git-Newrev: 3824f14d6f40702f5d10d8a258f88cc069e1ab64
+X-Git-Oldrev: 4a0c0e9a6de02b3d9feb0020fbb918660ae27cf2
+X-Git-Newrev: ef477d838b92c463874acb4c7175a23da027000c
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193701.7F09783593@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/zeek: add various
- fixes for gcc >= 13.x
+Message-Id: <20260213193701.24E8F83593@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/uftp: needs
+ libopenssl, not libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,180 +72,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1182697251014167560=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1182697251014167560==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3824f14d6f40702f5d10d8a258f88cc069e1ab64
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ef477d838b92c463874acb4c7175a23da027000c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
+Buildroot commit bumped libressl from version 3.8.4 to 3.9.2.
+
+Libressl 3.9.0 contains a breaking change:
+https://github.com/libressl/portable/releases/tag/v3.9.0
+"EVP_add_{cipher,digest}() were removed."
+
+Upstream was notified by Yegor but did not add any fixes:
+https://sourceforge.net/p/uftp-multicast/discussion/general/thread/c02c950dff/
+so we force the usage of libopenssl to fix a build error:
+
+encrypt_openssl.c: In function 'crypto_init':
+encrypt_openssl.c:77:5: error: implicit declaration of function
+ 'EVP_add_cipher'; did you mean 'EVP_Cipher'?
+ [-Wimplicit-function-declaration]
+   77 |     EVP_add_cipher(EVP_aes_128_ccm());
+
+first caught by the autobuilders on 2024-08-09:
+https://autobuild.buildroot.net/results/7da/7dadc662e0a6642e40831a93b788e959498d8923/
+
 Fixes:
-https://autobuild.buildroot.net/results/906/9061a358d5b37d7674fe5498686cecefda6cf51e/
-
-The build error
-
-  ripemd_160.hpp:52:23: error: 'uint8_t' was not declared in this scope
-
-which is fixed by patch 0002, afaics, first occurred on 2024-04-04:
-https://autobuild.buildroot.net/results/7ff/7ff3d6a09bd4911ff78e01c14f2bfb7da3d43d60/
-so a backport should be considered.
-
-After fixing the build error other build errors occurred which are fixed by
-backporting various upstream commits.
+https://autobuild.buildroot.net/results/a74/a74526181dfc90aff7f56457c430c1aa1d006e54/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit eb8ee9f7fdd0bddda62e72fa0c5c47f4e1f4b39c)
+(cherry picked from commit 07917a05db913348cc4b990e6937310f14456d34)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...dd-missing-includes-fix-build-with-GCC-13.patch | 40 ++++++++++++++++++
- ...-resulting-from-removal-of-ghc-filesystem.patch | 48 ++++++++++++++++++++++
- ...State.h-to-fix-compilation-error-on-gcc13.patch | 24 +++++++++++
- 3 files changed, 112 insertions(+)
+ package/uftp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/zeek/0002-Add-missing-includes-fix-build-with-GCC-13.patch b/package/zeek/0002-Add-missing-includes-fix-build-with-GCC-13.patch
-new file mode 100644
-index 0000000000..3590b01c58
---- /dev/null
-+++ b/package/zeek/0002-Add-missing-includes-fix-build-with-GCC-13.patch
-@@ -0,0 +1,40 @@
-+From c41f1c24f6ed2a5441b231b17e1889580bbbc01c Mon Sep 17 00:00:00 2001
-+From: Dominik Charousset <dominik@charousset.de>
-+Date: Wed, 29 Mar 2023 17:01:37 +0200
-+Subject: [PATCH] Add missing includes, fix build with GCC 13
-+
-+(cherry picked from commit c2ee99c38989deba848cc4c4ec9a230fa71162f7)
-+
-+Upstream: https://github.com/zeek/actor-framework/commit/c41f1c24f6ed2a5441b231b17e1889580bbbc01c
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libcaf_core/caf/detail/ripemd_160.hpp     | 1 +
-+ libcaf_core/caf/telemetry/metric_type.hpp | 2 ++
-+ 2 files changed, 3 insertions(+)
-+
-+diff --git a/libcaf_core/caf/detail/ripemd_160.hpp b/libcaf_core/caf/detail/ripemd_160.hpp
-+index ea9f44cec3..ec2482ecfa 100644
-+--- a/auxil/broker/caf/libcaf_core/caf/detail/ripemd_160.hpp
-++++ b/auxil/broker/caf/libcaf_core/caf/detail/ripemd_160.hpp
-+@@ -42,6 +42,7 @@
-+ 
-+ #include <array>
-+ #include <string>
-++#include <cstdint>
-+ 
-+ #include "caf/detail/core_export.hpp"
-+ 
-+diff --git a/libcaf_core/caf/telemetry/metric_type.hpp b/libcaf_core/caf/telemetry/metric_type.hpp
-+index 0525dd1da7..2047b5f6cc 100644
-+--- a/auxil/broker/caf/libcaf_core/caf/telemetry/metric_type.hpp
-++++ b/auxil/broker/caf/libcaf_core/caf/telemetry/metric_type.hpp
-+@@ -4,6 +4,8 @@
-+ 
-+ #pragma once
-+ 
-++#include <cstdint>
-++
-+ namespace caf::telemetry {
-+ 
-+ enum class metric_type : uint8_t {
-diff --git a/package/zeek/0003-Fix-some-missing-includes-resulting-from-removal-of-ghc-filesystem.patch b/package/zeek/0003-Fix-some-missing-includes-resulting-from-removal-of-ghc-filesystem.patch
-new file mode 100644
-index 0000000000..7789223a09
---- /dev/null
-+++ b/package/zeek/0003-Fix-some-missing-includes-resulting-from-removal-of-ghc-filesystem.patch
-@@ -0,0 +1,48 @@
-+From 1f87382302896876df0838d83f0d107aae4b89d3 Mon Sep 17 00:00:00 2001
-+From: Tim Wojtulewicz <tim@corelight.com>
-+Date: Thu, 10 Jul 2025 16:28:40 -0700
-+Subject: [PATCH] Fix some missing #includes resulting from removal of
-+ ghc::filesystem
-+
-+Upstream: https://github.com/zeek/zeek/commit/1f87382302896876df0838d83f0d107aae4b89d3
-+
-+[Bernd:
-+- backported only UDP.cc change from upstream commit
-+- added similar change to src/script_opt/CPP/GenFunc.cc, no upstream
-+  commit due to switch to from transform to std::ranges::transform:
-+  https://github.com/zeek/zeek/commit/72c79006ac028558004a259081fa8e02de3ebe85
-+  to fix build error:
-+
-+  /home/bernd/buildroot/output/build/zeek-4.1.1/src/script_opt/CPP/GenFunc.cc:
-+   In member function ‘std::string zeek::detail::CPPCompile::BodyName(const zeek::detail::FuncInfo&)’:
-+  /home/bernd/buildroot/output/build/zeek-4.1.1/src/script_opt/CPP/GenFunc.cc:214:17:
-+   error: ‘transform’ was not declared in this scope
-+    214 |                 transform(fns.begin(), fns.end(), fns.begin(), canonicalize);]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/packet_analysis/protocol/udp/UDP.cc      | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/packet_analysis/protocol/udp/UDP.cc b/src/packet_analysis/protocol/udp/UDP.cc
-+index bebfabd3fbb..bf114f5518b 100644
-+--- a/src/packet_analysis/protocol/udp/UDP.cc
-++++ b/src/packet_analysis/protocol/udp/UDP.cc
-+@@ -1,6 +1,9 @@
-+ // See the file "COPYING" in the main distribution directory for copyright.
-+ 
-+ #include "zeek/packet_analysis/protocol/udp/UDP.h"
-++
-++#include <algorithm>
-++
-+ #include "zeek/RunState.h"
-+ #include "zeek/Conn.h"
-+ #include "zeek/session/Manager.h"
-+--- a/src/script_opt/CPP/GenFunc.cc
-++++ b/src/script_opt/CPP/GenFunc.cc
-+@@ -1,5 +1,6 @@
-+ // See the file "COPYING" in the main distribution directory for copyright.
-+ 
-++#include <algorithm>
-+ #include <errno.h>
-+ #include <unistd.h>
-+ #include <sys/stat.h>
-diff --git a/package/zeek/0004-Add-cstdint-to-WeirdState.h-to-fix-compilation-error-on-gcc13.patch b/package/zeek/0004-Add-cstdint-to-WeirdState.h-to-fix-compilation-error-on-gcc13.patch
-new file mode 100644
-index 0000000000..09207a2d62
---- /dev/null
-+++ b/package/zeek/0004-Add-cstdint-to-WeirdState.h-to-fix-compilation-error-on-gcc13.patch
-@@ -0,0 +1,24 @@
-+From 122b8d6052ab987237dd8eb3feeed598230881f7 Mon Sep 17 00:00:00 2001
-+From: Tim Wojtulewicz <tim@corelight.com>
-+Date: Mon, 10 Apr 2023 16:07:18 -0700
-+Subject: [PATCH] Add cstdint to WeirdState.h to fix compilation error on gcc13
-+
-+Upstream: https://github.com/zeek/zeek/commit/122b8d6052ab987237dd8eb3feeed598230881f7
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/WeirdState.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/WeirdState.h b/src/WeirdState.h
-+index 5b8e90fba6a..b34a6da8e82 100644
-+--- a/src/WeirdState.h
-++++ b/src/WeirdState.h
-+@@ -2,6 +2,7 @@
-+ 
-+ #pragma once
-+ 
-++#include <cstdint>
-+ #include <string>
-+ #include <unordered_map>
-+ 
-
---===============1182697251014167560==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/uftp/Config.in b/package/uftp/Config.in
+index b88fb03ae2..a9296e595c 100644
+--- a/package/uftp/Config.in
++++ b/package/uftp/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_UFTP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Encrypted UDP based FTP with multicast.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1182697251014167560==--
