@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4F0FEF99D4
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56204EF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3F8261442;
-	Fri, 13 Feb 2026 19:36:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m9CYooCSAXVp; Fri, 13 Feb 2026 19:36:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81137607E8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011401;
-	bh=1vyDJ58yfviUwUkFq26nRsOodwiaRS7pst2g5IgyOS8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m59KQLLBx+eqierAg/+7p9sUaViHRXGHqYE3lG/YYnzSL+Mmz7Gwr0rE6mpzyx7KC
-	 3lOiYIB+NFP1O2mZbE9m7F/QRbdjeGcN5uEtUv0+nv40HdMFOvPDJcQ5FZM4XNM35m
-	 6tRl/MRu97XEaAvspBXuKhV8EzejA2gv1E5ZddBJqCajkyslExv3+KvyBDCJEaO6NG
-	 ixYvES+5kAejRDqRGSGg0OnUQM9QP99Vs95Q9GC14wYRNtGU3NiygKWJiJTV1Adr6J
-	 b73mEizOW8x5rvn7nJV6MJzdZygt9IiSKvDo14Fr4bHA2Wm6O/t+bwjZUafREyiNcX
-	 SFBv+8vwB2d5g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81137607E8;
-	Fri, 13 Feb 2026 19:36:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10000EC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFF1A41E38
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2267941E52;
+	Fri, 13 Feb 2026 19:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id frI0xGg_igqx for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id unFxbITcm55f; Fri, 13 Feb 2026 19:36:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FB3541EB8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771011414;
+	bh=hp3KWBtPN+nRajl7w9skgymFiaC1qf3DLRdaSfuRq0I=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=gmDPWZ8y/PS6nRiTtvu4ztv3nZzIpLOExTat3qU/TXnAKXd7k6tBkOA7J/XIPEJIR
+	 CdKAPdMmc1GiHz93IErwE/K9On9i53b2koq++tkm36l9b58+HOJBqjqHQtM0tKbsOH
+	 qiIyhy2G8KrVF83fk8ZFpoNTff0c4DBSBGiYa/gRntVPUqFM0L5UCwq4M5WICv+CG6
+	 Wqekxp7fREgdBPzs+ZXVWGymVZo9EDMmr7ySjRRJupmNtkHMwWZ5ON3NYO+7Dr6cJU
+	 lJnO6Ge4e29RDV4ggtLXE7rsTKy5CE3+Vv62VjWOPISaNz620Gd1YgyR3Iv/+pYDtc
+	 eUwOKJSRf9taQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FB3541EB8;
+	Fri, 13 Feb 2026 19:36:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01BD2EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F37AD41E45
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LvirOB7hE0i8 for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8405E41E3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E77841E1D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8405E41E3D
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E77841E1D
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 788E881EB5; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id 737BC86D67; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 15:00:59 +0100
+Date: Thu, 12 Feb 2026 14:10:51 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b8c1921d6016f1b1c4ddc46f6e270b7ae5e59dd8
-X-Git-Newrev: b5095f2be634c5464948ea2ca5d2c332b748c085
+X-Git-Oldrev: 411cc61bd5046b58454d0173285a178ce2664907
+X-Git-Newrev: a95cba3ece344bb78a67974eab63ec0cec0142bd
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193528.788E881EB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libucl: add CPE
+Message-Id: <20260213193526.737BC86D67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] utils/generate-cyclonedx:
+ fix dependencies w/o virtual
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,37 +77,118 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b5095f2be634c5464948ea2ca5d2c332b748c085
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a95cba3ece344bb78a67974eab63ec0cec0142bd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The CPE `vstakhov:libucl` is a valid CPE for the package libucl.
+Since its introduction in [1], by default the `generate-cyclonedx`
+script doesn't include buildroot's virtual packages in its 'components'
+list, unless using the `--virtual` argument.
 
-See the latest CVE: CVE-2025-6499 [1] that reference the upstream
-repository.
+References to virtual packages present in the 'show-info' output are
+filtered out in the resulting dependencies.
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2025-6499
+This patch fix the default CycloneDX dependencies generation
+without virtual packages to reference the packages that provide the
+virtual package instead of just dropping the virtual package itself.
+
+If we use the package `lbase64` that depends on the virtual package
+`luainterpreter` as an example. The 'dependency' entry looks like the
+following:
+
+```
+{
+  "ref": "lbase64",
+  "dependsOn": [
+    "host-skeleton",
+    "skeleton-init-common",
+    "skeleton-init-sysv",
+    "toolchain-external-bootlin"
+  ]
+}
+```
+
+The `luainterpreter` dependency is missing.
+
+After applying this patch, package that provides the `luainterpreter` is
+present:
+
+```
+{
+  "ref": "lbase64",
+  "dependsOn": [
+    "host-skeleton",
+    "lua",
+    "skeleton-custom",
+    "skeleton-init-sysv"
+  ]
+}
+```
+
+In the case of a virtual package provided by multiple packages all those
+packages will be listed. This happens when generating an SBOM on the
+entire Buildroot packages.
+
+[1] dbab39e2d9 support/scripts/generate-cyclonedx.py: add script to generate CycloneDX-style SBOM
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ef5293307478bd9487c890facbb8de85240d4156)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 67738a6e1d1574cc84888c32f9fb0c5bad03201e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libucl/libucl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ utils/generate-cyclonedx | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
-index bf5e368f2b..7b0e5b8e8c 100644
---- a/package/libucl/libucl.mk
-+++ b/package/libucl/libucl.mk
-@@ -12,6 +12,8 @@ LIBUCL_LICENSE = BSD-2-Clause
- LIBUCL_LICENSE_FILES = COPYING
- LIBUCL_DEPENDENCIES = host-pkgconf
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 04ce8fc3a1..2b6c6d63d3 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -337,7 +337,25 @@ def cyclonedx_vulnerabilities(show_info_dict):
+     } for cve, components in cves.items()]
  
-+LIBUCL_CPE_ID_VENDOR = vstakhov
+ 
+-def br2_parse_deps(ref, show_info_dict, virtual=False):
++def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
++    """Retrieve the list of packages that provide a virtual package.
 +
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBUCL_DEPENDENCIES += libcurl
- LIBUCL_CONF_OPTS += --enable-urls
++    Args:
++        ref (str): The identifier of the virtual package.
++        show_info_dict (dict): The JSON output of the show-info
++            command, parsed into a Python dictionary.
++
++    Returns:
++        list: package list that provides the virtual package.
++    """
++    return [
++        name
++        for name, comp in show_info_dict.items()
++        if "provides" in comp and ref in comp["provides"]
++    ]
++
++
++def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
+     """This function will collect all dependencies from the show-info output.
+ 
+     The dependency on virtual package will collect the final dependency without
+@@ -352,13 +370,15 @@ def br2_parse_deps(ref, show_info_dict, virtual=False):
+     Returns:
+         list: A list of dependencies of the 'ref' package.
+     """
+-    deps = []
++    deps = set()
+ 
+     for dep in show_info_dict.get(ref, {}).get("dependencies", []):
+-        if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
+-            deps.append(dep)
++        if not virtual and show_info_dict.get(dep, {}).get("virtual"):
++            deps.update(br2_virtual_is_provided_by(dep, show_info_dict))
++        else:
++            deps.add(dep)
+ 
+-    return deps
++    return list(deps)
+ 
+ 
+ def main():
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
