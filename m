@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51826EF99D1
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D16EEF99D5
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F9838455D;
-	Fri, 13 Feb 2026 19:36:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4963640C14;
+	Fri, 13 Feb 2026 19:36:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fzmexJLyRd3j; Fri, 13 Feb 2026 19:36:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8zjEmnZ3l2lZ; Fri, 13 Feb 2026 19:36:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EDF584632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56BB741E5A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011383;
-	bh=7Vfp/+i9u739ofBD1QOuCE9uE7nEchH8VedaMHqbkW4=;
+	s=default; t=1771011384;
+	bh=2bZmkf/B+e68RF/pRMTQjx4APkV0rKCyzBUjLuJBmyI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=L724f9701g4wQRvpHNHtmNuTcLy1ZJfYg8M0z2VIJycEAjOST1J7V6IM/GKfdojbM
-	 aKuDYHrK/L7ZKPoSkTcEBdK1iLZmmKl/Rwoe2sR4DTed+CEG4wBgrkjIYhOH0IDbQC
-	 k/MZf+NeKbi8Sk6xTmis/Jl7jIbRUj7BO5AAKzu90uggEoSnet7oH+w7v+FN/OSUnf
-	 rNSnl0JpS2u6TaMmvPoi6cQzxAIfhEGd2YKTe6XuDYnv3GeNpDU1zDjvc2zdHQPZ5r
-	 5dDLz9J1ZHQSoACx/B7j4WPllTJ8WKZaLtQmfVgID3kaLBVowE3EQ8RrNZGdlmKIwe
-	 JqMS/2b6zX14g==
+	b=AwEgET8KilgIx/x8/m1RQoak+CyUa4e7qW26NuBbcEOWF6jpo7VovEb0RHdW12tqJ
+	 XHlA7bGDBTKv7R9tv9jTlj4MW3cPS/RMs4p1aYQFm85yI3dNmvms/BNoHgLc4NQb4A
+	 fB/74/0dyATf8orWniqKoY0Sy3nrLT/dA0HdDiaI4haUWFBsdtnBbrQQPUlAOsyY4Q
+	 v2W6gnZHLtPbjTbfowY4fHSFReM+lbv5Tlw0cJxQKYY+DnydFLNgm+QoxHbDpHdKsK
+	 BJG/kh3zZrrgBqiO5ACwn7usYKkEgQ2aVmjKxohtdDSFEDalftamRxvT+dx13XEzQi
+	 trsRaGkq+9Xsw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EDF584632;
-	Fri, 13 Feb 2026 19:36:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 03EBDEC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56BB741E5A;
+	Fri, 13 Feb 2026 19:36:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E00A283
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BAAE84551
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4931041E3A
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5kZSzXUkpNVk for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DG1e6MKrAuAj for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44E378455F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45B0641E36
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44E378455F
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45B0641E36
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A04A83A88; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+ id 3A8BD81EB5; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:31:49 +0100
+Date: Thu, 12 Feb 2026 14:30:52 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 1ceb4e858d40258868128aed8a2409abd81ea185
-X-Git-Newrev: 8c04ca2f11fbc725f730c44bac4d57b650e19824
+X-Git-Oldrev: 6cb62442c9bfd699885bcf80d8cb233bcd9fdf18
+X-Git-Newrev: 393b2270c4d894d229d7e72724cb19bc88a97801
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193529.3A04A83A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libite: bump to
- v2.6.2
+Message-Id: <20260213193527.3A8BD81EB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/linux-headers:
+ Add support for custom license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8c04ca2f11fbc725f730c44bac4d57b650e19824
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/393b2270c4d894d229d7e72724cb19bc88a97801
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Changes:
-- Fix memory leak in which() on realloc() failure
-- Fix pidfile() to handle missing trailing slash in prefix path
+The linux-headers package was not providing any license file for any
+version other than the latest one.
 
-Changes to src/pidfile.c do not affect the licensing terms, but
-require updating the hash of this file that is used as one of the
-license files.
+Fix this by adding a Kconfig option to specify the license file,
+with a default value set to the commonly used license paths.
 
-https://github.com/troglobit/libite/releases/tag/v2.6.2
+For the headers-as-kernel case, use LINUX_LICENSE_FILES and disable the
+Kconfig option entirely.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8e7a54f7ef121a2236c3d722d0adca26860c4cfa)
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit d94762640e7234ef60dbc5a8ed7380fa3549b24e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host   | 10 ++++++++++
+ package/linux-headers/linux-headers.mk |  7 +------
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 3abad09b0a..c593f7a66d 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,7 @@
- # Upstream .sha256 from GitHub
--sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
-+sha256  0550ac5670836db85569786e00860d1d6999df8f74005307c290371c990e1dbd  libite-2.6.2.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c3b530a2b8..6f46ace4aa 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -438,3 +438,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ 		if BR2_KERNEL_HEADERS_CUSTOM_GIT
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_LICENSE_FILES
++	string "Kernel headers license files" if BR2_KERNEL_HEADERS_VERSION || \
++		BR2_KERNEL_HEADERS_CUSTOM_TARBALL || \
++		BR2_KERNEL_HEADERS_CUSTOM_GIT
++	default BR2_LINUX_KERNEL_LICENSE_FILES if BR2_KERNEL_HEADERS_AS_KERNEL
++	default "COPYING LICENSES/preferred/GPL-2.0 LICENSES/exceptions/Linux-syscall-note"
++	help
++	  A space-separated list of license files related to the Linux
++	  kernel headers.
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index b4b5a5b47d..15724090ce 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -111,12 +111,7 @@ endif
+ LINUX_HEADERS_DL_SUBDIR = linux
  
- # Locally calculated
- sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
- sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
--sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
-+sha256  b6cc7074a27b26ee4e1ccda8d634d485d0f6f819e564c663c28ed61f4cc2b451  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index e4bd845487..beb8c27ba7 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ LINUX_HEADERS_LICENSE = GPL-2.0
+-ifeq ($(BR2_KERNEL_HEADERS_LATEST),y)
+-LINUX_HEADERS_LICENSE_FILES = \
+-	COPYING \
+-	LICENSES/preferred/GPL-2.0 \
+-	LICENSES/exceptions/Linux-syscall-note
+-endif
++LINUX_HEADERS_LICENSE_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_LINUX_HEADERS_LICENSE_FILES))
+ LINUX_HEADERS_CPE_ID_VENDOR = linux
+ LINUX_HEADERS_CPE_ID_PRODUCT = linux_kernel
  
--LIBITE_VERSION = 2.6.1
-+LIBITE_VERSION = 2.6.2
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
