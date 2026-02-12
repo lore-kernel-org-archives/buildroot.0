@@ -1,81 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05410EB48F8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 10:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEDB5EB4901
+	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 11:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D784C60B3F;
-	Thu, 12 Feb 2026 10:42:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NENB0yU8c-Pi; Thu, 12 Feb 2026 10:42:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DD1C6071F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770892948;
-	bh=e1EOoGhiyBcPquRHbXeLXu0oJ6KW/H0Fj23OPRL6XVw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=V7fAc+4SilMMFKUWbEt262ELqDM7o9D0gi1F+T4AvF0EVHa8GGawrPjR2Uo1Z5Yi9
-	 rBsA0yfMlAio4dqGqMvJVjEcv0G50hRYzt2hETh7yLVcB5/htRGwbnTAIfo5JZlydE
-	 dIJGQENSCj3nRsUEx8BF8cWPE9Hawu04lCTk2QJp+MHIeiJxb4hQOP6daJU8vv1iLm
-	 gH4beByzS/JCiVR08WyrZMJnnAkwx+hH+JFUnnPtNrX44iFGEUIE9mWYGl5uKG2Duj
-	 EK6Caubr9WnqdoCdeVolZ8uGlRO634QM582ojl9oYfgrhD+KYfUPQ7yYz3HDOc15D4
-	 751+TTYAz3Nmg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DD1C6071F;
-	Thu, 12 Feb 2026 10:42:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3FE7BBE
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 10:42:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24D76407DE
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 10:42:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 859EB4007B;
+	Thu, 12 Feb 2026 11:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dObij0x8mDaM for <buildroot@buildroot.org>;
- Thu, 12 Feb 2026 10:42:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 40FEC40769
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40FEC40769
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 40FEC40769
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 10:42:22 +0000 (UTC)
-Received: from framework-OT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id A9A492C831BE;
- Thu, 12 Feb 2026 11:42:19 +0100 (CET)
+ id DNSGnbjCqPrX; Thu, 12 Feb 2026 11:01:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69048401EF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770894089;
+	bh=1WOfpjUlgQfXq2BtTc9AUuQLQq67faHOhNZxdaJyask=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=QhZL3pnrmvGDKvfJk34+Uec/k+5UcxtcJfnf86LQ+UeAjJw9MB6No/6WbIi8nEVlW
+	 rcDf8dstUvEsiy7XK9mX33j3Wfcd/Ava4kL+NniH9S9bsRhsAmzjwW18peHTHnWw7a
+	 bej+cWTpoBew0nqzR0otGeylJqdWZVZ6i+OaVOEk5YS3XGEzl8+XpsSfUiBvp9+x4W
+	 M/InCTzmiOjNj767p8QQZps1TIcswmbwyadfsaGRibNAOzmZiZV07KlKwOlEuDKorE
+	 jY43DSE9tHJtt9yshf5DLYLoD9kph+B34TpjKBhZ2UqUZVt9powac/b8oalGl9890i
+	 QDSGQ+NyFxRYA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69048401EF;
+	Thu, 12 Feb 2026 11:01:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4687BE
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 11:01:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86E39841C9
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 11:01:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hHwOJYusLhT1 for <buildroot@buildroot.org>;
+ Thu, 12 Feb 2026 11:01:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=23.90.104.147;
+ helo=esa2.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EBCCD8209B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBCCD8209B
+Received: from esa2.hc555-34.eu.iphmx.com (esa2.hc555-34.eu.iphmx.com
+ [23.90.104.147])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EBCCD8209B
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 11:01:25 +0000 (UTC)
+X-CSE-ConnectionGUID: uW8/btZ6T+Oll9E9PFcZ4Q==
+X-CSE-MsgGUID: OlQi7dGASIa61Lcv1ucLgw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from unknown (HELO ces04_data.me-crop.lan) ([146.255.191.134])
+ by esa2.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 12 Feb 2026 13:01:22 +0200
+X-CSE-ConnectionGUID: jnNwPH/GTj2KiK/ydDsDYg==
+X-CSE-MsgGUID: 2L5qVCslRQqpPx+lmvmApA==
+Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.2])
+ by ces04_data.me-crop.lan with SMTP; 12 Feb 2026 13:03:42 +0200
+Received: by epgd074.me-corp.lan (sSMTP sendmail emulation);
+ Thu, 12 Feb 2026 13:01:21 +0200
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 11:42:32 +0100
-Message-ID: <20260212104233.3226085-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.53.0
+Cc: guenther.harrasser@mobileye.com, Chris Packham <judge.packham@gmail.com>,
+ Andreas Ziegler <br025@umbiko.net>,
+ Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Date: Thu, 12 Feb 2026 13:01:16 +0200
+Message-ID: <20260212110116.2451538-1-jimmy.wesolowski@mobileye.com>
+In-Reply-To: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
+References: <20260202155535.3412990-1-jimmy.wesolowski@mobileye.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1770892939; bh=bI3qo9vq7JfmfSAgKAJ6pxJqg1eZMPpidZKCI9xXqoM=;
- h=From:To:Cc:Subject:Date;
- b=UOank0wZP/vnHLeiE6ex8s74uDmAtLmoVjo2r9KrOyjb0Ado7Mu+C0A49507FOOmz
- EnoM9y6i7xGE7y0ChIHc8I/9nGk4c55aqHhjyLU3ypsrupM8kVQdNCUabckc79rrN9
- 86kK/FvZVMJeXXizSKPlCiSvp911BZ7pQOq+j3k0HLxXqjKC2AP5hFd7n+AV65dOgE
- FbmB/ECs1sKw2V3XrtGWSR68ItSLhkVDQ0i5CgdmjDXVZGPjsJO+MVORubkgCySyyn
- SGD3i//oND657QWCPnJEqr9KXeM2zKsNJp3OoQZ8kRWbOX+qWvO4UZQi8pdUwy+tsf
- 0412MeRhA9mDQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=UOank0wZ
-Subject: [Buildroot] [PATCH] package/python-asgiref: security bump to 3.11.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
+ t=1770894086; x=1802430086;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=1RSbXAfFw0xlmKMdtNM3t7fOM2VOdECkxYWacM/E3P4=;
+ b=pXgTgVBqdkout3W1wz/T9pIyXiURie+BKr4UQ8RvGL94lgVi/0WIBbSY
+ Mnj9ugKob97DF9dvPaOwTixfi45dM6PN6ZEAdl5MPq57SA8Gnd0i+4csO
+ qIbjedG8sioYbB3QeVk2DFowdvrp7U1XrvTriuf1dxxw+KRRHlbBvQPaq
+ fTKoYVI7MYA1C3JyC8SDtIQhkTXyXJLCiIUw0/M1rwgIPOHHiOkhsoEC6
+ 52oFQ53vi5juMgFjRs7slLI/Xf8E2Vv/bp3BMRPrOsAasb8dZYvMnP93j
+ 4TxjDjw2AHoNlj0W2dikOLySF4PnIoV24hrtPs7g8/IrVALaxxW2oEhui
+ g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mobileye.com
+Subject: [Buildroot] [PATCH v3 1/1] package/coremark: use USE_PTHREAD when
+ possible, allow custom CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,58 +101,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org>
+Reply-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2025-14550:
-  There was a potential DoS vector for users of the
-  ``asgiref.wsgi.WsgiToAsgi`` adapter. Malicious requests, including an
-  unreasonably large number of values for the same header, could lead to
-  resource exhaustion when building the WSGI environment.
+This passes -DUSE_PTHREAD to coremark CFLAGS
+BR2_TOOLCHAIN_HAS_THREAD is set, and allows passing any additional custom
+ones defined in the Buildroot configuration.
 
-Changelog: https://github.com/django/asgiref/blob/3.11.1/CHANGELOG.txt
+Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/python-asgiref/python-asgiref.hash | 4 ++--
- package/python-asgiref/python-asgiref.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+  - do not add mips-i6500 through a patch, but copy it through rsync
+    in POST_EXTRACT_HOOKS (suggested by
+    Andreas Ziegler <br025@umbiko.net>)
+  - allow specifying a port directory to use through kconfig, such as
+    mips-i6500. The default stays linux for 32-bits architecture,
+    linux64 for 64.
+  - allow passing extra PORT_CFLAGS through kconfig  (suggested by
+    Andreas Ziegler <br025@umbiko.net>)
 
-diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
-index 89495e0257..aecbdf8000 100644
---- a/package/python-asgiref/python-asgiref.hash
-+++ b/package/python-asgiref/python-asgiref.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asgiref/json
--md5  554794453502d266a90d2254fcb1f7c3  asgiref-3.11.0.tar.gz
--sha256  13acff32519542a1736223fb79a715acdebe24286d98e8b164a73085f40da2c4  asgiref-3.11.0.tar.gz
-+md5  85bc32494d842f4941e2b1fc2c7b61cb  asgiref-3.11.1.tar.gz
-+sha256  5f184dc43b7e763efe848065441eac62229c9f7b0475f41f80e207a114eda4ce  asgiref-3.11.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
-index e5885a66c6..392f0a1c1e 100644
---- a/package/python-asgiref/python-asgiref.mk
-+++ b/package/python-asgiref/python-asgiref.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Changes v2 -> v3:
+  - do not include the mips-i6500 files as they are redundant with
+    the linux port. (suggested by Andreas Ziegler <br025@umbiko.net>)
+  - fix indentation in Config.in and coremark.mk
+  - drop the ability to pass custom port (no longer necessary).
+  - adapt the name and description of the patch accordingly.
+  - author and signed-off-by reset due to patch significant changes.
+
+Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+---
+ package/coremark/Config.in   | 10 ++++++++++
+ package/coremark/coremark.mk | 14 +++++++++++---
+ 2 files changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/package/coremark/Config.in b/package/coremark/Config.in
+index f0e13eda63..2f3b6f9551 100644
+--- a/package/coremark/Config.in
++++ b/package/coremark/Config.in
+@@ -6,3 +6,13 @@ config BR2_PACKAGE_COREMARK
+ 	  used in embedded systems
  
--PYTHON_ASGIREF_VERSION = 3.11.0
-+PYTHON_ASGIREF_VERSION = 3.11.1
- PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
--PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/76/b9/4db2509eabd14b4a8c71d1b24c8d5734c52b8560a7b1e1a8b56c8d25568b
-+PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/63/40/f03da1264ae8f7cfdbf9146542e5e7e8100a4c66ab48e791df9a03d3f6c0
- PYTHON_ASGIREF_SETUP_TYPE = setuptools
- PYTHON_ASGIREF_LICENSE = BSD-3-Clause
- PYTHON_ASGIREF_LICENSE_FILES = LICENSE
+ 	  https://www.eembc.org/coremark/
++
++if BR2_PACKAGE_COREMARK
++config BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA
++	string "coremark port extra CFLAGS"
++	default ""
++	help
++	  Additional CFLAGS to pass to CoreMark platform specific port.
++	  Any additional flags indicated here will be added to the
++	  CFLAGS_PORT variable.
++endif
+diff --git a/package/coremark/coremark.mk b/package/coremark/coremark.mk
+index 9ea8693e71..e1c6e7e00e 100644
+--- a/package/coremark/coremark.mk
++++ b/package/coremark/coremark.mk
+@@ -9,14 +9,22 @@ COREMARK_SITE = $(call github,eembc,coremark,v$(COREMARK_VERSION))
+ COREMARK_LICENSE = Apache-2.0
+ COREMARK_LICENSE_FILES = LICENSE.md
+ 
++COREMARK_CFLAGS = \
++	$(TARGET_CFLAGS) \
++	$(call qstrip,$(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++COREMARK_CFLAGS += -DUSE_PTHREAD
++endif # BR2_TOOLCHAIN_HAS_THREADS=y
++
+ define COREMARK_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
+-		PORT_CFLAGS="$(TARGET_CFLAGS)" \
++		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
+ 		PORT_DIR=linux$(if $(BR2_ARCH_IS_64),64) EXE= link
+-endef
++endef # COREMARK_BUILD_CMDS
+ 
+ define COREMARK_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/coremark $(TARGET_DIR)/usr/bin/coremark
+-endef
++endef # COREMARK_INSTALL_TARGET_CMDS
+ 
+ $(eval $(generic-package))
 -- 
-2.53.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
