@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F4BFEF99D2
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F4FFEF99D3
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:38:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAC8B84764;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E389261618;
 	Fri, 13 Feb 2026 19:38:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hYmhnHczoZjK; Fri, 13 Feb 2026 19:38:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MVUqz1bZ1CD3; Fri, 13 Feb 2026 19:38:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAA3E84759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A5F61612
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011482;
-	bh=1553z1BMzZJXywnldyQ7atP24eBR9zNWdA92i/j25mo=;
+	s=default; t=1771011480;
+	bh=6UTO0imz1D3Amdv1lDAIUXBWqKNX8nQdBGxF18Hitx8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QVa9iABkQs6qbWHQMMo7an7GNczWEYJj5vYuuMheu2JVrW7FEUfCa3BPvt059RT22
-	 qT4pC3HvtamVozeLjRNaoFqxaxNRfle/h/PCBwWpYNjeeYthRr9xPKCWqJhKihIAXS
-	 Wm0WTSPxQx+pbPO5ap17KBqzOyS0KNu9j6zejt5+9SFwOVT1viZiFPTrQ7igE4Me5W
-	 3/lZb41mM82+s5c+W3kZXNE7UHHOKmif+33o1w5Dgv/mB7Tw2H5g49+Z34qrqQyrmF
-	 axsoagZOsdgaBhjSzi0Zt2RUZHgx6/q6vdnC3zpki5YGJqNkS5qlG/Y5M7xLMVS2s2
-	 3rRTMGC83mTnw==
+	b=QXXJlk+RFFzkmW4QA+8Dk/1yfWf/cxswh93abIxO4fgcf4scQ10ghsbgemIG9+qzb
+	 EYAm9Mu96N5YQ7dQ+mrAgZY/oNk5BQulKlnaQ+E4haKtT5U3AxZ2580lQQv2uqEuLN
+	 ZaEZ68fiYdc3HvptOJ3HNoQPZ186mxC34V+wLt/9q8hr5mh60JKg0MY1RdhkWlZuuv
+	 jZtGK0b32bErk67/lcSdF5mhDKC5ITSXp+CEp2V8Bn7IY4JVqoIbkJPY39MltYPm2B
+	 JrLTOMD3WTap5wvt6f3bjbJlaCYNV/61R2RRvxzrw4eSdOJIvgn5TjRsBc09KzLlAJ
+	 3n+8/mi0HK9Dg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAA3E84759;
-	Fri, 13 Feb 2026 19:38:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92A5F61612;
+	Fri, 13 Feb 2026 19:38:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B7D13EC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A7A7C69
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C79C6413D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89C74413BF
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IE8SpdI59v9J for <buildroot@buildroot.org>;
+ id ylUz8Mu3Pztj for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6938C412DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A37C412DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6938C412DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A37C412DD
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E3C683593; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
+ id 7F79D83593; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:35:51 +0100
+Date: Thu, 12 Feb 2026 14:37:09 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: b871e3e4b1386d3813fb56af32c65c7fd50eb3c9
-X-Git-Newrev: 292c8cf89023748ab7f8b6c816f2ba3c38bf37c3
+X-Git-Oldrev: f407daec2ec74565050b7ec560c7e64ce128cc73
+X-Git-Newrev: c12b4b1eacacaacd9b12df40b0a8d9ebb7448f9b
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193702.5E3C683593@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/dc3dd: needs
- host-bison
+Message-Id: <20260213193702.7F79D83593@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/ell: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,38 +76,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/292c8cf89023748ab7f8b6c816f2ba3c38bf37c3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c12b4b1eacacaacd9b12df40b0a8d9ebb7448f9b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
+Buildroot commit e834d23cd792ee57ea80f37ce01d9d50756dba1d bumped ell to
+version 0.79 that includes upstream commits in version 0.72 which make
+use of fork():
+
+https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=9245dfb84d1e0f58dda102704201d78ddfdfca68
+https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=e0628c429d50d50b116717f37a5f5c1f66bef6a2
+
 Fixes:
-https://autobuild.buildroot.net/results/f11/f11b0b9154e9979f3f2d7ea84a019f7719565e8f/
-
-    ../build-aux/ylwrap: line 176: bison: command not found
-
-The build error occurred already in 2024:
-https://autobuild.buildroot.net/results/dea/dea779bbbbc08c7192f89073b93db768c41832f4/
-so a backport to the LTS branches should be considered.
+https://autobuild.buildroot.net/results/036/03690fa454ffb1c4c79b182cc3a165555e2c59eb/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a22fca0055e09b05c3ec402d1d69b5463253a5d7)
+(cherry picked from commit b27ee684b1aa9e799bad6dee449d2c56739ba48c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dc3dd/dc3dd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bluez5_utils/Config.in | 2 +-
+ package/ell/Config.in          | 2 ++
+ package/iwd/Config.in          | 2 +-
+ package/ofono/Config.in        | 2 +-
+ 4 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/dc3dd/dc3dd.mk b/package/dc3dd/dc3dd.mk
-index c31ab9e1f3..e9cb6ec7ac 100644
---- a/package/dc3dd/dc3dd.mk
-+++ b/package/dc3dd/dc3dd.mk
-@@ -10,6 +10,7 @@ DC3DD_SOURCE = dc3dd-$(DC3DD_VERSION).tar.xz
- DC3DD_SITE = https://downloads.sourceforge.net/project/dc3dd/dc3dd/$(DC3DD_VERSION_MAJOR)
- DC3DD_LICENSE = GPL-3.0+
- DC3DD_LICENSE_FILES = COPYING
-+DC3DD_DEPENDENCIES = host-bison
- # We are patching Makefile.am, so we need to autoreconf. We also need to
- # enable autopoint as dc3dd comes with an old gettext infra.
- DC3DD_AUTORECONF = YES
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 49bb719102..2fe25466b4 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	bool "bluez-utils"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, ell
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/ell/Config.in b/package/ell/Config.in
+index c7c9164816..124a57f7e9 100644
+--- a/package/ell/Config.in
++++ b/package/ell/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ELL
+ 	bool "ell"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	depends on BR2_USE_WCHAR
+@@ -9,5 +10,6 @@ config BR2_PACKAGE_ELL
+ 	  https://01.org/ell
+ 
+ comment "ell needs a toolchain w/ wchar, headers >= 4.12"
++	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+index e4b0ead882..d8fb6a6ea0 100644
+--- a/package/iwd/Config.in
++++ b/package/iwd/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_IWD
+ 	bool "iwd"
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, ell
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+index c1d0cae4ef..c6a45625d9 100644
+--- a/package/ofono/Config.in
++++ b/package/ofono/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_OFONO
+ 	bool "ofono"
+ 	depends on BR2_USE_WCHAR # gettext, libglib2, ell
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus, libglib2
++	depends on BR2_USE_MMU # dbus, ell, libglib2
+ 	depends on !BR2_STATIC_LIBS # dlopen(), ell
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
