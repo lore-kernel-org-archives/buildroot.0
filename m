@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C62EF99D0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F430EF99D1
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33A0B41E29;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AB5B845A4;
 	Fri, 13 Feb 2026 19:35:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iDHSo0A74_Xv; Fri, 13 Feb 2026 19:35:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BB4141E38
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011355;
-	bh=RnOFXatyEPwFhl750mD3JtKlGqxUFt9cLkahYE9wZyU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QkMJmt/OTxnw6/NO0F9Kxu/FsJbCZKOF6ssKI8sAarS4/FKGlhUCzrOE2C/dg6UgK
-	 HIqyqMK/fNWd86HR2zNkisvfbuoklUAm2Lxmse7vFJwbcTLGmBsqDA0dY4K++xzJnd
-	 3yNN0fs1u7F57lvTIMhOEXJn/+NmLBb5WQIC2e0aTWJAY3yCn0ZNK1fYpQpayxYf1Q
-	 h6DUaskxbYR67sbGT9OLXHwzg8UwXP71vWfIwD7rugKD4riNwpLSVkSgrO7to5cZkp
-	 EJ3AcMBJW6FeEVeTtFJblEy052s3AQOHQ6fcHu5fLwI7FLRRlG1kYxcdvFhvvOkOj6
-	 Uwb1sLkR0oPGg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BB4141E38;
-	Fri, 13 Feb 2026 19:35:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 14039283
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB3C18452C
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6BjOzgyMQHk for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ id s8wzDOd_Zy2l; Fri, 13 Feb 2026 19:35:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F4AA8459E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771011354;
+	bh=b9k70FfiwBFfLTd1wK5vfZlOBBFWmmHZYzRhUEl30L8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Oiy4xuO5b0fU0+qvPbSSB7durNrAueptp9BviiZJyOdYyijzTnB+Zo9M3KB5M/9DE
+	 lThtQ+vnjeGBM2uVK2ZqJTXiVLfN/81dbgY56p62rBDdCo/t7cKxYUdnJ+5836nsdj
+	 SSD6Azi51H/uPcqk+2wAmfCvokLhD9Wz8bRb73Z4h+ERVXclGvjfmwrPkxsPAUZ5UF
+	 JiE3PHQwE1uUmBR7M+PwNAPeyPfUt9j/oPZUjFL11QHX6X2GV/LDqPpO5GdhzuoV+v
+	 wHEXrcKfc7LkwyxpZc9QLKuwjkozr2tc5a0ppo+oRvYADTqQ/b46HqI0tct1ZkrPME
+	 qKPQTmNTbcqWQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F4AA8459E;
+	Fri, 13 Feb 2026 19:35:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10054EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E61E141E44
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HMPdAzy3Ttx5 for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D780844E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB72D41E39
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D780844E5
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB72D41E39
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81DD286D69; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ id D0907818C3; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:11:33 +0100
+Date: Thu, 12 Feb 2026 14:51:26 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a95cba3ece344bb78a67974eab63ec0cec0142bd
-X-Git-Newrev: 51c4b7884178909346c3aa39ce39fce4a47173c7
+X-Git-Oldrev: f15cbb2c4617dba25a534f13e5e428911d0d4ea7
+X-Git-Newrev: 9da1d2bc6addf84db695ff829d0dd93457921b49
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193526.81DD286D69@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/uftp: needs
- libopenssl, not libressl
+Message-Id: <20260213193527.D0907818C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/config-fragments/autobuild: replace MIPS64 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/51c4b7884178909346c3aa39ce39fce4a47173c7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9da1d2bc6addf84db695ff829d0dd93457921b49
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Buildroot commit bumped libressl from version 3.8.4 to 3.9.2.
+The prebuilt MIPS64 toolchains are very old, causing build issues (for
+example recently with the systemd v258 update). Replace them both a
+single toolchain configuration that uses one of the mips64el Bootlin
+toolchains.
 
-Libressl 3.9.0 contains a breaking change:
-https://github.com/libressl/portable/releases/tag/v3.9.0
-"EVP_add_{cipher,digest}() were removed."
-
-Upstream was notified by Yegor but did not add any fixes:
-https://sourceforge.net/p/uftp-multicast/discussion/general/thread/c02c950dff/
-so we force the usage of libopenssl to fix a build error:
-
-encrypt_openssl.c: In function 'crypto_init':
-encrypt_openssl.c:77:5: error: implicit declaration of function
- 'EVP_add_cipher'; did you mean 'EVP_Cipher'?
- [-Wimplicit-function-declaration]
-   77 |     EVP_add_cipher(EVP_aes_128_ccm());
-
-first caught by the autobuilders on 2024-08-09:
-https://autobuild.buildroot.net/results/7da/7dadc662e0a6642e40831a93b788e959498d8923/
-
-Fixes:
-https://autobuild.buildroot.net/results/a74/a74526181dfc90aff7f56457c430c1aa1d006e54/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 07917a05db913348cc4b990e6937310f14456d34)
+(cherry picked from commit 573a113edddf076b281da1897fa15556270c134d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/uftp/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ .../config-fragments/autobuild/bootlin-mips64el-glibc.config |  4 ++++
+ support/config-fragments/autobuild/br-mips64-n64-full.config | 10 ----------
+ .../autobuild/br-mips64r6-el-hf-glibc.config                 | 12 ------------
+ support/config-fragments/autobuild/toolchain-configs.csv     |  3 +--
+ 4 files changed, 5 insertions(+), 24 deletions(-)
 
-diff --git a/package/uftp/Config.in b/package/uftp/Config.in
-index b88fb03ae2..a9296e595c 100644
---- a/package/uftp/Config.in
-+++ b/package/uftp/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_UFTP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if BR2_PACKAGE_OPENSSL
- 	help
- 	  Encrypted UDP based FTP with multicast.
- 
+diff --git a/support/config-fragments/autobuild/bootlin-mips64el-glibc.config b/support/config-fragments/autobuild/bootlin-mips64el-glibc.config
+new file mode 100644
+index 0000000000..d8bebd5d70
+--- /dev/null
++++ b/support/config-fragments/autobuild/bootlin-mips64el-glibc.config
+@@ -0,0 +1,4 @@
++BR2_mips64el=y
++# BR2_MIPS_SOFT_FLOAT is not set
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_GLIBC_STABLE=y
+diff --git a/support/config-fragments/autobuild/br-mips64-n64-full.config b/support/config-fragments/autobuild/br-mips64-n64-full.config
+deleted file mode 100644
+index b89b74e76f..0000000000
+--- a/support/config-fragments/autobuild/br-mips64-n64-full.config
++++ /dev/null
+@@ -1,10 +0,0 @@
+-BR2_mips64el=y
+-BR2_MIPS_NABI64=y
+-# BR2_MIPS_SOFT_FLOAT is not set
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2020.11.2.tar.bz2"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
+-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config b/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+deleted file mode 100644
+index edf04c356f..0000000000
+--- a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
++++ /dev/null
+@@ -1,12 +0,0 @@
+-BR2_mips64el=y
+-BR2_mips_64r6=y
+-BR2_MIPS_NABI64=y
+-# BR2_MIPS_SOFT_FLOAT is not set
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2020.11.2.tar.bz2"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index df6a310477..8ef59965c7 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -28,6 +28,7 @@ support/config-fragments/autobuild/bootlin-m68k-5208-uclibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-microblazeel-uclibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-mipsel-uclibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-mipsel32r6-glibc.config,x86_64
++support/config-fragments/autobuild/bootlin-mips64el-glibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-openrisc-uclibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-powerpc64le-power8-glibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-powerpc-e500mc-uclibc.config,x86_64
+@@ -45,8 +46,6 @@ support/config-fragments/autobuild/bootlin-xtensa-uclibc.config,x86_64
+ support/config-fragments/autobuild/br-arm-basic.config,x86_64
+ support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
+ support/config-fragments/autobuild/br-arm-internal-glibc.config,any
+-support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64
+-support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
+ support/config-fragments/autobuild/linaro-aarch64.config,x86
+ support/config-fragments/autobuild/linaro-aarch64-be.config,x86
+ support/config-fragments/autobuild/linaro-arm.config,x86
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
