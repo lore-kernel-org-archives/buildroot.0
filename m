@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95DCDEF99D1
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AAE5EF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6496941E3C;
-	Fri, 13 Feb 2026 19:35:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E9D2613C7;
+	Fri, 13 Feb 2026 19:35:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UPSK8fdP5Kfx; Fri, 13 Feb 2026 19:35:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y0jDRbvEWiWO; Fri, 13 Feb 2026 19:35:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59F4941E58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E52F61386
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011348;
-	bh=Z+ySVfoaLQPl9DyI2UCA4PqOO3GN9mmuXcdpY/dnlyQ=;
+	s=default; t=1771011349;
+	bh=XWHc/pbIDHfle/fwSUZfPLCHSwCBN4Yj+flLdxCvc1U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Fn8/55TzlhCDjUOKj4HxvgL71TdX7uszpzVXOS4DOqxbG6/THDRNw4ZOiWjVcmT1n
-	 lCJIIjnWI+xTWBps7hX3Q3ByIJDqGPtCy4chOHPqNg02XyUfAFSsATseSbF1xxBSNX
-	 owu2Z6+FlXXWo8UfdhbkL5HrF/GmM+JYYcGuedVJGsDfJV+w18fYLM3oYjDhU0tOVu
-	 LJvepFQI7DfL4mbi8QXmuDw4JymmmA5x6WCWRfToUy70+jiQwEL/PV6aSGF6NehAB0
-	 ybjY5FVxManUFpL5mz8e4ImHJE8og6HD5nasxcH6IW3r7kvGpRjQwz/bvXUeqdQmwB
-	 euvV9DrM2DSTw==
+	b=Txc4+Vy5rSGOW+z1PGjESW8LRSH/L/Vswqfi+MA/5ByEzjzAcUH04l78azX2PR1Ys
+	 YM/ZJUNlnDa68csztBJOoD58CtUG75LEFUSE63OgMPiWJspK2PTsF7JJklh14f3Del
+	 WmNBGgGertXl7p7ohzB+Y3iGWVFWCNRJ5+8TmRpCSU/bLYT0PO84WcJYRb92tLZc/P
+	 EsH/DRuHwJXTZ/BZj7MpB1D3ajb23TYJH3DONmFJKi2pb/D80hULXc7hSTnm3+AJyF
+	 L0GtoixDusj11scKjNJ6B+esPtWOPUtZtHpV2qM9hxyogG+7yYKcYbissVhaTW+IJ9
+	 +YSf7BX1U0C3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59F4941E58;
-	Fri, 13 Feb 2026 19:35:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 104CC283
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E52F61386;
+	Fri, 13 Feb 2026 19:35:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A64BEC
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD0A084558
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB3164129A
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6rAbdcGBNUO for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PZC3e6saZBQP for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BD0E844B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C9FE403B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4BD0E844B9
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C9FE403B1
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2EBB386D67; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ id 01C1E818C3; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Feb 2026 12:13:28 +0100
+Date: Thu, 12 Feb 2026 14:56:13 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 29bec887165e149114b9e854c099ee86b3056a20
-X-Git-Newrev: ae7e57a9622474534f5e67af7750c1b0ccb9ff4f
+X-Git-Oldrev: 2bd9fe40609559b0a1cf66ce0ffe6f53f0555a3d
+X-Git-Newrev: 6f7e4d998d0a301b68b2750e2399ed99d699753b
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193526.2EBB386D67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libselinux:
- revert "allow pip to use system-provided packages"
+Message-Id: <20260213193528.01C1E818C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mpg123: add sdl2
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,98 +77,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ae7e57a9622474534f5e67af7750c1b0ccb9ff4f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6f7e4d998d0a301b68b2750e2399ed99d699753b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This reverts commit [1] which fails on the autobuilder because the patch
-don't apply. This was incorrectly applied as it is specific for a
-libselinux not part of 2025.02.x and fixes an error introduced by a pip
-version not present in 2025.02.x [2].
+mpg123 supports (and prefers) SDL2 as well for the sdl backends since 1.26.9
+with:
 
-[1] 32d1d7c367 package/libselinux: allow pip to use system-provided packages
-[2] 285097051d package/python-pip: bumpp version to 25.3
+https://github.com/madebr/mpg123/commit/792615f6512a0908081b5a2e98ca61f8677ed452
 
-Fixes: https://autobuild.buildroot.org/results/068/06854beaf880378da1b9ef75123de76465e5950f
+So support that here as well.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 53c2c0903dcddc364cd231648af36122c09c0b3f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...src-Makefile-build-python-module-without-.patch | 51 ----------------------
- package/libselinux/libselinux.mk                   |  4 --
- 2 files changed, 55 deletions(-)
+ package/mpg123/mpg123.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch b/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-deleted file mode 100644
-index 7f4a76515b..0000000000
---- a/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 8cfe4535f23a7768ee5efa615d11563a8404777c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
--Date: Mon, 27 Oct 2025 22:40:59 +0100
--Subject: [PATCH] libselinux/src/Makefile: build python module without
-- isolation
--
--The "pip install" logic in libselinux/src/Makefile tries to get
--setuptools from the network, which is not correct as during the
--build/installation, there shouldn't be any network access, or
--downloading of arbitrary resources from the network.
--
--This causes build issues in Debian:
--
--  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1121121
--
--And in Buildroot:
--
--  https://autobuild.buildroot.net/results/0e9/0e9de0c0d8b6ec57eea9f8834f02076b296ba4f1/build-end.log
--
--To fix this, we use the --no-build-isolation pip install argument so
--that pip install is allowed to use the system-provided setuptools,
--instead of wanting to download this one.
--
--This patch is derived from
--https://sources.debian.org/src/libselinux/3.9-4/debian/patches/Build-python-module-without-isolation-Closes-1119155.patch,
--with the change that --no-build-isolation is passed unconditionally,
--regardless of whether $(DESTDIR) is empty or not.
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://lore.kernel.org/selinux/20251227143911.1630813-1-thomas.petazzoni@bootlin.com/
-----
-- libselinux/src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libselinux/src/Makefile b/libselinux/src/Makefile
--index e9141bb9..9bc10606 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -197,7 +197,7 @@ ifneq ($(DISABLE_SHARED),y)
-- endif
-- 
-- install-pywrap: pywrap
---	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
--+	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --no-build-isolation --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-- 	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
-- 	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-- 
---- 
--2.52.0
--
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 7bc33392d5..360ab063ca 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -35,12 +35,8 @@ LIBSELINUX_DEPENDENCIES += \
- 	python3 \
- 	python-setuptools \
- 	host-python-pip \
--	host-python-setuptools \
- 	host-swig
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 2020fa55e8..7debbe7feb 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -64,10 +64,10 @@ MPG123_DEPENDENCIES += portaudio
+ MPG123_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0`"
+ endif
  
--LIBSELINUX_MAKE_ENV += \
--	$(PKG_PYTHON_SETUPTOOLS_ENV)
--
- LIBSELINUX_MAKE_OPTS += \
- 	$(PKG_PYTHON_SETUPTOOLS_ENV) \
- 	PYTHON=python$(PYTHON3_VERSION_MAJOR)
+-ifeq ($(BR2_PACKAGE_SDL),y)
++ifneq ($(BR2_PACKAGE_SDL)$(BR2_PACKAGE_SDL2),)
+ MPG123_AUDIO += sdl
+ MPG123_CONF_OPTS += --with-default-audio=sdl
+-MPG123_DEPENDENCIES += sdl
++MPG123_DEPENDENCIES += $(if $(BR2_PACKAGE_SDL2),sdl2,sdl)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
