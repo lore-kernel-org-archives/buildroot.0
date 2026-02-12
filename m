@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969DEEF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A724FEF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66C9442011;
-	Fri, 13 Feb 2026 19:38:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74A438465E;
+	Fri, 13 Feb 2026 19:38:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RgXyJctQZZXi; Fri, 13 Feb 2026 19:38:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mo_Nf7Yxfv3h; Fri, 13 Feb 2026 19:38:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5951242015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 593E284794
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011496;
-	bh=qZC/hqUar9/Cvdy8kJ7i6sgBlpsWFUlMDG09GDic9jY=;
+	s=default; t=1771011495;
+	bh=vxQOjLje2Ut+A2XSU7YiEVQqH2d7D06hRMwPOG0Rw0I=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YmZTtXJuWL1u3Eb1c7RGSfbhyKEy2CqtcRmE+kOTxHnrcbjm3Eia9f9UCLaJd/1g5
-	 xoFzuvb4l0+5+NoXLtFpIkOoDNI7R/axfFlNwKjhqd1cwMrsUUAz/fXRud4ODK5mis
-	 Sjy5V7+RtHIZyFg/d/XaAXfxIb00R6jIKJOO44W77p1rmwx2CCCnf5qMoX3coTupqm
-	 GskFDjydr8f8d56eYo3kB1iC490nymWDrlziExzjor+xVPzmILjdOEExQG5kEKjiHB
-	 IC+t1iBxOQgeFBjoGqzyo2nR/RgYJWHFrb2r9Vpag+MFXCFXwzZ2yGXxGSokF/l0K0
-	 brcsiRM+auLLg==
+	b=gbAbzz4EbikowOLSM5rjNulbic/JYe4UpLxarYy5huB5kyIzn9m9XSxsXqdSsKsye
+	 Kk7+EU1dhGUAJF4sywro/msKTJLsVsEkG0IO0rc9wx7gCaN5Xy0DiSYol1c4SsMOsy
+	 iO7IV6CysZwQgECiqMwIR+wq1tVzlTN5wQp9XmIP1gpRe0XEiPeb57LkW1o5TByd6v
+	 kn92Dpp6EZh/OUGTEwyHt6s7LnNNm+l5DwdhSEHBf/kB9IpjjHHZSAy0ZZyKaqG0nO
+	 hz3V1t9CIMzZKR399G7Sx44ZoTsabQubpiCJG2E0Is1ioXDCWG6cwONCUxCvwDj3IY
+	 RIXsYZR5hOsyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5951242015;
-	Fri, 13 Feb 2026 19:38:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 593E284794;
+	Fri, 13 Feb 2026 19:38:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62EC669
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6115F69
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB7AE413F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1CC3413F0
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DZ5Ey8K6J7TZ for <buildroot@buildroot.org>;
+ id joUI7eDZ7YW8 for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E21AA412C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 201A7412FA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E21AA412C3
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 201A7412FA
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D74C085DA7; Fri, 13 Feb 2026 19:37:02 +0000 (UTC)
+ id 1556885DA7; Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:49:34 +0100
+Date: Thu, 12 Feb 2026 14:54:07 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 3ffa6d7b3904ffb75a3b85d9d371f21c9ffe5294
-X-Git-Newrev: c8f6fe611c3134cce84d53bbd6298a9f2168e49b
+X-Git-Oldrev: d2caf50d543036b1f50c5cf9b86cdc2e09a51cda
+X-Git-Newrev: bdc77eddfec4256741f2dcb1de3e5053936670c2
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193702.D74C085DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x]
- support/config-fragments/autobuild: drop somewhat duplicate toolchain
- configs
+Message-Id: <20260213193703.1556885DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] support/testing:
+ test_python_sdbus_modemmanager: remove unneeded systemd vconsole
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,162 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c8f6fe611c3134cce84d53bbd6298a9f2168e49b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bdc77eddfec4256741f2dcb1de3e5053936670c2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-- br-i386-pentium4-full.config as an x86 32-bit toolchain test is
-  already reasonably covered by bootlin-x86-i686-musl.config
+The test failed in the past, due to kbd build failure. See [1].
+This specific issue was fixed by commit [2].
 
-- br-microblazeel-full-internal.config as a Microblaze toolchain test is
-  already reasonably covered by bootlin-microblazeel-uclibc.config
+This commit was originally written to workaround this issue, which was
+unrelated to the actual package being tested. Since systemd-vconsole
+is not needed anyway, this commit removes it from the test config.
 
-- br-powerpc-internal-full.config and br-powerpc-603e-basic-cpp.config
-  as PowerPC 32-bit toolchain tests are already reasonably covered by
-  bootlin-powerpc-e500mc-uclibc.config
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/12363929666
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/d98d9ba28ffa5b468fa243ae1a359aadef3ed0a0
 
-- br-powerpc64-power7-glibc.config as a PowerPC 64-bit toolchain test
-  is already reasonably covered by
-  bootlin-powerpc64le-power8-glibc.config
-
-- br-riscv64-full-internal.config as a RISC-V 64-bit toolchain test is
-  already reasonably covered by bootlin-riscv64-glibc.config and
-  bootlin-riscv64-musl.config
-
-- br-s390x-z13-internal-glibc.config as a s390 toolchain test is
-  already reasonably covered by bootlin-s390x-z13-glibc.config
-
-- br-xtensa-full-internal.config as an Xtensa toolchain test is
-  already reasonably covered by bootlin-xtensa-uclibc.config
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8bab0acff64a3accab4935a7245a3851a6369c35)
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+[Julien: reword the commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 287d06f5d7a99521a6a2ccf0f0c39159d5e5f2ef)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../config-fragments/autobuild/br-i386-pentium4-full.config    | 10 ----------
- .../autobuild/br-microblazeel-full-internal.config             |  1 -
- .../autobuild/br-powerpc-603e-basic-cpp.config                 | 10 ----------
- .../config-fragments/autobuild/br-powerpc-internal-full.config |  4 ----
- .../autobuild/br-powerpc64-power7-glibc.config                 |  9 ---------
- .../config-fragments/autobuild/br-riscv64-full-internal.config |  4 ----
- .../autobuild/br-s390x-z13-internal-glibc.config               |  4 ----
- .../config-fragments/autobuild/br-xtensa-full-internal.config  |  3 ---
- support/config-fragments/autobuild/toolchain-configs.csv       |  8 --------
- 9 files changed, 53 deletions(-)
+ support/testing/tests/package/test_python_sdbus_modemmanager.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/config-fragments/autobuild/br-i386-pentium4-full.config b/support/config-fragments/autobuild/br-i386-pentium4-full.config
-deleted file mode 100644
-index c680699288..0000000000
---- a/support/config-fragments/autobuild/br-i386-pentium4-full.config
-+++ /dev/null
-@@ -1,10 +0,0 @@
--BR2_x86_pentium4=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2020.11.2.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
--BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-microblazeel-full-internal.config b/support/config-fragments/autobuild/br-microblazeel-full-internal.config
-deleted file mode 100644
-index 0d2d7df8f1..0000000000
---- a/support/config-fragments/autobuild/br-microblazeel-full-internal.config
-+++ /dev/null
-@@ -1 +0,0 @@
--BR2_microblazeel=y
-diff --git a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config b/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-deleted file mode 100644
-index 045428c1de..0000000000
---- a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-+++ /dev/null
-@@ -1,10 +0,0 @@
--BR2_powerpc=y
--BR2_powerpc_603e=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2020.11.2.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
--# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-powerpc-internal-full.config b/support/config-fragments/autobuild/br-powerpc-internal-full.config
-deleted file mode 100644
-index 61b3e7a966..0000000000
---- a/support/config-fragments/autobuild/br-powerpc-internal-full.config
-+++ /dev/null
-@@ -1,4 +0,0 @@
--BR2_powerpc=y
--BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config b/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-deleted file mode 100644
-index a80047ea66..0000000000
---- a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-+++ /dev/null
-@@ -1,9 +0,0 @@
--BR2_powerpc64=y
--BR2_powerpc_power7=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64-power7-glibc-2020.11.2.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-riscv64-full-internal.config b/support/config-fragments/autobuild/br-riscv64-full-internal.config
-deleted file mode 100644
-index 5c1dfc47e3..0000000000
---- a/support/config-fragments/autobuild/br-riscv64-full-internal.config
-+++ /dev/null
-@@ -1,4 +0,0 @@
--BR2_riscv=y
--BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config b/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
-deleted file mode 100644
-index 56af5fb1ba..0000000000
---- a/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
-+++ /dev/null
-@@ -1,4 +0,0 @@
--BR2_s390x=y
--BR2_s390x_z13=y
--BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/br-xtensa-full-internal.config b/support/config-fragments/autobuild/br-xtensa-full-internal.config
-deleted file mode 100644
-index 89e81d4c45..0000000000
---- a/support/config-fragments/autobuild/br-xtensa-full-internal.config
-+++ /dev/null
-@@ -1,3 +0,0 @@
--BR2_xtensa=y
--BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 5c9fe660d3..ff8927eb37 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -45,15 +45,7 @@ support/config-fragments/autobuild/bootlin-xtensa-uclibc.config,x86_64
- support/config-fragments/autobuild/br-arm-basic.config,x86_64
- support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
- support/config-fragments/autobuild/br-arm-internal-glibc.config,any
--support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
- support/config-fragments/autobuild/br-loongarch64-full-internal.config,any
- support/config-fragments/autobuild/br-loongarch64-internal-glibc.config,any
--support/config-fragments/autobuild/br-microblazeel-full-internal.config,any
- support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64
- support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
--support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64
--support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
--support/config-fragments/autobuild/br-powerpc-internal-full.config,any
--support/config-fragments/autobuild/br-riscv64-full-internal.config,any
--support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
--support/config-fragments/autobuild/br-xtensa-full-internal.config,any
+diff --git a/support/testing/tests/package/test_python_sdbus_modemmanager.py b/support/testing/tests/package/test_python_sdbus_modemmanager.py
+index 58e02f99ef..736c34b724 100644
+--- a/support/testing/tests/package/test_python_sdbus_modemmanager.py
++++ b/support/testing/tests/package/test_python_sdbus_modemmanager.py
+@@ -8,6 +8,7 @@ class TestPythonPy3SdbusModemmanager(TestPythonPackageBase):
+         + """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_INIT_SYSTEMD=y
++        # BR2_PACKAGE_SYSTEMD_VCONSOLE is not set
+         BR2_PACKAGE_MODEM_MANAGER=y
+         BR2_PACKAGE_PYTHON_SDBUS_MODEMMANAGER=y
+         """
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
