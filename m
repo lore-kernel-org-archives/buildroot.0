@@ -1,111 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F5BFEE3688
-	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 14:18:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C878EEE3698
+	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 16:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DFB2406F2;
-	Thu, 12 Feb 2026 14:18:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8833842BC;
+	Thu, 12 Feb 2026 16:47:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WHO7Nz5EigSF; Thu, 12 Feb 2026 16:47:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07DB2842B5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1770914828;
+	bh=cs6IabDOqbHiZh4pfa8iYo7imrOhEpQpbWzVxKugpeI=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=iu6tocLsDh2fsCyD+pURZrf77ChaGzaOOONuDFAHr7yHh6LY6FsUCvP0Led2GAxBI
+	 5FlY/Wmr7CGONu1zSxNX2H3nTJfg9lKgO87aXgw4TpKiKK6flA06nA4jSQvmsH1g3t
+	 Pkn21NLHIbDRtT/AjyU6OUFb1Z46wZ35rTmgmkexMra1rpGpkEwBcbRCc2R4HjDNjO
+	 FO7hM0KftiFzoxVGzZ9lJ8+fJbxxDvwt+sIY+CaAJQvTBBG54yJnFS1qPSWLDfs3hh
+	 3wJnVaCAEx+kiOER7FYlTd2B0/sxBVY9iUAlVTn8jgERnQsjgOzABgx+zOGKZU58P/
+	 4xb1s1ZclMoVA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07DB2842B5;
+	Thu, 12 Feb 2026 16:47:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8382723D
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 16:47:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80A74409CF
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 16:47:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Q-YGYaH4ykG; Thu, 12 Feb 2026 14:18:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17508406E1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770905903;
-	bh=ln5S3x9Et0Y0Qa32Vo/KZcZqCum9e1n0t4jPfhU1ZTo=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=QZOZ1U3pStAxju94HjsMm+PQ+VWF4zSfnJJLCquDLMDj8k4zl3GXTl3LlIntTXGuA
-	 JbRyb8PXymtoGwWnUEaS+auC70/iaVGuXM64Na5+0u+ezH2R+hKZ5LR8vGgfWReBbB
-	 h3Ql1STGK3caxValtjmn53NyLnRRsAe+iAQeZ4jNuEZ5MGrHNYabqtykeBbqsFqntY
-	 hL1zdIbMHyFEFMKycCtsc6ZgWelQ3aAVijf6p2aB7OcTw1ZU5jSmM9Mqu31841uc/g
-	 fcZk7wPzb0zum2qc4SPk+SxaTFMyk7ryCUDKQiOqbomKmrfjvpVPAuEGxTifnmAAE5
-	 eTaSS7BOZT8xA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17508406E1;
-	Thu, 12 Feb 2026 14:18:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 26444BE
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 14:18:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0771340167
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 14:18:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IT0X-M1ld2xU for <buildroot@buildroot.org>;
- Thu, 12 Feb 2026 14:18:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
- envelope-from=ming.jvle@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 340F740148
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 340F740148
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
- [IPv6:2607:f8b0:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 340F740148
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 14:18:21 +0000 (UTC)
-Received: by mail-pf1-x434.google.com with SMTP id
- d2e1a72fcca58-824adf81fa6so556009b3a.3
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 06:18:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770905900; x=1771510700;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=smIMQjjX+IVd77AVwHIzNJ3tP2toGySKk/o8I0AniV0=;
- b=kUbNc+qDeNB23z4Cr8TMwdBVPNo9UjIT3voFwkmxGCMyAD24H4tJu21P/AXJNTvYHX
- E119CNTa7OiqbF1in7VPtvhwBFX/LoiQ24lbcXH+xXb4pCPjBR//SfMp16j7GjkX+ZSY
- WY26+fRW1x5awR6zknjphD4j0MNH2TvwLZaoahy2hIwq/wszi7qDKKOBnVXd0OdVrV5C
- PZG4hhwC+zemUz2B1eQnEaxQAVrlmBmozS5JqFKklLpp1pjCDkSPpl1VAfQXxl2JPiwx
- o5lp/7VBSHdTlTeI5saUxErqLqdPvEt5QxgYaL5E1MjQ0B2litBptpgCQBFZZd0eHa9c
- +bdA==
-X-Gm-Message-State: AOJu0YzsR+uk/3SF/tHZZepiGXkVCcOwGATglpKPdPa87u7A2s7qOGE7
- PhiY/tYwHH6y+LfaOQjDVcdyJCe/HCx/T5xTZmtq77+5z+wnIcldDH4beFF82AFt
-X-Gm-Gg: AZuq6aL2b33SZdsRnYNwqSVXgejrXrlMqtAaXxOQ9xrie1rBkobgJiZ4go/NiEBf5TV
- Qvtvl/id507CN6fxcM+oeUTvnjJSAYLhPQN1tLya1Y4BnBQEroByJA+U4ft11eOp/JFf6DMzljx
- 6hJlEm3ykyjIVMd5N1Xj/nG15+4TPcbHRI+WHtzclLKztNa3w0aVs2PdcPQYLZaKC5Cli1kOnfE
- oxPkHbDOyGLNz5Y2YMxbA/CXWgIzVzflj9oHFvLEZguLMLtllEg0r2McI6zzJRwu9ldtOJNU7Ys
- Y977/dtKv5gfa3WBcaI6gM5u56AgLuR5opVMPmHiv3DbLJZF2cevDpjaChqvWZFkJCIjZ/TtXOx
- YWLHauybuIn2FURtdRHWwACcA6HPZzI4JZ9KZVsMKrRly92vygQW4s4SSU1wDLEbRMPSkegSWgg
- RQxVA7ODdq4UM5qhSiaBEcn2JALvVKU6S1M2Gwd9PC1fPBkxU=
-X-Received: by 2002:a05:6a21:6da5:b0:38b:e55a:97c9 with SMTP id
- adf61e73a8af0-394484fefb8mr3124439637.28.1770905900055; 
- Thu, 12 Feb 2026 06:18:20 -0800 (PST)
-Received: from jvle-ThinkPad-X1-Carbon-Gen-8.. ([117.150.31.55])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2ab29999cedsm54522415ad.91.2026.02.12.06.18.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 12 Feb 2026 06:18:19 -0800 (PST)
-From: Keke Ming <ming.jvle@gmail.com>
+ id 1fTCzrx2DA1G for <buildroot@buildroot.org>;
+ Thu, 12 Feb 2026 16:47:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
+ helo=smtpcmd12132.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 429D7409CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429D7409CB
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 429D7409CB
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 16:47:02 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id qZqFvWOgeP2aDqZqFv6B7p; Thu, 12 Feb 2026 17:46:59 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Keke Ming <ming.jvle@gmail.com>
-Date: Thu, 12 Feb 2026 22:18:03 +0800
-Message-ID: <20260212141803.30239-1-ming.jvle@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Louis Aussedat <aussedat.louis@gmail.com>
+Date: Thu, 12 Feb 2026 17:46:58 +0100
+Message-ID: <20260212164658.2440528-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1770905900; x=1771510700; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=smIMQjjX+IVd77AVwHIzNJ3tP2toGySKk/o8I0AniV0=;
- b=jdpndNVU5vh0Q2gR0jc5SPJpIwL0T5MjEeFdR3cZFuIrTwR1QXJsTm5im4e5hhpxO8
- xAtzHIT7OeG/pJP7l90n2JoxpiNImxBPff0nss4aqIwn9La9vhL5vDgM/ayjlTXY776S
- ApumqZBA/revtyQh1pGBZ+M5dNhKiDTMoZBUo984iRBWdP/YOT7pk3mWbbhhYUaSC89z
- r3LNAaocAvLWgic//0ajGBVhhBY1oTnQs9x55RB4Pk2nO9lMmrt7vA4GVSpobZ3wJncp
- TU5F0dVnJFJ1N5cJAO3/oxOSWHNsFZiB1P3hKwbooNYza81t2BrnuupDCt4Y7rjjhMoz
- yZzg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfJsLwAaSDKNLgXnOcGg8NKfQ7DQit0PsKRhuAxBcKGVkzX2qNjHHqMDm2McWflG/NxNW3kSOXeMw2g6ljAEAx4QVQShnwMPsJam7uNLANAtM7spqVd00
+ e8aTGUKiH3KDVMT3MuzMHi3dOwTQLytOPNYtNDDbUjpry92kFuZUvo5IMDv48IX5YRtiCNDY3sG9Djr2OZlWfmRhxsE10+hQLnwoZjv8orsPikAMDAGELInb
+ NpivVS1jrLnh8jVde54F9GoY8IA1vc88SOn1yj/VPpWho9sQayzxTBMQgWbefFF3YhbPv2G1oq8tudpd3W7HcA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1770914819; bh=4l6A0H4Kf4zaBm27vXblI2MsiHLXCXjHersc5YzT7jk=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=NfCSb7qWMovvGb0d4Sl+CSMg2cYOaYBFKSw7DuMyarddjmYhsjiQQgJ2UOMETe++7
+ ubSnS6JConXS8vlx+osa4WENBdO42O75MCzDNwfxMee3F3nMbxW5Iswz5tJPGAum79
+ JpNuO9vXN+SEp5ofvsgl0Zg7ojWBEs1+2eBuVmJDQ+Yxm51L0/Ee3l/yi13lov9Unh
+ aiVurMymHpjTzQAvjApZAt3OwRzFxj6VmOun23tD6Jz6eevwyWyg+aVNe5cM5CyGW9
+ 21KuboC9ZYPy7IO/WNedpbLtXwvXzkVp2O4X9HCgOA+Uv+INUoBTBTanFklZ4VX/Rm
+ aJnYNQB+vfTJQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jdpndNVU
-Subject: [Buildroot] [PATCH] package/sdl12-compat: new package
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=NfCSb7qW
+Subject: [Buildroot] [PATCH] package/rtl8189es: fix build failure for Xtensa
+ with Linux 6.1.0 and gcc 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,96 +97,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-sdl12-compat is a SDL1.2 compatibility layer that uses SDL2 under
-the hood. This is particularly useful for running older SDL1.2
-applications on modern systems or hardware where SDL2 has better
-support.
+Add local patch pending upstream to fix this build failure.
 
-The reason I recommended this software to Buildroot is that I was
-unable to initialize correctly when I tried to run several SDL1.2
-projects on embedded devices, but SDL2 could initialize them.
-After using this project, the initialization problem was solved.
-
-https://github.com/libsdl-org/SDL-1.2/issues/898
-
-I have added the necessary files:
-- Config.in
-- sdl12-compat.mk
-- sdl12-compat.hash
-
-https://github.com/libsdl-org/sdl12-compat
-
-Signed-off-by: Keke Ming <ming.jvle@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/Config.in                      |  1 +
- package/sdl12-compat/Config.in         | 11 +++++++++++
- package/sdl12-compat/sdl12-compat.hash |  3 +++
- package/sdl12-compat/sdl12-compat.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/sdl12-compat/Config.in
- create mode 100644 package/sdl12-compat/sdl12-compat.hash
- create mode 100644 package/sdl12-compat/sdl12-compat.mk
+ ...r-Xtensa-with-Linux-6.1.0-and-gcc-13.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 6284bea7f4..9de93dcb69 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -364,6 +364,7 @@ comment "Graphic libraries"
- 	source "package/sdl2_mixer/Config.in"
- 	source "package/sdl2_net/Config.in"
- 	source "package/sdl2_ttf/Config.in"
-+	source "package/sdl12-compat/Config.in"
- 	source "package/spirv-headers/Config.in"
- 	source "package/tk/Config.in"
- 	source "package/vulkan-headers/Config.in"
-diff --git a/package/sdl12-compat/Config.in b/package/sdl12-compat/Config.in
+diff --git a/package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch b/package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch
 new file mode 100644
-index 0000000000..608adf153c
+index 0000000000..375b70b02e
 --- /dev/null
-+++ b/package/sdl12-compat/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_SDL12_COMPAT
-+	bool "sdl12-compat"
-+	depends on BR2_PACKAGE_SDL2
-+	depends on !BR2_PACKAGE_SDL
-+	help
-+	  An SDL-1.2 compatibility layer that uses SDL 2.0.
++++ b/package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch
+@@ -0,0 +1,33 @@
++From 08dd621491963afd226ff32112c5d117b89512c1 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 12 Feb 2026 17:41:27 +0100
++Subject: [PATCH] Fix building for Xtensa with Linux < 6.1.0 and gcc 13
 +
-+	  https://github.com/libsdl-org/sdl12-compat
++Only with commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8939c58d68f97ce530f02d46c9f2b56c3ec88399
++__umulsidi3 ha been defined, that is required by gcc 13. So let's
++workaround with a local defined __umulsidi3() if Linux version < 6.1.0
 +
-+comment "sdl12-compat needs sdl2 and conflicts with legacy sdl"
-+	depends on !BR2_PACKAGE_SDL2 || BR2_PACKAGE_SDL
-diff --git a/package/sdl12-compat/sdl12-compat.hash b/package/sdl12-compat/sdl12-compat.hash
-new file mode 100644
-index 0000000000..8c095a6202
---- /dev/null
-+++ b/package/sdl12-compat/sdl12-compat.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  2588686c0972e1785829dc3bf436b543c317e6afa30a9b91d48013dd9c110e81  sdl12-compat-1.2.74.tar.gz
-+sha256  8bb90ab9c7b3b4aaa2f59e6e629ecdb55b7d8f4a0159e74d8f106237e094eaab  LICENSE.txt
-diff --git a/package/sdl12-compat/sdl12-compat.mk b/package/sdl12-compat/sdl12-compat.mk
-new file mode 100644
-index 0000000000..c8fcbacb65
---- /dev/null
-+++ b/package/sdl12-compat/sdl12-compat.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# sdl12-compat
-+#
-+################################################################################
++Upstream: https://github.com/jwrdegoede/rtl8189ES_linux/pull/133
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ os_dep/osdep_service.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+SDL12_COMPAT_VERSION = 1.2.74
-+SDL12_COMPAT_SITE = $(call github,libsdl-org,sdl12-compat,release-$(SDL12_COMPAT_VERSION))
-+SDL12_COMPAT_LICENSE = Zlib
-+SDL12_COMPAT_LICENSE_FILES = LICENSE.txt
-+SDL12_COMPAT_INSTALL_STAGING = YES
-+SDL12_COMPAT_DEPENDENCIES = sdl2
++diff --git a/os_dep/osdep_service.c b/os_dep/osdep_service.c
++index d6d326a..7666bbb 100644
++--- a/os_dep/osdep_service.c
+++++ b/os_dep/osdep_service.c
++@@ -3218,3 +3218,9 @@ int hexstr2bin(const char *hex, u8 *buf, size_t len)
++ 	return 0;
++ }
++ 
+++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 0))
+++unsigned long long __umulsidi3(unsigned int a, unsigned int b) {
+++	return (unsigned long long)a * b;
+++}
+++EXPORT_SYMBOL(__umulsidi3);
+++#endif
++-- 
++2.47.3
 +
-+$(eval $(cmake-package))
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
