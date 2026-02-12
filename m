@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A263BEF99D4
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9585FEF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FC5E41E5F;
-	Fri, 13 Feb 2026 19:35:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5973561386;
+	Fri, 13 Feb 2026 19:35:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ylN4jTmFAB1; Fri, 13 Feb 2026 19:35:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m7mzxOntcf-r; Fri, 13 Feb 2026 19:35:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B0641E44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7901C61387
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011334;
-	bh=n0Os/mDBhGw5VMCSmxoBQ/fvCLU8a87G+6JESwD+n5s=;
+	s=default; t=1771011335;
+	bh=F9g9ygnvoqlvI65nDvXfdFC4TPIlUzgotrsouGvIrvA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=i+NdAyV/O2T1MXBIb9vpiqjqOPvdyXTJiPmEYmxNf2xqPD4TzEl4dFl889AALJzFu
-	 wzZ/lylFFDDwohWLRolEYPU+CTEJxWecBjIdublMpdsWc9SWhQIscVnR4g/bDnG1E3
-	 egWHPuFbNxQB6ndExnHVqYWZ3MbFSRPVFNn7mWtmM5ygJ5BOUaAbF9CFr5X2X38SCN
-	 1v4aij0VW3uP9z8DZVudW2wYa32LMNMYibkpL0Sx3Ua2tpSdr3mKsa27jn7FGG5Pnd
-	 3HjjQ1UPQegtUBi9l9JXqKCel4n6XJ++ybdvzF4xD4JkodrcdGARK4PsK9YxMjXLx+
-	 UFlMtxCE8tQPQ==
+	b=I2DpN8YagiMKnLXcUn7PsW+xS0ixvufg2WYZ6GNMijvQNolE03jFAGfnJS40apnpd
+	 4RZgnyXIwwqlp98e07ssoVfBWo2EKZ+hpolJhi6BxOQmNC44NLrQhfqg/r2NKYVbjb
+	 tECtcW7pKw5DmlzrBnjceq4l2g79p6jx+GKJs3oawxG41plTVLceXcKySI4VQ7a7CW
+	 kctwrFcWtP/0GciDQjLBz8LW8KmQ0ZKfnJTvNMr66W1DpJQlz7e3wkVBiTMOGteAYY
+	 rYASGWoW0euYJEBTIMyZ1of9tkvp3aaBy5puhCjykC06sYLsSnIoFpq0CH521gVsXy
+	 0LIYPa9455iKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62B0641E44;
-	Fri, 13 Feb 2026 19:35:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E316283
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7901C61387;
+	Fri, 13 Feb 2026 19:35:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32DE769
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8857041E37
+ by smtp2.osuosl.org (Postfix) with ESMTP id E14AE41280
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jbaycjoZZNE1 for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tff1qrzAuE6k for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B795A41E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ABCD40380
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B795A41E21
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0ABCD40380
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ACA0686C0F; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ id F34F483B01; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:21:35 +0100
+Date: Thu, 12 Feb 2026 14:27:48 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8fd75e77357bfb463956172cc4dd88a1a0b52d21
-X-Git-Newrev: 7a19511a9086bf123a5057beedc5c94bbb0f5d42
+X-Git-Oldrev: d9d7fa67d7d784d3d1bc31a625794ad3beaa42c0
+X-Git-Newrev: d09650eb9575a49e9b7246d47ae521014d69d8c3
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193526.ACA0686C0F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/zeek: add various
- fixes for gcc >= 13.x
+Message-Id: <20260213193526.F34F483B01@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] optee-os: Add support for
+ custom license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,180 +72,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2974607412884591219=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2974607412884591219==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7a19511a9086bf123a5057beedc5c94bbb0f5d42
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d09650eb9575a49e9b7246d47ae521014d69d8c3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes:
-https://autobuild.buildroot.net/results/906/9061a358d5b37d7674fe5498686cecefda6cf51e/
+The OP-TEE OS package was not providing any license file when a custom
+Linux version was selected.
 
-The build error
+Fix this by adding a Kconfig option to specify the license file,
+with a default value set to the commonly used license paths.
 
-  ripemd_160.hpp:52:23: error: 'uint8_t' was not declared in this scope
-
-which is fixed by patch 0002, afaics, first occurred on 2024-04-04:
-https://autobuild.buildroot.net/results/7ff/7ff3d6a09bd4911ff78e01c14f2bfb7da3d43d60/
-so a backport should be considered.
-
-After fixing the build error other build errors occurred which are fixed by
-backporting various upstream commits.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit eb8ee9f7fdd0bddda62e72fa0c5c47f4e1f4b39c)
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+[Arnout: use a single Kconfig option with conditional prompt]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 71e8ca62ddf898c6278ec5d89af32afebf54ac9d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...dd-missing-includes-fix-build-with-GCC-13.patch | 40 ++++++++++++++++++
- ...-resulting-from-removal-of-ghc-filesystem.patch | 48 ++++++++++++++++++++++
- ...State.h-to-fix-compilation-error-on-gcc13.patch | 24 +++++++++++
- 3 files changed, 112 insertions(+)
+ boot/optee-os/Config.in   | 8 ++++++++
+ boot/optee-os/optee-os.mk | 4 +---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/zeek/0002-Add-missing-includes-fix-build-with-GCC-13.patch b/package/zeek/0002-Add-missing-includes-fix-build-with-GCC-13.patch
-new file mode 100644
-index 0000000000..3590b01c58
---- /dev/null
-+++ b/package/zeek/0002-Add-missing-includes-fix-build-with-GCC-13.patch
-@@ -0,0 +1,40 @@
-+From c41f1c24f6ed2a5441b231b17e1889580bbbc01c Mon Sep 17 00:00:00 2001
-+From: Dominik Charousset <dominik@charousset.de>
-+Date: Wed, 29 Mar 2023 17:01:37 +0200
-+Subject: [PATCH] Add missing includes, fix build with GCC 13
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 6c4afccc7a..ff18236843 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -86,6 +86,14 @@ config BR2_TARGET_OPTEE_OS_VERSION
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+ 
++config BR2_TARGET_OPTEE_OS_LICENSE_FILES
++	string "OP-TEE OS license files" if BR2_TARGET_OPTEE_OS_CUSTOM_GIT || \
++		BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
++	default "LICENSE"
++	help
++	  A space-separated list of license files related to the
++	  OPTEE-OS package.
 +
-+(cherry picked from commit c2ee99c38989deba848cc4c4ec9a230fa71162f7)
-+
-+Upstream: https://github.com/zeek/actor-framework/commit/c41f1c24f6ed2a5441b231b17e1889580bbbc01c
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libcaf_core/caf/detail/ripemd_160.hpp     | 1 +
-+ libcaf_core/caf/telemetry/metric_type.hpp | 2 ++
-+ 2 files changed, 3 insertions(+)
-+
-+diff --git a/libcaf_core/caf/detail/ripemd_160.hpp b/libcaf_core/caf/detail/ripemd_160.hpp
-+index ea9f44cec3..ec2482ecfa 100644
-+--- a/auxil/broker/caf/libcaf_core/caf/detail/ripemd_160.hpp
-++++ b/auxil/broker/caf/libcaf_core/caf/detail/ripemd_160.hpp
-+@@ -42,6 +42,7 @@
-+ 
-+ #include <array>
-+ #include <string>
-++#include <cstdint>
-+ 
-+ #include "caf/detail/core_export.hpp"
-+ 
-+diff --git a/libcaf_core/caf/telemetry/metric_type.hpp b/libcaf_core/caf/telemetry/metric_type.hpp
-+index 0525dd1da7..2047b5f6cc 100644
-+--- a/auxil/broker/caf/libcaf_core/caf/telemetry/metric_type.hpp
-++++ b/auxil/broker/caf/libcaf_core/caf/telemetry/metric_type.hpp
-+@@ -4,6 +4,8 @@
-+ 
-+ #pragma once
-+ 
-++#include <cstdint>
-++
-+ namespace caf::telemetry {
-+ 
-+ enum class metric_type : uint8_t {
-diff --git a/package/zeek/0003-Fix-some-missing-includes-resulting-from-removal-of-ghc-filesystem.patch b/package/zeek/0003-Fix-some-missing-includes-resulting-from-removal-of-ghc-filesystem.patch
-new file mode 100644
-index 0000000000..7789223a09
---- /dev/null
-+++ b/package/zeek/0003-Fix-some-missing-includes-resulting-from-removal-of-ghc-filesystem.patch
-@@ -0,0 +1,48 @@
-+From 1f87382302896876df0838d83f0d107aae4b89d3 Mon Sep 17 00:00:00 2001
-+From: Tim Wojtulewicz <tim@corelight.com>
-+Date: Thu, 10 Jul 2025 16:28:40 -0700
-+Subject: [PATCH] Fix some missing #includes resulting from removal of
-+ ghc::filesystem
-+
-+Upstream: https://github.com/zeek/zeek/commit/1f87382302896876df0838d83f0d107aae4b89d3
-+
-+[Bernd:
-+- backported only UDP.cc change from upstream commit
-+- added similar change to src/script_opt/CPP/GenFunc.cc, no upstream
-+  commit due to switch to from transform to std::ranges::transform:
-+  https://github.com/zeek/zeek/commit/72c79006ac028558004a259081fa8e02de3ebe85
-+  to fix build error:
-+
-+  /home/bernd/buildroot/output/build/zeek-4.1.1/src/script_opt/CPP/GenFunc.cc:
-+   In member function ‘std::string zeek::detail::CPPCompile::BodyName(const zeek::detail::FuncInfo&)’:
-+  /home/bernd/buildroot/output/build/zeek-4.1.1/src/script_opt/CPP/GenFunc.cc:214:17:
-+   error: ‘transform’ was not declared in this scope
-+    214 |                 transform(fns.begin(), fns.end(), fns.begin(), canonicalize);]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/packet_analysis/protocol/udp/UDP.cc      | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/packet_analysis/protocol/udp/UDP.cc b/src/packet_analysis/protocol/udp/UDP.cc
-+index bebfabd3fbb..bf114f5518b 100644
-+--- a/src/packet_analysis/protocol/udp/UDP.cc
-++++ b/src/packet_analysis/protocol/udp/UDP.cc
-+@@ -1,6 +1,9 @@
-+ // See the file "COPYING" in the main distribution directory for copyright.
-+ 
-+ #include "zeek/packet_analysis/protocol/udp/UDP.h"
-++
-++#include <algorithm>
-++
-+ #include "zeek/RunState.h"
-+ #include "zeek/Conn.h"
-+ #include "zeek/session/Manager.h"
-+--- a/src/script_opt/CPP/GenFunc.cc
-++++ b/src/script_opt/CPP/GenFunc.cc
-+@@ -1,5 +1,6 @@
-+ // See the file "COPYING" in the main distribution directory for copyright.
-+ 
-++#include <algorithm>
-+ #include <errno.h>
-+ #include <unistd.h>
-+ #include <sys/stat.h>
-diff --git a/package/zeek/0004-Add-cstdint-to-WeirdState.h-to-fix-compilation-error-on-gcc13.patch b/package/zeek/0004-Add-cstdint-to-WeirdState.h-to-fix-compilation-error-on-gcc13.patch
-new file mode 100644
-index 0000000000..09207a2d62
---- /dev/null
-+++ b/package/zeek/0004-Add-cstdint-to-WeirdState.h-to-fix-compilation-error-on-gcc13.patch
-@@ -0,0 +1,24 @@
-+From 122b8d6052ab987237dd8eb3feeed598230881f7 Mon Sep 17 00:00:00 2001
-+From: Tim Wojtulewicz <tim@corelight.com>
-+Date: Mon, 10 Apr 2023 16:07:18 -0700
-+Subject: [PATCH] Add cstdint to WeirdState.h to fix compilation error on gcc13
-+
-+Upstream: https://github.com/zeek/zeek/commit/122b8d6052ab987237dd8eb3feeed598230881f7
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/WeirdState.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/WeirdState.h b/src/WeirdState.h
-+index 5b8e90fba6a..b34a6da8e82 100644
-+--- a/src/WeirdState.h
-++++ b/src/WeirdState.h
-+@@ -2,6 +2,7 @@
-+ 
-+ #pragma once
-+ 
-++#include <cstdint>
-+ #include <string>
-+ #include <unordered_map>
-+ 
-
---===============2974607412884591219==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ config BR2_TARGET_OPTEE_OS_NEEDS_DTC
+ 	bool "OP-TEE OS needs dtc"
+ 	select BR2_PACKAGE_HOST_DTC
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 25c917e2fc..1639597407 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -6,9 +6,7 @@
+ 
+ OPTEE_OS_VERSION = $(call qstrip,$(BR2_TARGET_OPTEE_OS_VERSION))
+ OPTEE_OS_LICENSE = BSD-2-Clause
+-ifeq ($(BR2_TARGET_OPTEE_OS_LATEST),y)
+-OPTEE_OS_LICENSE_FILES = LICENSE
+-endif
++OPTEE_OS_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_LICENSE_FILES))
+ 
+ OPTEE_OS_CPE_ID_PREFIX = cpe:2.3:o
+ OPTEE_OS_CPE_ID_VENDOR = linaro
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2974607412884591219==--
