@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C878EEE3698
-	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 16:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0897EE36B5
+	for <buildroot@archiver.kernel.org>; Thu, 12 Feb 2026 17:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8833842BC;
-	Thu, 12 Feb 2026 16:47:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46BD88429C;
+	Thu, 12 Feb 2026 17:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WHO7Nz5EigSF; Thu, 12 Feb 2026 16:47:08 +0000 (UTC)
+ id LLEyXX4k1X3B; Thu, 12 Feb 2026 17:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07DB2842B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4602D8429D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770914828;
-	bh=cs6IabDOqbHiZh4pfa8iYo7imrOhEpQpbWzVxKugpeI=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=iu6tocLsDh2fsCyD+pURZrf77ChaGzaOOONuDFAHr7yHh6LY6FsUCvP0Led2GAxBI
-	 5FlY/Wmr7CGONu1zSxNX2H3nTJfg9lKgO87aXgw4TpKiKK6flA06nA4jSQvmsH1g3t
-	 Pkn21NLHIbDRtT/AjyU6OUFb1Z46wZ35rTmgmkexMra1rpGpkEwBcbRCc2R4HjDNjO
-	 FO7hM0KftiFzoxVGzZ9lJ8+fJbxxDvwt+sIY+CaAJQvTBBG54yJnFS1qPSWLDfs3hh
-	 3wJnVaCAEx+kiOER7FYlTd2B0/sxBVY9iUAlVTn8jgERnQsjgOzABgx+zOGKZU58P/
-	 4xb1s1ZclMoVA==
+	s=default; t=1770919029;
+	bh=p6Yy0FO7APmh3zfyfj/U/etBrmgFU5Ci4j6kv8z2ksY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=M8HPvsei6tdI5JR3WKfzwQ2rccNpGjXzIcWBmtId6Oag3S8MywLk2Nj1B0iRXi0Z3
+	 dC/W+PQio3siKLzwg2Bzw86ZkLE4tbNcOABkhKcFe62AHn9svrJbG5aCCzDrYvEwpi
+	 VcBxdZsFpm+VPyN5mYY5RU8r3EWFadMLp66n+N9/LytbFDWyGE15LfwBfAu8Ltr3ls
+	 Vcl1XkX0hvBS+Lo5bDIiXwu+xL/AujfSJj6Zd6mlyyOhZySQ1EfP4mrxgK7W06XT3L
+	 3aizYOgiL0nHdGaTd3n3W/gDSJAE4wLj5UJxsLIhwH1b7F2p43vPeIOST62A44gbEv
+	 nJe67WKc41y2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07DB2842B5;
-	Thu, 12 Feb 2026 16:47:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8382723D
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 16:47:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4602D8429D;
+	Thu, 12 Feb 2026 17:57:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 088979CE
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 17:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80A74409CF
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 16:47:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD99760E60
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 17:57:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fTCzrx2DA1G for <buildroot@buildroot.org>;
- Thu, 12 Feb 2026 16:47:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
- helo=smtpcmd12132.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 429D7409CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429D7409CB
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 429D7409CB
- for <buildroot@buildroot.org>; Thu, 12 Feb 2026 16:47:02 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id qZqFvWOgeP2aDqZqFv6B7p; Thu, 12 Feb 2026 17:46:59 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tGs1gWz_JJS5 for <buildroot@buildroot.org>;
+ Thu, 12 Feb 2026 17:57:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FF5960DFE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FF5960DFE
+ for <buildroot@buildroot.org>; Thu, 12 Feb 2026 17:57:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 61FAC86C4D; Thu, 12 Feb 2026 17:57:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Louis Aussedat <aussedat.louis@gmail.com>
-Date: Thu, 12 Feb 2026 17:46:58 +0100
-Message-ID: <20260212164658.2440528-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJsLwAaSDKNLgXnOcGg8NKfQ7DQit0PsKRhuAxBcKGVkzX2qNjHHqMDm2McWflG/NxNW3kSOXeMw2g6ljAEAx4QVQShnwMPsJam7uNLANAtM7spqVd00
- e8aTGUKiH3KDVMT3MuzMHi3dOwTQLytOPNYtNDDbUjpry92kFuZUvo5IMDv48IX5YRtiCNDY3sG9Djr2OZlWfmRhxsE10+hQLnwoZjv8orsPikAMDAGELInb
- NpivVS1jrLnh8jVde54F9GoY8IA1vc88SOn1yj/VPpWho9sQayzxTBMQgWbefFF3YhbPv2G1oq8tudpd3W7HcA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1770914819; bh=4l6A0H4Kf4zaBm27vXblI2MsiHLXCXjHersc5YzT7jk=;
- h=From:To:Subject:Date:MIME-Version;
- b=NfCSb7qWMovvGb0d4Sl+CSMg2cYOaYBFKSw7DuMyarddjmYhsjiQQgJ2UOMETe++7
- ubSnS6JConXS8vlx+osa4WENBdO42O75MCzDNwfxMee3F3nMbxW5Iswz5tJPGAum79
- JpNuO9vXN+SEp5ofvsgl0Zg7ojWBEs1+2eBuVmJDQ+Yxm51L0/Ee3l/yi13lov9Unh
- aiVurMymHpjTzQAvjApZAt3OwRzFxj6VmOun23tD6Jz6eevwyWyg+aVNe5cM5CyGW9
- 21KuboC9ZYPy7IO/WNedpbLtXwvXzkVp2O4X9HCgOA+Uv+INUoBTBTanFklZ4VX/Rm
- aJnYNQB+vfTJQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=NfCSb7qW
-Subject: [Buildroot] [PATCH] package/rtl8189es: fix build failure for Xtensa
- with Linux 6.1.0 and gcc 13
+Date: Thu, 12 Feb 2026 18:56:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6a7fe6382aab710eee2338b061f1f4e4f8793e36
+X-Git-Newrev: babedec9f65c1eecc900a83ad95771763a7266cd
+X-Patchwork-Hint: ignore
+Message-Id: <20260212175705.61FAC86C4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libspdm: bump version to 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,61 +68,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch pending upstream to fix this build failure.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/babedec9f65c1eecc900a83ad95771763a7266cd
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Release notes:
+https://github.com/DMTF/libspdm/releases/tag/3.8.1
+
+Fixes two issues:
+
+ * Unaligned memory access in VENDOR_DEFINED_* : #3196
+ * Build failure when mutual authentication is disabled : #3178
+
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+[Julien: add link to release notes]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...r-Xtensa-with-Linux-6.1.0-and-gcc-13.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch
+ package/libspdm/libspdm.hash | 2 +-
+ package/libspdm/libspdm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch b/package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch
-new file mode 100644
-index 0000000000..375b70b02e
---- /dev/null
-+++ b/package/rtl8189es/0001-Fix-building-for-Xtensa-with-Linux-6.1.0-and-gcc-13.patch
-@@ -0,0 +1,33 @@
-+From 08dd621491963afd226ff32112c5d117b89512c1 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 12 Feb 2026 17:41:27 +0100
-+Subject: [PATCH] Fix building for Xtensa with Linux < 6.1.0 and gcc 13
-+
-+Only with commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8939c58d68f97ce530f02d46c9f2b56c3ec88399
-+__umulsidi3 ha been defined, that is required by gcc 13. So let's
-+workaround with a local defined __umulsidi3() if Linux version < 6.1.0
-+
-+Upstream: https://github.com/jwrdegoede/rtl8189ES_linux/pull/133
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ os_dep/osdep_service.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/os_dep/osdep_service.c b/os_dep/osdep_service.c
-+index d6d326a..7666bbb 100644
-+--- a/os_dep/osdep_service.c
-++++ b/os_dep/osdep_service.c
-+@@ -3218,3 +3218,9 @@ int hexstr2bin(const char *hex, u8 *buf, size_t len)
-+ 	return 0;
-+ }
-+ 
-++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 0))
-++unsigned long long __umulsidi3(unsigned int a, unsigned int b) {
-++	return (unsigned long long)a * b;
-++}
-++EXPORT_SYMBOL(__umulsidi3);
-++#endif
-+-- 
-+2.47.3
-+
--- 
-2.47.3
-
+diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+index 86358dad62..1c7b6b3158 100644
+--- a/package/libspdm/libspdm.hash
++++ b/package/libspdm/libspdm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e7aefb9bc546bbd3ff10d707a6f05213cfb2e679354438ea0d1b5c483b5daa85  libspdm-3.8.0.tar.gz
++sha256  2184a586bfe030218c6f336750d0fb0c3747fcfb0ed8af9a921bccb567029671  libspdm-3.8.1.tar.gz
+ sha256  8c891ecf439cca84ceab33fc819c029a72c198f31818aa53a3788a0553841d6e  LICENSE.md
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index 4d29429811..f76262c77b 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSPDM_VERSION = 3.8.0
++LIBSPDM_VERSION = 3.8.1
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
