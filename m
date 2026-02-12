@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C420EF99D0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70C3FEF99D2
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 486E061417;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4284E84558;
 	Fri, 13 Feb 2026 19:36:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VoVWKwu_wDiY; Fri, 13 Feb 2026 19:36:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NP_h709MyJb9; Fri, 13 Feb 2026 19:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DA34613FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F7B984548
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011363;
-	bh=SMp7PgXX+lpKTYEjAzm+ElQDRmeQX8gAEYnQug26/3Q=;
+	s=default; t=1771011364;
+	bh=2fuGBL4S1WVQty/gZYDIIK3/4bzc5HrojEaKWOAIIB8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Y9AzJ+gztRidt8SD0upKeXKWMBxQZklnhO6iIGJsM9pPHY7o5PVpkQzPvy1ZKsXlj
-	 KGLMGoKosjwV69+ctU+B15E6YzQlzKzvzEIIv8kt+jvu7uIfqgG+MVsPOyo6L7+cP5
-	 rE7P6+MzxggH7QZnuICZG5JRHZErGjg8b7aOdtpGtC888LCvPT2aiqrATLPgiMDaoH
-	 n+zCgUWcCcHP1/HORxh5PRhr/Plk0co8HZQmwVpfMIUdlBQwFd5k2f5Qsdkvm0HEcg
-	 iNsb71kJaEifSEhMnkIUsULzqkkiVY7xuKdWGHpsBA93PW2LQZ8Hl7tp4RlMyWNriP
-	 43amapXZAa2bg==
+	b=WgLGS43WVxDBvdXapJo2PWsFMVt4TI1L3A/orBywGdXYUKFWeWYBVKMK3gOvvftXE
+	 IhPrZ0yNd+mWYbWm+1E4m34j3uxyPlV9q+eAbhU5ARRVXb6ylizX+bARP02hoE+v1W
+	 09HY/xRvZrKeeWDY34sa2rrjZLdm7YJu1+l6DcrgbFg8L6E3SjjgF0BUZ6ybPDALzu
+	 8iiESYNx+SiF2r91Noo91Fydqgj6E8Qi7+qibW9CI5XLPv8MG/FB42EZ6Z++mTaQrs
+	 p6F6nm3Rba0K6MRWrYucHiKI0i5bux0hkpbWc0XKbjfMIji+kUldkaziG5C4iXX6tI
+	 nbMzvqxerJw2Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DA34613FB;
-	Fri, 13 Feb 2026 19:36:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9696BEC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F7B984548;
+	Fri, 13 Feb 2026 19:36:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DD67EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7710D40407
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C3F241E37
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OLybEdHt5_Ug for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4QDzOiUbrzI0 for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA07741280
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46CD541E32
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA07741280
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46CD541E32
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F1A381EB5; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id 3BAF383A88; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 15:04:55 +0100
+Date: Thu, 12 Feb 2026 14:59:18 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f64ce221a5e4b502f8fd29a233b07e72ec98944c
-X-Git-Newrev: afb87a21422d6c9846c10dfb333c6d343ed247da
+X-Git-Oldrev: 5225221daa844a9fdf52df9a4fd5873811ce1538
+X-Git-Newrev: 1e214ab549d641a575f98ba922520c65e11c3aaa
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193528.9F1A381EB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/util-linux:
- always disable man pages and translations
+Message-Id: <20260213193528.3BAF383A88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/safeclib: fix
+ build with gcc >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,64 +77,136 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/afb87a21422d6c9846c10dfb333c6d343ed247da
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1e214ab549d641a575f98ba922520c65e11c3aaa
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-When the host system has asciidoctor and po4a/poman installed,
-util-linux detect them and automatically enable manual pages and
-their translations. This can significantly increase the package
-build time (in my case, from 20s to 1m50s). See upstream
-commit [1] and [2].
+Backport two upstream patches to fix build errors introduced by the
+bump of gcc to 14.x.
 
-Since manual pages are not needed in Buildroot, this commit adds in
-_CONF_OPTS for host host and target variants the options to always
-disable the detection of those programs (--disable-asciidoc
---disable-poman). This will always disable the generation of manual
-pages.
+Fixes:
+https://autobuild.buildroot.net/results/af6/af65e6386439098ddf706ca43e99320cf5e9fd80/
 
-Note: Buildroot attempts to globally disable documentation for
-autotools packages by passing various --disable-docs configure
-options (see [3]), but those are not recognized by util-linux.
-
-This commit also reorder the options for UTIL_LINUX_CONF_OPTS.
-
-[1] https://github.com/util-linux/util-linux/commit/9acfc349e0ea68a92baf818cc659121f40ab9c04
-[2] https://github.com/util-linux/util-linux/commit/236421a49103ea510bcba1e7ef90b57d24aeab76
-[3] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/package/pkg-autotools.mk#L184-186
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit dd81c1766e1470b61f5e8d4461a066f64ce60c5e)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 34749a2d3e8f95ed3eb262dc9a4319acb44f8c0b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/util-linux/util-linux.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ ...002-vsnprintf_s-Increase-Buffer-Size-by-1.patch | 51 ++++++++++++++++++++++
+ ...003-vsnprintf_s-Increase-Buffer-Size-by-1.patch | 49 +++++++++++++++++++++
+ 2 files changed, 100 insertions(+)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index ed30c0b107..763d3872be 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -46,8 +46,10 @@ UTIL_LINUX_DEPENDENCIES = \
- # system is not Y2038 compliant. util-linux will support year2038 if
- # the system is compliant even with this option passed
- UTIL_LINUX_CONF_OPTS += \
--	--disable-rpath \
-+	--disable-asciidoc \
- 	--disable-makeinstall-chown \
-+	--disable-poman \
-+	--disable-rpath \
- 	--disable-year2038
- 
- UTIL_LINUX_LINK_LIBS = $(TARGET_NLS_LIBS)
-@@ -56,6 +58,8 @@ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
- # We also don't want the host-python dependency
- HOST_UTIL_LINUX_CONF_OPTS = \
-+	--disable-asciidoc \
-+	--disable-poman \
- 	--without-systemd \
- 	--with-systemdsystemunitdir=no \
- 	--without-python
+diff --git a/package/safeclib/0002-vsnprintf_s-Increase-Buffer-Size-by-1.patch b/package/safeclib/0002-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+new file mode 100644
+index 0000000000..eae11dcc0d
+--- /dev/null
++++ b/package/safeclib/0002-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+@@ -0,0 +1,51 @@
++From 62051f9761f92dc99c8ce0552239ad10e2062168 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 10 Jan 2026 12:16:22 +0100
++Subject: [PATCH] vsnprintf_s: Increase Buffer Size by 1
++
++Another fix similar to https://github.com/rurban/safeclib/commit/f59a0c8c1b5cf19cd0ed7f9bfb3a1e85f54113d0
++
++In function 'safec_ntoa_format',
++    inlined from 'safec_ntoa_long' at str/vsnprintf_s.c:331:12:
++str/vsnprintf_s.c:256:24: error: writing 32 bytes into a region of size 0 [-Werror=stringop-overflow=]
++  256 |             buf[len++] = '0';
++      |             ~~~~~~~~~~~^~~~~
++str/vsnprintf_s.c: In function 'safec_ntoa_long':
++str/vsnprintf_s.c:312:10: note: at offset 32 into destination object 'buf' of size 32
++  312 |     char buf[PRINTF_NTOA_BUFFER_SIZE];
++      |          ^~~
++In function 'safec_ntoa_format',
++    inlined from 'safec_ntoa_long' at str/vsnprintf_s.c:331:12:
++str/vsnprintf_s.c:260:24: error: writing 32 bytes into a region of size 0 [-Werror=stringop-overflow=]
++  260 |             buf[len++] = '0';
++      |             ~~~~~~~~~~~^~~~~
++str/vsnprintf_s.c: In function 'safec_ntoa_long':
++str/vsnprintf_s.c:312:10: note: at offset 32 into destination object 'buf' of size 32
++  312 |     char buf[PRINTF_NTOA_BUFFER_SIZE];
++      |          ^~~
++cc1: all warnings being treated as errors
++
++Upstream: https://github.com/rurban/safeclib/pull/150
++
++[backported to version 3.7.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/str/vsnprintf_s.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/str/vsnprintf_s.c b/src/str/vsnprintf_s.c
++index 59dbda94..ca838df1 100644
++--- a/src/str/vsnprintf_s.c
+++++ b/src/str/vsnprintf_s.c
++@@ -296,7 +296,7 @@ static size_t safec_ntoa_long(out_fct_type out,  const char *funcname,
++                               unsigned long base, unsigned int prec,
++                               unsigned int width, unsigned int flags)
++ {
++-    char buf[PRINTF_NTOA_BUFFER_SIZE];
+++    char buf[PRINTF_NTOA_BUFFER_SIZE + 1];
++     size_t len = 0U;
++ 
++     // no hash for 0 values
++-- 
++2.47.3
++
+diff --git a/package/safeclib/0003-vsnprintf_s-Increase-Buffer-Size-by-1.patch b/package/safeclib/0003-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+new file mode 100644
+index 0000000000..2dabebf3b2
+--- /dev/null
++++ b/package/safeclib/0003-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+@@ -0,0 +1,49 @@
++From dea3c2e1aa1b775baa690b9ef40239f881c5f068 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Wed, 13 Aug 2025 20:23:48 -0700
++Subject: [PATCH] vsnprintf_s: Increase Buffer Size by 1
++
++It is a buffer overflow warning that GCC 15.2 is catching.
++The issue is that it's trying to write to `buf[len++]` when len could
++potentially be 31, which would write to buf[31] in a buffer of size 32
++(valid indices 0-31), but the len++ post-increment means it could
++theoretically write beyond the buffer bounds.
++
++Fixes
++
++../../sources/safec-3.9.1/src/str/vsnprintf_s.c: In function 'safec_ftoa.isra':
++../../sources/safec-3.9.1/src/str/vsnprintf_s.c:523:24: error: writing 32 bytes into a region of size 31 [-Werror=stringop-overflow=]
++  523 |             buf[len++] = '0';
++      |             ~~~~~~~~~~~^~~~~
++../../sources/safec-3.9.1/src/str/vsnprintf_s.c:394:10: note: at offset [1, 32] into destination object 'buf' of size 32
++  394 |     char buf[PRINTF_FTOA_BUFFER_SIZE];
++      |          ^~~
++cc1: all warnings being treated as errors
++
++Upstream-Status: Submitted [https://github.com/rurban/safeclib/pull/148]
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++
++Upstream: https://github.com/rurban/safeclib/commit/f59a0c8c1b5cf19cd0ed7f9bfb3a1e85f54113d0
++
++[backported to version 3.7.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/str/vsnprintf_s.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/str/vsnprintf_s.c b/src/str/vsnprintf_s.c
++index ca838df1..8ef6989a 100644
++--- a/src/str/vsnprintf_s.c
+++++ b/src/str/vsnprintf_s.c
++@@ -369,7 +369,7 @@ static size_t safec_ftoa(out_fct_type out,  const char *funcname,
++                          double value, unsigned int prec, unsigned int width,
++                          unsigned int flags)
++ {
++-    char buf[PRINTF_FTOA_BUFFER_SIZE];
+++    char buf[PRINTF_FTOA_BUFFER_SIZE + 1];
++     size_t len = 0U;
++     double tmp;
++     double diff = 0.0;
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
