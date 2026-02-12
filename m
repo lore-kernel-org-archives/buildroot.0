@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A724FEF99D1
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE666EF99D2
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:38:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74A438465E;
-	Fri, 13 Feb 2026 19:38:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A37A384797;
+	Fri, 13 Feb 2026 19:38:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mo_Nf7Yxfv3h; Fri, 13 Feb 2026 19:38:16 +0000 (UTC)
+ id D35xsUkVfVRn; Fri, 13 Feb 2026 19:38:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 593E284794
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59FEF847A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011495;
-	bh=vxQOjLje2Ut+A2XSU7YiEVQqH2d7D06hRMwPOG0Rw0I=;
+	s=default; t=1771011498;
+	bh=jX4lTIYWV+Pf0DuEGJCwFMKXtDkfxUXX5r8mONy4nAg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gbAbzz4EbikowOLSM5rjNulbic/JYe4UpLxarYy5huB5kyIzn9m9XSxsXqdSsKsye
-	 Kk7+EU1dhGUAJF4sywro/msKTJLsVsEkG0IO0rc9wx7gCaN5Xy0DiSYol1c4SsMOsy
-	 iO7IV6CysZwQgECiqMwIR+wq1tVzlTN5wQp9XmIP1gpRe0XEiPeb57LkW1o5TByd6v
-	 kn92Dpp6EZh/OUGTEwyHt6s7LnNNm+l5DwdhSEHBf/kB9IpjjHHZSAy0ZZyKaqG0nO
-	 hz3V1t9CIMzZKR399G7Sx44ZoTsabQubpiCJG2E0Is1ioXDCWG6cwONCUxCvwDj3IY
-	 RIXsYZR5hOsyw==
+	b=n2m/s0uM+ZnG+ewfLjiUTOFRtNTOMr0tFYjdpJ7a+1EiWdnh9L231jYHQjZKEGGl4
+	 fri7eGfoJ4r0r7j/ONU+djUHYDjhsOaepotwz8WiGM0GIkuJKoRtKHYTD5qDKD1K68
+	 Bn4Jzjmh38TegnAYSloEvr1X7gzDH6sSZcE2FoHrycd2d1DZyjm4TIm1A2ccUIn3UB
+	 0DpoL9GE5ybEKKu9C0/B0TB08yiXfi4bGUzm/vblWdBhlMdd56O9kv1KZ5ouubUACR
+	 mRk2v9EHTXwKh1Nztf7YFmRuOxLg+3PoOuCMCe0OK+TVPz44vHkvFJQg98RGHCoL+z
+	 Wrh7+7WR5pvRg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 593E284794;
-	Fri, 13 Feb 2026 19:38:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59FEF847A1;
+	Fri, 13 Feb 2026 19:38:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6115F69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 23F34EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1CC3413F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0F12413F6
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id joUI7eDZ7YW8 for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
+ id w7GHzXxwx77P for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 201A7412FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39C8D41300
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 201A7412FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39C8D41300
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1556885DA7; Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
+ id 2F1C582A80; Fri, 13 Feb 2026 19:37:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:54:07 +0100
+Date: Thu, 12 Feb 2026 14:56:15 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: d2caf50d543036b1f50c5cf9b86cdc2e09a51cda
-X-Git-Newrev: bdc77eddfec4256741f2dcb1de3e5053936670c2
+X-Git-Oldrev: 41fbe94c7073973d1d0ee1c9ca6390e16921fbf3
+X-Git-Newrev: faa3db1e32b48d2b2950c346821f46572f45ffd6
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193703.1556885DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] support/testing:
- test_python_sdbus_modemmanager: remove unneeded systemd vconsole
+Message-Id: <20260213193703.2F1C582A80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/mpg123: add sdl2
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,40 +77,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bdc77eddfec4256741f2dcb1de3e5053936670c2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/faa3db1e32b48d2b2950c346821f46572f45ffd6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-The test failed in the past, due to kbd build failure. See [1].
-This specific issue was fixed by commit [2].
+mpg123 supports (and prefers) SDL2 as well for the sdl backends since 1.26.9
+with:
 
-This commit was originally written to workaround this issue, which was
-unrelated to the actual package being tested. Since systemd-vconsole
-is not needed anyway, this commit removes it from the test config.
+https://github.com/madebr/mpg123/commit/792615f6512a0908081b5a2e98ca61f8677ed452
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/12363929666
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/d98d9ba28ffa5b468fa243ae1a359aadef3ed0a0
+So support that here as well.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Julien: reword the commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 287d06f5d7a99521a6a2ccf0f0c39159d5e5f2ef)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 53c2c0903dcddc364cd231648af36122c09c0b3f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_python_sdbus_modemmanager.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/mpg123/mpg123.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python_sdbus_modemmanager.py b/support/testing/tests/package/test_python_sdbus_modemmanager.py
-index 58e02f99ef..736c34b724 100644
---- a/support/testing/tests/package/test_python_sdbus_modemmanager.py
-+++ b/support/testing/tests/package/test_python_sdbus_modemmanager.py
-@@ -8,6 +8,7 @@ class TestPythonPy3SdbusModemmanager(TestPythonPackageBase):
-         + """
-         BR2_PACKAGE_PYTHON3=y
-         BR2_INIT_SYSTEMD=y
-+        # BR2_PACKAGE_SYSTEMD_VCONSOLE is not set
-         BR2_PACKAGE_MODEM_MANAGER=y
-         BR2_PACKAGE_PYTHON_SDBUS_MODEMMANAGER=y
-         """
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 5e55d33b72..5e5ca579ac 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -64,10 +64,10 @@ MPG123_DEPENDENCIES += portaudio
+ MPG123_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0`"
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SDL),y)
++ifneq ($(BR2_PACKAGE_SDL)$(BR2_PACKAGE_SDL2),)
+ MPG123_AUDIO += sdl
+ MPG123_CONF_OPTS += --with-default-audio=sdl
+-MPG123_DEPENDENCIES += sdl
++MPG123_DEPENDENCIES += $(if $(BR2_PACKAGE_SDL2),sdl2,sdl)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
