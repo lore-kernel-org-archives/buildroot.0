@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B58ECEF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E3E6EF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63E0960745;
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC9D641E5D;
 	Fri, 13 Feb 2026 19:35:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u7Ll_b8pLohC; Fri, 13 Feb 2026 19:35:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80055607E8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011331;
-	bh=dh+UOcJK2/+YPZRevOcHKhGB0GZZtp2uLmqMz3rqSSg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CI3MIkkw1VAF5Dlrz1q7pognknc6XQBMDZ00TRSbv9RBgKbfz62YGPqYBMyK/VtPo
-	 Em3MecFcLugEjyYYB5KgGeFgPp4ae3lLGp8GQBLojpYuyVE2m4NoOmRGNhfWhGiE+L
-	 JcL3SxET6CdW3NHCVrcBWMLkdsFNtvbWQ+a0k/fguSOrHx6ZJsoAtnvta3tdTe0fpK
-	 VkaAS/1V1qp7+hdrMv566ZXctV9cuSV8N/2mU9PUz9heBsccbzwjApmBiUXoYKzrHO
-	 Eqvki5Q2xLDxOV0HAyJu7DO4/gdXL/ZSoLbrpRj83vm5i9+Qi/QeeJhJfJEeHfXKSy
-	 41i7j36SeIxIw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80055607E8;
-	Fri, 13 Feb 2026 19:35:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FE27283
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 511E141E37
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3WECfuvHWlQb for <buildroot@buildroot.org>;
+ id yYnQNWcZj-1B; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DFC141E21
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771011330;
+	bh=Wlq83i/f7C3nic5rb9TnNegp3EO79i45C1XfQj23iTU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=U5C7cBG6LPKK/kVPC4NogNulkvkfx/9JruBupOei3NqwfsGoE+YSYsndYyIwFnpMs
+	 XPUW0ZQbwJBszdYg9M42omoULNG+M8iK7+DjgOvG6F9KNAG2dQSdBFt7cwE7/x7sEG
+	 ma8rrlsE00laz6+88u+AvPGzxeknfzL16AG2A55Pfny7e6yNL1YpdcgP//JZO3zdWy
+	 TQDaowNbKZen2UqVszG57kFOsOtWBoLtuqRDh0qwjmJ7SJ77EtsEwnx3xtRZpRcGFI
+	 H4LGrDSkdRrfWN0Pc2KXeZNeTUujZDsNxkGhMyCtIdSljlb5XrX9XoSnm4GHzr7RWY
+	 blXOIoaNcxGvA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DFC141E21;
+	Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FF2931F
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54B2240407
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eO_Hg2k5WPSR for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29E1140C14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 810B74035F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29E1140C14
+ by smtp2.osuosl.org (Postfix) with ESMTP id 810B74035F
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B5D882A91; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
+ id 546B283B01; Fri, 13 Feb 2026 19:35:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Feb 2026 12:04:27 +0100
+Date: Thu, 12 Feb 2026 14:10:15 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5034989b1c1c769bea65212bdbfe00d550a39688
-X-Git-Newrev: 44034d73fe9702368ab41b59410bab17f9ff1550
+X-Git-Oldrev: b0ea0d5395c7b59a9625d9c96ee230eb7da08bee
+X-Git-Newrev: 8e7e67e1e30415eecaf016759e3abdb7e0abc67f
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193526.0B5D882A91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-django:
- bump to 5.2.10
+Message-Id: <20260213193526.546B283B01@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] utils/generate-cyclonedx:
+ use direct dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,52 +77,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/44034d73fe9702368ab41b59410bab17f9ff1550
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8e7e67e1e30415eecaf016759e3abdb7e0abc67f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Django 5.1 support ended December 3, 2025, bump to 5.2 LTS that's
-supported until April 2028 [1].
+Since the introduction of the `generate-cyclonedx` script in [1] the
+dependencies were 'recursive'. This means that the dependencies of a
+package dependency were included.
 
-[1] https://www.djangoproject.com/download/
+The CycloneDX spec [2] states that only direct dependencies needs to be
+included.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Acked-by: Titouan Christophe <titouan.christophe@mind.be>
+This patch drop the recursive dependencies.
+
+[1] dbab39e2d9 support/scripts/generate-cyclonedx.py: add script to generate CycloneDX-style SBOM
+[2] https://cyclonedx.org/docs/1.6/json/#dependencies
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit dc4af8bfa979beb147cdbd7523b5ade26095a0d5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/generate-cyclonedx | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 0c9b70959f..1c2b9bcd29 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  232748d1f2d6d1074f873dde91f7d75b  django-5.1.15.tar.gz
--sha256  46a356b5ff867bece73fc6365e081f21c569973403ee7e9b9a0316f27d0eb947  django-5.1.15.tar.gz
-+md5  98e667c17123f7bbd2d7d1db32f9ccdd  django-5.2.10.tar.gz
-+sha256  74df100784c288c50a2b5cad59631d71214f40f72051d5af3fdf220c20bdbbbe  django-5.2.10.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 32821e19a0..184f91bfa1 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index e864edf181..04ce8fc3a1 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -337,10 +337,9 @@ def cyclonedx_vulnerabilities(show_info_dict):
+     } for cve, components in cves.items()]
  
--PYTHON_DJANGO_VERSION = 5.1.15
-+PYTHON_DJANGO_VERSION = 5.2.10
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/45/1ac68964193cfcc0b0912a0f68025d5bdb54f71ba7b8716e85b959874bd0
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/e6/e5/2671df24bf0ded831768ef79532e5a7922485411a5696f6d979568591a37
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+ 
+-def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+-    """Parse dependencies from the show-info output. This function will
+-    recursively collect all dependencies, and return a list where each dependency
+-    is stated at most once.
++def br2_parse_deps(ref, show_info_dict, virtual=False):
++    """This function will collect all dependencies from the show-info output.
++
+     The dependency on virtual package will collect the final dependency without
+     including the virtual one.
+ 
+@@ -350,18 +349,14 @@ def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+         show_info_dict (dict): The JSON output of the show-info
+             command, parsed into a Python dictionary.
+ 
+-    Kwargs:
+-        deps (list): A list, to which dependencies will be appended. If set to None,
+-            a new empty list will be created. Defaults to None.
+-
+     Returns:
+         list: A list of dependencies of the 'ref' package.
+     """
++    deps = []
++
+     for dep in show_info_dict.get(ref, {}).get("dependencies", []):
+-        if dep not in deps:
+-            if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
+-                deps.append(dep)
+-            br2_parse_deps_recursively(dep, show_info_dict, virtual, deps)
++        if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
++            deps.append(dep)
+ 
+     return deps
+ 
+@@ -429,7 +424,7 @@ def main():
+         ],
+         "dependencies": [
+             cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
+-            *[cyclonedx_dependency(ref, br2_parse_deps_recursively(ref, show_info_dict, args.virtual))
++            *[cyclonedx_dependency(ref, br2_parse_deps(ref, show_info_dict, args.virtual))
+               for ref in filtered_show_info_dict],
+         ],
+         "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
