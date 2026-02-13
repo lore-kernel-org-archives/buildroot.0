@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 631E7EF99D1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DBF0EF99D2
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2879061617;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BC46846BB;
 	Fri, 13 Feb 2026 19:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V_U0uWurVPEX; Fri, 13 Feb 2026 19:37:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OTK51NmgkYyP; Fri, 13 Feb 2026 19:37:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB4C615FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 706578473B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011477;
-	bh=PSNSkbcs/nz5V/z2eJUuM3V6hia9AJtIt8jVjeCIWiM=;
+	s=default; t=1771011478;
+	bh=S7zs4W29T0EicXRHK7+IpSAdWXtiAtJYsJg8RJLHdcs=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=RNBJ/JgJdJQH3q+Nqn3y6yic9cg/7ew4PZBMds2OHZ8nDKf6BZGX0UZkzjl3fdD1V
-	 h4BRFmjnij/+slKEDyJ5yK8nUwGof+LFBEGAeUbYpN8NFqcW/5neX1f3UUthhX1Zw0
-	 XAdVZUKucsTpsgw4TnBTofGte7hukBgZjhBbc2UpPcvXwMTn+kZU0h/gFy8K2oJ+I3
-	 JauXg0evzBBb1xglhPjG0xAnJMN94dGACYzYwAjnvDN8Wd4jC3uZvCimGNVN+8J2hP
-	 aATem/+1Ya/EpGGr/TGCiS3wLE68milJ2NkTvJR5FYi7skv5kKHEfvgpUcBQ2sNF+A
-	 FXXyKnL1PJNiA==
+	b=TwIs14H2V3KBixlUpxPGa2eTB2f6eminDVPAmVQRUB03ZzENkWM+j1FgX7i8Pn9Px
+	 HY/xo1ST38CEVILqbZ1ua+8FGTSCewkKP+kXH9n3PC+yA19uBdX4xD1zNUYUI2igoN
+	 mZhNjVxSc0f+/SUlU2dI2INxi3cU9n0ZryK0oPVJbhW4IhV/+WTnJloceC5ZaT5biW
+	 BI+47o4iafo41MsnfKdCr54WG0vouM1mD34yBe3d9/aecH3PScHJklEkotnVWbnErt
+	 f9F+8B1GuhQrG2Pfq257uTP8e3LJYj+90C3hqtldxCREPcZcgW9cR5IjO2Y37S2dVW
+	 2buUyQUAJDzMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FB4C615FE;
-	Fri, 13 Feb 2026 19:37:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 23590EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 706578473B;
+	Fri, 13 Feb 2026 19:37:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B5B38EC
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 030AB615B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id B041641F51
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Gnyn8ykVWOk for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gn8wEi3w8VAh for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4FCD4613A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FCD4613A3
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4FCD4613A3
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:17 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4806ce0f97bso10011145e9.0
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:37:17 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 718AA41F54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718AA41F54
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 718AA41F54
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:18 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-43767807da6so793797f8f.2
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:37:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011435; x=1771616235;
+ d=1e100.net; s=20230601; t=1771011436; x=1771616236;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=lRouoq638GI1O7h/a4qhU+gmm5lto7xE/VX8DzQ6pbo=;
- b=f0nfBtdurX/SkLIVNfFbzSLl/J51+q3ZrBNv4SHwmPuLekph/Af/+RHE6IDi69GNJA
- U9r7yiy49P7oXGqOGPSXkW+Rcqs48MhdZvItdsBSym3OeF7qCf76QaKMhCETmHLqcuxq
- 9CIUHV3apnHQe933KYpenAJn9Ze4cHbswqafx5ZOC1kDdD2NgfvFCy7PiNd2lBm/a+d6
- ZIh1A1v/eSuL4Vs3HseoeC0SuHhsn+jvbLUswm1CiC/CS2T8O1fs57xwPsWXFZyEPtNB
- pI7sbrRLhIoTjbJaJmHkzEEtOzF7GqVQeod9VKMppq7PjmyXmx+7+hjBBtPOqYzIYJOV
- 6X6A==
+ bh=L4ghJhGogAbjND8jRDa71Fr0MTkWDTJ6Labt2WrI2no=;
+ b=Pxq2ecPteFwv4A0Z4UZVeIgwnuXF30tWaQrZFsAXW2qRXZYG2X6TPNAQbJPR/Dm+mc
+ 9eruRxJijL5yuxN5MPNa+p/tnjMwYbPFkVQozrI4/5eft/MzWXcZ8gl4GYKJoWjt+luL
+ O1pSv0zW/5YdQH5Ig/yMUHWnq3gmz1fEWor9QxWB+2FrQqnrBLsAkDbwNekg7IGaKWZS
+ ZOSGcdnLYeQ4rT7hwPlW2Qrvc+YiDnrRF4wAjEROWyOGuk9cbtWCq4OqFSOKhrfXFjJK
+ 8ulrVOqU+OA5rHG9IzAq54AAD5qBqPa+u66nvWM1xA0WjnGU9FopWnj7pxPkDaK/cEml
+ sipw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWHN97HtAeLhfKdwdU56bFi6PjdmxP4qSAJ1UpUCed9UD1xPmPH40OemWnv5GHw6yWS3x4YThcH7kk=@buildroot.org
-X-Gm-Message-State: AOJu0YwBlrxPlCNuLiK1Q/lFcUE+HzMDN/MbAxpA2biwP6UZDBhWmWvM
- C1SZdCc5budUWM0CaPt6TNUTWAPX2h8ghWt44dM9pRTaXsGBGmiF8+YROPgaB+9RGYo=
-X-Gm-Gg: AZuq6aLfaPSKTnaII9dzNb4DmdvHcuiIFy1q3fXuqPje0uySVPlZCisd4tPo4CqTc4S
- SvDdcAsQp+xNRzfULwQ82LgOzsR15wyMayBU39mozAfj1nW3IJ6uFj9ZwD1To4CcN6vtZmPBT8/
- F2KVqQQ7SnuZjWlIYDaW9FJiE1e+88oYBKmpfvEooJlfMEzyEEoX/eZNhMu7hmx7lSIK5qBVO4q
- kq2zjQtWVLDUQusCL79PqFeXXpXUMBir5LJK2XqVH0tAluHFfaTOM0//ApDQgHHfo1QdkK2cNrd
- FX20u33SL5Yc70Q09sDHuEV+x9kAgwmLOMRPbQ0ZV5/1ooWyEUMaGI5VHyiGkNCSg3mJqtEdaj7
- 5xry7Ep/+9FZUur43EcCMeFUfvYiSi0ByZiMTu8xHCYUMMY8+9woP5W3sgBadImyXZwg7p7hMqE
- z65EYJ51KWDR8Kn3E=
-X-Received: by 2002:a05:600c:4fd1:b0:483:6a8d:b2f9 with SMTP id
- 5b1f17b1804b1-48373a16361mr55847605e9.5.1771011435387; 
- Fri, 13 Feb 2026 11:37:15 -0800 (PST)
+ AJvYcCX6Zpqm42tExVFVBBSQajZGGDJcaJVG4ChaCV8unTO+OBRvVPxUsXXMOz5V8eX345tkJgSFPfgYGDk=@buildroot.org
+X-Gm-Message-State: AOJu0YwucrX9KDecaZwHt7AO6xpJW5s63k128lUMsiLfgmwnDyLHcl4h
+ aAj+AVqdfjI6TyFHhhnc76uGNlLB7vR0FM0yduiqyJrzesH9AQu40Cr7ptSGcB25kLleCAXKhtI
+ n0T4a
+X-Gm-Gg: AZuq6aJbBXWZ8xruDs3+ZSD24ZDUjEAZuyXwvZ7wlTO0b9r61R7v4k2vJ3m3BjwNv4y
+ PDQnf5n9XN4p39pnWWag7upMZedf578ZVup0OjIWe/x+9SC7bS8SYYdyOf2Zq3FYbY4j3QqeOHM
+ Gw7Uqow4AmXxie3ZnAIdNk+2eyRM0Nf93H4SmBhaTTDjlmswnA/O/SmS28XJYy83dmvwN9x4p8g
+ rpsmm4aGiuKTCT/N3lLZcNQeYyulo55pR+CGus8QLsMC+zYixqFXhBAcfFZ1UgYWg7YSdQfhjFl
+ 5HwU8rrTBYztPEAih9Ee25n6FX/9iB3HTmwow21vGUvaGmnrj1w19p6BIdCltKxBuSpXYdw4r9d
+ rfH9WLHyC3A1srPIpCBx42U7SeWfsYOY9evmqWw4NqVxPyfgMIKFWThCJJtslKiJLPFyt7YqCsV
+ hhuC0PjfjadJ5l7pY=
+X-Received: by 2002:a05:6000:2585:b0:436:3475:473e with SMTP id
+ ffacd0b85a97d-4379791ad09mr5909434f8f.51.1771011436330; 
+ Fri, 13 Feb 2026 11:37:16 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796ac8d46sm8535526f8f.32.2026.02.13.11.37.15
+ ffacd0b85a97d-43796a5ac7csm7025133f8f.7.2026.02.13.11.37.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:37:15 -0800 (PST)
-To: Kadambini Nema <kadambini.nema@gmail.com>
+ Fri, 13 Feb 2026 11:37:16 -0800 (PST)
+To: Florian Larysch <fl@n621.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:37:14 +0100
-Message-ID: <20260213193714.38871-1-thomas.perale@mind.be>
+Date: Fri, 13 Feb 2026 20:37:15 +0100
+Message-ID: <20260213193715.38925-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20250515083640.49630-1-kadambini.nema@gmail.com>
-References: <20250515083640.49630-1-kadambini.nema@gmail.com>
+In-Reply-To: <20250531000554.28543-1-fl@n621.de>
+References: <20250531000554.28543-1-fl@n621.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011435; x=1771616235; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011436; x=1771616236; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=lRouoq638GI1O7h/a4qhU+gmm5lto7xE/VX8DzQ6pbo=;
- b=aZkNccqmjkOHAbeZD91mDga2qRkP4Js87n9fWpL26mbGNhwO9tbmrrHpgcG78IFrTJ
- Qhfh5a82h7p0ANvCMGSGWvlhBFkePtbvqUkXc/S8AQqAOdKE8/5UXPjf4PI0x0l7joGE
- 0Qo+g1JiJ/zPZfQGxMnwuQ4fIcCdEfM6LbA6Eh5yMwjcXzvo1qxRG6Vs5uDGspS36jGc
- DSPDnZF09mSBUAh90SqZ/Ye1tXfHJA+Y07NS7hGIg5lENU75pydCXnXnW8BlwWv7poXk
- MGmlVe67jK/fQFSZoemAnVojtZZLprugZRp+YUaxytAaOQHsTBYJzddud6G9A+B23QAV
- Qg0g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=L4ghJhGogAbjND8jRDa71Fr0MTkWDTJ6Labt2WrI2no=;
+ b=C/a7B7+leIpT9fwd2NCIN4EGu46g5A6egX7Jk4bp8uwnXxsp4X2mRWJganwTvThIV7
+ a+lMVyDhAZSS8KPaAErV057sgP7WS6IPEmxSsBSP7G6EVq2rpb7wnKkHakZ8WYO4av83
+ eIVnYwmcKLwoOBKNAcHhKfvsrFIi984dmQ9xsMUcv11KC6FrbBm3zfTEZPFQr502dLiw
+ cHPBom2E0Fee4bIi5SHQpEjncjmrBqA+Bsq0t4UI8PNM9JCUzvdRHDsL+NpnUFkjq91B
+ K6Sd6CkjKzV41QHK7807sIlozP5qqpuPZ7y4K1CL+/myEqvd9a0ca/PaqhEDRDYLFwwl
+ DqvA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aZkNccqm
-Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: add
- -N/--needs-update option
+ header.a=rsa-sha256 header.s=google header.b=C/a7B7+l
+Subject: Re: [Buildroot] [PATCH 1/1] core/sdk: pre-calculate files in need
+ of relocation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,56 +132,83 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This commit adds the -N/--needs-update option, disabled by default,
-> to list only packages with newer upstream versions. All other packages
-> will be excluded from the HTML or JSON output.
+> Currently, the relocate-sdk.sh script scans the whole extracted SDK tree
+> to find instances of paths it needs to replace, which can take a
+> significant amount of time when the SDK is large, particularly relative
+> to the number of files that actually need to change.
 > 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+> However, the resulting list only depends on the SDK tarball itself, so
+> we can calculate it at build time and ship it with the tarball so
+> relocate-sdk.sh can use it directly.
+> 
+> Testing this on my machine with somewhat IOPS-limited rotating media,
+> the time goes down from:
+> 
+> $ time ./relocate-sdk.sh
+> Relocating the buildroot SDK from [...] to [...] ...
+> ./relocate-sdk.sh  5.19s user 26.21s system 9% cpu 5:34.40 total
+> 
+> To:
+> 
+> $ time ./relocate-sdk.sh
+> Relocating the buildroot SDK from [...] to [...] ...
+> ./relocate-sdk.sh  0.49s user 0.29s system 103% cpu 0.749 total
+> 
+> Signed-off-by: Florian Larysch <fl@n621.de>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  support/scripts/pkg-stats | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  Makefile                     | 10 ++++++++++
+>  support/misc/relocate-sdk.sh | 11 +++--------
+>  2 files changed, 13 insertions(+), 8 deletions(-)
 > 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 46b12cd992..c22a8e724f 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -1280,12 +1280,22 @@ def parse_args():
->                          default=[])
->      parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
->                          help='Increase verbosity')
-> +    parser.add_argument('-N', '--needs-update', dest='needs_update', action='store_true',
-> +                        help='Only include packages with newer versions available')
->      args = parser.parse_args()
->      if not args.html and not args.json:
->          parser.error('at least one of --html or --json (or both) is required')
->      return args
+> diff --git a/Makefile b/Makefile
+> index c14023fd98..95f207150b 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -600,6 +600,16 @@ prepare-sdk: world
+>  	@$(call MESSAGE,"Preparing the SDK")
+>  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+>  	mkdir -p $(HOST_DIR)/share/buildroot
+> +	(\
+> +		export LC_ALL=C; \
+> +		grep -lr '$(HOST_DIR)' '$(HOST_DIR)' | while read -r FILE; do \
+> +			if file -b --mime-type "$$FILE" | grep -q '^text/' && \
+> +			   [ "$$FILE" != '$(HOST_DIR)/share/buildroot/sdk-location' ] && \
+> +			   [ "$$FILE" != '$(HOST_DIR)/share/buildroot/sdk-relocs' ]; then \
+> +				echo "$$FILE"; \
+> +			fi; \
+> +		done \
+> +	) | sed -e 's|^$(HOST_DIR)|.|g' > $(HOST_DIR)/share/buildroot/sdk-relocs
+>  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
 >  
+>  BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
+> diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
+> index 981d272425..d25bc55279 100755
+> --- a/support/misc/relocate-sdk.sh
+> +++ b/support/misc/relocate-sdk.sh
+> @@ -37,15 +37,10 @@ fi
 >  
-> +def is_newer_version_available(pkg):
-> +    return not (
-> +        pkg.latest_version['status'] in (RM_API_STATUS_ERROR, RM_API_STATUS_NOT_FOUND) or
-> +        pkg.latest_version['version'] is None or
-> +        pkg.latest_version['version'] == pkg.current_version
-> +    )
-> +
-> +
->  def __main__():
->      global cvecheck
+>  echo "Relocating the buildroot SDK from ${OLDPATH} to ${NEWPATH} ..."
 >  
-> @@ -1341,6 +1351,8 @@ def __main__():
->      if "cve" not in args.disable and args.nvd_path:
->          print("Checking packages CVEs")
->          check_package_cves(args.nvd_path, packages)
-> +    if args.needs_update:
-> +        packages = [pkg for pkg in packages if is_newer_version_available(pkg)]
->      print("Calculate stats")
->      stats = calculate_stats(packages)
->      if args.html:
+> -# Make sure file uses the right language
+> -export LC_ALL=C
+>  # Replace the old path with the new one in all text files
+> -grep -lr "${OLDPATH}" . | while read -r FILE ; do
+> -    if file -b --mime-type "${FILE}" | grep -q '^text/' && [ "${FILE}" != "${LOCFILE}" ]
+> -    then
+> -        sed -i "s|${OLDPATH}|${NEWPATH}|g" "${FILE}"
+> -    fi
+> -done
+> +while read -r FILE ; do
+> +    sed -i "s|${OLDPATH}|${NEWPATH}|g" "${FILE}"
+> +done < share/buildroot/sdk-relocs
+>  
+>  # At the very end, we update the location file to not break the
+>  # SDK if this script gets interruted.
 > -- 
-> 2.25.1
+> 2.49.0
 > 
 > _______________________________________________
 > buildroot mailing list
