@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38CE0EF99D0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A814EF99D3
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEA4541E9A;
-	Fri, 13 Feb 2026 19:36:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24A2784574;
+	Fri, 13 Feb 2026 19:36:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bAg2YAvgQFN1; Fri, 13 Feb 2026 19:36:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B3lq4TSlr2sX; Fri, 13 Feb 2026 19:36:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26CDD41E45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B5FB8463E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011388;
-	bh=GDwL/BI4iJilQwLce2omt2USENYKW8/njRx4/y5bMGA=;
+	s=default; t=1771011387;
+	bh=P0SJcrEobOMobuEOMbVspjwMXVkhIg6dc6as9LAy2qo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=im6TXZM4umX/rK1JcjO6rJrm6UFCOxYGX91BAFJP2iMQbgzxVFvbK91UOGYO0fYuo
-	 MoMP/1nqX2AqFfWRNhcaP9MhmojRgqe/TzD9vhG2VpQiMFUjo+8tETe1fHo6YmV1NN
-	 3QgbvPcIg1zgpnhUoL8GPROgffUAJANEFjllEaL1uOPaKOMfhQXz/B3Hdy+8buSfwO
-	 MoxTMuXeErVvOTMq+x+5XC1duKK6pWrytpn9xG6e6qjnwTEZQuvULUn7L21y2+KFZZ
-	 pV2GiUQi45tmncUPw6NJvOhHXTPOxmM2/EZiNyFeZX2n/h1lzLGjNZ2DAUxgPrVvLJ
-	 TUOk/Z6Ynu/2Q==
+	b=NSQrX3Xlmqwm/vPgiIMLB1XiZS6i/C7ARSLF75vHmnijydUeW3IV358cP9FaJm48J
+	 Ko08rJfagwHB42iVbl9z4ds4Qq+CF0jC6c2N6+7hwVhRiXwTidwTXjkmvHpJ7cBEdP
+	 aXGiJXlTGMsttOyAcOoB0s23aXYxQUhGdvP1C5xrqBVjKvWoPUqTXn/mwczD7JtoBL
+	 ABEquNu1fKRCdjeAhBxSjqZG6yHOtfCGLZ0HBceUXFqgNnyxDEAoGqRyfa5dBh7lTZ
+	 EEcXUY/Vy9LkGDn5bnIVH7PBML9IoWkoMZPKu+0BPY2gOaDAh/sHEjryhBGlmFE8W5
+	 Ax1Ea7ME+XoSA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26CDD41E45;
-	Fri, 13 Feb 2026 19:36:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B5FB8463E;
+	Fri, 13 Feb 2026 19:36:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02581EC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02DDC69
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A16DE41E57
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D14641E56
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0R1aF88soct for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id BAOFFGzkqgw5 for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCED341E43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76F7241E21
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCED341E43
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76F7241E21
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D254283A88; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id 6C05981EB5; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 15:15:20 +0100
+Date: Fri, 13 Feb 2026 20:31:57 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 102262dbf9cf1fd8ba12133170863af411d4fb87
-X-Git-Newrev: 96fdae1fbf18abc2f2de0a26da2f0503ab8f26e2
+X-Git-Oldrev: eea5fba3d4de8bae1df515c27d37083603ed04d1
+X-Git-Newrev: 3811f091f2e8d613a232500a3feb4541dfaeb0c9
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193528.D254283A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/glibc: add
- CVE-2025-15281 CVE-2026-0861 CVE-2026-0915 to _IGNORE_CVES
+Message-Id: <20260213193529.6C05981EB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libwebsockets:
+ fix LWS_MAX_SMP when BR2_TOOLCHAIN_HAS_THREADS is set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/96fdae1fbf18abc2f2de0a26da2f0503ab8f26e2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3811f091f2e8d613a232500a3feb4541dfaeb0c9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Commit [1] bumped glibc from 2.42-3-gbc13db739 to 2.42-51-gcbf39c26b
-to fix some CVEs, but forgot to add those CVEs to GLIBC_IGNORE_CVES.
-This was needed because the GLIBC_CPE_ID_VERSION used for CVE checks
-remains to the same value "2.42" which is marked as vulnerable to
-those CVEs.
+The .mk file currently states:
 
-This commit adds those _IGNORE_CVES with the corresponding upstream
-commit references, to make sure they will not be reported by the
-"make pkg-stats" command.
+   If LWS_MAX_SMP=1, then there is no code related to pthreads
+   compiled in the library. If unset, LWS_MAX_SMP defaults to 32 and a
+   small amount of pthread mutex code is built into the library.
 
-Fixes:
-- [1]
+However, this is incorrect: when unset, LWS_MAX_SMP is actually set to
+1, so mutexes aren't built in.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/18de297a5ad3d1fc1b44f54ae69289ca10200ad5
+To fix, set it to 32 explicitly when threads are enabled. Why 32?
+Because
+https://libwebsockets.org/lws-api-doc-master/html/md_README.coding.html
+states:
 
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+   You can control the context basic data allocation for
+   multithreading from Cmake using -DLWS_MAX_SMP=, if not given it's
+   set to 32.
+
+Signed-off-by: Bart Van Severen <bart.vanseveren@barco.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 574aa2cfee19c7dfe505a303dd45b17a966bbdaa)
-[thomas: match to 2.41 branch]
+(cherry picked from commit b3abf16c8ef7cf7b2493b3ddfc66ec132c42493b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/glibc/glibc.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/libwebsockets/libwebsockets.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 3f519bfdca..d8e178edad 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -34,6 +34,15 @@ GLIBC_IGNORE_CVES += CVE-2025-5702
- # Fixed by glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
- GLIBC_IGNORE_CVES += CVE-2025-8058
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index e53febfce4..90ab5da0c9 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -18,15 +18,14 @@ LIBWEBSOCKETS_CONF_OPTS = \
+ 	-DLWS_WITHOUT_EXTENSIONS=OFF
  
-+# Fixed by glibc-2.41-121-g1e2c1ea4307197ccece0cda574bcfebf9080894c
-+GLIBC_IGNORE_CVES += CVE-2026-0861
-+
-+# Fixed by glibc-2.41-122-g15c9839a0b853f552b4ed9047841b6223f3c104d
-+GLIBC_IGNORE_CVES += CVE-2026-0915
-+
-+# Fixed by glibc-2.41-123-gfb4db64a04ad6c96cd1fbb7e02eb59323b1f2ac2
-+GLIBC_IGNORE_CVES += CVE-2025-15281
-+
- # This CVE is considered as not being security issues by
- # upstream glibc:
- #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+ # If LWS_MAX_SMP=1, then there is no code related to pthreads compiled
+-# in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
+-# amount of pthread mutex code is built into the library.
++# in the library. If unset, LWS_MAX_SMP defaults to 1.
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ LIBWEBSOCKETS_CONF_OPTS += \
+ 	-DLWS_MAX_SMP=1 \
+ 	-DLWS_WITH_SYS_SMD=OFF
+ else
+ LIBWEBSOCKETS_CONF_OPTS += \
+-	-DLWS_MAX_SMP= \
++	-DLWS_MAX_SMP=32 \
+ 	-DLWS_WITH_SYS_SMD=ON
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
