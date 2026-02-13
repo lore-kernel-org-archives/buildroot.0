@@ -1,114 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A194EF99D3
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16864EF99D2
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C59141E61;
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8BC6616BC;
 	Fri, 13 Feb 2026 19:39:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2VjnjC0t1MrZ; Fri, 13 Feb 2026 19:39:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9E7842182
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011554;
-	bh=tcaO0Og9xAS72kTJH58sp1bqcRO4pTb9bLEVv14wm6k=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=jZNf9aeQHwe5u11atR90J12PePAsJGSu6oZPWd/4B634YXNNl8fLe8obAzd9iwB9x
-	 JcVTUtynL8T/b2VXGqo4GWRbmXFvMfCKqbgjB6sHF8sOsXwmocd/myLYu1rizfyIaA
-	 9Fiq81LgiZxc1WQ60gObKfzt1c5CbLlMKx++O0CAD9NCOGYUR2nNZz8jpFijL+5gI/
-	 z1V9HpH9G63GsCxgRkIUwpevZq5rQ6MBDqvv+ZogkTPpre4c9xmv7UTkPVn6n4/Pm4
-	 SbTkBCL4z+dsb+U1P04ysOjZNxJxuQiuP45t9plyaUyOS5Izw8O5wyJDT4D2+EZaWA
-	 sEZOdqeTsGEvA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9E7842182;
-	Fri, 13 Feb 2026 19:39:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C848283
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE9A460750
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Quodmt6QizMN for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:38:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7ACB7615B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ACB7615B7
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7ACB7615B7
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:00 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-436234ef0f0so843294f8f.1
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011478; x=1771616278;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=+6nbEM44qgrFXnrO1Ei/TZfJHHiZDeVFKIrYVCoXmx4=;
- b=WX2mkX78blS7gRGBpK9hm93jenuKAuQsKeC0xGDXSKByFj1A7xO98VhWLjDkJgRNoj
- NSBAZrxz/Kyt1uL8i3MpihASeobBXeCcqm6uBefLYBjGCZSXrosrEVg07dsYrTdJB3UY
- bqMiAuffwBEnfb8pS6g3ft29aYJP1Jh9ee1G5DDsDGrOJG/6EJTbENkvoJOi2thAEJnZ
- FiHs+KQTsz3olsjYs7014j8FSKt61tB52xlUaG6iXGdnKfWeVlzA3PYAk1jtKAikl+hg
- 6Mn/xu6zXN/7FCWn/TwTi6nUqrR5iAS0QRRA1mF8E8WBAxklc/hHcAlUEuRduUQraGSw
- ta/w==
-X-Gm-Message-State: AOJu0YxHBUWreNnI/gw7LczZYgo7YVUC5LLdoYkZdeFnUv4aeAn0XhCd
- A9ULaIzUrWuXEJECRadA3oMRvASuk6ktFUhE4KUu9tTYnw+3K+gU+AGAxwYOYRCdJO4=
-X-Gm-Gg: AZuq6aI7cBmuOmur1kgwEbF9uVRbesah3NTC/k6zB8mA6h95dpJI1K1RysBH8WibJ8d
- O8Bh1GuFvqjCr2kLYUIiPwqcon/hg3Ibat+V1Xt7K4h9KMfW6CCqYXB0dj2h4wShXHEApH5I8it
- GTgcAD6WnFOrDTA5GQyTs0Puob9m3+xgvHm1pdYsbMzuUqzL5I6aKvlo8EOgTBp/041ooGkNVqk
- lUO21HDOxccOSg7BVIuegnmPzn2A3RlVLJ3WxXVuH6iAG8MGFmCbiuYpgS1xuguca2g5BeSPXlj
- LwNMSn5se8qhUeyFAijdl4pU4M5sQkdZWzcCGaQg9Lt/PB/kJqcJVO65gZZlDMbMceMD34IItcn
- G1joNqvLk303NtWMU6adfDmXApQOM4UbxdVyGDPbvl+7qp41Vqi2b6j7Upr5zGtfgfBRENMdH8b
- Ja9K4Li2+jA4h5HZ8=
-X-Received: by 2002:a5d:5d87:0:b0:437:694d:fb6c with SMTP id
- ffacd0b85a97d-437978c1b77mr4473807f8f.9.1771011478439; 
- Fri, 13 Feb 2026 11:37:58 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796a6a6desm7601131f8f.10.2026.02.13.11.37.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:37:58 -0800 (PST)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:37:57 +0100
-Message-ID: <20260213193757.41162-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260126130414.59175-3-thomas.perale@mind.be>
-References: <20260126130414.59175-3-thomas.perale@mind.be>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011478; x=1771616278; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+6nbEM44qgrFXnrO1Ei/TZfJHHiZDeVFKIrYVCoXmx4=;
- b=N65/gbYSqqo8q6t4uYdobQldXOyrtOfLcnlJE5IDhjxqnVUY6sG3MS2tnhAgBKi0Bl
- Ge1KhANzBBZwk6Y1CRo4Atc/EWhm/F3RCvq/2VMxwPSxcsEEhYNDbGKS59OZmtpOTdVk
- QTs6hVNnHm1qBiDlCV8O3dWDosLdzQ8VbaZM6xC5UkU1h0sA3tYj7y0ouVHx8KXYahBI
- JGCwGBUG9wGsZnkuidwrTVLc+3HJNZlRcNf2rJBP1B5P0U9jx3tPF8VrMW3EkcbNtrBa
- 8GFdom3HaiLB03hMDakm3aOhupdRFNZlq9DBjUiyGJe939aLX2ExkuaiQkHh/wA1Qsle
- 6JEQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=N65/gbYS
-Subject: Re: [Buildroot] [PATCH v2 3/4] package/pkg-utils: add 'provides' to
- show-info
+ id OIflMdFSKMDZ; Fri, 13 Feb 2026 19:39:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D26F4616D0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771011555;
+	bh=N2k8dR8peLJxL26p0f1bY405lU8PpACgOvZN7dlnaGQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Wn4q/EPv5TK3NQnB+XgFRp9tLdt2eMmo6vq6Tp6MgInBwWW6NPl3rPhX0J7PVvsDk
+	 JlEqmpV9hHtS2pi/xHwyF9KFn+Q49FJL18UXQQs0+PVmhI0fvW1KZq/5WFEdHNnDng
+	 KcTK+p8wM4vdbPRGbvztG2QF0q6u1p6oVpY2is+nOpNPcNNWZX7IsYnAico8xY/XO0
+	 Zmqq5F8Z1jOdUO3XdHXwCqwsA19dpv5ufM7mUq8JIFmz+99MmsMI6H7jjCYrw6Eqx7
+	 ONTMD5Vo5HWzmWtnHOdAuJ20AqeJ9u7wVl1rrvX2Y4glfu88k5XdvuedOcLHLPJgMd
+	 Wk/zDRNcNR4MQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D26F4616D0;
+	Fri, 13 Feb 2026 19:39:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 382EFEC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89DD3412DC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l1Wmw9BRATnN for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D17E6412DB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D17E6412DB
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C6AEB83593; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:33:10 +0100
+X-Git-Refname: refs/heads/2025.11.x
+X-Git-Oldrev: 3a32f607531032d55c516594c7734224dc8dae7c
+X-Git-Newrev: d818534f41eb4ba8c9a6610b56da324771207f59
+X-Patchwork-Hint: ignore
+Message-Id: <20260213193704.C6AEB83593@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/libite: bump to
+ v2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,56 +71,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Add the list of virtual packages a show-info entry provides to the
-> output.
-> 
-> For more information on virtual packages infrastructure see [1]
-> 
-> [1] https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_virtual_packages
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d818534f41eb4ba8c9a6610b56da324771207f59
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Applied to 2025.02.x & 2025.11.x. Thanks
+Changes:
+- Fix memory leak in which() on realloc() failure
+- Fix pidfile() to handle missing trailing slash in prefix path
 
-> ---
->  package/pkg-utils.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 288a202230..211e681e8f 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -201,9 +201,16 @@ define _json-info-pkg-details
->  		$(foreach patch, \
->  			$(call pkg-patches-list,$(1)), \
->  			$(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$(patch)))$(comma) \
-> -
->  		)
->  	],
-> +	$(if $($(1)_PROVIDES), \
-> +		"provides": [ \
-> +			$(foreach provide, \
-> +				$($(1)_PROVIDES), \
-> +				$(call mk-json-str,$(provide))$(comma) \
-> +			) \
-> +		]$(comma) \
-> +	)
->  endef
->  
->  define _json-info-fs
-> -- 
-> 2.52.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Changes to src/pidfile.c do not affect the licensing terms, but
+require updating the hash of this file that is used as one of the
+license files.
+
+https://github.com/troglobit/libite/releases/tag/v2.6.2
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8e7a54f7ef121a2236c3d722d0adca26860c4cfa)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/libite/libite.hash | 4 ++--
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index 3abad09b0a..c593f7a66d 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,7 +1,7 @@
+ # Upstream .sha256 from GitHub
+-sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
++sha256  0550ac5670836db85569786e00860d1d6999df8f74005307c290371c990e1dbd  libite-2.6.2.tar.xz
+ 
+ # Locally calculated
+ sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
+ sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
+-sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
++sha256  b6cc7074a27b26ee4e1ccda8d634d485d0f6f819e564c663c28ed61f4cc2b451  src/pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index e4bd845487..beb8c27ba7 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBITE_VERSION = 2.6.1
++LIBITE_VERSION = 2.6.2
+ LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
+ LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
