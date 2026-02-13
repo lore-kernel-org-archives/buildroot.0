@@ -1,118 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794EFEF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9346CEF99DD
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 22:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4596B614A3;
-	Fri, 13 Feb 2026 19:41:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3065640955;
+	Fri, 13 Feb 2026 22:18:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FPlSOkQFHCBF; Fri, 13 Feb 2026 22:18:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F181E40981
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771021120;
+	bh=/SGQiQrj2ERsboctyp2rFDgOR6yqbFDGjjKSbggKjsI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Vm7Ehyw5cJpqxNw/uuj5zmz8GWvdaO0xiVI8BCv4f26DfEUO06s+aiCBoqGFDJBS6
+	 m1K4hSnuWUp0KyulKqUHTKSqUPXJ8wVRCqsER/rVPhq85Lpeq1Mw+8gqk7EisuZdUf
+	 TYEnB/cKG0wGEGUpWnVuYc0pVibRa8Lyd22gmLX6+8cCPnTHqPVUBGLvSZT4yRXfRC
+	 WyCX8Dr/HizQP7i4CRIQb1IskWVsr0rOYvc74ZhiP7ucM7lV+2OTU4uS8LeZHBB6oA
+	 cik1nnfRY2heBf64sokUSCu+WTHMJAWpfQN/ItDVPIo28/do2X37li8DgoA9Tnrbmg
+	 GL2NJ5dXC9MKw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F181E40981;
+	Fri, 13 Feb 2026 22:18:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05CBFEC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 22:18:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0298B61273
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 22:18:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ub40rl6u5QTn; Fri, 13 Feb 2026 19:41:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB59D61478
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011693;
-	bh=rtfA4WoNV33WGR6uU+Qs/+bTkhVPUvP78wonOIVC/NA=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kME/UlWT9yyxTxsCHZ1njBEmIEgm3vJNMR6Im6SYse3paZ/Qd9FA1AN+32cBH3TQQ
-	 U+iIySYaFYeBxs2X7pjtMiHj7fAsFlOu5PyqKPHZYCCq5rxqErSSJXw2rodMWu/vKg
-	 CCwhDXDouHA0Ps01Fjp8Ky8OUvjeTSyFU7nXIZjUuP4ikGMiei3TgeiLgeyPvQdGXE
-	 HzKP/416NWgvGbAQTsXcri5aC/jHq149osazQGxqOAzEyzD3JJZ1Xp4YrKKSkJeQYN
-	 CeK7No4WkF2mSl6ZSiTD7ik38b9H4xWCGEa2s4JkIeCglAF/ZlumC1cVcKdaN2cu3X
-	 cd6wHGyiBlNgw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB59D61478;
-	Fri, 13 Feb 2026 19:41:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 197F769
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:41:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7C2E4026C
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:41:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9hAeU44zKyme for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:41:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B693F40055
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B693F40055
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B693F40055
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:41:22 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4807068eacbso10334945e9.2
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:41:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011681; x=1771616481;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=NsIcx8/U5uvNVNS3fQWR9nwEuBhv9v8SVMb2d7t7eDY=;
- b=NC4/2AQ53ZEzSaA5hJ/jXzxD3ycIsqYLoJk+oGZns7m2xQzUmdBhm8an2rvqNLiuJJ
- DViM+K5l3jEz8V53zBzOo7tpr7sZmKLJqUqIW6XAswttQUZQFyLgkkS+HY0r1RDo1BDt
- h+8hroi883frlh/MR2av6WFGdAdGG6BqhBR7p8LXwPQUoFUrALhdgG5o+0pCWExazC0+
- Pallyfgye294fxOa8s74kUsjnCvoWYPkwmJJGhC+VCb0d7Q6V7vE9rletjdpS6G1aDAi
- lBqGK5Xjsg/GhesCKA4dwItyc7dvu1fSmECJJs6RYAi9tWoX45UZLL5hFfgmhV4i8W7+
- upCg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXAbjfTDNtfJyejA5Bd9GqaMlUxMp3TOg9wXUOAgjm7vnLz42KxO93Tj4rVWsv63vCsJVXjLSpu7q8=@buildroot.org
-X-Gm-Message-State: AOJu0YwNX0oYF6Uvlqw7q/zam7HvCqA3jwqgJ+PiLxb1f8fwxzUjksuc
- IVQwxSOwA9e+HDRyzrLDS50NK49hT2h3c5EEUglen+gMqUBSjWuws49OO+gG8glO0ye/sGfV5S6
- YOo+v
-X-Gm-Gg: AZuq6aJy2d1Hnbhl6Yfxw2bCy4NV9AZ1fWNO9uRvFHVrMOIpLFcNbRP/gVglQRTMG+a
- 09cHEG22FLuQ4mh+SGhzreBZPHWWsI3qYGShzQ+gzvb0rgLwBD5aJfaYjGec/yP/L2ABMO+OXOx
- 89e8Mj0pqD7Z/Xb8uh4VKlnrYRDRd08JvykcKn33AgqCQntXBBMf5b+1XVVwpDqDlXVHc644A3P
- uXXHAIaM+iS34Jk6ToQUeszC7gp/hnc6zGRkWMiRMn9TXTW2YCpB583bYPYEzer23hTRHvL2iGa
- AvkWg2gvrpUyma8+hLiLiMzz9ZXSNs3NQZi6rHhd+UKbYlRN7DWVHi3GzGtxnMfTlNkR9SEa0Fe
- +qo8G4k51QTXCsMngexEseF/uxzINHgN0RM7hZUsz+e+HMfjn5+LZmQysRpV3XwCBBC1nl7wQEP
- LzajEHOQAMnPaWYvQ=
-X-Received: by 2002:a05:600c:1907:b0:479:3a86:dc1c with SMTP id
- 5b1f17b1804b1-48373a7a0eamr50003585e9.36.1771011680743; 
- Fri, 13 Feb 2026 11:41:20 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4834d5ebd1bsm312686675e9.6.2026.02.13.11.41.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:41:20 -0800 (PST)
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:41:19 +0100
-Message-ID: <20260213194120.49344-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260207170754.4022536-1-peter@korsgaard.com>
-References: <20260207170754.4022536-1-peter@korsgaard.com>
+ id VSanNzB0hFdE for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 22:18:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 66DF860715
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66DF860715
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 66DF860715
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 22:18:35 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c3ec.dip0.t-ipconnect.de [79.214.195.236])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9D52BA4C03B8
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 23:18:32 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56334)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vr1Ud-000000005a9-3Qo3
+ for buildroot@buildroot.org; Fri, 13 Feb 2026 22:18:32 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 23:18:32 +0100
+Message-ID: <20260213221832.1177432-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011681; x=1771616481; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=NsIcx8/U5uvNVNS3fQWR9nwEuBhv9v8SVMb2d7t7eDY=;
- b=TtPkRqrnstRwg4IbjINrdIpMWQ1GzHBrkKHQW/UTqPIuoS9z+1U79A4Twx12RghmrL
- g9wnrWdoAu1wBW0GQsSjlfdFpGLszKVV1jkz9vthDBMn072E+Ad0V06SOavUT429Hr/o
- 4pwsghWWTHp5aJX64so52nTVbNGCu2Fu1gTFi8LdBVS1DlaK45ZyykELtqHg+KISeiD4
- 9zYcZv6n8HWjx9tcIKC5jcG3hv1hef8iKtAShwvTu/jeKQkU6ssHn93dBmLN/ScxXd/S
- sVNVXzM3pKdbn4Gd99PhJ9KiP4HJgfxijQDL/mjgoVoqw4Ll1Ynlk/tqrqT/TDARLPCp
- 2zdQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=TtPkRqrn
-Subject: Re: [Buildroot] [PATCH] package/swig: swig-wrapper.in: handle
- symlinks
+ d=kuhls.net; 
+ s=kas202511301023; t=1771021112;
+ bh=bEF+cPHxtuakwR8gFGrpzdHNmYxaC95QXlWOM27Z590=;
+ h=From:To:Subject:Date:From;
+ b=ZZVQqQ4iKM54C/ASTVw4A7cfU73tJHT+oMkngkvuu626oDsoev1FzF9b4SYcnGzBo
+ gWjLnc2bhkN2FkwYma/4LQ6ujArsOj+3brXh092ZH5cfXtlh6aEHETRcilOY5oOEYq
+ 9N0MZAg8HkTFXEk1gcDsY1ZogN+s66TTPTOOKHQds9nmg3QsW0rW7ECi/+PHU4h2XG
+ SjH5+h3lmgqu1x+FwnzMl6brvkovJs8D7D4i4CpDZK2BTNCB+zpCgwrbTcb2xhYVgm
+ n3aN1X3mKQW/woIZ0lNbZGnIATEQUqfNX6hq+WKEbGNWYiDL6Ts2N9sUsF5+42pwan
+ ztmOpCyQWMH5w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=ZZVQqQ4i
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{10,
+ 15}.x / 6.{1, 6, 12, 18}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,46 +92,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Fixes https://autobuild.buildroot.net/results/e656684298b0462f8044667e7384c64d6508f22f/
-> 
-> Use realpath when constructing the path to the real swig so the wrapper
-> works even if it is called through a symlink (E.G. the swig<version>
-> symlinks).
-> 
-> Reported-by: Bernd Kuhls <bernd@kuhls.net>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ linux/before-6.17/linux.hash                 | 10 +++++-----
+ linux/from-6.17/linux.hash                   |  2 +-
+ package/linux-headers/{5.10.249 => 5.10.250} |  0
+ package/linux-headers/{5.15.199 => 5.15.200} |  0
+ package/linux-headers/{6.1.162 => 6.1.163}   |  0
+ package/linux-headers/{6.12.69 => 6.12.71}   |  0
+ package/linux-headers/{6.18.9 => 6.18.10}    |  0
+ package/linux-headers/{6.6.123 => 6.6.124}   |  0
+ package/linux-headers/Config.in.host         | 12 ++++++------
+ 9 files changed, 12 insertions(+), 12 deletions(-)
+ rename package/linux-headers/{5.10.249 => 5.10.250} (100%)
+ rename package/linux-headers/{5.15.199 => 5.15.200} (100%)
+ rename package/linux-headers/{6.1.162 => 6.1.163} (100%)
+ rename package/linux-headers/{6.12.69 => 6.12.71} (100%)
+ rename package/linux-headers/{6.18.9 => 6.18.10} (100%)
+ rename package/linux-headers/{6.6.123 => 6.6.124} (100%)
 
-Applied to 2025.02.x & 2025.11.x. Thanks
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index 90e2bf73cb..4352943b52 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4b493657f218703239c4f22415f027b3644949bf2761abd18b849f0aad5f7665  linux-6.12.69.tar.xz
+-sha256  a616d4b5a18a9097e2df8e03dfd2ba366ddfc1321b16d648651dc512b3e945b1  linux-6.6.123.tar.xz
+-sha256  9766422a49b9a24ea911ebc0b4e7d1f3d84fba3bc374387ae3c4bc60bec6d089  linux-6.1.162.tar.xz
++sha256  143e8bc76cc41f831b51aa5e75819bed55bed41f299d35922820f1d2d2b02600  linux-6.12.71.tar.xz
++sha256  a7aefb9f8e9be2314a66ccda708257d1c2dc04e68235cda987879597fc89794e  linux-6.6.124.tar.xz
++sha256  fd2d033321bd15e0ad5669208b6e43f3f93ccecb059a512ca6b913ca940c38ea  linux-6.1.163.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  01c0d3ae4c138a51891cb54d21374259fd07bfe1076e06362ec0ae0a822fbd2e  linux-5.15.199.tar.xz
+-sha256  b990ed34261149542f932e5eaf1ba58535c5d48c147ae36bc2747c65e54d1046  linux-5.10.249.tar.xz
++sha256  fce4b1c86688880932ba8f755880cbf390a89453464bfd90b9a1b01a121c2998  linux-5.15.200.tar.xz
++sha256  47754da223a9f264b917be5d575a4dae03fc8777aa9e1b00473e973ee997d529  linux-5.10.250.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+ sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index 105f025729..f7effa8edb 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  303079a8250b8f381f82b03f90463d12ac98d4f6b149b761ea75af1323521357  linux-6.19.tar.xz
+-sha256  030115ff8fb4cb536d8449dc40ebc3e314e86ba1b316a6ae21091a11cc930578  linux-6.18.9.tar.xz
++sha256  d6d377161741ada2fab28eed69143277634a2aeb5e3883e50c031588ede48ede  linux-6.18.10.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/5.10.249 b/package/linux-headers/5.10.250
+similarity index 100%
+rename from package/linux-headers/5.10.249
+rename to package/linux-headers/5.10.250
+diff --git a/package/linux-headers/5.15.199 b/package/linux-headers/5.15.200
+similarity index 100%
+rename from package/linux-headers/5.15.199
+rename to package/linux-headers/5.15.200
+diff --git a/package/linux-headers/6.1.162 b/package/linux-headers/6.1.163
+similarity index 100%
+rename from package/linux-headers/6.1.162
+rename to package/linux-headers/6.1.163
+diff --git a/package/linux-headers/6.12.69 b/package/linux-headers/6.12.71
+similarity index 100%
+rename from package/linux-headers/6.12.69
+rename to package/linux-headers/6.12.71
+diff --git a/package/linux-headers/6.18.9 b/package/linux-headers/6.18.10
+similarity index 100%
+rename from package/linux-headers/6.18.9
+rename to package/linux-headers/6.18.10
+diff --git a/package/linux-headers/6.6.123 b/package/linux-headers/6.6.124
+similarity index 100%
+rename from package/linux-headers/6.6.123
+rename to package/linux-headers/6.6.124
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b9c86168be..09c6cb724b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -464,12 +464,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.249"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.199"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.162"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.123"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.69"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.9"	if BR2_KERNEL_HEADERS_6_18
++	default "5.10.250"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.200"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.163"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.124"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.71"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.10"	if BR2_KERNEL_HEADERS_6_18
+ 	default "6.19"		if BR2_KERNEL_HEADERS_6_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-- 
+2.47.3
 
-> ---
->  package/swig/swig-wrapper.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/swig/swig-wrapper.in b/package/swig/swig-wrapper.in
-> index 61c885fc90..e6cf2df134 100644
-> --- a/package/swig/swig-wrapper.in
-> +++ b/package/swig/swig-wrapper.in
-> @@ -5,4 +5,4 @@ if [ -z "${SWIG_LIB}" ]; then
->      export SWIG_LIB="${0%/*}/../share/swig/@SWIG_VERSION@"
->  fi
->  
-> -exec "${0}.br_real" "$@"
-> +exec "$(realpath "${0}").br_real" "$@"
-> -- 
-> 2.47.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
