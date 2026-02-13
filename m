@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74498EF99D3
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D709EF99D0
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43213421EE;
-	Fri, 13 Feb 2026 19:39:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CDC6813E9;
+	Fri, 13 Feb 2026 19:39:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R9oDvKk2YJgR; Fri, 13 Feb 2026 19:39:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RfIJ4B9uyr0y; Fri, 13 Feb 2026 19:39:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60498421E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FF2E813ED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011568;
-	bh=pDSLEho5Fk5e9Fp10rDiJdHWWZo2scj5vkgLBYS9TFw=;
+	s=default; t=1771011570;
+	bh=asRadHjHU1xK5uJEx0NXOw0fuYofcy3aSNujJV26UzA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FEcxWrocAjB2LyrEEQSs4rnH8lLeAeZYz1NNZB0ff/r+N2pxt83iU9t1aVoSsbxQg
-	 aT1N9MRTe2Uef5Wuv5EBcLsyOvtodnBL03XYVlqTstNDyfgetnT/E6pu6J+olesO6I
-	 EiDTj77slUotQ3of7iw7Fx0HkYLHoPhXY9F7QBOpR1RZCIJFc4xrMlITIDnbnGMck+
-	 1vl88BSQ0AndHvkCDPv1uZTKMhJ9PIsHmzoYnECtjJZQWvawK22uEuwVxwl7BHBI4T
-	 tlkxNlLB+1kAE/offepWGEG6nuln0wQpw9N5q+xaO2SNlI3SSGrnN+aVne1gInxbNA
-	 8sgmokOCrk/dg==
+	b=Cg5ikO6ahl1ufYv6u8aXIqjtMgH+fD7C36RnK8yChRZZPnDytEk/qoTfc+RIcnbQN
+	 8ec2KE75ZT9FVpTBAo/QtDgutuSlVsh60a+pnI7/ef//lUJ3ctN4utfQ+EnmUqp4Ke
+	 ffOZrZFbN9lvorF4QQkYTPNGiheLCNql1iVvKJmkzFmhcrWiwHM7ww25MCx1ZX6mun
+	 0d6qP2o2DBnm6AblYcTyL+VgpKl4P4Svit5oLaBOPGZug31I5RmmltPqWBad99bBLd
+	 pv3onsFaFDH9cVPO+5+JVdkIg/PZeCowfaMIv4kC39FWlurPYjgFC4Ws80B7OApeq1
+	 7osuMlBHUB3TQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60498421E7;
-	Fri, 13 Feb 2026 19:39:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FF2E813ED;
+	Fri, 13 Feb 2026 19:39:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F277269
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 226D7283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77E3041307
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D21D412CB
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xfYBclEn9oZZ for <buildroot@buildroot.org>;
+ id NCqpORpOX3_1 for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A390413DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9EAB413D9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A390413DE
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9EAB413D9
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F7E083DBC; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
+ id DF237825CC; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:33:24 +0100
+Date: Fri, 13 Feb 2026 20:33:14 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 40f4ef8d4974b3ce25926668409921e0d430d680
-X-Git-Newrev: 7f44219be530b1021e54c54d428b0d78085f7520
+X-Git-Oldrev: 581091f89ebcf36bf482467e82fb358c8ecc61f7
+X-Git-Newrev: 66dcc3e2a96cb418350cc9af578219530b1b4140
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193705.2F7E083DBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/kvm-unit-tests:
- assume AArch64 supports KVM
+Message-Id: <20260213193704.DF237825CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/libcurl: also
+ specify the CA bundle location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,68 +72,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5375455327466133959=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5375455327466133959==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7f44219be530b1021e54c54d428b0d78085f7520
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/66dcc3e2a96cb418350cc9af578219530b1b4140
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Although it is possible to configure an AArch64 CPU without support
-for EL2 in practice all the common AArch64 have supported
-virtualisation from the start.
+When given a certificate directory with --with-ca-path, curl doesn't
+list the files in that directory. Instead, it uses the certificate hash
+to directly open the requested CA certificate. Therefore, putting a
+bundle in that directory and removing all the individual certificates is
+not possible.
 
-If we really wanted to be strict we could blacklist known non-EL2 CPUs
-but AFAICT all the current ones in the config have EL2.
+In order to support use of the bundle, a separate configuration option
+--with-ca-bundle is needed. With this option, it is possible to remove
+the individual certificates and include just the bundle, which reduces
+the size of the root filesystem a bit.
 
-I should also note KVM on Arm is deprecated and was removed from the
-kernel in v6.10.
+Note that the bundle is generated by the ca-certificates package, which
+also installs the individual certificates and the hash symlinks. It
+keeps both individual certificates and the bundle in the target.
 
-Reviewed-by: Jesse Taube <jesse@rivosinc.com>
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
-Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 137d6e249d9625ed9b58d6c8fea011901b413438)
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 5a63ee3c09e95bfd7afd7822a1a9254e361b940f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/kvm-unit-tests/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libcurl/libcurl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index 0d66a08dd7..817d3c4a8f 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -1,13 +1,13 @@
- config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
- 	bool
- 	# On ARM, it needs virtualization extensions and little endian CPUs
--	default y if (BR2_arm || BR2_aarch64) && \
-+	default y if BR2_arm && \
- 		(BR2_cortex_a7 || BR2_cortex_a12 || \
- 		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
- 		BR2_cortex_a17 || BR2_cortex_a17_a7 || \
--		BR2_cortex_a55 || BR2_cortex_a75 || \
--		BR2_cortex_a75_a55 || BR2_cortex_a76 || \
--		BR2_cortex_a76_a55)
-+		BR2_cortex_a76 || BR2_cortex_a76_a55)
-+	# For AArch64 we can assume all v8.0+ support virtualization
-+	default y if BR2_aarch64
- 	default y if BR2_riscv
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_powerpc64 || BR2_powerpc64le
-
---===============5375455327466133959==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e1e5a7facb..d9a712bcb6 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -58,7 +58,8 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
+ LIBCURL_DEPENDENCIES += openssl
+ LIBCURL_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr \
+-	--with-ca-path=/etc/ssl/certs
++	--with-ca-path=/etc/ssl/certs \
++	--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+ else
+ LIBCURL_CONF_OPTS += --without-openssl
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5375455327466133959==--
