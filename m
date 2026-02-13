@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B6AEF99D4
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E754FEF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2701661597;
-	Fri, 13 Feb 2026 19:36:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G2j_yQJhwDB9; Fri, 13 Feb 2026 19:36:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 560D261469
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011385;
-	bh=rJ7L3KQ/1g5NNtsVWO4MKo6LyIRrd6YnX3m2p2crxLA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HbdbpEl0dkBhlskL0QsKtu7Zk834HtGQtBS/XhRUQxVdo+ak6tNpfASJx2TFcupVN
-	 5fknnLlf5mTJ9YJac3Jsx5Gccop5gUhBVhzeu4umIsqhiodnAvS79/5fkZJChF2GBN
-	 Z2FfiO5d3sacMmuY6yh6dEXj3zcy4trGl6ath/i7yS7fr6IKyUjmsDbv3PGiLMHTEg
-	 HVkD85wAZbxI97taxsYmNNz9D/wObNGeSUYa0YvfENrPmUxDuRuS99YYSv0BvV7F9a
-	 qHg+ST9tOTxHwOrCZd3E4w2QyLucVBkeMdqeHdx999EhqwAkm4zu84mr44WmeCMlJ9
-	 aZJY3Esen4ckA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 560D261469;
-	Fri, 13 Feb 2026 19:36:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 142C6283
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47B8A8455E
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6428845BA;
+	Fri, 13 Feb 2026 19:36:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E2Nhb5U6Sf6q for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id pXXU2DajfH75; Fri, 13 Feb 2026 19:36:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1E0B84650
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771011393;
+	bh=dtOgIB4d1leOsTYl6Fi78xhPDCqGdAA+ZdZBUqTrx7E=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=eo9UZbbDateiF3i3rmPQAt8ivxwZLTr2WYWEOa8oKG1nMEEX1/NtR4fvl+SKGcbID
+	 DjPQn9G+Ypv0r6m4IpNHdcargMGa6bvZoB0cp3H1yM7Qa6Tw4PsoIUEi65/OHI6193
+	 h4sIipgVxBra0h7p244fcfBhEXJUDyB9dANkDrQDNyHYiDAXFOUZSYnj9C4lakgxMS
+	 97P2awb/9NoFlYm44Ck7NyGvV1kvROmTWY5C8fvVc5rUY8kV88g90tAnP/bs3PqxgV
+	 7vqV0HokQEa1iCWTeqjT/jumNk+VObp0VahTolNQf+/RPWyNMhZ8Lm0ApcByFJkYj8
+	 rvXRf0AWtC3SQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1E0B84650;
+	Fri, 13 Feb 2026 19:36:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16BD1283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB14141E58
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7K8ZL5w-a06h for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B724484520
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E99141E32
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B724484520
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E99141E32
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC9D283A88; Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+ id 9331C83A88; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 15:05:35 +0100
+Date: Fri, 13 Feb 2026 20:32:01 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: afb87a21422d6c9846c10dfb333c6d343ed247da
-X-Git-Newrev: e7cde76895d22e2fbf99425d9b8b237a20344bdb
+X-Git-Oldrev: af865daee0daab23f0ee96c2291093a4c9823d0b
+X-Git-Newrev: 6ce14a3faebf5c3f927f98d480d5b7a81afd7445
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193528.AC9D283A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/spandsp: fix
- build with gcc >= 14.x
+Message-Id: <20260213193529.9331C83A88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/dvdrw-tools:
+ remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,148 +77,240 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e7cde76895d22e2fbf99425d9b8b237a20344bdb
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6ce14a3faebf5c3f927f98d480d5b7a81afd7445
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Added upstream patch to fix build error.
-The build error does not occur with gcc-13.x.
+Upstream is dead, website unreachable, and the use case in 2026 is
+dubious, so drop the package.
 
-The first build error of this kind was recorded 2024-08-23:
-https://autobuild.buildroot.net/results/492/4927e93e40ec8bcda107f4bc3d8aa83024deb674/
-
-Fixes:
-https://autobuild.buildroot.net/results/48a/48af80bdda62ca70d73bc01e0939f548c3736c0d/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 130b5a124cd992f9bedd190b3d3b0c6e1033454a)
+(cherry picked from commit 95519e04644ab536a8cfb6a6cff0ddfb3898a3ab)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...Changes-to-address-V.17-fixed-point-issue.patch | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ .checkpackageignore                                |  2 -
+ Config.in.legacy                                   |  7 +++
+ DEVELOPERS                                         |  1 -
+ package/Config.in                                  |  1 -
+ package/dvdrw-tools/0001-limits.h.patch            | 23 ----------
+ ...ude-sysmacros.h-to-compile-with-newer-gcc.patch | 14 ------
+ package/dvdrw-tools/Config.in                      | 53 ----------------------
+ package/dvdrw-tools/dvdrw-tools.hash               |  3 --
+ package/dvdrw-tools/dvdrw-tools.mk                 | 35 --------------
+ 9 files changed, 7 insertions(+), 132 deletions(-)
 
-diff --git a/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
-new file mode 100644
-index 0000000000..39aaa5a5d4
---- /dev/null
-+++ b/package/spandsp/0002-Changes-to-address-V.17-fixed-point-issue.patch
-@@ -0,0 +1,116 @@
-+From 239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b Mon Sep 17 00:00:00 2001
-+From: Steve Underwood <steveu@coppice.org>
-+Date: Fri, 18 Aug 2023 01:24:21 +0100
-+Subject: [PATCH] Changes to address V.17 fixed point issue.
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f2b8fc6c8d..a143f8ea85 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -354,8 +354,6 @@ package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch lib_pa
+ package/dvblast/0001-missing-lm.patch lib_patch.Upstream
+ package/dvblast/0002-fix-int-types.patch lib_patch.Upstream
+ package/dvbsnoop/0001-musl-types-h.patch lib_patch.Upstream
+-package/dvdrw-tools/0001-limits.h.patch lib_patch.Upstream
+-package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch lib_patch.Upstream
+ package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch lib_patch.Upstream
+ package/earlyoom/S02earlyoom Shellcheck lib_sysv.Indent
+ package/ebtables/0001-replace-ebtables-save-perl-script-with-bash.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e8c95cb939..f1e4fa0d99 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02.11"
+ 
++config BR2_PACKAGE_DVDRW_TOOLS
++	bool "dvdrw-tools removed"
++	select BR2_LEGACY
++	help
++	  dvdrw-tools was no longer maintained upstream, so it has
++	  been dropped.
 +
-+Upstream: https://github.com/freeswitch/spandsp/commit/239bf2f6a80bbfb6ef92418ceb5402d1fb256a2b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/spandsp/private/v17rx.h |  2 +-
-+ src/v17rx.c                 | 30 +++++++++++++++++++-----------
-+ 2 files changed, 20 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/spandsp/private/v17rx.h b/src/spandsp/private/v17rx.h
-+index 8ea7a9fe..8613b5a5 100644
-+--- a/src/spandsp/private/v17rx.h
-++++ b/src/spandsp/private/v17rx.h
-+@@ -97,7 +97,7 @@ struct v17_rx_state_s
-+ 
-+     /*! \brief A measure of how much mismatch there is between the real constellation,
-+         and the decoded symbol positions. */
-+-    int32_t training_error;
-++    int64_t training_error;
-+ 
-+     /*! \brief The proportional part of the carrier tracking filter. */
-+     int32_t carrier_track_p;
-+diff --git a/src/v17rx.c b/src/v17rx.c
-+index a823dad2..295d26a9 100644
-+--- a/src/v17rx.c
-++++ b/src/v17rx.c
-+@@ -64,6 +64,10 @@
-+ #include "spandsp/dds.h"
-+ #include "spandsp/complex_filters.h"
-+ 
-++#if defined(SPANDSP_USE_FIXED_POINT)
-++#define SPANDSP_USE_FIXED_POINTx
-++#endif
-++
-+ #include "spandsp/v29rx.h"
-+ #include "spandsp/v17tx.h"
-+ #include "spandsp/v17rx.h"
-+@@ -389,7 +393,7 @@ static __inline__ void put_bit(v17_rx_state_t *s, int bit)
-+ /*- End of function --------------------------------------------------------*/
-+ 
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-static __inline__ uint32_t dist_sq(const complexi16_t *x, const complexi16_t *y)
-++static __inline__ uint32_t dist_sq(const complexi32_t *x, const complexi32_t *y)
-+ {
-+     return (int32_t) (x->re - y->re)*(x->re - y->re) + (int32_t) (x->im - y->im)*(x->im - y->im);
-+ }
-+@@ -954,11 +958,12 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+         else if (s->training_count >= V17_TRAINING_SEG_2_LEN)
-+         {
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %d\n", s->training_error);
-++            span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %ld\n", s->training_error);
-++            if (s->training_error < (int64_t) FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
-+ #else
-+             span_log(&s->logging, SPAN_LOG_FLOW, "Long training error %f\n", s->training_error);
-+-#endif
-+             if (s->training_error < FP_SCALE(20.0f)*FP_SCALE(1.414f)*constellation_spacing[s->space_map])
-++#endif
-+             {
-+                 s->training_error = FP_SCALE(0.0f);
-+                 s->training_count = 0;
-+@@ -1055,19 +1060,20 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+         /*endif*/
-+         if (++s->training_count >= V17_TRAINING_SHORT_SEG_2_LEN)
-+         {
-++            /* TODO: This was increased by a factor of 10 after studying real world failures.
-++                     However, it is not clear why this is an improvement, If something gives
-++                     a huge training error, surely it shouldn't decode too well? */
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %d\n", s->training_error);
-+             s->carrier_track_i = 100;
-+             s->carrier_track_p = 500000;
-++            if (s->training_error < (int64_t) (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-+ #else
-+             span_log(&s->logging, SPAN_LOG_FLOW, "Short training error %f\n", s->training_error);
-+             s->carrier_track_i = 100.0f;
-+             s->carrier_track_p = 500000.0f;
-+-#endif
-+-            /* TODO: This was increased by a factor of 10 after studying real world failures.
-+-                     However, it is not clear why this is an improvement, If something gives
-+-                     a huge training error, surely it shouldn't decode too well? */
-+             if (s->training_error < (V17_TRAINING_SHORT_SEG_2_LEN - 8)*FP_SCALE(4.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-++#endif
-+             {
-+                 s->training_count = 0;
-+                 if (s->bits_per_symbol == 2)
-+@@ -1136,11 +1142,13 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+ #endif
-+         if (++s->training_count >= V17_TRAINING_SEG_4_LEN)
-+         {
-+-            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-+-            {
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %d)\n", s->bit_rate, s->training_error);
-++            if (s->training_error < (int64_t) V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-++            {
-++                span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %ld)\n", s->bit_rate, s->training_error);
-+ #else
-++            if (s->training_error < V17_TRAINING_SEG_4_LEN*FP_SCALE(1.0f)*FP_SCALE(1.0f)*constellation_spacing[s->space_map])
-++            {
-+                 span_log(&s->logging, SPAN_LOG_FLOW, "Training succeeded at %dbps (constellation mismatch %f)\n", s->bit_rate, s->training_error);
-+ #endif
-+                 /* We are up and running */
-+@@ -1157,7 +1165,7 @@ static void process_half_baud(v17_rx_state_t *s, const complexf_t *sample)
-+             {
-+                 /* Training has failed. Park this modem. */
-+ #if defined(SPANDSP_USE_FIXED_POINTx)
-+-                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %d)\n", s->training_error);
-++                span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %ld)\n", s->training_error);
-+ #else
-+                 span_log(&s->logging, SPAN_LOG_FLOW, "Training failed (constellation mismatch %f)\n", s->training_error);
-+ #endif
+ config BR2_PACKAGE_LOCKDEV
+ 	bool "lockdev removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 30cf69a28f..0cae81eb11 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3061,7 +3061,6 @@ F:	package/libcli/
+ 
+ N:	Steve Kenton <skenton@ou.edu>
+ F:	package/dvdauthor/
+-F:	package/dvdrw-tools/
+ F:	package/memtest86/
+ F:	package/mjpegtools/
+ F:	package/udftools/
+diff --git a/package/Config.in b/package/Config.in
+index bd44e8e988..38da39033b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -16,7 +16,6 @@ menu "Audio and video applications"
+ 	source "package/bluez-alsa/Config.in"
+ 	source "package/dvblast/Config.in"
+ 	source "package/dvdauthor/Config.in"
+-	source "package/dvdrw-tools/Config.in"
+ 	source "package/espeak/Config.in"
+ 	source "package/faad2/Config.in"
+ 	source "package/ffmpeg/Config.in"
+diff --git a/package/dvdrw-tools/0001-limits.h.patch b/package/dvdrw-tools/0001-limits.h.patch
+deleted file mode 100644
+index ccda8eeb72..0000000000
+--- a/package/dvdrw-tools/0001-limits.h.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-transport.hxx: add limits.h include now needed because of kernel changes
+-
+-Signed-off-by: Steve Kenton <skenton@ou.edu>
+-
+-diff -pruN dvd+rw-tools-7.1.ori/transport.hxx dvd+rw-tools-7.1/transport.hxx
+---- dvd+rw-tools-7.1.ori/transport.hxx	2008-03-01 04:34:43.000000000 -0600
+-+++ dvd+rw-tools-7.1/transport.hxx	2015-01-18 15:47:24.245863631 -0600
+-@@ -9,6 +9,7 @@
+- #if defined(__unix) || defined(__unix__)
+- #include <stdio.h>
+- #include <stdlib.h>
+-+#include <limits.h>
+- #include <unistd.h>
+- #include <string.h>
+- #include <sys/types.h>
+-@@ -40,6 +41,7 @@ inline long getmsecs()
+- #include <stddef.h>
+- #include <stdio.h>
+- #include <stdlib.h>
+-+#include <limits.h>
+- #define ssize_t		LONG_PTR
+- #define off64_t		__int64
+- 
+diff --git a/package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch b/package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+deleted file mode 100644
+index 29c3a73a4b..0000000000
+--- a/package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch
++++ /dev/null
+@@ -1,14 +0,0 @@
+-growisofs.c: include sysmacros.h to compile with glibc-2.28
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-
+-diff -urpN dvd+rw-tools-7.1.orig/growisofs.c dvd+rw-tools-7.1/growisofs.c
+---- dvd+rw-tools-7.1.orig/growisofs.c	2018-09-08 01:56:11.686656819 +0200
+-+++ dvd+rw-tools-7.1/growisofs.c	2018-09-08 02:11:45.868778471 +0200
+-@@ -441,6 +441,7 @@
+- #include <fcntl.h>
+- #include <sys/types.h>
+- #include <sys/stat.h>
+-+#include <sys/sysmacros.h>
+- #include <assert.h>
+- #include "mp.h"
+diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
+deleted file mode 100644
+index d4d6bd2cd3..0000000000
+--- a/package/dvdrw-tools/Config.in
++++ /dev/null
+@@ -1,53 +0,0 @@
+-comment "dvdrw-tools needs a toolchain w/ threads, C++, wchar"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_DVDRW_TOOLS
+-	bool "dvdrw-tools"
+-	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_WCHAR
+-	help
+-	  The dvd+rw-tools are used to master Blu-ray Disc
+-	  and DVD Disc media, both +RW/+R and -RW/-R. Note:
+-	  The +RW in the name is a historical artifact. This
+-	  package contains the widely used growisofs program.
+-
+-	  Buildroot does not support packages with a '+' sign
+-	  in their name, which explains why it is named
+-	  dvdrw-tools and not dvd+rw-tools.
+-
+-	  Because dvd+rw-tools does not directly interact with
+-	  disc media it uses a separate media backend program.
+-	  The usual backend is mkisofs from the cdrtools package.
+-	  However, cdrtools is not currently part of buildroot.
+-
+-	  The Linux From Scratch project uses uses xorriso for the
+-	  media backend and Ubuntu uses cdrkit for the backend.
+-	  Choose the one which seems most appropriate for your use.
+-	  NOTE: xorriso does not currently support UDF.
+-
+-	  http://fy.chalmers.se/~appro/linux/DVD+RW/tools
+-
+-if BR2_PACKAGE_DVDRW_TOOLS
+-choice
+-	prompt "Media Backend"
+-	help
+-	  Choose which media backend program to use.
+-
+-config BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND
+-	bool "cdrkit"
+-	select BR2_PACKAGE_CDRKIT
+-	help
+-	  Symlink mkisofs to genisoimage from the cdrkit package.
+-
+-config BR2_PACKAGE_DVDRW_TOOLS_XORRISO_BACKEND
+-	bool "xorriso"
+-	select BR2_PACKAGE_XORRISO
+-	help
+-	  Symlink mkisofs to xorrisofs from the xorriso package.
+-
+-endchoice
+-endif
+diff --git a/package/dvdrw-tools/dvdrw-tools.hash b/package/dvdrw-tools/dvdrw-tools.hash
+deleted file mode 100644
+index a5ed6ad521..0000000000
+--- a/package/dvdrw-tools/dvdrw-tools.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed using sha256sum
+-sha256  f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca  dvd+rw-tools-7.1.tar.gz
+-sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  LICENSE
+diff --git a/package/dvdrw-tools/dvdrw-tools.mk b/package/dvdrw-tools/dvdrw-tools.mk
+deleted file mode 100644
+index 5dab546607..0000000000
+--- a/package/dvdrw-tools/dvdrw-tools.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-################################################################################
+-#
+-# dvdrw-tools
+-#
+-################################################################################
+-
+-DVDRW_TOOLS_VERSION = 7.1
+-DVDRW_TOOLS_SOURCE = dvd+rw-tools-$(DVDRW_TOOLS_VERSION).tar.gz
+-DVDRW_TOOLS_SITE = http://fy.chalmers.se/~appro/linux/DVD+RW/tools
+-DVDRW_TOOLS_LICENSE = GPL-2.0
+-DVDRW_TOOLS_LICENSE_FILES = LICENSE
+-DVDRW_TOOLS_DEPENDENCIES = host-m4
+-
+-define DVDRW_TOOLS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-ifeq ($(BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND),y)
+-DVDRW_TOOLS_BACKEND = genisoimage
+-DVDRW_TOOLS_DEPENDENCIES += cdrkit
+-else ifeq ($(BR2_PACKAGE_DVDRW_TOOLS_XORRISO_BACKEND),y)
+-DVDRW_TOOLS_BACKEND = xorrisofs
+-DVDRW_TOOLS_DEPENDENCIES += xorriso
+-endif
+-
+-define DVDRW_TOOLS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/dvd-ram-control $(TARGET_DIR)/usr/bin/dvd-ram-control
+-	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-booktype $(TARGET_DIR)/usr/bin/dvd+rw-booktype
+-	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-format $(TARGET_DIR)/usr/bin/dvd+rw-format
+-	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-mediainfo $(TARGET_DIR)/usr/bin/dvd+rw-mediainfo
+-	$(INSTALL) -m 0755 -D $(@D)/growisofs $(TARGET_DIR)/usr/bin/growisofs
+-	ln -s -f $(DVDRW_TOOLS_BACKEND) $(TARGET_DIR)/usr/bin/mkisofs
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
