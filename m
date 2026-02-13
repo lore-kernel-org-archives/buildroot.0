@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91140EF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18502EF99D0
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 643ED846BC;
-	Fri, 13 Feb 2026 19:37:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5EEF84687;
+	Fri, 13 Feb 2026 19:37:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eGmXPSUYjMBI; Fri, 13 Feb 2026 19:37:13 +0000 (UTC)
+ id bsPSxujTn1EA; Fri, 13 Feb 2026 19:37:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7D33846AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47239846C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011433;
-	bh=AiqcNyLGbBsfUZ7MnVs/4tIsQxU4ofRWEvwB0lV2qoQ=;
+	s=default; t=1771011435;
+	bh=hx1N9E0i97mjQeH7+MqxPiu/ZvZiUJB0kG7xzvttpTk=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DI7859zt/hON/brVkBZEcXQBY4l3wiJ3XUc3LFmcZzLn+QlfQEHPQ7CUfpFISSCI4
-	 4E7CUAgjhhT2gX/bOnOUMN5qKoqvK9ZZJlM40Bx4UXSx7vJCnlZjt1mc8h6KVg1CCB
-	 juuz38h6dzjhqyxexIyJnsxB7ITrRehPGDcokJ5vm1PyrLP1+hoQivsdC1w/15wfrp
-	 7+7YtEV3Xi7mnxhO3TxA80SEBbS3cw6RvpUMYWN5hMRvGucP7DZtgL/IZpzirSaws9
-	 hGHsqlif4guafaDV5QT8xRNE/xjXjO88Pcm8G8TAe/qTNEt70UA57QEmU86Ry9ZSPk
-	 FnLbI9EegOv7A==
+	b=L8cXUmMPULATw6yJ/tEUnQ+R5S2dbBBbb3uS9thyAyICzORyOM9/ho4Qd97zX9QYy
+	 8BX2dpiJJytFVqTlVJCw4SrhAneRXLSeLW9Cus38AkdjHg3MbNRKZD28Xm/CDEVcTL
+	 ACQDTluhTxupq4NDJgFBkCR89GgDLfZr9yPp8FKJ9w7XNXkDM8mqmzBXaYxk++PWte
+	 j9geCnymoRkWqwPRDr8H2FhRMNI84hScGHNYeK/4GfwzGzmnG1x9byQW1UlEPN+dO3
+	 q9oOg8yAQM+ZO83FuhlMoXXhJupfbZpfaBGXi0eu+fnvjzfSXOggtGS0vxhMJvb3Fg
+	 XjR1WnQkX2CMA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7D33846AB;
-	Fri, 13 Feb 2026 19:37:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47239846C4;
+	Fri, 13 Feb 2026 19:37:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0311D69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 119C6EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CAEB084674
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E123984678
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 19bQSYlQdgYD for <buildroot@buildroot.org>;
+ id sc4b9znKa8md for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:36:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B4A4F845C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A4F845C4
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B4A4F845C4
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:42 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4801c2fae63so10809235e9.2
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:42 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99D3B845A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99D3B845A4
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99D3B845A4
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:43 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-483487335c2so11594035e9.2
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1771011401; x=1771616201;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=wGcbisqYD+vqSbCC+P22IK/DNA63jhQXPGlgsVn+VtM=;
- b=ifuVd70xRwQTLVpiQeWZkgMWsSEyLfq2rQ091ICbKsp3/QR3CGbbyUDHsYuHAtSgt3
- DsivQXvtqcUZl3eBNb7Kxeq+z+COxX4OncR8xaPr3Jwl20EqsuzgbcCL4tHSqxXUmTnS
- EQTj6BzMf4WokfvsCrlS8C7iOgNHiXO4/z8z0XgQjjxy4ydew73tKfPjMBtzAAdb0e0F
- PH51Pehdkn0N8UqrY1bIe7xe8Gn8pIvmdSr3yguDG5Vu9ywaOjuCeBNYSc9VqY1XfJud
- 9Fn2Dpog4ImoQFPLeMD2f/4Cw0/hoGM/EAiHtrXe049ZdmcftJGlX2cmz1G3oLopjEjQ
- v2HA==
+ bh=70GVyp80t+RBTmCTBkNFYoC0Q5Gy+nvJ+gdRH6qJgKM=;
+ b=t1Wjly5oysCfa1sQQ05M8e5ZyYYda8n4aYKicMJyUmdALO2O6g8lEXVyeo4p00Iw5C
+ ZZRJHbWYwVjSKd4VVPrGH3ejcuZ8d3wg2BhgC2T1LhgKva4tnybTiHPegKTznupZM55k
+ SNCaLxV8OIVb4hzP972Ds63IuTU8xrS3DIZ/BYP7IWPXJ/vAWciogg5chBb8OSJ3csVs
+ e1uVWVF/oH6MLcUCGZwmJzbQAQzANgECGMN7s2ToVI0TudEqE1YgC8/D6Rzdd2ZygQjl
+ Jmsel28dYTHxJT8Jrkk65fedJ0BT3B3jr9xjMz3b6DawzU1DsF38hn479e6iDb3mg3Ol
+ JOJQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX1bJhOgbn7Na64CWXQLcV6p9+b0j/o7Gor+so/ESCcaZfLLO6Z9zrbxk/OhvMyNfLeqv+FZlWtG6g=@buildroot.org
-X-Gm-Message-State: AOJu0Yw5i/KtB7r+9iNX50WjKTS/43uIZcrQHUUSd7gWNrHHWHXYrfqW
- 1wYBHvAffxUMQKELG6FHqsAExaNOM4eYRI74cO5B8TLHQhRZMR8sR0XbKKt/Aj0FMOE=
-X-Gm-Gg: AZuq6aIab1mYvSjkN/9ZfNIw6yaFQD7McJQhplTVPZI/1RZYgayU3X6PoVuS5yDsFK2
- a46cXD3l4auk01YReGDG+n+RbYtZEsLvTkbiG27ClkLPDmKdIazXPAeI9E6qpJ3QwGwugiLKtS6
- 9lB4r+p2+H5pkGqQW76erM/yAgOr6Lr1wDE9cNRs0hrI6QDFk4l67cI2wDPnD1QYSpoSTjSVovn
- JBmDiYrJIZiBIE9D2xhDWW4jRosrsmQaHTCS3Gwl/hL4RtcR2pqJAOfkwWXkI1MTFkF+vWMXTDh
- i/sebWvT/naFWPfWWzFPDLLy0qb2PvK4Tyt9i6rpKre+YmpWDJs78LPPMIo9CRjh+VyTwHPXkWv
- ntjrZ/+q79D36k3QZN0OarA3pmSlVUcczoJsfEa8+SAaUhqbGT7JaM7g9bANcPoZqgwKO/VP2wQ
- ThwGq+s/jO1Xn07gE=
-X-Received: by 2002:a05:600c:3b8b:b0:471:14af:c715 with SMTP id
- 5b1f17b1804b1-4837104307amr78059895e9.3.1771011400685; 
- Fri, 13 Feb 2026 11:36:40 -0800 (PST)
+ AJvYcCUXus4YLohdxhoqtoACOus1sE89BhUJqvwLSjVpWGBh9XclEH930ImRqd33LOvPqjxj8jl1QdR2Z6Y=@buildroot.org
+X-Gm-Message-State: AOJu0YyIrJZEc1WkjxCZN1guPFm6u5S/j+zDOWmZk8Jpu90+8DRhmo48
+ sPdtFE/zEvkjw+og7sRc3Yib1X5Q17RLSyQX0JLpqGdimnO0h9OUhJeAhvrfngZLpZvmw/cdL0c
+ rWGWr
+X-Gm-Gg: AZuq6aLh4VZbEDYu3phkv2kucfL4abPiw+ATxfJ2ERtdZhmnebPS8+bSV+G50oAGWi8
+ 7deoy262o2furvaAfPIuyiPA9XyH3NcWTl0p/GbbiI2NsumvIBm5EQUrS0OEzHCXW9B4LJY6j5K
+ 4rL67nBhBkRH4pNXfgUxEJRmhZRQVmvo+WQnaixQ9QY4ky+2uuB3sfl/h7UoSdqcy18PxMy/mBt
+ BEb2gJrvlCPr26wICQgkwpSaysNFHhQxLfPUZ4uA6WIcf8VmxIO4dwXyg/+PgBq6d9F0PQks2fi
+ B40q9ONhctlHpaWlj53vfztYQJV3GMvqEI+y9x7uY4IXO6wt/ccweDlrMsjYswioFHsO/Babm2D
+ XFCjme2FBRWnF8xUI3tgpovq8aOWv6bYjXHXwxUpK8NAqvHKK2BiSDlHuZmP6HHHWpZdOGLyL+A
+ 9+q0V6pV6q05WFSDg=
+X-Received: by 2002:a05:600c:458a:b0:479:2f95:5179 with SMTP id
+ 5b1f17b1804b1-48373a0c663mr45027885e9.15.1771011401540; 
+ Fri, 13 Feb 2026 11:36:41 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796ac7d91sm7892527f8f.26.2026.02.13.11.36.40
+ ffacd0b85a97d-43796a5ac7csm7022468f8f.7.2026.02.13.11.36.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:36:40 -0800 (PST)
-To: Marcus Hoffmann <buildroot@bubu1.eu>
+ Fri, 13 Feb 2026 11:36:41 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
 Date: Fri, 13 Feb 2026 20:36:40 +0100
-Message-ID: <20260213193640.37783-1-thomas.perale@mind.be>
+Message-ID: <20260213193640.37838-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251120123703.1371644-2-buildroot@bubu1.eu>
-References: <20251120123703.1371644-2-buildroot@bubu1.eu>
+In-Reply-To: <20251201192849.3195425-1-bernd@kuhls.net>
+References: <20251201192849.3195425-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1771011401; x=1771616201; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wGcbisqYD+vqSbCC+P22IK/DNA63jhQXPGlgsVn+VtM=;
- b=MRKYJPYYXKUuXDJoVZ2yqQWMOp+zhcr0gxlZI9P1o5qonGRck34pWi1RYXcSSLzoHf
- Jpa7fzn9ij/+qm0GID5nUzENhM+pdvUdz1Y39haunEgOU6k+vsmYXb9P1FGA0u0LMNU1
- OO/S7sDPFiTYSGRaRxrqIXd95SugT+pOtjGItnseLFWFY3oRldOW5qJEDasD61f6ynYW
- J9lYAA9vPluEWxUUzpldu23yCCtjDo6AHcUuWiZ2IrWlLCseaNDnmanFzDek/VeBSVOv
- SLo1CRyXTdblsFWnnlaoDeb8yr8LbUJnUUdiIh6G5pUvc3/VxYHkE32+ZHh1jvVjkqEx
- eiGg==
+ bh=70GVyp80t+RBTmCTBkNFYoC0Q5Gy+nvJ+gdRH6qJgKM=;
+ b=Q9G24LnexFBAt9dq3dqkJI3oqb3WnjKuV/f6YMPdlGphsWpsDv9Hbq07+9VSCCCP4M
+ JPc0EswQuob6uGZXgIEgnCX5g6n1ASg/lcflUcEim/o34lxXOMigNFpKKpWk/PrzEPzg
+ XmBzK96dsj5Gq4W4EfKPVbHxTJURCQEEZJWd1XsAxIbTUkzziMkgpNNnkjxspZ6kfb6f
+ KrpcFDdgLc5AseOtsTMvOxYgR4sXuwl61O4d7mSwiSqa9QpUgdhsd3NehR/xI7T8NIfl
+ Xud3YnIZhXgQoiLv/jcQiEBrtwEZZY3PfA8I60cS+XeNPlAxyG1DrnrO8D/YBXNdQRg8
+ 7cSA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MRKYJPYY
-Subject: Re: [Buildroot] [PATCH v2 2/3] support/testing: fix
- SdbusModemmanager/SdbusNetworkmanager duplicate test name
+ header.a=rsa-sha256 header.s=google header.b=Q9G24Lne
+Subject: Re: [Buildroot] [PATCH 1/1] package/parprouted: fix build with gcc
+ 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,29 +132,64 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> Fixes:
+> https://autobuild.buildroot.net/results/572/572669fe1f9a77083a361fee7c8acdf38d7375ae/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.11.x. Thanks
 
 > ---
->  support/testing/tests/package/test_python_sdbus_modemmanager.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/parprouted/0001-gcc-15.patch | 38 ++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/parprouted/0001-gcc-15.patch
 > 
-> diff --git a/support/testing/tests/package/test_python_sdbus_modemmanager.py b/support/testing/tests/package/test_python_sdbus_modemmanager.py
-> index 34ab66e3bf..58e02f99ef 100644
-> --- a/support/testing/tests/package/test_python_sdbus_modemmanager.py
-> +++ b/support/testing/tests/package/test_python_sdbus_modemmanager.py
-> @@ -1,7 +1,7 @@
->  from tests.package.test_python import TestPythonPackageBase
->  
->  
-> -class TestPythonPy3SdbusNetworkmanager(TestPythonPackageBase):
-> +class TestPythonPy3SdbusModemmanager(TestPythonPackageBase):
->      __test__ = True
->      config = (
->          TestPythonPackageBase.config
+> diff --git a/package/parprouted/0001-gcc-15.patch b/package/parprouted/0001-gcc-15.patch
+> new file mode 100644
+> index 0000000000..2090506491
+> --- /dev/null
+> +++ b/package/parprouted/0001-gcc-15.patch
+> @@ -0,0 +1,38 @@
+> +Description: Fix FTBFS with GCC 15
+> +Author: Adrian Bunk <bunk@debian.org>
+> +Bug-Debian: https://bugs.debian.org/1097548
+> +
+> +Downloaded from
+> +https://sources.debian.org/src/parprouted/0.70-6/debian/patches/gcc-15.patch
+> +
+> +Upstream: dead (last update 2008)
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +
+> +--- parprouted-0.70.orig/parprouted.c
+> ++++ parprouted-0.70/parprouted.c
+> +@@ -330,7 +330,7 @@ void parseproc()
+> +     }
+> + }
+> + 
+> +-void cleanup() 
+> ++void cleanup(void *arg)
+> + {
+> +     /* FIXME: I think this is a wrong way to do it ... */
+> +     
+> +@@ -346,13 +346,13 @@ void cleanup()
+> +     exit(1);
+> + }
+> + 
+> +-void sighandler()
+> ++void sighandler(int sig)
+> + {
+> +     /* FIXME: I think this is a wrong way to do it ... */
+> +     perform_shutdown=1;
+> + }
+> + 
+> +-void *main_thread()
+> ++void *main_thread(void *arg)
+> + {
+> +     time_t last_refresh;
+> + 
 > -- 
-> 2.52.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
