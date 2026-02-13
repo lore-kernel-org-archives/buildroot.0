@@ -1,63 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B670EF99D1
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65A6FEF99D4
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADD1D61728;
-	Fri, 13 Feb 2026 19:39:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1031182813;
+	Fri, 13 Feb 2026 19:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9V8mu2-IpAF; Fri, 13 Feb 2026 19:39:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hBK-PXqUIiej; Fri, 13 Feb 2026 19:39:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D8F56171B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDE0B848A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011590;
-	bh=qn5cPBVD1uFPcXKRZzx+ipfwhqfWwQKnTjgbQLtGy6w=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kC/WFHhikTYw/1s/JtHMjPMC2pSp/xEXtfo+LvjBxQZpR0km5PkHeh7OWxe0POvxS
-	 +KjhjGf1p5Z9PNV6rsPtE/gxw8GQAjMeEXRJqS+oqTPjPAIkVLKXSc1+39XpZpD9cT
-	 +iAw/qNsLhXtna1y++Gj3oMqvllc3BpwwwM6LK+RP+orZ4IHMmB2IRzXGLXcb1fSMQ
-	 NbA0dMuEeuOA4toTACgWP7kQoTLkZR8pDtjbrrKFRBoy/EcmRbtJW9AWr4l8smwQZa
-	 BpOFR0DwrEHtaly9inSroB7itkoKhDQNWGi4ddw3PMgnTsHtj6nNVAN4sUpzd99V2v
-	 qkm+QUNuKQQTg==
+	s=default; t=1771011592;
+	bh=EqyDqxuswcHXibWY8oZKElpL/trx+hVDu93YeDOsSw0=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=qEd31ocYy8E6fv2yfUCG/3lg2L8nL+HWZZjKgQ8r1k2tNujGk5I06DH2VQOrMKI+e
+	 KrFZW8t9FUIz4KEkftLVuZ+CTff8VAbHDUcsr3VTIvbXr2Aqpf259VCKEevisSHCUo
+	 ME2SXQys6eNGGm93vsXwGBKlAbn+IGPTvsJDhmFoV7JV3eoNhFrpDa/0Mjv3duUN3t
+	 B3CWu+HNVxCTOpt412yxmfDuvDExKeU9rgm5Fg9RYPXrQHGoC6Q62a81YMs4UOEXuH
+	 GxQZdTfaiddaxWMnRP5Z20IZdQKCU3Uacy8erEjqQ5SnKRz3M3CqCIDUwt16Djo9rV
+	 GzKmiEJeVPEaQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D8F56171B;
-	Fri, 13 Feb 2026 19:39:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B1A2EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDE0B848A6;
+	Fri, 13 Feb 2026 19:39:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0A81EC
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59F39413DC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE931847C3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whkYjaR7tkrp for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE38F412C3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE38F412C3
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3A9585DA7; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:33:51 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 06ac307b2f86ad26e28a43487c799b8448acf45b
-X-Git-Newrev: 7e1d81d73dee5cfa611d71ba6f9550837daae8b9
-X-Patchwork-Hint: ignore
-Message-Id: <20260213193705.D3A9585DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/{glibc,
- localedef}: move to sourceware.org git repo
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YTriaLCi1nZX for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:38:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99BF2847B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99BF2847B7
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99BF2847B7
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:23 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-436317c80f7so2259171f8f.1
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1771011502; x=1771616302;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=GmHuT9Mz1gqP3kbGjifJ5rfIKZr9ivG8DfBytJEVDrg=;
+ b=CcOvlwS8MxLS5V88yzs1O3eelHtzbS1Kl0K2LYx1R7DJSQTYg6L3rbptHlDJH+Mvdf
+ 0MA/S0qVjsuxn644k7IjRGFduUJRZhJTOsM5m7amY2u74krsXBq4+cNv4P0g9yvQ+9ZK
+ o7sJeKHYnRwOAVfJ1rdSA4edqeDQooJQl51HTdP+ioGSjeyspO0zZnWcrGb1XRj23EXI
+ Mzyhma6WNxp+0aADN2THDPIMWdvJINzT2wMX5a1fWPJdYwA/y+7pFWepzmmvXnxOvJ5l
+ ZTOg2OOHMIsKPBCA707iYks5U+pXylpy1aDsmH0/4fgZuqaX8ri/oCs/EweEaNJ8iiNh
+ 1T8w==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUs9uYz6lySpFIhS/v4Q92Qpb4mRRXT8NoWmqeA13HoEusg5tOLD73fDAOHo+o3F9E95mA4c7OVzvE=@buildroot.org
+X-Gm-Message-State: AOJu0YxU6dqabynFHTujS3FEZ3lZI0QX5sZM2Uka/5PLgfw+puotpCC4
+ vqBYD3G72AEYGrhuCYLGOoxxyN7jA0/odS5ly9I0G0m4igC2K0q5inaUvOJKvNUBEHM=
+X-Gm-Gg: AZuq6aKnKS0gvC8S/b15wYD8yMozbz0RXESdUqSgbueXV54Ne7NA9OyTi5TsCslqnQa
+ cdbd28X43M7xYRalEBXACA+3HSmHMD+lLlIcH2cmARgawQy+UmXBXbWEdUYXSfkdYWtVnoMOtLc
+ EWir79GFsQC5cKVmPkng4K9HX4fs2f7Yeb7fBGvBEVtXeYqD83kvbl7mEuldTyzGEeO4vHX85K2
+ 1qnbqzI4oa6JLNW321lIvNDWE9LgqqqJ1PeyMcjOc5epaSYTb71/c0VhxyghkhGtXcnYSJnRVej
+ kzRGrB1IvbU+DxqS4QEPI3VtF9rKZeJO1Vex/hMPTVX2UiiRMJs/6bYYcfJ8HOl1QYIqcXvIIK0
+ pvBblMfGv13q0dgfWfB8CrZvQlZmKiAnjYYI8vVwNlSoRbEOut3G4jORPj4iuQgHvgBebVRfpox
+ n0b40PuzEgvBPyMms=
+X-Received: by 2002:a05:6000:2681:b0:436:e875:7911 with SMTP id
+ ffacd0b85a97d-4379d5daa51mr2327700f8f.4.1771011501658; 
+ Fri, 13 Feb 2026 11:38:21 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43796ad112bsm7718697f8f.36.2026.02.13.11.38.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Feb 2026 11:38:21 -0800 (PST)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Buildroot List <buildroot@buildroot.org>
+Date: Fri, 13 Feb 2026 20:38:20 +0100
+Message-ID: <20260213193820.42128-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260202212814.2607588-5-thomas.petazzoni@bootlin.com>
+References: <20260202212814.2607588-5-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1771011502; x=1771616302; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=GmHuT9Mz1gqP3kbGjifJ5rfIKZr9ivG8DfBytJEVDrg=;
+ b=dJugHMyUAivCjzrv+xk5z30+QfTUioCiG43boPzvZh/BTyfwCHzqCAXI51Uqr8kpMh
+ idhy2vc9TEnx38p+ymGUG3LBo6sqHfzuwQuDWCurXHAn6c3ZQLPNi0mHu2tilQjy/S1M
+ KxdvK7xr9Ifk93y4mdVfOvwU6yVLCgT47b4v6VE6C1axP1Apgmwzs5h1zKzZjzhuWiRZ
+ 3qsIhxBfclxsftVkfrUJgtLj1/X3ahhJDjSY3aNgo3SRSqOfXI9y8XbK6jU2e8XWk6qm
+ 2DUIDl2VhinWF44X7F8wohIOW55p+7ODBQr+h3hgfVRARFhsUNJBKid2p2aIEMNR6NZp
+ +aXQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=dJugHMyU
+Subject: Re: [Buildroot] [PATCH 4/5] support/config-fragments/autobuild:
+ replace MIPS64 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,100 +125,100 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e1d81d73dee5cfa611d71ba6f9550837daae8b9
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
+In reply of:
+> The prebuilt MIPS64 toolchains are very old, causing build issues (for
+> example recently with the systemd v258 update). Replace them both a
+> single toolchain configuration that uses one of the mips64el Bootlin
+> toolchains.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-As described in https://gitlab.com/buildroot.org/buildroot/-/issues/160, the
-github mirror is getting shut down - So move to the sourceware.org git repo.
+Applied to 2025.02.x & 2025.11.x. Thanks
 
-The github mirror was originally used because of performance and reliability
-issues with sourceware, but that seems be resolved now after server/RAM
-upgrades - E.G. from the sourceware news:
-
-April 22, 2024
-    server2.sourceware.org now has 512GB RAM, thanks Red Hat.
-
-https://sourceware.org/
-
-So change back to fetch glibc (and localedef) from sourceware.org over git.
-
-Notice: The git archiving leads to slightly different paths and permissions
-in the tarball, but the file content is identical:
-
-mkdir a && tar -C a -x --strip-components=1 -f \
-	path/to/glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125.tar.gz
-mkdir b && tar -C b -x --strip-components=1 -f \
-	path/to/glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125-git4.tar.gz
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien:
- - add missing SoB line
- - fix command lines in commit log
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 807b0bab37ad2d0d11b7f0a54e5859ff1ae9867d)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/glibc/glibc.hash       |  4 ++--
- package/glibc/glibc.mk         | 10 ++--------
- package/localedef/localedef.mk |  5 +++--
- 3 files changed, 7 insertions(+), 12 deletions(-)
-
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index a58bb7b9a7..0a11cfdb5e 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
--# Locally calculated (fetched from Github)
--sha256  f63ffa06cd17ee8ff891f6de41de6e189b96edc6b2be2807ae597291f4464388  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125.tar.gz
-+# Locally calculated (fetched from git)
-+sha256  737e3b2bfee2e3e209e514133f4ff7d2bef0d0dc903fd46b4e2244f6c998f7b2  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125-git4.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 44bf9c4b06..80d21b86ed 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -8,14 +8,8 @@
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
- GLIBC_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
--
--# Upstream doesn't officially provide an https download link.
--# There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
--# sometimes the connection times out. So use an unofficial github mirror.
--# When updating the version, check it on the official repository;
--# *NEVER* decide on a version string by looking at the mirror.
--# Then check that the mirror has been synced already (happens once a day.)
--GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
-+GLIBC_SITE = https://sourceware.org/git/glibc.git
-+GLIBC_SITE_METHOD = git
- 
- GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
- GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 254a79026a..4da110417a 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -8,8 +8,9 @@
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- LOCALEDEF_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
--LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
--LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
-+LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
-+LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
-+LOCALEDEF_SITE_METHOD = git
- HOST_LOCALEDEF_DL_SUBDIR = glibc
- 
- HOST_LOCALEDEF_DEPENDENCIES = \
+> ---
+>  .../autobuild/bootlin-mips64el-glibc.config          |  4 ++++
+>  .../autobuild/br-mips64-n64-full.config              | 10 ----------
+>  .../autobuild/br-mips64r6-el-hf-glibc.config         | 12 ------------
+>  .../config-fragments/autobuild/toolchain-configs.csv |  3 +--
+>  4 files changed, 5 insertions(+), 24 deletions(-)
+>  create mode 100644 support/config-fragments/autobuild/bootlin-mips64el-glibc.config
+>  delete mode 100644 support/config-fragments/autobuild/br-mips64-n64-full.config
+>  delete mode 100644 support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+> 
+> diff --git a/support/config-fragments/autobuild/bootlin-mips64el-glibc.config b/support/config-fragments/autobuild/bootlin-mips64el-glibc.config
+> new file mode 100644
+> index 0000000000..d8bebd5d70
+> --- /dev/null
+> +++ b/support/config-fragments/autobuild/bootlin-mips64el-glibc.config
+> @@ -0,0 +1,4 @@
+> +BR2_mips64el=y
+> +# BR2_MIPS_SOFT_FLOAT is not set
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_GLIBC_STABLE=y
+> diff --git a/support/config-fragments/autobuild/br-mips64-n64-full.config b/support/config-fragments/autobuild/br-mips64-n64-full.config
+> deleted file mode 100644
+> index b89b74e76f..0000000000
+> --- a/support/config-fragments/autobuild/br-mips64-n64-full.config
+> +++ /dev/null
+> @@ -1,10 +0,0 @@
+> -BR2_mips64el=y
+> -BR2_MIPS_NABI64=y
+> -# BR2_MIPS_SOFT_FLOAT is not set
+> -BR2_TOOLCHAIN_EXTERNAL=y
+> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2020.11.2.tar.bz2"
+> -BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
+> -BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config b/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+> deleted file mode 100644
+> index edf04c356f..0000000000
+> --- a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+> +++ /dev/null
+> @@ -1,12 +0,0 @@
+> -BR2_mips64el=y
+> -BR2_mips_64r6=y
+> -BR2_MIPS_NABI64=y
+> -# BR2_MIPS_SOFT_FLOAT is not set
+> -BR2_TOOLCHAIN_EXTERNAL=y
+> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2020.11.2.tar.bz2"
+> -BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
+> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+> index ff8927eb37..3ea05775f8 100644
+> --- a/support/config-fragments/autobuild/toolchain-configs.csv
+> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
+> @@ -28,6 +28,7 @@ support/config-fragments/autobuild/bootlin-m68k-5208-uclibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-microblazeel-uclibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-mipsel-uclibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-mipsel32r6-glibc.config,x86_64
+> +support/config-fragments/autobuild/bootlin-mips64el-glibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-openrisc-uclibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-powerpc64le-power8-glibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-powerpc-e500mc-uclibc.config,x86_64
+> @@ -47,5 +48,3 @@ support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
+>  support/config-fragments/autobuild/br-arm-internal-glibc.config,any
+>  support/config-fragments/autobuild/br-loongarch64-full-internal.config,any
+>  support/config-fragments/autobuild/br-loongarch64-internal-glibc.config,any
+> -support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64
+> -support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
+> -- 
+> 2.52.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
