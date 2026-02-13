@@ -1,63 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A1EEF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A6A3EF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3760D421DE;
-	Fri, 13 Feb 2026 19:39:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09B03613C4;
+	Fri, 13 Feb 2026 19:39:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ESoLOK_zBglk; Fri, 13 Feb 2026 19:39:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ivfE6e2CI8AR; Fri, 13 Feb 2026 19:39:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B63841F2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 363DC616DA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011565;
-	bh=A4Q5hJWWACmC0djf3ujwaMPjoE6vKFXrsTBHn3msdeo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=G23PbvkEseweegoJ62QXlNHODzb6PkQCEH1EZup6S5c8MyU5oR5UUrBx41p8iCBHO
-	 Gz0ra/QufcBU9h0T6onqqslsA004W+fzKU2B7bu9PhLcXX9gz9sSeMif0VuEgq/GT5
-	 HuraKAy2+9/UtNiuXYr5lSa1kIBDQZMzs4dyX8/v4rANy7J1ezZh1YY2McFla1n6xt
-	 +vTshZJNPd4BzJzIi5FFU40gCqqd+zwfvgtS1wsNmYlLCw+Cn7Xyy801/fTjYaV8aH
-	 qc2bNGduGa+Nk4lmeUUVuJCVeNL4C2JoJrGHDfoPZNQGOqw6U41IlETBZf7kXO6O5V
-	 KvXKnDM/pQNbw==
+	s=default; t=1771011566;
+	bh=rRU9NToLkMIyzl0d9IpX6repgWlqbQFt1/W9QuH7210=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ayCFi2xyEcVY+r70yIZ9udjTAUeI5izNkl8wnoEpbe6c2ouo9dx7QI0ZJNLqZlAHl
+	 cYwVmjxakuzm0c2cedF1GP4z8O5BhyhSOzIYzuO6uiqH07cD+GgbvR3rdqOPGVFcFU
+	 mavV7FAb6PiGlcd7nQ9PrzMi/nV1TtXUb3lflm0RkAJokF7kJ1LCp8LphMgWeuNuag
+	 cdtVJVuJZNIWtaMfuyX0YcV6OfZlQn5SmdSfsQ8fzKl6cVBv+dTIO4xhOA1Febj7sp
+	 5LaAQS2XIHbMVeg3Qj28c0RCLtqhMxeKoNJSkWSKL1tIdICUlQBh7tGfPGDohsXSrr
+	 0BnOxkGNdCzGg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B63841F2A;
-	Fri, 13 Feb 2026 19:39:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D2D6EEC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 363DC616DA;
+	Fri, 13 Feb 2026 19:39:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02828EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC44841334
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6A0861612
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iCkZ90HJ_veQ for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05BC1412D6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 05BC1412D6
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEF8F83593; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:33:16 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 66dcc3e2a96cb418350cc9af578219530b1b4140
-X-Git-Newrev: fd0ea11ac44757cddbde16beed7b3001e6167cd1
-X-Patchwork-Hint: ignore
-Message-Id: <20260213193704.EEF8F83593@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/brotli: fix
- LoongArch64 build
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c0qcyXtCd-zI for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:38:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DBB2461395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBB2461395
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DBB2461395
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:06 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-482f2599980so14465795e9.0
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1771011485; x=1771616285;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=x7qUzhGp4Tkwng6U8wMhRTD2ISzyFNDWK2lbYtdyMMQ=;
+ b=U8wSX3q06aNmqAyEkuroYglZDWCM/mBHFlWeEajF2t8B2qH+eQDJEyzX1O8e42gYtw
+ pzRFMplcmGzXNp/yOYnx0TXLDJEnUGnqvFhGoDbWFiaWpjJ/lLmYrhajJ+AOFZlDj0MC
+ wbNrzPfBqK3oTTHj7E2UWJfe0VgUIWnmpXs6xEVl1JRIuOGjZm4b3jdGzU4asndfBUFX
+ UxxgD4Vdm/LTYHfKpqLarXq28/KasEVdqkYS4DSci2NIj4yMHGWPSAucdsD8EvkKWC0+
+ dMwXdKoFVqaYuPNH9lLhfEIT9vC5FgVsSEvxlu/6EHurTCpK/F6EwHnN4OejPXRJLFDm
+ BgDQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWCZLUU9xYk6WZqXWakz9xPNanzDwTMtOeMRVkDJR3u34pbzCx38JizNxSDBnANCD14BgRUKGh1Q0Q=@buildroot.org
+X-Gm-Message-State: AOJu0YyS5W+mj9uXINOPp6RCtPAWqvt1WM86mNMMsrYmzqpW3MWi+2+p
+ 7k75JhtzDtbrX2dUTqgptInupoH+cSyEXIy4jn9BMAY70N4VVW+qjAbpN/Kzg8DBZts=
+X-Gm-Gg: AZuq6aKR6ZqkPvhbnbKoMNC0PTg/fLnT3xZ7ga4s/S4ZEKl/5IbyS6my8lh7BCvRqzx
+ B64nIWkQGMOntBex5XqdPaRbtE3V6msb/CWqzzDfL9FOYVnD+rX/d/VT6z02CjYgumBUrKe/iSt
+ HIQ0EntJFKmn4W3DB0uAP/R2OsOH/TGzpU1IVmCxGrvWUDqV9lMaRU0qA6/BpjsBJjMlDEF5u4i
+ 0z9v93X87VltOOTbpwx9eyl1O3h3TbRoy/vU7pgV81hFVs2zOQBylrkUs4PanXj+57bp/qzgZd1
+ DWoyI92OsnmABUN4atliLWZoQIep4mILtmo0Yq0qg5r3Ve8dfWC3Uj+hWb+KhOzw8X9+UMjVIYj
+ icN65bNqgzAeMmbvIVgvdtsLedZLS6M1qdi91vfa1KY5yM3FFZ25uu1KEMYPapiRzUNcp8n+3Hl
+ 8FPqqb6/uHUJzqtxc=
+X-Received: by 2002:a05:6000:4305:b0:437:6dfe:1b89 with SMTP id
+ ffacd0b85a97d-4379794331cmr5941392f8f.61.1771011484882; 
+ Fri, 13 Feb 2026 11:38:04 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43796abd259sm7705995f8f.24.2026.02.13.11.38.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Feb 2026 11:38:04 -0800 (PST)
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:38:03 +0100
+Message-ID: <20260213193803.41588-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <aYDg9IRuE64VYwWa@waldemar-brodkorb.de>
+References: <aYDg9IRuE64VYwWa@waldemar-brodkorb.de>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1771011485; x=1771616285; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=x7qUzhGp4Tkwng6U8wMhRTD2ISzyFNDWK2lbYtdyMMQ=;
+ b=Oy9adX3tNdHaldJiYuUPVC/IkxDrpUn4LTxNYgLezVqrQRFYzm4I+4oyNBKal8AXyX
+ cpJYrAOfvF7ibRS2KVNl0FiHIzjCQiK397rvj87mhaa8qWTByVZeWSgY8M4MGS3qeCdR
+ 4ULe6xRV0+m3lNt4Ql9B7T2m17MrEqBPCJkBsKVrs8X4xKkWV2JegaFv9XflTTMLpCj0
+ 7G5UCcQQOAz35IcxzvjanA8hQxqAsiYZV+d3Kq8oGNKNkr8UWqaJrISddb+WrF+JjKP2
+ k3wjtV9z4YKYMypJXO/diUC+v7VYoPqtK/pIKFrm1bDjJsKqkE1ilgSa8ass4rUAlk/c
+ iFjQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Oy9adX3t
+Subject: Re: [Buildroot] [PATCH] package/asterisk: add workaround to fix
+ build issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,82 +125,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fd0ea11ac44757cddbde16beed7b3001e6167cd1
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
+In reply of:
+> Sometimes asterisk buildsystem decides to remove our own
+> build menuselect stuff for the host. And then fails to
+> run the cross-compiled binary.
+> 
+> Add a patch to avoid removal of the menuselect stuff.
+> 
+> Fixes:
+>  - https://autobuild.buildroot.net/results/5f7/5f76f032ee596e928089b064b01f08adacade47a/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Buildroot commit 473c9400a0c7be14e7eb8ba617697a76286915b3 bumped brotli
-to version 1.2.0 causing build errors on loongarch64. The build error
-does not occur with brotli 1.1.0.
+Applied to 2025.02.x & 2025.11.x. Thanks
 
-Fixes:
-https://autobuild.buildroot.net/results/57f/57f61a5fd17432bba05e4f1865f82cc2f4626d3c/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 302a325f1f15d80aa0675841f50b2f8964680cb6)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...sable-BROTLI_MODEL-macro-for-some-targets.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
-new file mode 100644
-index 0000000000..d35b4b3336
---- /dev/null
-+++ b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
-@@ -0,0 +1,46 @@
-+From e230f474b87134e8c6c85b630084c612057f253e Mon Sep 17 00:00:00 2001
-+From: Evgenii Kliuchnikov <eustas@google.com>
-+Date: Mon, 3 Nov 2025 07:20:19 -0800
-+Subject: [PATCH] disable BROTLI_MODEL macro for some targets
-+
-+PiperOrigin-RevId: 827486322
-+
-+Upstream: https://github.com/google/brotli/commit/e230f474b87134e8c6c85b630084c612057f253e
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ c/common/platform.h | 9 +++++++--
-+ 1 file changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/c/common/platform.h b/c/common/platform.h
-+index b59f9b809..e1254d5ca 100644
-+--- a/c/common/platform.h
-++++ b/c/common/platform.h
-+@@ -213,6 +213,10 @@ To apply compiler hint, enclose the branching condition into macros, like this:
-+ #define BROTLI_TARGET_MIPS64
-+ #endif
-+ 
-++#if defined(__ia64__) || defined(_M_IA64)
-++#define BROTLI_TARGET_IA64
-++#endif
-++
-+ #if defined(BROTLI_TARGET_X64) || defined(BROTLI_TARGET_ARMV8_64) || \
-+     defined(BROTLI_TARGET_POWERPC64) || defined(BROTLI_TARGET_RISCV64) || \
-+     defined(BROTLI_TARGET_LOONGARCH64) || defined(BROTLI_TARGET_MIPS64)
-+@@ -665,13 +669,14 @@ BROTLI_UNUSED_FUNCTION void BrotliSuppressUnusedFunctions(void) {
-+ #undef BROTLI_TEST
-+ #endif
-+ 
-+-#if BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3)
-++#if !defined(BROTLI_MODEL) && BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3) && \
-++    !defined(BROTLI_TARGET_IA64) && !defined(BROTLI_TARGET_LOONGARCH64)
-+ #define BROTLI_MODEL(M) __attribute__((model(M)))
-+ #else
-+ #define BROTLI_MODEL(M) /* M */
-+ #endif
-+ 
-+-#if BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
-++#if !defined(BROTLI_COLD) && BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
-+ #define BROTLI_COLD __attribute__((cold))
-+ #else
-+ #define BROTLI_COLD /* cold */
+> ---
+>  ...0005-Makefile-don-t-clean-menuselect.patch | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/asterisk/0005-Makefile-don-t-clean-menuselect.patch
+> 
+> diff --git a/package/asterisk/0005-Makefile-don-t-clean-menuselect.patch b/package/asterisk/0005-Makefile-don-t-clean-menuselect.patch
+> new file mode 100644
+> index 0000000000..79c3174853
+> --- /dev/null
+> +++ b/package/asterisk/0005-Makefile-don-t-clean-menuselect.patch
+> @@ -0,0 +1,26 @@
+> +From 844c1cddf38fd91e15a93eef96c67a5834fc9a78 Mon Sep 17 00:00:00 2001
+> +From: Waldemar Brodkorb <wbx@openadk.org>
+> +Date: Sat, 10 Jan 2026 12:25:30 +0100
+> +Subject: [PATCH] Makefile: don't clean menuselect
+> +
+> +Upstream: not applicable
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> +---
+> + Makefile | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index b57f77477f..80035a09e7 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -436,7 +436,6 @@ _clean:
+> + 	rm -f doxygen.log
+> + 	rm -rf latex
+> + 	rm -f rest-api-templates/*.pyc
+> +-	@$(MAKE) -C menuselect clean
+> + 	cp -f .cleancount .lastclean
+> + 
+> + dist-clean: distclean
+> +-- 
+> +2.47.3
+> +
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
