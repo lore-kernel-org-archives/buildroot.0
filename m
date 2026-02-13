@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD1AEF99D3
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42B37EF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2F2961442;
-	Fri, 13 Feb 2026 19:36:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C13F845E0;
+	Fri, 13 Feb 2026 19:36:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZNQPeTHldhJr; Fri, 13 Feb 2026 19:36:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MyWRzGmSBK7v; Fri, 13 Feb 2026 19:36:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CE6961498
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 467A684612
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011374;
-	bh=Gn8HNiPiBFmzndOShrY3kf/okRSIrWqxlzKRaUSWSVs=;
+	s=default; t=1771011379;
+	bh=dBU2E8cG8+OH0QpjTkhj+OthJyGr+PQ71EzHIwVgcJI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LTAXjhcYscqPGnPNf1aJjBxCk61Zp7/Lu+TYlU3lbzeZjLrPm0sHjO1QbLDK+8+1u
-	 i+SIeyF6G8Cq2vc1C+tcjOxOR8HwSyhqYJ2OdtfRoSsO6JtjwHJ3L9pUKPlw1nPKkO
-	 ljcqLxAoG9eWJBBCNA1EmVkqDIDX3JWb0CHNT3/5iKJ5fZ2uWtxJm09/xALjSXTesZ
-	 MhzF1qwMcHrb/VCuUsIrEw/eW2vGFAqToWUHnFMvd64s4U1Z+W4Tr93nSf/Nej0HQ1
-	 bI83KDsFEKnZZwokgRAXay3fqDoS+JUndXJaZupTrri7uHOGYbjYBd5A6Plt4ryvdp
-	 1WgcsP2CxhnKg==
+	b=ES1KeWNz4tRWuX9ug9rd1iYAg/TmXR8ohBIkpNLFCdDQlxHqHuXhRu/t+mmYs5YCl
+	 3994Ovjl/ImDv3A/pSk/lfj9TcWZP2PK0mvbWh7TcU9XPi1rqVbRABovusxrstVwSf
+	 5MxDnyHH4kXvY10eImdT2JxMZavLhp9gOAlU3F+7w6R35EL9BWsNy2LjEWB0mUcUWv
+	 NMCAxZxhCZ37Z17l6zhpVUGc7batVMglpC/3c4zHehdXNfMO5LHS7mOrs2y1OTcDWj
+	 s774AdQDYNwmLYBPsXhv1lIXN9f7K8WUrwo/UmHp4iaQudNJWTMbUk0lHz0jCgpVYq
+	 DlkYMoy73WTyg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CE6961498;
-	Fri, 13 Feb 2026 19:36:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FABFEC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 467A684612;
+	Fri, 13 Feb 2026 19:36:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F039283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE0D540C48
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23E30844B5
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 39OWuJEAhwLX for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:35:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fAvk3GtlQlpY for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F392D41E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C8A084539
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F392D41E22
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C8A084539
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E90D38268D; Fri, 13 Feb 2026 19:35:27 +0000 (UTC)
+ id 2211F81EB5; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 14:55:36 +0100
+Date: Fri, 13 Feb 2026 20:31:45 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f47fc0c87b49a2722a7e3dbe68edef14442a3ff1
-X-Git-Newrev: 2bd9fe40609559b0a1cf66ce0ffe6f53f0555a3d
+X-Git-Oldrev: b6f85bbc9caf83345bc2806382626c61f91e641b
+X-Git-Newrev: 0f7d6cfc45c4773d5c8ef9b4e5e97ce6431c84cd
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193527.E90D38268D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] Makefile: add
- check-package-external target
+Message-Id: <20260213193529.2211F81EB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/screen: fix usage
+ with readonly rootfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,72 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2bd9fe40609559b0a1cf66ce0ffe6f53f0555a3d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f7d6cfc45c4773d5c8ef9b4e5e97ce6431c84cd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The new target provides a convenient way to run utils/check-package on
-any external trees, using .checkpackageignore files from the
-respective trees if present.
+Buildroot commit 4769724ee2bebd671f6a9372fb8922a8c22c5079 bumped the
+package from 4.9.1 to 5.0.0 which includes a major rewrite of the
+configure script
+https://cgit.git.savannah.gnu.org/cgit/screen.git/log/src/configure.ac?h=v.4.9.1
+https://cgit.git.savannah.gnu.org/cgit/screen.git/log/src/configure.ac?h=v.5.0.0
 
-While .checkpackageignore should be used as little as possible, in a
-few cases adding overrides for false-positives to the affected files
-is not feasible, a practical example of this is a Markdown file
-misidentified as Python by libmagic (likely due to code blocks).
+By default, screen puts the socket directory in $HOME/.screen, which
+is not writable when the rootfs is readonly:
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-[Arnout: set ${ignore} explicitly to empty, in case it exists in the
-environment.]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit fe489050806f2a0e7c2d14d9a5835fde9c71c7d5)
+ # screen
+ Cannot access /root/.screen: No such file or directory
+
+The --enable-socket-dir option added in upstream commit
+https://cgit.git.savannah.gnu.org/cgit/screen.git/commit/?id=78a961188f7da528c7cefcc63e07f35f04e69a93
+allows to configure this, and actually its default value of
+/run/screen is sensible, so we fix the problem by simply passing
+--enable-socket-dir, and rely on its default setting.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/issues/123
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 21311f79c61050bbb289fba1328bd4df1abdd52d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Makefile | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ package/screen/screen.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 486bf3fadc..84491cb55d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -125,7 +125,8 @@ endif
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig distclean manual manual-% check-package
-+	print-version olddefconfig distclean manual manual-% check-package \
-+	check-package-external
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 74453faff8..c85abaf411 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -13,7 +13,7 @@ SCREEN_SELINUX_MODULES = screen
+ SCREEN_DEPENDENCIES = ncurses
+ SCREEN_AUTORECONF = YES
+ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
+-SCREEN_CONF_OPTS = --enable-colors256
++SCREEN_CONF_OPTS = --enable-colors256 --enable-socket-dir
+ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
  
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -1262,10 +1263,29 @@ release:
- print-version:
- 	@echo $(BR2_VERSION_FULL)
- 
-+# $(1): br2-external path
-+# $(2): br2-external description
-+define check-package-external
-+	@$(call MESSAGE,"Checking packages in $(2)")
-+	$(Q)if [ -r "$(1)/.checkpackageignore" ]; then \
-+		ignore="--ignore-list=$(1)/.checkpackageignore" ; \
-+	else \
-+		ignore=""; \
-+	fi ; \
-+	$(TOPDIR)/utils/check-package \
-+		--br2-external $${ignore} \
-+		`git -C $(1) ls-tree -r --format='$(1)/%(path)' HEAD`
-+endef
-+
- check-package:
- 	$(Q)./utils/check-package `git ls-tree -r --name-only HEAD` \
- 		--ignore-list=$(TOPDIR)/.checkpackageignore
- 
-+check-package-external:
-+	$(foreach name,$(BR2_EXTERNAL_NAMES),\
-+		$(call check-package-external,$(BR2_EXTERNAL_$(name)_PATH),\
-+			$(BR2_EXTERNAL_$(name)_DESC))$(sep))
-+
- .PHONY: .checkpackageignore
- .checkpackageignore:
- 	$(Q)./utils/check-package --failed-only `git ls-tree -r --name-only HEAD` \
+ ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
