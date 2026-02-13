@@ -1,117 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92344EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87845EF99D0
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64419422BE;
-	Fri, 13 Feb 2026 19:40:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59A606177C;
+	Fri, 13 Feb 2026 19:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gy1A4oVvbsdf; Fri, 13 Feb 2026 19:40:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8rhy9P-Xuqv3; Fri, 13 Feb 2026 19:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72938422BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70D6861784
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011626;
-	bh=niHxuM9Avi+9VP+kAhubqCnRdqmXayhWbSss8OVvhIs=;
+	s=default; t=1771011627;
+	bh=ktv+LU/+FGEn1HtW0lFCZnAe0QmxJsFCVP7bOJRH++c=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Q7tw9vdbLxCyjCzsH0ls5Rm1NEs4+OergD74XGSiMqeqGpjvTYpYackDc02KpCO6F
-	 Z3eiRKuCuiCBFpSpcVDbGnSqY8S7gNiDAJvmX8acU6b3pnnm+xlWHYsBeZb+H8miK1
-	 9YvGFw4A1wq2YM+JjISz0kQ/CtgfN15eGSVDCw35kpck3Yzml2B+AAuTGNV0RAySBC
-	 5c55rapVbnn6NeprYLeTn0E7CEKWsF9VJjD8voSJ0QFmqlMhFHUepOV0dL/WvoKKG5
-	 UKJN6VFpBAorJPzKAARPBKIyBkPjJULsG/3daLOloOSpkmh4algfOYKdKmlqOr1gOT
-	 ujr92MxPRVtog==
+	b=G5aP+xFM2i44QWqDfRtqcd8n/p6YKWA+hmntLtTTtUB70s+RYkuzFuEiY3sUwr6gO
+	 TKp8D0iWhoNJrwoOGq3LPsrNoaHjES2y/eH3WAepIKdoutQf4p+2LF5FdSPEW8n83r
+	 UVgxQMwjtgFfQF10XoLyUrnXu7Izp5CkTOfdAZuZWEvheh5QtMbpxQrTSwtR8uDWkR
+	 oxFl1hLIHqFMKGUOLCFi8aOUXSRsRhIAZJHEFJOlqC0x9qlg5NSRdJehHN2BuJR3Xx
+	 PX9HYmnjfxInIqCK+H8UaMlZ6R1g5vPPxZWChsbVkq2jlNOPWK4wJ3D3ngKqUF9AU1
+	 Svh3oPZFDMSnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72938422BF;
-	Fri, 13 Feb 2026 19:40:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70D6861784;
+	Fri, 13 Feb 2026 19:40:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B3E269
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:39:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E2FF869
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98BAD412F9
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C0C34026C
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n_dM-lILF9Qr for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:56 +0000 (UTC)
+ id MTmUQAZTlDDG for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:38:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7A3FD412D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A3FD412D0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7A3FD412D0
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:56 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-436e87589e8so1436323f8f.3
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:37:56 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8B79D40407
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B79D40407
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B79D40407
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:03 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-483770e0b25so7127465e9.0
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011474; x=1771616274;
+ d=1e100.net; s=20230601; t=1771011482; x=1771616282;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=NCGfkrno/N5iFeWokC17ABIXSmAtBsoqb7EUqS092JE=;
- b=U+ODD2evQL9O6BGq+gK8WILWRN7mmqnH9aqxdWTKOjvz7oNq5SO2vhHxBz4h/TM1eK
- q9ICNkhEz88lKFGyavSG5IFgIfvPuJHUKLv4KDQ4OZt72hArkc9Zo3oEYcIvZFk7Pxu8
- Cgf6hOBE1ByEFjrhyPd8gMTIAnAOFp36kokOywzelJmyOXvddMifKKX4NBeuysbHNg7O
- QahEWiDZxyJTj8pZytB2nJUOiV0DD2JjAH+AW7MiMIVRJRxKptqabYamn3hkaAlOTEFO
- N6JisUJYIJiddi2BdymtS4+sPDKYLntmXnrL/OSSXtZ45dfqcbZK1HbGFjrtQrdcWOm9
- fqWw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUgHcjExvNRA764oSWVLWSKXM4ae7FRP4Uks6+R4HXr1e6mcThvOlP+QX7JjPmTNpdzp///UCbDWtI=@buildroot.org
-X-Gm-Message-State: AOJu0YxDh1bxPQpDCFHD3rOf24iYrNCDm2ghPnFa6aBN0Au9Zv/gIZen
- L1V47DwwYL+v5AoBAOiFOLc+1QK6KlZbpvHW2xQY2Q+HpBLq6MJFh+by6HGMe6LPW18=
-X-Gm-Gg: AZuq6aIIrQfDEAkkg8EuNQnaQ+USJ6YMdK9XijNbgtl0Bj3iihLaiq8pGS/GTlR0B6y
- llLyT/guQ8+uVbkVWY9XroTTZ9FGN7wnHnAjR3pX50NprtQJ20zTKAzbtUNzd1Rwo4JldlolEoT
- jSv10CHaVOKUCco/s4bOQeejMsuM3+XZNVDp+fq0S7WzkZBYJY1mjCg5JSIVNMiCYGRHgrH1wVj
- PiK+1W+PjipHmukptGM6t5zYtH4y8afs8STeCi+uIKeiHV+fDPGEssV1+smwnFgcJW9W1Du5UaT
- aqScxwK3qwlsNZISIVCNWIMpXss6zlxOUu1JSPrhi3xRbqZ+95EiFC+Y68IFXhxYPxePu+Obu4Z
- OhaPss0rziFweyylFu1K/6zDAmfe/LcZ18NgMxg6XbgRFcp4ESgMVUlMqeegN3uJexgaMxGm3cy
- 8fYgsSUJ+z+r7ydF3rBoAbF5If7A==
-X-Received: by 2002:a05:600c:34c6:b0:483:6ff1:18b with SMTP id
- 5b1f17b1804b1-483737bde90mr44962795e9.0.1771011474465; 
- Fri, 13 Feb 2026 11:37:54 -0800 (PST)
+ bh=RlMg0k1uzTx/CeRPhHpD553FTQyyUSSaxu3K/GkuyeA=;
+ b=ZAPG3WpW9yqD2UhBAApUQHvWvdSqBy6ZMVQH9R8mz0WmU1FkZMih6mvo5Haqnz2yXR
+ al6oT0hdILaylyvC7EturcskZF1MDemy0Al2Vv7+N7CsfsE6pnm9wxASgW+5et2YAXet
+ +DO52aljPhnYhCsBFG5snCB9jH0JbXcYeRzeaJG5+J+cd3IntgdlsA+QcQdKz9nIzdqW
+ xTLrpabTtJhdwgUeI1YEV/tVu8ehQTHe2oPLU4o2P2Rkn9qZi03arpICcnfbAjuleuer
+ 6tR22OKr+aPnHefuDGuCjUd8lDcIkKlcQue2D/wMjN3l3zSQiXDnog7rpbvevyUpBtjk
+ B5Gg==
+X-Gm-Message-State: AOJu0YwjVwHi4ooflkIZ619t3+jnvPr94SITRk+4yYMu6t5B3zvZGmea
+ OQouwEc+S44r+gwSyf2cyGjacHSqOxHarxvpfJHyXa1/g5Mo0rxTjy9Aq44oJxpCnTVJUwWfPr7
+ fhOvK
+X-Gm-Gg: AZuq6aLvibxjDrbpXlalu7wW7ZZMdH8HPJiV3PMeSVy8Y1mODESQm+n1BpKllKfIdU6
+ MbrmS/7pYHmE0o8Vft6m7z+QqikFGmzy0Z9ejJmsGdf4HLtXa81EWCk0XXqf4dJXne4vg2KaqjC
+ ZSjWsR/fuQJe7tD6olfyAvi31rmCK9vKP7h42HIY2LxfAXTpKuVFV+BOHQ+Wue8d0t1zrtf3WLA
+ W63YZA5aELvy0IneUQLVESdG1TigYRCz8/Eylf2Xt6hvtLjRuTMp605VBJUaeGhKTSnYU53Pb82
+ V8vuBPsm8rk6+aSZGHOq6kP6BzDOozZdPwmsvm0jjQR7TYfhkRD1oxTfE9ROx92zkUP2YVfRTnD
+ xqFypFpiKULJQ2fier99AcY2Qwg/NcM7CZ3VaJEVwGugK7/HqhcsqaoS7bx+smzrK3w5FfmZPwl
+ klm9mm0buiLwXdahY=
+X-Received: by 2002:a05:600c:474e:b0:479:3a86:dc1f with SMTP id
+ 5b1f17b1804b1-4837109740amr67421825e9.37.1771011481431; 
+ Fri, 13 Feb 2026 11:38:01 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4835d994670sm174975745e9.4.2026.02.13.11.37.53
+ 5b1f17b1804b1-4834d5e11f5sm271376845e9.4.2026.02.13.11.38.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:37:53 -0800 (PST)
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:37:53 +0100
-Message-ID: <20260213193753.40949-1-thomas.perale@mind.be>
+ Fri, 13 Feb 2026 11:38:01 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:38:00 +0100
+Message-ID: <20260213193800.41347-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <aXOBc0KVRl7qTTrK@waldemar-brodkorb.de>
-References: <aXOBc0KVRl7qTTrK@waldemar-brodkorb.de>
+In-Reply-To: <20260126130414.59175-2-thomas.perale@mind.be>
+References: <20260126130414.59175-2-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011474; x=1771616274; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011482; x=1771616282; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=NCGfkrno/N5iFeWokC17ABIXSmAtBsoqb7EUqS092JE=;
- b=DSd4Qd6KJDN3wfZEl8uI9GL27tlpXQ75QnzmAUgd98D3+DTfP5oA29uD4eFq1gmD4e
- r/7uWkPBZk4DzxtWtUvwlxE3E6HsSjpllpq2Hv3uzRd1tTpdP87pYegSDnjaKGbsBjYs
- X2ShhssTOpmv6KTUz1djPEqAZB+YY7gCQmjtg6HnbOzRd3awm37DUaGPp2gnzr/tWQlJ
- 0nPfBxEqD0nkJUXa+6GPJBxm6X+acjga2IqnIrJL39UvwJ3mnMUeIpRMrsCojAjqh352
- TFepz1j79Qne1mS1gc9HB/uh6yRefisscZPQ3EQ985zgQjPmsmDS0WLdnMe3qohLLc/h
- C9Eg==
+ bh=RlMg0k1uzTx/CeRPhHpD553FTQyyUSSaxu3K/GkuyeA=;
+ b=IFGrxK6UYuS86qWs1TiCKBOoDW3+8KtAkXfGBU33L8iG3tb3yWaQKW8T1vq5JceneU
+ bcX+I79h4fgTcJKMoeLEC2EuXorS5arHOB1YUxIPGS5yX+6T5KeutPP7JVe9831XA0PN
+ BDYHCsg/sJuu58PafkH8bvwy1wZMHOx6cXe9WxleiBaPAPo1ePsQUVjyRg7A6LPgOUTl
+ CiLipAXzJ4X74iVM7AfJ9APEeg22y1SHr3pS60GiDduU9uDI5g0x1g61sMHNmvRJxwLE
+ C/0MvhRFN16L8xWtmBIPNcPiOiDy1N0UhteDLmK6k4cUNnwSx+GhpF4WWfU2vZw/9LWy
+ ntFg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DSd4Qd6K
-Subject: Re: [Buildroot] [PATCH 1/2 v2] package/strongswan: fix security
- related bug
+ header.a=rsa-sha256 header.s=google header.b=IFGrxK6U
+Subject: Re: [Buildroot] [PATCH v2 2/4] utils/generate-cyclonedx: use direct
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,85 +129,78 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Add patch for CVE-2025-62291.
-> https://nvd.nist.gov/vuln/detail/CVE-2025-62291
+> Since the introduction of the `generate-cyclonedx` script in [1] the
+> dependencies were 'recursive'. This means that the dependencies of a
+> package dependency were included.
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> The CycloneDX spec [2] states that only direct dependencies needs to be
+> included.
+> 
+> This patch drop the recursive dependencies.
+> 
+> [1] dbab39e2d9 support/scripts/generate-cyclonedx.py: add script to generate CycloneDX-style SBOM
+> [2] https://cyclonedx.org/docs/1.6/json/#dependencies
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  ...001-eap_mschapv2_failure_request_len.patch | 46 +++++++++++++++++++
->  package/strongswan/strongswan.mk              |  1 +
->  2 files changed, 47 insertions(+)
->  create mode 100644 package/strongswan/0001-eap_mschapv2_failure_request_len.patch
+>  utils/generate-cyclonedx | 21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
 > 
-> diff --git a/package/strongswan/0001-eap_mschapv2_failure_request_len.patch b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
-> new file mode 100644
-> index 0000000000..8442cc7816
-> --- /dev/null
-> +++ b/package/strongswan/0001-eap_mschapv2_failure_request_len.patch
-> @@ -0,0 +1,46 @@
-> +From dda24815d148b91209ebf2d27e3a7acefe9b6435 Mon Sep 17 00:00:00 2001
-> +From: Tobias Brunner <tobias@strongswan.org>
-> +Date: Thu, 9 Oct 2025 11:33:45 +0200
-> +Subject: [PATCH] eap-mschapv2: Fix length check for Failure Request packets on
-> + the client
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index e864edf181..04ce8fc3a1 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -337,10 +337,9 @@ def cyclonedx_vulnerabilities(show_info_dict):
+>      } for cve, components in cves.items()]
+>  
+>  
+> -def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+> -    """Parse dependencies from the show-info output. This function will
+> -    recursively collect all dependencies, and return a list where each dependency
+> -    is stated at most once.
+> +def br2_parse_deps(ref, show_info_dict, virtual=False):
+> +    """This function will collect all dependencies from the show-info output.
 > +
-> +For message lengths between 6 and 8, subtracting HEADER_LEN (9) causes
-> +`message_len` to become negative, which is then used in calls to malloc()
-> +and memcpy() that both take size_t arguments, causing an integer
-> +underflow.
+>      The dependency on virtual package will collect the final dependency without
+>      including the virtual one.
+>  
+> @@ -350,18 +349,14 @@ def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+>          show_info_dict (dict): The JSON output of the show-info
+>              command, parsed into a Python dictionary.
+>  
+> -    Kwargs:
+> -        deps (list): A list, to which dependencies will be appended. If set to None,
+> -            a new empty list will be created. Defaults to None.
+> -
+>      Returns:
+>          list: A list of dependencies of the 'ref' package.
+>      """
+> +    deps = []
 > +
-> +For 6 and 7, the huge size requested from malloc() will fail (it exceeds
-> +PTRDIFF_MAX) and the returned NULL pointer will cause a segmentation
-> +fault in memcpy().
-> +
-> +However, for 8, the allocation is 0, which succeeds.  But then the -1
-> +passed to memcpy() causes a heap-based buffer overflow (and possibly a
-> +segmentation fault when attempting to read/write that much data).
-> +Fortunately, if compiled with -D_FORTIFY_SOURCE=3 (the default on e.g.
-> +Ubuntu), the compiler will use __memcpy_chk(), which prevents that buffer
-> +overflow and causes the daemon to get aborted immediately instead.
-> +
-> +Fixes: f98cdf7a4765 ("adding plugin for EAP-MS-CHAPv2")
-> +Fixes: CVE-2025-62291
-> +Upstream: https://github.com/strongswan/strongswan/commit/c687ada6a6f68913651e355fd09f906893096b32
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> +---
-> + src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c b/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
-> +index 21cc95a6a360..35faad2e0bb5 100644
-> +--- a/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
-> ++++ b/src/libcharon/plugins/eap_mschapv2/eap_mschapv2.c
-> +@@ -974,7 +974,7 @@ static status_t process_peer_failure(private_eap_mschapv2_t *this,
-> + 	data = in->get_data(in);
-> + 	eap = (eap_mschapv2_header_t*)data.ptr;
-> + 
-> +-	if (data.len < 3) /* we want at least an error code: E=e */
-> ++	if (data.len < HEADER_LEN + 3) /* we want at least an error code: E=e */
-> + 	{
-> + 		DBG1(DBG_IKE, "received invalid EAP-MS-CHAPv2 message: too short");
-> + 		return FAILED;
-> +-- 
-> +2.43.0
-> +
-> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-> index 9719242327..c0147c00df 100644
-> --- a/package/strongswan/strongswan.mk
-> +++ b/package/strongswan/strongswan.mk
-> @@ -12,6 +12,7 @@ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
->  STRONGSWAN_CPE_ID_VENDOR = strongswan
->  STRONGSWAN_DEPENDENCIES = host-pkgconf
->  STRONGSWAN_INSTALL_STAGING = YES
-> +STRONGSWAN_IGNORE_CVES += CVE-2025-62291
->  STRONGSWAN_CONF_OPTS += \
->  	--without-lib-prefix \
->  	--enable-led \
+>      for dep in show_info_dict.get(ref, {}).get("dependencies", []):
+> -        if dep not in deps:
+> -            if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
+> -                deps.append(dep)
+> -            br2_parse_deps_recursively(dep, show_info_dict, virtual, deps)
+> +        if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
+> +            deps.append(dep)
+>  
+>      return deps
+>  
+> @@ -429,7 +424,7 @@ def main():
+>          ],
+>          "dependencies": [
+>              cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
+> -            *[cyclonedx_dependency(ref, br2_parse_deps_recursively(ref, show_info_dict, args.virtual))
+> +            *[cyclonedx_dependency(ref, br2_parse_deps(ref, show_info_dict, args.virtual))
+>                for ref in filtered_show_info_dict],
+>          ],
+>          "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
 > -- 
-> 2.47.3
+> 2.52.0
 > 
 > _______________________________________________
 > buildroot mailing list
