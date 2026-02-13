@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16864EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77CEDEF99D0
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8BC6616BC;
-	Fri, 13 Feb 2026 19:39:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 480B384885;
+	Fri, 13 Feb 2026 19:39:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIflMdFSKMDZ; Fri, 13 Feb 2026 19:39:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lrR28hEmJ7tZ; Fri, 13 Feb 2026 19:39:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D26F4616D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AC0284889
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011555;
-	bh=N2k8dR8peLJxL26p0f1bY405lU8PpACgOvZN7dlnaGQ=;
+	s=default; t=1771011557;
+	bh=xdxtnpARO0mo1G+o5qfbFWA7LWsmUFH29gRW+VKGbaM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Wn4q/EPv5TK3NQnB+XgFRp9tLdt2eMmo6vq6Tp6MgInBwWW6NPl3rPhX0J7PVvsDk
-	 JlEqmpV9hHtS2pi/xHwyF9KFn+Q49FJL18UXQQs0+PVmhI0fvW1KZq/5WFEdHNnDng
-	 KcTK+p8wM4vdbPRGbvztG2QF0q6u1p6oVpY2is+nOpNPcNNWZX7IsYnAico8xY/XO0
-	 Zmqq5F8Z1jOdUO3XdHXwCqwsA19dpv5ufM7mUq8JIFmz+99MmsMI6H7jjCYrw6Eqx7
-	 ONTMD5Vo5HWzmWtnHOdAuJ20AqeJ9u7wVl1rrvX2Y4glfu88k5XdvuedOcLHLPJgMd
-	 Wk/zDRNcNR4MQ==
+	b=gZUD7wnebdbhNA7xh+eeC0JC3P3+V2Vvb4k5joOpHai1j9IF7TiOeXwX8gXlDP/nl
+	 zQa7fYpe/KHhD0Gp6RHs2U0nHTKlgSbIqTPYyOr9CTf97Bcoh8oX5YBolZdk3OKEtM
+	 01fYwmMng8wzRW8RbK4CXOl6QBZnqEJl/okjUEj/fS4c94GQO+z97gAxNIDXJJMxM8
+	 UHphZeU0vq6VAlsBhTgopEjLpPl6FNGZuF9u0KhukSUYe60TowJqw82uPjmRSefVnu
+	 msU8qOjgLIILCq2IIkaVcG875I/8vrJQAlS01XPaYt6ArGKF8iYmT9hg2yia4F6FFd
+	 7qB1kWovAgCTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D26F4616D0;
-	Fri, 13 Feb 2026 19:39:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AC0284889;
+	Fri, 13 Feb 2026 19:39:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 382EFEC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B33C369
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89DD3412DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A9A9412DB
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l1Wmw9BRATnN for <buildroot@buildroot.org>;
+ id 4OHjD0iJc4hO for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:37:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D17E6412DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8832E412D1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D17E6412DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8832E412D1
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6AEB83593; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
+ id 7B90C85DA7; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:33:10 +0100
+Date: Fri, 13 Feb 2026 20:32:58 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 3a32f607531032d55c516594c7734224dc8dae7c
-X-Git-Newrev: d818534f41eb4ba8c9a6610b56da324771207f59
+X-Git-Oldrev: fcf5b59d6135e891c30f60ef4404aadd873ab35e
+X-Git-Newrev: d2882b9acdd22ff7c99838d4eac37fabcbb14615
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193704.C6AEB83593@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/libite: bump to
- v2.6.2
+Message-Id: <20260213193704.7B90C85DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/libopenssl: fix
+ powerpc64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d818534f41eb4ba8c9a6610b56da324771207f59
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d2882b9acdd22ff7c99838d4eac37fabcbb14615
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Changes:
-- Fix memory leak in which() on realloc() failure
-- Fix pidfile() to handle missing trailing slash in prefix path
+Buildroot commit f710640be5869bb3716e254916ae614f79002f2f bumped the
+package to version 3.6.0 that includes upstream commit
+https://github.com/openssl/openssl/commit/8f24a148e6f112045cf110c3e3f4e2415d9c11fe
+which causes build errors on powerpc64.
 
-Changes to src/pidfile.c do not affect the licensing terms, but
-require updating the hash of this file that is used as one of the
-license files.
+The upstream commit was also backported to older libopenssl branches:
+https://github.com/openssl/openssl/pull/28990#issuecomment-3675219918
+but its first appearance on the buildroot master branch was with said
+bump to 3.6.0.
 
-https://github.com/troglobit/libite/releases/tag/v2.6.2
+This patch adds an upstream patch to fix the problem.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8e7a54f7ef121a2236c3d722d0adca26860c4cfa)
+Fixes:
+https://autobuild.buildroot.net/results/b28/b286ad40f2240a85b9cd0dc44e089d1d6babd3ea/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 96f01932be024eebad8e6edef121641eeb16ffd7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-gcm-ppc.pl-Removed-.localentry-directive.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 3abad09b0a..c593f7a66d 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,7 @@
- # Upstream .sha256 from GitHub
--sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
-+sha256  0550ac5670836db85569786e00860d1d6999df8f74005307c290371c990e1dbd  libite-2.6.2.tar.xz
- 
- # Locally calculated
- sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
- sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
--sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
-+sha256  b6cc7074a27b26ee4e1ccda8d634d485d0f6f819e564c663c28ed61f4cc2b451  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index e4bd845487..beb8c27ba7 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBITE_VERSION = 2.6.1
-+LIBITE_VERSION = 2.6.2
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+diff --git a/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
+new file mode 100644
+index 0000000000..7c507a2687
+--- /dev/null
++++ b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
+@@ -0,0 +1,69 @@
++From 5aaa7e5fdc59e88a13d2911cb86d814d4e2669da Mon Sep 17 00:00:00 2001
++From: Danny Tsen <dtsen@us.ibm.com>
++Date: Wed, 28 Jan 2026 07:23:13 -0500
++Subject: [PATCH] aes-gcm-ppc.pl: Removed .localentry directive
++
++Otherwise there is mixing of  ELFv1 ABI and ELFv2 ABI directives
++and PPC64 big endian builds fail.
++
++Fixes #29815
++
++Signed-off-by: Danny Tsen <dtsen@us.ibm.com>
++
++Reviewed-by: Paul Dale <paul.dale@oracle.com>
++Reviewed-by: Shane Lontis <shane.lontis@oracle.com>
++Reviewed-by: Tomas Mraz <tomas@openssl.org>
++MergeDate: Tue Feb  3 08:39:50 2026
++(Merged from https://github.com/openssl/openssl/pull/29827)
++
++Upstream: https://github.com/openssl/openssl/commit/5aaa7e5fdc59e88a13d2911cb86d814d4e2669da
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ crypto/modes/asm/aes-gcm-ppc.pl | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/crypto/modes/asm/aes-gcm-ppc.pl b/crypto/modes/asm/aes-gcm-ppc.pl
++index 68918a9305a2b..fd5dcc22a6117 100644
++--- a/crypto/modes/asm/aes-gcm-ppc.pl
+++++ b/crypto/modes/asm/aes-gcm-ppc.pl
++@@ -409,7 +409,6 @@
++ ################################################################################
++ .align 4
++ aes_gcm_crypt_1x:
++-.localentry	aes_gcm_crypt_1x,0
++ 
++ 	cmpdi	5, 16
++ 	bge	__More_1x
++@@ -492,7 +491,6 @@
++ ################################################################################
++ .align 4
++ __Process_partial:
++-.localentry	__Process_partial,0
++ 
++ 	# create partial mask
++ 	vspltisb 16, -1
++@@ -564,7 +562,6 @@
++ .global ppc_aes_gcm_encrypt
++ .align 5
++ ppc_aes_gcm_encrypt:
++-.localentry     ppc_aes_gcm_encrypt,0
++ 
++ 	SAVE_REGS
++ 	LOAD_HASH_TABLE
++@@ -752,7 +749,6 @@
++ .global ppc_aes_gcm_decrypt
++ .align 5
++ ppc_aes_gcm_decrypt:
++-.localentry	ppc_aes_gcm_decrypt, 0
++ 
++ 	SAVE_REGS
++ 	LOAD_HASH_TABLE
++@@ -1032,7 +1028,6 @@
++ .size   ppc_aes_gcm_decrypt,.-ppc_aes_gcm_decrypt
++ 
++ aes_gcm_out:
++-.localentry	aes_gcm_out,0
++ 
++ 	mr	3, 11			# return count
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
