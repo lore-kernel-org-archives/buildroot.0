@@ -1,63 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D315EF99D4
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28F6BEF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F190D8484C;
-	Fri, 13 Feb 2026 19:39:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED7204213A;
+	Fri, 13 Feb 2026 19:39:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EAa03EVOEmmC; Fri, 13 Feb 2026 19:39:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1iQ_4H-t8ZLj; Fri, 13 Feb 2026 19:39:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 053CA8485A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2422E42143
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011540;
-	bh=DQITP5d3iml9w/DquxRTBr1XCtsWH01AFYIpi0svrSU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OyOfvPDFVdkrX/52kOa7LQTF5qdtO0o3HuR3hESK/EcSoKBMtFbnwzhO0pHkuF7CI
-	 tuqBJpas08XdXABXeWj4RNsowi045bjiqKBqmCl6GIIX8SG+T+TjyN73/ALjMfMC/L
-	 hm8aezxCjdbrFgPXAY2N1xuYQ8WhiWsAygFW4N9zIyUP8iEZBwduhrKDdpM0/VvtR2
-	 +iG97E9SQTQa57s7CVkX7AZuDANV2YEO0YddKUT7xaB5Jesb/k2HlGE5sKNSLZnwWb
-	 v6BQqbR8hTe+K0KKO+utnjf31nxmnLwTmtJJHlyxyPiCZ6QIcLmw37fJZu+pNb69Bf
-	 /aBviUBlFR4hw==
+	s=default; t=1771011541;
+	bh=sqkvV0RnsaPQtJj0SrH+NA6gsCJg8u0vCYK96BdAWuM=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=T1vNWnOOFjJ1qrHHhO8K6qd8bzwGy4zzbh22aQ1V7hYvrYvdChlaHCZCNE0pxFNFs
+	 wElxBW6DsfiZQjE53WgQvczoFMuKLvTMLPJyWUyiI9c74CRlwWRwAvVcyuvrYTMhtz
+	 PKWk1QO1fQv6u3xWnPU6vJomOBt17GqWnnGpHn/0pi0lZoNvmKY+fHmMAYGpMK6Cls
+	 X+cbvjn5sIzuerpsSpYHKDa9adlGbkLXyuJYAKYhKvFesbw5jajfnPCBDA7Oq7kL3E
+	 xSbx54G03UoY+fq1oQzVbGnvdSlqlBF7+shg7TfElDiHsW8wevHAFS/DpJ/hMytF/a
+	 4aJg+ZwarhWRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 053CA8485A;
-	Fri, 13 Feb 2026 19:39:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D29B369
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2422E42143;
+	Fri, 13 Feb 2026 19:39:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1001369
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9283A41310
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B967241F8D
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EEZOKzNkjNmg for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 537664134F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 537664134F
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48B64825CC; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 12 Feb 2026 15:06:29 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: d4db2cf370489f3125a62402aec554271ef5390a
-X-Git-Newrev: e5c010239b7d8f4254f17de5d7b2fb0dfd073ad3
-X-Patchwork-Hint: ignore
-Message-Id: <20260213193704.48B64825CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x]
- support/scripts/pkg-stats: fix RuntimeError with python 3.14 asyncio
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kM_PfL9g7STA for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8298B41F8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8298B41F8F
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8298B41F8F
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:53 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-48375f1defeso7407285e9.0
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:37:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1771011471; x=1771616271;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=9NEMBpkhWqKJitynTbgZTwtqdLATcFqWG/hqCmcTgAE=;
+ b=Qui13Fx/EnX70Red06OKk5XwfB6WYWmn254LrTt6TXvpzJFrks6kGPSW/XYi//JAH2
+ JpefhtVUlDFeUT4ivmTwcgDVtVedPbLgLxoQuKu4KG9mVOhwQvatYTESOASgHBlIgEoS
+ fp2B/P8crDdcVQfkg2o8H+mnL9Fg5aolU4XC0LQfVJo3L5jFum7fIZgwYmZTwEmX/MDa
+ XGOX6BqO+IvLb8hOoFtrtbOdAGVzwA+nF6OfR/wqbx0Zi2DtncpPONfqZthtEzl4FMMB
+ 2svm6w0+l7slJwT2G4wDjWAnpdjEH687hsBqJf7BUmvMOCg7mr8ITH8zHguVLvNkCcsx
+ TZjQ==
+X-Gm-Message-State: AOJu0Yw7AeUTkRVD32yZ3jJBjqJmo6l27N9muCKec7J9Ywf0qvWJ0wWU
+ 6iOEPszZ2g8CIq1/kjsZmnmEkTO7R3NXExaW6J5CKHinC2qsCQbQgjPKp6NKlFAqRLHUYk12Jfq
+ vL8uR
+X-Gm-Gg: AZuq6aKrrRsXHnCC3Rhj5WNDRpE+T48rVUrEW+K4HrqTbs7nuPO7rGYea1dh6RTyVtX
+ viYZ0y7Yk4qjmWlXqaVNnG6FFfSRCPc9xtjiCR4f0gOJ6ayTylutFFEYzBsX8k3sJcZHC5AvG88
+ 85gBZZZ9yAURhpyi8BLf960Jv0dWNQ1tfrC0F2ykKUbbJ5eGW9o4yrPi+OExPxVWV2BiBamK8aH
+ WDjMawbYOQY5ZHM7jHojhcmSpOtxeycYDU+thuCdti9NFt2WfrVa6PzzoznqPK99jgdBdXlmH5Y
+ HxdeUc8X+FFX9ECmu7Y0v0PGcxLSO+VIJziGHIqz1i7vd/R2VxGzzitCfMqjOff3w1Vup6stDiE
+ LuS98Yp5P1WdW8X/FyevjXH0ZrbKoSxTpkYWStu+pjAgnJqL2zEaaQkKWJ/UA5eLgmLxMYNxwtb
+ P3CR6865AWY07dyRY=
+X-Received: by 2002:a05:600c:a09:b0:477:6d96:b3e5 with SMTP id
+ 5b1f17b1804b1-48373a0809fmr47151895e9.7.1771011471531; 
+ Fri, 13 Feb 2026 11:37:51 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4835d92267bsm317057335e9.0.2026.02.13.11.37.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Feb 2026 11:37:51 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:37:50 +0100
+Message-ID: <20260213193750.40839-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260120082405.46683-2-thomas.perale@mind.be>
+References: <20260120082405.46683-2-thomas.perale@mind.be>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1771011471; x=1771616271; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=9NEMBpkhWqKJitynTbgZTwtqdLATcFqWG/hqCmcTgAE=;
+ b=fZXQc3gHlLL+UVCAwyBEaDFRJrfP5mmXYwsva72MxOZcdoLJIE1IRyw6TChqyTCS7c
+ ychqz3NDznhcGX2hFEieu4hAyWaHQ54nUq/Yfil5koUa3Ux3qajTu6n9+gSWhW7zanir
+ 6Mu0XVBkOhS7O439b4J0vAGSVpulMuo8v/hkUeRjHEal04cSmBRYzxkn2BW89/pFBjr1
+ kWK5mIfzOhSugORW8AxmQN2ZpMTUPvuSS0ea4eGFUBntX+fRi1vQfJ/M9+RXE7XYqemv
+ zTSdGYVnALr2sy7lUsSTqyGNmDEHm57f8W1vmJL5kr2RVaUV9bhKXSBiAV/vqLAT2ger
+ wSxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fZXQc3gH
+Subject: Re: [Buildroot] [PATCH 2/6] package/podman: add CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,80 +122,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e5c010239b7d8f4254f17de5d7b2fb0dfd073ad3
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
+In reply of:
+> Add the `podman_project:podman` CPE referenced in the GHSA page [1].
+> 
+> The last entry with this CPE is CVE-2024-3056 [2].
+> 
+> Dropping the `v` prefix from the version to track the CPE version
+> correctly.
+> 
+> [1] https://github.com/containers/podman/security
+> [2] https://nvd.nist.gov//vuln/detail/CVE-2024-3056
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-When running "make pkg-stats" on a host with Python 3.14 (e.g.
-Fedora 43 for example), the execution fails with the error:
+Applied to 2025.02.x & 2025.11.x. Thanks
 
-    Checking URL status
-    Traceback (most recent call last):
-      File "/buildroot/support/scripts/pkg-stats", line 1387, in <module>
-        __main__()
-        ~~~~~~~~^^
-      File "/buildroot/support/scripts/pkg-stats", line 1368, in __main__
-        loop = asyncio.get_event_loop()
-      File "/usr/lib64/python3.14/asyncio/events.py", line 715, in get_event_loop
-        raise RuntimeError('There is no current event loop in thread %r.'
-                           % threading.current_thread().name)
-    RuntimeError: There is no current event loop in thread 'MainThread'.
-
-This is due to a breaking change introduced in Python 3.14
-asyncio.get_event_loop(). See [1]. Before Python 3.14, this call was
-creating and setting an event loop if there was none. This situation
-is now a runtime error.
-
-In order to fix this issue with newer Python version, while keeping
-backward compatibility, this commit replaces the code:
-
-    loop = asyncio.get_event_loop()
-
-by an explicit event loop creation:
-
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-This commit was tested on a Fedora 43 host with Python-3.14.2, and
-with the Buildroot Docker image plus the python3-aiohttp package
-which is a Debian 12 with Python-3.11.2.
-
-[1] https://docs.python.org/3.14/library/asyncio-eventloop.html#asyncio.get_event_loop
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Tested-by: Vincent Fazio <vfazio@xes-inc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e9f426aa527d279c078d234ffa3c4c8c052369ff)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- support/scripts/pkg-stats | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 7d9170e30f..d2d36257d9 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -1365,11 +1365,13 @@ def __main__():
-         pkg.set_developers(developers)
-     if "url" not in args.disable:
-         print("Checking URL status")
--        loop = asyncio.get_event_loop()
-+        loop = asyncio.new_event_loop()
-+        asyncio.set_event_loop(loop)
-         loop.run_until_complete(check_package_urls(packages, verbose=args.verbose))
-     if "upstream" not in args.disable:
-         print("Getting latest versions ...")
--        loop = asyncio.get_event_loop()
-+        loop = asyncio.new_event_loop()
-+        asyncio.set_event_loop(loop)
-         loop.run_until_complete(check_package_latest_version(packages, verbose=args.verbose))
-     if "cve" not in args.disable and args.nvd_path:
-         print("Checking packages CVEs")
+> ---
+>  package/podman/podman.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/podman/podman.mk b/package/podman/podman.mk
+> index 31cc9ba349..80107f3d9e 100644
+> --- a/package/podman/podman.mk
+> +++ b/package/podman/podman.mk
+> @@ -31,6 +31,8 @@ PODMAN_TAGS += seccomp
+>  PODMAN_DEPENDENCIES += shadow
+>  PODMAN_TAGS += libsubid
+>  
+> +PODMAN_CPE_ID_VERSION = $(subst v,,$(PODMAN_VERSION))
+> +
+>  ifeq ($(BR2_PACKAGE_BTRFS_PROGS),y)
+>  PODMAN_DEPENDENCIES += btrfs-progs
+>  define PODMAN_LINUX_CONFIG_FIXUPS_BTRFS
+> -- 
+> 2.52.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
