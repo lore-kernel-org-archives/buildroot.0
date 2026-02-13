@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68650EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9F6BEF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 386D48469F;
-	Fri, 13 Feb 2026 19:37:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 66N7fNjKhBlO; Fri, 13 Feb 2026 19:37:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A46A846EF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011446;
-	bh=X44UYQxn/IhYQCNpoCvhwfFx54S4Gbbo1OHRMu6Nly0=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=a/vdzhXrVa0o6FmmA9fC3u9QYKAYe+aTJrfEfBgi8adVlAgVhO9NVyHP7euCFqSwt
-	 8eVF81xjBlacY9EGNOtcQPmT2hJLJIhz/4D4oTlFYjVS0m0ImjVlqhwdHGVVd9EYqI
-	 HRQBiHCy6f/cO6S2OkQLsDTtyFnybvLbl1C3mrckqAVq3snpC1oVNrafSzifkX41fE
-	 fYeBq2od+qYDaPtfe5mV2L0paE+u/OQsLliJ9MYeMr/sK///xOq2GHkRHLzopPG3PP
-	 JaLO5pidAZQrgIGlk/omk6x5Y+v7rCaQnt4AWCZHi9oimofBIas/i2QDYH0bP4wnDU
-	 CsEL4P1+sSujA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A46A846EF;
-	Fri, 13 Feb 2026 19:37:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1406B69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AA0741F04
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E28541F64;
+	Fri, 13 Feb 2026 19:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DtBbE-JqTCuI for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:36:52 +0000 (UTC)
+ id ymExuHa4Qt23; Fri, 13 Feb 2026 19:37:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61A7641F14
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771011447;
+	bh=m7HmyddP7tfo0REdTUHdEYcYFpBcqydR9k4Z0lDwhFI=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Lc9YyK+txEnm8n2of0j0f0CbrWaGnWTiWyHAxEzZAO6vCZWPGuyBq480RfIaAE4+d
+	 jF/m4zfc2Wv1tzVMx9rzfhshvzG6kRRiHJMQ6KiRPtZj4+LV6bgYpYuIovyl+dCPsg
+	 jviO2xU3GkvoUcjtH80t7PV8ATl1lLDomqSoZc50xdkeZZy1OQCn3XmNAkus2VChMS
+	 jD9qKMn6DloQdqD7Om9NSJrO2vp1o7ThFX2YQiVS/XSAsTWpuvXckgrAvQYiP/3S/t
+	 giGhDYfgAt7QyW9ud/CWUIDygWao+Q6KOTxhGdeld4tE3/m4WFLpTvjoAg6xNXir+x
+	 YUYBuvWE12HKQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61A7641F14;
+	Fri, 13 Feb 2026 19:37:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A54D169
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86EC6845A6
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JVpnZuGtjN5g for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:36:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1C78841EB8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C78841EB8
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1C78841EB8
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:51 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4834826e5a0so12260985e9.2
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:51 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 64325844B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64325844B5
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 64325844B5
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:54 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-436309f1ad7so1049303f8f.3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011410; x=1771616210;
+ d=1e100.net; s=20230601; t=1771011412; x=1771616212;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=pT2erzWFeBsC3/zysPR1VfymkwXwUMqQ4kKNJAWizbc=;
- b=D/FCykesRS88x9+lVNPNauaWZ0D5neiceHRK6SIOuzkUAOYpCcUYH9lt2a4US1Mbo2
- tP8ibIfMKPNTmni1OAOslbQbQLQui46FYP8pdQ0d65ycACxUxFy8GDRkBsHXMcSeaJqD
- 1x25mKwwGnGhvOf7lFwv0h3KotaNVJ5Ox2AJHZ4Uh3mj9umnYbaHi9UtqgKONln0imT4
- KbKhSP5Xqdc6g62uJZ6G0RPY/wRCkout8z9/7d5jEhYArUqdj6g85VBNkQqJFICHxjAQ
- IzZitWpDdetc1W0H4L0LrXBXEqjc1Nsy1OmCL+6tbXHEPu7iYYUdg1gMXQs8M4+iBowh
- TpdA==
+ bh=COXpimueFPL77CSwtQlm6/0dYnIUq0C+dcbytBO1Xc8=;
+ b=fWZzwekFNktVDuE9iAU0+kmKpxWLeTbdaepRyhaRMyW5TfbWke48GDg55FQyA42C2h
+ McNnle27R2xcVwBz87PsIMDR5AmqTPxN/dZ3N5NjlZuyOeWyl19FBcXVDnmLSfCsfbjj
+ 4FdCvKCDUoF7HNeAim6Q3KMBXFXct85/j95dCFdk6qwPI+qlXs4ucPTVt6BO7J96bj2g
+ bhpNq02kLXvhfgtZup2XYExnr/oaE2upvKfCD1tqWCLZMGFxNAhHmmWunE2mUd5nXG3t
+ ewx4Ljzw9SSHtN8ETIotX35OYhS7Z0MSELw0Hteq6Ao7bM+QTat90+whLGKRh6jj85BP
+ 6tVQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVl4cEoCVwMicXK6j8upibn8tM4nQ3gwIwcoU53JZE4cIyZLzfBMZHA7lkmIKNwugXAnCQZZYA7ea4=@buildroot.org
-X-Gm-Message-State: AOJu0YwKI2jbtx1PsQ5QFw1nFykIHm/WkfeJVqVl8WFtE4U+TTuXMUBi
- UmK5c9XA6iw18enJGXYPKZhzra2QBAuldJLNSLIfLL4aKv/dLjL7vZidB6VZ46bPpWQ=
-X-Gm-Gg: AZuq6aKuJxRbskd7NuHkPifAOPvfcMfG6A/kQ4Rn0/k0Xdck+zhOvLxu3YD0qNqdNGI
- 65qPNUwOX+b4GlxMxqhCuQzeCdBLWu4UJW6CzXfl42vJ2ynSwpiN5DoGmhK9YjaDOTM6IsF5IYq
- NSNi984DxX0+4Kudc23slQTZi/HLMPtOa093aI34sA1VEpqS38d52MIIFgoR1HzZYUHwSuNFwfA
- w5ce7UeNQhO6P1NLMAdquLM2Et5XpKOzVch5mrt4JnnTX3m10YWa9+VCdmeyXydggzSpq7KKdct
- DLP80Bs9sI5DMSETQEunoM69uXB7wOUy2TIlQYW9RFwk94RKNEzcZ9mstt0Lm/jlq0ZaWWfQfN8
- wO1bPT9WJbhc58eFYOBsb/HqVa5VsqH1LW2LCYqJpm/eBGWQVZPLqeXjP/1/Wr2s/xIm5hPjBHT
- UhQqzO4aQuVTzu65U=
-X-Received: by 2002:a05:600c:1e1d:b0:477:9814:6882 with SMTP id
- 5b1f17b1804b1-48373a15f3cmr46446015e9.5.1771011410004; 
- Fri, 13 Feb 2026 11:36:50 -0800 (PST)
+ AJvYcCVCM/fjxfXs1hvaRzVQIgCESpQt+Yu+HkUcR7lwn+taZbuJCV7189rcV+t5laInKma/KcZT9UMYKXA=@buildroot.org
+X-Gm-Message-State: AOJu0Yyy+5SyKNFE7j8PsMzrwqyz6l0oCmsKf3ZFcXS+UzuBp7wb2GNz
+ y5xKWRizVVTKCeFnLFeFw8HpZRuDBwCQtYZhuVXc/7cpOIUc9xwq5be3mOWPJ7r7dLgmFJj+mh7
+ tBpOm
+X-Gm-Gg: AZuq6aIRmW8vz6O8MTyfWh5f0u9jcLLizPqm9cBE1/sY8WdPZx7RZ6QxwjJLga6vx6c
+ 4cRt49XzVuSsjSNBffcptIFjTzPVQGyEd28f30IU0rCQ2qkj+Xh5FX102i9Diz7/FN5gwuqs9n+
+ kVtY1QU0rsOcz9lDWXiVJ34BgtFSYRZAUnkLiZrRUwReimoJcdoQ7pj84bTNYBPMpphSPAFCUE5
+ 9S4HxU3h/y7BELmzE5ZePOYcbxt/08i9zCxYgog33+uwQ/v45gmyvc9KF5BGY7om9pMoFclE7vj
+ QQXAEQ/JU/T4j7HIxpJXa6ul5PpvB0ldax8LTFnkrca3OQhOr0q4c/irTyTTN4ymdDa06UquMcX
+ 6l4XbNfggS2sJY86jE2Kndw99gq8rDy+4gdEw4s4DS1Z5WXaWHvIrI3faYuabXB2F/Hhfyf95Un
+ JAfNuoF3/gc8l/rys=
+X-Received: by 2002:a5d:64c7:0:b0:437:6dac:4580 with SMTP id
+ ffacd0b85a97d-4379dbb0c62mr1153437f8f.62.1771011412008; 
+ Fri, 13 Feb 2026 11:36:52 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4836aa0847asm163717235e9.3.2026.02.13.11.36.49
+ ffacd0b85a97d-43796a6a5f0sm7411464f8f.11.2026.02.13.11.36.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:36:49 -0800 (PST)
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ Fri, 13 Feb 2026 11:36:51 -0800 (PST)
+To: Julien Olivain <ju.o@free.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:36:49 +0100
-Message-ID: <20260213193649.38288-1-thomas.perale@mind.be>
+Date: Fri, 13 Feb 2026 20:36:51 +0100
+Message-ID: <20260213193651.38391-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260104172853.3441726-1-giulio.benetti@benettiengineering.com>
-References: <20260104172853.3441726-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20260202144704.980271-1-ju.o@free.fr>
+References: <20260202144704.980271-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011410; x=1771616210; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011412; x=1771616212; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=pT2erzWFeBsC3/zysPR1VfymkwXwUMqQ4kKNJAWizbc=;
- b=OWKGcI8yUW9/Bow5NsCorm1B9HfxMNKyDkKiYdxkT8ernAQRaruWtVNU1dwjGDI/jl
- oJrqOexw6BJEIaL0iLQcXRs6EB5yrQsh3FdLPsmmdN6RbqgDvBZksiCc93Yh+cOqPmrI
- bhJ2QeSlvwe82NdX3D2M2LZw51w1Oy3p9LBBnK6dyEKqVTFaowZboSJAVwjaC57kVXkv
- 8517ZqN2BiYzVdoyck602Dvd0+SH4hItQ1tPb8gkukPrlNMcLHgKY5tIqRPQGAyMmFOc
- lnBrxMQz+OUzX2BO1lhhRSVDRNUmXURC81LXnUNvbZLHcR6jqEwe0waFKKhwSq378aS+
- S0Gg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=COXpimueFPL77CSwtQlm6/0dYnIUq0C+dcbytBO1Xc8=;
+ b=XDBMB9Fi0d5mjQaCoU4rq3jtwezHo21oXm/ldOTH3EF28eC2bFlrgCOx/+4JAohSbw
+ IFyyvClAJF1R8H2A7aqAK3OhudGEdD4CnoQA2qtr6vPVQDj3ouY/Qx7CDnZ2lnseveti
+ 54hooz6es7o4aPr8TBrZ1nwVMV0bqNWe1Tw8AmjqQmLfOPZ65lMny9zmU6lt4nntinIR
+ 2LExWEWQzkR18kvMWBHY8flH5S8K77mpBw4s+jbyS72TmtMxLXK4QUtlJT+JURdeP/S0
+ nBAhMBWaBrLLTt4i3/sMNAL5gNOdrGMrVVd1qEBnQsrAgUswkFUE7qNMOaQhDB8EruTz
+ swRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OWKGcI8y
-Subject: Re: [Buildroot] [PATCH] package/efl: update Upstream: field in 0001
- patch
+ header.a=rsa-sha256 header.s=google header.b=XDBMB9Fi
+Subject: Re: [Buildroot] [PATCH 1/2] package/qemu: bump to version 10.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,28 +131,46 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> For list of changes since v10.1.0, see:
+> https://gitlab.com/qemu-project/qemu/-/commits/v10.1.3
+> 
+> Note: this bump is a bugfix release for the stable-10.1 branch.
+> This commit can backported to Buildroot LTS branches.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to 2025.11.x. Thanks
 
 > ---
->  package/efl/0001-ecore_fb-fix-build-with-tslib.patch | 1 +
->  1 file changed, 1 insertion(+)
+>  package/qemu/qemu.hash | 2 +-
+>  package/qemu/qemu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/efl/0001-ecore_fb-fix-build-with-tslib.patch b/package/efl/0001-ecore_fb-fix-build-with-tslib.patch
-> index 2756e0932d..4b12183de4 100644
-> --- a/package/efl/0001-ecore_fb-fix-build-with-tslib.patch
-> +++ b/package/efl/0001-ecore_fb-fix-build-with-tslib.patch
-> @@ -12,6 +12,7 @@ ecore_fb_ts.c:(.text+0x4c): undefined reference to `ts_read_raw'
->  Fixes:
->   - http://autobuild.buildroot.org/results/fa111306b95316eed54771550474dae804fa261e
+> diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+> index f4691af1dd..ee70e67694 100644
+> --- a/package/qemu/qemu.hash
+> +++ b/package/qemu/qemu.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed, tarball verified with GPG signature
+> -sha256  e0517349b50ca73ebec2fa85b06050d5c463ca65c738833bd8fc1f15f180be51  qemu-10.1.0.tar.xz
+> +sha256  fbaa7a0d7a9a1deb5695b125916746ec28fe0de6275d4454f3e3bbaf8b339b53  qemu-10.1.3.tar.xz
+>  sha256  dd3ce02338c3a48abb6ba59b48809f7108a8bd242cb0cc8be90daafa30707c28  COPYING
+>  sha256  31c90ce76b6f5aab90a205851e71d5c27e31c0aa3d7017a4383b98a6fe3f1faa  COPYING.LIB
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index df81ea6486..5cc98138d9 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -6,7 +6,7 @@
 >  
-> +Upstream: https://git.enlightenment.org/enlightenment/efl/commit/f28462ee1082a26e4c394ff5fc6e2994d02bfb0f
->  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  ---
->   src/lib/ecore_fb/meson.build | 2 +-
+>  # When updating the version, check whether the list of supported targets
+>  # needs to be updated.
+> -QEMU_VERSION = 10.1.0
+> +QEMU_VERSION = 10.1.3
+>  QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+>  QEMU_SITE = https://download.qemu.org
+>  QEMU_SELINUX_MODULES = qemu virt
 > -- 
-> 2.47.3
+> 2.52.0
 > 
 > _______________________________________________
 > buildroot mailing list
