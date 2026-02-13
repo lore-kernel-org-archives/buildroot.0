@@ -1,117 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47322EF99D2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A1EEF99D0
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09E4181096;
-	Fri, 13 Feb 2026 19:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3760D421DE;
+	Fri, 13 Feb 2026 19:39:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hFYd3H0Esmrz; Fri, 13 Feb 2026 19:39:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ESoLOK_zBglk; Fri, 13 Feb 2026 19:39:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01965810B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B63841F2A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011564;
-	bh=p4YOWc4GOEqFR1heGsha/KwOi/+P/Jd31QQyCM4DX1M=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=jG9dlCK50cm90iC5fpXmScSjScxJpEk8xETrQgMZM+ZJZvK4XDFMNNuunRsnqGRQQ
-	 HtdhS4r3wmAK1+5NoU+w3pc/VnKWwCdfA6Tua2qymrkXSoN9FDtHfYPnSPKZbKyLB9
-	 GFKFLFlntK5WFrJEweUj0gsbYz8cYW2aU5EmseBq0BoRvnuaiKvpcraLg7f8s5nMr4
-	 kuv/GxmMk1YKAIkKn1AQvXXFIOiaoXJfmuloOdtbmImUpySrrt7tPLxfpE33n709+L
-	 3+Bt4+Pw3vCSx265wg/FmKPgx9K9OjaVpDY3IlY6ucpnadkE/z8Ot+OXjFc9Ex8oLw
-	 PtIB2uJkyO4aA==
+	s=default; t=1771011565;
+	bh=A4Q5hJWWACmC0djf3ujwaMPjoE6vKFXrsTBHn3msdeo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=G23PbvkEseweegoJ62QXlNHODzb6PkQCEH1EZup6S5c8MyU5oR5UUrBx41p8iCBHO
+	 Gz0ra/QufcBU9h0T6onqqslsA004W+fzKU2B7bu9PhLcXX9gz9sSeMif0VuEgq/GT5
+	 HuraKAy2+9/UtNiuXYr5lSa1kIBDQZMzs4dyX8/v4rANy7J1ezZh1YY2McFla1n6xt
+	 +vTshZJNPd4BzJzIi5FFU40gCqqd+zwfvgtS1wsNmYlLCw+Cn7Xyy801/fTjYaV8aH
+	 qc2bNGduGa+Nk4lmeUUVuJCVeNL4C2JoJrGHDfoPZNQGOqw6U41IlETBZf7kXO6O5V
+	 KvXKnDM/pQNbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01965810B4;
-	Fri, 13 Feb 2026 19:39:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 42F9369
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B63841F2A;
+	Fri, 13 Feb 2026 19:39:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D2D6EEC
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2392984773
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC44841334
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l5wnNd_Zg2BH for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:38:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8BC208476D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BC208476D
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BC208476D
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:05 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-48374014a77so8920575e9.3
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011483; x=1771616283;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=G35jbb3+7gTd/VFNv8tlsjn2l1lMHHYCVTyUsdAkb5o=;
- b=XwlH0d+KrhLfZ/5HaZLOqAc0JKKwF4AF+EWMTDR8oeOWy7HkE2p11K+Cnvxz3ze2Ze
- ViPeRBuos1LyePgZb7z3HGxbnYepx2azVqYmCgnXVjb52XpMTs81jBCRzh5G8p0xWAIy
- XQsdy4Muo7l0jI3Cg6pTmhQZmCnG83o5Mdb3CVkaqk5hDAl9zX7dX3x6JROPWmz8hcI9
- PDB+rLvxEkZodNC+xsMN8oopkj3ijuQsuUm/5GwFmCQCcgXb532X4Qn8xbfohzv8YCdZ
- drwLxQU2cSd88hCloM2mcFv/0nzpK1DBDsksL/U46d/05MbTG2qIZB+BQwKy9Tm06fIj
- qqzw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCX5Vl6hgPE2J3T0SjD/RZNDrBKRTh/Rxgev1y8O6bcICip787iA6119LtfJqyvTkZrbY4AxXBD0Vls=@buildroot.org
-X-Gm-Message-State: AOJu0Yzg0EOvJrDRsn+ftzD6jyQq+Lx7pXtFvGymp0+aGiUiprDMcMfB
- SArpl2WNnEzjV/h0BnToaddHexJsTuFlNeYICWwFo083ejJIbRy4ECzakTzTN3QoIqQ=
-X-Gm-Gg: AZuq6aL3g5P3neaNE+0HEhSzKFuAshLeZTo3uxkbm0bp1V+m6PCNV/jquhWuu/iUMa7
- Q2CWXucAidQ9EUJ+tnR0Al55xQRsWStlOWs1Anug1qrTvkcckgY0dnGRqrWKu3DMU9ZIEwQlSPQ
- 3dfH7dbxfHnTXJkUvfr4I1H71jFnXv9DnSz+0NIb2ugDhsGDTStr/kCw7PbyWpm+VuJ2LXTfSeN
- N36s2N8r8iQDRc/KLOJPVk3i9KLiLrB5Fl/gEKUB+O6aE41H7W/DtiPbKAoWdlZT6UXizPpHabZ
- PFIKAqO2MD6yf151lVhbB8/jGW+eRBUD3bV0L+4TRV6YZcLAENUDeBOPbxRhSONyfWksX3un1ui
- 3s/Ue3ER/e3g6DPEUln88S1E6V3jNHT6+dl2THdMkHuInzolchHZF3LmrQcm8+0ws98WYpUav4q
- h2/Z/eOup9mDVRpv0=
-X-Received: by 2002:a05:600c:314f:b0:483:6fe1:c057 with SMTP id
- 5b1f17b1804b1-48373a3f3bcmr42801555e9.21.1771011483546; 
- Fri, 13 Feb 2026 11:38:03 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48371a36443sm22831665e9.21.2026.02.13.11.38.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:38:03 -0800 (PST)
-To: Franciszek Stachura <fbstachura@gmail.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:38:02 +0100
-Message-ID: <20260213193802.41532-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260202142750.937246-2-fbstachura@gmail.com>
-References: <20260202142750.937246-2-fbstachura@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011483; x=1771616283; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=G35jbb3+7gTd/VFNv8tlsjn2l1lMHHYCVTyUsdAkb5o=;
- b=h6TsbZBiv69mTE2j+9VFt4WyevfFR24KyuZNylKlKitd5Boy+xp1iRDCN+Tll4HzgK
- aLBTQDdS6fP8gnBF1qNdATn0ZmlPz8WboB2lpV/a+rsW8I2mi6G9i4RACBuFCe83/aSW
- Hvo3azzWJ44jl0SwJvCgaumGRwbghyD/n3yuaO2BwE4bPlj1TvRI+255bgrtDM2dRdP7
- kjwjibpoq3gFodV1eg7PSi8NLdFNsq7zHCSLWa09i7uvk6SX1q+AUv4Z5OtVZ0n+dB3l
- fwmZsRGUeghLrnawsvXPb1/ZCPbuX3hhRqYHuV3iSTAzynAdgPhYSOdT/nOd4SJaA0EA
- qUyg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=h6TsbZBi
-Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: replace bulix paste with
- sr.ht
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iCkZ90HJ_veQ for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05BC1412D6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05BC1412D6
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EEF8F83593; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:33:16 +0100
+X-Git-Refname: refs/heads/2025.11.x
+X-Git-Oldrev: 66dcc3e2a96cb418350cc9af578219530b1b4140
+X-Git-Newrev: fd0ea11ac44757cddbde16beed7b3001e6167cd1
+X-Patchwork-Hint: ignore
+Message-Id: <20260213193704.EEF8F83593@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/brotli: fix
+ LoongArch64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,45 +71,82 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> http://code.bulix.org/ is no longer responding.
-> Fix paste list formatting.
-> 
-> Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fd0ea11ac44757cddbde16beed7b3001e6167cd1
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Applied to 2025.02.x & 2025.11.x. Thanks
+Buildroot commit 473c9400a0c7be14e7eb8ba617697a76286915b3 bumped brotli
+to version 1.2.0 causing build errors on loongarch64. The build error
+does not occur with brotli 1.1.0.
 
-> ---
->  docs/manual/contribute.adoc | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
-> index c17f1619b4..f22164991f 100644
-> --- a/docs/manual/contribute.adoc
-> +++ b/docs/manual/contribute.adoc
-> @@ -559,8 +559,9 @@ If some of these details are too large, do not hesitate to use a
->  pastebin service. Note that not all available pastebin services will
->  preserve Unix-style line terminators when downloading raw pastes.
->  Following pastebin services are known to work correctly:
-> +
->  - https://gist.github.com/
-> -- http://code.bulix.org/
-> +- https://paste.sr.ht/
->  
->  === Using the runtime tests framework
->  
-> -- 
-> 2.52.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Fixes:
+https://autobuild.buildroot.net/results/57f/57f61a5fd17432bba05e4f1865f82cc2f4626d3c/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 302a325f1f15d80aa0675841f50b2f8964680cb6)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...sable-BROTLI_MODEL-macro-for-some-targets.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
+new file mode 100644
+index 0000000000..d35b4b3336
+--- /dev/null
++++ b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
+@@ -0,0 +1,46 @@
++From e230f474b87134e8c6c85b630084c612057f253e Mon Sep 17 00:00:00 2001
++From: Evgenii Kliuchnikov <eustas@google.com>
++Date: Mon, 3 Nov 2025 07:20:19 -0800
++Subject: [PATCH] disable BROTLI_MODEL macro for some targets
++
++PiperOrigin-RevId: 827486322
++
++Upstream: https://github.com/google/brotli/commit/e230f474b87134e8c6c85b630084c612057f253e
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ c/common/platform.h | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/c/common/platform.h b/c/common/platform.h
++index b59f9b809..e1254d5ca 100644
++--- a/c/common/platform.h
+++++ b/c/common/platform.h
++@@ -213,6 +213,10 @@ To apply compiler hint, enclose the branching condition into macros, like this:
++ #define BROTLI_TARGET_MIPS64
++ #endif
++ 
+++#if defined(__ia64__) || defined(_M_IA64)
+++#define BROTLI_TARGET_IA64
+++#endif
+++
++ #if defined(BROTLI_TARGET_X64) || defined(BROTLI_TARGET_ARMV8_64) || \
++     defined(BROTLI_TARGET_POWERPC64) || defined(BROTLI_TARGET_RISCV64) || \
++     defined(BROTLI_TARGET_LOONGARCH64) || defined(BROTLI_TARGET_MIPS64)
++@@ -665,13 +669,14 @@ BROTLI_UNUSED_FUNCTION void BrotliSuppressUnusedFunctions(void) {
++ #undef BROTLI_TEST
++ #endif
++ 
++-#if BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3)
+++#if !defined(BROTLI_MODEL) && BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3) && \
+++    !defined(BROTLI_TARGET_IA64) && !defined(BROTLI_TARGET_LOONGARCH64)
++ #define BROTLI_MODEL(M) __attribute__((model(M)))
++ #else
++ #define BROTLI_MODEL(M) /* M */
++ #endif
++ 
++-#if BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
+++#if !defined(BROTLI_COLD) && BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
++ #define BROTLI_COLD __attribute__((cold))
++ #else
++ #define BROTLI_COLD /* cold */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
