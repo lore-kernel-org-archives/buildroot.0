@@ -1,63 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77CEDEF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F60AEF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 480B384885;
-	Fri, 13 Feb 2026 19:39:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AD86421B9;
+	Fri, 13 Feb 2026 19:39:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lrR28hEmJ7tZ; Fri, 13 Feb 2026 19:39:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EsYTYRQvo7Tc; Fri, 13 Feb 2026 19:39:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AC0284889
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A77742184
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011557;
-	bh=xdxtnpARO0mo1G+o5qfbFWA7LWsmUFH29gRW+VKGbaM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gZUD7wnebdbhNA7xh+eeC0JC3P3+V2Vvb4k5joOpHai1j9IF7TiOeXwX8gXlDP/nl
-	 zQa7fYpe/KHhD0Gp6RHs2U0nHTKlgSbIqTPYyOr9CTf97Bcoh8oX5YBolZdk3OKEtM
-	 01fYwmMng8wzRW8RbK4CXOl6QBZnqEJl/okjUEj/fS4c94GQO+z97gAxNIDXJJMxM8
-	 UHphZeU0vq6VAlsBhTgopEjLpPl6FNGZuF9u0KhukSUYe60TowJqw82uPjmRSefVnu
-	 msU8qOjgLIILCq2IIkaVcG875I/8vrJQAlS01XPaYt6ArGKF8iYmT9hg2yia4F6FFd
-	 7qB1kWovAgCTw==
+	s=default; t=1771011558;
+	bh=ZcNF9Slltk5FIOpAx8hGkkWKk4tNGrLpBbASBBiYLKo=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=T6fTcpJMI1LKNYgvuua6ShzbYYv2nBPmOmF7ffaiRiNM8W8F2SvJ4J/ycE1iCCrIR
+	 SoEnDAxCN6q5rdNBK9iV3CkjU4hD7QS9HKJ1DcWLp3nzft8qh/iJf7iCCqQGENLn32
+	 4oDKPji8cgrLFkISkF6tMyp1jXQkViqIFNkXx3Hm0ttsVxUXaWaRlNC5HjMYbze0EN
+	 dQM4GoAjHtFuPy3WWgqnT2Z0xbbAT0HVBxgGsFRMwKG54pVG3KbCphIUwEOfjZR9Yc
+	 GUvS4AcQbyGo9unFxcr9yexx79aZkW+QgWlOXEMVEWCleGN5ZsKEkvW1OBDatZ7Ua+
+	 73wMtwmw0eOKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AC0284889;
-	Fri, 13 Feb 2026 19:39:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B33C369
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A77742184;
+	Fri, 13 Feb 2026 19:39:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12A88EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A9A9412DB
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E86861612
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4OHjD0iJc4hO for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8832E412D1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8832E412D1
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B90C85DA7; Fri, 13 Feb 2026 19:37:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:32:58 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: fcf5b59d6135e891c30f60ef4404aadd873ab35e
-X-Git-Newrev: d2882b9acdd22ff7c99838d4eac37fabcbb14615
-X-Patchwork-Hint: ignore
-Message-Id: <20260213193704.7B90C85DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/libopenssl: fix
- powerpc64 build
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OerA7tpqJ5wa for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:38:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B096600CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B096600CB
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B096600CB
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:01 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4806e0f6b69so10397785e9.3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1771011479; x=1771616279;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=AqOvBo/8JCbImROxd7JTroCJ+n6AcPDia+A2Gppp3es=;
+ b=kfWOIvIT2yjs9LrX39JVqIs48e1Bql6eUK7YEMh4r6lfGTWem4mxa7TJP1g57+CRGC
+ 6SUEX44EEOo6nLgUspEw4eczttH08rcku7Ay1Q5y8d4sDCMrNiSWp4ezQZ/w8TtldWSF
+ X8AVU1iHmj4oC4k/pSEGsXBBovPM5wu17bf2prIXU4kNwsWZooG/nOAemQI/DaGeX3r/
+ 0mCzxM6asCxtk1RLhXcOen7DVv37GZ4QPX2vqU8mYmzBNdj+gqKxqI3y6FEThMrJ5XmQ
+ Sl0tNMjvjz27zgiaPmvz5IApK3DhRqZM8BzIIPcgciQjxYQMxGbHMjgIqAep28a+6CkG
+ ZT4Q==
+X-Gm-Message-State: AOJu0YwkfnzGATPIIbBB6INfjYmuQP7gjsrG7SaBrQCiBAZUWe+h4NnG
+ 12Rksp7FRdOeYf53gL6hHYuMYJDu2EgqLVk29iq0K6olvYuq0NX86dRupMToOmScC4r10JB6TWh
+ LRNXM
+X-Gm-Gg: AZuq6aIMXBaTwg/+idpUWS7qPIScJW4AhV6CnZSP0EFlnahPeuOXFVe3jQgXYP5uZwr
+ WwDToV6nTobvV/AFuhtwUJ/3+cGGgbdPpu1J4r8uHIlwFyAmE3tXVacerfQiCUDkJXJMXUmc/i0
+ nNIGeeA9uhNSa0BuafqpMv+lj7rtEcdkpXoBAuQTL6Se6jYHccOxBCIR7VpVJg1sqbU958vQn32
+ /Hi8bKBksS84RlJCi7Y/6oDeryKFwYGz4ywQFSegU6C5NNxDOHtgVM2x24ITgIWmG6qPTkOlDWC
+ nokkV7llBiwKncJ1aHe0EkvPRc8eCx8UILgqyctZKmsWqPkV9NPv1fNYDFLCN5gB1BvRQzxcIRq
+ M9H97q7xYCoVFsIZAznaAZF701MQ9P4MCCt1z77iUXpkAAr4i8Pkz7JOVvYkG44s9tXQ7bLl2wv
+ WDCdE8bA0gjmoxgqM=
+X-Received: by 2002:a05:600c:608f:b0:477:9dc1:b706 with SMTP id
+ 5b1f17b1804b1-4837108573amr50848965e9.19.1771011479378; 
+ Fri, 13 Feb 2026 11:37:59 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4835d92267bsm317066045e9.0.2026.02.13.11.37.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Feb 2026 11:37:59 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:37:58 +0100
+Message-ID: <20260213193758.41211-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260126130414.59175-4-thomas.perale@mind.be>
+References: <20260126130414.59175-4-thomas.perale@mind.be>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1771011479; x=1771616279; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=AqOvBo/8JCbImROxd7JTroCJ+n6AcPDia+A2Gppp3es=;
+ b=RMiNf0IAT6ZoEzDQHz9F+rfnqdegxmPFiREW8JcNOXx9AJgw796JBUWw3jUD7x5S7q
+ ryDGnwuG/5MTAxcdptwTcyVGeLzAjqbo0JSR2iT57/18moDtzSb9CgUQsome56yX5cVf
+ Lvm3MbZ8XO2VdRmfgrZSisynjeV/kgxHEm3a6dmHrMJr5yZNg0gFd7GUH8v9fm9RLNY7
+ vitgsjntnC4IipBgxsKiMhtrC+7zZk53on2bxLn6xHkaRgBtB2PVFab3G8H/Av0ryOhA
+ 0ZwV6C3jIragG6rbyDEN8wHanbgEy17PR7aNG/CKlKJx/RmGF61d0oCpPr/xk/KVyFp5
+ dCHQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=RMiNf0IA
+Subject: Re: [Buildroot] [PATCH v2 4/4] utils/generate-cyclonedx: fix
+ dependencies w/o virtual
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,113 +123,130 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d2882b9acdd22ff7c99838d4eac37fabcbb14615
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
+In reply of:
+> Since its introduction in [1], by default the `generate-cyclonedx`
+> script doesn't include buildroot's virtual packages in its 'components'
+> list, unless using the `--virtual` argument.
+> 
+> References to virtual packages present in the 'show-info' output are
+> filtered out in the resulting dependencies.
+> 
+> This patch fix the default CycloneDX dependencies generation
+> without virtual packages to reference the packages that provide the
+> virtual package instead of just dropping the virtual package itself.
+> 
+> If we use the package `lbase64` that depends on the virtual package
+> `luainterpreter` as an example. The 'dependency' entry looks like the
+> following:
+> 
+> ```
+> {
+>   "ref": "lbase64",
+>   "dependsOn": [
+>     "host-skeleton",
+>     "skeleton-init-common",
+>     "skeleton-init-sysv",
+>     "toolchain-external-bootlin"
+>   ]
+> }
+> ```
+> 
+> The `luainterpreter` dependency is missing.
+> 
+> After applying this patch, package that provides the `luainterpreter` is
+> present:
+> 
+> ```
+> {
+>   "ref": "lbase64",
+>   "dependsOn": [
+>     "host-skeleton",
+>     "lua",
+>     "skeleton-custom",
+>     "skeleton-init-sysv"
+>   ]
+> }
+> ```
+> 
+> In the case of a virtual package provided by multiple packages all those
+> packages will be listed. This happens when generating an SBOM on the
+> entire Buildroot packages.
+> 
+> [1] dbab39e2d9 support/scripts/generate-cyclonedx.py: add script to generate CycloneDX-style SBOM
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Buildroot commit f710640be5869bb3716e254916ae614f79002f2f bumped the
-package to version 3.6.0 that includes upstream commit
-https://github.com/openssl/openssl/commit/8f24a148e6f112045cf110c3e3f4e2415d9c11fe
-which causes build errors on powerpc64.
+Applied to 2025.02.x & 2025.11.x. Thanks
 
-The upstream commit was also backported to older libopenssl branches:
-https://github.com/openssl/openssl/pull/28990#issuecomment-3675219918
-but its first appearance on the buildroot master branch was with said
-bump to 3.6.0.
-
-This patch adds an upstream patch to fix the problem.
-
-Fixes:
-https://autobuild.buildroot.net/results/b28/b286ad40f2240a85b9cd0dc44e089d1d6babd3ea/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 96f01932be024eebad8e6edef121641eeb16ffd7)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...-gcm-ppc.pl-Removed-.localentry-directive.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
-
-diff --git a/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
-new file mode 100644
-index 0000000000..7c507a2687
---- /dev/null
-+++ b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
-@@ -0,0 +1,69 @@
-+From 5aaa7e5fdc59e88a13d2911cb86d814d4e2669da Mon Sep 17 00:00:00 2001
-+From: Danny Tsen <dtsen@us.ibm.com>
-+Date: Wed, 28 Jan 2026 07:23:13 -0500
-+Subject: [PATCH] aes-gcm-ppc.pl: Removed .localentry directive
-+
-+Otherwise there is mixing of  ELFv1 ABI and ELFv2 ABI directives
-+and PPC64 big endian builds fail.
-+
-+Fixes #29815
-+
-+Signed-off-by: Danny Tsen <dtsen@us.ibm.com>
-+
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+Reviewed-by: Shane Lontis <shane.lontis@oracle.com>
-+Reviewed-by: Tomas Mraz <tomas@openssl.org>
-+MergeDate: Tue Feb  3 08:39:50 2026
-+(Merged from https://github.com/openssl/openssl/pull/29827)
-+
-+Upstream: https://github.com/openssl/openssl/commit/5aaa7e5fdc59e88a13d2911cb86d814d4e2669da
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ crypto/modes/asm/aes-gcm-ppc.pl | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/crypto/modes/asm/aes-gcm-ppc.pl b/crypto/modes/asm/aes-gcm-ppc.pl
-+index 68918a9305a2b..fd5dcc22a6117 100644
-+--- a/crypto/modes/asm/aes-gcm-ppc.pl
-++++ b/crypto/modes/asm/aes-gcm-ppc.pl
-+@@ -409,7 +409,6 @@
-+ ################################################################################
-+ .align 4
-+ aes_gcm_crypt_1x:
-+-.localentry	aes_gcm_crypt_1x,0
-+ 
-+ 	cmpdi	5, 16
-+ 	bge	__More_1x
-+@@ -492,7 +491,6 @@
-+ ################################################################################
-+ .align 4
-+ __Process_partial:
-+-.localentry	__Process_partial,0
-+ 
-+ 	# create partial mask
-+ 	vspltisb 16, -1
-+@@ -564,7 +562,6 @@
-+ .global ppc_aes_gcm_encrypt
-+ .align 5
-+ ppc_aes_gcm_encrypt:
-+-.localentry     ppc_aes_gcm_encrypt,0
-+ 
-+ 	SAVE_REGS
-+ 	LOAD_HASH_TABLE
-+@@ -752,7 +749,6 @@
-+ .global ppc_aes_gcm_decrypt
-+ .align 5
-+ ppc_aes_gcm_decrypt:
-+-.localentry	ppc_aes_gcm_decrypt, 0
-+ 
-+ 	SAVE_REGS
-+ 	LOAD_HASH_TABLE
-+@@ -1032,7 +1028,6 @@
-+ .size   ppc_aes_gcm_decrypt,.-ppc_aes_gcm_decrypt
-+ 
-+ aes_gcm_out:
-+-.localentry	aes_gcm_out,0
-+ 
-+ 	mr	3, 11			# return count
-+ 
+> ---
+> v1 -> v2: use set to avoid duplication of dependencies
+> 
+>  utils/generate-cyclonedx | 30 +++++++++++++++++++++++++-----
+>  1 file changed, 25 insertions(+), 5 deletions(-)
+> 
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index 04ce8fc3a1..2b6c6d63d3 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -337,7 +337,25 @@ def cyclonedx_vulnerabilities(show_info_dict):
+>      } for cve, components in cves.items()]
+>  
+>  
+> -def br2_parse_deps(ref, show_info_dict, virtual=False):
+> +def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
+> +    """Retrieve the list of packages that provide a virtual package.
+> +
+> +    Args:
+> +        ref (str): The identifier of the virtual package.
+> +        show_info_dict (dict): The JSON output of the show-info
+> +            command, parsed into a Python dictionary.
+> +
+> +    Returns:
+> +        list: package list that provides the virtual package.
+> +    """
+> +    return [
+> +        name
+> +        for name, comp in show_info_dict.items()
+> +        if "provides" in comp and ref in comp["provides"]
+> +    ]
+> +
+> +
+> +def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
+>      """This function will collect all dependencies from the show-info output.
+>  
+>      The dependency on virtual package will collect the final dependency without
+> @@ -352,13 +370,15 @@ def br2_parse_deps(ref, show_info_dict, virtual=False):
+>      Returns:
+>          list: A list of dependencies of the 'ref' package.
+>      """
+> -    deps = []
+> +    deps = set()
+>  
+>      for dep in show_info_dict.get(ref, {}).get("dependencies", []):
+> -        if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
+> -            deps.append(dep)
+> +        if not virtual and show_info_dict.get(dep, {}).get("virtual"):
+> +            deps.update(br2_virtual_is_provided_by(dep, show_info_dict))
+> +        else:
+> +            deps.add(dep)
+>  
+> -    return deps
+> +    return list(deps)
+>  
+>  
+>  def main():
+> -- 
+> 2.52.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
