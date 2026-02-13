@@ -1,116 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D259EF99D1
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF87EF99D3
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED8AB849AE;
-	Fri, 13 Feb 2026 19:40:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B94861773;
+	Fri, 13 Feb 2026 19:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QmOCo0jwDOvy; Fri, 13 Feb 2026 19:40:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CzsDjs1xULhL; Fri, 13 Feb 2026 19:40:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB39C84998
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24BD06177A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011622;
-	bh=NRQQ+pEDyvwBV97kjl76eocFCHi5kcOGTye5Iayq3aY=;
+	s=default; t=1771011624;
+	bh=5jAJKKJY3If55b1F2o7Xqsg1rTRCfAGl347g4jdcKCc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=O3bAfDLGNCZ0Zm6slMnlt+XSa+J/CXxiiTX9GzRSSaHaGP2A0NUH8QlqeB7EEbTm5
-	 Wl7QD3wCE0lLmD+51b63P4YgbakuwmOV0gEJupd1kgCVxPkqsguySSpaa5M1qvcfU8
-	 0JT88J8RIqlZX/pgQVeXfAHfypV7IErmC8jrPFropTYQcrs47WUGPHWEwrw7a9+Omk
-	 N3MpwwJb+zhT7HDVvoZPq2FBLWxqnqvJSqCCf5/q9hrrqupGjHMqw+zNqShGrfTfQm
-	 N8jdIQcWAoJamVEoni6UZ+DxaY/7NKGUWpg8ewvKRNl8JtTPWNPMvRcVKCfvcVUKOR
-	 eROUEQGvF0Zlw==
+	b=bKYjnuLMeUQbEJzFvB6SGveiCl+cxxQoFkflL+L7CbRG6M8s/6/kaOHZugH4ZmVBn
+	 LXzpdPklm7jo/PYOqQBzdBjcslItEgRoL+mzQIBfZ9Rb/dLE/ekxJ4ZUjQyE6Hu8Mp
+	 Wtv/36CbCeiXyDM52WxbkmC61Msw95vpfF6F0pwUxO842vsIFsCi5SrnOyUl5l/Ig8
+	 hGfLxhezkBjZrR+R9LstQY9F+soFeth9FGhk4ZtkgnEsCAJH4zKacOhzHE65x/RtY0
+	 KImTxE6yUUVLJSN1Vi1OqtGomKhUH8w9wRLc97D2U/vvTZuzY1fO5TnBaq7XSyXgQp
+	 DlA/0+bwhccmw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB39C84998;
-	Fri, 13 Feb 2026 19:40:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24BD06177A;
+	Fri, 13 Feb 2026 19:40:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6313CEC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1203A69
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E05A412CF
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7753A412F2
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TMnTc2rd1iGu for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:37:47 +0000 (UTC)
+ id MgZbJ3wHbVCS for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6806C40407
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6806C40407
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6806C40407
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:47 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4836f363ad2so14408115e9.1
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:37:47 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 736DF412A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 736DF412A6
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 736DF412A6
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:50 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-43622089851so1085464f8f.3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:37:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011465; x=1771616265;
+ d=1e100.net; s=20230601; t=1771011468; x=1771616268;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ojOKMOD7GdJz0eI5hnBJfSqa0myQn7trfBcbjdXij5A=;
- b=lS8NBTY+lAjLNDA7dbxXZpog/Jr2N+6QmRp6shiNPaDKob+RX97o7vIhkxbV4ZajmQ
- MHoDQMXr5cZxAQNMuwTkB69kk9UZUu5IUI4SX4P5HTIkKrd5/iIF/TKYYburFg0lPwTp
- NB8CFBnl0jVeEqlObJBK4O4Vwlay8e3mHOc/KnNrDE5wtDaWTq45UVDMyrdWLzo8y2Eq
- Iy6CwM5FRzDbPfPK2Z3DiKD5DL/Nq7E4D4kFxSuyuVrNrt5kXLWIhZ3DPtvZwZipHKso
- 8KcUIQAjs39oLUaBsI1VEOt6p7g1hhYjnXngyZ/X8JVj7BeEtnKPjaAWYbcNCvRR1izr
- qC/Q==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUSLv6/G0J9OhLYfvzNvb2izyAgA5J+Hgv1a59cD9NnK7Gu6Eq7JHEB609gvpaWJpZ07bHe7xL9aC8=@buildroot.org
-X-Gm-Message-State: AOJu0YxN7NTwIAwUbzZVMwkisscerkiIKRtZDky7CxkE7hk9eve9JaDE
- Z1Zjbstq00VH/XoLtv9Jk5lTYOEc0WRILczwS9wDgPXF3OkbekjEIMZHlb3R1Q/FCpM=
-X-Gm-Gg: AZuq6aKPm5jSS7LDSMPRJlO0+clh6wOh8NuRIt8D7cg3RekHjiDM4mF15ujeDse59QN
- nEZJEWUmzilkgS53iVBgRkGLOVEFJrySaX1p5T7H4EX9TvVzCoDg7Gq1W9dD+AHG5qbeAt7o49B
- d/T4SVpu7lmDmjkiB7BLT1O41WRAaimzIZTSUOsZ7Xi8mJXgyLsPUIjZLiLRzKKvgedly6qX0+b
- 2JYz31oxsn20w4m0PlCzGVMI5e9OTpOOHPC3wdj4AWdopugtPs+bhGRJo4m4gNXV/LQ1YgAV8kM
- mg3H0RDdBjwRvC3GWCzAT2oTAcpo7EcTfiCyrcDFlvIN20kPAFD2ll/4XIOQwaLvskRhckK35Ob
- A53eyBjDFgNXidIcrnw+2PolXJMKwO1GBsVTRSjlDDbnYoBtBeOBL1VgN7SFogreAEbA5OHjfar
- 3I0GLcBJoRsrAPkdo=
-X-Received: by 2002:a05:600c:8b2f:b0:46f:c55a:5a8d with SMTP id
- 5b1f17b1804b1-483739ff865mr43143095e9.4.1771011465333; 
- Fri, 13 Feb 2026 11:37:45 -0800 (PST)
+ bh=0ZHJYU2eD3Da8ynqWBIoLdReamMNh7R8C5f7gg3MDUc=;
+ b=IqkrNuXTKk8ffhILpwTKPHux7Q3DhH82+A4bHc7KL2ptq7Wk1YKvzTH6YXPGJ0CAM+
+ R8G9LxdQI1X9+7wHNot+Ss+4YJjENGHaUsZBtVBZi93e/BpSPVnKXvHfejnzp+LYA70y
+ HM01bIA90Q1NaLnxRNUAbb5r49XNXzlJDqzxsNa9ss7ItKARIIEFqykSTdmdGF35MU6E
+ Z0Mb89Kid+7bPVdt5flIKNstbn9QEUl4nODU0SnXdL8ujWmlr7/i4zggpSj81cFbgLXa
+ 49iet7vqkvxkSej/LW7WKJ0kU+/qNE6hvAlOstZgvpu0DNQwc/Y39HlBdeWwcs6uMgBL
+ mKgw==
+X-Gm-Message-State: AOJu0YyXOyg78UFJfDWnstv5dh0Jcdy+pAwtscWOoXLr3hLDnqvqXt2H
+ 2V31gysxwCQ/jW9WhBctbgGYi74uh0m+jthQcVVdRvI4yQmBW2nHpZuqYSFzyV9uvXZAClwJNtR
+ ziYT9
+X-Gm-Gg: AZuq6aL+bANs2SVksfgIvvic4hizRNIuxUQKgh9daAG/yQQRabT1cW02ctmauuwi5YZ
+ gj6qrmC0GO9XR4x63M/kgiKGnP2cWEpS83s4LVAjNJ6/Pcrl7cl/C2WZJfYL1y95/OtxWH58/Yy
+ rCvf8thaJp0W9ga0T/4I9bq+H1gIK82nsxUuCy+u3s2SLaLelsuKWIF2LdjztvucKnwhLSeUD/W
+ GAE4xwoJRMKj3d0frpx8MOXFmaunThXzSROcIjoUPngRsoEssBcchtXCR+qS9PhBU65AUn1JUNR
+ L8D+tk58sh0embD+JQcNjdzAb1z1xRjknYWbIWrDMf4KS34wwJdwlGcPyJSsyA82FYVhHoLF5vV
+ /dM68+7Ho/w142Ngdtv0OMS7FAs28AYP3EQgSCH0L2e33DUD8VWJM45ZawluRLjIVJV568jqYgO
+ r2pfKR/150EzNdirI=
+X-Received: by 2002:a5d:5f55:0:b0:435:dbc4:3af0 with SMTP id
+ ffacd0b85a97d-437978cdb95mr5643766f8f.14.1771011468347; 
+ Fri, 13 Feb 2026 11:37:48 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48371a02a79sm54608585e9.3.2026.02.13.11.37.44
+ ffacd0b85a97d-43796a6a5f0sm7415206f8f.11.2026.02.13.11.37.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:37:45 -0800 (PST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:37:44 +0100
-Message-ID: <20260213193744.40515-1-thomas.perale@mind.be>
+ Fri, 13 Feb 2026 11:37:48 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:37:47 +0100
+Message-ID: <20260213193747.40675-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260118114734.955796-1-bernd@kuhls.net>
-References: <20260118114734.955796-1-bernd@kuhls.net>
+In-Reply-To: <20260120082405.46683-5-thomas.perale@mind.be>
+References: <20260120082405.46683-5-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011465; x=1771616265; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011468; x=1771616268; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ojOKMOD7GdJz0eI5hnBJfSqa0myQn7trfBcbjdXij5A=;
- b=HfnCwE5oXBbWkCb6BQ56H2qx20HtCU3V8YrTQHT5biIYvXOy1McBpUkEYNUj24YiFc
- kXXsdCeEr1B7rsir+Iq7pMmEZYW3A/jaLLtWIHMHKxoXeb+gs8s/z16RrMqWpKDS2A3K
- 7n0CDKIig+ikfFW7JOlilz9WZJUI7oO8J7ao0tt4NNqUibEmxA3rY1Ntq0NKWwo2LIYM
- QKaVpLKKT3Fp0h2zo1G4tGKNmEW+WM1X6TLbql4t7dyDTqlknvnlN2kcwJ1/wy3AuGeR
- 5SVaELzEXxv14ehF1GbeLu3hpIkh0rHwHvVIgzRRRng/hqYIgJq+6FxFQzqNWXjJofeK
- Lwhg==
+ bh=0ZHJYU2eD3Da8ynqWBIoLdReamMNh7R8C5f7gg3MDUc=;
+ b=TXDK8noSAUhgdoBcM/S6PR5I7zKlyYnmkMtWs1rzQqVfORocnGo0zy7YndllaQ/vp4
+ vRebgbFvlFWRPt6arB8LfTZhAiiUWvRe0uczj1UmmdGWXsH6xxZUAeliPsJxu30sMEsI
+ vNorUB6BIPuax3CL/qVpIxLtuOjU0mmILLuIipdYR/LsZYrUxPJTPaoEOEBYlm2n/WsW
+ hbDkERTSrtSWokizmJb6GgWyq9CbLfuWX9qiIpoLr9MrdOYW1pSQ6PdgaDDiHAS22oZR
+ fgwxtOBTh2gcGGGTqDLEUvzGqHVhzDcbz0uCukJoAsyO98qgrmp9D0NP27VmtSaW+IQA
+ hLxQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HfnCwE5o
-Subject: Re: [Buildroot] [PATCH 1/1] package/screen: set socket-dir to /run
+ header.a=rsa-sha256 header.s=google header.b=TXDK8noS
+Subject: Re: [Buildroot] [PATCH 5/6] package/igmpproxy: add CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,62 +128,34 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit 4769724ee2bebd671f6a9372fb8922a8c22c5079 bumped the
-> package from 4.9.1 to 5.0.0 which includes a major rewrite of the
-> configure script
-> https://cgit.git.savannah.gnu.org/cgit/screen.git/log/src/configure.ac?h=v.4.9.1
-> https://cgit.git.savannah.gnu.org/cgit/screen.git/log/src/configure.ac?h=v.5.0.0
+> The CPE `pali:igmpproxy` is a valid CPE for the package igmpproxy.
 > 
-> Upstream commit
-> https://cgit.git.savannah.gnu.org/cgit/screen.git/commit/?id=78a961188f7da528c7cefcc63e07f35f04e69a93
-> added an option to configure the socket directory which defaults to
-> $HOME/.screen causing problems with read-only rootfs:
+> See the latest CVE: CVE-2025-50681 [1] that reference the upstream
+> repository.
 > 
->  # screen
->  Cannot access /root/.screen: No such file or directory
+> [1] https://nvd.nist.gov/vuln/detail/CVE-2025-50681
 > 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/issues/123
-> 
-> Updated project URL to https.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/screen/Config.in | 2 +-
->  package/screen/screen.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/igmpproxy/igmpproxy.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/screen/Config.in b/package/screen/Config.in
-> index 81a9bbe4c3..453950bff2 100644
-> --- a/package/screen/Config.in
-> +++ b/package/screen/Config.in
-> @@ -14,7 +14,7 @@ config BR2_PACKAGE_SCREEN
->  	  ISO 2022 standards (e.g., insert/delete line and support for
->  	  multiple character sets).
+> diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+> index 357c9087e0..f2c32939ff 100644
+> --- a/package/igmpproxy/igmpproxy.mk
+> +++ b/package/igmpproxy/igmpproxy.mk
+> @@ -11,4 +11,6 @@ IGMPPROXY_AUTORECONF = YES
+>  IGMPPROXY_LICENSE = GPL-2.0+, BSD-3-Clause (mrouted)
+>  IGMPPROXY_LICENSE_FILES = COPYING GPL.txt Stanford.txt
 >  
-> -	  http://www.gnu.org/software/screen/
-> +	  https://www.gnu.org/software/screen/
->  
->  comment "screen needs a toolchain w/ wchar, gcc >= 8"
->  	depends on BR2_USE_MMU
-> diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-> index 74453faff8..c7411ab6ca 100644
-> --- a/package/screen/screen.mk
-> +++ b/package/screen/screen.mk
-> @@ -13,7 +13,7 @@ SCREEN_SELINUX_MODULES = screen
->  SCREEN_DEPENDENCIES = ncurses
->  SCREEN_AUTORECONF = YES
->  SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
-> -SCREEN_CONF_OPTS = --enable-colors256
-> +SCREEN_CONF_OPTS = --enable-colors256 --enable-socket-dir=/run
->  SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
->  
->  ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+> +IGMPPROXY_CPE_ID_VENDOR = pali
+> +
+>  $(eval $(autotools-package))
 > -- 
-> 2.47.3
+> 2.52.0
 > 
 > _______________________________________________
 > buildroot mailing list
