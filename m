@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 051D4EF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6EC7EF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7CAC84550;
-	Fri, 13 Feb 2026 19:37:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7165341F4C;
+	Fri, 13 Feb 2026 19:37:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id giH760M1KaSI; Fri, 13 Feb 2026 19:37:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z8vrsEmQmbqi; Fri, 13 Feb 2026 19:37:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF2D4846E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC43E41F01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011442;
-	bh=AZxVgqw+D/RmqUD31DlP7Oo6gCEsVqgUvCf6bUvBZkQ=;
+	s=default; t=1771011443;
+	bh=9WFoOUqQseVSy7s/VPdj9LtMekj/wQNc28SM+ZbCDIg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ZH8OMZm7jsdAObNSg/LYdta5m5N7/QXcm9UGhEJ0iv29LWx5fI4GWzLFzzmxITU/I
-	 k1RHdJVfDHcJbkgVjpXmPdQ1EoPHpGFmBU8nrVPj30vwGKCzU52pkbrLZAeB5Qt2b4
-	 wuL8NGksRdfG6tVBnUYvRZPyn0LVxRLgnigccFfWpv+tT80dlc0YZ4bBFIgrheu7vS
-	 gXz2DW0RDvlJPpsFE6X2WclynIaLGZ6XnaGLYoS8vt3DOw3E5KcX81cglNiqP2RPIq
-	 +KUvAEX08hEe8H/1d1IJN9swRWgp62daujgglC+O3IcN7T0aqRXvgiERkaI2XDsiOv
-	 Aad1HjOHECr0w==
+	b=dj8TcabFNhq05rAt7AsXTVAM84nRZ/b+uVqNN2r/rae05Vgw/x+JXcYRVt5kku6ou
+	 qC8etKbAKrW1If4ZU3phXQaonx27LAJsvgX3zDJ+k4J4HX8pMz77DVH7KUpQ+EdkTa
+	 mhAUKDPUHw10OaSZllgdWDR7k1153PKE9DeC07QTNiem0Oxy1uE/v3/0acCqsL9qXs
+	 4pEJHPaa+pe2a1OnDoi/RD56Zrit1pqUq7kDOy/Lm0GKK1znnF6v55cjpv97yNL+9h
+	 Zyiv/oWQss1EmY0pnoi5YuOImEHZjjyeuxcN7FsvyM3DxYw+GLSzDBmU1Sa1WjJtzs
+	 WsiIx4P8f1mRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF2D4846E3;
-	Fri, 13 Feb 2026 19:37:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 80ED6EC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC43E41F01;
+	Fri, 13 Feb 2026 19:37:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10B24283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EB93844B5
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XWqNCJjfvspa for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:36:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2FA9984558
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FA9984558
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2FA9984558
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C18841F04
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:51 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-48336a6e932so7994165e9.3
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SN3sbFiJwGpA for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:36:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4006C41F0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4006C41F0F
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4006C41F0F
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:50 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48068127f00so12888655e9.3
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011409; x=1771616209;
+ d=1e100.net; s=20230601; t=1771011408; x=1771616208;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=nxi7gKmPs3aBLBUO0Ugzqm96oOcnEUqB/FM5Y6j3yII=;
- b=a0Qw5BxtYEdtE25f1IAQa3q0Wfc5VPlaWPFWlZwxfCpZb4a4Dwg1XshEunlyGxppSY
- 89VGFxoSjzuRB3HEszU5n9SWC8h7el4iG3zmEpfjjgHL7qFjK1xKi6dNzRkvDI00rB01
- NqayNIx2PbSAvHTo21S2tIUKJRCG5qgC27X6JySrvnzcDN9wZ4ZJX1YHFyr0C0bzwxww
- A4uvy06EypCCPgJKOE6bFt63mccClj0l6qtrsee5nYI6+tTdaBMA24QAvlqrKV1xSP6h
- 21xpBU8fvZSwg2aT5wC4G1/aRfKG0WpWjahWrMqnLYd3WnqbMiOnb3gHokZ1CHKqQCzm
- iFvg==
+ bh=2sr33yf+H+9KRhrv2Qw44YJ9U6kPoJ4g75rPWcBmwC4=;
+ b=SqowDAQDm+AnyZyIHy9a4hefTh2sc/MyJzplKuBCkroSyTCds38HRiOJcVq47cstoC
+ b0mhIPuL5godiAR/CZ2RctaXSqv5SjGtxz2YX3RWZZ7Wi4AJs+CYifnZe4WRacARzvft
+ 4mj/3DvH+tiX97n3rK6m3rAnJqzUGpwp3963MLnPubLRYkLakC5ugUV0lcLogw2/VaLe
+ c7+CLt6INtW/nWkcpAEQHZCraqCOorrpBl315l7CXL+rHr7jCk7FEgQdGS25KFDtMbac
+ cblJ2xVVmozEZ1SeOWCbq7rWmZYeuwZoTOJYP9rJG4YrT1iV9Toa6kTaHblH745dGseK
+ Pltw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWR2dEI3b1m9yn+WIuG5/jV36yLDDHkrDGJ2XuRaqAvupbU1CKKNzlmljyXj3Xq7Cc7uu875eSJyjA=@buildroot.org
-X-Gm-Message-State: AOJu0YzQEE6aUHRHb7zXYN0XA26H0qx6QnRCzZcggkovjYfvqppJaaB/
- qgrywxGWZTqsl0z3/GfahYWnBVzcXUFUvnHHHI8fBRC2/4ZaguMcZYtjY5cYVBc9rZAbB3UWEaG
- mn9Ht
-X-Gm-Gg: AZuq6aJzjb8hv9WDCxY3FQmbhN0RsTMd7klWknMSrgEGS9m+fGctHCxgG3SxTViA1UT
- H31ISnUxiUbg/nvhY++lE4BjepCIWUoQpq/ezqfvtwblkD7wi49bq2j/hzcvISTkPCV0wr7X+TJ
- iBwm2Xrchua+Jrvy1B/DZhAHKBPDKlqjrPoMCRIW3nNt/MUqjE37qIc2K9/Phcsy/1VlxLA44n+
- FG7ndH4O/fBGaan9i7ChjInWOJFckActNoZD0znRW6AYkxzR2fBLnRt5pWbsQ9D5S79LIh98s+Y
- zOLwAYhdxY890LCWQylshGsxW07pqoXa3TrVZuWGpiCCNDZSbXzjYtaX3Lc9RzzeUuIxnREAM+J
- C+ZMV4J17wfCH8MdQNYKMeihYku0APgISK+/ebiLh3I2RmPGUPQgcZjlNePBtzt7Vduiks2WKTQ
- MIn5o453YLtvWp3WY=
-X-Received: by 2002:a05:600c:8119:b0:47a:975b:e3e6 with SMTP id
- 5b1f17b1804b1-48379be8248mr5767235e9.18.1771011409210; 
- Fri, 13 Feb 2026 11:36:49 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796ac8209sm7983348f8f.30.2026.02.13.11.36.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ AJvYcCWDKl+aAHez6qER0rOQ7s5MS6e4UEockkD8Dj+X5Yxmm+Q1wXHXaLoWg9DKCSx2t5E66S8tWVO3fT4=@buildroot.org
+X-Gm-Message-State: AOJu0YyMQAAtOWqeEZO8gOVEvwjlJGBkZq7tXf8MlTURmhfo6j16XjS1
+ hQgy+9QAkDfXY75W14XYF7KlXsIs668w93yIL2wes3CEvqrHJM6KcajDCofdRoX5RBc=
+X-Gm-Gg: AZuq6aKNEyf07j7J1x9zRr99bfifjZuGooZ2YquYh5tsmjvAwbImo+xd/uDThXROwyg
+ eSwlMBqLUv63udNGBY02wbRhVCQPppgSasFcu6AiJ+WVhNykNl5zVkGAEo64+PXhX+g8AjXG3Au
+ kECAyZnyGxo1a+NkIK8Z+p0KTzRRmqLt+K6FDpCgcFGMMVYdInck1jLIpnpo2sCeVBD2PixJ+Xq
+ BM7+9mzHThJxh70vEBtUUs9E1l83sO7TWjEh5vO8EgzDYG6xxdBTs1MO0GfwzQZcg3x08VqjFkk
+ xH+eLeJ0OeUlVFUxfbGOIWRiPIwpFzfKBs0ntszfCrz1Mx3tZCwH8FxTbXk93P65BMijacnnGe8
+ H7XTWq70G80kyN5ClfRv85bCGSBd/65ko/8pPiV/HmEornPes69wK8o1tVzJuMEeESZnu9S3Gfc
+ 3s9a94wRow+CLDNA4=
+X-Received: by 2002:a05:600c:a09:b0:477:6d96:b3e5 with SMTP id
+ 5b1f17b1804b1-48373a0809fmr47120045e9.7.1771011408200; 
  Fri, 13 Feb 2026 11:36:48 -0800 (PST)
-To: Bernd Kuhls <bernd@kuhls.net>
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-48371a15d99sm34911645e9.4.2026.02.13.11.36.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Feb 2026 11:36:47 -0800 (PST)
+To: Thomas Devoogdt <thomas@devoogdt.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:36:48 +0100
-Message-ID: <20260213193648.38233-1-thomas.perale@mind.be>
+Date: Fri, 13 Feb 2026 20:36:47 +0100
+Message-ID: <20260213193647.38179-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260104110220.352547-1-bernd@kuhls.net>
-References: <20260104110220.352547-1-bernd@kuhls.net>
+In-Reply-To: <20260103084002.2045193-1-thomas@devoogdt.com>
+References: <20260103084002.2045193-1-thomas@devoogdt.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011409; x=1771616209; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011408; x=1771616208; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=nxi7gKmPs3aBLBUO0Ugzqm96oOcnEUqB/FM5Y6j3yII=;
- b=bWLGwPMspQOIouyY97Z/zpDcPOgFyERSXZ9yjRwZ2MuWXI0ZiRdt5L1COk0zuLaw0u
- tUJCOzWfQ1dqaLzo6PJimF26APp6Lkjr/t+WbMVuLxk2FvHihmon+HQMw70XBPw/pbdD
- NiMu9mUSQEuX7nXm7wynaT6I2VawYubUvsDOA3g2Z8g2MO8GxDL2lQGZFQUwdLEuLsSs
- zDQ5/bEufXkpM6ORPaEjdiqzNo+jjYbor1apcLMaXfxjPdOWLfSV2BvjxY+NlSDuwchZ
- DBDEhShZEmpGdw78D0jMv2Q7lZjplEbZXDqFuBasPKBcIOPQShr82wLZGoNyYCC1xQhD
- 2x3w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=2sr33yf+H+9KRhrv2Qw44YJ9U6kPoJ4g75rPWcBmwC4=;
+ b=Rj1HFyEjkJtP+woWQK7z8QSryQLYoAeABITiX0WyEUq1WY1PLNlwpp6ma82VVY2fQy
+ sP9XG9dKGn8t/7QEDioUr2TfupMj9QZEX95rq2oYSLRVtoNVVAxuHsGkN7SX2EhoAhq9
+ 80lqij1RRsxObwF1+1wnNnWqV4UQf4S/WdSjX4ILUt7AwF5/5RjjBBPPRIfE6rbNzskT
+ endcQqzmgzOBw1UWLDN/xsdacrNvwmg4wsCb+lk9CSGI/eY+kPJftKlp6vd9Kyr3fcAL
+ CDL+Q6+Mt8LdWP4X0wwXm4C3BZOSJ2QP8YBesCSTkAsBcC74BSkb1gHzgassi2m60fsM
+ 5sLQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bWLGwPMs
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/brotli: fix LoongArch64 build
+ header.a=rsa-sha256 header.s=google header.b=Rj1HFyEj
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/mesa3d: explicitly enable
+ llvm for host-mesa3d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,79 +131,56 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit 473c9400a0c7be14e7eb8ba617697a76286915b3 bumped brotli
-> to version 1.2.0 causing build errors on loongarch64. The build error
-> does not occur with brotli 1.1.0.
+> LLVM is already implicitly enabled for host-mesa3d when
+> BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER is selected. This blind
+> option is automatically enabled when LLVM is required by drivers such
+> as intel-iris, panfrost, imagination, or intel-vulkan.
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/57f/57f61a5fd17432bba05e4f1865f82cc2f4626d3c/
+> The BR2_PACKAGE_MESA3D_LLVM option also independently selects host-llvm,
+> but this change makes the dependency more explicit for host-mesa3d
+> builds.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Note that disabling LLVM is not possible for host-mesa3d, as the build
+> will fail with:
+> ../../../br-test-pkg/bootlin-armv5-uclibc/build/host-mesa3d-25.3.2/meson.build:847:3: ERROR: Feature llvm cannot be disabled: CLC requires LLVM
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 
 Applied to 2025.11.x. Thanks
 
 > ---
-> v2: added comment that the previous brotli version builds with
->     LoongArch64 (Thomas)
+> v2: Explicitly added the llvm flag to host-mesa3d configuration,
+>     see https://lore.kernel.org/buildroot/20251226101445.2b29f439@windsurf/.
+>     @bkuhls, I can see that CLC support is needed to compile the intel-iris
+>     driver, (commit 317260f "package/{mesa3d, mesa3d-headers}: bump version to
+>     25.0.6") but can you elaborate why this is required for the generic
+>     host-mesa3d? Perhaps some llvm related logic should be added for the host.
+> ---
+>  package/mesa3d/mesa3d.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->  ...-BROTLI_MODEL-macro-for-some-targets.patch | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
-> 
-> diff --git a/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
-> new file mode 100644
-> index 0000000000..d35b4b3336
-> --- /dev/null
-> +++ b/package/brotli/0001-disable-BROTLI_MODEL-macro-for-some-targets.patch
-> @@ -0,0 +1,46 @@
-> +From e230f474b87134e8c6c85b630084c612057f253e Mon Sep 17 00:00:00 2001
-> +From: Evgenii Kliuchnikov <eustas@google.com>
-> +Date: Mon, 3 Nov 2025 07:20:19 -0800
-> +Subject: [PATCH] disable BROTLI_MODEL macro for some targets
-> +
-> +PiperOrigin-RevId: 827486322
-> +
-> +Upstream: https://github.com/google/brotli/commit/e230f474b87134e8c6c85b630084c612057f253e
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + c/common/platform.h | 9 +++++++--
-> + 1 file changed, 7 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/c/common/platform.h b/c/common/platform.h
-> +index b59f9b809..e1254d5ca 100644
-> +--- a/c/common/platform.h
-> ++++ b/c/common/platform.h
-> +@@ -213,6 +213,10 @@ To apply compiler hint, enclose the branching condition into macros, like this:
-> + #define BROTLI_TARGET_MIPS64
-> + #endif
-> + 
-> ++#if defined(__ia64__) || defined(_M_IA64)
-> ++#define BROTLI_TARGET_IA64
-> ++#endif
-> ++
-> + #if defined(BROTLI_TARGET_X64) || defined(BROTLI_TARGET_ARMV8_64) || \
-> +     defined(BROTLI_TARGET_POWERPC64) || defined(BROTLI_TARGET_RISCV64) || \
-> +     defined(BROTLI_TARGET_LOONGARCH64) || defined(BROTLI_TARGET_MIPS64)
-> +@@ -665,13 +669,14 @@ BROTLI_UNUSED_FUNCTION void BrotliSuppressUnusedFunctions(void) {
-> + #undef BROTLI_TEST
-> + #endif
-> + 
-> +-#if BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3)
-> ++#if !defined(BROTLI_MODEL) && BROTLI_GNUC_HAS_ATTRIBUTE(model, 3, 0, 3) && \
-> ++    !defined(BROTLI_TARGET_IA64) && !defined(BROTLI_TARGET_LOONGARCH64)
-> + #define BROTLI_MODEL(M) __attribute__((model(M)))
-> + #else
-> + #define BROTLI_MODEL(M) /* M */
-> + #endif
-> + 
-> +-#if BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
-> ++#if !defined(BROTLI_COLD) && BROTLI_GNUC_HAS_ATTRIBUTE(cold, 4, 3, 0)
-> + #define BROTLI_COLD __attribute__((cold))
-> + #else
-> + #define BROTLI_COLD /* cold */
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index e41bf68d8ec..09b098628ab 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -297,6 +297,7 @@ HOST_MESA3D_CONF_OPTS = \
+>  	-Dgallium-drivers=$(subst $(space),$(comma),$(HOST_MESA3D_GALLIUM_DRIVERS-y)) \
+>  	-Dtools=$(subst $(space),$(comma),$(HOST_MESA3D_TOOLS)) \
+>  	-Dinstall-mesa-clc=true \
+> +	-Dllvm=enabled \
+>  	-Dmesa-clc=enabled \
+>  	-Dplatforms= \
+>  	-Dprecomp-compiler=enabled \
+> @@ -306,6 +307,7 @@ HOST_MESA3D_CONF_OPTS = \
+>  HOST_MESA3D_DEPENDENCIES = \
+>  	host-libclc \
+>  	host-libdrm \
+> +	host-llvm \
+>  	host-python-mako \
+>  	host-python-pyyaml \
+>  	host-spirv-tools
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
