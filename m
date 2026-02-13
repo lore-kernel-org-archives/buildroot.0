@@ -4,114 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E989EF99D3
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B670EF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BC1C61440;
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADD1D61728;
 	Fri, 13 Feb 2026 19:39:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EKFNhKpFOWfW; Fri, 13 Feb 2026 19:39:47 +0000 (UTC)
+ id M9V8mu2-IpAF; Fri, 13 Feb 2026 19:39:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4FCB6145A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D8F56171B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011587;
-	bh=D0nFq+QcEFDKwKwiYsi36huT8RG3snWaUi7lf1UebsY=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=TdQVbHI2UtufVX5m/SySoceOOmOvvelJKg7Gl+mCAWAX+RFlACc5HlfATt+0FHbw/
-	 DjCQDGu5z1VxoqrJtVPH0fWLiMhf5LX76KkBh8kuZ3xMEm95h6TlRxph62csz06O8n
-	 u6hDvMz+J0NqlxWV8xzZLfXl257JsHV81Tzsc+Wbfw+THn3Kvt0r8NSp4foHtc9Rcp
-	 gefJe3dPdHTq72uwv2fe9oMluHA8e8eP4pZ5pj7D1A2E/Q+60mBYOfuaeIVOQ/tMcu
-	 /i2YuNBPgO3UwIhTRfzusKSQGiMy++FR0KP8Kg3H9V6jEq4KgUMdKdOkgAIz5svYkt
-	 7dBeqS+ufyyBw==
+	s=default; t=1771011590;
+	bh=qn5cPBVD1uFPcXKRZzx+ipfwhqfWwQKnTjgbQLtGy6w=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=kC/WFHhikTYw/1s/JtHMjPMC2pSp/xEXtfo+LvjBxQZpR0km5PkHeh7OWxe0POvxS
+	 +KjhjGf1p5Z9PNV6rsPtE/gxw8GQAjMeEXRJqS+oqTPjPAIkVLKXSc1+39XpZpD9cT
+	 +iAw/qNsLhXtna1y++Gj3oMqvllc3BpwwwM6LK+RP+orZ4IHMmB2IRzXGLXcb1fSMQ
+	 NbA0dMuEeuOA4toTACgWP7kQoTLkZR8pDtjbrrKFRBoy/EcmRbtJW9AWr4l8smwQZa
+	 BpOFR0DwrEHtaly9inSroB7itkoKhDQNWGi4ddw3PMgnTsHtj6nNVAN4sUpzd99V2v
+	 qkm+QUNuKQQTg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4FCB6145A;
-	Fri, 13 Feb 2026 19:39:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FFB6EC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D8F56171B;
+	Fri, 13 Feb 2026 19:39:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B1A2EC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8542A4203C
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59F39413DC
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QYAjSZ5d7iRD for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:38:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 397F94202A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 397F94202A
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 397F94202A
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:21 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-48373a4bca3so5485115e9.0
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011499; x=1771616299;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=9F0kVXFjzgBwCVHwkf8gUaR6eXzxNqPbOGgXmtMgmZg=;
- b=qSYiCmxmde2Zll/UiBVgDlQ5vUs6TIFqycsILgXr2xQCNKppz41hsrspq+pG9z5H0z
- 00W1VirA6TWRcrI80DxStJUy36tVi1gKXTKaiDqmQGi6K2LD1aDAd0RKAkmL5PKN6qPy
- cXREtegjMdbMkVEZmTc/eOLcYmk5Z6vDTRgRYay/cVDJt731iDJO7CQbXP56rgBWwOBX
- oPt2oDI1gqxuYz/4wGz+zjLrf/k9aZJ7wBILufleY6m7SHJSZ3V7x5+lh3KV6+TrOz3Z
- o1OKAdhqd8frribA0rQ+a2c6Oltr4819S0MvWnrdnqXyiHWgFDq6Me1bQD70/sFMTUZN
- RgeA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVyO2XlqukfHu8nzKChemhqTq7cv27VbWO4IvkQRZiLbpOXoN08my+Yum10wHeclhyKO18pAB3DMHM=@buildroot.org
-X-Gm-Message-State: AOJu0YyVB2KArLyqeovlehHFns0EEPhYyOBw6dg6Swtg6cIbLY8LB97V
- AhHF2omqcJBn4l+3kq6+qgzViZbyIebUHPuRR+pvcoymnVeCBn7w0Vc9raTwMpsDrnI=
-X-Gm-Gg: AZuq6aJZpqiIcWWWLMT2otNbM+fSgedrJQKKTBqSzczxiIN4jk9oL+GfVSf2kiD0Fob
- XmNT/1IKdsXBhBH7vIjoPrLhqPf3S3m9IehiS+lbdO/jRs43uHebWKd9O18Lu1gLOp7NVonDtW4
- HMY/a1n/IKm8tf9UZuAeVXtG7OEp5kg9K9XxkXH6CtTYaPh93ECS3etzycXexrNBwLOwR7Y3kr1
- dRiRNvtfPpRD37xwOo/dF2BE/PR9WFiw3ESxYRCKo7stB/BDYWwPXUMJx6EymmKfol8TAzRbjQn
- qvut/MYaFAAd+O4vSzYJ9yHijV6PMTR0rcu1OFNamKm3CmGDNdDXHO4Jt3twJingtnVOVWsBNfr
- w8bOEzWPwaztGzo2DAhmKD8Nk7aQmzEQdGHTQIIUzvgvGNWqdTrOX1MuMZ6BPY3wbzhULmKaUkn
- B3mN/t81M8AdWO8h0=
-X-Received: by 2002:a05:600c:37cc:b0:483:702f:4633 with SMTP id
- 5b1f17b1804b1-48379b8c016mr6849865e9.4.1771011499200; 
- Fri, 13 Feb 2026 11:38:19 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48371a4b63dsm23272905e9.32.2026.02.13.11.38.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:38:18 -0800 (PST)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Buildroot List <buildroot@buildroot.org>
-Date: Fri, 13 Feb 2026 20:38:18 +0100
-Message-ID: <20260213193818.42030-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260202212814.2607588-4-thomas.petazzoni@bootlin.com>
-References: <20260202212814.2607588-4-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011499; x=1771616299; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9F0kVXFjzgBwCVHwkf8gUaR6eXzxNqPbOGgXmtMgmZg=;
- b=JJn2SjddJLkBuqFcCLEwrhiyy8uge2Z7KQ4ZW5LUsaDpKIBpETJ5mKjKnEWJ/558Rk
- amrE6C/N+yGSaVcofgS1WLuiCzf2whnExYOR3fnLXrIJSF+BMFCY7kSAA7YZ9ul7bBEU
- GNJm2exBBIlrIbsmAXQ/F3tlVEpe+43VkpqHFrouaRzwO66BG4djKGAeYSi4GB0MgRUU
- A9FwdZP8KrkpETr3k87w/vC6+yzBgleUts/p0EIKwburEHh3zI/F7SlqswpI2mq+U1WU
- GzNp3W8SYKKBbsOYI15ame9IKC52uP2gvJvdnZBV5sdQ2gPwPfC0ZbBqK02Xc339oFW9
- vCBw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=JJn2Sjdd
-Subject: Re: [Buildroot] [PATCH 3/5] support/config-fragments/autobuild:
- drop somewhat duplicate toolchain configs
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id whkYjaR7tkrp for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:37:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE38F412C3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE38F412C3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D3A9585DA7; Fri, 13 Feb 2026 19:37:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:33:51 +0100
+X-Git-Refname: refs/heads/2025.11.x
+X-Git-Oldrev: 06ac307b2f86ad26e28a43487c799b8448acf45b
+X-Git-Newrev: 7e1d81d73dee5cfa611d71ba6f9550837daae8b9
+X-Patchwork-Hint: ignore
+Message-Id: <20260213193705.D3A9585DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/{glibc,
+ localedef}: move to sourceware.org git repo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,180 +71,100 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> - br-i386-pentium4-full.config as an x86 32-bit toolchain test is
->   already reasonably covered by bootlin-x86-i686-musl.config
-> 
-> - br-microblazeel-full-internal.config as a Microblaze toolchain test is
->   already reasonably covered by bootlin-microblazeel-uclibc.config
-> 
-> - br-powerpc-internal-full.config and br-powerpc-603e-basic-cpp.config
->   as PowerPC 32-bit toolchain tests are already reasonably covered by
->   bootlin-powerpc-e500mc-uclibc.config
-> 
-> - br-powerpc64-power7-glibc.config as a PowerPC 64-bit toolchain test
->   is already reasonably covered by
->   bootlin-powerpc64le-power8-glibc.config
-> 
-> - br-riscv64-full-internal.config as a RISC-V 64-bit toolchain test is
->   already reasonably covered by bootlin-riscv64-glibc.config and
->   bootlin-riscv64-musl.config
-> 
-> - br-s390x-z13-internal-glibc.config as a s390 toolchain test is
->   already reasonably covered by bootlin-s390x-z13-glibc.config
-> 
-> - br-xtensa-full-internal.config as an Xtensa toolchain test is
->   already reasonably covered by bootlin-xtensa-uclibc.config
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e1d81d73dee5cfa611d71ba6f9550837daae8b9
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Applied to 2025.02.x & 2025.11.x. Thanks
+As described in https://gitlab.com/buildroot.org/buildroot/-/issues/160, the
+github mirror is getting shut down - So move to the sourceware.org git repo.
 
-> ---
->  .../autobuild/br-i386-pentium4-full.config             | 10 ----------
->  .../autobuild/br-microblazeel-full-internal.config     |  1 -
->  .../autobuild/br-powerpc-603e-basic-cpp.config         | 10 ----------
->  .../autobuild/br-powerpc-internal-full.config          |  4 ----
->  .../autobuild/br-powerpc64-power7-glibc.config         |  9 ---------
->  .../autobuild/br-riscv64-full-internal.config          |  4 ----
->  .../autobuild/br-s390x-z13-internal-glibc.config       |  4 ----
->  .../autobuild/br-xtensa-full-internal.config           |  3 ---
->  .../config-fragments/autobuild/toolchain-configs.csv   |  8 --------
->  9 files changed, 53 deletions(-)
->  delete mode 100644 support/config-fragments/autobuild/br-i386-pentium4-full.config
->  delete mode 100644 support/config-fragments/autobuild/br-microblazeel-full-internal.config
->  delete mode 100644 support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
->  delete mode 100644 support/config-fragments/autobuild/br-powerpc-internal-full.config
->  delete mode 100644 support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
->  delete mode 100644 support/config-fragments/autobuild/br-riscv64-full-internal.config
->  delete mode 100644 support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
->  delete mode 100644 support/config-fragments/autobuild/br-xtensa-full-internal.config
-> 
-> diff --git a/support/config-fragments/autobuild/br-i386-pentium4-full.config b/support/config-fragments/autobuild/br-i386-pentium4-full.config
-> deleted file mode 100644
-> index c680699288..0000000000
-> --- a/support/config-fragments/autobuild/br-i386-pentium4-full.config
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -BR2_x86_pentium4=y
-> -BR2_TOOLCHAIN_EXTERNAL=y
-> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2020.11.2.tar.bz2"
-> -BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-> -BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> -# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-microblazeel-full-internal.config b/support/config-fragments/autobuild/br-microblazeel-full-internal.config
-> deleted file mode 100644
-> index 0d2d7df8f1..0000000000
-> --- a/support/config-fragments/autobuild/br-microblazeel-full-internal.config
-> +++ /dev/null
-> @@ -1 +0,0 @@
-> -BR2_microblazeel=y
-> diff --git a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config b/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-> deleted file mode 100644
-> index 045428c1de..0000000000
-> --- a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -BR2_powerpc=y
-> -BR2_powerpc_603e=y
-> -BR2_TOOLCHAIN_EXTERNAL=y
-> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2020.11.2.tar.bz2"
-> -BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
-> -# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-powerpc-internal-full.config b/support/config-fragments/autobuild/br-powerpc-internal-full.config
-> deleted file mode 100644
-> index 61b3e7a966..0000000000
-> --- a/support/config-fragments/autobuild/br-powerpc-internal-full.config
-> +++ /dev/null
-> @@ -1,4 +0,0 @@
-> -BR2_powerpc=y
-> -BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> -BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config b/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-> deleted file mode 100644
-> index a80047ea66..0000000000
-> --- a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-> +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -BR2_powerpc64=y
-> -BR2_powerpc_power7=y
-> -BR2_TOOLCHAIN_EXTERNAL=y
-> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64-power7-glibc-2020.11.2.tar.bz2"
-> -BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
-> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-riscv64-full-internal.config b/support/config-fragments/autobuild/br-riscv64-full-internal.config
-> deleted file mode 100644
-> index 5c1dfc47e3..0000000000
-> --- a/support/config-fragments/autobuild/br-riscv64-full-internal.config
-> +++ /dev/null
-> @@ -1,4 +0,0 @@
-> -BR2_riscv=y
-> -BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> -BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config b/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
-> deleted file mode 100644
-> index 56af5fb1ba..0000000000
-> --- a/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
-> +++ /dev/null
-> @@ -1,4 +0,0 @@
-> -BR2_s390x=y
-> -BR2_s390x_z13=y
-> -BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> -BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-xtensa-full-internal.config b/support/config-fragments/autobuild/br-xtensa-full-internal.config
-> deleted file mode 100644
-> index 89e81d4c45..0000000000
-> --- a/support/config-fragments/autobuild/br-xtensa-full-internal.config
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -BR2_xtensa=y
-> -BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> -BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-> index 5c9fe660d3..ff8927eb37 100644
-> --- a/support/config-fragments/autobuild/toolchain-configs.csv
-> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-> @@ -45,15 +45,7 @@ support/config-fragments/autobuild/bootlin-xtensa-uclibc.config,x86_64
->  support/config-fragments/autobuild/br-arm-basic.config,x86_64
->  support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
->  support/config-fragments/autobuild/br-arm-internal-glibc.config,any
-> -support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
->  support/config-fragments/autobuild/br-loongarch64-full-internal.config,any
->  support/config-fragments/autobuild/br-loongarch64-internal-glibc.config,any
-> -support/config-fragments/autobuild/br-microblazeel-full-internal.config,any
->  support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64
->  support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
-> -support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64
-> -support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
-> -support/config-fragments/autobuild/br-powerpc-internal-full.config,any
-> -support/config-fragments/autobuild/br-riscv64-full-internal.config,any
-> -support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
-> -support/config-fragments/autobuild/br-xtensa-full-internal.config,any
-> -- 
-> 2.52.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+The github mirror was originally used because of performance and reliability
+issues with sourceware, but that seems be resolved now after server/RAM
+upgrades - E.G. from the sourceware news:
+
+April 22, 2024
+    server2.sourceware.org now has 512GB RAM, thanks Red Hat.
+
+https://sourceware.org/
+
+So change back to fetch glibc (and localedef) from sourceware.org over git.
+
+Notice: The git archiving leads to slightly different paths and permissions
+in the tarball, but the file content is identical:
+
+mkdir a && tar -C a -x --strip-components=1 -f \
+	path/to/glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125.tar.gz
+mkdir b && tar -C b -x --strip-components=1 -f \
+	path/to/glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125-git4.tar.gz
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien:
+ - add missing SoB line
+ - fix command lines in commit log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 807b0bab37ad2d0d11b7f0a54e5859ff1ae9867d)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/glibc/glibc.hash       |  4 ++--
+ package/glibc/glibc.mk         | 10 ++--------
+ package/localedef/localedef.mk |  5 +++--
+ 3 files changed, 7 insertions(+), 12 deletions(-)
+
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index a58bb7b9a7..0a11cfdb5e 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+-# Locally calculated (fetched from Github)
+-sha256  f63ffa06cd17ee8ff891f6de41de6e189b96edc6b2be2807ae597291f4464388  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125.tar.gz
++# Locally calculated (fetched from git)
++sha256  737e3b2bfee2e3e209e514133f4ff7d2bef0d0dc903fd46b4e2244f6c998f7b2  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 44bf9c4b06..80d21b86ed 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -8,14 +8,8 @@
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+ GLIBC_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+-
+-# Upstream doesn't officially provide an https download link.
+-# There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+-# sometimes the connection times out. So use an unofficial github mirror.
+-# When updating the version, check it on the official repository;
+-# *NEVER* decide on a version string by looking at the mirror.
+-# Then check that the mirror has been synced already (happens once a day.)
+-GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
++GLIBC_SITE = https://sourceware.org/git/glibc.git
++GLIBC_SITE_METHOD = git
+ 
+ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+ GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 254a79026a..4da110417a 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -8,8 +8,9 @@
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ LOCALEDEF_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+-LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+-LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
++LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
++LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
++LOCALEDEF_SITE_METHOD = git
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
+ 
+ HOST_LOCALEDEF_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
