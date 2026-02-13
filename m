@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C47EDF148
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 10:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62920EDF148
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 10:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DB3641BE8;
-	Fri, 13 Feb 2026 10:38:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2505E41BF8;
+	Fri, 13 Feb 2026 10:44:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aHi9-fFTT82K; Fri, 13 Feb 2026 10:38:36 +0000 (UTC)
+ id dUr08WwxJwmz; Fri, 13 Feb 2026 10:44:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E48C41BEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91BEE41BEC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770979116;
-	bh=pKNinXdglDWLw4534dcnq4wddLL8gmascOp6mfkOZ7Y=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=l0NfrzBET+FvfH9Z+s5Ccq6oozaguHEeHL4k35FgoX56JLNZfPJlTW4BHpwiMu4mm
-	 fptUe4VAu8/04TRyfB/VXAQxgKCLusezwwnUqWFxwEFnXG8ZLWdPIb632zbkpuwft9
-	 WYUEo6ssWYlMl8qxtb08p/3Ag+EgcIaGa5OIc0QD0Kaq0vBTyj1Xbaa+E1/UddX2Oq
-	 xovR9kCB9W/SD63tFjKyNfRL0KWf9C70xr5qXDOdOUOjXQj8bXteuCFXWyzvHnCUpQ
-	 Nk0tH1eE7fSONsWulQCCuQkUpoqWTDhYWxD1fnlLO3B4AvmtBPJFD5QoQjR8q8HFbm
-	 nSzlJPDUa6xlg==
+	s=default; t=1770979455;
+	bh=Zoc4bE99qk4n3fW36zkyXftLeepPKuFxb/fz+CwxQug=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=XFAUs+KTwrsiaQMbcpeqvMkUgm58XV9q3VUjmRhL611lhPv5ZQTFexB/iykHHya3e
+	 RmQqe4B4zBaRgXk8LBB3V9lD8T0ZB9jGgEpct1Sbi6OgMr8wCLgsOeR3iCkINjgOE3
+	 JklAwd2XA4B8YMNgXCpdBYT0UIYQKoewjgoS2VD+rlL41dIyHZ0cOsfgnlOMYY25x4
+	 NMKJMXHerYQn4ifIXGi9skEzgobixfppZcShUZRYpgfDrLO9ucftDSQWopDMO3mV0w
+	 tRipfaIbc38bFnLl8MJ5gFyKkiMYoc1Wda8JrxpIPSW+UeqVnXc+JO2fCXwapRpjCt
+	 Iia4Kqdeu/bPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E48C41BEC;
-	Fri, 13 Feb 2026 10:38:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B7BB69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 10:38:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91BEE41BEC;
+	Fri, 13 Feb 2026 10:44:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAB71255
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 10:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 899E041BEC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 10:38:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F9C040B01
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 10:44:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5rcaapvH_jtZ for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 10:38:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DCD241BE8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DCD241BE8
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 10:38:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E60D86D42; Fri, 13 Feb 2026 10:38:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 11:37:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4abb8a98b26922796b41bc913e72be487337640e
-X-Git-Newrev: b95ffe208b087699d923f048ae8e29bffb587b1f
-X-Patchwork-Hint: ignore
-Message-Id: <20260213103833.6E60D86D42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-pam: add security patch for
- CVE-2024-10963
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SKV8xDud9xJP for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 10:44:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A021E40208
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A021E40208
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A021E40208
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 10:44:13 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 25EB96012D;
+ Fri, 13 Feb 2026 11:44:08 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 13 Feb 2026 11:44:08 +0100
+MIME-Version: 1.0
+Date: Fri, 13 Feb 2026 11:44:08 +0100
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+In-Reply-To: <20260129161012.1610562-1-raphael.pavlidis@gmail.com>
+References: <20260129161012.1610562-1-raphael.pavlidis@gmail.com>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <28f39cebabfac2467fcd43416b74193d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1770979450;
+ bh=+wZaHv8cwOxy1Hl9X79HwXPwU4iZPujpcOKHlV+qXBg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=PETa7xMJVbnercLdf1gnxWEOraTDim5aHEesjYe7rzCINwLGnL5yUD1AsIVk/pBOA
+ C17bYpiG2+V+gQaCu/et0mFfD8YygDfjHIJwePoqSIbRvwX1g5YvV8XsNe8nhK7e6/
+ ZNMcszcWsVYF2ld3HhlWqbmuM6cafUE/jVQBgQS+In0DZYr35LK1OkTR/1NvPv2JAO
+ kZFRhQ7IPEx83fnatXdhC4CIZ9da5fMjUr3pr53jXyPLTHFHGWY3qOFZ9lLonz1TNG
+ BMO0QndAPjJQxJS2lmjlO8QC5nzYO5nWVpUYm9y0HNY7DEF5iiR5ucusz0ZmVBdr8g
+ Ch9DvMeAend+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PETa7xMJ
+Subject: Re: [Buildroot] [PATCH v1 1/3] package/linux-pam: add security
+ patch for CVE-2024-10963
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,298 +95,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b95ffe208b087699d923f048ae8e29bffb587b1f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Raphael,
 
-This commit backports an upstream patch fixing CVE-2024-10963. See:
-https://github.com/linux-pam/linux-pam/issues/834
-https://github.com/linux-pam/linux-pam/pull/854
+On 29/01/2026 17:10, Raphael Pavlidis wrote:
+> See:
+> https://github.com/linux-pam/linux-pam/issues/834
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-Fixes:
+I applied this patch only on master, thanks. For info, I slightly
+reworked it. I fixed few check-package errors, and added extra
+information, to help the LTS maintainers. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/b95ffe208b087699d923f048ae8e29bffb587b1f
 
-- CVE-2024-10963:
+The rest of the series is a somewhat large, non-trivial bump. So I
+prefer to keep it for the next release development cycle.
 
-Pam: improper hostname interpretation in pam_access leads to access
-control bypass
+Best regards,
 
-A flaw was found in pam_access, where certain rules in its
-configuration file are mistakenly treated as hostnames. This
-vulnerability allows attackers to trick the system by pretending
-to be a trusted hostname, gaining unauthorized access. This issue
-poses a risk for systems that rely on this feature to control who
-can access certain services or terminals.
-
-https://www.cve.org/CVERecord?id=CVE-2024-10963
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-[Julien:
- - fix check-package errors
- - add info in commit log
- - rebase patch on v1.6.1 to avoid patch offsets
- - add "CVE:" tag in patch
- - add comment with patch name near _IGNORE_CVES in .mk
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...ss-rework-resolving-of-tokens-as-hostname.patch | 229 +++++++++++++++++++++
- package/linux-pam/linux-pam.mk                     |   3 +
- 2 files changed, 232 insertions(+)
-
-diff --git a/package/linux-pam/0002-pam_access-rework-resolving-of-tokens-as-hostname.patch b/package/linux-pam/0002-pam_access-rework-resolving-of-tokens-as-hostname.patch
-new file mode 100644
-index 0000000000..367cdf6202
---- /dev/null
-+++ b/package/linux-pam/0002-pam_access-rework-resolving-of-tokens-as-hostname.patch
-@@ -0,0 +1,229 @@
-+From d82b7ef5fc8afd7841735a4d0fcef6237193e183 Mon Sep 17 00:00:00 2001
-+From: Thorsten Kukuk <kukuk@suse.com>
-+Date: Thu, 14 Nov 2024 10:27:28 +0100
-+Subject: [PATCH] pam_access: rework resolving of tokens as hostname
-+
-+* modules/pam_access/pam_access.c: separate resolving of IP addresses
-+  from hostnames. Don't resolve TTYs or display variables as hostname
-+  (#834).
-+  Add "nodns" option to disallow resolving of tokens as hostname.
-+* modules/pam_access/pam_access.8.xml: document nodns option
-+* modules/pam_access/access.conf.5.xml: document that hostnames should
-+  be written as FQHN.
-+
-+CVE: CVE-2024-10963
-+Upstream: https://github.com/linux-pam/linux-pam/commit/940747f88c16e029b69a74e80a2e94f65cb3e628
-+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+---
-+ modules/pam_access/access.conf.5.xml |  4 ++
-+ modules/pam_access/pam_access.8.xml  | 46 ++++++++++++------
-+ modules/pam_access/pam_access.c      | 72 +++++++++++++++++++++++++++-
-+ 3 files changed, 105 insertions(+), 17 deletions(-)
-+
-+diff --git a/modules/pam_access/access.conf.5.xml b/modules/pam_access/access.conf.5.xml
-+index 2dc5d477..b2997e10 100644
-+--- a/modules/pam_access/access.conf.5.xml
-++++ b/modules/pam_access/access.conf.5.xml
-+@@ -232,6 +232,10 @@
-+       An IPv6 link local host address must contain the interface
-+       identifier. IPv6 link local network/netmask is not supported.
-+     </para>
-++    <para>
-++      Hostnames should be written as Fully-Qualified Host Name (FQHN) to avoid
-++      confusion with device names or PAM service names.
-++    </para>
-+   </refsect1>
-+ 
-+   <refsect1 xml:id="access.conf-see_also">
-+diff --git a/modules/pam_access/pam_access.8.xml b/modules/pam_access/pam_access.8.xml
-+index c991d7a0..71a4f7ee 100644
-+--- a/modules/pam_access/pam_access.8.xml
-++++ b/modules/pam_access/pam_access.8.xml
-+@@ -22,11 +22,14 @@
-+       <arg choice="opt" rep="norepeat">
-+         debug
-+       </arg>
-++      <arg choice="opt" rep="norepeat">
-++        noaudit
-++      </arg>
-+       <arg choice="opt" rep="norepeat">
-+         nodefgroup
-+       </arg>
-+       <arg choice="opt" rep="norepeat">
-+-        noaudit
-++        nodns
-+       </arg>
-+       <arg choice="opt" rep="norepeat">
-+         quiet_log
-+@@ -132,6 +135,33 @@
-+         </listitem>
-+       </varlistentry>
-+ 
-++      <varlistentry>
-++        <term>
-++          nodefgroup
-++        </term>
-++        <listitem>
-++          <para>
-++            User tokens which are not enclosed in parentheses will not be
-++	    matched against the group database. The backwards compatible default is
-++            to try the group database match even for tokens not enclosed
-++            in parentheses.
-++          </para>
-++        </listitem>
-++      </varlistentry>
-++
-++      <varlistentry>
-++        <term>
-++          nodns
-++        </term>
-++        <listitem>
-++          <para>
-++	    Do not try to resolve tokens as hostnames, only IPv4 and IPv6
-++	    addresses will be resolved. Which means to allow login from a
-++	    remote host, the IP addresses need to be specified in <filename>access.conf</filename>.
-++          </para>
-++        </listitem>
-++      </varlistentry>
-++
-+       <varlistentry>
-+         <term>
-+           quiet_log
-+@@ -185,20 +215,6 @@
-+         </listitem>
-+       </varlistentry>
-+ 
-+-      <varlistentry>
-+-        <term>
-+-          nodefgroup
-+-        </term>
-+-        <listitem>
-+-          <para>
-+-            User tokens which are not enclosed in parentheses will not be
-+-	    matched against the group database. The backwards compatible default is
-+-            to try the group database match even for tokens not enclosed
-+-            in parentheses.
-+-          </para>
-+-        </listitem>
-+-      </varlistentry>
-+-
-+     </variablelist>
-+   </refsect1>
-+ 
-+diff --git a/modules/pam_access/pam_access.c b/modules/pam_access/pam_access.c
-+index 2ab1ca94..fdb5dd86 100644
-+--- a/modules/pam_access/pam_access.c
-++++ b/modules/pam_access/pam_access.c
-+@@ -100,6 +100,7 @@ struct login_info {
-+     int only_new_group_syntax;		/* Only allow group entries of the form "(xyz)" */
-+     int noaudit;			/* Do not audit denials */
-+     int quiet_log;			/* Do not log denials */
-++    int nodns;                          /* Do not try to resolve tokens as hostnames */
-+     const char *fs;			/* field separator */
-+     const char *sep;			/* list-element separator */
-+     int from_remote_host;               /* If PAM_RHOST was used for from */
-+@@ -154,6 +155,8 @@ parse_args(pam_handle_t *pamh, struct login_info *loginfo,
-+ 	    loginfo->noaudit = YES;
-+ 	} else if (strcmp (argv[i], "quiet_log") == 0) {
-+ 	    loginfo->quiet_log = YES;
-++	} else if (strcmp (argv[i], "nodns") == 0) {
-++	    loginfo->nodns = YES;
-+ 	} else {
-+ 	    pam_syslog(pamh, LOG_ERR, "unrecognized option [%s]", argv[i]);
-+ 	}
-+@@ -741,7 +744,7 @@ remote_match (pam_handle_t *pamh, char *tok, struct login_info *item)
-+       if ((str_len = strlen(string)) > tok_len
-+ 	  && strcasecmp(tok, string + str_len - tok_len) == 0)
-+ 	return YES;
-+-    } else if (tok[tok_len - 1] == '.') {       /* internet network numbers (end with ".") */
-++    } else if (tok[tok_len - 1] == '.') {       /* internet network numbers/subnet (end with ".") */
-+       struct addrinfo hint;
-+ 
-+       memset (&hint, '\0', sizeof (hint));
-+@@ -816,6 +819,39 @@ string_match (pam_handle_t *pamh, const char *tok, const char *string,
-+ }
-+ 
-+ 
-++static int
-++is_device (pam_handle_t *pamh, const char *tok)
-++{
-++  struct stat st;
-++  const char *dev = "/dev/";
-++  char *devname;
-++
-++  devname = malloc (strlen(dev) + strlen (tok) + 1);
-++  if (devname == NULL) {
-++      pam_syslog(pamh, LOG_ERR, "Cannot allocate memory for device name: %m");
-++      /*
-++       * We should return an error and abort, but pam_access has no good
-++       * error handling.
-++       */
-++      return NO;
-++  }
-++
-++  char *cp = stpcpy (devname, dev);
-++  strcpy (cp, tok);
-++
-++  if (lstat(devname, &st) != 0)
-++    {
-++      free (devname);
-++      return NO;
-++    }
-++  free (devname);
-++
-++  if (S_ISCHR(st.st_mode))
-++    return YES;
-++
-++  return NO;
-++}
-++
-+ /* network_netmask_match - match a string against one token
-+  * where string is a hostname or ip (v4,v6) address and tok
-+  * represents either a hostname, a single ip (v4,v6) address
-+@@ -877,10 +913,42 @@ network_netmask_match (pam_handle_t *pamh,
-+ 	    return NO;
-+ 	  }
-+       }
-++    else if (isipaddr(tok, NULL, NULL) == YES)
-++      {
-++	if (getaddrinfo (tok, NULL, NULL, &ai) != 0)
-++	  {
-++	    if (item->debug)
-++	      pam_syslog(pamh, LOG_DEBUG, "cannot resolve IP address \"%s\"", tok);
-++
-++	    return NO;
-++	  }
-++	netmask_ptr = NULL;
-++      }
-++    else if (item->nodns)
-++      {
-++	/* Only hostnames are left, which we would need to resolve via DNS */
-++	return NO;
-++      }
-+     else
-+       {
-++	/* Bail out on X11 Display entries and ttys. */
-++	if (tok[0] == ':')
-++	  {
-++	    if (item->debug)
-++	      pam_syslog (pamh, LOG_DEBUG,
-++			  "network_netmask_match: tok=%s is X11 display", tok);
-++	    return NO;
-++	  }
-++	if (is_device (pamh, tok))
-++	  {
-++	    if (item->debug)
-++	      pam_syslog (pamh, LOG_DEBUG,
-++			  "network_netmask_match: tok=%s is a TTY", tok);
-++	    return NO;
-++	  }
-++
-+         /*
-+-	 * It is either an IP address or a hostname.
-++	 * It is most likely a hostname.
-+ 	 * Let getaddrinfo sort everything out
-+ 	 */
-+ 	if (getaddrinfo (tok, NULL, NULL, &ai) != 0)
-+-- 
-+2.53.0
-+
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 23b09efbae..f4e488428d 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -25,6 +25,9 @@ LINUX_PAM_LIBS = $(TARGET_NLS_LIBS)
- LINUX_PAM_MAKE_OPTS += LIBS="$(LINUX_PAM_LIBS)"
- LINUX_PAM_CPE_ID_VENDOR = linux-pam
- 
-+# 0002-pam_access-rework-resolving-of-tokens-as-hostname.patch
-+LINUX_PAM_IGNORE_CVES += CVE-2024-10963
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- LINUX_PAM_LIBS += -latomic
- endif
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
