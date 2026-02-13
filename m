@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67EEFEF99D2
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC620EF99D1
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3831A849D0;
+	by smtp4.osuosl.org (Postfix) with ESMTP id A039F422B0;
 	Fri, 13 Feb 2026 19:40:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2cZnDEvtmrZG; Fri, 13 Feb 2026 19:40:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pCmLELw9SdNr; Fri, 13 Feb 2026 19:40:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 886A6849CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A50BA422CD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011628;
-	bh=Nq0Nd8aMXcQZdHSGbqCkj3B+jt1nkM5FfJzuKD9rFak=;
+	s=default; t=1771011629;
+	bh=28CKozx/sbs8A/FBgzKE+gKpof7Ev3mNsifjn/E4OZA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=M4rDI9xkJL1nDSoc4ffHQr/wo2jp4O/3rbSfA7SBWqjyTl/RH9i8KyajRWIRStFPH
-	 hAP0HzPuo2/4115res2lkzyXJEk1VvxaXyAqfUCI7jYsp9+NCcxxMqaf6WCncGzs9Y
-	 6mE853rHrCrJKs2edl8gm6syCRnkS7LE3/bkdmXzvJOmfDAtTdXUKiSqWDKQ+2EmBm
-	 CGY2jZ+RATnZpDxv0rL/BLmyjnPbpFBykC3uxbZg86cmcTw9taBKBT+YfZoY8W36wY
-	 W66gEiS5O5QevvyiyB6wm+j61ndiAY4BIB0Ajpno7ReKlCK8nFyPhBSi6ciXsXKMau
-	 gX+/9JvDIZnfA==
+	b=HsTaqkSnb6g7HuY/JfVT6b2EaWZmVwTE+Q+9t8sjhBwNlxIX4gcziUqN86PlB27sf
+	 idrMx4x0TTFu5JUVw6Z4Q0dd302cOkXbOjCOks9j98ly+ORMXasxbgM8XylU76aJQC
+	 MfKrKvdhP0N2/XeBLC8vNJ/+OJYYGHWMfG+n2YBetqxjNXrRSchCiFgYy25o1TgbTH
+	 SDrm1LSIPDoU2onq7r1wBmUP+YgtfDifCgznfVniZeaLH8SqymwpGMJkzfqPpAyw32
+	 yhNjjhAblvcIcxd+rf3WwravQPoF2ShC5jkQZJo0DDPtPG4bupixiPMKKt7qEI7D23
+	 3C+ZjkXRtnyKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 886A6849CC;
-	Fri, 13 Feb 2026 19:40:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A50BA422CD;
+	Fri, 13 Feb 2026 19:40:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 20E3B69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:39:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 19A2869
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67DF3412D6
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CAAE412C3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uGIMiSlCA4ST for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:38:19 +0000 (UTC)
+ id 9fdFWUwLd_Cf for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:38:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 30F7C4035F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30F7C4035F
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 30F7C4035F
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:19 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-48334ee0aeaso9830125e9.1
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:18 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 36B7040407
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36B7040407
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 36B7040407
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:38:24 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4806f3fc50bso15279155e9.0
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:38:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011497; x=1771616297;
+ d=1e100.net; s=20230601; t=1771011503; x=1771616303;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=LHGd0cPzLO6TcV4+4l40T1hb2u2eX8R13Nhd6nj+hic=;
- b=VJWmZvVq+IBqoVszk+KEzGmiihJiHHgpZCTrNkucN+49vgxHvq/mhO76VmDHI7NxlG
- F/g58zt17I6ETW73TTlaZWYcApXYO3KXIbZCjj9RwjrBibAmJa5AKuvsGWddGn62Zk+d
- EVmlmiDoUGpjHpxx7nqlwsV4EF2pYfnyn9314QrnKNUyWwCPWqTsywDvFsudWXEhz5Ow
- jAR8hJcNC5ewYtOExI5NWPFCRnC6Tz7QaQy+FFTJQOursk2ZTF0GIcpzGtZUgP8OiL2S
- MXLAPzMYEYekGggOBRnKo79faUimZC9wul8fkkExyYEv5PM5dkyO2mYKFBInVhbk3muM
- CTUw==
+ bh=emSNbeFkfwAf/YSOq11hd0MdfUH4+EDRdWB5n3p05jc=;
+ b=uLBwmcoqisvVQxHw94xzfYeIWjGGekFHtAP+guvbCbYovCfwqB77D8CEEuSRNukQD1
+ PSwtVQkYvTFxNJh4xNXnZYjR8l1KF3V/wiRqwAGJK1O7t3jOJQraXgm0Ek8rQBVFptQn
+ DKTKjBg1fmFhbvXf1uK8dMDoxOMiW3jJ95YKLYYuzIIwyjKLnroV4AfBxGq3NC3lJufK
+ JnRp0TsEHYsR6g+tAnVBGnef57U6sNjrhoLrLrkOETNUTNV21jdXhZC39ri1vYTVeCYX
+ jL2dkfWvRvPRWp9YzhjSzPCJu0NQlbhdlLMTFoRPdcVEG+3oRqIKiIoObwaBdZNhRNKU
+ M0DQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUcVQBWgfR7MoR1Vc4BqCeqeYy35+2Lar3DAPxo3g81ujSMzEU/a66Pb0MZCstGlSF+NH92wOHx3Oo=@buildroot.org
-X-Gm-Message-State: AOJu0YyqVNIhifqXnfX7RmfFn+/tX2mn0yA1ZcybCwJMtGcVsuNby0Ab
- 8ayqQwUUJu00HyWmzv8mEWbX2VUxdVCFiDJOYoiAQj6uq4iq9taY2G+4Kyu8YYGSmdM=
-X-Gm-Gg: AZuq6aJCTMjApttNzX5zKvtBYOU46NWsJS7ZT/RjS8SLcJKoWxDqep4OE+UTdiSUAls
- WCoqWkvmhStoXFbAf23rUk/dMTC+ZliJwtyf5rQOC2VObBmhgFOl8niYeK30rVOke9ZtOFGt1fD
- qb0anvVo1IfMr05/baFBa42ECkVxG1fmyHShAMrrXHsuhzf3lCpbtD9CZa02Dm9USdx5xgevQmZ
- xlO2QyMsosOOSUKo/jEymh+yLUpizS/A9U1olwpdHg+NNNxmmSmeBZrfR1DczTxtkKNgOKF7l5q
- Yxv+UFMCBFwlmF9D1D3deHz9Bu3cs8yoHwmATy8F+gnRgvS74Iwb2JZlEeFIE5G19UgtgG+8r9a
- R4JimXZ0whLrHRTuBUp7+ns34h1SADxRUCv5vTVVKskHiuXoH+zXCnGwmPzqAfjy7//tEuwbop+
- G/9FUXWizbAGohoPHTyuERMCQyBA==
-X-Received: by 2002:a05:600c:8b26:b0:480:6ab1:ed0d with SMTP id
- 5b1f17b1804b1-48373a1acb0mr48124065e9.9.1771011497135; 
- Fri, 13 Feb 2026 11:38:17 -0800 (PST)
+ AJvYcCUIcIPjrKf44SovpjyhW4EDx8Dj5ouHNxt/eLO+vTZVpuBEJVdeiw54AIDFBL3VpmYPcd4iOMWeNHE=@buildroot.org
+X-Gm-Message-State: AOJu0YwhEYeOJ/7T85o/cAhZpMeirFM2L/grJLLZ2yGi9ljvKUWA8m3f
+ l+EHvOpnWSAqqz9CYIS8FPiZWAUH9q5YCzzl3uu7Zy+n51ZJNN2XpsXC3QqAfx+WGHY=
+X-Gm-Gg: AZuq6aLupTGCg6MDy6i+jS7IcidleivePh4IjVAQbO/Cmxktd0zKXPQAQkg6v03Frbu
+ VadDRbmMSlqvWv/YjLHsQeMa9gf7qmaeqEEqLXxwG/MsQencWBuRPq0f3cp7znV11l2H7LXSR1i
+ MZYFCFuEwGV95FfBTRBppZRG8BSWnC6hHhqSiQULFlDHw1X6tgAxv2uE79sGPIYjF2urUgE2hEg
+ nuiJFE/MogRICyQZi7iqVtRIMoXgceQuSHOYnLAZilpuzm7nMWpnxlXvpvRvyN3Lz++IQbVqNsF
+ rxt1UL7KvxfoFwb1CikVWuPFRRDSMmhm5OGYIA2AWlm3Nnz7UE5MRj1oc6GVBIAB7SLQWQm8HPl
+ D+fptqfyuHUpUVOdy0DCh4UZfK0qu7CnjP6y1+25MFMUn/itETMmxiyy2I07vPwgGHP/X+j1vk0
+ EDuGIyQwnhVKJFVYw=
+X-Received: by 2002:a05:600c:5285:b0:477:9976:9e1a with SMTP id
+ 5b1f17b1804b1-48379b933a3mr5811145e9.6.1771011503050; 
+ Fri, 13 Feb 2026 11:38:23 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796ad015bsm7480259f8f.38.2026.02.13.11.38.16
+ 5b1f17b1804b1-4835dd0deeasm199063005e9.12.2026.02.13.11.38.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:38:16 -0800 (PST)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Fri, 13 Feb 2026 11:38:22 -0800 (PST)
+To: Marcus Hoffmann <buildroot@bubu1.eu>
 Cc: Thomas Perale <thomas.perale@mind.be>,
- Buildroot List <buildroot@buildroot.org>
-Date: Fri, 13 Feb 2026 20:38:16 +0100
-Message-ID: <20260213193816.41931-1-thomas.perale@mind.be>
+	buildroot@buildroot.org
+Date: Fri, 13 Feb 2026 20:38:21 +0100
+Message-ID: <20260213193821.42218-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260202212814.2607588-6-thomas.petazzoni@bootlin.com>
-References: <20260202212814.2607588-6-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260202150143.3996204-1-buildroot@bubu1.eu>
+References: <20260202150143.3996204-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011497; x=1771616297; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011503; x=1771616303; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LHGd0cPzLO6TcV4+4l40T1hb2u2eX8R13Nhd6nj+hic=;
- b=WdVKyQCoyXUzN4+0zcMGJLoyePFDa8iXi1KG+apLVpaKqlygeHkgl6CBupgaFbeZJc
- JQ3zmhca6oEm3tAXyTFrb47e+kUKH+qgnC/Mw2WPBPXl52zf/NvBJcvMXEX21Vl3Dp96
- KACvoMzdvxHe/yJfaIpXThkJ+223GcSvlA2YRbb4jcFEQZBu/hTBOoZpvtC+7R+Penn/
- krZmjIQfO+I8p5gjvNQdERQwYEheaT8LTb+u3W7VchVvB8Ct+/R8HBKfvGoJVz0F9N6v
- LEoRwR4YkKE0zKLd4CtsfM9Rpic9ym7/80nprc/1k+PQHBKtxbUhkklAG7LfztV65Ka2
- 8TKg==
+ bh=emSNbeFkfwAf/YSOq11hd0MdfUH4+EDRdWB5n3p05jc=;
+ b=hDcJF9IoVGpFfW3XxNO7HWrDSyBM8Nyuz70lEC652++HnwuS7z6VJ/GU5QhdUe2l67
+ L0ZZgb3OG0kGWxleN6ebYYxKVN3NMPHeaeaBPaHdZOEfc2oZI2ezRH/FOgngmuRnfr1g
+ N3PQivZkMq2Vwg/NtmkEW8BTKQex9pZeo5Ndp+JgXXBmDGkafXrei0Tx+ouJDxMmpIe7
+ 0Fxxhl8/WYczQKkEzQXOx6V6Pi+oXuysq/HtD6PZtaoHfHm5N1NIstSm6KzqzS6IOLA7
+ TWjkUtmcZ/no2+W0sOfkHo+JVh+IJEjUOUCuECnJHP0DOgHqXjDVJURawp0eBSZDHuTQ
+ k76Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WdVKyQCo
-Subject: Re: [Buildroot] [PATCH 5/5] support/config-fragments/autobuild: add
- a really old toolchain
+ header.a=rsa-sha256 header.s=google header.b=hDcJF9Io
+Subject: Re: [Buildroot] [PATCH 1/2] support/testing: python-requests: new
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,60 +131,77 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Testing with a really old toolchain is helpful to catch issues related
-> to kernel headers version issues, gcc version issues, etc. We chose a
-> glibc toolchain though as old musl or uClibc-ng versions tend to lack
-> a number of features that are needed by modern software.
+> Use an armv7 kernel because that comes with networking support.
 > 
-> This toolchain is placed near the top of toolchain-configs.csv, so
-> that it is used as part of the "base" set of toolchain that test-pkg
-> uses, even without the -a option.
-> 
-> test-pkg takes the 6 first toolchains of this CSV file for its base
-> test, and actually the comment in toolchain-configs.csv was wrong
-> since commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511, which removed a
-> toolchain from the base set, but not realizing that test-pkg would
-> anyway continue to test the first 6 toolchains.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  .../autobuild/bootlin-aarch64-glibc-old.config           | 9 +++++++++
->  support/config-fragments/autobuild/toolchain-configs.csv | 3 +++
->  2 files changed, 12 insertions(+)
->  create mode 100644 support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
+>  DEVELOPERS                                    |  2 ++
+>  .../tests/package/sample_python_requests.py   |  4 ++++
+>  .../tests/package/test_python_requests.py     | 21 +++++++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 support/testing/tests/package/sample_python_requests.py
+>  create mode 100644 support/testing/tests/package/test_python_requests.py
 > 
-> diff --git a/support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config b/support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
-> new file mode 100644
-> index 0000000000..1b811f267a
-> --- /dev/null
-> +++ b/support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
-> @@ -0,0 +1,9 @@
-> +BR2_aarch64=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> +BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/aarch64--glibc--bleeding-edge-2017.05-toolchains-1-2.tar.bz2"
-> +BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
-> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> +BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-> index 3ea05775f8..7103d903c9 100644
-> --- a/support/config-fragments/autobuild/toolchain-configs.csv
-> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-> @@ -18,6 +18,9 @@ support/config-fragments/autobuild/bootlin-x86-64-musl.config,x86_64
->  # Test a MMU toolchain without dynamic library support
->  support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index aff26f8012..6dc83d3a38 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2284,6 +2284,7 @@ F:	support/testing/tests/package/test_python_django.py
+>  F:	support/testing/tests/package/test_python_fastapi.py
+>  F:	support/testing/tests/package/test_python_pydantic.py
+>  F:	support/testing/tests/package/test_python_pydantic_settings.py
+> +F:	support/testing/tests/package/test_python_requests.py
+>  F:	support/testing/tests/package/test_python_ruamel_yaml.py
+>  F:	support/testing/tests/package/test_python_sdbus_modemmanager.py
+>  F:	support/testing/tests/package/test_python_tzlocal.py
+> @@ -2297,6 +2298,7 @@ F:	support/testing/tests/package/sample_python_django.py
+>  F:	support/testing/tests/package/sample_python_fastapi.py
+>  F:	support/testing/tests/package/sample_python_pydantic.py
+>  F:	support/testing/tests/package/sample_python_pydantic_settings.py
+> +F:	support/testing/tests/package/sample_python_requests.py
+>  F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+>  F:	support/testing/tests/package/sample_python_sdbus_modemmanager.py
 >  
-> +# Test a really old toolchain (gcc 6.x, headers 4.9)
-> +support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config,x86_64
+> diff --git a/support/testing/tests/package/sample_python_requests.py b/support/testing/tests/package/sample_python_requests.py
+> new file mode 100644
+> index 0000000000..e8d2b64076
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_requests.py
+> @@ -0,0 +1,4 @@
+> +import requests
 > +
->  # Toolchains used by test-pkg only when the '-a' option is passed:
->  support/config-fragments/autobuild/arm-aarch64.config,x86_64
->  support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
+> +r = requests.get("https://buildroot.org")
+> +assert r.status_code == 200
+> diff --git a/support/testing/tests/package/test_python_requests.py b/support/testing/tests/package/test_python_requests.py
+> new file mode 100644
+> index 0000000000..48f910139b
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_requests.py
+> @@ -0,0 +1,21 @@
+> +import os
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonPy3Requests(TestPythonPackageBase):
+> +    __test__ = True
+> +    config = TestPythonPackageBase.config + \
+> +        """
+> +        BR2_SYSTEM_DHCP="eth0"
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON_REQUESTS=y
+> +        """
+> +    sample_scripts = ["tests/package/sample_python_requests.py"]
+> +    timeout=15
+> +
+> +    def login(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv7",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
 > -- 
 > 2.52.0
 > 
