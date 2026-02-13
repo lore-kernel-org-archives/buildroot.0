@@ -4,107 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12AD8EDF16F
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 14:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43907EDF16F
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 14:35:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC80681DE0;
-	Fri, 13 Feb 2026 14:35:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D64CE81F43;
+	Fri, 13 Feb 2026 14:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Ub7NLfUjmIR; Fri, 13 Feb 2026 14:35:06 +0000 (UTC)
+ id ddonlthiKywA; Fri, 13 Feb 2026 14:35:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B744381C58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C82C382057
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1770993306;
-	bh=SG/mnnbWjZxvdhn1isJIZZhDBJ9uuykuK2R0B8G+Ox8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=s+pJ7rNfmPznhB775QwQNNjlaSeaoJY3o6J0ZQs5ST7AxwhenV93XkdcLFAC9gCBD
-	 MUx4UOfwEV7tsnO4AE4i1f8jb9FXv/Jls1vm17OtnTCn+fqZ6QZeHpTjiDQ5iZ08i/
-	 atNo28+7Q5MlTKOQpNUmz2o3lrXOXWutrsAFHXy4YyTbT34yLFocJQYE6wsAlMbryM
-	 YAyuyUXu0LyLTL1OjWfznRbMrH/zjYHrv627bj6ay/5319cvIgrxLBG2oZVZX+VzDA
-	 doWj/q6ywocyKixwhNyFS57GeerIaz5kkjNmbCw7QJMcylrY4xIkVIWRscJOc92HnI
-	 MrmrHssiOcUkw==
+	s=default; t=1770993308;
+	bh=O2A3qutxlfVoCRSqx5zU4AQ2DIrubLFMyU6MJRSsprE=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=kNWfeHdTCQHFKS0/VXbiXtG2H+B8MEfD+bHbZQcG3joP0CYjXWU/ScCH4vew7BXoc
+	 sKQ95X59mBfa0+DSoLJc3P4xoc07XhsvCyJ/3ZbuJFK4DSpTzDKEa/k8tMP+SYK/MT
+	 nGmk8iHger2RJC3AO+37CQQHnbDlYzlu0y1wa3FwzM309i6ha+6zJjQLCu2L6xy+fA
+	 I469WbkTG4Ga+I9iSgA23pqiQsVTz8UTPOZ5rm3/8g1p9IjHe/mDPcVeVkR4EcA1rC
+	 qAIooWa55uxTqB++i6J/9Gfpgo2vohezfllgyz+OZLRJ3X1gNibsUSWZ3fI+gYzavk
+	 NYDLlGqab4aMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B744381C58;
-	Fri, 13 Feb 2026 14:35:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 273A569
+	by smtp1.osuosl.org (Postfix) with ESMTP id C82C382057;
+	Fri, 13 Feb 2026 14:35:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E562BEC
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 14:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 213416124E
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6D8481D46
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 14:35:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wQDX7q7xkQkw for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 14:35:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FQfULXiUUYlY for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 14:35:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A16BA60711
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A16BA60711
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7977981C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7977981C6F
 Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
  [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A16BA60711
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 14:35:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7977981C6F
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 14:35:05 +0000 (UTC)
 Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4837907f535so252005e9.3
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 06:35:04 -0800 (PST)
+ 5b1f17b1804b1-48068127f00so9715865e9.3
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 06:35:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1770993302; x=1771598102;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=C1QVuwjYZ4IdvUvy8ekN6w08n0+NeETXlBadQXbHU7w=;
- b=U0+9uR1COaF6D36oFEmhxACNM8aOR0qcXU54CoDDXiOtCAowjt1NGJ3ph/bM7AVcQO
- 8voSTuqwvTutyiRbW9YfaGvgW6mOnw1LD3mTGaZ0NaciEqJXVzF8Uk3qJG+9zsRmXgOd
- lsF/mluz1tzsOhRU1NL8pyrT4nU2SIrK7/luRtICQFbj2ivizd1XBzOYmj9eY+LfPld4
- Ulh6uKex5XkzjPARP+R+BJ+WXfHwUTFVjWfRDzhnsC5sAsKh9Skh4lLphneL48qUT3C2
- OmJ++6ZJfIf/VE7RPBPD/RxxPSIWN7W2RT2Dez9adOZcsd/T8IeDLT8BO1qhJWNNHfSs
- MxQw==
-X-Gm-Message-State: AOJu0YzXCxCIx0CEp33rwG99rTRnxN2cNGs8jYCH8YlONWq3Bja/mXQG
- m49cyqEys8o5Z6Jdj+JflUpvza0r8YC7KE2tOez/wY/hQtLOSgWxS9QwZVUwFS+qyY6iLjHI3yK
- mn7jP
-X-Gm-Gg: AZuq6aLZ5FD9byErj885fjwiY6tT+aYavcNJJYGGgTurN+NQImIPYj3Oc67yKzF2ZXI
- A27boJZrSs7bo1cgQHnHpWEgjc+gKg4yzsgLHEjDZROK4L/W35xgTkg5PBnEfd4ei7LjMG2AdjS
- GLrnHZ341ebD+ht0iB9R2fzLOnNPxSjsOyDUwfJkCL9/tgeyD2VRW7PRTcCfZjF+1jMzAYu+rVr
- ZJlMBVNPcqpa6tYDKJpranqlgWRUGpd8rILtH1xSbkUvEv8DVPz6k8TDdqHW+ZOEt18av7U2JJR
- NbSKPlJTcQ/6wQXZbjC8+jg6hlaQW9sp6gXaNhzvZ1Psd9CpEzFwwOAomZSLw3UNmc/+7cxgEx2
- UCwfivqJi0e72RIhG3SWw2yo57+YvcWws3IwCbwl/oBCgJLnWDY6WUaB00ztOcGM0zEEwqaUKBA
- wAbHtHKTpiC8G2wLo=
-X-Received: by 2002:a05:600c:6211:b0:47a:8cce:2940 with SMTP id
- 5b1f17b1804b1-48373a1107cmr32061045e9.14.1770993301808; 
- Fri, 13 Feb 2026 06:35:01 -0800 (PST)
+ d=1e100.net; s=20230601; t=1770993303; x=1771598103;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=Vf0k7Z2/3Dpl8NFEZgRBN5960jHqOefEkyvjBVrv8s4=;
+ b=D3GRu/u4dolO3ZirqFwU3u0Pgvq5NtGMR0FFxygXtBs8kxZ7fIi+1avrc1aoXW+baC
+ 6MtJ3C5VQwzku+vPuYG5n4n3NQD1cgxfgWpSWOc9FwreaWhnhV0TGXo5OVQ49VGWfkJh
+ S87olsHT1eCxuUVg0sgiBw1fe2fwK7dThKdJ1Gjfbk0o4u4incq2g2HraseuE8hB33eM
+ FwFjVetS1K1ZSgx0mUST/jvKzAm9gsrHYWTowuOK1hUCFwmW3vCOmBgrVGFsZ9MY7ad5
+ bOITPJip9ADZHYFOyDKjC0mLx0MhTRgScRsVtMyuXKjo4xGrK5JldwRdrkmsH97PQUf6
+ VQ4w==
+X-Gm-Message-State: AOJu0YwHkgc3Zs+VGlGjY1nGmUWcr+NV8J4cFoytJBOPf3Pvvmju9a1B
+ nvl26b6QJYFYY3PZ4swT5O2qHe4i5K/qIcAD/qu3rIFNiV6k/R9ms2HLiG09cZfcfC/NjwE6NjS
+ GAQ58
+X-Gm-Gg: AZuq6aKPsPngVb2P1B/oY0F3KjXLagOeB2XxUC3ti0zBZiluBaedNLy/7b+MeWv1aox
+ o2byb7NU5PopKjxdCHE3abOGE6IBWyFFK2bnKJXQILMIXWsRmVu9E6P1ztpq9BENz6pzOy9IeZw
+ 0SG+kL1IfiPm2G3/R5IoHjLO39szISWpezSTowOHFgxwGDHy7WafqPvB3g/+S+tJEaeUFDoOaQf
+ D1r+iXklGqmXNuAChTJZ17iu/5zIDrUfvJzbw0pNrFaQ9y3JAY+LO+JqeO4OfyO1aGVn58R4IIM
+ 7HljMBkGmpWAWsZJ6+d9Hh2380XxRWkpzxxB7TuBl9tSc51RCtQhMFT/wzcaULvY5bQ4OD7DSSY
+ h+S4SPgWuS2UYnI/a0g/YwW+9Lkef1zb7XRQ/UsBpMuKe+RGL0d1bO1uDonKXO49A8RbUTNBK+e
+ sxMHpQNXnFxjz5lbcDd7jz3z22kg==
+X-Received: by 2002:a05:600c:5246:b0:483:71f7:2782 with SMTP id
+ 5b1f17b1804b1-48373a14406mr33687365e9.12.1770993302678; 
+ Fri, 13 Feb 2026 06:35:02 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-48371a02a79sm41320725e9.3.2026.02.13.06.35.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 06:35:01 -0800 (PST)
+ Fri, 13 Feb 2026 06:35:02 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 15:34:58 +0100
-Message-ID: <20260213143500.528726-1-thomas.perale@mind.be>
+Date: Fri, 13 Feb 2026 15:34:59 +0100
+Message-ID: <20260213143500.528726-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260213143500.528726-1-thomas.perale@mind.be>
+References: <20260213143500.528726-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1770993302; x=1771598102; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=C1QVuwjYZ4IdvUvy8ekN6w08n0+NeETXlBadQXbHU7w=;
- b=XLluyTNjK1cabecKNpABeTIttiSEj/W2Eil6kGYAhCr2gIngDnkNusrPW+8hHNbAIr
- A3ZPdKdY1uc1GECwEd7ZXgOxwnyoGm2zXabTRWYE7ZrioI4H23ZCI91D3ciWye0O+XDa
- zw/o8vjlGBWYoy0uxGhcXCRPBWifpFeODMwc0lALaofk9cdJmKeHal4S/3VY1tpNP2Lg
- oiuNkXzRuLog0UdSxsbPyVtKRNsns6muhLvVXL0ekRVSS8lf7N1ZB9YR4YA0Nhzv3YkM
- oFiv9alMYAjlA99bJ8gLx2DOFnl+LdCU3YyEaZMoQoFnMMg5YnzD0mFMluQYW0PGq0Ar
- zNPw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1770993303; x=1771598103; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Vf0k7Z2/3Dpl8NFEZgRBN5960jHqOefEkyvjBVrv8s4=;
+ b=FjD13mC7do4CGCSweBYXK4n14Gp+5rVBe4G2JiMpOsaGcpiXueWSrsITbnkblhdouS
+ hJQ/hAeJ4NkW/LxcJN5qPFs3KA5L85IPjfXL7sejKpdEJBgAJgDGDy7Qz6RjDyVSLlWq
+ rIcaKpU3AinKM7uPV4K6unoSiiklnm0RTW3rP4D3loWLOjQfJfF+XvxWHHawPSsQH0Te
+ DijWP0NULJJflw/qkxb3qITPKEqblGXgIRZhuWpPBx6QsdztOYEoHIHPz91k+ATAUkak
+ I2zm05LSzzoNJ9/pt/ULuas1XR40J3kGLXhlmkGwbxxGLGAhyePH+XEt90oC2F/SdQ7H
+ 0EhA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=XLluyTNj
-Subject: [Buildroot] [PATCH 1/3] package/dash: add CPE
+ header.s=google header.b=FjD13mC7
+Subject: [Buildroot] [PATCH 2/3] package/python-jinja2: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,30 +129,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE `dash:dash` is valid and has a single CVE associated to it. See
-[1] & [2].
+The `pocoo:jinja2` CPE introduced in commit [1] is not deprecated but is
+no longer used. All the security issue on the Github Advisory reference
+CVE with the `palletsprojects:jinja` CPE instead (see [2]).
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2009-0854
-[2] https://security-tracker.debian.org/tracker/source-package/dash
+This commit updates the CPE accordingly.
+
+[1] 165f60a092 package/python-jinja2: add CPE variables
+[2] https://github.com/pallets/jinja/security/advisories/GHSA-cpwx-vrp4-4pq7
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dash/dash.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-jinja2/python-jinja2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 78effa791c..143972f01a 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -11,6 +11,8 @@ DASH_LICENSE_FILES = COPYING
- # We're patching configure.ac
- DASH_AUTORECONF = YES
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 74360ec258..a52fa77275 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -10,8 +10,8 @@ PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/df/bf/f7da0350254c0
+ PYTHON_JINJA2_SETUP_TYPE = flit
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE.txt
+-PYTHON_JINJA2_CPE_ID_VENDOR = pocoo
+-PYTHON_JINJA2_CPE_ID_PRODUCT = jinja2
++PYTHON_JINJA2_CPE_ID_VENDOR = palletsprojects
++PYTHON_JINJA2_CPE_ID_PRODUCT = jinja
  
-+DASH_CPE_ID_VENDOR = dash
-+
- # dash does not build in parallel
- DASH_MAKE = $(MAKE1)
- 
+ # In host/target build, setup.py tries to download markupsafe if it is not installed
+ PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
 -- 
 2.52.0
 
