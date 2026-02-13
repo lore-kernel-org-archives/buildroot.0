@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A814EF99D3
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8AB2EF99D4
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24A2784574;
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA4A561464;
 	Fri, 13 Feb 2026 19:36:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B3lq4TSlr2sX; Fri, 13 Feb 2026 19:36:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WALHYR0CjsSa; Fri, 13 Feb 2026 19:36:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B5FB8463E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0B93614F3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011387;
-	bh=P0SJcrEobOMobuEOMbVspjwMXVkhIg6dc6as9LAy2qo=;
+	s=default; t=1771011382;
+	bh=H3sDzSc9T/f31kToiig7L4/1tqi6uPvxdyRjDuVYB4Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NSQrX3Xlmqwm/vPgiIMLB1XiZS6i/C7ARSLF75vHmnijydUeW3IV358cP9FaJm48J
-	 Ko08rJfagwHB42iVbl9z4ds4Qq+CF0jC6c2N6+7hwVhRiXwTidwTXjkmvHpJ7cBEdP
-	 aXGiJXlTGMsttOyAcOoB0s23aXYxQUhGdvP1C5xrqBVjKvWoPUqTXn/mwczD7JtoBL
-	 ABEquNu1fKRCdjeAhBxSjqZG6yHOtfCGLZ0HBceUXFqgNnyxDEAoGqRyfa5dBh7lTZ
-	 EEcXUY/Vy9LkGDn5bnIVH7PBML9IoWkoMZPKu+0BPY2gOaDAh/sHEjryhBGlmFE8W5
-	 Ax1Ea7ME+XoSA==
+	b=K54JFCSQkeT2CLh1MBiA14RRRa2Y2G7Nas02qhh7X82ePlgcrkD7RlHw7L+wsgkgr
+	 CKSzjhA6DJMn8LjGqJINY8vglOBK8GJn/60f9gkAakcyutjX5/s4hG5uzH8W3fJdoc
+	 Q89EHq6Qa5I514PzpTZq/dtAwkkjdXlk6vX+O/BMlz/oEMRWjDxO98qv3V+RFupNq9
+	 ldQx+hwVCUSYUOiaS35xBqJ/CNBaf2TSc+P1Yi9P9T6+/t7LXs+a1zQsMQ3/5Sbx+w
+	 50/hvseRL60WZldZjKhE1S1oxVPWDhadmxHrSOoq/p3eQ5gNN8ZcGCKVLdrULBFCbh
+	 4xePXJNsXnXsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B5FB8463E;
-	Fri, 13 Feb 2026 19:36:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0B93614F3;
+	Fri, 13 Feb 2026 19:36:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02DDC69
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 07D6E283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D14641E56
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EA9041E54
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BAOFFGzkqgw5 for <buildroot@buildroot.org>;
+ id 8yjnUEebJPUM for <buildroot@buildroot.org>;
  Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76F7241E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3929441E3A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76F7241E21
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3929441E3A
  for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C05981EB5; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
+ id 2DE6283545; Fri, 13 Feb 2026 19:35:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:31:57 +0100
+Date: Fri, 13 Feb 2026 20:31:47 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: eea5fba3d4de8bae1df515c27d37083603ed04d1
-X-Git-Newrev: 3811f091f2e8d613a232500a3feb4541dfaeb0c9
+X-Git-Oldrev: 0f7d6cfc45c4773d5c8ef9b4e5e97ce6431c84cd
+X-Git-Newrev: 1ceb4e858d40258868128aed8a2409abd81ea185
 X-Patchwork-Hint: ignore
-Message-Id: <20260213193529.6C05981EB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libwebsockets:
- fix LWS_MAX_SMP when BR2_TOOLCHAIN_HAS_THREADS is set
+Message-Id: <20260213193529.2DE6283545@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libite: add
+ dependency on MMU, requires fork()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3811f091f2e8d613a232500a3feb4541dfaeb0c9
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1ceb4e858d40258868128aed8a2409abd81ea185
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The .mk file currently states:
+Unfortunately, parts of the library is not very no-MMU friendly atm.
+The below check fails due to runbg.c requiring fork().
 
-   If LWS_MAX_SMP=1, then there is no code related to pthreads
-   compiled in the library. If unset, LWS_MAX_SMP defaults to 32 and a
-   small amount of pthread mutex code is built into the library.
+$ ./utils/test-pkg -c libite.config -p libite
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: FAILED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                             arm-aarch64 [6/6]: OK
 
-However, this is incorrect: when unset, LWS_MAX_SMP is actually set to
-1, so mutexes aren't built in.
+The dependency was introduced in libite v2.6.0, so this patch should
+be backported to v2025.02.x.
 
-To fix, set it to 32 explicitly when threads are enabled. Why 32?
-Because
-https://libwebsockets.org/lws-api-doc-master/html/md_README.coding.html
-states:
+Fixes:
 
-   You can control the context basic data allocation for
-   multithreading from Cmake using -DLWS_MAX_SMP=, if not given it's
-   set to 32.
+ https://autobuild.buildroot.net/results/6c6fd2ae410a82c44da54ee13a09a38a7ab220c1/
 
-Signed-off-by: Bart Van Severen <bart.vanseveren@barco.com>
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b3abf16c8ef7cf7b2493b3ddfc66ec132c42493b)
+(cherry picked from commit e0b129e36e6d6b45de473bb59795001fddfcc0cc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libwebsockets/libwebsockets.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/libite/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index e53febfce4..90ab5da0c9 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -18,15 +18,14 @@ LIBWEBSOCKETS_CONF_OPTS = \
- 	-DLWS_WITHOUT_EXTENSIONS=OFF
- 
- # If LWS_MAX_SMP=1, then there is no code related to pthreads compiled
--# in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
--# amount of pthread mutex code is built into the library.
-+# in the library. If unset, LWS_MAX_SMP defaults to 1.
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
- LIBWEBSOCKETS_CONF_OPTS += \
- 	-DLWS_MAX_SMP=1 \
- 	-DLWS_WITH_SYS_SMD=OFF
- else
- LIBWEBSOCKETS_CONF_OPTS += \
--	-DLWS_MAX_SMP= \
-+	-DLWS_MAX_SMP=32 \
- 	-DLWS_WITH_SYS_SMD=ON
- endif
- 
+diff --git a/package/libite/Config.in b/package/libite/Config.in
+index 80d29791db..516d1bff98 100644
+--- a/package/libite/Config.in
++++ b/package/libite/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBITE
+ 	bool "libite"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Libite is a lightweight library of frog DNA. It can be used
+ 	  to fill the gaps in any dinosaur project. It holds useful
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
