@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E711EEF99D0
-	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A41EF99D1
+	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8BE3846FE;
-	Fri, 13 Feb 2026 19:37:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 686EC41F76;
+	Fri, 13 Feb 2026 19:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P3yddS7qlxNM; Fri, 13 Feb 2026 19:37:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gTUtF2NoY5GF; Fri, 13 Feb 2026 19:37:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90E5E846F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93D1F41F61
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011449;
-	bh=Brg5EZQYDJhfen7OQV3z6MmtuI63lZW99Ps824cXb2k=;
+	s=default; t=1771011450;
+	bh=kKafXQNgJcTdyIckQe2GmBudQ2sJvohIdGPQoXV8efA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XkA3R731EvPjs7EidbMqeKK19TRlUucn7cFrhnZemxbOSlfwHbVxMm4Dl2T9ufECO
-	 M71CMrW1Gqyrx2uqym0Moo6bWNQNE2Wzg1NdtRlwooCCY3V7brpD7awnx+LnqKkkEz
-	 QLRQce7AZ8wwESU1i/7G5LYcnJvtHyfWS06O1u46WcmVYO9QnjAQY3gn+LOESoVtVF
-	 H8gm8gyjx+hpDh1UwxrEgSm9T2MlePoazXy1hM/j5b0PHB6qFPKpXytPiNpqd1iP46
-	 RuaIF2poKKCRnFi1oBtHd3GqeKgn1i8hU+h4oksOTE+NS7/KddVS1KU4ctlTuyHIOJ
-	 GB7WyP7kAsFuA==
+	b=aq7BSqvzRXDp2pxkdt5FppzjuKVnTg/HSKQpkfD/0mp9dzpmaht5wB1UrMah+8tXP
+	 s/+1TDXFDCZQjz6eikca5z5QOd9xZFIUpr3La6fidrgN55sB61pWcxbJ5v3WVASeJQ
+	 RCKawZfgOSVmcu/YcATv395uc/bEuzlyR/cTuBh+m1N1DmFbeck7OwxsrrCe2dTABI
+	 JA2eWJxIG1MldZ5rNpaeofb3v+2SSacOfnW73bjWwzTJ9txCcUawxsQs+FHtukdWCS
+	 aHOSdn2kJ48K6j7scAIqXtlcvubVUjLZyyMiFge4ta0QiUmzN8hPKAF20895qezBeh
+	 9LCECwWoTVGPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90E5E846F0;
-	Fri, 13 Feb 2026 19:37:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DF2A31F
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93D1F41F61;
+	Fri, 13 Feb 2026 19:37:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26745283
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85515845A6
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08B4A40380
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:37:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ac_1vLxST85j for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:36:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3txcr-5V8xAA for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:36:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9218884683
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9218884683
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9218884683
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:57 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-48069a48629so11739305e9.0
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:57 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8D7794035F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D7794035F
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8D7794035F
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:58 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-43638a33157so1188677f8f.1
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011415; x=1771616215;
+ d=1e100.net; s=20230601; t=1771011416; x=1771616216;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=NGiZXsrdm5S8CSi68lS3DBFIwQaLRiVd4r06aLVICJA=;
- b=dHjmSDmNkSIe+Kt12G+wY7hT+fPp585EonuBe26StpBZmHS+fcKkiU7fw71aeDW88q
- nhbFQ0F5OX0fAZC+0M4we42rn/zIGBDtsyx1ggQ7EINhcHiPuvEQJ8iITtrl53mhndbd
- nnewDoIOahRfVj9wZbhtj9BInmqADm2eQhaKQVJkNdnBejZhJwsMjIXSJbmFqcGCZLFE
- cX31JZons5hZlW7C0p+79hCzT02oweBjYyh4tirWF8laV7mvj57w+ZOy/Nh4RapEgxwl
- hgP9l29EApOJMkiAlAcW3ZF73srUStOhWWoMM1Jddosf8piPOLEszj7P8sNjKxHtRbxc
- Q+xQ==
+ bh=Ps/qijTk5vgUxg5+3Thg4pJAAB13VG1FeV5MDqN1Mpw=;
+ b=PBDpAfwAw8CHam378OBJZ6yzbSmYo2DeYJzYivw1jl7qVc3gG5TuP+yaaduuDL7ZPw
+ 1ApPGTZ3ms9nxLHMuzdN/PMkrFwURSmfyLfKSxI0o4JBEMoUvaZbABA/7XNJBCWcQz6g
+ lKYtZlgUiC9DQFyrjzczGzpcftc2PC+Ca2vggl0tNY/WtXMj6xUt8dvv0lj9Ftf9uYBG
+ q5j2QT6hiQy7x/bWn7H8fleF88IADQkEm0k4e69EKcZsV0wReJBW2a3c9cd1ziXbmcYD
+ KRVZMGDn0lRaxrWhpaOjEdV9geKDeErYiRlfpebgnyqIw22HlU4VbqnSX/C+h3JNIPm8
+ 1z/g==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXneNyAalz6NyXOr8XzugrIgk19imUEJvPgBq5lB57ahSKP550cgeIrlHFjwWscpcOe820XwGb36sE=@buildroot.org
-X-Gm-Message-State: AOJu0YzPLJoT3sj+LWERzdnMNHpbWCC86SdUcckHr3N1XlpCEiCFdpzv
- nLnNE8fIq91LzEyQkYY6BIlq4PMirEqGFxxjsk3LHwDafnWnbuCiXZB+AzDnic/cZeg=
-X-Gm-Gg: AZuq6aJ+hmIWF7p6Wvu3nnzlB/MdkYcCeVlYtYszwJ32cjrx6znkWmnxvV2cttxdUUB
- 8kkwURQnfCwozMczXDmBLBBOvECiuPcOcoFnW2yjq4wNlCnQfo194UxDyNbYSpgZX61bBd1ift4
- iriv4hlbAJxcV6pI+s9E94MAPI9IRagZQHngBN5fAoyQHTtGAlzihkZyGwr4x3VLybT/wA3KxyC
- UyJhpArLhKR/o16HiTNniQoNaEsNb5DCXhRwvojtaXNnPS9PlVOlKcjxzRZAm/UXWO2XQafUXin
- +wkwJKlTxOcLDT2R2aOOQ+b2znztT1w+4X9L7wvNSBehhUbzDpsTJVDjZd0xYtE3Tko9u8vUv8w
- /xKQfG0h6WAKuh8oeDzFAvWNHQKarRl48tzZDyztROUA+NRwbMJXjB48a1+z7YSRs43detqpEfb
- PeiYdqDtGH0/IdSdQ=
-X-Received: by 2002:a05:600c:1986:b0:483:71f9:37ef with SMTP id
- 5b1f17b1804b1-483739ff8f5mr57939435e9.8.1771011415544; 
- Fri, 13 Feb 2026 11:36:55 -0800 (PST)
+ AJvYcCUrRUOJ45aO4ZJXdnIYwnQo39DH8tRRKy06MEm3iDN4MyzJuuYzosLru6xYQWoQAiQMYbKmfZySZ7Y=@buildroot.org
+X-Gm-Message-State: AOJu0Ywjdhm3KAk1YrmIjYwxtAgHYzVX5PBwj0shl+ynGeqD7Tq6SpQT
+ Ai5kL8oKqY3gxl/qutTshSFCWZ/eJgatgAah/GzbP8SbpF0BU5q4TeOulhEHO1UFCkU=
+X-Gm-Gg: AZuq6aKh9C2aUP/GOYh22Nwc2jPsHWNd6bDPQ2IiLV35E2x3GXCONDUUqCU53FMXoGp
+ DN1yYD4JdJfwjcpxdTLGQnWcRJgSxy4UP7bmT319BgethkeKYY5f9vI2dxpnl9An3upGJaRjBkT
+ BlDgGiqNZCKcY2U4Mtnofea8xkZqK/Afgt/lvYGqM7A0y8NchFaTUxWHJ4JqwkD5AnvsH5zfBHk
+ ztbHBGHnkFCPCHTINMtYsjEmXvuANvYFrMZl6sLMlEzt5/qo5ZUG0ASrLKrlWGPXNf1VC5Oeb4h
+ yqUdDAB+oNdruNwplh4FS/URh2bCLaFmcoUF5U8V0TD45j5iXKEQr/I04DIAtGmySKl9PmhXYRv
+ GoA5ffoY7DRbWT3Va0Dkxdk32ANqF4UWQcxPF1aJxdsldnhKW0XFTlccG96s7PWuz7Fv7K/kafD
+ 0/0THcbVn3q43Q97fgrVZZo4KUEw==
+X-Received: by 2002:a05:6000:1883:b0:429:c851:69ab with SMTP id
+ ffacd0b85a97d-43797943548mr5383777f8f.55.1771011416439; 
+ Fri, 13 Feb 2026 11:36:56 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796a5b07fsm7342106f8f.2.2026.02.13.11.36.55
+ ffacd0b85a97d-43796ac800esm8147505f8f.27.2026.02.13.11.36.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:36:55 -0800 (PST)
-To: yann.morin@orange.com
+ Fri, 13 Feb 2026 11:36:56 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:36:54 +0100
-Message-ID: <20260213193654.38557-1-thomas.perale@mind.be>
+Date: Fri, 13 Feb 2026 20:36:55 +0100
+Message-ID: <20260213193655.38611-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <ea7cef9a9d5fae4f69e8e177a54202c60b6ba13a.1770208629.git.yann.morin@orange.com>
-References: <ea7cef9a9d5fae4f69e8e177a54202c60b6ba13a.1770208629.git.yann.morin@orange.com>
+In-Reply-To: <20260204073238.472889-1-bernd@kuhls.net>
+References: <20260204073238.472889-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011415; x=1771616215; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011416; x=1771616216; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=NGiZXsrdm5S8CSi68lS3DBFIwQaLRiVd4r06aLVICJA=;
- b=ZcpGwtFmWe15xd6k7s26aU19H528C+fLQzLG+GicRyHeCSlfe6PNoNuEs7wXZ6IcKP
- Y1kOr0HR3Gnu86miWiVi/oMD/kBO0jr/jEq6O1OhzKCpK1KWU2P0vAOlPU+6hDRic/oO
- +4R/+nwsG0sJ5VOTsiUykSpcvbnpwvEY6Y0xRTVXkwj93mL6o5+TFjNPRJZiTGM4BN5z
- kX1KN8hiK9voO4V8QiX5KjOv/t5gxzCFiEcAWRPxY/R33lbWoJASodyTqdJpBxl8FqpP
- 1oTDBePz9GeaDhW1RV0f7h2dG7oJqjAmfJDPPIzkvazbNgVOrKLpmPSIilZrzPgPMYHi
- 51dA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Ps/qijTk5vgUxg5+3Thg4pJAAB13VG1FeV5MDqN1Mpw=;
+ b=EGq4AemUjsI1f9Fh7zwVROgKyItyvzNnyqC9XjCbBI25g/B1pxgkCO3/Yf1mV1+clT
+ W53ick0bHeDH0ZyCtj6IV0iucTTLBWzz0Hun7Pxqkg8oKDZR9tmMlcz5M16uoA9BvHeW
+ rwv38SVSDFqSQVMFITOUkRXgw8imX+HxcnjBnDB/QWIKsNrb3XQ2hBHQkKBc9a1wz3rx
+ l+zeELh/9pFXnnN0UJXvRUS9bhiEJRnLIspHire156f5nn1eCcaqQ1OkiyBPaRRaaH28
+ lS3K7y5rfrEN5s1G+REHsc5WtyEnyrFRcALN0pVL2rZrRx31kpx4YDZYlohu8mMqtGev
+ 4Nwg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZcpGwtFm
-Subject: Re: [Buildroot] [PATCH 1/3] package/blake3: explicitly disable
- threading & examples
+ header.a=rsa-sha256 header.s=google header.b=EGq4AemU
+Subject: Re: [Buildroot] [PATCH 1/1] package/libopenssl: fix powerpc64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,53 +130,107 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Use of threading requires a C++20 compiler, and the oneTBB
-> implementation. oneTBB is missing from Buildroot, but a system
-> one may be used if found.
+> Buildroot commit f710640be5869bb3716e254916ae614f79002f2f bumped the
+> package to version 3.6.0 that includes upstream commit
+> https://github.com/openssl/openssl/commit/8f24a148e6f112045cf110c3e3f4e2415d9c11fe
+> which causes build errors on powerpc64.
 > 
-> Even if the default for threading is disabled, explcitly state so, in
-> case the default changes in the future.
+> The upstream commit was also backported to older libopenssl branches:
+> https://github.com/openssl/openssl/pull/28990#issuecomment-3675219918
+> but its first appearance on the buildroot master branch was with said
+> bump to 3.6.0.
 > 
-> Also disable examples, we don't and won't need them.
+> This patch adds an upstream patch to fix the problem.
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Heiko Thiery <heiko.thiery@gmail.com>
+> Fixes:
+> https://autobuild.buildroot.net/results/b28/b286ad40f2240a85b9cd0dc44e089d1d6babd3ea/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.11.x. Thanks
 
 > ---
->  package/blake3/blake3.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  ...ppc.pl-Removed-.localentry-directive.patch | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
 > 
-> diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
-> index 9d1323192c..1055a2c073 100644
-> --- a/package/blake3/blake3.mk
-> +++ b/package/blake3/blake3.mk
-> @@ -10,6 +10,10 @@ BLAKE3_SUBDIR = c
->  BLAKE3_LICENSE = Apache-2.0 or Apache-2.0 with exceptions or CC0-1.0
->  BLAKE3_LICENSE_FILES = LICENSE_A2 LICENSE_A2LLVM LICENSE_CC0
->  
-> +HOST_BLAKE3_CONF_OPTS = \
-> +	-DBLAKE3_USE_TBB=OFF \
-> +	-DBLAKE3_EXAMPLES=OFF
+> diff --git a/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
+> new file mode 100644
+> index 0000000000..7c507a2687
+> --- /dev/null
+> +++ b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
+> @@ -0,0 +1,69 @@
+> +From 5aaa7e5fdc59e88a13d2911cb86d814d4e2669da Mon Sep 17 00:00:00 2001
+> +From: Danny Tsen <dtsen@us.ibm.com>
+> +Date: Wed, 28 Jan 2026 07:23:13 -0500
+> +Subject: [PATCH] aes-gcm-ppc.pl: Removed .localentry directive
 > +
->  # The package is a dependency to ccache so ccache cannot be a dependency
->  HOST_BLAKE3_ADD_CCACHE_DEPENDENCY = NO
->  
+> +Otherwise there is mixing of  ELFv1 ABI and ELFv2 ABI directives
+> +and PPC64 big endian builds fail.
+> +
+> +Fixes #29815
+> +
+> +Signed-off-by: Danny Tsen <dtsen@us.ibm.com>
+> +
+> +Reviewed-by: Paul Dale <paul.dale@oracle.com>
+> +Reviewed-by: Shane Lontis <shane.lontis@oracle.com>
+> +Reviewed-by: Tomas Mraz <tomas@openssl.org>
+> +MergeDate: Tue Feb  3 08:39:50 2026
+> +(Merged from https://github.com/openssl/openssl/pull/29827)
+> +
+> +Upstream: https://github.com/openssl/openssl/commit/5aaa7e5fdc59e88a13d2911cb86d814d4e2669da
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + crypto/modes/asm/aes-gcm-ppc.pl | 5 -----
+> + 1 file changed, 5 deletions(-)
+> +
+> +diff --git a/crypto/modes/asm/aes-gcm-ppc.pl b/crypto/modes/asm/aes-gcm-ppc.pl
+> +index 68918a9305a2b..fd5dcc22a6117 100644
+> +--- a/crypto/modes/asm/aes-gcm-ppc.pl
+> ++++ b/crypto/modes/asm/aes-gcm-ppc.pl
+> +@@ -409,7 +409,6 @@
+> + ################################################################################
+> + .align 4
+> + aes_gcm_crypt_1x:
+> +-.localentry	aes_gcm_crypt_1x,0
+> + 
+> + 	cmpdi	5, 16
+> + 	bge	__More_1x
+> +@@ -492,7 +491,6 @@
+> + ################################################################################
+> + .align 4
+> + __Process_partial:
+> +-.localentry	__Process_partial,0
+> + 
+> + 	# create partial mask
+> + 	vspltisb 16, -1
+> +@@ -564,7 +562,6 @@
+> + .global ppc_aes_gcm_encrypt
+> + .align 5
+> + ppc_aes_gcm_encrypt:
+> +-.localentry     ppc_aes_gcm_encrypt,0
+> + 
+> + 	SAVE_REGS
+> + 	LOAD_HASH_TABLE
+> +@@ -752,7 +749,6 @@
+> + .global ppc_aes_gcm_decrypt
+> + .align 5
+> + ppc_aes_gcm_decrypt:
+> +-.localentry	ppc_aes_gcm_decrypt, 0
+> + 
+> + 	SAVE_REGS
+> + 	LOAD_HASH_TABLE
+> +@@ -1032,7 +1028,6 @@
+> + .size   ppc_aes_gcm_decrypt,.-ppc_aes_gcm_decrypt
+> + 
+> + aes_gcm_out:
+> +-.localentry	aes_gcm_out,0
+> + 
+> + 	mr	3, 11			# return count
+> + 
 > -- 
-> 2.34.1
-> 
-> ____________________________________________________________________________________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-> 
-> This message and its attachments may contain confidential or privileged information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-> Thank you.
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
