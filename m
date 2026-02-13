@@ -1,118 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18502EF99D0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E716EEF99D1
 	for <buildroot@archiver.kernel.org>; Fri, 13 Feb 2026 19:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5EEF84687;
-	Fri, 13 Feb 2026 19:37:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B547841E60;
+	Fri, 13 Feb 2026 19:37:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bsPSxujTn1EA; Fri, 13 Feb 2026 19:37:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fYlsMsP7h8Mv; Fri, 13 Feb 2026 19:37:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47239846C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C771441F4E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771011435;
-	bh=hx1N9E0i97mjQeH7+MqxPiu/ZvZiUJB0kG7xzvttpTk=;
+	s=default; t=1771011436;
+	bh=fs82dML4dm73FW6OWaHbp7g1ezsaUe0fNeVY/ziyuTg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=L8cXUmMPULATw6yJ/tEUnQ+R5S2dbBBbb3uS9thyAyICzORyOM9/ho4Qd97zX9QYy
-	 8BX2dpiJJytFVqTlVJCw4SrhAneRXLSeLW9Cus38AkdjHg3MbNRKZD28Xm/CDEVcTL
-	 ACQDTluhTxupq4NDJgFBkCR89GgDLfZr9yPp8FKJ9w7XNXkDM8mqmzBXaYxk++PWte
-	 j9geCnymoRkWqwPRDr8H2FhRMNI84hScGHNYeK/4GfwzGzmnG1x9byQW1UlEPN+dO3
-	 q9oOg8yAQM+ZO83FuhlMoXXhJupfbZpfaBGXi0eu+fnvjzfSXOggtGS0vxhMJvb3Fg
-	 XjR1WnQkX2CMA==
+	b=iJAFoBlr+ZtM5TJ3q21eBwkmCDpSG4171emPlCYjr0NazZ3MYCenkVxmsbCG8JxVf
+	 vZx4fvqbCWb36UUUvlMd6CJFZ+fzXRgVnzGK6YbWQDhLRs0HZ2inq0m8CNlQgrz005
+	 q1Y6lq5BZTKr6aQkwBv6GI9kfnd/4As0+EAHuSHrMKUnNCtFDFLuF7GHad43hQ+2Ze
+	 Jh9XQC/oHf6cbuCrzYe2kUCthAqdlLV5JXVeXSb8F9N60edVAQZxftL1ussknhWeQI
+	 EzrY/tMtmJyy6dojFpmQvwjpjg/Y4rdxkJyxFNlSKLD9utEnyJo1ojFbnFfLDa1nzj
+	 mz1SG2eTVMwug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47239846C4;
-	Fri, 13 Feb 2026 19:37:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 119C6EC
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C771441F4E;
+	Fri, 13 Feb 2026 19:37:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F6B569
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E123984678
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81E9E41F02
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sc4b9znKa8md for <buildroot@buildroot.org>;
- Fri, 13 Feb 2026 19:36:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2NZiRqNV-j2x for <buildroot@buildroot.org>;
+ Fri, 13 Feb 2026 19:36:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99D3B845A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99D3B845A4
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 99D3B845A4
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:43 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-483487335c2so11594035e9.2
- for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:43 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DC43041E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC43041E1D
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC43041E1D
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 19:36:44 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4834826e555so12801415e9.2
+ for <buildroot@buildroot.org>; Fri, 13 Feb 2026 11:36:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771011401; x=1771616201;
+ d=1e100.net; s=20230601; t=1771011403; x=1771616203;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=70GVyp80t+RBTmCTBkNFYoC0Q5Gy+nvJ+gdRH6qJgKM=;
- b=t1Wjly5oysCfa1sQQ05M8e5ZyYYda8n4aYKicMJyUmdALO2O6g8lEXVyeo4p00Iw5C
- ZZRJHbWYwVjSKd4VVPrGH3ejcuZ8d3wg2BhgC2T1LhgKva4tnybTiHPegKTznupZM55k
- SNCaLxV8OIVb4hzP972Ds63IuTU8xrS3DIZ/BYP7IWPXJ/vAWciogg5chBb8OSJ3csVs
- e1uVWVF/oH6MLcUCGZwmJzbQAQzANgECGMN7s2ToVI0TudEqE1YgC8/D6Rzdd2ZygQjl
- Jmsel28dYTHxJT8Jrkk65fedJ0BT3B3jr9xjMz3b6DawzU1DsF38hn479e6iDb3mg3Ol
- JOJQ==
+ bh=f+Ue4vHxUOe8UYjQwksa4Eqh2BaBg6czQlxg/dA9r4Y=;
+ b=a3oT3ngbizoFdcklRBGoeu6cW6tW3lNpf/hAeADgSrkdG0m6mBEyCMSOvHLcXLYizQ
+ fOKBFLnzvRu23ZgGXG2dchIpRaMM4GOEeps+4gYSkGNZyKZxO+WYSwE9f/bncgyiYX7b
+ b64T1FG3XldmA8sh65e9isEuoBVj5L88aUUfrdFAisVetFYSFSsq3VoitdnPfp8mY26v
+ 4E4lxoANwgWWnt0sp3a40TDN6QtVa04RCXBmO8YOAPLifY9yZSIouq9V/2wblCm8beM7
+ WpSkoywjx4Nw9k9iFUary4eBCM+reV3zcJjyB4I9bdt3TunJnz+oVQgBcH0/lt0Uhr1l
+ ObdQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUXus4YLohdxhoqtoACOus1sE89BhUJqvwLSjVpWGBh9XclEH930ImRqd33LOvPqjxj8jl1QdR2Z6Y=@buildroot.org
-X-Gm-Message-State: AOJu0YyIrJZEc1WkjxCZN1guPFm6u5S/j+zDOWmZk8Jpu90+8DRhmo48
- sPdtFE/zEvkjw+og7sRc3Yib1X5Q17RLSyQX0JLpqGdimnO0h9OUhJeAhvrfngZLpZvmw/cdL0c
- rWGWr
-X-Gm-Gg: AZuq6aLh4VZbEDYu3phkv2kucfL4abPiw+ATxfJ2ERtdZhmnebPS8+bSV+G50oAGWi8
- 7deoy262o2furvaAfPIuyiPA9XyH3NcWTl0p/GbbiI2NsumvIBm5EQUrS0OEzHCXW9B4LJY6j5K
- 4rL67nBhBkRH4pNXfgUxEJRmhZRQVmvo+WQnaixQ9QY4ky+2uuB3sfl/h7UoSdqcy18PxMy/mBt
- BEb2gJrvlCPr26wICQgkwpSaysNFHhQxLfPUZ4uA6WIcf8VmxIO4dwXyg/+PgBq6d9F0PQks2fi
- B40q9ONhctlHpaWlj53vfztYQJV3GMvqEI+y9x7uY4IXO6wt/ccweDlrMsjYswioFHsO/Babm2D
- XFCjme2FBRWnF8xUI3tgpovq8aOWv6bYjXHXwxUpK8NAqvHKK2BiSDlHuZmP6HHHWpZdOGLyL+A
- 9+q0V6pV6q05WFSDg=
-X-Received: by 2002:a05:600c:458a:b0:479:2f95:5179 with SMTP id
- 5b1f17b1804b1-48373a0c663mr45027885e9.15.1771011401540; 
- Fri, 13 Feb 2026 11:36:41 -0800 (PST)
+ AJvYcCWLcdYDpRnSF8cUKAIt63q3vUMzcCu/0RPO7rziSabQ8mh07wGxcq9qcHkPCDVHTAgyMaOMBSe7a28=@buildroot.org
+X-Gm-Message-State: AOJu0Yw8MTfBh45/nWweEur34viY9GgWlKkGJa/X08Cm/bCR4Sp7N6dF
+ rcEbBL/YxzCXglhnDKNxSwRdTwBuXdh9B1ecZnLPsl1KLW6vNzkIJ/eGjlHGUWnqLs4=
+X-Gm-Gg: AZuq6aJU/2BQ8+OmefCN4Y+awGjx7+DdktOFLz3b/pVgvhDoiGYWO3HbU1GuUcc/Dtm
+ 5dI7bb7I/yFPiHMG5DUZNO1ZmF+LYkVoNTJlVvdIsdEf1KULqPyZ31hKPJgnENf7XkRjUS58NBi
+ PnnhQb/5llld9OaLbZfoqPTMT3stobx5eUNXcyHtzIZXo6IxgjwAk1SKsIVfQYzks1aaq/fKbhj
+ jLQrA/F/cpzgzAL2V1cmAIhVqGl6y0UvsNDfeLsEeNFG46iEHyida6jU5B7MVzAgKlJuAqw1SiJ
+ dFCOHAVw11bRGiAmFNPr40WUjPf3kvGBzGXIsGVrAcoQkt0N8Y+mJvQeK5DvxEflxNE5Ql/koM1
+ 7AgKA0nOosH8hqqkavMGa4x31XRbVCKNehDjCWriuYc6mFq9Mdqi1Mhc1GwOqsgOjwsZgXUgWI6
+ il9N0rNq+yBQPsHLk=
+X-Received: by 2002:a05:600c:5488:b0:477:a219:cdb7 with SMTP id
+ 5b1f17b1804b1-48379b35657mr7160005e9.0.1771011402544; 
+ Fri, 13 Feb 2026 11:36:42 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796a5ac7csm7022468f8f.7.2026.02.13.11.36.41
+ 5b1f17b1804b1-483709f8812sm49436295e9.0.2026.02.13.11.36.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Feb 2026 11:36:41 -0800 (PST)
+ Fri, 13 Feb 2026 11:36:42 -0800 (PST)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 13 Feb 2026 20:36:40 +0100
-Message-ID: <20260213193640.37838-1-thomas.perale@mind.be>
+Date: Fri, 13 Feb 2026 20:36:41 +0100
+Message-ID: <20260213193641.37894-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251201192849.3195425-1-bernd@kuhls.net>
-References: <20251201192849.3195425-1-bernd@kuhls.net>
+In-Reply-To: <20251204223855.3571710-1-bernd@kuhls.net>
+References: <20251204223855.3571710-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771011401; x=1771616201; darn=buildroot.org;
+ d=mind.be; s=google; t=1771011403; x=1771616203; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=70GVyp80t+RBTmCTBkNFYoC0Q5Gy+nvJ+gdRH6qJgKM=;
- b=Q9G24LnexFBAt9dq3dqkJI3oqb3WnjKuV/f6YMPdlGphsWpsDv9Hbq07+9VSCCCP4M
- JPc0EswQuob6uGZXgIEgnCX5g6n1ASg/lcflUcEim/o34lxXOMigNFpKKpWk/PrzEPzg
- XmBzK96dsj5Gq4W4EfKPVbHxTJURCQEEZJWd1XsAxIbTUkzziMkgpNNnkjxspZ6kfb6f
- KrpcFDdgLc5AseOtsTMvOxYgR4sXuwl61O4d7mSwiSqa9QpUgdhsd3NehR/xI7T8NIfl
- Xud3YnIZhXgQoiLv/jcQiEBrtwEZZY3PfA8I60cS+XeNPlAxyG1DrnrO8D/YBXNdQRg8
- 7cSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=f+Ue4vHxUOe8UYjQwksa4Eqh2BaBg6czQlxg/dA9r4Y=;
+ b=Dz9OgFhlH+Enri1oJTW+8wbugOq5g1Un6sE63twY+WXQoyxM2sgLcAcjY8bZhSbyJL
+ MPF0800ZYZzCJGZpDBDYv+7Tc2ATFjABxbjIZastKoRd9OPMWcIC8h9hZKsiSFjRRcId
+ FMeKYWGpL8SPAsatPZMKtyy66mHb0Ac6mJ/EzKCzi8TbNhMLOQzhlDLrRoknDSjK7NhR
+ P5TNgsxWGvIa3ykaygIIG3OZvU5b5MkSuc0nuIeOwMah9HOLl9VSOr4SLDIxYib+Y3GD
+ rS7feHoe5vDRtz2zWYxT9zTsiitRsjClmm58Llws55xJApPmHOHUOFZN6NE+kTyoY/5i
+ J+og==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Q9G24Lne
-Subject: Re: [Buildroot] [PATCH 1/1] package/parprouted: fix build with gcc
- 15.x
+ header.a=rsa-sha256 header.s=google header.b=Dz9OgFhl
+Subject: Re: [Buildroot] [PATCH 1/1] package/vsftpd: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,61 +131,48 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
 > Fixes:
-> https://autobuild.buildroot.net/results/572/572669fe1f9a77083a361fee7c8acdf38d7375ae/
+> https://autobuild.buildroot.net/results/661/661edeafc949390df397fd40a8035330238cbe8a/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.11.x. Thanks
 
 > ---
->  package/parprouted/0001-gcc-15.patch | 38 ++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/parprouted/0001-gcc-15.patch
+>  ...ted-non-prototype-warning-with-clang.patch | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>  create mode 100644 package/vsftpd/0004-Fix-Wdeprecated-non-prototype-warning-with-clang.patch
 > 
-> diff --git a/package/parprouted/0001-gcc-15.patch b/package/parprouted/0001-gcc-15.patch
+> diff --git a/package/vsftpd/0004-Fix-Wdeprecated-non-prototype-warning-with-clang.patch b/package/vsftpd/0004-Fix-Wdeprecated-non-prototype-warning-with-clang.patch
 > new file mode 100644
-> index 0000000000..2090506491
+> index 0000000000..ec305bf6bc
 > --- /dev/null
-> +++ b/package/parprouted/0001-gcc-15.patch
-> @@ -0,0 +1,38 @@
-> +Description: Fix FTBFS with GCC 15
-> +Author: Adrian Bunk <bunk@debian.org>
-> +Bug-Debian: https://bugs.debian.org/1097548
+> +++ b/package/vsftpd/0004-Fix-Wdeprecated-non-prototype-warning-with-clang.patch
+> @@ -0,0 +1,25 @@
+> +From 2bdb7ddbfcf6481ed7662d3d4eb5a3dc83d50224 Mon Sep 17 00:00:00 2001
+> +From: Tom Stellard <tstellar@redhat.com>
+> +Date: Fri, 28 Oct 2022 05:35:11 +0000
+> +Subject: [PATCH] Fix -Wdeprecated-non-prototype warning with clang
 > +
-> +Downloaded from
-> +https://sources.debian.org/src/parprouted/0.70-6/debian/patches/gcc-15.patch
-> +
-> +Upstream: dead (last update 2008)
+> +Upstream: https://github.com/InfrastructureServices/vsftpd/pull/6
 > +
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + ssl.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
 > +
-> +--- parprouted-0.70.orig/parprouted.c
-> ++++ parprouted-0.70/parprouted.c
-> +@@ -330,7 +330,7 @@ void parseproc()
-> +     }
-> + }
-> + 
-> +-void cleanup() 
-> ++void cleanup(void *arg)
-> + {
-> +     /* FIXME: I think this is a wrong way to do it ... */
-> +     
-> +@@ -346,13 +346,13 @@ void cleanup()
-> +     exit(1);
-> + }
-> + 
-> +-void sighandler()
-> ++void sighandler(int sig)
-> + {
-> +     /* FIXME: I think this is a wrong way to do it ... */
-> +     perform_shutdown=1;
-> + }
-> + 
-> +-void *main_thread()
-> ++void *main_thread(void *arg)
-> + {
-> +     time_t last_refresh;
-> + 
+> +diff --git a/ssl.c b/ssl.c
+> +index d401203..8826b05 100644
+> +--- a/ssl.c
+> ++++ b/ssl.c
+> +@@ -36,7 +36,7 @@
+> + static char* get_ssl_error();
+> + static SSL* get_ssl(struct vsf_session* p_sess, int fd);
+> + static int ssl_session_init(struct vsf_session* p_sess);
+> +-static void setup_bio_callbacks();
+> ++static void setup_bio_callbacks(SSL *p_ssl);
+> + static long bio_callback(
+> +   BIO* p_bio, int oper, const char* p_arg, int argi, long argl, long retval);
+> + static int ssl_verify_callback(int verify_ok, X509_STORE_CTX* p_ctx);
 > -- 
 > 2.47.3
 > 
