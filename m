@@ -1,92 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA5CEF584C
-	for <buildroot@archiver.kernel.org>; Sat, 14 Feb 2026 17:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F9CEF584E
+	for <buildroot@archiver.kernel.org>; Sat, 14 Feb 2026 18:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1934C40B44;
-	Sat, 14 Feb 2026 17:02:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B2n3XJjTwEjF; Sat, 14 Feb 2026 17:02:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1287D40974
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771088563;
-	bh=xtEjqPp4VE36yl0AoQHcPyJUZPLQG95roHpl6L1NeQY=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=dd7oKIC70Ep0DKt6Ue8ACFrxcf13zSwzilV21M1+SnJH9B4FKgyHpp0pMSwJ5Lzli
-	 qEMXr9UBW/xJo7GX41Qdc0CfuQ0SXdDkpivSYJMafn3/uS7PxBKTRyM0OgVYKhuMOq
-	 sPNF18AnuVlifUzF89aqMXJ4JQNZ7AgqhWKBpvjMrDWOR+N+Jn52+s1uGkGvBhUaix
-	 GNDcvyWrgmATvRgHsjm/lYZlFaedeElbyLt/Yg81+h35rXBTW0755307Gq/l6qgVVg
-	 mGZtJRL4Lm2hnuBPqzjVsXKbku88nMUKEyllQ9u14gevPtI4ffhqsU+YXSOtRqGmPq
-	 6l6MS1rJq5OaA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1287D40974;
-	Sat, 14 Feb 2026 17:02:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A996F270
- for <buildroot@buildroot.org>; Sat, 14 Feb 2026 17:02:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A46181EA8
- for <buildroot@buildroot.org>; Sat, 14 Feb 2026 17:02:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 677F583A7D;
+	Sat, 14 Feb 2026 18:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WRoxvdgqoIqk for <buildroot@buildroot.org>;
- Sat, 14 Feb 2026 17:02:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7DC0D81E79
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DC0D81E79
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7DC0D81E79
- for <buildroot@buildroot.org>; Sat, 14 Feb 2026 17:02:40 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 79283C1C39B;
- Sat, 14 Feb 2026 17:02:48 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 26A4F606CB;
- Sat, 14 Feb 2026 17:02:38 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0DF1C10368FEF; Sat, 14 Feb 2026 18:02:34 +0100 (CET)
-Mime-Version: 1.0
-Date: Sat, 14 Feb 2026 18:02:33 +0100
-Message-Id: <DGEUHT8BHE5X.2TU0LU49G6PSC@bootlin.com>
-To: "Marcus Hoffmann" <buildroot@bubu1.eu>, <buildroot@buildroot.org>,
- "Titouan Christophe" <titouan.christophe@mind.be>, "Thomas Perale"
- <thomas.perale@mind.be>
-Cc: "buildroot" <buildroot-bounces@buildroot.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260210154501.05EB784212@busybox.osuosl.org>
- <7955cd2b-9c7d-44a8-964b-62d9f6305b3c@bubu1.eu>
-In-Reply-To: <7955cd2b-9c7d-44a8-964b-62d9f6305b3c@bubu1.eu>
-X-Last-TLS-Session-Version: TLSv1.3
+ id uItbneNvvGoo; Sat, 14 Feb 2026 18:06:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A8CA83AB4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771092415;
+	bh=LPTdpE86BBk7TBofk/8RfVSGdFVx4xipxHv55bD8vpM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=meWLswNdCFXVA4NTsfLlQT/brfJgXrZz0xtb0cRcbD/D7xqQR1LGhLh8Uu1t0YR2l
+	 8jaQIAUZF7+zXf4XreiR181XbUBsA9FC84a/CnZAGG2jEy4UGjFe0LAoslP2GZr6AW
+	 3KAl3YPV/JKz5WUQPvn0bEDAXqmzReZnnwfQgI/MeF9xmOEiauzE+QX2VZRrp0T1uv
+	 6B9HwWCF6raPiOgCcs28+TekWU41wO7+7crhhwqThidu19iM5gFbSFTZTxx5FzGy6q
+	 huls1a8nii3SOlV3akewVaaWH5mNGmv+vEdWSoFsrqksEo5pJd2PEd9txoXcPevaI2
+	 PnVcNgrRsgLlw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A8CA83AB4;
+	Sat, 14 Feb 2026 18:06:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7899D69
+ for <buildroot@buildroot.org>; Sat, 14 Feb 2026 18:06:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A47F83AB4
+ for <buildroot@buildroot.org>; Sat, 14 Feb 2026 18:06:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3y-PLncRoXzm for <buildroot@buildroot.org>;
+ Sat, 14 Feb 2026 18:06:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BEB6483A7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEB6483A7D
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BEB6483A7D
+ for <buildroot@buildroot.org>; Sat, 14 Feb 2026 18:06:51 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c3ec.dip0.t-ipconnect.de [79.214.195.236])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 35434A4C0358
+ for <buildroot@buildroot.org>; Sat, 14 Feb 2026 19:06:48 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52482)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vrK2Z-000000000Tj-0FFe
+ for buildroot@buildroot.org; Sat, 14 Feb 2026 18:06:47 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 14 Feb 2026 19:06:47 +0100
+Message-ID: <20260214180647.1863688-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: +++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1771088557; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=Gpy6Av3aHeXA9EJuFXpOhCaRntaU7b5Nk8K4eQCijUs=;
- b=md3Ypc5l8QkVgizM9C/JK5yB/rb5HsSD2/r9jSLyhooe/rW0QDAo/cqdrb5Q7n90qPHZ0v
- rMXw4PwaV1gdAHCWl4taL0FdcQUUqdikkYpLkcm+O0y+17cfegZuqwqA8MviXG1PxyL5n9
- sywV2Uii9T+Z+AkpLnN+sgZZ0LzL07+2ydh1kJ2FKpMAZ3ZeDupauU3e8TWLXM5Nq17PWs
- hek+UBFQtvVLKFtckjHZLDU0gGbn/MbSJ62oWBEuhfoicojRCsu9/90FyShaKxRXm1VKuC
- 7VV6fesgMk20pgfPTcmiVPuvOgDxBf+zFB7uIjkN3JGnQD9LssuLKbLw1Sqxwg==
+ d=kuhls.net; 
+ s=kas202511301023; t=1771092408;
+ bh=wnVnrV6YOm2PSTluaFi753MIHxTfSAnxvcZTuVFqNM4=;
+ h=From:To:Subject:Date:From;
+ b=Ly7ubiCuPanImGeOeTjPEsx3cjZhfNXMwwVwuTuoU/e5rUh+IhIPlte+ED1wzMIL6
+ Bj+sOJEXDNEiYcQ87AlO/W/smxweu45W935s9dIiGQ8hIDtxVbixwT7yghzB1qIbm1
+ Piuaj8qNW+LvOgN2oOVq2jxCmKAF393DjWX08qQuCVcBSdTNVa/yuW2OBRzft+7bUa
+ BMDxXqbUbq3fuH1sXVn8U1CzBZZcFy+KcnSBOdcxrkInTHx/hMrhmCJ7VIVNWSlgyl
+ fUDb94pYlcNeC2Auqkxm3utGwcZbdtlAH/qc/AElkRw5HqhVCL5i4uirTYdWGuNy2p
+ naWJmTBLoxiYA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=md3Ypc5l
-Subject: Re: [Buildroot] [git commit] package/m4: bump version to 1.4.21
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Ly7ubiCu
+Subject: [Buildroot] [PATCH 1/1] package/libplist: bump version to 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,53 +91,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1IEZlYiAxMiwgMjAyNiBhdCAxMDo1OCBBTSBDRVQsIE1hcmN1cyBIb2ZmbWFubiB2aWEg
-YnVpbGRyb290IHdyb3RlOgoKSGVsbG8sCgo+IEhpIFRpdG91YW4sIFRob21hcywKPgo+IE9uIDIv
-MTAvMjYgMTU6NTksIE1hcmN1cyBIb2ZmbWFubiB2aWEgYnVpbGRyb290IHdyb3RlOgo+PiBjb21t
-aXQ6IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC84
-NzVkNmFlZGJjNjM5NDg0ZTkyMDNjNWJjZGExYTU1ZWNiN2FkNGM5Cj4+IGJyYW5jaDogaHR0cHM6
-Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vdHJlZS9tYXN0ZXIKPj4gCj4+
-IGh0dHBzOi8vbGlzdHMuZ251Lm9yZy9hcmNoaXZlL2h0bWwvbTQtYW5ub3VuY2UvMjAyNi0wMi9t
-c2cwMDAwMC5odG1sCj4KPiBXZSBwcm9iYWJseSBuZWVkIHRoaXMgaW4gdGhlIHN0YWJsZSBicmFu
-Y2hlcyBiZWNhdXNlIGFzIG9mIHRvZGF5IAo+IGFyY2hsaW51eCBpcyBzaGlwcGluZyBnY2MgMTUg
-YnVpbHQgYWdhaW5zdCBnbGliYyAyLjQzIGFuZCBtNCBmYWlscyB0byAKPiBjb21waWxlIGJlZm9y
-ZSB2ZXJzaW9uIDEuNC4yMQo+Cj4gID4gWy4uLl0KCkkgY2FuIGNvbmZpcm0gdGhhdCBJIGZhaWwg
-dG8gYnVpbGQgaG9zdC1tNCBvbiAyMDI1LjAyLnggZHVlIHRvIG15IGhvc3QKaGF2aW5nIGdjYzE1
-IGFuZCBnbGliYyAyLjQzOgoKICBDQyAgICAgICBsaWJtNF9hLWMzMnRvbG93ZXIubwogIEluIGZp
-bGUgaW5jbHVkZWQgZnJvbSAvdXNyL2luY2x1ZGUvZmVhdHVyZXMuaDo1NDAsCiAgICAgICAgICAg
-ICAgICAgICBmcm9tIC91c3IvaW5jbHVkZS9iaXRzL2xpYmMtaGVhZGVyLXN0YXJ0Lmg6MzMsCiAg
-ICAgICAgICAgICAgICAgICBmcm9tIC91c3IvaW5jbHVkZS9zdHJpbmcuaDoyNiwKICAgICAgICAg
-ICAgICAgICAgIGZyb20gLi9zdHJpbmcuaDo0MSwKICAgICAgICAgICAgICAgICAgIGZyb20gYmFz
-ZW5hbWUtbGdwbC5jOjI0OgogIC4vc3RyaW5nLmg6Nzc3OjIwOiBlcnJvcjogZXhwZWN0ZWQgaWRl
-bnRpZmllciBvciAnKCcgYmVmb3JlICdfR2VuZXJpYycKICAgIDc3NyB8IF9HTF9FWFRFUk5fQyB2
-b2lkICptZW1jaHIgKGNvbnN0IHZvaWQgKl9fcywgaW50IF9fYywgc2l6ZV90IF9fbikKICAgICAg
-ICB8ICAgICAgICAgICAgICAgICAgICBefn5+fn4KICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3Vz
-ci9pbmNsdWRlL2ZlYXR1cmVzLmg6NTQwLAogICAgICAgICAgICAgICAgICAgZnJvbSAvdXNyL2lu
-Y2x1ZGUvZXJybm8uaDoyNSwKICAgICAgICAgICAgICAgICAgIGZyb20gb3BlbmF0LXByaXYuaDoy
-MywKICAgICAgICAgICAgICAgICAgIGZyb20gb3BlbmF0LXByb2MuYzoyMjoKICAuL3N0ZGxpYi5o
-OjgyNzoyMDogZXJyb3I6IGV4cGVjdGVkIGlkZW50aWZpZXIgb3IgJygnIGJlZm9yZSAnX0dlbmVy
-aWMnCiAgICA4MjcgfCBfR0xfRVhURVJOX0Mgdm9pZCAqYnNlYXJjaCAoY29uc3Qgdm9pZCAqX19r
-ZXksCiAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgXn5+fn5+fgogIEluIGZpbGUgaW5jbHVk
-ZWQgZnJvbSAvdXNyL2luY2x1ZGUvZmVhdHVyZXMuaDo1NDAsCiAgICAgICAgICAgICAgICAgICBm
-cm9tIC4vd2NoYXIuaDo2OSwKICAgICAgICAgICAgICAgICAgIGZyb20gYnRvd2MuYzoyMToKICAu
-L3N0cmluZy5oOjc3NzoyMDogZXJyb3I6IGV4cGVjdGVkIGlkZW50aWZpZXIgb3IgJygnIGJlZm9y
-ZSAnX0dlbmVyaWMnCiAgICA3NzcgfCBfR0xfRVhURVJOX0Mgdm9pZCAqbWVtY2hyIChjb25zdCB2
-b2lkICpfX3MsIGludCBfX2MsIHNpemVfdCBfX24pCiAgICAgICAgfCAgICAgICAgICAgICAgICAg
-ICAgXn5+fn5+CiAgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC91c3IvaW5jbHVkZS9mZWF0dXJlcy5o
-OjU0MCwKICAgICAgICAgICAgICAgICAgIGZyb20gL3Vzci9pbmNsdWRlL3VjaGFyLmg6MjYsCiAg
-Wy4uLl0KCkNoZXJyeS1waWNraW5nIE1hcmN1cycgcGF0Y2ggZnJvbSBtYXN0ZXIgYnJhbmNoLCBj
-b21taXQgODc1ZDZhZWRiYzYzCigicGFja2FnZS9tNDogYnVtcCB2ZXJzaW9uIHRvIDEuNC4yMSIp
-LCBhbGxvd3MgdG8gY29ycmVjdGx5IGJ1aWxkCmhvc3QtbTQgd2l0aCBob3N0IGdsaWJjIDIuNDMu
-IFRoZSBwYXRjaCBhcHBsaWVzIHdpdGhvdXQgY29uZmxpY3Qgb24gdG9wCm9mIDIwMjUuMDIueC4K
-CkFsZXhpcwoKLS0gCkFsZXhpcyBMb3Rob3LDqSwgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQg
-S2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+https://github.com/libimobiledevice/libplist/blob/2.7.0/NEWS
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libplist/libplist.hash | 2 +-
+ package/libplist/libplist.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 9bc79bf3f0..ecc8984716 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3f5868ae15b117320c1ff5e71be53d29469d4696c4085f89db1975705781a7cd  libplist-2.4.0.tar.bz2
++sha256  7ac42301e896b1ebe3c654634780c82baa7cb70df8554e683ff89f7c2643eb8b  libplist-2.7.0.tar.bz2
+ sha256  7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
+diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
+index 0b8a69455b..2c7edd38ef 100644
+--- a/package/libplist/libplist.mk
++++ b/package/libplist/libplist.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPLIST_VERSION = 2.4.0
++LIBPLIST_VERSION = 2.7.0
+ LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
+ LIBPLIST_SITE = https://github.com/libimobiledevice/libplist/releases/download/$(LIBPLIST_VERSION)
+ LIBPLIST_INSTALL_STAGING = YES
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
