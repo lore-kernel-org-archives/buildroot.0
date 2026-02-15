@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F708E63F09
-	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 17:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7691E63F08
+	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 18:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FEE8402F8;
-	Sun, 15 Feb 2026 17:51:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3888E406C1;
+	Sun, 15 Feb 2026 18:46:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hFEDwt8X1x8C; Sun, 15 Feb 2026 17:51:14 +0000 (UTC)
+ id s-eiOFNMEc_7; Sun, 15 Feb 2026 18:46:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AE6F40317
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5230940561
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771177874;
-	bh=YZaUVeH41NEbGg4ziEFS2eoxe5O0zrO4AAfd7vPvMzk=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=h/x/ztUlHVtcbtkgNR/Ah8V5cTbC0zj657IiyygvNmalbJMLsASb10mPneLguaFFD
-	 xisvIY7IAOEGR9OYeGxsdee66aAdbWFum/74mvC0kznRg2lpgEGXQr9GfMCnBcinO7
-	 1cgx2S1I0fo3kU6Gm2Dhe4VqH0Yy+MjBlMJuSNuQZqu69PbT3abC7xnscm4ewtEPMD
-	 EQzxa6NzeyVpfA6VXrNCWiLJfWnv8o50CoRPjyb/WXuWEZwDCXgc99xE/q0F1J2cC+
-	 pjZsLWQuB8r1GICCJd2zi71NlYuMzbxpjbkzJPQICgLaKxCAWEvXknM/ulhnthYZN/
-	 Ik2y+w2vaO3Bg==
+	s=default; t=1771181181;
+	bh=wd/Sa8yvjtk2IDiux1sI2Nv5pqp7WIqUXR16E8e1j0k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=E6QQQYsJ914l2cAryfpusiUXJID9bsMdoj7H7ahPvgUYrtL4rxaUtgF7WZYKE3Kp8
+	 7UznbNAiEup1lMWmj4jrgrTnKCIpCEh9rOO638Xfid2U7klX+Eo5J2HIN2jIyNxfpi
+	 a0FOZmry8tfkpM/jIVsKKUGZ2f7OJWKPncrG9YvUoMW9rT/QGVUEGkBvzCnPs0UMfs
+	 84ZPkF9tQC0+bzV5T3PfBILV/oT+OIEkMsZnLWC9PVhWMEOgvL0X/Z4/ZdgcpJOEJF
+	 fw5hkS9MJh4FYFCIk4N1WjgkNJM6uNNmqYoC/l88X1jpbIAz5kYwaK8GC9EAxW1W0N
+	 dcWRd32M2207w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AE6F40317;
-	Sun, 15 Feb 2026 17:51:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FD9B270
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 17:51:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5230940561;
+	Sun, 15 Feb 2026 18:46:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE8DC270
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 18:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 74B0A824DD
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 17:51:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0C5960A3C
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 18:46:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dC8EHAaaa5-t for <buildroot@buildroot.org>;
- Sun, 15 Feb 2026 17:51:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9908480FAD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9908480FAD
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9908480FAD
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 17:51:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id A5B1D6013A;
- Sun, 15 Feb 2026 18:51:08 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 15 Feb 2026 18:51:08 +0100
-MIME-Version: 1.0
-Date: Sun, 15 Feb 2026 18:51:08 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260215160425.1421192-1-bernd@kuhls.net>
-References: <20260215160425.1421192-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <756327be5aab19a6ef26bdf70678c2f0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1771177869;
- bh=eZQg2ZiMY+zNXzZo+16KuR+NU7IiZ21hCfJqL+NpKgw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=MWZA8b23Y+Z4J3sIDg31Ho3Kxd96oAXFNGT337O350gvOMZK8/1lGYXJ6h4GPM5B4
- JZJZYQT5vjlwRJV3Mzq9ut4GdIMEw2YSkOn7JmVaPwriE5d4H6TsttCxXIzKJe7DmR
- kJ3tE71GWos/Qg+TdFhrRgzL5wtGGSw8q6bNz4VNGf9CnRsKAin75vq5ivRKOZbhVV
- bjdTb/beFnv7CpH+anXZBoIAkXMKZZPNLeO57jk3qPTqtW6X9hwtglnPn6S1I2KNWC
- s6ZKFVPCj1/j6w4WcxxNPTCbvT2vWd8dbzXpEdtyMTYioT/gjC8TnGTw3Fy1efg02q
- 7bBXH6ioqGFEQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MWZA8b23
-Subject: Re: [Buildroot] [PATCH 1/1] package/coreutils: bump version to 9.10
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m7jqYdHOJMHF for <buildroot@buildroot.org>;
+ Sun, 15 Feb 2026 18:46:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E47AE606EF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E47AE606EF
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 18:46:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D0BEB86E7E; Sun, 15 Feb 2026 18:46:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 15 Feb 2026 19:41:25 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6dcf28eaa89c4dc5514e2c5cd303dffcd56214cf
+X-Git-Newrev: 429bcb111baada7445ac69b31e83e858559d7f9b
+X-Patchwork-Hint: ignore
+Message-Id: <20260215184618.D0BEB86E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/less: bump to version 692
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,26 +70,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/02/2026 17:04, Bernd Kuhls wrote:
-> Upstream does not provide hashes in sha1/sha256 format anymore.
-> 
-> https://lists.gnu.org/archive/html/coreutils-announce/2025-11/msg00000.html
-> 
-> https://lists.gnu.org/archive/html/coreutils-announce/2026-02/msg00000.html
-> "'kill' and 'uptime' are no longer built by default.  These programs
->  can be built with the --enable-install-program=kill,uptime configure
->  option."
-> 
-> Adjust coreutils.mk to install 'kill' and 'uptime'.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/429bcb111baada7445ac69b31e83e858559d7f9b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+For change log, see:
+https://www.greenwoodsoftware.com/less/news.692.html
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/less/less.hash | 4 ++--
+ package/less/less.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/less/less.hash b/package/less/less.hash
+index 49dcaf28ef..5f0b0f3846 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # using DSA key F153A7C833235259
+-# https://www.greenwoodsoftware.com/less/less-691.sig
+-sha256  88b480eda1bb4f92009f7968b23189eaf1329211f5a3515869e133d286154d25  less-691.tar.gz
++# https://www.greenwoodsoftware.com/less/less-692.sig
++sha256  61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14  less-692.tar.gz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/less/less.mk b/package/less/less.mk
+index 6f78fb67c7..49156a805b 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LESS_VERSION = 691
++LESS_VERSION = 692
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
