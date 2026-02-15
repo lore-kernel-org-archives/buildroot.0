@@ -1,91 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12575EF586E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 16:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF792EF587E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 16:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12E8F40A99;
-	Sun, 15 Feb 2026 16:17:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4298281130;
+	Sun, 15 Feb 2026 16:34:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1yhPV2eGxf36; Sun, 15 Feb 2026 16:17:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xzPr-RpzRPhb; Sun, 15 Feb 2026 16:34:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98E2E406EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FA8B8107F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771172246;
-	bh=wc4ZC69e8A5j9tx0AqUylWUDm7RHn2fF3dzyUtemSZI=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	s=default; t=1771173285;
+	bh=503KuHUhWW9iw0hzSnp/Z/QwuZjNPT4cm4ZZOUQYFCo=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=ZRUfQMD+XOWFZx7u56vK4PwotxlcpUu6P8qeozHcr+r2lq27+HFGG6fU1wpPoZqKE
-	 Kp2ch+4l+CA0N2RWDBxtNwKevJHycXXCBlyO/D1+Z65aMtkXqe6nWFB7ok2EhfXJ9A
-	 zgPqQb90VNlMlk4aehk2qD70vEt6ZCgiZvAG2xx0WpAZH2D/QM6keqRrEk1znUPDL9
-	 eQ1tBEEgGuwjQD1xabgs7gWvveNo9ZlGdJCRTcSo/CloucKOJUp/SifNzAsSoHFuAp
-	 7+r6IDSSaeaV1fnMKRSENW+EgB5yxht2EbA+vobyf1w3k/Fg+fFdr6RhyJ3eIky5sp
-	 c0ygV0ykhXpPg==
+	b=tAZrLNL16qpS5SwmP/IIBLiOgwop/FqAhyf+tgw36ZV8XNvf3Y5dyWQjP7Fap/F/R
+	 7ntcOAfmULWRWYnFmWdD2RLOQDJ0x7ceY3i30YQg2J9KiBfT/zFhK7dY8QB2YbwKBE
+	 a/uKAyzkG2al2HohV/s5eFZwCMbx4alp33c8PVEblRdC/cJOBTJmJno/XSK0p09mOQ
+	 qTEj81B/yYrgTUSSqv2MWiWs4MgW1MjGoz8PbGcPrX3a0+NxdEEPJwFzoM4dXaVUiu
+	 SThnx32tQmFTukh2P5kH/GaohkQrIvXjsiJaqaTQCL7eYwOfeOLZyWqRAChC+RQvA8
+	 gqGnIt3rOegYg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98E2E406EA;
-	Sun, 15 Feb 2026 16:17:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E80135B
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 16:17:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FA8B8107F;
+	Sun, 15 Feb 2026 16:34:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33A60270
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 16:34:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D33460850
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 16:17:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24FA9608A9
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 16:34:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zcq44-xMu_RC for <buildroot@buildroot.org>;
- Sun, 15 Feb 2026 16:17:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 18059608A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18059608A4
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18059608A4
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 16:17:22 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:7f99:e996:ad1b:cb5] (unknown
- [IPv6:2a01:e0a:12:eba0:7f99:e996:ad1b:cb5])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 413FEC08A0;
- Sun, 15 Feb 2026 17:11:58 +0100 (CET)
-Message-ID: <1b70a9ec-bc22-4f48-9fc6-71d3c6e4f5ab@grenoble.cnrs.fr>
-Date: Sun, 15 Feb 2026 17:11:57 +0100
+ id GlFMp7Yxhg4W for <buildroot@buildroot.org>;
+ Sun, 15 Feb 2026 16:34:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E186460708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E186460708
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E186460708
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 16:34:42 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c3ec.dip0.t-ipconnect.de [79.214.195.236])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D85CBA4C0CE9;
+ Sun, 15 Feb 2026 17:34:40 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44318)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vrf4y-000000005P1-0yu4;
+ Sun, 15 Feb 2026 16:34:40 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Sun, 15 Feb 2026 17:34:38 +0100
+Message-ID: <20260215163440.483386-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260215163440.483386-1-bernd@kuhls.net>
+References: <20260215163440.483386-1-bernd@kuhls.net>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20260215105358.2089856-1-peter@korsgaard.com>
- <20260215105358.2089856-3-peter@korsgaard.com>
-Content-Language: en-US, fr
-In-Reply-To: <20260215105358.2089856-3-peter@korsgaard.com>
+X-Spamd-Bar: ++++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1771171918;
- bh=o6mvG27MtMmbx7gNWKBEbqovF6dT/5Tj23xQlXo/29o=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=AsoOR8+YIVywTjE2F8B9dIAOm2CiZc+lGr5270TmPNOJ6/JWh/OXEXiDFjDDrjb/z
- 7IcqQws69AfIZLfZ1pljMi0JABsgsS0BlR0gXhkdt9mD63EmEhJOGdDfapzVZZVYUy
- WKuTOvzIFP5lV7mZjsRTBQI+DNlVw6zxFrqH0D7UpAEMmHgrzbgM9QC6+98MxH5MAp
- Y+HkJV7jrcrceaTIRFNM7MkVbFXIJ1VQDnmHbwurP96SUkwn+DJc/BykU/hJQhv1BS
- pgNSAwKeCOeXj9Wnr8gKmagcaag9bdfpI/MhIni04S0lo8NmFmdY8g3YEEAegEYOvY
- CA1L+SAtDaU/A==
+ d=kuhls.net; 
+ s=kas202511301023; t=1771173280;
+ bh=1Z78qh+0awHzT/jJcAiRy4bfZOFmXQeaMk/kcK8etnY=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=f5u+xBtJsV0314EwAWcfmq4YuhFEAjWlg3XqgLAiS1TagGl0JmfXen1fiDb3LzR6S
+ o/JYyT5ThQTKG6QbG4KwUM+nC0LCnghVsp+wz9H38RpEj9pwFwuCFiwiMiERj4ivCR
+ Fi0VumAIbpLUr+P0dh1LjzFe1pzqGfSs80ZLXPB+a+N9qID/NrdDcW8z7+Te16WfDY
+ 0V26qvu3z8T5PHwHZ3obZQM7VpmQkD8NHvHX1zAdYaRfITKXYweOxodNqsINI1M++G
+ fSvy0vPvUHxE9XJCDFX9wH8Yu2yBEoymTrbemx54cGAchE0LikCHAvJt9lfvwEohLG
+ 8Do1xCYlVNuFA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=AsoOR8+Y
-Subject: Re: [Buildroot] [PATCH 3/3] openblocks_a6_defconfig: specify Linux
- license file
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=f5u+xBtJ
+Subject: [Buildroot] [PATCH 2/3] package/binutils: make binutils 2.45.1 be
+ the default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,29 +97,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello!
+Now that support for binutils 2.46.0 has been introduced, we follow our
+policy of making binutils 2.45.1 the default version.
 
-On 2026-02-15, Peter Korsgaard wrote:
-> The used Linux kernel (4.14.336) does not contain the default license files
-> as those were only added in 4.16 with commit e00a844aca ("LICENSES: Add
-> Linux syscall note exception"), so specify the correct license file to fix:
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/binutils/Config.in.host | 2 +-
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Note that there are three other defconfigs with kernels older than 4.16:
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index db17df70bc..0b264131e0 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_44_X if !BR2_arc
++	default BR2_BINUTILS_VERSION_2_45_X if !BR2_arc
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	help
+ 	  Select the version of binutils you wish to use.
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 0f2384d69d..f772c9cf9a 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2024.12-release
+ else
+-BINUTILS_VERSION = 2.44
++BINUTILS_VERSION = 2.45.1
+ endif
+ endif # BINUTILS_VERSION
+ 
+-- 
+2.47.3
 
-  * s6lx9_microboard_defconfig (4.4.7)
-  * ts4900_defconfig (4.12)
-  * ts5500_defconfig (4.14)
-
-Regards,
-
-Edgar Bonet.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
