@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80338E63F08
-	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 22:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3E7E63F08
+	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 22:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44DF882387;
-	Sun, 15 Feb 2026 22:18:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5831682387;
+	Sun, 15 Feb 2026 22:18:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JOtnoiilpSF6; Sun, 15 Feb 2026 22:18:08 +0000 (UTC)
+ id 3cL3EKLzt9tD; Sun, 15 Feb 2026 22:18:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8503D8235C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84C8782365
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771193888;
-	bh=nmK0SALw73AQE98Z9tGi31+LJlWhO7J7yyf/MXHHmnc=;
+	s=default; t=1771193907;
+	bh=iMnue2rZGv9PqsNnVTp4y9gjyMbVEd7dqTCelUqIUrc=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=qT8veeh3IspvTGpgI/z+Ht9KI+1L/VvvSWKLni339uFSIAJiY1O/+5kgkz0cVKSDW
-	 rvdHHtfZUFmRa19S107oLsDMIw3M8e2jnFE8Q6/zwxdJGrQ3qWnxpEt/5aDM39dVLW
-	 CZfUZ3XMzovlqS602/N2FYWcQuiQHqChJRr2VpIfDo5HGpt/RW5Nv7Lo1GKA5zx8Ei
-	 11S31W81T/5rsABKIMipfDg5HAlWk34MqbnmNfG7ArVxNHUazg6eXpWbsPrlLQnL9a
-	 C4dTuZopTfOQWMAvrQPw5WfGSC5vbAY2+kSVWl1rZ9gNekGHLy0LRVl8pm7SDOfh9c
-	 gn3byGOkGgOnw==
+	b=N5o9HLydoQB4H6x1eagMBx/3vRiEaVlN3jB0WoHVViyFzA8uUOInD89Kr3j/M3RcJ
+	 +xv4yVQVVA8MEEdZWFJM86Fh/F81y+PTWXGS2Dq/Ly2hFrBphnXeS41IJesHG68PvE
+	 9YaLWbrz/u8JikYZrupHnqCtuoDAOKpV0S+MQ8c86tzDAN358OijGJxirJ+h6gsHwT
+	 FkcZGHtPrpYvMAiGsADNF6reoCmv7RVL0d6BcUce6L48Tk2bdbsgiMDyLg/pDesE+x
+	 20Gj/12NSHRLLm7WF3Kk+29hTH3sWO13hm0OykXQ9p7+bfnrVoL+gAJ9DDFBsvMXdC
+	 9N1YRcfx8Mpvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8503D8235C;
-	Sun, 15 Feb 2026 22:18:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 12DE01EB
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 22:18:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84C8782365;
+	Sun, 15 Feb 2026 22:18:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0270270
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 22:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1056240601
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 22:18:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B208B408A5
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 22:18:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fLL1xLLEujSD for <buildroot@buildroot.org>;
- Sun, 15 Feb 2026 22:18:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T0JLLOSVmEmo for <buildroot@buildroot.org>;
+ Sun, 15 Feb 2026 22:18:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0EE1E4035C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EE1E4035C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A00C64086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A00C64086C
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0EE1E4035C
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 22:18:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A00C64086C
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 22:18:25 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -820048944; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 425195614; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 15 Feb 2026 22:18:02 +0000 (UTC)
+ Sun, 15 Feb 2026 22:18:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vrkRE-00000009eCB-3Q93;
- Sun, 15 Feb 2026 23:18:00 +0100
+ (envelope-from <peter@korsgaard.com>) id 1vrkRZ-00000009eDu-0HuW;
+ Sun, 15 Feb 2026 23:18:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20260215141317.503620-2-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 15 Feb 2026 15:13:17 +0100")
-References: <20260215141317.503620-1-bernd@kuhls.net>
- <20260215141317.503620-2-bernd@kuhls.net>
-Date: Sun, 15 Feb 2026 23:18:00 +0100
-Message-ID: <87h5rhodlz.fsf@dell.be.48ers.dk>
+In-Reply-To: <20260215072212.12312-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sun, 15 Feb 2026 08:22:12 +0100")
+References: <20260215072212.12312-1-bernd@kuhls.net>
+Date: Sun, 15 Feb 2026 23:18:21 +0100
+Message-ID: <87cy25odle.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=KFx8H7id6GW01DdgJwGMDnCN03tGqb85seXx4dH1dOXq9AqzZL1hoGARohtq4abDfBDkVPzef0d8TN72EcNAnyuXDOJTFUScquzDJsTQajK94uf1+2NwwOSz8ZJmBrELusiOpFO/xrn6IgSDnX1rVAVq6siqsyGUbpNWsF8uGClhj9bjA1Rdvjd4m6V+Q10srMKs7SPPOTbIg3zgjN1XNmUQ7VoZUexT+cPNqnBWYr3jio5W4DrGf2sM29ED4NbyhUKNbuBWeeRvEhpK4I5kMEorTEGr5cmvX2tQNcO17MqfbrfAdpg2pdlVWMzGjGBFGUZkIycvqcBRtKWi5ROlvg==;
+ b=Xt5Wp1HIALcUHUnoUtyNao069dWN3ohc34LCcGEUcIWXY5vJ6KrvaNz5zfv23ogwCUP4m9FU57XoyLb9QcZBHgt7MMN1KknuFP6xdl1K4obW30zba0rZz7xCKTKDSuSlAOHvbqJaYMjQjcQYOhXqYUK5uwhkW4bV3ccI+iyV/xu2aBNM+Roq6BzQPN1aUTX5IZQIFjU9lHEGVDcIXwHr1MvWfnP0RubFFCeHvpO8IfQ1vpfNR2BB8Uyu58dWXemtgeg4CwOUFvd7v1WLxZyxFvFBtbSdAnTQ4nhblfKlOLRkuuDKkqDaBzYkLqjIyqbkNFx32Ax+azhMP7qlEKVmcg==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=B0yv/rdgkz4KTZ6BMwbXxYUtgLm0gpfS0Lz/3rqT8xI=;
+ bh=LP5h/9e8m/Ar+oEUOVbsK+shFV85bsfj7zJCoKVh9cA=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=KFx8H7id
-Subject: Re: [Buildroot] [PATCH 2/2] package/intel-vpl-gpu-rt: bump version
- to 26.1.2
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Xt5Wp1HI
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
+ to 21.2.15-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,7 +100,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
- > https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.1.2
+ > https://github.com/janbar/pvr.mythtv/blob/21.2.15-Omega/pvr.mythtv/changelog.txt
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Committed, thanks.
