@@ -1,84 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51922EF5871
-	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 10:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCBCBEF587B
+	for <buildroot@archiver.kernel.org>; Sun, 15 Feb 2026 14:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6243660902;
-	Sun, 15 Feb 2026 10:54:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A675082308;
+	Sun, 15 Feb 2026 14:12:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VBzfwKuLitSx; Sun, 15 Feb 2026 10:54:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2PzLmfyPAOUx; Sun, 15 Feb 2026 14:12:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 903F1608F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1779F81B70
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771152851;
-	bh=1cY3rFj/slkcsaMeC0G5lHl7sJ5QkEpPCy8ATfZjdUg=;
+	s=default; t=1771164740;
+	bh=9Ns5AWr/Hf50f5Fv0Tnbmx1ImR6Rw30VYftqgcsf/HY=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=BJuR8mW+L98tfyTQcSPfIG50p4r3zOdi8AU0XVp3nISY/sUXkOvueyRfGhTMeGWyk
-	 QSTLtLKINwBIaY+4jIDm72XlgqPjjja9D8Hu5wHyPc0kD/vSbEWnVPRng+il8E7mzc
-	 gf99pRnqzKgoXvh295ARl7tkvwkrUeN1qmWwplchbGXNiSj8mXi89FfAMu5mOjfoJn
-	 gdQFq0yU+cOTKXlyxQKLqDXTZTQiCNnz04LF+wqEVnQIfUkzB9IfofBC084Fny0qdF
-	 fKADRbFfXv2+vaIohK2SFqWafB3EeI1He261f4ZkRCaqhmbbEevSu3vjSGBZwk8ZpY
-	 36vp+fIxdABtg==
+	b=j7IsK9TvwNIxZr57XpU8575amu3Fj4BMb+y99M3agSLRpfObkD5V0ZBJQPith6H6s
+	 YeZfyz88kGrKuqm7VP4nGWtyi1pT2ttQUtIJd8ZUG+DJIHOabLC7xdrzoT0K8cKjA5
+	 YDa98OxE/RQoK1cflAc+czNML9go0iU+bO/+OmVAd8BFlDKypiTTEg7LGm2FODpE24
+	 DONLi/vQbhBx0THGMFhLTXcYKw4tyOZiYYtCB/UwrX80tA6OpvYkvoDej+CkN+pNdG
+	 q+ExSAngGJERCLIAYGI3no05mAu2KAVWVXt7hWZ9zlKMgpFePn//07JhhjRhYhgOEX
+	 W3GMubEjt9FRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 903F1608F3;
-	Sun, 15 Feb 2026 10:54:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 66E28391
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 10:54:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1779F81B70;
+	Sun, 15 Feb 2026 14:12:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8EEDF1EB
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 14:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51A8C608B9
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 10:54:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D0DB81B70
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 14:12:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nu0rqan02W22 for <buildroot@buildroot.org>;
- Sun, 15 Feb 2026 10:54:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E2C8560788
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2C8560788
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E2C8560788
- for <buildroot@buildroot.org>; Sun, 15 Feb 2026 10:54:06 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1410194305; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 15 Feb 2026 10:54:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vrZlI-00000008lfj-17Et;
- Sun, 15 Feb 2026 11:54:00 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hU03TEp_X8c3 for <buildroot@buildroot.org>;
+ Sun, 15 Feb 2026 14:12:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D6DC881B35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6DC881B35
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D6DC881B35
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 14:12:16 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c3ec.dip0.t-ipconnect.de [79.214.195.236])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 38953A4C0EC2
+ for <buildroot@buildroot.org>; Sun, 15 Feb 2026 15:12:13 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53816)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vrcr6-000000005Wv-2LYI
+ for buildroot@buildroot.org; Sun, 15 Feb 2026 14:12:12 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 15 Feb 2026 11:53:53 +0100
-Message-ID: <20260215105358.2089856-1-peter@korsgaard.com>
+Date: Sun, 15 Feb 2026 15:12:12 +0100
+Message-ID: <20260215141212.503466-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=RjkIM2wSMe87YZubsM96TIVo45ce8CmT9/UaTi9Ub0SfvXJ31FNp3diMbCZg9DoSA3KOMHRzkJuhOGw6cCuM2+S78/ovjO399FUylJ4gLyA/59shxfKTVvaFLjwj+Jbe1WQcNtVNUPBsOxczI+vv9mZs3WGonpwve+jm8Oet5uVC0ny+A0GjdVzTP1DXECPqTBGePF5BSM/7cEiz4ogzmPxCHTmCQ/xGA56pwlEFhv7SrE4zacZr582GWWJBUreXpfhEcyWQnfghEb6zd36jsTbgIogbJbJpwTvYX7M9SRV9hlIPtxV6Jrn9Uaczg1lG2/SrrYVrWisRd+kELM2oKA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=trsmOvoPzUpU71MJgGC5sV/0VtRm0IJXOcXVKADlOz8=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1771164733;
+ bh=Ddw//6js8FjNoKgq2U9ob166G0vyqeufr3E+5h8ebzc=;
+ h=From:To:Subject:Date:From;
+ b=MGd0xcmsiV2fVaZuHFMGeNkG6QJp9uCLu8MX9Fy59E/c8OXiPVzqVqE7vyXNmgaum
+ Q5u0cIren+IwIlJKUbKmXtmpdOXlOCE03+fV3l2DAK9S+SqHH8aU+L92QBHKWQelVo
+ cMuaI9u9QMj/uPuRmuPjaN6Y9sUjOm8eX3bALspKtCam1DI1d2Jy5h8uoh9OZ9C9ax
+ pKeMBUg8BgDV+ikl+KAGuu1GlSNStiXLLHhKnbqarQcWfuCrNt3lwlXiMLCQyEFi5g
+ H0P9/zSGt/ztd2TXstDpK9t1hbviXnqTYOESyBxL+cQqPmTUmAhnTubiPyAInjSyNF
+ DemJgnO1NdbTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=RjkIM2wS
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 1/3] linux: make license option visible for
- _CUSTOM_VERSION as well
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=MGd0xcms
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 8.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,31 +96,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 50958bcdac ("linux: Add support for custom license files") added a
-default value for the license files and made the option visible (E.G.
-editable) when a custom VCS or tarball version is used, but it is also
-needed for users of an older _CUSTOM_VERSION (E.G.  mainline release), as
-the referenced files were only added in Linux 4.16 with commit e00a844aca
-("LICENSES: Add Linux syscall note exception"), so change that.
+https://www.php.net/ChangeLog-8.php#8.5.3
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9d96b346d5..c136084afd 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -152,7 +152,7 @@ config BR2_LINUX_KERNEL_VERSION
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 6d13f11e56..5747e153f2 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php?source=Y
+-sha256  cb75a9b00a2806f7390dd64858ef42a47b443b3475769c8af6af33a18b1381f1  php-8.5.2.tar.xz
++sha256  ce65725b8af07356b69a6046d21487040b11f2acfde786de38b2bfb712c36eb9  php-8.5.3.tar.xz
  
- config BR2_LINUX_KERNEL_LICENSE_FILES
- 	string "Kernel license files" if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || \
--		BR2_LINUX_KERNEL_CUSTOM_SVN || BR2_LINUX_KERNEL_CUSTOM_TARBALL
-+		BR2_LINUX_KERNEL_CUSTOM_SVN || BR2_LINUX_KERNEL_CUSTOM_VERSION || BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default "COPYING LICENSES/preferred/GPL-2.0 LICENSES/exceptions/Linux-syscall-note"
- 	help
- 	  A space-separated list of license files related to the Linux
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 2c91ef7b63..4cba87a06e 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.5.2
++PHP_VERSION = 8.5.3
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.47.3
 
