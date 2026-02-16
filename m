@@ -4,104 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475F4E7BD80
-	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 09:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1406AE7BD81
+	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 09:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDC0960B49;
-	Mon, 16 Feb 2026 09:54:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E31ED60B44;
+	Mon, 16 Feb 2026 09:56:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N3Zqhmfgs_WF; Mon, 16 Feb 2026 09:54:18 +0000 (UTC)
+ id o0Thakj3Z8cX; Mon, 16 Feb 2026 09:56:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C8560840
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1484C60840
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771235658;
-	bh=6Ohl1dVUiq+54NO4hkH228QD6q5J9wjsc9h1B4mqKzc=;
-	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=dyXsGMDTsPxU42uJiIAmEWCaTIXxKMGa3TA+GmX9Eq5gqXO357Uh1L3KFNdIumfbY
-	 q4KDdSS52YXpry2ilhxzYvJXXGy6uBitK4WJ/iRmm5STf5uRaWbO11ZyJEaifNtdHg
-	 KhZHJ9Ug5vEGLICS7cXtVnmYSiCYYQwd88rp+Hi96Xgr6fR3Xo7XULYYEt3/EhzIEb
-	 y4wOro/OEl09xBSL/1hri5ngFFP1NFqofdUcRd/7QhJYZVH/+zA6BHrqzrxwc2upnG
-	 6c2ozFUJOECR8P00asAh6HAG+Qol20yDIJlvXJekhHwg7H0fNKqlmMmRPCoVt60SbE
-	 KjbQJKPMYjUAg==
+	s=default; t=1771235807;
+	bh=IJiJlgVq+nBMEEtnmO6s0KqKBHseg7HrIYHWP62vmo4=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=jnHE/W6WNvkg1p7Pi6+ldRG6r88d3uCUk/InhRPOtQsMl/32q9JJb9pDYGsFij5b0
+	 hYNvBGJNiTa4TRqZzjODb0Cf6T79shlazxwYhk9GdD+7AVQEK02TJzZaNL037SFfxj
+	 KxDyn4SmmLQW2xK7uDudGTK0YjeNSS49XTAJIu/JdyAcuoHtZBfARdLga4Vdr8s0qp
+	 hAth+6sU2jD1G/bCUZzv29fESVL12qCc5HMZZYw24Ah9GQIdF5vYcIxuVvMazt+9Xi
+	 8U0z2FbiITfg9pexOY8qXA7rO9v60IfQCjae2J4UBqJSGQy80ryHhP64ZuEMl1HS9K
+	 jCyKDdfUFOhdA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6C8560840;
-	Mon, 16 Feb 2026 09:54:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A05F235B
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:54:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1484C60840;
+	Mon, 16 Feb 2026 09:56:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 210D81EB
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81E3640C05
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:54:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1200E40940
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Obdn2HTo797w for <buildroot@buildroot.org>;
- Mon, 16 Feb 2026 09:54:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id ZFPtN6wWayCV for <buildroot@buildroot.org>;
+ Mon, 16 Feb 2026 09:56:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 82E2E40B2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82E2E40B2E
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82E2E40B2E
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:54:15 +0000 (UTC)
-X-CSE-ConnectionGUID: qR0dklUrRfKWZ6e1QCl0HA==
-X-CSE-MsgGUID: L91b9QKQRz2kWUYHXHy2Jg==
-Received: from unknown (HELO opfedv3rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 16 Feb 2026 10:54:13 +0100
-Received: from unknown (HELO OPE16NORMBX503.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 10:54:13 +0100
-Received: from OPE16NORMBX301.corporate.adroot.infra.ftgroup [x.x.x.x] by
- OPE16NORMBX503.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.37; Mon, 16 Feb 2026 10:54:12 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX301.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
- Mon, 16 Feb 2026 10:54:10 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 16 Feb 2026 10:54:10 +0100
-X-CSE-ConnectionGUID: UViz+YXpTW2q3VVSctRhgw==
-X-CSE-MsgGUID: sQimPv3pSF26li3PTpru6A==
-X-IronPort-AV: E=Sophos;i="6.21,202,1763420400"; d="scan'208";a="392898671"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Mon, 16 Feb 2026 10:54:10 +0100
-Message-ID: <731645eba72ecb0cba41a28b5faa257c3db0c2bc.1771235650.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 058D3408BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 058D3408BA
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 058D3408BA
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:56:44 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 9692B4E40E64
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:56:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 69F16606CF
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:56:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 825CE10369036; Mon, 16 Feb 2026 10:56:41 +0100 (CET)
+Date: Mon, 16 Feb 2026 10:56:40 +0100
+To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: buildroot@buildroot.org
+Message-ID: <aZLpW6VY-EmXGyn-@windsurf>
+References: <20260216-openscap_cpp-v1-1-3372149da5b0@bootlin.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX604.corporate.adroot.infra.ftgroup
- (10.115.26.32) To OPE16NORMBX301.corporate.adroot.infra.ftgroup
- (10.115.26.10)
+Content-Disposition: inline
+In-Reply-To: <20260216-openscap_cpp-v1-1-3372149da5b0@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1771235656; x=1802771656;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=F5F+Eihk+RyBFk0TBJUynBaKjyk8n3VtcHADAfYSvCg=;
- b=Ia+Rgc5mUOL3FmHE6NT3zJeeWw3V+DwFwEhVxo++CkgY26XEDZG+b/Ki
- iwrzP79Ny2xJLufEuNHXro9I3N73NSfIaV0dfbUEnSnfGAoLZg9D3eTkN
- OZf4U7ADVFF22LZiAMKx2Dy3yQMYHDA6wpzo3Z+t+eNulht9m0EaZXFu9
- gubn0aFuQU0tYOp6kzBlOwFQeeMtHsXZU1ZxWDEiEfwUwTCBtTHygEcyz
- QCMk+urcJSp3U2l2V7yN33S8HMilkK7zGZXfv7vtz/fk8DEsdkGdAyVFG
- GqnvPNF14jI3z3kuswSFbepOGl0jgnXnUmWqEOMWda7cqYEfdVSrBS0NW
- A==;
+ d=bootlin.com; s=dkim; 
+ t=1771235802; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=k+jmB9oYMBydlv8tR9L84X4jve3ULXMPGuttSk5BZFI=;
+ b=Hi44gUNn05a/Py5G/0rEwLKBU7Iq7StVegFV0Y/1YSLiNwD2GJE95qko2dMtJqYZJlUvav
+ 4S/E+7n5JxXPNqlxzZovW/B4y3+Q4dmiNxrqPpsaf4MhwGyEZ625UsucOCK91m0lrkT70X
+ GuzCNC4QlPwX1buebsFqDRw/TCz+5QLYR93aAYLfSH8Y+oikCAcPEWkuSkLVfCvheXf+sr
+ NPMFqqC2lQ0015S+fqasU/UOAefgRCvG47FVzpKqwX1MaONwrdRx9Ehx8LCFOxpkk7ArRF
+ 7KNXUsGcP+iPEdWWhSRRGFBMtFOg5OpkTo/Jb3sUzbaOrl/0bYPnj5bQ9O3O9g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=Ia+Rgc5m
-Subject: [Buildroot] [PATCH] package/skopeo: bump to 1.22.0
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=Hi44gUNn
+Subject: Re: [Buildroot] [PATCH] package/openscap: set dependency on C++
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,59 +96,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Hello Alexis,
 
-Release notes:
-https://github.com/containers/skopeo/releases/tag/v1.22.0
+Thanks for the fix!
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
----
- package/skopeo/skopeo.hash | 2 +-
- package/skopeo/skopeo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Feb 16, 2026 at 10:40:42AM +0100, Alexis Lothor=E9 wrote:
+> When the toolchain involved in openscap build does not support C++, the
+> configure step fails with the following error:
+> =
 
-diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
-index 4a1bcfa0f1..72b5b07801 100644
---- a/package/skopeo/skopeo.hash
-+++ b/package/skopeo/skopeo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f76eeddf697a3cc7a872e3077ab4d0fdbebe9f3c6171462e3e9feb84368b3fac  skopeo-1.21.0-go2.tar.gz
-+sha256  dc9aa749973b10d3c2672d2839e61bac75cf32d5e5106463420b83653c9df3ff  skopeo-1.22.0-go2.tar.gz
- sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
-diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
-index d534a04813..2dcad871df 100644
---- a/package/skopeo/skopeo.mk
-+++ b/package/skopeo/skopeo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SKOPEO_VERSION = 1.21.0
-+SKOPEO_VERSION = 1.22.0
- SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
- 
- SKOPEO_LICENSE = Apache-2.0
--- 
-2.34.1
+>   -- Detecting CXX compiler ABI info
+>   -- Detecting CXX compiler ABI info - failed
+>   -- Check for working CXX compiler: /bin/false
+>   -- Check for working CXX compiler: /bin/false - broken
+>   CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (=
+message):
+>     The C++ compiler
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+From a quick look, it doesn't seem like openscap contains C++ code. So
+instead the right fix is most likely to change CMakeLists.txt to check
+for the C compiler only.
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+To do that, in CMakeLists.txt, change:
 
+project(blabla)
+
+to
+
+project(blabla C)
+
+Best regards,
+
+Thomas
+-- =
+
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
