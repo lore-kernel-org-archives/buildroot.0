@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBB30E83836
-	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 21:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E841E83837
+	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 21:47:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A84F060E3B;
-	Mon, 16 Feb 2026 21:45:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A65B60C08;
+	Mon, 16 Feb 2026 21:47:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ldTz6Cvf1dyS; Mon, 16 Feb 2026 21:45:28 +0000 (UTC)
+ id 0_YEeAiujDht; Mon, 16 Feb 2026 21:47:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C31DF60E1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BD9260E15
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771278328;
-	bh=T6a+mKV3CPGJ1EZpHPvORFP5ROWH9d02LUJwpYegci4=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=JFHZbqphXh82ADUICoLgieDLettKVVy1KRTHrRb6E8ZJgs8qSBzWJTE/SeDKpOqHu
-	 hU95STbRqxzwx75vW2YBnJKutGHJI/ghLU9AVX/ok8d7peAfbFA+DsRolcP87goHmg
-	 257YV6HdopeD7NSIgiWTC0Be+bumuXL1Cv+K3SFcZCQgEceKXTRRYZ9DAXNgRj9gIM
-	 MjzRXuFaWaUgQAi9njIYukoLePIqdWqOSO3ncD8VgHEiCjUiQ7j+289gSM4wXf+wc0
-	 oTpyZNvAfAtRyQ4PvG68djF+DKaRyDQuqIlWoW8/bRdJYb+ZcjMMo3AElRsMw6Xo3D
-	 /fgIq26YllzLQ==
+	s=default; t=1771278420;
+	bh=0dqxW2JfN4OB/PxtC2jS7ZOYzagySC3095D/XTaxiw0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hL2gZy9JyJbqMau9vsW+KX3TPslL9EFJgXIn9Imio04HTDwczaFAv2Jzp/h5AyPX+
+	 aIkTkQi03lAjY7NNO77Hw/3mjmMjVbgRWE7IiMr3bfJ/To/XO7EdJZuIykAmj9OE6b
+	 +4UPO1Zs1g4h0oE3tAwUJgp2bK++pRQWDGEVu+NvJqmrXwUzeh5NFSp8F1Wo4TxZEm
+	 llsuvNnafAlaj5W8d1FYAzyfKE/sRO/G3IoCA+xGHdNiMLqZ1hF1zrzqMzJO45XcsI
+	 YBX0so2afGCanIFX8m55rq8R4SUMMowzKRHJKaCIYF+jr9ywY1C3RmaNJ+jU/WjWX5
+	 f63OPxK7maoRQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C31DF60E1B;
-	Mon, 16 Feb 2026 21:45:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B2B1270
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 21:45:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BD9260E15;
+	Mon, 16 Feb 2026 21:47:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97D84270
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 21:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 692E160E1B
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 21:45:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88FBE408A5
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 21:46:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fjxvqjneznzk for <buildroot@buildroot.org>;
- Mon, 16 Feb 2026 21:45:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9BD0B60E15
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BD0B60E15
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9BD0B60E15
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 21:45:26 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 7171219F57B;
- Mon, 16 Feb 2026 22:45:22 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 16 Feb 2026 22:45:22 +0100
-MIME-Version: 1.0
-Date: Mon, 16 Feb 2026 22:45:22 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
-In-Reply-To: <20260216191333.2170402-1-giulio.benetti@benettiengineering.com>
-References: <20260216191333.2170402-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <47254290ba3ad71e292f9f03049db2eb@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1771278324;
- bh=H3PnXFbRcIpvpaW3ExKZX2irpqRNdTW81CzT67rjBgQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SNlaaT3o2BTR4bqb/YBB0/3mzaKwqP2bjhuWVHAEKWcA3nCo2HsYvHR/piuWES79l
- nJ9bRgoCUROHnm35jvlUX1sdE6d2CZSHmLeFgpnuQhmWPVKTlFHmdLot0iS9+7rX69
- CNSNzXcHzzE9lOkeQOOw3tZB4KKyUvq4CxnlJgxuwwMYIjGytw9LoQkfOx/ajX1Y0i
- Wlp0X8xV++DbGORPI3uDCxZ4E6eXonoq1iUrSg+I5wn02dIZOSwDp1cCPxwr1EUbkd
- VzGIhz010ieWrznzO2L3ycCrFeJYue9go0zY3qoCmllGq+5Ytw1NQZG4e/DsC2qJuE
- l3BQofZ76Ct7A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SNlaaT3o
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.120.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ud2aZmyyatKT for <buildroot@buildroot.org>;
+ Mon, 16 Feb 2026 21:46:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F44540780
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F44540780
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 21:46:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2B73386F62; Mon, 16 Feb 2026 21:46:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 16 Feb 2026 22:45:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 50d1dec604c21c04bd518109fff0c67e8f7f029b
+X-Git-Newrev: 41eb6620f42fda2c0e38b6a7b122e59b136e02b0
+X-Patchwork-Hint: ignore
+Message-Id: <20260216214657.2B73386F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/catch2: bump to version 3.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,18 +70,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/02/2026 20:13, Giulio Benetti wrote:
-> For release note, see:
-> https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_120_1.rst
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/41eb6620f42fda2c0e38b6a7b122e59b136e02b0
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+changelog:
+https://github.com/catchorg/Catch2/releases/tag/v3.13.0
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/catch2/catch2.hash | 2 +-
+ package/catch2/catch2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+index 1cf29821c9..c45cd0e3c5 100644
+--- a/package/catch2/catch2.hash
++++ b/package/catch2/catch2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e077079f214afc99fee940d91c14cf1a8c1d378212226bb9f50efff75fe07b23  catch2-3.12.0.tar.gz
++sha256  650795f6501af514f806e78c554729847b98db6935e69076f36bb03ed2e985ef  catch2-3.13.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+index d3da027d2b..fb0edbc9bc 100644
+--- a/package/catch2/catch2.mk
++++ b/package/catch2/catch2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CATCH2_VERSION = 3.12.0
++CATCH2_VERSION = 3.13.0
+ CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
+ CATCH2_INSTALL_STAGING = YES
+ CATCH2_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
