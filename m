@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24BC1E83827
-	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 19:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4F03E8382D
+	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 20:19:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99C1C81516;
-	Mon, 16 Feb 2026 19:55:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 480AB60A65;
+	Mon, 16 Feb 2026 20:19:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1j2I-PeY22Wd; Mon, 16 Feb 2026 19:55:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tI2xrlVvH00Q; Mon, 16 Feb 2026 20:19:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97EEA812FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2812460AC7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771271701;
-	bh=uA9PENrK6ZwhuAWuPguVGq8wnq2iKHLeMVyrAC8DxL0=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=h1OlpwdVKW9UYh9XnF8a6XnLDvmk1vEO2NsX6u2jW09oR0sWdgIgZA7T9QfolD7vH
-	 qLuKfT8vojKyXE6EX+ptRM2xjZOyuLvMD0mEkWM78CbST0S8H9uTIiLp/Y3CntYMlb
-	 Ie5q3oBEsJFoc26AJ8OXvkNXU+YKq9ViQyYON6MWW46UeMl3fXLEBqGuRjgqReDz6y
-	 NpWGk6fF82qa8V1fGUz0cRi3Z+vJDdMfuex9RQyq9EmJkQuDlSqlzwglnpT0sV+Z/R
-	 MfKywhr0R7yEeypDc8Ppxk8i0pu/eW/K92shhZcZ8lwAvgj2kG/PIGpjlqNdXV7sHv
-	 dsOJzNd91hmBw==
+	s=default; t=1771273148;
+	bh=oBl+S5ELTobtsNvikgo8ohA7yf8As/bL2Ta98m23j98=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=koEjbNDuQIhQnuBiDibckrHARNtQqLg2qARuV7hd0D4QflvurusAFipM5q1qM3gdu
+	 fbC/4uVGHIOOZHqf+8YnrC16JOsNYpjedvsJYU12O3ewMlucp6kZB2FYU4EiaRxUxT
+	 7Q3YtHtkrSbe3sN3Gv0saOb/q5zqAbsphUZwC2TW+GttxBchCQNnbvWhdjNnAR70qv
+	 4AtyHeffMVJav+F3KvzSgHF+N/FfdIus/pUE6FnXY0vUViXNips7dnXOaAN9Lmn3v7
+	 GYzt+AnkrF8qtwQLkByFN9mX+NMSIhxZSAlcmv2V43DF0OZYih0St0fN/p00IcEMAf
+	 gosMElP4Ub7hw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97EEA812FC;
-	Mon, 16 Feb 2026 19:55:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 030CF35B
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:55:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2812460AC7;
+	Mon, 16 Feb 2026 20:19:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E82241EB
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 20:19:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F224D40B35
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:54:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5D6360AC7
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 20:19:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eqmGQeSd7iZn for <buildroot@buildroot.org>;
- Mon, 16 Feb 2026 19:54:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kLYCvQ-wBOXb for <buildroot@buildroot.org>;
+ Mon, 16 Feb 2026 20:19:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5CD1240AFF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CD1240AFF
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5CD1240AFF
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:54:58 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 763307903; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 16 Feb 2026 19:54:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vs4gG-0000000AsBF-3gfx;
- Mon, 16 Feb 2026 20:54:52 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <7dc79f5eca72bc099e12f92a0a471ff5@free.fr> (Julien Olivain's
- message of "Mon, 16 Feb 2026 20:49:25 +0100")
-References: <20260215105358.2089856-1-peter@korsgaard.com>
- <7dc79f5eca72bc099e12f92a0a471ff5@free.fr>
-Date: Mon, 16 Feb 2026 20:54:52 +0100
-Message-ID: <87ecmkjwfn.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=FOE8btVkgzgycs0ggDrPq1DCSTmFdnsVm51YWwGCeN9w4uBZqiVOoJ+35n0ywvW6ErOwD8Lhj1ZPvwUi9uXWjbVv07MAi3I6/5bmGkpmPPoQKShvMs2otoh0af69SaOBNrq7A4t2EibR5cTt5vHZsd7zVSXDfow/tx8KE7dggS48HKMTzWWt1MuwH+bunYbfBZj/ezC3x0GbeijplUL/Xk4OmvFAkYjw7VTlZG05/jbsBmuaOLV0QsO90PaSeIoFRccWXIeIer3nc4ZEd7ElXRJ5lsEzZES34prssKeZBDCWUJS+G38G4gtuYJK2DcI3ws/J525arqpeuNXA0vZKDA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=khNKPK0QpjExtSLfLI1X3l/wSy1x3ltX+62x9qo4kkw=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=FOE8btVk
-Subject: Re: [Buildroot] [PATCH 1/3] linux: make license option visible for
- _CUSTOM_VERSION as well
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07A1C60A65
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07A1C60A65
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 20:19:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DCF4086F39; Mon, 16 Feb 2026 20:19:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 16 Feb 2026 20:50:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e78a710e8fefaf722d45d8031e542be5c5718e0e
+X-Git-Newrev: 31d58806d8113eba4f0cecb5b493eed575f42c46
+X-Patchwork-Hint: ignore
+Message-Id: <20260216201905.DCF4086F39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kf5/*: bump to v5.116
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,22 +68,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/31d58806d8113eba4f0cecb5b493eed575f42c46
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Hi,
+This is the last (known) release of KDE Frameworks 5, read the announcement
+https://kde.org/announcements/frameworks/5/5.116.0/
 
- > Applied to master. For info,  I added the missing
- > BR2_LINUX_KERNEL_LICENSE_FILES in openblocks_a6_defconfig.
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash | 2 +-
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash                 | 2 +-
+ package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash         | 2 +-
+ package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash     | 2 +-
+ package/kf5/kf5.mk                                               | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-Argh, seems like I forgot to save after editing. Thanks for fixing it!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash
+index 70b776b5d7..bf87bc63b6 100644
+--- a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash
++++ b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9717885e30aadf184fa71511930409cabbf08eb6627ea8b051de8804fbcec54c  extra-cmake-modules-5.91.0.tar.xz
++sha256  e8f6d11a6ef478171f845d376523ad5c56e8f7fd4bae8791942cecba0b23cd08  extra-cmake-modules-5.116.0.tar.xz
+ sha256  46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b  COPYING-CMAKE-SCRIPTS
+diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
+index e4ebf2bb39..f9b631827f 100644
+--- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
++++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  dfe3da03260e0153f9f6ced1fc7464eaaf0ed1fb692fc6c2b2d968b629ad719b  kcoreaddons-5.91.0.tar.xz
++sha256  defbb4c068fcfccf7a08298ee6f7b88f9c2d3f34e4ae22b8f8e2df47dfb73174  kcoreaddons-5.116.0.tar.xz
+ 
+ # Hash for license files
+ sha256  d1cf0896da7045d841fe45b0991cf35540bac1a17b5d11f4afcf8fcb950246b5  LICENSES/GPL-2.0-only.txt
+diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash
+index 4b6c03a3bb..db1c37960a 100644
+--- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash
++++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a2673f18c7866d39c9cedca2f86540c56baf966a2491a86ca06a5a0427358496  modemmanager-qt-5.91.0.tar.xz
++sha256  06055351f3a6f8755df60f48b3fdaabb4a406939b9c777f474e8a22bdd116f80  modemmanager-qt-5.116.0.tar.xz
+ 
+ # Hash for license files
+ sha256  d1cf0896da7045d841fe45b0991cf35540bac1a17b5d11f4afcf8fcb950246b5  LICENSES/GPL-2.0-only.txt
+diff --git a/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
+index de4504064f..9bf7ee4ad1 100644
+--- a/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
++++ b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  2e20ffd995ce64a90b1133b594bab2b2292be54e538f62633e78e8296cc44738  networkmanager-qt-5.91.0.tar.xz
++sha256  0b4e80a4e110776b2f7bcbd4f6371ccbd8d9ed58f01c8a3738ce9c8ef1601b69  networkmanager-qt-5.116.0.tar.xz
+ 
+ # Hash for license files
+ sha256  d1cf0896da7045d841fe45b0991cf35540bac1a17b5d11f4afcf8fcb950246b5  LICENSES/GPL-2.0-only.txt
+diff --git a/package/kf5/kf5.mk b/package/kf5/kf5.mk
+index 64b08bae4f..9341ea89fb 100644
+--- a/package/kf5/kf5.mk
++++ b/package/kf5/kf5.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KF5_VERSION_MAJOR = 5.91
++KF5_VERSION_MAJOR = 5.116
+ KF5_VERSION = $(KF5_VERSION_MAJOR).0
+ KF5_SITE = https://download.kde.org/stable/frameworks/$(KF5_VERSION_MAJOR)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
