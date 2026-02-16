@@ -1,90 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ECFBEF5860
-	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 09:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76691EF5860
+	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 09:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B34A04020B;
-	Mon, 16 Feb 2026 09:41:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 117F460882;
+	Mon, 16 Feb 2026 09:42:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PbomIzE1TmxF; Mon, 16 Feb 2026 09:41:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GK-oqCweaNYX; Mon, 16 Feb 2026 09:42:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC1F240BF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 114B060A69
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771234864;
-	bh=/lZFKr6t/iwYcgxxeevEsyNWRwQLbOl7G8xmCj5orEo=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=QGfD+pKmRHilwEzVDk5oM9o7L0nZv9xaKh1yn26LPga7XLohC1q+J4LbW54tSLysZ
-	 y6RzZcgNevtkGryU4d9sOxKXsWVAr8lCl2IDIPYDnUGXSHoTZfjF3bQysJwhjeEjw5
-	 C+EHO4y132SvHpGY31XUoSrFW68kgG3ZU5N9d7l94LlyL/rrg7dBQDtDZ+0UieWLf6
-	 ODYEspWCNjgcUwGNRQ5SlbtRTG7OilRmfIt2+yt4cp4yC2paHis054j+Fn7fGBjUut
-	 Lvz24J+GEeHV2hvatFXvLBA0NzkbQ76r/O1j6o/cmhhzvysLNIjzC6/WAFY4TRPbxQ
-	 myo9MoI654c5g==
+	s=default; t=1771234932;
+	bh=Ncgdm7DoMOFHUgKjvhN3UJ9DGqaj1GnCFOX0J9MdEtU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=LqlRtxg008sRrLK+7ksyDKSpPh9hjFaJZaMGoKlBLgr+igEb54R7z9dHSeTdtlsD0
+	 kELABby3t48JQYqh4AJ+ID6mZsQB3HP6xz2vDnxg5xRXnNrlWIboFKXTGXjckvZuKq
+	 I70lfrGQK8pZop5nnQ2r1CwMqp+sqlQzzWJtugrKFjfnXLGyegTg498IBKvtl7VbGy
+	 OUn/+Lv27pgHejj+IYJWJC/+tMsIqm/3zzJc7+BMk3BDyraCFnKaXYTwK586/1qEm8
+	 1LZxE/hdXmq1PuRrhV6es8touFU3hhXNFBZ2SlYojocz1BaZScOTbTfHFNuqGyTPAt
+	 HdvKB4y3292UA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC1F240BF8;
-	Mon, 16 Feb 2026 09:41:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DE89335B
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:41:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 114B060A69;
+	Mon, 16 Feb 2026 09:42:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31804270
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC526816F5
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:41:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F9C94052F
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:42:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3b40AQJ7CsVw for <buildroot@buildroot.org>;
- Mon, 16 Feb 2026 09:41:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=alexis.lothore@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iPSw_j25zK76 for <buildroot@buildroot.org>;
+ Mon, 16 Feb 2026 09:42:09 +0000 (UTC)
+X-Greylist: delayed 324 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 16 Feb 2026 09:42:07 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 70416402D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70416402D7
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=54.36.140.176;
+ helo=5.mo534.mail-out.ovh.net; envelope-from=mooz@blockos.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6BDD1816E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BDD1816E0
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BDD1816E0
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:41:01 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 15FB34E40E71
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:40:59 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id D5608606CF
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:40:58 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 01035103690E4; Mon, 16 Feb 2026 10:40:57 +0100 (CET)
-Date: Mon, 16 Feb 2026 10:40:42 +0100
-MIME-Version: 1.0
-Message-Id: <20260216-openscap_cpp-v1-1-3372149da5b0@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDI0Mz3fyC1Lzi5MSC+OSCAl3TVBMDY9MU85SkNAsloJaCotS0zAqwcdG
- xtbUAPaKYUl4AAAA=
-X-Change-ID: 20260216-openscap_cpp-5e4035d7dbf8
+Received: from 5.mo534.mail-out.ovh.net (5.mo534.mail-out.ovh.net
+ [54.36.140.176])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 70416402D7
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 09:42:07 +0000 (UTC)
+Received: from director2.derp.mail-out.ovh.net
+ (director2.derp.mail-out.ovh.net [79.137.60.36])
+ by mo534.mail-out.ovh.net (Postfix) with ESMTPS id 4fDyMr2X2cz69wh;
+ Mon, 16 Feb 2026 09:36:40 +0000 (UTC)
+Received: from director2.derp.mail-out.ovh.net
+ (director2.derp.mail-out.ovh.net. [127.0.0.1])
+ by director2.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <mooz@blockos.org>; Mon, 16 Feb 2026 09:36:40 +0000 (UTC)
+Received: from mta11.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.0.151])
+ by director2.derp.mail-out.ovh.net (Postfix) with ESMTPS id
+ 4fDyMr1Msbz20Yj; Mon, 16 Feb 2026 09:36:40 +0000 (UTC)
+Received: from blockos.org (unknown [10.1.6.7])
+ (Authenticated sender: mooz@blockos.org)
+ by mta11.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id BEEAC9A1361;
+ Mon, 16 Feb 2026 09:36:39 +0000 (UTC)
+X-OVh-ClientIp: 213.36.7.12
+From: Vincent Cruz <mooz@blockos.org>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1771234858; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=el1kZtTJg6W7/cPxcRxz7kgCA+WrVPYp6ducbVArdvQ=;
- b=K6khBwMofoYDPl5QyLiblfcjAvqn6hodpE0CHyQn162QUsazk1iKQYkt8HuM22I8m5dWiK
- uOjPzFm6uGSYa4CLMWg408QrxO4QXO9XRs8pQKKV6yU2lNWn47MBAU2kOpl9POcUzAL2Y2
- 4gVCXNa9kiV5XNuoJxUSouf619s1JVlOmp5EDZZtUnQ4h8+MeRewcFY+aJ6v4EzzTDiyYf
- mP/SgvpCibHH7dnR/HEqnVW3IZaVHROuqd68d+yjhjv8QzSWKN1wN4+HqAqRODifOzPfoY
- abhfHrWvkLOJCj2dueY9EqucUSDvOzxw2Gl1cpUlCZn+RKpFE7/GpdJD0UrpFQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=K6khBwMo
-Subject: [Buildroot] [PATCH] package/openscap: set dependency on C++ support
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Vincent Jardin <vjardin@free.fr>, Vincent Cruz <mooz@blockos.org>
+Date: Mon, 16 Feb 2026 10:33:29 +0100
+Message-ID: <20260216093535.20643-1-mooz@blockos.org>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+x-ovh-tracer-id: 16512448034021427989
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTEzWXMWOHfkaMWs1NkZwgsZhcgR5CvWDLSSVi1DOFYfyyfzKXqD6E0xwBfUQJ8jp2NjVMG/dqQw2/MYF7zfbQQvwnqwiOzrZmnsxcbL5XjFMH5PqhJCqyzN+foZoSJE0yz+PL3Rq05gKPhxkC3j9OVEx1ce7Av1wCUwO1tB1gNv2HsLhsOFROSt+ju8ExIxS5QG3Hi/fmpobZLXexZVwFhUeT1Xhb1VfmKTMraK7dIve14cCq9Rw1A8dWgSENhQf8gv0S82bC7ptX6jgD+rn4a/7O3th47HFh+tYDvShTpc8UCbc7A9Z3suGguXtAYHJyghGexy5uciTBjwJALOyfgnGawYJobzgMevQFpB0yMmk9v0UB3FY4KowqS0CuVg0s3P4EFL3whNc8J7wfYpQcF47hAEZ9j+ufinlSEzul9nwSaOjN/YpKLfsfXoP2qZKH+aDB/FP+w6GwilLjzTRZ8UFQbW31NKOr7KaXSkvOwXlTBCtAsinqAlVvZFzPWh4fBi5ArE5b6hVDkibajA7Q9GHaKmrf6TvLU6VggZw5mqjCAGSrhd+66XGQkrGFilTKr7ojsdqavBxaDdvV5pz9svGNEX3t6RaXrKZGiyzz4RdWKyCpALQ8y/s2ZiOFPj43aeLhSjlJbvomgk7eJ0MdUVQ+8drYCyaoGNvG6IonmNIg
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=blockos.org
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-106R006688acb74-3541-42f3-b48a-98f12809ec93,
+ B97F932625BD606AA9665C31F29B1DECF885AB65) smtp.auth=mooz@blockos.org
+Subject: [Buildroot] [PATCH v3 1/1] package/libnss-ato: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,82 +97,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiB0aGUgdG9vbGNoYWluIGludm9sdmVkIGluIG9wZW5zY2FwIGJ1aWxkIGRvZXMgbm90IHN1
-cHBvcnQgQysrLCB0aGUKY29uZmlndXJlIHN0ZXAgZmFpbHMgd2l0aCB0aGUgZm9sbG93aW5nIGVy
-cm9yOgoKICAtLSBEZXRlY3RpbmcgQ1hYIGNvbXBpbGVyIEFCSSBpbmZvCiAgLS0gRGV0ZWN0aW5n
-IENYWCBjb21waWxlciBBQkkgaW5mbyAtIGZhaWxlZAogIC0tIENoZWNrIGZvciB3b3JraW5nIENY
-WCBjb21waWxlcjogL2Jpbi9mYWxzZQogIC0tIENoZWNrIGZvciB3b3JraW5nIENYWCBjb21waWxl
-cjogL2Jpbi9mYWxzZSAtIGJyb2tlbgogIENNYWtlIEVycm9yIGF0IC91c3Ivc2hhcmUvY21ha2Uv
-TW9kdWxlcy9DTWFrZVRlc3RDWFhDb21waWxlci5jbWFrZTo3MyAobWVzc2FnZSk6CiAgICBUaGUg
-QysrIGNvbXBpbGVyCgogICAgICAiL2Jpbi9mYWxzZSIKCiAgICBpcyBub3QgYWJsZSB0byBjb21w
-aWxlIGEgc2ltcGxlIHRlc3QgcHJvZ3JhbS4KCiAgICBJdCBmYWlscyB3aXRoIHRoZSBmb2xsb3dp
-bmcgb3V0cHV0OgoKICAgICAgQ2hhbmdlIERpcjogJy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQv
-aW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxk
-L0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJJwoKICAgICAgUnVuIEJ1
-aWxkIENvbW1hbmQocyk6IC91c3IvYmluL2NtYWtlIC1FIGVudiBWRVJCT1NFPTEgL3Vzci9iaW4v
-bWFrZSAtZiBNYWtlZmlsZSBjbVRDXzE4MzRiL2Zhc3QKICAgICAgbWFrZVsxXTogRW50ZXJpbmcg
-ZGlyZWN0b3J5ICcvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEv
-YnVpbGQvb3BlbnNjYXAtMS4zLjEyL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlU2Ny
-YXRjaC9UcnlDb21waWxlLXRVeWRxSScKICAgICAgL3Vzci9iaW4vbWFrZSAgLWYgQ01ha2VGaWxl
-cy9jbVRDXzE4MzRiLmRpci9idWlsZC5tYWtlIENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIvYnVp
-bGQKICAgICAgbWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9hdXRvYnVpbGQvYXV0
-b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3BlbnNjYXAtMS4zLjEyL2J1aWxkcm9v
-dC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlU2NyYXRjaC9UcnlDb21waWxlLXRVeWRxSScKICAgICAg
-QnVpbGRpbmcgQ1hYIG9iamVjdCBDTWFrZUZpbGVzL2NtVENfMTgzNGIuZGlyL3Rlc3RDWFhDb21w
-aWxlci5jeHgubwogICAgICAvYmluL2ZhbHNlICAgIC1vIENNYWtlRmlsZXMvY21UQ18xODM0Yi5k
-aXIvdGVzdENYWENvbXBpbGVyLmN4eC5vIC1jIC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5z
-dGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxkL0NN
-YWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJL3Rlc3RDWFhDb21waWxlci5j
-eHgKICAgICAgbWFrZVsyXTogKioqIFtDTWFrZUZpbGVzL2NtVENfMTgzNGIuZGlyL2J1aWxkLm1h
-a2U6ODE6IENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIvdGVzdENYWENvbXBpbGVyLmN4eC5vXSBF
-cnJvciAxCiAgICAgIG1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS9hdXRvYnVpbGQv
-YXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3BlbnNjYXAtMS4zLjEyL2J1aWxk
-cm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlU2NyYXRjaC9UcnlDb21waWxlLXRVeWRxSScKICAg
-ICAgbWFrZVsxXTogKioqIFtNYWtlZmlsZToxMzQ6IGNtVENfMTgzNGIvZmFzdF0gRXJyb3IgMgog
-ICAgICBtYWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvYXV0b2J1aWxkL2F1dG9idWls
-ZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL29wZW5zY2FwLTEuMy4xMi9idWlsZHJvb3QtYnVp
-bGQvQ01ha2VGaWxlcy9DTWFrZVNjcmF0Y2gvVHJ5Q29tcGlsZS10VXlkcUknCgogICAgQ01ha2Ug
-d2lsbCBub3QgYmUgYWJsZSB0byBjb3JyZWN0bHkgZ2VuZXJhdGUgdGhpcyBwcm9qZWN0LgogIENh
-bGwgU3RhY2sgKG1vc3QgcmVjZW50IGNhbGwgZmlyc3QpOgogICAgQ01ha2VMaXN0cy50eHQ6MTEg
-KHByb2plY3QpCgogIC0tIENvbmZpZ3VyaW5nIGluY29tcGxldGUsIGVycm9ycyBvY2N1cnJlZCEK
-ICBtYWtlOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjYzOiAvaG9tZS9hdXRvYnVpbGQv
-YXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3BlbnNjYXAtMS4zLjEyLy5zdGFt
-cF9jb25maWd1cmVkXSBFcnJvciAxCiAgbWFrZTogTGVhdmluZyBkaXJlY3RvcnkgJy9ob21lL2F1
-dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9idWlsZHJvb3QnCgpNYWtlIG9wZW5zY2FwIGRl
-cGVuZCBvbiBwcm9wZXIgQysrIHN1cHBvcnQuCgpGaXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVp
-bGRyb290Lm9yZy9yZXN1bHRzLzFmZTU1MGZmYTc5ZjBhMDgzYTQ1MGFlMDNmZTA2N2E4YWI3MzM2
-YmUKRml4ZXM6IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9lOWQ1MmI1
-MjY1ODU0NDkxNjAyMjA1MGM3OGRjYjEzN2NhNmM5N2UwCkZpeGVzOiBodHRwczovL2F1dG9idWls
-ZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNGE5YzIxNzYzYWFkZGIyMTdlZTVmOGJiODk0N2ZhYWQ5
-NzY3YmFhMwpTaWduZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJv
-b3RsaW4uY29tPgotLS0KIHBhY2thZ2Uvb3BlbnNjYXAvQ29uZmlnLmluIHwgNSArKystLQogMSBm
-aWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL29wZW5zY2FwL0NvbmZpZy5pbiBiL3BhY2thZ2Uvb3BlbnNjYXAvQ29uZmlnLmlu
-CmluZGV4IDMxNzA1NWM3NTMyNy4uMzc1ZmNhY2MyZDA1IDEwMDY0NAotLS0gYS9wYWNrYWdlL29w
-ZW5zY2FwL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL29wZW5zY2FwL0NvbmZpZy5pbgpAQCAtMiw2
-ICsyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX09QRU5TQ0FQCiAJYm9vbCAib3BlbnNjYXAiCiAJ
-ZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MSUJHUEdfRVJST1JfQVJDSF9TVVBQT1JUUyAgIyBsaWJn
-Y3J5cHQKIAlkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyBkbGZjbi5oCisJZGVwZW5kcyBv
-biBCUjJfSU5TVEFMTF9MSUJTVERDUFAKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCQ1VSTAogCSMg
-SW4gdGhlb3J5IHNob3VsZCBidWlsZCB3aXRob3V0IGNyeXB0bywgYnV0IGluIHByYWN0aWNlIGl0
-CiAJIyBkb2Vzbid0OiBodHRwczovL2dpdGh1Yi5jb20vT3BlblNDQVAvb3BlbnNjYXAvaXNzdWVz
-LzIzMTAKQEAgLTE5LDYgKzIwLDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX09QRU5TQ0FQCiAJICBo
-dHRwczovL3d3dy5vcGVuLXNjYXAub3JnLwogCSAgaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQ
-L29wZW5zY2FwCiAKLWNvbW1lbnQgIm9wZW5zY2FwIG5lZWRzIGEgdG9vbGNoYWluIHcvIGR5bmFt
-aWMgbGlicmFyeSIKK2NvbW1lbnQgIm9wZW5zY2FwIG5lZWRzIGEgdG9vbGNoYWluIHcvIEMrKywg
-ZHluYW1pYyBsaWJyYXJ5IgogCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCR1BHX0VSUk9SX0FS
-Q0hfU1VQUE9SVFMKLQlkZXBlbmRzIG9uIEJSMl9TVEFUSUNfTElCUworCWRlcGVuZHMgb24gQlIy
-X1NUQVRJQ19MSUJTIHx8ICFCUjJfSU5TVEFMTF9MSUJTVERDUFAKCi0tLQpiYXNlLWNvbW1pdDog
-NzhkMzhkOWRkZGE4MWQ3YzZiZmY5YjUyMDY1NmZlNGY0NmYwZjY5MgpjaGFuZ2UtaWQ6IDIwMjYw
-MjE2LW9wZW5zY2FwX2NwcC01ZTQwMzVkN2RiZjgKCkJlc3QgcmVnYXJkcywKLS0gCkFsZXhpcyBM
-b3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+CgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+The libnss_ato module is a set of C library extensions which allows to
+map every nss request for unknown user to a single predefined user.
+
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
+---
+v2 -> v3:
+   - rebased to v0.2.0 tag
+     https://github.com/donapieppo/libnss-ato/releases/tag/v0.2.0
+
+v1 -> v2:
+  - rebased on top of the latest master branch
+  - asked upstream for a release tag:
+    https://github.com/donapieppo/libnss-ato/issues/27
+
+v1: https://lists.buildroot.org/pipermail/buildroot/2024-November/767814.html
+  - Baruch Siach: add depends on BR2_TOOLCHAIN_USES_GLIBC since other
+    C libraries do not provide NSS functionality. (applied)
+  - Baruch Siach: questioned why upstream Makefile is not used;
+    explained that it avoids patching for a single .c file. Added
+    comment in .mk. (applied)
+  - Neal Frager: suggested asking upstream to create proper release
+    tags instead of using commit SHA for SBOM compliance. (done, see
+    above)
+  - Neal Frager: suggested sending upstream a PR to fix the Makefile
+    for cross-compilation.
+
+Tested with Buildroot gitlab CI (12/12 glibc toolchains pass):
+  https://gitlab.com/vjardin/buildroot/-/pipelines/2313074190
+
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/libnss-ato/Config.in       | 11 +++++++++++
+ package/libnss-ato/libnss-ato.hash |  4 ++++
+ package/libnss-ato/libnss-ato.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
+ create mode 100644 package/libnss-ato/Config.in
+ create mode 100644 package/libnss-ato/libnss-ato.hash
+ create mode 100644 package/libnss-ato/libnss-ato.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9e983ae113..aaf9e78fd5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3358,6 +3358,7 @@ F:	configs/nvidia_bf3_defconfig
+ F:	package/bfscripts/
+ F:	package/dpdk/
+ F:	package/libecoli/
++F:	package/libnss-ato/
+ F:	package/libyang-cpp/
+ F:	package/sysrepo-cpp/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 371a1c33e1..955bbf47e7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1630,6 +1630,7 @@ menu "Crypto"
+ 	source "package/libksba/Config.in"
+ 	source "package/libmd/Config.in"
+ 	source "package/libnss/Config.in"
++	source "package/libnss-ato/Config.in"
+ 	source "package/libp11/Config.in"
+ 	source "package/libscrypt/Config.in"
+ 	source "package/libsecret/Config.in"
+diff --git a/package/libnss-ato/Config.in b/package/libnss-ato/Config.in
+new file mode 100644
+index 0000000000..6c6fc23857
+--- /dev/null
++++ b/package/libnss-ato/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBNSS_ATO
++	bool "libnss-ato"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  Library to map every nss request for unknown user to a
++	  single predefined user.
++
++	  https://github.com/donapieppo/libnss-ato
++
++comment "libnss-ato needs a glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/libnss-ato/libnss-ato.hash b/package/libnss-ato/libnss-ato.hash
+new file mode 100644
+index 0000000000..39220f4b03
+--- /dev/null
++++ b/package/libnss-ato/libnss-ato.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++sha256  7fe56dcfaed74884fa1f9323d000135a4de2a32177a474ee2b9e4a217ae83994  libnss-ato-0.2.0.tar.gz
++sha256  3de3161d298c48e55d7416ad89130e13dd72263b93563f3fb79c899fa8450ce2  copyright
++sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  lgpl-3.0.txt
+diff --git a/package/libnss-ato/libnss-ato.mk b/package/libnss-ato/libnss-ato.mk
+new file mode 100644
+index 0000000000..a7fb3600f8
+--- /dev/null
++++ b/package/libnss-ato/libnss-ato.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# libnss-ato
++#
++################################################################################
++
++LIBNSS_ATO_VERSION = 0.2.0
++LIBNSS_ATO_SITE = $(call github,donapieppo,libnss-ato,v$(LIBNSS_ATO_VERSION))
++LIBNSS_ATO_LICENSE = LGPL-3.0+
++LIBNSS_ATO_LICENSE_FILES = copyright lgpl-3.0.txt
++
++# Skip the default build system (avoid patching Makefile for 1 .c)
++define LIBNSS_ATO_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		-fPIC -Wall -shared -o $(@D)/libnss_ato.so.2 \
++		-Wl,-soname,libnss_ato.so.2 \
++		$(@D)/libnss_ato.c
++endef
++
++define LIBNSS_ATO_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so.2
++	ln -sf libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so
++	$(INSTALL) -D -m 0644 $(@D)/libnss-ato.conf $(TARGET_DIR)/etc/libnss-ato.conf
++endef
++
++$(eval $(generic-package))
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
