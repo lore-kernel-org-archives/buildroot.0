@@ -1,90 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C036E81A3C
-	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 16:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8928BE81A40
+	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 16:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4CF640A06;
-	Mon, 16 Feb 2026 16:13:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4221560D68;
+	Mon, 16 Feb 2026 16:29:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OgNeDeI1SorM; Mon, 16 Feb 2026 16:13:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KCE1yRfSRIoj; Mon, 16 Feb 2026 16:29:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9B7640A0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AB4A60D6D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771258414;
-	bh=YMJSC3SX/JA2DGh9sIpuAbLGzDJcKRZSvsGEV4RAgus=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=C/4corPqy1/r7ThOeuYzEaBOCkc0tOemzGl7FI8/EVcMzwqTNXD/M4DzNxSA4ZZh2
-	 iqwLEn2tx0PHU/50acI2g6cXMEWh0vgSZvpoCO6uJ1hLW4Iyrkd7bz83KWCJxn6ut/
-	 44Zz0EUUtQFEJjGAmJooNDqFBr263G9UEXovo6rloyo3Cp5wnFTDI5eIcI0f2BlFqS
-	 6+U7TPblCcs+s4EADk4Os4Zg12HtvF+CQoRZ493x+V4w1iaPD4iLWNAX7L+FuM981b
-	 aEe3XLIiZmdyJN4qiVTub8nYwdxHBqrlUx+LvN6nSEAGy+42j/akzXoISAsk/ZGd2f
-	 t1eBSS1Xk+O1A==
+	s=default; t=1771259387;
+	bh=KqGhdsGFQYS/SQlri4UNFwkZamqeRvZKR4RkHxsLBZw=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=fU14+yJ5fguz2uIWOSl+IPTC5CAcox/5wIRV5ohyZAYwnpEJC/CMm2BfCvPIGWO/p
+	 Hb8qSqHm5f7Nv39mXHYTNok0MigciRnD2bH1wQgo/BlcmsNWUW063uOx1X/v9uMD61
+	 fWbFU3JArFJPEZ29/1GO7HZdyfCUhEvd4lfrHSCdw2ndAXc4tVIpgbf4KKMC/bm5ps
+	 7kEm0Eoaf3+TKrLMoYK44PNQNcWS4DfXXngQaTp+Dhfxy+Ts0/IDMHckHaQiyGSvl2
+	 AOHt6rjVtsd74hxuKULdhww5xH6NluIrbvQXxJ++rIz0EOshEvMsCK/RQEZ0YYtEqu
+	 uO0+a68WTxSkQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9B7640A0B;
-	Mon, 16 Feb 2026 16:13:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 053581EB
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:13:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AB4A60D6D;
+	Mon, 16 Feb 2026 16:29:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1329B35B
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA60940A00
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:13:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 014A640C6F
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5yEkKT7ZU7RK for <buildroot@buildroot.org>;
- Mon, 16 Feb 2026 16:13:32 +0000 (UTC)
+ id 82aGX1pT5zNc for <buildroot@buildroot.org>;
+ Mon, 16 Feb 2026 16:29:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BB383409E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB383409E0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0B92240CB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B92240CB1
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BB383409E0
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:13:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0B92240CB1
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:29:44 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id BF7411A0FDB
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:13:28 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 8FAE81A0FEC
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:29:42 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 94CE4606CF
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:13:28 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5C499606CF
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 16:29:42 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5DBD610369167; Mon, 16 Feb 2026 17:13:26 +0100 (CET)
-Date: Mon, 16 Feb 2026 17:13:05 +0100
+ with ESMTPSA id 98FF7103690D7; Mon, 16 Feb 2026 17:29:41 +0100 (CET)
+Date: Mon, 16 Feb 2026 17:29:41 +0100
+To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: buildroot@buildroot.org
+Message-ID: <aZNF0ReJoNKF9Teo@windsurf>
+References: <20260216-openscap_cpp-v2-1-a61c7bb50837@bootlin.com>
 MIME-Version: 1.0
-Message-Id: <20260216-openscap_cpp-v2-1-a61c7bb50837@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XMQQrCMBCF4auUWRtJ0qZVV95DirTJ1A5oJiQlK
- KV3N3bv8n/wvhUSRsIEl2qFiJkSsS+hDxXYefAPFORKg5a6lVq1ggP6ZIdwtyEIg42sjevcOJ2
- gXELEid47d+tLz5QWjp9dz+q3/oGyEkrUdadVc3aDGeV1ZF6e5I+WX9Bv2/YFTIRjZqoAAAA=
-X-Change-ID: 20260216-openscap_cpp-5e4035d7dbf8
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.3
+Content-Disposition: inline
+In-Reply-To: <20260216-openscap_cpp-v2-1-a61c7bb50837@bootlin.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1771258408; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=EGEuWJrybdO/2z9XMzph3gMuXp3RGjAgxF4MT8VG9aY=;
- b=sQB1rnuyps1ujfotUNKQn+FFVSU5EHYq/Q2hjGlvVZc8/OSP9vD+Qhg38PTan8r+jjz8aR
- a/F9C8NpvtzCKrY/5QhFYsaBmwpxT8ngHU1jsueWcsVbrFSQxDQaqckTNLMN46DLp9d2As
- o7aDYqeRSIRL9+/9WrdgimWLfS/UtOZC5jjaHxUZ7mkcmjEpf180DQsUNp/8FL0OuMtc/e
- 7HyzbuaDJMY/KGGa+alQkY8tx528IEG5WYxIdJzkOTLjrhoMDHQBHvfh6ic27jYGiuTW34
- 4eUoa+HT5+6R7NBzCtNPqGW6Q8xXPxGoGpXn5u8j+muWkkMND7L/l+J8jIODPw==
+ t=1771259381; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=PVtfmzCNtGd8KnPlcwnCuMfth0p+4ogIuXH3yVaAcMU=;
+ b=Z7RMPvHrFjfqpTjyTiRduCy/YJ71omyUPL7YC+pVjLVubs7kR64Sc973F+vX/8bHHNENDA
+ Xfvrs2vCE6/RvGS1U6ffFD3Rf/NFLXmSYmMXURMdO2PX9RUgPMELSHK99fDKnGBTUoAL1d
+ vro/hEaowtlt+ixC9LNIu4FzkeSl0y+aNYIEai01idJgwPT2AFh137H9qvwWE/1X1uRk3L
+ 9tU/ezPivawq5HvN40LcnJQbEz7RRXligg7PdtWidPcx1lN8Gwqn0rxBSltYnZ0TGuMcQB
+ nx1fGJVSO7uhxelTo4nCWmyVsUGaQj/yY/UJ1geQuLuybWfLGdjsMs4JGInnzw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=sQB1rnuy
-Subject: [Buildroot] [PATCH v2] package/openscap: add patch to enforce
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=Z7RMPvHr
+Subject: Re: [Buildroot] [PATCH v2] package/openscap: add patch to enforce
  project as C project
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -97,146 +95,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiB0aGUgdG9vbGNoYWluIGludm9sdmVkIGluIG9wZW5zY2FwIGJ1aWxkIGRvZXMgbm90IHN1
-cHBvcnQgQysrLCB0aGUKY29uZmlndXJlIHN0ZXAgZmFpbHMgd2l0aCB0aGUgZm9sbG93aW5nIGVy
-cm9yOgoKICAtLSBEZXRlY3RpbmcgQ1hYIGNvbXBpbGVyIEFCSSBpbmZvCiAgLS0gRGV0ZWN0aW5n
-IENYWCBjb21waWxlciBBQkkgaW5mbyAtIGZhaWxlZAogIC0tIENoZWNrIGZvciB3b3JraW5nIENY
-WCBjb21waWxlcjogL2Jpbi9mYWxzZQogIC0tIENoZWNrIGZvciB3b3JraW5nIENYWCBjb21waWxl
-cjogL2Jpbi9mYWxzZSAtIGJyb2tlbgogIENNYWtlIEVycm9yIGF0IC91c3Ivc2hhcmUvY21ha2Uv
-TW9kdWxlcy9DTWFrZVRlc3RDWFhDb21waWxlci5jbWFrZTo3MyAobWVzc2FnZSk6CiAgICBUaGUg
-QysrIGNvbXBpbGVyCgogICAgICAiL2Jpbi9mYWxzZSIKCiAgICBpcyBub3QgYWJsZSB0byBjb21w
-aWxlIGEgc2ltcGxlIHRlc3QgcHJvZ3JhbS4KCiAgICBJdCBmYWlscyB3aXRoIHRoZSBmb2xsb3dp
-bmcgb3V0cHV0OgoKICAgICAgQ2hhbmdlIERpcjogJy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQv
-aW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxk
-L0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJJwoKICAgICAgUnVuIEJ1
-aWxkIENvbW1hbmQocyk6IC91c3IvYmluL2NtYWtlIC1FIGVudiBWRVJCT1NFPTEgL3Vzci9iaW4v
-bWFrZSAtZiBNYWtlZmlsZSBjbVRDXzE4MzRiL2Zhc3QKICAgICAgbWFrZVsxXTogRW50ZXJpbmcg
-ZGlyZWN0b3J5ICcvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEv
-YnVpbGQvb3BlbnNjYXAtMS4zLjEyL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlU2Ny
-YXRjaC9UcnlDb21waWxlLXRVeWRxSScKICAgICAgL3Vzci9iaW4vbWFrZSAgLWYgQ01ha2VGaWxl
-cy9jbVRDXzE4MzRiLmRpci9idWlsZC5tYWtlIENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIvYnVp
-bGQKICAgICAgbWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9hdXRvYnVpbGQvYXV0
-b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3BlbnNjYXAtMS4zLjEyL2J1aWxkcm9v
-dC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlU2NyYXRjaC9UcnlDb21waWxlLXRVeWRxSScKICAgICAg
-QnVpbGRpbmcgQ1hYIG9iamVjdCBDTWFrZUZpbGVzL2NtVENfMTgzNGIuZGlyL3Rlc3RDWFhDb21w
-aWxlci5jeHgubyAvYmluL2ZhbHNlICAgIC1vIENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIvdGVz
-dENYWENvbXBpbGVyLmN4eC5vIC1jIC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2Ut
-Ni9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmls
-ZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJL3Rlc3RDWFhDb21waWxlci5jeHgKICAg
-ICAgbWFrZVsyXTogKioqIFtDTWFrZUZpbGVzL2NtVENfMTgzNGIuZGlyL2J1aWxkLm1ha2U6ODE6
-IENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIvdGVzdENYWENvbXBpbGVyLmN4eC5vXSBFcnJvciAx
-CiAgICAgIG1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS9hdXRvYnVpbGQvYXV0b2J1
-aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3BlbnNjYXAtMS4zLjEyL2J1aWxkcm9vdC1i
-dWlsZC9DTWFrZUZpbGVzL0NNYWtlU2NyYXRjaC9UcnlDb21waWxlLXRVeWRxSScKICAgICAgbWFr
-ZVsxXTogKioqIFtNYWtlZmlsZToxMzQ6IGNtVENfMTgzNGIvZmFzdF0gRXJyb3IgMgogICAgICBt
-YWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0
-YW5jZS02L291dHB1dC0xL2J1aWxkL29wZW5zY2FwLTEuMy4xMi9idWlsZHJvb3QtYnVpbGQvQ01h
-a2VGaWxlcy9DTWFrZVNjcmF0Y2gvVHJ5Q29tcGlsZS10VXlkcUknCgogICAgQ01ha2Ugd2lsbCBu
-b3QgYmUgYWJsZSB0byBjb3JyZWN0bHkgZ2VuZXJhdGUgdGhpcyBwcm9qZWN0LgogIENhbGwgU3Rh
-Y2sgKG1vc3QgcmVjZW50IGNhbGwgZmlyc3QpOgogICAgQ01ha2VMaXN0cy50eHQ6MTEgKHByb2pl
-Y3QpCgogIC0tIENvbmZpZ3VyaW5nIGluY29tcGxldGUsIGVycm9ycyBvY2N1cnJlZCEKICBtYWtl
-OiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjYzOiAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1
-aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3BlbnNjYXAtMS4zLjEyLy5zdGFtcF9jb25m
-aWd1cmVkXSBFcnJvciAxCiAgbWFrZTogTGVhdmluZyBkaXJlY3RvcnkgJy9ob21lL2F1dG9idWls
-ZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9idWlsZHJvb3QnCgpUaGUgb3BlbnNjYXAgcHJvamVjdCBk
-b2VzIG5vdCBjb250YWluIGFueSBDKysgZmlsZSwgYW5kIHNvIGRvZXMgbm90IG5lZWQKYSBDKysg
-Y2FwYWJsZSBjb21waWxlci4gQnJpbmcgdGhlIHRvLWJlLWludGVncmF0ZWQtdXBzdHJlYW0gcGF0
-Y2gKZW5mb3JjaW5nIEMgbGFuZ3VhZ2UgaW4gQ01ha2VMaXN0cy50eHQgdG8gcHJldmVudCB0aGlz
-IGJ1aWxkIGZhaWx1cmUuCgpGaXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9y
-ZXN1bHRzLzFmZTU1MGZmYTc5ZjBhMDgzYTQ1MGFlMDNmZTA2N2E4YWI3MzM2YmUKRml4ZXM6IGh0
-dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9lOWQ1MmI1MjY1ODU0NDkxNjAy
-MjA1MGM3OGRjYjEzN2NhNmM5N2UwCkZpeGVzOiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qu
-b3JnL3Jlc3VsdHMvNGE5YzIxNzYzYWFkZGIyMTdlZTVmOGJiODk0N2ZhYWQ5NzY3YmFhMwpTaWdu
-ZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgot
-LS0KQ2hhbmdlcyBpbiB2MjoKLSBmaXggdXBzdHJlYW0gQ01ha2VMaXN0cy50eHQgcmF0aGVyIHRo
-YW4gZW5hYmxpbmcgQysrIHN1cHBvcnQgaW4gdG9vbGNoYWluCi0gYnJpbmcgaW4gdGhlIHRvLWJl
-LWludGVncmF0ZWQtdXBzdHJlYW0gY29ycmVzcG9uZGluZyBwYXRjaAotIExpbmsgdG8gdjE6IGh0
-dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNjAyMTYtb3BlbnNjYXBfY3BwLXYxLTEtMzM3MjE0
-OWRhNWIwQGJvb3RsaW4uY29tCi0tLQogLi4uL29wZW5zY2FwLzAwMDEtc2V0LXByb2plY3QtYXMt
-Yy1wcm9qZWN0LnBhdGNoICAgfCA3OCArKysrKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hh
-bmdlZCwgNzggaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbnNjYXAvMDAw
-MS1zZXQtcHJvamVjdC1hcy1jLXByb2plY3QucGF0Y2ggYi9wYWNrYWdlL29wZW5zY2FwLzAwMDEt
-c2V0LXByb2plY3QtYXMtYy1wcm9qZWN0LnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IDAwMDAwMDAwMDAwMC4uYzc5NGZiYWY0NGRjCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9v
-cGVuc2NhcC8wMDAxLXNldC1wcm9qZWN0LWFzLWMtcHJvamVjdC5wYXRjaApAQCAtMCwwICsxLDc4
-IEBACitGcm9tIGE3NDI2NDdlZmQyMTViNjgyZTRjZDI2YjE1YWMzZTU4MGMxMGVmOWYgTW9uIFNl
-cCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiA9P1VURi04P3E/QWxleGlzPTIwTG90aG9yPUMzPUE5
-Pz0gPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgorRGF0ZTogTW9uLCAxNiBGZWIgMjAyNiAx
-Mzo1MDo0OCArMDEwMAorU3ViamVjdDogW1BBVENIXSBTZXQgcHJvamVjdCBhcyBDIHByb2plY3Qg
-aW4gQ01ha2VMaXN0cy50eHQKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQv
-cGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKwor
-VGhlIG9wZW5zY2FwIHRvb2wgaGFzIGJlZW4gcmVjZW50bHkgaW50ZWdyYXRlZCBpbiB0aGUgYnVp
-bGRyb290IGJ1aWxkCitzeXN0ZW0gKFsxXSksIHdoaWNoIG1ha2VzIHRoZSBvcGVuc2NhcCB0b29s
-IGJ1aWxkYWJsZSBmb3IgYSB3aWRlIHZhcmlldHkKK29yIGFyY2hpdGVjdHVyZXMvT1Nlcywgd2l0
-aCBhIHdpZGUgdmFyaWV0eSBvZiBfY29tcGlsZXJzXy4gQW5kIHNvIHdoZW4KK3N1Y2ggY29tcGls
-ZXJzIGFyZSBub3Qgc3VwcG9ydGluZyBDKysgcHJvamVjdHMgKGFzIGl0IGlzIHRoZSBjYXNlIHdp
-dGggYQorZGVmYXVsdCBidWlsZHJvb3QgdG9vbGNoYWluKSwgdGhlIGJ1aWxkIGJyZWFrcyBvbiB0
-aGUgZm9sbG93aW5nIGVycm9yCisoc2VlIFsyXSBmb3IgYW4gZXhhbXBsZSk6CisKKyAgLS0gRGV0
-ZWN0aW5nIENYWCBjb21waWxlciBBQkkgaW5mbworICAtLSBEZXRlY3RpbmcgQ1hYIGNvbXBpbGVy
-IEFCSSBpbmZvIC0gZmFpbGVkCisgIC0tIENoZWNrIGZvciB3b3JraW5nIENYWCBjb21waWxlcjog
-L2Jpbi9mYWxzZQorICAtLSBDaGVjayBmb3Igd29ya2luZyBDWFggY29tcGlsZXI6IC9iaW4vZmFs
-c2UgLSBicm9rZW4KKyAgQ01ha2UgRXJyb3IgYXQgL3Vzci9zaGFyZS9jbWFrZS9Nb2R1bGVzL0NN
-YWtlVGVzdENYWENvbXBpbGVyLmNtYWtlOjczIChtZXNzYWdlKToKKyAgICBUaGUgQysrIGNvbXBp
-bGVyCisKKyAgICAgICIvYmluL2ZhbHNlIgorCisgICAgaXMgbm90IGFibGUgdG8gY29tcGlsZSBh
-IHNpbXBsZSB0ZXN0IHByb2dyYW0uCisKKyAgICBJdCBmYWlscyB3aXRoIHRoZSBmb2xsb3dpbmcg
-b3V0cHV0OgorCisgICAgICBDaGFuZ2UgRGlyOiAnL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9p
-bnN0YW5jZS02L291dHB1dC0xL2J1aWxkL29wZW5zY2FwLTEuMy4xMi9idWlsZHJvb3QtYnVpbGQv
-Q01ha2VGaWxlcy9DTWFrZVNjcmF0Y2gvVHJ5Q29tcGlsZS10VXlkcUknCisKKyAgICAgIFJ1biBC
-dWlsZCBDb21tYW5kKHMpOiAvdXNyL2Jpbi9jbWFrZSAtRSBlbnYgVkVSQk9TRT0xIC91c3IvYmlu
-L21ha2UgLWYgTWFrZWZpbGUgY21UQ18xODM0Yi9mYXN0CisgICAgICBtYWtlWzFdOiBFbnRlcmlu
-ZyBkaXJlY3RvcnkgJy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQt
-MS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VT
-Y3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJJworICAgICAgL3Vzci9iaW4vbWFrZSAgLWYgQ01ha2VG
-aWxlcy9jbVRDXzE4MzRiLmRpci9idWlsZC5tYWtlIENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIv
-YnVpbGQKKyAgICAgIG1ha2VbMl06IEVudGVyaW5nIGRpcmVjdG9yeSAnL2hvbWUvYXV0b2J1aWxk
-L2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL29wZW5zY2FwLTEuMy4xMi9idWls
-ZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVNjcmF0Y2gvVHJ5Q29tcGlsZS10VXlkcUknCisg
-ICAgICBCdWlsZGluZyBDWFggb2JqZWN0IENNYWtlRmlsZXMvY21UQ18xODM0Yi5kaXIvdGVzdENY
-WENvbXBpbGVyLmN4eC5vCisgICAgICAvYmluL2ZhbHNlICAgIC1vIENNYWtlRmlsZXMvY21UQ18x
-ODM0Yi5kaXIvdGVzdENYWENvbXBpbGVyLmN4eC5vIC1jIC9ob21lL2F1dG9idWlsZC9hdXRvYnVp
-bGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1
-aWxkL0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJL3Rlc3RDWFhDb21w
-aWxlci5jeHgKKyAgICAgIG1ha2VbMl06ICoqKiBbQ01ha2VGaWxlcy9jbVRDXzE4MzRiLmRpci9i
-dWlsZC5tYWtlOjgxOiBDTWFrZUZpbGVzL2NtVENfMTgzNGIuZGlyL3Rlc3RDWFhDb21waWxlci5j
-eHgub10gRXJyb3IgMQorICAgICAgbWFrZVsyXTogTGVhdmluZyBkaXJlY3RvcnkgJy9ob21lL2F1
-dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMu
-MTIvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5
-ZHFJJworICAgICAgbWFrZVsxXTogKioqIFtNYWtlZmlsZToxMzQ6IGNtVENfMTgzNGIvZmFzdF0g
-RXJyb3IgMgorICAgICAgbWFrZVsxXTogTGVhdmluZyBkaXJlY3RvcnkgJy9ob21lL2F1dG9idWls
-ZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVp
-bGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJJwor
-CisgICAgQ01ha2Ugd2lsbCBub3QgYmUgYWJsZSB0byBjb3JyZWN0bHkgZ2VuZXJhdGUgdGhpcyBw
-cm9qZWN0LgorICBDYWxsIFN0YWNrIChtb3N0IHJlY2VudCBjYWxsIGZpcnN0KToKKyAgICBDTWFr
-ZUxpc3RzLnR4dDoxMSAocHJvamVjdCkKKworb3BlbnNjYXAgZG9lcyBub3QgaGF2ZSBhbnkgQysr
-IGNvZGUgdG8gYnVpbGQsIHNvIHJlc3RyaWN0aW5nIGJ1aWxkcyB0bwordG9vbGNoYWlucyBzdXBw
-b3J0aW5nIEMrKyBpcyBvdmVyY29uc3RyYWluaW5nLCB0aGUgY29uZmlndXJhdGlvbiBzdGVwCitz
-aG91bGQgcmF0aGVyIG5vdCB0cnkgdG8gY2hlY2sgQysrIHN1cHBvcnQuCisKK0VuZm9yY2UgdGhl
-IHByb2plY3QgYXMgYSBDIHByb2plY3QgaW4gQ01ha2VMaXN0cy50eHQgdG8gbWFrZSBzdXJlIG5v
-dCB0bwordGVzdCBDKysgZmVhdHVyZXMgb24gdGhlIHVzZWQgdG9vbGNoYWluLgorCitbMV0gaHR0
-cHM6Ly9idWlsZHJvb3Qub3JnLworWzJdIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcv
-cmVzdWx0cy8xZmU1NTBmZmE3OWYwYTA4M2E0NTBhZTAzZmUwNjdhOGFiNzMzNmJlL2J1aWxkLWVu
-ZC5sb2cKKworVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NBUC9vcGVuc2NhcC9w
-dWxsLzIzMTIKK1twYXRjaCBzbGlnaHRseSBhZGFwdGVkIHRvIGJlIGFwcGxpY2FibGUgb24gdjEu
-My4xMl0KK1NpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9v
-dGxpbi5jb20+CistLS0KKyBDTWFrZUxpc3RzLnR4dCB8IDIgKy0KKyAxIGZpbGUgY2hhbmdlZCwg
-MSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMu
-dHh0IGIvQ01ha2VMaXN0cy50eHQKK2luZGV4IGNiMTNkZWJiNDdjZi4uMDViMDU0MzI3OTUxIDEw
-MDY0NAorLS0tIGEvQ01ha2VMaXN0cy50eHQKKysrKyBiL0NNYWtlTGlzdHMudHh0CitAQCAtOCw3
-ICs4LDcgQEAgaWYoTk9UIENNQUtFX0JVSUxEX1RZUEUgQU5EIE5PVCBDTUFLRV9DT05GSUdVUkFU
-SU9OX1RZUEVTKQorIAkJIk1pblNpemVSZWwiICJSZWxXaXRoRGViSW5mbyIpCisgZW5kaWYoKQor
-IAorLXByb2plY3QoIm9wZW5zY2FwIikKKytwcm9qZWN0KCJvcGVuc2NhcCIgQykKKyBzZXQoT1BF
-TlNDQVBfVkVSU0lPTl9NQUpPUiAiMSIpCisgc2V0KE9QRU5TQ0FQX1ZFUlNJT05fTUlOT1IgIjMi
-KQorIHNldChPUEVOU0NBUF9WRVJTSU9OX1BBVENIICIxMiIpCistLSAKKzIuNTMuMAorCgotLS0K
-YmFzZS1jb21taXQ6IDc4ZDM4ZDlkZGRhODFkN2M2YmZmOWI1MjA2NTZmZTRmNDZmMGY2OTIKY2hh
-bmdlLWlkOiAyMDI2MDIxNi1vcGVuc2NhcF9jcHAtNWU0MDM1ZDdkYmY4CgpCZXN0IHJlZ2FyZHMs
-Ci0tIApBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+On Mon, Feb 16, 2026 at 05:13:05PM +0100, Alexis Lothor=E9 wrote:
+> When the toolchain involved in openscap build does not support C++, the
+> configure step fails with the following error:
+> =
+
+>   -- Detecting CXX compiler ABI info
+>   -- Detecting CXX compiler ABI info - failed
+>   -- Check for working CXX compiler: /bin/false
+>   -- Check for working CXX compiler: /bin/false - broken
+>   CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (=
+message):
+>     The C++ compiler
+> =
+
+>       "/bin/false"
+> =
+
+>     is not able to compile a simple test program.
+> =
+
+>     It fails with the following output:
+> =
+
+>       Change Dir: '/home/autobuild/autobuild/instance-6/output-1/build/op=
+enscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+> =
+
+>       Run Build Command(s): /usr/bin/cmake -E env VERBOSE=3D1 /usr/bin/ma=
+ke -f Makefile cmTC_1834b/fast
+>       make[1]: Entering directory '/home/autobuild/autobuild/instance-6/o=
+utput-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCo=
+mpile-tUydqI'
+>       /usr/bin/make  -f CMakeFiles/cmTC_1834b.dir/build.make CMakeFiles/c=
+mTC_1834b.dir/build
+>       make[2]: Entering directory '/home/autobuild/autobuild/instance-6/o=
+utput-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCo=
+mpile-tUydqI'
+>       Building CXX object CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o=
+ /bin/false    -o CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o -c /home/=
+autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-bui=
+ld/CMakeFiles/CMakeScratch/TryCompile-tUydqI/testCXXCompiler.cxx
+>       make[2]: *** [CMakeFiles/cmTC_1834b.dir/build.make:81: CMakeFiles/c=
+mTC_1834b.dir/testCXXCompiler.cxx.o] Error 1
+>       make[2]: Leaving directory '/home/autobuild/autobuild/instance-6/ou=
+tput-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCom=
+pile-tUydqI'
+>       make[1]: *** [Makefile:134: cmTC_1834b/fast] Error 2
+>       make[1]: Leaving directory '/home/autobuild/autobuild/instance-6/ou=
+tput-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCom=
+pile-tUydqI'
+> =
+
+>     CMake will not be able to correctly generate this project.
+>   Call Stack (most recent call first):
+>     CMakeLists.txt:11 (project)
+> =
+
+>   -- Configuring incomplete, errors occurred!
+>   make: *** [package/pkg-generic.mk:263: /home/autobuild/autobuild/instan=
+ce-6/output-1/build/openscap-1.3.12/.stamp_configured] Error 1
+>   make: Leaving directory '/home/autobuild/autobuild/instance-6/buildroot'
+> =
+
+> The openscap project does not contain any C++ file, and so does not need
+> a C++ capable compiler. Bring the to-be-integrated-upstream patch
+> enforcing C language in CMakeLists.txt to prevent this build failure.
+> =
+
+> Fixes: https://autobuild.buildroot.org/results/1fe550ffa79f0a083a450ae03f=
+e067a8ab7336be
+> Fixes: https://autobuild.buildroot.org/results/e9d52b52658544916022050c78=
+dcb137ca6c97e0
+> Fixes: https://autobuild.buildroot.org/results/4a9c21763aaddb217ee5f8bb89=
+47faad9767baa3
+> Signed-off-by: Alexis Lothor=E9 <alexis.lothore@bootlin.com>
+
+Thanks for this new iteration!
+
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Thomas
+-- =
+
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
