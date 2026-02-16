@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9871E8382B
-	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 19:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CD33E83827
+	for <buildroot@archiver.kernel.org>; Mon, 16 Feb 2026 19:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF7C783C10;
-	Mon, 16 Feb 2026 19:48:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D91060DF9;
+	Mon, 16 Feb 2026 19:49:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2W1SDXyJwVLT; Mon, 16 Feb 2026 19:48:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XIpJwWgEffUA; Mon, 16 Feb 2026 19:49:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF6E783BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A466605E7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771271282;
-	bh=E8mrbVAfIc8Ps/GE7I86T+EIcXP1ZIQaIoRVDjiy5hA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hxlNEMI8DZSBJyTjLYa0P+AyE4iuDcOrdk9JUa0XjWlBl0aCd5HLWflb5js/JtYsZ
-	 K0JhbVc1Nkpzl/vLk9pExDiPrweJ9kN/wr14yrCiL+rciFim177sVC7Fi6WptoZqMK
-	 pfnbVgBoIcIn5REhXdJC0+yXCFpTH4Jlkq9ChtUXjWU9uiX4Q+vznBRtIsthgGovM6
-	 pUKFYDEWexVFJwqsV2UvjehfTZDggUsAL1/8vGJoKjInGRxRVQxsbo6ccZT2kqY7sS
-	 EbtlGeXYrAxNS5VfMfM3u6spbFskJUvdP05P64ZwP2cek30Lb+rit0ARk+gZ1lfE1p
-	 F7M047ccIMyRA==
+	s=default; t=1771271371;
+	bh=QbyhUhj8kag1Xeaaq+WkGGzKyBrmC9MzRJH2EiRs1bA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=JR73i4dhBotHNsz6CW4ZgCR3DDdv1hbDMNheB2C2q58rVYfDLGANsCP6LGDVrYsQm
+	 V1j9pamvdQgut6Kb65P2T/NTt/Di8F+yY45xabWXoQGPNxrlqR8/9ABr7m2KRw/KHP
+	 Pinxa8qWt1Gu0NSA+JPz3exHd9mD1OYOgmwFP64VULkI2kSfQLYGgLI/QcO5v+gm26
+	 dmkmS++/MWofzHDRwJywV50k0poZFj7vk/Z062SXZDkpHz+6yrcBV/NIJiYn1DmgvJ
+	 ff3RiKUsoUM0btzlSjSSYo0p4okfIUCirpHXp+lsIxOykc9KBXZHArskaaF0QvH1Ci
+	 whqg8lVv0luGA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF6E783BDF;
-	Mon, 16 Feb 2026 19:48:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A466605E7;
+	Mon, 16 Feb 2026 19:49:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EAAFA35B
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:47:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D0D6735B
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA97340A1C
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:47:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B5AA340A62
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:49:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ag4aCOZ3petK for <buildroot@buildroot.org>;
- Mon, 16 Feb 2026 19:47:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 337B240A62
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 337B240A62
- for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:47:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1785386F1D; Mon, 16 Feb 2026 19:47:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 16 Feb 2026 20:47:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7bbe1e0979c1432acd62f76b2d16ff8339064397
-X-Git-Newrev: e78a710e8fefaf722d45d8031e542be5c5718e0e
-X-Patchwork-Hint: ignore
-Message-Id: <20260216194757.1785386F1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/openblocks_a6: specify Linux
- license file
+ id AZG4-5kQaqKO for <buildroot@buildroot.org>;
+ Mon, 16 Feb 2026 19:49:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0948F40A5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0948F40A5B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0948F40A5B
+ for <buildroot@buildroot.org>; Mon, 16 Feb 2026 19:49:28 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 467202003DC;
+ Mon, 16 Feb 2026 20:49:25 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 16 Feb 2026 20:49:25 +0100
+MIME-Version: 1.0
+Date: Mon, 16 Feb 2026 20:49:25 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260215105358.2089856-1-peter@korsgaard.com>
+References: <20260215105358.2089856-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <7dc79f5eca72bc099e12f92a0a471ff5@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1771271366;
+ bh=QTkXv86l0lcR5P9+8nkpE8LfdOvUCWGgrbs8LUd5gTQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DoUw3jiQdbkIwGuSIiKmF3L2iX7kJhzdthvUW3j7qc4XupphzfWwM4OLgKAgZyRDy
+ xFwaN5aqWTi/WaybrWTXq/UyzlIvgY2+5w8PyCsV1MsbDVT63uiPDZdPOFgJpntVTr
+ WRkQR73VXgT0p0hODBfg3qoWNmwRNfrnauCs/1wmBRS1VUq1+VE4ExQ/tNnrUIWO6D
+ WlAfqrc92qFjTp/TojpC1izvPP49ktdC4XK2xq5bYTsgPgNghisQbsJFxCTzYAQ4OI
+ U3GPYbayjvU+5+vHBLYDi96BNGxoDkH2Em5EszvwcVbwcnqAHZIxAtXypmugcN8qKv
+ 4vpJ9rxdvXktg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=DoUw3jiQ
+Subject: Re: [Buildroot] [PATCH 1/3] linux: make license option visible for
+ _CUSTOM_VERSION as well
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,56 +96,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e78a710e8fefaf722d45d8031e542be5c5718e0e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 15/02/2026 11:53, Peter Korsgaard wrote:
+> Commit 50958bcdac ("linux: Add support for custom license files") added 
+> a
+> default value for the license files and made the option visible (E.G.
+> editable) when a custom VCS or tarball version is used, but it is also
+> needed for users of an older _CUSTOM_VERSION (E.G.  mainline release), 
+> as
+> the referenced files were only added in Linux 4.16 with commit 
+> e00a844aca
+> ("LICENSES: Add Linux syscall note exception"), so change that.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-The used Linux kernel (4.14.336) does not contain the default license files
-as those were only added in 4.16 with commit e00a844aca ("LICENSES: Add
-Linux syscall note exception"), so specify the correct license file to fix:
+Applied to master. For info,  I added the missing
+BR2_LINUX_KERNEL_LICENSE_FILES in openblocks_a6_defconfig.
 
-make legal-info
-..
-cp: cannot stat '/path/to/output/build/linux-headers-4.14.336/LICENSES/preferred/GPL-2.0': No such file or directory
+Best regards,
 
-And add the sha256sum to the .hash file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien:
- - reword commit title
- - actually add BR2_LINUX_KERNEL_LICENSE_FILES in defconfig
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/openblocks/a6/patches/linux/linux.hash | 1 +
- configs/openblocks_a6_defconfig              | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/board/openblocks/a6/patches/linux/linux.hash b/board/openblocks/a6/patches/linux/linux.hash
-index b207306a2b..aa432012b0 100644
---- a/board/openblocks/a6/patches/linux/linux.hash
-+++ b/board/openblocks/a6/patches/linux/linux.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  0820fdb7971c6974338081c11fbf2dc869870501e7bdcac4d0ed58ba1f57b61c  linux-4.14.336.tar.xz
-+sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/configs/openblocks_a6_defconfig b/configs/openblocks_a6_defconfig
-index 754ec53937..e0ce4aa3fb 100644
---- a/configs/openblocks_a6_defconfig
-+++ b/configs/openblocks_a6_defconfig
-@@ -8,6 +8,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.336"
-+BR2_LINUX_KERNEL_LICENSE_FILES="COPYING"
- BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
