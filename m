@@ -1,120 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52342E9A03B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACC3BE9A04A
 	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 06:31:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E56C5405AD;
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1E7380F50;
 	Wed, 18 Feb 2026 06:31:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RRSwN_F8ryyE; Wed, 18 Feb 2026 06:31:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J-1VFtNyLngN; Wed, 18 Feb 2026 06:31:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15746405BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18D9580F4A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771396293;
-	bh=BDnRgWO4tlFe3ladpQX32bzlLdyFKpblIOHB3BvQVcQ=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ZWNCo/LIK1C0vi/lFO9cL+izMpjZGTStRSEorplRREvPatN0UGFx7kHlKPeXFhh8v
-	 idqUx2cUDsa7M0qZ1GkaVKMMYssYvJ7nVOo0CyKaCNJxCKXtahB86i41L3vEQMypV4
-	 k6XQPDfTR//XfNZudJeleweqRXkO67HsK50Kdeqcs4tEayZqEr4SNlwhksWPaGRkf/
-	 KPegg0KSruAcT9cEv3kapb5o297G0+9HUZn32t2Th8lIb77o8DQRfSkb72IYmZB6T5
-	 5hZKEE6mwds+pKbAtB2hzz18E2gExToBIrEubvAFCXxtp9xUFZbtQtj98yw5NtMeLc
-	 0ziucBv6HN3bQ==
+	s=default; t=1771396292;
+	bh=eQnY5qSEwO9Z8N60FDbFOyvUH8qafFAlvER/eYJCsg0=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=BXmwxYzrR1ZaZO2++/JYRL4qvMg/ldR/ab0zdSLlRLW9W+cIdfxfeTkd4f/xFoyO5
+	 Yyv1zrpMN1q3g1pltw/RBEuAgZqkRUVFbE3t1fighZwducUfIb7SQykEQLA1NL1yMh
+	 Zt0gZDdYMDFem3rISEMSOVF8YL02/ux/JCFVO23zn9g/Vs0OiPHbwHUzaO9WpNYFiR
+	 TpNDNYkl+OY8SaGBhRCaTFO1vykkMp2xNpnNbM4D+JFCQpbtr3sGdrVdewXOzzFzCD
+	 PLU+7tCgmq5+wt5PHu4VCMKSy3ugYJyZdL5R2uj8XoCKJwSSv513uc1Ot4/gH/pZtz
+	 wGTAEnlERsyOw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15746405BA;
-	Wed, 18 Feb 2026 06:31:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CA0E1CE
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 06:31:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18D9580F4A;
+	Wed, 18 Feb 2026 06:31:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE471270
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 06:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E8576074F
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 06:31:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFBC140042
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 06:31:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kGH4jW5_3zi1 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id knkElwNbXcQ6 for <buildroot@buildroot.org>;
  Wed, 18 Feb 2026 06:31:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::22f; helo=mail-oi1-x22f.google.com;
+ client-ip=2607:f8b0:4864:20::331; helo=mail-ot1-x331.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A2CE6073D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A2CE6073D
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
- [IPv6:2607:f8b0:4864:20::22f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A2CE6073D
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 06:31:30 +0000 (UTC)
-Received: by mail-oi1-x22f.google.com with SMTP id
- 5614622812f47-45f171cb842so364424b6e.1
- for <buildroot@buildroot.org>; Tue, 17 Feb 2026 22:31:30 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 150344002A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150344002A
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
+ [IPv6:2607:f8b0:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 150344002A
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 06:31:29 +0000 (UTC)
+Received: by mail-ot1-x331.google.com with SMTP id
+ 46e09a7af769-7d1890f7ee4so2970149a34.0
+ for <buildroot@buildroot.org>; Tue, 17 Feb 2026 22:31:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771396289; x=1772001089;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=t4XS46x53oe6BULRrH0tKgFCPogcy4s9GDskYHn8txw=;
- b=ojzCUiWYrHl7roZvFT5p4Ez5CTF/0q0g7IMqtdsig+WnFS51NAzwnkFNmCtrd9TMfA
- Q2lFEu0UiSd/k4oHEx4H5/9LkJ3xhmZ/eJZRBqKn1Gbut2ngolWlOlLZMNNlnPTqLMhH
- PgJ7/Z+twDXQda/DOx5ypXb3SNmnLdvebEfQkG59bV4/OHnEK1B8xN4AMi7k4HSZa8zm
- 5WUkt2a336XDJhmNBiF0Qx37wX7wgMMFrb/9eAzJQq26f+KIW3fkoljnyyyGrKoXIdnc
- zZEjTjmn2qySmr7G22ij+s9FQDoowwxW1NLccDPS/4M7ipetasApUYITqf1OE2jYkN5q
- cExA==
-X-Gm-Message-State: AOJu0YwOY06bK+YnOlSqmsiG4ksQqqfX48slLhu2l8nmw2r3D/Qxp90a
- an1y2ZWqUquTEIrSPardNc4hKihHwwOczZOQ33unZJZnGOdooovDJdmSNpIIkHM3
-X-Gm-Gg: AZuq6aLyebSa8coNtjJh7yBSkh4BZTcyKPXoI4wlpCnFQsx+3F9hlY/l/embFcE4f7F
- kqVi2NXhbI7SE7kaQHt/ZiqrhUgGe822fk2FthbspFL6n+/TnHc1YD2HZtnrcZDVv3XZHdrT8SJ
- Ke4HjBBUjKLE3/vFBhH7rY4xAmT0On7DqmFLZB/HRlmqS1fDY+yrTGx2gCc5XAWtzoZzlWR7ErF
- c5nztK6yg42bECFp1LwW0GULcT8YwIohJ3hrwpjPAeutiMeiNgXvNT0Iji1IDglb1uoUVrXkbrF
- cBbqe6dcHQrs1odIGQInR99ox8ZyP3yIeyrCUtbwOVnI2gCx+yM/NijYTVF92i3x8wYpO/HRhDK
- YupNW0Huv3SXQQn9eukIdJ/S5rVLo8/sUr+fKEXbqqOt2X1vQct51HcB8w1hzz3PSyiyPic6oze
- H9LtSRzFxJlmyif0FO3/pJ/oxur3kIcDUD96js3Kf+FRLPnWuQESyxihNYT2wt5Kqd8I6TWq/Ft
- PEsk4Mwjyiw2wrDQaBZdh/VVYnXALDeU7C2gjSo9VDz2BmeyQ9ZoS/Tdxy/
-X-Received: by 2002:a05:6808:f15:b0:45e:fd68:3dd7 with SMTP id
- 5614622812f47-46410c8f0e9mr462752b6e.32.1771396289007; 
- Tue, 17 Feb 2026 22:31:29 -0800 (PST)
+ d=1e100.net; s=20230601; t=1771396288; x=1772001088;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gqQOkkXS/TlniS37Azc2uuVJziYgnZoBpiOZ1ygBTDI=;
+ b=PGuq5pN7mOFJH7LIBlOaG/Bsjh1UxV06P1+vTw2dWROFxTI2R41UImFwHmcwY5qyIF
+ bdJ6Ta6T2HifKyO7weluPnqr9DmXnphQr3YXVZDwP2GvEQnu5raT2jZQpXT52tZ5/Ixn
+ POA1qRm7vJwebUe09McCKlKRGJ5ZL4Escwh76VnSSp5ies8LbinLr7XzkLdRKCBEXne4
+ 6S4HIE7Ev4hitZImi+J0WXLuwbbn8yQjxVgGtu0JQzNVwOYX7KwDXrXMelYACT+ysmEe
+ dTK+gnEZfEu5SjljyI4YiawuidVAyoStGsvQ6L5wsafQqwYAk4LcmHZV2l1EWY2QeIQU
+ L+6w==
+X-Gm-Message-State: AOJu0YyQWYUFz36NeSEVKnTlkw8T+Vzbo25S8uEMbBFN3Nvk4ddnVtaU
+ e0rcRvI40W3PrC8t/ORQIarsiOclkvcYSh9jH8d/JCPVYijiJdKsgQytFcnyjMez
+X-Gm-Gg: AZuq6aKSZo6sQTmU6AKEui1/dXNyGTlS9uSw/InNGat1lw6Bq8okWSRjzGAk2XgPRZR
+ auy5cUjcm/YOlLKamrVPASquAkgoQd02UJgHVnpPlHrtjr/KXjrgESbmwSsTbQeIZ03lHIRt3uA
+ 5StWNOvwAAll0JUqGIE+j0Np3MnQElfH0aCfAPoYevWX6iktuMrKGONWTP6rUM2zRcp72lzJtgh
+ 8hRywRczjd4v2J0X3CpSzWqzt3/L0kjnY6q01T3H+CIxk+/scBhx+sNdwrc7GPVqpjHx2S8TnRz
+ AhUeX3E6FE/SSUD7YbBvQ7AmSIyrETytwFltCLVPAWJU/vVYqSOTQfPmj0y1eDEZyFxDAjqYg9c
+ nJ0cp9pJJHkW+JtMbsnfATCmhay5O0j0Jue6xF1AucUSzQ8ODkznUyuCkzL0993y+z1MT/mygkB
+ /QRjTYF1bbVbhXP7igy9QqTNK0wPGp+Jjq7HJcBHYyM8IMYlpeyDy78/0wa69ARlKB6L5OkRRJB
+ yh16tOUjFMKGhQOxqt8dA08+4AhGIltx+FcHSm508Br/nrCCTLzOA53vRpO
+X-Received: by 2002:a05:6830:2a03:b0:7cf:da36:4c7e with SMTP id
+ 46e09a7af769-7d4c2fe5e3dmr12243797a34.8.1771396288243; 
+ Tue, 17 Feb 2026 22:31:28 -0800 (PST)
 Received: from james-x399.localdomain (71-33-158-51.hlrn.qwest.net.
  [71.33.158.51]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7d4c22d11a3sm12444701a34.6.2026.02.17.22.31.28
+ 46e09a7af769-7d4c22d11a3sm12444701a34.6.2026.02.17.22.31.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Feb 2026 22:31:28 -0800 (PST)
+ Tue, 17 Feb 2026 22:31:27 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
 Cc: Adrian Perez de Castro <aperez@igalia.com>, Bernd Kuhls <bernd@kuhls.net>,
  Romain Naour <romain.naour@gmail.com>,
  James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 17 Feb 2026 23:31:23 -0700
-Message-ID: <20260218063123.546067-2-james.hilliard1@gmail.com>
+Date: Tue, 17 Feb 2026 23:31:22 -0700
+Message-ID: <20260218063123.546067-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260218063123.546067-1-james.hilliard1@gmail.com>
-References: <20260218063123.546067-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1771396289; x=1772001089; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=t4XS46x53oe6BULRrH0tKgFCPogcy4s9GDskYHn8txw=;
- b=QDnzEH0K9NyELdCS/Utaya0zxSRKsdUP9lr9wtb6WjuYxZk1jHtXapM1+ixkTZ0VCq
- cS+h7xmomshjrwV/u/rAHyssyG4JbEQtH/pYVwQoV2iF02H0BG2ymXdiyFgvb1M2NFFr
- e4DcSSPHsWcorQuB1a6F3xQw4NDHkdQdhUeBQrAyUe9JMz4pTGo0u4y78K2/10XkL/YW
- aoGzAsIi0tbNCNEvmlNfDSKTu5igM+yL4ZPvDisnier6uckejUcNmJNUL1fvEB5rZERC
- +MRJ2izR7PAohrXIIOOM8DXk4D/VW9YtLSILtSNn7Zvk9rLk6aBx+t5TLYhYLDxFRrW1
- v4xw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1771396288; x=1772001088; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gqQOkkXS/TlniS37Azc2uuVJziYgnZoBpiOZ1ygBTDI=;
+ b=UrPwvlrWSdrnf2Ij2vNmShSEqBdYBdElEtWPtMdrB4NyACvmDYTESaZVvf+BE1EMhO
+ taScqwVopgryUQL7N4T1x6ODwLBhgbNKz3ZeJnpiZiE5pR/RgtRmZ/0Gizh7S2wMLPcy
+ tTw0kdRDNIZYVNYssXRk9jgyefy7FfWYjk9rkMDDMBgRxZQNhmW0ZcGOHeZpLpEyporQ
+ qDQZaOBtQSXUTDsxWL82FnuOLBfBWCvvnc+zMBAiDDYxC085kxbJlY+6WDv2UEQfbbID
+ RhxQpIV06z0Vbix54XoUM73UOl93bHVioIXFC+uR9yBxCD1nYJZgOZrAgoSuublIhko6
+ JpRg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=QDnzEH0K
-Subject: [Buildroot] [PATCH 2/2] package/wpebackend-fdo: fix
- EGL_NOT_INITIALIZED crash
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=UrPwvlrW
+Subject: [Buildroot] [PATCH 1/2] package/mesa3d: add
+ EGL_WL_bind_wayland_display support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,32 +126,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 4cd4b2e1e6e8816555db38771d18daad46df3a6c updated mesa3d
-past version 25.2.0 which deprecated the legacy wayland
-EGL_WL_bind_wayland_display interface, as wpebackend-fdo
-currently still relies on this functionality ensure that we
-enable EGL_WL_bind_wayland_display in mesa3d.
-
-Fixes:
- - https://lore.kernel.org/all/CADvTj4pYf0uymrkZUuWgahWK=pm5CgTJL5U+gwbwKExK1so5jA@mail.gmail.com/
+This feature was made optional in mesa3d 25.2.0 as it is deprecated,
+however some packages still require it so lets add a new config
+option that those packages can select until they no longer require
+this feature.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/wpebackend-fdo/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d/Config.in | 6 ++++++
+ package/mesa3d/mesa3d.mk | 3 +++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-index 9b4dd28741..bd0ab5421e 100644
---- a/package/wpebackend-fdo/Config.in
-+++ b/package/wpebackend-fdo/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBWPE
- 	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY if BR2_PACKAGE_MESA3D
- 	help
- 	  WPEBackend interface using freedesktop.org API.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e1faea95d5..8a7811b6a5 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -50,6 +50,12 @@ comment "llvm support needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
  
++config BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY
++	bool "Legacy Wayland EGL_WL_bind_wayland_display support"
++	depends on BR2_PACKAGE_WAYLAND
++	help
++	  Legacy Wayland EGL_WL_bind_wayland_display support.
++
+ menuconfig BR2_PACKAGE_MESA3D_OPENCL
+ 	bool "OpenCL support"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 42693ce928..9c0e5d7256 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -209,6 +209,9 @@ endif
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland wayland-protocols
+ MESA3D_PLATFORMS += wayland
++ifeq ($(BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY),y)
++MESA3D_CONF_OPTS += -Dlegacy-wayland=bind-wayland-display
++endif
+ endif
+ 
+ MESA3D_CONF_OPTS += \
 -- 
 2.43.0
 
