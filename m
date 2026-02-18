@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C750E9A057
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0AECE9A056
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FC8F60F1A;
-	Thu, 19 Feb 2026 17:26:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1F4661044;
+	Thu, 19 Feb 2026 17:26:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i_3qdiOazfN4; Thu, 19 Feb 2026 17:26:15 +0000 (UTC)
+ id qS6grlYJjBgM; Thu, 19 Feb 2026 17:26:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E6B2611D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98566611D2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521975;
-	bh=//0tlLGz+Tp+kvjqHLmq1gkoP3LuHkwI+l9q1LUaLO0=;
+	s=default; t=1771521976;
+	bh=Bj8AlkalZDTAUnNPkwPimSo5lR7zTPaa2/S7e/QFbFg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=itxBsW17wkbKTkbwaNzKdh74YQs+F7dFsoH8fIsu+iBLEglEvxT7+r3jPDDZKbDpE
-	 tKXcyjCWenFyTuIfy8a15FcXmNcCUUcuqEe+X609Ya8bJaGgzl+cCQRiGyYxzv9nAu
-	 sDhVZhNMw1mdPi2K/99/iYRpkpqvfrslpTmklU9NU8FXc7uIFr8LTmPYihEjK2OtCk
-	 lg3af3LGgTEG+aAYWqXLhv9sGKW6cbZFWzJN5U+0xiqAmthNmQqkIwoqbpLRuymJSj
-	 +HH7o0N2xcdjOjBsr/RepYNbfXXhU5qBrWHMcibrjKAm5XMGGqvhFZJoFKkQ87UFDJ
-	 hAF7JMFKQsZpA==
+	b=iAgULWdMNDdwCdUpKCB1hRhH7KaQNV1V/1OEJ6lxatAjiXAjQLNAJ2D8IhpJ235QZ
+	 APjAdUE1JQDc6PrBHcOHqUOx2K7M2aAQ6oxCefO75LNKiLopF8AkrgjbiQQV96cKn3
+	 PRuRbVo3uSqHQsYU0y7DVJCSKOHgKFGGowzaU7HDX/9T6GD5C72IZqT0VfGLeQKZiv
+	 akaINAnrHp8kaXz0BBIdjslwREZ4qhGNkQwjQYcqfu7KZPaBQwD8w1/Y0HMi5pj05p
+	 SNeB1Ktl+Ts0qCg582DV1n/3Y5AsFgw3QMYtcl6nOjOGyB5Mo55hMij2RgTZEkxVWc
+	 Cn/wRqVFvtagA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E6B2611D0;
-	Thu, 19 Feb 2026 17:26:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98566611D2;
+	Thu, 19 Feb 2026 17:26:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CB25206
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 60C991CE
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 510C540CF4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 831E840CE7
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3EjVh_jedeYJ for <buildroot@buildroot.org>;
+ id xB-ykmK2Hs_Z for <buildroot@buildroot.org>;
  Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 052B640CE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F09D40C6F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 052B640CE7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F09D40C6F
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 023CD82DF0; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+ id 1BEDC82DF0; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:27:11 +0100
+Date: Wed, 18 Feb 2026 19:27:28 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 36b733d180317e38e78f193bc259c8533967c26b
-X-Git-Newrev: 3e0076aa87fa78e6792319b5063f2ab9a9ef64ef
+X-Git-Oldrev: e7fce26fa04522ebcc785dca0a5a794bf4c79042
+X-Git-Newrev: 6953ccbab91f1d257814b6f7754e721fa503af5e
 X-Patchwork-Hint: ignore
-Message-Id: <20260219172538.023CD82DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dash: add CPE
+Message-Id: <20260219172538.1BEDC82DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/frr: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,36 +76,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3e0076aa87fa78e6792319b5063f2ab9a9ef64ef
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6953ccbab91f1d257814b6f7754e721fa503af5e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The CPE `dash:dash` is valid and has a single CVE associated to it. See
-[1] & [2].
+The CPE `linuxfoundation:free_range_routing` introduced in commit [1]
+has a single CVE associated to it [2].
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2009-0854
-[2] https://security-tracker.debian.org/tracker/source-package/dash
+By looking at the Debian Security tracker for this package [3], the CVE
+associated are using the `frrouting:frrouting` CPE.
+
+This commit update the CPE accordingly.
+
+[1] c4c11c2e1a package/frr: add CPE variables
+[2] https://nvd.nist.gov/vuln/detail/cve-2020-12831
+[3] https://security-tracker.debian.org/tracker/source-package/frr
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 87e2a72e13b870530cdeb7ec9f21036aa994d43c)
+(cherry picked from commit 42a63f9eae72d4898ddfbad7a9dd320f548a409c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dash/dash.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/frr/frr.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index f030e4ec91..0993cb99a6 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -11,6 +11,8 @@ DASH_LICENSE_FILES = COPYING
- # We're patching configure.ac
- DASH_AUTORECONF = YES
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 78979e2beb..7ee436d282 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -20,8 +20,8 @@ FRR_LICENSE_FILES = \
+ # tools/gcc-plugins/frr-format.[ch] is not enabled by frr's ./configure, so gcc's
+ # GPLv3 does not apply
+ #	doc/licenses/GPL-3.0
+-FRR_CPE_ID_VENDOR = linuxfoundation
+-FRR_CPE_ID_PRODUCT = free_range_routing
++FRR_CPE_ID_VENDOR = frrouting
++FRR_CPE_ID_PRODUCT = frrouting
+ FRR_AUTORECONF = YES
  
-+DASH_CPE_ID_VENDOR = dash
-+
- # dash does not build in parallel
- DASH_MAKE = $(MAKE1)
- 
+ FRR_DEPENDENCIES = host-frr readline json-c libyang \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
