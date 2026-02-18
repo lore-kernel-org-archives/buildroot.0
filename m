@@ -4,107 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7CCDE9A02C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 16:15:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6D5AE9A02C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 16:32:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A19B560903;
-	Wed, 18 Feb 2026 16:15:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C67F60902;
+	Wed, 18 Feb 2026 16:32:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uSOzgdQYbymI; Wed, 18 Feb 2026 16:15:16 +0000 (UTC)
+ id j-Bm9oNXUJ5e; Wed, 18 Feb 2026 16:32:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ECD7608F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 895A3608F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771431316;
-	bh=sJLiHdUhqw1EYMGzTP5jsbrulHfAakTTesqSYk8rP8w=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=PYYRBqnx8x/O+uiPniWgIf8dfdKcosCkXC6SIyDTyB6U7bhvEYNiAwKnnI1RXE62l
-	 hAiv2gpFGj4Ix9Lb5Ldnj/ilH3+63YrdSVEb4SzTZabwdr7wPugy4FIaVY7SndsHTS
-	 pdxw8OpRW2GibY6Q6TNwKoz153hHNBHTbchzloCYZ6g1QXnLWGnAt4Rl6cNzNAkDkn
-	 sFkObPM3LgaXYvvPjIb5DyUs/bjfSiZ/gKbLEay3ViWOII3lMbMG23JTXDQj897jNq
-	 ft7haCS/mQ2Yp0LRszty/6R3Digl7wWxZPVdt1SB35euxv8dw3r+iqvmN7gHuGdpoV
-	 eL5ciSInM4VvQ==
+	s=default; t=1771432334;
+	bh=9A54JTfHYJ1FDFPtrY2CqlkFHaoBPyC4MLeue7LasIo=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=RhBAqjuLxVIuzgxu4xLpwimOwOCsMCrHwgbCPrhCJYETHX9dGCy0nllPk1kRNXgxr
+	 dRZ5P483V3nnoPF1teNyafHWpXntl6EXSpzH0HXCl/kqIJWSMRrJY8TNMp2SiMi1L8
+	 sGAdCcT+nFPuEypD7Vl5YB/YN7SWHMtJcf+69F+b9ix70jVh6S3EiOFcPCdg9WF3o3
+	 IIkU4uadFJVc0owUo2BSKxTJgsFn2C1JUxQeVJgc6bJofBjcS6K8uAg6uHOJt1YlEe
+	 RIf/2BAzXAPIZybCZOirqBzmOUXOHOvjZvvJOlzASXugpWsAjSGRu3ehtZVdwAYAb7
+	 tpx2ROS1HmJ1A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ECD7608F5;
-	Wed, 18 Feb 2026 16:15:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 895A3608F5;
+	Wed, 18 Feb 2026 16:32:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 33682206
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:15:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D29235B
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24D9540351
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:15:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F329340404
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pv0hRTDmmA6i for <buildroot@buildroot.org>;
- Wed, 18 Feb 2026 16:15:13 +0000 (UTC)
+ id eq987RRtqHXZ for <buildroot@buildroot.org>;
+ Wed, 18 Feb 2026 16:32:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1CC1C400A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CC1C400A0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1CC1C400A0
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:15:12 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-4359249bbacso742629f8f.0
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 08:15:12 -0800 (PST)
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 02FB3403FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02FB3403FF
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 02FB3403FF
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:11 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4806ce0f97bso253245e9.0
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 08:32:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771431311; x=1772036111;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5XCbJFU0Mny2Cnew/Q4B5a+POTLAUQG6WEq940ICnr8=;
- b=tx+aFOseIgwn850pZZeq0csl9mcZivDnmgVP7dVP0m1WnW3Bwbt5wkhDvYo7WnVD10
- IUZ+htqc1IOj1YgNu4QoA9k5JCs6xL1q/gzq5nyp3AVSk12VWoDLvPhV5OpSzIkA6Piu
- 0MJZ7ErVXR2rQRMJxhOa0WSwMbJKoQp/H9aPd1Q+rpcqOWlZZLRjeITiOF+hK1xNu0IT
- ralvBe58RvhTsC26+75yqDS+ePCtUA5MT/RD8NnTqpcTHlvwLEoCGKOuFpiv/Q3VhLu8
- vs6gk5hLO3jhgsuJqzrouNrtus2B0joJnT8ihInACKEuWjiVpNlRqtW/C5gtgxK9hRBV
- Ap2Q==
-X-Gm-Message-State: AOJu0Yxplz7fyYQLtdTwUHkYJpOldGE7fCiFlwUQEDWlK+P8Tnu2Xdhi
- D6wML/ROAiSyOUgme0XVOOqPv7muF7QKzvbM29hKnymAWblaqUYKlOnNtvyUvQ==
-X-Gm-Gg: AZuq6aIND3pv1OWJo58vCn+o3ObMj93AMI40ZPbm9qTBrA4E1eaFGTXjy+0h2dpWupi
- C/i42Ss9v5T/sqjE4yKzz7e2xwLmiJ6okAlf9qWs8PZeEOu2wN6Mo2WmHk9Qk1VRw2niaXu1xSJ
- xOX4/tVlAF0PXAPDdD3J0Xli+FKIM010v2kYdEvOSHzZUDNOWyBsCEMIUAl9uxjPAcqpkqLyN+B
- w6UcYcPCfYZyM4zO7mGQZ4p0JAPfgVcqL3yv0Pyuo+yI65g2E9F6Abo794cgBTAja9vu3o5cgXM
- en7CES5HSyy05mrb+3mWB7oPKzL4bzbvGG97Oh4Z2HyyrcIo6901VPpuoL2Pz3lE3SHxlSmh/mn
- nRs1EzSV/Vi0sm0xwPiH75Au4hy57KAf7STtEmQLHDnJCpF08Vj92ClrhtkdihWgnS+XNB11D5G
- m0LNrNTO41WhnLw24qqIPZJEGS85fIN2HSqklYEVjEhG6ZzECYXlPVTC3B2MxFbzylyfyTXSw=
-X-Received: by 2002:a05:6000:220f:b0:435:9e32:2b85 with SMTP id
- ffacd0b85a97d-43958c52e5dmr4615721f8f.29.1771431310471; 
- Wed, 18 Feb 2026 08:15:10 -0800 (PST)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
+ d=1e100.net; s=20230601; t=1771432329; x=1772037129;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=yhfu+7SOv1HBwQ8AotjTeuB2yj1TsUkrRUkRFwo+8kk=;
+ b=RC6K/SyTPlnu/AujgaF8BtCPKCr3wvrmZN8OBkahQ+BS1YtJpm6KXqFfczCV5Jwfpa
+ vgx6sIOgZYAXmR/bHfOpLwgWhzBim9f6QN0XzFaVeJ3u8fKkPG9WJPtY4qMx7JyA9idw
+ EBsSRV1Vxfmkd8uaa3CGSU5gLQz+5gAimP1gk8HhBlfAsSbgrv7OgNuSSongZl45lWMA
+ rGrrfGMFGwyt46GAIlrIeyM9cgK4lPXm+VBXGmKJWNfPGobrx7YOOyJcBjunsOKPZHYi
+ EIngMvmBmH3yhq2rpbfkaSEgGMDO7zusqKjPKcKbSqsdu8EwgkgOtcNOaMaMnBbQBa9O
+ E1pw==
+X-Gm-Message-State: AOJu0YxRskcwp/qbBHM4wrxI9uhAVVBTOfh/FmLmu9MvaUiZ44f5h/51
+ ApA+1T8o6Me2t39rJ8FTAClRKfGell6BVE/iOTYuRTlzIKtRsd8L1WBuK/Tsn4aHqQm4BBLMqqr
+ oUDl9
+X-Gm-Gg: AZuq6aIS4CNSm6H4RgaYdzfiC11WGK4Lv7iFbeCz6WssNPn1sO/W7bvg8uZDgBr0jvj
+ /OkVqoNcmx0CKWNjrFpiIytJq2w0H72QkV7gd6Gy/imP313xoI6Mhpix4iGB4PQninaLdWvPCxX
+ TUYeOUcc2kLOA0SVgdHtqooc2fw7Pa4gsUjUWOMPizPgbIx8CMyfnwtFrTQp6KVq4iy7QI4pBp/
+ 9Egb1zgCCDstmLrfLgfriyGTMU9Tz/telFDtVBrAfFgBxmOxWzgk7KlT//DeZaaznwmnkjdPfo0
+ mmW06UvVvdV1Eicf8XWE3bSllEtOBVzgn56CRsH1ksSocO2zM+xNZNMk7UFwX/6PBbHPG/nfVvk
+ 1xeQdQ7lc5HCY13Ji1xBS8La/rvf2FwU/mB1jM9wUSYJPJtfZVj6MFav0I3Se2CyRxBz2gkg1C6
+ Dvph18ojY1GC4zokTxdV75rTBOOVtou/0idLbV9z01
+X-Received: by 2002:a05:600c:1d1b:b0:47b:e2a9:2bd7 with SMTP id
+ 5b1f17b1804b1-48398ad716dmr39871785e9.19.1771432329240; 
+ Wed, 18 Feb 2026 08:32:09 -0800 (PST)
+Received: from FRSMI25-GRAVITY.. ([2a01:e0a:943:83d0:6dc6:c524:f7df:4d64])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4835dcfafcdsm917968255e9.9.2026.02.18.08.15.09
+ 5b1f17b1804b1-483983e8e3dsm20677605e9.20.2026.02.18.08.32.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Feb 2026 08:15:10 -0800 (PST)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
+ Wed, 18 Feb 2026 08:32:08 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 18:15:03 +0200
-Message-ID: <20260218161503.125586-1-flaviu.nistor@gmail.com>
+Cc: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Date: Wed, 18 Feb 2026 17:32:03 +0100
+Message-ID: <20260218163205.1639035-2-fabien.lehoussel@smile.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260218163205.1639035-1-fabien.lehoussel@smile.fr>
+References: <20260218163205.1639035-1-fabien.lehoussel@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1771431311; x=1772036111; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5XCbJFU0Mny2Cnew/Q4B5a+POTLAUQG6WEq940ICnr8=;
- b=LwFH8f9xh+R6VHzNmeFobygoa5ze7YYiEXvOTTl7p5EMoWLp9ZkgMIkOAmjoNG04le
- fqLgSKnTZYSzpeaHjbfP7RcRQsHTycehEVYBO6dzAbUsiEMMl1+7qo8Yhh5T0SAE0gND
- twJ02D8S92CuioG6sPlP8TwgjGNEkZlUB8z+3+RXmJfYe8SfKl74PZ9gmI7coYUzw3g+
- 7A8wCH21KSi/LSJXqyGHBCU/6GH16HKHs427m/GTN36p0SJuxCZTEJsrmEMSweMj8YHd
- CggPE7vpg59my8u6OKybD51sgEaawQtLAYx9qK9mgK/9eH9lCJYABWbTgtLhT9ShUgma
- tZLA==
+ d=smile.fr; s=google; t=1771432329; x=1772037129; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=yhfu+7SOv1HBwQ8AotjTeuB2yj1TsUkrRUkRFwo+8kk=;
+ b=VbvxbaH+/nm5kkpDAkqg0lBgRv9zqbTes979linwxKvWqp8VP7G7f/kzOYOZzmp3//
+ EDDl4vYuLiAnsC8dm0HJ7kObqw9L6xWUyc3OKM2OzeyH/1ZWTtYMOBVVHZ4AvtBDnEIa
+ 3sH70XFHLBj4whLoynDQP5nr179WzCMP1/DIM=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LwFH8f9x
-Subject: [Buildroot] [PATCH 1/1] package/python-rich-click: new package
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=VbvxbaH+
+Subject: [Buildroot] [PATCH 1/2] linux/linux.mk: add generation of
+ compile_commands.json
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,83 +120,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Fabien Lehoussel via buildroot <buildroot@buildroot.org>
+Reply-To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
----
- package/Config.in                                |  1 +
- package/python-rich-click/Config.in              |  9 +++++++++
- package/python-rich-click/python-rich-click.hash |  5 +++++
- package/python-rich-click/python-rich-click.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-rich-click/Config.in
- create mode 100644 package/python-rich-click/python-rich-click.hash
- create mode 100644 package/python-rich-click/python-rich-click.mk
+Enable automatic generation of compile_commands.json during the kernel
+build process to facilitate security analysis and CVE filtering.
 
-diff --git a/package/Config.in b/package/Config.in
-index 371a1c33e1..edb3b17151 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1375,6 +1375,7 @@ menu "External python modules"
- 	source "package/python-rfc3987/Config.in"
- 	source "package/python-rgbmatrix/Config.in"
- 	source "package/python-rich/Config.in"
-+	source "package/python-rich-click/Config.in"
- 	source "package/python-rpds-py/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rpi-ws281x/Config.in"
-diff --git a/package/python-rich-click/Config.in b/package/python-rich-click/Config.in
-new file mode 100644
-index 0000000000..ea0749f7ac
---- /dev/null
-+++ b/package/python-rich-click/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_RICH_CLICK
-+	bool "python-rick-click"
-+	select BR2_PACKAGE_PYTHON_CLICK # runtime
-+	select BR2_PACKAGE_PYTHON_RICH # runtime
+The compile_commands.json file is generated after the kernel build
+using the native kernel target (available since Linux 5.3). It
+contains the complete list of compiled source files with their
+compilation commands and flags.
+
+This file is copied to the binaries directory and can be used to:
+- Extract the exact list of compiled kernel files
+- Cross-reference with CVE databases (NVD, CNA) to filter relevant
+  vulnerabilities
+In the future, this information could be leveraged to:
+- Map affected files to their corresponding Kconfig CONFIG_ options
+- Determine which CVEs are actually applicable based on the current
+  build configuration
+- Provide more accurate vulnerability impact analysis
+
+The generated file is saved as linux_compile_commands.json in the
+binaries directory for use by CVE analysis tools.
+
+Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+---
+ linux/Config.in | 20 ++++++++++++++++++++
+ linux/linux.mk  | 12 ++++++++++++
+ 2 files changed, 32 insertions(+)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 4ed9104695..c6929a4a7c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -519,6 +519,26 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	  /boot if DTBs have been generated by the kernel build
+ 	  process.
+ 
++
++config BR2_LINUX_KERNEL_COMPILE_COMMANDS
++	bool "Generate compile_commands.json file"
 +	help
-+	  rich-click is a wrapper around Click that
-+	  renders help output nicely using Rich.
++	  Generate compile_commands.json during the Linux kernel build.
++	  This file contains the exact list of all compiled kernel files
++	  with the current build options/configuration in JSON format
 +
-+	  https://github.com/ewels/rich-click
-diff --git a/package/python-rich-click/python-rich-click.hash b/package/python-rich-click/python-rich-click.hash
-new file mode 100644
-index 0000000000..900170b999
---- /dev/null
-+++ b/package/python-rich-click/python-rich-click.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/rich-click/json
-+md5  a8c8797cf21e21323f51531861b5100d  rich_click-1.9.7.tar.gz
-+sha256  022997c1e30731995bdbc8ec2f82819340d42543237f033a003c7b1f843fc5dc  rich_click-1.9.7.tar.gz
-+# Locally computed sha256 checksums
-+sha256  d460cfe666617a2f86cb7c66f9041f0a87611c8b0c1f2f3f674a2022adc1f2af  LICENSE
-diff --git a/package/python-rich-click/python-rich-click.mk b/package/python-rich-click/python-rich-click.mk
-new file mode 100644
-index 0000000000..0325ff66a7
---- /dev/null
-+++ b/package/python-rich-click/python-rich-click.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-rich-click
-+#
-+################################################################################
++	  The generated file is copied to the binaries directory as
++	  linux_compile_commands.json and can be used for:
++	  - Static analysis and code indexing tools
++	  - Cross-referencing with CVE databases (NVD, CNA) to determine
++	    which vulnerabilities are actually applicable to the current
++	    kernel build configuration
 +
-+PYTHON_RICH_CLICK_VERSION = 1.9.7
-+PYTHON_RICH_CLICK_SOURCE = rich_click-$(PYTHON_RICH_CLICK_VERSION).tar.gz
-+PYTHON_RICH_CLICK_SITE = https://files.pythonhosted.org/packages/04/27/091e140ea834272188e63f8dd6faac1f5c687582b687197b3e0ec3c78ebf
-+PYTHON_RICH_CLICK_SETUP_TYPE = poetry
-+PYTHON_RICH_CLICK_LICENSE = MIT
-+PYTHON_RICH_CLICK_LICENSE_FILES = LICENSE
++	  Note: This option requires Linux kernel 5.4 or newer.
 +
-+$(eval $(python-package))
++	  If unsure, say N.
++
++
+ config BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL
+ 	bool "Needs host OpenSSL"
+ 	help
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c61089bfe0..649921a87b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -550,6 +550,18 @@ define LINUX_BUILD_CMDS
+ 	$(LINUX_APPEND_DTB)
+ endef
+ 
++define LINUX_GENERATE_COMPILE_COMMANDS
++	@$(call MESSAGE,"Generating compile_commands.json")
++	$(Q)$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) \
++		-C $(@D) \
++		compile_commands.json
++	cp $(@D)/compile_commands.json $(BINARIES_DIR)/linux_compile_commands.json
++endef
++
++ifeq ($(BR2_LINUX_KERNEL_GENERATE_COMPILE_COMMANDS),y)
++LINUX_POST_BUILD_HOOKS += LINUX_GENERATE_COMPILE_COMMANDS
++endif
++
+ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+ # When a DTB was appended, install the potential several images with
+ # appended DTBs.
 -- 
 2.43.0
 
