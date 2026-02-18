@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EA80E9A02C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 14:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B246E9A02C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 15:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D423E407E9;
-	Wed, 18 Feb 2026 14:04:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C18381113;
+	Wed, 18 Feb 2026 15:06:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KRQw4kNg5vSI; Wed, 18 Feb 2026 15:06:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C531580F62
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771427163;
+	bh=SKBW1EJIYaXoSLgyUVPB0N82Fn5sVl5+S3iNWSZrfCo=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=pK7Hmzfr6F2NHWt2UeYQY4Yl0o0oRKUAnjmG5u0vGyxYnm45oKsRE4i9AD+ImKAs/
+	 pV5qONAsrKJtxp28v4f9u60+GUub+5vChP8ompLdDkWKmb9yN/+qzyb8oipzT3ZITe
+	 c9cSsIM0AI7WE1jdTD/ozna8dq7+zmPWZyezaT3eGB7mL6xi5xb9Zdelq7El3iQojP
+	 1DR5BE/vUcLfPVmXUIRpndrpeU6UTtsLZLoYFbfkNOWyIoxKnMzkJ4RHaQtxaiweJS
+	 hDL1aOY4dtGjmN3YS4g3Kpgnpj9sRaDqVxuP68zCRbMpHYbMxZ5t4uKDaZqNI34Xn0
+	 UlOTKlR/ve9Uw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C531580F62;
+	Wed, 18 Feb 2026 15:06:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5513A1CE
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 15:06:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4298B407C6
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 15:06:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpfMfIBdJrm0; Wed, 18 Feb 2026 14:04:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 292E1407C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771423466;
-	bh=s25LJ3fJkuVUzJ6Am+8gQV/euuYyYZSS/C7cUrWFaJk=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=WKooFf1umx3TpaGApuzsCfzrYj/bfP20680eovCf2IRrcdug+ICkNzeAcRps5TEY3
-	 Bf6rRJACWPqDox4Ypdx0mxL0EaJxFz0mtRRNAI7IBC38IMA36E3DN4ovqGlpiVwZcn
-	 ZVYza65TZL9VsHKAk1d5EdOCWd4250DgB+514BXhDUwg3pSlLccjudAW6vfuCXqLOm
-	 DZ6hRX+lV6yEq5DQWsjiAiUrdt+HYColwUJCkz8IH7MDyJDyPQDCwhi6O9VHdRBq0P
-	 0l1UzIgVDBZqFs5vR/LPj0rKpAvte7547/f6CiWC5b1lktvVvCu1Tx1ox7Nk5lYk4M
-	 vhJZusrPaktjw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 292E1407C5;
-	Wed, 18 Feb 2026 14:04:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D33135B
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 14:04:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 42CCC400AE
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 14:04:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fYzeRuMXX8RH for <buildroot@buildroot.org>;
- Wed, 18 Feb 2026 14:04:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.10.208.61;
- helo=mout-b-201.mailbox.org; envelope-from=manuel.diener@oss.othermo.de;
+ id kTuZmNDOhKjC for <buildroot@buildroot.org>;
+ Wed, 18 Feb 2026 15:06:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.10.208.52;
+ helo=mout-b-203.mailbox.org; envelope-from=manuel.diener@oss.othermo.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E7A944004E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A944004E
-Received: from mout-b-201.mailbox.org (mout-b-201.mailbox.org [195.10.208.61])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7A944004E
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 14:04:22 +0000 (UTC)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org
- [IPv6:2001:67c:2050:b231:465::1])
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 67CD9407AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67CD9407AF
+Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org [195.10.208.52])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67CD9407AF
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 15:05:59 +0000 (UTC)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org
+ [IPv6:2001:67c:2050:b231:465::202])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by mout-b-201.mailbox.org (Postfix) with ESMTPS id 4fGJCj5sCTzDs53;
- Wed, 18 Feb 2026 15:04:17 +0100 (CET)
+ by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4fGKZp12C0z9wWZ;
+ Wed, 18 Feb 2026 16:05:54 +0100 (CET)
 From: Manuel Diener <manuel.diener@oss.othermo.de>
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 15:00:29 +0100
-Message-ID: <20260218140031.3124335-1-manuel.diener@oss.othermo.de>
+Date: Wed, 18 Feb 2026 16:04:50 +0100
+Message-ID: <20260218150453.3743924-1-manuel.diener@oss.othermo.de>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4fGJCj5sCTzDs53
+X-Rspamd-Queue-Id: 4fGKZp12C0z9wWZ
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oss.othermo.de; s=MBO0001; t=1771423457;
+ d=oss.othermo.de; s=MBO0001; t=1771427154;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=EMRzJs4ByxN6xUPU+IV5I96jJNwtZ0WvLbfE/kP9Zos=;
- b=GlagD2jcJJ+MGkWVzACimy9hL8aVfiNK9Psh8VcaKrsiVU/X9t0hJnH5HCm5YtP5p3gXwA
- Spe/oi1khusD2513YXyTh4sWGG0hFo/tE3TziWpnzn0ocwY+aKXswtyebglGXooJ1RTwE1
- lHtMJptlbE0cGBHVf6rD2i3zuxBR2JvzORgfLNlr7HUu3wsXP/MOaJACqDzvtgZyBJ2cI1
- XKNZ0846Q/pMe8lF7mk34Gb3uiGDPQzxUOyrvXp/NgjV+3D0+9oZYb5TDvSEhbUBwWMQEn
- i3S0qJyxKMu07+AL2EgZrgtVvzwAyXvHaslWYcNJAEcodpLZjDb3FjZhWpSu3g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=rzcxgnKqoercpUPiHJxVsIEzlXcdW50CrOEzoj12l9Y=;
+ b=AExNDrmuKOjKlAuS8m6H66qhciklvGAly1dyM/lULR3ous6NEVKwCvgb223dBqMV0RTrbZ
+ pQkLCmbwmMWuN3CuB+mj6UPs5NGaR+e6H8o6/F1BZiL7Hbbeq0+XjSSJlnL2Co5O9JX+cP
+ /r4oNmUKAuHamOBa5WwuzVi1aX3iG2I2qVWZVH7PGabWPmRqCgXCVD4U9DD7iTTY9Q+pW1
+ 9Z0h7eUMK2778GpQ0jA9Eq3U3IXmtIkirJC6lJFImndaNPIVXw/e5I/XQaNy6GdFjMdFwh
+ hzVGGekceH923Q98cYsXcqSrjMjvZpdy355AWO4uqL2FRePPPd3Ys8o00ry7/Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=oss.othermo.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=oss.othermo.de header.i=@oss.othermo.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=GlagD2jc
+ header.a=rsa-sha256 header.s=MBO0001 header.b=AExNDrmu
 X-Mailman-Original-Authentication-Results: outgoing_mbo_mout; dkim=none;
  spf=pass (outgoing_mbo_mout: domain of manuel.diener@oss.othermo.de designates
- 2001:67c:2050:b231:465::1 as permitted sender)
+ 2001:67c:2050:b231:465::202 as permitted sender)
  smtp.mailfrom=manuel.diener@oss.othermo.de
-Subject: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to version
- 3.12.0
+Subject: [Buildroot] [PATCH 1/2] package/python-starlette.mk: bump to
+ version 0.52.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,50 +96,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Falco Hyfing <hyfinglists@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
+Cc: James Hilliard <james.hilliard1@gmail.com>,
  Manuel Diener <manuel.diener@oss.othermo.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes here: https://github.com/pymodbus-dev/pymodbus/releases/tag/v3.12.0
+See the release notes here: https://starlette.dev/release-notes/
+This also includes the versions 0.51.0 and 0.52.0
 
 Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
 ---
- package/python-pymodbus/python-pymodbus.hash | 4 ++--
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 8d990d0d5f..b1183fba1e 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index 9b84774c86..72c56012f7 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  7485a0f834aafb48273c6adb297dff93  pymodbus-3.11.4.tar.gz
--sha256  6910e385cb6b2f983cd457e9ecee2ff580dbb23cf3d84aefec0845e71edd606a  pymodbus-3.11.4.tar.gz
-+md5  c120f359fa9a0bba0c450efcb93941e9  pymodbus-3.12.0.tar.gz
-+sha256  3fafe85e5d82bb9bcbda14b97a0e69a47dc46be55631e9f988adfaf95140c44b  pymodbus-3.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  f3479ed026aeaffb43af371d3b7db527  starlette-0.50.0.tar.gz
+-sha256  a2a17b22203254bcbc2e1f926d2d55f3f9497f769416b3190768befe598fa3ca  starlette-0.50.0.tar.gz
++md5  3fafce592e3b272a54e2fe7727397fc1  starlette-0.52.1.tar.gz
++sha256  834edd1b0a23167694292e94f597773bc3f89f362be6effee198165a35d62933  starlette-0.52.1.tar.gz
  # Locally computed sha256 checksums
- sha256  572a4d6fa7541553f70cc6d494fbcbee7eb7d3f2fbd16080d39b20cccda26f0b  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 1e7df6892a..75c0bdc35a 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index af8a49e0fd..9831fbcf13 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMODBUS_VERSION = 3.11.4
-+PYTHON_PYMODBUS_VERSION = 3.12.0
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/2a/af/bbb716301ab9c60f0702c3cdf72cc0e373286a5648fe16bc4431400489dc
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/41/dc/8db192f3a66032e1bd900eb87b5bbcb539d5118f520372af0cb92ba42499
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+-PYTHON_STARLETTE_VERSION = 0.50.0
++PYTHON_STARLETTE_VERSION = 0.52.1
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/ba/b8/73a0e6a6e079a9d9cfa64113d771e421640b6f679a52eeb9b32f72d871a1
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/c4/68/79977123bb7be889ad680d79a40f339082c1978b5cfcf62c2d8d196873ac
+ PYTHON_STARLETTE_SETUP_TYPE = hatch
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 -- 
 2.53.0
 
