@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDD8BE9A055
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6245E9A056
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9CEAD610F7;
-	Thu, 19 Feb 2026 17:25:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A0DB61143;
+	Thu, 19 Feb 2026 17:25:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U7IJ5zXuVQXw; Thu, 19 Feb 2026 17:25:47 +0000 (UTC)
+ id tB9TJwTZiQtT; Thu, 19 Feb 2026 17:25:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9ECA61143
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C83086114F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521947;
-	bh=ehxgPlk/GBJOUjgLEedD32sAUbB/EUIVKCmW9UR3N4w=;
+	s=default; t=1771521948;
+	bh=4nuoc/QzGQftE80jONX8Ozx3PvCDHBaefKP2dwpzFhw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZLfNtSAXsswg9H+klKjg1KiZ4IUbE5SpGmxgW2cD2KTZ1uI/6ngVZitpnX3ScboRh
-	 7E8983JGtaH32ghbQbJFiUaWAujlOYDqD7/GZI7UECzsfwDX9hHoKrtmwYroKYNpDp
-	 0w4BxNMGdysrsnnDrWYnabbwO4APuMrKe3uNEwoDPuN6wL3smnVbV15OMnPMS2opD9
-	 GKzGcwOEAU1JeGMHrl31gnRgDjzK9av/AOHpV3x7KQNC2kL1FjOik7PQ/yjt0ZgJDh
-	 6pJutcYZARTsozjeViDUPwr1FZln8ffFfkxN1QHNEKHJMrME6rooT0feTBw8C9lvmi
-	 DV1QOdIFSlHzA==
+	b=VACAZq5tU98rlQaGQXjkp5qlMhmAPY1YwY64QitNxDBrqnCAeH22RPLg5SUvLse/7
+	 N+xklBdyi5iwhQovLHaRfKb59t96WZwRyIMBcfBObc6gwaE9eHIOcO6hfY/B5h8iNW
+	 679K796HE/YqpKFQ/hRsNpMJVDVbQ9PlXnpT805UzY9dr2jBZCTzTM5n8xbkfNTq/t
+	 MFj5/R2H4v8MmUh49AAto+Dmo3pafJ1RtDf5hEA41SaWgmMiizz/kQrJhIVd2OCzdF
+	 l12tIiOru+lwiW9jd64RMrajczJrkPT1RbVOhOEZ/ZClL3pEgiP3PywPogECNX4EyG
+	 g5+16YZpJj/JA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9ECA61143;
-	Thu, 19 Feb 2026 17:25:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 439271CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id C83086114F;
+	Thu, 19 Feb 2026 17:25:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56004355
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7067883827
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47BC1403E5
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L5sq85Oi3RuS for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id isFZY4GESv1T for <buildroot@buildroot.org>;
  Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE9283829
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E72F4083B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEE9283829
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E72F4083B
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9ED60870DC; Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
+ id 7EF7B82DF0; Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:21:31 +0100
+Date: Wed, 18 Feb 2026 19:10:16 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ff04f0eda2e6831c6f868c977c01b14a89b729be
-X-Git-Newrev: 80f304768398af840687e3969154a03ad6c84bda
+X-Git-Oldrev: 8c21d2f4a7186bc5a325284a30a21a426b8f7f77
+X-Git-Newrev: f3107dda1e01417cd0d0d3c7c3a97eb08e8f831d
 X-Patchwork-Hint: ignore
-Message-Id: <20260219172537.9ED60870DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/testing/tests/package/test_firewalld: use ext2 instead of cpio
+Message-Id: <20260219172537.7EF7B82DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/m4: bump version
+ to 1.4.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,100 +77,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/80f304768398af840687e3969154a03ad6c84bda
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f3107dda1e01417cd0d0d3c7c3a97eb08e8f831d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The CPIO filesystem generated by the test_firewalld test is too
-large, and doesn't fit as an initramfs in the 256MB of RAM available
-in the versatilepb machine. This causes a "Initramfs unpacking failed:
-write error" when booting, and many files being missing from the root
-filesystem, ultimately causing the test to fail.
+https://lists.gnu.org/archive/html/m4-announce/2026-02/msg00000.html
 
-The test_firewalld test initially started to fail following a systemd
-update [1][3]:
-
-  [BRTEST# systemctl is-active firewalld
-  failed
-
-But really started to crash at boot following a python 3.14 update
-[2][4]:
-
-  Run /init as init process
-  /init: exec: line 15: /sbin/init: not found
-
-Also, update TestFirewalldSysVInit to use ext2 instead of cpio.
-
-[1] 926e0504d06b5d61d7affb24b94b133b916b71f7
-[2] a0a6abc8b193e5bdab5326324d7299c19d5d8c67
-
-Fixes:
-[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/12944797059
-[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/11856840940
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6a7fe6382aab710eee2338b061f1f4e4f8793e36)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit 875d6aedbc639484e9203c5bcda1a55ecb7ad4c9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_firewalld.py | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ package/m4/m4.hash | 2 +-
+ package/m4/m4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
-index 700337f637..1093873b38 100644
---- a/support/testing/tests/package/test_firewalld.py
-+++ b/support/testing/tests/package/test_firewalld.py
-@@ -23,19 +23,21 @@ class TestFirewalldSystemd(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_FIREWALLD=y
--        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
+diff --git a/package/m4/m4.hash b/package/m4/m4.hash
+index a5b8456cc2..b6dcca6c7d 100644
+--- a/package/m4/m4.hash
++++ b/package/m4/m4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  e236ea3a1ccf5f6c270b1c4bb60726f371fa49459a8eaaebc90b216b328daf2b  m4-1.4.20.tar.xz
++sha256  f25c6ab51548a73a75558742fb031e0625d6485fe5f9155949d6486a2408ab66  m4-1.4.21.tar.xz
+ # License files, locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 396c2bbee2..d498754b35 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def test_run(self):
--        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
-         kernel_file = os.path.join(self.builddir, "images", "zImage")
-         dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-         self.emulator.boot(arch="armv7",
-                            kernel=kernel_file,
--                           kernel_cmdline=["console=ttyAMA0,115200"],
-+                           kernel_cmdline=["console=ttyAMA0,115200",
-+                                           "rootwait", "root=/dev/mmcblk0"],
-                            options=[
--                               "-initrd", cpio_file,
-+                               '-drive', f'file={ext2_file},if=sd,format=raw',
-                                "-dtb", dtb_file,
-                                "-M", "vexpress-a9"
-                            ])
-@@ -78,19 +80,21 @@ class TestFirewalldSysVInit(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_FIREWALLD=y
--        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
- 
-     def test_run(self):
--        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
-         kernel_file = os.path.join(self.builddir, "images", "zImage")
-         dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-         self.emulator.boot(arch="armv7",
-                            kernel=kernel_file,
--                           kernel_cmdline=["console=ttyAMA0,115200"],
-+                           kernel_cmdline=["console=ttyAMA0,115200",
-+                                           "rootwait", "root=/dev/mmcblk0"],
-                            options=[
--                               "-initrd", cpio_file,
-+                               '-drive', f'file={ext2_file},if=sd,format=raw',
-                                "-dtb", dtb_file,
-                                "-M", "vexpress-a9"
-                            ])
+-M4_VERSION = 1.4.20
++M4_VERSION = 1.4.21
+ M4_SOURCE = m4-$(M4_VERSION).tar.xz
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
