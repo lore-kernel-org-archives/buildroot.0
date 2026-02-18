@@ -1,114 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6D5AE9A02C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 16:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2267FE9A047
+	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 16:32:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C67F60902;
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD87F81247;
 	Wed, 18 Feb 2026 16:32:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3s0KE9g4SliA; Wed, 18 Feb 2026 16:32:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BB298123F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771432333;
+	bh=6Y9bkyRDS6M16b24DOnxYfOB1Mtj1fVSIQE+QcktZtk=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=HaepCEF6tjuhr+6XDsmRjaLuy2YZudsJxiqQ8vVLDrI0CFzUxm0gzmVKJ53cj9QaE
+	 8P7znK6PteqXx19SI+Hga+DhLmRoiagxhgW06fbEeuHyMHOUMutAG5UNJoJylHdJsT
+	 ZUBdxQpor5IQckB3vFeHqSrhhmlboKy9xezBijgjesfG+vtAN35RAhMQEPILof/ju8
+	 qAQ4SGhG1/LcejIkoBzfzKrGNgflMJylu2o5VFnS310rDscBckcm4GNM5U48TrM4L/
+	 wc9+Ddx9tgd+SJveZTqqAlDQhWNmhwmrP3q/F06hjxERrlg8c2HoyCRoXDAl7beUYj
+	 fNZgitzmY58Zw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BB298123F;
+	Wed, 18 Feb 2026 16:32:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BCC435B
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2138860903
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j-Bm9oNXUJ5e; Wed, 18 Feb 2026 16:32:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 895A3608F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771432334;
-	bh=9A54JTfHYJ1FDFPtrY2CqlkFHaoBPyC4MLeue7LasIo=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RhBAqjuLxVIuzgxu4xLpwimOwOCsMCrHwgbCPrhCJYETHX9dGCy0nllPk1kRNXgxr
-	 dRZ5P483V3nnoPF1teNyafHWpXntl6EXSpzH0HXCl/kqIJWSMRrJY8TNMp2SiMi1L8
-	 sGAdCcT+nFPuEypD7Vl5YB/YN7SWHMtJcf+69F+b9ix70jVh6S3EiOFcPCdg9WF3o3
-	 IIkU4uadFJVc0owUo2BSKxTJgsFn2C1JUxQeVJgc6bJofBjcS6K8uAg6uHOJt1YlEe
-	 RIf/2BAzXAPIZybCZOirqBzmOUXOHOvjZvvJOlzASXugpWsAjSGRu3ehtZVdwAYAb7
-	 tpx2ROS1HmJ1A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 895A3608F5;
-	Wed, 18 Feb 2026 16:32:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D29235B
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F329340404
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eq987RRtqHXZ for <buildroot@buildroot.org>;
- Wed, 18 Feb 2026 16:32:12 +0000 (UTC)
+ id 0zvYSoOJMuhl for <buildroot@buildroot.org>;
+ Wed, 18 Feb 2026 16:32:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 02FB3403FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02FB3403FF
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02FB3403FF
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:11 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4806ce0f97bso253245e9.0
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 08:32:11 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BF4CE60904
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF4CE60904
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BF4CE60904
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 16:32:10 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4836f4cbe0bso117565e9.3
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 08:32:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771432329; x=1772037129;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=yhfu+7SOv1HBwQ8AotjTeuB2yj1TsUkrRUkRFwo+8kk=;
- b=RC6K/SyTPlnu/AujgaF8BtCPKCr3wvrmZN8OBkahQ+BS1YtJpm6KXqFfczCV5Jwfpa
- vgx6sIOgZYAXmR/bHfOpLwgWhzBim9f6QN0XzFaVeJ3u8fKkPG9WJPtY4qMx7JyA9idw
- EBsSRV1Vxfmkd8uaa3CGSU5gLQz+5gAimP1gk8HhBlfAsSbgrv7OgNuSSongZl45lWMA
- rGrrfGMFGwyt46GAIlrIeyM9cgK4lPXm+VBXGmKJWNfPGobrx7YOOyJcBjunsOKPZHYi
- EIngMvmBmH3yhq2rpbfkaSEgGMDO7zusqKjPKcKbSqsdu8EwgkgOtcNOaMaMnBbQBa9O
- E1pw==
-X-Gm-Message-State: AOJu0YxRskcwp/qbBHM4wrxI9uhAVVBTOfh/FmLmu9MvaUiZ44f5h/51
- ApA+1T8o6Me2t39rJ8FTAClRKfGell6BVE/iOTYuRTlzIKtRsd8L1WBuK/Tsn4aHqQm4BBLMqqr
- oUDl9
-X-Gm-Gg: AZuq6aIS4CNSm6H4RgaYdzfiC11WGK4Lv7iFbeCz6WssNPn1sO/W7bvg8uZDgBr0jvj
- /OkVqoNcmx0CKWNjrFpiIytJq2w0H72QkV7gd6Gy/imP313xoI6Mhpix4iGB4PQninaLdWvPCxX
- TUYeOUcc2kLOA0SVgdHtqooc2fw7Pa4gsUjUWOMPizPgbIx8CMyfnwtFrTQp6KVq4iy7QI4pBp/
- 9Egb1zgCCDstmLrfLgfriyGTMU9Tz/telFDtVBrAfFgBxmOxWzgk7KlT//DeZaaznwmnkjdPfo0
- mmW06UvVvdV1Eicf8XWE3bSllEtOBVzgn56CRsH1ksSocO2zM+xNZNMk7UFwX/6PBbHPG/nfVvk
- 1xeQdQ7lc5HCY13Ji1xBS8La/rvf2FwU/mB1jM9wUSYJPJtfZVj6MFav0I3Se2CyRxBz2gkg1C6
- Dvph18ojY1GC4zokTxdV75rTBOOVtou/0idLbV9z01
-X-Received: by 2002:a05:600c:1d1b:b0:47b:e2a9:2bd7 with SMTP id
- 5b1f17b1804b1-48398ad716dmr39871785e9.19.1771432329240; 
- Wed, 18 Feb 2026 08:32:09 -0800 (PST)
+ d=1e100.net; s=20230601; t=1771432328; x=1772037128;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=x3DEq4/FuA6nMw9VAplQrh1f7Qa9qLwYhLmIDDzTRsM=;
+ b=WPrXa9haZv7lOOI4JLfFmLncg56ooC19FkeXhSwufJwG6UPjx1h3rGFb2B0dhGLgki
+ Zc84lORjc7HSfsFTnsjyps1e9cYAERggxfZR5YUoAoOq7l1T0CjtdfDF/Fs4T/8EX7vr
+ lZRpfQ0i1TiRUdm1nezPbnMa3FS0MwWLBeVYhbI5uebzLyVyyVKXiGIdt2z01eNxO3VY
+ LjDK2D1us5es6A57ESL2hiAnJDt1lKQMz6j+O1rdw9khqNd7aGEDvR36DCRRvqpgb3Om
+ Ft4xHTbITTKK0rETOqtq/mzt4dWWMY7Jf+FhaC5CT61M1RV3gGp/vFo175bBwsZ0A75A
+ JgOA==
+X-Gm-Message-State: AOJu0YyQS9IkiKutgrWBIKxdCm/JSEjw2kAq6me4ZmbylLhay0Mba/hi
+ hBa1A2Uk2xjFx4POHNNTtRu0KNjjxDRBH/wJcJj5KQQUBkUkF0Wu08/ApI4Y01wXIICrDNIM97N
+ o0KoK
+X-Gm-Gg: AZuq6aIhV5GUGhaYF3IBaBzwJFtnTjO6t/YpKgTiy6j2ppapQp6j4d1u1nnLG9z5KbE
+ e9U+1KQFYYRPQhHlIH84o7CbtTydKxkG9pW6x4G7Ncwv8Bch78uTSAKKD2+ZjFUHQE5bQhATFyy
+ My3BKy5c43JVdI+rU7R2sZQOuH0XSHJnJDHItlwVpzAN1VcyWizH43UiXVvPDDlWAKxoI4md3Nw
+ lR29kvR54erC4jI8YSBfleY/brJSM0uFa35ZSzNoPeQnlSmwJdu6Iqq5oY1YUiL3BDxseKFsg6N
+ SIvtC1Z48M4uL7Dp54AHGdDjMC36aCeBbRiMMnxaHhoSScQMkfk8bFcoQLZ9p8jrSMdMojpkI3c
+ yiL9p34MuRCixX5euary88zeGtxVNYczxnQ42FONhrb2TfJpb0pAy9fOrfY7a+LoPJV9h/4+V/c
+ EilPvyVCX7UWoERN3Iz3djXWTNcgyluv5sQtm07z5B
+X-Received: by 2002:a05:600c:3b86:b0:480:69b6:dfed with SMTP id
+ 5b1f17b1804b1-48398ad3023mr45249185e9.24.1771432328206; 
+ Wed, 18 Feb 2026 08:32:08 -0800 (PST)
 Received: from FRSMI25-GRAVITY.. ([2a01:e0a:943:83d0:6dc6:c524:f7df:4d64])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483983e8e3dsm20677605e9.20.2026.02.18.08.32.08
+ 5b1f17b1804b1-483983e8e3dsm20677605e9.20.2026.02.18.08.32.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Feb 2026 08:32:08 -0800 (PST)
+ Wed, 18 Feb 2026 08:32:07 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Date: Wed, 18 Feb 2026 17:32:03 +0100
-Message-ID: <20260218163205.1639035-2-fabien.lehoussel@smile.fr>
+Date: Wed, 18 Feb 2026 17:32:02 +0100
+Message-ID: <20260218163205.1639035-1-fabien.lehoussel@smile.fr>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260218163205.1639035-1-fabien.lehoussel@smile.fr>
-References: <20260218163205.1639035-1-fabien.lehoussel@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1771432329; x=1772037129; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=yhfu+7SOv1HBwQ8AotjTeuB2yj1TsUkrRUkRFwo+8kk=;
- b=VbvxbaH+/nm5kkpDAkqg0lBgRv9zqbTes979linwxKvWqp8VP7G7f/kzOYOZzmp3//
- EDDl4vYuLiAnsC8dm0HJ7kObqw9L6xWUyc3OKM2OzeyH/1ZWTtYMOBVVHZ4AvtBDnEIa
- 3sH70XFHLBj4whLoynDQP5nr179WzCMP1/DIM=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=smile.fr; s=google; t=1771432328; x=1772037128; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=x3DEq4/FuA6nMw9VAplQrh1f7Qa9qLwYhLmIDDzTRsM=;
+ b=S2f1nMchf9oUUez20cO07xnNztMDZy1iAL4SkF9O2ettrFFX4cOnBqfwWPaE4JgHM2
+ mNUBUIKJYo4e7IWv/RcdcbcsSVMlqA0IU/S5qXr94Rc6x0w0QFZOaWD1snddnCvlDYyI
+ WrLC+bbgWAGqfn2npOOQwl6HuE76Np4U/eRuo=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=VbvxbaH+
-Subject: [Buildroot] [PATCH 1/2] linux/linux.mk: add generation of
- compile_commands.json
+ header.s=google header.b=S2f1nMch
+Subject: [Buildroot] [PATCH 0/2] Linux kernel CVE filtering improvements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,87 +122,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable automatic generation of compile_commands.json during the kernel
-build process to facilitate security analysis and CVE filtering.
+This patch series adds support for generating compile_commands.json during
+the Linux kernel build and provides a tool to filter out CVEs that are
+definitively NOT applicable to the current build.
 
-The compile_commands.json file is generated after the kernel build
-using the native kernel target (available since Linux 5.3). It
-contains the complete list of compiled source files with their
-compilation commands and flags.
+The goal is to remove false positives from CVE reports while keeping
+potentially applicable CVEs that require
+further investigation.
 
-This file is copied to the binaries directory and can be used to:
-- Extract the exact list of compiled kernel files
-- Cross-reference with CVE databases (NVD, CNA) to filter relevant
-  vulnerabilities
-In the future, this information could be leveraged to:
-- Map affected files to their corresponding Kconfig CONFIG_ options
-- Determine which CVEs are actually applicable based on the current
-  build configuration
-- Provide more accurate vulnerability impact analysis
+The series consists of:
 
-The generated file is saved as linux_compile_commands.json in the
-binaries directory for use by CVE analysis tools.
+1. linux: generate compile_commands.json for kernel CVE analysis
+   - Adds Makefile hook to generate compile_commands.json
+   - Adds Kconfig option to enable this feature (disabled by default)
+   - File is copied to binaries directory for use by analysis tools
 
-Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
----
- linux/Config.in | 20 ++++++++++++++++++++
- linux/linux.mk  | 12 ++++++++++++
- 2 files changed, 32 insertions(+)
+2. support/scripts: add filter-kernel-cve script for Linux kernel CVE analysis
+   - New script to analyze CVEs from Buildroot's CycloneDX SBOM
+   - Cross-references with official CVE database (CNA/cvelistV5)
+   - Removes CVEs where NO affected files are compiled
+   - Keeps CVEs where affected files ARE compiled
+   - Keeps CVEs with insufficient data for manual review
+   - Supports stdin/stdout for pipeline integration
+   - Optionally auto-updates CVE database
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4ed9104695..c6929a4a7c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -519,6 +519,26 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
- 	  /boot if DTBs have been generated by the kernel build
- 	  process.
- 
-+
-+config BR2_LINUX_KERNEL_COMPILE_COMMANDS
-+	bool "Generate compile_commands.json file"
-+	help
-+	  Generate compile_commands.json during the Linux kernel build.
-+	  This file contains the exact list of all compiled kernel files
-+	  with the current build options/configuration in JSON format
-+
-+	  The generated file is copied to the binaries directory as
-+	  linux_compile_commands.json and can be used for:
-+	  - Static analysis and code indexing tools
-+	  - Cross-referencing with CVE databases (NVD, CNA) to determine
-+	    which vulnerabilities are actually applicable to the current
-+	    kernel build configuration
-+
-+	  Note: This option requires Linux kernel 5.4 or newer.
-+
-+	  If unsure, say N.
-+
-+
- config BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL
- 	bool "Needs host OpenSSL"
- 	help
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c61089bfe0..649921a87b 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -550,6 +550,18 @@ define LINUX_BUILD_CMDS
- 	$(LINUX_APPEND_DTB)
- endef
- 
-+define LINUX_GENERATE_COMPILE_COMMANDS
-+	@$(call MESSAGE,"Generating compile_commands.json")
-+	$(Q)$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) \
-+		-C $(@D) \
-+		compile_commands.json
-+	cp $(@D)/compile_commands.json $(BINARIES_DIR)/linux_compile_commands.json
-+endef
-+
-+ifeq ($(BR2_LINUX_KERNEL_GENERATE_COMPILE_COMMANDS),y)
-+LINUX_POST_BUILD_HOOKS += LINUX_GENERATE_COMPILE_COMMANDS
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
- # When a DTB was appended, install the potential several images with
- # appended DTBs.
+
+Fabien Lehoussel (2):
+  linux/linux.mk: add generation of compile_commands.json
+  support/scripts: add filter-kernel-cve script for Linux kernel CVE
+    analysis
+
+ linux/Config.in                   |  20 +
+ linux/linux.mk                    |  12 +
+ support/scripts/filter-kernel-cve | 592 ++++++++++++++++++++++++++++++
+ 3 files changed, 624 insertions(+)
+ create mode 100755 support/scripts/filter-kernel-cve
+
 -- 
 2.43.0
 
