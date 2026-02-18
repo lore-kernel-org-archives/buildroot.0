@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82469E9A056
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABE19E9A053
 	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59291611AE;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FF5F8386E;
 	Thu, 19 Feb 2026 17:26:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SdwjUAG3ivhL; Thu, 19 Feb 2026 17:26:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E1syGXZ-yoaO; Thu, 19 Feb 2026 17:26:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02E95611A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A33A283984
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521969;
-	bh=aK+7AuUzlJL8+XgJHSTlbKCjvjmOZN7D94a4hV0s7Qg=;
+	s=default; t=1771521970;
+	bh=uOFspd9DllFLXXI/bGNc8rXK4jnw6TjwQwjRLY4xhWY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MNlT1kpqEEFfj61FP6yN9q2yaeZuiPWEov+5GG35Y6OEy9IQqxpkAR+aoiCOx7Mqy
-	 BVu6Sx8o4pBg1hMe1rZYrn1w5WUcOVaSP8kMz+SrcMcp3MHnLJXoBj7Nlc/VI2k9lT
-	 fwY21jT8qNU143fpRTnsXVI4NERWFO74R7fg1ZqAGmG5nQ41xncuS2p9hKNkqFkL7g
-	 ZT3JA3XhF9Upwf76IyVoaUwfOAdvHb5SJyTz/uoCb3fSJ6SkJ3Y2TbGE8ddienclhe
-	 0xf02F8B1LMVoqZwGobddVKiX7cvoIhqxbGTAssZkXMWKcqyuuU7YaMfUGtq7nSGut
-	 PGA+snpr3T/Nw==
+	b=YwN4iw2UW4XId/TF0hMK+5URjaNrCtnq5KLSZi1t4lAdn/YsQpewsBFi/xcMafPN4
+	 02Cc7fPXPE+98VkUgLWg10TgrFCeVTrjjupsgd4GcAxMUhcZ/Y7IuYfRT7j7jxLMpf
+	 40WUUUQYGbl+OLR1nrTyWh6zwFRjuLC7ANBwJLOsVWwCmNKANx0LvhOu2cERLKjBrW
+	 EHbORrv9Ez3P4otx2VHwEtM4y5sqGSzo9PrreMIQr+hO7mwimYIFLzkHqBvLyePUWU
+	 XUqXrC9AW2NJxEh7UyE2ebzBZTNJLSMs/iZSOjhxwHLumDpxrNouLb46UaGVm8oY7k
+	 3zHQIlFIgqa/Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02E95611A3;
-	Thu, 19 Feb 2026 17:26:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DDC1206
+	by smtp1.osuosl.org (Postfix) with ESMTP id A33A283984;
+	Thu, 19 Feb 2026 17:26:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9DFF8206
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81D5E60F46
+ by smtp4.osuosl.org (Postfix) with ESMTP id 802BD40C73
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 00aB-b1asi7N for <buildroot@buildroot.org>;
- Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RRKm5ucWli2z for <buildroot@buildroot.org>;
+ Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11F2A610BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADC4E40CBC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11F2A610BF
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADC4E40CBC
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F28C870D9; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+ id AABED82DF0; Thu, 19 Feb 2026 17:25:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:27:22 +0100
+Date: Wed, 18 Feb 2026 19:22:12 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3e0076aa87fa78e6792319b5063f2ab9a9ef64ef
-X-Git-Newrev: e7fce26fa04522ebcc785dca0a5a794bf4c79042
+X-Git-Oldrev: 80f304768398af840687e3969154a03ad6c84bda
+X-Git-Newrev: bca05afec883e16ff82f252f5a1cce56b3dcd4fb
 X-Patchwork-Hint: ignore
-Message-Id: <20260219172538.0F28C870D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-jinja2:
- update CPE
+Message-Id: <20260219172537.AABED82DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/tor: bump version
+ to 0.4.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,41 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e7fce26fa04522ebcc785dca0a5a794bf4c79042
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bca05afec883e16ff82f252f5a1cce56b3dcd4fb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The `pocoo:jinja2` CPE introduced in commit [1] is not deprecated but is
-no longer used. All the security issue on the Github Advisory reference
-CVE with the `palletsprojects:jinja` CPE instead (see [2]).
+https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.5/ReleaseNotes
 
-This commit updates the CPE accordingly.
+Updated license hash due to upstream commit:
+https://gitlab.torproject.org/tpo/core/tor/-/commit/2b0be077600beb95066ffa5f06094eeca906851a
 
-[1] 165f60a092 package/python-jinja2: add CPE variables
-[2] https://github.com/pallets/jinja/security/advisories/GHSA-cpwx-vrp4-4pq7
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c01c53f5e8ea212c826e9c276d69a900dfbbbace)
+(cherry picked from commit 0eee0df35a6f32c2f7d90e2a27a71bfe5396b332)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-jinja2/python-jinja2.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/tor/tor.hash | 6 +++---
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 74360ec258..a52fa77275 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -10,8 +10,8 @@ PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/df/bf/f7da0350254c0
- PYTHON_JINJA2_SETUP_TYPE = flit
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE.txt
--PYTHON_JINJA2_CPE_ID_VENDOR = pocoo
--PYTHON_JINJA2_CPE_ID_PRODUCT = jinja2
-+PYTHON_JINJA2_CPE_ID_VENDOR = palletsprojects
-+PYTHON_JINJA2_CPE_ID_PRODUCT = jinja
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index eeafd49058..a4b0af12b5 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.22.tar.gz.sha256sum
+-sha256  c88620d9278a279e3d227ff60975b84aa41359211f8ecff686019923b9929332  tor-0.4.8.22.tar.gz
++# From https://dist.torproject.org/tor-0.4.9.5.tar.gz.sha256sum
++sha256  c949c2f86b348e64891976f6b1e49c177655b23df97193049bf1b8cd3099e179  tor-0.4.9.5.tar.gz
+ # Locally computed
+-sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
++sha256  5dc29ea302cc75db6db4a7c88d7b5d4638b4e0f5f1d2e6d21ce71f707470b766  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index c0785ef2b1..36be7967bf 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # In host/target build, setup.py tries to download markupsafe if it is not installed
- PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+-TOR_VERSION = 0.4.8.22
++TOR_VERSION = 0.4.9.5
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
