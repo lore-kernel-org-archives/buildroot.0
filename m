@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A26D9E9A02C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 21:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B09DE9A049
+	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 21:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 958E0816D8;
-	Wed, 18 Feb 2026 21:43:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52258815D7;
+	Wed, 18 Feb 2026 21:45:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B9lc2dSczzH7; Wed, 18 Feb 2026 21:43:32 +0000 (UTC)
+ id n1u2qeD6eOwb; Wed, 18 Feb 2026 21:45:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22944816D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73C27810F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771451012;
-	bh=rqWrBBbLOrP/ASnJ3nH/UzFcskh4L05eZwwgChbAKoA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qHnYBru5yI9+0zgzZZUYWokKmzvlOQfWY0CPhMDC5hoQkFfBF8rk4MKEwKYQg1GoX
-	 y+qnPXd00NifagDTJMy0rbI+Zplqpuc97nioe2jZnmiImbb1uZRuv1NtKZ4Tc7OCnk
-	 V5WlVASEnaycpgkeTP4k28tYaMQV0dwuy9dy/bIlPwhfj1uAJqkXbanKG7/bQdBIML
-	 tKWk80LlD0JfP0B6W2HU2P9gt+JfpdMeMZmY9goxXTXjjlgnY9od0rEpnKX+M2fW4I
-	 r0ZfaZpuTRRuIHQRCkBtVcCP8nZqaBU7TkTrabVUGvXl4muw0/d0vz2CZ5KScUTfVp
-	 6Ls48PDbLPCxQ==
+	s=default; t=1771451121;
+	bh=nS6gcA3qxB6tjJgsaiPYJg7JYMAIsIR0JjxS6qYl1Jg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=EXMTfVgdLvCRjKbX75HoAN1nLUt8egC9DMTt09UGueITqYecvA/z3JKZ8jAkUTgaZ
+	 pxPYdC4T8rt0Mdyg/373qqUfIMkg6/TxbKXBI31pN9CU36fETZRluyEcZPddInwqHh
+	 e3vzo4bOPtDwlbaiZmciCK04X5TudqSQj2jLZnSlgFnJBIW/PoHfzg7fhN3CudAqOX
+	 koB8HH/qW2Eu/xlQeeTFtEE6smZkpaPVVdBAPIKLe5ljZFJ4mDub5iiOKkfL1jcQUx
+	 egCWOkDNByBrJTSrTV1/0WSE8cGKYmHObiyKO8MCeQyxv5C6FmUhTLmZieoDIzgUZJ
+	 xgvIfwGETH1xg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22944816D3;
-	Wed, 18 Feb 2026 21:43:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73C27810F5;
+	Wed, 18 Feb 2026 21:45:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 78C8D183
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 21:43:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 843A81CE
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 21:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A24D403B2
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 21:43:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A274403B2
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 21:45:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dgh6m3ef54yl for <buildroot@buildroot.org>;
- Wed, 18 Feb 2026 21:43:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92CDF4035B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92CDF4035B
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 21:43:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D92386FFD; Wed, 18 Feb 2026 21:43:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 22:27:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06b964b362b1b30cc346145c38e2a4aad78d0eec
-X-Git-Newrev: 127f36b406e80a6e5f773ce6e588a5ba9e5b3974
-X-Patchwork-Hint: ignore
-Message-Id: <20260218214330.7D92386FFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: bump to version 4.0.1
+ id yw5Mr9cMYJXy for <buildroot@buildroot.org>;
+ Wed, 18 Feb 2026 21:45:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6798F4035B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6798F4035B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6798F4035B
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 21:45:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id DEFBB2003C3;
+ Wed, 18 Feb 2026 22:45:13 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 18 Feb 2026 22:45:13 +0100
+MIME-Version: 1.0
+Date: Wed, 18 Feb 2026 22:45:13 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260218012159.1555509-1-james.hilliard1@gmail.com>
+References: <20260218012159.1555509-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <02b14874884a69a726723245ba184efe@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1771451115;
+ bh=RNxHw80lDAo5VxFc/lFmh5mZi1LgHZ0GJ1e2Eu8E2Do=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=e/6609QAVNR/zkhvdZXbNRhUsrlrmyHfY8SixOQOW0uHrrVIKX4Kbap7YGX0u5Esn
+ hWNDtPyMdO7eKqxRqgS8ycA/Wn2XKr751Cy1GEcX+Eq38akpt1tf9xjRlcs6FlbcQ/
+ vkKhwj08/aCWdiUJpMpgSmdfFFzBDKmbxZpsmx1Sey+JrmOU7e5MHzSW3sBHmIAuDD
+ TJVPA12ZclZFEWU4lKCHMwFZj0M0e67NvvjB9cUrkY3Y4tfuhHCjcKMXXwNEqHa4xg
+ XCDjC4men/xVDnDLrFh6gekwiwYIV7qL6ZVLST8Ye3lpMjG/CICJieMwN+3DK8BiW1
+ 3KEfFUMVcTsHQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=e/6609QA
+Subject: Re: [Buildroot] [PATCH 1/1] package/ruby: bump to version 4.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,53 +95,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/127f36b406e80a6e5f773ce6e588a5ba9e5b3974
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 18/02/2026 02:21, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Release announce:
-https://www.ruby-lang.org/en/news/2026/01/13/ruby-4-0-1-released/
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add link to release announce]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 95d968e8e2..bd64f97339 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2025/12/25/ruby-4-0-0-released/
--sha256  a72bacee9de07283ebc19baa4ac243b193129f21aa4e168c7186fb1fe7d07fe1  ruby-4.0.0.tar.xz
-+# https://www.ruby-lang.org/en/news/2026/01/13/ruby-4-0-1-released/
-+sha256  0531fe57dfdb56bf591620d2450642ea0e0964f3512a6ebee7dc9305de69395f  ruby-4.0.1.tar.xz
- 
- # License files, Locally calculated
- sha256  a74812486cffbdc55141a5d9f165d782cbb202660d827622ec966237d4717b99  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 76ad9cc73f..a9668e36f1 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 4.0
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
--RUBY_VERSION_EXT = 4.0.0
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
-+RUBY_VERSION_EXT = 4.0.1
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
- 
+Applied to master (since it is a bugfix only release). Thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
