@@ -1,113 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3956EE9A04D
-	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 22:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD1D9E9A04D
+	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 23:13:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B7E680D13;
-	Wed, 18 Feb 2026 22:04:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 938DE60893;
+	Wed, 18 Feb 2026 23:13:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DwD-_1O3r5T6; Wed, 18 Feb 2026 22:04:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lECZoujq0nFl; Wed, 18 Feb 2026 23:12:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 028E680B88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8362B60B2E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771452284;
-	bh=hvSjHyvJu51vc4i9u2DnZo0JW8J5p/mmlRxOVtAFPVQ=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=saOuc+DUgI3Ri1RnJw/1XOdBbJrh834d34JwIK9ib6s/ZnXAvG9hgW2sv3wQXzNSj
-	 U1fnp4EQkQ97JLPIDrxefc/ry5+Qn9kCTLLPYr+qXGzzrHQuTss7atnKLVChXqT2G8
-	 r+PUqJY7b3bqaEcwO3EOctI8yrAlc+V/7U4ywoPi1iuOg7TxeTy+vu58vZRt9l/7QT
-	 rH0WF5P7BWtrmAQnKcS2LxmqPVKOGT92Hqcs73DPKmJqiLMqXe20YrcuW+DH3yfhFk
-	 k8sij+aCK+Qn/+8AM1piu1N5rn/hJ5e3HvX/nCaSQ719C8JHBKn5QzsyTHHyhNkVAw
-	 SBRxxtElOS88Q==
+	s=default; t=1771456379;
+	bh=zkJTItpbtiQXNvSrYyj7rSXbVdbjQkwZQBdawM3bB3k=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=hkcNJk0yj31y0ylnuDx7s3dC0zyJOjYDA8qxQPkaNEBIjTx2npJkiD45DRStydVE1
+	 0jJc2my0oHdhtPGYfI2A28AeBHNquwkEE9unK5X03KDD3g63B97dM25k+5ig+ReORd
+	 K9vTckQOHdC+hooNZaY3FQ+wG3JKo5HtPQk1DzYLUv96mbtKq8labz3aBhnPS3a3he
+	 goz7+6GmxmKE+mwdeRU9BELdV3NYj850oO5koabeTD4xR6kzIbke5LVkCyTAehb+ZY
+	 apwkNB10ij+krK7mTQIRSKVzggepfJZgryByaTRVNYrQMAdthM1v+818bu8l9dPDmd
+	 yOCapLtBOc1ZA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 028E680B88;
-	Wed, 18 Feb 2026 22:04:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8362B60B2E;
+	Wed, 18 Feb 2026 23:12:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4655E1CE
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 22:04:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 877FD183
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 23:12:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43CBC405F7
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 22:04:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78C78408F1
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 23:12:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CUJVmesDc1HR for <buildroot@buildroot.org>;
- Wed, 18 Feb 2026 22:04:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 21B61405D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B61405D9
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 21B61405D9
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 22:04:40 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-436317c80f7so944368f8f.1
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 14:04:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771452278; x=1772057078;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=lCwVLErPL3Ij1v0eqwhpLIQnLMo3TZKxIkWA8L39fCM=;
- b=h0DOc2YVF3h86RqtZS4yq8VfNjQIoIdH4oIgvytKCL1dKCYye7UsKXnIfjyhYMnYZO
- o4CWqtSt9T7w4b3sqfUt/Rw0wUIx9yXrqej60xlfo0QDZAe5cYP3IuPojKKpqmfFgmYC
- S8jNXpvrjRs+kAcIrG3wswVYyGIeMGMKU4jr6NlvevEWcBqDxDi13zoWS4mkRZlwneWl
- +qwP+p8FSkNZ/pon5KNryJMOAlJUXEOV3pTA8rDkcJGnpJc98XJx4y/xhc9gvRqVKn/7
- KpGrKmB4YdkawJt0l19KW81id5MldFyD40Lmc4pY1gskNq0/5IKPxZFJb4yjeLrEq1wU
- kU7g==
-X-Gm-Message-State: AOJu0YzaQiJsY6+5EGM//qPnz7feL7bkb9vZCi9hcPQAcpVHtxwXE7g0
- m+J29v5TsoXM8O1TsnWgr0i4W9ZNjq/VeQ+eULQ75DB/dnLdnV52h31bHRoDAQHw7BQiRiG/xLh
- BcaWr
-X-Gm-Gg: AZuq6aJkR9PfqEp3HgOouuyB8gFpAulDIg88RZUWMyiwFdGT8w+OXIqcyZ+eAbJDA0/
- s84n/7/Cu5Nxr03KGOYB2KnGkDKafirAN6clmCM2FmEOlW1O+7ucRP1n8wxi9mpB8RYkXQS//bp
- rAf2lRP7JVoQcydNOFpWmvPyHdnUc3sOQq6qlJ/q99/XWd12B+B6ViIiUid60H3+Wbe34on+NRG
- pn0y3FpbYpXy2mO89B+UHONcMqISCwAwPDO/DCVffQwIIPF0Jt2WG9uevVnuy8qm5xFHtFVUyKo
- O4sUzMu9YOOiqGN4nlv5tp4CmeLNeyBSWLybfSiWFL1uJ4+mG6TENUB39Ow1VQZIh5ZXgjJAR7C
- k+J1ntDW4yz7AINDLprbKLiMSKMA23HBDxtwgw6kBTv6J3BXdGhiROt5SlnlAF5jB+FPvRwi/kJ
- znCjIRpXnzTS9hABO4bmXCI8fpHSE4z8SJLQj7Qxmwt4p0FuiCDGf08yn8sr9dSFLb5R+i+YnYr
- W4dLvfgboCFWhxA1ML7X+otEeEF4mW68RWM
-X-Received: by 2002:a05:6000:2504:b0:435:9538:939b with SMTP id
- ffacd0b85a97d-43958c03381mr5836770f8f.8.1771452278279; 
- Wed, 18 Feb 2026 14:04:38 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439567aad3csm10418878f8f.36.2026.02.18.14.04.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Feb 2026 14:04:38 -0800 (PST)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>, Vincent Fazio <vfazio@xes-inc.com>,
- James Hilliard <james.hilliard1@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
-Date: Wed, 18 Feb 2026 23:04:35 +0100
-Message-ID: <20260218220435.1849890-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.52.0
+ id INlECA9SFFK1 for <buildroot@buildroot.org>;
+ Wed, 18 Feb 2026 23:12:57 +0000 (UTC)
+X-Greylist: delayed 1949 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 18 Feb 2026 23:12:54 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 14E1A404C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14E1A404C0
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 14E1A404C0
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 23:12:54 +0000 (UTC)
+Received: from 81-197-150-176.elisa-laajakaista.fi ([81.197.150.176]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1vsqHg-002FPi-S9; Wed, 18 Feb 2026 23:44:40 +0100
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id c7002654;
+ Wed, 18 Feb 2026 22:44:40 +0000 (UTC)
+Date: Thu, 19 Feb 2026 00:44:40 +0200
+Message-ID: <20260219004440.GB317369@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Julien Olivain via buildroot <buildroot@buildroot.org>,
+ Julien Olivain <ju.o@free.fr>
+In-Reply-To: <87ldhb1cwq.fsf@dell.be.48ers.dk>
+References: <20251017131035.224739-1-aperez@igalia.com>
+ <cc93ebe7f1b702a71c48e410766eaf54@free.fr> <87ldhb1cwq.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1771452278; x=1772057078; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lCwVLErPL3Ij1v0eqwhpLIQnLMo3TZKxIkWA8L39fCM=;
- b=JzqVqz8zYmzE1p/ATsEp6LXkC6NJQDhP2QuOqPZot5h8JiiNjfpFXiI0D2+yMZIQoc
- q1PnYziBqCsHxrk/rf1/+Q2rBdYWhszgKhO9Kqyw8skUg/hjIxP5GZPjeffs4huTmbmb
- 6lLjK9nyR3yBrYWC7XUrsJDLGYVNVa+1i21hQ=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=nEMBhb6rlAj5/dxnODA64YHix3U32liui4HUYVjEQaE=; b=mVtM6QLSmds6Bkz/HQu2xsIxcQ
+ IXVgb34r5tj910Ny7XcEeArhTMBmH+Kw8Q6iI1HSo+JJyS/dQoAtg78IfwHoJuk/hT5x2yzhwMga7
+ Wq+6R1DUJtvLs0NNEUfzR4f/5o3gMgxkkM8MeXtxEViKyem49z30V7cKNOIoG+jbnPpShADeJxtI9
+ 7N1rHjz4ZNpCVQm4DUAVVDKd7iX33MiR+e9uceaMMiCBiDyF8GKRqUKWuZlL8+EI+kue/UWfMhXiW
+ xQbsd8zOXAyR+/fvO94msBppbdbt1y3WTRvz4oTnQmLAUwi0N93Ly5q4SKgGgcIozsTYlRpIgG/q1
+ d0+fY8Zw==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=JzqVqz8z
-Subject: [Buildroot] [PATCH] package/python-pybind: overwrite
- 'pybind11/_version.py' with a hard-coded version
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=mVtM6QLS
+Subject: Re: [Buildroot] [PATCH] package/wpewebkit: security bump to version
+ 2.50.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,84 +100,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0709189889575443471=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes build error with python-pillow since its version bump to 12.0.0
-which introduced a dependency to pybind with buildroot commit
-5f446a8d6dd8715385d6e2df2714f064bf26243d:
 
-FileNotFoundError: [Errno 2] No such file or directory:
- '/home/bernd/buildroot/output/host/lib/python3.13/site-packages/include/pybind11/detail/common.h'
+--===============0709189889575443471==
+Content-Type: multipart/signed; boundary="/oMhjNCf4QKGdBSf"; micalg="pgp-sha256"; protocol="application/pgp-signature"
 
-Implement the solution suggested by Vincent Fazio [1]:
-Generate `pybind11/_version.py` file with a hard-coded version to avoid
-copying pybind11 headers in HOST_DIR.
 
-Fixes:
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/13138981946 (TestPythonPybind)
+--/oMhjNCf4QKGdBSf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-[1] https://lists.busybox.net/pipermail/buildroot/2026-February/796082.html
+T24gTW9uLCAwMiBGZWIgMjAyNiAxNDo0MDo1MyArMDEwMCBQZXRlciBLb3JzZ2FhcmQgPHBldGVy
+QGtvcnNnYWFyZC5jb20+IHdyb3RlOgo+ID4+Pj4+ICJKdWxpZW4iID09IEp1bGllbiBPbGl2YWlu
+IHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6Cj4gCj4gSGkg
+QWRyaWFuLAo+IAo+ICA+IEkgbmFpdmVseSB0cmllZCB0byBjb21waWxlIHRoZSBwYWNrYWdlIHdp
+dGggdGhpcyBwYXRjaCBvbiB0b3Agb2YgdGhlCj4gID4gbWFzdGVyIGJyYW5jaCBhdCBjb21taXQg
+NzA5NWUxMjBhMiB3aXRoIHRoZSBmb2xsb3dpbmcgY29tbWFuZHM6Cj4gCj4gID4gICAgIGNhdCA+
+LmNvbmZpZyA8PEVPRgo+ICA+ICAgICBCUjJfYWFyY2g2ND15Cj4gID4gICAgIEJSMl9UT09MQ0hB
+SU5fRVhURVJOQUw9eQo+ICA+ICAgICBCUjJfVE9PTENIQUlOX0VYVEVSTkFMX0JPT1RMSU49eQo+
+ICA+ICAgICBCUjJfUEFDS0FHRV9NRVNBM0Q9eQo+ICA+ICAgICBCUjJfUEFDS0FHRV9NRVNBM0Rf
+R0FMTElVTV9EUklWRVJfU09GVFBJUEU9eQo+ICA+ICAgICBCUjJfUEFDS0FHRV9NRVNBM0RfT1BF
+TkdMX0VHTD15Cj4gID4gICAgIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfRVM9eQo+ICA+ICAg
+ICBCUjJfUEFDS0FHRV9XUEVXRUJLSVQ9eQo+ICA+ICAgICBCUjJfUEFDS0FHRV9XUEVXRUJLSVRf
+U0FOREJPWD15Cj4gID4gICAgIEJSMl9QQUNLQUdFX1dQRVdFQktJVF9NVUxUSU1FRElBPXkKPiAg
+PiAgICAgQlIyX1BBQ0tBR0VfV1BFV0VCS0lUX01FRElBX1NUUkVBTT15Cj4gID4gICAgIEJSMl9Q
+QUNLQUdFX1dQRVdFQktJVF9XRUJEUklWRVI9eQo+ICA+ICAgICBFT0YKPiAgPiAgICAgbWFrZSBv
+bGRkZWZjb25maWcKPiAgPiAgICAgbWFrZSB3cGV3ZWJraXQKPiAKPiAgPiBBbmQgaXQgZmFpbGVk
+IGF0IGNvbmZpZ3VyZSB0aW1lLCBjb21wbGFpbmluZyBhYm91dCBtaXNzaW5nCj4gID4gZnJlZXR5
+cGUgKHRoZW4gZm9udGNvbmZpZykgbGlicmFyaWVzLCB3aXRoIHRoZSBmb2xsb3dpbmcgZXJyb3I6
+Cj4gCj4gID4gQ291bGQgTk9UIGZpbmQgRnJlZXR5cGUgKG1pc3Npbmc6IEZSRUVUWVBFX0xJQlJB
+UlkKPiAgPiBGUkVFVFlQRV9JTkNMVURFX0RJUlMpCj4gID4gKFJlcXVpcmVkIGlzIGF0IGxlYXN0
+IHZlcnNpb24gIjIuOS4wIikKPiAKPiAgPiBJIGFsc28gdHJpZWQgd2l0aCBCUjJfUEFDS0FHRV9X
+UEVXRUJLSVQ9eSBvbmx5ICh3aXRob3V0IHRoZQo+ICA+IHN1Yi1vcHRpb25zKSBhbmQgaXQgZmFp
+bHMgdGhlIHNhbWUgd2F5LiBJIGRvbid0IHRoaW5rIHRoZSBpc3N1ZQo+ICA+IGlzIGludHJvZHVj
+ZWQgYnkgdGhpcyBwYXRjaCwgYXMgSSBzZWUgdGhlIHNhbWUgaXNzdWUgd2l0aG91dCB0aGlzCj4g
+ID4gcGF0Y2guCgpGaXhlZCBieSBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3Qv
+YnVpbGRyb290L3BhdGNoLzIwMjYwMjE4MTk1ODEyLjI5ODMyMDctMS1iZXJuZEBrdWhscy5uZXQv
+CiAKPiAgPiBJIHdhcyBub3QgYWJsZSB0byBjb21waWxlIHRoZSBwYWNrYWdlIHdpdGhvdXQgbWFu
+dWFsIG1vZGlmaWNhdGlvbnMuCj4gCj4gID4gQ291bGQgeW91IGhhdmUgYSBsb29rIGlmIHlvdSBj
+YW4gZml4IHRoaXMgaXNzdWUsIHBsZWFzZT8KPiAKPiBDb3VsZCB5b3UgcGxlYXNlIGhhdmUgYSBs
+b29rIGF0IHRoaXMgQWRyaWFuPyBIYXZpbmcgYSB3cGV3ZWJraXQgcGFja2FnZQo+IHdpdGgga25v
+d24gc2VjdXJpdHkgaXNzdWVzIHNpbmNlIE9jdG9iZXIgaXMgbm90IGdyZWF0IDooCgpCZXJuZCBo
+YXMgYWxzbyBzdWJtaXR0ZWQgYW4gdXBkYXRlIHRvIDIuNTAuNSAodGhlIGN1cnJlbnQgbGF0ZXN0
+IHN0YWJsZQpyZWxlYXNlKSBpbiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3Qv
+YnVpbGRyb290L3BhdGNoLzIwMjYwMjE4MTk1ODEyLjI5ODMyMDctMi1iZXJuZEBrdWhscy5uZXQv
+CgpJJ3ZlIGFja2VkIGJvdGggcGF0Y2hlcy4KCkNoZWVycywK4oCUQWRyacOhbgo=
 
-Cc: Vincent Fazio <vfazio@xes-inc.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-v2: add missing package/python-pybind/python-pybind_version.py.in file
----
- package/python-pybind/python-pybind.mk            |  7 +++++++
- package/python-pybind/python-pybind_version.py.in | 12 ++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 100644 package/python-pybind/python-pybind_version.py.in
+--/oMhjNCf4QKGdBSf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index 7282c058f6..cdafc9d4c0 100644
---- a/package/python-pybind/python-pybind.mk
-+++ b/package/python-pybind/python-pybind.mk
-@@ -19,9 +19,16 @@ PYTHON_PYBIND_CONF_OPTS = \
- 
- PYTHON_PYBIND_INSTALL_PATH = $(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/pybind11
- 
-+# Overwrite 'pybind11/_version.py' with a hard-coded version to replace
-+# 'pybind11/_version.py' installed by default that require
-+# pybind11/detail/common.h header in HOST_DIR.
-+# https://github.com/pybind/pybind11/blob/f5fbe867d2d26e4a0a9177a51f6e568868ad3dc8/pyproject.toml#L93
- define PYTHON_PYBIND_INSTALL_MODULE
- 	mkdir -p $(PYTHON_PYBIND_INSTALL_PATH)
- 	cp -dpf $(@D)/pybind11/*.py $(PYTHON_PYBIND_INSTALL_PATH)
-+	sed -e 's#@@PYBIND_VERSION@@#$(PYTHON_PYBIND_VERSION)#' \
-+		$(PYTHON_PYBIND_PKGDIR)/python-pybind_version.py.in \
-+		> $(PYTHON_PYBIND_INSTALL_PATH)/_version.py
- endef
- PYTHON_PYBIND_POST_INSTALL_STAGING_HOOKS += PYTHON_PYBIND_INSTALL_MODULE
- 
-diff --git a/package/python-pybind/python-pybind_version.py.in b/package/python-pybind/python-pybind_version.py.in
-new file mode 100644
-index 0000000000..c4cc5d074d
---- /dev/null
-+++ b/package/python-pybind/python-pybind_version.py.in
-@@ -0,0 +1,12 @@
-+from __future__ import annotations
-+
-+
-+def _to_int(s: str) -> int | str:
-+    try:
-+        return int(s)
-+    except ValueError:
-+        return s
-+
-+
-+__version__ = "@@PYBIND_VERSION@@"
-+version_info = tuple(_to_int(s) for s in __version__.split("."))
--- 
-2.52.0
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCaZZA2AAKCRCRxVnb5MkS
+O6SAAJ9B4uEEZOjGLoVZ3mRLF8+ko5vECgCfZ0i4r0tdTF77anrZH1fWmLouBhY=
+=k6O2
+-----END PGP SIGNATURE-----
+
+--/oMhjNCf4QKGdBSf--
+
+--===============0709189889575443471==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0709189889575443471==--
