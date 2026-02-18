@@ -4,81 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81ABE9A02C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 20:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06AC9E9A02C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Feb 2026 20:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C89A4093C;
-	Wed, 18 Feb 2026 20:47:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A92BD40567;
+	Wed, 18 Feb 2026 20:51:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VrS0jlnzL3ML; Wed, 18 Feb 2026 20:47:45 +0000 (UTC)
+ id Hyx28P439p_G; Wed, 18 Feb 2026 20:51:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA0140933
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA5A54040F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771447665;
-	bh=H5RcQanlnaP9P+YIiiA32U2Fn9+uv1WtcFPaKWdF5Fc=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=d15h/FuQ9VkofJ/53I9tWA8KgIG8oEOzzj0Hne7PA9xvuCR4P7qbU/jP/T7rzAocE
-	 cK0Oii9jThVG5sN0lMG/HY4SH4Oig2xK/INrtdUkP0u8/BahuJ+hmz/4+gG7s4AKEK
-	 3o2mzw3dAR+z3yTn3m5D6VNACdkwGN1hdve1BOk1KtKBv3T2MdeFtxfrS6CGhpqRDS
-	 Vh6gXbKXI/ZGdHMmok5hPqQWIVxdFw+MuBbr/mzyZv5/GNkt1sQjLkj6pDGNo58dgq
-	 UI7ohsgyGsvf9/rVuVZ0kM6UhLaYbQRVYhz9F8watdt4R8eNUaw8K5ugPDTILH68yj
-	 7/1kFF8lPWGiQ==
+	s=default; t=1771447892;
+	bh=YuvPCB4NcQW4gPZ96JeAe0SSLL2eoz6FN0NKsAniivE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Kn53NQeSAAcbeBWtXbqLHNx4o9EHDDKB5eF9WIMKOeGaP8JFEzCd8S2oeP9Szb8+U
+	 hIFXyy9ivGpOSNqzzMknZrkyQUX3R5tgf0e1EZcz5ZC9727FXx7dAkw9v1NcY51nIT
+	 ErkIDX2rriKZ+dpLwpbC5G849mmcc2pJk4vj4R6TJsOnsSFuUKq5GnZ1a3Ak0f+QYx
+	 YpXrwQ5OAfiWwUJZtzYMcZLHnCayF9cfGJEdcCS5TyTZ0x12kNcRS6ronSihae5P7S
+	 61I3ehIHH5LR6Y5ElC4xmXBc/6w8gGVaCouSEOzryzMf7mGCXQHFPaicQCp5LBb1QH
+	 MkwXh/YxpUAWA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AA0140933;
-	Wed, 18 Feb 2026 20:47:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05A2C1CE
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 20:47:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA5A54040F;
+	Wed, 18 Feb 2026 20:51:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC84B1CE
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 20:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 034BE40933
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 20:47:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADFFF4040F
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 20:51:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pqp0u-DqXpTy for <buildroot@buildroot.org>;
- Wed, 18 Feb 2026 20:47:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.148;
- helo=smtpdh19-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ id SbA20jJhCYbH for <buildroot@buildroot.org>;
+ Wed, 18 Feb 2026 20:51:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 75EDF40931
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75EDF40931
-Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 75EDF40931
- for <buildroot@buildroot.org>; Wed, 18 Feb 2026 20:47:42 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id soSRvE5xJclBZsoSRvHPqo; Wed, 18 Feb 2026 21:47:39 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BCDD403E8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BCDD403E8
+ for <buildroot@buildroot.org>; Wed, 18 Feb 2026 20:51:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0649486FFF; Wed, 18 Feb 2026 20:51:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 18 Feb 2026 21:47:38 +0100
-Message-ID: <20260218204738.915516-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFAuu4jEIai1DDMTSyyaQv7zb5kLet5HmLUoKA2X/Q0AFQHAztjONvY77QNJL982Bm1hXiRZXy83w1t13gGGbaOKIe4qRPGwzJAeG3HrZhTkwE5tehUO
- dT1Rm1+yjlT95aDyteLDLEBqu5yECJyqQf1KB0JkUUBwdbsLDnW07PYjIPQJ5BVku1YvtE9G6P2uFQDisMVhVEiZjNka7gBcarLZD1OJ61YtIcddSnJzeGn3
- Uobj+DXC0H3DPh5eMgSs4oSderjR3w/mdot4Eq2KepA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1771447659; bh=8b0QDop8SdJKCd/NydR4r1a8qzoEQ9FFP8XNflqnMgc=;
- h=From:To:Subject:Date:MIME-Version;
- b=mHUL0g2uz5Z21MS5FsfZ14KSn8XuZafM/G/hJwIT/0nwkJ/YlZTcYw0JMzqLkWETN
- rEyD2eWOw8Q3eHacQ9MwLIh4lC9s460NOStOu9m4Iqh7knP9sql5P3QpoKCCKc8chB
- +oADwsRRCT5/JTYy0BgIjBddaDH1YU3tdwzBjOzqIwlHLjp2XQhdD+k1Ufx9pZHSyO
- 10FVbJJbofqH5rG+/Zg9ZVp49ggV9jxmlgtAtB+Dpl4NUdrNqRcHmFkAJ3Xb+EL7qo
- mQt2a25byG1DnQ+v9DhfJrT0SPzWff1TTdqQOYo2RB7snrxHg4rk7tLN+7M3OwLHdb
- NoXBrlJC1mLUA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=mHUL0g2u
-Subject: [Buildroot] [PATCH] package/bind: bump version to 9.18.45
+Date: Wed, 18 Feb 2026 21:36:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5c7d9ca80eb533f69e10298db504bf861c1896ab
+X-Git-Newrev: 06b964b362b1b30cc346145c38e2a4aad78d0eec
+X-Patchwork-Hint: ignore
+Message-Id: <20260218205131.0649486FFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libzlib: security bump version to
+ 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,50 +69,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.45/doc/arm/html/notes.html
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/06b964b362b1b30cc346145c38e2a4aad78d0eec
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.45/doc/arm/html/changelog.html
+https://github.com/madler/zlib/releases/tag/v1.3.2
+https://github.com/madler/zlib/blob/v1.3.2/ChangeLog
+https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Updated license hash due to copyright year bumps:
+https://github.com/madler/zlib/commit/570720b0c24f9686c33f35a1b3165c1f568b96be
+https://github.com/madler/zlib/commit/9e35567064baded660f61732b247ef5abc809014
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
+ package/libzlib/libzlib.hash | 4 ++--
+ package/libzlib/libzlib.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index aaf3519ced..6f016a3317 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/libzlib/libzlib.hash b/package/libzlib/libzlib.hash
+index cbd9313870..bc8b046426 100644
+--- a/package/libzlib/libzlib.hash
++++ b/package/libzlib/libzlib.hash
 @@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.44/bind-9.18.44.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.45/bind-9.18.44.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d  bind-9.18.44.tar.xz
-+sha256  096ec94c10bc9d2ba686325660a615962d0fd6529429149acfcfb7daefaf2421  bind-9.18.45.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 041541b037..1b71bcbf66 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+ # From http://www.zlib.net/
+-sha256  38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32  zlib-1.3.1.tar.xz
++sha256  d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3  zlib-1.3.2.tar.xz
+ # License files, locally calculated
+-sha256  845efc77857d485d91fb3e0b884aaa929368c717ae8186b66fe1ed2495753243  LICENSE
++sha256  e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2  LICENSE
+diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
+index bc5092d9a9..c73328deee 100644
+--- a/package/libzlib/libzlib.mk
++++ b/package/libzlib/libzlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.18.44
-+BIND_VERSION = 9.18.45
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
--- 
-2.47.3
-
+-LIBZLIB_VERSION = 1.3.1
++LIBZLIB_VERSION = 1.3.2
+ LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
+ LIBZLIB_SITE = https://www.zlib.net
+ LIBZLIB_LICENSE = Zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
