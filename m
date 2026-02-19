@@ -4,60 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C284E9A053
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D98A9E9A053
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:25:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B965610D4;
-	Thu, 19 Feb 2026 17:24:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD3FD61133;
+	Thu, 19 Feb 2026 17:25:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Xsu-7IqkULT; Thu, 19 Feb 2026 17:24:53 +0000 (UTC)
+ id Mk97XD4fT1g9; Thu, 19 Feb 2026 17:25:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39BF4610F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1145E61107
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521891;
-	bh=gWeeaAwJUidYI49oNCOXrnHbGxK5NTu2+8eICIPRvtU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iOgDOZCx9ZOX2IJ+shnyEKksNnO43q6kT+tvC0bIai41uwnUM2S5H3GJU1fsdnF3g
-	 OPkKfZsWii1bRVJ9R4W8eCVi7ZFChjpsVVbCx7jAWlVadR7Np/3MoDcFA0HtprReP6
-	 b8RuCq7+h/2dU9QKdqDQFqu1a3HbOMBO3i2unTaW6Z59vDm3fQ1PeJefCUX78xb8OM
-	 BFv3Yxo8u8ggBVf+utxbZ7opho4T6inpujvXRSfbUIpR8LeN8Seq0Rh7RSiGAa11QG
-	 oucF16hamqCSzm6JHEVsRSMZi1I7mncqH766O40nEnAsd+82jT0HEF5yq7Nt8dO2hQ
-	 wzPO5/C9Un+Nw==
+	s=default; t=1771521907;
+	bh=AEXXe8M/Xr7lgO2elhBq3aLdeMF1GLYMjzhxX3uxTV4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=S2Tud86YwMmnE7mVsbqh3iaYTEBgMXYwoxwUe0bbb+X2Ue5sY/i2UQ5GkHeQoDXjm
+	 rvHDF4+9vd+AOyCqLRN+0JaV6h+b8Ihg7hmQZ6dFewOrO1Ki5hifCDYhgjzTMhBZFc
+	 1vPcEEdmnhM31UGWhT7r5lQmt3CAW4Tt/L/ooM8pp2Wxd/452T3/JBLBSqsF57AIH/
+	 gO5CT5jP/gMimZJufCGC7GgyRDGx/QnJq2DcUmNc+4w1Zo+oNMSZtYznvq06NX0e29
+	 WDGSm/OpP/l5euqUYWlhPABGOwiB4OF3dRQ2ncX7593nsYyBMScfJabGKUBrqL74+8
+	 2Oy7Z+wYjQAIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39BF4610F0;
-	Thu, 19 Feb 2026 17:24:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 777C5206
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1145E61107;
+	Thu, 19 Feb 2026 17:25:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FE49206
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2C2E40D04
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1E52814BB
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wMM_RbnTsqCy for <buildroot@buildroot.org>;
- Thu, 19 Feb 2026 17:24:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CFBA40D03
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CFBA40D03
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A6EE82205; Thu, 19 Feb 2026 17:24:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:32:18 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: a5d0f1c6c264fccc54c9f95d6262759bf1836767
-X-Git-Newrev: dfd467c970ad59b580f6fab8474a3dfc75575484
-X-Patchwork-Hint: ignore
-Message-Id: <20260219172414.6A6EE82205@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/nginx: patch
- CVE-2025-53859
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kf5bKxkPS4Q6 for <buildroot@buildroot.org>;
+ Thu, 19 Feb 2026 17:25:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECDC98131F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECDC98131F
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECDC98131F
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:03 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-48373a4bca3so7874405e9.0
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 09:25:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1771521901; x=1772126701;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=/UhF+pslPTCRVXYlbzZO3WnVY5MY39+anaMaqU8kFnA=;
+ b=ehEykJ3tjMlPEC9olFUK1/iH2mbbBbxRAyL//o8TXpwGqAOe4wh9lm7HICYcgjBRPP
+ RbTGm9+pr64r5nzh0E4xYpHsIe+mtRr41M013ySrwt9d0qxri2lqp5zeFWtYXXTCDTIB
+ CF8jaPg2xnw4Y8a2PC3dxLmJ4SXOUQEU5GCHXf1mfJE+VjRyGPQjJDgPf9NrqW9Jt1uR
+ IB7bqPk9o2Yl6rSW8VBDGQ3y/lZyu3Sr7RfHUoojEQu1cCv8ck2WqsoerXDzNEhOFu8P
+ ZRWfiJnW1BQKU1caHWIeRiH7oC1tcWBsfILUUAJr4y2ABuBkf27HbFKBsCwWI7j8mWAy
+ hOKw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWPXRrSGhj4P2vF04ztgvgpSb8HsTw4OfrSNEvIzqsfVhWRd72lJkPsdRQ9gN6ZffGiH9osrNu5e64=@buildroot.org
+X-Gm-Message-State: AOJu0Ywm/SWIJayqByMy7VSu5puzPMlpbx/lyIdgwfNMOJrFTWDREu8O
+ SnsaF41t0VRPzzeSETwZXJ54mnu6ZHTTfkE9qp9vuiF+zc5Id6jKhmNODbN/rwvJm8U=
+X-Gm-Gg: AZuq6aJJzRuSQLQKpIqLxuJkzt8nmB2otTfIJT05YiPpzkVTrjetfTp0M7YTvL2Fj+3
+ phxIEoD2Ur6g7pSPVVEA3f6kS9dDxX+YdcxIJK3d1yXBAngfg+pCg5DVVe8KZqGIoSUVjHYws/l
+ vSUBXQ80QniWKMe+wKyvgE3aymGtd5a0VWoROI5N5ilYuBLKHdRnED7RFQVgp05vraqF6vD7Pbi
+ /wJmfjF7UkMRdfbV6DDr27U7gVM72zEyxnCkjNRWyyWe1i1oyr3wrqAuoTj06zmzp9kSGMCwd5r
+ ljrHSHEuJF6ZM4NgkURcSyr05DALeLCVGyyprKAt1AizdX/Q/TGpj1bdme+9b5dsD/44Ao/7qAq
+ IoU1imJyWU/eOsl6/sUEpj9jnPDs/lQh4R1bnoK6W5LAnZOFnzqADVfUt9ryjpqjiSpro2pX7hi
+ u5aI9TYRjId1Z+KEg=
+X-Received: by 2002:a05:600c:c4a5:b0:47e:e71a:e13a with SMTP id
+ 5b1f17b1804b1-48379bedc20mr258019685e9.32.1771521901416; 
+ Thu, 19 Feb 2026 09:25:01 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43796a6c1bfsm51017477f8f.13.2026.02.19.09.25.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Feb 2026 09:25:00 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Thu, 19 Feb 2026 18:25:00 +0100
+Message-ID: <20260219172500.339758-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20251115103347.3462638-1-bernd@kuhls.net>
+References: <20251115103347.3462638-1-bernd@kuhls.net>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1771521901; x=1772126701; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=/UhF+pslPTCRVXYlbzZO3WnVY5MY39+anaMaqU8kFnA=;
+ b=JxyjiKiXgYiHw+RnvoErRKeGErt04xwYwUkeGswSbeFIpBbpVl63a8R6nakjo3N8sI
+ QsJ9yoaV4VFniF0DwqGHrKFSlT831GkYIDtTzrXYDTtxIq5M9clWLZVP8nm0edhwFuoA
+ cMumIu6rwV5eadYS8cf9DeY2E3KtZPpNmVrFT/5EArkCErk1/vCGneuNZjbFR4XOBWVG
+ 77kJcDcZw59Yi93ZMMQRqsjuzSU0MHLlsfwmmIyRRnOEnPPw9Bahg8jCZDGOnT+guutL
+ Qnrhj52YHuSjYA4wSSpXKlcEuPFsYGzD16tXd6+U/bUyqgrTpT/cSbwy8WRu84pkqkkP
+ jO1w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=JxyjiKiX
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-microcode: bump version
+ to 20251111
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,192 +126,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dfd467c970ad59b580f6fab8474a3dfc75575484
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
+In reply of:
+> Release notes:
+> https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20251111
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fix the following vulnerability:
+Applied to 2025.02.x. Thanks
 
-- CVE-2025-53859:
-    NGINX Open Source and NGINX Plus have a vulnerability in the
-    ngx_mail_smtp_module that might allow an unauthenticated attacker to
-    over-read NGINX SMTP authentication process memory; as a result, the
-    server side may leak arbitrary bytes sent in a request to the
-    authentication server. This issue happens during the NGINX SMTP
-    authentication process and requires the attacker to make preparations
-    against the target system to extract the leaked data. The issue
-    affects NGINX only if (1) it is built with the ngx_mail_smtp_module,
-    (2) the smtp_auth directive is configured with method "none," and (3)
-    the authentication server returns the "Auth-Wait" response header.
-    Note: Software versions which have reached End of Technical Support
-    (EoTS) are not evaluated.
-
-For more information, see:
-    - https://nvd.nist.gov/vuln/detail/CVE-2025-53859
-    - https://nginx.org/download/patch.2025.smtp.txt
-
-(cherry picked from commit a0081aa1f8c332d5fb6dbb19de9e46cb39be4931)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/nginx/0010-CVE-2025-53859.patch | 130 ++++++++++++++++++++++++++++++++
- package/nginx/nginx.mk                  |   3 +
- 2 files changed, 133 insertions(+)
-
-diff --git a/package/nginx/0010-CVE-2025-53859.patch b/package/nginx/0010-CVE-2025-53859.patch
-new file mode 100644
-index 0000000000..34befebd8a
---- /dev/null
-+++ b/package/nginx/0010-CVE-2025-53859.patch
-@@ -0,0 +1,130 @@
-+CVE: CVE-2025-53859
-+Upstream: https://nginx.org/download/patch.2025.smtp.txt
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+
-+diff --git a/src/mail/ngx_mail_handler.c b/src/mail/ngx_mail_handler.c
-+index 1167df3fb..d3be7f3b3 100644
-+--- a/src/mail/ngx_mail_handler.c
-++++ b/src/mail/ngx_mail_handler.c
-+@@ -523,7 +523,7 @@ ngx_mail_starttls_only(ngx_mail_session_t *s, ngx_connection_t *c)
-+ ngx_int_t
-+ ngx_mail_auth_plain(ngx_mail_session_t *s, ngx_connection_t *c, ngx_uint_t n)
-+ {
-+-    u_char     *p, *last;
-++    u_char     *p, *pos, *last;
-+     ngx_str_t  *arg, plain;
-+ 
-+     arg = s->args.elts;
-+@@ -555,7 +555,7 @@ ngx_mail_auth_plain(ngx_mail_session_t *s, ngx_connection_t *c, ngx_uint_t n)
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-+-    s->login.data = p;
-++    pos = p;
-+ 
-+     while (p < last && *p) { p++; }
-+ 
-+@@ -565,7 +565,8 @@ ngx_mail_auth_plain(ngx_mail_session_t *s, ngx_connection_t *c, ngx_uint_t n)
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-+-    s->login.len = p++ - s->login.data;
-++    s->login.len = p++ - pos;
-++    s->login.data = pos;
-+ 
-+     s->passwd.len = last - p;
-+     s->passwd.data = p;
-+@@ -583,24 +584,26 @@ ngx_int_t
-+ ngx_mail_auth_login_username(ngx_mail_session_t *s, ngx_connection_t *c,
-+     ngx_uint_t n)
-+ {
-+-    ngx_str_t  *arg;
-++    ngx_str_t  *arg, login;
-+ 
-+     arg = s->args.elts;
-+ 
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth login username: \"%V\"", &arg[n]);
-+ 
-+-    s->login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[n].len));
-+-    if (s->login.data == NULL) {
-++    login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[n].len));
-++    if (login.data == NULL) {
-+         return NGX_ERROR;
-+     }
-+ 
-+-    if (ngx_decode_base64(&s->login, &arg[n]) != NGX_OK) {
-++    if (ngx_decode_base64(&login, &arg[n]) != NGX_OK) {
-+         ngx_log_error(NGX_LOG_INFO, c->log, 0,
-+             "client sent invalid base64 encoding in AUTH LOGIN command");
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-++    s->login = login;
-++
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth login username: \"%V\"", &s->login);
-+ 
-+@@ -611,7 +614,7 @@ ngx_mail_auth_login_username(ngx_mail_session_t *s, ngx_connection_t *c,
-+ ngx_int_t
-+ ngx_mail_auth_login_password(ngx_mail_session_t *s, ngx_connection_t *c)
-+ {
-+-    ngx_str_t  *arg;
-++    ngx_str_t  *arg, passwd;
-+ 
-+     arg = s->args.elts;
-+ 
-+@@ -620,18 +623,19 @@ ngx_mail_auth_login_password(ngx_mail_session_t *s, ngx_connection_t *c)
-+                    "mail auth login password: \"%V\"", &arg[0]);
-+ #endif
-+ 
-+-    s->passwd.data = ngx_pnalloc(c->pool,
-+-                                 ngx_base64_decoded_length(arg[0].len));
-+-    if (s->passwd.data == NULL) {
-++    passwd.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[0].len));
-++    if (passwd.data == NULL) {
-+         return NGX_ERROR;
-+     }
-+ 
-+-    if (ngx_decode_base64(&s->passwd, &arg[0]) != NGX_OK) {
-++    if (ngx_decode_base64(&passwd, &arg[0]) != NGX_OK) {
-+         ngx_log_error(NGX_LOG_INFO, c->log, 0,
-+             "client sent invalid base64 encoding in AUTH LOGIN command");
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-++    s->passwd = passwd;
-++
-+ #if (NGX_DEBUG_MAIL_PASSWD)
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth login password: \"%V\"", &s->passwd);
-+@@ -674,24 +678,26 @@ ngx_int_t
-+ ngx_mail_auth_cram_md5(ngx_mail_session_t *s, ngx_connection_t *c)
-+ {
-+     u_char     *p, *last;
-+-    ngx_str_t  *arg;
-++    ngx_str_t  *arg, login;
-+ 
-+     arg = s->args.elts;
-+ 
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth cram-md5: \"%V\"", &arg[0]);
-+ 
-+-    s->login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[0].len));
-+-    if (s->login.data == NULL) {
-++    login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[0].len));
-++    if (login.data == NULL) {
-+         return NGX_ERROR;
-+     }
-+ 
-+-    if (ngx_decode_base64(&s->login, &arg[0]) != NGX_OK) {
-++    if (ngx_decode_base64(&login, &arg[0]) != NGX_OK) {
-+         ngx_log_error(NGX_LOG_INFO, c->log, 0,
-+             "client sent invalid base64 encoding in AUTH CRAM-MD5 command");
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-++    s->login = login;
-++
-+     p = s->login.data;
-+     last = p + s->login.len;
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 6ca1ac2075..9ea432abdb 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -19,6 +19,9 @@ NGINX_CONF_OPTS = \
- 	--with-cpp="$(TARGET_CC)" \
- 	--with-ld-opt="$(TARGET_LDFLAGS)"
- 
-+# 0010-CVE-2025-53859.patch
-+NGINX_IGNORE_CVES += CVE-2025-53859
-+
- # www-data user and group are used for nginx. Because these user and group
- # are already set by buildroot, it is not necessary to redefine them.
- # See system/skeleton/etc/passwd
+> ---
+>  package/intel-microcode/intel-microcode.hash | 2 +-
+>  package/intel-microcode/intel-microcode.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+> index 735b352d1f..4c6676dfb0 100644
+> --- a/package/intel-microcode/intel-microcode.hash
+> +++ b/package/intel-microcode/intel-microcode.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  a8358422c68cc4d15c26db1ef682fbce332c3f46c4e087a79c132c437ec5f407  intel-microcode-20250812.tar.gz
+> +sha256  5a9a0d17240f486461bc101ef74f2b8c10675cdd02d0ba0bd6168b061c62e970  intel-microcode-20251111.tar.gz
+>  sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+> index 2850dd01e4..e8bbf15a81 100644
+> --- a/package/intel-microcode/intel-microcode.mk
+> +++ b/package/intel-microcode/intel-microcode.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -INTEL_MICROCODE_VERSION = 20250812
+> +INTEL_MICROCODE_VERSION = 20251111
+>  INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+>  INTEL_MICROCODE_LICENSE = PROPRIETARY
+>  INTEL_MICROCODE_LICENSE_FILES = license
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
