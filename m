@@ -4,111 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A370BE9A056
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F0BE9A055
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A5D461259;
-	Thu, 19 Feb 2026 17:26:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD58B6123C;
+	Thu, 19 Feb 2026 17:27:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZxNoAYNKGmXi; Thu, 19 Feb 2026 17:26:58 +0000 (UTC)
+ id 1aGwIkwOWTau; Thu, 19 Feb 2026 17:27:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16C2261184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653396124E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771522015;
-	bh=bqgNyGGHCV1raOTMrmT0lcXsMSllFZ7N7UgbE+reric=;
+	s=default; t=1771522017;
+	bh=Awkw2vJTycmNh+kcsDXXmAjYZa1Dl0BtVPUaGe9h2Jk=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Xb6OEf1L+n2Bw9NGj8Y5hSn9888jE2uaYLSR7f2th1zLZTdFPQUNWjPQ2JBnE6dak
-	 ZhJXe8cO0thvCqxoK8fhpfBmGxvK0/9w5iH1TEWl29o9mQgzBX5NQfWg3ZnuZn5hcg
-	 Seat2s9bozpFBajHFReNAqzlHHrF9QqKRQpDDRkBstFp6x+LNLDPsFmyXi7u0VJmPy
-	 oZjdAupioF3jJL3L2M8wZHUFHzd8JzNikOBOj7smUSISkUHhvofkd42GJDbJ9YEe7z
-	 Bx9WUN0Yohwcq4LF0kpHs9kyXHUmnVcUkBCpdy7hmlf3eOu4+lKglmzV+JQPXf1W4V
-	 A4MT5gmYmg20Q==
+	b=BXTBb4KlW4Zo/blZQd+AKC0n6phLuButYQmztHN6/QbJZ49UIMxe83OxIGs5hUUzv
+	 0D9q4IsVTV3m0aXRKDIkfw5XZOA7l5QK7B8I5C/+SBPsehk9u3qTDs1Jf9cO5oXZJL
+	 u6wbcZbSmS4oy6Bmoa7amDRamzXiAPvA+qNXtna0/0YmwSSDXkMGirzTzA2KjbgHfr
+	 hy6eUzj/r5yaqkqDuJvgvszfT+tg6uBi9/wUgm8dHY1dUgepcwfRS7auIzRhxWkzk8
+	 yZaUZVwo4eubOuSF1wYJmmvEJa2E28xtHwZQJDrwihbM/jqQj6cbVYswW1YyryQYpt
+	 hdjR0jhUD6Bog==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16C2261184;
-	Thu, 19 Feb 2026 17:26:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 653396124E;
+	Thu, 19 Feb 2026 17:26:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F1C71CE
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:26:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D14D8206
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 051D9403E5
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:26:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C34104083B
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FXtOaaGMBA3F for <buildroot@buildroot.org>;
- Thu, 19 Feb 2026 17:26:44 +0000 (UTC)
+ id UTP2NhSkOiIe for <buildroot@buildroot.org>;
+ Thu, 19 Feb 2026 17:26:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D07744045B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D07744045B
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D07744045B
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:26:43 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-4376c0bffc1so980034f8f.0
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 09:26:43 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B43BF403E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B43BF403E5
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B43BF403E5
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:26:45 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48378136adcso7617275e9.1
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 09:26:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771522002; x=1772126802;
+ d=1e100.net; s=20230601; t=1771522004; x=1772126804;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=H2PV76HyfgcZI6nix92GJPlh4bM3Bi3EAN8nyRinX/0=;
- b=o5brLCwB52vwl5jWrC1ka6FizO86BqMySh+9ieI3Z1azqj2mr0UPPucGWgrHEfB7ej
- UByYO7g9rtik4tIwUf86etYTFJjSQuWQxgGWtxvgfSIaot3ltpSbkzhr6/BBfNbXlbOI
- 6AaYQM6EqzTotwpjWssoAoTqBpy1D6MAqIrW2g7fvD277tj+UERyn5qxKmwC/XEoeOAf
- xJtBAahFYt96Ry3OZjY5VxXd5I8REVmf92L5H5/cKWEQFeKSQd2hcC0S7Zdl2jbCqt/7
- XRULW3M7LJ11ThIS0J1rIjiIUCab2NpR3UZfskalnenzjrMyZOpeDheNnbFuAC3jifNC
- yS1Q==
-X-Gm-Message-State: AOJu0YzfOHFiHKZyWBHd/g9V4YqkDWGfLDFQNslVbI7sjJsIBchakaUz
- nq7+ch3GqZz65tlaPRBxZ6657HNlWxB3Arfg4bqcgx2YZjVwAfMoNxyvU1V+L7Uk+6uPY0Oku64
- y8fDZ
-X-Gm-Gg: AZuq6aITaR19sKDjjj4a/4XdhdWQ03VJv05QY/2yiWeqDMgj7FQOLgCvb5oXNZeSb1S
- X/H9tDANa5cEApWPGZG15rZIPgV/T18GivKF+a/5DeDX7N5z4yxgFJXMrEevdCgSQK11TQfP7Iw
- Bz9JG5opGfZ/+9ct8Fefi9ARHZv99zx38YB9h9vZPu8dPHAuOEMgi384danmrKy8rHxeGhGCSM5
- wv4q2pt9eyEx62NBd8z6uca1bXcmyHwpjujVWfM4YNh2G3TMjQcXIGGgSa1iVWi9tMpfyYDeVyE
- yHqp2YcrALLRpHykhujXd0LYoiAbfDUkGcVf695LmBxz/g1c6fhd3vu6G5cJpW0JManUGuXRbRB
- LOXXXF7Z/BP4Hlxtcmxv4wTj0NFbtwoj5iGxtzcxYhP+B8jpVownC3YqIf5+VKuCkEAWmgosWex
- EMCEdBRVIZdH1Rx+6ACgtZ7Nah7A==
-X-Received: by 2002:a05:6000:2313:b0:42f:bb08:d1ef with SMTP id
- ffacd0b85a97d-4395fd352cemr5645280f8f.17.1771522001724; 
- Thu, 19 Feb 2026 09:26:41 -0800 (PST)
+ bh=3uw40EP/vb4gYKn1P3FrgHt7sUxRxiXNu3btOYARKq8=;
+ b=md2ZyLXDrwOgdM3A8Hg9dAAMZz6ztGx0waICXUl4gu6KJd5FZj6yYlQ79etg6zsjh1
+ qOfsA+nu41Suq/UIgoorR+Gf6Y19RrW3uJkOP/5tf2AhEPO2v2h/3Pi3jjhlbUCDJZ4q
+ aw/FveioegVvwNABLMCLSz1+ZEWliLC/f1pE1SYcWPCoKASSWhT+8JwYhhVsr4G+8fXw
+ HnicNoM4IIZYkqlE+2RJIBkiaRzLVStpPxin8rBfeQRvvYwrTWAvKa7Df4jWQIKlJNZu
+ IaRw1D9nmArwMpboAO4YMBW1tJ9Q4gjVlai4JEwCVsCe7hegNdGv0Wi7TtKBigr++UHN
+ tC8g==
+X-Gm-Message-State: AOJu0YwOXFnn5bAjy1hpo4gc91ZzXRhwjA9xOMQgd3iR1SBRiUe+naO9
+ lytT3MZZe2F7U4zKwBzU1FvfR94LqsvWsr9GDSo3A8bbqddUKLW/VnLhClXV8FLD9rAchE6PFZP
+ EB0nQ
+X-Gm-Gg: AZuq6aLADjMpqGOyKvT6noVoxu1PK35soN0SnRVgIyoaHHoGfTPbziZ4LKrtdB/Gnxy
+ rlMZTXIVKl/pvOLk+ep8TsoA4w/4JSdQvJcm/UwSqEIcv3jNOT+OaOcAf/1B0L3nOSDrIvzOer+
+ ooFsc1gec7jrmGPE7QobJc+ub0yuGr5pm5RgL5bL4fBcumJAhnA5H5Ur25VFhCOrvVVIN2tA2Rl
+ RWqAUPilnZe6ssgadyMKcSD8Fa6vys6v4ji3hiRXRC4JxsdZqG+oHuRZhQgp5ZLI8UIR0AOkAhP
+ PIF/QuoHCRkRfV9D0fBro20U7RVqjwCtuH9yIKNGqYZLN21sgU2GGo95RFlM889/4I0e9Dhq0nv
+ 8qKh3oDXETldVGXpk1pEoFoy/CfExvoQ147wdeVfq8pS/Y1NIkhXyL01zzIEDcyyUhEM128TsCX
+ nMYIOCpxHuQ5gWo04=
+X-Received: by 2002:a05:600c:8189:b0:483:6f37:1b61 with SMTP id
+ 5b1f17b1804b1-48379bac876mr293983145e9.4.1771522003622; 
+ Thu, 19 Feb 2026 09:26:43 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43796ac8209sm51227939f8f.30.2026.02.19.09.26.41
+ 5b1f17b1804b1-4839f986118sm23776595e9.21.2026.02.19.09.26.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Feb 2026 09:26:41 -0800 (PST)
+ Thu, 19 Feb 2026 09:26:43 -0800 (PST)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Thu, 19 Feb 2026 18:26:40 +0100
-Message-ID: <20260219172640.341322-1-thomas.perale@mind.be>
+Date: Thu, 19 Feb 2026 18:26:42 +0100
+Message-ID: <20260219172642.341421-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260215141716.34571-1-thomas.perale@mind.be>
-References: <20260215141716.34571-1-thomas.perale@mind.be>
+In-Reply-To: <20260215144923.54095-2-thomas.perale@mind.be>
+References: <20260215144923.54095-2-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1771522002; x=1772126802; darn=buildroot.org;
+ d=mind.be; s=google; t=1771522004; x=1772126804; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=H2PV76HyfgcZI6nix92GJPlh4bM3Bi3EAN8nyRinX/0=;
- b=MLoUTS83dEmJdzJX2aVg4OdiMh45SojuCh/OHhGqxxSIEXfk+7dQb+MkvtTWso54hH
- 2m3fFbuI2IJmLpJe8cavvohxjjYIgToYt0bOWy6x//4nOjfrIpXuCYre/K8oj7WWkEVk
- jPLg2P9wfRyfDLVSZwFHhkJmPqjvjwZIJNpbYSv/m7+Cr44wky2ZFHL7yeIpnQWf5IgH
- QUMb8wBCjx0uF2ua9O3MPZFtObfx7AUCewKh9Yl8Ixy4zEnRBagnVUfg0u2JjhfNhW3l
- 80JFHKDPLGfm/xiS6QCna5vAWd7MGJFg1Epm0bPHXj/NYy7RysBAQgAvzc4QsmyJ/0Iv
- XzmA==
+ bh=3uw40EP/vb4gYKn1P3FrgHt7sUxRxiXNu3btOYARKq8=;
+ b=YCgsVpkeZrBHkhN/VevB1xyhYEhPLC56ghW7+4v/ToZ50SIL3pfsfior32j7r2U/n4
+ 3brWs96uG4PUelDC9sXTfigQrQFu2KeYQNo9w5jox3kkHAGou7cIZPE0lF2WOxPjVgNP
+ 3Lec2iZ7I3bA9stb64KA/lciJXTOZo/1GjrctpJrD+H3YA9lGKzitYGvgehmtfCtxqv2
+ 7vtG9mD6DgWFdGRHmNRT0YRorkx0OVDfYibIHtKkVyeATaDMYA1LgqWL3ZGXg/ZnzSNt
+ /FYK9OemSrG/CqrR4ScPKkArziZdmgQ/qJh0cFmNmuVzWQqN6UHWaURsUGDERSo26FDj
+ Wdlg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MLoUTS83
-Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: patch CVE-2025-60876
+ header.a=rsa-sha256 header.s=google header.b=YCgsVpke
+Subject: Re: [Buildroot] [PATCH 2/2] package/haproxy: security bump to
+ v2.6.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,93 +129,54 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This commit fixes the following vulenerability:
+> For more information on the release, see:
+>   - https://git.haproxy.org/?p=haproxy-2.6.git;a=commit;h=c3bf1ac6709072bf9984c829c3badda5a4e8fa7e
 > 
-> - CVE-2025-60876:
->     BusyBox wget thru 1.3.7 accepted raw CR (0x0D)/LF (0x0A) and other C0
->     control bytes in the HTTP request-target (path/query), allowing the
->     request line to be split and attacker-controlled headers to be
->     injected. To preserve the HTTP/1.1 request-line shape METHOD SP
->     request-target SP HTTP/1.1, a raw space (0x20) in the request-target
->     must also be rejected (clients should use %20).
+> This fixes the following vulnerability:
+> 
+> - CVE-2025-11230:
+>     Inefficient algorithm complexity in mjson in HAProxy allows remote
+>     attackers to cause a denial of service via specially crafted JSON
+>     requests.
 > 
 > For more information, see:
->     - https://www.cve.org/CVERecord?id=CVE-2025-60876
->     - https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
->     - https://sources.debian.org/data/main/b/busybox/1%3A1.37.0-10/debian/patches/wget-disallow-control-chars-in-URLs-CVE-2025-60876.patch
+>   - https://www.cve.org/CVERecord?id=CVE-2025-11230
+>   - https://www.haproxy.com/blog/october-2025-cve-2025-11230-haproxy-mjson-library-denial-of-service-vulnerability
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  ...trol-characters-or-spaces-in-the-URL.patch | 42 +++++++++++++++++++
->  package/busybox/busybox.mk                    |  3 ++
->  2 files changed, 45 insertions(+)
->  create mode 100644 package/busybox/0014-wget-dont-allow-control-characters-or-spaces-in-the-URL.patch
+>  package/haproxy/haproxy.hash | 4 ++--
+>  package/haproxy/haproxy.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/busybox/0014-wget-dont-allow-control-characters-or-spaces-in-the-URL.patch b/package/busybox/0014-wget-dont-allow-control-characters-or-spaces-in-the-URL.patch
-> new file mode 100644
-> index 0000000000..d0a31ed821
-> --- /dev/null
-> +++ b/package/busybox/0014-wget-dont-allow-control-characters-or-spaces-in-the-URL.patch
-> @@ -0,0 +1,42 @@
-> +From: Radoslav Kolev <radoslav.kolev@suse.com>
-> +Date: Fri, 21 Nov 2025 11:21:18 +0200
-> +Subject: wget: don't allow control characters or spaces in the URL
-> +Forwarded: yes, https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
-> +Bug-Debian: https://bugs.debian.org/1120795
-> +
-> +Fixes CVE-2025-60876 malicious URL can be used to inject
-> +HTTP headers in the request.
-> +
-> +Signed-off-by: Radoslav Kolev <radoslav.kolev@suse.com>
-> +Reviewed-by: Emmanuel Deloget <logout@free.fr>
-> +Upstream: https://sources.debian.org/data/main/b/busybox/1%3A1.37.0-10/debian/patches/wget-disallow-control-chars-in-URLs-CVE-2025-60876.patch
-> +Upstream: https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
-> +CVE: CVE-2025-60876
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + networking/wget.c | 9 +++++++++
-> + 1 file changed, 9 insertions(+)
-> +
-> +diff --git a/networking/wget.c b/networking/wget.c
-> +index ec3767793..fa555427b 100644
-> +--- a/networking/wget.c
-> ++++ b/networking/wget.c
-> +@@ -536,6 +536,15 @@ static void parse_url(const char *src_url, struct host_info *h)
-> + {
-> + 	char *url, *p, *sp;
-> + 
-> ++	/* Fix for CVE-2025-60876 - don't allow control characters or spaces in the URL */
-> ++	/* otherwise a malicious URL can be used to inject HTTP headers in the request */
-> ++	const unsigned char *u = (void *) src_url;
-> ++	while (*u) {
-> ++		if (*u <= ' ')
-> ++			bb_simple_error_msg_and_die("Unencoded control character found in the URL!");
-> ++		u++;
-> ++	}
-> ++
-> + 	free(h->allocated);
-> + 	h->allocated = url = xstrdup(src_url);
-> + 
-> +-- 
-> +2.47.3
-> +
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 7ae9c1d41e..a33548c355 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -19,6 +19,9 @@ BUSYBOX_IGNORE_CVES += CVE-2022-28391
->  # 0013-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
->  BUSYBOX_IGNORE_CVES += CVE-2025-46394
+> diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+> index 42f340fa80..ce5dae17e7 100644
+> --- a/package/haproxy/haproxy.hash
+> +++ b/package/haproxy/haproxy.hash
+> @@ -1,5 +1,5 @@
+> -# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.22.tar.gz.sha256
+> -sha256  4c0797f450f997dc287d2c7aafa7a0e5b7a2d71593a2cd58e664e8f3aea614fa  haproxy-2.6.22.tar.gz
+> +# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.23.tar.gz.sha256
+> +sha256  1281d57f25e98456a042c81f32801a106a293c1340b0c06debb2a87d6a7b3611  haproxy-2.6.23.tar.gz
+>  # Locally computed:
+>  sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+>  sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+> diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+> index f60cb1e08a..51878e754f 100644
+> --- a/package/haproxy/haproxy.mk
+> +++ b/package/haproxy/haproxy.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
 >  
-> +# 0014-wget-dont-allow-control-characters-or-spaces-in-the-URL.patch
-> +BUSYBOX_IGNORE_CVES += CVE-2025-60876
-> +
->  BUSYBOX_CFLAGS = \
->  	$(TARGET_CFLAGS)
->  
+>  HAPROXY_VERSION_MAJOR = 2.6
+> -HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).22
+> +HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).23
+>  HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+>  HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+>  HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 > -- 
 > 2.52.0
 > 
