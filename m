@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5801E9A055
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E85A0E9A056
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB83183A4D;
-	Thu, 19 Feb 2026 17:26:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCA1F6119F;
+	Thu, 19 Feb 2026 17:26:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kgtAuer0EX_3; Thu, 19 Feb 2026 17:26:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tq5k1x8xn_9M; Thu, 19 Feb 2026 17:26:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B838683AAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0EF16117C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521962;
-	bh=BPUvMuISlOkBVPp1YDms0DzzR1V+RCOfaj77+yLixJo=;
+	s=default; t=1771521963;
+	bh=hYo3eA8waZXgteUFXxlmvr0SW498hn8eAfIyVb91JPE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EXQxUekWntuJ1lho/rk22prTfM6mY5dnYy/AFIBOzbLIqLoMc+J6E8qUCKZd0sN97
-	 JsW8gr7DIsS77DyCpteSYIAfHi9mK4/4CuG1pT/NU5PGAMZTrfxmq45wTXutrL05aG
-	 BaPmdiXcpy65AjN3Nc5szLkbB/UmFz3UjcfS91jEhqm587JnhAzykuQPZZmT7yxi1F
-	 bFNYwFwQDhAPQDJik7mPsLjdzI+NHrGYjvnppRlAUYsVkv5O2onrLvKtw6/ABZxey+
-	 2qIgNRp+2rJy8gNBdJQl+9oXU5Am2rd+78YUqlPUI6nud0MvABqM+ZdYCleNKW82Ip
-	 rmKUw/+6SiYQQ==
+	b=h7HHsupWkQxSrvGVcGYSoMd5gKhc7UnYDcuGnspAM4guwsWE+o4+B4bII8hEKtkPO
+	 zTd90HqaCaPS2KRG/+Cvy8B+89EeG5qw+1UTbA7KPMXc3GQmqFZ2Yb66lVBmIo1jzv
+	 A9cIs6PLhdGsSCjhhLKEWs8WFzA6VAHBynn2R+E2PHQRS5XhFw0rxIwc+WZLPKhcMA
+	 YdIFyPyn83ICgIupRSfTb+8brn0Y56jnZH8CuSqIOXHeuj6k+FprxrNh3Z7nce0WQI
+	 DqCIC9KuBITfFMnP2o/IdYnrOzjfiDOZo6/+oEtGfYf8fmxw0A2yM6m26to/BuJuKB
+	 JRwXgdrBBGApQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B838683AAA;
-	Thu, 19 Feb 2026 17:26:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 934441CE
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0EF16117C;
+	Thu, 19 Feb 2026 17:26:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04089206
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CF9F40CE9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DE2E610CA
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hLsD7i5UBO5j for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uwGuloDbaCLM for <buildroot@buildroot.org>;
  Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 536E840C78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D18E610B2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 536E840C78
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D18E610B2
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 501BB82DF0; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+ id 797BE80DA3; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:31:23 +0100
+Date: Thu, 19 Feb 2026 10:17:59 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8ee9ea6923b8ae4ac5d67bdf14379e9e6eaeeb22
-X-Git-Newrev: 335c8b7c204d62418cd7b5fa0651dbd84529eac7
+X-Git-Oldrev: 2280debfc13a5e70177f667e51b4d495ff3b20df
+X-Git-Newrev: 44e91ed586d31e39aef6830d7f48e70a9eabd57c
 X-Patchwork-Hint: ignore
-Message-Id: <20260219172538.501BB82DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- configs/acmesystems_acqua_a5_*: remove at91bootstrap3 license
+Message-Id: <20260219172538.797BE80DA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/vim: bump package
+ to version 9.1.2017
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,79 +72,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2756629875826279089=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2756629875826279089==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/335c8b7c204d62418cd7b5fa0651dbd84529eac7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/44e91ed586d31e39aef6830d7f48e70a9eabd57c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-When using a specific git repo and version for at91bootstrap3,
-BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES defaults to "LICENSES/MIT.txt".
-However the git version we use (namely v3.10.3) does not provide this
-file. Actually, it does not provide a license file at all. This causes
-‘make legal-info’ to fail with:
+Changelog:
+https://github.com/vim/vim/compare/v9.1.1989...v9.1.2017
 
->>> at91bootstrap3 v3.10.3 Collecting legal info
-sha256sum: /builds/buildroot.org/buildroot/output/build/at91bootstrap3-v3.10.3/LICENSES/MIT.txt: No such file or directory
-ERROR: while checking hashes from boot/at91bootstrap3/at91bootstrap3.hash
-ERROR: LICENSES/MIT.txt has wrong sha256 hash:
-ERROR: expected: 5a3809b1c2ba13b7242572322951311c584419f1f8516f665d6c06f0668d78de
-ERROR: got     :
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Let's be explicit that there is no license file to check.
-
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/12992815386
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/12992815390
-
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit df61ce39c1ae66e9778f225e875ce191275835b7)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit ef70ba7b243d5126c453b32245807d091c3bf734)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- configs/acmesystems_acqua_a5_256mb_defconfig | 1 +
- configs/acmesystems_acqua_a5_512mb_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index 9e6d35a859..e3cca2408c 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -22,6 +22,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-256m"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index 8e6d9774da..1a38c742d8 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -22,6 +22,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-512m"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-
---===============2756629875826279089==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 95c44234fe..f7c883b929 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  e150b40bcf593c10afb39378f2594203d94e5d6110ffe242a0b6bedd258d757f  vim-9.1.1989.tar.gz
++sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+ sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 41b290ab9f..fa7d47d67d 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 9.1.1989
++VIM_VERSION = 9.1.2017
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2756629875826279089==--
