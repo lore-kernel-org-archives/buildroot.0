@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0C84EEF317
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 08:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D16AEEF319
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 08:02:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8361980B07;
-	Thu,  5 Mar 2026 08:02:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F39D380B1C;
+	Thu,  5 Mar 2026 08:02:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYfPF3F-P0rT; Thu,  5 Mar 2026 08:02:11 +0000 (UTC)
+ id JsNoLlke2TGh; Thu,  5 Mar 2026 08:02:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E06F480B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FD5380B9A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772697731;
-	bh=t1p6JkKVXnL4L88pcfXDuhuLfQTiHoyEv8U68tTChOU=;
+	s=default; t=1772697734;
+	bh=uc98gWD68fvwoFOPxmVGv86r/s+5xznc0NzlwbO7YgE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qvnK02IhWXOEq7ygF7HSC23YT9TkoamcI7GvMkcaNAhdsdpaAMSeLtFbm+Em6OL4o
-	 pSeFaTj1ehbSyRzHb0jz00z3Nto+rNrSSqhVZNrNkzVmFpvXnHqeHUui11VXS9rKFp
-	 a6Z4juJQyRG+0d6cQ/0fWrQgObysdv8LwfV9e2kyDjcJq//37Rhn/xeAxCilahCcIN
-	 TAs0Zx5XdcO5/ru8adcHqxq+a0zxRJJys4vKtNOCeOLSRTyK+Lb3deYlygmxbsVTTb
-	 997cVWKcTKyjmWISnxi2xELdqQFHHi9kh0+PpeiuBXdrFwHzFJ3whxAabS6NHl5+xm
-	 TvEcD3kXy4BsQ==
+	b=r9gXt2feHvB4MFfvmX5NaOz2+eGBCfEIE8kAFmYiAbvy23lpvW5v6xgRlwWBrp6nD
+	 hDfhGpLzd9p0vmdtWCW/3UgET+JFdwgZ/wA4pi54GnGtssiWqiSZjbgY3TvIX5hPL7
+	 WlOmraW4SN8cV2GNRqtXz7Je8PaqQPfM35F4QakSO3KV58Rpe+al7xT5ONkHynS5ZP
+	 /3rNpSRn95XJbbrSwElhLTq9679/uXgILsllEsmQ1ja+hjs8v73k8gB36yAb4bzF/X
+	 pha9Y0n0fZvk5rV1KRk4/62Zomfra7vFcFHt99TIKvDIMXduB5jQqhocgnV65E1K57
+	 SxI4/y7OTQPxw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E06F480B04;
-	Thu,  5 Mar 2026 08:02:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FD5380B9A;
+	Thu,  5 Mar 2026 08:02:14 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 80FE434F
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3196C34F
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 669B360672
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B58D6069F
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6jF0stKK9i56 for <buildroot@buildroot.org>;
+ id 2fG19-0711UU for <buildroot@buildroot.org>;
  Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8202F605EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F213605F0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8202F605EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F213605F0
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E8CE863DE; Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
+ id 9A9A8863DF; Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 17 Feb 2026 22:44:12 +0100
+Date: Thu, 19 Feb 2026 12:52:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b592bd62076ac0897b7862919aadf767ccffffd
-X-Git-Newrev: e0c14c083a930e2dbe63bcc1cf5ed453e858a742
+X-Git-Oldrev: 314b6f63681c42ea05724e73b6d6ea14dfb05024
+X-Git-Newrev: 6c83a0b8e5658b901dd35ae23217075f035af998
 X-Patchwork-Hint: ignore
-Message-Id: <20260305080207.7E8CE863DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/binutils: remove support for
- binutils 2.43
+Message-Id: <20260305080207.9A9A8863DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pymodbus: bump to version
+ 3.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,36 +69,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e0c14c083a930e2dbe63bcc1cf5ed453e858a742
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6c83a0b8e5658b901dd35ae23217075f035af998
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Now that binutils 2.46.0 has been introduced and binutils 2.45.1 made
-the default version, drop the oldest supported version, binutils 2.43,
-keeping only the 3 last versions supported: 2.44, 2.45.1 and 2.46.0.
+See the release notes here: https://github.com/pymodbus-dev/pymodbus/releases/tag/v3.12.0
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- Config.in.legacy                                   |   7 +
- package/binutils/2.43.1/0001-sh-conf.patch         |  50 --
- .../2.43.1/0002-poison-system-directories.patch    | 307 --------
- package/binutils/2.43.1/0003-objdump-memleak.patch |  31 -
- ...-std-gnu23-compatibility-wrt-static_asser.patch |  90 ---
- ...Warnings-when-building-gprofng-with-Clang.patch | 801 ---------------------
- ...-std-gnu23-compatibility-wrt-unprototyped.patch | 619 ----------------
- .../0007-gprofng-fix-build-with-std-gnu23.patch    | 199 -----
- package/binutils/Config.in.host                    |   4 -
- package/binutils/binutils.hash                     |   1 -
- 10 files changed, 7 insertions(+), 2102 deletions(-)
+ package/python-pymodbus/python-pymodbus.hash | 4 ++--
+ package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+index 8d990d0d5f..b1183fba1e 100644
+--- a/package/python-pymodbus/python-pymodbus.hash
++++ b/package/python-pymodbus/python-pymodbus.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+-md5  7485a0f834aafb48273c6adb297dff93  pymodbus-3.11.4.tar.gz
+-sha256  6910e385cb6b2f983cd457e9ecee2ff580dbb23cf3d84aefec0845e71edd606a  pymodbus-3.11.4.tar.gz
++md5  c120f359fa9a0bba0c450efcb93941e9  pymodbus-3.12.0.tar.gz
++sha256  3fafe85e5d82bb9bcbda14b97a0e69a47dc46be55631e9f988adfaf95140c44b  pymodbus-3.12.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  572a4d6fa7541553f70cc6d494fbcbee7eb7d3f2fbd16080d39b20cccda26f0b  LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index 1e7df6892a..75c0bdc35a 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYMODBUS_VERSION = 3.11.4
++PYTHON_PYMODBUS_VERSION = 3.12.0
+ PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+-PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/2a/af/bbb716301ab9c60f0702c3cdf72cc0e373286a5648fe16bc4431400489dc
++PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/41/dc/8db192f3a66032e1bd900eb87b5bbcb539d5118f520372af0cb92ba42499
+ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
