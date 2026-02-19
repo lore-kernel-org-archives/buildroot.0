@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE5E8E9A053
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD59BE9A057
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2E8F83B55;
-	Thu, 19 Feb 2026 17:26:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rag4UYmfyNzw; Thu, 19 Feb 2026 17:26:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F16F83B56
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521966;
-	bh=elqu4DTOs6w2/Ty+3cYJlEsqeLe62ACfCJ6nWQZEvKo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bPXrVBf9SBjrUU5nuGZb4dUeEECWcjwtVaQFtq5FiyFKfR5H32t09BFmDXYKB7NaD
-	 mhgbxfkV+RWwM+8WPd91U7JqF4oh6/L230pKpvl50w484IxnRu3M9X3/suMngyoWaR
-	 +BpFBjmrF8KHvyIBRNVB2Vl+dX1oF5d0J9jBO1wlLVzrxjRtIoTD/9x/GcBj7pr9NO
-	 pxYa+VtBLD7ljG4RbveQEnZql50E4JiB9CF91G7DDDwS1QJ9nMETO0dzq9os1p3bMa
-	 sB6m9dDct7Y31D4sNN/sx4ru/0J51lkbvKneGN5CYfovBXqnNRZcwW7EDjYrVle0CT
-	 Q8e9xDohuMawA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F16F83B56;
-	Thu, 19 Feb 2026 17:26:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D65A1CE
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53875610B2
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A36D611B9;
+	Thu, 19 Feb 2026 17:26:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m9Xs8tb9CU3C for <buildroot@buildroot.org>;
+ id ognocjf5sHej; Thu, 19 Feb 2026 17:26:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8E52611AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771521967;
+	bh=f1ywm4LcmCvCEg1OdB4NUuv9fsoBhidb5DP673IYJfY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=pxO2HdnJZr6tcDiyirVqjymFJqJP//utu6r3F/ymSGXje4Oorm+5Jl9p3qeETrNIH
+	 d5CB1aQHq/1XKVGa726En6uGK2GRCA9xjvVz7JHV0RWIzfJb+HmhLRUIuoiGX2ioxV
+	 qUKhRN4BqQfflBJwrx+QpDjEF8HQCdFp1qF9SyiwZYh672esb5/pd0RPfQ8pVUyZ8N
+	 DPIiFUcpi0FSCgEWGeeDF5zwLdWi8UbYHOwIi5Xzdsb3FoHlfuhRQTReMRbPMR5Vhj
+	 jii/5J+vK387yLwH8Qg2h3hod9XllOzpJhH35nsz4dHCgM8ysanvXkFQ3fpaK64t4l
+	 C+EdwgeWYk3Ag==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8E52611AE;
+	Thu, 19 Feb 2026 17:26:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A0E71CE
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 652F440CF7
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EdIq5cSsCago for <buildroot@buildroot.org>;
  Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C6B610F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E84140C73
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60C6B610F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E84140C73
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E09A80DA3; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
+ id 6B25382DF0; Thu, 19 Feb 2026 17:25:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:35:28 +0100
+Date: Thu, 19 Feb 2026 10:17:50 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 335c8b7c204d62418cd7b5fa0651dbd84529eac7
-X-Git-Newrev: 6be6a7b57bc09af1daee3d7c890bbe91960b4258
+X-Git-Oldrev: 6be6a7b57bc09af1daee3d7c890bbe91960b4258
+X-Git-Newrev: 2280debfc13a5e70177f667e51b4d495ff3b20df
 X-Patchwork-Hint: ignore
-Message-Id: <20260219172538.5E09A80DA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/nginx: patch
- CVE-2025-53859
+Message-Id: <20260219172538.6B25382DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/vim: bump package
+ to version 9.1.1989
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,186 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6be6a7b57bc09af1daee3d7c890bbe91960b4258
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2280debfc13a5e70177f667e51b4d495ff3b20df
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fix the following vulnerability:
+Changelog:
+https://github.com/vim/vim/compare/v9.1.1684...v9.1.1989
 
-- CVE-2025-53859:
-    NGINX Open Source and NGINX Plus have a vulnerability in the
-    ngx_mail_smtp_module that might allow an unauthenticated attacker to
-    over-read NGINX SMTP authentication process memory; as a result, the
-    server side may leak arbitrary bytes sent in a request to the
-    authentication server. This issue happens during the NGINX SMTP
-    authentication process and requires the attacker to make preparations
-    against the target system to extract the leaked data. The issue
-    affects NGINX only if (1) it is built with the ngx_mail_smtp_module,
-    (2) the smtp_auth directive is configured with method "none," and (3)
-    the authentication server returns the "Auth-Wait" response header.
-    Note: Software versions which have reached End of Technical Support
-    (EoTS) are not evaluated.
-
-For more information, see:
-    - https://nvd.nist.gov/vuln/detail/CVE-2025-53859
-    - https://nginx.org/download/patch.2025.smtp.txt
-
-(cherry picked from commit a0081aa1f8c332d5fb6dbb19de9e46cb39be4931)
+Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit a7f1ab80cd65616f437ed12b700a4bc2a32e50c8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/nginx/0010-CVE-2025-53859.patch | 130 ++++++++++++++++++++++++++++++++
- package/nginx/nginx.mk                  |   3 +
- 2 files changed, 133 insertions(+)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/0010-CVE-2025-53859.patch b/package/nginx/0010-CVE-2025-53859.patch
-new file mode 100644
-index 0000000000..34befebd8a
---- /dev/null
-+++ b/package/nginx/0010-CVE-2025-53859.patch
-@@ -0,0 +1,130 @@
-+CVE: CVE-2025-53859
-+Upstream: https://nginx.org/download/patch.2025.smtp.txt
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+
-+diff --git a/src/mail/ngx_mail_handler.c b/src/mail/ngx_mail_handler.c
-+index 1167df3fb..d3be7f3b3 100644
-+--- a/src/mail/ngx_mail_handler.c
-++++ b/src/mail/ngx_mail_handler.c
-+@@ -523,7 +523,7 @@ ngx_mail_starttls_only(ngx_mail_session_t *s, ngx_connection_t *c)
-+ ngx_int_t
-+ ngx_mail_auth_plain(ngx_mail_session_t *s, ngx_connection_t *c, ngx_uint_t n)
-+ {
-+-    u_char     *p, *last;
-++    u_char     *p, *pos, *last;
-+     ngx_str_t  *arg, plain;
-+ 
-+     arg = s->args.elts;
-+@@ -555,7 +555,7 @@ ngx_mail_auth_plain(ngx_mail_session_t *s, ngx_connection_t *c, ngx_uint_t n)
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-+-    s->login.data = p;
-++    pos = p;
-+ 
-+     while (p < last && *p) { p++; }
-+ 
-+@@ -565,7 +565,8 @@ ngx_mail_auth_plain(ngx_mail_session_t *s, ngx_connection_t *c, ngx_uint_t n)
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-+-    s->login.len = p++ - s->login.data;
-++    s->login.len = p++ - pos;
-++    s->login.data = pos;
-+ 
-+     s->passwd.len = last - p;
-+     s->passwd.data = p;
-+@@ -583,24 +584,26 @@ ngx_int_t
-+ ngx_mail_auth_login_username(ngx_mail_session_t *s, ngx_connection_t *c,
-+     ngx_uint_t n)
-+ {
-+-    ngx_str_t  *arg;
-++    ngx_str_t  *arg, login;
-+ 
-+     arg = s->args.elts;
-+ 
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth login username: \"%V\"", &arg[n]);
-+ 
-+-    s->login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[n].len));
-+-    if (s->login.data == NULL) {
-++    login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[n].len));
-++    if (login.data == NULL) {
-+         return NGX_ERROR;
-+     }
-+ 
-+-    if (ngx_decode_base64(&s->login, &arg[n]) != NGX_OK) {
-++    if (ngx_decode_base64(&login, &arg[n]) != NGX_OK) {
-+         ngx_log_error(NGX_LOG_INFO, c->log, 0,
-+             "client sent invalid base64 encoding in AUTH LOGIN command");
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-++    s->login = login;
-++
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth login username: \"%V\"", &s->login);
-+ 
-+@@ -611,7 +614,7 @@ ngx_mail_auth_login_username(ngx_mail_session_t *s, ngx_connection_t *c,
-+ ngx_int_t
-+ ngx_mail_auth_login_password(ngx_mail_session_t *s, ngx_connection_t *c)
-+ {
-+-    ngx_str_t  *arg;
-++    ngx_str_t  *arg, passwd;
-+ 
-+     arg = s->args.elts;
-+ 
-+@@ -620,18 +623,19 @@ ngx_mail_auth_login_password(ngx_mail_session_t *s, ngx_connection_t *c)
-+                    "mail auth login password: \"%V\"", &arg[0]);
-+ #endif
-+ 
-+-    s->passwd.data = ngx_pnalloc(c->pool,
-+-                                 ngx_base64_decoded_length(arg[0].len));
-+-    if (s->passwd.data == NULL) {
-++    passwd.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[0].len));
-++    if (passwd.data == NULL) {
-+         return NGX_ERROR;
-+     }
-+ 
-+-    if (ngx_decode_base64(&s->passwd, &arg[0]) != NGX_OK) {
-++    if (ngx_decode_base64(&passwd, &arg[0]) != NGX_OK) {
-+         ngx_log_error(NGX_LOG_INFO, c->log, 0,
-+             "client sent invalid base64 encoding in AUTH LOGIN command");
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-++    s->passwd = passwd;
-++
-+ #if (NGX_DEBUG_MAIL_PASSWD)
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth login password: \"%V\"", &s->passwd);
-+@@ -674,24 +678,26 @@ ngx_int_t
-+ ngx_mail_auth_cram_md5(ngx_mail_session_t *s, ngx_connection_t *c)
-+ {
-+     u_char     *p, *last;
-+-    ngx_str_t  *arg;
-++    ngx_str_t  *arg, login;
-+ 
-+     arg = s->args.elts;
-+ 
-+     ngx_log_debug1(NGX_LOG_DEBUG_MAIL, c->log, 0,
-+                    "mail auth cram-md5: \"%V\"", &arg[0]);
-+ 
-+-    s->login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[0].len));
-+-    if (s->login.data == NULL) {
-++    login.data = ngx_pnalloc(c->pool, ngx_base64_decoded_length(arg[0].len));
-++    if (login.data == NULL) {
-+         return NGX_ERROR;
-+     }
-+ 
-+-    if (ngx_decode_base64(&s->login, &arg[0]) != NGX_OK) {
-++    if (ngx_decode_base64(&login, &arg[0]) != NGX_OK) {
-+         ngx_log_error(NGX_LOG_INFO, c->log, 0,
-+             "client sent invalid base64 encoding in AUTH CRAM-MD5 command");
-+         return NGX_MAIL_PARSE_INVALID_COMMAND;
-+     }
-+ 
-++    s->login = login;
-++
-+     p = s->login.data;
-+     last = p + s->login.len;
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 6ca1ac2075..9ea432abdb 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -19,6 +19,9 @@ NGINX_CONF_OPTS = \
- 	--with-cpp="$(TARGET_CC)" \
- 	--with-ld-opt="$(TARGET_LDFLAGS)"
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index ae909aaeac..95c44234fe 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  4fe4cb284007e26255267338dde1ceac6f8326f78123ae8c96a36ee15a1ea7ba  vim-9.1.1684.tar.gz
++sha256  e150b40bcf593c10afb39378f2594203d94e5d6110ffe242a0b6bedd258d757f  vim-9.1.1989.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+ sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 852d5ed959..41b290ab9f 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0010-CVE-2025-53859.patch
-+NGINX_IGNORE_CVES += CVE-2025-53859
-+
- # www-data user and group are used for nginx. Because these user and group
- # are already set by buildroot, it is not necessary to redefine them.
- # See system/skeleton/etc/passwd
+-VIM_VERSION = 9.1.1684
++VIM_VERSION = 9.1.1989
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
