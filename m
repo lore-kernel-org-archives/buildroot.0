@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99EC1E9A056
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0D8E9A057
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 17:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70ADB610D9;
-	Thu, 19 Feb 2026 17:24:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A48AE610FC;
+	Thu, 19 Feb 2026 17:24:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M_qSr_AiHxfE; Thu, 19 Feb 2026 17:24:49 +0000 (UTC)
+ id Vif0D-WV52f8; Thu, 19 Feb 2026 17:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88753610DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0673610E7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771521886;
-	bh=F0K3kqkNOj/2gzmJW3xvJH8CBw3G5xUJ+J8ViXF+Ntg=;
+	s=default; t=1771521888;
+	bh=4sEowqC9ycE4ZJgDZoh2ErUmmBDMSg/EB4L5TXz57Tc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KJGc/XZnII2wLrdbos5y/XVG5+20tECowmXApBSBK/opqBIjL7e2FiY7bYr/zCnSr
-	 I0SpIB+wdhi0i3icM/blqdweejqnBFtS504b6AKjLqMxE1WKL4EcHU/qQNuj/YK1uI
-	 uLOx3qOcrxco53ln719WYFZ5vdYbaxkuR9QFOlF/PRiGXedViul9diaM2ESVhT/pVj
-	 lBhV7NcmiIhhTzezb48x/kcN2MqgAHTQgxMf3HnYUFLZHA0CdZDRjeA27NU6mqnfn7
-	 TwqHd/tBued00ZaSjkQXQANzEMgT3YwU1muO/e1PvAFH2yEPq9gNzk0onzkWl173b7
-	 wYmJbq1wVUKLg==
+	b=fAoUXDR+CRDvTGs+J50cS0GlW6vyLCzG9S0jQrO9MnhT2weFTvb59BqdYhv7wPD/f
+	 8lwXwJVVq8gj8SbjrKDPW5e1i2itgAiFY+HgDu1uQ7c80f8aRCBHU99WpWF0mWuJ1v
+	 zP/JYypn84xH5bbmvIBYf85TJZ4OtKKCCWXAeOA8Johemb669nTML3cOh1unHwLLyr
+	 5N4XMObrvSOdzX0uFWMF2pFlAOPRfFo9q4oX6rfkuQf/RDwOaY6IPq7/2AUlr29shh
+	 15B6BmzJtWW4kqWZH2TOdcqXqggylu0N+yqAwndTvwZ4W9REmSe3qirN+u4O7J2PtS
+	 s1oIcBOYaFCuQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88753610DF;
-	Thu, 19 Feb 2026 17:24:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0673610E7;
+	Thu, 19 Feb 2026 17:24:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 724661CE
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C199206
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59F4A40CE9
+ by smtp4.osuosl.org (Postfix) with ESMTP id B43AF40D00
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yqVQqxbgCF3F for <buildroot@buildroot.org>;
+ id MNys2At9hqiv for <buildroot@buildroot.org>;
  Thu, 19 Feb 2026 17:24:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 594F240D00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 851F040D05
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 594F240D00
+ by smtp4.osuosl.org (Postfix) with ESMTP id 851F040D05
  for <buildroot@buildroot.org>; Thu, 19 Feb 2026 17:24:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5725B84046; Thu, 19 Feb 2026 17:24:14 +0000 (UTC)
+ id 831578010F; Thu, 19 Feb 2026 17:24:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Feb 2026 19:30:01 +0100
+Date: Thu, 19 Feb 2026 10:18:02 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: bda1452e19236bc58eb52d747126ba95209c0a77
-X-Git-Newrev: 5dc325e5a8bc64c766ef68e4527c98bed1ea3203
+X-Git-Oldrev: b84518c52c58149e9ca082f58e355264cca54ce3
+X-Git-Newrev: 324d857a56c7f51b9d3eef8fa25f04454bae374e
 X-Patchwork-Hint: ignore
-Message-Id: <20260219172414.5725B84046@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/haproxy: security
- bump to v2.6.23
+Message-Id: <20260219172414.831578010F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/vim: bump package
+ to version 9.1.2017
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5dc325e5a8bc64c766ef68e4527c98bed1ea3203
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/324d857a56c7f51b9d3eef8fa25f04454bae374e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-For more information on the release, see:
-  - https://git.haproxy.org/?p=haproxy-2.6.git;a=commit;h=c3bf1ac6709072bf9984c829c3badda5a4e8fa7e
+Changelog:
+https://github.com/vim/vim/compare/v9.1.1989...v9.1.2017
 
-This fixes the following vulnerability:
-
-- CVE-2025-11230:
-    Inefficient algorithm complexity in mjson in HAProxy allows remote
-    attackers to cause a denial of service via specially crafted JSON
-    requests.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-11230
-  - https://www.haproxy.com/blog/october-2025-cve-2025-11230-haproxy-mjson-library-denial-of-service-vulnerability
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d94d4ff0a6e39f3ac024069134d0ab9209027686)
+(cherry picked from commit ef70ba7b243d5126c453b32245807d091c3bf734)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 42f340fa80..ce5dae17e7 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.22.tar.gz.sha256
--sha256  4c0797f450f997dc287d2c7aafa7a0e5b7a2d71593a2cd58e664e8f3aea614fa  haproxy-2.6.22.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.23.tar.gz.sha256
-+sha256  1281d57f25e98456a042c81f32801a106a293c1340b0c06debb2a87d6a7b3611  haproxy-2.6.23.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index f60cb1e08a..51878e754f 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 95c44234fe..f7c883b929 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  e150b40bcf593c10afb39378f2594203d94e5d6110ffe242a0b6bedd258d757f  vim-9.1.1989.tar.gz
++sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+ sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 41b290ab9f..fa7d47d67d 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).22
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).23
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-VIM_VERSION = 9.1.1989
++VIM_VERSION = 9.1.2017
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
