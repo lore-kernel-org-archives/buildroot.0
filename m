@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B12CE9A048
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 13:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D988EE9A04A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 13:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B045E40AFB;
-	Thu, 19 Feb 2026 13:30:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4FjCEM3tex9J; Thu, 19 Feb 2026 13:30:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D00EE40B5A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771507852;
-	bh=IncimIhkLIVBG0iD0Ie/2k/i22+p7jYETcjkDZQtXyI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BRFbWfO4zE1ed/sA1qDC/J5iOY2NwZ4Y6SJWw1YAycSLt/+HvdxgyN8P/PBwzXamO
-	 MZ5NWsYd4G33zIHHaUAEqEae4STe94hEhRCXWz7FnIfM1fLUX4+aHVbWa6bcW0l5yc
-	 /XKjUCWT6pIrkzEtiQEHGdGEOOw2+MLFAXp35MYeQaOKVbuC/jOlc6IaFVXeAcsVNA
-	 xiyotJKWw0J5dAt+FOKHeU6fTVSXziPCjqi/JZYsSqFLC9bCtw02A84hT+dkOhgKWp
-	 RzP7SdtWHdwWipdKl+BJdNji4osoXGvIXa66CQaRgnvQg2RHxyePQLdY88+6nUkNJo
-	 qu84dfzkndgkw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D00EE40B5A;
-	Thu, 19 Feb 2026 13:30:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA1B2206
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 13:30:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBC7781A16
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 13:30:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D05F48233F;
+	Thu, 19 Feb 2026 13:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U7HHZsfW0ITx for <buildroot@buildroot.org>;
- Thu, 19 Feb 2026 13:30:50 +0000 (UTC)
+ id NTFtUYbC7fKB; Thu, 19 Feb 2026 13:38:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F80782339
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771508286;
+	bh=irXacIF76d4kuXkeLhLYZd4KIcSpTtaH4qDclkM6eHs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=J5Z80zqAMNatEk99IRE26nvnQTIxMyVnlstOmgA34+OSdm2njqa7Xxm0x9QchYMpv
+	 nZXekWm2KCGISmGdpOVHRKqWl9RZYT20jwR1b7NZZkCtohJ5ThN4RGRc/v31f/mmw7
+	 i1Dxh7+kR3A7CgSGt4HcGPrlJbM3QBxtERGtLv2/zqLurF+wxahR1UXP9zdn7dF9wW
+	 PiiP9MU+VJxyITB5xIRvlbeyPMC/hOf+WbjIpXU97Lo4cW32NmKjQSpaGWrzycP9vW
+	 JoRCZReemfiu4x2FN2alRm6nTf5fO8mCQFq3jScczAfxoPkcfPKD+FIJ/X3eRL0/Xk
+	 IOX21Cg2HrEeQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F80782339;
+	Thu, 19 Feb 2026 13:38:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EF44206
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 13:38:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24E1B82339
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 13:38:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yocG5z4ngfXP for <buildroot@buildroot.org>;
+ Thu, 19 Feb 2026 13:38:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E8D781916
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32ECF81E9A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E8D781916
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 13:30:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32ECF81E9A
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 13:38:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B39087023; Thu, 19 Feb 2026 13:30:50 +0000 (UTC)
+ id 21DE68702F; Thu, 19 Feb 2026 13:38:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 19 Feb 2026 12:52:36 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 314b6f63681c42ea05724e73b6d6ea14dfb05024
-X-Git-Newrev: 6c83a0b8e5658b901dd35ae23217075f035af998
+Date: Thu, 19 Feb 2026 14:36:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 127f36b406e80a6e5f773ce6e588a5ba9e5b3974
+X-Git-Newrev: d3d55662923f9aa898ac4a2663bdce6cadfd421d
 X-Patchwork-Hint: ignore
-Message-Id: <20260219133050.8B39087023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pymodbus: bump
- to version 3.12.0
+Message-Id: <20260219133804.21DE68702F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-anyio: bump to version
+ v4.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6c83a0b8e5658b901dd35ae23217075f035af998
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d3d55662923f9aa898ac4a2663bdce6cadfd421d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-See the release notes here: https://github.com/pymodbus-dev/pymodbus/releases/tag/v3.12.0
+See the release notes here:
+https://anyio.readthedocs.io/en/stable/versionhistory.html
 
 Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/python-pymodbus/python-pymodbus.hash | 4 ++--
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ package/python-anyio/python-anyio.hash | 4 ++--
+ package/python-anyio/python-anyio.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 8d990d0d5f..b1183fba1e 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
+diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
+index 2a02bc9d37..d25c1a2bad 100644
+--- a/package/python-anyio/python-anyio.hash
++++ b/package/python-anyio/python-anyio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  7485a0f834aafb48273c6adb297dff93  pymodbus-3.11.4.tar.gz
--sha256  6910e385cb6b2f983cd457e9ecee2ff580dbb23cf3d84aefec0845e71edd606a  pymodbus-3.11.4.tar.gz
-+md5  c120f359fa9a0bba0c450efcb93941e9  pymodbus-3.12.0.tar.gz
-+sha256  3fafe85e5d82bb9bcbda14b97a0e69a47dc46be55631e9f988adfaf95140c44b  pymodbus-3.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/anyio/json
+-md5  a026af4a3b485699718761b1b44ad1df  anyio-4.12.0.tar.gz
+-sha256  73c693b567b0c55130c104d0b43a9baf3aa6a31fc6110116509f27bf75e21ec0  anyio-4.12.0.tar.gz
++md5  10e3ba7d02402b6605d834a1e4881a1d  anyio-4.12.1.tar.gz
++sha256  41cfcc3a4c85d3f05c932da7c26d0201ac36f72abd4435ba90d0464a3ffed703  anyio-4.12.1.tar.gz
  # Locally computed sha256 checksums
- sha256  572a4d6fa7541553f70cc6d494fbcbee7eb7d3f2fbd16080d39b20cccda26f0b  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 1e7df6892a..75c0bdc35a 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
+ sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
+diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
+index 035e2298e8..32b4a84ef1 100644
+--- a/package/python-anyio/python-anyio.mk
++++ b/package/python-anyio/python-anyio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMODBUS_VERSION = 3.11.4
-+PYTHON_PYMODBUS_VERSION = 3.12.0
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/2a/af/bbb716301ab9c60f0702c3cdf72cc0e373286a5648fe16bc4431400489dc
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/41/dc/8db192f3a66032e1bd900eb87b5bbcb539d5118f520372af0cb92ba42499
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+-PYTHON_ANYIO_VERSION = 4.12.0
++PYTHON_ANYIO_VERSION = 4.12.1
+ PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
+-PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/16/ce/8a777047513153587e5434fd752e89334ac33e379aa3497db860eeb60377
++PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/96/f0/5eb65b2bb0d09ac6776f2eb54adee6abe8228ea05b20a5ad0e4945de8aac
+ PYTHON_ANYIO_SETUP_TYPE = setuptools
+ PYTHON_ANYIO_LICENSE = MIT
+ PYTHON_ANYIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
