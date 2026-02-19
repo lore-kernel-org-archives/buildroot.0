@@ -1,135 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BBACE9A054
-	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 19:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD589C531CC
+	for <buildroot@archiver.kernel.org>; Thu, 19 Feb 2026 19:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 560AE41782;
-	Thu, 19 Feb 2026 19:33:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fwAQ2VGKa_JA; Thu, 19 Feb 2026 19:32:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E33FD4177A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771529579;
-	bh=J5d+wF3AP6XEnpFjBhg0Cx8hGzDHX8WfyoOlwlkanJE=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=rnMMxE5ZPrYQxC8djlNGIwTBj8SZKKBs9YIsHRj9v3Y7tT0/VXoSjSkEjzRGujlkV
-	 mI3+nhhMDMsprFJ90nkHdEdS+ujJTE0Fs4gvX8YFxGzQwnDbQ/BrfjJoMKPBAgNAuB
-	 V117S8kCZarcQxW7gBtWQCVnuEnW+ft1sFEysvYzNmIQW5EqLprcBqf7/sPLOB/+g/
-	 F6je2SiHmgyrnSm7mtX321k4dT+oEPFoEqzXnwCArS1sKwQvNaNGvXS34jZH2yZqCj
-	 8wKJtRhquFVijoo4451BHd2GQVdcmTEIAlh3db5geuTcsFoyshec/yfNbYzpgNrph8
-	 wZa5qNXQoG57g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E33FD4177A;
-	Thu, 19 Feb 2026 19:32:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AB62D1CE
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 19:32:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CB6C83BAA
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 19:32:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C69E83C13;
+	Thu, 19 Feb 2026 19:56:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M0u3ZbmcW9Kj for <buildroot@buildroot.org>;
- Thu, 19 Feb 2026 19:32:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::335; helo=mail-ot1-x335.google.com;
- envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7D46583BA3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D46583BA3
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com
- [IPv6:2607:f8b0:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7D46583BA3
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 19:32:56 +0000 (UTC)
-Received: by mail-ot1-x335.google.com with SMTP id
- 46e09a7af769-7d1890f5cafso466892a34.1
- for <buildroot@buildroot.org>; Thu, 19 Feb 2026 11:32:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771529575; cv=none;
- d=google.com; s=arc-20240605;
- b=BSsPNej6oIp6h7ZyazsSRSgOAaSN0XYopLOlxoNTGmt9/+HnMPXJKEDjqCk4lSOsWw
- VR1HjLePAPUeQclGXeCdlEQhvI5FBVUd35qwyV0kDraj/m6EQVebM+6jHGLq/OkMDjaP
- hhsDfxPnSzad0LZnCs70n/Le0pdw5sZDjPm+41qb/3AsflwA24nkp5jW3ElSa8s+cvJd
- W/ZYl/FljItlhDhZzhUpEEwtbbE+2b/Z94NeBFzB3jqjVch74PrmaT6wqtzBqtIHPxH6
- jzC3HU75LT5VU2KEGTgyYS8alRJAdIR71fWbBy8ldWamCX9F9zrgFed6gCUbYx8jGM8C
- WCgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20240605; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:dkim-signature;
- bh=niNDCvpHxtGZeYUHHhuMgl4nQh8NF4BlUMJ3Yxr5XOM=;
- fh=wo7tCDjhCybiN53hXWmbFG5LuhEyalG3Ts7dxuq/aEU=;
- b=KFOxH3BpC6ytcIY/3GgShFeW79plvkdAoSdEtw8kt2C1X/v74muhesnnVTjbpOPj3G
- o2BOyPzYSlB9PXYky+PyBZK/8c63KhYwcCa9gdd84C1h4M9Fy+VgN6qXIo72zB+IXKz4
- HGTQrvKZ2xLCyozFp4ae05LC+lVWxtmZ7u+2TpCyOYpurswPP3smUeWAIJzVUrRLAWP5
- DHAnx9/9h54bi1alXmPi0E1F+33w/aihwMsdwies9p8YJKHOHjjjKILSQu0Yo73MqybM
- rc2i4c+afyIq6L9EptETZ77pE6Y0RaxghEJJUnaIAFvTYQ1aSSL7o1LpJosqR7EGSIZY
- 25cg==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771529575; x=1772134375;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=niNDCvpHxtGZeYUHHhuMgl4nQh8NF4BlUMJ3Yxr5XOM=;
- b=hF2ygMvp9yU2LFd2fy5NcKPuW57ks91Qe9fgK+uBp5wbB/uvPP00r0DspL25ZMAMkk
- BFtD36uw8ThjksuVnZsbp/S7x75QI54K8mruolzwAV+dEDaDICoFFrkXmreLqP056vFi
- P5Zr6p9Lxe9YQUCn8xyMNAtsWcPjivmkFz4m3sEy5feEatTZEuySCI5o3LAImmjgrzJ0
- DDWw5vSmE0/lpD7c/+sujHLR+AtUkDsKfUyAojw4Y/mUW+HjqpT4xQufJiNP7LGW+hcd
- UYAgvkgJJ6JCjZMYaP+ZFm8jC9IvEuJq4dEAULStCVM5044z2QzTmVlRjQRTCXPfxa5y
- 0XVA==
-X-Gm-Message-State: AOJu0YyTuqCho2qE9zGXMypWPoDppvzM9AM8SIVpvsyfS5BXnRRPZ+Hy
- GxDYQsGmgnK/Uh9fpwr09WX+UefabscUt1OLisY0kcAG/huZQUtGDKaCoOekCiZ7DsGa/FCuObl
- htff7Yo0+gjyNm3x6mgQSMil7EKEtQuI=
-X-Gm-Gg: AZuq6aKHe8estQTjEiyl/KdgEJ51RPPDYkUHM94XvPUWGkfPRCxv1QgfSTWjpOnuw9M
- +suS20jBNe5p/ojY31r/CijPfrXXGUX5sdL4077Fc1jWf46vN/T0d397JoJO4sH+PnuRm7N1DuD
- sOtzpQkD4k0m9a2oZyZQzWp+Mb01sD0u6XOx9lNyjEOEzuPrUk7y3bSe4/U3NkS5Knfg9RmjlGx
- vvYllFEQMfiV7p4Nue5/uaLnlGNZ4PFm1Bace0rwWONc0skDRZEjG49fsnWSAN8Sa7Z6bgTwwhp
- FisXNQ==
-X-Received: by 2002:a05:6820:1c94:b0:661:cc1:50c0 with SMTP id
- 006d021491bc7-67858ef3a2bmr9831133eaf.11.1771529574500; Thu, 19 Feb 2026
- 11:32:54 -0800 (PST)
+ id IN5xfixqhXMK; Thu, 19 Feb 2026 19:56:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D454A83C07
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1771531013;
+	bh=9ZnfZQ5JzPAHm00TbjQxqi4nscsnzKGInYDidswMH0s=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=EI2iX6xTVNHneqg1Cf6oNKPHxxN/sxiDplSAn2bMo6Tf2jHjrL9TboiTr8J+c50ua
+	 NkMeA1kdOsseqtTTJUbTwsm2yQO0htyPdy2N+S6/mxev++uu/5RLXor0UIa0GsVGjd
+	 ejBR/OEjA4+LHyYJBaTOcuHWk3E2uahylDOwAyaQePhgubcAGAUtZ9mgj01x0viKki
+	 cy2x1PAXmXmQrEyE8VumL5hYb5o3Daz/LWvkaOXep4s84wMFufFe1YZmgbP/Py3w+9
+	 ZA3FXSB2EiOCVXMyEMA8jOG+37U8CJG5wWrykx0I75nz/RZjA12gMr92zH54GPRFl7
+	 WmDHogm5So3gw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D454A83C07;
+	Thu, 19 Feb 2026 19:56:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD008206
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 19:56:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B21DD408E3
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 19:56:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z-lqGAYc0F0w for <buildroot@buildroot.org>;
+ Thu, 19 Feb 2026 19:56:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E741940857
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E741940857
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E741940857
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 19:56:50 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 77137A4C0ED1
+ for <buildroot@buildroot.org>; Thu, 19 Feb 2026 20:56:47 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52740)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vtA8l-000000003xU-0s76
+ for buildroot@buildroot.org; Thu, 19 Feb 2026 19:56:47 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 19 Feb 2026 20:56:46 +0100
+Message-ID: <20260219195646.1090143-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-References: <20251203-virglrenderer-v2-v2-0-2846fc1a579a@gmail.com>
- <20251203-virglrenderer-v2-v2-1-2846fc1a579a@gmail.com>
- <d13a47d0-39c4-4bd4-801c-ca4cdd4bc8ca@smile.fr>
-In-Reply-To: <d13a47d0-39c4-4bd4-801c-ca4cdd4bc8ca@smile.fr>
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 19 Feb 2026 11:32:18 -0800
-X-Gm-Features: AaiRm51wCBXXiEojh4gmZPxsXHgc-3fbQ2RBjwDxXiEdjk7Q-to0B3vgVfmAPik
-Message-ID: <CAMWSM7hYmiCCkqnAbSZaJtAgwGfrSDbvrMvojzGk57fiUqaC=w@mail.gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>, 
- Romain Naour <romain.naour@gmail.com>, Steve deRosier <derosier@cal-sierra.com>,
- Adam Ford <aford173@gmail.com>
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1771529575; x=1772134375; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=niNDCvpHxtGZeYUHHhuMgl4nQh8NF4BlUMJ3Yxr5XOM=;
- b=BnHffXPREKb8a63hmbSeTnNKe8BwzqzTzXOUjDYVBelPnvxnX7Hw4bfkVh2YXtM0tG
- zbY6nAU1u6WcVUYjubkZhCD87aS8iFYj+0xB2Pq/0MVXHU1r1g92sqamRPog4CH31TSe
- SGCP7/NnRU69lNc7DeqbD/Fbw39St56dsnctoH+o3jn8oDoabBbzbJsXYcZ6FvTUUd/b
- iA9cxj55n5gkregg5zWvFQtbsGF6DXkAOvRp9cg+NmcjOB2MNDzbyEDGDUN3nCW8zFwN
- SAzJix8IdeVf53yJVMsE42p0A0gJvEer6GlT3I4xHf0iw0ytPHisUwveKUebY+yHI4Zu
- rH8w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1771531007;
+ bh=iQf6MoXGXi9QdLa/zsrUupLbLkwUbn9OlIuGoDoztPo=;
+ h=From:To:Subject:Date:From;
+ b=JRFOWrkM4lreVcy1P0Pm0Z+u5jo3lt4Z4myXjlLUOgtYdn1Cqp+eEBOBHkdRIFPew
+ tuC3gVaioL5+vp9ULTm0ovGKUcV5Cxa9VjK9TE0QC/7Xgzf31BfNTH2Gk2Ef3yg9DK
+ iWIgIDb0O4xgJQfv9dt72YR98Qn9csxP2AyJYiTx7vQu35OvbEZCC6ob2ZTKBkHNwP
+ qDmpnyl/q9XB4tjRTFdkEzH5V7d6dDvS3IfBM+kczTDjYNsPCNJz6UBqMHc+iMXJeD
+ 9+MH1kLRfu6E0xQBuksjjtA+VvjcZ2ogcesnvKZiQwZ8jIqA5/SL5/Xvm5mTrJl/OC
+ dH8LcmBh5iwJQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BnHffXPR
-Subject: Re: [Buildroot] [PATCH RESEND v2 1/2] package/virglrenderer: new
- package
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=JRFOWrkM
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{10,
+ 15}.x / 6.{1, 6, 12, 18, 19}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -141,34 +92,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUm9tYWluLAoKT24gVGh1LCBGZWIgMTIsIDIwMjYgYXQgMTA6NTnigK9BTSBSb21haW4g
-TmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4gd3JvdGU6Cj4KPiBJIG5vdGljZWQgdGhhdCBo
-b3N0LXB5dGhvbi1weXlhbWwgYW5kIGhvc3QtcHl0aG9uMyBhcmUgbmVlZGVkIGhlcmUgc2luY2Ug
-c29tZQo+IHB5dGhvbiBzY3JpcHRzIGFyZSB1c2VkIGJ5IHRoZSBidWlsZCBzeXN0ZW0gaW1wb3J0
-IHRoaXMgcHl0aG9uIG1vZHVsZToKPgo+IHNyYy9nYWxsaXVtL2F1eGlsaWFyeS91dGlsL3VfZm9y
-bWF0X3BhcnNlLnB5OjMzOmltcG9ydCB5YW1sCj4KPiBsaWJnYm0gaXMgYWxzbyBjaGVja2VkIGJ5
-IG1lc29uIFsyXSwgc28gYWRkIGxpYmdibSBpbgo+IFZJUkdMUkVOREVSRVJfREVQRU5ERU5DSUVT
-LiBBZGQgImRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSEFTX0xJQkdCTSIgYXMKPiBCUjJfUEFDS0FH
-RV9WSVJHTFJFTkRFUkVSIGRlcGVuZGVuY3kuCgpHb29kIGNhdGNoLCB0aGFuayB5b3UuCgo+ID4g
-K2lmZXEgKCQoQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUl9WRU5VUykseSkKPiA+ICtWSVJHTFJF
-TkRFUkVSX0NPTkZfT1BUUyArPSAtRHZlbnVzPXRydWUKPiA+ICtWSVJHTFJFTkRFUkVSX0RFUEVO
-REVOQ0lFUyArPSB2dWxrYW4tbG9hZGVyCj4KPiBDYW4geW91IGNoZWNrIGlmIHZ1bGthbi1oZWFk
-ZXJzIGlzIG5lZWRlZCBoZXJlPwo+CgpZZXMsIEknbGwgZG91YmxlIGNoZWNrIGZvciB0aGUgbmV4
-dCB2ZXJzaW9uIG9mIHRoZSBzZXJpZXMuCgo+Cj4gV2UgaGF2ZSBsaWJ2YSBpbiBCdWlsZHJvb3Qs
-IHdoYXQgYWJvdXQgYWRkaW5nIGxpYnZhIG9wdGlvbmFsIGRlcGVuZGVuY3k/Cj4KPiBpZmVxICgk
-KEJSMl9QQUNLQUdFX0xJQlZBKSx5KQo+IFZJUkdMUkVOREVSRVJfQ09ORl9PUFRTICs9IC1Edmlk
-ZW89dHJ1ZQo+IFZJUkdMUkVOREVSRVJfREVQRU5ERU5DSUVTICs9IGxpYnZhCj4gZWxzZQo+IFZJ
-UkdMUkVOREVSRVJfQ09ORl9PUFRTICs9IC1EdmlkZW89ZmFsc2UKPiBlbmRpZgo+CgpJIGJlbGll
-dmUgdGhlIHZpcmdscmVuZGVyZXIgcHJvamVjdCBpcyB3b3JraW5nIG9uIHZpZGVvIGFjY2VsZXJh
-dGlvbgpwYXNzdGhyb3VnaCBvdmVyIHZpcnRpby1ncHUgYW5kIGl0IGJ1aWxkcywgYnV0IEkgaGF2
-ZW4ndCB0ZXN0ZWQgaXQKbXlzZWxmLiBJIGRvbid0IHRoaW5rIGl0J3Mgc3RhYmlsaXplZCBvciBn
-ZW5lcmFsbHkgdXNhYmxlIHlldCwgc28gSQpjaG9zZSB0byBsZWF2ZSBpdCBkaXNhYmxlZCBmb3Ig
-bm93LCB0aG91Z2ggSSB0aGluayB3ZSBjb3VsZCBhdCBsZWFzdAptYWtlIGl0IGV4cGxpY2l0LgoK
-QmVzdCwKSm9zZXBoCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ linux/{6.19.2 => 6.19.3}                     |  0
+ linux/Config.in                              |  2 +-
+ linux/before-6.17/linux.hash                 | 10 +++++-----
+ linux/from-6.17/linux.hash                   |  4 ++--
+ package/linux-headers/{5.10.250 => 5.10.251} |  0
+ package/linux-headers/{5.15.200 => 5.15.201} |  0
+ package/linux-headers/{6.1.163 => 6.1.164}   |  0
+ package/linux-headers/{6.12.73 => 6.12.74}   |  0
+ package/linux-headers/{6.18.12 => 6.18.13}   |  0
+ package/linux-headers/{6.19.2 => 6.19.3}     |  0
+ package/linux-headers/Config.in.host         | 14 +++++++-------
+ 11 files changed, 15 insertions(+), 15 deletions(-)
+ rename linux/{6.19.2 => 6.19.3} (100%)
+ rename package/linux-headers/{5.10.250 => 5.10.251} (100%)
+ rename package/linux-headers/{5.15.200 => 5.15.201} (100%)
+ rename package/linux-headers/{6.1.163 => 6.1.164} (100%)
+ rename package/linux-headers/{6.12.73 => 6.12.74} (100%)
+ rename package/linux-headers/{6.18.12 => 6.18.13} (100%)
+ rename package/linux-headers/{6.19.2 => 6.19.3} (100%)
+
+diff --git a/linux/6.19.2 b/linux/6.19.3
+similarity index 100%
+rename from linux/6.19.2
+rename to linux/6.19.3
+diff --git a/linux/Config.in b/linux/Config.in
+index e32f252440..e85cfd3175 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.19.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.19.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index d523173bb0..f2946ac337 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4059d394cbf8e9548df36d37e0b8a80c4409ac4e14ecc5019a72a770ef7b41ba  linux-6.12.73.tar.xz
+-sha256  16742f4e78abfec8cc9205fb3cf79d63c7e819c33bfc691402683402c350ee2f  linux-6.6.126.tar.xz
+-sha256  fd2d033321bd15e0ad5669208b6e43f3f93ccecb059a512ca6b913ca940c38ea  linux-6.1.163.tar.xz
++sha256  3b56eeb1dc9a437f189ca56b823be3769994f59a4ea0895b08ec0d20acaca13e  linux-6.12.74.tar.xz
++sha256  a7cd9c97b4f0b31cc030bcdc60abe5434fffb2556e293f7438ce7909dff8c9fe  linux-6.6.127.tar.xz
++sha256  33bf087f7bbf7f626873dd7d955eb44182a93695db41f5f89a6bd3d233a39d1c  linux-6.1.164.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  fce4b1c86688880932ba8f755880cbf390a89453464bfd90b9a1b01a121c2998  linux-5.15.200.tar.xz
+-sha256  47754da223a9f264b917be5d575a4dae03fc8777aa9e1b00473e973ee997d529  linux-5.10.250.tar.xz
++sha256  4f2afffbeddaad6b8527d41a3e3a82646d3cf5dfd0acbb6c4e8a99fc70461b96  linux-5.15.201.tar.xz
++sha256  e6857625fee3b587b0279b445adc3940a5c40723385fa1055ac7af16ff4b4c01  linux-5.10.251.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+ sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index 6edbdd7471..8f4d558e8d 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  88611981582cceb7cdd4d688d9d881073cf4977176252193a23ca6d4b982ee5a  linux-6.19.2.tar.xz
+-sha256  e003294ad4c2c2ac5bb77fbb8259511134f51d987b3212516832dc4b0c83f1ea  linux-6.18.12.tar.xz
++sha256  0e474968adfcbee32916fd01a89d8ccfd1168d8d32569e76a5c664c793198ebe  linux-6.19.3.tar.xz
++sha256  ed2c3c55fd38e6836c094fce356f2567f9516130b73354a29857960368c5687f  linux-6.18.13.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/5.10.250 b/package/linux-headers/5.10.251
+similarity index 100%
+rename from package/linux-headers/5.10.250
+rename to package/linux-headers/5.10.251
+diff --git a/package/linux-headers/5.15.200 b/package/linux-headers/5.15.201
+similarity index 100%
+rename from package/linux-headers/5.15.200
+rename to package/linux-headers/5.15.201
+diff --git a/package/linux-headers/6.1.163 b/package/linux-headers/6.1.164
+similarity index 100%
+rename from package/linux-headers/6.1.163
+rename to package/linux-headers/6.1.164
+diff --git a/package/linux-headers/6.12.73 b/package/linux-headers/6.12.74
+similarity index 100%
+rename from package/linux-headers/6.12.73
+rename to package/linux-headers/6.12.74
+diff --git a/package/linux-headers/6.18.12 b/package/linux-headers/6.18.13
+similarity index 100%
+rename from package/linux-headers/6.18.12
+rename to package/linux-headers/6.18.13
+diff --git a/package/linux-headers/6.19.2 b/package/linux-headers/6.19.3
+similarity index 100%
+rename from package/linux-headers/6.19.2
+rename to package/linux-headers/6.19.3
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d53460d07d..4745ff148e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -464,13 +464,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.250"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.200"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.163"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.126"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.73"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.12"	if BR2_KERNEL_HEADERS_6_18
+-	default "6.19.2"	if BR2_KERNEL_HEADERS_6_19
++	default "5.10.251"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.201"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.164"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.127"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.74"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.13"	if BR2_KERNEL_HEADERS_6_18
++	default "6.19.3"	if BR2_KERNEL_HEADERS_6_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
