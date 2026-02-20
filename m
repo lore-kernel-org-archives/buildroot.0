@@ -1,113 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 058DCC5AD68
-	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 19:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2EB8C5AE49
+	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 19:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CAA3608A1;
-	Fri, 20 Feb 2026 19:23:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B9CC840CD;
+	Fri, 20 Feb 2026 19:47:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NLYH-L6_M1lC; Fri, 20 Feb 2026 19:23:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xWfdSK2J13Ld; Fri, 20 Feb 2026 19:47:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BCFA61018
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 767AD840C9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771615398;
-	bh=ZSrU0rr3V9KB3YE6osbnTUAXylAhz4DAqSXXaW6MHLk=;
+	s=default; t=1771616838;
+	bh=HGNHLcjt1T2VU+I0+fF2mBbBCp+lFr8FsdEpXGiDp8c=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=AFSUquv3TSrHUOBgLdL6BZ+cd8uZ5xmMgbeLS3MuLXCNWakLcsl+iVEXSYfSZmCh5
-	 uxIvrw4mbuJXz1Alkl9vJJSyQS7k9l5GjQKItoZ+don2YLgBu6M4ELOoD7lz991Jap
-	 vZjs3DKA8uURExxG4j1qIxEzDqBH8SEDUoLXhYtUU4GRJqY7NJzuyJanv9h4l6Q8Ow
-	 SNv7s4aBIrDplvzSdLcZ3/nv6e5Nd+gGk3R/GyTNbjaFcNUlBrXdBl6EBYcud4OjeU
-	 HtnbcGMZvf74QBiHXaCGaYW2yCcXurgBOhlXX470cMyKme13Oq4G1YIP5E1E6U7uHU
-	 ZSz7PV2+8ptKg==
+	b=tCplztWqaaqenCQXFJjGlgH7gTw4dK7Gz/rKo1eNnLzNISS65cGr8AjedfeD7CnKz
+	 QRJWxFHAr/RH6ZJ2krrbjdPdPRyNhhbA4eJo6sF08ShFKXSrjCKUzLqY9it8SdMI3Y
+	 VrPtAovKar/HNWXvdxDrPz/RzKg37ZlMETcptlkac/j30JE7ZWEV3uaMlWB9lg5uTJ
+	 m9IBbMzg5CZdjwRkRk//fkRFF5eBP+PeYIqVNBzliAnZwQa+9bU8I2ZMKdAsiN5FFL
+	 yzGHcgmBLekvZkrnCBY0Axs1Oab+HqUtyw8X7BsEDMiQzrrt92Rn3eXX8gs6wv8QLN
+	 FjtR8hGBW3s7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BCFA61018;
-	Fri, 20 Feb 2026 19:23:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B2E8206
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 19:23:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 767AD840C9;
+	Fri, 20 Feb 2026 19:47:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FEE1183
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 19:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C80261019
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 19:23:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35C4F40B5B
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 19:47:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iQYqqY2N4m0G for <buildroot@buildroot.org>;
- Fri, 20 Feb 2026 19:23:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1036; helo=mail-pj1-x1036.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 81CBC608A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81CBC608A1
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 81CBC608A1
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 19:23:15 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- 98e67ed59e1d1-352f60d6c2fso1435307a91.1
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:23:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771615394; x=1772220194;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=GA67d9engpl4CVE4GA3r8tpg3DFHQuzgJhZo3dD0k8Y=;
- b=kxZs5v29hz7apNLkSMCJb/w/aPcsk+OS4VJYHKgkcPUeWqXsbeDUkwsWUexRK8Yf0f
- V/jzSCY+G8amePkFussAeKtgqfJWnB6b1YLvoLHCrGccy499Lw3LXoaacY4CaWNUgazT
- Dr8Thi3V7bcmw6lFr78K8dfPfcPxqoTIX4R7SJ8H2F8i/c5TvvCBeFX5AL2POacLFo81
- jHQbX9UxK+XD4d8EiLFjKGVMRgtGUH7bNgBZAA8rWC3shaGV+aAEEEkM5AkYoLDJLBQ3
- gY6TZDGeXsUqvJ1k1RSF7ZFcMZFQ+scogFWWZxS8GFHw0LOWdEJE0dP6aiAl4jMNExkp
- 6RBw==
-X-Gm-Message-State: AOJu0YyqdhbofUeq2RV6FRrkutfr5/kD5xfUHLyRLEa8jlh924srQRwq
- di9tQ4+lmuQh4Jh8rQNJqrbzXUnEfKXSBXGupZS+NjxJl8p36j/NZ2hj5OiL1rviTl0HlA==
-X-Gm-Gg: AZuq6aJ8HZ/ufvZAHUPN+0DeKVVOZK6qsnhTFaOd2pzb7dU55uP8RSJ2tfrtfGrx0xh
- kj0SbHEvqyV8cJZTecovS9b8VCsHUmjHBipQxt+POBFbkaSxUUAvcduOzuH15UMaSRoHIcysFMU
- eDIYhIohPLlC7CfqqJCBSnI7TfGzl5i5wiQ981k1rVYrOp8+zjSSwOh3Ot/GaoH1YC2SkRtnt2B
- xtMHzATlb0xGPH1IoawRVaPLRHfc1+g5bcjlxLE6qydzEjLCWSvMCZdAGY2Zb2T4UX7XZzVvECB
- VRIT9I5Zy6cXcgkvXdb7W9IGcmhL51ifXxKpLKaOddjDi30R/cnj651Yvx3hJyiCrLr2utfrPnT
- 7Yy8GqqQc4Hpc7mHNtYZFciWvKwhkc8xQ06kUygO8TZLRX0FhfpYOXLBnVcMxGb55NtvKp2gp3L
- KuQhvT/qOfl+umnTn4Bx9EPpNdYzSl512vzf7RPHJWpWNm
-X-Received: by 2002:a17:90b:2781:b0:32e:7bbc:bf13 with SMTP id
- 98e67ed59e1d1-358ae8da15amr480973a91.34.1771615394157; 
- Fri, 20 Feb 2026 11:23:14 -0800 (PST)
-Received: from fedora ([2409:40e5:1045:f7f3:b903:7ed:3361:c527])
- by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-358a2b39b66sm1250681a91.11.2026.02.20.11.23.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Feb 2026 11:23:13 -0800 (PST)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JLpM1PZM7FK5 for <buildroot@buildroot.org>;
+ Fri, 20 Feb 2026 19:47:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C09E740B41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C09E740B41
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C09E740B41
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 19:47:14 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 364F4A4C0983;
+ Fri, 20 Feb 2026 20:47:11 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34356)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vtWSs-000000005Ww-2woX;
+ Fri, 20 Feb 2026 19:47:10 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Sat, 21 Feb 2026 00:53:01 +0530
-Message-ID: <20260220192301.119525-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Fri, 20 Feb 2026 20:47:02 +0100
+Message-ID: <20260220194702.3078327-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1771615394; x=1772220194; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GA67d9engpl4CVE4GA3r8tpg3DFHQuzgJhZo3dD0k8Y=;
- b=DoBdhZ3XM/W3eDaketOXWRxJprOmFB3D+03JMnFPaHZbc9JmxSUir6qf9kDe35Fh0q
- F6/kvpOWFsXQKKCJtla+TUSEclc3QVeBJ+PRRzu5Rzd4fk22RFMstRYC+LW/U/bSGJ1r
- OcXPf8DOruzNTqa5nVXvCBYskG4tkwzSMGj8uWZsLHoFumszS+hEwiet4D0LYo9lmyVn
- sb5o5Vsvq2Ih4a/F3m/MLX86C5B0dMU18PXm448aGdG0k2hng0/VNsABad0pIYEf8a9l
- Z68OatJ217RzArQ4bz48CGdOnOKDcs7q6iQ50CtQsVwcYeJetrkx6DdukMtKIEh9askP
- v37A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1771616831;
+ bh=Jh9ob8jWiF6PiWH4DfXssO4thJT2AycmYsup3n6VBvs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Q1a0+x2OdZ7dSpiK0YCdfSWdDwYdgM2RdloE5uczWPoryU2Qu50pOyCktC7fTTTi3
+ 7ex9EQpiBJ9ZYmzOqlhJJgCcszoE5HLexS8vVi5CQC4smTfZh3P3PC7LQj1qg9uJKG
+ wNDck1Tv+H0TIS/vxE+oUVOD5/xTzcuzO3mtEu25idSD6x2RgPLMgPsPHkU88dytm9
+ yJdrtgkZ0YLaFnkeo0Ht1qeI98gW/WyvJaOdcZ/whQO3XG+bWBF9rLGk2vgQds5ONJ
+ AwH3kYxCPkPHNGr5JoEiqrNLwDcp6yOzSG6TwiB0DZck10fPJfckOEXmDQo8+A+R/6
+ xLy13Q/0wLEIg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=DoBdhZ3X
-Subject: [Buildroot] [PATCH] package/make: fix conflicting prototypes for
- getenv and getopt
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Q1a0+x2O
+Subject: [Buildroot] [PATCH 1/1] package/wmctrl: fix tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,87 +97,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-GCC 15 defaults to C23, which rejects old-style K&R empty parameter
-list declarations that conflict with typed prototypes in system headers.
+Current site is down, switch to Debian.
 
-Fix getenv() declarations in lib/fnmatch.c and src/getopt.c, and
-fix getopt() declarations in src/getopt.h to match the prototypes
-in <stdlib.h> and <unistd.h>.
+Fixes:
+https://autobuild.buildroot.net/results/679/679a9f6224d1771ec2ab52e45fd74af8d03c1604/
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...ing-prototypes-for-getenv-and-getopt.patch | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/make/0001-fix-conflicting-prototypes-for-getenv-and-getopt.patch
+ package/wmctrl/wmctrl.hash | 2 +-
+ package/wmctrl/wmctrl.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/make/0001-fix-conflicting-prototypes-for-getenv-and-getopt.patch b/package/make/0001-fix-conflicting-prototypes-for-getenv-and-getopt.patch
-new file mode 100644
-index 0000000000..b64b62d00c
---- /dev/null
-+++ b/package/make/0001-fix-conflicting-prototypes-for-getenv-and-getopt.patch
-@@ -0,0 +1,60 @@
-+From: Buildroot Maintainer <buildroot@buildroot.org>
-+Date: Sat, 21 Feb 2026 12:00:00 +0000
-+Subject: [PATCH] fix conflicting prototypes for getenv and getopt
-+
-+Fixes build error with GCC 15 and musl libc.
-+
-+Signed-off-by: Buildroot Maintainer <buildroot@buildroot.org>
-+---
-+ lib/fnmatch.c | 2 +-
-+ src/getopt.c  | 2 +-
-+ src/getopt.h  | 4 ++--
-+ 3 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/lib/fnmatch.c b/lib/fnmatch.c
-+--- a/lib/fnmatch.c
-++++ b/lib/fnmatch.c
-+@@ -121,7 +121,7 @@
-+    whose names are inconsistent.  */
-+ 
-+ # if !defined _LIBC && !defined getenv
-+-extern char *getenv ();
-++extern char *getenv (const char *__name);
-+ # endif
-+ 
-+ # ifndef errno
-+diff --git a/src/getopt.c b/src/getopt.c
-+--- a/src/getopt.c
-++++ b/src/getopt.c
-+@@ -202,7 +202,7 @@
-+    whose names are inconsistent.  */
-+ 
-+ #ifndef getenv
-+-extern char *getenv ();
-++extern char *getenv (const char *__name);
-+ #endif
-+ 
-+ static char *
-+diff --git a/src/getopt.h b/src/getopt.h
-+--- a/src/getopt.h
-++++ b/src/getopt.h
-+@@ -102,7 +102,7 @@
-+    errors, only prototype getopt for the GNU C library.  */
-+ extern int getopt (int argc, char *const *argv, const char *shortopts);
-+ #else /* not __GNU_LIBRARY__ */
-+-extern int getopt ();
-++extern int getopt (int argc, char *const *argv, const char *shortopts);
-+ #endif /* __GNU_LIBRARY__ */
-+ extern int getopt_long (int argc, char *const *argv, const char *shortopts,
-+ 		        const struct option *longopts, int *longind);
-+@@ -116,7 +116,7 @@
-+ 		             const struct option *longopts, int *longind,
-+ 			     int long_only);
-+ #else /* not __STDC__ */
-+-extern int getopt ();
-++extern int getopt (int argc, char *const *argv, const char *shortopts);
-+ extern int getopt_long ();
-+ extern int getopt_long_only ();
-+ 
-+-- 
-+2.43.0
+diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
+index 531f64a0d8..86b04d0c01 100644
+--- a/package/wmctrl/wmctrl.hash
++++ b/package/wmctrl/wmctrl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl-1.07.tar.gz
++sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl_1.07.orig.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+index 36ad3513ff..e948f7a939 100644
+--- a/package/wmctrl/wmctrl.mk
++++ b/package/wmctrl/wmctrl.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ WMCTRL_VERSION = 1.07
+-WMCTRL_SITE = https://sites.google.com/site/tstyblo/wmctrl
++WMCTRL_SOURCE = wmctrl_$(WMCTRL_VERSION).orig.tar.gz
++WMCTRL_SITE = https://snapshot.debian.org/archive/debian/20050312T000000Z/pool/main/w/wmctrl
+ WMCTRL_LICENSE = GPL-2.0+
+ WMCTRL_LICENSE_FILES = COPYING
+ 
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
