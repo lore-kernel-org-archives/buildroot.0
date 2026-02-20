@@ -1,105 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6CF6C55ABC
-	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 11:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 908DCC54FD2
+	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 13:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD05383E96;
-	Fri, 20 Feb 2026 11:53:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 194D04079D;
+	Fri, 20 Feb 2026 13:36:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7vBVss9LPfiC; Fri, 20 Feb 2026 11:53:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WKlTJix5ckHv; Fri, 20 Feb 2026 13:36:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C48F83E9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B16C540587
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771588414;
-	bh=CgRmoBtqYhESmJZGvZoH5hmqx0KefkDYFAhheH/klhY=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=eP8NibHDD/JRCVTNU8WumhyPtY0yGx7fH5+aiIoiqNyldSZkqrTY6TZ61BLIFWE4v
-	 eP8Y3ysexibxHMOgZ1myj83LN30vLswymbSGYpCe8/N+g868NIn7p+a5KH4dPnySj7
-	 SJSQIbwY+OyY4+smdsLnF3CtWwe6fITsrlimlUxkqC8k7eR5Xu9J7zFGvF1jjQnshj
-	 JftYdK54FCnp+z6lw0QtnCjd3CzbbWQ1m3NhK4gv8IC3Np8UYOTvcVkrjqw1sw6GMg
-	 ulCMxQAqAuPIIC3nA90/yKQVu8nmsRcv8CyHAdLsh22EIMIxgJunQvc76CvngBF2W9
-	 eq9lGvxZ5so9A==
+	s=default; t=1771594591;
+	bh=dZCQkuDcngBwknV2lDsvgL24mpIpdFZE5oEggORNNxI=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Gxwc6nr8HQIsP2SnExq+72Owfk/9KU+kxlDU3LhCQXeXBt95qk8m3OagVLDFA7lHY
+	 8NFpila3emouD8oJ8HNUGYX2a15pdJGUq/SgZorC3nErU/sZu34FH9xiiEJIEhjQOG
+	 CDDkv9HO48ZUQf/3Apyw8ZfMjeIrULs8nZ9G54w83+it0+Q4dM86e/9QaXVh3P303N
+	 nlYxUWU5CH4ld3oUBjlk5cgd2QPRKXvhzFJGUgOWEZKgjuA4zcLQmoh+dS2Pi6ZM60
+	 Z5g045OLOFkVYK5k9dYAAFTfAllFS1h0CkvtHmKT/yUlO0/FMc7DPzRdZjvtlFYWGZ
+	 vt5t+N/pHXkCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C48F83E9D;
-	Fri, 20 Feb 2026 11:53:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 696601CE
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B16C540587;
+	Fri, 20 Feb 2026 13:36:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB11F183
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 13:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F1464051D
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB15B40595
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 13:36:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tbux-Iyj8T-Z for <buildroot@buildroot.org>;
- Fri, 20 Feb 2026 11:53:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id Zitunuir3I8O for <buildroot@buildroot.org>;
+ Fri, 20 Feb 2026 13:36:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.146;
+ helo=smtpweb146.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E22DB40524
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E22DB40524
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E22DB40524
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:28 +0000 (UTC)
-X-CSE-ConnectionGUID: yq9ESTMNTsqMI+2/OWjhXA==
-X-CSE-MsgGUID: mlaN18jfRQOo10wiAoQvcg==
-Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 20 Feb 2026 12:53:28 +0100
-Received: from unknown (HELO OPE16NORMBX503.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 12:53:28 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX503.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Fri, 20 Feb 2026 12:53:26 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 20 Feb 2026 12:53:26 +0100
-X-CSE-ConnectionGUID: pDKYSIzQSKeUpjtLiRT0IQ==
-X-CSE-MsgGUID: OKnyyce4S2ujIGWm3tGX/Q==
-X-IronPort-AV: E=Sophos;i="6.21,301,1763420400"; d="scan'208";a="394768731"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Fri, 20 Feb 2026 12:53:13 +0100
-Message-ID: <0a67d2a3b35a4f15274830d78c422403e82889f7.1771588390.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1771588390.git.yann.morin@orange.com>
-References: <cover.1771588390.git.yann.morin@orange.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3170D4051D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3170D4051D
+Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3170D4051D
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 13:36:25 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id tQgAvrt0E3rWitQgAvv9Aq; Fri, 20 Feb 2026 14:36:23 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 20 Feb 2026 14:36:21 +0100
+Message-ID: <20260220133622.2271059-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX501.corporate.adroot.infra.ftgroup
- (10.115.26.25) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
- (10.115.26.27)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1771588409; x=1803124409;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=84ZWRnvOxCOOTpHD12BqgrFmFSeVU2xtd2rck3tQlZs=;
- b=bHKjfG/+mzca1jeNHApo7Miium04jmPNn8uLcDw2MAEj5YyYh1ns8ZY5
- XqtBMBQ+jv3EgsSyGB69B+nBKXlhFshyQa26Z6YNdTJ5ulEt2AzxwzY9a
- LACT1Z8oxPItmFJcsrKL4VOY2r6OHWUDeUi9IQeliGhYkFGSpBFMFH/wA
- 44ESX2zuFsWuPW7lq4vKGAfbP7KMAcZkGe8f4Tffx/OUi8M3SobPkugiw
- lVeyKDi3hkIYSBg8peBHLt1FR+UwtDU0TMKWR/bZ/5XHJ/AE7mMyX94Zm
- P/idm0/I41XsHZV3km4mFvwPtjB8OSxXgcOP8TdJor8l8p8QU8CHEl49s
- w==;
+X-CMAE-Envelope: MS4xfP2/NEGkd+Knezj427hyVtSVfWm8ico7FvRcJwq15IOxUlnHGNZejs5eEmY/j43WLRCmNqKZ26IK08JzAfqopmbucCGk1mCfVfvMJWo4H+wy+p53DKda
+ RFmO2UylXrLrMrtPjRwJ/iwswcVs1FEoTT1ngAiRJrZZ1Efhw88MTjQD7kp8S4BO/BQdzmZwoPHxdZIw+8tXEMVM7l/VmeSFJyKtzgpY/z4YAvWJT/Ynagt4
+ 6FhAzRwp53ehTokfRVl+ZZfG8rUco8w+k/hmEJjm0xxjtT4UBFVHfreGntnFup5aQEkGaGl1O52JxjWr17Dkpw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1771594583; bh=BgLgUpE6kfH5UWH/Wte4EZjyUHhDmgYD0GxLN7YG0eE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=HegCBp4jYI78gCu0QNLEkP857V9AjUtkyqtCNTWtb4YE2lsZxwFHMq3BE81Ltdtam
+ gBUD3jqq5viEI9tRqd0fRMGlKPRZh3qlRYo7R2X7ueZgVElgbmKKbFDW4jfIYV2axy
+ f1W124cSviO1sVgTbrXjfYs7YY6vs0WjR+XVR24N+2I9ukvO8i6dJ7EbKESN+adbXa
+ m6eDjuPZ9Xdo2d13AcTo+xGb/N+hUXaxnVFKu19kUTSFuk0zopwGDlH8ASbjVzGMrD
+ E5cnKBEtppwH2nRyfQv7AiATATmcZqRW4eI5NO+9IOMk8zbka4jwh4yVga3WJNpVF9
+ SMLc8TibQVo8A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=bHKjfG/+
-Subject: [Buildroot] [PATCH 8/8] package/mosquitto: add option to enable the
- persist-sqlite plugin
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=HegCBp4j
+Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,83 +91,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com, Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Release announce:
+https://lore.kernel.org/linux-nfs/fdf3631f-e924-4e4c-bd9f-db5b40a90bfe@redhat.com/
 
-That plugin can be used instead of the builtin support to persist the
-mosquitto state across restarts.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/mosquitto/Config.in    | 7 +++++++
- package/mosquitto/mosquitto.mk | 8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ package/nfs-utils/nfs-utils.hash | 4 ++--
+ package/nfs-utils/nfs-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index daa3441ec3..360d0fb1f5 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -109,6 +109,13 @@ config BR2_PACKAGE_MOSQUITTO_BROKER_DYNAMIC_SECURITY_PLUGIN
- 	  Build and install the dynamic security plugin for
- 	  mosquitto broker onto target.
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index fb5c03d917..9aa9151ebb 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.4/sha256sums.asc
+-sha256  11c4cc598a434d7d340bad3e072a373ba1dcc2c49f855d44b202222b78ecdbf5  nfs-utils-2.8.4.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.5/sha256sums.asc
++sha256  b13ca4a9df44186bdbe107514b22732d4243f785f95daf2fb86afc1edba15bbb  nfs-utils-2.8.5.tar.xz
+ # Locally computed
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index e7d82b10ba..6540962988 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_PERSIST_SQLITE
-+	bool "persist-sqlite plugin"
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  Add the persist-sqlite plugin, to persist the broker
-+	  state across restarts.
-+
- endif
- 
- comment "mosquitto broker needs a toolchain w/ dynamic library"
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 4d0f51176c..0650cfa37a 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -96,7 +96,6 @@ MOSQUITTO_CONF_OPTS += \
- 	-DWITH_BROKER=ON \
- 	-DWITH_PLUGINS=ON \
- 	-DWITH_PLUGIN_EXAMPLES=OFF \
--	-DWITH_PLUGIN_PERSIST_SQLITE=OFF \
- 	-DWITH_PLUGIN_SPARKPLUG_AWARE=OFF
- 
- ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_STATIC_PASSWD),y)
-@@ -117,6 +116,13 @@ else
- MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_DYNAMIC_SECURITY=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_PERSIST_SQLITE),y)
-+MOSQUITTO_DEPENDENCIES += sqlite
-+MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_PERSIST_SQLITE=OM
-+else
-+MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_PERSIST_SQLITE=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- MOSQUITTO_CONF_OPTS += -DWITH_SYSTEMD=ON
- MOSQUITTO_DEPENDENCIES += systemd
+-NFS_UTILS_VERSION = 2.8.4
++NFS_UTILS_VERSION = 2.8.5
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.47.3
 
 _______________________________________________
 buildroot mailing list
