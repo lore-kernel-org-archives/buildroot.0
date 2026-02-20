@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 004F5C55ABF
-	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 11:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B222C55ABE
+	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 11:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5DAA83E83;
-	Fri, 20 Feb 2026 11:53:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B0BC83EA0;
+	Fri, 20 Feb 2026 11:53:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i5BQ3TD2lOXx; Fri, 20 Feb 2026 11:53:34 +0000 (UTC)
+ id esLWye7hf5Rf; Fri, 20 Feb 2026 11:53:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4153E83E84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F60C83E87
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771588407;
-	bh=9ef23vlgFGSLsacN6qGQbBf5mh63liTvODttgmCTup8=;
+	s=default; t=1771588408;
+	bh=702y3TcEouHxTSvwnCeRCkCkq67jgCSGyp6rZbN6RIY=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=efAOdBMZMDZsmCqwuK+Xlr8lx2lXdxP5zzFOcsYbKhzETpgohdCvqUAVe6AmBJ9jX
-	 5T+2gRzvCXSRqQ5dFc4aUUmBvyF6tpJlSbLRaWOEZE0vB8QMHOuxwOsTrc6vrLOKDo
-	 7LAhRENqK+sNFOoKGCVqtxPkN3cYojNyvYVvoBAWlKEDvZlaYUqYX0NnXb+ZmpP7Nw
-	 513BI/99j3kZwKFhiTNOEhDkKtQg/4w845YubLjyudAXeIQQlNoS533HdrSnY6wq0M
-	 HCk37pKGn67iBqRs52W+Bg+lECFVNuWtAmfzCtEvUzxlYTmLSlvivgV4Yo1tArd0YM
-	 GA+bu32ESBtYw==
+	b=k3PSUrV9g01IHYyOewj9LijD77okRl0EvQSbMwihDxt2CsBhBKWNTXlKzQv8BJMB1
+	 V9aqwqv59SLxpjK5qt+mc7SSbS5fXvrgvwqwl6G74sYRaic+9VbujA/GIpfuT8V5pv
+	 JlunRWeS1BtHqZ0owHYe6+ib0whuqU6+mw2yq9C9s79dmd3NLbsqWxLYvu28L/cKeu
+	 2dV8TyK4Pr97DtYesxrRustnZtU9ROHL/XvYRKhGbZW/9p2/PGT323N/8H3erUxQl3
+	 N5KRP+Q3UL2fiX8gYjhnVYYMMGxm2Q6ogiHaFWHV1k9/BtOSTZOV8vA9vlmV5QqWe8
+	 e0VV0lPlQOF2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4153E83E84;
-	Fri, 20 Feb 2026 11:53:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 27D56206
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F60C83E87;
+	Fri, 20 Feb 2026 11:53:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC7C71CE
  for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19BE860650
+ by smtp1.osuosl.org (Postfix) with ESMTP id C939983E5D
  for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MMek3SL8rUiT for <buildroot@buildroot.org>;
- Fri, 20 Feb 2026 11:53:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xO-usQ97OeKN for <buildroot@buildroot.org>;
+ Fri, 20 Feb 2026 11:53:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F38136082C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F38136082C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 66B1483E68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66B1483E68
 Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F38136082C
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:20 +0000 (UTC)
-X-CSE-ConnectionGUID: fVl0dFViQC2+Qv0RNEEQZQ==
-X-CSE-MsgGUID: +6d0krP5SRKCTjCKkCHicA==
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 66B1483E68
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:21 +0000 (UTC)
+X-CSE-ConnectionGUID: zRAC/QpyTe+LwBW3JXzLLA==
+X-CSE-MsgGUID: tM3LqoEOSn+T0MeVwj3bfQ==
 Received: from unknown (HELO opfedv1rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 20 Feb 2026 12:53:19 +0100
+ 20 Feb 2026 12:53:21 +0100
 Received: from unknown (HELO OPE16NORMBX503.corporate.adroot.infra.ftgroup)
  ([x.x.x.x]) by opfedv1rlp0b.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 12:53:19 +0100
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 12:53:21 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX503.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Fri, 20 Feb 2026 12:53:17 +0100
+ Fri, 20 Feb 2026 12:53:19 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 20 Feb 2026 12:53:17 +0100
-X-CSE-ConnectionGUID: YngtaqQkS5+AejHTkPwJqg==
-X-CSE-MsgGUID: CuvRM+T8QqG6jDRKdgNudQ==
-X-IronPort-AV: E=Sophos;i="6.21,301,1763420400"; d="scan'208";a="396645765"
+ Fri, 20 Feb 2026 12:53:19 +0100
+X-CSE-ConnectionGUID: cn6Sto+nQm2+K4k3y25jOA==
+X-CSE-MsgGUID: Q/3umy50TASR8flIW0cR8g==
+X-IronPort-AV: E=Sophos;i="6.21,301,1763420400"; d="scan'208";a="396645772"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Fri, 20 Feb 2026 12:53:08 +0100
-Message-ID: <9171da235ae8d1dfc9940ef833611c6538feb63f.1771588390.git.yann.morin@orange.com>
+Date: Fri, 20 Feb 2026 12:53:09 +0100
+Message-ID: <ab05c9e4712a533a581a956f978c383aa18ef7ab.1771588390.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1771588390.git.yann.morin@orange.com>
 References: <cover.1771588390.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX507.corporate.adroot.infra.ftgroup
- (10.115.27.27) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX608.corporate.adroot.infra.ftgroup
+ (10.115.27.32) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
  (10.115.26.27)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
  t=1771588401; x=1803124401;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=J2rGpFpFAvaRoH2+KP+/JFJ8aH1GtCOx0kMnR8fL13A=;
- b=iAt7p7pw+6vi7oG+WvHUd4RAR+CFK9O2dO0nuFP7D0ZhjHumGEA9z57T
- Fj3Hqvvu4QN6IXsMo7DHGSN7cGAexvL+RqSWAjAdTL52HgtHrwhH6yWJ/
- Yn/Hyk5r7Fu15kzyMJG1Wvj6P3/k/0DvHwIjnEj1spFfSTDwqinb6gNUO
- RXQYh/4fQJhh0XKeozJ+u+6YjWElhnT+AusQAo2FfYekPhKByl2xqRTSA
- pI8XEEqfxvBr+VBpuwvRpHIV1NmzUOOn7jy4sZf+/B8nXi7qnoMouHOPt
- /mD46S0/rNNAq9JyYrgN0xjdepXNvCJJ4i7MS+CM9riPtwjqixwJvtG/I
- g==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=X/sZopkfOjRkOBeB277qzz1KN1K2QrIQ5yEiIdCw++c=;
+ b=fJCVgsSHZjjVffN7/DPFwS55xqSxsrcWndDQ+5Qkfjc//Zb5pUNa4/Aw
+ +zMWOOyP2x4lvSFDX1F3OIWzBt+Ao3YNqNdRg9V4RgcGF4LYhshGeyW7T
+ PKy7DWF98u86Zwi8/mcJuh70iaSO2ODhoP6Of3WhOIK/gImYVGZ02QY+n
+ eWwW8/fEnol6YdO+JlYpjv/sD5pYi2E1DUE0HSj43Ad8Dl7ZXiLMbv1Y6
+ Wq/LZNc5bwF+nOsut85k7MMP6W8PdLMTtLuIPe/tarpXMYLJCOj2lbecf
+ NZZMdxxG4762Q8etHh+75ItKszcQfgoEToUdMArRXqSYUAcIqEmCP04ql
+ w==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=iAt7p7pw
-Subject: [Buildroot] [PATCH 3/8] pakcage.mosquitto: add option to install
- CLI tools
+ header.a=rsa-sha256 header.s=orange002 header.b=fJCVgsSH
+Subject: [Buildroot] [PATCH 4/8] package/mosquitto: add option to build
+ broker-related apps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,67 +119,91 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-mosquitto_sub/pub/rr can be handy to test a broker from the command
-line, but they can get superfluous when only the broker is required
+mosquitto_{ctrl,db_dump,passwd,signal} can be handy to interact with
+the mosquitto broker during development, but are usually unnecessary
 on the target.
 
 Add an option to enable or disable them. Make that new option enabled
-by default to keep backward compatibility with previous (def)config
-files.
+by default when the broker is enabled, to keep backward compatibility
+with previous (def)config files.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/mosquitto/Config.in    | 9 +++++++++
- package/mosquitto/mosquitto.mk | 7 ++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/mosquitto/Config.in    | 16 ++++++++++++++++
+ package/mosquitto/mosquitto.mk | 12 ++++++++----
+ 2 files changed, 24 insertions(+), 4 deletions(-)
 
 diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 2667b60f57..d0f096e5cf 100644
+index d0f096e5cf..954a4d3b75 100644
 --- a/package/mosquitto/Config.in
 +++ b/package/mosquitto/Config.in
-@@ -24,6 +24,15 @@ config BR2_PACKAGE_MOSQUITTO
+@@ -33,6 +33,22 @@ config BR2_PACKAGE_MOSQUITTO_CLIENTS
+ 	    mosquitto_sub
+ 	    mosquitto_rr
  
- if BR2_PACKAGE_MOSQUITTO
- 
-+config BR2_PACKAGE_MOSQUITTO_CLIENTS
-+	bool "install clients"
-+	default y  # Backward compatibility
++config BR2_PACKAGE_MOSQUITTO_APPS
++	bool "install apps"
++	default y if BR2_PACKAGE_MOSQUITTO_BROKER  # Backward compatibility
++	depends on BR2_USE_WCHAR  # libedit
++	# For mosquitto_ctrl shell feature, mandatorily enabled:
++	select BR2_PACKAGE_READLINE if !BR2_PACKAGE_LIBEDIT
 +	help
-+	  Install CLI tools to publish/subscribe to the broker:
-+	    mosquitto_pub
-+	    mosquitto_sub
-+	    mosquitto_rr
++	  Those apps can be used to interact with the broker:
++	    mosquitto_db_dump
++	    mosquitto_signal
++
++	  Additionally, when TLS is enabled, the following apps are
++	  also installed:
++	    mosquitto_ctrl
++	    mosquitto_passwd
 +
  config BR2_PACKAGE_MOSQUITTO_BROKER
  	bool "install the mosquitto broker"
  	default y
 diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index e767d97bee..de952e9d77 100644
+index de952e9d77..1cfc052003 100644
 --- a/package/mosquitto/mosquitto.mk
 +++ b/package/mosquitto/mosquitto.mk
-@@ -19,7 +19,6 @@ MOSQUITTO_CONF_OPTS = \
+@@ -19,8 +19,7 @@ MOSQUITTO_CONF_OPTS = \
  	-DWITH_TESTS=OFF \
  	-DWITH_STATIC_LIBRARIES=OFF \
  	-DWITH_BUNDLED_DEPS=ON \
--	-DWITH_CLIENTS=ON \
- 	-DWITH_HTTP_API=OFF \
- 	-DWITH_CTRL_SHELL=OFF
+-	-DWITH_HTTP_API=OFF \
+-	-DWITH_CTRL_SHELL=OFF
++	-DWITH_HTTP_API=OFF
  
-@@ -70,6 +69,12 @@ else
- MOSQUITTO_CONF_OPTS += -DWITH_LIB_CPP=OFF
+ # adns uses getaddrinfo_a
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+@@ -75,12 +74,18 @@ else
+ MOSQUITTO_CONF_OPTS += -DWITH_CLIENTS=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_CLIENTS),y)
-+MOSQUITTO_CONF_OPTS += -DWITH_CLIENTS=ON
++ifeq ($(BR2_PACKAGE_MOSQUITTO_APPS),y)
++MOSQUITTO_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBEDIT),libedit,readline)
++MOSQUITTO_CONF_OPTS += -DWITH_APPS=ON -DWITH_CTRL_SHELL=ON
 +else
-+MOSQUITTO_CONF_OPTS += -DWITH_CLIENTS=OFF
++MOSQUITTO_CONF_OPTS += -DWITH_APPS=OFF -DWITH_CTRL_SHELL=OFF
 +endif
 +
  ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER),y)
  
  MOSQUITTO_CONF_OPTS += \
+ 	-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+ 	-DWITH_BROKER=ON \
+-	-DWITH_APPS=ON \
+ 	-DWITH_PLUGINS=ON \
+ 	-DWITH_PLUGIN_ACL_FILE=ON \
+ 	-DWITH_PLUGIN_PASSWORD_FILE=ON \
+@@ -123,7 +128,6 @@ MOSQUITTO_POST_INSTALL_TARGET_HOOKS += MOSQUITTO_INSTALL_TARGET_CONF
+ else # !BR2_PACKAGE_MOSQUITTO_BROKER
+ MOSQUITTO_CONF_OPTS += \
+ 	-DWITH_BROKER=OFF \
+-	-DWITH_APPS=OFF \
+ 	-DWITH_PLUGINS=OFF
+ endif
+ 
 -- 
 2.34.1
 
