@@ -4,113 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59765C55ABA
-	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 11:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CEDCC55ABC
+	for <buildroot@archiver.kernel.org>; Fri, 20 Feb 2026 11:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03A1083B7B;
-	Fri, 20 Feb 2026 11:51:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7A5483DF2;
+	Fri, 20 Feb 2026 11:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CRcuvyN2h4fu; Fri, 20 Feb 2026 11:51:32 +0000 (UTC)
+ id CLUbLMOFnrFx; Fri, 20 Feb 2026 11:53:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F59883E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD60383E5C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771588292;
-	bh=FU0UyUPaZe2C1zSocD7X/+hsYBFFkB5b2TAb6q+Ui3c=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=nUqjcKEweQbHdWkDEeFB3zqGgJHkkBfdAtFB8qSZvZgE7lSBGooT2rgVBJPINReT8
-	 1VYWuUwDNLU3r1xK8L+pd2bhd7oA9r4Y2os42UITfFJsqY8exWPyOshv7Q23YGY0iF
-	 PWz5MZpGuSSoIKFwhCXuALUT6yA9EA1my865LAZc5nn4i5D5k2jeZhmbVmV62Arcok
-	 EaPV3ZeaGZPUaRmcBjm7nbjBissGrY69H4rl6lfxLXxrzxjLch6aRDI0NXAseckYwW
-	 YA63ie28H4KNYjHXtxKw3OWK0qw2h3zt7PKeRYAWzHDUzAnuZjApb+2pQog6gjyrSt
-	 MMdUMfRzBUZLg==
+	s=default; t=1771588399;
+	bh=VIvKKWe35q/YVon/lRNvX4uDAyZeL5XQZcaNqU4CSXY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=M1etfIFWBX35mxapvRCygpPMjsK1ckCaQB9Kqk6LHWFL04319/NSTRmlLkr59V1ip
+	 4DlA3hQdbGNLTI5sRxzC4yUUoREME3aFgr/UCI0COTFNuXWiFw+VhfiqiHCpW0z0cc
+	 liH0eX1cDallq6GbLmrmXiLUKDx2e9nTk8sMtvHZ1objtKi/BLCKT4MZle4tbFd5z0
+	 cFXx5HPL4VtfFPP50g5y0BwwEev/vR7Kks7dCpRGWsrVL2U5umOjcR5x+2roIH0z6b
+	 U1Qz7KH/VNH7t1domUlprq+kcVfhFjezL7AWS3usl8nV9Vunt1OkMzStXCcq/YpeIV
+	 90eKfNsgmACEw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F59883E55;
-	Fri, 20 Feb 2026 11:51:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E25B81CE
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:51:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD60383E5C;
+	Fri, 20 Feb 2026 11:53:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE2B4206
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF9A34034A
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:51:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABB0B83E5C
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFYZRRnyDOU4 for <buildroot@buildroot.org>;
- Fri, 20 Feb 2026 11:51:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::433; helo=mail-pf1-x433.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3CABA402FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CABA402FF
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
- [IPv6:2607:f8b0:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3CABA402FF
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:51:30 +0000 (UTC)
-Received: by mail-pf1-x433.google.com with SMTP id
- d2e1a72fcca58-824c9da9928so1050913b3a.3
- for <buildroot@buildroot.org>; Fri, 20 Feb 2026 03:51:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771588289; x=1772193089;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=//48ub9Td0B3/HlaboMsLKlOS0ZRxbZo498TADgzAJ8=;
- b=XPOFCnOUCV7PQdo4/TEGTNrp2Yzbm8GZjePGri2iWI3DlVccedomM68uTQPtZx1Wef
- Yh048I5RA6OQu1scrNcUbcUwldj5SIi4yA8goeewo1yZOfRfJAeM1A2WT/7u5FabArp8
- Ggq1EIiWaYQ8neyU/jclm5xV2LqdEx93DZbCXV0GfPGuVOdOLOyDsIL8kuiiKS+NYqfS
- pCgl6xf70h5OLBnS+Erwpbuizn/ncVZwpjuu6WPGUDHVWbGwGEA5gC+GeyYURVj7Otph
- MqNJDObxbZ2EqcHr0N+gL4LofLRXBaeF/E54TEiA0eOhc7odJ8/Ea7oOHwnBN5FWWznd
- ytEA==
-X-Gm-Message-State: AOJu0YwgETVZvnrTfitMWRiycrLise+4+gwobG1Ec8apUqE89hC3XPF2
- nbG6qmpiNkRAI2v3JZOmlH31tWqLH2Oa1CbwNaS7GEBqaLH0F8rBXnPVwMOu/eusv5/omQ==
-X-Gm-Gg: AZuq6aLGikv07yaJUAojlpseTUDIy7q+UCaxrZI9c1JbO66DNGPMPJWibCXEU7zHHzB
- Nlk80q+5G41KufxijxuBEOWFCyx+DIMLanFmdZdQxR9mmflgeJhg3fJuLCK/FNH+Deiks/LAW86
- MJ44S0FQ6P5UTCSqdwDcXqSdq1sqdJic/TNCFIQlxuiEE7mp/p7pnuUtxlaXoHJ6w+17NlEiRgL
- mD7YGfR8vdRTlOSkt+J3PUdSgnMdarb+Ln792yA638XQntOkBjLxWkUp83I8op30XcnaEy41mlT
- XxW60zeMFgRO4nO36tRkQPYdYfOYcTzqzL4fcfvi+0g3udncdPo3c4xiO2ExP6MlNZ8FhT9mtHv
- Vm4sNXT1Cn/wwD7G1R3xdnD0XzzYS4AD0TNWXXPaiJjMb98qO/dD6BIgga1D3E2aVfIT2ZBkyuL
- DdwBlTQJ6flJeglzFj8QgIOnS17F/HQy52EA==
-X-Received: by 2002:a05:6a21:c210:b0:38b:eeb9:cbb5 with SMTP id
- adf61e73a8af0-395121d8424mr4739619637.39.1771588289117; 
- Fri, 20 Feb 2026 03:51:29 -0800 (PST)
-Received: from fedora ([2409:40e5:116b:88d4:3795:8a9b:7eb9:b495])
- by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-358a2abf178sm1175622a91.5.2026.02.20.03.51.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Feb 2026 03:51:28 -0800 (PST)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: "Ernesto L . Williams Jr" <realcontrols@gmail.com>,
- Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Fri, 20 Feb 2026 17:21:15 +0530
-Message-ID: <20260220115115.231929-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260218073958.455704-1-chakrabortyshubham66@gmail.com>
-References: <20260218073958.455704-1-chakrabortyshubham66@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NT6t3_DeeIdm for <buildroot@buildroot.org>;
+ Fri, 20 Feb 2026 11:53:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 081FC83DF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 081FC83DF2
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 081FC83DF2
+ for <buildroot@buildroot.org>; Fri, 20 Feb 2026 11:53:15 +0000 (UTC)
+X-CSE-ConnectionGUID: SnotP8d3Q0Wyi6YaurCOkg==
+X-CSE-MsgGUID: cTFyrbrySSqtMUQXc79ong==
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 20 Feb 2026 12:53:13 +0100
+Received: from unknown (HELO OPE16NORMBX503.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 12:53:12 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
+ Fri, 20 Feb 2026 12:53:11 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Fri, 20 Feb 2026 12:53:10 +0100
+X-CSE-ConnectionGUID: KryLjP1zShGtsRbL0/DqsQ==
+X-CSE-MsgGUID: MjjrSWZ5TXeljslGJm7aNA==
+X-IronPort-AV: E=Sophos;i="6.21,202,1763420400"; d="scan'208";a="398431875"
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Fri, 20 Feb 2026 12:53:10 +0100
+Message-ID: <cover.1771588390.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ (10.115.26.27)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1771588289; x=1772193089; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=//48ub9Td0B3/HlaboMsLKlOS0ZRxbZo498TADgzAJ8=;
- b=a0RMQYf0a7axOvRz95+bXkwMkfAuh3l7pGRpyzPWVB9ICipuz/wRGXYbZzkzqEi5e4
- CGnIBNRjDf8lRESL847eppTM5hrNhHWUf8vXRtqZMKtgY07ehAuwgWqNzu7o7qcwORcS
- HKrRxieIzSUUExxA03Gk1Cj+GCJZnDpj0Um66+Jw0lC2bBdDSn9UX5Z5/Wu4q8Dh3ItZ
- owyTQ6RXyj4TPhxHXN9QHcOCfLB+jaSvtMCCMNFwj/h3m/hvPkPmfa9pAmY0nscXP8o9
- oL9ztf47i1rTAzZdoOs3eg6ZdWkqdQIoPCTWVZ93zCm17FrBflimMhpregshbuBw/MOE
- BrzA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1771588396; x=1803124396;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=C1q0Y3KWJrbMpHsKrDuipjFmTzd+0PtgXkmvFKfPRNM=;
+ b=XJn2WATi4xzcwefUzvDbMmIw/ZTLBhYmP3gDwLIGOXv5AcsipAO4AnmZ
+ 6AlpOZTblhufeSi6rn62ifwQpXz985C9vHKpVnCMJgZV23odqyYrqSGmJ
+ 98tclW3mnsoap6j+GF+E6428c2Stv/ZJ6BTs78gqYrWrgTL1Ivuf2FPHA
+ wVSuSFYBQmIk2pRULWkSM4KPKcQX0kwSYNfZ5LtfranN+EB/gOEu5WaCi
+ /0Sgq82inv7U1jMblSXkwEt6zx/KWFDCkEYWgPxOHVbWNIRiZnzP30vKJ
+ tbSl5IYZHyHKDQ7eDWJJo9kYdPpWpB3mQPMfPBPMU5Q7mng7OEPhgczij
+ g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=a0RMQYf0
-Subject: [Buildroot] [PATCH v2] package/szip: fix build with GCC 15
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=XJn2WATi
+Subject: [Buildroot] [PATCH 0/8] package/mosquitto: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,131 +109,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Danomi Manchego <danomimanchego123@gmail.com>, "Yann
+ E . MORIN" <yann.morin@orange.com>,
+ Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-GCC 15 defaults to C23, which no longer allows empty parameter lists
-in function pointer declarations or old-style K&R function definitions.
-Modernize all affected declarations in src/rice.c and src/sz_api.c.
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Tested with musl toolchain and verified across 32 toolchain
-configurations using test-pkg.
+Hello All!
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
-Changes v1 -> v2:
-  - Fix Signed-off-by name (was "Rick", now correct)
-  - Extend fix to cover all K&R style function definitions in rice.c
-    and sz_api.c, not just winner_function pointers
-  - Add proper patch headers (Signed-off-by, Upstream)
-  - Tested across 32 toolchains with test-pkg, all OK
----
- ...-error-by-modernizing-C-declarations.patch | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 package/szip/0001-rice-sz_api-fix-too-many-arguments-error-by-modernizing-C-declarations.patch
+This series brings a new version of mosquitto; it is quite a big
+endeavour, as it has switched to using cmake. With this, it becomes
+possible to easily install only the parts of mosquitto that are needed,
+and we do add some options to that effect;
+  - CLI tools to talk MQTT
+  - CLI apps to interact with the the daemon
+  - native websockets, or legacy using libwebsockets
+  - HTTP API
+  - plugins
 
-diff --git a/package/szip/0001-rice-sz_api-fix-too-many-arguments-error-by-modernizing-C-declarations.patch b/package/szip/0001-rice-sz_api-fix-too-many-arguments-error-by-modernizing-C-declarations.patch
-new file mode 100644
-index 0000000000..0f0bdbfb49
---- /dev/null
-+++ b/package/szip/0001-rice-sz_api-fix-too-many-arguments-error-by-modernizing-C-declarations.patch
-@@ -0,0 +1,92 @@
-+diff -u -r a/src/rice.c b/src/rice.c
-+--- a/src/rice.c	2017-01-25 23:36:17.000000000 +0530
-++++ b/src/rice.c	2026-02-20 15:06:07.163580418 +0530
-+@@ -103,8 +103,8 @@
-+ #endif /* !HDF */
-+ 
-+ #ifndef REMOVE_SZIP_ENCODER
-+-static int (*winner_function)();
-+-static int (*winner_ref_function)();
-++static int (*winner_function)(unsigned *, unsigned *);
-++static int (*winner_ref_function)(unsigned *, unsigned *);
-+ #endif /* !defined(REMOVE_SZIP_ENCODER) */
-+ 
-+ static boolean compress_exactly_as_chip;
-+@@ -534,9 +534,7 @@
-+ ---------------------------------------------------------------------------*/
-+ #ifndef REMOVE_SZIP_ENCODER
-+ static void
-+-fix_last_scanline(byte_buffer, n)
-+-unsigned char *byte_buffer;
-+-int n;
-++fix_last_scanline(unsigned char *byte_buffer, int n)
-+ {
-+     unsigned char *end;
-+     unsigned char *p;
-+@@ -601,7 +599,7 @@
-+ 
-+ #ifndef REMOVE_SZIP_ENCODER
-+ static int
-+-encode_scanline()
-++encode_scanline(void)
-+ {
-+     char *bptr;
-+     int del;
-+@@ -3577,14 +3575,7 @@
-+ * Valid bits_per_pixel are: 1-24,32,64.                         *
-+ ****************************************************************/
-+ long
-+-compress_memory(options_mask, bits_per_pixel, pixels_per_block, pixels_per_scanline, in, pixels, out)
-+-int options_mask;
-+-int bits_per_pixel;
-+-int pixels_per_block;
-+-int pixels_per_scanline;
-+-const void *in;
-+-long pixels;
-+-char *out;
-++compress_memory(int options_mask, int bits_per_pixel, int pixels_per_block, int pixels_per_scanline, const void *in, long pixels, char *out)
-+ {
-+ #ifndef REMOVE_SZIP_ENCODER
-+     long out_bytes;
-+@@ -5484,15 +5475,7 @@
-+ * Valid bits_per_pixel are: 1-24,32,64.                         *
-+ ****************************************************************/
-+ long
-+-uncompress_memory(new_options_mask, new_bits_per_pixel, new_pixels_per_block, new_pixels_per_scanline, in, in_bytes, out, out_pixels)
-+-int new_options_mask;
-+-int new_bits_per_pixel;
-+-int new_pixels_per_block;
-+-int new_pixels_per_scanline;
-+-const char *in;
-+-long in_bytes;
-+-void *out;
-+-long out_pixels;
-++uncompress_memory(int new_options_mask, int new_bits_per_pixel, int new_pixels_per_block, int new_pixels_per_scanline, const char *in, long in_bytes, void *out, long out_pixels)
-+ {
-+     static char *interleave_array;
-+     long bytes_written;
-+@@ -5796,12 +5779,7 @@
-+ #endif /* !HDF */
-+ 
-+ int
-+-check_params(bits_per_pixel, pixels_per_block, pixels_per_scanline, image_pixels, msg)
-+-int bits_per_pixel;
-+-int pixels_per_block;
-+-int pixels_per_scanline;
-+-long image_pixels;
-+-char **msg;
-++check_params(int bits_per_pixel, int pixels_per_block, int pixels_per_scanline, long image_pixels, char **msg)
-+ {
-+     if (bits_per_pixel >= 1 && bits_per_pixel <= 24)
-+         ;
-+diff -u -r a/src/sz_api.c b/src/sz_api.c
-+--- a/src/sz_api.c	2017-01-25 22:10:25.000000000 +0530
-++++ b/src/sz_api.c	2026-02-20 15:06:19.243681266 +0530
-+@@ -467,6 +467,6 @@
-+ }
-+ 
-+ int
-+-SZ_encoder_enabled() {
-++SZ_encoder_enabled(void) {
-+     return(szip_allow_encoding);
-+ }
--- 
-2.53.0
+The 2.1.x series is still quite recent, and has already accumulated
+quite a few fixes; the most releveant ones have been backported. As
+for the few patches I've authored, I'm still waiting for internal
+validation of the Eclipse CLA before I can push them upstream...
+
+Changes since RFC:
+  - add options for various parts
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 6ea50235a2ead1f65fcb8069fdc8a606bd45c3e4
+
+  CHANGES: update for 2025.11.2 (2026-02-20 09:21:57 +0100)
+
+
+are available as patches in this mail series,
+
+for you to apply patches up to 0a67d2a3b35a4f15274830d78c422403e82889f7
+
+  package/mosquitto: add option to enable the persist-sqlite plugin (2026-02-20 12:53:07 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (8):
+      package/cjson: add host variant
+      package/mosquitto: bump to version 2.1.2
+      pakcage.mosquitto: add option to install CLI tools
+      package/mosquitto: add option to build broker-related apps
+      package/mosquitto: add option for websockets
+      package/mosquitto: enable HTTP API with libmicrohttpd
+      package/mosquitto: add options for password and ACL plugin
+      package/mosquitto: add option to enable the persist-sqlite plugin
+
+ package/cjson/cjson.mk                             |   7 +
+ .../0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch  |  50 -----
+ ...T_DISCONNECT-being-called-before-MOSQ_EVT.patch |  41 ++++
+ .../0002-Add-configure-time-check-for-lanl.patch   |  47 -----
+ ...ntial-crash-if-group-id-has-no-group-name.patch |  36 ++++
+ ...to_loop_start-leaving-the-mosq-struct-in-.patch |  62 ++++++
+ package/mosquitto/0004-Fix-missing-SONAME.patch    | 139 ++++++++++++
+ ...d-length-not-being-passed-to-MOSQ_EVT_BAS.patch | 234 +++++++++++++++++++++
+ ...-outgoing-maximum-packet-size-limit-check.patch | 155 ++++++++++++++
+ ...x-will-messages-being-incorrectly-delayed.patch | 213 +++++++++++++++++++
+ ...ct-parsing-of-unix-socket-address-in-prox.patch |  30 +++
+ ...eList-only-require-C-when-actually-needed.patch |  46 ++++
+ ...0-broker-properly-check-for-getaddrinfo_a.patch |  38 ++++
+ .../0011-libcommon-check-for-getrandom.patch       |  83 ++++++++
+ package/mosquitto/Config.in                        |  98 ++++++++-
+ package/mosquitto/mosquitto.hash                   |   7 +-
+ package/mosquitto/mosquitto.mk                     | 198 +++++++++--------
+ 17 files changed, 1290 insertions(+), 194 deletions(-)
+ delete mode 100644 package/mosquitto/0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch
+ create mode 100644 package/mosquitto/0001-Fix-MOSQ_EVT_DISCONNECT-being-called-before-MOSQ_EVT.patch
+ delete mode 100644 package/mosquitto/0002-Add-configure-time-check-for-lanl.patch
+ create mode 100644 package/mosquitto/0002-Fix-potential-crash-if-group-id-has-no-group-name.patch
+ create mode 100644 package/mosquitto/0003-Fix-mosquitto_loop_start-leaving-the-mosq-struct-in-.patch
+ create mode 100644 package/mosquitto/0004-Fix-missing-SONAME.patch
+ create mode 100644 package/mosquitto/0005-Fix-password-length-not-being-passed-to-MOSQ_EVT_BAS.patch
+ create mode 100644 package/mosquitto/0006-Fix-outgoing-maximum-packet-size-limit-check.patch
+ create mode 100644 package/mosquitto/0007-Fix-will-messages-being-incorrectly-delayed.patch
+ create mode 100644 package/mosquitto/0008-Fix-incorrect-parsing-of-unix-socket-address-in-prox.patch
+ create mode 100644 package/mosquitto/0009-CMakeList-only-require-C-when-actually-needed.patch
+ create mode 100644 package/mosquitto/0010-broker-properly-check-for-getaddrinfo_a.patch
+ create mode 100644 package/mosquitto/0011-libcommon-check-for-getrandom.patch
+
+--
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
