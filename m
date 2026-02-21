@@ -4,60 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79FA5C61DE5
-	for <buildroot@archiver.kernel.org>; Sat, 21 Feb 2026 13:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DA9CC61DE5
+	for <buildroot@archiver.kernel.org>; Sat, 21 Feb 2026 13:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 291C983F00;
-	Sat, 21 Feb 2026 13:33:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4094A841EE;
+	Sat, 21 Feb 2026 13:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rH7GQPe-wYfZ; Sat, 21 Feb 2026 13:33:25 +0000 (UTC)
+ id q5sPBshrI9Gh; Sat, 21 Feb 2026 13:37:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46D5483F02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 161A9841CC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771680805;
-	bh=mRkuMomECdBVl4sfuGGJzRbroXoVLIJXk6Eg57+teUM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=gkBQQoM4UOgRhDupYG15+/BcyhHQN2xeuAby8ZIrQbJf1Ho6aldJ37OYmy4pjMNWh
-	 oE4gY7DKwmO5Yrg5C2tOHoHKozPURhNovUiHy7ktk+UpHpWeLzoIMCOq/T3dH2kKGo
-	 vLfMNP306aGejmq/j0pQIF4QlOlEk30CO9jvE2yepe2x/zDVpvpuc3gRBlcrKvYcuM
-	 rIU826TDLUccMWvaWr6Ak2y2VQAhKfWc9L1vPury0B88e/IkvtV+0cMM//imiYTAEj
-	 MWTTaDw9Bi57XYtVT4C2dMaLWXcEzrM5jbeFs4rOpy/1m7mzw3ulyMWqSa57ZWzmVt
-	 kGBmyiExzpqZg==
+	s=default; t=1771681050;
+	bh=bkPCso4ynFhyxu8AoHnApA6KvNPbyYCnFCGKi+UvTXM=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=P30r5fre2noFToPUBecHPv/SGt3PiqhE6BPPAQ9lINCtNAz0gZ5aM1JqIx+Vx+1OH
+	 KtR3BOY50tV+QaU8SMaiQkVdjhI8X+gAoEacHR4annl/VOonDHy7ntgZfkhI4cqCN4
+	 rUSdEzH0qFjou6Afy5spWllONVb6wClJhv2Hq1kc2b80iaTxWY+50j16Ym79BGO5yT
+	 cZ/Jvv5xQReBQlHvsI174zWU4K32hBXOXlfyuTyOQ5A/p3tingBnnoL0YGaq2PeuaA
+	 hUOb1Sl/Et/aMw5KQTjTuJGVuwjsPYWV25SeUJxVWwrFZiXeAJ27MtT1Gv6DsROm8V
+	 DyquN3BAXRnOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46D5483F02;
-	Sat, 21 Feb 2026 13:33:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DA48183
- for <buildroot@buildroot.org>; Sat, 21 Feb 2026 13:33:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 161A9841CC;
+	Sat, 21 Feb 2026 13:37:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B6A31CE
+ for <buildroot@buildroot.org>; Sat, 21 Feb 2026 13:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D901418AD
- for <buildroot@buildroot.org>; Sat, 21 Feb 2026 13:33:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CF4840924
+ for <buildroot@buildroot.org>; Sat, 21 Feb 2026 13:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U53x2CZ4pMpL for <buildroot@buildroot.org>;
- Sat, 21 Feb 2026 13:33:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id Wc_SGnOhduSX for <buildroot@buildroot.org>;
+ Sat, 21 Feb 2026 13:37:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE97040697
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE97040697
- for <buildroot@buildroot.org>; Sat, 21 Feb 2026 13:33:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BAE2186EC1; Sat, 21 Feb 2026 13:33:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 26C384091E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26C384091E
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 26C384091E
+ for <buildroot@buildroot.org>; Sat, 21 Feb 2026 13:37:27 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1834998553; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 21 Feb 2026 13:37:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vtnAe-0000000GPIJ-2YD2;
+ Sat, 21 Feb 2026 14:37:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 21 Feb 2026 14:28:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07008c8f2ad9484a1d6df8a31622a109bbd86e1f
-X-Git-Newrev: f90d38dafcadf959e6a0383376639a137a8bae4d
-X-Patchwork-Hint: ignore
-Message-Id: <20260221133322.BAE2186EC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wmctrl: fix tarball URL
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260220202314.3805964-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Fri, 20 Feb 2026 21:23:14 +0100")
+References: <20260220202314.3805964-1-bernd@kuhls.net>
+Date: Sat, 21 Feb 2026 14:37:20 +0100
+Message-ID: <87fr6ugqun.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=UHl21lFEyY3gDs381KL/QVwgvrEbyGLzy6kwm9TvBtqvpq6x5RN9XMgbky8LEfSb53CTn8ija9ukF7jktgqCVVNW1QhAxEWh/YhqxZt7l+GUO1fS3oukiemblGHUelevMfoLIdK+tdsQGRHNgQIJAIqteDmfMyFXRd1Bm+Dhs2WrVlA7k+0k58uaPkvNiVw0TVzcYmHZjhMKPnJTM5sXHd5snihEvBuzvLaGjcZVw7K4QUX7zUD57oi4txa66vlvHlp4GHaeB1h/kEZYjv9gBUpcCoYjFo4WVESL2+M9UkNe6ShYwsSeDzJZRsBhn0IlLslCh789K/UasngRejW9iA==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=3TWb1hZ8VTibd7j336VGoUj3vOHtQDnCcDnXARC0lRk=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=UHl21lFE
+Subject: Re: [Buildroot] [PATCH 1/1] package/flashbench: update tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,50 +92,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f90d38dafcadf959e6a0383376639a137a8bae4d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Current site is down, switch to Debian.
+ > Current site is down, switch to Debian.
+ > Fixes:
+ > https://autobuild.buildroot.net/results/eec/eecf2cbaafd8a170b5f5c6c24df552280a530204/
 
-Fixes:
-https://autobuild.buildroot.net/results/679/679a9f6224d1771ec2ab52e45fd74af8d03c1604/
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wmctrl/wmctrl.hash | 2 +-
- package/wmctrl/wmctrl.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Looking around, I see there is a fork of it here:
 
-diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
-index 531f64a0d8..86b04d0c01 100644
---- a/package/wmctrl/wmctrl.hash
-+++ b/package/wmctrl/wmctrl.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl-1.07.tar.gz
-+sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl_1.07.orig.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
-index 36ad3513ff..e948f7a939 100644
---- a/package/wmctrl/wmctrl.mk
-+++ b/package/wmctrl/wmctrl.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- WMCTRL_VERSION = 1.07
--WMCTRL_SITE = https://sites.google.com/site/tstyblo/wmctrl
-+WMCTRL_SOURCE = wmctrl_$(WMCTRL_VERSION).orig.tar.gz
-+WMCTRL_SITE = https://snapshot.debian.org/archive/debian/20050312T000000Z/pool/main/w/wmctrl
- WMCTRL_LICENSE = GPL-2.0+
- WMCTRL_LICENSE_FILES = COPYING
- 
+https://github.com/bradfa/flashbench/commits/dev/
+
+With a few more commits since then. Maybe it makes more sense to change
+to that?
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
