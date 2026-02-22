@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DB3CC624DB
-	for <buildroot@archiver.kernel.org>; Sun, 22 Feb 2026 17:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ECA5C636B3
+	for <buildroot@archiver.kernel.org>; Sun, 22 Feb 2026 18:18:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 569DE60EF4;
-	Sun, 22 Feb 2026 17:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E45360FA6;
+	Sun, 22 Feb 2026 18:18:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KgWGInlXwQ4O; Sun, 22 Feb 2026 17:54:12 +0000 (UTC)
+ id hlIAgyrAcUFg; Sun, 22 Feb 2026 18:18:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 308BB60DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26A5860F28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771782852;
-	bh=4gKvIu4t2ZeqfCDn8p4dv4qvTIwRcRFj26dcWKQ4WYI=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YOrSyC5dOvmfvdtzNvD8livzhlurSF2b8lqP6yeP6V7mfc9TDVwKFakGvg5mVVrik
-	 nA+1F9La2+ZV2vcWv3SPrycjjpOPOVt5peIT8SpizkHd/XmPop2V9x27Yb332Qc9Tz
-	 FhLOBS9TfpeEWoixDuYx/f+OHqsznoxxrfukfCG2TJP7f/4P0SDizBObTpNebIWWL+
-	 oWArIzGSX2SP3+6cbauwtUHRxH79g/3mRg9jvkYo5KbOQKtHbjGR+PptqeGsyYTobS
-	 VpECvelp/CtM6hYZAqr6dX/Q6Zu+vTcP7gKWtczIasYu2XsWkZrJF/fp+imKpYEefV
-	 K2+zfrRNFb7jw==
+	s=default; t=1771784304;
+	bh=GtUw2srRF+G4792LV5ds9O1jK15Aits7ZxsMyYbzf8U=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=KyhlaLOyhL7fhEdKol/ZJqBDkT2Kbh3FYitKl02WN4Pth42xboKuXrL1UVnuAljpC
+	 itahY+54UVNYAM8A6iVj9ureYiGF4uE49aicmLaYjnExKhhtrvl7AivPYB33KD1uNb
+	 IJ7nBcJ2npANSHoomyLySMkurEWYndM7YMjPM0OHIhpWNwDst2JguYcjhroU0Wsjs4
+	 GdcOGL2jjLGbfKOXeGIwvbKtUKzOY5ANXhIjL6zVTW4VARWqvMBacCSx3XBU1OmqVi
+	 BmS8+R5a4OGNUI3qZu3IwFZXSKWbLQ4keELPHtOKfE2pEBV4j0U3vFRicQtCJfRawM
+	 Ar9IrZlzPvYNQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 308BB60DED;
-	Sun, 22 Feb 2026 17:54:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26A5860F28;
+	Sun, 22 Feb 2026 18:18:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 057AF2DF
- for <buildroot@buildroot.org>; Sun, 22 Feb 2026 17:54:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 959041CE
+ for <buildroot@buildroot.org>; Sun, 22 Feb 2026 18:18:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB88283E18
- for <buildroot@buildroot.org>; Sun, 22 Feb 2026 17:54:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7460B82EB5
+ for <buildroot@buildroot.org>; Sun, 22 Feb 2026 18:18:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j22YPbYKruy9 for <buildroot@buildroot.org>;
- Sun, 22 Feb 2026 17:54:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8BB6D83DFB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BB6D83DFB
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BB6D83DFB
- for <buildroot@buildroot.org>; Sun, 22 Feb 2026 17:54:07 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EB739A4C1B9C;
- Sun, 22 Feb 2026 18:54:04 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41176)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vuDee-0000000040C-3cdX;
- Sun, 22 Feb 2026 17:54:04 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 22 Feb 2026 18:54:04 +0100
-Message-ID: <20260222175404.1945211-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id kkKdHxwU0rOH for <buildroot@buildroot.org>;
+ Sun, 22 Feb 2026 18:18:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6D59C8289B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D59C8289B
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6D59C8289B
+ for <buildroot@buildroot.org>; Sun, 22 Feb 2026 18:18:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 8D1A2B0053D;
+ Sun, 22 Feb 2026 19:18:17 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 22 Feb 2026 19:18:17 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1771782845;
- bh=I702MxKZoO4WlBGaLtCXRJfh7IYszufYudAZ98WZiuc=;
- h=From:To:Cc:Subject:Date:From;
- b=ILcDGAb1TPUKfPb2RKxb9sk9eHpTTlZxXy3J8HakAWJK+i8CgTB5ShrY1tIsiWdWQ
- y1ZKv5IdDhgTkaIB1TMz16BXMwlkywfek5WtX6WTAG95yY+ANe6oUJz/BYn4rzlnJY
- hSfGnwJZUyz35d4t9NcIhQxMhqnbRJVCtmOr6U26oiw9vogferr5lgb2BlkdTUu7KN
- k5npZmqQ8fl0/nm7Ri5rRb528RXoNI3ixBTiRLgsi+9auE2x+GMwVsEUCUgnLZkU9Z
- PAWkp1YdIplYPoTHFjeYiFzpk59adJnZcEVVwpilSNNwhSPpQSP89QBTR0WqO60Itp
- MOq25eB88Ds0A==
+Date: Sun, 22 Feb 2026 19:18:17 +0100
+To: Joseph Kogut <joseph.kogut@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260220-llama-cpp-b8117-v1-1-20e68ea57055@gmail.com>
+References: <20260220-llama-cpp-b8117-v1-1-20e68ea57055@gmail.com>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <5a727d873b79b960dd824272ab5b4270@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1771784298;
+ bh=PWO0k5LKmY04asUtpLy04wbrB9HuFTpg/IQN+wtBYAA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Do3Ysq6bzj//Fs/3+be+ii8UTBd7M3tHjrXiLNm5Lr1qURQ3pz7EjA1Q+UqJntHIx
+ G9rB4GmwpWzAVnD35I7Xw2pr8A6p71EQosTttjhOniRIFwNfSVi41cFRynK/oAwnDl
+ KX2Hzc/IO2lTY7sHDJhtOnGXdonrGcrESRVBhwEZLN6jdnNlfVGsOrSfQZzdhcQuxo
+ 7G9T9Ev+A4fYltwtdDmGOpnXnN47Hjc2mmr6NM8mHuwPCe/eSVLtkm5+yu+71PcHXm
+ CpKqJEt0AAN45YNFXP4bttwIDfiPCEqBC2mRKEkSvMKLCSyDD6WDpeuLoUxVdG8Ct7
+ GjmCemQvmu7Qw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=ILcDGAb1
-Subject: [Buildroot] [PATCH 1/1] package/snort: Fix build with gcc-15.x
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Do3Ysq6b
+Subject: Re: [Buildroot] [PATCH] package/llama.cpp: bump to version b8117
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,65 +93,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/3b9/3b92d275a32721bd2cbb10e15c392054dfd42c63/
+Hi Joseph,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/snort/0009-gcc-15-fix.patch | 36 +++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/snort/0009-gcc-15-fix.patch
+Thanks for the patch. I have few comments, see below.
 
-diff --git a/package/snort/0009-gcc-15-fix.patch b/package/snort/0009-gcc-15-fix.patch
-new file mode 100644
-index 0000000000..227ad5ffc5
---- /dev/null
-+++ b/package/snort/0009-gcc-15-fix.patch
-@@ -0,0 +1,36 @@
-+Fix build with gcc-15.x
-+
-+Adapted from: https://lists.openembedded.org/g/openembedded-devel/topic/meta_oe_patch_2_8_snort/112466576
-+
-+Upstream-Status: Backport [resolved in snort3 https://github.com/snort3/snort3/commit/c3cc27355ac302bd24ee3e9d613166898ec2be64]
-+
-+Signed-off-by: Martin Jansa <martin.jansa@gmail.com>
-+
-+Downloaded from
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/net-analyzer/snort/files/snort-2.9.20-gcc-15-fix.patch?id=410cb3ac09ab3d55e96876634c4d58005d9ead89
-+
-+Upstream: https://github.com/snort3/snort3/commit/c3cc27355ac302bd24ee3e9d613166898ec2be64
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+--- a/src/dynamic-preprocessors/dcerpc2/spp_dce2.c
-++++ b/src/dynamic-preprocessors/dcerpc2/spp_dce2.c
-+@@ -160,7 +160,7 @@ static void DCE2_ReloadSwapFree(void *);
-+ static void DCE2_AddPortsToPaf(struct _SnortConfig *, DCE2_Config *, tSfPolicyId);
-+ static void DCE2_ScAddPortsToPaf(struct _SnortConfig *, void *);
-+ static uint32_t max(uint32_t a, uint32_t b);
-+-static uint32_t DCE2_GetReloadSafeMemcap();
-++static uint32_t DCE2_GetReloadSafeMemcap(tSfPolicyUserContextId pConfig);
-+ 
-+ static bool dce2_file_cache_is_enabled = false;
-+ static bool dce2_file_cache_was_enabled = false;
-+--- a/src/preprocessors/HttpInspect/include/file_decomp_PDF.h
-++++ b/src/preprocessors/HttpInspect/include/file_decomp_PDF.h
-+@@ -80,6 +80,6 @@ fd_status_t File_Decomp_Init_PDF( fd_session_p_t SessionPtr );
-+ 
-+ fd_status_t File_Decomp_End_PDF( fd_session_p_t SessionPtr );
-+ 
-+-fd_status_t File_Decomp_PDF();
-++fd_status_t File_Decomp_PDF( fd_session_p_t SessionPtr );
-+ 
-+ #endif /* FILE_DECOMP_PDF_H */
--- 
-2.47.3
+On 21/02/2026 00:01, Joseph Kogut wrote:
+> Release notes: https://github.com/ggml-org/llama.cpp/releases
+> 
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  package/llama-cpp/llama-cpp.hash | 2 +-
+>  package/llama-cpp/llama-cpp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/llama-cpp/llama-cpp.hash 
+> b/package/llama-cpp/llama-cpp.hash
+> index 765025f180..d929d40ed9 100644
+> --- a/package/llama-cpp/llama-cpp.hash
+> +++ b/package/llama-cpp/llama-cpp.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated
+> -sha256  
+> b2c4c89b6282c4ddc7c9c00c79af77d84811b6092aa47838a194e8a2981fa104  
+> b7271.tar.gz
+> +sha256  
+> 4f9fdf018339783722936d537573d40cca596262e42714f597b1c93299113cea  
+> b8117.tar.gz
+>  # License
+>  sha256  
+> e562a2ddfaf8280537795ac5ecd34e3012b6582a147ef69ba6a6a5c08c84757d  
+> LICENSE
 
+The license hash is failing, due to year update in:
+https://github.com/ggml-org/llama.cpp/commit/7a4ca3cbd905907ac4d12bc14b878fdfbe4fd1d6
+Could you send an updated patch fixing the license hash, please?
+
+> diff --git a/package/llama-cpp/llama-cpp.mk 
+> b/package/llama-cpp/llama-cpp.mk
+> index 5112022656..f104766403 100644
+> --- a/package/llama-cpp/llama-cpp.mk
+> +++ b/package/llama-cpp/llama-cpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -LLAMA_CPP_VERSION = b7271
+> +LLAMA_CPP_VERSION = b8117
+
+Also, due to upstream commit:
+https://github.com/ggml-org/llama.cpp/commit/a180ba78c710f52af7c7edee562fbe98c36d6ddd
+the command llama-cli is no longer available in the runtime test,
+which is failing with this patch. Could you update the Config.in
+comments to reflect that change, and update the runtime test, if
+necessary?
+
+You can test with the command:
+
+     utils/docker-run support/testing/run-tests \
+         -k -d dl -o output_folder \
+         tests.package.test_llama_cpp
+
+>  LLAMA_CPP_SOURCE = $(LLAMA_CPP_VERSION).tar.gz
+>  LLAMA_CPP_SITE = 
+> https://github.com/ggml-org/llama.cpp/archive/refs/tags
+>  LLAMA_CPP_LICENSE = MIT
+> 
+> ---
+> base-commit: 6c83a0b8e5658b901dd35ae23217075f035af998
+> change-id: 20260220-llama-cpp-b8117-e23d56923b35
+> 
+> Best regards,
+> --
+> Joseph Kogut <joseph.kogut@gmail.com>
+
+Could you send an updated patch addressing those comments, please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
