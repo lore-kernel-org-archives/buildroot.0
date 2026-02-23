@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82BE0EC1126
-	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 20:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14A2AEC112C
+	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 20:24:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BE7060AEE;
-	Mon, 23 Feb 2026 20:22:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 834D060AD7;
+	Mon, 23 Feb 2026 20:24:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aGKE4xPzr8Ac; Mon, 23 Feb 2026 20:22:01 +0000 (UTC)
+ id 4X6NjL-d27rM; Mon, 23 Feb 2026 20:24:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67FA561246
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0417160AB6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771878121;
-	bh=B3bVBqdXM779OZf5MfAe3leIoliS2NnVP8rPph14alc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WaCHtmN6kcSEK5qZ6vn/Y3UlnC9ag/BE7rs4Q5HGAkrl8MwLTn8CUppkSr4bFgJ8l
-	 4BSht1H/59CKlZ94w2UFgsdZzu8UN59bbLcUzWvFsc3NJcx6AfK1c69pk1dXaCUsui
-	 upFX+3oVoggWvVtq7A7ke8G0DHwlmT2b8YSslBK1mKxjb+wEOuPEbjF76WsUdpuklw
-	 VC1LG55b+bEPVrwuLovx6jjwNZG2GtsZR3K3/i+kOdSOu7fYBVu63VZtmDcL4iRgwl
-	 ft1w8ICwNtqGEMjsUVsMpjLVex4fHKNm0VMIxMet23NVmySGTAZ7FvEIcEHlophHpa
-	 x87W3haUsdjBw==
+	s=default; t=1771878254;
+	bh=kixubNJF56TZ+03WzgGLxB6eRoddVL8SVs/41qpRhZc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Ctu4E2o9LlZbl1/PNJMH5o1tooryHDJhGuXBXpa+RAY8Xt3Kar090C8hRNhCVeT0c
+	 s5VYScaitVaetsTpwXsyMXId2p4K1RysnYV0KJt3a2EmQIQU3ak+14Q0dDNnWfxh6C
+	 qZ0G8OYNbYNfPvUp2VXpftx129Tu8Rj9ZALmbIP2BWKTTFVBP0zl7WSPzk1bg90Ces
+	 MUAeREB9FwxUtzES/Yau9hL5T1GA44Gh3It/6wJpW2DInx02/koWaLaD153BaN3NJc
+	 arVTiBxSpcUV9bmEa+8TpCLIb5zixHaoa+0xh0rOTrNGx+76xFD5XQJvZJAP1Cl5MM
+	 OKR6KABv7nxEQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67FA561246;
-	Mon, 23 Feb 2026 20:22:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 16070237
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:22:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0417160AB6;
+	Mon, 23 Feb 2026 20:24:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B60FE237
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06E9960AD7
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:22:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A769E810BD
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:24:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4CWy4wcOvjF6 for <buildroot@buildroot.org>;
- Mon, 23 Feb 2026 20:21:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6AD860ABB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6AD860ABB
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:21:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 200A187130; Mon, 23 Feb 2026 20:02:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 23 Feb 2026 20:55:57 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 461eac6f23181c008110c11e911dfb453886a732
-X-Git-Newrev: 603b0350b67201cd9e21f45be00dc04fece26d2d
-X-Patchwork-Hint: ignore
-Message-Id: <20260223200223.200A187130@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bdwgc: bump version to
- 8.2.12
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OuIfcWdztcz0 for <buildroot@buildroot.org>;
+ Mon, 23 Feb 2026 20:24:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 697D88107F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 697D88107F
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 697D88107F
+ for <buildroot@busybox.net>; Mon, 23 Feb 2026 20:24:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 07C9C5FFAA;
+ Mon, 23 Feb 2026 21:24:07 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 23 Feb 2026 21:24:07 +0100
+MIME-Version: 1.0
+Date: Mon, 23 Feb 2026 21:24:07 +0100
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20260223083040.327878-1-francois.perrad@gadz.org>
+References: <20260223083040.327878-1-francois.perrad@gadz.org>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <8e0f20f951557ac61b1a96349244d16e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1771878249;
+ bh=4cEydCg3v2mT/hfwMaH7TNtxvaZUk9/FKEnmCQs/tFk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=IOjMGvoQQUp/X19Tz+0I9b3F/EwFFL57NQLo+LxwusplakAzmSMAmrB40NhwKm+2K
+ XvKTc5W1tW/N5s9KKcvPZdy+8WWdpR7yfgqLQg2lziQIs4wGs9ur7/6IS+4ldjfmux
+ o0s5/yygFSTt8MbN+Ub7Mb9HEefpk/lRm/hGYMw9uiiwoavFhxMEcIqitqHm7RV4RX
+ U/T5ZAKeuIk0OWqaMLR2ONxeQyi6qXY8R4ExLpgS7moQsuRA4ep+FabrKTdDjgHSLZ
+ w9B5KVZpVZJ1/JrfcsaUNetu2iefKWR3XPZbw+HBAiS9wnzs7IDLoNv8H9GZeWpfLj
+ t8oYpcfOHTIlg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=IOjMGvoQ
+Subject: Re: [Buildroot] [PATCH] package/gawk: bump to version 5.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,64 +95,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/603b0350b67201cd9e21f45be00dc04fece26d2d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 23/02/2026 09:30, Francois Perrad via buildroot wrote:
+> release notes:
+> https://cgit.git.savannah.gnu.org/cgit/gawk.git/tree/NEWS?h=gawk-5.4.0
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Changelog: https://github.com/bdwgc/bdwgc/releases/tag/v8.2.12
-
-This commit updates the README.QUICK license hash after year
-update in upstream commit [1].
-
-Also, the github URL [2] redirects to [3]. This commit updates
-the _SITE url accordingly.
-
-[1] https://github.com/bdwgc/bdwgc/commit/c40b182fa58b92a584571aebe50e07105476cbe9
-[2] https://github.com/ivmai/bdwgc
-[3] https://github.com/bdwgc/bdwgc
-
-Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-[Julien:
- - update _SITE
- - add extra info in commit log
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bdwgc/bdwgc.hash | 4 ++--
- package/bdwgc/bdwgc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
-index d38b2bb1b5..dca7e61771 100644
---- a/package/bdwgc/bdwgc.hash
-+++ b/package/bdwgc/bdwgc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  832cf4f7cf676b59582ed3b1bbd90a8d0e0ddbc3b11cb3b2096c5177ce39cc47  gc-8.2.10.tar.gz
--sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
-+sha256  42e5194ad06ab6ffb806c83eb99c03462b495d979cda782f3c72c08af833cd4e  gc-8.2.12.tar.gz
-+sha256  46cf78d79f08ec7295e1c767213582c60eccba2c5bcb07b1b29fd7ddb138fbdc  README.QUICK
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index 0700ee7bf5..e81ad3b288 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--BDWGC_VERSION = 8.2.10
-+BDWGC_VERSION = 8.2.12
- BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
--BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
-+BDWGC_SITE = https://github.com/bdwgc/bdwgc/releases/download/v$(BDWGC_VERSION)
- BDWGC_INSTALL_STAGING = YES
- BDWGC_LICENSE = bdwgc license
- BDWGC_LICENSE_FILES = README.QUICK
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
