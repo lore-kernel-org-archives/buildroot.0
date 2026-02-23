@@ -1,113 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00BD3EC110C
-	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 16:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76583EC111E
+	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 18:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8C4183026;
-	Mon, 23 Feb 2026 16:55:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C14AB61263;
+	Mon, 23 Feb 2026 18:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4_sjhbpPu9Y; Mon, 23 Feb 2026 16:55:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qti-trY5MK-y; Mon, 23 Feb 2026 18:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5AC083459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 842A661256
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771865732;
-	bh=PZACkv86hN79uyGsbvWLRhVQmkEaIiYdLqnG+BYEkYQ=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=dydWaZ21gUPNyuJCZH4J/rh4FMU4p7VwTEKm+huoWAk/DJn/TAhdRKB1n6NEbxRFh
-	 z0ENwcYZjIHlq5lwFkyUgRcMbrUL48Hn5BJBLgJcCQo4rPCRcVzoca+JVplN9SrVj/
-	 5MYEoXshp1lmqsXT15tFgfZBGK32GHPDwg8K73XncSCc2vc5X+uVtfxXXD/AOD/k9O
-	 0g9x8prnRf/KRIOAi3qnGc30d1P0mhxWyIT8I6/z60u8CYR6/ZUkfsO9JCuuhVjQB5
-	 /3Scg0DHFqzNeXpbbnibu7YB2a3YzCodJ5PXsob857bpTt55SulGHBUW3myMPwKmIk
-	 PDBjVYh+O/LXw==
+	s=default; t=1771872108;
+	bh=MLyyiDWnG95RrHOWiw/q3fo9sxKjf6+IVYheywvTZGw=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=a/RjFW8YMHBEl7rWxJVKfzlCX8ieb/ERwMIpsxsgZoTmdy3VITb3FSPC3E/iZKncY
+	 VvmgZzFYrLtewlKnxqjY9rC/kfIQWPGNkFtXbl+vU+YPe5UzN4f13zUXyUJ8Qfue7d
+	 CbD15FEziXN3n0ztVJutl5Dt0vJoegJitobHIenzDjM8SbfocbP7fTQo5iR8tNBGMo
+	 YltbjVyeKHRTcxogNcgOsSchXAP4cykEGk6M9/8o8D/U//d+D7OejuRbecYPp7Kvik
+	 mG6QjOZ/QB9IH5C8TLwLtcOtw1bIcDccp33CaRRUCzPYyLECmyJk6OBlWWLAD2+ECQ
+	 PYBIVCyUuR31g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5AC083459;
-	Mon, 23 Feb 2026 16:55:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 842A661256;
+	Mon, 23 Feb 2026 18:41:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C1C1E1CE
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 16:55:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C5E2D1B8
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 18:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A747083459
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 16:55:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2ADC8436E
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 18:41:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iwQ7QETxStGK for <buildroot@buildroot.org>;
- Mon, 23 Feb 2026 16:55:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 762A783026
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 762A783026
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 762A783026
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 16:55:29 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-4806f3fc50bso52020095e9.0
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 08:55:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1771865726; x=1772470526;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5evqOG3fMqkKfTlW0gB89eLdvGjRuL5GcCUvpQAKDT8=;
- b=YyEBr2keFld/KGfZg/wz9ZWubY4Qggo/KBGMlc2inmpC9ACWcRgFU13uLMmq+lCHB/
- EI8Wk+LgUn1uVp0oHC6qAIYqsc51/xzrOp502WHeCmydKDEgTYqprFK1QpDmVrAdN18b
- g9+vGCKU1/9m+7amvubFitelZufbo0U6Qs7PJS7lSDIXaczC9WPtQWDz6yDj3YqXzGMT
- xDMpn6pbvkWKwD1+ZTKN84jRPWgAaVJdwhIUm8VckJf7Tadk5KLrxDiaiVgZrCWPk0oZ
- Ruf8QbscLrbvKZ3b3LE1LA6FCMtkoc0uL/X4V42ffFRbkZH0hS09atRtYUKBQZesx0m9
- j43g==
-X-Gm-Message-State: AOJu0YwU37zpED6Qh6mgtZB9pboIRHviiN2YeCkIXXx8V9q0lyB9wGyJ
- nFURm5aVYP71FrfhCVx4vKOHRQJBRC7ZUZ0SygwprRkWqQIRlAkCd5ln5pBwKz4WoNHnW/B1wvG
- BvIYT
-X-Gm-Gg: AZuq6aLIt5/18ou5a+x076/k/jqfLPR06kp5ylPBiD+rUO7XemWfjextWn8rIlhLwng
- RQ37gCWNIxxJB1vUgRcBcyq1BpvcX8RD2L2oa57HULrr7fx+kAkG9Sw/xBNH9Z3ORjB5YvI3bd+
- g38jB1WYR7wWZDgE86N3HjaG08l2On1QDi1E+gRORPIxfjJKIoYGhvFYr18H6ZEkbiqDKAK7Non
- xhwJ529cbab1GzJ3ImvhZAFwD2DbHznf1ucunkTzaKIJS9a4jaGOTnM7rwxNnAQ1pFdDh9546St
- j3uQ1MgDyXv7J+rjuemDtpgf82DJTOaHrcPf8ArkCukH5lbDkq6B/uJgYtNQV1sLSqhNSDGwC+4
- xPeXk5idQrzGKtQNXGc9ioiSkTbuyK6lHdjh46s96F90OfQuO4rAJ3msGJcuxnAVwr+vAUkvNCU
- W+SvbP4oBoWJcUbtdIMdVFA5lHGv8O4z01HX+UniZ3pna8QmyXA/THXwtt7iYrDPDN/sdFRTy1I
- VixA+LDBqG4dpihp92l5c2E1L3Qq2s0pq1Jr/ORPQ==
-X-Received: by 2002:a05:600c:3b10:b0:483:43da:6c87 with SMTP id
- 5b1f17b1804b1-483a963d603mr134572435e9.33.1771865726528; 
- Mon, 23 Feb 2026 08:55:26 -0800 (PST)
-Received: from FRSMI25-GRAVITY.idf.intranet
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483a31c048bsm289296615e9.7.2026.02.23.08.55.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Feb 2026 08:55:26 -0800 (PST)
+ id R7t54lW1EM_s for <buildroot@buildroot.org>;
+ Mon, 23 Feb 2026 18:41:46 +0000 (UTC)
+X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 23 Feb 2026 18:41:45 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9A82B84369
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A82B84369
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.126.130;
+ helo=mout.kundenserver.de; envelope-from=paguilar@paguilar.org;
+ receiver=<UNKNOWN> 
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9A82B84369
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 18:41:45 +0000 (UTC)
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from uxmal ([81.56.223.94]) by mrelayeu.kundenserver.de (mreue009
+ [212.227.17.165]) with ESMTPSA (Nemesis) id 1McH1Q-1vHweu1ZGe-00h5B7; Mon, 23
+ Feb 2026 19:36:36 +0100
+From: Pedro Aguilar <paguilar@paguilar.org>
 To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Date: Mon, 23 Feb 2026 17:55:23 +0100
-Message-ID: <20260223165523.1392281-1-fabien.lehoussel@smile.fr>
+Cc: Pedro Aguilar <paguilar@paguilar.org>
+Date: Mon, 23 Feb 2026 19:35:51 +0100
+Message-ID: <20260223183551.25008-1-paguilar@paguilar.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:+mo2famWijHD3W1gDxtvmP2xdSi4B8wpt5LE0YCaXii3GZIGOWb
+ Y3zWL3eY1Q//yx+NdHNT2IUnKOd4Z9r3mTYol8Wj4eABVzlUMuS1S3TL5E9gbggK3+HAxMv
+ iYkCU/3h0qzi9gv5MHzu81nnX7gAqmOZg2mLcnyx+vABmFb2B71pssd7rYpWjpRQ65PWJD7
+ mdpczQnPk1B8lL4dy1gpA==
+UI-OutboundReport: notjunk:1;M01:P0:jmRjp7ektVo=;1kFv/DpS2p27fhFtT9Si/0bPiRR
+ tRWUkBW4YJFgU6RAfhg+bH3CUhW1fHj2mI5/gZozHsYWB4Vfs7nxwgwQmD0RA+gv5B8oMuDIO
+ mYluc9ug8YAgpKGN9joIKuNVE2BNkZLbt0BfbIt6usxztQSiXpZKEDrs6mrCPEITKXLLDRYnT
+ 8DdgcmlCPfVK+ycTnd5xHg7XhCbYgmmHTZGc/slfpWcMPkYuNP9LUc0aRHQSq22CfGRGf1nfn
+ FIiIwRPxTFadCX4c3hTXN///5lxiQYGZOsQv+dqtPs50vPU5EqVjY1Qq1i0wtK5SVpWqaciR1
+ OvQ7Gbb1tbxQzMoRUaYrul6oTlY2yBzKviQkpPrYfq7aAqmmI85hoSa9GcFm+82P0r2lbM/26
+ yBTHqHjeGMY2Xhb1fsWJiC7cMT0szpWcYz4vPBqROsrpOV6kb/0xnEvvtYtHl0YXvSCKJ1zVG
+ F1lv/NJWt0SwdpPPuXhig+pp1W5C5Jw44KuPWssu3XS6OASUxMAQTr/NunBNHVwj7j5g3+LeP
+ ZZTqbUhzrVfWx5m3KnVfOitlPW1dhcEiHt8tGZ59kOQxxAHDxgoF1pCi0PaYYB9Mf53IbWvRJ
+ tYhyCc4tB4b84eLu21z3n3ZGu+4oswh2tsPqDDwWOuQ6UD3fOfvgVwCD8UWx6bLuKVMnOp1+N
+ RxVnu9D3b65LtqsC7cIuKF09we9jwb7KBkg1yTSAGDP8DQOOnDTj6cp55QQQFwmt+8McYRLZ7
+ o9SIlV15Ie23Emdd8j8z6Xwt+fMfL9HqRaZM998VSC0D2IBFEcpZ5LUmiU4qRheuqUsJu4ag5
+ N7ugEB5aXzMjRzgyEMHa3yTCIGOMXHd3vCSkRNamtraTEt+BcX0OIaLm1ZG2kzr8no4jb3cKT
+ 59vElRB8K6LizLP/bHF0DVWudGpysMeCNUZrhxzqtsZKID285SxqxjKDojVjAQXPE8IhXam21
+ dzrw4jg8EqizI0eZa4fsxQeXK1AY2QfKcjktyFD1/M7hs8pcSz0eF4Z4pYE9VeOmafaMj6cyn
+ 6hAIDNlXuxeot3CCu3Dnv3lvWu81dfbolwuO9vPRS6Z6QGe3flhVbbQEPw0D2I53EUMUUWz8i
+ XEUdAmBkJXD2qZDAyVtwPPex7Hgt87v5iH7KMOua8HDo5eaGcC0xkqsCsJbox52FL2cS/0MMS
+ NUNhtl+ytlLeEPcPRDNbCHlV5MZBgASh4mmvA4uKBeKXK5blOfk4ZgwB7o+c5d8ph+vl/7Oir
+ VN+NEgfodKfnTCFnZPDzsocoLXEKANP1AlBnS+PjhY3zqch/t4rQ+4VmzuX4v0SdRPQ/pl5n/
+ XQ9yPqhnfnOA1LOU8VO/EqpbvcxgJhFgiRiD40riU9OY43IrFvbaLIrdU/VqPtHCHePDV9mLg
+ +aKnznqzu7csLr79MF8sqhnTBHJpsjpbHm+YkjIt3o5VwqS6x2xXP9cKUf/GtHwJYBhUSAC2V
+ 0g0ubxZJp4wCqpbzjDFjiUCBW+CDL0pkDjG45YnfxX90laNpdjJTUpf7loffra6Kz2rmttYZQ
+ mfeux7PNP3ZFvF/mgcnbwlzfIKbvWhIzHkFauoXSgKds4orjynduLM/qzBIkJRZr7x6ECdQ5Y
+ 9iAB1i+u5/h+u8ICGNxycD3F3qFAp4yB7eBJnkpPrO0OZ2qDUlh9Ex9SdgCvGs4tk+Uh96ZtS
+ mlaWQENjMijP5roWGVKaCF9c4/sVPPRX/dfkMGtHREAoL1kpyLURbKCx5e6+7nnAO8EPp5XmP
+ ZUCXoPTa27k/2YNsQhoJt72+hdMovSqzvMIOqGlkNN4WJNzyCfdXT6jSwgQDbS66D28im1fiT
+ p8Rw/g+xecRknSvluwZ5GuyVvQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1771865726; x=1772470526; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5evqOG3fMqkKfTlW0gB89eLdvGjRuL5GcCUvpQAKDT8=;
- b=mg0aC8mSjWr1AJRuE5a69UMsD/qzUNqCcTP39eJTmkJAnrK7kCiA22ym8QJPd9rew0
- 8cc01c8Ldk/tL9k8koJ84wCS6g5dzpxfORgRoG7YHGmPan1Ue1+eksyCGpszwouKIL1l
- gKNhUrVutnGcA3mM5IOIJVv/iWmuYrEPmebeM=
+ d=paguilar.org; 
+ s=s1-ionos; t=1771872103; x=1772476903; i=paguilar@paguilar.org;
+ bh=t5ZTPsNgEW6tLNCFut6MviXbkDgYIKfZ+TWz4OPxP5E=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=Nyo7crNEzgsmY6F5XGDU3bSc9nIdCz0ZyD1CGXvm1fuxWOuPpBwd0gC3m0CvNOsU
+ K6iVokrIAXgiki/WkonkAA0vQpaWm9KYFAv//tGAtFPKQ/kDiX0gNu/EI3SLZ6LU6
+ outfFLEWImigFMdznp/9KQlnXR2ic9x2cr+j5pVsCjdo3CidUUuALQzZoYG1l1FZQ
+ bexSX9GrJ+MZxEgGFJobmPtFq5XIjfGbZ/4H21K8+WX8PWo7KSgbaUKjfchjyLKS/
+ S0q6dgUtw+zyZttugqjKcAWSMMuOhGGRPE+uOsY9eiGO4Bn87IoxrtYFakDZlaRI9
+ Jt1lrCNhfqV0cy2nUQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ dmarc=pass (p=none dis=none)
+ header.from=paguilar.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=mg0aC8mS
-Subject: [Buildroot] [PATCH 1/1] support/scripts/generate-cyclonedx: add
- source attribute to each CVE
+ dkim=pass (2048-bit key,
+ unprotected) header.d=paguilar.org header.i=paguilar@paguilar.org
+ header.a=rsa-sha256 header.s=s1-ionos header.b=Nyo7crNE
+Subject: [Buildroot] [PATCH 1/1] package/bdwgc: bump version to 8.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,57 +125,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fabien Lehoussel via buildroot <buildroot@buildroot.org>
-Reply-To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CycloneDX 1.6 specification requires that each CVE include a 'source'
-attribute to identify the origin of the vulnerability information.
-Without this mandatory source attribute, SBOM files cannot
-be properly imported as VEX into vulnerability management tools like
-Dependency-Track.
+Changelog: https://github.com/bdwgc/bdwgc/releases/tag/v8.2.12
 
-Test Environment:
-- Buildroot: 2025.02.1 (or master)
-- Dependency-Track: v4.13.6
-
-Test Results - BEFORE (without source attribute):
-apiserver_1  | 2026-02-23 16:05:40,890 INFO [VexUploadProcessingTask] Processing CycloneDX VEX uploaded to project: e43fe185-c0a3-4e3a-a908-667344a66a9c
-apiserver_1  | 2026-02-23 16:05:40,941 WARN [CycloneDXVexImporter] VEX vulnerability at position #0 does not have an ID and / or source; Skipping it
-apiserver_1  | 2026-02-23 16:05:40,941 WARN [CycloneDXVexImporter] VEX vulnerability at position #1 does not have an ID and / or source; Skipping it
-...
-apiserver_1  | 2026-02-23 16:05:40,941 WARN [CycloneDXVexImporter] VEX vulnerability at position #19 does not have an ID and / or source; Skipping it
-apiserver_1  | 2026-02-23 16:05:40,941 INFO [CycloneDXVexImporter] The uploaded VEX does not contain any applicable vulnerabilities; Skipping VEX import
-
-Test Results - AFTER (with source):
-apiserver_1  | 2026-02-23 16:17:13,492 INFO [VexUploadProcessingTask] Processing CycloneDX VEX uploaded to project: e43fe185-c0a3-4e3a-a908-667344a66a9c
-apiserver_1  | 2026-02-23 16:17:14,054 INFO [VexUploadProcessingTask] Completed processing of CycloneDX VEX for project: e43fe185-c0a3-4e3a-a908-667344a66a9c
-
-CVEs are correctly filtered and imported in Dependency-Track
-
-Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 ---
- utils/generate-cyclonedx | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/bdwgc/bdwgc.hash | 4 ++--
+ package/bdwgc/bdwgc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 2b6c6d63d3..6007a6a402 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -327,6 +327,10 @@ def cyclonedx_vulnerabilities(show_info_dict):
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index d38b2bb1b5..dca7e61771 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  832cf4f7cf676b59582ed3b1bbd90a8d0e0ddbc3b11cb3b2096c5177ce39cc47  gc-8.2.10.tar.gz
+-sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
++sha256  42e5194ad06ab6ffb806c83eb99c03462b495d979cda782f3c72c08af833cd4e  gc-8.2.12.tar.gz
++sha256  46cf78d79f08ec7295e1c767213582c60eccba2c5bcb07b1b29fd7ddb138fbdc  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 0700ee7bf5..77040df2a4 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     return [{
-         "id": cve,
-+        "source": {
-+            "name": "NVD",
-+            "url": "https://nvd.nist.gov/"
-+        },
-         "analysis": {
-             "state": "resolved_with_pedigree" if cve in VULN_WITH_PEDIGREE else "in_triage",
-             "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
+-BDWGC_VERSION = 8.2.10
++BDWGC_VERSION = 8.2.12
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
+ BDWGC_INSTALL_STAGING = YES
 -- 
 2.43.0
 
