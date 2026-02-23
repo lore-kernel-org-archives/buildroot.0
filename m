@@ -1,64 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AE20E98E0A
-	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 08:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3180EA4FBA
+	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 13:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3884F40604;
-	Mon, 23 Feb 2026 08:42:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7140B8425D;
+	Mon, 23 Feb 2026 13:12:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uN4Fnvt9HbR4; Mon, 23 Feb 2026 08:42:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3wcktmEGzBQr; Mon, 23 Feb 2026 13:12:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E313406B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 811A184202
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771836161;
-	bh=XmUEQWaaHbGRMIMCJX1AChJZ7rRmsQyg6BZltpVKmDs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=H9j/tBS4fprzuV5TorCI4EkGzU3gpWqwrSFz1i66+wPd1ZYy2Zon843YqmmLUTNgF
-	 mQ0dQDbGlwPZUybUYE04x2AcuiL1F6GHk/2pkjz4MEdHim3bCyGQt6ZdaX+fYx9JiW
-	 PJH6tqeOGGaPEJ1UnA0eBM4PYK86gChAAkafZI4UFG+5u6nEb5ZjSOmJmgB+sZ/Pk9
-	 xU13usmHUA5C9PFB9hCEjdWXt8NLdcn7Mkjj/swsTYlu8NtCYMnIgnKDBZgkOGZX0u
-	 s1LIzM1vRfBU8rSlnROoG8w3Vzhsfffcou+XEe2SYip+fxxQUB9i1qszMhohbKyyy7
-	 qKPajcerxcQ0Q==
+	s=default; t=1771852364;
+	bh=4cjIUnMkLt4YGPXyIed6aI+S1IhXL9y/OdZ9OYVVUk0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=UXc6TY0XXWKU29TfYkWRcL96O+ssGpeXp+gjzuWFlw7KuPBwCDsBnOEiqMXlbkko2
+	 b1zJYaMHWYwVhePRGKuUDYKmY/LsKkhk0RjMh1WKb19P+N15rm4S2NaFZZ0NUVzWmU
+	 WEqsVD+o6nVUwxOujyzz3lFsHkpewM9idRZw5nZHakcnuncK4BrbTbDkOfc0AyTciO
+	 +h+MXh2GD2BgMxmQPcY542r+NN+kP/iegNy4eoNb+qsBncbf81VVYnBwmnRVaYMSfI
+	 RkKyiCg+2D27Ys87+b5ExPDIlq+qchjCsWEQljHHn5+Xi13MpMnxanwgUFzDF2WtLM
+	 p0Uk0zu8m25OQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E313406B1;
-	Mon, 23 Feb 2026 08:42:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CF102237
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 08:42:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 811A184202;
+	Mon, 23 Feb 2026 13:12:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 943DA249
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 13:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47ECE6074C
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 08:42:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79D6384202
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 13:12:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BF0lv-NXvoCz for <buildroot@buildroot.org>;
- Mon, 23 Feb 2026 08:42:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A6FC60776
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A6FC60776
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 08:42:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57D328734B; Mon, 23 Feb 2026 08:42:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 23 Feb 2026 09:41:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e12d9b4810610e75edf7d108b462804b72e519e
-X-Git-Newrev: d27aad788d679d2a828a6bd2cb97854462201c4c
-X-Patchwork-Hint: ignore
-Message-Id: <20260223084237.57D328734B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.50.5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QMEU-mUz6sKT for <buildroot@buildroot.org>;
+ Mon, 23 Feb 2026 13:12:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D274684201
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D274684201
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D274684201
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 13:12:38 +0000 (UTC)
+Received: from 91-154-227-245.elisa-laajakaista.fi ([91.154.227.245]
+ helo=kodama) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1vuVjj-004EvM-FK; Mon, 23 Feb 2026 14:12:31 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id ca51fd1a;
+ Mon, 23 Feb 2026 13:12:30 +0000 (UTC)
+Date: Mon, 23 Feb 2026 15:12:30 +0200
+Message-ID: <20260223151230.GD2359969@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>,
+ Romain Naour <romain.naour@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20260218063123.546067-1-james.hilliard1@gmail.com>
+References: <20260218063123.546067-1-james.hilliard1@gmail.com>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=LBIEfjtfVjXcdK2y77JRyAyri07i9YcI+uGMEoqvloA=; b=nbLz4k8h/AqXiOIBeM6WqiCuyq
+ JZGvc/gPcB0Ph6F3DNkDAEw/KPZ95C4BCiwSGIQoXq/RHYJOeGgCSQ0M4deXsoBa+GY23MMHowj+w
+ B8KbttcNt2gPE5EjXE/5CLJj9XYJ1cPEN+iN8/98A1BRQSiR8cfTZPLsywdE+osKoZ6Eix7l3cEVo
+ vSpLlKaiy/2I/D42GQgYq3yJZK1l4guabKsq39s7pt8mcWbxGWS9p4qwp75ndCMFwcu19eAP97i2E
+ yUZnxj23+dAVivK9s/jDHuibuPRbDEyP2/MouFN3SggQvjVyUY8PwVCxI/Py7qCafT8XsvfR5kvHR
+ OiHQDHNA==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=nbLz4k8h
+Subject: Re: [Buildroot] [PATCH 1/2] package/mesa3d: add
+ EGL_WL_bind_wayland_display support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,132 +98,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6496128227512061237=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d27aad788d679d2a828a6bd2cb97854462201c4c
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This updates WPE WebKit to the 2.50 stable series.
-WPE WebKit 2.50 highlights and 2.50.[1-5] release notes:
+--===============6496128227512061237==
+Content-Type: multipart/signed; boundary="KLrymaXyER2JKP0W"; micalg="pgp-sha256"; protocol="application/pgp-signature"
 
-- https://wpewebkit.org/release/wpewebkit-2.50.0.html
-- https://wpewebkit.org/release/wpewebkit-2.50.1.html
-- https://wpewebkit.org/release/wpewebkit-2.50.2.html
-- https://wpewebkit.org/release/wpewebkit-2.50.3.html
-- https://wpewebkit.org/release/wpewebkit-2.50.4.html
-- https://wpewebkit.org/release/wpewebkit-2.50.5.html
 
-Fixes the following security issues:
+--KLrymaXyER2JKP0W
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-- From https://wpewebkit.org/security/WSA-2025-0007.html
-  CVE-2025-43343
+T24gVHVlLCAxNyBGZWIgMjAyNiAyMzozMToyMiAtMDcwMCBKYW1lcyBIaWxsaWFyZCA8amFtZXMu
+aGlsbGlhcmQxQGdtYWlsLmNvbT4gd3JvdGU6Cj4gVGhpcyBmZWF0dXJlIHdhcyBtYWRlIG9wdGlv
+bmFsIGluIG1lc2EzZCAyNS4yLjAgYXMgaXQgaXMgZGVwcmVjYXRlZCwKPiBob3dldmVyIHNvbWUg
+cGFja2FnZXMgc3RpbGwgcmVxdWlyZSBpdCBzbyBsZXRzIGFkZCBhIG5ldyBjb25maWcKPiBvcHRp
+b24gdGhhdCB0aG9zZSBwYWNrYWdlcyBjYW4gc2VsZWN0IHVudGlsIHRoZXkgbm8gbG9uZ2VyIHJl
+cXVpcmUKPiB0aGlzIGZlYXR1cmUuCj4gCj4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQg
+PGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+CgpSZXZpZXdlZC1ieTogQWRyaWFuIFBlcmV6IGRl
+IENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cgo+IC0tLQo+ICBwYWNrYWdlL21lc2EzZC9Db25m
+aWcuaW4gfCA2ICsrKysrKwo+ICBwYWNrYWdlL21lc2EzZC9tZXNhM2QubWsgfCAzICsrKwo+ICAy
+IGZpbGVzIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L21lc2EzZC9Db25maWcuaW4gYi9wYWNrYWdlL21lc2EzZC9Db25maWcuaW4KPiBpbmRleCBlMWZh
+ZWE5NWQ1Li44YTc4MTFiNmE1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5p
+bgo+ICsrKyBiL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbgo+IEBAIC01MCw2ICs1MCwxMiBAQCBj
+b21tZW50ICJsbHZtIHN1cHBvcnQgbmVlZHMgYSB0b29sY2hhaW4gbm90IGFmZmVjdGVkIGJ5IEdD
+QyBidWcgNjQ3MzUiCj4gIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xMVk1fQVJDSF9TVVBQT1JU
+Uwo+ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19HQ0NfQlVHXzY0NzM1Cj4gIAo+ICtj
+b25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0xFR0FDWV9CSU5EX1dBWUxBTkRfRElTUExBWQo+ICsJ
+Ym9vbCAiTGVnYWN5IFdheWxhbmQgRUdMX1dMX2JpbmRfd2F5bGFuZF9kaXNwbGF5IHN1cHBvcnQi
+Cj4gKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1dBWUxBTkQKPiArCWhlbHAKPiArCSAgTGVnYWN5
+IFdheWxhbmQgRUdMX1dMX2JpbmRfd2F5bGFuZF9kaXNwbGF5IHN1cHBvcnQuCj4gKwo+ICBtZW51
+Y29uZmlnIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOQ0wKPiAgCWJvb2wgIk9wZW5DTCBzdXBwb3J0
+Igo+ICAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9NRVNBM0RfTExWTQo+IGRpZmYgLS1naXQgYS9w
+YWNrYWdlL21lc2EzZC9tZXNhM2QubWsgYi9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsKPiBpbmRl
+eCA0MjY5M2NlOTI4Li45YzBlNWQ3MjU2IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21l
+c2EzZC5tawo+ICsrKyBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+IEBAIC0yMDksNiArMjA5
+LDkgQEAgZW5kaWYKPiAgaWZlcSAoJChCUjJfUEFDS0FHRV9XQVlMQU5EKSx5KQo+ICBNRVNBM0Rf
+REVQRU5ERU5DSUVTICs9IHdheWxhbmQgd2F5bGFuZC1wcm90b2NvbHMKPiAgTUVTQTNEX1BMQVRG
+T1JNUyArPSB3YXlsYW5kCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX0xFR0FDWV9CSU5E
+X1dBWUxBTkRfRElTUExBWSkseSkKPiArTUVTQTNEX0NPTkZfT1BUUyArPSAtRGxlZ2FjeS13YXls
+YW5kPWJpbmQtd2F5bGFuZC1kaXNwbGF5Cj4gK2VuZGlmCj4gIGVuZGlmCj4gIAo+ICBNRVNBM0Rf
+Q09ORl9PUFRTICs9IFwKPiAtLSAKPiAyLjQzLjAKPiAKPiAKCkNoZWVycywK4oCUQWRyacOhbgo=
 
-- From https://wpewebkit.org/security/WSA-2025-0006.html
-  CVE-2025-43272, CVE-2025-43342, CVE-2025-43356, CVE-2025-43368
+--KLrymaXyER2JKP0W
+Content-Type: application/pgp-signature; name="signature.asc"
 
-- From https://wpewebkit.org/security/WSA-2025-0005.html
-  CVE-2025-31273, CVE-2025-31278, CVE-2025-43211, CVE-2025-43212,
-  CVE-2025-43216, CVE-2025-43227, CVE-2025-43228, CVE-2025-43240,
-  CVE-2025-43265, CVE-2025-6558
+-----BEGIN PGP SIGNATURE-----
 
-Removed patch 0001 which is included in this release.
+iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCaZxSPgAKCRCRxVnb5MkS
+OyN2AJ4yLI4u+R/U7etB8D1NJSp6u8tgyACfR3v00hTG0VqcPjUOTG47y2CLRcc=
+=pYFK
+-----END PGP SIGNATURE-----
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-[Bernd: bumped to 2.50.5, removed two patches originally added by Adrian
- which were added to upstream version 2.50.2]
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch | 44 ----------------------
- package/wpewebkit/wpewebkit.hash                   |  8 ++--
- package/wpewebkit/wpewebkit.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 49 deletions(-)
+--KLrymaXyER2JKP0W--
 
-diff --git a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-deleted file mode 100644
-index 8432543e07..0000000000
---- a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 94acd1ce0ff2860b19f22ab2d386d7711c9699b7 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Tue, 8 Jul 2025 21:46:44 +0300
--Subject: [PATCH] [WPE] Fix the build with USE_SKIA_OPENTYPE_SVG=ON and
-- USE_SYSPROF_CAPTURE=OFF
--
--Unreviewed build fix.
--
--When backporting 287859@main the #include for the needed Skia header
--slipped inside an USE(SYSPROF_CAPTURE) guard. This moves the guards
--and #include statements to their correct places.
--
--* Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp:
--
--Canonical link: https://commits.webkit.org/290945.273@webkitglib/2.48
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--Upstream: https://github.com/WebKit/WebKit/commit/943d05f0c9b03c053a456c90c2a8817c1f679711
-----
-- Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
--index a06e33fd04f8..5fb245ce0b66 100644
----- a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
--+++ b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
--@@ -43,11 +43,12 @@
-- #include <skia/core/SkGraphics.h>
-- #endif
-- 
---#if USE(SYSPROF_CAPTURE)
---#include <wtf/SystemTracing.h>
-- #if USE(SKIA_OPENTYPE_SVG)
-- #include <skia/modules/svg/SkSVGOpenTypeSVGDecoder.h>
-- #endif
--+
--+#if USE(SYSPROF_CAPTURE)
--+#include <wtf/SystemTracing.h>
-- #endif
-- 
-- namespace WebKit {
---- 
--2.50.1
--
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 332fd9deaa..60a51c3e49 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.48.3.tar.xz.sums
--md5  2d3b7fa3c62886546f918fcc289cabbe  wpewebkit-2.48.3.tar.xz
--sha1  8a90b9ff8809c99c306defc1a08e50a31a09c590  wpewebkit-2.48.3.tar.xz
--sha256  807571f07e87823b8fb79564692c9b1ef81ee62edbf51345a15bd0e7e1f2e07b  wpewebkit-2.48.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.50.5.tar.xz.sums
-+md5  1d81485379005cca0236a278706f194f  wpewebkit-2.50.5.tar.xz
-+sha1  dd56b76eff8ba157a0291c0b61220666eed59313  wpewebkit-2.50.5.tar.xz
-+sha256  de4bfd20bfc921cdfc77e839ee4da84e2674bcb58b2f916172978d62fa115fc2  wpewebkit-2.50.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 31aba2a0b9..03deb6e991 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # The middle number is even for stable releases, odd for development ones.
--WPEWEBKIT_VERSION = 2.48.3
-+WPEWEBKIT_VERSION = 2.50.5
- WPEWEBKIT_SITE = https://wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+--===============6496128227512061237==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6496128227512061237==--
