@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF75CEC112B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 20:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22C64EC1136
+	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 20:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 836F760A9F;
-	Mon, 23 Feb 2026 20:41:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 178FD60B1E;
+	Mon, 23 Feb 2026 20:47:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ghkLgHsDdh44; Mon, 23 Feb 2026 20:41:54 +0000 (UTC)
+ id hL53-Gg_c5ZU; Mon, 23 Feb 2026 20:47:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A94C860AB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1B2260AD7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771879314;
-	bh=y70oTPigpZ6EAUMywUX5MHcwkA3lPH+aWOHqSKWWJGU=;
+	s=default; t=1771879676;
+	bh=QhEMsA4/kUeLy+1zhUvr1vGwmpOqLSNoa6VkZmOnPy4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DT0iNxsTd0gtqb7iLsEv6m4uUplZyriFA0wzOFTeJs/k4zznCBVMQRLOA8rFN8udI
-	 mdG227Eg/VNLipaVhk9Cj9lauUxMdlQDzC1Sy2KIV9SJy1bPn6jzJhku5qLzyoq11H
-	 KTqvikgluDU+6Zn4WqIRUtF6s03ZFS8w1hUtZt4aUQkm0KWJ48Ltg5uyNVbER1rXA4
-	 KUo9Mo1rWSyHIVUwvI0E64VTNdIjtgT7zwrF+aeJhsw7GPKTqNWZT35HhcDrGSgjpf
-	 9NHIzZfW9Wd6eiYKfwo3GBbn94FjjOpD8QfHzkp0T5wK6qUHXeZYgMdpOE9YviIQLB
-	 KvbLnV/eeGH5A==
+	b=LzcDjUGQXgrYGdC8NsqawKTia6W0lF90G1yzxIHzQJpjLN2IKoxvl6tAHArcNubxc
+	 F51Ewwf5S3KQ/VSXJUdQ5v1gyrOVWxjyEHi/pr5MLvOAYKOoLaun8JpE82ij6mfGSU
+	 VrSOjk75Js3QFa7M57KAZ2tL8G9P6rwJk2UokStcB7bFDIYCmARohVKO/sr3UsLlRg
+	 OhPlPd2kI2JQAKR7jddm5HWPKA8edJg0xtCBi998HxiZ9WXgh/e6V98FuSjIkKw2/P
+	 1Gb2SEzOvJ8t4NnUl3QVuysaDk2zT579jOGBGAY2sFa6b7e93MbqPVYZnIDAHx455w
+	 N3FTH4+nBXkvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A94C860AB3;
-	Mon, 23 Feb 2026 20:41:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1108B249
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:41:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1B2260AD7;
+	Mon, 23 Feb 2026 20:47:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C7E9237
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3F7260AB3
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:41:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41EEE838DB
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:47:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LUsHAEuXA1nU for <buildroot@buildroot.org>;
- Mon, 23 Feb 2026 20:41:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XJEC9W7LLT12 for <buildroot@buildroot.org>;
+ Mon, 23 Feb 2026 20:47:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3524560A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80A6D80EDB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3524560A9F
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:41:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80A6D80EDB
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 20:47:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04ED887139; Mon, 23 Feb 2026 20:23:54 +0000 (UTC)
+ id 6E05887142; Mon, 23 Feb 2026 20:47:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 23 Feb 2026 21:03:08 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 603b0350b67201cd9e21f45be00dc04fece26d2d
-X-Git-Newrev: 347fd878d3071b373e90c194d6b394f08bcd4bda
+Date: Mon, 23 Feb 2026 21:44:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d27aad788d679d2a828a6bd2cb97854462201c4c
+X-Git-Newrev: 421b5545f8110faf2de9b2165956d9d897f483fe
 X-Patchwork-Hint: ignore
-Message-Id: <20260223202354.04ED887139@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gawk: bump to version
- 5.4.0
+Message-Id: <20260223204753.6E05887142@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/snort: Fix build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +76,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/347fd878d3071b373e90c194d6b394f08bcd4bda
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/421b5545f8110faf2de9b2165956d9d897f483fe
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-release notes:
-https://cgit.git.savannah.gnu.org/cgit/gawk.git/tree/NEWS?h=gawk-5.4.0
+Fixes:
+https://autobuild.buildroot.net/results/3b9/3b92d275a32721bd2cbb10e15c392054dfd42c63/
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gawk/gawk.hash | 4 ++--
- package/gawk/gawk.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/snort/0009-gcc-15-fix.patch | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-index b658359257..35524c7742 100644
---- a/package/gawk/gawk.hash
-+++ b/package/gawk/gawk.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gawk/gawk-5.3.2.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gawk/gawk-5.4.0.tar.xz.sig
- # Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
--sha256  f8c3486509de705192138b00ef2c00bbbdd0e84c30d5c07d23fc73a9dc4cc9cc  gawk-5.3.2.tar.xz
-+sha256  3dd430f0cd3b4428c6c3f6afc021b9cd3c1f8c93f7a688dc268ca428a90b4ac1  gawk-5.4.0.tar.xz
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 40b0672da2..10ca336844 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GAWK_VERSION = 5.3.2
-+GAWK_VERSION = 5.4.0
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk
+diff --git a/package/snort/0009-gcc-15-fix.patch b/package/snort/0009-gcc-15-fix.patch
+new file mode 100644
+index 0000000000..227ad5ffc5
+--- /dev/null
++++ b/package/snort/0009-gcc-15-fix.patch
+@@ -0,0 +1,36 @@
++Fix build with gcc-15.x
++
++Adapted from: https://lists.openembedded.org/g/openembedded-devel/topic/meta_oe_patch_2_8_snort/112466576
++
++Upstream-Status: Backport [resolved in snort3 https://github.com/snort3/snort3/commit/c3cc27355ac302bd24ee3e9d613166898ec2be64]
++
++Signed-off-by: Martin Jansa <martin.jansa@gmail.com>
++
++Downloaded from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/net-analyzer/snort/files/snort-2.9.20-gcc-15-fix.patch?id=410cb3ac09ab3d55e96876634c4d58005d9ead89
++
++Upstream: https://github.com/snort3/snort3/commit/c3cc27355ac302bd24ee3e9d613166898ec2be64
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++--- a/src/dynamic-preprocessors/dcerpc2/spp_dce2.c
+++++ b/src/dynamic-preprocessors/dcerpc2/spp_dce2.c
++@@ -160,7 +160,7 @@ static void DCE2_ReloadSwapFree(void *);
++ static void DCE2_AddPortsToPaf(struct _SnortConfig *, DCE2_Config *, tSfPolicyId);
++ static void DCE2_ScAddPortsToPaf(struct _SnortConfig *, void *);
++ static uint32_t max(uint32_t a, uint32_t b);
++-static uint32_t DCE2_GetReloadSafeMemcap();
+++static uint32_t DCE2_GetReloadSafeMemcap(tSfPolicyUserContextId pConfig);
++ 
++ static bool dce2_file_cache_is_enabled = false;
++ static bool dce2_file_cache_was_enabled = false;
++--- a/src/preprocessors/HttpInspect/include/file_decomp_PDF.h
+++++ b/src/preprocessors/HttpInspect/include/file_decomp_PDF.h
++@@ -80,6 +80,6 @@ fd_status_t File_Decomp_Init_PDF( fd_session_p_t SessionPtr );
++ 
++ fd_status_t File_Decomp_End_PDF( fd_session_p_t SessionPtr );
++ 
++-fd_status_t File_Decomp_PDF();
+++fd_status_t File_Decomp_PDF( fd_session_p_t SessionPtr );
++ 
++ #endif /* FILE_DECOMP_PDF_H */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
