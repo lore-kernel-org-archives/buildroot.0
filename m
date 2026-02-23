@@ -4,103 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94384EA4FC4
-	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 14:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3349EA4FBA
+	for <buildroot@archiver.kernel.org>; Mon, 23 Feb 2026 14:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 388D441AAA;
-	Mon, 23 Feb 2026 14:18:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B68C940DB6;
+	Mon, 23 Feb 2026 14:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oxrJvbRZ59ZI; Mon, 23 Feb 2026 14:18:14 +0000 (UTC)
+ id nLABiTEQwwsw; Mon, 23 Feb 2026 14:18:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B30E41AAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C366B41ADF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1771856294;
-	bh=wo3T27sVyRjInZ8UaX2kQs2xJ3CaoHi0QG1DkPZDaDI=;
+	s=default; t=1771856297;
+	bh=w5QvTSrPtDkrGy/qPpKq4UwHFSuHBv/oxvNx2dcGczE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=T5feI2bp2Z13P87sPqhBh7ZTZJgWGu7WSV8kSkc3n/sojiVZBl9uPXza+RhRBVFpm
-	 uBTSQIKbctChZd/BdEh6rarsVUTCXsPtPZckYBThjAIV5Hb16aovgG9IG+b5bEnufA
-	 DlnuG/k44Riq2nWbVmlNMT7vjNBGVp2fYnZeSb7tF8VqPaLC8Mc2El2nbuJxO5XV9f
-	 LGksfW2o1kvJrnBk5O3dIB7/xZBsmjiXH6r+Z23rrjyd4sakWyqA27Wr3dYD+vlCuD
-	 ocPrelmJWNpo/sDh2ivxBRH+pcfXiUxaL6PQ4jBFLXzk/h1HAB6eVuVwEOfmNNs7uu
-	 X4bF+ios8SBrQ==
+	b=suYzmXCo47GHrqZoi6Wm0Rs2LRCdXKrA4SzSIk+xYoxe1DqVIT4lhslSjibpLFHep
+	 yuZBe5gb1EanEorftLgLWWq2xwOzYXiDhrv98mMSYMlYAxAuhX7X0E301C9utOyX6/
+	 4iXqeaajXtVB9mnY93bAlU38tXxk7T8QD96XUVjzgw+1DlzoXYcwBB4H+vmGwGDx2L
+	 2gdDhZWtoNH0RaDmO82LflqkB8xrqq8jrjMSMZjmyuaJN9sw9TpvEyz2Pb3un5VZEY
+	 A1cpU/qiOU9kotNCyiN4K9q+6KvVcio9k4KGyR25E7p7UFHgP9/OFfazmcp14HPWqN
+	 b+MJICaB+ZZcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B30E41AAC;
-	Mon, 23 Feb 2026 14:18:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C366B41ADF;
+	Mon, 23 Feb 2026 14:18:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 247361CE
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 14:18:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C2525249
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 14:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09F0040A08
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 14:18:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEF4140A39
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 14:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fDS4skH-SNpR for <buildroot@buildroot.org>;
- Mon, 23 Feb 2026 14:18:11 +0000 (UTC)
+ id ENCHZ3K3t0w6 for <buildroot@buildroot.org>;
+ Mon, 23 Feb 2026 14:18:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E62241A4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E62241A4F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 71A7141AAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71A7141AAA
 Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6E62241A4F
- for <buildroot@buildroot.org>; Mon, 23 Feb 2026 14:18:06 +0000 (UTC)
-X-CSE-ConnectionGUID: YpaaD5VPRECQMO9WXpbp/g==
-X-CSE-MsgGUID: fhgmX3LyQ7KSbKrIPlZ6rQ==
-Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 71A7141AAA
+ for <buildroot@buildroot.org>; Mon, 23 Feb 2026 14:18:07 +0000 (UTC)
+X-CSE-ConnectionGUID: X7nL/eAGQgixIdpsRSp+YQ==
+X-CSE-MsgGUID: 7F4DQm7qS2ysmZ2CdtmV1A==
+Received: from unknown (HELO opfedv3rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 23 Feb 2026 15:18:04 +0100
+ 23 Feb 2026 15:18:06 +0100
 Received: from unknown (HELO OPE16NORMBX503.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 15:18:04 +0100
+ ([x.x.x.x]) by opfedv3rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 15:18:06 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX503.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Mon, 23 Feb 2026 15:18:02 +0100
+ Mon, 23 Feb 2026 15:18:05 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 23 Feb 2026 15:18:02 +0100
-X-CSE-ConnectionGUID: AUwNpu4YTgKIhhMrYozmOw==
-X-CSE-MsgGUID: r6Ld2PlbQuyyCb1PG2Z7Mw==
-X-IronPort-AV: E=Sophos;i="6.21,306,1763420400"; d="scan'208";a="396029191"
+ Mon, 23 Feb 2026 15:18:04 +0100
+X-CSE-ConnectionGUID: naZtW6ZPQpiPoxNw0zccQA==
+X-CSE-MsgGUID: 2KjDRVLgTnWoIwS5Mk9W7w==
+X-IronPort-AV: E=Sophos;i="6.21,202,1763420400"; d="scan'208";a="395722999"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Mon, 23 Feb 2026 15:17:47 +0100
-Message-ID: <4991400fea4d0acfcca7062c0df172c0e914ea93.1771856260.git.yann.morin@orange.com>
+Date: Mon, 23 Feb 2026 15:17:48 +0100
+Message-ID: <4a23d0cf09f1c12e1a93552b59113153b2078511.1771856260.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1771856259.git.yann.morin@orange.com>
 References: <cover.1771856259.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX608.corporate.adroot.infra.ftgroup
- (10.115.27.32) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX504.corporate.adroot.infra.ftgroup
+ (10.115.26.28) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
  (10.115.26.27)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1771856286; x=1803392286;
+ t=1771856287; x=1803392287;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=b4T6ildXFBioLQZPqJ3m/91Nm2IXQ1nxlIJ+Hm0zCdI=;
- b=NronWY/vCeqP4sDTWgbPSRKecELwNx03vrQ08DnwkTkyU73K2Yyp5aXo
- qjNk+7GqEJgKhLP2+gOHXGocbBUq/CvUlxelo/uypeFw8dL+XGh5S9YPJ
- ZwNSrDSx0pHwV32ejzVy0t/jHqQiwF6UeSk9gTP0xebBAP4GW3j5HY/LP
- ib7IbMy9HiLdkcpZk6X0nboo24ThPip71xU8N+P8gjnUkbQnVaqrCibBG
- IEAzErjI4ybw89JwvnqBLUS5MY16eoeuu7z/Ll/ixRB4GexQFfPEfRylp
- Y+VLpuB5c7Vt/MsmCx3zLfEQE+DxeHCtmkebb54Zj+CrYLgigXBxHL5nx
+ bh=b+TwwY03VkG0rHEtgB2PX/+XMM/mbs2UhQ/0CnvH/cg=;
+ b=eC70Q61eRsdkWAR4H/u1hpbSP6puUYTWsh1jusyEfJmX0CtC3Fuy6Rl2
+ fUwyp+w8/2LRhe8qMVf8NrAylgZhIw3sREOtdv91um9z+nbWJVfE9p9eq
+ yaFK26dfAIPq2e1Mh0wBN9Q/SgRV7oc/GLJzTC7S/LowaCUf/oKevx7Vm
+ Eg5IQsyliQN93OyWWy05/O5U3igOSAMdZEXGknV6VFsErlnrwqJNzzMOg
+ M9KrOaxIInlNyavodmoY2e/yx5eZebjkJOSfwxF1JzfOsgqVfhL6codzJ
+ myjVjl/m/O1xoyLRKlqX+g0LfNHIzPDLoTGP2jjlZAcxmK2czrxxjNywI
  w==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=NronWY/v
-Subject: [Buildroot] [PATCH 7/8 v2] package/mosquitto: add options for
- password and ACL plugin
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=eC70Q61e
+Subject: [Buildroot] [PATCH 8/8 v2] package/mosquitto: add option to enable
+ the persist-sqlite plugin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,83 +119,61 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Until version 2.0.x, support for using static password or ACL files, was
-builtin to the broker. With version 2.1.x, two new plugins have been
-introdiuced to replace the builtin support, which is now deprecated and
-will get removed in the next version.
-
-Add two new configuration ooptions for those plugins.
-
-We decded to do a single commit, rather than one per option, because
-they are relatively tied together (ACL needs passwords, at least).
-
-We also choose to make those options enabled by default, because the
-traditional way to configure mosquitto is to use static files for
-authentication and authorization, and the builtin support if now
-deprecated in favour for the plugins.
+That plugin can be used instead of the builtin support to persist the
+mosquitto state across restarts.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/mosquitto/Config.in    | 14 ++++++++++++++
- package/mosquitto/mosquitto.mk | 14 ++++++++++++--
- 2 files changed, 26 insertions(+), 2 deletions(-)
+ package/mosquitto/Config.in    | 7 +++++++
+ package/mosquitto/mosquitto.mk | 8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 3df6131a5d..f7bd5a01b8 100644
+index f7bd5a01b8..b57abbe982 100644
 --- a/package/mosquitto/Config.in
 +++ b/package/mosquitto/Config.in
-@@ -88,6 +88,20 @@ config BR2_PACKAGE_MOSQUITTO_BROKER_HTTP_API
- 	  Add support for simple webserver as a listener to serve
- 	  some of the HTTP API.
+@@ -109,6 +109,13 @@ config BR2_PACKAGE_MOSQUITTO_BROKER_DYNAMIC_SECURITY_PLUGIN
+ 	  Build and install the dynamic security plugin for
+ 	  mosquitto broker onto target.
  
-+config BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_STATIC_PASSWD
-+	bool "static password file plugin"
-+	default y
++config BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_PERSIST_SQLITE
++	bool "persist-sqlite plugin"
++	select BR2_PACKAGE_SQLITE
 +	help
-+	  Add support for authentication based on static files. using
-+	  a plugin rather than the legacy builtin support.
++	  Add the persist-sqlite plugin, to persist the broker
++	  state across restarts.
 +
-+config BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_STATIC_ACL
-+	bool "static ACL file plugin"
-+	default y
-+	help
-+	  Add support for authorization (ACL) based on static files,
-+	  using a plugin rather than the legacy builtin support.
-+
- config BR2_PACKAGE_MOSQUITTO_BROKER_DYNAMIC_SECURITY_PLUGIN
- 	bool "dynamic security plugin"
- 	select BR2_PACKAGE_OPENSSL
+ endif
+ 
+ comment "mosquitto broker needs a toolchain w/ dynamic library"
 diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index ffd9c19e30..4d0f51176c 100644
+index 4d0f51176c..0650cfa37a 100644
 --- a/package/mosquitto/mosquitto.mk
 +++ b/package/mosquitto/mosquitto.mk
-@@ -95,12 +95,22 @@ MOSQUITTO_CONF_OPTS += \
- 	-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+@@ -96,7 +96,6 @@ MOSQUITTO_CONF_OPTS += \
  	-DWITH_BROKER=ON \
  	-DWITH_PLUGINS=ON \
--	-DWITH_PLUGIN_ACL_FILE=ON \
--	-DWITH_PLUGIN_PASSWORD_FILE=ON \
  	-DWITH_PLUGIN_EXAMPLES=OFF \
- 	-DWITH_PLUGIN_PERSIST_SQLITE=OFF \
+-	-DWITH_PLUGIN_PERSIST_SQLITE=OFF \
  	-DWITH_PLUGIN_SPARKPLUG_AWARE=OFF
  
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_STATIC_PASSWD),y)
-+MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_PASSWORD_FILE=ON
+ ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_STATIC_PASSWD),y)
+@@ -117,6 +116,13 @@ else
+ MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_DYNAMIC_SECURITY=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_PERSIST_SQLITE),y)
++MOSQUITTO_DEPENDENCIES += sqlite
++MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_PERSIST_SQLITE=OM
 +else
-+MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_PASSWORD_FILE=OFF
++MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_PERSIST_SQLITE=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_PLUGIN_STATIC_ACL),y)
-+MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_ACL_FILE=ON
-+else
-+MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_ACL_FILE=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER_DYNAMIC_SECURITY_PLUGIN),y)
- MOSQUITTO_CONF_OPTS += -DWITH_PLUGIN_DYNAMIC_SECURITY=ON
- else
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ MOSQUITTO_CONF_OPTS += -DWITH_SYSTEMD=ON
+ MOSQUITTO_DEPENDENCIES += systemd
 -- 
 2.34.1
 
