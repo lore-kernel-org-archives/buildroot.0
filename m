@@ -1,74 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E1C7FD377D
-	for <buildroot@archiver.kernel.org>; Wed, 25 Feb 2026 17:59:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0503EFD23F
+	for <buildroot@archiver.kernel.org>; Wed, 25 Feb 2026 19:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9613B61563;
-	Wed, 25 Feb 2026 17:59:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 712D0810E5;
+	Wed, 25 Feb 2026 19:11:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Qmt09Uj45K3; Wed, 25 Feb 2026 17:59:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T7oQmnUpcc7r; Wed, 25 Feb 2026 19:11:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6E1261565
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E62C80FB2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772042385;
-	bh=MpvaCTQOyRHASiHwvUxzLsH74y2xrQ4N6oN82Tj+ayg=;
+	s=default; t=1772046718;
+	bh=mwZ+QzfvE7qCVeyrj+iWUrg5rdC/lsnW4kKfYnNt40M=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=LCnADYPGSv+FTEDx7p70AUsj8B4UXd3xzjmFM7BePuXrEqKfDmJJ/wkef9jJBRlGa
-	 2uf/NhMd3z/IhWZDJoF1EQ7PFkkkpy4Az4DiH9V3KNSdY4TlWLuidk9v6HXl2bL11v
-	 yjtQRJLCMHX/2Yr3Q0wOfjXdiNCJ6gDg42HeG/7sMf4h6iIMmSHc3mKhc/ymAaaIQ5
-	 a3/HQ7Ft/5Wn8X7Woij/o5I9xljC3fjNQ8OcF/3fGOCIh2zy+6yXAaVaX1Zlk1cDTG
-	 A3yuyunEvESdqEt9m+l4DdAOm5TzW/ccNhVGD5wY/TIiODyAfE5Rove7xc+jwe4ixH
-	 VWLmL72fCuzpg==
+	b=Ee3yGDSnjGm9sF27NJtelBuxSj78z02lk4BEt7HBMJFUlpQ57i8qoC0pzIEkHTJQh
+	 sHMXlRA3QrPFW3L8M6ZxSf/hjHyoQrfaMTKy2mhEX7HOZHCo7uboFe+vU6V01N1li6
+	 8qAEDKEhrJF6yrK1lHio54Ki2zYRqE5lJpg2K/FnwtzKgRhsNiGD3UYz1dU1VYUYSd
+	 yp22OZzzAsm+E5pHvc0mCJ1DKxkzdRHItaSRZqKyI8doZmA+TPuyRZdd9IH/JjJfQF
+	 yGKzXBWnZvqCagF8gqyjiats5YbaUy/JawyjzudE1ISVHZuVknq7gGUHXZOZTtJsc4
+	 4h+jRYXIZZQGQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6E1261565;
-	Wed, 25 Feb 2026 17:59:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E62C80FB2;
+	Wed, 25 Feb 2026 19:11:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D33523D
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 17:59:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B22A23D
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 19:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52F7761565
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 17:59:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3163460FDB
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 19:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JUpdLG_-2CAX for <buildroot@buildroot.org>;
- Wed, 25 Feb 2026 17:59:42 +0000 (UTC)
-X-Greylist: delayed 444 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 25 Feb 2026 17:59:40 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0229C61568
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0229C61568
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.233.101.22;
- helo=leonov.paulk.fr; envelope-from=paulk@sys-base.io; receiver=<UNKNOWN> 
-Received: from leonov.paulk.fr (leonov.paulk.fr [185.233.101.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0229C61568
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 17:59:40 +0000 (UTC)
-Received: from laika.paulk.fr (12.234.24.109.rev.sfr.net [109.24.234.12])
- by leonov.paulk.fr (Postfix) with ESMTPS id B13A71F80041
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 17:52:12 +0000 (UTC)
-Received: by laika.paulk.fr (Postfix, from userid 65534)
- id 55306B2358A; Wed, 25 Feb 2026 17:52:11 +0000 (UTC)
-Received: from shepard (unknown [192.168.1.65])
- by laika.paulk.fr (Postfix) with ESMTP id 216BBB2357B;
- Wed, 25 Feb 2026 17:51:58 +0000 (UTC)
-From: Paul Kocialkowski <paulk@sys-base.io>
+ id WvFP1hw-B8wr for <buildroot@buildroot.org>;
+ Wed, 25 Feb 2026 19:11:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 638AD60D8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 638AD60D8B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 638AD60D8B
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 19:11:54 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 82B55A4C2700;
+ Wed, 25 Feb 2026 20:11:51 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53240)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vvKIZ-000000000Uh-1k7D;
+ Wed, 25 Feb 2026 19:11:51 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Pedro Aguilar <paguilar@paguilar.org>,
- Paul Kocialkowski <paulk@sys-base.io>
-Date: Wed, 25 Feb 2026 18:51:38 +0100
-Message-ID: <20260225175138.2965145-1-paulk@sys-base.io>
-X-Mailer: git-send-email 2.53.0
+Cc: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 25 Feb 2026 20:11:50 +0100
+Message-ID: <20260225191150.487199-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +++++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1772046711;
+ bh=DI1ucpy732sNpnJtA3wlWNDZiWKMqdb38DD/HUa9L3E=;
+ h=From:To:Cc:Subject:Date:From;
+ b=S9S8kzpayWPttyEcIXe/somQvJstZddc8XFJWXTP+ci3NHzobvek3HZrJqd8lfcDI
+ 4D0Sh4gcaV2fHbyOSbCQrY1GbeB747fD7OTXiM/sJNGMmxYJiPO1GPGivV9C3TFoQa
+ idXFiI2bo1w4+4jJ73imfq61PRIrKuQ62jFIKPcbrt0PXDSsIY9qWWj3yXi5Hz6NV9
+ GqMs+JHYFjhEEXC1yiNc1C9ABnH9vNiMr36/+pTXvyxgQdufdN869JQKnBCGwoPII6
+ BKKCZAev0mBJ9f1SVuG55Y0bWs5JDqQgqvu86T+xHv96IhNBkR9hDG7g220YB86ojS
+ BabBKBKRCEPEg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=sys-base.io
-Subject: [Buildroot] [PATCH] packages/libunistring: bump to version 1.4.2
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=S9S8kzpa
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: security bump version to 26.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,43 +98,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This minor release contains a fix for building with host glibc 2.43,
-which fails otherwise.
+https://lists.freedesktop.org/archives/mesa-announce/2026-February/000840.html
 
-Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libunistring/libunistring.hash | 4 ++--
- package/libunistring/libunistring.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index f86b6f94b02b..ef2f3da34147 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 10cfd8f719..b9acabe325 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 26.0.0
++MESA3D_HEADERS_VERSION = 26.0.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 958a99ec9f..898d1c6897 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.xz.sig
--sha256  67d88430892527861903788868c77802a217b0959990f7449f2976126a307763  libunistring-1.4.1.tar.xz
-+# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.xz.sig
-+sha256  5b46e74377ed7409c5b75e7a96f95377b095623b689d8522620927964a41499c  libunistring-1.4.2.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 1abbfde6da9e..57333a35bffc 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-announce/2026-February/000838.html
+-sha256  2a44e98e64d5c36cec64633de2d0ec7eff64703ee25b35364ba8fcaa84f33f72  mesa-26.0.0.tar.xz
+-sha512  d39d190d0a17306f0aa69033e38dd8cf458dbf8da483b768841e2dc681dd670735999b212fbe0b29be839702a20750c87d6587bd925dca10693950830a17cd55  mesa-26.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2026-February/000840.html
++sha256  bb5104f9f9a46c9b5175c24e601e0ef1ab44ce2d0fdbe81548b59adc8b385dcc  mesa-26.0.1.tar.xz
++sha512  d47072257035acfa8a5594c0cda831b4e5178169dea8a06c6657268a441e32271f8798486e837cea23f35ce3f0b4b9520a4ea4ed26b0e1267b02da4c649bc9f9  mesa-26.0.1.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 42693ce928..325756d92e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBUNISTRING_VERSION = 1.4.1
-+LIBUNISTRING_VERSION = 1.4.2
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 26.0.0
++MESA3D_VERSION = 26.0.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
