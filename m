@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E55BFFD45F1
-	for <buildroot@archiver.kernel.org>; Wed, 25 Feb 2026 21:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83909FD45F1
+	for <buildroot@archiver.kernel.org>; Wed, 25 Feb 2026 21:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CAEA81170;
-	Wed, 25 Feb 2026 21:10:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EAfxwQ11dJIR; Wed, 25 Feb 2026 21:10:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E79681179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772053822;
-	bh=E/DxKwaF+a+f1KKLfzVIZdKEt7SMnCvObTLa0fg5clQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LRfG6A9IJsLEe8+8XVTUx1dl3qphPIvqTHqQylu3A2r3PPDp5VHlyQLWYtwFAnejo
-	 mR6+D9pAUzRqg144zuXsVijcgvNEqNfyUQXNV779gYLA4BxXu6sXceSzxPtUbOKL66
-	 Vpf37rRP9eI/kzGhkdmK0sMNBYc+ix3tl+xidYZoRl6g5/wY+bympI3psQ1mOUG/Xd
-	 kOEpBho/NJv9KR/X6iLMYLodh3BFEy0EHBoHE124GLLTFuChufX9JJp85qT+oEAvYH
-	 nvMC4VaUUqhjRd7lbJOZK09SfnP2e8EMPOxoeX80aBT3m1A4zNrAwtZjlp3N7+U1+7
-	 FmEeSQ3JtiEpA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E79681179;
-	Wed, 25 Feb 2026 21:10:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 96E8423D
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 21:10:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94E9861733
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 21:10:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4621361614;
+	Wed, 25 Feb 2026 21:10:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2BZlWl7SduHF for <buildroot@buildroot.org>;
- Wed, 25 Feb 2026 21:10:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A23D861614
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A23D861614
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 21:10:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F38C58747F; Wed, 25 Feb 2026 21:10:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 25 Feb 2026 21:56:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 45e009ab4ad8c41365d02daaf2074677ca92d46d
-X-Git-Newrev: 49e180d3d55fcf83f927fb7b5e168aa8ced28b15
-X-Patchwork-Hint: ignore
-Message-Id: <20260225211015.F38C58747F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/containerd: security bump to v2.0.7
+ id kZShtby4DW8L; Wed, 25 Feb 2026 21:10:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73A8461733
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772053829;
+	bh=4Ur5MHypo0nJbw2M3FkJ3LrJSFl6TUrcr17TRuXnoY0=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=RCiqO09VooCYzxWhd1F301f0ltnMfir/wtinuSkJav+eA63UFkNf0rITc9M2whl8W
+	 HCQ4BMt3hMOJTv7c8JPe39I4VMbfpt9EE8aYTeGIkrTR11e86JpzNTNP8NQqrN5oId
+	 lA5CL9tk482+nG9Xjo2/h7ZZdjgUy5PrDFDUTPhBZ0CdG6XfUZlQJTa2NT8iD96nR3
+	 r7MGsPbHIH1VotPAU8dQgV8l428EAi76TGnfPzZHopbABwjDT4/dpzCe/YDR5HLCft
+	 y6g3m3Scc4Phla5JiVqu0MTFm5mWcFYiJcpG0HLGmFTFUCuyQPsa4SC8ZTZ0S+OD3s
+	 3QHmj8WpnMWtg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73A8461733;
+	Wed, 25 Feb 2026 21:10:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C57CB204
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 21:10:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABCD861733
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 21:10:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WcUvl_JSKF5T for <buildroot@buildroot.org>;
+ Wed, 25 Feb 2026 21:10:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A725B61614
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A725B61614
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A725B61614
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 21:10:26 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 9696C5FFAF;
+ Wed, 25 Feb 2026 22:10:22 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 25 Feb 2026 22:10:22 +0100
+MIME-Version: 1.0
+Date: Wed, 25 Feb 2026 22:10:22 +0100
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+In-Reply-To: <20260225094824.270893-1-thomas.perale@mind.be>
+References: <20260225094824.270893-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <8e32328df393792f01b394205c3428b8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772053824;
+ bh=UJeL60kZbWncFSZnNAIbk2CyAp6PMHaUOshjWiql+qc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=o3NEfV/jkVJRgg9o0Ycj6fFn5aaJWRQkraznmr0LYynWXXcimTYOqbp1tLvcEQBpM
+ VSpajExUXEUwv1s4KONlP5/0eZYLWVenHixIUTN5iMUA/EP35u9x9UQwW17prKO+4H
+ +mkAwiEjwxl+herW8mbNRFQ4DJz4bU090I0Kmcn2Prp5jttCE6XFmAhrxICoUUXLEj
+ /aziaxtHWvbMLReGU/kymOHOKIBXTpD/a+4JsDXhXlnAx58TMMtZeGBqZWbTu5iNfj
+ M9SljPfXMHV+hU/dPBpQOW43xIpDUpalWbXML3P4zXuprRJuMzj6nDgN2fshcL3lSf
+ 6GVRfAVQEHVMg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=o3NEfV/j
+Subject: Re: [Buildroot] [PATCH 1/1] package/containerd: security bump to
+ v2.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,88 +95,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/49e180d3d55fcf83f927fb7b5e168aa8ced28b15
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 25/02/2026 10:48, Thomas Perale via buildroot wrote:
+> For more information on the version bump, see:
+>   - https://github.com/containerd/containerd/releases/tag/v2.0.7
+>   - https://github.com/containerd/containerd/releases/tag/v2.0.6
+>   - https://github.com/containerd/containerd/releases/tag/v2.0.5
+>   - https://github.com/containerd/containerd/releases/tag/v2.0.4
+>   - https://github.com/containerd/containerd/releases/tag/v2.0.3
+[...]
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-For more information on the version bump, see:
-  - https://github.com/containerd/containerd/releases/tag/v2.0.7
-  - https://github.com/containerd/containerd/releases/tag/v2.0.6
-  - https://github.com/containerd/containerd/releases/tag/v2.0.5
-  - https://github.com/containerd/containerd/releases/tag/v2.0.4
-  - https://github.com/containerd/containerd/releases/tag/v2.0.3
-
-Fixes the following vulnerabilities:
-
-- CVE-2024-25621:
-    Versions 2.0.0-beta.0 through 2.0.6 have an overly broad default
-    permission vulnerability. Directory paths `/var/lib/containerd`,
-    `/run/containerd/io.containerd.grpc.v1.cri` and
-    `/run/containerd/io.containerd.sandbox.controller.v1.shim` were all
-    created with incorrect permissions.
-
-    https://www.cve.org/CVERecord?id=CVE-2024-25621
-
-- CVE-2024-40635:
-    A bug was found in containerd prior to versions 2.0.4 where
-    containers launched with a User set as a `UID:GID` larger than the
-    maximum 32-bit signed integer can cause an overflow condition where
-    the container ultimately runs as root (UID 0). This could cause
-    unexpected behavior for environments that require containers to run
-    as a non-root user.
-
-    https://www.cve.org/CVERecord?id=CVE-2024-40635
-
-- CVE-2025-47291:
-    A bug was found in the containerd's CRI implementation where
-    containerd, starting in version 2.0.1 and prior to version 2.0.5,
-    doesn't put usernamespaced containers under the Kubernetes' cgroup
-    hierarchy, therefore some Kubernetes limits are not honored. This
-    may cause a denial of service of the Kubernetes node.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-47291
-
-- CVE-2025-64329:
-    Versions 2.0.0-beta.0 through 2.0.6 contain a bug in the CRI Attach
-    implementation where a user can exhaust memory on the host due to
-    goroutine leaks.
-
-    https://www.cve.org/CVERecord?id=CVE-2025-64329
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 4ec78897d9..0916c603bb 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  472747a7a6b360a0864bab0ee00a8a6f51da5795171e6a60ab17aa80cbd850a2  containerd-2.0.2-go2.tar.gz
-+sha256  2bbf9fedcf4ab31736fcb3ce224ef22610a87da9d53bbd8f6d205710fd849831  containerd-2.0.7-go2.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 2ef70ab5d7..a334f0fdac 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONTAINERD_VERSION = 2.0.2
-+CONTAINERD_VERSION = 2.0.7
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
