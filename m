@@ -1,114 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968B1EFD23A
-	for <buildroot@archiver.kernel.org>; Wed, 25 Feb 2026 09:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E25EFD238
+	for <buildroot@archiver.kernel.org>; Wed, 25 Feb 2026 09:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47CFB4094B;
-	Wed, 25 Feb 2026 09:48:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BEFA83C55;
+	Wed, 25 Feb 2026 09:48:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xOsFxGo70_ri; Wed, 25 Feb 2026 09:48:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dgLAPbHZHzMP; Wed, 25 Feb 2026 09:48:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D5F74096D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66AD483C63
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772012910;
-	bh=mW/E6qmftqb2xw+tL/SscN4IimFoO1zAadpK+FfHVxc=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=DdM5W9WfbZ4Frxr4JSFhF8O1mC7njBjMNKm1mSOYlQp84soXfrFNiJnqqgDmPNz9l
-	 sEa7+UCOv/go4MO5URYkLb2mwA95e8Mc/R6OnGyrUHLVsEAUYmSX2kgdDME7ZV9I4I
-	 JkqT1quGrSIHOFDuyat2GvAcpo5j4qCRAj8EH5VqQCk5wwEpPlwKU/qMkn7yutfaU8
-	 276kd6GmDOZ3RxwE96fCOsTcbRlNFdMBvQycSSaPTLMAg6UaPh4633d7fTRmkXaFL7
-	 hvSv2/Bc4XfZ6e0l56zOI61i9o2Sd6h07FloVl7rUluRTgb7S7/9b7YRFbFosrxWeb
-	 PQg+A6WC40ZjA==
+	s=default; t=1772012911;
+	bh=/49UXzTmVyh8A8fPkKJx2cc6i0+/pk5Eli4UXjIMQLg=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=W0zh9DO7dKowyM0CbdQA93aCE58WJdSQlEAEvC1jIWd5s9IfighTlJfq/OHdfjBdo
+	 fyA0ig3dVVrhUt+NaMUYkNAbhi52JQURqI0pDhYky+TorOpi/DHZUHwJGMXazgD2Oy
+	 tOkkdgT/LL/xDL41O49Tu/i2EGyQEcoQXDqWM5L25n1+WQ0kWMm8SVk1p54KyWbGb+
+	 wXOC3yTmHzFDPfoR7z/fE59S1lQ2+Px1mCEajtPEs1kCVtlgqaLOh9sSXsl8w87SDQ
+	 GDkUZYzAbK2RrgxytjxiMFmjsFKcVNytKWTIoCrLRYf+tBBXns4KMsRwA7YZ0zvWaa
+	 N5A5+hK7Uqidw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D5F74096D;
-	Wed, 25 Feb 2026 09:48:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E27BF23D
- for <buildroot@buildroot.org>; Wed, 25 Feb 2026 09:48:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66AD483C63;
+	Wed, 25 Feb 2026 09:48:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0543523D
+ for <buildroot@buildroot.org>; Wed, 25 Feb 2026 09:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D41F04096D
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF3BB4016F
  for <buildroot@buildroot.org>; Wed, 25 Feb 2026 09:48:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FG2vKXH9jlKn for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3psvKV7aF9gq for <buildroot@buildroot.org>;
  Wed, 25 Feb 2026 09:48:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B9AF34094B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9AF34094B
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B9AF34094B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B9A2F400D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9A2F400D9
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B9A2F400D9
  for <buildroot@buildroot.org>; Wed, 25 Feb 2026 09:48:27 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-4398d1f06caso1028698f8f.0
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-48379a42f76so49559835e9.0
  for <buildroot@buildroot.org>; Wed, 25 Feb 2026 01:48:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1772012905; x=1772617705;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=xB02o9p4k3vaYM7ny0W64ciWiloZ6O7/woI+/KoeeZk=;
- b=QabK/tFIXYEuJFpa2wk/mOi43J4WtKRXjHrlHBUL057VwqHHYvUjbQOsLcgKtx5Lym
- vKRavbFv1/2RlFjM7J0Muaw9HOHt07IvyfWWqEgERsYA/FDWEIrZtEQa4AENoJ3bE0cz
- 1PbZBfR/IUITB/SLmabHmRE23sOqjftP78ONQhplYVFR6r8F55ZRsVSMF+pCIlzb1w+2
- ROMa8JcS6IDhZ/rUX2LiSvTzF5ofljGXNl7dvJe8sOVEjzTKj3Ie4SvuGeou3C/qa3MM
- xw1SILsM4q6nO4oWOHuLyAPR4gTF8hL6WMNyQ2H7XbUXeslcl2WtVkdAYwhU7ljBPx46
- EYjQ==
-X-Gm-Message-State: AOJu0YyRAPijwXZOcCWEwnJx60gypJpjn3AOmjDipRr66jKVF6F/bZ3J
- abyDtBbnRBPjTdiLA9DR5CJWMlKTe92Z9NMer2Y2NIjnRuAo30hK5GmbeZuCA91v7uWmGdaCYGW
- xs0IK
-X-Gm-Gg: ATEYQzxv0JUQD/osctyDTMec0AE4nagyGGCfiNve094ki0rNDEqPq4mYxxMT0gRyvj1
- HCYf8yVz2usQx7xECJmZWi5OHX7UoY998vrL5mrtc85eRVLCXAWEl5tkKyhu+Qzi8iBjiS3QnDK
- FiLfzVKSbRwHN9o3CpFpbHWNPz6CoW8WmImTJ2Ng2f7SIDVell/Z4tG6muMYwtrsF4+Gh3cJu50
- JPjeH3U+0TcKC48U5gjKElWf1llSsIKWTo69QUfWrMtKoJCfPhgpBZe5srmhXG8q1ihFyn3G73l
- 2bA9wo/7x9tpV/Io7Kk2S8XUO/mR2mp5ZTgksnrwVRZP+TcU1sKHREo1KzUxSAHq3rHuJdhBhZx
- btnNjwM9Z7+OLbsryheKDaYhNFX3+n+RVaqts6OvxofZ8FVU+CM8xVh5gnzOrK0OeZsEJ6CX/4x
- CiaD0UiLm2Q8QLk08=
-X-Received: by 2002:a05:600c:8215:b0:477:5ad9:6df1 with SMTP id
- 5b1f17b1804b1-483bef18a2cmr28241785e9.3.1772012905134; 
- Wed, 25 Feb 2026 01:48:25 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=U9gmXmGw0ZFdOqkVKI61f1G+rSGn2Naz6d2DdC1h+ZY=;
+ b=p4WBZiy9ObdgAOJ4y9HeJ2I+ZGnqQCBS6vnZoPWX7cmplvD+LNYfZXoRlpd0ghi4/M
+ 5E/e2fb3PPG30JP31uZ7ZLqCun3yuHoPiRJT/s9ih2CpBE6Htltvkmc981OzU2xLOtf9
+ qgHY+U5MRqRChYIP2whNopG65SNnCIhw+TJl9CTKxt3pLTKEUmuFPrykUnq30ToG3+ns
+ H3r+IzPZ05XwSWFbpdbsv8Jz8MfpjiFhwv+JoTv+bWnUpa4fv3dKBy7oTDkG9WboXHdu
+ j1EtYpZpDspElIPZmsmEqrrcjWshYOOx3bB3q88u1rdRGgaewUW7+deeYSc+0nHpAE1y
+ ugFw==
+X-Gm-Message-State: AOJu0YxElgMyaR2PUmMf3O/7Uqlx6rVGZ6dCmF1AECnEilyuEkDbqb4s
+ 8IhZX36A7rn9moD2ZALjGwiZdTZbJNStQehLv/DZMNoVNg0GuEICBjuEVsXJ30RkJm6a3dy3NQ2
+ LfGzb
+X-Gm-Gg: ATEYQzzQxsoMlAsFKOsIgnZZYEF8M6jOKXAdlkH2yyO3+hidgKL4Ys9ab9thjyubEHN
+ DtdwHCdRqTp5rA5FdTg58FrT7HCDPo6PgB8/SnaYt/ugcQg7sOM2YNnv1kbDi3LVYqv/xD5rU3v
+ 0twBdbUMJ4MBFwtsWGfg71BbcwPpIUcE2yV4UC/lEJPkq/ZNGpN+cqZ7Nym675WMRD/rx7z5jFZ
+ eHDQnHMLpqKLYU0KAJuu+6blZF2wVve8CPgZxpR/jI/zuMiijjuKKxbzGcT8yox+dYtTK0rZU24
+ f+1HEuv6K3DDePkG2Jw2yeB/mEhtJm39Ahcb6tYa2WI2GA8VWzdnEy9rn6vKKxxfqk6HKj5rdFr
+ Go4uP6O9srkCxvCBU963xLFZopKTbJNHxYSk8bGGvbn6/SMw6P9PPAqQTXokJ24Jm5ylihJGb+P
+ +wfi8KGHLWJmoUTvqepclT+MoZhg==
+X-Received: by 2002:a05:600c:3f10:b0:480:4d38:7abc with SMTP id
+ 5b1f17b1804b1-483bef24711mr27307275e9.11.1772012904759; 
+ Wed, 25 Feb 2026 01:48:24 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-483bd72bd66sm55770795e9.11.2026.02.25.01.48.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Wed, 25 Feb 2026 01:48:24 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Christian Stewart <christian@aperture.us>
-Date: Wed, 25 Feb 2026 10:48:24 +0100
-Message-ID: <20260225094824.270893-2-thomas.perale@mind.be>
+Date: Wed, 25 Feb 2026 10:48:23 +0100
+Message-ID: <20260225094824.270893-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260225094824.270893-1-thomas.perale@mind.be>
-References: <20260225094824.270893-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1772012905; x=1772617705; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xB02o9p4k3vaYM7ny0W64ciWiloZ6O7/woI+/KoeeZk=;
- b=b42rcQqqZ8Ek+luOwq0MLEHcjyJRtsv/KUMcANEaODZKN6+Q1XgxCVYDEb/hIkJeOK
- w4qBJqeS+zn6EW7EGGLGy2OxHkVtIkflQM2j5cKBY5WBZu/XRI6cuH8Qena1V+IPGZtW
- JH2LpLtB2PP1rMrPDo7QaEldx+NvGtmM4yLQzODkA9d/mJdvhMxOuX9eUdIKbV3M+YOI
- uNS7vzxSR3Q7GnEmOeescbCpYzpLSMaBAXdRf7ccNPKqFpazDcUv0h+PG0HT2lE/QR8D
- 78TiyqVVuhI4F2qaKo2fMVODASDx34tM2UbbuCxgfx4kMN2a1JrWhBp5I3efR0mb+W70
- s1jw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=U9gmXmGw0ZFdOqkVKI61f1G+rSGn2Naz6d2DdC1h+ZY=;
+ b=CqPPmOW07Tas9ud9P9ZUFm107pzLhI+ghTmxYJ4dTMBqW7YQzWjHKa1j4eBYh0uK2w
+ LbDcYeXi44FcHHIvVJCVD5pcgKmvJ+7ozpEOCdXdpahdJ7FHp06TRVt5b2yDgVJxQPoJ
+ /2eud+RZMUMEXix1tXAPVrADzThIMaisDGiH6VWcYmK0uQcBDgQvYhqkVZYD1LWrJ5eL
+ pujSHGUOuPPKELaf1U1xosx5MLuWJLzM3e74D6tH9HgOo0KKe/ZYZ9a2FqzXbptMECET
+ 6NOqzkrUkOyw2pZhxb7/Vxrp3Px779MFjsOYZYv0ut65TfAJtj4ZLTnSHabnmCHuaibf
+ cP8w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=b42rcQqq
-Subject: [Buildroot] [PATCH] package/wireshark: security bump to v4.4.13
+ header.a=rsa-sha256 header.s=google header.b=CqPPmOW0
+Subject: [Buildroot] [PATCH 1/1] package/containerd: security bump to v2.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,88 +124,77 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 For more information on the version bump, see:
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.13.html
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.12.html
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.11.html
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.10.html
+  - https://github.com/containerd/containerd/releases/tag/v2.0.7
+  - https://github.com/containerd/containerd/releases/tag/v2.0.6
+  - https://github.com/containerd/containerd/releases/tag/v2.0.5
+  - https://github.com/containerd/containerd/releases/tag/v2.0.4
+  - https://github.com/containerd/containerd/releases/tag/v2.0.3
 
 Fixes the following vulnerabilities:
 
-- CVE-2025-11626:
-    MONGO dissector infinite loop in Wireshark 4.4.0 to 4.4.9 and 4.2.0 to
-    4.2.13 allows denial of service
+- CVE-2024-25621:
+    Versions 2.0.0-beta.0 through 2.0.6 have an overly broad default
+    permission vulnerability. Directory paths `/var/lib/containerd`,
+    `/run/containerd/io.containerd.grpc.v1.cri` and
+    `/run/containerd/io.containerd.sandbox.controller.v1.shim` were all
+    created with incorrect permissions.
 
-    https://www.cve.org/CVERecord?id=CVE-2025-11626
+    https://www.cve.org/CVERecord?id=CVE-2024-25621
 
-- CVE-2025-13499:
-    Kafka dissector crash in Wireshark 4.6.0 and 4.4.0 to 4.4.10 allows
-    denial of service
+- CVE-2024-40635:
+    A bug was found in containerd prior to versions 2.0.4 where
+    containers launched with a User set as a `UID:GID` larger than the
+    maximum 32-bit signed integer can cause an overflow condition where
+    the container ultimately runs as root (UID 0). This could cause
+    unexpected behavior for environments that require containers to run
+    as a non-root user.
 
-    https://www.cve.org/CVERecord?id=CVE-2025-13499
+    https://www.cve.org/CVERecord?id=CVE-2024-40635
 
-- CVE-2025-13946:
-    MEGACO dissector infinite loop in Wireshark 4.6.0 to 4.6.1 and 4.4.0
-    to 4.4.11 allows denial of service
+- CVE-2025-47291:
+    A bug was found in the containerd's CRI implementation where
+    containerd, starting in version 2.0.1 and prior to version 2.0.5,
+    doesn't put usernamespaced containers under the Kubernetes' cgroup
+    hierarchy, therefore some Kubernetes limits are not honored. This
+    may cause a denial of service of the Kubernetes node.
 
-    https://www.cve.org/CVERecord?id=CVE-2025-13946
+    https://www.cve.org/CVERecord?id=CVE-2025-47291
 
-- CVE-2026-0959:
-    IEEE 802.11 protocol dissector crash in Wireshark 4.6.0 to 4.6.2 and
-    4.4.0 to 4.4.12 allows denial of service
+- CVE-2025-64329:
+    Versions 2.0.0-beta.0 through 2.0.6 contain a bug in the CRI Attach
+    implementation where a user can exhaust memory on the host due to
+    goroutine leaks.
 
-    https://www.cve.org/CVERecord?id=CVE-2026-0959
-
-- CVE-2026-0960:
-    HTTP3 protocol dissector infinite loop in Wireshark 4.6.0 to 4.6.2
-    allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0960
-
-- CVE-2026-0961:
-    BLF file parser crash in Wireshark 4.6.0 to 4.6.2 and 4.4.0 to 4.4.12
-    allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0961
-
-- CVE-2026-0962:
-    SOME/IP-SD protocol dissector crash in Wireshark 4.6.0 to 4.6.2 and
-    4.4.0 to 4.4.12 allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0962
+    https://www.cve.org/CVERecord?id=CVE-2025-64329
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 88eb7ef494..87d5781eed 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.9.txt
--sha1  dc91c68b03b389645fa6dade92960863d74bca1d  wireshark-4.4.9.tar.xz
--sha256  60551dc787f41e87aeaa1e9c33304f9008037e3baf9fa11aef9c2d584cc0b54b  wireshark-4.4.9.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.13.txt
-+sha1  2e85bc1231775283d3e1593ce700566e0dc4efb9  wireshark-4.4.13.tar.xz
-+sha256  cdaaf455954b45990651ba334ddcc691ee446fcfb332e78d27b0a8451f22dc0f  wireshark-4.4.13.tar.xz
- 
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 9ccd8f9a9e..196ac63271 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 4ec78897d9..0916c603bb 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  472747a7a6b360a0864bab0ee00a8a6f51da5795171e6a60ab17aa80cbd850a2  containerd-2.0.2-go2.tar.gz
++sha256  2bbf9fedcf4ab31736fcb3ce224ef22610a87da9d53bbd8f6d205710fd849831  containerd-2.0.7-go2.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 2ef70ab5d7..a334f0fdac 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 4.4.9
-+WIRESHARK_VERSION = 4.4.13
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-CONTAINERD_VERSION = 2.0.2
++CONTAINERD_VERSION = 2.0.7
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 -- 
 2.53.0
 
