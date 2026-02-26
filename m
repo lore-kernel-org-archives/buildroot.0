@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DCF3FD9E07
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 19:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E621FD9E0C
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 19:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB157406CB;
-	Thu, 26 Feb 2026 19:44:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CD6B406F7;
+	Thu, 26 Feb 2026 19:54:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C1lKxgkhyzpJ; Thu, 26 Feb 2026 19:44:08 +0000 (UTC)
+ id vK2AsJrXULBh; Thu, 26 Feb 2026 19:54:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE7B7406D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62DBA406DD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772135048;
-	bh=k5XnIJX/jqDqOVa7EE9/2u+ljEBq2oocGDFcybfYWSY=;
+	s=default; t=1772135693;
+	bh=+QJ2xnRhvObc3NtBew23zwbCpdNnfvgpVn6pQjayatg=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=N4SOdSEEdNtNoR6TWu/c/CTsVx9h2GzqtSkcXhh3BvlpKj+54hA8ASBfQDAWNC6R3
-	 o/V9i5ldl3AalLp6LHtYj/u1urHJYj7ToihvqpupKXKfdTQtFWJMoH5xBZT1ba1ngJ
-	 5QtH94Qg1ABsYVidC/Yu/K1ElycW2/BuUJU2mNDN6VEQmUQCgyh6FZ8HMfKHBQywBt
-	 38Od6akOfQ4U9RJY2nnxlOVtc5EsWZ0IYfPoJFXRh4eGkSVgk7iHi4PHGszI8x3ypV
-	 WJ3254Ai2LQ6NfxIVHgBMlZTQ+L/9crKw1dgOVbjNXiGlRXXsTE4vuzT/TV4tKQ4Rl
-	 9WMizLAesuNdQ==
+	b=UwIzxj/b+BaItNV4ZSDzXnizaCewjD3geI03Tc3CFcS3PIuvf6ewx2izaNfl7Oddw
+	 SzGcuttwg8Dtzlt2hqRvl6l0k9I4R4e8B5Utr/1wHWtpSDdtf5HAd+t3GJqzdbZZTJ
+	 Z0xPhoonEXjO+gQG15ADYxX9W0AA7cn705LIDVCaP7PWsPcqmd8pBN0B++bGefr4QO
+	 1dovDUz+IQ2sqh6jTVvSOjEjbUvyys8UfnVpwiF7L5m37x4OKUsG5EwMEvEksJ4Q1u
+	 vuMGr6B1Beywf40HuK4QRlt1uHNfrB8WoA67IxDxnfEmLVqnalRcvDYyDvvw53Zy1i
+	 BjIt2fJmphcSA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE7B7406D0;
-	Thu, 26 Feb 2026 19:44:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62DBA406DD;
+	Thu, 26 Feb 2026 19:54:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BB41A204
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:44:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B4319204
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACA28406D0
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:44:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5C7A406DD
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:54:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TEeK0hk_Sagb for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 19:44:04 +0000 (UTC)
+ id AfiCVtTD8rUl for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 19:54:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a02:168:860f:1::35;
  helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BEFEB406CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEFEB406CB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 01E3A406D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01E3A406D5
 Received: from mail.codelabs.ch (mail.codelabs.ch [IPv6:2a02:168:860f:1::35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BEFEB406CB
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:44:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 01E3A406D5
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id 90C845A0003;
- Thu, 26 Feb 2026 20:44:01 +0100 (CET)
+ by mail.codelabs.ch (Postfix) with ESMTP id D7C5E5A0003;
+ Thu, 26 Feb 2026 20:54:48 +0100 (CET)
 Received: from mail.codelabs.ch ([127.0.0.1])
  by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zmnCmtmP6zHi; Thu, 26 Feb 2026 20:44:00 +0100 (CET)
+ id 3M32SeOlCFd4; Thu, 26 Feb 2026 20:54:47 +0100 (CET)
 Received: from zbook.home (198.210.60.188.dynamic.cust.swisscom.net
  [188.60.210.198])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 38B1C5A0002;
- Thu, 26 Feb 2026 20:44:00 +0100 (CET)
-Message-ID: <cf65ad066e47e39cc22f720d794a87dae31e2a11.camel@strongswan.org>
+ by mail.codelabs.ch (Postfix) with ESMTPSA id CE3325A0002;
+ Thu, 26 Feb 2026 20:54:47 +0100 (CET)
+Message-ID: <28990be01491d1f5de540a3913867b515c199224.camel@strongswan.org>
 From: Martin Willi <martin@strongswan.org>
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 20:44:00 +0100
-In-Reply-To: <20260226153843.194855-1-thomas.perale@mind.be>
-References: <20260226142700.1064999-8-martin@strongswan.org>
- <20260226153843.194855-1-thomas.perale@mind.be>
+Date: Thu, 26 Feb 2026 20:54:47 +0100
+In-Reply-To: <20260226155058.198531-1-thomas.perale@mind.be>
+References: <20260226142023.1064241-2-martin@strongswan.org>
+ <20260226155058.198531-1-thomas.perale@mind.be>
 Autocrypt: addr=martin@strongswan.org; prefer-encrypt=mutual;
  keydata=mQENBEhbeIwBCADbKW4rqhkBsvQumeWTAfy+Q+YciIbbqLvxwRZPKpxz19nxJQPbWF7pG
  oiPb3TWLK3TitWVKKZuNILStsKTGiR4RqLUs8n3sESPoz5HmRqsijm6yJDzzPAE3/B7IWHBeAOssV
@@ -95,24 +95,24 @@ Autocrypt: addr=martin@strongswan.org; prefer-encrypt=mutual;
 User-Agent: Evolution 3.52.3-0ubuntu1.1 
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=strongswan.org; s=default; t=1772135040;
- bh=+bzWL8bFKQ2ZW2XFYA81m+vEZE/ZhIhqdgjAcRd0dho=;
+ d=strongswan.org; s=default; t=1772135687;
+ bh=xOpYOnegqL3g1089c+BqwiqPe48CWuVMapt0zcDmWGo=;
  h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
- b=wg38GjzcjySLe52HwZ/bUe2W4sc60Ktdny6tRDwc25gR5ogBHyvFD9VNPCkN8Z3Zq
- PBrQ+eMxZKDogwyw67osSpFaH8DAoN/qWGMmpxMT+7EIiadaSNbMrEgLAU6xYsAMTR
- yl4kr1/tzp+mfm1OSsxamrs6xVvEgWe5As+vcwbbMVzBAHB0MXzWip22gXftqBDP/E
- iQItWv4zKePLO5KpaH3H7Bq4s8jcgpws5ymHf5oAzZxylLPrA7CBblJwGWYg/NNe7C
- wtiy/6Eya2X2VmaVPvr8ctF/d5OQau3/gMLpnHDI9eicADgH2cIDp75rjwvQIWCwbT
- zF7280YxzHhYA==
+ b=p3wkiNJIYlXuG4WF/xRJrHlPiGkUJxmgvsQNc2E0i97OzlHsTVCEjm5FG442PrK76
+ qS6uVcer1G0limbgXvXyhFfUVn0A76rZCHw+mVFGzsyEEvF3H/c/9Kgn72zVXROdZ1
+ oNfnC7zFft5XimV4csaX8RyhEQ4THT2UbZfAsBQGoGDcciABuN93bWksMmtGr7LYBa
+ 1BHiMCzmeno2pYMeJ2CC1tSwZxnXPmvGa+CGEk9+7Yfv1WhnVXv2ecY9XFdHBHktxT
+ g1ofPKFrBo/qSxG+LLL7C1QpQ08jYxc9IkAPhkck5MNPaeqj45hN/XQOuvgco3gnZi
+ ecTB+Rm9kLf6Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=strongswan.org
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=strongswan.org header.i=@strongswan.org
- header.a=rsa-sha256 header.s=default header.b=wg38Gjzc
-Subject: Re: [Buildroot] [PATCH 7/9] utils/generate-cyclonedx: add generic
- purl for http(s) source URIs
+ header.a=rsa-sha256 header.s=default header.b=p3wkiNJI
+Subject: Re: [Buildroot] [PATCH 1/8] utils/generate-cyclonedx: add option to
+ control patch diff inclusion in SBOM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,44 +130,15 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
-> How do you plan to use the 'generic' PURL name ? I don't think we can
-> have a proper unique package url based on the Buildroot package name.
+> For this use case personally I've used an external script that just
+> strip out the pedigree
 
-Yes, the name won't properly identify the package, but it seems
-mandatory to pick one for "generic" PURLs. So if (scanning) tools
-inspecting generic PURLs are clever enough to just look at the
-download_url, this may work to identify packages. But this is certainly
-questionable. 
+For just stripping the diff, I agree. If the url/url-only option in the
+next commit is something we consider, the "none" variant is then
+probably a very lightweight addition that won't hurt much?
 
-> I started last year some work to add PURL support to Buildroot [1]. I
-> only focussed on the 'ecosystems' since we don't have a solution for
-> C packages yet.
-
-Interesting, thanks for the pointer. My idea was to approach this from
-the other end, i.e. try derive ecosystem-PURLs from the download URL;
-this should work for CPAN (when using cpan.org) or PyPI and others, but
-will probably be more tricky for Go and cargo... And it allows github
-PURLs, which can identify the source properly.
-
-> The main outcome of discussion regarding this series is that right
-> now we can't be sure that the package name in Buildroot correspond to
-> the one upstream.
-
-I guess the main problem is that there is no good way to identify
-source packages; there is no "source" PURL type what could work across
-different projects. Using "generic" PURLs is certainly not a very good
-option for packages building from a tarball, but the only one we
-currently have?
-
-An alternative could be to encode the tarball URL in a
-externalReferences "source-distribution" [1], to have at least
-something that identifies the source of a package. Tools probably won't
-use this to identify packages, though.
-
-Thanks,
+Best regards
 Martin
-
-[1] https://cyclonedx.org/docs/1.6/json/#components_items_externalReferences_items_url
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
