@@ -1,118 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50CD3FD9E11
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B32AFD9E0E
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21610607E2;
-	Thu, 26 Feb 2026 20:47:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZBlmZkPKQn8e; Thu, 26 Feb 2026 20:47:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F22DD607E5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138836;
-	bh=t4HsDDL8O4DCssiDfkHuXS/H8BvAczpvtB54lvNDWsQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=G+/yhHDDFQwoiv/YFyHB9bSL0reGgCSrR7ECUDp3cdyxVkvEERYZLxUX/9TkoDIFH
-	 z1qj9lHUfpAIlwoXGX3FYfQ9ZNgB8b1n7jMabpX7R3Oh2s3vUFkyBqtYWjtXSV6r75
-	 QxUbt0HIh2T+/1sA0OHiYheU1E440Eb0Hy+vZDqsqCIdPIja7mTO8HE1BnzAObsAga
-	 gIJIrKD40NuCrsch5WEFKERGW7CoLYlo0szY9LEi/wppUtn7+8C3HZH0IIr+ed5V/Z
-	 lAZXaxC+M/zGMTR8hAnktBJ25OJNgDjnOiSDvaFhLJpWh9FmQxwFmMLJdGQzwo0oNp
-	 Soo7FZVGaYYNw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F22DD607E5;
-	Thu, 26 Feb 2026 20:47:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BE9423D
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 019334048B
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 517B3405F7;
+	Thu, 26 Feb 2026 20:47:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zmmkdE5sHWob for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:47:11 +0000 (UTC)
+ id 9GgQcP1hdArt; Thu, 26 Feb 2026 20:47:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72128405F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772138837;
+	bh=Z+xaF8SjjagGiSuCWty9eW6vWikYSGjNCQDbCcVw51k=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DJgyQtEuj1GrDGaXhc6Tijr4CtS3h8E+TkVX4GSQwlFy7AxWv23W3aOp+CD4q+HEX
+	 ir5clbqqw/5MAMPy7Q008laKUumTwsmDPgH7DyB/46FuamWQOp9tz/YMrJje3EHrja
+	 A22P/O4YQemsVTEnsN6XlTQLyXo2P9TSoGWFYf27FDXyDG2UXGsPkGCgzaKXbvjhsu
+	 XRV3rY86i4qm1VodD+LoHHEmRMIum2d8X5hmaQsljDUbM9BHCoyboNFwuPsYmRe3Xf
+	 2D2CzcyS1J0x+tvr6J/u9m1s8VsPVfIKA+GRWA5wDp8/Xp0XnKn2NtqaibOtVqgfCt
+	 wG+wKMWMF6zPQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72128405F9;
+	Thu, 26 Feb 2026 20:47:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2393D1F3
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09CDB80E4F
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3qCZVtSM21_N for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:47:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F1A4C40467
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1A4C40467
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F1A4C40467
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:10 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-4398ebdf520so1530395f8f.0
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:10 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F08C480E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F08C480E4E
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F08C480E4E
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:11 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4837907f535so12122705e9.3
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772138829; x=1772743629;
+ d=1e100.net; s=20230601; t=1772138830; x=1772743630;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=dznkNAiKCJGp3nUuy/skOiYgu9EJ2gK5N1RCCjPaL+E=;
- b=eVSWgn1BR79qamtaAKE+y5uECvx8aXjuVuimlKrKQsihhPb/grgZIlXb4iUTabBIVi
- OAKoVy3coFINpoHYLQc2uhKJjpcbc0CURAoxRSMWrNU8g9N4DQSk3QX30dNtxqlcYLfE
- EO9q1sxJwn/Q9nfcbf+YphmHgtrTW//Qn/SkJbuTYxR6rLUJjADYocMNtsK8JQwUCHDv
- CAB7951JwdYqDsLRJ768EFpzBYduDSAXnnnNp6vGfJicMWjGK61F1jVHuNKspWPKpyRZ
- T++0yYM0S+rc8j/am+1E/bUJudXTCepKNxNKSP8lcarFjfEyjGblzmNZ3EfqnU0JnIw2
- xY0g==
+ bh=EjpjhR5ZvEBfNZBqe22vJX6MlToVD3LTt5u3w/IyLoI=;
+ b=V66e4zLGA4bXWMGtUjl0tkLHuChWOYOxIKCTuMlW32VV40LrdqMc9J34+bRbX/ls0j
+ z/QCAGdy9zAMnYu6Uf+ezRHu2Ur2uKfaMehAAYmFY9k85o61rpJUtD38LPgjrZrYRZiZ
+ PcTZT0rwpR+JYUzvTA6Wm/qLM2meaFNgYybHAOE6Nh6lDau6weP5/2Q/cXFkOH4DpZWt
+ 7GKtg2zKhI8Yw+PYPbw4OYW6lVXUbFVuge2ECOpSUvv2UbKghPUmrHNJ3haaTbOeIe8N
+ 2qqGEdzSHLLDZzc92bsp+Vz7OSFJoPBDadfpWdr4z/mkasy8ZF54E4NKTJQipHmx+jiY
+ 3RYA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUI1zkzhRF/zYD/PaPdj0Pq3V2oxrY20eTdIflsl9UtUNxZVyCV7vADQcw8e9bKNVTTLbMpotXYaKE=@buildroot.org
-X-Gm-Message-State: AOJu0Yw9RM0Jeb9Duc+d+OFNaXYny5on1+fCmyUKioSoPRrDxLnXFd+A
- /umNKCLQ1+NWg5Z22hBtomXI8QYXMPe7FxnH2ke4f/RfnhlM9nEZS+UEdg57EHYxxIhpeJrxFYy
- OiAc2
-X-Gm-Gg: ATEYQzyCRQeZlcpm0zJ7JwGAuGYliccT4uCupWJccmtiE8HVcLUh3zHi11FVyG5q1Ld
- CxtDjWN9CSizfwR1xsLQPuTy0ZVLXqKdHSrG5NS2sVSzQ1iuHiCgN9DkoRIsOKlRm8PrU3zz93m
- pvbBRsOcIsPCqEd0wGnRICHi3g5xkTMbLTynUuvEsTuzf1QalnGI/gKuGKMpx1w/pxD5OrdXqdP
- 8TKocg2EfpTDXVHfRb25LaDKuUkpqE4ZL05h4s6EAZhU6ve5suoJRJC33mmqett/NPZ4aThCUIR
- ikyGo270iZ6pw8IKbfBAsVYbEc98n0wsse7Gr0scsG03gixaGA2YQfrGAn/fAk89XRmxaIYdlb0
- l1g+zqPLrCNoy+lr1EvYEVqPtM4tzc2CL3DGVxoby6Uh4BIhREkh7qnJbQ4QHYhx1I4J4LEhP55
- YucGDqSpXFW1DmexA=
-X-Received: by 2002:a05:6000:250e:b0:436:14fa:a3fd with SMTP id
- ffacd0b85a97d-439971fc709mr7145165f8f.24.1772138828883; 
- Thu, 26 Feb 2026 12:47:08 -0800 (PST)
+ AJvYcCWeNrpOIT8/Ojsm6QuIi2g97RSaBaC9I61CzoKKypBngWmADGsbZmI6ouN4jU+bNDnsaibR6ALQ+1k=@buildroot.org
+X-Gm-Message-State: AOJu0Yz+31RYj7iC23M8x7WgVAUdskhgLcnW7Pl/R3sO1OzvQVyELRoy
+ HMXH23vvtn+3gM5+3FJnF7YCYUuIn80Sk1ZbLkJe5qKs++vsqATWyGd/zMIVlQwAVME=
+X-Gm-Gg: ATEYQzxoBIPOIQ754bnHWQl5QpQ/rx7UpS1i4zfGEJvUitw2Xr8YDMfSxLKqWQ2erQF
+ D//FqzOkzxlvHvgYRuIp2bLCS0i4Qdde2CNjA30/dY3t4lSGSIwREqBbkSYPnnxKXxraJAR72c5
+ UllXbZRZ1pyZNC6pIDiXi+vK2ymj8XZ+lNZSiJZmhYbVMlNYrLlL+VHDut1pR0K+RGKxWbaTSjy
+ wcPwswv4Y4s4jm4LYfYmUKMHk0x8b7InnUiShGxcA2n6MpZ55Ty1O11rC0brFU2BfjtlXU3BJK1
+ JGav3CHDRhRWwuoWt3FLG3ynDjqrCmND4FY/VSWZ6oVBG3r+/bcBMwegOwgxfJv+6202feD3Zwn
+ 91loK3125VjnXfQG5/rw5ITKt5zpMJVp6chU/0HstYPu04LiyEPmwxet9F+B6KqHU0BTtIKhfWp
+ fTkG2qm6hbmDCXx5T+36CMlY5xHg==
+X-Received: by 2002:a05:600c:46cd:b0:483:702f:4633 with SMTP id
+ 5b1f17b1804b1-483c9b9433bmr3382995e9.4.1772138829763; 
+ Thu, 26 Feb 2026 12:47:09 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4399c60f764sm2004014f8f.3.2026.02.26.12.47.08
+ 5b1f17b1804b1-483c3b3d24dsm54102485e9.5.2026.02.26.12.47.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Feb 2026 12:47:08 -0800 (PST)
+ Thu, 26 Feb 2026 12:47:09 -0800 (PST)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 21:47:08 +0100
-Message-ID: <20260226204708.253839-1-thomas.perale@mind.be>
+Date: Thu, 26 Feb 2026 21:47:09 +0100
+Message-ID: <20260226204709.253893-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260218190918.2574524-1-bernd@kuhls.net>
-References: <20260218190918.2574524-1-bernd@kuhls.net>
+In-Reply-To: <20260220194702.3078327-1-bernd@kuhls.net>
+References: <20260220194702.3078327-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772138829; x=1772743629; darn=buildroot.org;
+ d=mind.be; s=google; t=1772138830; x=1772743630; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dznkNAiKCJGp3nUuy/skOiYgu9EJ2gK5N1RCCjPaL+E=;
- b=dLwVTB0/pTVcMFO0/oSP20ETyAeJ81JssC25gtABoxqWWcSu3Z5VeZD6w7vSRF3lg+
- 1X873cwo54SnTCh7pHVCMLn+z5qv2/2A3N03kVMWlotU7nKe749A/pV5exlflYeV8J55
- o3fL+UMl3kvkz2UhSsCG7NdiW4JLTRGuPd1rkdY/KBUwnAXjaZlPrPHJ0mvcwnTZ1eAJ
- gKNUqFUYzkqIXYgvku4+2PooEWonv0LQW2cibLgN9BvTwKNB2ZW6szGkYXNKc0nqdc9K
- h8EAMtag15MkHZUQSk2kOHz/JAp9Z6lLwiR7pWHNbdsKzxsMsXLipzZOvgJR7hXPb4pR
- nSnA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=EjpjhR5ZvEBfNZBqe22vJX6MlToVD3LTt5u3w/IyLoI=;
+ b=O3SqmGN1K7KoMmTguH9/EBrICwAx1rUWDQgGRXLjpNcIvyLnD1+YjuifzwMrHf+HF5
+ MbFAjedctTsA97Fg128Tl6g9XjP8apmX5Hd4zrQLUygRWIEtVA3ToG3dthgYM6ptf8yd
+ UvZfO13T3YVypvToWA8XjAzEAHKW5LU5yILH5aP8e0ZyjqETHKfdSgoh7tFiQyFZG6uo
+ 4kylJ3UCRtrYdgiTxVSvbo0RhR/UdCA95asVQwVDQs86bNlK4V21AbbljkBV58v+cW1p
+ cLg0WvaiAqX8xTiXgvAUp18FOEFDDdET1/9Adzpwk65oM1dho/rO54gXaj4dB8MS1Y4o
+ YYbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=dLwVTB0/
-Subject: Re: [Buildroot] [PATCH 1/1] package/libzlib: security bump version
- to 1.3.2
+ header.a=rsa-sha256 header.s=google header.b=O3SqmGN1
+Subject: Re: [Buildroot] [PATCH 1/1] package/wmctrl: fix tarball URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,47 +130,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/madler/zlib/releases/tag/v1.3.2
-> https://github.com/madler/zlib/blob/v1.3.2/ChangeLog
-> https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/
+> Current site is down, switch to Debian.
 > 
-> Updated license hash due to copyright year bumps:
-> https://github.com/madler/zlib/commit/570720b0c24f9686c33f35a1b3165c1f568b96be
-> https://github.com/madler/zlib/commit/9e35567064baded660f61732b247ef5abc809014
+> Fixes:
+> https://autobuild.buildroot.net/results/679/679a9f6224d1771ec2ab52e45fd74af8d03c1604/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/libzlib/libzlib.hash | 4 ++--
->  package/libzlib/libzlib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/wmctrl/wmctrl.hash | 2 +-
+>  package/wmctrl/wmctrl.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libzlib/libzlib.hash b/package/libzlib/libzlib.hash
-> index cbd9313870..bc8b046426 100644
-> --- a/package/libzlib/libzlib.hash
-> +++ b/package/libzlib/libzlib.hash
-> @@ -1,4 +1,4 @@
->  # From http://www.zlib.net/
-> -sha256  38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32  zlib-1.3.1.tar.xz
-> +sha256  d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3  zlib-1.3.2.tar.xz
->  # License files, locally calculated
-> -sha256  845efc77857d485d91fb3e0b884aaa929368c717ae8186b66fe1ed2495753243  LICENSE
-> +sha256  e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2  LICENSE
-> diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-> index bc5092d9a9..c73328deee 100644
-> --- a/package/libzlib/libzlib.mk
-> +++ b/package/libzlib/libzlib.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
+> index 531f64a0d8..86b04d0c01 100644
+> --- a/package/wmctrl/wmctrl.hash
+> +++ b/package/wmctrl/wmctrl.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl-1.07.tar.gz
+> +sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl_1.07.orig.tar.gz
+>  sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+> diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+> index 36ad3513ff..e948f7a939 100644
+> --- a/package/wmctrl/wmctrl.mk
+> +++ b/package/wmctrl/wmctrl.mk
+> @@ -5,7 +5,8 @@
 >  ################################################################################
 >  
-> -LIBZLIB_VERSION = 1.3.1
-> +LIBZLIB_VERSION = 1.3.2
->  LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
->  LIBZLIB_SITE = https://www.zlib.net
->  LIBZLIB_LICENSE = Zlib
+>  WMCTRL_VERSION = 1.07
+> -WMCTRL_SITE = https://sites.google.com/site/tstyblo/wmctrl
+> +WMCTRL_SOURCE = wmctrl_$(WMCTRL_VERSION).orig.tar.gz
+> +WMCTRL_SITE = https://snapshot.debian.org/archive/debian/20050312T000000Z/pool/main/w/wmctrl
+>  WMCTRL_LICENSE = GPL-2.0+
+>  WMCTRL_LICENSE_FILES = COPYING
+>  
 > -- 
 > 2.47.3
 > 
