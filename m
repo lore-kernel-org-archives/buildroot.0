@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2746EEF31A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 08:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E67CEEF319
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 08:02:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58B22405B9;
-	Thu,  5 Mar 2026 08:02:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C90C80ADE;
+	Thu,  5 Mar 2026 08:02:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0CIR9_3KSmgm; Thu,  5 Mar 2026 08:02:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fqtp9xphZ-1G; Thu,  5 Mar 2026 08:02:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7869D407CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8659680BFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772697736;
-	bh=v+pPAotCt8cpA6DeasyO+F9Dke4LUXK8312mPqgh0hw=;
+	s=default; t=1772697737;
+	bh=WJO38sjP/Dghgch23s/8LZ2fLEsjYcx/9bhzSGPQCyk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oDV0wPWATFdqkehGWJv5alph5rJfD3cNK2k9m2lHpdquyU83+OdBfp4wXNo8i943B
-	 Q7AIeMRnD/ufNor/6vEgFLHtwKP9GA5QM2f/+0anH4tUX1MT84kmDuIlzXh4KCBX4j
-	 zFEvRovqdHT1xH2w43QTknq3RyVKohYcKK1QnSOV5u7Mh5eDsmw6nOC/VD83kh4/ZJ
-	 qEmQXeMVj3q9d4ob/sFiXxFhycVQmk0Vzl+HSjsQT7gZNN470h4n6qayvoZd6/FCh1
-	 s0eaZBO0mW1phXpNk3nDnN7AJZcSbr998b3bBcIJkEwEfb7GfP3wOUXc+4LbUzBjta
-	 DiZ7zJYtgM6FA==
+	b=QgoZdTCu085scG4jiim2Ub3WxmZ2InGrJkjKF311QArFsENjvXBst/c5+TKYgMDME
+	 OnOkoXREuxSrK75VDS0vAtZf3HSG9FpBq8vIMgdkawWJFUPp/mJRbFS1HhpoV6A8iG
+	 SUdmYd9J8SjdKjLx86EmJoLa5ERqeptQC2lTYZR0G+sfzD3t4yCtlgd6to22o51jOp
+	 1sG/zAk30hFELU78T+5zU95UWGYNRLrqC0uSB6BDum4kQjlP58UuJUxpfPuukOOKkB
+	 EuNXSwjccB+64VVmFXc4R0DjbI9spGPJ0rgp2AZ+om6QdzobgVmIOa2fcqS61Y777d
+	 gXoQvjZUbYhHQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7869D407CB;
-	Thu,  5 Mar 2026 08:02:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0299A34F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8659680BFB;
+	Thu,  5 Mar 2026 08:02:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18E741EB
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1791405E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF24F606DF
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MvVYCWCROqoy for <buildroot@buildroot.org>;
- Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OZcCH7lwdiR4 for <buildroot@buildroot.org>;
+ Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B85134056B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E244D60611
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B85134056B
+ by smtp3.osuosl.org (Postfix) with ESMTP id E244D60611
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C492083FF7; Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
+ id E8376863DE; Thu,  5 Mar 2026 08:02:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 23 Feb 2026 21:03:08 +0100
+Date: Thu, 26 Feb 2026 22:05:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 603b0350b67201cd9e21f45be00dc04fece26d2d
-X-Git-Newrev: 347fd878d3071b373e90c194d6b394f08bcd4bda
+X-Git-Oldrev: a4980af0dfd82e98781752120f47d27c9ebf19dc
+X-Git-Newrev: f721d9d935fb1c8c61b92efbd5a5fd82fb374cb1
 X-Patchwork-Hint: ignore
-Message-Id: <20260305080207.C492083FF7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gawk: bump to version 5.4.0
+Message-Id: <20260305080207.E8376863DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: bump version to 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,51 +71,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0053594371495343708=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/347fd878d3071b373e90c194d6b394f08bcd4bda
+--===============0053594371495343708==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f721d9d935fb1c8c61b92efbd5a5fd82fb374cb1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-release notes:
-https://cgit.git.savannah.gnu.org/cgit/gawk.git/tree/NEWS?h=gawk-5.4.0
+For release note, see:
+https://github.com/openzfs/zfs/releases/tag/zfs-2.4.1
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gawk/gawk.hash | 4 ++--
- package/gawk/gawk.mk   | 2 +-
+ package/zfs/zfs.hash | 4 ++--
+ package/zfs/zfs.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-index b658359257..35524c7742 100644
---- a/package/gawk/gawk.hash
-+++ b/package/gawk/gawk.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gawk/gawk-5.3.2.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gawk/gawk-5.4.0.tar.xz.sig
- # Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
--sha256  f8c3486509de705192138b00ef2c00bbbdd0e84c30d5c07d23fc73a9dc4cc9cc  gawk-5.3.2.tar.xz
-+sha256  3dd430f0cd3b4428c6c3f6afc021b9cd3c1f8c93f7a688dc268ca428a90b4ac1  gawk-5.4.0.tar.xz
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 40b0672da2..10ca336844 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 87f4e462f1..6e47f07ead 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.4.0/zfs-2.4.0.sha256.asc
+-sha256  7bdf13de0a71d95554c0e3e47d5e8f50786c30d4f4b63b7c593b1d11af75c9ee  zfs-2.4.0.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.4.1/zfs-2.4.1.sha256.asc
++sha256  c17b69770f0023154f578eb8c7536a70f07d6a3bb0bd38f04fa0e8811c3c1390  zfs-2.4.1.tar.gz
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index 30207f7cf7..0ecc9eee2d 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GAWK_VERSION = 5.3.2
-+GAWK_VERSION = 5.4.0
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk
+-ZFS_VERSION = 2.4.0
++ZFS_VERSION = 2.4.1
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+
+--===============0053594371495343708==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0053594371495343708==--
