@@ -1,116 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B32AFD9E0E
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAC5FFD9E0A
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 517B3405F7;
-	Thu, 26 Feb 2026 20:47:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76F34607FA;
+	Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9GgQcP1hdArt; Thu, 26 Feb 2026 20:47:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j7l2U88yl3SA; Thu, 26 Feb 2026 20:47:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72128405F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F04BA607F8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138837;
-	bh=Z+xaF8SjjagGiSuCWty9eW6vWikYSGjNCQDbCcVw51k=;
+	s=default; t=1772138842;
+	bh=cQ5BXaqOKhl1qUzHgysHRD3Z04BOFEQBtFvuVMzA56A=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DJgyQtEuj1GrDGaXhc6Tijr4CtS3h8E+TkVX4GSQwlFy7AxWv23W3aOp+CD4q+HEX
-	 ir5clbqqw/5MAMPy7Q008laKUumTwsmDPgH7DyB/46FuamWQOp9tz/YMrJje3EHrja
-	 A22P/O4YQemsVTEnsN6XlTQLyXo2P9TSoGWFYf27FDXyDG2UXGsPkGCgzaKXbvjhsu
-	 XRV3rY86i4qm1VodD+LoHHEmRMIum2d8X5hmaQsljDUbM9BHCoyboNFwuPsYmRe3Xf
-	 2D2CzcyS1J0x+tvr6J/u9m1s8VsPVfIKA+GRWA5wDp8/Xp0XnKn2NtqaibOtVqgfCt
-	 wG+wKMWMF6zPQ==
+	b=swnVgQ0PeK6K7bz7zZgzSwAVUIPI+wdVJgW2YjZC4s5B+ee31UkSAWaEfZX+8G82j
+	 uA05ZDo+EvOltrLSOLMlYjR3ZCkgJnd39oI3hSTsQBo/2me/R1qh9vo61CwA4dS2iP
+	 MwTsckrtuirF9ylpBx0Us0s4QwgUaAScdnoM3GeVW2M4HFq66mzXuC1lmf1xNQwyD2
+	 +NugjxG2esplnVnhAhN0GEotPGCGh7NmbkyTzHa1I0QGQSb0Fm0lu5zRCQR3BepmyB
+	 veA5iyVNU5R8BbZOyLuZ3WPSW7IuAO4JUYSGjBJ0/9KD9S3iqGdRMNZIB4pcG4vA1A
+	 +KRKuz34peOIA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72128405F9;
-	Thu, 26 Feb 2026 20:47:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2393D1F3
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F04BA607F8;
+	Thu, 26 Feb 2026 20:47:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFC9C1F3
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09CDB80E4F
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1AA64060F
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3qCZVtSM21_N for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:47:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Z7mFzr0mJMG for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F08C480E4E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F08C480E4E
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F08C480E4E
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:11 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4837907f535so12122705e9.3
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:11 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 94132405F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94132405F7
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 94132405F7
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-436356740e6so1342643f8f.2
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772138830; x=1772743630;
+ d=1e100.net; s=20230601; t=1772138832; x=1772743632;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=EjpjhR5ZvEBfNZBqe22vJX6MlToVD3LTt5u3w/IyLoI=;
- b=V66e4zLGA4bXWMGtUjl0tkLHuChWOYOxIKCTuMlW32VV40LrdqMc9J34+bRbX/ls0j
- z/QCAGdy9zAMnYu6Uf+ezRHu2Ur2uKfaMehAAYmFY9k85o61rpJUtD38LPgjrZrYRZiZ
- PcTZT0rwpR+JYUzvTA6Wm/qLM2meaFNgYybHAOE6Nh6lDau6weP5/2Q/cXFkOH4DpZWt
- 7GKtg2zKhI8Yw+PYPbw4OYW6lVXUbFVuge2ECOpSUvv2UbKghPUmrHNJ3haaTbOeIe8N
- 2qqGEdzSHLLDZzc92bsp+Vz7OSFJoPBDadfpWdr4z/mkasy8ZF54E4NKTJQipHmx+jiY
- 3RYA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWeNrpOIT8/Ojsm6QuIi2g97RSaBaC9I61CzoKKypBngWmADGsbZmI6ouN4jU+bNDnsaibR6ALQ+1k=@buildroot.org
-X-Gm-Message-State: AOJu0Yz+31RYj7iC23M8x7WgVAUdskhgLcnW7Pl/R3sO1OzvQVyELRoy
- HMXH23vvtn+3gM5+3FJnF7YCYUuIn80Sk1ZbLkJe5qKs++vsqATWyGd/zMIVlQwAVME=
-X-Gm-Gg: ATEYQzxoBIPOIQ754bnHWQl5QpQ/rx7UpS1i4zfGEJvUitw2Xr8YDMfSxLKqWQ2erQF
- D//FqzOkzxlvHvgYRuIp2bLCS0i4Qdde2CNjA30/dY3t4lSGSIwREqBbkSYPnnxKXxraJAR72c5
- UllXbZRZ1pyZNC6pIDiXi+vK2ymj8XZ+lNZSiJZmhYbVMlNYrLlL+VHDut1pR0K+RGKxWbaTSjy
- wcPwswv4Y4s4jm4LYfYmUKMHk0x8b7InnUiShGxcA2n6MpZ55Ty1O11rC0brFU2BfjtlXU3BJK1
- JGav3CHDRhRWwuoWt3FLG3ynDjqrCmND4FY/VSWZ6oVBG3r+/bcBMwegOwgxfJv+6202feD3Zwn
- 91loK3125VjnXfQG5/rw5ITKt5zpMJVp6chU/0HstYPu04LiyEPmwxet9F+B6KqHU0BTtIKhfWp
- fTkG2qm6hbmDCXx5T+36CMlY5xHg==
-X-Received: by 2002:a05:600c:46cd:b0:483:702f:4633 with SMTP id
- 5b1f17b1804b1-483c9b9433bmr3382995e9.4.1772138829763; 
- Thu, 26 Feb 2026 12:47:09 -0800 (PST)
+ bh=FvmfyXKJoQilxcuUUejsWMonPmuDe/jDMmMVbqG99Hs=;
+ b=L8KSZXp2HeTqgwQiiIUA6hFRtHp1UTxbkzeygpbMcdNuRvnV4bZzN65LD7Tg/r82Gp
+ b9DZjlV+3q3r20MlZaabJV9AO7JAO6VMlgKyhVG3f/DFHB1ZVhlCHbq5OZS+HIDAAstK
+ UQv9LeUznct/rgBmLZrgJhM6W2uTBwzD/u65UpFGP8qLlvgQiRx4naeo7B45r3Pg0fHS
+ 2OmMmY0nktjzuEEzKFH0XPw0vqLm7ZbjNhtrgc1R4kSkFriY8m/P3dnOwiPYr/n1l80E
+ I8J9cdytr2CUb7bjAAEQsQqTCwnCfSZKQQWoYHh1AyBoOknufwpyuoF/BzG+VaVdv3ip
+ 0WTg==
+X-Gm-Message-State: AOJu0YxXUzjHknVgIzUqe3+zGIHeuvBjtloKBECdDPYZnCnVk4xfiFby
+ eot0sfUKL0whkDQWLDPdBoqWFZeQR6GlbxqXt3xaYH6W72l91JbQpUq/p2dYkWq1ZAZUyUhSoOO
+ npL3R
+X-Gm-Gg: ATEYQzw0DsluAn0HQhOqAa3tOwIbCwhIkLWwS/SJxAQ6Hv7uQ25Zn4QA3E8XY/TPY/9
+ BFm4+l06bOMJJCYqq+evxU5ARfL75GFJjGTIc9pgwl6uax4S7V49YVRFKksvUDIHkTlOm7jIc/0
+ dr8SNlmp+cjmxYZ4OCoUHqBgFHLYDGl1T4173KPCpw4f8VBaFXCzL/6LQQ80sUzS2ZGPVYnTCKF
+ kbr8sBwoZN1AqtQ9CASJpKAsBTQUTs4XVYrRyZUmmMpse9RAgyaq/UPCauDySaJxibXTM7VruzL
+ 23pd1CHaLOY1w/Hcy/3YIHevgzrPv7WDmvcV10HKBPlp+KpEFyrzNOntNOjsh+S5+epW21/6Jcx
+ DGvEG6ThLPSDhNwmeZCobrNQpOiMF0ZmJ6IavpC6QxI5MHO4QmghZtwRkLtMco3l55wF61k2qSn
+ mC7Rk8TXkyCmccgPQ=
+X-Received: by 2002:a5d:5c89:0:b0:439:94da:1a97 with SMTP id
+ ffacd0b85a97d-4399de1c6b3mr372116f8f.33.1772138831610; 
+ Thu, 26 Feb 2026 12:47:11 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483c3b3d24dsm54102485e9.5.2026.02.26.12.47.09
+ ffacd0b85a97d-4399c76b40esm1555122f8f.36.2026.02.26.12.47.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Feb 2026 12:47:09 -0800 (PST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 21:47:09 +0100
-Message-ID: <20260226204709.253893-1-thomas.perale@mind.be>
+ Thu, 26 Feb 2026 12:47:11 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Thu, 26 Feb 2026 21:47:10 +0100
+Message-ID: <20260226204710.253996-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260220194702.3078327-1-bernd@kuhls.net>
-References: <20260220194702.3078327-1-bernd@kuhls.net>
+In-Reply-To: <20260222204607.292238-1-thomas.perale@mind.be>
+References: <20260222204607.292238-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772138830; x=1772743630; darn=buildroot.org;
+ d=mind.be; s=google; t=1772138832; x=1772743632; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=EjpjhR5ZvEBfNZBqe22vJX6MlToVD3LTt5u3w/IyLoI=;
- b=O3SqmGN1K7KoMmTguH9/EBrICwAx1rUWDQgGRXLjpNcIvyLnD1+YjuifzwMrHf+HF5
- MbFAjedctTsA97Fg128Tl6g9XjP8apmX5Hd4zrQLUygRWIEtVA3ToG3dthgYM6ptf8yd
- UvZfO13T3YVypvToWA8XjAzEAHKW5LU5yILH5aP8e0ZyjqETHKfdSgoh7tFiQyFZG6uo
- 4kylJ3UCRtrYdgiTxVSvbo0RhR/UdCA95asVQwVDQs86bNlK4V21AbbljkBV58v+cW1p
- cLg0WvaiAqX8xTiXgvAUp18FOEFDDdET1/9Adzpwk65oM1dho/rO54gXaj4dB8MS1Y4o
- YYbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=FvmfyXKJoQilxcuUUejsWMonPmuDe/jDMmMVbqG99Hs=;
+ b=KDkB2H7XvOnBuMphSdL6Tnof/k+DZlhJM91D3i/VM700lY2hC+iOq9qJh8JnoRgxky
+ +KJ8QJz/6fodq+yPw28ML8WeEYsQ9tl3P5yiJml/+i9dtold2e7Ecs6DG7AlYoXZbnjN
+ u28wL8vp5BB3hd6ck3kByti1CNu/qoIz0SWKY0WfkQHRA4mfS3az6eXfAdE7YLKfbwmF
+ GiT4I2TI57e6D8F3w6nAWmj5gYQiwSkjI0OIah7bB4V7oUIC9qnwyDYwvrjuHj31N/k+
+ ytRvx5CUxwVHoV36VtdyC1iUkgSYnJOZogcvGFnu5EiHR7p31ZVd+Zuoup7wCxKEkb8S
+ vhyw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=O3SqmGN1
-Subject: Re: [Buildroot] [PATCH 1/1] package/wmctrl: fix tarball URL
+ header.a=rsa-sha256 header.s=google header.b=KDkB2H7X
+Subject: Re: [Buildroot] [PATCH] package/c-ares: security bump to v1.34.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,45 +128,56 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Current site is down, switch to Debian.
+> For more information about the release, see:
+>   - https://github.com/c-ares/c-ares/releases/tag/v1.34.6
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/679/679a9f6224d1771ec2ab52e45fd74af8d03c1604/
+> Fixes the following vulnerability:
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> - CVE-2025-62408:
+>     c-ares is an asynchronous resolver library. Versions 1.32.3 through
+>     1.34.5  terminate a query after maximum attempts when using
+>     read_answer() and process_answer(), which can cause a Denial of
+>     Service. This issue is fixed in version 1.34.6.
+> 
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2025-62408
+>   - https://github.com/c-ares/c-ares/commit/714bf5675c541bd1e668a8db8e67ce012651e618
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/wmctrl/wmctrl.hash | 2 +-
->  package/wmctrl/wmctrl.mk   | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  package/c-ares/c-ares.hash | 2 +-
+>  package/c-ares/c-ares.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
-> index 531f64a0d8..86b04d0c01 100644
-> --- a/package/wmctrl/wmctrl.hash
-> +++ b/package/wmctrl/wmctrl.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl-1.07.tar.gz
-> +sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl_1.07.orig.tar.gz
->  sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-> diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
-> index 36ad3513ff..e948f7a939 100644
-> --- a/package/wmctrl/wmctrl.mk
-> +++ b/package/wmctrl/wmctrl.mk
-> @@ -5,7 +5,8 @@
+> diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+> index 1c28d91e97..7bf4163e55 100644
+> --- a/package/c-ares/c-ares.hash
+> +++ b/package/c-ares/c-ares.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  7d935790e9af081c25c495fd13c2cfcda4792983418e96358ef6e7320ee06346  c-ares-1.34.5.tar.gz
+> +sha256  912dd7cc3b3e8a79c52fd7fb9c0f4ecf0aaa73e45efda880266a2d6e26b84ef5  c-ares-1.34.6.tar.gz
+>  
+>  # Hash for license file
+>  sha256  460f5e768fda3752ca2169a95df062578a10fb126bfd65f3b9b1a1bed2f84807  LICENSE.md
+> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+> index 090147d0e9..1653b16c28 100644
+> --- a/package/c-ares/c-ares.mk
+> +++ b/package/c-ares/c-ares.mk
+> @@ -4,7 +4,7 @@
+>  #
 >  ################################################################################
 >  
->  WMCTRL_VERSION = 1.07
-> -WMCTRL_SITE = https://sites.google.com/site/tstyblo/wmctrl
-> +WMCTRL_SOURCE = wmctrl_$(WMCTRL_VERSION).orig.tar.gz
-> +WMCTRL_SITE = https://snapshot.debian.org/archive/debian/20050312T000000Z/pool/main/w/wmctrl
->  WMCTRL_LICENSE = GPL-2.0+
->  WMCTRL_LICENSE_FILES = COPYING
->  
+> -C_ARES_VERSION = 1.34.5
+> +C_ARES_VERSION = 1.34.6
+>  C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/v$(C_ARES_VERSION)
+>  C_ARES_INSTALL_STAGING = YES
+>  C_ARES_CONF_OPTS = --with-random=/dev/urandom
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
