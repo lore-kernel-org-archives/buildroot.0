@@ -1,63 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D03FFFD9E0A
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB28FD9E0A
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A799E407AF;
-	Thu, 26 Feb 2026 20:45:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 925506071A;
+	Thu, 26 Feb 2026 20:46:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hOLILqQ5225z; Thu, 26 Feb 2026 20:45:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ydXmTg2jgn1h; Thu, 26 Feb 2026 20:46:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2ECC407CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47ED960733
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138747;
-	bh=5at73TToi/yd6l5aqqFZnfnSfWqQvKFQCNb15j2QRJg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IV9rBzeNxof3wbzhwCo1EP/RU/tAiI1ITMKvSVkDLzFmL/XKq5l9XRu3Jq3A96qnp
-	 7MlSc58xeJdwMJBCytIUMGdXSIH97Va+HbszaEa39AGsJ52MfTIkUW2IuHm0AKLuDg
-	 kA7fIAlI5z9OGHooLGE2RFCj+X7J261/jc3ewRKjqPHY65RW+jEyb+4Ksq3hYtjhuc
-	 jcYVwGvJoSwzp6LhmKqpd25On8KN6tw8DaSZAA/HQis+7ebQP5htR6KaguTVAfNMVW
-	 YNpp2PedkpdHzTGp0Ao/5GHYFR4vRSqnIsgfcU1MO/4HwPNUXxyVckhyOPSDcDrTb4
-	 Q65oXqV7TzRdQ==
+	s=default; t=1772138809;
+	bh=hFjPO0fqrFHBcotmd3EYLC/gmedPdrvrMOmsi82/InQ=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Nlpvc9BIlRARJFmizdfF301fcGEa+Cn31HPGTowk3gNKbdneZh5ppgtTtq3NfdH60
+	 Ikc5z6vESRRzDh1hvN9aYHl55dsuIh5RNqFpM0f+orP/NbNs11B/s8kfAlGRUnea3A
+	 idwjfqUex4D7218nX+DfEHvUZRJcD+W3mkgmUpmDcVofsMtLEtil7yU3H+A8cY5gFe
+	 P/4j5RdGsKCDhOlRyp+0/vhHIFXuXAkEu/K+O4fQr2bHCckj50UeKHPNemsQ+CZiE3
+	 bP1YO5CXyKA3iwcgtBzNAVGqyV3ml4wz0398O7t+sI7q6mSQa79q/2q+1JIMflrf+4
+	 4vSY4FqtWh80A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2ECC407CF;
-	Thu, 26 Feb 2026 20:45:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D0E3823D
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:45:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47ED960733;
+	Thu, 26 Feb 2026 20:46:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBFFC1F3
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0991F81192
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:45:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9C1B40269
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:46:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dsPrUh8psd9L for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:45:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB59F81193
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB59F81193
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:45:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C20D68755F; Thu, 26 Feb 2026 20:45:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 10:25:07 +0100
-X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 08161c9980aa63c34216288ac27696108c0bc7a7
-X-Git-Newrev: 2d9a63218deace52df6473ffb971c83b7d333e85
-X-Patchwork-Hint: ignore
-Message-Id: <20260226204529.C20D68755F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/dtc: fix host
- build with glibc 2.43
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 47uvZ2qaiIaQ for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:46:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A91B540122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A91B540122
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A91B540122
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:46:47 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-43990aa7dbaso1032064f8f.1
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:46:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1772138805; x=1772743605;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=XJ2oOb3HRxEAanJoFWMzKqqRXE1Qz/1pNv7ngAIfj3o=;
+ b=R6vhcd19IT4rPq3n6UefWjlsPTWV0+3HqQOKUTCWkKIw1UqHUCchRkUZ3SNQKLdC+K
+ /RyfmqXsEGFq1Ci/JXIBIFy0mu+rfAb7b57paraDOQAOy/qAruCKiNbVw5Gc/lzVAyiT
+ lM/SK4WXcHIJs/fBMusk9lXyo/WcgHW7x/6YR4G+EWNSIa4/or3Il70xS4JCVqFHMaNw
+ PqreVSzTUQcP7gi/weR+A2tIaXGwCSGVRhStRiAvG3jShgVvpvr+BB63QP15TQSNxvca
+ TJQyVILVyDL4MntO9uflBns6gRdUG2wjL2Iu4uUuUAdldTB2s/et5Ie2Mtdb6Mv4yuoE
+ WXBQ==
+X-Gm-Message-State: AOJu0YyoFlaon1uXzP26cihgoxEvN2ij6nRwNZyAiLJmjUhnTxkOXo4+
+ rMnSZhP7OygP5r6HN+KQQzVMXXA0y57tNnmkkFW3qiFX1H7tp7prGTY+uz/q8koFk5kDZ3EjXSn
+ 1m3AJ
+X-Gm-Gg: ATEYQzzh5UWi7hYKWIIOKFOSqrz1gORLnqzJRkYue43w5EhAQYKC0Lgr7JuGgD0iz40
+ dyQbkE2ZZSTviOCf57t8oFqb6mM0IrJ+O4msTR/sIl3lSYCSsFL0EQfjKiecNUcV86SEUgRAzlz
+ a/lATJ1f7KpC16wt2om6IzbA+dQpcT/otlQkNjXahj+tnEqa7onKAu3HJ18X5QK97dE+p4gxwRg
+ 0xIk0eVclqTSqcoEs63u7Mk6vdOOQEv7GzaJWSDsmR8bOo5UAePFH/d9uuE/GVzfxD/RM1rucYj
+ itk9X+aGhgz1y8ZIilYp2K7VgWwsahZTm6VorFVXN6sYXA+N9U8W3izqlvrOd5P2huid8HOzxcm
+ EM4wJVlXBNXjO9Qb/VsN3SYtTw4xdKHai0PMi47mhxsxcWRxdqvgO/yxzj0g4Rmn2Re47f2sIhK
+ NhHOUMJGuHpURNTDo=
+X-Received: by 2002:a05:6000:4202:b0:439:4d46:606 with SMTP id
+ ffacd0b85a97d-4399de1c657mr337193f8f.31.1772138805283; 
+ Thu, 26 Feb 2026 12:46:45 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4399c70e8dasm1669502f8f.9.2026.02.26.12.46.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 26 Feb 2026 12:46:45 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Thu, 26 Feb 2026 21:46:44 +0100
+Message-ID: <20260226204644.253341-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260224203615.248962-1-thomas.perale@mind.be>
+References: <20260224203615.248962-1-thomas.perale@mind.be>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1772138805; x=1772743605; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=XJ2oOb3HRxEAanJoFWMzKqqRXE1Qz/1pNv7ngAIfj3o=;
+ b=BI3V18Yvzi5c2L00PdAj8V1xj3wsOPChLDRo34BpkRpMF2vP4NYay7j77hxVfOFy0c
+ 3jYU4IVaUML/m4htMD5a0AGQBkp+FMLp25gpfEsVWSBlvPb5ifsKz+8r9FPJpYogiXuR
+ xQU5ewQTaZ7er+t6slkwAJjRjF3Zn1/usIxW7SM/CzTRC1bfR3LJDO7Nc/myagYgnJtq
+ Oan1aXrtw0FqqbxM7vaueZ9Ici63W2mYep8LZa+xrWLvv2WDATyHq3eN9fXvZUzIWAxC
+ csnMYc8SdrZgRCT8bjPaXgqqfKarjjjl1/ZNwTlSAjenTGoo+xw8o6LxGVli6F4nu61d
+ Bw2w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=BI3V18Yv
+Subject: Re: [Buildroot] [2025.02.x,
+ PATCH] package/fluidsynth: add patch for CVE-2025-56225
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,174 +124,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3434591981983387193=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3434591981983387193==
-Content-Type: text/plain
+In reply of:
+> Fixes the following vulnerability:
+> 
+> - CVE-2025-56225:
+>     fluidsynth-2.4.6 and earlier versions is vulnerable to Null pointer
+>     dereference in fluid_synth_monopoly.c, that can be triggered when
+>     loading an invalid midi file.
+> 
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2025-56225
+>   - https://github.com/FluidSynth/fluidsynth/commit/45f2a79f4265dcc4f98cfbafdb10727fb1c0d411
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2d9a63218deace52df6473ffb971c83b7d333e85
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
+Applied to 2025.02.x. Thanks
 
-When trying to build host-dtc on a host with glibc 2.43, the build fails
-on the following error:
-
-  libfdt/fdt_overlay.c: In function ‘overlay_fixup_phandle’:
-  libfdt/fdt_overlay.c:424:21: error: assignment discards ‘const’
-  qualifier from pointer target type [-Werror=discarded-qualifiers]
-    424 |                 sep = memchr(fixup_str, ':', fixup_len);
-        |                     ^
-  libfdt/fdt_overlay.c:434:21: error: assignment discards ‘const’
-  qualifier from pointer target type [-Werror=discarded-qualifiers]
-    434 |                 sep = memchr(name, ':', fixup_len);
-        |                     ^
-  fdtput.c: In function ‘create_node’:
-  fdtput.c:235:11: error: assignment discards ‘const’ qualifier from
-  pointer target type [-Werror=discarded-qualifiers]
-    235 |         p = strrchr(node_name, '/');
-        |           ^
-  cc1: all warnings being treated as errors
-  make[2]: *** [Makefile:359: fdtput.o] Error 1
-  make[2]: *** Waiting for unfinished jobs....
-  cc1: all warnings being treated as errors
-  make[2]: *** [Makefile:359: libfdt/fdt_overlay.o] Error 1
-  make[1]: *** [package/pkg-generic.mk:273:
-  /home/alexis/src/buildroot/dtc/build/host-dtc-1.7.2/.stamp_built] Error 2
-  make: *** [Makefile:83: _all] Error 2
-
-The issue can be reproduced on master with this minimal defconfig on a
-host having glibc 2.43:
-
-  BR2_x86_64=y
-  BR2_TOOLCHAIN_EXTERNAL=y
-  BR2_PACKAGE_QORIQ_MC_UTILS=y
-
-(QORIQ_MC_UTILS will pull HOST_DTC)
-
-This error is due to some functions prototype update in glibc 2.43 for
-ISO C23 (see [1], point 3 in the NEWS list). The corresponding fix has
-already been integrated upstream, but it has not been released since
-then.
-
-Bring the corresponding upstream patch to allow host-dtc to build on
-affected hosts.
-
-[1] https://lists.gnu.org/archive/html/info-gnu/2026-01/msg00005.html
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3b52fe6f2e0feb72e745991a1ad4645ffdc55713)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- .../dtc/0002-fix-discarded-const-qualifiers.patch  | 88 ++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
-
-diff --git a/package/dtc/0002-fix-discarded-const-qualifiers.patch b/package/dtc/0002-fix-discarded-const-qualifiers.patch
-new file mode 100644
-index 0000000000..95db886389
---- /dev/null
-+++ b/package/dtc/0002-fix-discarded-const-qualifiers.patch
-@@ -0,0 +1,88 @@
-+From 9a1c801a1a3c102bf95c5339c9e985b26b823a21 Mon Sep 17 00:00:00 2001
-+From: Stephen Gallagher <sgallagh@redhat.com>
-+Date: Tue, 6 Jan 2026 14:19:30 -0500
-+Subject: Fix discarded const qualifiers
-+
-+It's unsafe to implicitly discard the const qualifier on a pointer. In
-+overlay_fixup_phandle(), this was probably just an oversight, and making
-+the "sep" variable a const char * is sufficient to fix it.
-+
-+In create_node(), however, the "p" variable is directly modifying the
-+buffer pointed to by "const char* node_name". To fix this, we need to
-+actually make a duplicate of the buffer and operate on that instead.
-+
-+This introduces a malloc()/free()  and an unbounded strdup() into the
-+operation, but fdtput isn't a long-running service and the node_name
-+argument comes directly from argv, so this shouldn't introduce a
-+significant performance impact.
-+
-+Signed-off-by: Stephen Gallagher <sgallagh@redhat.com>
-+Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
-+Upstream: https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=9a1c801a1a3c102bf95c5339c9e985b26b823a21
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+
-+---
-+ fdtput.c             | 8 +++++---
-+ libfdt/fdt_overlay.c | 3 ++-
-+ meson.build          | 1 +
-+ 3 files changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/fdtput.c b/fdtput.c
-+index 05f2b93..fdb581a 100644
-+--- a/fdtput.c
-++++ b/fdtput.c
-+@@ -254,19 +254,21 @@ static int create_paths(char **blob, const char *in_path)
-+ static int create_node(char **blob, const char *node_name)
-+ {
-+ 	int node = 0;
-+-	char *p;
-++	const char *p;
-++	char *path = NULL;
-+ 
-+ 	p = strrchr(node_name, '/');
-+ 	if (!p) {
-+ 		report_error(node_name, -1, -FDT_ERR_BADPATH);
-+ 		return -1;
-+ 	}
-+-	*p = '\0';
-+ 
-+ 	*blob = realloc_node(*blob, p + 1);
-+ 
-+ 	if (p > node_name) {
-+-		node = fdt_path_offset(*blob, node_name);
-++		path = xstrndup(node_name, (size_t)(p - node_name));
-++		node = fdt_path_offset(*blob, path);
-++		free(path);
-+ 		if (node < 0) {
-+ 			report_error(node_name, -1, node);
-+ 			return -1;
-+diff --git a/libfdt/fdt_overlay.c b/libfdt/fdt_overlay.c
-+index e6b9eb6..51a3859 100644
-+--- a/libfdt/fdt_overlay.c
-++++ b/libfdt/fdt_overlay.c
-+@@ -407,7 +407,8 @@ static int overlay_fixup_phandle(void *fdt, void *fdto, int symbols_off,
-+ 		const char *fixup_str = value;
-+ 		uint32_t path_len, name_len;
-+ 		uint32_t fixup_len;
-+-		char *sep, *endptr;
-++		const char *sep;
-++		char *endptr;
-+ 		int poffset, ret;
-+ 
-+ 		fixup_end = memchr(value, '\0', len);
-+diff --git a/meson.build b/meson.build
-+index 66b44e8..501b706 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -18,6 +18,7 @@ add_project_arguments(
-+     '-Wshadow',
-+     '-Wsuggest-attribute=format',
-+     '-Wwrite-strings',
-++    '-Wdiscarded-qualifiers',
-+   ]),
-+   language: 'c'
-+ )
-+-- 
-+cgit 1.2.3-korg
-+
-+
-
---===============3434591981983387193==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> ---
+>  ...inter-dereference-during-legato-mode.patch | 25 +++++++++++++++++++
+>  package/fluidsynth/fluidsynth.mk              |  3 +++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 package/fluidsynth/0001-Fix-a-nullpointer-dereference-during-legato-mode.patch
+> 
+> diff --git a/package/fluidsynth/0001-Fix-a-nullpointer-dereference-during-legato-mode.patch b/package/fluidsynth/0001-Fix-a-nullpointer-dereference-during-legato-mode.patch
+> new file mode 100644
+> index 0000000000..a155164bcf
+> --- /dev/null
+> +++ b/package/fluidsynth/0001-Fix-a-nullpointer-dereference-during-legato-mode.patch
+> @@ -0,0 +1,25 @@
+> +From 45f2a79f4265dcc4f98cfbafdb10727fb1c0d411 Mon Sep 17 00:00:00 2001
+> +From: "Tom M." <tom.mbrt@googlemail.com>
+> +Date: Mon, 14 Jul 2025 18:13:38 +0200
+> +Subject: [PATCH] Fix a nullpointer dereference during legato mode (#1607)
+> +
+> +CVE: CVE-2025-56225
+> +Upstream: https://github.com/FluidSynth/fluidsynth/commit/45f2a79f4265dcc4f98cfbafdb10727fb1c0d411
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/synth/fluid_synth_monopoly.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/synth/fluid_synth_monopoly.c b/src/synth/fluid_synth_monopoly.c
+> +index d1de13196..6e6e2a906 100644
+> +--- a/src/synth/fluid_synth_monopoly.c
+> ++++ b/src/synth/fluid_synth_monopoly.c
+> +@@ -410,7 +410,7 @@ int fluid_synth_noteoff_mono_LOCAL(fluid_synth_t *synth, int chan, int key)
+> +                 fluid_channel_breath_msb(channel))
+> +         {
+> +             /* legato playing detection */
+> +-            if(channel->mode  & FLUID_CHANNEL_LEGATO_PLAYING)
+> ++            if (channel->mode & FLUID_CHANNEL_LEGATO_PLAYING && channel->preset != NULL)
+> +             {
+> +                 /* the list contains others notes */
+> +                 if(i_prev >= 0)
+> diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+> index 1c9139aa9f..bde3f416a7 100644
+> --- a/package/fluidsynth/fluidsynth.mk
+> +++ b/package/fluidsynth/fluidsynth.mk
+> @@ -12,6 +12,9 @@ FLUIDSYNTH_CPE_ID_VENDOR = fluidsynth
+>  FLUIDSYNTH_INSTALL_STAGING = YES
+>  FLUIDSYNTH_DEPENDENCIES = libglib2
+>  
+> +# 0001-Fix-a-nullpointer-dereference-during-legato-mode.patch
+> +FLUIDSYNTH_IGNORE_CVES += CVE-2025-56225
+> +
+>  ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
+>  FLUIDSYNTH_CONF_OPTS += -Denable-alsa=1
+>  FLUIDSYNTH_DEPENDENCIES += alsa-lib
+> -- 
+> 2.53.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3434591981983387193==--
