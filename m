@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D24AFCE093
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 14:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37EFCFCE091
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 14:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53A3E84227;
-	Thu, 26 Feb 2026 14:27:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0OMvtnbwbHDm; Thu, 26 Feb 2026 14:27:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F24084151
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772116048;
-	bh=c+l/yoy26cYd+Ydm3wK3HJfNbb4ShCv9N1372uzOMzg=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=aXaj3UL8k1qQKoyw5WJ012WHG4UzVSE9KPNxwasboqRw2LxDxsUlItKxCqzcaXFfa
-	 donAzynF+B2fmYp5e1zcGNF7pNV5ujJbeUJR8AVUAOo0viNpm7wP3oJ89oxxpEv3yh
-	 vFBlioGjj/U2icI0ixwDTYmnnEdqPKIEKACfBUGNGz3iHM1AZL7jzCpdUCYmcgTgFx
-	 MiMHHO6T9teOG4w6fuTVVvg8dqe4rTgcuFM6UemU6RxTfPRxf1tPyiC43AjoR2akg3
-	 ktTPVNjq8vXOdEGQzk9/AUsGe098/K/TJOLdTggZvndkMgU0uRYnH+yiqRn5oOPYS/
-	 qmHB+GXfWfbSw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F24084151;
-	Thu, 26 Feb 2026 14:27:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A53524E
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:27:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DCF3261603
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:27:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08CEB61636;
+	Thu, 26 Feb 2026 14:27:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fQEALQaotsns for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 14:27:22 +0000 (UTC)
+ id 5REMrqT4l6yW; Thu, 26 Feb 2026 14:27:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F224C61637
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772116050;
+	bh=r2BtynKodIRjrBn7ymoC8qSE1M2CP5DhcgAIcnptBs4=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=HnPV7o5SfAPBw9pxa5e+FSYOQNY9eaqHPHQ1+4niym+tEbR6V191W+QP6PM1TjsgD
+	 QY7JZa+YDfXlu8ZopSnFXNoKu91TDxmKRZFJL/LLJQJuUEXqCfPVcuWxsnTcAHUm37
+	 akytKeDT7sm++fKjAY7BPvYLHVDyq6sDWkCFLt/tJ7WUO+ESazC8wvPy5cmu94q3Vo
+	 D1GFWjfLWxKg5I3TrGI4IHs9Xslp7t5CfE/VzBZgxZW1nNpe5pm9oQBd2DRbp3LLqg
+	 cWWaa14/xrtopCxWmrDxExA/1MNB8+oQbwK+OQWe4uyo366qu7MN0uJWbBZGBsiMwl
+	 oW1XH4DXTnuyA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F224C61637;
+	Thu, 26 Feb 2026 14:27:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AE8223D
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:27:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40EB88414B
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:27:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8ds3whiAhPsm for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 14:27:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a02:168:860f:1::35;
  helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C50E0615FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C50E0615FE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 215DA84070
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 215DA84070
 Received: from mail.codelabs.ch (mail.codelabs.ch [IPv6:2a02:168:860f:1::35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C50E0615FE
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:27:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 215DA84070
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:27:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id 31D6B5A0003;
- Thu, 26 Feb 2026 15:27:20 +0100 (CET)
+ by mail.codelabs.ch (Postfix) with ESMTP id 7B6F15A0003;
+ Thu, 26 Feb 2026 15:27:22 +0100 (CET)
 Received: from mail.codelabs.ch ([127.0.0.1])
  by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NLwEuhpfqpYu; Thu, 26 Feb 2026 15:27:19 +0100 (CET)
+ id MJY7rb0mMPoD; Thu, 26 Feb 2026 15:27:21 +0100 (CET)
 Received: from zbook.wlp.is (unknown [185.12.128.225])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 699755A000B;
+ by mail.codelabs.ch (Postfix) with ESMTPSA id 7067F5A000C;
  Thu, 26 Feb 2026 15:27:13 +0100 (CET)
 From: Martin Willi <martin@strongswan.org>
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Thu, 26 Feb 2026 15:26:59 +0100
-Message-ID: <20260226142700.1064999-9-martin@strongswan.org>
+Date: Thu, 26 Feb 2026 15:27:00 +0100
+Message-ID: <20260226142700.1064999-10-martin@strongswan.org>
 In-Reply-To: <20260226142700.1064999-1-martin@strongswan.org>
 References: <20260226142700.1064999-1-martin@strongswan.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=strongswan.org; s=default; t=1772116033;
- bh=Wa51lKcbsLa3GuvLtSgWtzqrLazlp/8YO9BcO6P+GOg=;
+ bh=H/XpKiKw/KG4wuaGwEJLiRyowcXs6JFUBTUfHchyIzc=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=T1XqMtLRT2l8qQgXdwujMwWo5/JdxTlK1av+Hh2BE4CdZqj8jU2joVBfY8GzKw22Y
- e8wtwOtVy+HAnBZUbbe4qKV2uk+X8ozL3W3R04Loeio7PJ54Ju5GPD7ZUHI3WMg9mo
- n8DxvaCmxheSaD8R236lSbGoBmwG5EggFwQKtyEIGW3xNMmmJHdz5YNX2LXDDoAB08
- mwGuDElGsLKN0us7DW23XgXry9hjQ0xR45YQVIXiJOeMrHUmyTwGx0Ht2VPTExRPLG
- IZCKPL88AVcmLNQr3xQFbSqdGsZumQytWG9tlvYrhtYAnQR4zFyHCoCaqkrvS5euQj
- C4SVc9OJzIj2w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=XxIi3WdOlENmMu5IayzJPJxH6vLYF47cyAqXqKW9py/EgZ8sR2bZtvY/PC3T0v5Qd
+ oRsBBezDTw1qU/q/wtcZLmS8GhIi7vPAqCN3Wn8kA3Tu3SaDDlEwhJLkkVxPUJWxfB
+ zQIb17cFKNfzqfP0ect+yGjhhteyEisM7o9fZLvtds1tOqWt1LldRm/JxaU9fvjOiw
+ pFVFjjVkLZPC8+BGqm3TmSjzFmN0boGN3DrIlTQLIpys8aSQyg9cx13/BEvPxRkiUU
+ vDNnWOEXk/d0lbFGYw5GV2fypuf6TweLMODMl9Q/7ZLPh84byCZlbUcYNEvJ8vrMj5
+ RynHmcagiRK9A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=strongswan.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=strongswan.org header.i=@strongswan.org
- header.a=rsa-sha256 header.s=default header.b=T1XqMtLR
-Subject: [Buildroot] [PATCH 8/9] utils/generate-cyclonedx: use github purls
- if a package references a GitHub tag
+ header.a=rsa-sha256 header.s=default header.b=XxIi3WdO
+Subject: [Buildroot] [PATCH 9/9] support/testing/utils: add
+ utils/generate-cyclonedx metadata and purl tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,48 +101,214 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If a package references a GitHub tag, usually by defining a *_SITE using
-$(call github,...), form a github purl instead of a generic purl. As a github
-purl references a specific tag, this is done only for download URLs referencing
-an "archive"; "releases/download" URLs reference an artifact that may differ
-from what is identified by a tag, hence they are not considered for github
-purls.
+Extend the existing test_generate_cyclonedx.py test suite to cover the new
+functionality, including metadata fields, manufacturer URL extraction from
+Config.in and purl generation based on download URLs.
 
 Signed-off-by: Martin Willi <martin@strongswan.org>
 ---
- utils/generate-cyclonedx | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../tests/utils/test_generate_cyclonedx.py    | 156 ++++++++++++++++++
+ 1 file changed, 156 insertions(+)
 
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 0b38a0317cbe..94138aa5786e 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -355,6 +355,16 @@ def cyclonedx_manufacturer(pkgname, pkgdir):
-     return {}
+diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
+index d41a0b0aef46..28755469a0be 100644
+--- a/support/testing/tests/utils/test_generate_cyclonedx.py
++++ b/support/testing/tests/utils/test_generate_cyclonedx.py
+@@ -5,6 +5,7 @@ import os
+ import subprocess
+ import tempfile
+ import unittest
++from datetime import datetime
+ from pathlib import Path
  
+ import infra
+@@ -42,6 +43,7 @@ class TestGenerateCycloneDX(unittest.TestCase):
+                 "patches": [UPSTREAM_PATCH],
+                 "dependencies": ["skeleton-baz", "package-virtual"],
+                 "ignore_cves": ["CVE-2025-0001"],
++                "package_dir": "package/package-foo",
+             },
+             "skeleton-baz": {
+                 "name": "skeleton-baz",
+@@ -50,6 +52,7 @@ class TestGenerateCycloneDX(unittest.TestCase):
+                 "virtual": False,
+                 "licenses": "Apache-2.0",
+                 "dependencies": [],
++                "package_dir": "package/skeleton-baz",
+             },
+             "host-tool": {
+                 "name": "host-tool",
+@@ -58,6 +61,7 @@ class TestGenerateCycloneDX(unittest.TestCase):
+                 "virtual": False,
+                 "licenses": "GPL-3.0-only",
+                 "dependencies": [],
++                "package_dir": "package/host-tool",
+             },
+             "package-virtual": {
+                 "name": "virtual-provider",
+@@ -65,6 +69,7 @@ class TestGenerateCycloneDX(unittest.TestCase):
+                 "type": "target",
+                 "provides": ["package-foo"],
+                 "dependencies": [],
++                "package_dir": "package/package-virtual",
+             },
+         }
  
-+def github_purl(uri: str) -> dict[str, str]:
-+    """ If the URI is a GitHub URL for tag, create a purl entry for it. """
-+    parsed = urllib.parse.urlparse(uri)
-+    if parsed.hostname == "github.com":
-+        parts = parsed.path.strip("/").split("/")
-+        if len(parts) >= 4 and parts[2] == "archive":
-+            return { "purl": f"pkg:github/{parts[0]}/{parts[1]}@{parts[3]}" }
-+    return {}
+@@ -163,3 +168,154 @@ class TestGenerateCycloneDX(unittest.TestCase):
+         foo = self._find_component(result, "package-foo")
+         patch = foo["pedigree"]["patches"][0]
+         self.assertNotIn("diff", patch)
 +
++    def test_metadata(self):
++        args = [
++            "--manufacturer-name", "Acme Devices",
++            "--manufacturer-url", "https://acme.example",
++            "--manufacturer-url", "https://mirror.example",
++        ]
++        result = self._run_script(args)
 +
- def generic_purl(uri: str, comp: dict[str, Any], source: str) -> dict[str, str]:
-     """ Create a generic purl entry for a URI and source. """
-     if name := comp.get("name"):
-@@ -379,6 +389,8 @@ def cyclonedx_purl(comp: dict[str, Any]) -> dict[str, str]:
-         for uri in usable_download_uris(download.get("uris", [])):
-             host = urllib.parse.urlparse(uri).hostname
-             if host and host != "sources.buildroot.net":
-+                if github := github_purl(uri):
-+                    return github
-                 if source := download.get("source"):
-                     if generic := generic_purl(uri, comp, source):
-                         return generic
++        metadata = result["metadata"]["component"]
++        self.assertEqual(metadata["manufacturer"], {
++            "name": "Acme Devices",
++            "url": [
++                "https://acme.example",
++                "https://mirror.example",
++            ],
++        })
++        timestamp = datetime.fromisoformat(result["metadata"]["timestamp"])
++        self.assertIsNotNone(timestamp.tzinfo)
++        self.assertEqual(result["metadata"]["lifecycles"][0]["phase"], "build")
++
++    def test_comp_manu(self):
++        with tempfile.TemporaryDirectory() as tmpdir:
++            pkg_dir = Path(tmpdir) / "package" / "foo"
++            pkg_dir.mkdir(parents=True, exist_ok=True)
++            (pkg_dir / "Config.in").write_text(
++                "config BR2_PACKAGE_FOO\n"
++                "    bool \"Foo\"\n"
++                "    help Manufacturer page\n"
++                "    https://manufacturer.example/foo\n\n"
++            )
++            show_info = {
++                "package-foo": {
++                    "name": "foo",
++                    "version": "1.2",
++                    "type": "target",
++                    "virtual": False,
++                    "licenses": "MIT",
++                    "package_dir": str(pkg_dir),
++                    "dependencies": [],
++                },
++            }
++            result = self._run_script(show_info=show_info)
++
++        component = self._find_component(result, "package-foo")
++        self.assertEqual(
++            component["manufacturer"],
++            {"url": ["https://manufacturer.example/foo"]}
++        )
++
++    def test_comp_manu_lib(self):
++        with tempfile.TemporaryDirectory() as tmpdir:
++            lib_dir = Path(tmpdir) / "package" / "libacme"
++            non_lib_dir = lib_dir.with_name("acme")
++            non_lib_dir.mkdir(parents=True, exist_ok=True)
++            (non_lib_dir / "Config.in").write_text(
++                "config BR2_PACKAGE_LIBACME\n"
++                "    bool \"Libacme\"\n"
++                "    help Provide manufacturer URL\n"
++                "    https://manufacturer.example/libacme\n\n"
++            )
++            show_info = {
++                "libacme": {
++                    "name": "libacme",
++                    "version": "3.4",
++                    "type": "target",
++                    "virtual": False,
++                    "licenses": "MIT",
++                    "package_dir": str(lib_dir),
++                    "dependencies": [],
++                },
++            }
++            result = self._run_script(show_info=show_info)
++
++        component = self._find_component(result, "libacme")
++        self.assertEqual(
++            component["manufacturer"],
++            {"url": ["https://manufacturer.example/libacme"]}
++        )
++
++    def test_purl(self):
++        show_info = {
++            "package-generic": {
++                "name": "pkg-generic",
++                "version": "1.0",
++                "type": "target",
++                "virtual": False,
++                "licenses": "MIT",
++                "package_dir": "package/pkg-generic",
++                "downloads": [
++                    {
++                        "source": "pkg-generic-1.0.tar.gz",
++                        "uris": [
++                            "https|urlencode+https://downloads.example/pkg-generic"
++                        ],
++                    }
++                ],
++                "dependencies": [],
++            },
++        }
++        result = self._run_script(show_info=show_info)
++
++        component = self._find_component(result, "package-generic")
++        self.assertEqual(
++            component["purl"],
++            "pkg:generic/pkg-generic@1.0?download_url=https://downloads.example/pkg-generic/pkg-generic-1.0.tar.gz"
++        )
++
++    def test_purl_github(self):
++        def make_pkg(name: str, uri: str, version: str, download: str):
++            show_info = {
++                name: {
++                    "name": name,
++                    "version": version,
++                    "type": "target",
++                    "virtual": False,
++                    "licenses": "MIT",
++                    "package_dir": f"package/{name}",
++                    "downloads": [
++                        {
++                            "source": download,
++                            "uris": [uri],
++                        }
++                    ],
++                    "dependencies": [],
++                },
++            }
++            result = self._run_script(show_info=show_info)
++            return self._find_component(result, name)
++
++        archive = make_pkg(
++            "github-archive",
++            "https|urlencode+https://github.com/owner/project/archive/v2.0.tar.gz",
++            "2.0",
++            "project-2.0.tar.gz",
++        )
++        self.assertEqual(
++            archive["purl"],
++            "pkg:github/owner/project@v2.0.tar.gz",
++        )
++
++        no_archive = make_pkg(
++            "github-no-archive",
++            "https|urlencode+https://github.com/owner/project/releases/latest",
++            "1.1",
++            "project-1.1.tar.gz",
++        )
++        self.assertEqual(
++            no_archive["purl"],
++            "pkg:generic/github-no-archive@1.1?download_url=https://github.com/owner/project/releases/latest/project-1.1.tar.gz",
++        )
 -- 
 2.43.0
 
