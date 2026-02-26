@@ -4,115 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C3A1FD8FFA
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 19:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA94FD9E02
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 19:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61394810CA;
-	Thu, 26 Feb 2026 19:15:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DECD810DC;
+	Thu, 26 Feb 2026 19:40:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rARVNz_wpEPB; Thu, 26 Feb 2026 19:15:01 +0000 (UTC)
+ id VsMNL4t9YZfd; Thu, 26 Feb 2026 19:40:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93069810DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BB95810D6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772133301;
-	bh=pvP/5RqiN0BTtRkqx3m1d8y5PMqJziY441RBywcIv3Q=;
+	s=default; t=1772134839;
+	bh=LPCUnSiC/ef1bzzWihTCB3qEAxQWxWsLQB9w68FeL48=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=KZSKCFqMGKZcsI67VeiGJg/CHZPc2en7crHumT6DnbgQwXffDbJvbVL/Q/mTblyNr
-	 8V5n9bmVJA6n9xs77zxmnIQguH2j2hemadlPdyZhi87x0QQ8oJTXFQGoZ2BhvWsQQs
-	 1zSKBsubiVV50TQxc8NVOauXsLdsCwpAJ7JPMZBPnLgPwZGgoQYruXLL0kD5AyvM4+
-	 epd1iz8SBJ8j9WEsC0yfAPntlqLBqOCXqpQz/sRrwEwsv3S9BaYcXZ+fV9/kNATxEf
-	 8BIBEnZxPR4vNRXaM0KZ9z2rw9LDYql4Km7iFp8rMidJWOGDBuJ00kV/Rfxr4CFCoO
-	 GsbBnTZlgDUiQ==
+	b=o4THxq+UclQFx4CoH35mLTQjxfWoUZGU8bOoj9W3T3llmaLkBCzSrAtw92DKQruEP
+	 8mySbjNzh/aTZ5d/gnUU2G444fD6Lvp8rUxOSoB/qDfBAh096Dehvu0SzKMdXZle3m
+	 tVVt0sTJ4LxYa9klk4HhyO6lx6Goe/fvqOLqPwMGF/p2vGgAsd8EMJJ000/WfL4Rls
+	 7K70fX4A8RJ2RPfqTIobGprTy2YftpCSq6SrM/Nx430vVX7tlEuuGjJjnln4yW+z9Y
+	 Q/O2+xejF+R9XAgeUIO9B08J6+GxNgwXo2VcKeFf04esQ2pNutfuEcF8zn9RN3ZoPO
+	 /sWt0obW7jlBQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93069810DC;
-	Thu, 26 Feb 2026 19:15:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B018023D
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:14:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BB95810D6;
+	Thu, 26 Feb 2026 19:40:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EAA63204
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD9C8406D6
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:14:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC06A810D2
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:40:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KANGdCdwJPOQ for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 19:14:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=109.202.192.35;
- helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 23D0B406DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23D0B406DC
-Received: from mail.codelabs.ch (mail.codelabs.ch [109.202.192.35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 23D0B406DC
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:14:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id 348115A0003;
- Thu, 26 Feb 2026 20:14:56 +0100 (CET)
-Received: from mail.codelabs.ch ([127.0.0.1])
- by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hl3dK1GtaFju; Thu, 26 Feb 2026 20:14:55 +0100 (CET)
-Received: from zbook.home (198.210.60.188.dynamic.cust.swisscom.net
- [188.60.210.198])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 1DE4E5A0002;
- Thu, 26 Feb 2026 20:14:55 +0100 (CET)
-Message-ID: <4410274cd4a511624ab7664947098d746dfc8538.camel@strongswan.org>
-From: Martin Willi <martin@strongswan.org>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 20:14:55 +0100
-In-Reply-To: <20260226152434.190931-1-thomas.perale@mind.be>
-References: <20260226142023.1064241-7-martin@strongswan.org>
- <20260226152434.190931-1-thomas.perale@mind.be>
-Autocrypt: addr=martin@strongswan.org; prefer-encrypt=mutual;
- keydata=mQENBEhbeIwBCADbKW4rqhkBsvQumeWTAfy+Q+YciIbbqLvxwRZPKpxz19nxJQPbWF7pG
- oiPb3TWLK3TitWVKKZuNILStsKTGiR4RqLUs8n3sESPoz5HmRqsijm6yJDzzPAE3/B7IWHBeAOssV
- TWS7b9ROz4iFI+fNLnqMqE22zMEItC2r9zi6GpDmi/QP3CcxHFzPMF5iQkMPp6QJMwOdPvYR9kBb1
- x1ubDOjsfWqI41neJTGlv3EVFc5nkv0s7PfoYxMkf8/VStd29pMe4csKJUaPDkLqenLl8Omq8Z3F+
- sbjdo+hcim4i3EsROYh59kA4/UuMFfI0hxaIaoW6UAb6gyqOHkS6vC+VABEBAAG0Jk1hcnRpbiBXa
- WxsaSA8bWFydGluLndpbGxpQHJldm9zZWMuY2g+iQE4BBMBAgAiBQJRsHoSAhsvBgsJCAcDAgYVCA
- IJCgsEFgIDAQIeAQIXgAAKCRAQGu6ewTL0wxf8B/9EThZXuVqNTK2nH2QuRi2zQntFXkK2QbU11sv
- zkfZV8xDfWKHdq67LLako/FOE1dXN6iurWFChgMexs0bSMzaftCmHGSSgGaQhBhANSObKu8M+UyHd
- bes88zNpQKdwVd9guIo6oRrX33IYkb63ifZReChcBffu6cjXQky7/79kpnl6f3qlP5ZluyNGX9Iwe
- z1EpmG2zHkJlc+3oPQbsQbFKjUOdR1hfyKbcVVQHs1ddv830Z0cpM6QbcknR81VsCQ7FYBrH5Hw3N
- AKhrfbIaZMvwBgQfXIgc7mwPZFg2oONZMzauzX6EpZ29Z+kCsy3AArnZssVAwxk+ydRJhUWlZmtCR
- NYXJ0aW4gV2lsbGkgPG1hcnRpbkBzdHJvbmdzd2FuLm9yZz6JATYEEwECACAFAkhbeIwCGy8GCwkI
- BwMCBBUCCAMEFgIDAQIeAQIXgAAKCRAQGu6ewTL0w9ruCADDGN0JgrImHOPGgsJwdP2nKwBytO8mM
- Z/Z/folgH20zqiMqyNR4lOZW9L3DF4rz83fKXQFbP7nCf6GZ/tmjmrImiTZBkKwr37ZsaBRaCz3i9
- rYITY94njenYp7jy6roMcvlBMhNjSI04AvLjaA/hcPuSexqqso+qoNTa7+VplF7OpikB8vKPt+fMp
- XuGP8TF/q8v9TrY+gcVv0c8ZOrGDnI5vJt1Fp0PvoH/vXFx3Jy90g+hRUYFbLW2S76geiGVML9AeK
- IQKjEpp2bxsd+JYGo91MeKBqjlllonxZ17eKNtlA+X+iluwcDJZzdabB19EQG7ZEf0jAy6Sy09au6
- MYFtCBNYXJ0aW4gV2lsbGkgPG1hcnRpbkByZXZvc2VjLmNoPokBNgQTAQIAIAUCSzjspgIbLwYLCQ
- gHAwIEFQIIAwQWAgMBAh4BAheAAAoJEBAa7p7BMvTDaP4IALJRUmUEagBRrdAi1SrxxcsgPDr5vo8
- 1UrPADXKnMdf6KXPqfPMN4hIeS4zbFyC/FA9cg0T9680pVk8hLmcD3iCRMMnL9d38hOQmMxw2TYnd
- 7rth1LuoDRhIwI1bfADw3EJGEMsTy49zVtVl1KwmqBZDDk3PGHvukHYawleOrTRVitOEvavg0vfgg
- CgqvSeSBy3tkX2EIlagC/5eXpYLguj1iI84xG01M4bZ9PU+PuzZADaHL+a9iPelBvk0uNjwKvKjPx
- OPDfaxsmEgjNG7M9gZjBkjSjvclRUlLMpe+3qHhGEYf2yKsv72hCLYy8my5jRnu59eZq72lX9YWVs
- jlXU=
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gqdfnP1KqXeb for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 19:40:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 518D5810D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 518D5810D6
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 518D5810D6
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 19:40:35 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D7EB1A4C2FC3;
+ Thu, 26 Feb 2026 20:40:32 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55590)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vvhDs-0000000063M-3GeO;
+ Thu, 26 Feb 2026 19:40:32 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Thu, 26 Feb 2026 20:40:30 +0100
+Message-ID: <20260226194032.4110146-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260226194032.4110146-1-bernd@kuhls.net>
+References: <20260226194032.4110146-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=strongswan.org; s=default; t=1772133295;
- bh=9wBFRyf5KgWkAWMELdjgVLylAOPs799sc50N5Wgd/cA=;
- h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
- b=fqSy7M+Wwai/u7titxE+dFLdH9A5wouvFlaW6Q54AxJYVlSR09+/GelIqHBY0Z5JN
- wJ9oYnNFLkNkrQ2yIG1TVNeRrO62w7BJhKULt/+CjmezOrlxuHMnhFuY5f5sKW3GGr
- +3xB8+QPc/6JJ7LwUrksWK5CZ4DgiLVhKACHdpAI7TDZWk4ckQ3tLg9Uu1Do8gAQ6l
- LGoqmBMY6WDum2FwxkIYm8XQK0K6b1zc3kYVN0xC6uy62zOs+h92kTE0fEAvSDQDqh
- NWtnzvgMcQkxCRgSPmTB3P+OVC6pE0psuYdARD0ZhlDr1nlc/hMjXBzWhm0x4Jsc7W
- uNPFOrfcl/CFA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1772134832;
+ bh=BvM6Lvhu5IkGpT5h6PrXZ40MqyQy9X71PnYwYJgaf7M=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=Pn12Y11kD2juBNFmzcgiz6qTwuoR/M9Nlz8toWILZrJWaJ96edfvShsZH1YsObZGt
+ GkL4Goq1z0nLh/1MWbAIWpwxAC0cf5gPA/cbLUypWIEzGvCy0O6dUPLuH9UB6Gm6c2
+ 87eiAZtaQ+z5RX1Gz3sd3mw2Yz2giTbh0R1H2ujS7ehEaDQGHgMaOTaMtb8IxoxJ3p
+ vXdskt+wDeJEMTW77Z3j6KQB16vabR3Vu9KYgGatnLKVC0obPGsX3btLyIdfltlVex
+ jzSa1rB+uUXym2AkO18csMwGP5o0HaWT0qhqvjWX3I1jYXRDUPj6A+aDxsttdzp6kz
+ SgKudiQRlQG4w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=strongswan.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=strongswan.org header.i=@strongswan.org
- header.a=rsa-sha256 header.s=default header.b=fqSy7M+W
-Subject: Re: [Buildroot] [PATCH 6/8] utils/generate-cyclonedx: do not list
- filtered packages as dependencies
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Pn12Y11k
+Subject: [Buildroot] [PATCH/next 2/3] package/spirv-llvm-translator: bump to
+ llvm_release_220 branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,21 +103,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+No released tag for llvm 22 yet.
 
-> I think that this patch actually address my previous comment [1].
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/spirv-llvm-translator/spirv-llvm-translator.hash | 2 +-
+ package/spirv-llvm-translator/spirv-llvm-translator.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ok. I should have combined these patches, sorry for the confusion.
+diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.hash b/package/spirv-llvm-translator/spirv-llvm-translator.hash
+index 85ae98337c..a6cf243eb8 100644
+--- a/package/spirv-llvm-translator/spirv-llvm-translator.hash
++++ b/package/spirv-llvm-translator/spirv-llvm-translator.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  43080fd5122c71cd93a3d174d59b9fc95ff8aeb1847d50f394088112f6b2a217  spirv-llvm-translator-21.1.3.tar.gz
++sha256  8903b22559c471b31cb0a2e85edbcc34d555dbc092e06416f317bd8313ecf737  spirv-llvm-translator-567786558a00e8b7ec0457f1706504784e229150.tar.gz
+ sha256  e3bc36440fc927c62d5cc24efeefe225a14d4e34ffeb0c92e430625cce9ee444  LICENSE.TXT
+diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+index 0fb79e04d4..ab8b66cff4 100644
+--- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
++++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SPIRV_LLVM_TRANSLATOR_VERSION = 21.1.3
+-SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,v$(SPIRV_LLVM_TRANSLATOR_VERSION))
++SPIRV_LLVM_TRANSLATOR_VERSION = 567786558a00e8b7ec0457f1706504784e229150
++SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,$(SPIRV_LLVM_TRANSLATOR_VERSION))
+ SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
+ SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+ HOST_SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm host-spirv-headers
+-- 
+2.47.3
 
-> If we keep adding new filters to the SBOM generation do you think
-> it's possible to instead extend the `filtered_show_info_dict` to also
-> directly filter the dependencies of the show-info output so we don't
-> have to implement the logic in the dependency generation?
-
-Probably yes, I'll give it a try.
-
-Thanks,
-Martin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
