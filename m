@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3FD2FD9E11
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E38DFD9E10
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F656407DE;
-	Thu, 26 Feb 2026 20:44:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D6EA407E4;
+	Thu, 26 Feb 2026 20:44:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D6pWhp4g2I2h; Thu, 26 Feb 2026 20:44:16 +0000 (UTC)
+ id iXw8CTGr6jj1; Thu, 26 Feb 2026 20:44:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BFAE407C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03F71407AD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138654;
-	bh=tU7k3TzqsHyVhuIqA3ICM7enqneUxzv4t1xbslXKmOw=;
+	s=default; t=1772138653;
+	bh=f9xEa8yjCsudcY7rBOh+6TMUkcLMT/E05tah1VxSh+c=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AcJQA6RU9zuJGlQSDhq+vtiqN15EJ5+p0BlZapxb6ckOIqVndRCo49qbqmk4FRIh4
-	 a87FPeNwqEbI1zq4g3psxD+PP/WmRnR2Vd8nHoRdOB3Dsbjbh8pGJpDqEQd91/f7MF
-	 397QXzyBZOOHI6q9VHXcVibPH9Rai5OvncvOBs9YiyDH+NAwAblINaHWOkI4NKR4AU
-	 yyvy7RhAonwLbA1zSHUYzGEHZ6Yu+f/BB05K/51fHG6H9k3GlwwZJPJOn2RM7qnULD
-	 MyByiUObvi0MTRvZIEvZpuaoKdZEN0t6WMnVAAtS+x9E5ZLmqIzsmLzuxbDnN3gEj3
-	 8JTeJvnVrT2Xw==
+	b=ma94vd2b8+JKGfMLh6sG/ps9LX3/9A/FVCMHfpyT5K7QRu9PHaS0c1gDi2QGAjJEM
+	 gUam5yrioPmmdxFeRElrqurVuJBUsD/ifwUBmSXh/u3Xzu+2xGRV1j7fEzE1RVREBg
+	 dlTQqxxrZFVHPPlwCirDVw2tWxj7WgeHw4JUljSEXCqVQr7Dn3CoEtcsfUnR4DJCuZ
+	 UrxHkMJ9zXjotX2GEi+GT8G/ack1YYBVyTQ+NAaVfuvWVjkAXL70QLcTPtSqsQbmCu
+	 kfZVuZhVE63xUsEdx2/jTjWxVvMAZ72YKHMhv4jCOeWmcgucCJmtZNd7EhktH5vzLN
+	 pbg7v4q+hD+bw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BFAE407C9;
-	Thu, 26 Feb 2026 20:44:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 45AD01F3
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:44:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03F71407AD;
+	Thu, 26 Feb 2026 20:44:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C0F91F3
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8763B40757
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:43:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6CE280DFD
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:43:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZWhI4sjQ2lFE for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ts_LWiVzQV-O for <buildroot@buildroot.org>;
  Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BACEA4074E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A25D880DF6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BACEA4074E
+ by smtp1.osuosl.org (Postfix) with ESMTP id A25D880DF6
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B025F87506; Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
+ id 93A6287510; Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 10:24:55 +0100
+Date: Thu, 26 Feb 2026 10:22:58 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9677c64019e9875f51ff92bb13f7d6ce4980b226
-X-Git-Newrev: 9cbe77ae94efadd4f2b2a35457c7683ecc846c36
+X-Git-Oldrev: 0319847f4a333c9966319a743e2e7b084736d09c
+X-Git-Newrev: 4e294ae91078e46f104d997d22748afb896fbc92
 X-Patchwork-Hint: ignore
-Message-Id: <20260226204356.B025F87506@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/openblocks_a6:
- specify Linux license file
+Message-Id: <20260226204356.93A6287510@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/postgresql:
+ security bump to v17.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,52 +77,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9cbe77ae94efadd4f2b2a35457c7683ecc846c36
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e294ae91078e46f104d997d22748afb896fbc92
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The used Linux kernel (4.14.336) does not contain the default license files
-as those were only added in 4.16 with commit e00a844aca ("LICENSES: Add
-Linux syscall note exception"), so specify the correct license file to fix:
+For more information about the release, see:
+  - https://www.postgresql.org/docs/17/release-17-8.html
 
-make legal-info
-..
-cp: cannot stat '/path/to/output/build/linux-headers-4.14.336/LICENSES/preferred/GPL-2.0': No such file or directory
+Fixes the following vulnerabilities:
 
-And add the sha256sum to the .hash file.
+- CVE-2026-2003:
+    Improper validation of type "oidvector" in PostgreSQL allows a
+    database user to disclose a few bytes of server memory.  We have not
+    ruled out viability of attacks that arrange for presence of
+    confidential information in disclosed bytes, but they seem unlikely.
+    Versions before PostgreSQL 18.2, 17.8, 16.12, 15.16, and 14.21 are
+    affected.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien:
- - reword commit title
- - actually add BR2_LINUX_KERNEL_LICENSE_FILES in defconfig
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e78a710e8fefaf722d45d8031e542be5c5718e0e)
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-2003
+
+- CVE-2026-2004:
+    Missing validation of type of input in PostgreSQL intarray extension
+    selectivity estimator function allows an object creator to execute
+    arbitrary code as the operating system user running the database.
+    Versions before PostgreSQL 18.2, 17.8, 16.12, 15.16, and 14.21 are
+    affected.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-2004
+
+- CVE-2026-2005:
+    Heap buffer overflow in PostgreSQL pgcrypto allows a ciphertext
+    provider to execute arbitrary code as the operating system user
+    running the database.  Versions before PostgreSQL 18.2, 17.8, 16.12,
+    15.16, and 14.21 are affected.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-2005
+
+- CVE-2026-2006:
+    Missing validation of multibyte character length in PostgreSQL text
+    manipulation allows a database user to issue crafted queries that
+    achieve a buffer overrun.  That suffices to execute arbitrary code as
+    the operating system user running the database.  Versions before
+    PostgreSQL 18.2, 17.8, 16.12, 15.16, and 14.21 are affected.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-2006
+
+COPYRIGHT year updated in [1].
+
+[1] https://github.com/postgres/postgres/commit/625e4495bf58733f1dac24e363b12e6f95d7e92d
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+(cherry picked from commit a5a1171ca3b5688eed233488744c5eb77ed69ec5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/openblocks/a6/patches/linux/linux.hash | 1 +
- configs/openblocks_a6_defconfig              | 1 +
- 2 files changed, 2 insertions(+)
+ package/postgresql/postgresql.hash | 6 +++---
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/openblocks/a6/patches/linux/linux.hash b/board/openblocks/a6/patches/linux/linux.hash
-index b207306a2b..aa432012b0 100644
---- a/board/openblocks/a6/patches/linux/linux.hash
-+++ b/board/openblocks/a6/patches/linux/linux.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  0820fdb7971c6974338081c11fbf2dc869870501e7bdcac4d0ed58ba1f57b61c  linux-4.14.336.tar.xz
-+sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/configs/openblocks_a6_defconfig b/configs/openblocks_a6_defconfig
-index 754ec53937..e0ce4aa3fb 100644
---- a/configs/openblocks_a6_defconfig
-+++ b/configs/openblocks_a6_defconfig
-@@ -8,6 +8,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.336"
-+BR2_LINUX_KERNEL_LICENSE_FILES="COPYING"
- BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index efa1b5e751..b7a2397f8f 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v17.7/postgresql-17.7.tar.bz2.sha256
+-sha256  ef9e343302eccd33112f1b2f0247be493cb5768313adeb558b02de8797a2e9b5  postgresql-17.7.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v17.8/postgresql-17.8.tar.bz2.sha256
++sha256  a88d195dd93730452d0cfa1a11896720d6d1ba084bc2be7d7fc557fa4e4158a0  postgresql-17.8.tar.bz2
+ # License file, Locally calculated
+-sha256  5ed3ce5c9373dff7f98b1fae7a6c7ccd98df7d734d46d24c1bcebf1240be8307  COPYRIGHT
++sha256  3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 13abce8330..9856d6423b 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 17.7
++POSTGRESQL_VERSION = 17.8
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
