@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C18AFD9E0E
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58E9DFD9E0E
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EFC660706;
-	Thu, 26 Feb 2026 20:22:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29497606AA;
+	Thu, 26 Feb 2026 20:23:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kJDJra-GVR60; Thu, 26 Feb 2026 20:22:43 +0000 (UTC)
+ id hQNHerzw4DCQ; Thu, 26 Feb 2026 20:23:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F8D260717
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D963606B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772137363;
-	bh=89lV7VEUjlhYOZm7tkpSFP+x2v60aoXPnjdtdJSwKlA=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1772137419;
+	bh=Yc/qz+KG/xEoVObXRlG+QSQBYnBXzjysuUbdtC5av1c=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=s+cVbD/2CYOmn3bBxKtqFxclKqSwZV/gvLeSYAvDomfIe/+ZpR4bSWnEk0jY/JVvC
-	 Zx6DPx40So/mRnTX5ug/DEtF9cDm1ou8Qo3+ruBeZfwv08RaAMH8CVFlTsXlZhGls1
-	 eHJOrAf8PX7l7VRif1ZhQFu9D9uUudzXfG+hUvqFoNN8OOXmd0ITpyEPyv+22y3ZDf
-	 cQ/LCen5txHsooe+dIHS0hM5Gb1CC9xtrFzRm56XqF6Q6MhliPL++/3DDUZVz+Qshi
-	 kA198ZIOhrFkLB+gvMhVmNz6owUp/w2c4wR4zIcBXBOrJY/4epHsgwE18i1SMSVJWg
-	 47h3vNhT/2W+g==
+	b=UyMI+mICwYpTnCSpx18QJB68QfXtECxPd3UrumDPPb4F0qssp0P4/LPx4olhyZuwO
+	 Ay539Iez7NR+knzpnVoL/S85V1leuaBH/40JG38jaWworI7NnwK1KSQ52mdkriYeNB
+	 cPNpFW7KJlb7GE35SejMlukynT+e8htxQrv07GcbRQNH/AIMJHci4rtCyvKqUMeAQl
+	 2/WKhbpUGSbYt2wEwPmkd2I8Z53lw8Kz6bwSBODDX2zA1/u7HFEHjjfb6p+k7bD5xl
+	 TtKDf8/Uy9yuBaJkGWiaLUeRuXTssrH+gMhGOU37V9JNW4R/bdUScfpOYi1yWVco7v
+	 q0wWBCgW+C/VA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F8D260717;
-	Thu, 26 Feb 2026 20:22:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 40B2D23D
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:22:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D963606B6;
+	Thu, 26 Feb 2026 20:23:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 369DE23D
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 266A180833
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:22:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BFA8606B6
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:23:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dewvr3hwEL6f for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:22:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IOUZfJLPepPg for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:23:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7FEB28082F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FEB28082F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 97A39606AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A39606AA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7FEB28082F
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:22:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 97A39606AA
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:23:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 927C8A4C2E88;
- Thu, 26 Feb 2026 21:22:37 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48930)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B2D7BA4C2E88
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 21:23:34 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49730)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vvhsb-000000005Qe-1v0c;
- Thu, 26 Feb 2026 20:22:37 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vvhtW-000000005av-2gGK
+ for buildroot@buildroot.org; Thu, 26 Feb 2026 20:23:34 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 26 Feb 2026 21:22:36 +0100
-Message-ID: <20260226202236.2150026-1-bernd@kuhls.net>
+Date: Thu, 26 Feb 2026 21:23:34 +0100
+Message-ID: <20260226202334.2275873-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1772137357;
- bh=5tSqmhtkWVL0rpkbh6SmKwAghHwn0TiiI1DjCwNnBjU=;
- h=From:To:Cc:Subject:Date:From;
- b=s4YqNRjAN8CQmDts408MjCY3goLSzkj/s2LyGTwbJDZA4a9aujOwKnJGW23WhoJzu
- sMO1lQNB5Vimk6L9DYpYahrUM2LS4BK4JiheD0rcYAOdcSZW9oHt+/otcJi8P5heuN
- hk10tIK2I5igvPzbqt4DUqsy/72OyBqNp1XCzftYtgdTc39UcNzeXNS53Ff2NTNh4l
- ramXTfJsrVGQhAyrLYcLLIrD8bOE7l/6y8lbT18bIqPKtG1+u6cX+tJwbRTIPQRpay
- oH8ZG9Z+XfMKvRRhW17Nk6zlKj7aZosqCLh7k4+Jnp7nXh3olEUpeWxajesooXMw6H
- FYesbEmQ4mfGg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202511301023; t=1772137414;
+ bh=lxzYF1JLZZzx43m47V1tPZUTKDNKa8sBQu2k32wmYOU=;
+ h=From:To:Subject:Date:From;
+ b=hlGHDd+4PHwL38fZUb7vwRYsZUiunIGn6NsnNpVijZMqfrVLYBL4KntQd/xz5UhmP
+ k6ki6A5DbKJdOXdcyonjjr73PTC1fiN3dKsxcVfLo5yWPWLNz86cMLAH6dJuduJ14A
+ vofM6m8rHiHYjU4g6iYuPXI6re2tnFbtAMb3eq9no0nyzHx0WkVbf3unxaLKAndMzL
+ TUUFuCb0wGVCueIagScgyOWYSwXeCQwqbpmPB1OFr8vcBVv+tVbfplF0Q4i0GW+bgu
+ lbk1nqtbzA/eW7aXhfWn1POirA1pC303C8raQ9MIXTumyjQOl6uU5Apl98/SoF+0dr
+ bkMgjC/auU4Uw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=s4YqNRjA
-Subject: [Buildroot] [PATCH/next 1/1] package/lxc: bump version to 6.0.5
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=hlGHDd+4
+Subject: [Buildroot] [PATCH/next 1/1] package/libbytesize: bump version to
+ 2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,209 +97,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://discuss.linuxcontainers.org/t/lxc-6-0-lts-has-been-released/19567
-https://discuss.linuxcontainers.org/t/lxc-6-0-1-lts-has-been-released/20283
-https://discuss.linuxcontainers.org/t/lxc-6-0-2-lts-has-been-released/21632
-https://discuss.linuxcontainers.org/t/lxc-6-0-3-lts-has-been-released/22402
-https://discuss.linuxcontainers.org/t/lxc-6-0-4-lts-has-been-released/23390
-https://discuss.linuxcontainers.org/t/lxc-6-0-5-lts-has-been-released/24438
+https://github.com/storaged-project/libbytesize/blob/2.12/NEWS.rst
 
-Removed patch which is included in this release.
-
-Systemd support was replaced by dbus:
-https://github.com/lxc/lxc/commit/820d2a2b3a886ebfe46cd256ba8c320e50fcc5cd
+Added tarball hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...-lxc-syscall_numbers.h-drop-define-1.patch | 138 ------------------
- package/lxc/lxc.hash                          |   2 +-
- package/lxc/lxc.mk                            |  10 +-
- 3 files changed, 6 insertions(+), 144 deletions(-)
- delete mode 100644 package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+ package/libbytesize/libbytesize.hash | 3 ++-
+ package/libbytesize/libbytesize.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
-deleted file mode 100644
-index d6eb7476dc..0000000000
---- a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
-+++ /dev/null
-@@ -1,138 +0,0 @@
--From 964740d28c9a0da52a75d579d7fdfa53df67e925 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 30 Mar 2024 16:50:46 +0100
--Subject: [PATCH] src/lxc/syscall_numbers.h: drop define -1
--
--Drop "#define -1" to avoid the following m68k build failure with gcc 12:
--
--In file included from ../src/lxc/syscall_wrappers.h:19,
--                 from ../src/lxc/mount_utils.h:15,
--                 from ../src/lxc/conf.h:24,
--                 from ../src/lxc/log.h:19,
--                 from ../src/lxc/storage/btrfs.c:20:
--../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
--  423 |                 #define -1
--      |                         ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/lxc/lxc/commit/82fe01821cd5cb8548598d7d93b07d6ef3f6b604
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- src/lxc/syscall_numbers.h | 13 -------------
-- 1 file changed, 13 deletions(-)
--
--diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
--index ae5fdd0641c6..5dc1259fef1c 100644
----- a/src/lxc/syscall_numbers.h
--+++ b/src/lxc/syscall_numbers.h
--@@ -51,7 +51,6 @@
-- 			#define __NR_keyctl 5241
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_keyctl not defined for your architecture"
-- 	#endif
-- #endif
--@@ -88,7 +87,6 @@
-- 			#define __NR_memfd_create 5314
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_memfd_create not defined for your architecture"
-- 	#endif
-- #endif
--@@ -123,7 +121,6 @@
-- 			#define __NR_pivot_root 5151
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_pivot_root not defined for your architecture"
-- 	#endif
-- #endif
--@@ -158,7 +155,6 @@
-- 			#define __NR_setns 5303
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_setns not defined for your architecture"
-- 	#endif
-- #endif
--@@ -193,7 +189,6 @@
-- 			#define __NR_sethostname 5165
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_sethostname not defined for your architecture"
-- 	#endif
-- #endif
--@@ -260,7 +255,6 @@
-- 			#define __NR_signalfd4 5283
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_signalfd4 not defined for your architecture"
-- 	#endif
-- #endif
--@@ -295,7 +289,6 @@
-- 			#define __NR_unshare 5262
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_unshare not defined for your architecture"
-- 	#endif
-- #endif
--@@ -330,7 +323,6 @@
-- 			#define __NR_bpf 5315
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_bpf not defined for your architecture"
-- 	#endif
-- #endif
--@@ -365,7 +357,6 @@
-- 			#define __NR_faccessat 5259
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_faccessat not defined for your architecture"
-- 	#endif
-- #endif
--@@ -420,7 +411,6 @@
-- 			#define __NR_seccomp 5312
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_seccomp not defined for your architecture"
-- 	#endif
-- #endif
--@@ -455,7 +445,6 @@
-- 			#define __NR_gettid 5178
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_gettid not defined for your architecture"
-- 	#endif
-- #endif
--@@ -494,7 +483,6 @@
-- 			#define __NR_execveat 5316
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_execveat not defined for your architecture"
-- 	#endif
-- #endif
--@@ -733,7 +721,6 @@
-- 			#define __NR_personality (132 + 5000)
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_personality not defined for your architecture"
-- 	#endif
-- #endif
---- 
--2.43.0
--
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 8b3365ddfc..cfe0e5ab6b 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/libbytesize/libbytesize.hash b/package/libbytesize/libbytesize.hash
+index c3962d7bbd..3697afd982 100644
+--- a/package/libbytesize/libbytesize.hash
++++ b/package/libbytesize/libbytesize.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/storaged-project/libbytesize/releases/tag/2.12
++sha256  8356bac2cafd2f31f39bf1ad373cef8448cab08b817aeaee5c526d54e81c3c5a  libbytesize-2.12.tar.gz
  # Locally calculated
--sha256  2693a4c654dcfdafb3aa95c262051d8122afa1b6f5cef1920221ebbdee934d07  lxc-5.0.3.tar.gz
-+sha256  2e540c60b9dd49e7ee1a4efa5e9c743b05df911b81b375ed5043d9dd7ee0b48a  lxc-6.0.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 7a5f91e1a8..2f17960e55 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
+-sha256  1f6ce157750ed1201ce83edd3c23d997a615c7da30f9a0e5bb44635f66768d81  libbytesize-2.11.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libbytesize/libbytesize.mk b/package/libbytesize/libbytesize.mk
+index f163b9ad21..c786105118 100644
+--- a/package/libbytesize/libbytesize.mk
++++ b/package/libbytesize/libbytesize.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LXC_VERSION = 5.0.3
-+LXC_VERSION = 6.0.5
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
-@@ -69,11 +69,11 @@ else
- LXC_CONF_OPTS += -Dopenssl=false
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--LXC_CONF_OPTS += -Dsd-bus=enabled
--LXC_DEPENDENCIES += systemd
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+LXC_CONF_OPTS += -Ddbus=true
-+LXC_DEPENDENCIES += dbus
- else
--LXC_CONF_OPTS += -Dsd-bus=disabled
-+LXC_CONF_OPTS += -Ddbus=false
- endif
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
+-LIBBYTESIZE_VERSION = 2.11
++LIBBYTESIZE_VERSION = 2.12
+ LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
+ LIBBYTESIZE_LICENSE = LGPL-2.1+
+ LIBBYTESIZE_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
