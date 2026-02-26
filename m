@@ -4,84 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95294FD9E10
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:39:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A032FD9E10
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:41:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 638E160723;
-	Thu, 26 Feb 2026 20:39:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B603460703;
+	Thu, 26 Feb 2026 20:41:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L_GGHRpe3rg7; Thu, 26 Feb 2026 20:39:27 +0000 (UTC)
+ id ikfmn06yRWNq; Thu, 26 Feb 2026 20:41:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B391360716
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 659E460718
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138367;
-	bh=L1g6gWismIq3wVD5S5bipt5hVucQKRKW7PFqjY1M4iY=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=fF0rHIDjc+bAuvphDrIer22C141+Xrja0kPR+/bdofKtnLKuakvW2uRFEv2mdW2QE
-	 olp3cNU1kAS8DwIDlOnawTRWdCuoRgu20q8zbBAsNnkbyUzYI2IPonUQCOgSrA35uw
-	 um5fpS+UPXzNzlBWCXRnRYjVx0AB7IkW8fTotOvHPZPkA9AFIirv5kf5aHtv1w+p/I
-	 OucZXeWIHKl9dx+PLWuW+3DOAH3Jmghc9teI9bGjNehmgNMIJgx7byOqjE54V9SWEq
-	 /f+Cs3sWE1ZUkD/i0SjC3bDysIdCbkn8E8pg4lW5iVL80f5DD78bb7sBf7ZwHZIGos
-	 pkDo498S1fMRw==
+	s=default; t=1772138487;
+	bh=xcDObcAWNlwNhhc9SSYanP7F51qSFgT+ZN8rPnpeuU8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=fdyepmgnbxsFU7AYrMNXe8U+YYhJttJZAQJD0S4rYQXNvuRjVZpHEjI5uEqiPR6BG
+	 Pi6Flbf4fb9yKgGWWKpqVGvDm2cd2JCEej4RAJP+Xuo4QRlucf8hcf2cqRIiUXcqUI
+	 UkHYP58jl0G1FyLgbnCYX/pWB2SpVo5H2/UY6LXKGhIVPcGrTLEpK9CW0wJqDmOGaQ
+	 2F5TOQpR0TvsKMZDzT8d/xoiPKSnc8ihmo6Cw9C1nFhwmDxEndnk8Aq6J/rQUVHkm2
+	 DYIUYlziRFiNLSMM6JSnLgUK/jUzeVkShO9VvR79WnXlwdEG6hVUlzASL1SqXaruD5
+	 BGTNkjxD2th1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B391360716;
-	Thu, 26 Feb 2026 20:39:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D454A1F3
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:39:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 659E460718;
+	Thu, 26 Feb 2026 20:41:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFA7A272
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9A2E4056D
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:39:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00CA581184
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:41:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KTjhJY9p6g5f for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:39:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8084A4056C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8084A4056C
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8084A4056C
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:39:24 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 35D2278035E;
- Thu, 26 Feb 2026 21:39:20 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 26 Feb 2026 21:39:19 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QmKMLo8Pqcup for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:41:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EA5D981188
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA5D981188
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EA5D981188
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:41:23 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 653B4A4C2CC2
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 21:41:21 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42998)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vviAj-000000000MU-1Z5h
+ for buildroot@buildroot.org; Thu, 26 Feb 2026 20:41:21 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 26 Feb 2026 21:41:21 +0100
+Message-ID: <20260226204121.3547356-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Thu, 26 Feb 2026 21:39:19 +0100
-To: Simon Richter <simon@sinic.eu>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-In-Reply-To: <20260226073135.64960-1-simon@sinic.eu>
-References: <20260226073135.64960-1-simon@sinic.eu>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <cc7c1d74a572270e82c666d43ddf58ad@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1772138362;
- bh=3p1bxPLrFFXt8zKZ7ab65pS+SFbcrLPQlIFJqYJT6Pw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Y4LcbtdHuBdrmOZjTTgwzNlSYtQwGB0oqPrvhn+UUzvC9nqRq1NFShm3vWbzncGBR
- 1vYKJ3vsG/KgzMq213dm0/LHGf53qcclpBBIeo+67c0bykNfZ86o0TCKtX9+/cpdO3
- Bg7ao/ZA3+phoa8ZgkOXlmgC6e2AV1gQTUa2a2lIgYAShtWG1A+i2GNXmjl/yMWuX7
- Xh8fF2cahbGsviZEBXJlv/udjyKcRqPYB5/YqJl5JpcGcueekjKDh+AHhpKtKOfbHF
- l73FcsrR/9ek2uIsDSof9gu8BDmnckIWvCjDImquidn+CNvIypbkSgAjeBT1sUk9//
- 9hovW7UHDmV0w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Y4LcbtdH
-Subject: Re: [Buildroot] [PATCH] package/rust: bump to version 1.93.1
+X-Spamd-Bar: +++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1772138481;
+ bh=sVjQlMMFjSdFuGx1MdnWHU+74ctev2/qBphD1OBmyTA=;
+ h=From:To:Subject:Date:From;
+ b=uaLkWknjWfJ4WVf+4nep81Shpj+PrqprwNJN/eAakyqnZ51WiWNwhVTc+IPptTrD2
+ tsQkAsHjEe80gMIvt+V3y72bu8s1EW2M6BYtn86MyBWhA0jqzO2Uu05a6YpW3EeZ0x
+ ery6Iana7HdvePwk8X8gOUhEE+bAap05fLf2zhLBGbhgStbGSDXGf2mG1ki7+F41AJ
+ Hv1LyVm4e5yQIcJFSYd+st4AG3ZjBnoRjLLV6kBfz4vfY2kg5/TnJPIO6LahJhIzs7
+ cc3eq2toyW7CK+tJR+H5tWGd/MWe6skpQhNCI/QQ1XOheVO5fqSDhaaDsiqIDhS3YT
+ fpGHvDexr01Vg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=uaLkWknj
+Subject: [Buildroot] [PATCH/next 1/1] package/gkrellm: bump version to 2.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,59 +90,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Simon,
+https://git.srcbox.net/gkrellm/gkrellm/releases/tag/gkrellm-2.5.1
 
-Thanks for the patch.
+Switched _SITE to https.
 
-On 26/02/2026 08:31, Simon Richter via buildroot wrote:
-> Changelog:
-> https://doc.rust-lang.org/stable/releases.html
-> 
-> Signed-off-by: Simon Richter <simon@sinic.eu>
-> ---
->  package/rust-bin/rust-bin.hash | 128 ++++++++++++++++-----------------
->  package/rust-bin/rust-bin.mk   |   2 +-
->  package/rust/rust.hash         |   4 +-
->  package/rust/rust.mk           |   2 +-
->  4 files changed, 68 insertions(+), 68 deletions(-)
-[...]
-> diff --git a/package/rust-bin/rust-bin.mk 
-> b/package/rust-bin/rust-bin.mk
-> index 215bd84ad3..dcb63902a9 100644
-> --- a/package/rust-bin/rust-bin.mk
-> +++ b/package/rust-bin/rust-bin.mk
-> @@ -6,7 +6,7 @@
-> 
->  # When updating this version, check whether 
-> support/download/cargo-post-process
->  # still generates the same archives.
-> -RUST_BIN_VERSION = 1.88.0
-> +RUST_BIN_VERSION = 1.93.1
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/gkrellm/gkrellm.hash | 4 ++--
+ package/gkrellm/gkrellm.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-This bump has still the same issue as 1.92.0 proposed in:
-https://patchwork.ozlabs.org/project/buildroot/patch/20251218222527.3861751-1-bernd@kuhls.net/
+diff --git a/package/gkrellm/gkrellm.hash b/package/gkrellm/gkrellm.hash
+index 2f0fbcbeb4..e8a6ef5540 100644
+--- a/package/gkrellm/gkrellm.hash
++++ b/package/gkrellm/gkrellm.hash
+@@ -1,5 +1,5 @@
+-# From https://git.srcbox.net/gkrellm/gkrellm/releases/download/gkrellm-2.5.0/gkrellm-2.5.0.tar.bz2.sha256sum
+-sha256  68c75a03a06b935afa93d3331ca1c2d862c1d50c3e9df19d9a8d48970d766b55  gkrellm-2.5.0.tar.bz2
++# From https://git.srcbox.net/gkrellm/gkrellm/releases/download/gkrellm-2.5.1/gkrellm-2.5.1.tar.bz2.sha256sum
++sha256  089e3c1ed398482e682c9900b504ea166a6144a6c9fa041e70c5bbca6b177e63  gkrellm-2.5.1.tar.bz2
+ # Locally computed
+ sha256  691de85c3c6eeda5b6982c751548575344739ce4b4418d78905e599359f6c435  COPYING
+ sha256  a4bb0b604fe7d40ca4469ffd5e2e2de70ff8ece43e47980ab2c8962d5e913330  COPYRIGHT
+diff --git a/package/gkrellm/gkrellm.mk b/package/gkrellm/gkrellm.mk
+index 6ee00858d3..16d0729d5f 100644
+--- a/package/gkrellm/gkrellm.mk
++++ b/package/gkrellm/gkrellm.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GKRELLM_VERSION = 2.5.0
+-GKRELLM_SITE = http://gkrellm.srcbox.net/releases
++GKRELLM_VERSION = 2.5.1
++GKRELLM_SITE = https://gkrellm.srcbox.net/releases
+ GKRELLM_SOURCE = gkrellm-$(GKRELLM_VERSION).tar.bz2
+ GKRELLM_LICENSE = GPL-3.0+
+ GKRELLM_LICENSE_FILES = COPYING COPYRIGHT
+-- 
+2.47.3
 
-The rust bootstrap sequence has changed in 1.89.0:
-https://blog.rust-lang.org/inside-rust/2025/05/29/redesigning-the-initial-bootstrap-sequence/
-and is no longer working in Buildroot.
-
-We should find a solution for that before updating to a newer
-version. Could you have a look please?
-
->  RUST_BIN_SITE = https://static.rust-lang.org/dist
->  RUST_BIN_LICENSE = Apache-2.0 or MIT
->  RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
