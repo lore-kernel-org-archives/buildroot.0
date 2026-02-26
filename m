@@ -4,111 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAC5FFD9E0A
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08EDDFD9E11
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76F34607FA;
-	Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0EDA607EF;
+	Thu, 26 Feb 2026 20:47:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j7l2U88yl3SA; Thu, 26 Feb 2026 20:47:22 +0000 (UTC)
+ id Z7jaG5nhg6xr; Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F04BA607F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C6EB607FB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138842;
-	bh=cQ5BXaqOKhl1qUzHgysHRD3Z04BOFEQBtFvuVMzA56A=;
+	s=default; t=1772138843;
+	bh=KSyCK9eu9/L27V3juycyhrgYyGWSFZYYks70F0l7Qj8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=swnVgQ0PeK6K7bz7zZgzSwAVUIPI+wdVJgW2YjZC4s5B+ee31UkSAWaEfZX+8G82j
-	 uA05ZDo+EvOltrLSOLMlYjR3ZCkgJnd39oI3hSTsQBo/2me/R1qh9vo61CwA4dS2iP
-	 MwTsckrtuirF9ylpBx0Us0s4QwgUaAScdnoM3GeVW2M4HFq66mzXuC1lmf1xNQwyD2
-	 +NugjxG2esplnVnhAhN0GEotPGCGh7NmbkyTzHa1I0QGQSb0Fm0lu5zRCQR3BepmyB
-	 veA5iyVNU5R8BbZOyLuZ3WPSW7IuAO4JUYSGjBJ0/9KD9S3iqGdRMNZIB4pcG4vA1A
-	 +KRKuz34peOIA==
+	b=XBBa682B/wD8fzTDCZrKG0+wNtRFr6HsWEs/UgdXxwdzE4kHOiaD1yjZGQhefHbPt
+	 zgIke1lKnZHgMhnz4NE2Jkd1fWN+scTa87uLajEqj4vbS7DYejEDANAOX7yumWrUZU
+	 FNekVG6268wDA4NmT5GhReIsULew3xfv1djv1kccxh11njEY90c/KumYaj9obBpaSR
+	 1jwAOagIuTmBVgafP9c7PJkFo6uTaLKtbljc2j8KPeLs8SALbkEDEHo+XLOh22rc23
+	 ddiTPHBiUls32uOVnKq1tm+mOFU4VD2ignDPsOTwf7j9wSG3RQAtOUKShaLe6i6nh8
+	 xe49SL9hqhO+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F04BA607F8;
-	Thu, 26 Feb 2026 20:47:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AFC9C1F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C6EB607FB;
+	Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEEB11F3
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1AA64060F
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB71580E4E
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Z7mFzr0mJMG for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Laley6nz2RZ for <buildroot@buildroot.org>;
  Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 94132405F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94132405F7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B69BB80E4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B69BB80E4D
 Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
  [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 94132405F7
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B69BB80E4D
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:12 +0000 (UTC)
 Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-436356740e6so1342643f8f.2
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:13 -0800 (PST)
+ ffacd0b85a97d-436317c80f7so1648364f8f.1
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772138832; x=1772743632;
+ d=1e100.net; s=20230601; t=1772138831; x=1772743631;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=FvmfyXKJoQilxcuUUejsWMonPmuDe/jDMmMVbqG99Hs=;
- b=L8KSZXp2HeTqgwQiiIUA6hFRtHp1UTxbkzeygpbMcdNuRvnV4bZzN65LD7Tg/r82Gp
- b9DZjlV+3q3r20MlZaabJV9AO7JAO6VMlgKyhVG3f/DFHB1ZVhlCHbq5OZS+HIDAAstK
- UQv9LeUznct/rgBmLZrgJhM6W2uTBwzD/u65UpFGP8qLlvgQiRx4naeo7B45r3Pg0fHS
- 2OmMmY0nktjzuEEzKFH0XPw0vqLm7ZbjNhtrgc1R4kSkFriY8m/P3dnOwiPYr/n1l80E
- I8J9cdytr2CUb7bjAAEQsQqTCwnCfSZKQQWoYHh1AyBoOknufwpyuoF/BzG+VaVdv3ip
- 0WTg==
-X-Gm-Message-State: AOJu0YxXUzjHknVgIzUqe3+zGIHeuvBjtloKBECdDPYZnCnVk4xfiFby
- eot0sfUKL0whkDQWLDPdBoqWFZeQR6GlbxqXt3xaYH6W72l91JbQpUq/p2dYkWq1ZAZUyUhSoOO
- npL3R
-X-Gm-Gg: ATEYQzw0DsluAn0HQhOqAa3tOwIbCwhIkLWwS/SJxAQ6Hv7uQ25Zn4QA3E8XY/TPY/9
- BFm4+l06bOMJJCYqq+evxU5ARfL75GFJjGTIc9pgwl6uax4S7V49YVRFKksvUDIHkTlOm7jIc/0
- dr8SNlmp+cjmxYZ4OCoUHqBgFHLYDGl1T4173KPCpw4f8VBaFXCzL/6LQQ80sUzS2ZGPVYnTCKF
- kbr8sBwoZN1AqtQ9CASJpKAsBTQUTs4XVYrRyZUmmMpse9RAgyaq/UPCauDySaJxibXTM7VruzL
- 23pd1CHaLOY1w/Hcy/3YIHevgzrPv7WDmvcV10HKBPlp+KpEFyrzNOntNOjsh+S5+epW21/6Jcx
- DGvEG6ThLPSDhNwmeZCobrNQpOiMF0ZmJ6IavpC6QxI5MHO4QmghZtwRkLtMco3l55wF61k2qSn
- mC7Rk8TXkyCmccgPQ=
-X-Received: by 2002:a5d:5c89:0:b0:439:94da:1a97 with SMTP id
- ffacd0b85a97d-4399de1c6b3mr372116f8f.33.1772138831610; 
- Thu, 26 Feb 2026 12:47:11 -0800 (PST)
+ bh=Dkne2T/TKdB0ybFQJ6walVI8BOARZfHQj+j1/7d4EbY=;
+ b=vMVEKyqu/wD89oHgkD6BUhFeSJ75CAebVaBozDvHYamtDhJ7MDyLZJb0h6jlN+/Oel
+ NovvVPq4ONEEx3bk+hj+jMfdbqzDFelXpR3/u+4iuoq9+Bd75twzbzcb748FTlUBCHXo
+ 58XCb6JpWI6a0iR14V52VF9W6iihcO7l1gVAhgpHRQ7ObncIM1zJ3wmM1+ZFs9uJ55/h
+ oroe/l/wyoO+CRMo4Lb3p2zAc6UknJkzLJLDX5PMw2Zcwwx1LxCW2sCq44ZuqXi2bJNM
+ pKXQyopMCO0AErqIEd3DOj6F36FJAiDPVJ8AR1FVrNr0WEYes3hzMxAJCldbwlqfJq0J
+ tiYQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUyWnKZxcv0AWbNb4nB8HUi/j4lE4dj+t9QYKK0jJGNLuqleb5GjCQM7TNWWxqd5LQf8G2Z6ZeCI7A=@buildroot.org
+X-Gm-Message-State: AOJu0Yz6wvRStEPTmNO+8uMzhXF/Hmx0eTBfzSK5tpFUhpOpdMq05sJQ
+ UtIMokPfJzRcdThkA5AN380CjI0ZPBMMV+QXguqxqnoQwwllzTaAlI0NwVFMXQHTCD5JZkbB0xz
+ mpfHd
+X-Gm-Gg: ATEYQzxlFMXx9aN3S4lLC+Ec/GJwcvWoNjIWBusyLc+gq5px8757ibYNbdLsTPnAhP4
+ WuFVhs0kftpilFXg0WB6ft+wyIVJ1x603cJgsOuWHHky5uU7KNL4e9wgcs7OAkY2YZQ/udD4s4d
+ dtgNf40XorZKx/P7K70qrVqDDLxsdgv/3vMnsLJBQBME15L49M4+KAikllRPCyhsJDXM6GEOSha
+ GZdY4uiC8IspzQ6JrS16DkIcVTSXpdMA/6GloX4DuTkXe6Tif2w25oxinp9CTEjEirLR0mTO1vI
+ y4FMpPF7OhksUoDZcfn0W7EizzPlp9+EaOzAOwIJoxuSvpOxu7DZ605Iydp2Bzn14rygbqyUU7r
+ jUQlmox62Kgc/VeGRBF6ZlsSdxg6txQdxITjUfNd+b7e/gmHCg6kGZbjHQZZPztfs8BXhH2XysY
+ OPtIZHC2F7rkqOkeI=
+X-Received: by 2002:a05:6000:2401:b0:439:8c72:1d8f with SMTP id
+ ffacd0b85a97d-4399d97499dmr716114f8f.2.1772138830662; 
+ Thu, 26 Feb 2026 12:47:10 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4399c76b40esm1555122f8f.36.2026.02.26.12.47.11
+ ffacd0b85a97d-4399c60f8e5sm2148648f8f.4.2026.02.26.12.47.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Feb 2026 12:47:11 -0800 (PST)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 21:47:10 +0100
-Message-ID: <20260226204710.253996-1-thomas.perale@mind.be>
+ Thu, 26 Feb 2026 12:47:10 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Thu, 26 Feb 2026 21:47:09 +0100
+Message-ID: <20260226204709.253947-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260222204607.292238-1-thomas.perale@mind.be>
-References: <20260222204607.292238-1-thomas.perale@mind.be>
+In-Reply-To: <20260221202603.467160-1-bernd@kuhls.net>
+References: <20260221202603.467160-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772138832; x=1772743632; darn=buildroot.org;
+ d=mind.be; s=google; t=1772138831; x=1772743631; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FvmfyXKJoQilxcuUUejsWMonPmuDe/jDMmMVbqG99Hs=;
- b=KDkB2H7XvOnBuMphSdL6Tnof/k+DZlhJM91D3i/VM700lY2hC+iOq9qJh8JnoRgxky
- +KJ8QJz/6fodq+yPw28ML8WeEYsQ9tl3P5yiJml/+i9dtold2e7Ecs6DG7AlYoXZbnjN
- u28wL8vp5BB3hd6ck3kByti1CNu/qoIz0SWKY0WfkQHRA4mfS3az6eXfAdE7YLKfbwmF
- GiT4I2TI57e6D8F3w6nAWmj5gYQiwSkjI0OIah7bB4V7oUIC9qnwyDYwvrjuHj31N/k+
- ytRvx5CUxwVHoV36VtdyC1iUkgSYnJOZogcvGFnu5EiHR7p31ZVd+Zuoup7wCxKEkb8S
- vhyw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Dkne2T/TKdB0ybFQJ6walVI8BOARZfHQj+j1/7d4EbY=;
+ b=U0PMg3i7XkMzZe7UW/8m+C9Tqh/64nJhK7+QAN3ndUBrmokiDfg6kUC14kxL8hm9JA
+ BJNsluCZFgOz4a1QZG7FS1vLjhOtT4jjtGXVGdggDGNyFmgGfNeFof0wrNUudxwPvaXo
+ DrCNrK+1nPExGZwsEIelo7k7b+L5ztyeMm6zLl3FYXbCsVhBQAhdEf9DjTZkI52xp1uq
+ nOynG/oZmckEUEso3ziO+3R0hYcF+OMhsufSTNPHvIzhiRi3JViO8qhwXj06ZmYOB2W8
+ 67E/qFNhHDdZ1Q+WJJNgm8Jt/8tUrr6NHccwqW9CNkgAtsIrml/R3aWBD+GYRe/VWeUn
+ gsgw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KDkB2H7X
-Subject: Re: [Buildroot] [PATCH] package/c-ares: security bump to v1.34.6
+ header.a=rsa-sha256 header.s=google header.b=U0PMg3i7
+Subject: Re: [Buildroot] [PATCH 1/1] package/qemu: Remove CRIS support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,56 +131,82 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For more information about the release, see:
->   - https://github.com/c-ares/c-ares/releases/tag/v1.34.6
+> Buildroot commmit edfc67fb1a5f0fe67ba9de91e90b06a44902c231 bumped the
+> package from 9.1.0 to 9.2.0 without removing support for CRIS which was
+> removed upstream in version 9.2.0:
+> https://gitlab.com/qemu-project/qemu/-/commit/01d01edc9fc4623e93118bc8cb8c69a46d707026
 > 
-> Fixes the following vulnerability:
+> https://wiki.qemu.org/ChangeLog/9.2
+> "The CRIS target has been removed without replacement"
 > 
-> - CVE-2025-62408:
->     c-ares is an asynchronous resolver library. Versions 1.32.3 through
->     1.34.5  terminate a query after maximum attempts when using
->     read_answer() and process_answer(), which can cause a Denial of
->     Service. This issue is fixed in version 1.34.6.
+> Fixes:
+> https://autobuild.buildroot.net/results/376/376ea96ddfc0f220bca8bd241614303747f61bd4/
 > 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2025-62408
->   - https://github.com/c-ares/c-ares/commit/714bf5675c541bd1e668a8db8e67ce012651e618
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/c-ares/c-ares.hash | 2 +-
->  package/c-ares/c-ares.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  Config.in.legacy       | 6 ++++++
+>  package/qemu/Config.in | 5 -----
+>  package/qemu/qemu.mk   | 2 --
+>  3 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-> index 1c28d91e97..7bf4163e55 100644
-> --- a/package/c-ares/c-ares.hash
-> +++ b/package/c-ares/c-ares.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -sha256  7d935790e9af081c25c495fd13c2cfcda4792983418e96358ef6e7320ee06346  c-ares-1.34.5.tar.gz
-> +sha256  912dd7cc3b3e8a79c52fd7fb9c0f4ecf0aaa73e45efda880266a2d6e26b84ef5  c-ares-1.34.6.tar.gz
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 4539b19bbe..a2a7b06a6d 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,12 @@ endif
 >  
->  # Hash for license file
->  sha256  460f5e768fda3752ca2169a95df062578a10fb126bfd65f3b9b1a1bed2f84807  LICENSE.md
-> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-> index 090147d0e9..1653b16c28 100644
-> --- a/package/c-ares/c-ares.mk
-> +++ b/package/c-ares/c-ares.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  comment "Legacy options removed in 2026.02"
 >  
-> -C_ARES_VERSION = 1.34.5
-> +C_ARES_VERSION = 1.34.6
->  C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/v$(C_ARES_VERSION)
->  C_ARES_INSTALL_STAGING = YES
->  C_ARES_CONF_OPTS = --with-random=/dev/urandom
+> +config BR2_PACKAGE_QEMU_TARGET_CRIS
+> +	bool "qemu cris support has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  CRIS support has been removed since Qemu 9.2.0.
+> +
+>  config BR2_PACKAGE_DVDRW_TOOLS
+>  	bool "dvdrw-tools removed"
+>  	select BR2_LEGACY
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index e16eafe446..0b16c8c284 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+> @@ -189,11 +189,6 @@ config BR2_PACKAGE_QEMU_TARGET_AVR
+>  	help
+>  	  AVR 8-bit microcontroller architecture.
+>  
+> -config BR2_PACKAGE_QEMU_TARGET_CRIS
+> -	bool "cris"
+> -	help
+> -	  ETRAX CRIS microcontroller architecture.
+> -
+>  config BR2_PACKAGE_QEMU_TARGET_HEXAGON
+>  	bool "hexagon (linux-user, only)"
+>  	depends on BR2_PACKAGE_QEMU_LINUX_USER
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 97f8e22091..b7007e3b98 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -65,7 +65,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64) += aarch64-softmmu
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-softmmu
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-softmmu
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AVR) += avr-softmmu
+> -QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_CRIS) += cris-softmmu
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HPPA) += hppa-softmmu
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-softmmu
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-softmmu
+> @@ -102,7 +101,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64_BE) += aarch64_be-linux-user
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-linux-user
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-linux-user
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARMEB) += armeb-linux-user
+> -QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_CRIS) += cris-linux-user
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HEXAGON) += hexagon-linux-user
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HPPA) += hppa-linux-user
+>  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-linux-user
 > -- 
-> 2.53.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
