@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC3D0FCE08E
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 14:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D82CFCE08D
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 14:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B18786164B;
-	Thu, 26 Feb 2026 14:26:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F7DE843B9;
+	Thu, 26 Feb 2026 14:26:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4_F8rAO3045K; Thu, 26 Feb 2026 14:26:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 72W9LT5U8L1F; Thu, 26 Feb 2026 14:26:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EBBA6163B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 004DA84458
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772115972;
-	bh=ifUMY37IHNNhbgtL7iGzjfNCe7EfewhgbxlIFNu7pLo=;
+	s=default; t=1772115974;
+	bh=LZILNVdQsWZQ3F/pxpaxfWM8B0DDGjdhxZRPhAtyKJc=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=k1rVkSg/4+kiC+UJLVXbISemjIBsPGYHsKM1QTarxIKLh78anDAaqlzIf91948JXi
-	 491p5euoQL0dsbVlm7bBchRpRPWAuRaxh/xr1o84fnQ3yvkBN+tDILwcN/rZtmo8AS
-	 9PblxbM6Im+Pk1/MK0QppCPcMpYlqRaxy1CYo/xqzbtUMx89k8/eN8AIkZq1VjDDHJ
-	 BrpqKKBV7vz+rguPKr1MTyj+/8B6Fr4TNpDRkdb+zAxnqhiujexSC/GNzW6l524lAU
-	 8A/c5LDrotHbpyj+K6scFXqqEcGAC7M4GuCn3NgecaenFt5ojEHAKdx27CsZ1pe4Bm
-	 ejBRfv0+7GR5Q==
+	b=ovx7eug9YppnSvkH16eJ/dqIDPgAR6PWO4FJM1/Putl2rDlQVBMtAF75Wb0rIUoSh
+	 11lpdhZTgdeoDL3XVLxXe7gFunDVNhY8WH8kI9Z7JH9tQlvXLlF8uwFkIL+StLuOTA
+	 RK09uUDsNqOGi2L7TvAdqAzmrTRY8NVyLSdKJC2WH9tyCae+TLFyHPsXz0L+QE+bvh
+	 KuuSu4n2Wpx2wTxnOQQr01KOqvzofhoaOEySmYVW8GgT1I+6yG/fkWUlriyuu0HxBC
+	 N9yY5+ZNOWpuXI+dM+u7sAzWeOYYLDgzVqFikmciPL/oSLiJIwMSVlgTmXrv1uomH3
+	 VLykyYG+pM47Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EBBA6163B;
-	Thu, 26 Feb 2026 14:26:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B14323D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 004DA84458;
+	Thu, 26 Feb 2026 14:26:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A433C23D
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:26:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B174D61600
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:26:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF5ED40A4E
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:26:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lwnBb4VbqiMg for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 14:26:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jw601JQ0bdnR for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 14:26:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a02:168:860f:1::35;
  helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4ECCA61603
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ECCA61603
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9470B4084B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9470B4084B
 Received: from mail.codelabs.ch (mail.codelabs.ch [IPv6:2a02:168:860f:1::35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4ECCA61603
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:26:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9470B4084B
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 14:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id 11A235A0007;
- Thu, 26 Feb 2026 15:20:53 +0100 (CET)
+ by mail.codelabs.ch (Postfix) with ESMTP id 1363D5A0005;
+ Thu, 26 Feb 2026 15:20:52 +0100 (CET)
 Received: from mail.codelabs.ch ([127.0.0.1])
  by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZKu_m1V682Bj; Thu, 26 Feb 2026 15:20:52 +0100 (CET)
+ id Bus3pqyw_H7W; Thu, 26 Feb 2026 15:20:51 +0100 (CET)
 Received: from zbook.wlp.is (unknown [185.12.128.225])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 40BDF5A0008;
+ by mail.codelabs.ch (Postfix) with ESMTPSA id 2D32E5A0006;
  Thu, 26 Feb 2026 15:20:49 +0100 (CET)
 From: Martin Willi <martin@strongswan.org>
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Thu, 26 Feb 2026 15:20:21 +0100
-Message-ID: <20260226142023.1064241-7-martin@strongswan.org>
+Date: Thu, 26 Feb 2026 15:20:19 +0100
+Message-ID: <20260226142023.1064241-5-martin@strongswan.org>
 In-Reply-To: <20260226142023.1064241-1-martin@strongswan.org>
 References: <20260226142023.1064241-1-martin@strongswan.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=strongswan.org; s=default; t=1772115649;
- bh=J7H5qn/Dly26hBEO2Lu7dxkmbTNZFYwXNN+UA6zKJks=;
+ bh=7YOlU9KbomA3A6ET+AuQqNswcXngb8q3m4NgFPwcv5U=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=mLl4ZBdq6iBMT3enVvz3+sSUOmuQjk0WrBv37YUtpA7LMHe+82P5cvfm7ypgZiEpV
- +YYz2dmw5zLN3MtV84FO47Bpe7uJ5mZ1D6iP/bIHjJ6sqFWT9FHlYAKHI4VwXJZZTo
- 4NkrfJIvzI8skpu2jaAyoUwv9UZw8QKRwIFCrFp+aHVNDhOfTpN55AhzIlIy8d1GtQ
- u7O6itzKu0VuUqAmSW7laPP534155VMOck1iu2Ub8xivQxbyfVlGkI7AszYMK0H+lG
- +YffMPz5nlyUgwf4n7Ut8BTNvtF6FiHnp67GVZO2LMhVU1gLigr6dK1V76PGbUEH8u
- 0NIA2he3vqRVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=RmJ3Th8CUz6gA89Gk/l7C9gB2DTmq8aNQbOmn8cdyWR7Fkyo3PJbfPRajt703o4am
+ TdF1cS9O3hgCYibAv2CH9mZWAqsuqC5UDNJZ++KWUrqcOxUHe4oqDBSFttGYiswOyK
+ 5ctRyrHTcDEhP9MwNPazDSEzOhykzRjQwMHLbYxBUyN/D2LL976no4g9nmZWLk1gj5
+ g+mzdYrP1NR/Rpb86vG/klCbcBLwQDTxYYD/k50Kc8Y6kusTQfw5L+ZaVpDmKT1nOc
+ tJ1mnQ3W/91q6RDPilwy1iIVFsQuHqiAryc3sr8KviEi0jrBK9D8ZpmnCWcGrw4eRM
+ 15s+bBzE3vuZQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=strongswan.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=strongswan.org header.i=@strongswan.org
- header.a=rsa-sha256 header.s=default header.b=mLl4ZBdq
-Subject: [Buildroot] [PATCH 6/8] utils/generate-cyclonedx: do not list
- filtered packages as dependencies
+ header.a=rsa-sha256 header.s=default header.b=RmJ3Th8C
+Subject: [Buildroot] [PATCH 4/8] utils/generate-cyclonedx: allow filtering
+ host packages from SBOM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,70 +101,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Packages filtered by --no-host or --no-skeleton are not meaningful dependencies,
-as their references are invalid. Filter dependencies by components that are
-actually part of the SBOM.
+Including build dependencies in SBOMs can be useful, but some use cases prefer
+excluding them. Add --no-host to exclude host packages from the generated
+CycloneDX SBOM. Host packages are filtered via the type property from the
+show-info output, with the exception of toolchain packages identified by their
+prefix.
 
 Signed-off-by: Martin Willi <martin@strongswan.org>
 ---
- utils/generate-cyclonedx | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ utils/generate-cyclonedx | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 1d8fec7a2cdf..9920000e6714 100755
+index b728e9883dec..534177bd6902 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -381,7 +381,7 @@ def cyclonedx_vulnerabilities(show_info_dict):
-     } for cve, components in cves.items()]
+@@ -441,6 +441,8 @@ def main():
+                         help="Patch diff mode (default:'inline')")
+     parser.add_argument("--no-skeleton", default=False, action='store_true',
+                         help="Excludes skeleton packages from the CycloneDX output")
++    parser.add_argument("--no-host", default=False, action='store_true',
++                        help="Excludes host packages from the CycloneDX output")
+     parser.add_argument("--project-name", type=str, default="buildroot",
+                         help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
+     parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
+@@ -469,6 +471,11 @@ def main():
+             k: v for k, v in filtered_show_info_dict.items()
+             if not k.startswith("skeleton-")
+         }
++    if args.no_host:
++        filtered_show_info_dict = {
++            k: v for k, v in filtered_show_info_dict.items()
++            if v["type"] != "host" and not k.startswith("toolchain-")
++        }
  
- 
--def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
-+def br2_virtual_is_provided_by(ref, show_info_dict, include) -> list:
-     """Retrieve the list of packages that provide a virtual package.
- 
-     Args:
-@@ -395,11 +395,11 @@ def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
-     return [
-         name
-         for name, comp in show_info_dict.items()
--        if "provides" in comp and ref in comp["provides"]
-+        if name in include and "provides" in comp and ref in comp["provides"]
-     ]
- 
- 
--def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
-+def br2_parse_deps(ref, show_info_dict, include, virtual=False) -> list:
-     """This function will collect all dependencies from the show-info output.
- 
-     The dependency on virtual package will collect the final dependency without
-@@ -417,8 +417,10 @@ def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
-     deps = set()
- 
-     for dep in show_info_dict.get(ref, {}).get("dependencies", []):
-+        if dep not in include:
-+            continue
-         if not virtual and show_info_dict.get(dep, {}).get("virtual"):
--            deps.update(br2_virtual_is_provided_by(dep, show_info_dict))
-+            deps.update(br2_virtual_is_provided_by(dep, show_info_dict, include))
-         else:
-             deps.add(dep)
- 
-@@ -511,11 +513,13 @@ def main():
-         ],
-         "dependencies": [
-             cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
--            *[cyclonedx_dependency(ref, br2_parse_deps(ref, show_info_dict, args.virtual))
--              for ref in filtered_show_info_dict],
-         ],
-         "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
-     }
-+    for ref in filtered_show_info_dict:
-+        include = filtered_show_info_dict.keys()
-+        depends = br2_parse_deps(ref, show_info_dict, include, args.virtual)
-+        cyclonedx_dict["dependencies"].append(cyclonedx_dependency(ref, depends))
- 
-     args.out_file.write(json.dumps(cyclonedx_dict, indent=2))
-     args.out_file.write('\n')
+     cyclonedx_dict = {
+         "bomFormat": "CycloneDX",
 -- 
 2.43.0
 
