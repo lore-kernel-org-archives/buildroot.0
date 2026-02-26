@@ -1,117 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08EDDFD9E11
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25586FD9E0A
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0EDA607EF;
-	Thu, 26 Feb 2026 20:47:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1BE1405FB;
+	Thu, 26 Feb 2026 20:47:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z7jaG5nhg6xr; Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ofAC44mfYuEp; Thu, 26 Feb 2026 20:47:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C6EB607FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D1740791
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138843;
-	bh=KSyCK9eu9/L27V3juycyhrgYyGWSFZYYks70F0l7Qj8=;
+	s=default; t=1772138845;
+	bh=2myenw7HosEX4/Mz11sgRc77oraYyhnS8wcehY/4mjw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XBBa682B/wD8fzTDCZrKG0+wNtRFr6HsWEs/UgdXxwdzE4kHOiaD1yjZGQhefHbPt
-	 zgIke1lKnZHgMhnz4NE2Jkd1fWN+scTa87uLajEqj4vbS7DYejEDANAOX7yumWrUZU
-	 FNekVG6268wDA4NmT5GhReIsULew3xfv1djv1kccxh11njEY90c/KumYaj9obBpaSR
-	 1jwAOagIuTmBVgafP9c7PJkFo6uTaLKtbljc2j8KPeLs8SALbkEDEHo+XLOh22rc23
-	 ddiTPHBiUls32uOVnKq1tm+mOFU4VD2ignDPsOTwf7j9wSG3RQAtOUKShaLe6i6nh8
-	 xe49SL9hqhO+w==
+	b=dEre7A2wX3hlhJaijQg/fAJDTTD8PR5J6ElYTk0zZSJBWYeabSsbIMmbZxFAOTV93
+	 cwEa657gQwNbkAZbFCnlBFFoYBBayh5RsbriJL3kyE/h3ChJwONMVA4DnpvzfEq+wJ
+	 cXYvulG2KvLIsF3GBSV5r4RFZORm4XVmUXfXy+sxt0766FQg9d8oSZV80KhnXGWrtw
+	 zjNC+r9RjHJ+r/9TxHXlFfHipBfp9Z9s4IneHjMLuejNx1girt7kHbhxIOWSexrNC0
+	 T3mxZc7kOCNYO0GFog15WBl3HPhGJ0rHXyoayz4M0Ow0N7kODVeES4cHP7wmVrIQQS
+	 9UWi6K/vNq8TA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C6EB607FB;
-	Thu, 26 Feb 2026 20:47:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DEEB11F3
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2D1740791;
+	Thu, 26 Feb 2026 20:47:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EBE623D
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB71580E4E
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04B1F4076A
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Laley6nz2RZ for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:47:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zHRkDhz0dUnt for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:47:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B69BB80E4D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B69BB80E4D
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B69BB80E4D
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:12 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-436317c80f7so1648364f8f.1
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:12 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7FBB840600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FBB840600
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7FBB840600
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:47:14 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4837634de51so5930075e9.1
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 12:47:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772138831; x=1772743631;
+ d=1e100.net; s=20230601; t=1772138832; x=1772743632;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=Dkne2T/TKdB0ybFQJ6walVI8BOARZfHQj+j1/7d4EbY=;
- b=vMVEKyqu/wD89oHgkD6BUhFeSJ75CAebVaBozDvHYamtDhJ7MDyLZJb0h6jlN+/Oel
- NovvVPq4ONEEx3bk+hj+jMfdbqzDFelXpR3/u+4iuoq9+Bd75twzbzcb748FTlUBCHXo
- 58XCb6JpWI6a0iR14V52VF9W6iihcO7l1gVAhgpHRQ7ObncIM1zJ3wmM1+ZFs9uJ55/h
- oroe/l/wyoO+CRMo4Lb3p2zAc6UknJkzLJLDX5PMw2Zcwwx1LxCW2sCq44ZuqXi2bJNM
- pKXQyopMCO0AErqIEd3DOj6F36FJAiDPVJ8AR1FVrNr0WEYes3hzMxAJCldbwlqfJq0J
- tiYQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUyWnKZxcv0AWbNb4nB8HUi/j4lE4dj+t9QYKK0jJGNLuqleb5GjCQM7TNWWxqd5LQf8G2Z6ZeCI7A=@buildroot.org
-X-Gm-Message-State: AOJu0Yz6wvRStEPTmNO+8uMzhXF/Hmx0eTBfzSK5tpFUhpOpdMq05sJQ
- UtIMokPfJzRcdThkA5AN380CjI0ZPBMMV+QXguqxqnoQwwllzTaAlI0NwVFMXQHTCD5JZkbB0xz
- mpfHd
-X-Gm-Gg: ATEYQzxlFMXx9aN3S4lLC+Ec/GJwcvWoNjIWBusyLc+gq5px8757ibYNbdLsTPnAhP4
- WuFVhs0kftpilFXg0WB6ft+wyIVJ1x603cJgsOuWHHky5uU7KNL4e9wgcs7OAkY2YZQ/udD4s4d
- dtgNf40XorZKx/P7K70qrVqDDLxsdgv/3vMnsLJBQBME15L49M4+KAikllRPCyhsJDXM6GEOSha
- GZdY4uiC8IspzQ6JrS16DkIcVTSXpdMA/6GloX4DuTkXe6Tif2w25oxinp9CTEjEirLR0mTO1vI
- y4FMpPF7OhksUoDZcfn0W7EizzPlp9+EaOzAOwIJoxuSvpOxu7DZ605Iydp2Bzn14rygbqyUU7r
- jUQlmox62Kgc/VeGRBF6ZlsSdxg6txQdxITjUfNd+b7e/gmHCg6kGZbjHQZZPztfs8BXhH2XysY
- OPtIZHC2F7rkqOkeI=
-X-Received: by 2002:a05:6000:2401:b0:439:8c72:1d8f with SMTP id
- ffacd0b85a97d-4399d97499dmr716114f8f.2.1772138830662; 
- Thu, 26 Feb 2026 12:47:10 -0800 (PST)
+ bh=OA9414rURgynLr/Tc5TTnI4hMZwuDURb9MOyNeynp+g=;
+ b=oJkaBNmoiAcE+zM3Pzgb/3joKc7qaiSsRxkypEhoqV53V+QFzumn+4FqBEnJvA9dp3
+ Ct3T3w9Mosk0USi+CLK93u/NAL/Gw0A7i98UIdwEXkMgQUw/5zzvl4g5DwGT+egPFDt2
+ sXRY0udgrwHf55PJoHJXQe2OMYDMDEGFwSnyhJd6IrZ367IO8ZfGY5xN2go7h9CbJ0OE
+ mLT3FuauiQYr4A8A4OHPpjdRdaRb57w1ClH+1ZeILPbEZd3SblUjwU+H9Qt2GLjA38i0
+ qGDq2LI9J7b1x0SE7qURrmWxeGU/cayuU+Rg1ID3BJQDXS7F/3hsXHrs8N/R9yDYFNmS
+ CoFg==
+X-Gm-Message-State: AOJu0YyJOuyCHG/QumkIv4O5/OcN2h+7UUgC69I3RUvIYbXYJ1n4HiBE
+ UKwx5gXOD/mxhoc4li3+oGnV1BL2eH61mqD9tjFKJQ6k8nZ2tJKF7ENK4bDZjUdZTJ2vYe9undW
+ R0GYW
+X-Gm-Gg: ATEYQzxnucIUJ9EMLwpUeYmZahfNDgYFJtmtlKnLPOAnFMtbovyfAKhQMjrZ0czpj0i
+ qdxEtrsrrks44nZDjjY7ooMFkqi/xE1h66eySVsXjAUjncfFHgRBx/a0TsIjMEnhsjn6kwz7mwI
+ mqg4gBiqs2KzUkEzb5d44mKGlMWt2UueyszmgaTNstj/JP04vxYg4Duq7WzQUaB9whsHab7YLSl
+ 96Lbl1GB8biSu3nN/dNlhR4ttjPOqQPLPIjGLWFYZGfdXC0ZsSq5PY+oqQA2bcoWXIxlHZ6ZJXC
+ XMXpdw7A+Ja7qOHcXB9IynWETkwz6ymuJmR8uWLTypN55e+AtO1Qg4m/xiYdbLSxVWqiFSDs75A
+ 8iwf9b6nUcOAfVBwkK3SrLx8WE3cn2XXxs3v6n3otc7782NciECIniM8UVXVhz4kjh66Gz5xt9y
+ b0Eou5VYouvt+NCxs=
+X-Received: by 2002:a05:600c:1d0e:b0:483:acd9:bd18 with SMTP id
+ 5b1f17b1804b1-483c9bc55ecmr3200145e9.1.1772138832437; 
+ Thu, 26 Feb 2026 12:47:12 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4399c60f8e5sm2148648f8f.4.2026.02.26.12.47.10
+ 5b1f17b1804b1-483c3b7713csm56063755e9.11.2026.02.26.12.47.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Feb 2026 12:47:10 -0800 (PST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 21:47:09 +0100
-Message-ID: <20260226204709.253947-1-thomas.perale@mind.be>
+ Thu, 26 Feb 2026 12:47:12 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Thu, 26 Feb 2026 21:47:11 +0100
+Message-ID: <20260226204711.254056-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260221202603.467160-1-bernd@kuhls.net>
-References: <20260221202603.467160-1-bernd@kuhls.net>
+In-Reply-To: <20260222203423.272780-1-thomas.perale@mind.be>
+References: <20260222203423.272780-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772138831; x=1772743631; darn=buildroot.org;
+ d=mind.be; s=google; t=1772138832; x=1772743632; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Dkne2T/TKdB0ybFQJ6walVI8BOARZfHQj+j1/7d4EbY=;
- b=U0PMg3i7XkMzZe7UW/8m+C9Tqh/64nJhK7+QAN3ndUBrmokiDfg6kUC14kxL8hm9JA
- BJNsluCZFgOz4a1QZG7FS1vLjhOtT4jjtGXVGdggDGNyFmgGfNeFof0wrNUudxwPvaXo
- DrCNrK+1nPExGZwsEIelo7k7b+L5ztyeMm6zLl3FYXbCsVhBQAhdEf9DjTZkI52xp1uq
- nOynG/oZmckEUEso3ziO+3R0hYcF+OMhsufSTNPHvIzhiRi3JViO8qhwXj06ZmYOB2W8
- 67E/qFNhHDdZ1Q+WJJNgm8Jt/8tUrr6NHccwqW9CNkgAtsIrml/R3aWBD+GYRe/VWeUn
- gsgw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=OA9414rURgynLr/Tc5TTnI4hMZwuDURb9MOyNeynp+g=;
+ b=Tz07HQc5jdL8/K5k6P5AdeaJ6L/t5u2jsFJdUl5fXIsCWHE1f0NruOnlmyntf7YLog
+ OG4vk6Hd7mLiD7Ggx8/HSLfXnGOVAYV5w3jV8K9DG9GaAfaZeerUWWYf2UJQ1L4nEhci
+ 1+UTpgtUEAXwI+jgygPCL5VAlMNkYPHrTvK2HibLVjH5nQjvZ3V+o632aqBEok2S+kk1
+ KDEnW5N6bY5mdMrG+zyr2glVOZhW3XM4+HDoHr66tz0GyDM+GgD6WkVnSREB3rbVQPz6
+ nAM5xAdhgELO739Iq4c6OPBdY/hYOHXnzdUfekn9D0jTZGEH5hmf0GsBcdZGVPMbsX8u
+ JRnQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=U0PMg3i7
-Subject: Re: [Buildroot] [PATCH 1/1] package/qemu: Remove CRIS support
+ header.a=rsa-sha256 header.s=google header.b=Tz07HQc5
+Subject: Re: [Buildroot] [PATCH 1/1] package/netsnmp: add patch for
+ CVE-2025-68615
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,82 +129,81 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commmit edfc67fb1a5f0fe67ba9de91e90b06a44902c231 bumped the
-> package from 9.1.0 to 9.2.0 without removing support for CRIS which was
-> removed upstream in version 9.2.0:
-> https://gitlab.com/qemu-project/qemu/-/commit/01d01edc9fc4623e93118bc8cb8c69a46d707026
+> Fixes the following security vulnerability:
 > 
-> https://wiki.qemu.org/ChangeLog/9.2
-> "The CRIS target has been removed without replacement"
+> - CVE-2025-68615:
+>     net-snmp is a SNMP application library, tools and daemon. Prior to
+>     versions 5.9.5 and 5.10.pre2, a specially crafted packet to an net-
+>     snmp snmptrapd daemon can cause a buffer overflow and the daemon to
+>     crash. This issue has been patched in versions 5.9.5 and 5.10.pre2.
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/376/376ea96ddfc0f220bca8bd241614303747f61bd4/
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2025-68615
+>   - https://github.com/net-snmp/net-snmp/commit/b4e6f826d9ddcc2d72eac432746807e1234266db
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  Config.in.legacy       | 6 ++++++
->  package/qemu/Config.in | 5 -----
->  package/qemu/qemu.mk   | 2 --
->  3 files changed, 6 insertions(+), 7 deletions(-)
+>  ...d-Fix-out-of-bounds-trapOid-accesses.patch | 32 +++++++++++++++++++
+>  package/netsnmp/netsnmp.mk                    |  2 ++
+>  2 files changed, 34 insertions(+)
+>  create mode 100644 package/netsnmp/0004-snmptrapd-Fix-out-of-bounds-trapOid-accesses.patch
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 4539b19bbe..a2a7b06a6d 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2026.02"
->  
-> +config BR2_PACKAGE_QEMU_TARGET_CRIS
-> +	bool "qemu cris support has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  CRIS support has been removed since Qemu 9.2.0.
+> diff --git a/package/netsnmp/0004-snmptrapd-Fix-out-of-bounds-trapOid-accesses.patch b/package/netsnmp/0004-snmptrapd-Fix-out-of-bounds-trapOid-accesses.patch
+> new file mode 100644
+> index 0000000000..a937b53644
+> --- /dev/null
+> +++ b/package/netsnmp/0004-snmptrapd-Fix-out-of-bounds-trapOid-accesses.patch
+> @@ -0,0 +1,32 @@
+> +From b4e6f826d9ddcc2d72eac432746807e1234266db Mon Sep 17 00:00:00 2001
+> +From: Bart Van Assche <bvanassche@acm.org>
+> +Date: Sun, 2 Nov 2025 14:48:55 -0800
+> +Subject: [PATCH] snmptrapd: Fix out-of-bounds trapOid[] accesses
 > +
->  config BR2_PACKAGE_DVDRW_TOOLS
->  	bool "dvdrw-tools removed"
->  	select BR2_LEGACY
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> index e16eafe446..0b16c8c284 100644
-> --- a/package/qemu/Config.in
-> +++ b/package/qemu/Config.in
-> @@ -189,11 +189,6 @@ config BR2_PACKAGE_QEMU_TARGET_AVR
->  	help
->  	  AVR 8-bit microcontroller architecture.
->  
-> -config BR2_PACKAGE_QEMU_TARGET_CRIS
-> -	bool "cris"
-> -	help
-> -	  ETRAX CRIS microcontroller architecture.
-> -
->  config BR2_PACKAGE_QEMU_TARGET_HEXAGON
->  	bool "hexagon (linux-user, only)"
->  	depends on BR2_PACKAGE_QEMU_LINUX_USER
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 97f8e22091..b7007e3b98 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -65,7 +65,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64) += aarch64-softmmu
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-softmmu
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-softmmu
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AVR) += avr-softmmu
-> -QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_CRIS) += cris-softmmu
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HPPA) += hppa-softmmu
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-softmmu
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-softmmu
-> @@ -102,7 +101,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64_BE) += aarch64_be-linux-user
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-linux-user
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-linux-user
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARMEB) += armeb-linux-user
-> -QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_CRIS) += cris-linux-user
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HEXAGON) += hexagon-linux-user
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HPPA) += hppa-linux-user
->  QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-linux-user
+> +Fixes: https://issues.oss-fuzz.com/issues/457106694
+> +Fixes: https://issues.oss-fuzz.com/issues/458668421
+> +Fixes: https://issues.oss-fuzz.com/issues/458876071
+> +CVE: CVE-2025-68615
+> +Upstream: https://github.com/net-snmp/net-snmp/commit/b4e6f826d9ddcc2d72eac432746807e1234266db
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + apps/snmptrapd_handlers.c | 6 ++++++
+> + 1 file changed, 6 insertions(+)
+> +
+> +diff --git a/apps/snmptrapd_handlers.c b/apps/snmptrapd_handlers.c
+> +index 6cd126f266..afd93ed0fb 100644
+> +--- a/apps/snmptrapd_handlers.c
+> ++++ b/apps/snmptrapd_handlers.c
+> +@@ -1112,6 +1112,12 @@ snmp_input(int op, netsnmp_session *session,
+> + 	     */
+> +             if (pdu->trap_type == SNMP_TRAP_ENTERPRISESPECIFIC) {
+> +                 trapOidLen = pdu->enterprise_length;
+> ++                /*
+> ++                 * Drop packets that would trigger an out-of-bounds trapOid[]
+> ++                 * access.
+> ++                 */
+> ++                if (trapOidLen < 1 || trapOidLen > OID_LENGTH(trapOid) - 2)
+> ++                    return 1;
+> +                 memcpy(trapOid, pdu->enterprise, sizeof(oid) * trapOidLen);
+> +                 if (trapOid[trapOidLen - 1] != 0) {
+> +                     trapOid[trapOidLen++] = 0;
+> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+> index a79c13c611..1c7e406a4e 100644
+> --- a/package/netsnmp/netsnmp.mk
+> +++ b/package/netsnmp/netsnmp.mk
+> @@ -11,6 +11,8 @@ NETSNMP_LICENSE = Various BSD-like
+>  NETSNMP_LICENSE_FILES = COPYING
+>  NETSNMP_CPE_ID_VENDOR = net-snmp
+>  NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
+> +# 0004-snmptrapd-Fix-out-of-bounds-trapOid-accesses.patch
+> +NETSNMP_IGNORE_CVES += CVE-2025-68615
+>  NETSNMP_SELINUX_MODULES = snmp
+>  NETSNMP_INSTALL_STAGING = YES
+>  NETSNMP_CONF_ENV = \
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
