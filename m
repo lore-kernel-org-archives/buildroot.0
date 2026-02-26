@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4CAFD9E10
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3F75FD9E11
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 20:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2FA040768;
-	Thu, 26 Feb 2026 20:44:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A7A9406CF;
+	Thu, 26 Feb 2026 20:44:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xqG93bvCLX0A; Thu, 26 Feb 2026 20:44:00 +0000 (UTC)
+ id FYAXjcSrxTq3; Thu, 26 Feb 2026 20:44:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C8A640755
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 151064074E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772138640;
-	bh=6BwnDxdwtRUtOWFA/8Oc8lmD29dClB5QKPqmPWtJTZE=;
+	s=default; t=1772138642;
+	bh=cvSLTHapfcFvUAnv8u8p5CVbzBsmhRbRe8ILNb1pmCo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OTrR1gRfDNE0EHEDJs4+ulNeg3GLKL/wn15SC9LsWPqBowyMK8PM19HlrjVAlxjH5
-	 Iw5S5NkqMAhbsjOQX8eMBUIEZ0DQpMj7+9GcZVn7v13hdSB8E9qWEnImOQAu/L+5we
-	 P+L5/P9Gi4HbjO32E/wR0QzIv3UKYQCSyABMJDN4wJ+AkBjbxxI0BhVbKLJ/o4bG04
-	 m5UdneKnX80Q7c4aNLuHQVOkZngBMzY9YTZJu8oI1PaHKy47vSiq1VZ8dLTdEO3w2s
-	 RON7N/PBRUOnU8TjbR395DCZokSzJgTlY3WxlZDXRDgNEb6m4mFfeZTLC+IAy2NQAX
-	 IJYKoY1mpEYsg==
+	b=m7bwgtNmeUB+YyCbE97Z6xuxsXYMh7fOCMM952Dbl8sQzOlvfxVbYuNVnOeDPhKxy
+	 HC4cEf57nFuIz+/16tb+HdDhtpcEqqkaKr8gfoDoJLUWIlTAT8EQyatFBpyeN8xvFt
+	 1U/eM1yKIPouDVg+gYdqvBJCtRR8lllsLVKaZBUz24OeDWy2G8FHVVHmu7qJuO5183
+	 Yf1X5oG/uhcecHv4VTHwlWhbzA+L/i8GuLO15PLrIft+7hLyewkD0EP42LdpGiRDfH
+	 LeKHgV5CWVWMQeRJ+zE6Ije86Dfko5zKtYBA7nY4CCpw0p0K6TedaSMAwWELZMFQ+O
+	 wlKYLo1u/V44A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C8A640755;
-	Thu, 26 Feb 2026 20:44:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B235023D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 151064074E;
+	Thu, 26 Feb 2026 20:44:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C2DD9272
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFAE040261
+ by smtp4.osuosl.org (Postfix) with ESMTP id B21AF40758
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:43:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AVDdk0MzcyIA for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7ZSRU72vSeFy for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 20:43:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE42740234
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED77340755
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE42740234
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED77340755
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A66A18750E; Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
+ id E2F4E8750E; Thu, 26 Feb 2026 20:43:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 10:24:47 +0100
+Date: Thu, 26 Feb 2026 10:28:03 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 1c3edc704680863d3f64e290bb8a709b83a24fe9
-X-Git-Newrev: 9677c64019e9875f51ff92bb13f7d6ce4980b226
+X-Git-Oldrev: 071216c81d8612516e3304b41273437df45a1451
+X-Git-Newrev: 8fa5da48d65dd5fee9b3473ee882f50a30655ccd
 X-Patchwork-Hint: ignore
-Message-Id: <20260226204356.A66A18750E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/sheevaplug:
- specify Linux license file
+Message-Id: <20260226204356.E2F4E8750E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qemu: Remove CRIS
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9677c64019e9875f51ff92bb13f7d6ce4980b226
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8fa5da48d65dd5fee9b3473ee882f50a30655ccd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The used Linux kernel (4.14.336) does not contain the default license files
-as those were only added in 4.16 with commit e00a844aca ("LICENSES: Add
-Linux syscall note exception"), so specify the correct license file to fix:
+Buildroot commmit edfc67fb1a5f0fe67ba9de91e90b06a44902c231 bumped the
+package from 9.1.0 to 9.2.0 without removing support for CRIS which was
+removed upstream in version 9.2.0:
+https://gitlab.com/qemu-project/qemu/-/commit/01d01edc9fc4623e93118bc8cb8c69a46d707026
 
-make legal-info
-..
-cp: cannot stat '/path/to/output/build/linux-headers-4.14.336/LICENSES/preferred/GPL-2.0': No such file or directory
+https://wiki.qemu.org/ChangeLog/9.2
+"The CRIS target has been removed without replacement"
 
-And add the sha256sum to the .hash file.
+Fixes:
+https://autobuild.buildroot.net/results/376/376ea96ddfc0f220bca8bd241614303747f61bd4/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: reword commit title]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7bbe1e0979c1432acd62f76b2d16ff8339064397)
+(cherry picked from commit 5e7e7c5a66f82cd6a96fc7925d99554592cca374)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/sheevaplug/patches/linux/linux.hash | 1 +
- configs/sheevaplug_defconfig              | 1 +
- 2 files changed, 2 insertions(+)
+ Config.in.legacy       | 8 ++++++++
+ package/qemu/Config.in | 5 -----
+ package/qemu/qemu.mk   | 2 --
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/board/sheevaplug/patches/linux/linux.hash b/board/sheevaplug/patches/linux/linux.hash
-index b207306a2b..aa432012b0 100644
---- a/board/sheevaplug/patches/linux/linux.hash
-+++ b/board/sheevaplug/patches/linux/linux.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  0820fdb7971c6974338081c11fbf2dc869870501e7bdcac4d0ed58ba1f57b61c  linux-4.14.336.tar.xz
-+sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index 855efedafa..a6a324213c 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -7,6 +7,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.336"
-+BR2_LINUX_KERNEL_LICENSE_FILES="COPYING"
- BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f1e4fa0d99..bddafc66ce 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,14 @@ endif
+ 
+ ###############################################################################
+ 
++comment "Legacy options removed in 2025.02.12"
++
++config BR2_PACKAGE_QEMU_TARGET_CRIS
++	bool "qemu cris support has been removed"
++	select BR2_LEGACY
++	help
++	  CRIS support has been removed since Qemu 9.2.0.
++
+ comment "Legacy options removed in 2025.02.11"
+ 
+ config BR2_PACKAGE_DVDRW_TOOLS
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index ff7423bc4c..31f2981077 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -174,11 +174,6 @@ config BR2_PACKAGE_QEMU_TARGET_AVR
+ 	help
+ 	  AVR 8-bit microcontroller architecture.
+ 
+-config BR2_PACKAGE_QEMU_TARGET_CRIS
+-	bool "cris"
+-	help
+-	  ETRAX CRIS microcontroller architecture.
+-
+ config BR2_PACKAGE_QEMU_TARGET_HEXAGON
+ 	bool "hexagon (linux-user, only)"
+ 	depends on BR2_PACKAGE_QEMU_LINUX_USER
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 3a2f69ea3c..ae5f4ef5f7 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -52,7 +52,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64) += aarch64-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AVR) += avr-softmmu
+-QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_CRIS) += cris-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HPPA) += hppa-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-softmmu
+@@ -89,7 +88,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64_BE) += aarch64_be-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARMEB) += armeb-linux-user
+-QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_CRIS) += cris-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HEXAGON) += hexagon-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_HPPA) += hppa-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-linux-user
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
