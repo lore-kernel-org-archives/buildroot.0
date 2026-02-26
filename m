@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DEB2FD8FCE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 15:50:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84288FD8FCE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 15:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DB4760F80;
-	Thu, 26 Feb 2026 15:50:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4802883D04;
+	Thu, 26 Feb 2026 15:50:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HJWwCqhFtIZl; Thu, 26 Feb 2026 15:50:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xXxMqNk2w2bF; Thu, 26 Feb 2026 15:50:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79CAA60B5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D8FE83D0B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772121013;
-	bh=Jy9yMnxZK6VvD4l8c/mHGbuq23dINnu4Dizl8w/RoIE=;
+	s=default; t=1772121016;
+	bh=tuTk7bSri/NmbUcHT3laB6/+pR32ciztEVkC29G3Xmc=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=pP5gJqyQL5RFG/wwksMXko0oqTM2z22yfLUsEaU/QDYkY/K5yk0CkCVBDEhODf75x
-	 M6Pa+YKO2SkhqHoFOiJ0mKivnSiENzLhG+HA1ohhwEtVYDbejtSGcO8y0P3NCXXGon
-	 ULjBZYb7cVZndIDgXd0ZM+1NFXHOFWZcRPnxmUcK6sY+uC++cVCU8+4D9Qezpa/96k
-	 HFQ9UWNWq3GJvp6TiIDs5yNdIn2KYLFvCGn7Dj9VE3HuCV9bznuEUknPltwTkBs9Xt
-	 ZDOR3IxtS64Ea8YWEuHj5S8hsrDsXjiYh9SWgeWkognDVtqy5Yc10uPOjwCUjptwKR
-	 7No8GK7xe+tOg==
+	b=ldi4SH/939Efm5O1Q1FoZMYFfkAhyn3dZXZ+mPkQdN4g8hl1yE4B6FmSYrVjjgKRq
+	 mabFq1N+I11rJHIOpoOF9Hb6YIcTcWYCfVGb+lsWZPlKUoVbDHFopEZ3Eul1tGBYkJ
+	 S/FB328Wflo7qH1usuTtF9Q65i1yOkl5WnGxKk1nniuPQjUtvj86KrWmcJA7uTC083
+	 sBXxCN1tIifGDI8ZT8ZpZK8fkAUKjdpO4QnDzR9Dc8U/q8FJlzFqOHYIjzaN0qYRjx
+	 a57wzLkz/aCMy/eCEQJJajk6xiQwMiivF1STyYC7vWnnjMaLNRH9PzE3kDIo0yfxPN
+	 psR6X5kasDWeQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79CAA60B5E;
-	Thu, 26 Feb 2026 15:50:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A33A2204
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D8FE83D0B;
+	Thu, 26 Feb 2026 15:50:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9F73204
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88DD440784
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBBEA421FB
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S1oXbQ2Y8Nm4 for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 15:50:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IMkD2HbtpZPS for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 15:50:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6A0C404CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDADC41F2B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6A0C404CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDADC41F2B
  for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:50:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8959873DC; Thu, 26 Feb 2026 15:50:11 +0000 (UTC)
+ id D466B873E7; Thu, 26 Feb 2026 15:50:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 16:45:12 +0100
+Date: Thu, 26 Feb 2026 16:45:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b28f9363c5afbf0782fad6ca5faf71fdd89ee15c
-X-Git-Newrev: 9123849e0e39e54fcaf68597dd038bc60f06eabe
+X-Git-Oldrev: 9123849e0e39e54fcaf68597dd038bc60f06eabe
+X-Git-Newrev: ea79b66ab2bc62a8e2e02b510dbf56c6aecb8725
 X-Patchwork-Hint: ignore
-Message-Id: <20260226155011.C8959873DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] packages/libunistring: bump to version
- 1.4.2
+Message-Id: <20260226155011.D466B873E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups: security bump to v2.4.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,45 +75,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9123849e0e39e54fcaf68597dd038bc60f06eabe
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ea79b66ab2bc62a8e2e02b510dbf56c6aecb8725
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This minor release contains a fix for building with host glibc 2.43,
-which fails otherwise.
+For more information on the version bump, see:
+  - https://github.com/OpenPrinting/cups/blob/v2.4.16/CHANGES.md
+  - https://github.com/OpenPrinting/cups/releases/tag/v2.4.16
+  - https://github.com/OpenPrinting/cups/releases/tag/v2.4.15
 
-Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
+Fixes the following vulnerabilities:
+
+- CVE-2025-58436:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. Prior to version 2.4.15, a client
+    that connects to cupsd but sends slow messages, e.g. only one byte per
+    second, delays cupsd as a whole, such that it becomes unusable by
+    other clients.
+
+For more information, see
+  - https://www.cve.org/CVERecord?id=CVE-2025-58436
+  - https://github.com/OpenPrinting/cups/commit/40008d76a001babbb9beb9d9d74b01a86fb6ddb4
+
+- CVE-2025-61915:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. Prior to version 2.4.15, a user in
+    the lpadmin group can use the cups web ui to change the config and
+    insert a malicious line. Then the cupsd process which runs as root
+    will parse the new config and cause an out-of-bound write.
+
+For more information, see
+  - https://www.cve.org/CVERecord?id=CVE-2025-61915
+  - https://github.com/OpenPrinting/cups/commit/db8d560262c22a21ee1e55dfd62fa98d9359bcb0
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libunistring/libunistring.hash | 4 ++--
- package/libunistring/libunistring.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index f86b6f94b0..ef2f3da341 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.xz.sig
--sha256  67d88430892527861903788868c77802a217b0959990f7449f2976126a307763  libunistring-1.4.1.tar.xz
-+# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.xz.sig
-+sha256  5b46e74377ed7409c5b75e7a96f95377b095623b689d8522620927964a41499c  libunistring-1.4.2.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 1abbfde6da..57333a35bf 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index a200a82deb..7c08a68c10 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
++sha256  0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d  cups-2.4.16-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index e6de671174..d3e6094c67 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNISTRING_VERSION = 1.4.1
-+LIBUNISTRING_VERSION = 1.4.2
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+-CUPS_VERSION = 2.4.14
++CUPS_VERSION = 2.4.16
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
