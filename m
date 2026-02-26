@@ -1,118 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF09FD8FCE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 15:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD3DFD8FC3
+	for <buildroot@archiver.kernel.org>; Thu, 26 Feb 2026 15:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A29E460B49;
-	Thu, 26 Feb 2026 15:51:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hmZh5fLEExvR; Thu, 26 Feb 2026 15:51:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B15DD60B5E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772121066;
-	bh=y4a7rnqjcOSAEvmX/HNV8b2jWbwD1oS7bZFx4olPf5A=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=f4sl+MsBaX8yHiWSPVBQo0J+u801M+U0GQBpqSmAvFSBn6NAXxKpfVIZTJKARoB6w
-	 cpiCcr9hNiY5kgqJhyPhOySIM0HQRIHkX0oq10j2d6nX6jr15/oElBBFRInDIp7cPG
-	 4dffzrXdVIicGDMMxhoq8cYjKx2eMyfaJSQ1SECAi2bga6sFLUDyjqj30PGK7oZNcj
-	 NW6xCeBnpVp8tGPrPyBPA3JFVK26gMuRVF96VyZNE4nZzWh7Fd6t0Kj0kTU69jAEWU
-	 DAQWOTbeZ6AqAfhjI4YTJpZnvysGQwiVmLfzVTaGEh9JnUWyT2BIGuycz3Lwr0bEAp
-	 vuHMqEJ7G0PPQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B15DD60B5E;
-	Thu, 26 Feb 2026 15:51:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A529B24E
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:51:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8AB1083DF1
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:51:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE9B984787;
+	Thu, 26 Feb 2026 15:54:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sI80NLd5gyl0 for <buildroot@buildroot.org>;
- Thu, 26 Feb 2026 15:51:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96C9983D0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96C9983D0F
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96C9983D0F
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:51:01 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-436e8758b91so683996f8f.0
- for <buildroot@buildroot.org>; Thu, 26 Feb 2026 07:51:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772121059; x=1772725859;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=53QJQJswhM4EWSy8vMjDqSXozvM1wNxWA33u6NcltMc=;
- b=Nn/mCkPo1CkVLxguB5s4SWSSEMCMhrbFww3tdu5tFxFHaDA/cxsi5qlPI2saOnWHSr
- 7nVTc6DKW9rA6kvVapM7qkN/QtWmUz8yuKDcKM97R5xKSjpRDh9N1ntHNV6qu22WLikq
- vBKLaqIHAA7X2a6zChcpfdoWNN9sck9rJiCB8OLmYTaNIJRVkBdPwjKrIz05fbKUaNvm
- 5fDvAxybWjsyMsdrK+h0ytgvzvFXg3/QIYtNAEFRjUgRaSJLIQ7brVolABGr+432XZFT
- gouE7rL/vAIcEBwW0kCL3X5PRRI280KbfOuzRQH4nNMc1IFheayGCRq2XxjEGY5FWjqY
- Ed1Q==
-X-Forwarded-Encrypted: i=1;
- AJvYcCW7McjXHdNeoLbRva6pnjorPcGanwlb/ClYm3XsCHjZwxHIrzPxiXMzKsiJTjfnIktUQcTj58Pe2yI=@buildroot.org
-X-Gm-Message-State: AOJu0YzOodSGhL1ePyKDJSEh5dXyW/tqUyHh74JfhXe1t9LNwFVkgS16
- qFGgfiVnHV1jWoSU1+NW91Pr5jNfifnn9TBsuulp/RSOpdhytmT0dSvgj+TYA8ooIcuWDK5bva3
- MC+zt
-X-Gm-Gg: ATEYQzy/6uHA+D4xm4GGrHa3ssD4Da/S0E/1m7FAxw8DcQh9WADvvWkYVWvxCUY7uV2
- POpvB/oTpXm3194a5VgRFUpMi0rnyGwvemMZ3WFYRTWjgpFNEh3oxfq5iN0sgWnUPJnlq6zZsjF
- 4EbT01hSDNy1Z+FU0ZfWklS8fgpD/Z9601xDwAL2pdR74hVk1ZV0dO151MrzcQAkPqPMtd9fsHR
- qiPxpOKOjmOJu2cqx1N3kQWXmPxtK/QdrKw9styBGsEX6ikCKBHj2B3jBhpaOYyCyKimGnyQQuA
- 9mFCTjYunmddwwxU7CfcgjNfouu2hQB6QzVMB0Dd8sWcbUfgwPRGWmUNC5UxzsM5hFvioZpA1TC
- cZt1nysyIZdNqx9I7adekza+OSSwERxH1wj/mlxv2n4D1Rg2SR94zG46nzZUV6jwCXXaCVegFzc
- 5hDi7Q+eyg5tALdwERCytMvhahng==
-X-Received: by 2002:a05:600c:1381:b0:483:7783:5373 with SMTP id
- 5b1f17b1804b1-483c21a5835mr79809015e9.23.1772121058931; 
- Thu, 26 Feb 2026 07:50:58 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483bfb776b0sm40626555e9.1.2026.02.26.07.50.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Feb 2026 07:50:58 -0800 (PST)
-To: Martin Willi <martin@strongswan.org>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 26 Feb 2026 16:50:58 +0100
-Message-ID: <20260226155058.198531-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260226142023.1064241-2-martin@strongswan.org>
-References: <20260226142023.1064241-2-martin@strongswan.org>
+ id dl0BkyYZn2Gi; Thu, 26 Feb 2026 15:54:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB01E84789
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772121251;
+	bh=qLPZ2cXMTzAnozTHfCXNZiGAbbKTec+rBbA6ibPSCBU=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=p/70B3kmjCocoeCTAco8qjGuGexTiwMvF8pBoHCSLRPbUAsqN0eUxBZyLEgqS2HYs
+	 cTNdAhvwJNEMDhCo+oJtlLNXf5hkWCDGJPccgT7A0swj2kY7qIeqAV6BPsgtlPmMZf
+	 1ClV8+88uk6kwlJH4hrvw5RdjCek1y/EPHOvKATLdZNGiWTWQxle6+l2jyHdzlZMdy
+	 J2tLM84qcZ2W22s/mp6GXdezaKw3Y7EDFbaikuvVd9ml/SGx/r7+qiZszqBjUOU3H1
+	 UVdE4Xld97XA5OY7IL5xZT6tBAUl/WaZEsNwb1TAgEVD2GyZi9HfSTvzz0tLNWS2/D
+	 g1PQ2sr8h97eA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB01E84789;
+	Thu, 26 Feb 2026 15:54:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1316A24E
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:54:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECE3884783
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:54:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E1i-sn2844wV for <buildroot@buildroot.org>;
+ Thu, 26 Feb 2026 15:54:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7BF3B84781
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BF3B84781
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7BF3B84781
+ for <buildroot@buildroot.org>; Thu, 26 Feb 2026 15:54:07 +0000 (UTC)
+X-CSE-ConnectionGUID: yXqTNImTSfegT3s4+fBKlg==
+X-CSE-MsgGUID: /7JmeHNcSAOvdefGh1DtLw==
+Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 26 Feb 2026 16:54:04 +0100
+Received: from unknown (HELO OPE16NORMBX503.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 16:54:04 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
+ Thu, 26 Feb 2026 16:54:02 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Thu, 26 Feb 2026 16:54:02 +0100
+X-CSE-ConnectionGUID: dvbmeOPiT+uGZjS5AiOtPw==
+X-CSE-MsgGUID: EblZ8zP0T5GDPGcwIQ++yw==
+X-IronPort-AV: E=Sophos;i="6.21,312,1763420400"; d="scan'208";a="396999561"
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Thu, 26 Feb 2026 16:54:02 +0100
+Message-ID: <cover.1772121240.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26) To OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ (10.115.26.27)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772121059; x=1772725859; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=53QJQJswhM4EWSy8vMjDqSXozvM1wNxWA33u6NcltMc=;
- b=fP2P1Dj9R2s1ZbObEOVSEj155dtkIP+1WNSfOWnGztM/iBG8JpIfpQbRGTkxpErBMj
- VmtXLVS+5Stj4+Eje/O5qWHAz3CHvmM8eeDFjI+9KwXECplkcZ4XcbKb8yl7G1Y0kF58
- L/lE+zClxHzJV3/ha5Ql5vh0yXD/CxNtpmifR0p0LBcVTOhPd4Qd4A5jjuiOwLkGxgUg
- 5gd48Z3sOvJm6ZkrxWn52ZQt7ZiXNLRRiJC2PVFvX9UuzZt5PRhi/KKS0fJCJlSTJBr5
- /9X/HkQBgyVxao7riyhIKnZsvMotAwE2x8F88kGr7GaWuc+Lh8B4o/glRgTGJIzSWr0h
- HA/w==
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1772121247; x=1803657247;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=dlGgFMYYTmFJhL9KToC+XfU68Av+Vk2lOdyQ77rtaf8=;
+ b=h2C1IFG2BkGNr0zizJu/PIV/wGbnFM6JGTAsbwCZ4u5iFd5j2aI5SlCX
+ d34Y4M4vQojkoJY0/daLUA3bPzk3bvlsAxDxiIjC+/dQxdW8t/8thhH8V
+ NUzm8XZ9EnuATXRvQIB8Efk2gVvIbC8+9Q0aQ/Lmm/buMIHpi/3/TmNCJ
+ 3VluFw49sIHyxGGp/a+hoxM2jo8OcDs0CuMj+I2W/w1LC6iujx3ZQZAOg
+ VbSq4rBXBLCPGc4KawCzrqV/pADXUKLxHEFjPpUH9BqZPWbpMz7mh8Pc7
+ XNbALyTGpE6adrO0ziJW2OpH9WVaqMNNiG8NahNcBRS1H9F2wPzsfWmIx
+ Q==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fP2P1Dj9
-Subject: Re: [Buildroot] [PATCH 1/8] utils/generate-cyclonedx: add option to
- control patch diff inclusion in SBOM
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=h2C1IFG2
+Subject: [Buildroot] [PATCH 00/11 v3] package/mosquitto: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,203 +109,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: "Yann E . MORIN" <yann.morin@orange.com>,
+ Danomi Manchego <danomimanchego123@gmail.com>,
+ Titouan Christophe <titouan.christophe@mind.be>,
+ Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Martin,
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-For this use case personally I've used an external script that just strip out
-the pedigree [1] that I just plug next to the SBOM output:
+Hello All!
 
-make show-info | ./utils/geenrate-cyclonedx | strip-pedigree
+This series brings a new version of mosquitto; it is quite a big
+endeavour, as it has switched to using cmake. With this, it becomes
+possible to easily install only the parts of mosquitto that are needed,
+and we do add some options to that effect;
+  - CLI tools to talk MQTT
+  - CLI apps to interact with the the daemon
+  - native websockets, or legacy using libwebsockets
+  - $SYS and $CONTROL trees of topics
+  - bridge support
+  - HTTP API
+  - plugins
 
-Personally I prefer that we have a 'strong' base and then strip out stuff or do
-analysis externaly if needed to keep the script as simple as possible but maybe
-that's just my opinion ;)
+The 2.1.x series is still quite recent, and has already accumulated
+quite a few fixes; the most releveant ones have been backported. As
+for the few patches I've authored, I'm still waiting for internal
+validation of the Eclipse CLA before I can push them upstream...
 
-What do you think ?
+Changes v2 -> v3:
+  - new build options
+  - backport additional fixes
+  - drop my patches, now upstream
 
-PERALE Thomas
+Changes v1 -> v2:
+  - clarify help text about broker-related apps (Fiona)
 
-[1] https://gitlab.com/buildroot.org/buildroot-lts-tools/-/blob/main/tools/strip-pedigree
+Changes since RFC:
+  - add options for various parts
 
-In reply of:
-> Including raw patch data can be verbose, and it does not always make sense.
-> Patch diff data is optional in CycloneDX, so add an option to control whether
-> the diff is included. The patch inclusion mode is modeled as an enum, as future
-> changes will add more modes.
-> 
-> If a patch has no diff and resolves no CVEs, omit it from the SBOM.
-> 
-> Signed-off-by: Martin Willi <martin@strongswan.org>
 
-> ---
->  utils/generate-cyclonedx | 71 ++++++++++++++++++++++------------------
->  1 file changed, 40 insertions(+), 31 deletions(-)
-> 
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 2b6c6d63d3cf..25248a0e2d95 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -13,7 +13,9 @@ import bz2
->  import gzip
->  import json
->  import os
-> +from enum import Enum
->  from pathlib import Path
-> +from typing import Any
->  import urllib.request
->  import subprocess
->  import sys
-> @@ -43,6 +45,13 @@ VULN_WITH_PEDIGREE = set()
->  
->  SPDX_LICENSES = []
->  
-> +class DiffMode(str, Enum):
-> +    INLINE = "inline"
-> +    NONE = "none"
-> +
-> +    def __str__(self) -> str:
-> +        return self.value
-> +
->  if not SPDX_SCHEMA_PATH.exists():
->      # Download the CycloneDX SPDX schema JSON, and cache it locally
->      cyclonedxpath.mkdir(parents=True, exist_ok=True)
-> @@ -197,7 +206,7 @@ def read_patch_file(patch_path: Path) -> str:
->      return content
->  
->  
-> -def cyclonedx_patches(patch_list: list[str]):
-> +def cyclonedx_patches(patch_list: list[str], mode: DiffMode):
->      """Translate a list of patches from the show-info JSON to a list of
->      patches in CycloneDX format.
->  
-> @@ -207,61 +216,58 @@ def cyclonedx_patches(patch_list: list[str]):
->      Returns:
->          dict: Patch information in CycloneDX format.
->      """
-> -    patch_contents = []
-> -    for patch in patch_list:
-> -        patch_path = brpath / patch
-> +    patch_contents: list[dict[str, Any]] = []
-> +    for path in patch_list:
-> +        patch_path = brpath / path
-> +        patch: dict[str, Any] = {}
->          if patch_path.exists():
->              try:
->                  content = read_patch_file(patch_path)
->              except Exception:
->                  # If the patch can't be read it won't be added to
->                  # the resulting SBOM.
-> -                print(f"Failed to handle patch: {patch}", file=sys.stderr)
-> +                print(f"Failed to handle patch: {path}", file=sys.stderr)
->                  continue
->  
->              header = patch_retrieve_header(content)
->  
-> -            issue = {}
->              cves = extract_cves_from_header(header)
->              if cves:
->                  VULN_WITH_PEDIGREE.update(cves)
-> -                issue = {
-> -                    "resolves": [
-> -                        {
-> -                            "type": "security",
-> -                            "name": cve
-> -                        } for cve in cves
-> -                    ]
-> -                }
-> +                patch["resolves"] = [
-> +                    {
-> +                        "type": "security",
-> +                        "name": cve
-> +                    } for cve in cves
-> +                ]
->  
-> -            patch_contents.append({
-> -                "diff": {
-> +            if mode is DiffMode.INLINE:
-> +                patch["diff"] = {
->                      "text": {
->                          "content": content
->                      }
-> -                },
-> -                **issue
-> -            })
-> +                }
->          else:
->              # If the patch is not a file it's a tarball or diff url passed
->              # through the `<pkg-name>_PATCH` variable.
-> -            patch_contents.append({
-> -                "diff": {
-> -                    "url": patch
-> +            if mode is not DiffMode.NONE:
-> +                patch["diff"] = {
-> +                    "url": path
->                  }
-> -            })
->  
-> +        if patch:
-> +            patch["type"] = "unofficial"
-> +            patch_contents.append(patch)
-> +
-> +    if not patch_contents:
-> +        return {}
->      return {
->          "pedigree": {
-> -            "patches": [{
-> -                "type": "unofficial",
-> -                **content
-> -            } for content in patch_contents]
-> +            "patches": patch_contents
->          },
->      }
->  
-> -
-> -def cyclonedx_component(name, comp):
-> +def cyclonedx_component(name, comp, diff_mode: DiffMode):
->      """Translate a component from the show-info output, to a component entry in CycloneDX format.
->  
->      Args:
-> @@ -284,7 +290,7 @@ def cyclonedx_component(name, comp):
->          **({
->              "cpe": comp["cpe-id"],
->          } if "cpe-id" in comp else {}),
-> -        **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
-> +        **cyclonedx_patches(comp.get("patches", []), diff_mode),
->          "properties": [{
->              "name": "BR_TYPE",
->              "value": comp["type"],
-> @@ -393,6 +399,8 @@ def main():
->                          default=sys.stdout)
->      parser.add_argument("--virtual", default=False, action='store_true',
->                          help="This option includes virtual packages to the CycloneDX output")
-> +    parser.add_argument("--with-diff", type=DiffMode, choices=list(DiffMode), default=DiffMode.INLINE,
-> +                        help="Patch diff mode (default:'inline')")
->      parser.add_argument("--project-name", type=str, default="buildroot",
->                          help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
->      parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
-> @@ -440,7 +448,8 @@ def main():
->              }
->          },
->          "components": [
-> -            cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
-> +            cyclonedx_component(name, comp, args.with_diff)
-> +            for name, comp in filtered_show_info_dict.items()
->          ],
->          "dependencies": [
->              cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit b28f9363c5afbf0782fad6ca5faf71fdd89ee15c
+
+  package/patch: add patches for CVE-2018-6952 & CVE-2019-20633 (2026-02-25 22:11:08 +0100)
+
+
+are available as patches in this mail series,
+
+for you to apply patches up to 484bf45a56ffd2f343265076aefefdcfa8694aaa
+
+  package/mosquitto: add option to enable the $CONTROL/# topics tree (2026-02-26 16:53:17 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (11):
+      package/cjson: add host variant
+      package/mosquitto: bump to version 2.1.2
+      pakcage.mosquitto: add option to install CLI tools
+      package/mosquitto: add option to build broker-related apps
+      package/mosquitto: add option for websockets
+      package/mosquitto: add option to enable HTTP API on listeners
+      package/mosquitto: add options for password and ACL plugin
+      package/mosquitto: add option to enable the persist-sqlite plugin
+      package/mosquitto: add option to enable bridge support
+      package/mosquitto: add option to enable the $SYS/# topics tree
+      package/mosquitto: add option to enable the $CONTROL/# topics tree
+
+ package/cjson/cjson.mk                             |   7 +
+ .../0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch  |  50 -----
+ ...T_DISCONNECT-being-called-before-MOSQ_EVT.patch |  40 ++++
+ .../0002-Add-configure-time-check-for-lanl.patch   |  47 -----
+ ...ntial-crash-if-group-id-has-no-group-name.patch |  33 +++
+ ...to_loop_start-leaving-the-mosq-struct-in-.patch |  59 ++++++
+ package/mosquitto/0004-Fix-missing-SONAME.patch    | 136 ++++++++++++
+ ...d-length-not-being-passed-to-MOSQ_EVT_BAS.patch | 231 +++++++++++++++++++++
+ ...-outgoing-maximum-packet-size-limit-check.patch | 152 ++++++++++++++
+ ...x-will-messages-being-incorrectly-delayed.patch | 212 +++++++++++++++++++
+ ...ct-parsing-of-unix-socket-address-in-prox.patch |  27 +++
+ ...ct-maximum-packet-size-restriction-for-in.patch | 116 +++++++++++
+ ...0-broker-properly-check-for-getaddrinfo_a.patch |  35 ++++
+ ...make-Only-include-C-support-when-required.patch |  56 +++++
+ .../0012-libcommon-check-for-getrandom.patch       |  90 ++++++++
+ package/mosquitto/Config.in                        | 118 ++++++++++-
+ package/mosquitto/mosquitto.hash                   |   7 +-
+ package/mosquitto/mosquitto.mk                     | 198 ++++++++++--------
+ 18 files changed, 1415 insertions(+), 199 deletions(-)
+ delete mode 100644 package/mosquitto/0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch
+ create mode 100644 package/mosquitto/0001-Fix-MOSQ_EVT_DISCONNECT-being-called-before-MOSQ_EVT.patch
+ delete mode 100644 package/mosquitto/0002-Add-configure-time-check-for-lanl.patch
+ create mode 100644 package/mosquitto/0002-Fix-potential-crash-if-group-id-has-no-group-name.patch
+ create mode 100644 package/mosquitto/0003-Fix-mosquitto_loop_start-leaving-the-mosq-struct-in-.patch
+ create mode 100644 package/mosquitto/0004-Fix-missing-SONAME.patch
+ create mode 100644 package/mosquitto/0005-Fix-password-length-not-being-passed-to-MOSQ_EVT_BAS.patch
+ create mode 100644 package/mosquitto/0006-Fix-outgoing-maximum-packet-size-limit-check.patch
+ create mode 100644 package/mosquitto/0007-Fix-will-messages-being-incorrectly-delayed.patch
+ create mode 100644 package/mosquitto/0008-Fix-incorrect-parsing-of-unix-socket-address-in-prox.patch
+ create mode 100644 package/mosquitto/0009-Fix-incorrect-maximum-packet-size-restriction-for-in.patch
+ create mode 100644 package/mosquitto/0010-broker-properly-check-for-getaddrinfo_a.patch
+ create mode 100644 package/mosquitto/0011-cmake-Only-include-C-support-when-required.patch
+ create mode 100644 package/mosquitto/0012-libcommon-check-for-getrandom.patch
+
+--
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
