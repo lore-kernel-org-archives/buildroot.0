@@ -4,114 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8530E104891E
-	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 23:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84234104891D
+	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 23:14:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DCE883C92;
-	Fri, 27 Feb 2026 23:14:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5F6F83CA1;
+	Fri, 27 Feb 2026 23:14:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VT1IFlEk4Xfw; Fri, 27 Feb 2026 23:14:26 +0000 (UTC)
+ id QiHrq6ASwiIW; Fri, 27 Feb 2026 23:14:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9376083C30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EB3B83C51
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772234066;
-	bh=1N211Uio+73iYTlS5QPztirC+kPvUmaqWoNnRVYH1ZY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=R5idt0cdLa2bznSTQ9plDbKZM3TP7Gt5UWVuKsZ/6g4g+2Ve81K95L7mntgciRLJ8
-	 eOM5nnv5CZpAag8LqnALDLAQzK9fW6crQJMnkDyysS6tjgH2NfsfLZidabmBadiZzO
-	 kxknCVbBWFG89GF+/m2aiCzTrMYRTiaDJz1AEGdlDDYU5wNtcMHnBuEsh3AxWDevx/
-	 6xb7gab3SgnDOUBk+hvkagXPcvqQRZQk92SH5HLZvH8VdephfBkobyPvmgyZxHqCtp
-	 LECadhOUGlen2dR9giiKIuu29kKBCegGD/SUOADvygxU00dEh3sgIZk/EACnQ+kydX
-	 gQgNv/VZl/4/w==
+	s=default; t=1772234068;
+	bh=4ecd06RiNQjyhNOI0u4N9xkKA/miFZ4PDqqZ9+y8R5w=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=sLlsC4hJZoJUDKaKWhlQX+IcayS3BnqkNO0oGhWPuUtEANPUeSQt+FCdJiwHx+L7h
+	 iCbHfx8xNnvQLcMECfDao3aLI+kAJLQg42leUI4Tz1BjyqQ4oblPn20ipFbnFUBF4R
+	 ieyorj2oJfHVfFlSgg6kVRgDlzV/qmzkipje0JaqJRPZutx8e1flBKnFLCqrtyL8Ko
+	 TrvsdHexrw3xaQHswTO4ywyRqihmXghtlhOFBYq7BktTQKO/SFmQ/IjbxvNP/mT/IW
+	 sV0ns90NS39E0Xcs34lP1Zk0prs+hJ1vL6y0XNZfxOUMjzbnKOAlRwUfp4ckUk3Uf2
+	 aGXAYXViLEpXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9376083C30;
-	Fri, 27 Feb 2026 23:14:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 26D681F3
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 23:14:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EB3B83C51;
+	Fri, 27 Feb 2026 23:14:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A355131
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 23:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C29360E1D
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 23:14:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BD56418CF
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 23:14:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jyvax_974NFj for <buildroot@buildroot.org>;
- Fri, 27 Feb 2026 23:14:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 70b4o0vtZhb3 for <buildroot@buildroot.org>;
+ Fri, 27 Feb 2026 23:14:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::636; helo=mail-pl1-x636.google.com;
+ client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
  envelope-from=joseph@anodize.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 15CD360E1C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15CD360E1C
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
- [IPv6:2607:f8b0:4864:20::636])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 15CD360E1C
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 23:14:23 +0000 (UTC)
-Received: by mail-pl1-x636.google.com with SMTP id
- d9443c01a7336-2ad617d5b80so17097505ad.1
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 15:14:23 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8D0CB418A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D0CB418A6
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
+ [IPv6:2607:f8b0:4864:20::533])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8D0CB418A6
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 23:14:25 +0000 (UTC)
+Received: by mail-pg1-x533.google.com with SMTP id
+ 41be03b00d2f7-c70fb6aa323so860264a12.3
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 15:14:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772234062; x=1772838862;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=pyat1yVI8ho5GHDX/cKMejKXgo0frhvzp6KT/xusC38=;
- b=wIpOqdPtr3cJQZMQz9fqvZxz0mMslEaTHqSdupjAPOf+4Dna6Gkk5njQ9NKUHjY9sQ
- /pU1fUpY34RynI7M1t08DsXCVIa8bQCygrqOEki4IS05cS0rWoIKax9BnbmoaI8XCDVc
- s3p+iRZNggjhWcvQJp/PSm3kJRLUnpgh+EL44/xS69r94+ca484lJlosG4DLFT9DiMRY
- 4PDrElLu6l7xm6EFqqW5KrELfXvEKDybhFAMjCVOBr0qHOF5q30wyYHnmX0ymDE3UmWD
- jqPOgQRrF5khxJnULm+FjEC07wwnQvUi44bBCez3sQyDO57IqPZhLu8XTpw24ageM8XW
- a77Q==
-X-Gm-Message-State: AOJu0YwYKdOmg3rLps5SCPu3RESanRhPyNIxZ252O462KhbD+AqLMxJD
- lZ55SsPH30f4r6hufS/fWtiJbbk2MuhQd3Yow6JlG1g0npvBUIuDIsGXkxdUp+kN86svfkMvTbj
- ukbnpLjY=
-X-Gm-Gg: ATEYQzz1AfCzQOLOW+CscZ6RJwf6w4PmYYVZZJW3Ua1wYcZHRNR1GaLrvw+qw0utvX4
- 118j4jkxAwNEebtaVp1CoXa4J7eBYf1mn5NfQjdo0XRhTibIR2ff8iLsLWQT8bXlzvSzYOC05KM
- 3oiBZ4ris+iXmOlm9/8YQvBxVgCxR90Zu91Hwj4Te5HNITcFTAYuq19dhZNUXYX7PONcl9W8NiL
- qzpd0Sh8eM74YBUBH5xqeyePlWhYnNCyDkI3mi/gRv07zdeBSg40tDD73MzWRljU5bHzPxYARqh
- RIKFBLFJhaLeiUhGvwPR+dCCgEo9WYZnkejJIKgucS6BrLulcybmVxqjB/U35IOWGnkOnBlqEiJ
- Uq04IIgJjKnApdZm8P9jlcyqgXV8iiQMBgTSuc/Gk5gBXnZEysDHGwjfb5EaQsyWE/iX2qDMrrm
- 8jv2KM92vv6gpmkz9/K7+dsba8SGQIczADyok=
-X-Received: by 2002:a17:903:3c4b:b0:2aa:d630:cd5d with SMTP id
- d9443c01a7336-2ae2e4bb332mr42500975ad.44.1772234062486; 
- Fri, 27 Feb 2026 15:14:22 -0800 (PST)
+ d=1e100.net; s=20230601; t=1772234064; x=1772838864;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=fQkdHq2rIsxFq2HLFER7EHxvvzjdIM8R6w0re8URLwk=;
+ b=OldQ07o7D9VxU5fTGPJw6CkrePuQHQAJgpS/fVStJ5QS3DlN51kmWyGjc+i8s+qv3U
+ 0VbWFas67I7ScaNpATd+ovyYNGrtBipMU+yqdkc91/wqTBoqwiUK6f+XngQWlMH47Ezt
+ YwPlWlxptBd09v3YQryyTug+xvB+32hJZT1fTZzFNdJHbHydcFMAkUM7OfxohqvlfFmY
+ T1kZGdX64/uPmH9AI9ZZQlplRIuqxdA+pBdVs6GNIVCmQL1XlWFJ1L5ONXSIKqkYj+U5
+ d4U6VrrEBJ9fsgWJCQlqxjj7f3Mtji0NKHMH6bvc8R1QKk67nZZgSS+EV7VAvKAEDly2
+ 0OLA==
+X-Gm-Message-State: AOJu0YxxokH+CvQcvkCPPssvesDa2xWk5LTzXIKJR9GdQtuWM80RD+Ev
+ aOEvRmFpDicwDhZQKlUdleShw22UJcd/J/qKyaH9zLN6QlW7loLWwkj7vLofzmvYKYI1HkJTJRZ
+ x27b73as=
+X-Gm-Gg: ATEYQzw8llV/FwapRtZgAlg9tp5f6FqIfVJn8VpQ0z+SeuMbXPFyQCEV+yCPSHdrHdf
+ Q7HKCNYW3+bzWASLEEWFq1gRY/tRqEE6R3CVAnTSSkrVMkStKxUCOp7oAOVjSkH4CjH7BWJah2b
+ y4hyxOynVniSxVukQOvzcqmGtCQcChrKSSnvsjEUa9iXroEhz0ZEksKrXHQrPLs+19JLb1Mjlps
+ PYAuZvrys+AKaqQpQY6s+inlNvcKex+SguyqfE33ugoTt9JVlFjy1ybbLHzf8S+DZMdeY5WOVf/
+ bMXwdwq5Qfd6HE729Iir5/dAPYv+zvjL3Ox4u6uTPQKrGamqSKhyHTZpxv3uRlAJ2FPYB40o+r9
+ WgeVRFJUgVka+suswkCXl0PwjKdJcKHo9HoRpum+fJmiAl0MQbj9dVs4fAxPswr93qyaNeFx1zy
+ sjKmSlXnQ+6qK5IFC1AoXq9w7eTZCtLMu5O1g=
+X-Received: by 2002:a17:903:b8b:b0:2aa:daf7:84ea with SMTP id
+ d9443c01a7336-2ae2e3fb944mr43050295ad.45.1772234064243; 
+ Fri, 27 Feb 2026 15:14:24 -0800 (PST)
 Received: from wash.clouded-fir.ts.net ([50.120.91.49])
  by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2adfb69fff3sm72007995ad.48.2026.02.27.15.14.19
+ d9443c01a7336-2adfb69fff3sm72007995ad.48.2026.02.27.15.14.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Feb 2026 15:14:21 -0800 (PST)
+ Fri, 27 Feb 2026 15:14:22 -0800 (PST)
 From: Joseph Kogut <joseph@anodize.com>
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
  Joseph Kogut <joseph.kogut@gmail.com>, Adam Ford <aford173@gmail.com>,
  Steve deRosier <derosier@cal-sierra.com>, Joseph Kogut <joseph@anodize.com>
-Date: Fri, 27 Feb 2026 15:14:04 -0800
-Message-ID: <20260227-mesa3d-amdgpu-virtio-v1-0-3e6d10d4eaef@anodize.com>
+Date: Fri, 27 Feb 2026 15:14:05 -0800
+Message-ID: <20260227-mesa3d-amdgpu-virtio-v1-1-3e6d10d4eaef@anodize.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260227-mesa3d-amdgpu-virtio-v1-0-3e6d10d4eaef@anodize.com>
+References: <20260227-mesa3d-amdgpu-virtio-v1-0-3e6d10d4eaef@anodize.com>
 MIME-Version: 1.0
-X-Change-ID: 20260225-mesa3d-amdgpu-virtio-a5b4116ea08c
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=anodize.com; s=google; t=1772234062; x=1772838862; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pyat1yVI8ho5GHDX/cKMejKXgo0frhvzp6KT/xusC38=;
- b=G11MJnj+rB2bB7ZiMLWE7pJ4ql+gwuPnjXOFY7E899XkQYZDm0hg2Oe4F2rqiqmWlK
- eNAnwMS0xVo1o+5hz8oHhyYs1hC5pXha4xuyeCgpaAKG9J80jNv7rg3yQASM9CHx3T1L
- GjnyiyC9hvZFrcTn55lkEuXlKTu8wGN6Nt3Gp1wMy2UT3YN/DLP7zS1kyNKtBo7/Swil
- 8b6s/xZEVfcLa0WPgMUM7t+uw9CKHUCJIUBITcj/kh71OD1E829KuV/I2eRmvaZZbu4b
- HbH+e7mx8eR3rl6fID8yJNIv9bP9z//FQotxRBTHv0VoXQCyOnjYuCYg7z7FXYYl434s
- 7L5Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=anodize.com; s=google; t=1772234064; x=1772838864; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fQkdHq2rIsxFq2HLFER7EHxvvzjdIM8R6w0re8URLwk=;
+ b=KSGlVA6S8XHcRb0POvLZsSo8y5fEO6HUQCpHq+x8OgVocgI+IrbPR/nEer01CmqDdE
+ LN2qXCmf6aaDwIa8yGwsSpeLYJBHH6s8O2cVz5ooIprVrXr7XW5TtjJ+zT/Gt1I+Tnqm
+ xFzMPrnGlGtYGQjFtgjHAQnrQ6/ALNtey/o0+LYHS8vWCqw1zbA3iIPUdGT+4ydnXa8y
+ PM1twjyP8dDr5st7xdSA3S/kOSSTnKTOKSEmgNyJbhrIEjqwJOJUvfD0v549HyXwHqjb
+ 6rF+Dga2c6zpfV65e+UglmcpT/7IkccoD7GDdM4gW8H1K1FB4BDLVJrekEwWDVeCpiGO
+ ULBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=anodize.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=anodize.com header.i=@anodize.com header.a=rsa-sha256
- header.s=google header.b=G11MJnj+
-Subject: [Buildroot] [PATCH 0/4] package/mesa3d: add host native context
- configs
+ header.s=google header.b=KSGlVA6S
+Subject: [Buildroot] [PATCH 1/4] package/mesa3d: add amdgpu-virtio config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,67 +130,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The first patch adds a config for mesa to enable the virtio backend for
-amdgpu. The second patch enables the same feature for freedreno. The
-third patch rounds out the freedreno API support by adding a config to
-enable the vulkan driver (turnip), which can also be used with the
-virtio backend.
+Add a config section for host native context drivers, which currently
+use virtio-gpu as a backend to mediate access to the host kernel's DRM
+uAPI.
 
-This allows the mesa user-mode drivers that interface with the
-amdgpu kernel-mode driver (radeonsi, RADV) and freedreno KMD (freedreno,
-turnip) to do so inside virtualized guests over virtio-gpu, mediated by
-virglrenderer on the host.
-
-This combination, known as host native context [0], (sometimes referred
-to as vDRM) is an alternative to VirGL/Venus for accelerated graphics
-and compute in virtualized guests.
-
-Host native context runs the UMD directly in guests. Compared to API
-level virtualization through VirGL/Venus, host native context enables
-lower overhead, more complete API support, better security, and
-additional features like hardware accelerated video encode/decode.
-
-VMMs that support host native context currently include libkrun [1]
-based projects like muvm [2], and qemu with a patchset [3] that's
-currently in review on the mailing list. Also, VMMs which support
-rutabaga-gfx [4], including CrosVM and qemu (partial).
-
-See this video [5] for a demonstration of libkrun/muvm with host native
-context using the asahi UMD.
-
-Upstream mesa recently also merged support for i915 and panfrost host
-native context, which should be a part of v26.3. Those config options
-can be added once they become available in a supported release.
-
-See also the patches adding the virglrenderer package [6] to buildroot.
-
-[0] https://www.collabora.com/news-and-blog/blog/2025/01/15/the-state-of-gfx-virtualization-using-virglrenderer/
-[1] https://github.com/containers/libkrun
-[2] https://github.com/AsahiLinux/muvm
-[3] https://lore.kernel.org/qemu-devel/20260220001634.3579257-1-dmitry.osipenko@collabora.com/
-[4] https://github.com/magma-gpu/rutabaga_gfx
-[5] https://www.youtube.com/watch?v=xRNu0XaXTng
-[6] https://lore.kernel.org/buildroot/20260219-virglrenderer-v3-0-e2ff1a23be3f@gmail.com/
+https://www.collabora.com/news-and-blog/blog/2025/01/15/the-state-of-gfx-virtualization-using-virglrenderer/
 
 Signed-off-by: Joseph Kogut <joseph@anodize.com>
 ---
-Joseph Kogut (4):
-      package/mesa3d: add amdgpu-virtio config
-      package/mesa3d: add freedreno-virtio config
-      package/mesa3d: add freedreno vulkan driver config
-      DEVELOPERS: add package/mesa3d for Joseph Kogut
+ package/mesa3d/Config.in | 19 +++++++++++++++++++
+ package/mesa3d/mesa3d.mk |  6 ++++++
+ 2 files changed, 25 insertions(+)
 
- DEVELOPERS               |  1 +
- package/mesa3d/Config.in | 39 +++++++++++++++++++++++++++++++++++++++
- package/mesa3d/mesa3d.mk | 17 +++++++++++++++++
- 3 files changed, 57 insertions(+)
----
-base-commit: 1cc6279d1144c0b61dc6051eb57ab8800931c96c
-change-id: 20260225-mesa3d-amdgpu-virtio-a5b4116ea08c
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 63acf0cc6e..015c47af54 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -248,6 +248,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_AMDGPU
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+ 	select BR2_PACKAGE_LLVM_AMDGPU
+@@ -332,6 +333,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_LIBDRM_AMDGPU
+ 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  RADV is a userspace driver that implements the
+@@ -406,6 +408,23 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_VIRTIO
+ 	help
+ 	  Vulkan VirtIO (venus) driver.
+ 
++comment "Host native context drivers"
++	depends on BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
++
++config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_AMDGPU
++	bool "amdgpu-virtio"
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
++		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD
++	help
++	  Enable VirtIO support for AMDGPU native contexts
++	  used by the radeonsi (OpenGL) and RADV (Vulkan) drivers.
++
++	  Select this when running Mesa inside a virtual machine
++	  with virtio-gpu host native context support.
++
++config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
++	bool
++
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+ comment "OpenGL API Support"
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e5880cc995..5405aa3d50 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -151,6 +151,12 @@ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
+ MESA3D_DEPENDENCIES += host-python-pycparser
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_AMDGPU),y)
++MESA3D_CONF_OPTS += -Damdgpu-virtio=true
++else
++MESA3D_CONF_OPTS += -Damdgpu-virtio=false
++endif
++
+ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
+ MESA3D_DEPENDENCIES += host-python-ply
+ endif
 
-Best regards,
 -- 
-Joseph Kogut <joseph@anodize.com>
+2.53.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
