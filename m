@@ -1,111 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E532EFD530F
-	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 08:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310A3FD530D
+	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 09:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D7B981769;
-	Fri, 27 Feb 2026 08:44:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67CC1608A8;
+	Fri, 27 Feb 2026 09:15:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vaSyvAXuKc4X; Fri, 27 Feb 2026 08:44:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h0EWQWeQ84FD; Fri, 27 Feb 2026 09:15:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B44081764
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C81EE608A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772181851;
-	bh=iv7lzwKEu908nNzenvCWsl97Rg0E6YNTIRheSOQN0xo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=P2MkB/Glqusu7CevQ1PUhxGE0j6UBxGJm18FJvqHDtL9l7WBiAwa+4qCNnsPigFDE
-	 aFlIEA7JrHY4ffprR11tfFeZKWamd/TFtWWvUO2RYvoKCpI0Vgstrf9Jop4hmg5FVG
-	 /mqgZoagodo0ayiLyNnygPQTMAyEwFitN9G1wNyhkhkRw3JzznUxV9AdAgbpJ6+bvB
-	 bnDQnU9zHrMx2iUIlDne5wWypMSWfOD/6lEMQcGVzxIDsfjKXn3Vq44t18apegCAgI
-	 dtVP2bEW6asW8Pj0Ws8Dx45Y091H3nshjggG5eG7opUAhysm2WuLkUqB+tWhpHAgA5
-	 S9ObMxLOD6Z1g==
+	s=default; t=1772183748;
+	bh=gFr5FrmRNS49O5/WY4m2bmprqkC2iJJ/Wz9Ts3skfFw=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=pL6dYt+xJlUvDHRsk5tYUzizz3AylyN6MZzZo1OeWY5wlpJMXTJDs/1wXUxa3CRPS
+	 2gLWi2ta1aFAlbgGoqdOTu0M6DV2mgdfB96z3CpLtffA1KXZLABt006ZbemP52GEJH
+	 8QmjMU5J9S/bUyjfJoMbltg93nuA9kRlBl9fXpT7EBat46HjOUaWV/AAk9zg1JhX2G
+	 ZRm6eHPqTBA/6xMgfTUTnlPKfyQeiji7bA3GpEoRHbvkfAQH0H9Pmf3oim3Ukj61pl
+	 0LS/3ZkSjPZX9cNidpXhbQpGLEH0wH8QXQqCfCCncxkkAWz8Ir0Q4D2U12mv2X08Xe
+	 dkNyfZ/v6LEnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B44081764;
-	Fri, 27 Feb 2026 08:44:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C81EE608A1;
+	Fri, 27 Feb 2026 09:15:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 63829204
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 08:44:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 606F7131
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 09:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54F1340459
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 08:44:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45DA240467
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 09:15:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 55mAZO4OLvob for <buildroot@buildroot.org>;
- Fri, 27 Feb 2026 08:44:08 +0000 (UTC)
+ id 7IMamcjU7IMB for <buildroot@buildroot.org>;
+ Fri, 27 Feb 2026 09:15:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 201F04044C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 201F04044C
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 201F04044C
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 08:44:07 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4834826e5a0so19011855e9.2
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 00:44:07 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2897A40459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2897A40459
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2897A40459
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 09:15:44 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4836e3288cdso11931115e9.0
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 01:15:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772181845; x=1772786645;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OuYcZJwOYTBZ1OCriEjl0bNitHFMSZsaRAkjejd8+tU=;
- b=NbboRg5d8ZC1dBbgyaE6Q+FqVcXfyIpSNZ2C9Qpqdhs2T7gptWXY738tJGTa3bjZNc
- BxZRKQTFPT7eni4XXoA1BqmXvo/dincI6jD1VMDIW6ynDXSWOhVX4PrJHvOgGhqYswGp
- PGF/pO0Cxkhpt/yVEkalav08PdvYCsPdxFbao3BgkzJAYPabsPPlphQLXjLj4FwwJe9A
- NqTfwfyPCqH1TtYi/ey3/afk+4CZ0W0Gm6W9c8EUW9p/hRvwdiiGdWtQfp+XNodIEVSz
- /OvoaGU6CsfeRycmzSGYUvGgn8piYgoTJ7eqWlm/kkPocevA0aL3l9h3B14Zr/eIKx1L
- 5KTA==
-X-Gm-Message-State: AOJu0YwJF7CQYOEriJhDOMDHUMmUEjebkgSLPYLOiUD3iD4+VAUBpT8K
- DlSWW9SEFc1CqYLkccCgQbORNRSNmyxTHEmmsxOUIDVw+5AgmxplY6ENhYKc37aRXYSdbFPej95
- 07Tsa
-X-Gm-Gg: ATEYQzwFJu1JSw9Rv0LpMmd26QCtlb7xHkltmJQjI/diNhgkOGOcTwtNvFJPaaNDnbS
- Dosmv5K7H/7fxhwhp38BGmtOevQVg0lLeYtEAqN+lnmLv/0WKX9C85MUGaFGxeK5nZOhK2NBA+d
- tRPXeuCHu1n6TIdaOAvVOE6bBz8i4X1ONMkrJf0MidSRYG7+t/qTek96PAi9khSbhTvDPiTB55Y
- el3dFhVM6y7qVeyRV1Q2UI90+eUWil/TYppGpoW9UInlMyX2vy3uw5QD55E075dVKaXsFu4eINX
- IKlIU4S99B/oOhF4CwQsMDT1KLNIBuyClJwqIQZcrsODxUh/5aSElaHYL8IPo73iGfPxM1V1tqn
- VrrBwWp/MJXEIXnn9Jro0JZsoUuvK/e0fNuxOVVST+m8TWqZ6J++N8QtI5diNWM8VLWROI/6nk+
- MLv/rkKMP+8mf8se4=
-X-Received: by 2002:a05:600c:81c9:b0:483:7783:5363 with SMTP id
- 5b1f17b1804b1-483c9bfa6bdmr24352455e9.26.1772181845120; 
- Fri, 27 Feb 2026 00:44:05 -0800 (PST)
+ d=1e100.net; s=20230601; t=1772183743; x=1772788543;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=kssliaglys8iocHUeOShPxpX03SiMZr5sYNlmC3XRhI=;
+ b=uDk8YO+1iObSnqZlis4FEoNEHqODBSJcxx1/qJWPb1e2RZ7Fxf0YwOh4WdfkTuKx8p
+ 7WwSXdP0nZIgccwz4w6eDO37hvnGpdhDqxpGGCWDctYZ40si85QzFSEZH6mkB+PeaFJy
+ amP0wA7efaYx+EPKyXerKrR13JEv1VspU24qKXAgMHIw/NmW3R3lMCuTElNpe1eh2DCi
+ BUAL5/Jxvyb3UWFnRdrG2f2kX31KPtKVs6g5vtfxmM09sVZJ77mdRIOWJNwzgc+VEAuW
+ OwD4Q4GFYn71X4dpWx9gDJ+HNaG12tmu1ETdsXnrNXWRwByn6tnwFXvLUUEhhend2IrH
+ /mmg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVBvvln/i9Trz+4RUQDUdqEbSzvcuGmQId6y0Hfqd/1W5b/JxWKfwCLqs+je87/oOL6X0nRLCzp5ms=@buildroot.org
+X-Gm-Message-State: AOJu0YyAGgMEkR/XbHAy7UewPJdpESJcxrQdpkJUyjKW8cTAP4uQxAvg
+ Q2LqtkAwQTasirFzyeliV2DDBSlh/ODNRAG9rWpgliSd1IasYSjpmUF5b1x3O1xxhryxlY/gFhj
+ N2hp+
+X-Gm-Gg: ATEYQzwo8/iIgOlelVmImFyy4xLDF1kguN/x91xXz3BCI3x44Rcs2oOmNPlOeIB7W3A
+ u6X5yCHV4cdqE5rSSsh83jc3E9QSJ1cBaRY/YES1iboasDs4ibQtDhIJYhT/Jl2K2oFsrKSdd0r
+ 8iO7J4wEzlxv5NxObSaXqEOFJUi+7du+Z4kP6dRxMtOK0CVR56XveF6aNiryGJCqNTAuI5jIzis
+ aMMSKlVJ+9l4p9j9j2eRK8rNh+4tZiGUt9JzPgj2yMpsm8VJP8nl8aq6VJYMAe+e+Oo7sP/BAi0
+ gx/IlvoFU0p5xXmEHNJo7eotUyMx/aRDHJK2XbiltXxrr0YDTui7afiZzaUwIbICY5mC7IHJck3
+ p3f3IHco+auWERLudhXCrOg9LfGE3UEgeR0D1AVL22CxheSBnr9dtJswX8kiCD4BqpA20sXaOY5
+ h8UnyiEpzhUldXgJc=
+X-Received: by 2002:a05:600c:2249:b0:47e:e48f:43b5 with SMTP id
+ 5b1f17b1804b1-483c33f33d2mr66488785e9.18.1772183742133; 
+ Fri, 27 Feb 2026 01:15:42 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-483bfcd0b14sm54379915e9.27.2026.02.27.00.44.04
- for <buildroot@buildroot.org>
+ 5b1f17b1804b1-483bd7030b9sm163531085e9.4.2026.02.27.01.15.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Feb 2026 00:44:04 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Fri, 27 Feb 2026 09:44:04 +0100
-Message-ID: <20260227084404.35563-1-thomas.perale@mind.be>
+ Fri, 27 Feb 2026 01:15:41 -0800 (PST)
+To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 27 Feb 2026 10:15:41 +0100
+Message-ID: <20260227091541.41760-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260224145622.1789367-1-fabien.lehoussel@smile.fr>
+References: <20260224145622.1789367-1-fabien.lehoussel@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772181845; x=1772786645; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=OuYcZJwOYTBZ1OCriEjl0bNitHFMSZsaRAkjejd8+tU=;
- b=QhewATMIY/ZvLc5tyV/PTkqE+0pDTQ3ZcLU+Rq/pcPKZ+MsDjSWNCWUW3X8crUF7/P
- J0dNpXCEaXYzCPMVWq9dt9jKBWh/QfqJ/uGtWPKBbRH7ZCWoliC0yq/ZE47pPpAnAM76
- le42qpvKHrQzSfGrw19967bSR58+vN18RuK3W620TjkYeweCIZttvfnva5zl0Rw84Hsj
- VkrQ5l+nIYQCVERfc37VBv5GSg86My7t2plyV5sFLYoo6GIInWZGmDQsEVVjImmhGNnN
- S727+CMFFVRMj7X+APQG/EFfP2sRFIxjD/UA0hy4pXkMh70te171p6ZFU2VRNZCELjMW
- XDSg==
+ d=mind.be; s=google; t=1772183743; x=1772788543; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=kssliaglys8iocHUeOShPxpX03SiMZr5sYNlmC3XRhI=;
+ b=cDp+EMMcElYOA3pRpGP7WumXzBe0Mnzj3dMAlCxrkZ/VHxLGtXFyfe5AeeL/R7fBJv
+ 65I8MZVKC9pxOUbh3TJ9Pt/hLdIQ/RTOWa1XZWONK85PsHyIQPa/D+mRrFT7B6QV1XXK
+ AaJd83ZAB9uGutSW2xrCEsH8ZA9kT+ECfyjSAoiHd1w6b4zYAeGVE1TZUTnoL6S8HMiT
+ mUprlwC5DsnEc8apLtKKxwzh/QudbShhWN572MIP2ozelICQtRDEoLCVhmJw7kPb1+C5
+ AGb16YSPiuBdUIpOrSnEcSY+qDzddkvDNhC4QF41kUVFUpQnvuD0vVQjeMZaHiygfQwU
+ uZMQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=QhewATMI
-Subject: [Buildroot] [PATCH] package/botan: add patch for CVE-2024-50382 &
- CVE-2024-50383
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=cDp+EMMc
+Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/cve-check: Fix
+ vulnerability timestamp to RFC 3339
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,125 +132,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerabilities:
+Hi Fabien,
 
-- CVE-2024-50382:
-    Botan before 3.6.0, when certain LLVM versions are used, has compiler-
-    induced secret-dependent control flow in lib/utils/ghash/ghash.cpp in
-    GHASH in AES-GCM. There is a branch instead of an XOR with carry. This
-    was observed for Clang in LLVM 15 on RISC-V.
+Good catch, thanks for taking the time looking at this.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2024-50382
-  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+I have some comments:
 
-- CVE-2024-50383:
-    Botan before 3.6.0, when certain GCC versions are used, has a
-    compiler-induced secret-dependent operation in lib/utils/donna128.h in
-    donna128 (used in Chacha-Poly1305 and x25519). An addition can be
-    skipped if a carry is not set. This was observed for GCC 11.3.0 with
-    -O2 on MIPS, and GCC on x86-i386. (Only 32-bit processors can be
-    affected.)
+In reply of:
+> Normalize vulnerability timestamps to RFC 3339 format with explicit UTC
+> timezone suffix for CycloneDX 1.6 compliance.
+> This fixes validation errors in sbom-utility and makes the generated
+> SBOM with vulnerabilities compatible with DependencyTrack VEX parsers.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2024-50383
-  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+I took a look at the spec and if I'm not mistaking I didn't found reference
+RFC3339 in the CDX Spec. It looks like this come from the JSON Schema
+`date-time` data type that the CDX Spec use
+https://json-schema.org/understanding-json-schema/reference/type#dates-and-times
+https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...avoid-compiler-induced-side-channels.patch | 65 +++++++++++++++++++
- package/botan/botan.mk                        |  3 +
- 2 files changed, 68 insertions(+)
- create mode 100644 package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+I would include this information in the commit message and the docstring.
 
-diff --git a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
-new file mode 100644
-index 0000000000..22f64be1b9
---- /dev/null
-+++ b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
-@@ -0,0 +1,65 @@
-+From 53b0cfde580e86b03d0d27a488b6c134f662e957 Mon Sep 17 00:00:00 2001
-+From: Jack Lloyd <jack@randombit.net>
-+Date: Sat, 19 Oct 2024 07:43:18 -0400
-+Subject: [PATCH] Add more value barriers to avoid compiler induced side
-+ channels
-+
-+The paper https://arxiv.org/pdf/2410.13489 claims that on specific
-+architectures Clang and GCC may introduce jumps here. The donna128
-+issues only affect 32-bit processors, which explains why we would not
-+see it in the x86-64 valgrind runs.
-+
-+The GHASH leak would seem to be generic but the authors only observed
-+it on RISC-V.
-+
-+CVE: CVE-2024-50382
-+CVE: CVE-2024-50383
-+Upstream: https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/lib/utils/donna128.h      | 5 +++--
-+ src/lib/utils/ghash/ghash.cpp | 2 +-
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/lib/utils/donna128.h b/src/lib/utils/donna128.h
-+index 8212bd349e0..7adf54546df 100644
-+--- a/src/lib/utils/donna128.h
-++++ b/src/lib/utils/donna128.h
-+@@ -8,6 +8,7 @@
-+ #ifndef BOTAN_CURVE25519_DONNA128_H_
-+ #define BOTAN_CURVE25519_DONNA128_H_
-+ 
-++#include <botan/internal/ct_utils.h>
-+ #include <botan/internal/mul128.h>
-+ #include <type_traits>
-+ 
-+@@ -73,14 +74,14 @@ class donna128 final {
-+          l += x.l;
-+          h += x.h;
-+ 
-+-         const uint64_t carry = (l < x.l);
-++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x.l).if_set_return(1);
-+          h += carry;
-+          return *this;
-+       }
-+ 
-+       constexpr donna128& operator+=(uint64_t x) {
-+          l += x;
-+-         const uint64_t carry = (l < x);
-++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x).if_set_return(1);
-+          h += carry;
-+          return *this;
-+       }
-+diff --git a/src/lib/utils/ghash/ghash.cpp b/src/lib/utils/ghash/ghash.cpp
-+index 8c3b1ed6c2a..61b28590002 100644
-+--- a/src/lib/utils/ghash/ghash.cpp
-++++ b/src/lib/utils/ghash/ghash.cpp
-+@@ -131,7 +131,7 @@ void GHASH::key_schedule(std::span<const uint8_t> key) {
-+          m_HM[4 * j + 2 * i + 1] = H1;
-+ 
-+          // GCM's bit ops are reversed so we carry out of the bottom
-+-         const uint64_t carry = R * (H1 & 1);
-++         const uint64_t carry = CT::Mask<uint64_t>::expand(H1 & 1).if_set_return(R);
-+          H1 = (H1 >> 1) | (H0 << 63);
-+          H0 = (H0 >> 1) ^ carry;
-+       }
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 561e7bf702..38948f0184 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -11,6 +11,9 @@ BOTAN_LICENSE = BSD-2-Clause
- BOTAN_LICENSE_FILES = license.txt
- BOTAN_CPE_ID_VALID = YES
- 
-+# 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
-+BOTAN_IGNORE_CVES += CVE-2024-50382 CVE-2024-50383
-+
- BOTAN_INSTALL_STAGING = YES
- 
- BOTAN_DEPENDENCIES = host-python3
--- 
-2.53.0
+> The NVD JSON data feeds provide timestamps in ISO 8601 format without timezone
+> information (e.g., "1999-01-01T05:00:00.000"), but CycloneDX 1.6 requires
+> RFC 3339 format with explicit timezone designation (e.g.,
+> "1999-01-01T05:00:00.000Z").
+> 
+> Add nvd_datetime_to_rfc3339() helper function to convert timestamps before
+> serialization.
+> 
+> Validation results:
+> 
+> Before fix:
+>   $ sbom-utility validate -i cve/cve_report_current.json
+>   [INFO] BOM valid against JSON schema: 'false'
+>   [INFO] (234) schema errors detected.
+> 
+>   Error example:
+>   {
+>     "type": "format",
+>     "field": "vulnerabilities.0.updated",
+>     "context": "(root).vulnerabilities.0.updated",
+>     "description": "Does not match format 'date-time'",
+>     "value": "2025-04-03T01:03:51.193"
+>   }
+> 
+> After fix:
+>   $ sbom-utility validate -i cve/cve_report_update.json
+>   [INFO] BOM valid against JSON schema: 'true'
+> 
+> Tested-with: sbom-utility v0.18.1
+> Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 
+> ---
+>  support/scripts/cve-check | 24 ++++++++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/scripts/cve-check b/support/scripts/cve-check
+> index ff14e4b238..932c67bd12 100755
+> --- a/support/scripts/cve-check
+> +++ b/support/scripts/cve-check
+> @@ -15,6 +15,7 @@ from typing import TypedDict
+>  import argparse
+>  import sys
+>  import json
+> +import datetime
+
+This import ended up not being used in your implementation.
+
+>  
+>  import cve as cvecheck
+>  
+> @@ -118,6 +119,25 @@ def nvd_cve_references_to_cdx(references):
+>      return advisories
+>  
+>  
+> +def nvd_datetime_to_rfc3339(dt_string):
+> +    """
+> +    Normalize datetime string to RFC 3339 format with Z suffix.
+> +    NVD dates are already in ISO format, just need to add the Z suffix.
+> +    
+> +    Input:  "1999-01-01T05:00:00.000"
+> +    Output: "1999-01-01T05:00:00.000Z"
+> +    """
+
+I would include the reference to the JSON Schema spec.
+
+https://json-schema.org/understanding-json-schema/reference/type#dates-and-times
+https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
+
+> +    if not dt_string:
+> +        return None
+> +    
+> +    # If already has Z or timezone offset, return as is
+> +    if dt_string.endswith('Z') or '+' in dt_string or dt_string.endswith('-00:00'):
+> +        return dt_string
+> +    
+> +    # Otherwise just append Z
+> +    return dt_string + 'Z'
+> +
+> +
+
+I propose a more generic implementation with python datetime utils so we can
+cover any edge case that we might not know of yet and normalize the output data.
+As your other series uses the CVEList db which has another format for date this
+might be useful.
+
+https://docs.python.org/3/library/datetime.html#datetime.date.fromisoformat
+
+```python
+from datetime import datetime, timezone
+
+def datetime_to_rfc3339(dt_string):
+    dt = datetime.fromisoformat(dt_string.replace('Z', '+00:00'))
+    
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    else:
+        dt = dt.astimezone(timezone.utc)
+        
+    return dt.isoformat().replace('+00:00', 'Z')
+
+if __name__ == "__main__":
+    print(datetime_to_rfc3339("2010-10-20T00:00:00.000Z"))
+    print(datetime_to_rfc3339("2025-08-02T12:15:28.050"))
+    print(datetime_to_rfc3339("2025-08-02T12:15:28+02:00"))
+    print(datetime_to_rfc3339("1999-01-01T05:00:00.000"))
+```
+
+But maybe this is overkill ?
+
+>  def nvd_cve_to_cdx_vulnerability(nvd_cve):
+>      """
+>      Turns the CVE object fetched from the NVD API into a CycloneDX
+> @@ -134,10 +154,10 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+>              "url": "https://nvd.nist.gov/"
+>          },
+>          **({
+> -            "published": nvd_cve["published"],
+> +            "published": nvd_datetime_to_rfc3339(nvd_cve["published"]),
+>          } if "published" in nvd_cve else {}),
+>          **({
+> -            "updated": nvd_cve["lastModified"],
+> +            "updated": nvd_datetime_to_rfc3339(nvd_cve["lastModified"]),
+>          } if "lastModified" in nvd_cve else {}),
+>          **({
+>              "cwes": nvd_cve_weaknesses_to_cdx(nvd_cve["weaknesses"]),
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
