@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBC09FEFB6E
-	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 17:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBA1FEFB6E
+	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 17:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 775F440C6F;
-	Fri, 27 Feb 2026 17:55:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBDA540C85;
+	Fri, 27 Feb 2026 17:59:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sIt93AYPUHU0; Fri, 27 Feb 2026 17:55:52 +0000 (UTC)
+ id 4mn69MuxlecL; Fri, 27 Feb 2026 17:59:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2FE240C70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C50EA40C96
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772214952;
-	bh=nA4wSbvtMVBxtWuCLBnh89Ov7Q66r/rwGHJ+5XnJTq4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hnWbG5tK4fXf3bqFl/CiyAIo/gkT6giIPmh9XFMn8fA4n4+YYS0kPH2b/YkA26612
-	 r084Fc+ahdnImDe2itBweLKf4P3T1NbXMMO+E/2gYJOHGVlL/m6oIKRcsAc4SE5ViT
-	 QmJzHcbDQIUlvHY5ZHru5lyxqPLWXna+nOjUioBng3WNYlVa95in9MCe7uURkjCHBh
-	 9q9mbFzBLOzdP4LdO1o6GgLbb5AGE1cnXjEtuoDiqHbBWOnpNTJVByfr+fqMOo/cO2
-	 Ehp513NBtRleoL1AroZDzYFtX8Z/+mEXk46xjr1a2g8McljepZuKWJYs9SCVcvrKGE
-	 hu4h4bNQ5FDLA==
+	s=default; t=1772215189;
+	bh=inMwDa0Wxpih1veHNgR94ihqKCHbun9aks9zuntQU5Y=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=MynU21svVGe1n+tMUxDUFRGDLNeewFN8hLp3iY7djxJ0OCAMDu1cTWEUYjrMaOmh5
+	 d/Pr44F0vp9A8lBELgYGUqhhSxf2y8EDrA0h84k0kViOsOJNVQJTUQBXcqNRoDFsXb
+	 R3orm0sN8AzzioXEqjemL49tt4SfxwzlD1zYNxz64TzUfAgA+730y2bwUZqV0HQRd+
+	 6kBeNjpFlj9612KN7Tpll+CpdGIcEJFAokzaErfA7ovSXFnzRC40q4ecN1A2rFi2iY
+	 8XHm9K9muEzQeFml+SR2dvHoAipbj6D0eBQbwD+oKopMpsrXMGXPVeqdymXrNOJuR0
+	 s5blylWhn6NHQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2FE240C70;
-	Fri, 27 Feb 2026 17:55:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D9862131
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 17:55:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C50EA40C96;
+	Fri, 27 Feb 2026 17:59:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F068C131
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 17:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF70F408AD
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 17:55:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5B1C82DD9
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 17:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ekzhuF7qAhP6 for <buildroot@buildroot.org>;
- Fri, 27 Feb 2026 17:55:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F88F40865
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F88F40865
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 17:55:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 523788107C; Fri, 27 Feb 2026 17:55:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 27 Feb 2026 18:54:54 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 06c64513668c6ccccd4c53c35f5fc141554d77d8
-X-Git-Newrev: 250a4cd4cf39ce36829b2268a6176c68f94b7280
-X-Patchwork-Hint: ignore
-Message-Id: <20260227175546.523788107C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mesa3d: add panfrost
- vulkan driver config
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id guQ6I4uK4Aks for <buildroot@buildroot.org>;
+ Fri, 27 Feb 2026 17:59:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0A1A182D57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A1A182D57
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A1A182D57
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 17:59:46 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id DE86C19F733;
+ Fri, 27 Feb 2026 18:59:38 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 27 Feb 2026 18:59:38 +0100
+MIME-Version: 1.0
+Date: Fri, 27 Feb 2026 18:59:38 +0100
+To: Joseph Kogut <joseph@anodize.com>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>, Bernd
+ Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20260225-mesa3d-vulkan-amd-v1-1-2a91cfb594a5@anodize.com>
+References: <20260225-mesa3d-vulkan-amd-v1-1-2a91cfb594a5@anodize.com>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <6c6ce00dae243b3ab3e9ec21ce0f1537@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772215184;
+ bh=INFvzwkOVkpXtnoSBGNiihOSKbwTxETUfZKHI9fZyLY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=aI3ZAAcglImnW7XVQ1dYqdohgI3IeoqbTUHSG/2B60nuMKov+ua+IjX59haX3bQWt
+ KiSYU4wEnc6F1gzw0Eywg23Nk0L97w9L2dAVH0sX3Lrd2f7NssnVDauyCI/ocs+WcU
+ aDsL8MsTVQnUtLGM2s5+8tUz8+7nOmS3/RGVsICiFPMbKvTa30xXO91iuTfSMu6EjS
+ dEZHf3buJCbBnXYMvTn+vBHaU69aiQLbU7Ae2TbJKeUgqu2bLW8u3ChnB3CFxPFxwq
+ hFRRydg6jSxq9cnmiaNsswYvwLXS5vk06GDLrMEO1PS1Lyp5FKPvkBkFCk5CahOapY
+ hsLRjZrSiZhWw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aI3ZAAcg
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: add amd vulkan driver config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,86 +96,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/250a4cd4cf39ce36829b2268a6176c68f94b7280
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 25/02/2026 22:22, Joseph Kogut wrote:
+> Signed-off-by: Joseph Kogut <joseph@anodize.com>
 
-Signed-off-by: Joseph Kogut <joseph@anodize.com>
-[Julien: add libxshmfence comment in Config.in]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mesa3d/Config.in | 14 ++++++++++++++
- package/mesa3d/mesa3d.mk |  6 ++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index e1faea95d5..a7af0af052 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -59,6 +59,7 @@ menuconfig BR2_PACKAGE_MESA3D_OPENCL
- 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS || \
- 		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL || \
- 		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION || \
-+		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST || \
- 		(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS && \
- 		 BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER)
- 	select BR2_PACKAGE_LLVM_RTTI
-@@ -365,6 +366,19 @@ comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
- 
-+config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST
-+	bool "Vulkan panfrost driver"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-+	depends on BR2_PACKAGE_MESA3D_LLVM
-+	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
-+	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
-+	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-+	help
-+	  Vulkan panfrost driver.
-+
-+comment "panfrost vulkan needs llvm"
-+	depends on !BR2_PACKAGE_MESA3D_LLVM
-+
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
- 	bool "Vulkan swrast driver"
- 	depends on BR2_PACKAGE_MESA3D_LLVM
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 42693ce928..027ddf5133 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -131,6 +131,8 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK)     += zink
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION) += imagination
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
-+MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST) += panfrost
-+HOST_MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST) += panfrost
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST) += swrast
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_VIRTIO) += virtio
- 
-@@ -284,7 +286,7 @@ else
- MESA3D_CONF_OPTS += -Dglvnd=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
-+ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST)$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST),)
- HOST_MESA3D_TOOLS += panfrost
- endif
- 
-@@ -315,7 +317,7 @@ HOST_MESA3D_DEPENDENCIES = \
- 	host-python-pyyaml \
- 	host-spirv-tools
- 
--ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
-+ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST)$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST),)
- HOST_MESA3D_INSTALL_PANFROST_COMPILE = \
- 	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/panfrost/clc/panfrost_compile $(HOST_DIR)/bin/panfrost_compile
- endif
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
