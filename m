@@ -4,139 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 406CEFD5303
-	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 07:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E532EFD530F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 08:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CCA7813F4;
-	Fri, 27 Feb 2026 07:04:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D7B981769;
+	Fri, 27 Feb 2026 08:44:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NHok_hYNPKmS; Fri, 27 Feb 2026 07:04:42 +0000 (UTC)
+ id vaSyvAXuKc4X; Fri, 27 Feb 2026 08:44:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4681581352
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B44081764
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772175882;
-	bh=NJ2JuKmcH33i8YWzupE0Asmindi1Q4t3TKZvTATP/nI=;
+	s=default; t=1772181851;
+	bh=iv7lzwKEu908nNzenvCWsl97Rg0E6YNTIRheSOQN0xo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=Br3pk+rNNZg+hZ1C7IbrkaZVKi/hehBE7W6eFIWVIQIh51ls5hbxj+fnOMuybCoYr
-	 ia2FCglDtZuykeU16ITspohg0B2SFilifT1DM5J1DUnb2gjwVRTA/dQKpDtqpNpjGF
-	 phz+V+ILYJEKFXpsSPD9dlWG71x2YCYa1o0kUoOieq96l7BdV+eTUKl9fz/7+icgVY
-	 U49322JdDMcF2XrFCt9+b8A6O5oTBQgNiz0l3Bkt8t/u75kaxHqONah7hhMT6iLHS4
-	 an/cP/bfYEGANhGkQgpUP8k2Rv+9ltGSvhqKDiQcvwe4l5c2rj+z8TpICROZm7vbbo
-	 k6Ny6JsdpATjA==
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=P2MkB/Glqusu7CevQ1PUhxGE0j6UBxGJm18FJvqHDtL9l7WBiAwa+4qCNnsPigFDE
+	 aFlIEA7JrHY4ffprR11tfFeZKWamd/TFtWWvUO2RYvoKCpI0Vgstrf9Jop4hmg5FVG
+	 /mqgZoagodo0ayiLyNnygPQTMAyEwFitN9G1wNyhkhkRw3JzznUxV9AdAgbpJ6+bvB
+	 bnDQnU9zHrMx2iUIlDne5wWypMSWfOD/6lEMQcGVzxIDsfjKXn3Vq44t18apegCAgI
+	 dtVP2bEW6asW8Pj0Ws8Dx45Y091H3nshjggG5eG7opUAhysm2WuLkUqB+tWhpHAgA5
+	 S9ObMxLOD6Z1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4681581352;
-	Fri, 27 Feb 2026 07:04:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 705661F3
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 07:04:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B44081764;
+	Fri, 27 Feb 2026 08:44:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63829204
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 08:44:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61A5D40843
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 07:04:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54F1340459
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 08:44:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b_zxCbZsx7bs for <buildroot@buildroot.org>;
- Fri, 27 Feb 2026 07:04:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 55mAZO4OLvob for <buildroot@buildroot.org>;
+ Fri, 27 Feb 2026 08:44:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c10d::3;
- helo=sn4pr0501cu005.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CFB25408F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFB25408F0
-Received: from SN4PR0501CU005.outbound.protection.outlook.com
- (mail-southcentralusazlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c10d::3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CFB25408F0
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 07:04:38 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hQVv5nR5YvqJxbvfJPzE0Z187QjcNA+YfynurPa1MaV6hSxO6V38Ch/cWtGPLmDNm8bL7IuKhNHbFLqezZsKUWgoMG5gFr38SFQYvpGSqXnDKELq41l9UW8/uErmo1+IbLguNdl1lN4CNvrMLT9dLjw9gQkGJemuF7/KU7vT3sXC/8KCiqfL22ZYAB/jlmt78HRzEgKAsuZA7KcSFfUb/+WNgYYIp1Yt4p/IWjUwGZztX1F2zFmHFSMkHxYNYJVj8oXm0iCrQlKSE1DrDgSKK8RZSbRcr2Dk4MVNh67Pts6SerTQdJf7+CVO442pOOC4oCTX5eLSI20j7c/ImmvNMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WddCRsF+VX4uKxx5s0trlSQbiUQUyVObLMWyN6MACoc=;
- b=BkuEQ3NRlfTRjPej/eqFtY2s/faRwsWiy9FZ2Ua8xygOYi88GS/5pIwv8Jh/zvffIGcdng4b2bI7HhitzuNgjm2K2vB9rdlKsRFKB99auqIUJXTUTGpqujh0MAgxGTpdnVAclMo1fvqbJWcVh/cFMWHuRNfsmrMUW8CHd7VIttGUC2jaPK/sQLywiqPRl1n6zWU4Eqq1QRbQdjFCJ9QiUynklEt60pw1pf6gQqGqOiRHtIi+nVOgyLdgzImDSJILgX27uV6EQgcSzPuBowiuLdZt5cEcG8gCxJ+slo5OD98bxH4C1ZxtoR+U6KMcN6mFDEM3KGrfJ3FjkTjGFATvwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0PR05CA0186.namprd05.prod.outlook.com (2603:10b6:a03:330::11)
- by BN7PPF0FD1DEA27.namprd12.prod.outlook.com
- (2603:10b6:40f:fc02::6c8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.13; Fri, 27 Feb
- 2026 07:04:34 +0000
-Received: from MW1PEPF0001615B.namprd21.prod.outlook.com
- (2603:10b6:a03:330:cafe::1) by SJ0PR05CA0186.outlook.office365.com
- (2603:10b6:a03:330::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.21 via Frontend Transport; Fri,
- 27 Feb 2026 07:04:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- MW1PEPF0001615B.mail.protection.outlook.com (10.167.249.86) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9654.0 via Frontend Transport; Fri, 27 Feb 2026 07:04:33 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 27 Feb
- 2026 01:04:32 -0600
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb09.amd.com
- (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 26 Feb
- 2026 23:04:32 -0800
-Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Fri, 27 Feb 2026 01:04:30 -0600
-To: <buildroot@buildroot.org>
-Date: Fri, 27 Feb 2026 07:04:23 +0000
-Message-ID: <20260227070423.1309460-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 201F04044C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 201F04044C
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 201F04044C
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 08:44:07 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4834826e5a0so19011855e9.2
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 00:44:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1772181845; x=1772786645;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OuYcZJwOYTBZ1OCriEjl0bNitHFMSZsaRAkjejd8+tU=;
+ b=NbboRg5d8ZC1dBbgyaE6Q+FqVcXfyIpSNZ2C9Qpqdhs2T7gptWXY738tJGTa3bjZNc
+ BxZRKQTFPT7eni4XXoA1BqmXvo/dincI6jD1VMDIW6ynDXSWOhVX4PrJHvOgGhqYswGp
+ PGF/pO0Cxkhpt/yVEkalav08PdvYCsPdxFbao3BgkzJAYPabsPPlphQLXjLj4FwwJe9A
+ NqTfwfyPCqH1TtYi/ey3/afk+4CZ0W0Gm6W9c8EUW9p/hRvwdiiGdWtQfp+XNodIEVSz
+ /OvoaGU6CsfeRycmzSGYUvGgn8piYgoTJ7eqWlm/kkPocevA0aL3l9h3B14Zr/eIKx1L
+ 5KTA==
+X-Gm-Message-State: AOJu0YwJF7CQYOEriJhDOMDHUMmUEjebkgSLPYLOiUD3iD4+VAUBpT8K
+ DlSWW9SEFc1CqYLkccCgQbORNRSNmyxTHEmmsxOUIDVw+5AgmxplY6ENhYKc37aRXYSdbFPej95
+ 07Tsa
+X-Gm-Gg: ATEYQzwFJu1JSw9Rv0LpMmd26QCtlb7xHkltmJQjI/diNhgkOGOcTwtNvFJPaaNDnbS
+ Dosmv5K7H/7fxhwhp38BGmtOevQVg0lLeYtEAqN+lnmLv/0WKX9C85MUGaFGxeK5nZOhK2NBA+d
+ tRPXeuCHu1n6TIdaOAvVOE6bBz8i4X1ONMkrJf0MidSRYG7+t/qTek96PAi9khSbhTvDPiTB55Y
+ el3dFhVM6y7qVeyRV1Q2UI90+eUWil/TYppGpoW9UInlMyX2vy3uw5QD55E075dVKaXsFu4eINX
+ IKlIU4S99B/oOhF4CwQsMDT1KLNIBuyClJwqIQZcrsODxUh/5aSElaHYL8IPo73iGfPxM1V1tqn
+ VrrBwWp/MJXEIXnn9Jro0JZsoUuvK/e0fNuxOVVST+m8TWqZ6J++N8QtI5diNWM8VLWROI/6nk+
+ MLv/rkKMP+8mf8se4=
+X-Received: by 2002:a05:600c:81c9:b0:483:7783:5363 with SMTP id
+ 5b1f17b1804b1-483c9bfa6bdmr24352455e9.26.1772181845120; 
+ Fri, 27 Feb 2026 00:44:05 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-483bfcd0b14sm54379915e9.27.2026.02.27.00.44.04
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 27 Feb 2026 00:44:04 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Fri, 27 Feb 2026 09:44:04 +0100
+Message-ID: <20260227084404.35563-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW1PEPF0001615B:EE_|BN7PPF0FD1DEA27:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28a73723-8ea8-4ceb-f00a-08de75ce75ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|1800799024|82310400026|376014|36860700013|7416014|41080700001; 
-X-Microsoft-Antispam-Message-Info: QFhVonJdMuoWP1Txr7UCz1YXG7oNooos6+bDvmghhur9TU9om9HN6G4OSp1ewz4bdgm7jNiX/aYpTAKqHZuWxKcHMSng7WTpjkzSEOnwpvqCLGydPpyHOm0jEDA40l2/46ygxm+ivG67pK6hY+JHvuHqqLvTt/FAkoINiW9PxlBjEsKIzF5a4fmFlnIL+K+r4AGmqAzE2Tbmeq2FyhDtTiI0HwFVCkjPOCNkfBNb9huujGOfh/Hmw9yKXfl+KV0xS/WrBZnZcTytHUHZiTq0e1/h1E9nI1nEuRTXPiFWAr3J9hbfs+RX/ExqIQk+7u2q5E5FJXokgxVy+SWVtdhhFZ/E4sLpb3IliJM2Kxkqi74ycnm0gyRmJT7kx+wVikIS7eRu8uR9ekJmOKVZoaeYVMRNvoGTTfazFcnBe5yTicyZ0aSsbBitnygcJCrF+l5dn9cnvZTpvUINX3DIC21tY476iT4t0+W5+qejkDlCD/rUh4mwWTUuZKxchjlRL0xBKW8vQNP0h53daJYD6RPSELgx5wcr/ewqKGxbKGKWiIzIl0vAKTBP7GslgZo0Mk+CV884f1XGa8mgAZjk1lwk7RCY91NTgtXRaXxaVwOAHkeahxs0Jf6d+0R0cr7v3HbahWMTnA+wKLbGTsOEGaztx+lUZelfaLJ5w+O8pmo3ac9EwR9CcqnMTPqUddZlVhtVAPca/JWMyRf6wKyRjpHCGeponTvjYNN70gsAQ+MnLyG2Jika6ltfn2jX1MGN1mWtI6k67K+MQpCnEgrJcxz+Lsj75L/mJAf8bHc7Z1GF4VDVxwUz0XBpnTt2kMqHMG83nDXo1ZCdB44CZYEitKgqliDnvwpvKeIoedOm1GCP9Ww=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013)(7416014)(41080700001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: CNz49CRI1g6qqCbyKxoAZDemJ1lEvNrx4HgZeVtrMvhe4cXgoobXhVN8O8g3oH8lfa2z7nCtikuKYpNUYn2rZaAYBo7jkV7HmGzn/1BIPzk9T3wCdCauWHKu0R8RmsJ2R1PHd2V4CVLLu8xTqIUm2YVwuVvm6M9mseKvMisq/fVPCIm52PMSidFi1dekxR8vR30fYNk6BwnNT88wEMgDYXqw3nuM4f7MvmfLT+WOb9xxP1W36lM7zHAUaHahE3B96bLNHX7LeS4tXrWE3G2R9i/gVYfnhtFpyr0EwEadPQ14EBNXI8uRtvv6c3UPCzvFPjvpoUy182eKlQoHzr9z3V6DlbnXMuQH47hdwIBMhrS5J9V8ZddUQAZ8ggjummtdMGKAGpftjcTK6k1ss9olJwnkI36OKDyy1iHDtEOa6A3eLejcUiatnynYW3VVMZTZ
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 07:04:33.1933 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28a73723-8ea8-4ceb-f00a-08de75ce75ce
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW1PEPF0001615B.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF0FD1DEA27
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WddCRsF+VX4uKxx5s0trlSQbiUQUyVObLMWyN6MACoc=;
- b=t0dXQekLYgBuQLGcba1nlxwiCgMarBEnrpTUTpCv+vfLGuqZ3E+6f0j4RMf3xnYh63cAF3gxvwT5Yz4v/5y3AufptQRPehUv2TZXVIMe8hzcgMvqoIz11cYSh1SbAZesk3mBllUxPM1v8ouPRAgONzlgCzZ+HuePdO3LJsFZtdA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1772181845; x=1772786645; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OuYcZJwOYTBZ1OCriEjl0bNitHFMSZsaRAkjejd8+tU=;
+ b=QhewATMIY/ZvLc5tyV/PTkqE+0pDTQ3ZcLU+Rq/pcPKZ+MsDjSWNCWUW3X8crUF7/P
+ J0dNpXCEaXYzCPMVWq9dt9jKBWh/QfqJ/uGtWPKBbRH7ZCWoliC0yq/ZE47pPpAnAM76
+ le42qpvKHrQzSfGrw19967bSR58+vN18RuK3W620TjkYeweCIZttvfnva5zl0Rw84Hsj
+ VkrQ5l+nIYQCVERfc37VBv5GSg86My7t2plyV5sFLYoo6GIInWZGmDQsEVVjImmhGNnN
+ S727+CMFFVRMj7X+APQG/EFfP2sRFIxjD/UA0hy4pXkMh70te171p6ZFU2VRNZCELjMW
+ XDSg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=t0dXQekL
-Subject: [Buildroot] [PATCH v1 1/1] DEVELOPERS: add
- configs/versal_vpk120_defconfig
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=QhewATMI
+Subject: [Buildroot] [PATCH] package/botan: add patch for CVE-2024-50382 &
+ CVE-2024-50383
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -148,41 +117,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- yann.morin@orange.com, brandon.maier@collins.com, ju.o@free.fr,
- Neal Frager <neal.frager@amd.com>, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add configs/versal_vpk120_defconfig to the list of files I maintain.
+Fixes the following vulnerabilities:
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-I forgot to include the DEVELOPERS update when I added the new defconfig
-yesterday.
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+- CVE-2024-50382:
+    Botan before 3.6.0, when certain LLVM versions are used, has compiler-
+    induced secret-dependent control flow in lib/utils/ghash/ghash.cpp in
+    GHASH in AES-GCM. There is a branch instead of an XOR with carry. This
+    was observed for Clang in LLVM 15 on RISC-V.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e983ae113..88a684d9ac 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2510,6 +2510,7 @@ F:	boot/xilinx-embeddedsw/
- F:	boot/xilinx-prebuilt/
- F:	configs/versal_vck190_defconfig
- F:	configs/versal_vek280_defconfig
-+F:	configs/versal_vpk120_defconfig
- F:	configs/versal_vpk180_defconfig
- F:	configs/versal2_vek385_defconfig
- F:	configs/zynq_zc702_defconfig
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2024-50382
+  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+
+- CVE-2024-50383:
+    Botan before 3.6.0, when certain GCC versions are used, has a
+    compiler-induced secret-dependent operation in lib/utils/donna128.h in
+    donna128 (used in Chacha-Poly1305 and x25519). An addition can be
+    skipped if a carry is not set. This was observed for GCC 11.3.0 with
+    -O2 on MIPS, and GCC on x86-i386. (Only 32-bit processors can be
+    affected.)
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2024-50383
+  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...avoid-compiler-induced-side-channels.patch | 65 +++++++++++++++++++
+ package/botan/botan.mk                        |  3 +
+ 2 files changed, 68 insertions(+)
+ create mode 100644 package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+
+diff --git a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+new file mode 100644
+index 0000000000..22f64be1b9
+--- /dev/null
++++ b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+@@ -0,0 +1,65 @@
++From 53b0cfde580e86b03d0d27a488b6c134f662e957 Mon Sep 17 00:00:00 2001
++From: Jack Lloyd <jack@randombit.net>
++Date: Sat, 19 Oct 2024 07:43:18 -0400
++Subject: [PATCH] Add more value barriers to avoid compiler induced side
++ channels
++
++The paper https://arxiv.org/pdf/2410.13489 claims that on specific
++architectures Clang and GCC may introduce jumps here. The donna128
++issues only affect 32-bit processors, which explains why we would not
++see it in the x86-64 valgrind runs.
++
++The GHASH leak would seem to be generic but the authors only observed
++it on RISC-V.
++
++CVE: CVE-2024-50382
++CVE: CVE-2024-50383
++Upstream: https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/lib/utils/donna128.h      | 5 +++--
++ src/lib/utils/ghash/ghash.cpp | 2 +-
++ 2 files changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/src/lib/utils/donna128.h b/src/lib/utils/donna128.h
++index 8212bd349e0..7adf54546df 100644
++--- a/src/lib/utils/donna128.h
+++++ b/src/lib/utils/donna128.h
++@@ -8,6 +8,7 @@
++ #ifndef BOTAN_CURVE25519_DONNA128_H_
++ #define BOTAN_CURVE25519_DONNA128_H_
++ 
+++#include <botan/internal/ct_utils.h>
++ #include <botan/internal/mul128.h>
++ #include <type_traits>
++ 
++@@ -73,14 +74,14 @@ class donna128 final {
++          l += x.l;
++          h += x.h;
++ 
++-         const uint64_t carry = (l < x.l);
+++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x.l).if_set_return(1);
++          h += carry;
++          return *this;
++       }
++ 
++       constexpr donna128& operator+=(uint64_t x) {
++          l += x;
++-         const uint64_t carry = (l < x);
+++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x).if_set_return(1);
++          h += carry;
++          return *this;
++       }
++diff --git a/src/lib/utils/ghash/ghash.cpp b/src/lib/utils/ghash/ghash.cpp
++index 8c3b1ed6c2a..61b28590002 100644
++--- a/src/lib/utils/ghash/ghash.cpp
+++++ b/src/lib/utils/ghash/ghash.cpp
++@@ -131,7 +131,7 @@ void GHASH::key_schedule(std::span<const uint8_t> key) {
++          m_HM[4 * j + 2 * i + 1] = H1;
++ 
++          // GCM's bit ops are reversed so we carry out of the bottom
++-         const uint64_t carry = R * (H1 & 1);
+++         const uint64_t carry = CT::Mask<uint64_t>::expand(H1 & 1).if_set_return(R);
++          H1 = (H1 >> 1) | (H0 << 63);
++          H0 = (H0 >> 1) ^ carry;
++       }
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 561e7bf702..38948f0184 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -11,6 +11,9 @@ BOTAN_LICENSE = BSD-2-Clause
+ BOTAN_LICENSE_FILES = license.txt
+ BOTAN_CPE_ID_VALID = YES
+ 
++# 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
++BOTAN_IGNORE_CVES += CVE-2024-50382 CVE-2024-50383
++
+ BOTAN_INSTALL_STAGING = YES
+ 
+ BOTAN_DEPENDENCIES = host-python3
 -- 
-2.25.1
+2.53.0
 
 _______________________________________________
 buildroot mailing list
