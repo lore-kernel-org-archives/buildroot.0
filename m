@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8253AFEFB7F
-	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 19:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0801FEFB7F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 19:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44B6A40CFA;
-	Fri, 27 Feb 2026 19:08:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF55B40D49;
+	Fri, 27 Feb 2026 19:18:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kvL35lQVKYpP; Fri, 27 Feb 2026 19:08:08 +0000 (UTC)
+ id 0cJJRpKTuDXu; Fri, 27 Feb 2026 19:18:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DF9040CEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5453240D40
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772219288;
-	bh=1/XLM7Zram1Fwk0ivxybH7nnkmKEs8JFiH9Lh8nHQT4=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1772219895;
+	bh=kSvZXVOY/hnFP2yslBlOJo9mUpdO4SW11YnjCoG7G54=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=rfZaVX6I70S5As1RhlG/L5lAWg0zzkppjYOBxZyR+OEJWVMAjT0FMmne8ZfJKn+d+
-	 gyIIq9zmdrBfuYNrzHiTLfa2exsfVNoEP8C9bWFhA03K5mq6ukRVDbeyoyS9zoXBao
-	 T74phU1QEw/2f5Ki5EJIyF0Y9PSUHF5/YZYJok2g4ZQcR1DOykTWlMDMNh/wYnV0FD
-	 RrXATSCWl3e+2W9g/3wA6QVqFKRtrfydEtmv3v10CWwcOpjjDI6eLxPA420dViiawC
-	 t3wzojAfZgHG9B2Uqvk9w7XcUMQeC1SC6Npy3fDg9OGF3yYe50dCPU3UaqNu5ZxCHW
-	 M6AKA+MjG8JdQ==
+	b=OghTlAWLErWaCLU5TJRYyzqYPFWPKsjs0MQvkR6naJHv5Iue6XQS6Zpkk7lHcZJvU
+	 rv6LAeoVXWkqnyUlfYcdtQ7PERyEOD5YiBXz3gbqStBt5Dsw9BDyBZXlwM91jheP3U
+	 7IBY1t3P+W5YdgHAhyQBg77IeRQsAc/rKkalzLlQTgHYikbeXVLr4FxGE0aeB4mHkS
+	 tNF+do/jzLcGuQ5u+Hxo3zv6OM8oBXgIAs6QIqADnmInYOw2BY1E3GQeY59Y29r6Jj
+	 6MqN3ON4W/MFMesUSfmZClKElQ6mB4gDxNbFnfkf4QPsHfhahFsd1ysjdOLMdOZi42
+	 vWuWZ3GUZ+Tpg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DF9040CEE;
-	Fri, 27 Feb 2026 19:08:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id ED0061F3
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 19:08:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5453240D40;
+	Fri, 27 Feb 2026 19:18:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A1F11F3
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 19:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2EE440CEE
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 19:08:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1779640864
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 19:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mf3ols05PBU3 for <buildroot@buildroot.org>;
- Fri, 27 Feb 2026 19:08:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CDBC540C84
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDBC540C84
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CDBC540C84
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 19:08:06 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0CAADA4C2FE0
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:07:53 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55624)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vw3Bo-000000001Tz-4AUs
- for buildroot@buildroot.org; Fri, 27 Feb 2026 19:07:52 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Fri, 27 Feb 2026 20:07:52 +0100
-Message-ID: <20260227190752.2041167-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260227190752.2041167-1-bernd@kuhls.net>
-References: <20260227190752.2041167-1-bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id njefWJA--3Oj for <buildroot@buildroot.org>;
+ Fri, 27 Feb 2026 19:18:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 613104060A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 613104060A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 613104060A
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 19:18:11 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 892206293; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 27 Feb 2026 19:18:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vw3Lh-00000008Hjz-1xJj;
+ Fri, 27 Feb 2026 20:18:05 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Mattias =?utf-8?Q?Walstr=C3=B6m?= <lazzer@gmail.com>
+Cc: buildroot@buildroot.org,  Bernd Kuhls <bernd@kuhls.net>,  "Yann E .
+ MORIN" <yann.morin@orange.com>
+In-Reply-To: <20260227160842.2905924-1-lazzer@gmail.com> ("Mattias
+ =?utf-8?Q?Walstr=C3=B6m=22's?=
+ message of "Fri, 27 Feb 2026 17:08:42 +0100")
+References: <20260227160842.2905924-1-lazzer@gmail.com>
+Date: Fri, 27 Feb 2026 20:18:05 +0100
+Message-ID: <87wlzyov0y.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772219273;
- bh=eoxsIhSQpLPxUPdadBDaeyKl0ZId51He4laQukEawEc=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=gq/W1PA+AEZ8beYuW2D3DiEjX9FpZnKR8C6MUcd9meUOd2PlFR275D1ky8/0b1y1w
- AI5S8Cg7Qq158+SLJzAu3tuolarlkDi0I1l0xD0aiPG0GixHJCNsIR2eAEwwQg6Qwz
- vndBZo31eF2e/xv0x1GmIwhZx/sev3pWvI4Z9AmyixUiFzP8wuPTbi87Sgi1is+VzA
- y7R4uH25XijqRW0bVvIzOfR7sEsoKaIAQ2bDQWnMHbh3DhdrxYyHniGwzfjBBy4tq6
- Rdvi3gqvY5A5CxBuFtOfAGbMATjQlGbp3L8arZIAnNfxDx8AJslueFd9F1/+hzsG7O
- x6U61k1E68whg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=gq/W1PA+
-Subject: [Buildroot] [PATCH/next 2/2] package/flashbench: bump version
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=A/0al9rwg784jNKzd+EERKJwhWSgrFEzhNdxn8IWJkriA3o/7WIm5cQdHkoym8ALOim68MarSQnyVEMdHtQ3lxlW84E3KPcXCn1/N5gcVgI7oPS7Hs+xy66qOI2ZV3s6n9HPUIcYQk4a0GNXCKqdwnvhWUxcsoeKYBGeh01rooGI8UsqYBx9rvWOic2dWhsm1Axn8OnO8i/VBt6NYb4CKSQLpEhyLn7eowmYiuM5t6ILBvvshZ4YIxFbRefvNcdzuKfwn8cysrqsGWuUD0TSu8aIGvpjUdk0yQY5T/BMHD6etJrmrrcbsGWZYI3CCP2HFeN1Nsg+Ii7QfIULoOoX1A==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=htj4cmNnLiRn5VXYgQaBFOUwoOMqurn0/KzluF1LndI=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=A/0al9rw
+Subject: Re: [Buildroot] [PATCH 1/1] package/gpsd: Bump version to 3.27.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,45 +94,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to latest commit on the -dev branch.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/flashbench/flashbench.hash | 2 +-
- package/flashbench/flashbench.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/flashbench/flashbench.hash b/package/flashbench/flashbench.hash
-index 8b087c2a10..d5ff4e3a6e 100644
---- a/package/flashbench/flashbench.hash
-+++ b/package/flashbench/flashbench.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  408a2642700b7f8daf4356a49948b921137ad15bb6e0fd05b1cb8dc700c154dc  flashbench-2e30b1968a66147412f21002ea844122a0d5e2f0.tar.gz
-+sha256  27f41fb12012775c26f40b537a0a34387263c558dfb6446b54c333adebed381d  flashbench-d783b1bd2443812c6deadc31b081f043e43e4c1a.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/flashbench/flashbench.mk b/package/flashbench/flashbench.mk
-index 28ce7f7dd1..186e9c162c 100644
---- a/package/flashbench/flashbench.mk
-+++ b/package/flashbench/flashbench.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLASHBENCH_VERSION = 2e30b1968a66147412f21002ea844122a0d5e2f0
-+FLASHBENCH_VERSION = d783b1bd2443812c6deadc31b081f043e43e4c1a
- FLASHBENCH_SITE = $(call github,bradfa,flashbench,$(FLASHBENCH_VERSION))
- FLASHBENCH_LICENSE = GPL-2.0
- FLASHBENCH_LICENSE_FILES = COPYING
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIk1hdHRpYXMiID09IE1hdHRpYXMgV2Fsc3Ryw7ZtIDxsYXp6ZXJAZ21haWwuY29tPiB3
+cml0ZXM6CgogPiBTaWduZWQtb2ZmLWJ5OiBNYXR0aWFzIFdhbHN0csO2bSA8bGF6emVyQGdtYWls
+LmNvbT4KCkNvbW1pdHRlZCBhZnRlciBhZGRpbmcgYSBsaW5rIHRvIGh0dHBzOi8vZ3BzZC5naXRs
+YWIuaW8vZ3BzZC9ORVdTIGFuZAptZW50aW9uaW5nIHRoYXQgdGhpcyBpcyBhIGJ1Z2ZpeCByZWxl
+YXNlLCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
