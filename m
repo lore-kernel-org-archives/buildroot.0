@@ -1,84 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D1C8FD9E3A
-	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 20:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9831710398B2
+	for <buildroot@archiver.kernel.org>; Fri, 27 Feb 2026 20:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4288F4177D;
-	Fri, 27 Feb 2026 20:16:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DejVeAjbZliE; Fri, 27 Feb 2026 20:16:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB23041190
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772223382;
-	bh=dCsqhtkQAbxQzZyGtdmH0lQCiZx/oj3NiSLT0mBrs9k=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oMpvDRU4Rbr8BzgMnXDndVwifbAfX7WkfQqoDLSa6+JPFbG871JAtaA8pIcf0Q0Zx
-	 4x45uEVjiVjeltgV7TIKwW0j3w/Og/5J/1oeSfwSM7dFbdv+nPqPhKafOgXNSbl6Dn
-	 EiqShT9mIq7L3gw3Gx7ApAdP4UQUIHh3FvcYqG02HzHD0RylGYZ42iqBCmCvW41n5n
-	 u4wI2hY0nTymLpMnI+XDOZwqucl4PPm3fVymShGEO8xiI9/kAQcI5ODkuopm+ngz3w
-	 XYp38ChkQ6b8zYG5mutsmbYMvi50rrLOgAlZONzacyBwLdhw3PWW5eGpr6QTPobvi6
-	 l/E9XO6zdNMSQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB23041190;
-	Fri, 27 Feb 2026 20:16:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C635B1F3
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:16:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC1AA81DF4
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:16:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE7F480E05;
+	Fri, 27 Feb 2026 20:57:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DEHh_JkrIIcH for <buildroot@buildroot.org>;
- Fri, 27 Feb 2026 20:16:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.132;
- helo=smtpdh18-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ id cfjv9vtP7k99; Fri, 27 Feb 2026 20:57:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 409B880DEB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772225824;
+	bh=fpU6YHMUI6GF0VcJDo4NIyV8e684HWFATRQPbW1mhn8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=E1lP9oQBNseJQNs2uy9wNmldHQsP8RjjZaIRkTJUly5nX1YEodg+/6U3Bw5nghri4
+	 oHyJ8rejgnT2Jol3D28i50l6V/xQUv7wXg8dlCbOlw2E5x+gebCRKKHFDnKU5G5hM8
+	 WBPYPSPBoUSLE31yOkrQKvNmkb50enw3Cp1ZYCyYMAQ6POpfo65dvHswARjBakC3Ha
+	 w0zt9ddbpkI076eWw8aKDpJ4jt2OdYvKiXDelugMGQ49xHYau3BU2vKcokmouneLUW
+	 /b6w9V5lbVKlEDzcXBeFZ0VbIXhEeMx8zF2m9paRM+lPpE85vWlLokzhyhZlJL/KYc
+	 FDbw33azHyCog==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 409B880DEB;
+	Fri, 27 Feb 2026 20:57:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8CA241F3
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:57:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72CF3403DE
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:57:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f2YOsC6xVyGy for <buildroot@buildroot.org>;
+ Fri, 27 Feb 2026 20:57:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EC05681DE3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC05681DE3
-Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC05681DE3
- for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:16:18 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id w4FvvUmZk5Stew4FxvT7s4; Fri, 27 Feb 2026 21:16:14 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CA8A403D3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7CA8A403D3
+ for <buildroot@buildroot.org>; Fri, 27 Feb 2026 20:57:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 70459854A7; Fri, 27 Feb 2026 20:57:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 27 Feb 2026 21:16:07 +0100
-Message-ID: <20260227201607.3701906-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfEeqakaVirBPLIV1k5EEo7ec7fbniIGbyorxI3zSaiFTc/EPSknzmdM619+x+b7cM3ORVK6JuoE2SGD2BftDrC44Kz637gg7NPG3eJ91GAVmvGU1rxjF
- JPA2gIXDbIjpUxV5KA5RX2F7TXZFKVNZR/ygP4bEij88w1x23am/gN659kjj05EPIyemFi3CJ/CPlmMS9IEC+IQ9+6e3CkkGV99iNiQmxwCCeeaMfzq8QPUR
- pkTrUsUInGPZUvpjqMkqSRtgHWvG/O3utX6zBEc/xXs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1772223374; bh=HPRey5mFZ8RY6KVoRzVdDOquhsCFVEs6zs2me/aRePU=;
- h=From:To:Subject:Date:MIME-Version;
- b=eMXRI4LkbUWn8vndOn2L9l2QkIoiJPYysaq5wQGaDMVLxOv2iA4tJyYJ4vwNbNnmX
- PyfZqX8NmiGz6DWIlMNc+N4U/7doVcJmsIPZDz4xA08CjyL7W0k3TJ1/Y8xzOp/hZ4
- KccmfSeTjUhgbhurX6+GjAJqLBhNbfpicB6qp1eqFbjioUQfEQD6lMBBnu4FuNMoF4
- 2wjO0e3Ldmys3GxNl9+P7sJWchxiFdM6Nta3fUZgpmgYhH9pfu1gcV/4u5kctKiYvs
- 1hi3SqtkysaoHdfCaX/VIfnrA05zhMqQi9DRwTW7h2tFcSrVZqck+WM5IgpK3xrL2r
- mWc/HXdeV5nTA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=eMXRI4Lk
-Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.18.46
+Date: Fri, 27 Feb 2026 21:47:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fbdabe5fda6573fb90571e0188ffaed5dc16dea9
+X-Git-Newrev: 2ce4c8c266b06bdfbfcfe11eb567784c04331d53
+X-Patchwork-Hint: ignore
+Message-Id: <20260227205702.70459854A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/udisks: security bump to version
+ 2.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,54 +69,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2ce4c8c266b06bdfbfcfe11eb567784c04331d53
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+This fixes these CVEs:
+CVE-2026-26103:
+https://github.com/storaged-project/udisks/security/advisories/GHSA-c75h-phf8-ccjm
+CVE-2026-26104:
+https://github.com/storaged-project/udisks/security/advisories/GHSA-fcvx-497g-6xmw
+
 Release notes:
-https://ftp.isc.org/isc/bind9/9.18.46/doc/arm/html/notes.html
-
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.46/doc/arm/html/changelog.html
-
-Fixes bug:
-GL #5751
-https://gitlab.isc.org/isc-projects/bind9/-/issues/5751
+https://github.com/storaged-project/udisks/releases/tag/udisks-2.11.1
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/udisks/udisks.hash | 2 +-
+ package/udisks/udisks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 2e6ab4e043..4671eab985 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.45/bind-9.18.45.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.46/bind-9.18.46.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  096ec94c10bc9d2ba686325660a615962d0fd6529429149acfcfb7daefaf2421  bind-9.18.45.tar.xz
-+sha256  6b59f0de30c6901cce783007d06f7dd717ec3aa74b5bb5cc5159f93f0be4fc1d  bind-9.18.46.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 1b71bcbf66..e58dcda34d 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
+index a62e6b5ed6..8a70b90a67 100644
+--- a/package/udisks/udisks.hash
++++ b/package/udisks/udisks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0bf30151fe8d9d2fb59b57f6630739dfbbd16417dee69ec57d43b37335bd649a  udisks-2.11.0.tar.bz2
++sha256  e88c52bae02fa13414604bbef42c6bb91c2e24177ee0057ed55c6bd7451bcb6d  udisks-2.11.1.tar.bz2
+ sha256  98046e932dc6c739001e79d7079a3bd958fc55475dcd917d27f884c0c93525cc  COPYING
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index c9b66872e9..43d066c9e1 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.18.45
-+BIND_VERSION = 9.18.46
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
--- 
-2.47.3
-
+-UDISKS_VERSION = 2.11.0
++UDISKS_VERSION = 2.11.1
+ UDISKS_SOURCE = udisks-$(UDISKS_VERSION).tar.bz2
+ UDISKS_SITE = https://github.com/storaged-project/udisks/releases/download/udisks-$(UDISKS_VERSION)
+ UDISKS_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
