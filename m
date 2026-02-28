@@ -4,87 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D67FEE4EE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 19:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4D15FEE4F7
+	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 20:15:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F19A160F79;
-	Sat, 28 Feb 2026 19:51:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DE4460F90;
+	Sat, 28 Feb 2026 20:15:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MylNxf1igqHt; Sat, 28 Feb 2026 19:51:06 +0000 (UTC)
+ id 6JyOsN5QrK7v; Sat, 28 Feb 2026 20:15:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13F9960F7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EF0360F93
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772308266;
-	bh=XamQYj28WbEgWupKAOpEFBGNKOaRn0USDVYOqSLwzms=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=PaEVKYJLeUEDEP18oznocyeNMqDondvtK7ITtNvp77pX4r0sj+RMEEQ2mYUqYvH22
-	 7Kt0P+GZVLDjCeyfVEzpzHBdfTKo5mxN/2fMA+8YWzbofx7PgasrXryIIuvlVtLa1h
-	 uYk5yXsmjnHmQ7JolZispJjA3y//EJq+ZVmYTRUkIBBshCZqfi2VDHcokUyS5ylqg3
-	 Ol+ItgD0rwMPdHnJPIDkpsiYAdmwfqgJDitXw6gC6QoCGZBb3I50rC40878wwVJZww
-	 QxJ6pXiwWM9YnG7qK5ex7M8a9dcs2LpuMQAUDbU0f+ZoSEQ7ssk+/L5CLcjgu0G/RH
-	 XnPvCO8ANcuhw==
+	s=default; t=1772309757;
+	bh=f9X4Yanv8oLhobGokgNGvKjcEC+xJihRIuv8Z+crNjk=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=ChYIgvn7ALgBPyTR3gQtAEWih4CcF7/WSbDdtIZhe5uPPDREeXgGcDFIqfvkHi/eY
+	 YCf8P5tRSUmmUYtkhIpDfw9NX9OH1CJmcnWdZjg717+ksZzIwSvxB5vTV+A+c0sK0m
+	 CwfLELHNE93oDGZxlPBj5s2xP18b4BgZwDCs3M90DVyOJiVUrGWOoyPhHmX6OpSDLN
+	 asyxjZoeZdmaZrV+XdJv6Uv8LvUTIN08lyIKRAJN9LYS0Lrqu2t3CM5pszKTt5TeDN
+	 AKaXU1ZP1/HvBkkzhxVUU+0V7w5JKAy7xkHdlnXhmVFRyEbfRXeNknHNwem4Tv0PG9
+	 ig0JrFLTouYdA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13F9960F7B;
-	Sat, 28 Feb 2026 19:51:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 58F9218D
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 19:51:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EF0360F93;
+	Sat, 28 Feb 2026 20:15:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D1F9B18D
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AA0760F7B
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 19:51:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C385A83E70
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:15:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fIXCjY5IGL19 for <buildroot@buildroot.org>;
- Sat, 28 Feb 2026 19:51:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7946A60F79
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7946A60F79
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7946A60F79
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 19:51:01 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1093273050; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 28 Feb 2026 19:50:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vwQL0-00000009cls-1hfN;
- Sat, 28 Feb 2026 20:50:54 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org,  Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>,  Julien Olivain <ju.o@free.fr>,
- Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>,
- guenther.harrasser@mobileye.com
-In-Reply-To: <20260227192112.3792145-1-fiona.klute@gmx.de> (Fiona Klute's
- message of "Fri, 27 Feb 2026 20:21:12 +0100")
-References: <20260227192112.3792145-1-fiona.klute@gmx.de>
-Date: Sat, 28 Feb 2026 20:50:54 +0100
-Message-ID: <871pi4prz5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mnCR4YYCWU-x for <buildroot@buildroot.org>;
+ Sat, 28 Feb 2026 20:15:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D546883E6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D546883E6E
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D546883E6E
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:15:53 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-4399dd8d7b3so1552017f8f.0
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:15:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1772309750; x=1772914550;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=O4AMCMYY9g7ZJCqRf6zI1MFxi2+vJtQow9iBs8hoDDk=;
+ b=rd9JZ8/UBu37PxG0VAlkQn4GvrXyJLM4RqRRfaF2eiHuPwcfqvBHbSDFreKz8/DemN
+ OGxMEihZ30rk5BW0Bzv5b9IxJEYz16FUDviGSGdSqGDV56fKbhgAW6lN3Js1H6wngLut
+ y6fPIOEbQ+icZR6OXisqyQ3nFfBQF2ounf98ByOjlhpbyiE80w6PXVENs34qxPGIEmDl
+ k0fCls1F2FGFL0YWRJtcHC57xecF0Hu2X3s9dwPLslqg+9DFSp/PIl1NVeCTqeOQdPVK
+ PGsdtn8ffkk+DOsCOubS/RibZ8oC8/dSHEKv3IxHuqcNblJ5KYn68GYHvOuUYHKZJWem
+ 3aXw==
+X-Gm-Message-State: AOJu0Yyggu5xhPAdmweMXiR+yAt97E91vhldridKh4TqrCwmsQDIYIXI
+ Rmy+krb6/snrdy+7/oGnnNAZ1QTHEhk4Je8Nlyn4Q9ljbGqyJyA2SGZauF93PnA7PUTnlLwQkqv
+ PLTjC
+X-Gm-Gg: ATEYQzxIcLM3ybfR5f+QFpp0ROB1YjxZ7BuwTHkd0hCbEvQFowamB6folE2EV8RMgHH
+ d7hTVWY8SeguABTCM9mcVfiiHlsJywPAfsdevKqZF0kUF99Y/0Ov8uVuJzND8ecjJAd7+O7x+J8
+ 1+Dq4xOz15a7zVo2wm53Sgy8p/8ZNjw2aKo9i/mx37O+gEzZLYK4SGTBpa7w9EW+5xuIrPP2FvK
+ b0DP7VJuD8Of6S58906z3JAU5h9NaKOfjMtUlsJzc33Goz92ZF3I7RgFbdssqC2w3EmICRUfRUF
+ xYn+7W6Lek5HNbh7S6LPiXo94i7p3uZpLf3rhhEWtkvaXvUcecJ6V2apxyvtC3P5J0fXgUIPfc2
+ pI8LdDb5SEmHM6Y0PnA2ZiW14013buNXGrfJ0Y7BoaFcuM2I5+uJTO+C1MDGvJniR3Ow+M3bq9H
+ E4bvm/2e2cq6H5j6U=
+X-Received: by 2002:a05:6000:288a:b0:439:af0e:5796 with SMTP id
+ ffacd0b85a97d-439af0e5989mr1774544f8f.27.1772309749657; 
+ Sat, 28 Feb 2026 12:15:49 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4399c60f8e5sm18120867f8f.4.2026.02.28.12.15.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 28 Feb 2026 12:15:48 -0800 (PST)
+To: buildroot@buildroot.org
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Date: Sat, 28 Feb 2026 21:15:47 +0100
+Message-ID: <20260228201547.84699-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ClLhiQ3py1gsYwBDIM3bI5e6ji7PkLw5QCk5AC6lz/77ZkIifo9ZioC7JVFZgAaZ82eUJCEiJOgdMgNEFdMugEKg8n9juU1nj9nrb4lPf8n6gWkMtaohjR4Qwhq6odY0rgLw+8nvSt8Kzm+PsB5xP3uJSSPZB0PgBarZurm9YjOdEzMvIlcGTU0zMfSxWgS6TxiZOU5RYkoSJbRSRvrcSdV02Db0Fq37mjVN9E8CuIuRT4N3yMx6+ZrAPx2uZtfFjHCWqicr5zilxElogzmvepwHlIz3inWv4YgOyaKGMJMyG8/efD6qfY7rh/35HgnbXZVE0dIVr0qOOwbgh4uQnw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=DGxqVTWAPMDEPehulC/Zx75eZBV8ykoUY5MMRHmDCiE=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1772309750; x=1772914550; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=O4AMCMYY9g7ZJCqRf6zI1MFxi2+vJtQow9iBs8hoDDk=;
+ b=fVErftZlY3BQpLiT3ZCfvy31LXM8lOz7jWLtnIe1U6ErKlEJkJHoX70F/y8zqLJ11p
+ i/B3kztWtevS218rQge23RX2jv7H72/S605yE+P0jeHRE5P7rZ9WVkf6SAPMcBRsmbBE
+ Pmb2+ytA9YqC5YIoWPl0PrdRKoSdocZT2QKL54W/BTw7ZFbhNDX0eP3ReYTOnP7O4E3T
+ 1z9DcQrT+jrLkQ9EgK/xFl6/1hIQxvwBhIWQTzWTGwr2/JJSOtakIUnSb+NLlo7/ZNze
+ LyISSJ4z9A073onbIXuDruc4V6iTYIzsYLDxLUGi5ImGgnHvKHrH7ElywtnZtD5C9pum
+ FOLQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=ClLhiQ3p
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: transfer config in
- environment instead of class variables
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=fVErftZl
+Subject: [Buildroot] [PATCH] package/mupdf: add patch for CVE-2026-25556
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,51 +117,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fiona" == Fiona Klute <fiona.klute@gmx.de> writes:
+Fixes the following vulnerability:
 
- > With Python 3.14 the default process start method in the
- > multiprocessing module for POSIX platfroms changed from "fork" to
- > "forkserver". Unlike with "fork" the new process does not inherit
- > loaded modules, classes, etc., instead it has to load any it
- > needs. This means that class variables modified in the parent process
- > are lost, which breaks the way support/testing/run-tests sets
- > configuration in BRConfigTest.
+- CVE-2026-25556:
+    MuPDF versions 1.23.0 through 1.27.0 contain a double-free
+    vulnerability in fz_fill_pixmap_from_display_list() when an exception
+    occurs during display list rendering. The function accepts a caller-
+    owned fz_pixmap pointer but incorrectly drops the pixmap in its error
+    handling path before rethrowing the exception. Callers (including the
+    barcode decoding path in fz_decode_barcode_from_display_list) also
+    drop the same pixmap in cleanup, resulting in a double-free that can
+    corrupt the heap and crash the process. This issue affects
+    applications that enable and use MuPDF barcode decoding and can be
+    triggered by processing crafted input that causes a rendering-time
+    error while decoding barcodes.
 
- > Instead add a method to serialize the configuration into an
- > environment variable, and read it during
- > BRConfigTest.__init__(). Reading is skipped if the environment
- > variable is not set so test discovery (not execution) works without
- > configuration (e.g. utils/get-developers uses this).
+For more information, see
+  - https://www.cve.org/CVERecord?id=CVE-2026-25556
+  - https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
 
- > The (de-)serialization could be simpler using a dedicated
- > @dataclasses.dataclass class, but the dataclasses module was added
- > with Python 3.7, while support/dependencies/check-host-python3.mk
- > specifies 3.4 as the minimum for Buildroot.
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...-incorrect-error-case-free-of-pixmap.patch | 53 +++++++++++++++++++
+ package/mupdf/mupdf.mk                        |  3 ++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
 
- > Remove the "fork" method override added in
- > 3d2141bceefda32bef06ddda594eaf8665913276. This fixes a crash that
- > occured in combination with an incorrect [1] patch added to the Debian
- > python3-nose2 package with version 0.15.1-2 [2] because setting the
- > default multiprocessing start method twice is an error.
-
-Looking at https://wiki.debian.org/Python, python 3.7+ was included
-since Debian 10 (released July 2019, EOL September 2022), so I do think
-that we can start relying on 3.7 for new releases, but for 2026.02 (and
-2025.02.x) why not just change run-tests to do:
-
-# set_start_method() may only be called once
-if multiprocessing.get_start_method() != 'fork:
-   multiprocessing.set_start_method('fork')
-
-Wouldn't that work?
-
+diff --git a/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
+new file mode 100644
+index 0000000000..f78c429cef
+--- /dev/null
++++ b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
+@@ -0,0 +1,53 @@
++From d4743b6092d513321c23c6f7fe5cff87cde043c1 Mon Sep 17 00:00:00 2001
++From: Robin Watts <Robin.Watts@artifex.com>
++Date: Mon, 12 Jan 2026 19:08:56 +0000
++Subject: Bug 709029: Fix incorrect error-case free of pixmap.
++
++Don't free a pixmap we don't own!
++
++CVE: CVE-2026-25556
++Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ source/fitz/util.c | 15 +++++++++------
++ 1 file changed, 9 insertions(+), 6 deletions(-)
++
++diff --git a/source/fitz/util.c b/source/fitz/util.c
++index 7710124cc..90226a5c1 100644
++--- a/source/fitz/util.c
+++++ b/source/fitz/util.c
++@@ -119,7 +119,15 @@ fz_new_pixmap_from_display_list_with_separations(fz_context *ctx, fz_display_lis
++ 	else
++ 		fz_clear_pixmap_with_value(ctx, pix, 0xFF);
++
++-	return fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
+++	fz_try(ctx)
+++		fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
+++	fz_catch(ctx)
+++	{
+++		fz_drop_pixmap(ctx, pix);
+++		fz_rethrow(ctx);
+++	}
+++
+++	return pix;
++ }
++
++ fz_pixmap *
++@@ -136,14 +144,9 @@ fz_fill_pixmap_from_display_list(fz_context *ctx, fz_display_list *list, fz_matr
++ 		fz_close_device(ctx, dev);
++ 	}
++ 	fz_always(ctx)
++-	{
++ 		fz_drop_device(ctx, dev);
++-	}
++ 	fz_catch(ctx)
++-	{
++-		fz_drop_pixmap(ctx, pix);
++ 		fz_rethrow(ctx);
++-	}
++
++ 	return pix;
++ }
++--
++cgit v1.2.3
++
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index fe4f3e6756..c538b9bec8 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -27,6 +27,9 @@ MUPDF_IGNORE_CVES = \
+ 	CVE-2024-24258 \
+ 	CVE-2024-24259
+ 
++# 0001-Fix-incorrect-error-case-free-of-pixmap.patch
++MUPDF_IGNORE_CVES += CVE-2026-25556
++
+ # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
+ # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
+ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
 -- 
-Bye, Peter Korsgaard
+2.53.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
