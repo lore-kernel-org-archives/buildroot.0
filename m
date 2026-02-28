@@ -1,63 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E92C8FEE4ED
-	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 12:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CE3FEE4E9
+	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 12:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C749C80A68;
-	Sat, 28 Feb 2026 12:11:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 456D660655;
+	Sat, 28 Feb 2026 12:11:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZQ3tAIjbIBz3; Sat, 28 Feb 2026 12:11:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dJlUWk1ADg9u; Sat, 28 Feb 2026 12:11:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5704880986
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7442E60618
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772280700;
-	bh=qDGg/+dZI31CPX4h5+tyMsPI3V2fiR5dqY08DxhZPLw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=S97uu+XxioC8ezUMOIV5qlU4i6LeVI5/OlYceFR4aCnZUCojGCIX7x6dL3oIm3C35
-	 QL92EF+i6oUSRq3xFcUf+Otv6Iesz38N7pyCpM030B6AXyGX/nhA/7iKaBjB/F9mg7
-	 tWDujjfxQGhAKC3a5gBB0PAWDHjxCythpNNC6dyFH75sNcqmdkdaGh2YOBQ9JZJFpI
-	 YBMg41aAtMDPVEP7l47YC1FFFoFntFv8XNicvwcb7YrvDDFsd/v43IefReNmc+pMG8
-	 uWymRlg/hHdviUpmSyR5CYggmEmrCsfvn5Ro6OcG/YTBeQs6iywr/Lekizzo5/+NEf
-	 xR0ircUbb8blA==
+	s=default; t=1772280714;
+	bh=RtKrojWkvCV+o4mE6yfvADTc4ccNUnrIOJji3fqwppU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=dO8Jj+B8AgCxae36sp95HK95tR+HIV3ehG1nTwp6EQYtJTEQo5MNkLElTA6r5eQk6
+	 BnGw3oA7aE4jzw0epbFroCxxpws9xjUfKPjXo+LhqoIIx8bl6onq/D0aQ5ImsH1eOU
+	 XnvtF6BPV3QNLVWJ2i9E/+HEGZ1OifZZVljiy0IyYlpwdbmA32xyuRje6qsg5hMQqH
+	 m7lcJnoGLhYpdjxDw1HDTR2gB3wNNUcRR/cyyFP+Y5IKUbTY5Pnp32tHrIA4kLHn12
+	 Z2vuXVx5UGhUGoKjtNcgTXuEZM/PYWAElytyWhioCrLsMtuNer3kWpfrCFRwvRVR+z
+	 vi9F4P5AYQufA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5704880986;
-	Sat, 28 Feb 2026 12:11:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6773A18D
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7442E60618;
+	Sat, 28 Feb 2026 12:11:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C6C518D
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58FEE418A8
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DD0F4009A
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Th6zhOZ9Qgsm for <buildroot@buildroot.org>;
- Sat, 28 Feb 2026 12:11:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A38F7418A6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A38F7418A6
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99FAD85AFF; Sat, 28 Feb 2026 12:11:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Feb 2026 13:05:46 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef4f0eca1b179f5c623b67babe87a6cd1ff10b34
-X-Git-Newrev: 658662b2465c56603d168194270516b20200ab04
-X-Patchwork-Hint: ignore
-Message-Id: <20260228121137.99FAD85AFF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nano: bump to version
- 8.7.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2CCA9iJH_BBZ for <buildroot@buildroot.org>;
+ Sat, 28 Feb 2026 12:11:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 55D734006B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55D734006B
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 55D734006B
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 4DE0E13F8A7;
+ Sat, 28 Feb 2026 13:11:47 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Feb 2026 13:11:46 +0100
+MIME-Version: 1.0
+Date: Sat, 28 Feb 2026 13:11:46 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260228110352.2521276-1-bernd@kuhls.net>
+References: <20260228110352.2521276-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <77655f9660cd7d36b69a3f47ab392056@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772280708;
+ bh=aI1R6qq1KAkEw+WmX61R//ZK1QuRT4UgEA4363XPQjY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=VAvGL8NpKI6ru1muW5mvRivD+9tBjINHm/jMZgnS8kbaftySgTAzE2Zdf3tQLKpJC
+ dZ1cKo99UGCyL0qn98lvezkK28pVi4f91D7ASGTACRYWDZ1oNmDYCAeQE+Y/HLpL80
+ mrZaQOmGgG2MXs9iZDeArhYh0uU3asloylnsbutpXu2IsOvsu5XHpX6ZXCqPACZLDE
+ YNLHexDYC6VyKmiW3iPD1WSfhh4SrwpgTEoQCAI0ArylJaifynBWqf3T1FWkmEVpVX
+ R226fbmgzaf4lqi5N2tRqoBSlgdochUdYNLvySxrtRJk+jL2hL8dtmErCXg61TBnOc
+ 2Tto8m4maABuA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VAvGL8Np
+Subject: Re: [Buildroot] [PATCH 1/1] package/nano: bump to version 8.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,50 +94,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/658662b2465c56603d168194270516b20200ab04
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 28/02/2026 12:03, Bernd Kuhls wrote:
+> Changelog:
+> https://www.nano-editor.org/dist/v8/ChangeLog
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog:
-https://www.nano-editor.org/dist/v8/ChangeLog
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index c8bdb0913f..5d369a514f 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz.asc
-+# https://www.nano-editor.org/dist/v8/nano-8.7.1.tar.xz.asc
- # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
--sha256  afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9  nano-8.7.tar.xz
-+sha256  76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf  nano-8.7.1.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index ee82225a72..0e2b0af574 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 8
--NANO_VERSION = $(NANO_VERSION_MAJOR).7
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7.1
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
