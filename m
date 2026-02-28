@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9503FEE4F8
-	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 20:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABD96FEE4F0
+	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 20:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48EB160FB4;
-	Sat, 28 Feb 2026 20:49:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75A0060FBC;
+	Sat, 28 Feb 2026 20:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RyxyRanKZXX3; Sat, 28 Feb 2026 20:49:34 +0000 (UTC)
+ id zNLxQhvi9J2P; Sat, 28 Feb 2026 20:51:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6013260FBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F39360FC0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772311774;
-	bh=HN5X6gd7yKLcWJagJwdi/4WIHBXUUhKcS5lPWC+B6Og=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=E+7LdW/n2MvOfhozT7h8aPukB8UTq5cAO3gUheeBjBwsbkUbdyQfBH8U4sm/NHo/s
-	 wpKfYbd7v95KBucSBahPLFUxDsmZsAUW9rHsFzuO+/QvESh0sQDyLXzGQ5dPNwf3+S
-	 gvrzfXLyu83btSorCidp4Ca3GGBPTRSCTIjap15NNWCstHl2mHadC5G8OR+nypfTms
-	 Ew7kbkQ8FroV/ykZKGXaCdjZrXcHZ05ieh/lwoN2zVkuYjtv2VdZLKkpOctoo6mCKA
-	 OfMUMKDt2l8tuG2tpH839jN8tjseF0aCZ4xzwG1KcXx9+lzyLQTeIN9TKp3P1N3nJj
-	 V0Y+gc5QoFaVg==
+	s=default; t=1772311877;
+	bh=+0Vocm6yKCNqzp32nA6Fk2IlTWXmqKx129mkBN39UU8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=OVewG4mByknUvQP+V+2gj2zMKsR0fw1twWaPyX1lczEyNReHO8/uGQmWGBbfps89X
+	 XMOSZkJvNlRvu+1pILgyJ3NU/ZhUpJbVKVjXOGj8vH2BycU9irXewsDcnEimcrKX0I
+	 0mvaE3LwcC4UjLzvSC+jkRBP5tDSwGBgzOZhSCsywfS3mQEBUPWzHT3UkZ/UotHtKa
+	 Dm9HeA22Y6CURHMbmwyGZMdXevDeIHtRoSfptz+YsJzEQF3uOgWjSntzvOG711o0x5
+	 Tnv2Kii+NUvt084orJDlhtiTGXk6nTtkDGSFyoB2zFi6jPdgQcKgW60yeHjG3RXuJL
+	 9m8NC5M129/tQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6013260FBC;
-	Sat, 28 Feb 2026 20:49:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F39360FC0;
+	Sat, 28 Feb 2026 20:51:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D92DC1EB
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:49:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 04C791EB
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BEE834166D
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:49:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA65441678
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:51:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bumBGmvbKDLk for <buildroot@buildroot.org>;
- Sat, 28 Feb 2026 20:49:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DB5B4164A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DB5B4164A
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:49:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AC9785C2D; Sat, 28 Feb 2026 20:49:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Feb 2026 21:43:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f47b624a12d38f23809c0d82c94588c3a3d26d16
-X-Git-Newrev: 3f4e289aab9c2aa113d05589ba6b83778e60a0f3
-X-Patchwork-Hint: ignore
-Message-Id: <20260228204931.8AC9785C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mupdf: add patch for CVE-2026-25556
+ id i5CzdUCnUsUj for <buildroot@buildroot.org>;
+ Sat, 28 Feb 2026 20:51:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EAFBE4166D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAFBE4166D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EAFBE4166D
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 20:51:14 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 6E6E0B00535;
+ Sat, 28 Feb 2026 21:51:10 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Feb 2026 21:51:10 +0100
+MIME-Version: 1.0
+Date: Sat, 28 Feb 2026 21:51:10 +0100
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?=
+ <raphael.melotte@mind.be>
+In-Reply-To: <20260228201547.84699-1-thomas.perale@mind.be>
+References: <20260228201547.84699-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <d6e061cbe4b8d14d857bc736abc5e961@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772311872;
+ bh=UwLhWSMicD4zyM/oLZdCe7WmKzE6c8/kQsozzAKHLGU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CoWs+HjITk+LguEglgEG7XehL5XXbVpoBV03yqopKhQmTFy3cWHdOGJjwFDoQv9pX
+ 1K3RgvhiAwesV2G6PvzVNXlUNS/tRnkg2Nl5DUHN5Ebc6F2CV3RXsDnYYGNywyKGzr
+ xYZBp408viXimOjyB/TUhZHwfz0Mok0beiRaPmHDA/pNDsVC+78usnadBqibD43lE6
+ Lv2ifyCSV4UsvRpKmFAwgybf3HQAI7Qjff/McmRNdPF5Kzdg6pgnqGhCgeZD1+rgQ2
+ TTb2Cw2/IVwLoQ5FoJpQMZlNjqCBZ0psb0oXge7p06k5sNCjLn1pay7c1uC/NAuoIe
+ qQJSBxUubGQyA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CoWs+HjI
+Subject: Re: [Buildroot] [PATCH] package/mupdf: add patch for CVE-2026-25556
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,114 +95,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3f4e289aab9c2aa113d05589ba6b83778e60a0f3
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 28/02/2026 21:15, Thomas Perale via buildroot wrote:
+> Fixes the following vulnerability:
+> 
+> - CVE-2026-25556:
+>     MuPDF versions 1.23.0 through 1.27.0 contain a double-free
+>     vulnerability in fz_fill_pixmap_from_display_list() when an 
+> exception
+>     occurs during display list rendering. The function accepts a 
+> caller-
+>     owned fz_pixmap pointer but incorrectly drops the pixmap in its 
+> error
+>     handling path before rethrowing the exception. Callers (including 
+> the
+>     barcode decoding path in fz_decode_barcode_from_display_list) also
+>     drop the same pixmap in cleanup, resulting in a double-free that 
+> can
+>     corrupt the heap and crash the process. This issue affects
+>     applications that enable and use MuPDF barcode decoding and can be
+>     triggered by processing crafted input that causes a rendering-time
+>     error while decoding barcodes.
+> 
+> For more information, see
+>   - https://www.cve.org/CVERecord?id=CVE-2026-25556
+>   - 
+> https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Fixes the following vulnerability:
-
-- CVE-2026-25556:
-    MuPDF versions 1.23.0 through 1.27.0 contain a double-free
-    vulnerability in fz_fill_pixmap_from_display_list() when an exception
-    occurs during display list rendering. The function accepts a caller-
-    owned fz_pixmap pointer but incorrectly drops the pixmap in its error
-    handling path before rethrowing the exception. Callers (including the
-    barcode decoding path in fz_decode_barcode_from_display_list) also
-    drop the same pixmap in cleanup, resulting in a double-free that can
-    corrupt the heap and crash the process. This issue affects
-    applications that enable and use MuPDF barcode decoding and can be
-    triggered by processing crafted input that causes a rendering-time
-    error while decoding barcodes.
-
-For more information, see
-  - https://www.cve.org/CVERecord?id=CVE-2026-25556
-  - https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...1-Fix-incorrect-error-case-free-of-pixmap.patch | 53 ++++++++++++++++++++++
- package/mupdf/mupdf.mk                             |  3 ++
- 2 files changed, 56 insertions(+)
-
-diff --git a/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
-new file mode 100644
-index 0000000000..f78c429cef
---- /dev/null
-+++ b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
-@@ -0,0 +1,53 @@
-+From d4743b6092d513321c23c6f7fe5cff87cde043c1 Mon Sep 17 00:00:00 2001
-+From: Robin Watts <Robin.Watts@artifex.com>
-+Date: Mon, 12 Jan 2026 19:08:56 +0000
-+Subject: Bug 709029: Fix incorrect error-case free of pixmap.
-+
-+Don't free a pixmap we don't own!
-+
-+CVE: CVE-2026-25556
-+Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ source/fitz/util.c | 15 +++++++++------
-+ 1 file changed, 9 insertions(+), 6 deletions(-)
-+
-+diff --git a/source/fitz/util.c b/source/fitz/util.c
-+index 7710124cc..90226a5c1 100644
-+--- a/source/fitz/util.c
-++++ b/source/fitz/util.c
-+@@ -119,7 +119,15 @@ fz_new_pixmap_from_display_list_with_separations(fz_context *ctx, fz_display_lis
-+ 	else
-+ 		fz_clear_pixmap_with_value(ctx, pix, 0xFF);
-+
-+-	return fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
-++	fz_try(ctx)
-++		fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
-++	fz_catch(ctx)
-++	{
-++		fz_drop_pixmap(ctx, pix);
-++		fz_rethrow(ctx);
-++	}
-++
-++	return pix;
-+ }
-+
-+ fz_pixmap *
-+@@ -136,14 +144,9 @@ fz_fill_pixmap_from_display_list(fz_context *ctx, fz_display_list *list, fz_matr
-+ 		fz_close_device(ctx, dev);
-+ 	}
-+ 	fz_always(ctx)
-+-	{
-+ 		fz_drop_device(ctx, dev);
-+-	}
-+ 	fz_catch(ctx)
-+-	{
-+-		fz_drop_pixmap(ctx, pix);
-+ 		fz_rethrow(ctx);
-+-	}
-+
-+ 	return pix;
-+ }
-+--
-+cgit v1.2.3
-+
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index fe4f3e6756..c538b9bec8 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -27,6 +27,9 @@ MUPDF_IGNORE_CVES = \
- 	CVE-2024-24258 \
- 	CVE-2024-24259
- 
-+# 0001-Fix-incorrect-error-case-free-of-pixmap.patch
-+MUPDF_IGNORE_CVES += CVE-2026-25556
-+
- # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
- # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
- MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
