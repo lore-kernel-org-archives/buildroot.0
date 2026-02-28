@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA23FEE4EB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 11:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E92C8FEE4ED
+	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 12:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93EDE418F2;
-	Sat, 28 Feb 2026 11:06:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C749C80A68;
+	Sat, 28 Feb 2026 12:11:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3FN22vSbmPUA; Sat, 28 Feb 2026 11:06:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZQ3tAIjbIBz3; Sat, 28 Feb 2026 12:11:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 933B2418E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5704880986
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772276785;
-	bh=k+Q4Kth6A+rb298FZDfbGwVosqlgflX2oPwXb/ldJpQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=JlZ8orB/gmX7bYS2yJYlo0lYAzZlpNxKjmAA3SwZ3L/nULaxK4VtbXN6E84yp5Uk4
-	 DNsjZh2SU4OUWbRWTxlaJYw2wwacUlAtZJohkAkus+2Fc1uoGNsB6BEfU+cpHDEiTo
-	 C7xPqd7Su/6DgR4zWxNfeCPuhHeR5lGNG5xRwwb6YYDNBBxelNYA+UgWvpNBjKoH7c
-	 Mf+WBGnz5C2kn7bpVRLrdnHYK0brVjGYUZMsisaJoe3eq5cioFM2xJQRJCoqu4TZfZ
-	 ML5BIW8uKAdnN/ZLqSMlp/47wqXWqxOB1H/+4oiASn8wLfKK+A+f4uMzvwqRYFxOcJ
-	 cgg2uf4Shg+ZQ==
+	s=default; t=1772280700;
+	bh=qDGg/+dZI31CPX4h5+tyMsPI3V2fiR5dqY08DxhZPLw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=S97uu+XxioC8ezUMOIV5qlU4i6LeVI5/OlYceFR4aCnZUCojGCIX7x6dL3oIm3C35
+	 QL92EF+i6oUSRq3xFcUf+Otv6Iesz38N7pyCpM030B6AXyGX/nhA/7iKaBjB/F9mg7
+	 tWDujjfxQGhAKC3a5gBB0PAWDHjxCythpNNC6dyFH75sNcqmdkdaGh2YOBQ9JZJFpI
+	 YBMg41aAtMDPVEP7l47YC1FFFoFntFv8XNicvwcb7YrvDDFsd/v43IefReNmc+pMG8
+	 uWymRlg/hHdviUpmSyR5CYggmEmrCsfvn5Ro6OcG/YTBeQs6iywr/Lekizzo5/+NEf
+	 xR0ircUbb8blA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 933B2418E0;
-	Sat, 28 Feb 2026 11:06:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1040518D
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 11:06:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5704880986;
+	Sat, 28 Feb 2026 12:11:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6773A18D
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 006C9418E0
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 11:06:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58FEE418A8
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N06i-5xCDigm for <buildroot@buildroot.org>;
- Sat, 28 Feb 2026 11:06:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 82DD2418AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82DD2418AF
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82DD2418AF
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 11:06:22 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 296ADA4C0788;
- Sat, 28 Feb 2026 12:06:20 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44444)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vwI9M-000000003yo-0J1e;
- Sat, 28 Feb 2026 11:06:19 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id Th6zhOZ9Qgsm for <buildroot@buildroot.org>;
+ Sat, 28 Feb 2026 12:11:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A38F7418A6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A38F7418A6
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 12:11:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 99FAD85AFF; Sat, 28 Feb 2026 12:11:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Sat, 28 Feb 2026 12:06:19 +0100
-Message-ID: <20260228110619.2758404-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: ++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772276780;
- bh=ReSvKfrQDWkHLvCrtAcYFVTaD3FkXbcUxIzUhkKLlh8=;
- h=From:To:Cc:Subject:Date:From;
- b=RGT8LznkKcV+z6kT9N5bE7b6w39PdJGRkG2MPI3uJ5l1PIcdhv3YgeeX/5qMjbkHa
- Nd8CpUbQC83wi/w66M/pdxE6Hais78vaLtsBKCAFI4qWswTTXsg7+kN1ozRuTg1SQE
- DShZ5oNBLvxFWKM0vl+v5o45V5M2maWopFkZ8ZfhqSb+lRwKXdYQC8IF33ZBsglsGS
- GZ57gBiLRvp05wzOjbeyJEUWhW9CsKKXGkzpPBdvMk4aoaVTI/SfbHSjxAEbfsAPew
- JGzeFsSnId6QV6wl6lh3UQ4eROWK+iM3WXLSXLVZSZIl1+cUfVbWh/ABKF8zSqV9rs
- rV7XKKu9J6G3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=RGT8Lznk
-Subject: [Buildroot] [PATCH/next 1/1] package/oath-toolkit: bump version to
- 2.6.14
+Date: Sat, 28 Feb 2026 13:05:46 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ef4f0eca1b179f5c623b67babe87a6cd1ff10b34
+X-Git-Newrev: 658662b2465c56603d168194270516b20200ab04
+X-Patchwork-Hint: ignore
+Message-Id: <20260228121137.99FAD85AFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nano: bump to version
+ 8.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,53 +69,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://codeberg.org/oath-toolkit/oath-toolkit/src/tag/v2.6.14/NEWS
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/658662b2465c56603d168194270516b20200ab04
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+
+Changelog:
+https://www.nano-editor.org/dist/v8/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/oath-toolkit/oath-toolkit.hash | 8 ++++----
- package/oath-toolkit/oath-toolkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/oath-toolkit/oath-toolkit.hash b/package/oath-toolkit/oath-toolkit.hash
-index d44b7bb742..a2c0b27de4 100644
---- a/package/oath-toolkit/oath-toolkit.hash
-+++ b/package/oath-toolkit/oath-toolkit.hash
-@@ -1,9 +1,9 @@
- # After checking pgp signature from:
--# https://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.13.tar.gz.sig
-+# https://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.14.tar.gz.sig
- # using key A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2
- # From release announce:
--# https://mail.gnu.org/archive/html/oath-toolkit-help/2025-07/msg00000.html
--sha1  62807099befb8141e429d3e38750772041ea9056  oath-toolkit-2.6.13.tar.gz
--sha256  5b5d82e9a4455206d24fcbd7ee58bf4c79398a2e67997d80bd45ae927586b18b  oath-toolkit-2.6.13.tar.gz
-+# https://mail.gnu.org/archive/html/oath-toolkit-help/2026-01/msg00000.html
-+sha1  e408631d07f84c839f266e0b1081a9f202d76a81  oath-toolkit-2.6.14.tar.gz
-+sha256  8b1da365759f1249be57a82aec6e107f7b57dc77d813f96dc0aaf81624f28971  oath-toolkit-2.6.14.tar.gz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/oath-toolkit/oath-toolkit.mk b/package/oath-toolkit/oath-toolkit.mk
-index 37b00a8241..8dee1feb00 100644
---- a/package/oath-toolkit/oath-toolkit.mk
-+++ b/package/oath-toolkit/oath-toolkit.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index c8bdb0913f..5d369a514f 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz.asc
++# https://www.nano-editor.org/dist/v8/nano-8.7.1.tar.xz.asc
+ # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
+-sha256  afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9  nano-8.7.tar.xz
++sha256  76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf  nano-8.7.1.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index ee82225a72..0e2b0af574 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OATH_TOOLKIT_VERSION = 2.6.13
-+OATH_TOOLKIT_VERSION = 2.6.14
- OATH_TOOLKIT_SITE = https://download.savannah.nongnu.org/releases/oath-toolkit
- OATH_TOOLKIT_LICENSE = GPL-3.0+ (tools), LGPL-2.1+ (libraries)
- OATH_TOOLKIT_LICENSE_FILES = COPYING
--- 
-2.47.3
-
+ NANO_VERSION_MAJOR = 8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).7
++NANO_VERSION = $(NANO_VERSION_MAJOR).7.1
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
