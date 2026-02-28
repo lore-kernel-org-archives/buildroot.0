@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C864BFEE4ED
-	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 15:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC6AEFEE4ED
+	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 15:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A367407CD;
-	Sat, 28 Feb 2026 15:37:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9829E4090D;
+	Sat, 28 Feb 2026 15:37:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PfZqbnryOuln; Sat, 28 Feb 2026 15:37:41 +0000 (UTC)
+ id WfcUgKUxiEMs; Sat, 28 Feb 2026 15:37:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DB33407CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 773C140906
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772293061;
-	bh=V5ohTY86Lla8ed+CGljmsoGVY18yFTeZZg6yhcFQwvU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=K4fPhjQX+thfdtoDNSCYW+ecSTsZoIF4KfYiStwdrsfnwltyDYYD2hRNEm7my3NHW
-	 KiTAGe3b8qXW94fvSucoskpAVuilgfeEOc91HGAMRtFj05TE5EfI7Le87XGXEhjfmH
-	 Ll1xpYyUcPkAqtfOV19YbLfNKgbBzq36K+E2J7xhkkLHc6hHJWRnJ3+ukY/iIBfr95
-	 pCmfAs5Rs/eiWMHeWSIVnwMP0VXgDj6dH1K7359wAOvCYivKuIbYAg3/3fEiTKDbCx
-	 fgRxzWPaVvie6Z6IFvypKA68xPa3gWLN8Gw3TGNIiuamAjp7cxbCsRg2Y6N6Gopggw
-	 iyPk+M6QsBVGg==
+	s=default; t=1772293072;
+	bh=WRVw+ykZh2fNxwVcd63ROIGeZbIyqMWx+zuAVvH+SrY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=hiSkSeDQrA5SNi2DTzEvZp2NLzDIgHQmgfS+EwFalzEpZFXuwXMVCvEziRMM5iA+A
+	 gUhngFIniZ7GadRahlt0WFyKiVCly9GV5RJ6y/9DO6ahZQnMpqnonSkyzQUPWmbHpy
+	 V9bGmTs4PNGmEMQp2/Dpu+yeHy+OOjizJ3HFI0A5mH5hjg9NQlkuV8cV2h6GtwuJRW
+	 5Lu+NFcDZTZ/rAXJMfxJBXlSe3vMsDfKVMTVeelAUBJSCcYFMzIdbDDvDmrTQgpGCS
+	 5xLTYs7YG0V6ZLQ4b8knl6H8ijYri0GuzqkQ1yLARGY2XEKlYbstkds5AZEjWlLxE2
+	 iu1ww0TZqIPwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DB33407CE;
-	Sat, 28 Feb 2026 15:37:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AB6D01D3
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 15:37:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 773C140906;
+	Sat, 28 Feb 2026 15:37:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B8A124E
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 15:37:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 913C983C59
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 15:37:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8186F408D7
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 15:37:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lfV-sL7vtcIQ for <buildroot@buildroot.org>;
- Sat, 28 Feb 2026 15:37:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EE6083388
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9EE6083388
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 15:37:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 891A9852ED; Sat, 28 Feb 2026 15:37:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Feb 2026 16:22:10 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a035a0f99fa3bbeca776d741bbdeb6c04b3b35c8
-X-Git-Newrev: 359a92df2964f9af2f01b770c38bcdc7f9cba641
-X-Patchwork-Hint: ignore
-Message-Id: <20260228153737.891A9852ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lxc: bump version to
- 6.0.5
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yiqzjVX8g9hW for <buildroot@buildroot.org>;
+ Sat, 28 Feb 2026 15:37:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7E0E6408BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E0E6408BE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7E0E6408BE
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 15:37:49 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 8D993780375;
+ Sat, 28 Feb 2026 16:37:45 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Feb 2026 16:37:45 +0100
+MIME-Version: 1.0
+Date: Sat, 28 Feb 2026 16:37:45 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?=
+ <jezz@sysmic.org>
+In-Reply-To: <20260226202236.2150026-1-bernd@kuhls.net>
+References: <20260226202236.2150026-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <50ab062d0c9b56c91b5a51dc329ebe8a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772293067;
+ bh=Uc2xCPWvzazETkgvW58KB42jPdCEBVmJRetGKQZv2wg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RUFovc7j2Unt1BatxiBdos1VsK9qmJ1qZPx1iPK9MeDI5m3cg50QfKzoi7NUYEBw/
+ EpP+hfsvA/Pv4B/HwwkaitVZM9hCfHTFY3rXZSFn0p5QGaqpdlZKMuKG/8Jrku8fPq
+ b3o3noSZLtojUlko1AHvloMbM2PRvWTqhDXonHSqYGSHv8mSJ1t6HtDr13nYCLGaH9
+ 2y99f/AzV3CO2LtGGl3C2rK86NE9VV0XzjfEJeAdA4cyZG1twOHWTx1s0sY8jsC3LD
+ c8xzrp696JeVk2B04tRinZeoY2ZNne9q/rL5DKdC2sCgi0DMFo5DcMV7XGz/3O9b90
+ vJI8g+Ne9Hxtw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RUFovc7j
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/lxc: bump version to 6.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,218 +95,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/359a92df2964f9af2f01b770c38bcdc7f9cba641
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 26/02/2026 21:22, Bernd Kuhls wrote:
+> https://discuss.linuxcontainers.org/t/lxc-6-0-lts-has-been-released/19567
+> https://discuss.linuxcontainers.org/t/lxc-6-0-1-lts-has-been-released/20283
+> https://discuss.linuxcontainers.org/t/lxc-6-0-2-lts-has-been-released/21632
+> https://discuss.linuxcontainers.org/t/lxc-6-0-3-lts-has-been-released/22402
+> https://discuss.linuxcontainers.org/t/lxc-6-0-4-lts-has-been-released/23390
+> https://discuss.linuxcontainers.org/t/lxc-6-0-5-lts-has-been-released/24438
+> 
+> Removed patch which is included in this release.
+> 
+> Systemd support was replaced by dbus:
+> https://github.com/lxc/lxc/commit/820d2a2b3a886ebfe46cd256ba8c320e50fcc5cd
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://discuss.linuxcontainers.org/t/lxc-6-0-lts-has-been-released/19567
-https://discuss.linuxcontainers.org/t/lxc-6-0-1-lts-has-been-released/20283
-https://discuss.linuxcontainers.org/t/lxc-6-0-2-lts-has-been-released/21632
-https://discuss.linuxcontainers.org/t/lxc-6-0-3-lts-has-been-released/22402
-https://discuss.linuxcontainers.org/t/lxc-6-0-4-lts-has-been-released/23390
-https://discuss.linuxcontainers.org/t/lxc-6-0-5-lts-has-been-released/24438
-
-Removed patch which is included in this release.
-
-Systemd support was replaced by dbus:
-https://github.com/lxc/lxc/commit/820d2a2b3a886ebfe46cd256ba8c320e50fcc5cd
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...1-src-lxc-syscall_numbers.h-drop-define-1.patch | 138 ---------------------
- package/lxc/lxc.hash                               |   2 +-
- package/lxc/lxc.mk                                 |  10 +-
- 3 files changed, 6 insertions(+), 144 deletions(-)
-
-diff --git a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
-deleted file mode 100644
-index d6eb7476dc..0000000000
---- a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
-+++ /dev/null
-@@ -1,138 +0,0 @@
--From 964740d28c9a0da52a75d579d7fdfa53df67e925 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 30 Mar 2024 16:50:46 +0100
--Subject: [PATCH] src/lxc/syscall_numbers.h: drop define -1
--
--Drop "#define -1" to avoid the following m68k build failure with gcc 12:
--
--In file included from ../src/lxc/syscall_wrappers.h:19,
--                 from ../src/lxc/mount_utils.h:15,
--                 from ../src/lxc/conf.h:24,
--                 from ../src/lxc/log.h:19,
--                 from ../src/lxc/storage/btrfs.c:20:
--../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
--  423 |                 #define -1
--      |                         ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/lxc/lxc/commit/82fe01821cd5cb8548598d7d93b07d6ef3f6b604
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- src/lxc/syscall_numbers.h | 13 -------------
-- 1 file changed, 13 deletions(-)
--
--diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
--index ae5fdd0641c6..5dc1259fef1c 100644
----- a/src/lxc/syscall_numbers.h
--+++ b/src/lxc/syscall_numbers.h
--@@ -51,7 +51,6 @@
-- 			#define __NR_keyctl 5241
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_keyctl not defined for your architecture"
-- 	#endif
-- #endif
--@@ -88,7 +87,6 @@
-- 			#define __NR_memfd_create 5314
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_memfd_create not defined for your architecture"
-- 	#endif
-- #endif
--@@ -123,7 +121,6 @@
-- 			#define __NR_pivot_root 5151
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_pivot_root not defined for your architecture"
-- 	#endif
-- #endif
--@@ -158,7 +155,6 @@
-- 			#define __NR_setns 5303
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_setns not defined for your architecture"
-- 	#endif
-- #endif
--@@ -193,7 +189,6 @@
-- 			#define __NR_sethostname 5165
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_sethostname not defined for your architecture"
-- 	#endif
-- #endif
--@@ -260,7 +255,6 @@
-- 			#define __NR_signalfd4 5283
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_signalfd4 not defined for your architecture"
-- 	#endif
-- #endif
--@@ -295,7 +289,6 @@
-- 			#define __NR_unshare 5262
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_unshare not defined for your architecture"
-- 	#endif
-- #endif
--@@ -330,7 +323,6 @@
-- 			#define __NR_bpf 5315
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_bpf not defined for your architecture"
-- 	#endif
-- #endif
--@@ -365,7 +357,6 @@
-- 			#define __NR_faccessat 5259
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_faccessat not defined for your architecture"
-- 	#endif
-- #endif
--@@ -420,7 +411,6 @@
-- 			#define __NR_seccomp 5312
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_seccomp not defined for your architecture"
-- 	#endif
-- #endif
--@@ -455,7 +445,6 @@
-- 			#define __NR_gettid 5178
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_gettid not defined for your architecture"
-- 	#endif
-- #endif
--@@ -494,7 +483,6 @@
-- 			#define __NR_execveat 5316
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_execveat not defined for your architecture"
-- 	#endif
-- #endif
--@@ -733,7 +721,6 @@
-- 			#define __NR_personality (132 + 5000)
-- 		#endif
-- 	#else
---		#define -1
-- 		#warning "__NR_personality not defined for your architecture"
-- 	#endif
-- #endif
---- 
--2.43.0
--
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 8b3365ddfc..cfe0e5ab6b 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  2693a4c654dcfdafb3aa95c262051d8122afa1b6f5cef1920221ebbdee934d07  lxc-5.0.3.tar.gz
-+sha256  2e540c60b9dd49e7ee1a4efa5e9c743b05df911b81b375ed5043d9dd7ee0b48a  lxc-6.0.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 7a5f91e1a8..2f17960e55 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 5.0.3
-+LXC_VERSION = 6.0.5
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
-@@ -69,11 +69,11 @@ else
- LXC_CONF_OPTS += -Dopenssl=false
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--LXC_CONF_OPTS += -Dsd-bus=enabled
--LXC_DEPENDENCIES += systemd
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+LXC_CONF_OPTS += -Ddbus=true
-+LXC_DEPENDENCIES += dbus
- else
--LXC_CONF_OPTS += -Dsd-bus=disabled
-+LXC_CONF_OPTS += -Ddbus=false
- endif
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
