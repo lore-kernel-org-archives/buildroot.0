@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18D57FEE4EF
-	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 16:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C978FEE4EF
+	for <buildroot@archiver.kernel.org>; Sat, 28 Feb 2026 16:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C06216074E;
-	Sat, 28 Feb 2026 16:57:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEF2660EC9;
+	Sat, 28 Feb 2026 16:58:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id huwCIFhJR5On; Sat, 28 Feb 2026 16:57:22 +0000 (UTC)
+ id 4ka3h5icMl8C; Sat, 28 Feb 2026 16:58:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C038E60756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E02D6081A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772297842;
-	bh=t0Gs68C03qYhNFPXKOVS0k8yDQBVYpwyolPoHRarwUI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZIjFQrYteeMNgYkH535A6y/H6N9RDzXbn7jxaQhZf+1KJvMbZWCseEdKBWwfTQTG8
-	 pBeSLyrumgnrELPpcY3zjg8dZCsJxgER5GFLDJz41FDcN3kY9HqDNYg36zKYNk0Qyo
-	 NIeBaTWcoA634f03qZOTNx5nvH/EmicZyNJWGQoCkiOIw0o71Vcp9mlIFteKvAuSHw
-	 GwZH9UBGAqiu8xntnqdrbXJaFZH+ThXJR6mEXDYIOCN518yG9zrN1/MdMHW7yCXwqt
-	 y6JkwRl690GSqkrZLWs6GG9i56oTmPIbMJbNEIyNZIFoHUM/oYw59CfBxLbnZfSPzM
-	 TT4zLJMG+ZmiA==
+	s=default; t=1772297886;
+	bh=dwnpdkmh3xm9+grz8pHywD6epc92OdqyXPg0i/SU+YM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Sd6IHalNRdvB3JFODc2dio5JK2gdwRH0X49x0vy4dhV+53uNuZJVzeROYt02pn3IW
+	 C7BzvuXP3hl8EHOAGkeJTEN0nNVUR1PLyEs7/uyp89QfUto9W8aoc55Y0y3x34AOmj
+	 urj7AZJ48VfZVIo6cluxg7GYeiazvvX0jdnexyz0YPQjRsWqGYP2v7pZOjMb6kRlS0
+	 MZMr7B6GYfgIA5xoxgY7/mJ8YhqkzKd0iFfpkRH+lW4KMBC2bwxJUlt83SQ5/PypFh
+	 R832GBmLz7UHt4SHKabBAuU6ONKDMN+lp1gOF6z84nfxsxgunhelzeWh2ptgAmRDPi
+	 PsslQkMBAIk2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C038E60756;
-	Sat, 28 Feb 2026 16:57:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E02D6081A;
+	Sat, 28 Feb 2026 16:58:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DA45C1EB
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 16:57:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 37E8218D
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 16:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC16440460
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 16:57:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 299B740460
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 16:58:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lc4UMkN7pkmU for <buildroot@buildroot.org>;
- Sat, 28 Feb 2026 16:57:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E258040118
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E258040118
- for <buildroot@buildroot.org>; Sat, 28 Feb 2026 16:57:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B570B85CC8; Sat, 28 Feb 2026 16:57:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Feb 2026 17:30:02 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c61dbf8493f6e6c45e55716617c8f8c3b8224879
-X-Git-Newrev: ac0dff075f5c635198b2155426806dcb5be6c00e
-X-Patchwork-Hint: ignore
-Message-Id: <20260228165720.B570B85CC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx6ullevk: bump Linux
- to 6.18.8 and U-Boot to 2026.01
+ id MYRiP9x2_Y1f for <buildroot@buildroot.org>;
+ Sat, 28 Feb 2026 16:58:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 694D640118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 694D640118
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 694D640118
+ for <buildroot@buildroot.org>; Sat, 28 Feb 2026 16:58:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 7F2EDB00572;
+ Sat, 28 Feb 2026 17:57:59 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Feb 2026 17:57:59 +0100
+MIME-Version: 1.0
+Date: Sat, 28 Feb 2026 17:57:59 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Fabio Estevam <festevam@gmail.com>, Fabrice
+ Goucem <fabrice.goucem@oss.nxp.com>
+In-Reply-To: <20260226173524.2702621-1-giulio.benetti@benettiengineering.com>
+References: <20260226173524.2702621-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <67fe7081f5c78a347bcce0a1d19cf5c3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772297882;
+ bh=O/c1RrNTseYmLtUp1RAiArca9FUMT1v0eUdX+FEev6Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vE/Si0gmXDhxlYgEI6ozmz/VAlDd7XohmuJ4EU+7qjEtEtYMfmDhZah0g8hioh/ux
+ Zwv2HMAtwD82+JdoFxFmpH2THvQgP5WrhKoAhdhAdqyUl2juFCn6M2dbkcdYBEDjv2
+ O9hK7zemW6qixotizQwvIiSB2JDoP3O7t5wuFCIYV9QyC0cEKz6FrXoX4xxgaI7sh6
+ yIbMhUJo5AABDQ+1CcY1TDN8aZIGtEzMme6b8ymwxdMyaAfU3kr4aEl+bhGXZXOz6K
+ 27Dgya51Gd/4Nb1ohgV0Op15OhYG4RGIZu51yd+5kDi2xb7z2w3f1nYPXH6ZNrZrbf
+ orC+W7jyxgZkw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vE/Si0gm
+Subject: Re: [Buildroot] [PATCH] configs/imx6ullevk: bump Linux to 6.18.8
+ and U-Boot to 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,198 +96,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ac0dff075f5c635198b2155426806dcb5be6c00e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 26/02/2026 18:35, Giulio Benetti wrote:
+> The patch:
+> * bumps Linux kernel to version 6.18.8
+> * bumps U-Boot to version 2026.01
+> * forces check hashes
+> * create a board/freescale/imx6ull-evk folder dedicated to upstream 
+> Linux
+>   and U-Boot to ease maintainance.
+> * clean up both imx6ullevk and imx6ull-evk readme.txt files
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-The patch:
-* bumps Linux kernel to version 6.18.8
-* bumps U-Boot to version 2026.01
-* forces check hashes
-* create a board/freescale/imx6ull-evk folder dedicated to upstream Linux
-  and U-Boot to ease maintainance.
-* clean up both imx6ullevk and imx6ull-evk readme.txt files
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: fix IMX6ULLQSG url in readme.txt]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                                     |  1 -
- board/freescale/imx6ull-evk/linux_sdma.fragment         |  1 +
- .../patches/linux-headers/linux-headers.hash            |  1 +
- board/freescale/imx6ull-evk/patches/linux/linux.hash    |  2 ++
- board/freescale/imx6ull-evk/patches/uboot/uboot.hash    |  2 ++
- board/freescale/{imx6ullevk => imx6ull-evk}/readme.txt  | 17 +++++------------
- board/freescale/imx6ullevk/readme.txt                   | 13 +++----------
- configs/imx6ullevk_defconfig                            |  9 ++++++---
- 8 files changed, 20 insertions(+), 26 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 695e0d50c6..8bee044234 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -103,7 +103,6 @@ configs/imx6-sabresd_qt5_defconfig lib_defconfig.ForceCheckHash
- configs/imx6slevk_defconfig lib_defconfig.ForceCheckHash
- configs/imx6sx-sdb_defconfig lib_defconfig.ForceCheckHash
- configs/imx6ulevk_defconfig lib_defconfig.ForceCheckHash
--configs/imx6ullevk_defconfig lib_defconfig.ForceCheckHash
- configs/imx6ulpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mqevk_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/freescale/imx6ull-evk/linux_sdma.fragment b/board/freescale/imx6ull-evk/linux_sdma.fragment
-new file mode 100644
-index 0000000000..6f1c8b4313
---- /dev/null
-+++ b/board/freescale/imx6ull-evk/linux_sdma.fragment
-@@ -0,0 +1 @@
-+CONFIG_IMX_SDMA=m
-diff --git a/board/freescale/imx6ull-evk/patches/linux-headers/linux-headers.hash b/board/freescale/imx6ull-evk/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/freescale/imx6ull-evk/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/imx6ull-evk/patches/linux/linux.hash b/board/freescale/imx6ull-evk/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..b1a0042a91
---- /dev/null
-+++ b/board/freescale/imx6ull-evk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-diff --git a/board/freescale/imx6ull-evk/patches/uboot/uboot.hash b/board/freescale/imx6ull-evk/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..b6a925ea4e
---- /dev/null
-+++ b/board/freescale/imx6ull-evk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
-diff --git a/board/freescale/imx6ullevk/readme.txt b/board/freescale/imx6ull-evk/readme.txt
-similarity index 82%
-copy from board/freescale/imx6ullevk/readme.txt
-copy to board/freescale/imx6ull-evk/readme.txt
-index dc7c5f3678..8203a12026 100644
---- a/board/freescale/imx6ullevk/readme.txt
-+++ b/board/freescale/imx6ull-evk/readme.txt
-@@ -2,25 +2,18 @@
- Freescale i.MX6ULL EVK board
- ****************************
- 
--This file documents the Buildroot support for the Freescale i.MX6ULL EVK board.
-+This file documents the Buildroot support for the Freescale i.MX6ULL EVK board
-+using Upstream U-Boot and Linux.
- 
- Build
- =====
- 
- First, configure Buildroot for your i.MX6ULL EVK board:
- 
--In order to do so there are two supported options:
--
--  make freescale_imx6ullevk_defconfig
--
--if you plan to use NXP provided U-Boot and kernel.
--
--or
-+In order to do so issue:
- 
-   make imx6ullevk_defconfig
- 
--if you plan to use mainline U-Boot and mainline kernel.
--
- Build all components:
- 
-   make
-@@ -33,7 +26,7 @@ You will find in output/images/ the following files:
-   - rootfs.tar
-   - sdcard.img
-   - u-boot.bin
--  - u-boot.imx
-+  - u-boot-dtb.imx
-   - zImage
- 
- Create a bootable SD card
-@@ -68,4 +61,4 @@ Enjoy!
- 
- References
- ==========
--[1] https://www.nxp.com/files-static/32bit/doc/brochure/IMX6ULLQSG.pdf
-+[1] https://www.nxp.com/webapp/Download?colCode=IMX6ULLQSG
-diff --git a/board/freescale/imx6ullevk/readme.txt b/board/freescale/imx6ullevk/readme.txt
-index dc7c5f3678..80db3a46ca 100644
---- a/board/freescale/imx6ullevk/readme.txt
-+++ b/board/freescale/imx6ullevk/readme.txt
-@@ -2,25 +2,18 @@
- Freescale i.MX6ULL EVK board
- ****************************
- 
--This file documents the Buildroot support for the Freescale i.MX6ULL EVK board.
-+This file documents the Buildroot support for the Freescale i.MX6ULL EVK board
-+using Vendor U-Boot and Linux.
- 
- Build
- =====
- 
- First, configure Buildroot for your i.MX6ULL EVK board:
- 
--In order to do so there are two supported options:
-+In order to do so issue:
- 
-   make freescale_imx6ullevk_defconfig
- 
--if you plan to use NXP provided U-Boot and kernel.
--
--or
--
--  make imx6ullevk_defconfig
--
--if you plan to use mainline U-Boot and mainline kernel.
--
- Build all components:
- 
-   make
-diff --git a/configs/imx6ullevk_defconfig b/configs/imx6ullevk_defconfig
-index 38ea8f6940..5d802e6614 100644
---- a/configs/imx6ullevk_defconfig
-+++ b/configs/imx6ullevk_defconfig
-@@ -1,13 +1,15 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx6ull-evk/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6ull-14x14-evk"
-@@ -20,9 +22,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
