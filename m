@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3475FFD0047
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 18:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51A18FD0062
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 18:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB21783EFB;
-	Sun,  1 Mar 2026 18:47:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DbTuKxs4sFAU; Sun,  1 Mar 2026 18:47:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC61783ED4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772390878;
-	bh=nkWz9sFXqy4wCsa1X7vns2/sCBm7BEYgTMZWv+oCzDM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZvebUXaT0cpM+GjQ56+YTNxCo5FcwTkgkyVFauAq4cUo2P+05cVUJ9B6F0N4BIyo9
-	 hDWZ6sAR3WEoxkBorMXXTzyUYrL7j4/h7/UzIvBdsGnqKqy2RWXmAt8XUfDWcitgo5
-	 fgEHlu/8rP9bnB9INjHB1oZQ35gqFqmfUEwPzv8cUiJy9tl1oFhVJ6uZySmPmzh978
-	 0WxIBBLZmpdx85tb5KrUcUJXkUnUzEaykvCCu4mCIqlSJfOS6ZV2j7c3xepJeAXfQd
-	 ehDCr8DBfwSZ+TYFxp9vtPV4p9ML326QTG6T3Y02xXMnTXQ2Cb6HUZnGT+awoJbv/S
-	 DIT594tz5sMmQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC61783ED4;
-	Sun,  1 Mar 2026 18:47:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BFA5F231
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:47:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A54C0417A1
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:47:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08F15417F8;
+	Sun,  1 Mar 2026 18:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wgdVN4xXDVsC for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 18:47:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D864041229
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D864041229
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:47:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA24985DCC; Sun,  1 Mar 2026 18:47:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 1 Mar 2026 19:44:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49cabda8fb09c665f80cc45b505923b7a4a3bd60
-X-Git-Newrev: 7756b39d64f97b386dc993080e1ec4c90f18eddc
-X-Patchwork-Hint: ignore
-Message-Id: <20260301184756.DA24985DCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-multipart: security bump to
+ id wpX_UNP-vcQm; Sun,  1 Mar 2026 18:49:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 271E241B86
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772390987;
+	bh=6OyUovNcvncaHDcVl7U3EqGq87hhB3yeCirQq0MBMR4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=g2R3WpvrSfKO5XOp0FB6/nwUDGf/aLIvpOTU3v92DxJRn+qJdYg2T7fGpl5wm52qi
+	 rSmYgiMVbNFUEjocIEtIAddrrmuvN8ZgVwYnlrzBidED3CTbdXUEpHweAMyY+9KgSU
+	 m6dt1d6+H4VV6UX/NZg3ydcrP9Doo6l7Bf9nQWEcJeUdMdZaUHn+JOBEC3hpAVEr/M
+	 tTo9M86fjQfx39a3OdjjFybTUwf9PGcWuMJzgcMmQZi1qKhFhgA5DKKXKni5zUekk7
+	 SPYYltelhJ2+jpEEjAlWRUNGFHuW1cQVemtfdHYiDJYUAKs5MfHADQhGjrI/yhEyKL
+	 sivjP1VGHIuqQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 271E241B86;
+	Sun,  1 Mar 2026 18:49:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29FFF24E
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:49:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B6F483F3C
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:49:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vhMI-PNb3ysj for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 18:49:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 415DC83F29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 415DC83F29
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 415DC83F29
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:49:44 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id D15EA13F8A7;
+ Sun,  1 Mar 2026 19:49:39 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 01 Mar 2026 19:49:39 +0100
+MIME-Version: 1.0
+Date: Sun, 01 Mar 2026 19:49:39 +0100
+To: Martin Bachmann <martin.bachmann@designwerk.com>
+Cc: Martin Bachmann via buildroot <buildroot@buildroot.org>, James Hilliard
+ <james.hilliard1@gmail.com>
+In-Reply-To: <ZR0P278MB0869C41190C47D5811F1A6758B75A@ZR0P278MB0869.CHEP278.PROD.OUTLOOK.COM>
+References: <ZR0P278MB0869C41190C47D5811F1A6758B75A@ZR0P278MB0869.CHEP278.PROD.OUTLOOK.COM>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <e0c365f95e5128715e0a6e6f2a3d0405@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772390982;
+ bh=PgM7zku3/LRMEiXJY+gF9ahrGI/+LrXGJb847OgFurk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZDK41SwI6fRAk5r1kl23PDkI4iniin5jNSU9cS5zxfX/DjKgZ5wTUoKNDCquCe4PQ
+ DkBpw1n4r3CP0oEaPouwMbZffYw3m8kBL9FCC7cmaH9NlqoRLUkQgEL1UT5Ee7rKYA
+ fxfcFZnqv5kOLWDoubYJUWAKlQ+Q4UenRSgnv4eWfMtbq6S7nOAOp4ArFLg9BAMCmB
+ DmVkSM7Ins9Yyj/yhhGNAvYpmxPymGHqP5Pabbvyd0d36WfkFNV80ogXpZA29fPshw
+ 1/fWwYTzAAJ0zFrP0yOLvd71i4X4OFA3il4oqkNYYdNwQe0yMNb4uIqI3a2Ojttv5r
+ RvBLXEQYLzv3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZDK41SwI
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/python-multipart: bump to
  version 0.0.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,57 +96,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7756b39d64f97b386dc993080e1ec4c90f18eddc
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 25/02/2026 13:49, Martin Bachmann via buildroot wrote:
+> This will fix CVE-2026-24486
+> 
+> Signed-off-by: Martin Bachmann <martin.bachmann@designwerk.com>
 
-For release notes, see:
-https://github.com/Kludex/python-multipart/releases/tag/0.0.22
+Applied to master, thanks.  For info, I reworded the commit log to
+explicitly mark the commit as a security bump, and added links
+the release notes and CVE. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/7756b39d64f97b386dc993080e1ec4c90f18eddc
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2026-24486
+Best regards,
 
-Signed-off-by: Martin Bachmann <martin.bachmann@designwerk.com>
-[Julien: reword commit log to mark the commit as a security bump]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-multipart/python-multipart.hash | 4 ++--
- package/python-multipart/python-multipart.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-multipart/python-multipart.hash b/package/python-multipart/python-multipart.hash
-index ed01763cd7..a5bc988b02 100644
---- a/package/python-multipart/python-multipart.hash
-+++ b/package/python-multipart/python-multipart.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python_multipart/json
--md5  fd24645f1b328d5d328e8b10bc2c596c  python_multipart-0.0.21.tar.gz
--sha256  7137ebd4d3bbf70ea1622998f902b97a29434a9e8dc40eb203bbcf7c2a2cba92  python_multipart-0.0.21.tar.gz
-+md5  0debb97a2b5d68f8dd5119bd200f4010  python_multipart-0.0.22.tar.gz
-+sha256  7340bef99a7e0032613f56dc36027b959fd3b30a787ed62d310e951f7c3a3a58  python_multipart-0.0.22.tar.gz
- # Locally computed sha256 checksums
- sha256  a8e833176cd617daf00b9d6d39fa15ca8edebc6d1643079cd2f4893c0c289be2  LICENSE.txt
-diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
-index 6921d935eb..cdaae6ef67 100644
---- a/package/python-multipart/python-multipart.mk
-+++ b/package/python-multipart/python-multipart.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MULTIPART_VERSION = 0.0.21
-+PYTHON_MULTIPART_VERSION = 0.0.22
- PYTHON_MULTIPART_SOURCE = python_multipart-$(PYTHON_MULTIPART_VERSION).tar.gz
--PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/78/96/804520d0850c7db98e5ccb70282e29208723f0964e88ffd9d0da2f52ea09
-+PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/94/01/979e98d542a70714b0cb2b6728ed0b7c46792b695e3eaec3e20711271ca3
- PYTHON_MULTIPART_SETUP_TYPE = hatch
- PYTHON_MULTIPART_LICENSE = Apache-2.0
- PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
