@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62EAFD0070
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 15:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40623FD006D
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 16:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DA8760BAB;
-	Sun,  1 Mar 2026 15:51:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCA0760BF0;
+	Sun,  1 Mar 2026 16:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tGpCJy2hsBTS; Sun,  1 Mar 2026 15:51:41 +0000 (UTC)
+ id yqbEuuQdhddK; Sun,  1 Mar 2026 16:30:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB3E260BC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42076090C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772380301;
-	bh=m7K6mo2nqRBAOUBC8lUoMcTbjL4u1anOs6qQ5da/AIA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=YUnkFfkohlWY5AZfj/QwCsxtOATy2L+d8zkWJcK+eT7GFTZHZGs0Qj2ug9apAGd/i
-	 2xJoZ9PyfrLE222HUCZNc2Kgre5Gu5mvQyhZXeZ0WlQ9yVfyIVvv2Dr8ZZu918HnmE
-	 oOUVya7TIA2XarQRbEb33iKY4he5oDq/YDlbywgd2pHAPtfq0G4vqnWnHB4Njyq2ub
-	 BRDdT1Bz6TWyMIauRvaOjjLsv4NwETMX2ONv6HQEFxRTGJRf8DHb3QgqC6yQWdqtJL
-	 cRS7ewVcD5aWCdvDqJHfn1N+hh+jEL7e9upqNQaP+Jns6SI9yjrvc3wozKME2YaR/I
-	 oax0FgeTQBFLQ==
+	s=default; t=1772382600;
+	bh=qz4ek2HhKqcMenZZmdeZYIBf7vC+mbnNJWEtLOQG5EY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=bg/jn+Gq6xmXy5BSgtM1b3AAxZZ0uJc2ismPxO82gVhoKuveL1FvXBjAe8AWVYjBt
+	 n8jr2g44ORNs2r1dpk89I52rJmXOdCO7UcR/Ghx2G/tB6ARraQtc1qkeugB8l9mzIf
+	 dD4o3o0hs6toGwaAurTp855I6jtLpMg7H3uCHGhQrdgHDT/QyqzYhs926u8EluenHm
+	 Z/mQWHyD39rV8JAyxi7nfXuHpBy+aitCaNBcgaDT/8MYq9SoHf6d1ws0mk1RHsdWiH
+	 jEcMcsCklVCO32T4CwAuxdvZRZYrm851ce9FafNESold54OT6GS6Q//iHs30wahSsZ
+	 OcThh7Z1VzqeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB3E260BC0;
-	Sun,  1 Mar 2026 15:51:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6009E24E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:51:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A42076090C;
+	Sun,  1 Mar 2026 16:30:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34F98231
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 16:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5154460BC0
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:51:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16F4640629
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 16:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1_NVWYWaoyMI for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 15:51:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F0D660BAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F0D660BAB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F0D660BAB
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:51:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id EC6FEB00548;
- Sun,  1 Mar 2026 16:51:33 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 01 Mar 2026 16:51:33 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id an6OpUUxzrLJ for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 16:29:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E692403E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E692403E3
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E692403E3
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 16:29:57 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6D8D3A4C3001;
+ Sun,  1 Mar 2026 17:29:55 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40700)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vwjg3-000000004ZT-1a5u;
+ Sun, 01 Mar 2026 16:29:55 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun,  1 Mar 2026 17:29:54 +0100
+Message-ID: <20260301162954.2893222-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 01 Mar 2026 16:51:33 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Petr Vorel <petr.vorel@gmail.com>
-In-Reply-To: <20260301140024.693061-1-giulio.benetti@benettiengineering.com>
-References: <20260301140024.693061-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <57f5a1043ce0ef66ae77a010483d6ff9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1772380296;
- bh=d0VNgDYattQ7y99/qwg0Ajlhy3OJO0JUIW0tG94wdrk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=KCoikJhRty9qE5fpiaL44f5O0riz+Xv8+W4x8YpYJqng/IOljnlHAe2oVO/HU1znh
- dHcsro9zqfoEQSuS1Xaecg91jMiCSSPkn1k5IU+YoIBD7rNwnQcf8YT//r8GsLDJcY
- s81NI5hWncLNFZ7hSlbR5z2J0aY59vo35tJ/lE4GPoKR+t29a4cF/iVuRh164ZDaqa
- vNLDMXZeaWBUL1QbnTladSXT1xobrjn4V4BAh0ME937jsXaBnrZhy7HqvPIo4ROFwB
- QSB9pJWVexlPpDJ8mCgMfgsxEx2CkBuJ1Myk7fP6LQVqFFjnxjJYdLDjWcWGJTBgbD
- P3msGSMAG2XHQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KCoikJhR
-Subject: Re: [Buildroot] [PATCH v2] package/nfs-utils: bump version to 2.8.5
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1772382595;
+ bh=J7bmNkG0LIoPi24R1/lJBbyNfGBitTTnC8nX8rrJES0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=tpDBWr/9W917e7q6m6IQvlxU8vj7CSwj5XlUFQYhGfF+L16zYypwdtggu2S5+Zhtm
+ ktPANjOCxapQ7KeHKQ2aKhAfzgv+SqweVcDmLIwkGA+TMrwhf70/Zt/TxTpWAOPbq7
+ iHoQhNtHSK9xPiUKOIY4PxkklMDM+36duGfru+MjZOFYP2SY2zhMq/vwvQlbYoB37q
+ J0LgbUA8jym2mekghNWzM1ROw7lgHufIW0DOXubqGHOpMxnXuV8u0m+GTeY14Y6uTS
+ vVTC0jg+cweXPCJlAqNkIS77nKVQwDMAhK6FEn3mqpVBJgoTTRsYB58Syad/SEKvNE
+ m+vgnF1t3LQeQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=tpDBWr/9
+Subject: [Buildroot] [PATCH/next v2 1/1] package/rust-bindgen: bump version
+ to 0.72.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,26 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/03/2026 15:00, Giulio Benetti wrote:
-> Release announce:
-> https://lore.kernel.org/linux-nfs/fdf3631f-e924-4e4c-bd9f-db5b40a90bfe@redhat.com/
-> 
-> With patch [1] option nfsv41 required to be renamed to blkmapd.
-> 
-> [1]: 
-> https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=59e85671e59f7ccbf66dcf72ce7462bf4932cc78
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+https://github.com/rust-lang/rust-bindgen/releases/tag/v0.72.1
 
-Applied to next, thanks.
+We need to add "refs/tags/" to RUST_BINDGEN_SITE because the github
+repo contains a tag and a branch with the same name:
+
+$ wget -q https://github.com/rust-lang/rust-bindgen/archive/v0.72.1/rust-bindgen-0.72.1-cargo4.tar.gz -O -
+the given path has multiple possibilities: #<Git::Ref:0x00007d64db1eed90>, #<Git::Ref:0x00007d64db1e7c70>
+
+Fixes a build error with mesa3d 26.x and the upcoming llvm 22 bump:
+https://github.com/rust-lang/rust-bindgen/issues/3264#issuecomment-3218111176
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Co-authored-by: Julien Olivain <ju.o@free.fr>
+---
+v2: updated _SITE (Julien)
+
+ package/rust-bindgen/rust-bindgen.hash | 2 +-
+ package/rust-bindgen/rust-bindgen.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/rust-bindgen/rust-bindgen.hash b/package/rust-bindgen/rust-bindgen.hash
+index dc79a62ddd..72ff0401ce 100644
+--- a/package/rust-bindgen/rust-bindgen.hash
++++ b/package/rust-bindgen/rust-bindgen.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f131b9cf87ea0a5db33ff3ad711aec4dbc4d383536f5f2e37493d63cbe95428e  rust-bindgen-0.72.0-cargo4.tar.gz
++sha256  9dd2f0f7bae7c84b1d79fb848d17335b8ebc37c27cd5ecb6e0da3ec0dba87d71  rust-bindgen-0.72.1-cargo4.tar.gz
+ sha256  c23953d9deb0a3312dbeaf6c128a657f3591acee45067612fa68405eaa4525db  LICENSE
+diff --git a/package/rust-bindgen/rust-bindgen.mk b/package/rust-bindgen/rust-bindgen.mk
+index 8c02db557f..55f3b4d5b7 100644
+--- a/package/rust-bindgen/rust-bindgen.mk
++++ b/package/rust-bindgen/rust-bindgen.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-RUST_BINDGEN_VERSION = 0.72.0
+-RUST_BINDGEN_SITE = $(call github,rust-lang,rust-bindgen,v$(RUST_BINDGEN_VERSION))
++RUST_BINDGEN_VERSION = 0.72.1
++RUST_BINDGEN_SITE = $(call github,rust-lang,rust-bindgen,refs/tags/v$(RUST_BINDGEN_VERSION))
+ RUST_BINDGEN_LICENSE = BSD-3-clause
+ RUST_BINDGEN_LICENSE_FILES = LICENSE
+ 
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
