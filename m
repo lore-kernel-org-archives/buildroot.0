@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5C4AFD0068
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 13:41:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92DDDFD0057
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 13:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6964D40CD2;
-	Sun,  1 Mar 2026 13:41:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4038783D41;
+	Sun,  1 Mar 2026 13:46:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r1xo2MnZ2G1Z; Sun,  1 Mar 2026 13:41:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NlxHGtKprpxS; Sun,  1 Mar 2026 13:46:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BDFC40CE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63CD483D5B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772372460;
-	bh=osO4bhCfE9xD19IJG9KCaIPg5VNz5qvo6BpmYJSj5nc=;
+	s=default; t=1772372783;
+	bh=GhP1VoqJU8ynpETj1HFHBh+W1KUUHalH3TULAwv0MxI=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=fy/Ff8ZtAOTYi2a/aNRTjeG7+EpNJhlw808I7fGEi6JDQmQgk3kDQYbC2q/cpbeFS
-	 2mZgGCN2jfb1r+YHeeZcsYzs1HQG45i3GqzNhuoi07o7d6UZoMtvQOOLKIOS8x8xpI
-	 iNbfWf+nr7y171J8VITKDbQxoARPnx+Z+VCW4G0hd9fyT9JeYPGi9vNORvQ+Oa1wyE
-	 3LMa53yNE6kz2qj0Bf8Wj40WqlPrTAWeDzncBW+Vw6zXru7qGYJXG4yNLBTuv//Tfy
-	 Fyo7ouoba2yZsMwNbGv3U3/XOkEaEk+QJu4FptgezJAAlkDTlzq06akGr+DRhNDbqx
-	 W4gM7fqy4Fipw==
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=stavlekXSizfjZ39ySkNEz2FFmqxhzy7Mwb6G9SOowiQ+sJE+pFT6AwZgIAAw/AJK
+	 YPyjKlYveESCi9aqVr7EpxnnA+EKgUCLeLGVOMwMKHmt6MhrtontzwNtAp8pC43vjM
+	 xM2SDtRLpkeNqp7V8f2M8vDe+QE38DFiNy0zx4yCoahAlHYYmU4Q22uvfAYKUMtQRp
+	 kexd7eB86Owq//1BAC8YV68dzynpu988nnEmtB/XiX/Lx5x8N+vu4PotHjWI35AkOL
+	 rXeeRkVBU1heBJZHIPsDxQSLuaSD+xhcJqE61NNKX4R7iyYqQH17qfdMoUXS5r1tKP
+	 snXyOKfq5k/iQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BDFC40CE6;
-	Sun,  1 Mar 2026 13:41:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5063C24E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:40:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63CD483D5B;
+	Sun,  1 Mar 2026 13:46:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21679231
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34A2E40CE6
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:40:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07398403CB
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:46:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id geKnOcTH9Mj0 for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 13:40:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4F74C40CD2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F74C40CD2
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4F74C40CD2
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:40:55 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6BB7DA4C3111;
- Sun,  1 Mar 2026 14:40:53 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47904)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vwh2T-000000008Ty-1P8B;
- Sun, 01 Mar 2026 13:40:53 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun,  1 Mar 2026 14:40:52 +0100
-Message-ID: <20260301134053.1460941-1-bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UkHQXj3VCtWA for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 13:46:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 490844007C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 490844007C
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 490844007C
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:46:20 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1588218888; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 01 Mar 2026 13:46:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vwh7Z-0000000CiT1-0GQS;
+ Sun, 01 Mar 2026 14:46:09 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org,
+ Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>,
+ Fiona Klute <fiona.klute@gmx.de>
+Date: Sun,  1 Mar 2026 14:45:36 +0100
+Message-ID: <20260301134538.3030668-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772372453;
- bh=M2gnoJnUxUqLxlMvoYVOx9sRdYkQLmcL5ZUphbFDNDc=;
- h=From:To:Cc:Subject:Date:From;
- b=bxgVG7XNQToDz8qouJh2DSfbYnTaYVAVIWITsYTFLSxbQCUVNUQhAVVuJgy9XrAgw
- L1mXcyMJjD3o39r7+OoAtBtj6vZYfP0fPQ+FphNLtkD0dkYyWEiVbSZImnBLW6tdVG
- iRFHXIcefzwvK3cJ501QXgpfy8clkmlAAewkM1muQ25Q8qf+tIvHRrZDlBSrkpJVws
- e4bhOJaJ4xYuHOjB5kFqWx7mGrc6i7Cfu85atil+Q/Insf9svxgZx5VceDtHrY67R2
- 7wqNYguoVCxmCc6aD1CgdrH0aHtDeXy00686v8A8qRVObLMckWfE1Jp5ZrX1Mgjg4j
- 6c+Zd0dAg7zrA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=nSHFhmQopxsLt1ZQ20w3SJkrRIUmP8RsCBW4kmoABv35mWGeJhck7Z90XBcRjTbW3Q9fv6oS4VIlbl11nU2MVBkFjcGVBl0Alf+sjCQUQq3J9nTjeXcKXyz1LNy9hPm+K1xnzQeRJuN4SOFw13Z+Pf6Ksgnuq++WPssCorHyQKwL0qJzhmhRMLviFa3cS+9/5NlVy+QjUEkd12o12K26gvF1j97DHmSZuTQRH4yEcQcpvNsDsN7kT8mSlIHCAt/NcpeHJ6jtLQv6x4Q1QTPjdI1yVCWYdCg+xkCin3nbvbrv3cmo7LeOnPd0Pjjj9kjQiUoYsYqbvJxdDalVludi7g==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=u9ogdXXu6rhCd/w3DTDNxaXYmscBJ1x326JIfGZfb10=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=bxgVG7XN
-Subject: [Buildroot] [PATCH/next 1/1] boot/shim: Fix build with binutils 2.46
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=nSHFhmQo
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] support/testing/run-tests: unbreak on Debian
+ testing/unstable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,86 +92,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 101997e334efcbfd9bde3100ae75400177cfa56f added binutils
-2.46.0 to -next branch causing a build error with shim:
+Commit 3d2141bcee("support/testing/run-tests: specify multiprocessing
+method") added a call to multiprocessing.set_start_method('fork') as a
+workaround for python 3.14, which changed the default start method to
+forkserver - Which is incompatible with the nose2 setup.
 
-output/per-package/shim/host/bin/x86_64-buildroot-linux-gnu-objcopy:
- shimx64.so: file format not recognized
-output/per-package/shim/host/bin/x86_64-buildroot-linux-gnu-objcopy:
- mmx64.so: file format not recognized
+multiprocessing.set_start_method() is only supposed to be called a maximum
+of 1 time per process and throws a RuntimeError if called more than that
+(even with the same arguments):
 
-Added an upstream patch to fix the problem.
+>>> import multiprocessing
+>>> multiprocessing.set_start_method('fork')
+>>> multiprocessing.set_start_method('fork')
+Traceback (most recent call last):
+  File "<python-input-2>", line 1, in <module>
+    multiprocessing.set_start_method('fork')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib/python3.13/multiprocessing/context.py", line 247, in set_start_method
+    raise RuntimeError('context has already been set')
 
-No backport to buildroot LTS branches necessary.
+Debian included a similar patch in python3-nose2 0.51.1-2 (currently in
+testing/unstable) which adds its own call to set_start_method():
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://salsa.debian.org/python-team/packages/nose2/-/blob/debian/0.15.1-2/debian/patches/0004-plugins-mp-set-context-to-fork-for-Python-3.14-mp-AP.patch?ref_type=tags
+
+Which comes from:
+https://github.com/nose-devs/nose2/pull/644
+
+As discussed in the upstream PR, this is not a correct fix is wrong and
+breaks various use cases.  An issue has been opened to get this fixed in the
+Debian packaging at:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1129350
+
+But until that is done, rework the patch to:
+
+- Only override set_start_method() if needed to limit impact
+- Monkey patch set_start_method() so additional calls are ignored
+
+To unbreak run-test on affected Debian systems and add some documentation to
+make it clear why this is done.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-with-binutils-2.46.patch   | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 boot/shim/0001-Fix-build-with-binutils-2.46.patch
+ support/testing/run-tests | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/boot/shim/0001-Fix-build-with-binutils-2.46.patch b/boot/shim/0001-Fix-build-with-binutils-2.46.patch
-new file mode 100644
-index 0000000000..05ab7b2c83
---- /dev/null
-+++ b/boot/shim/0001-Fix-build-with-binutils-2.46.patch
-@@ -0,0 +1,51 @@
-+From c4665d282072df2ed8ab6ae1d5fa0de41e5db02f Mon Sep 17 00:00:00 2001
-+From: Luca Boccassi <luca.boccassi@gmail.com>
-+Date: Tue, 6 Jan 2026 11:48:13 +0100
-+Subject: [PATCH] Fix build with binutils 2.46
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 1c4d2b4a85..2bbe7b140f 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -142,5 +142,15 @@ def main():
+ 
+ 
+ if __name__ == "__main__":
+-    multiprocessing.set_start_method("fork")
++    # python 3.14 changed default start method from fork to
++    # fork-server, which is not compatible with the nose2 setup
++    if multiprocessing.get_start_method() != 'fork':
++        multiprocessing.set_start_method("fork")
++        # set_start_method throws a RuntimeError if called more than
++        # once.
++        # Debian python3-nose2 0.15.1-2 includes a patch adding
++        # another set_start_method() call, so monkey patch it out to
++        # get rid of this
++        multiprocessing.set_start_method = lambda *args: None
 +
-+With the new binutils which is in development and in Fedora Rawhide:
-+
-+objcopy -D -j .text -j .sdata -j .data -j .data.ident \
-+        -j .dynamic -j .rodata -j .rel* \
-+        -j .rela* -j .dyn -j .reloc -j .eh_frame \
-+        -j .vendor_cert -j .sbat -j .sbatlevel \
-+        --file-alignment 0x1000 \
-+        --target efi-app-x86_64 fbx64.so fbx64.efi
-+objcopy: fbx64.so: file format not recognized
-+
-+It seems it was an intentional compat break, according to the upstream
-+commit:
-+
-+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=5e83077d552ed6f81dbc092eb3ccf827a43de42c
-+
-+* Internal changes to plugin support, and stricter target checking may result
-+  in some errors being exposed in user options passed to the various binutils.
-+  For example objcopy --target=TARGET now will only work if the input file is
-+  for TARGET whereas prior versions of objcopy accepted other target input
-+  files and produced a TARGET output.  If you do in fact want the old
-+  behaviour the correct usage is objcopy --output-target=TARGET.
-+
-+Switch from --taget to --output-target as suggested.
-+
-+Signed-off-by: Luca Boccassi <luca.boccassi@gmail.com>
-+
-+Upstream: https://github.com/rhboot/shim/commit/c4665d282072df2ed8ab6ae1d5fa0de41e5db02f
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Make.defaults | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Make.defaults b/Make.defaults
-+index c5fa32bec..9b40b7f4a 100644
-+--- a/Make.defaults
-++++ b/Make.defaults
-+@@ -155,7 +155,7 @@ endif
-+ 
-+ LIB_GCC		= $(shell $(CC) $(ARCH_CFLAGS) -print-libgcc-file-name)
-+ EFI_LIBS	= -lefi -lgnuefi --start-group Cryptlib/libcryptlib.a Cryptlib/OpenSSL/libopenssl.a --end-group $(LIB_GCC)
-+-FORMAT		?= --target efi-app-$(ARCH)
-++FORMAT		?= --output-target efi-app-$(ARCH)
-+ LOCAL_EFI_PATH	= gnu-efi/$(ARCH_GNUEFI)/gnuefi
-+ LIBDIR		= gnu-efi/$(ARCH_GNUEFI)/lib
-+ 
+     sys.exit(main())
 -- 
 2.47.3
 
