@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52E75FD0062
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 18:02:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3475FFD0047
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 18:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A44B583F18;
-	Sun,  1 Mar 2026 18:02:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB21783EFB;
+	Sun,  1 Mar 2026 18:47:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id On175QqD_XpL; Sun,  1 Mar 2026 18:02:44 +0000 (UTC)
+ id DbTuKxs4sFAU; Sun,  1 Mar 2026 18:47:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 829CB8387D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC61783ED4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772388164;
-	bh=GINI5kLIzCLW7naD239Yoytp/QohEl7Gw/Usp6g1t44=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=AIvvZAQxZlMuaH2s5rVRuYP/qPTcLru4LJQjODN7hH3q1PeQNWGsbJ/8IzqfvjgJt
-	 6QTSPmJkw1pGasXjD7XqFaZojeLspT1cp/r90aZBv0Rb9jqyMomrwN0rLb03vkhFNk
-	 i6B+azLGpKaXUAp3nyrIQ0YVWFmPM/Ar3HY7ARWYpkP4DjGyH15UNA/+sV0RKlKZOz
-	 fWTjKdsnvwdWYMb8nbhmDm+uZNx5UUCIbABTPU4TIwuHiG3hRVfmuAI2zEV/ioAG0+
-	 vA+k7+uig523Gle2pY3M9KmBZ+/1Q0ICIkmAAAX/LRXsNtr3Zrnm2vfMdB+EFZtn0h
-	 PBIrVR9CK5PQg==
+	s=default; t=1772390878;
+	bh=nkWz9sFXqy4wCsa1X7vns2/sCBm7BEYgTMZWv+oCzDM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ZvebUXaT0cpM+GjQ56+YTNxCo5FcwTkgkyVFauAq4cUo2P+05cVUJ9B6F0N4BIyo9
+	 hDWZ6sAR3WEoxkBorMXXTzyUYrL7j4/h7/UzIvBdsGnqKqy2RWXmAt8XUfDWcitgo5
+	 fgEHlu/8rP9bnB9INjHB1oZQ35gqFqmfUEwPzv8cUiJy9tl1oFhVJ6uZySmPmzh978
+	 0WxIBBLZmpdx85tb5KrUcUJXkUnUzEaykvCCu4mCIqlSJfOS6ZV2j7c3xepJeAXfQd
+	 ehDCr8DBfwSZ+TYFxp9vtPV4p9ML326QTG6T3Y02xXMnTXQ2Cb6HUZnGT+awoJbv/S
+	 DIT594tz5sMmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 829CB8387D;
-	Sun,  1 Mar 2026 18:02:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BB0524E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:02:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC61783ED4;
+	Sun,  1 Mar 2026 18:47:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFA5F231
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D3E260895
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:02:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A54C0417A1
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:47:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BoBS-GVo1hnI for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 18:02:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E364260D4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E364260D4B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E364260D4B
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:02:42 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 481F219F57E;
- Sun,  1 Mar 2026 19:02:39 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 01 Mar 2026 19:02:39 +0100
-MIME-Version: 1.0
-Date: Sun, 01 Mar 2026 19:02:39 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260301162954.2893222-1-bernd@kuhls.net>
-References: <20260301162954.2893222-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <e40745eb0658c6d826b5de2d55312325@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1772388160;
- bh=kQbZQ0Q+LuqwfQJ+lgc33EaJufdmD4oJ3FBzoyixAlA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=i3JX7Y5Qr04BPezPQmmOTlBj/UDbdskRwm8TV3g5rmaX7VzkNHVfL4h9ukPjmvQgD
- o3Cj73X0T5k5hdNdde2yseTDY6HF1IAejmrGQnMAtv2deU8TGKflzNs9HD9oHZPhSn
- t1F4j5EJK7L1uOCt+UC6K0nSW7swWu0B4AJZmeAVj3Vn+Lls4eBaoGFEUzxemEWvjG
- sVEqLlcgesa5krtAwEvy7mFLn3PMuOpgNGaXMuuV8Dp+tL4UKbfo331xd3SQ266t20
- Eh1DPGt8JDvw1WzZasT7yXqf/R5iFHqCoGui1mSwlNOUtCPctDfEPKIoLwQKzL6rOA
- G6FdlyxM/EJlA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=i3JX7Y5Q
-Subject: Re: [Buildroot] [PATCH/next v2 1/1] package/rust-bindgen: bump
- version to 0.72.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wgdVN4xXDVsC for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 18:47:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D864041229
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D864041229
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 18:47:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DA24985DCC; Sun,  1 Mar 2026 18:47:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 1 Mar 2026 19:44:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 49cabda8fb09c665f80cc45b505923b7a4a3bd60
+X-Git-Newrev: 7756b39d64f97b386dc993080e1ec4c90f18eddc
+X-Patchwork-Hint: ignore
+Message-Id: <20260301184756.DA24985DCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-multipart: security bump to
+ version 0.0.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,30 +71,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/03/2026 17:29, Bernd Kuhls wrote:
-> https://github.com/rust-lang/rust-bindgen/releases/tag/v0.72.1
-> 
-> We need to add "refs/tags/" to RUST_BINDGEN_SITE because the github
-> repo contains a tag and a branch with the same name:
-> 
-> $ wget -q 
-> https://github.com/rust-lang/rust-bindgen/archive/v0.72.1/rust-bindgen-0.72.1-cargo4.tar.gz 
-> -O -
-> the given path has multiple possibilities: 
-> #<Git::Ref:0x00007d64db1eed90>, #<Git::Ref:0x00007d64db1e7c70>
-> 
-> Fixes a build error with mesa3d 26.x and the upcoming llvm 22 bump:
-> https://github.com/rust-lang/rust-bindgen/issues/3264#issuecomment-3218111176
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> Co-authored-by: Julien Olivain <ju.o@free.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7756b39d64f97b386dc993080e1ec4c90f18eddc
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to next, thanks.
+For release notes, see:
+https://github.com/Kludex/python-multipart/releases/tag/0.0.22
+
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2026-24486
+
+Signed-off-by: Martin Bachmann <martin.bachmann@designwerk.com>
+[Julien: reword commit log to mark the commit as a security bump]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-multipart/python-multipart.hash | 4 ++--
+ package/python-multipart/python-multipart.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-multipart/python-multipart.hash b/package/python-multipart/python-multipart.hash
+index ed01763cd7..a5bc988b02 100644
+--- a/package/python-multipart/python-multipart.hash
++++ b/package/python-multipart/python-multipart.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python_multipart/json
+-md5  fd24645f1b328d5d328e8b10bc2c596c  python_multipart-0.0.21.tar.gz
+-sha256  7137ebd4d3bbf70ea1622998f902b97a29434a9e8dc40eb203bbcf7c2a2cba92  python_multipart-0.0.21.tar.gz
++md5  0debb97a2b5d68f8dd5119bd200f4010  python_multipart-0.0.22.tar.gz
++sha256  7340bef99a7e0032613f56dc36027b959fd3b30a787ed62d310e951f7c3a3a58  python_multipart-0.0.22.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8e833176cd617daf00b9d6d39fa15ca8edebc6d1643079cd2f4893c0c289be2  LICENSE.txt
+diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
+index 6921d935eb..cdaae6ef67 100644
+--- a/package/python-multipart/python-multipart.mk
++++ b/package/python-multipart/python-multipart.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MULTIPART_VERSION = 0.0.21
++PYTHON_MULTIPART_VERSION = 0.0.22
+ PYTHON_MULTIPART_SOURCE = python_multipart-$(PYTHON_MULTIPART_VERSION).tar.gz
+-PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/78/96/804520d0850c7db98e5ccb70282e29208723f0964e88ffd9d0da2f52ea09
++PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/94/01/979e98d542a70714b0cb2b6728ed0b7c46792b695e3eaec3e20711271ca3
+ PYTHON_MULTIPART_SETUP_TYPE = hatch
+ PYTHON_MULTIPART_LICENSE = Apache-2.0
+ PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
