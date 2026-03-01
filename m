@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A76BFD0048
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 10:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6BAAFD004A
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 10:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B595B409EB;
-	Sun,  1 Mar 2026 10:26:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D1A3418FB;
+	Sun,  1 Mar 2026 10:37:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ITkKle1dUl9; Sun,  1 Mar 2026 10:26:55 +0000 (UTC)
+ id pjzd9E42zEC3; Sun,  1 Mar 2026 10:37:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C481240A5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93407418F3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772360815;
-	bh=Os9C4iYMuInri7lrhSBQCVsqz9QGVKd8yFYCMJnyKd8=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1772361449;
+	bh=BUBBHtWKyMw1nnWpm1s+ApgdUwG1fPkuFzc2SAtTatM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=RBafCko6xSQwmw8Ft4d8jupRSh+MMUCdxjBuK+fuGdcoa5DTHEf/M/9Ep10cKmwZg
-	 wgniBNgONSXBwjEV5ChBkVZ4oMLus9Xf8BIzfZXdL2v0DQYO3mp0BgDst42eaCMgOg
-	 fxUhNKMGjjZC4rjtjifG+bnGgM4hs4Imjautfjk/Fw1jpmxyNXxEUsmbDHl6yCzgjq
-	 K45xcKj+GEZqEprSZDgqb+1UdYHEtv90uHmAuTZsYjPgtFhtx5w/FVWlRqyuDx7r3t
-	 a+y56aB2fZTlH8eY58fL6t1atQJBdHuN6bkyOf8v77PAERHy29hwcZeXj5Nj9VaaRx
-	 hNFyqD732Su7Q==
+	b=gFkJY4109w125Y1Hg37vqR0MpFqtSVbxS/Jub0sVpLx/SX8o1SYbd5ETlMZZ0XUoL
+	 5LVLFPW+pOteb08iEfvOysQLDBmz24k4H++cZAvddgaV8U7U4kCC/rQxNUj/WgJpNh
+	 h5BYpG9mc9iK1WZTBEDJPUXCNzS32cg2ir8EqKUPdpeZot0VlT5zMVX/GkxaW0RynG
+	 dtP2GueMwoLmX37T39BCTbKThzNGorsGrCi7yS9XSyW6FvP3sXxUTABKIaSDIghk6w
+	 M01I3p5bdApE3pR+UAGqwaBLYHcOoDe/u3tFE7Gts5bkMp0zyIjnnDOVnBGIg8hZ8c
+	 hsSPR0MMeimRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C481240A5D;
-	Sun,  1 Mar 2026 10:26:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B65F231
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 10:26:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93407418F3;
+	Sun,  1 Mar 2026 10:37:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BEC6231
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 10:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98A3660792
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 10:26:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99670404EF
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 10:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HhenN1pa03Mx for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 10:26:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.149;
- helo=smtpdh19-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5A2FC6061E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A2FC6061E
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5A2FC6061E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 10:26:50 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id we0dvcnieclBZwe0dvTl4W; Sun, 01 Mar 2026 11:26:47 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7uvCBj2jCkx7 for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 10:37:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0562340499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0562340499
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0562340499
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 10:37:26 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 170FAA4C32BB
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 11:37:23 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54076)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1vweAs-000000001OU-1fja
+ for buildroot@buildroot.org; Sun, 01 Mar 2026 10:37:22 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Simon Dawson <spdawson@gmail.com>
-Date: Sun,  1 Mar 2026 11:26:46 +0100
-Message-ID: <20260301102646.594814-1-giulio.benetti@benettiengineering.com>
+Date: Sun,  1 Mar 2026 11:37:22 +0100
+Message-ID: <20260301103722.3526268-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfBeuSMlVTwW1wbwZXfhoO9pfbTpT3B7LPoO7iANG1HwPgrpiNeaWU313yHQk88D9vhYrQ9XhF3BtY0lirudBqDgyMKS5bZwZiz3H04rQj5Npn9isSnJp
- NWQnzRGdKcYT2GIP1PHDaQVtXQ1GnrhCHPgTm5ZJQyOykTntf/zdXqMojVt4ScMWw0wCz8jHOQQ9zIpvyirYL9PObRLv9lKPwLTqlhciKJyYYdZAvrymz3QX
- 3GVRDjnf6iUp/mEiCM80Up3TitF/WFCacOZpinjGvdTK71b6dqZeKtVnQUrnEmesABs0qtJgESjd8x69+WKzgQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1772360807; bh=C2hpNEmrrWa+vvZDtvC2ftdAaUYbM83YPFupaXxJ3Uo=;
- h=From:To:Subject:Date:MIME-Version;
- b=NNN+dTDoT3LBKsrORLDr2T5pW9RHRTzwGJ7wP2IORXzyaBbUOdYCMdRsepTtWu6Gc
- c74ry6Qcw9qO/9W0SXG0iepp+soOXsBN+V2e1SbqKHUSkHEknvQ748XMNUz4r33maM
- SJ0yDVZrAJAYCcdlkiu5t6JqFg53A9MK0wBom3XbyivtCpRTVDGJkFdoS4U7gHzfSv
- hVQELCwkzIhYZn0WTjduAmkwW3tpAb8xwkwiep0OAqe+iAGfVQ/eIZz1xbu86IFkDz
- iwqn+NjTAigwFj5W1cQ0X2Vpo9K6jYdqugODNVhqXcxIWyY/410Y93+IA66bExoSHV
- f/TK8Lhn72XiQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Spamd-Bar: ++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1772361443;
+ bh=x8ZFJQZLqTcso/8jsDvlJEtoRopnmtp0xeIcVCxIERU=;
+ h=From:To:Subject:Date:From;
+ b=jK0WoWWF1MtplACg6+pebagqWLfMxic5REKdv6H0yhND/DpLR1C+n/Xu+NsWfvaBz
+ TDjfCnEJAeuryWR330FmyUiFgKwyWet9IrDt4LaUConeKJQOEu8K/16ATeoSgMq7Vg
+ 3qhY00OtK91BvDIB5n4Nxh0df/n8CTMVvXisRrznRzylzWl0GnERk6EPvmYDNduqpv
+ jz4wfhJmo1oP/dzppkdtooQFKAt+PdZW4sPzbs7vAdD9JN+k6JuwBMkqI2tmotV7L0
+ 3VuxgX49jtOt7pU+GS+mIhDltdA/ADU6HArv85j0/vWXOnvhXVSNM//zkjgumlEbOq
+ uOuG/sUWYQIXg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=NNN+dTDo
-Subject: [Buildroot] [PATCH] package/minicom: bump to version 2.11.1
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=jK0WoWWF
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.23.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,37 +96,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release Notes:
-https://salsa.debian.org/minicom-team/minicom/-/releases/2.11.1
+Release notes of this bugfix release:
+https://www.samba.org/samba/history/samba-4.23.6.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index 92a50d010c..8d5f646dd2 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  90e7ce2856b3eaaa3f452354d17981c49d32c426a255b6f0d3063a227c101538  minicom-2.10.tar.bz2
-+sha256  87cf0da91af0531357cd61b8e1906b907edd2c9ef82f9ae74c277e1893d0f98c  minicom-2.11.1.tar.bz2
- sha256  cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index 0c9b1ae434..c799fcd23a 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index cc07b2527b..84ada82bfd 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.23.5.tar.asc
+-sha256  593a43ddd0d57902237dfa76888f7b02cb7fc7747111369cb31e126db4836b9f  samba-4.23.5.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.23.6.tar.asc
++sha256  e3dabd8b5e42dc97669fa0faef032510a94e496b58f7067082e5036d88f0e702  samba-4.23.6.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 5d9eacef90..2631f2dcad 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINICOM_VERSION = 2.10
-+MINICOM_VERSION = 2.11.1
- MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.bz2
- MINICOM_SITE = \
- 	https://salsa.debian.org/minicom-team/minicom/-/archive/$(MINICOM_VERSION)
+-SAMBA4_VERSION = 4.23.5
++SAMBA4_VERSION = 4.23.6
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.47.3
 
