@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5E93FD006E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 15:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80B3BFD006E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 15:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5697E60BCC;
-	Sun,  1 Mar 2026 15:30:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A3F41829;
+	Sun,  1 Mar 2026 15:30:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 05x4_CAxsro6; Sun,  1 Mar 2026 15:30:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6uSgdmf9QCuy; Sun,  1 Mar 2026 15:30:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22EC060BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3558E41B34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772379023;
-	bh=XGfhq5YbqPey3uaRe0lC6tgpEwrUwj6yYlHhwuX6l/c=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Vp/btDvE8vNYE6+szqQQsJeSk8K1Pes28a/oPIv1O//1IoOPDZPSBK/COqxRpH+2w
-	 8V84oqJjzSoQKvJpD0Dzl3DQDoG1zjnGZ7TcuGP8TmZk7EYrKRfoZIBhYvqPNZGf+P
-	 lyG+V2YXYHOcgL4FTRU9c2GkTejDfcHOiXLKjyQpRugCzLgJsaEwiJ+NgFZGLivptz
-	 8bMHtTygcREsOIJxq9cxHjzZKNzVOzPleFW9DDEnVwsT6RNNRz5V/SnUKLJ3289COT
-	 zJouqAm4VQg0/JoWtfC4EaW0z/q8PRhp9fV/MJcan7O6erwCX9H9aJPqliah3HzrTd
-	 BDvp5bOMZqRQg==
+	s=default; t=1772379037;
+	bh=r3rlyXqEC4yUPcelQFLCFhpsqKQA8q2cFZxplyygNUQ=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=NOsXY4i4n0lxn0HbM8eAtLw56XYX6AbsoSGt7cSBboIAhvqW5cP0roSdTfKq0D6Gm
+	 fUDRfV+eFSU5QMnRDrOEPchA82apUisE+SalE6Tc/YTUuzvbXUjSk+cVRrbzN3CIVJ
+	 ypbZ02UEjriGCY2/yvMKriP43DMP9XkESxCyb1jyzncu0/Qlh5KYVArIkyRF9IvY95
+	 wtyMY/amBej9ilifxjt0x7PNrrHVj/1JfHdVOtEjKxeNSIWMI19hvwaVy05nOx5C3e
+	 sExXgLiXZX9DqDHHgK063m1CyrNf9wksZWYXMLt8DkxRqBMvDyE94yxt4ybbqv5BUy
+	 K22Rr8Onxidkg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22EC060BEA;
-	Sun,  1 Mar 2026 15:30:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 00F7924E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:30:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3558E41B34;
+	Sun,  1 Mar 2026 15:30:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B09B231
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6E3260BEA
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:30:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80E2541B34
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:30:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id amnXJjeAmT-C for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 15:30:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1FHnmMsXlmDf for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 15:30:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AD7AC60BCC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD7AC60BCC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3565A41829
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3565A41829
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AD7AC60BCC
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:30:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3565A41829
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 15:30:33 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0c16.dip0.t-ipconnect.de [91.58.12.22])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 025ABA4C1F06;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 20BF8A4C3387;
  Sun,  1 Mar 2026 16:30:17 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:48450)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vwikK-000000002TM-3Yee;
+ (envelope-from <bernd@kuhls.net>) id 1vwikK-000000002TM-4BQP;
  Sun, 01 Mar 2026 15:30:16 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
  Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sun,  1 Mar 2026 16:30:13 +0100
-Message-ID: <20260301153015.1981106-1-bernd@kuhls.net>
+Date: Sun,  1 Mar 2026 16:30:14 +0100
+Message-ID: <20260301153015.1981106-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260301153015.1981106-1-bernd@kuhls.net>
+References: <20260301153015.1981106-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1772379017;
- bh=at+GdLbnBYrR381vJifgg/jWhRlsaxJOmIB8yS9tQc0=;
- h=From:To:Cc:Subject:Date:From;
- b=cswLKmzd/NktCwz6crVrPQcMAOZKBFuzRQTegkHZeqFUMAWj4ASL78kD57foBcGAY
- SxRgbNqW+6qGk/chj80XlQcql+im21JP9fdZZPPjXIlVct6okuS1OHfLpBtwIZU8Ax
- epF1NWaI/yteAnjlrsBBZpp/1M+FNvReIiaeNNg+ZzUaqE6tna0EplNfWqcyMJ1doO
- WfQ7ZjYz45vJM1tcS3TNLC/qGnvDuANGc6C9eq9bY1naYrPm4h5ppqykpA6RyOp9JD
- TuLpzcqgdvTYSxhTbB36iSyJqW+/0mNykxivG07xJGr0+REXLqdg5UDUlT4xLaugfa
- OtoKmvAf8fYkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=TxcQjI6pUbD/eRHa+Zggbh3Nhdim6wu7sztzDUjXT8g=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=PDStM8pRC6kM3g188r8VycELBW0LcT+EJ89ZNxDRuFY5Y8vWXqBAwagkVccPKEDRy
+ F6I30laRyd+VZtK7xDv5e7L7JAv9or7vu51sBXGrTM4ykQcBP29lo/OOTRDJ8V4jYQ
+ MXnH04JTMXlHlG3aFnDHqcTCDcPHCGIGDDyoZ5/UzGcwOMA5nIKvpXRmtv623EF9JZ
+ C3X12uVZNoDfvgyakFjhb15qKc5xmSu4FJLUq/sDsBsXJrWIMnoiM1Uz5ES6OACSOz
+ ym0YKyoZwNv2ich5tHR/95KNw5zcSaF0HU794YeVLos7YkGqiQpvbL5XPS8noy9cML
+ RmPPJabCG0Uhw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=cswLKmzd
-Subject: [Buildroot] [PATCH/next v4 1/2] package/qpdf: bump to version 12.3.2
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=PDStM8pR
+Subject: [Buildroot] [PATCH 2/2] package/cups-filters: fix build against
+ qpdf 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,211 +96,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-
-Changelog:
-https://qpdf.readthedocs.io/en/stable/release-notes.html
-
-Quoting the release notes for version 12.3.0:
-"A C++20 compiler is now required to build or test qpdf."
-Updated Config.in accordingly.
-
-Updating source URL (Github) and updating build system to cmake.
-
-Build-tested using this defconfig
-
-BR2_PACKAGE_QPDF=y
-BR2_PACKAGE_GNUTLS=y
-BR2_PACKAGE_OPENSSL=y
-
-                             arm-aarch64 [ 1/32]: OK
-                   bootlin-aarch64-glibc [ 2/32]: OK
-               bootlin-aarch64-glibc-old [ 3/32]: SKIPPED
-               bootlin-arcle-hs38-uclibc [ 4/32]: OK
-                    bootlin-armv5-uclibc [ 5/32]: OK
-                     bootlin-armv7-glibc [ 6/32]: OK
-                   bootlin-armv7m-uclibc [ 7/32]: SKIPPED
-                      bootlin-armv7-musl [ 8/32]: OK
-                bootlin-m68k-5208-uclibc [ 9/32]: SKIPPED
-               bootlin-m68k-68040-uclibc [10/32]: OK
-             bootlin-microblazeel-uclibc [11/32]: OK
-                  bootlin-mips64el-glibc [12/32]: OK
-                bootlin-mipsel32r6-glibc [13/32]: OK
-                   bootlin-mipsel-uclibc [14/32]: OK
-                 bootlin-openrisc-uclibc [15/32]: OK
-        bootlin-powerpc64le-power8-glibc [16/32]: OK
-           bootlin-powerpc-e500mc-uclibc [17/32]: OK
-                   bootlin-riscv32-glibc [18/32]: OK
-                   bootlin-riscv64-glibc [19/32]: OK
-                    bootlin-riscv64-musl [20/32]: OK
-                 bootlin-s390x-z13-glibc [21/32]: OK
-                      bootlin-sh4-uclibc [22/32]: OK
-                   bootlin-sparc64-glibc [23/32]: OK
-                    bootlin-sparc-uclibc [24/32]: OK
-                    bootlin-x86-64-glibc [25/32]: OK
-                     bootlin-x86-64-musl [26/32]: OK
-                   bootlin-x86-64-uclibc [27/32]: OK
-                   bootlin-x86-i686-musl [28/32]: OK
-                   bootlin-xtensa-uclibc [29/32]: OK
-                            br-arm-basic [30/32]: SKIPPED
-                    br-arm-full-nothread [31/32]: SKIPPED
-                      br-arm-full-static [32/32]: SKIPPED
-
-32 builds, 6 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Bernd:
- - bumped to 12.3.2
- - raised gcc version to 10
- - removed configure option -DSKIP_OS_SECURE_RANDOM=ON as suggested
-   by Angelo: https://lists.buildroot.org/pipermail/buildroot/2025-August/784962.html
- - added build test results]
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v4: unchanged, added cups-filter patch to series to avoid a version bump
-v3: various updates after last feedback from Thomas:
-    https://lists.buildroot.org/pipermail/buildroot/2025-August/784962.html
-
- DEVELOPERS                     |  1 +
- package/cups-filters/Config.in |  6 +++---
- package/qpdf/Config.in         |  6 +++---
- package/qpdf/qpdf.hash         |  4 ++--
- package/qpdf/qpdf.mk           | 27 +++++++++++----------------
- 5 files changed, 20 insertions(+), 24 deletions(-)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e983ae113..5b07fea884 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -243,6 +243,7 @@ F:	package/python-pillow/
- F:	package/python-pydal/
- F:	package/python-spidev/
- F:	package/python-web2py/
-+F:	package/qpdf/
- F:	package/qt5/qt5coap/
- F:	package/qt5/qt5knx/
- F:	package/qt5/qt5mqtt/
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-index ded99a4774..b5b9e04a28 100644
---- a/package/cups-filters/Config.in
-+++ b/package/cups-filters/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_CUPS_FILTERS
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_CUPS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # qpdf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # qpdf
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # qpdf
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_FONTCONFIG
-@@ -32,9 +32,9 @@ config BR2_PACKAGE_CUPS_FILTERS
- 
- 	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters
- 
--comment "cups-filters needs a toolchain w/ wchar, C++, threads and dynamic library, gcc >= 5"
-+comment "cups-filters needs a toolchain w/ wchar, C++, threads and dynamic library, gcc >= 10"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
-index accf2b5f34..ccb6715110 100644
---- a/package/qpdf/Config.in
-+++ b/package/qpdf/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_QPDF
- 	bool "qpdf"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_JPEG
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_QPDF
- 
- 	  http://qpdf.sourceforge.net/
- 
--comment "qpdf needs a toolchain w/ C++, gcc >= 5"
-+comment "qpdf needs a toolchain w/ C++, gcc >= 10"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
-index 08a048f2ed..81bee9e58c 100644
---- a/package/qpdf/qpdf.hash
-+++ b/package/qpdf/qpdf.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/qpdf/files/qpdf/10.5.0/qpdf-10.5.0.sha256/download
--sha256  88257d36a44fd5c50b2879488324dd9cafc11686ae49d8c4922a4872203ce006  qpdf-10.5.0.tar.gz
-+# From https://github.com/qpdf/qpdf/releases/download/v12.3.2/qpdf-12.3.2.sha256
-+sha256  6cba2f9f2cd887d905faeb99e0e51a307b217920d1bbf3e9cfbb2e8178a2deda  qpdf-12.3.2.tar.gz
- # Locally computed:
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
- sha256  fb929ac30decb4dc3a2eea2bec6c43296a797c5d2d602deb3784ee39430583d5  Artistic-2.0
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index d479515789..c11b42f60c 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -4,36 +4,31 @@
- #
- ################################################################################
- 
--QPDF_VERSION = 10.5.0
--QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
-+QPDF_VERSION = 12.3.2
-+QPDF_SITE = https://github.com/qpdf/qpdf/releases/download/v$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
- QPDF_LICENSE = Apache-2.0 or Artistic-2.0
- QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
- QPDF_CPE_ID_VALID = YES
- QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
-+QPDF_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--QPDF_CONF_OPTS = --with-random=/dev/urandom
--
--ifeq ($(BR2_USE_WCHAR),)
--QPDF_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -DQPDF_NO_WCHAR_T"
--endif
-+QPDF_CONF_OPTS = \
-+	-DUSE_IMPLICIT_CRYPTO=OFF \
-+	-DREQUIRE_CRYPTO_NATIVE=ON
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
--QPDF_CONF_OPTS += --enable-crypto-gnutls
-+QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_GNUTLS=ON
- QPDF_DEPENDENCIES += gnutls
- else
--QPDF_CONF_OPTS += --disable-crypto-gnutls
-+QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_GNUTLS=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--QPDF_CONF_OPTS += --enable-crypto-openssl
-+QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_OPENSSL=ON
- QPDF_DEPENDENCIES += openssl
- else
--QPDF_CONF_OPTS += --disable-crypto-openssl
--endif
--
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--QPDF_CONF_ENV += LIBS=-latomic
-+QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_OPENSSL=OFF
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBwYXRjaCBhZGRzIGZpeGVzIGZvciBjdXBzLWZpbHRlcnMgc28gaXQgY2FuIGJlIGJ1aWxk
+IHdpdGggbmV3ZXIKdmVyc2lvbnMgb2YgcXBkZiB0aGF0IG1hZGUgY2hhbmdlcyB0byBQb2ludGVy
+SG9sZGVyOgpodHRwczovL2dpdGh1Yi5jb20vcXBkZi9xcGRmL2Jsb2IvdjEyLjMuMi9tYW51YWwv
+ZGVzaWduLnJzdCNzbWFydC1wb2ludGVycwoKQnVpbGQtdGVzdGVkIHVzaW5nIHRoaXMgZGVmY29u
+ZmlnOgoKQlIyX1BBQ0tBR0VfQ1VQUz15CkJSMl9QQUNLQUdFX0NVUFNfRklMVEVSUz15CgogICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIGFybS1hYXJjaDY0IFsgMS8zMl06IE9LCiAgICAgICAg
+ICAgICAgICAgICBib290bGluLWFhcmNoNjQtZ2xpYmMgWyAyLzMyXTogT0sKICAgICAgICAgICAg
+ICAgYm9vdGxpbi1hYXJjaDY0LWdsaWJjLW9sZCBbIDMvMzJdOiBTS0lQUEVECiAgICAgICAgICAg
+ICAgIGJvb3RsaW4tYXJjbGUtaHMzOC11Y2xpYmMgWyA0LzMyXTogT0sKICAgICAgICAgICAgICAg
+ICAgICBib290bGluLWFybXY1LXVjbGliYyBbIDUvMzJdOiBPSwogICAgICAgICAgICAgICAgICAg
+ICBib290bGluLWFybXY3LWdsaWJjIFsgNi8zMl06IE9LCiAgICAgICAgICAgICAgICAgICBib290
+bGluLWFybXY3bS11Y2xpYmMgWyA3LzMyXTogU0tJUFBFRAogICAgICAgICAgICAgICAgICAgICAg
+Ym9vdGxpbi1hcm12Ny1tdXNsIFsgOC8zMl06IE9LCiAgICAgICAgICAgICAgICBib290bGluLW02
+OGstNTIwOC11Y2xpYmMgWyA5LzMyXTogU0tJUFBFRAogICAgICAgICAgICAgICBib290bGluLW02
+OGstNjgwNDAtdWNsaWJjIFsxMC8zMl06IE9LCiAgICAgICAgICAgICBib290bGluLW1pY3JvYmxh
+emVlbC11Y2xpYmMgWzExLzMyXTogT0sKICAgICAgICAgICAgICAgICAgYm9vdGxpbi1taXBzNjRl
+bC1nbGliYyBbMTIvMzJdOiBPSwogICAgICAgICAgICAgICAgYm9vdGxpbi1taXBzZWwzMnI2LWds
+aWJjIFsxMy8zMl06IE9LCiAgICAgICAgICAgICAgICAgICBib290bGluLW1pcHNlbC11Y2xpYmMg
+WzE0LzMyXTogT0sKICAgICAgICAgICAgICAgICBib290bGluLW9wZW5yaXNjLXVjbGliYyBbMTUv
+MzJdOiBPSwogICAgICAgIGJvb3RsaW4tcG93ZXJwYzY0bGUtcG93ZXI4LWdsaWJjIFsxNi8zMl06
+IE9LCiAgICAgICAgICAgYm9vdGxpbi1wb3dlcnBjLWU1MDBtYy11Y2xpYmMgWzE3LzMyXTogT0sK
+ICAgICAgICAgICAgICAgICAgIGJvb3RsaW4tcmlzY3YzMi1nbGliYyBbMTgvMzJdOiBPSwogICAg
+ICAgICAgICAgICAgICAgYm9vdGxpbi1yaXNjdjY0LWdsaWJjIFsxOS8zMl06IE9LCiAgICAgICAg
+ICAgICAgICAgICAgYm9vdGxpbi1yaXNjdjY0LW11c2wgWzIwLzMyXTogT0sKICAgICAgICAgICAg
+ICAgICBib290bGluLXMzOTB4LXoxMy1nbGliYyBbMjEvMzJdOiBPSwogICAgICAgICAgICAgICAg
+ICAgICAgYm9vdGxpbi1zaDQtdWNsaWJjIFsyMi8zMl06IE9LCiAgICAgICAgICAgICAgICAgICBi
+b290bGluLXNwYXJjNjQtZ2xpYmMgWzIzLzMyXTogT0sKICAgICAgICAgICAgICAgICAgICBib290
+bGluLXNwYXJjLXVjbGliYyBbMjQvMzJdOiBPSwogICAgICAgICAgICAgICAgICAgIGJvb3RsaW4t
+eDg2LTY0LWdsaWJjIFsyNS8zMl06IE9LCiAgICAgICAgICAgICAgICAgICAgIGJvb3RsaW4teDg2
+LTY0LW11c2wgWzI2LzMyXTogT0sKICAgICAgICAgICAgICAgICAgIGJvb3RsaW4teDg2LTY0LXVj
+bGliYyBbMjcvMzJdOiBPSwogICAgICAgICAgICAgICAgICAgYm9vdGxpbi14ODYtaTY4Ni1tdXNs
+IFsyOC8zMl06IE9LCiAgICAgICAgICAgICAgICAgICBib290bGluLXh0ZW5zYS11Y2xpYmMgWzI5
+LzMyXTogT0sKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJyLWFybS1iYXNpYyBbMzAvMzJd
+OiBTS0lQUEVECiAgICAgICAgICAgICAgICAgICAgYnItYXJtLWZ1bGwtbm90aHJlYWQgWzMxLzMy
+XTogU0tJUFBFRAogICAgICAgICAgICAgICAgICAgICAgYnItYXJtLWZ1bGwtc3RhdGljIFszMi8z
+Ml06IFNLSVBQRUQKCgozMiBidWlsZHMsIDYgc2tpcHBlZCwgMCBidWlsZCBmYWlsZWQsIDAgbGVn
+YWwtaW5mbyBmYWlsZWQsIDAgc2hvdy1pbmZvIGZhaWxlZAoKU2lnbmVkLW9mZi1ieTogQmVybmQg
+S3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tClRoaXMgc29sdXRpb24gYXZvaWRzWzFdIGEgdmVy
+c2lvbiBidW1wIG9mIHRoaXMgcGFja2FnZSB3aGlsZSBrZWVwaW5nCmNvbXBhdGliaWxpdHkgd2l0
+aCB0aGUgbmV3ZXN0IHZlcnNpb24gb2YgcXBkZi4gVGhlIGJ1bXAgb2YgcXBkZiBpcwpuZWVkZWQg
+dG8gZml4IGJ1aWxkIGVycm9ycyB3aXRoIGdjYyAxNi1zbmFwc2hvdCB2ZXJzaW9ucy4KClsxXSBo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlwZXJtYWlsL2J1aWxkcm9vdC8yMDI1LUF1Z3Vz
+dC83ODQ5MzEuaHRtbApUaG9tYXM6ICJ3aGljaCBtZWFucyBkdXBsaWNhdGluZyBhbGwgdGhlIGNy
+YXp5IGRlcGVuZGVuY2llcyBvZgogbGliY3Vwc2ZpbHRlcnMgeWVzIDovIgoKIHBhY2thZ2UvY3Vw
+cy1maWx0ZXJzLzAwMDItcXBkZi0xMi5wYXRjaCB8IDExNyArKysrKysrKysrKysrKysrKysrKysr
+KysKIDEgZmlsZSBjaGFuZ2VkLCAxMTcgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvY3Vwcy1maWx0ZXJzLzAwMDItcXBkZi0xMi5wYXRjaAoKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvY3Vwcy1maWx0ZXJzLzAwMDItcXBkZi0xMi5wYXRjaCBiL3BhY2thZ2UvY3Vwcy1maWx0
+ZXJzLzAwMDItcXBkZi0xMi5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAw
+MDAwLi4zMzZjMzUzNjcyCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9jdXBzLWZpbHRlcnMv
+MDAwMi1xcGRmLTEyLnBhdGNoCkBAIC0wLDAgKzEsMTE3IEBACitGcm9tOiBTw6liYXN0aWVuIE5v
+ZWwgPHNlYmFzdGllbkB0d29saWZlLmJlPgorU3ViamVjdDogZml4IGJ1aWxkIGFnYWluc3QgcXBk
+ZiAxMgorCitEb3dubG9hZGVkIGZyb20gRGViaWFuOgoraHR0cHM6Ly9zb3VyY2VzLmRlYmlhbi5v
+cmcvc3JjL2N1cHMtZmlsdGVycy8xLjI4LjE3LTcvZGViaWFuL3BhdGNoZXMvMDAwNi1xcGRmLTEy
+LnBhdGNoCisKK0FscGluZSBMaW51eCB1c2VzIHRoZSBzYW1lIHBhdGNoOgoraHR0cHM6Ly9naXRs
+YWIuYWxwaW5lbGludXgub3JnL2FscGluZS9hcG9ydHMvLS9ibG9iL21hc3Rlci9jb21tdW5pdHkv
+Y3Vwcy1maWx0ZXJzLzAwMDYtcXBkZi0xMi5wYXRjaAorCitVcHN0cmVhbTogbm90IGFwcGxpY2Fi
+bGUsIHVwc3RyZWFtIG1vdmVkIHRvIDIuMC54CisKK1NpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxz
+IDxiZXJuZEBrdWhscy5uZXQ+CisKKy0tLSBhL2ZpbHRlci9wZGYuY3h4CisrKysgYi9maWx0ZXIv
+cGRmLmN4eAorQEAgLTIxLDYgKzIxLDggQEAKKyAjaW5jbHVkZSA8dmVjdG9yPgorICNpbmNsdWRl
+IDxzdHJpbmc+CisgI2luY2x1ZGUgPGNzdHJpbmc+CisrI2RlZmluZSBQT0lOVEVSSE9MREVSX1RS
+QU5TSVRJT04gMworKyNpbmNsdWRlIDxxcGRmL1BvaW50ZXJIb2xkZXIuaGg+CisgI2luY2x1ZGUg
+PHFwZGYvUVBERi5oaD4KKyAjaW5jbHVkZSA8cXBkZi9RUERGT2JqZWN0SGFuZGxlLmhoPgorICNp
+bmNsdWRlIDxxcGRmL1FQREZXcml0ZXIuaGg+CistLS0gYS9maWx0ZXIvcGRmdG9wZGYvcXBkZl94
+b2JqZWN0LmNjCisrKysgYi9maWx0ZXIvcGRmdG9wZGYvcXBkZl94b2JqZWN0LmNjCitAQCAtMSw1
+ICsxLDcgQEAKKyAjaW5jbHVkZSAicXBkZl94b2JqZWN0LmgiCisgLy8jaW5jbHVkZSA8cXBkZi9U
+eXBlcy5oPgorKyNkZWZpbmUgUE9JTlRFUkhPTERFUl9UUkFOU0lUSU9OIDMKKysjaW5jbHVkZSA8
+cXBkZi9Qb2ludGVySG9sZGVyLmhoPgorICNpbmNsdWRlIDxxcGRmL1FQREYuaGg+CisgI2luY2x1
+ZGUgPHFwZGYvUGxfRGlzY2FyZC5oaD4KKyAjaW5jbHVkZSA8cXBkZi9QbF9Db3VudC5oaD4KKy0t
+LSBhL2ZpbHRlci9yYXN0ZXJ0b3BkZi5jcHAKKysrKyBiL2ZpbHRlci9yYXN0ZXJ0b3BkZi5jcHAK
+K0BAIC0zOSw2ICszOSw4IEBACisgI2luY2x1ZGUgPGFycGEvaW5ldC5oPiAgIC8vIG50b2hsCisg
+CisgI2luY2x1ZGUgPHZlY3Rvcj4KKysjZGVmaW5lIFBPSU5URVJIT0xERVJfVFJBTlNJVElPTiAz
+CisrI2luY2x1ZGUgPHFwZGYvUG9pbnRlckhvbGRlci5oaD4KKyAjaW5jbHVkZSA8cXBkZi9RUERG
+LmhoPgorICNpbmNsdWRlIDxxcGRmL1FQREZXcml0ZXIuaGg+CisgI2luY2x1ZGUgPHFwZGYvUVV0
+aWwuaGg+CitAQCAtNDgxLDcgKzQ4Myw3IEBAIFFQREZPYmplY3RIYW5kbGUgZW1iZWRJY2NQcm9m
+aWxlKFFQREYgJnAKKyAgICAgY21zU2F2ZVByb2ZpbGVUb01lbShjb2xvclByb2ZpbGUsIGJ1ZmYs
+ICZwcm9maWxlX3NpemUpOworIAorICAgICAvLyBXcml0ZSBJQ0MgcHJvZmlsZSBidWZmZXIgaW50
+byBQREYKKy0gICAgcGggPSBuZXcgQnVmZmVyKGJ1ZmYsIHByb2ZpbGVfc2l6ZSk7ICAKKysgICAg
+cGggPSAoUG9pbnRlckhvbGRlcjxCdWZmZXI+KSBuZXcgQnVmZmVyKGJ1ZmYsIHByb2ZpbGVfc2l6
+ZSk7ICAKKyAgICAgaWNjc3RyZWFtID0gUVBERk9iamVjdEhhbmRsZTo6bmV3U3RyZWFtKCZwZGYs
+IHBoKTsKKyAgICAgaWNjc3RyZWFtLnJlcGxhY2VEaWN0KFFQREZPYmplY3RIYW5kbGU6Om5ld0Rp
+Y3Rpb25hcnkoc3RyZWFtZGljdCkpOworIAorLS0tIGEvZmlsdGVyL3BkZnRvcGRmL3FwZGZfcGRm
+dG9wZGZfcHJvY2Vzc29yLmNjCisrKysgYi9maWx0ZXIvcGRmdG9wZGYvcXBkZl9wZGZ0b3BkZl9w
+cm9jZXNzb3IuY2MKK0BAIC04MywxMCArODMsMTAgQEAKKyAgICAgcGFnZS5nZXRLZXkoIi9SZXNv
+dXJjZXMiKS5yZXBsYWNlS2V5KCIvWE9iamVjdCIsUVBERk9iamVjdEhhbmRsZTo6bmV3RGljdGlv
+bmFyeSh4b2JqcykpOworICAgICBjb250ZW50LmFwcGVuZCgiUVxuIik7CisgICAgIHBhZ2UuZ2V0
+S2V5KCIvQ29udGVudHMiKS5yZXBsYWNlU3RyZWFtRGF0YShjb250ZW50LFFQREZPYmplY3RIYW5k
+bGU6Om5ld051bGwoKSxRUERGT2JqZWN0SGFuZGxlOjpuZXdOdWxsKCkpOworLSAgICBwYWdlLnJl
+cGxhY2VPclJlbW92ZUtleSgiL1JvdGF0ZSIsbWFrZVJvdGF0ZShyb3RhdGlvbikpOworKyAgICBw
+YWdlLnJlcGxhY2VLZXkoIi9Sb3RhdGUiLG1ha2VSb3RhdGUocm90YXRpb24pKTsKKyAgIH0gZWxz
+ZSB7CisgICAgIFJvdGF0aW9uIHJvdD1nZXRSb3RhdGUocGFnZSkrcm90YXRpb247CistICAgIHBh
+Z2UucmVwbGFjZU9yUmVtb3ZlS2V5KCIvUm90YXRlIixtYWtlUm90YXRlKHJvdCkpOworKyAgICBw
+YWdlLnJlcGxhY2VLZXkoIi9Sb3RhdGUiLG1ha2VSb3RhdGUocm90KSk7CisgICB9CisgICBwYWdl
+PVFQREZPYmplY3RIYW5kbGUoKTsgLy8gaS5lLiB1bmluaXRpYWxpemVkCisgICByZXR1cm4gcmV0
+OworQEAgLTE4MSw5ICsxODEsOSBAQAorICAgcGFnZS5hc3NlcnRJbml0aWFsaXplZCgpOworICAg
+Um90YXRpb24gc2F2ZV9yb3RhdGUgPSBnZXRSb3RhdGUocGFnZSk7CisgICBpZihvcmllbnRhdGlv
+bj09Uk9UXzB8fG9yaWVudGF0aW9uPT1ST1RfMTgwKQorLSAgICBwYWdlLnJlcGxhY2VPclJlbW92
+ZUtleSgiL1JvdGF0ZSIsbWFrZVJvdGF0ZShST1RfOTApKTsKKysgICAgcGFnZS5yZXBsYWNlS2V5
+KCIvUm90YXRlIixtYWtlUm90YXRlKFJPVF85MCkpOworICAgZWxzZQorLSAgICBwYWdlLnJlcGxh
+Y2VPclJlbW92ZUtleSgiL1JvdGF0ZSIsbWFrZVJvdGF0ZShST1RfMCkpOworKyAgICBwYWdlLnJl
+cGxhY2VLZXkoIi9Sb3RhdGUiLG1ha2VSb3RhdGUoUk9UXzApKTsKKyAKKyAgIFBhZ2VSZWN0IGN1
+cnJwYWdlPSBnZXRCb3hBc1JlY3QoZ2V0VHJpbUJveChwYWdlKSk7CisgICBkb3VibGUgd2lkdGgg
+PSBjdXJycGFnZS5yaWdodC1jdXJycGFnZS5sZWZ0OworQEAgLTI0Miw3ICsyNDIsNyBAQAorICAg
+Ly9Dcm9wcGluZy4KKyAgIC8vIFRPRE86IEJvcmRlcnMgYXJlIGNvdmVyZWQgYnkgdGhlIGltYWdl
+LiBidWZmZXIgc3BhY2U/CisgICBwYWdlLnJlcGxhY2VLZXkoIi9UcmltQm94IixtYWtlQm94KGN1
+cnJwYWdlLmxlZnQsY3VycnBhZ2UuYm90dG9tLGN1cnJwYWdlLnJpZ2h0LGN1cnJwYWdlLnRvcCkp
+OworLSAgcGFnZS5yZXBsYWNlT3JSZW1vdmVLZXkoIi9Sb3RhdGUiLG1ha2VSb3RhdGUoc2F2ZV9y
+b3RhdGUpKTsKKysgIHBhZ2UucmVwbGFjZUtleSgiL1JvdGF0ZSIsbWFrZVJvdGF0ZShzYXZlX3Jv
+dGF0ZSkpOworICAgcmV0dXJuIGdldFJvdGF0ZShwYWdlKTsKKyB9CisgCitAQCAtMjUxLDE0ICsy
+NTEsMTQgQEAKKyAgIHBhZ2UuYXNzZXJ0SW5pdGlhbGl6ZWQoKTsKKyAgIFJvdGF0aW9uIHNhdmVf
+cm90YXRlID0gZ2V0Um90YXRlKHBhZ2UpOworICAgaWYob3JpZW50YXRpb249PVJPVF8wfHxvcmll
+bnRhdGlvbj09Uk9UXzE4MCkKKy0gICAgcGFnZS5yZXBsYWNlT3JSZW1vdmVLZXkoIi9Sb3RhdGUi
+LG1ha2VSb3RhdGUoUk9UXzkwKSk7CisrICAgIHBhZ2UucmVwbGFjZUtleSgiL1JvdGF0ZSIsbWFr
+ZVJvdGF0ZShST1RfOTApKTsKKyAgIGVsc2UKKy0gICAgcGFnZS5yZXBsYWNlT3JSZW1vdmVLZXko
+Ii9Sb3RhdGUiLG1ha2VSb3RhdGUoUk9UXzApKTsKKysgICAgcGFnZS5yZXBsYWNlS2V5KCIvUm90
+YXRlIixtYWtlUm90YXRlKFJPVF8wKSk7CisgCisgICBQYWdlUmVjdCBjdXJycGFnZT0gZ2V0Qm94
+QXNSZWN0KGdldFRyaW1Cb3gocGFnZSkpOworICAgZG91YmxlIHdpZHRoID0gY3VycnBhZ2Uucmln
+aHQtY3VycnBhZ2UubGVmdDsKKyAgIGRvdWJsZSBoZWlnaHQgPSBjdXJycGFnZS50b3AtY3VycnBh
+Z2UuYm90dG9tOworLSAgcGFnZS5yZXBsYWNlT3JSZW1vdmVLZXkoIi9Sb3RhdGUiLG1ha2VSb3Rh
+dGUoc2F2ZV9yb3RhdGUpKTsKKysgIHBhZ2UucmVwbGFjZUtleSgiL1JvdGF0ZSIsbWFrZVJvdGF0
+ZShzYXZlX3JvdGF0ZSkpOworICAgaWYod2lkdGg+aGVpZ2h0KQorICAgICByZXR1cm4gdHJ1ZTsK
+KyAgIHJldHVybiBmYWxzZTsKK0BAIC02NjIsNyArNjYyLDcgQEAKKyAgICAgICAvLyBUT0RPPyBv
+dGhlciByb3RhdGlvbiBkaXJlY3Rpb24sIGUuZy4gaWYgKHNyY19yb3Q9PVJPVF8wKSYmKHBhcmFt
+Lm9yaWVudGF0aW9uPT1ST1RfMjcwKSAuLi4gZXRjLgorICAgICAgIC8vIHJvdGF0aW9uPVJPVF8y
+NzA7CisgCistICAgICAgcGFnZS5yZXBsYWNlT3JSZW1vdmVLZXkoIi9Sb3RhdGUiLG1ha2VSb3Rh
+dGUoc3JjX3JvdCtyb3RhdGlvbikpOworKyAgICAgIHBhZ2UucmVwbGFjZUtleSgiL1JvdGF0ZSIs
+bWFrZVJvdGF0ZShzcmNfcm90K3JvdGF0aW9uKSk7CisgICAgIH0KKyAgIH0KKyB9Ci0tIAoyLjQ3
+LjMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
