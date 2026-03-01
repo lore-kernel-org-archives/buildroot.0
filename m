@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D053BEEF312
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 08:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D75C4EEF317
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 08:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7A0B409B4;
-	Thu,  5 Mar 2026 08:02:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B381360B5C;
+	Thu,  5 Mar 2026 08:02:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nvq22d4bKVIW; Thu,  5 Mar 2026 08:02:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8qLof2LFGEV4; Thu,  5 Mar 2026 08:02:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2C9C40A22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF4D060ADB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772697755;
-	bh=naSXeYoKFMkkMpkNNiuW28UTQxujLE9Cjq392TEG9YY=;
+	s=default; t=1772697758;
+	bh=Z8sDX3rVhKgCcm2RgZjCirWHpKABn/I4qs+JBhtlIbU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BgTZq5XeFqn/hoty3mspzryQYFc0KMhR2IEYD0VNg+7QjIqVpEIjKQgn9NJlGB5+z
-	 FXO/A/8g1eKQixKXX4cQezUz2gZ07Zp/Rv4jYLKLCTLoM2UiI5iVdqGEzx2qG8CSnm
-	 BT0Ms383mkZYL0ksIRMJ5Y22qROi23sS4BHBuqH2WYn6PXzYFYqR7CHNjzv6eR5UQ+
-	 nHMv5MZsSC11C/+yI2Cj/G7x0t4O55DimavSABiQf5CWjtyDMnVz1ZmrzWr5jcyzk5
-	 /OHwmeFuirASoooZYVl6TFh6eHaPBd9ZFqxdv00VM8Vxv1Ygg6iopuEjqMA1hRB6um
-	 6sSx1jApna61w==
+	b=S+ydrzJduqNetqfCFhC+6RoLFK5tBR89SyurYD8Gge2yHoIEmL1fZnaAGRHiwmYna
+	 jJ5Yfr7q0K5TuYHWOF0wiOMMD0JD7TC954QEDUlKhZovzbRMgoKlaQhC0SJPOqeTAx
+	 XrZJHB0CwAeHOv/My1/Mfc674tKjLH9BmL0gR90lRYvDZXIXx3eHqYkLuB3rTBMJ4A
+	 MVZgih1sbeE4P+S5bEuU1LFdrZopAaAK4E676g9EYcBFnpOcV8jGJ0Ph9Vtoy65jxU
+	 PCEEbOOoMtdn6vBw2UHtrAon5udFPUzoRIeAsiQjumgwKFEchXorJpm1lfM/Ae8rxf
+	 u1mjyyBUehFUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2C9C40A22;
-	Thu,  5 Mar 2026 08:02:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0188A1EB
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF4D060ADB;
+	Thu,  5 Mar 2026 08:02:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01F9925B
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87121405A5
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B6816069F
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0fN1Qewg9qh for <buildroot@buildroot.org>;
- Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SjIgQ_mmK9Jf for <buildroot@buildroot.org>;
+ Thu,  5 Mar 2026 08:02:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B13D6405C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC1E5606ED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B13D6405C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC1E5606ED
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE20081829; Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
+ id E9289828F8; Thu,  5 Mar 2026 08:02:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Feb 2026 17:08:53 +0100
+Date: Sun, 1 Mar 2026 12:12:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97ceb56821b5c1a23ef763bf98e55c6e09ccd846
-X-Git-Newrev: c61dbf8493f6e6c45e55716617c8f8c3b8224879
+X-Git-Oldrev: a773d00904f9ae543c54b44ba02a2e8b0190adb8
+X-Git-Newrev: 43a931ec5f4f565bbafcecf3b7d3833e99bb03a2
 X-Patchwork-Hint: ignore
-Message-Id: <20260305080208.BE20081829@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gkrellm: bump version to 2.5.1
+Message-Id: <20260305080208.E9289828F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minicom: bump to version 2.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,47 +76,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c61dbf8493f6e6c45e55716617c8f8c3b8224879
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/43a931ec5f4f565bbafcecf3b7d3833e99bb03a2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://git.srcbox.net/gkrellm/gkrellm/releases/tag/gkrellm-2.5.1
+Release Notes:
+https://salsa.debian.org/minicom-team/minicom/-/releases/2.11.1
 
-Switched _SITE to https.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gkrellm/gkrellm.hash | 4 ++--
- package/gkrellm/gkrellm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/minicom/minicom.hash | 2 +-
+ package/minicom/minicom.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gkrellm/gkrellm.hash b/package/gkrellm/gkrellm.hash
-index 2f0fbcbeb4..e8a6ef5540 100644
---- a/package/gkrellm/gkrellm.hash
-+++ b/package/gkrellm/gkrellm.hash
-@@ -1,5 +1,5 @@
--# From https://git.srcbox.net/gkrellm/gkrellm/releases/download/gkrellm-2.5.0/gkrellm-2.5.0.tar.bz2.sha256sum
--sha256  68c75a03a06b935afa93d3331ca1c2d862c1d50c3e9df19d9a8d48970d766b55  gkrellm-2.5.0.tar.bz2
-+# From https://git.srcbox.net/gkrellm/gkrellm/releases/download/gkrellm-2.5.1/gkrellm-2.5.1.tar.bz2.sha256sum
-+sha256  089e3c1ed398482e682c9900b504ea166a6144a6c9fa041e70c5bbca6b177e63  gkrellm-2.5.1.tar.bz2
- # Locally computed
- sha256  691de85c3c6eeda5b6982c751548575344739ce4b4418d78905e599359f6c435  COPYING
- sha256  a4bb0b604fe7d40ca4469ffd5e2e2de70ff8ece43e47980ab2c8962d5e913330  COPYRIGHT
-diff --git a/package/gkrellm/gkrellm.mk b/package/gkrellm/gkrellm.mk
-index 6ee00858d3..16d0729d5f 100644
---- a/package/gkrellm/gkrellm.mk
-+++ b/package/gkrellm/gkrellm.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index 92a50d010c..8d5f646dd2 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  90e7ce2856b3eaaa3f452354d17981c49d32c426a255b6f0d3063a227c101538  minicom-2.10.tar.bz2
++sha256  87cf0da91af0531357cd61b8e1906b907edd2c9ef82f9ae74c277e1893d0f98c  minicom-2.11.1.tar.bz2
+ sha256  cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 0c9b1ae434..c799fcd23a 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GKRELLM_VERSION = 2.5.0
--GKRELLM_SITE = http://gkrellm.srcbox.net/releases
-+GKRELLM_VERSION = 2.5.1
-+GKRELLM_SITE = https://gkrellm.srcbox.net/releases
- GKRELLM_SOURCE = gkrellm-$(GKRELLM_VERSION).tar.bz2
- GKRELLM_LICENSE = GPL-3.0+
- GKRELLM_LICENSE_FILES = COPYING COPYRIGHT
+-MINICOM_VERSION = 2.10
++MINICOM_VERSION = 2.11.1
+ MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.bz2
+ MINICOM_SITE = \
+ 	https://salsa.debian.org/minicom-team/minicom/-/archive/$(MINICOM_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
