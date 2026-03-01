@@ -4,83 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92DDDFD0057
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 13:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1151BFD0066
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 14:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4038783D41;
-	Sun,  1 Mar 2026 13:46:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B912983F57;
+	Sun,  1 Mar 2026 14:00:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NlxHGtKprpxS; Sun,  1 Mar 2026 13:46:23 +0000 (UTC)
+ id Bn0fJX8_lDpr; Sun,  1 Mar 2026 14:00:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63CD483D5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A660983F5A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772372783;
-	bh=GhP1VoqJU8ynpETj1HFHBh+W1KUUHalH3TULAwv0MxI=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=stavlekXSizfjZ39ySkNEz2FFmqxhzy7Mwb6G9SOowiQ+sJE+pFT6AwZgIAAw/AJK
-	 YPyjKlYveESCi9aqVr7EpxnnA+EKgUCLeLGVOMwMKHmt6MhrtontzwNtAp8pC43vjM
-	 xM2SDtRLpkeNqp7V8f2M8vDe+QE38DFiNy0zx4yCoahAlHYYmU4Q22uvfAYKUMtQRp
-	 kexd7eB86Owq//1BAC8YV68dzynpu988nnEmtB/XiX/Lx5x8N+vu4PotHjWI35AkOL
-	 rXeeRkVBU1heBJZHIPsDxQSLuaSD+xhcJqE61NNKX4R7iyYqQH17qfdMoUXS5r1tKP
-	 snXyOKfq5k/iQ==
+	s=default; t=1772373634;
+	bh=NttSsr5mwLF55o49KPEswO0fk5mby5/UyMDL4gdTfWY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=IUkshsRUR3uAdQ/atCwJkmlAD1I4IhZjMuplnjfHl27sSo5iyCqgASmN99XOCPjiN
+	 ug3CMnP310Z7tp8Ox4fitlKwB7pRm9CYIoRVUxcFWi5C5XsspbZ4NuW/3UCaU3cfFK
+	 4OL7N4l3PTc7CThDrF8wcE2SV0FxjabP8Xbg1NqOjEUJcMDNYOMvmEbo/gUCSYurGA
+	 JFiuIsbaX33YpkViHJpFtZz7ultYWU84fU3jy5yewQ4SgngPos2jgOwfQ0S9QEUmSS
+	 28MWAIAvdAdMt2BkfdGb1uSjTjOzadxV6vQJ8nqFYaYUcu3G2v3LMnufmExhdrb/uf
+	 havs7DdvuVuwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63CD483D5B;
-	Sun,  1 Mar 2026 13:46:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 21679231
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:46:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A660983F5A;
+	Sun,  1 Mar 2026 14:00:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8BA624E
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:00:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07398403CB
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:46:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE4D3403CB
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:00:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UkHQXj3VCtWA for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 13:46:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ id 7cetY6eQSOPz for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 14:00:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.149;
+ helo=smtpdh19-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 490844007C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 490844007C
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 490844007C
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 13:46:20 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1588218888; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 01 Mar 2026 13:46:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vwh7Z-0000000CiT1-0GQS;
- Sun, 01 Mar 2026 14:46:09 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org,
- Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>,
- Fiona Klute <fiona.klute@gmx.de>
-Date: Sun,  1 Mar 2026 14:45:36 +0100
-Message-ID: <20260301134538.3030668-1-peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B68154007C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B68154007C
+Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B68154007C
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:00:28 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id whLOvekq4clBZwhLOvUNuY; Sun, 01 Mar 2026 15:00:26 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Petr Vorel <petr.vorel@gmail.com>
+Date: Sun,  1 Mar 2026 15:00:24 +0100
+Message-ID: <20260301140024.693061-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=nSHFhmQopxsLt1ZQ20w3SJkrRIUmP8RsCBW4kmoABv35mWGeJhck7Z90XBcRjTbW3Q9fv6oS4VIlbl11nU2MVBkFjcGVBl0Alf+sjCQUQq3J9nTjeXcKXyz1LNy9hPm+K1xnzQeRJuN4SOFw13Z+Pf6Ksgnuq++WPssCorHyQKwL0qJzhmhRMLviFa3cS+9/5NlVy+QjUEkd12o12K26gvF1j97DHmSZuTQRH4yEcQcpvNsDsN7kT8mSlIHCAt/NcpeHJ6jtLQv6x4Q1QTPjdI1yVCWYdCg+xkCin3nbvbrv3cmo7LeOnPd0Pjjj9kjQiUoYsYqbvJxdDalVludi7g==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=u9ogdXXu6rhCd/w3DTDNxaXYmscBJ1x326JIfGZfb10=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-CMAE-Envelope: MS4xfEfQBSsGDCHLbgZ3QU+3/cMpUF6dnro1UEuBOGEFJY2uB13Pg0oeRARUO7PRhce/eh0LeBwwDDcHfwC0364it8LSfEFOSt3gRTftcCdrGhHj58ILH3Vu
+ KrlTqz1iVkgr3g8DemOTCrwXLt7p4YDmwYIkdJRdXVXgNIp6LbhGLl3n/8e7etT+qGQwRSVhiD2UHg5XDbhdjbceMR63soyOs0N4E4fk7wVJpn+uzi/O7oi1
+ jStXGYT20qXpnWKqaNAhn9grfS3/u5BgkkSHMIwRgI6/sfxmF5Dg0l3MmQbsyynIarZFLPSFXRLSpLKCeIGkLA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1772373626; bh=/CVQ/VDlop9s7yKUhWkonymZhU4Y4hUlnWbOvIrviP0=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=kVenfFkVNtP4PPs1NboHm+P31tK4ATRromdRSzVsKZXqttmUv2navuQjf3Pysdfsc
+ cM/km3UDaF1njHzL+vaevRd71AJSSaUw7T16TA4VH2AJxQo4XXE7bqKxgZBmssfzst
+ jVKejwYIHLqteiF6O7hmoYVsdvgYy/4N7gQBfqgEV4U0zs30mdqZjiaa+r5L94Ev2/
+ VbkrR2w9yI9yxrxd2Uxw0/gS8THw0HPbS8qW/w+RILIosms3KX8b1ShUHA7hEg/Sek
+ XpfTArtTjjAhADVArfNuZi94lDYXQiGGDFAXR6ZY/h4E7KUbC/rE5Ozu/fSLQohQo9
+ xkvkLKbJNKgxw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=nSHFhmQo
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] support/testing/run-tests: unbreak on Debian
- testing/unstable
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=kVenfFkV
+Subject: [Buildroot] [PATCH v2] package/nfs-utils: bump version to 2.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,79 +91,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 3d2141bcee("support/testing/run-tests: specify multiprocessing
-method") added a call to multiprocessing.set_start_method('fork') as a
-workaround for python 3.14, which changed the default start method to
-forkserver - Which is incompatible with the nose2 setup.
+Release announce:
+https://lore.kernel.org/linux-nfs/fdf3631f-e924-4e4c-bd9f-db5b40a90bfe@redhat.com/
 
-multiprocessing.set_start_method() is only supposed to be called a maximum
-of 1 time per process and throws a RuntimeError if called more than that
-(even with the same arguments):
+With patch [1] option nfsv41 required to be renamed to blkmapd.
 
->>> import multiprocessing
->>> multiprocessing.set_start_method('fork')
->>> multiprocessing.set_start_method('fork')
-Traceback (most recent call last):
-  File "<python-input-2>", line 1, in <module>
-    multiprocessing.set_start_method('fork')
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/context.py", line 247, in set_start_method
-    raise RuntimeError('context has already been set')
+[1]: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=59e85671e59f7ccbf66dcf72ce7462bf4932cc78
 
-Debian included a similar patch in python3-nose2 0.51.1-2 (currently in
-testing/unstable) which adds its own call to set_start_method():
-
-https://salsa.debian.org/python-team/packages/nose2/-/blob/debian/0.15.1-2/debian/patches/0004-plugins-mp-set-context-to-fork-for-Python-3.14-mp-AP.patch?ref_type=tags
-
-Which comes from:
-https://github.com/nose-devs/nose2/pull/644
-
-As discussed in the upstream PR, this is not a correct fix is wrong and
-breaks various use cases.  An issue has been opened to get this fixed in the
-Debian packaging at:
-
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1129350
-
-But until that is done, rework the patch to:
-
-- Only override set_start_method() if needed to limit impact
-- Monkey patch set_start_method() so additional calls are ignored
-
-To unbreak run-test on affected Debian systems and add some documentation to
-make it clear why this is done.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- support/testing/run-tests | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+V1->V2:
+* renamed option nfsv41 to blkmapd as pointed by Petr Vorel
+---
+ package/nfs-utils/nfs-utils.hash | 4 ++--
+ package/nfs-utils/nfs-utils.mk   | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 1c4d2b4a85..2bbe7b140f 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -142,5 +142,15 @@ def main():
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index fb5c03d917..9aa9151ebb 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.4/sha256sums.asc
+-sha256  11c4cc598a434d7d340bad3e072a373ba1dcc2c49f855d44b202222b78ecdbf5  nfs-utils-2.8.4.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.5/sha256sums.asc
++sha256  b13ca4a9df44186bdbe107514b22732d4243f785f95daf2fb86afc1edba15bbb  nfs-utils-2.8.5.tar.xz
+ # Locally computed
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index e7d82b10ba..ba87ef813e 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-NFS_UTILS_VERSION = 2.8.4
++NFS_UTILS_VERSION = 2.8.5
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
+@@ -28,7 +28,7 @@ HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqli
+ HOST_NFS_UTILS_CONF_OPTS = \
+ 	--enable-tirpc \
+ 	--disable-nfsv4 \
+-	--disable-nfsv41 \
++	--disable-blkmapd \
+ 	--disable-gss \
+ 	--disable-uuid \
+ 	--disable-ipv6 \
+@@ -50,10 +50,10 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
+ 	usr/sbin/fsidd usr/lib/systemd/system/fsidd.service
  
- if __name__ == "__main__":
--    multiprocessing.set_start_method("fork")
-+    # python 3.14 changed default start method from fork to
-+    # fork-server, which is not compatible with the nose2 setup
-+    if multiprocessing.get_start_method() != 'fork':
-+        multiprocessing.set_start_method("fork")
-+        # set_start_method throws a RuntimeError if called more than
-+        # once.
-+        # Debian python3-nose2 0.15.1-2 includes a patch adding
-+        # another set_start_method() call, so monkey patch it out to
-+        # get rid of this
-+        multiprocessing.set_start_method = lambda *args: None
-+
-     sys.exit(main())
+ ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
+-NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
++NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-blkmapd
+ NFS_UTILS_DEPENDENCIES += keyutils lvm2
+ else
+-NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
++NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-blkmapd
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NFS_UTILS_GSS),y)
 -- 
 2.47.3
 
