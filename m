@@ -1,87 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C24BFD0079
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 21:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA226FD0079
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 21:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1357082243;
-	Sun,  1 Mar 2026 21:28:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DBFE40D19;
+	Sun,  1 Mar 2026 21:29:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 06WusqRhf0UI; Sun,  1 Mar 2026 21:28:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id miVKecPFA13o; Sun,  1 Mar 2026 21:29:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 946D98222A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCAF640D20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772400504;
-	bh=R8tTMZDfJJFbzjPBMYXXWrX8KkjhU/IxwK3d99hrlrE=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=U43g71xSnwKR95kjJQdZB+7kVPYWdyQwxEaN46uPuELXBrwdM/EKXcUtglozwxZKm
-	 hs7+fBp2obIZHr3gkF6hmEcdVcFBL5Bzbux2i6EPtv+0c+wrFBH1igpWH0vThvWRpn
-	 XYBYlae9zLvD015ShzMfvvNAw4dbknjbZENjlQgtXxLtQ8VeBoDmdOYRd6u2A/wZpd
-	 DZMfQbhdBnXvW8/Y/xetl//47Y4/tWPcWCDzR6r1BvbOYnXJJ+fVsQQ8eJx0m0gtKw
-	 WJW+E9TqDGFv6XLRu1DHA5GE0AZI5vy6vQ8ij1YiGwUDDoclfMe6GAu6rqe43G6C3J
-	 QMOyY3vOsThvA==
+	s=default; t=1772400551;
+	bh=+tCxBjZrCTT6DOQY9V0h6FB41kbee9l4S2KzQXYQGDI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HFscof9+LdrfpH3/bjVFQP0lovbZv+w4JJOG47Eo6/CWYSSQa4A7gKBT7/RwcI33L
+	 ftTxrf/88hnvlPzfsatpAs6z6sFCE9A5ZqSPw6l06WvGL9FuGflhx1q/OKhpjnuy6B
+	 mPD0y0b4xfX+sOjsh1P291PKLVUAoEqAkk1bcyL0jaoRvcXc0/LLeWLyKdi4Z4L4U8
+	 RExDsIBte6pGtbHDxTLZLgBY05CcHIFw/trS/yqsmQA5zLDOh05/rAnm6arbSbbMZr
+	 aob3GdRvfw0qYxMfV0p+ClwILgemRgTUN+meTaufIFOpqHP1Aj8Dr/JOzK5yDFIkYb
+	 SQkxsOu+xqNfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 946D98222A;
-	Sun,  1 Mar 2026 21:28:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E2F9624E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 21:28:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCAF640D20;
+	Sun,  1 Mar 2026 21:29:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0CEA24E
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 21:29:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D491740894
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 21:28:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96D2F40894
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 21:29:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kNLBTthPEw7Y for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 21:28:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id MjJ8pbL4vxIw for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 21:29:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A8F7640515
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8F7640515
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A8F7640515
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 21:28:22 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 832249783; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 01 Mar 2026 21:28:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vwoKl-0000000D2ZV-24Hz;
- Sun, 01 Mar 2026 22:28:15 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9F8140515
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9F8140515
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 21:29:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B843A8469E; Sun,  1 Mar 2026 21:29:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20260224215738.818318-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 24 Feb 2026 22:57:38 +0100")
-References: <20260224215738.818318-1-bernd@kuhls.net>
-Date: Sun, 01 Mar 2026 22:28:15 +0100
-Message-ID: <87ikbfme8g.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=mySEjr5pR0VvPECuoGDHOAz2alT2FX8PFhdjO154Bj5ctMx4zuIMmj0EOHSf9BGUnqW9AyehWqZZTqmwoWjWk9khjQlh9G30hgtIAVzhKEkCP7VOlz7DsZnrO2SaEV9znkO0wj8obQtmKPJzUPOccDfg1IxHMDfh4FS/ZInuVFdToZQxI4EkObbEuzGbcw+JDXJXhOuBPi9sRCPtybg34ciRIHY+VnetZ2f0y2JwKIEQ9G/4W4m5rzhwv/zR/b0dJOJ5WeLfu2r6g0q6xgyuEGA20QEdNvqlHTxKybOVBSuhL888PjYEfdkqiX/rGOspLyfr9pe0dm1UYLFVaxTbNQ==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=oKY0zBZI9kNBN823NOj0JMQy9h31eL54Qc1nnwHl+N4=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=mySEjr5p
-Subject: Re: [Buildroot] [PATCH 1/1] package/safeclib: fix build error with
- gcc 15.x
+To: buildroot@buildroot.org
+Date: Sun, 1 Mar 2026 22:26:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 88d1fde405054b2f39a5a12531a3a50b32c254db
+X-Git-Newrev: d88660265bd80591034caf0dbb95236342a2c823
+X-Patchwork-Hint: ignore
+Message-Id: <20260301212909.B843A8469E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/safeclib: fix build error with gcc
+ 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,44 +70,157 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d88660265bd80591034caf0dbb95236342a2c823
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > This defconfig can be built without problems:
- > BR2_x86_64=y
- > BR2_GCC_VERSION_15_X=y
- > BR2_PACKAGE_SAFECLIB=y
+This defconfig can be built without problems:
 
- > However adding rocketlake as architecture variant
+BR2_x86_64=y
+BR2_GCC_VERSION_15_X=y
+BR2_PACKAGE_SAFECLIB=y
 
- > BR2_x86_64=y
- > BR2_x86_rocketlake=y
- > BR2_GCC_VERSION_15_X=y
- > BR2_PACKAGE_SAFECLIB=y
+However adding rocketlake as architecture variant
 
- > causes a build error:
+BR2_x86_64=y
+BR2_x86_rocketlake=y
+BR2_GCC_VERSION_15_X=y
+BR2_PACKAGE_SAFECLIB=y
 
- > str/vsnprintf_s.c: In function 'safec_ftoa.isra':
- > str/vsnprintf_s.c:523:24: error: writing 32 bytes into a region of size
- >  31 [-Werror=stringop-overflow=]
- >   523 |             buf[len++] = '0';
+causes a build error:
 
- > with gcc 15.x only, gcc =< 14.x is not affected, reason unknown.
+str/vsnprintf_s.c: In function 'safec_ftoa.isra':
+str/vsnprintf_s.c:523:24: error: writing 32 bytes into a region of size
+ 31 [-Werror=stringop-overflow=]
+  523 |             buf[len++] = '0';
 
- > This commit adds two upstream commits which fix the problem.
+with gcc 15.x only, gcc =< 14.x is not affected, reason unknown.
 
- > No autobuilder error was recorded.
+This commit adds two upstream commits which fix the problem.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+No autobuilder error was recorded.
 
-Committed, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...001-vsnprintf_s-Increase-Buffer-Size-by-1.patch | 47 ++++++++++++++++++++
+ ...002-vsnprintf_s-Increase-Buffer-Size-by-1.patch | 50 ++++++++++++++++++++++
+ 2 files changed, 97 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/safeclib/0001-vsnprintf_s-Increase-Buffer-Size-by-1.patch b/package/safeclib/0001-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+new file mode 100644
+index 0000000000..f99f56f08c
+--- /dev/null
++++ b/package/safeclib/0001-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+@@ -0,0 +1,47 @@
++From f59a0c8c1b5cf19cd0ed7f9bfb3a1e85f54113d0 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Wed, 13 Aug 2025 20:23:48 -0700
++Subject: [PATCH] vsnprintf_s: Increase Buffer Size by 1
++
++It is a buffer overflow warning that GCC 15.2 is catching.
++The issue is that it's trying to write to `buf[len++]` when len could
++potentially be 31, which would write to buf[31] in a buffer of size 32
++(valid indices 0-31), but the len++ post-increment means it could
++theoretically write beyond the buffer bounds.
++
++Fixes
++
++../../sources/safec-3.9.1/src/str/vsnprintf_s.c: In function 'safec_ftoa.isra':
++../../sources/safec-3.9.1/src/str/vsnprintf_s.c:523:24: error: writing 32 bytes into a region of size 31 [-Werror=stringop-overflow=]
++  523 |             buf[len++] = '0';
++      |             ~~~~~~~~~~~^~~~~
++../../sources/safec-3.9.1/src/str/vsnprintf_s.c:394:10: note: at offset [1, 32] into destination object 'buf' of size 32
++  394 |     char buf[PRINTF_FTOA_BUFFER_SIZE];
++      |          ^~~
++cc1: all warnings being treated as errors
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++
++Upstream: https://github.com/rurban/safeclib/commit/f59a0c8c1b5cf19cd0ed7f9bfb3a1e85f54113d0
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/str/vsnprintf_s.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/str/vsnprintf_s.c b/src/str/vsnprintf_s.c
++index fa53ab42..0b62c3cb 100644
++--- a/src/str/vsnprintf_s.c
+++++ b/src/str/vsnprintf_s.c
++@@ -391,7 +391,7 @@ static size_t safec_ftoa(out_fct_type out, const char *funcname, char *buffer,
++                          size_t idx, size_t maxlen, double value,
++                          unsigned int prec, unsigned int width,
++                          unsigned int flags) {
++-    char buf[PRINTF_FTOA_BUFFER_SIZE];
+++    char buf[PRINTF_FTOA_BUFFER_SIZE + 1]; // Add extra byte for safety
++     size_t len = 0U, off = 0U;
++     double tmp;
++     double diff = 0.0;
++-- 
++2.47.3
++
+diff --git a/package/safeclib/0002-vsnprintf_s-Increase-Buffer-Size-by-1.patch b/package/safeclib/0002-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+new file mode 100644
+index 0000000000..4301426747
+--- /dev/null
++++ b/package/safeclib/0002-vsnprintf_s-Increase-Buffer-Size-by-1.patch
+@@ -0,0 +1,50 @@
++From 79e1445f4b3689526b46121b1218cab802b9ae88 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 10 Jan 2026 12:16:22 +0100
++Subject: [PATCH] vsnprintf_s: Increase Buffer Size by 1
++
++Another fix similar to https://github.com/rurban/safeclib/commit/f59a0c8c1b5cf19cd0ed7f9bfb3a1e85f54113d0
++
++In function 'safec_ntoa_format',
++    inlined from 'safec_ntoa_long' at str/vsnprintf_s.c:331:12:
++str/vsnprintf_s.c:256:24: error: writing 32 bytes into a region of size 0 [-Werror=stringop-overflow=]
++  256 |             buf[len++] = '0';
++      |             ~~~~~~~~~~~^~~~~
++str/vsnprintf_s.c: In function 'safec_ntoa_long':
++str/vsnprintf_s.c:312:10: note: at offset 32 into destination object 'buf' of size 32
++  312 |     char buf[PRINTF_NTOA_BUFFER_SIZE];
++      |          ^~~
++In function 'safec_ntoa_format',
++    inlined from 'safec_ntoa_long' at str/vsnprintf_s.c:331:12:
++str/vsnprintf_s.c:260:24: error: writing 32 bytes into a region of size 0 [-Werror=stringop-overflow=]
++  260 |             buf[len++] = '0';
++      |             ~~~~~~~~~~~^~~~~
++str/vsnprintf_s.c: In function 'safec_ntoa_long':
++str/vsnprintf_s.c:312:10: note: at offset 32 into destination object 'buf' of size 32
++  312 |     char buf[PRINTF_NTOA_BUFFER_SIZE];
++      |          ^~~
++cc1: all warnings being treated as errors
++
++Upstream: https://github.com/rurban/safeclib/commit/79e1445f4b3689526b46121b1218cab802b9ae88
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/str/vsnprintf_s.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/str/vsnprintf_s.c b/src/str/vsnprintf_s.c
++index 0b62c3cb..cf8e866e 100644
++--- a/src/str/vsnprintf_s.c
+++++ b/src/str/vsnprintf_s.c
++@@ -309,7 +309,7 @@ static size_t safec_ntoa_long(out_fct_type out, const char *funcname,
++                               unsigned long value, bool negative,
++                               unsigned long base, unsigned int prec,
++                               unsigned int width, unsigned int flags) {
++-    char buf[PRINTF_NTOA_BUFFER_SIZE];
+++    char buf[PRINTF_NTOA_BUFFER_SIZE + 1];
++     size_t len = 0U;
++ 
++     // no hash for 0 values
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
