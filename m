@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1576FD0066
-	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 14:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27997FD0066
+	for <buildroot@archiver.kernel.org>; Sun,  1 Mar 2026 14:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C03D8143E;
-	Sun,  1 Mar 2026 14:01:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6AA1417C2;
+	Sun,  1 Mar 2026 14:03:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lil_K5nzS_I2; Sun,  1 Mar 2026 14:01:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5PUBIbDSIF3Z; Sun,  1 Mar 2026 14:03:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCC50813F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 049BE417C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772373714;
-	bh=oIopybzhXxyQV28R+YdZVxL2CLTvC8+xxieY1Y0W+TM=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	s=default; t=1772373786;
+	bh=M1VowECc+gJvZpUWfeBTdv7gFXoQwWkP3U3opxqBWWo=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=rRYkPGa/PVhHL9ez7TxfmUU9EUm30xXTpC2vqxOTZ8BqvQKyTCkSbyXnqwN6VcjaY
-	 CpHZRtmFTdFIiCNbRxN4Q/J6+Hp0AuqD09DzkKC8c0X97+x3MhGqjo3XP7K3DcUHoL
-	 a+dONpi6O7XX03+bxDB8rDZ/Uask0B4qjcM9xv1hSlWNqR4JZAAA7k5zuXsp4KYkJi
-	 CwJYCaK7g9V4g44kh80AjX+I5uwLUmnagTjxuQCREd0ji5z7K+awrQzxSNBCCdlnH3
-	 jEXuMXwiz9+2K2LPk6wvwv5MNKs4QaJ2e+P5S4IBHVmCMENAugtdHDTsE92AAvFSYO
-	 xjmtpRN3SgHaw==
+	b=o+PxdFwI9iK+GVFFjPTuDPXb6NI6CaB5Ib+hRYwqyH+B9I9rev+YHfH1hXR/Ektms
+	 oo+UUlwFtoSKNeCJ5iEH0XEqRqztojf8aiBAVO4vEwOdJnbXZMOP1r5ggqI7Sfx9n5
+	 cQfvtx/KADzX5vFIElVVfrG97oIXtqvXivud3zbwZQ3HNpiPVS7TFIbW1Lp8UQEcOf
+	 EyRNVA1FYJkmc5jkqPSs49KSFJysy4hWNnG5rD0bL1Wq45va4ZtmlXpJ90ptUojjRF
+	 v1XwziPpmpqQhFgNi/JnlB1Ph9jT7vzvo6rsVsXk8+ySxlQHeIAXMYU7c8xocdj40H
+	 HeUALDvJVJnmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCC50813F8;
-	Sun,  1 Mar 2026 14:01:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CE97024E
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:01:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 049BE417C4;
+	Sun,  1 Mar 2026 14:03:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34203231
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C007C813F8
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:01:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A1DC417C4
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:03:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ZqklY-Ff5t8 for <buildroot@buildroot.org>;
- Sun,  1 Mar 2026 14:01:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.149;
- helo=smtpdh19-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K0ohgov6vmBL for <buildroot@buildroot.org>;
+ Sun,  1 Mar 2026 14:03:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7C2EC81380
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C2EC81380
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7C2EC81380
- for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:01:52 +0000 (UTC)
-Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id whMjveliXclBZwhMjvUOCy; Sun, 01 Mar 2026 15:01:49 +0100
-Message-ID: <302dbe28-478a-4fd8-80c5-82c219a78272@benettiengineering.com>
-Date: Sun, 1 Mar 2026 15:01:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Petr Vorel <petr.vorel@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 08487417C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08487417C2
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 08487417C2
+ for <buildroot@buildroot.org>; Sun,  1 Mar 2026 14:03:02 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1974706039; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 01 Mar 2026 14:02:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vwhNl-0000000CjkH-3APj;
+ Sun, 01 Mar 2026 15:02:53 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
 Cc: buildroot@buildroot.org
-References: <20260220133622.2271059-1-giulio.benetti@benettiengineering.com>
- <20260221072716.GA405421@pevik>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20260221072716.GA405421@pevik>
-X-CMAE-Envelope: MS4xfNP7V0kG5WhD5hcEHMeZCZ3vRENkxTHvKoVI/QA1kgkxgCGum2xPxRAbsnMtfWNOiEmL2/lLHphu4CxqG2A4Ed7Y/0R7P4WeJAVgEjMRAWJM5ariuzX7
- yq7DAgB9BB31Jqi25incpxUy9+ZZ2idCk0RkgFHwyPrJwyebA306s1RCzV8OAxW6u9beZB1eAPdB8tVW3pKQS4xbCl1Krq2pZ5y0INFP5/BKo+4dUZNfSz9I
- hiEOMUk1m4qVZotmy7huog==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1772373709; bh=54VGXTVbc/zOkNUgJRE4vD3xNITjXCzMbhByJGYpYiQ=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=K4tx0A80BLtvvKmFQuBEANgAg7vYjNPDqGYTI0S77tZXxpSV9LeOCkWG8/6psUTv0
- vK3iEv/eQNtiW3x+quA7cIzNPWNuJjRRELQ/oB3PmJ6eLo71JZP02KjnAUHYhnTlpd
- PVaDP8DJS8iuTRI9ArE4iOc9YhGgjtt5h5xT9hgYc5xYJv7n5pA2ElARU/Yx9GP06u
- IBgFdRqgrLwK6Ru8LU2jcw1tvWYiRclkPoAMXEALrWgYcjmUhSoaPjeIX9zWgFLQiH
- N981ZEhYr+juS3g7u8m5z1AjBr55h6cr1x2GQrgBHfcQJ0dYQYAfzelVGSpx7mDP9o
- zWPsR80PfBaIw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+In-Reply-To: <20260228194406.1906845-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Sat, 28 Feb 2026 21:44:04 +0200")
+References: <20260228194406.1906845-1-aperez@igalia.com>
+Date: Sun, 01 Mar 2026 15:02:53 +0100
+Message-ID: <874imzodf6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=LaB4qJQ96UrhZ87SDgj32GAhGQ5hTCX9brQ+o3TNjQqXaKCdxMR3RhQCWGapMoXWQE+ETFV076Fnfds/If5OpF47nHGEoltwvGo+9dLmA0zWERNh0Y42LpBdnslCZ+0bcC4JNKHJH6qwGISvm0lpTNcQfOxLkkqY35zvd3TPXQ1U4Jz0/0hoE6ShZ9RVJjgHtFdbyFKFj/5eMZuLWe0Cg6s8F2MyqZEfZoh+w4srExwmdA27fcthU6PnTukiM8ErYK6D5GJlpRd3AoBWn1KAca2hhwgORlDy7PsEJUPkWkvYv7pdw8DFruk3e2MZ4DU/sYLHdEZcwDOjLji9npOp5A==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=n5Twp++NEiBH/PW57RGHfXK8UTLg5vo+cRQIp8GdRoY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=K4tx0A80
-Subject: Re: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.8.5
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=LaB4qJQ9
+Subject: Re: [Buildroot] [PATCH] package/webkitgtk: disable JIT for all MIPS
+ CPUs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,32 +93,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Petr,
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-On 21/02/2026 08:27, Petr Vorel wrote:
-> Hi Giulio,
-> 
-> LGTM.
-> 
->> * blkmapd not built by default (--enable-blkmapd to re-enable)
-> I suppose we don't need blkmapd, do we?
+ > Change the mips32r6 into a blanket BR2_mips[el] check to disable the
+ > JSC JIT. Upstream removed JIT support for all MIPS processors in
+ > January 2024 [0], and the change trickled down to stable releases
+ > starting on version 2.44.0 [1].
 
-We do, thanks to triggering this point, otherwise option nfsv41 was 
-ignored completely.
+ > While at it, change the upstream bug links to point to a more
+ > appropriate bug report.
 
-Kind regards
-Giulio
+ > [0] https://commits.webkit.org/272866@main
+ > [1]
+ > https://lists.webkit.org/archives/list/webkit-wpe@lists.webkit.org/thread/JM7GLPPKGAB6DIQ2YDHPEIWNOYSUHBC7/
 
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> 
-> Kind regards,
-> Petr
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
