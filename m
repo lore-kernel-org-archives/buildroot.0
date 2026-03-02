@@ -1,91 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC788EB362C
-	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 21:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB8AEB3632
+	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 21:20:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78EAD6088C;
-	Mon,  2 Mar 2026 21:00:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47A0283EB1;
+	Mon,  2 Mar 2026 21:20:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7O4FRHy4s-0G; Mon,  2 Mar 2026 21:00:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ibAQFbytakVN; Mon,  2 Mar 2026 21:20:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94BE961043
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6910083EB2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772485254;
-	bh=i69gEbRTJXZ4qrxYYVTy8bljYiv+t8AIpyVHFc0D+Wo=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1772486438;
+	bh=pgffwcHHxMTYLzigAQvyuKwrDpZiwwWY4BbXCCQQSCY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=MM6hXp32UtsbU4Dqb/1a7JBA2UKTYfFHkPy1Jb3WZwiQhvYMeoejyJ+szBM1t29jF
-	 +k6NThbSLGJ9J6Ek6oFNgmDqr+PYnXsykDRRMxEHFNVJHmgQ5OrlzJDz0eZJZvh9rT
-	 Tk3JmqALTuoDdOBMRRiK2GoJZKCJHVBBKfUQHJ4a5vss73K6Lgkcd2dXc21oexbsmf
-	 oqYLGTP3Y/sjtwmSDZmCeYThs54wIsnxGhusJt2AukCeMOFHu0rK5VOB2jjbo8sH/k
-	 Xo/3iDH5gKF0RJgP4fNaqtzDmiWbkZBQpzJUML+uFmzhK+2NiIGwUX55rfbTyWvaUK
-	 M856tYSNOjDug==
+	 From:Reply-To:From;
+	b=Pigd5nJecLuA/kMuy/E1Zp1m1RvZsfNrtnaIja81VY2rq6sFOTQPVqSsTmXaY8rPZ
+	 GUTNm53qlC5QeHcFerDdo3DymntJj8LyrfNCBg2+Hhd8JwTYX1S7t6u13uPFiBxe2W
+	 2IEt7HD4adALvuyPDhHZpw1XDntw1NRecmF3yDtJjeW920crgj4g3Snt1bDXLCKxgQ
+	 ZCf+jZuYH6k//l8iOAwFVOQN2/AN34J8CAGGhrYQBrMzoQpp5l3nApmimfLUG2+hUU
+	 kEvoqLVU0qIh0XoIHt665/LWSaKkfA4X6GEMJ0xvHVtYW/1TAV4xsDubzIPXXSl8Dl
+	 HD318vPvW6CpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94BE961043;
-	Mon,  2 Mar 2026 21:00:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5739B231
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 21:00:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6910083EB2;
+	Mon,  2 Mar 2026 21:20:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D65F825B
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 21:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CD5F40347
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 21:00:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7A7241CB2
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 21:20:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AYCPsnwhJgpE for <buildroot@buildroot.org>;
- Mon,  2 Mar 2026 21:00:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E463E40147
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E463E40147
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E463E40147
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 21:00:51 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a037c.dip0.t-ipconnect.de [91.58.3.124])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E1957A4C33AE;
- Mon,  2 Mar 2026 22:00:37 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41472)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vxANZ-000000006VS-3Ofo;
- Mon, 02 Mar 2026 21:00:37 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  2 Mar 2026 22:00:37 +0100
-Message-ID: <20260302210037.1931571-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260302210037.1931571-1-bernd@kuhls.net>
-References: <20260302210037.1931571-1-bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4AhmZm1jiBaW for <buildroot@buildroot.org>;
+ Mon,  2 Mar 2026 21:20:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE26841CA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE26841CA4
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE26841CA4
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 21:20:35 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id BD50B19F5A5;
+ Mon,  2 Mar 2026 22:20:31 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 02 Mar 2026 22:20:31 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772485237;
- bh=gCc/Vj7rsl/KzJjJeAweg5f3qaNd9Fv1eka6l0+m8NY=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=I+jh5tO8xofr46TeMjiv/KHyST8CO8gQ9LBf+z2sRj4AIAzr0bC7O9EqNepMK/0HA
- r35BNjNLEJFwoj/0wI6pwDRrALm1BhUF690XSQWjrFsitTjMRniUg0Jts7W7BMlwwL
- LAzPJC+9av37bnV29DIskm5S9zM3xG7Bi9QX2ejzm7cfJw76+6w1euHCybRIVO9ibv
- Bv9HKDjheZuha6oATR0lRYX/JQyjhWfN2cmCGXnIyu45wtUOJVKot62tVq8YG4go2w
- fIK4eGXnHO2SQDgB53k+uZxT27btSK/znY30Zi7XeWqvgJ9VKHNUVDQYLKOw48jxxW
- zQjjW8S6p2TGw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Date: Mon, 02 Mar 2026 22:20:31 +0100
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <aaXHi1j_b4fRSI-V@waldemar-brodkorb.de>
+References: <aaQ0OC8I4PAx0xZz@waldemar-brodkorb.de>
+ <294c54a635aa57d40cda161b8af98f8f@free.fr>
+ <aaXHi1j_b4fRSI-V@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <054ee3804bf26bee3dadf8425e0f723c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772486432;
+ bh=EeBonYGGSBVFx3V/xHwPCkhAZLY6jbN6xy4jgLlug6c=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=mWaYIu3/Qs321gVG2fnfdRFnL7Himu8sq+8JQEtkPW1tRc8rr1lYnJ28d1cWIuFqY
+ aKehoxtqm5C/slSeCac+dyo63gc/4pHEwSgnwmVvrnRzYYkktKeeY/vt2Oyj8dkqDh
+ FeA8lBxwtrzQMaXjBBh+1qpV11d0D48PzAuq5HBQq0OmJRICPt7kfcmJijsXySUsQA
+ 4QFaqpQ0zPeeIDa5j6RSBkTkbp3p+0WNJPuuDFVUWO7OWrHcK1jBZocNR7djIgPkO9
+ kTROgwZRk4eNrgCNIcd4y3IJLrMBMyOqo+C8Ze8ovZN0Ltq3+ZUKNwAj/JySwoU4c2
+ Z5+cMsdodFruA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=I+jh5tO8
-Subject: [Buildroot] [PATCH/next v2 2/2] package/fwupd-efi: bump version to
- 1.8
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=mWaYIu3/
+Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,70 +95,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/fwupd/fwupd-efi/releases/tag/1.8
+Hi Waldemar,
 
-Added TARGET_LD to _MESON_EXTRA_BINARIES due to upstream commit
-https://github.com/fwupd/fwupd-efi/commit/a7ac71e3b391e040d9ca0d58d2d186be5b60b631
-which causes a misdetection of the linker used.
+On 02/03/2026 18:23, Waldemar Brodkorb wrote:
+> Hi Julien,
+> Julien Olivain wrote,
+> 
+>> Hi Waldemar,
+>> 
+>> Thanks for the patch.
+>> 
+>> On 01/03/2026 13:42, Waldemar Brodkorb wrote:
+>> > Following changes made it into the release:
+>> >
+>> > Joris van Rantwijk (1):
+>> >       Fix adjtimex() with TIME64
+>> >
+>> > Waldemar Brodkorb (8):
+>> >       sys/stat.h: remove _STAT_VER/_MKNOD_VER
+>> >       fix gettid() declaration
+>> >       add statx syscall wrapper
+>> 
+>> This new uclibc version is introducing a test failure
+>> with zfs. See:
+>> https://gitlab.com/jolivain/buildroot/-/jobs/13308829775
+>> 
+>> Running with the previous uclibc 1.0.56 works fine:
+>> https://gitlab.com/jolivain/buildroot/-/jobs/13308875027
+>> 
+>> It seems related to commit:
+>> https://github.com/wbx-github/uclibc-ng/commit/d3a819aff25af436e22abd5ba01ff2cfc0631b32
+>> 
+>> Do you have any idea which component should be fixed?
+>> (uclibc, zfs, or the rutime test_xzf?)
+> 
+> It is uclibc-ng fault. A fix and a patch v2 will follow.
 
-Build log without specifying TARGET_LD:
+I looked a bit more into this. The statx headers for glibc and uclibc-ng
+are indeed the same:
 
-  Program ld.bfd found: YES (/usr/bin/ld.bfd)
-  [...]
-  /usr/bin/ld.bfd: cannot represent machine `aarch64'
+https://sourceware.org/git/?p=glibc.git;a=blob;f=io/bits/statx-generic.h;h=9bb9701dc67eccad968b338aeb15d87378fe65cd;hb=ea37298b65bd67f94c3c2640e91ec5865a5019ad#l66
 
-Build log with specifying TARGET_LD:
+https://github.com/wbx-github/uclibc-ng/blob/v1.0.57/libc/sysdeps/linux/common/bits/statx.h#L88
 
-  Program ld.bfd found: YES
+On its side, zfs is (re)defining the function slightly
+differently in its test:
+https://github.com/openzfs/zfs/blob/zfs-2.4.1/tests/zfs-tests/cmd/statx.c#L57-L59
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: fixed linker detection (Julien)
+Also, this test does not include the <sys/stat.h> header. It includes
+only <fcntl.h>. In the case this test is compiled with glibc, stat.h
+is never included, so the error does not happen.
 
- package/fwupd-efi/fwupd-efi.hash | 2 +-
- package/fwupd-efi/fwupd-efi.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+For some reason, in the uclibc-ng case, sys/stat.h gets
+included from fcntl.h, generating the error. See:
+https://gitlab.com/jolivain/buildroot/-/jobs/13308829775#L237
 
-diff --git a/package/fwupd-efi/fwupd-efi.hash b/package/fwupd-efi/fwupd-efi.hash
-index 42f9eb83ff..8bca799e68 100644
---- a/package/fwupd-efi/fwupd-efi.hash
-+++ b/package/fwupd-efi/fwupd-efi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  96d4fc45467159b2664ce86ee7d5030e265fdb4d4a4d774080654d2f5b1561ff  fwupd-efi-1.7.tar.gz
-+sha256  c9f1f9b9b967ea50eb0b478f0d7693d6673d4cd76c8e7eb80c55fc44ec928925  fwupd-efi-1.8.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/fwupd-efi/fwupd-efi.mk b/package/fwupd-efi/fwupd-efi.mk
-index fbff5a9043..cc44ec7e48 100644
---- a/package/fwupd-efi/fwupd-efi.mk
-+++ b/package/fwupd-efi/fwupd-efi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWUPD_EFI_VERSION = 1.7
-+FWUPD_EFI_VERSION = 1.8
- FWUPD_EFI_SITE = $(call github,fwupd,fwupd-efi,$(FWUPD_EFI_VERSION))
- FWUPD_EFI_LICENSE = LGPL-2.1+
- FWUPD_EFI_LICENSE_FILES = COPYING
-@@ -22,6 +22,8 @@ FWUPD_EFI_CONF_OPTS = \
- 	-Defi_sbat_distro_url=https://gitlab.com/buildroot.org/buildroot/-/tree/master/package/fwupd-efi \
- 	-Dgenpeimg=disabled \
- 	-Dpython="$(HOST_DIR)/bin/python3"
--FWUPD_EFI_MESON_EXTRA_BINARIES = objcopy='$(TARGET_OBJCOPY)'
-+FWUPD_EFI_MESON_EXTRA_BINARIES = \
-+	ld.bfd='$(TARGET_LD)' \
-+	objcopy='$(TARGET_OBJCOPY)'
- 
- $(eval $(meson-package))
--- 
-2.47.3
+Maybe the zfs statx test should protect the statx() definition
+with a "#ifndef HAVE_STATX".
 
+Or could uclibc avoid to include sys/stat.h from fcntl.h,
+when it's not needed?
+
+What do you think?
+
+> best regards
+>  Waldemar
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
