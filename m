@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EBA9D58E4C
-	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 09:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 986E2D58E4C
+	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 09:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EB8B813EE;
-	Mon,  2 Mar 2026 09:33:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68EEC813EE;
+	Mon,  2 Mar 2026 09:34:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YZWtbSYt6EvG; Mon,  2 Mar 2026 09:33:51 +0000 (UTC)
+ id TG1VdA43qxt6; Mon,  2 Mar 2026 09:34:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50A9D81454
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 536098146F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772444031;
-	bh=lkyNZEVr0LG6oZH4B2mZWsmalxnee6jQkpdKUL6s2h0=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Cm5f6OyTxfZ/BL8A+1cX3HFOQeV6IH7FaERnsCyl0dk14XyFFsAFjlSYCK0LFM8ep
-	 A15Nz+2VOvZuyUbhL3owuB+iO4kePUrjcmfD78N8lwT2uUHLj7UsUfQL7ROmrb7EBz
-	 3Dl7uWkWtTq8QCnsBzD632tLOhIrWC19PpmYhDMz0BPZ3BFKnB4qGDTdquX9O0znRh
-	 iJ/9SOEdJdr4MsctMYJgTmpr8sh7uTOeylm3QwLvl+B3r1NtAsVZ2F+CpFfTEOmCGE
-	 lRLXM7nReURrXyw/PaHJbaxMNASOe0JFnMdhiCS3Jdtdc3WgJFX81MaP3ZBiHrB1rd
-	 yEQz6saA92LPQ==
+	s=default; t=1772444041;
+	bh=CQ7ZjyC99lepQvbuc1LT/d8f7eo3oeDur5XP+kqTEKQ=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=A0mpQHmCsIk9qBFd1ZafU7aOuQNWW4pXPlDA+sijFilpva6xOJtaADwucfGg3DG/S
+	 +yb4SHg3sMunUA0TNrIH9h44I1Mq5C+DZ0u4nMNc7mtO3NUDgZNobEk8UKyx1+cgle
+	 wojPY87GsTIgzv64wqf4IP1L97Qg+DmI77JO7SCy+722Cy4hDAdtiTRG8xU2Qdyamx
+	 xE1UE91PruhollMWVKOfWHmVb4+3YqfA098sLiM8at0BChxcBmzqX6p5Olyy0ohoGG
+	 lEAAlRZ01OguyqqdDwSx6EO8cwsh2P46TpX9RH7GsGqtwdvrJ97F3hXMUfsQEfCbyy
+	 0Sk9qYghR6PrA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50A9D81454;
-	Mon,  2 Mar 2026 09:33:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 536098146F;
+	Mon,  2 Mar 2026 09:34:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 64CBD231
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:33:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 57677231
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:34:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AB83813EE
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:33:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48C2C8146F
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:34:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L_-2sXA5WMAE for <buildroot@buildroot.org>;
- Mon,  2 Mar 2026 09:33:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id 08dh4IC2EIrn for <buildroot@buildroot.org>;
+ Mon,  2 Mar 2026 09:33:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0320981454
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0320981454
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0320981454
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:33:47 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 78313432;
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 02 Mar 2026 09:33:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vwzeq-0000000DVtf-2rtz;
- Mon, 02 Mar 2026 10:33:44 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558AE813EE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 558AE813EE
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:33:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5903A81785; Mon,  2 Mar 2026 09:33:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Alexis =?utf-8?Q?Lothor=C3=A9?= via buildroot <buildroot@buildroot.org>
-Cc: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>,  Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260216-openscap_cpp-v2-1-a61c7bb50837@bootlin.com> ("Alexis
- =?utf-8?Q?Lothor=C3=A9?= via buildroot"'s message of "Mon, 16 Feb 2026
- 17:13:05 +0100")
-References: <20260216-openscap_cpp-v2-1-a61c7bb50837@bootlin.com>
-Date: Mon, 02 Mar 2026 10:33:44 +0100
-Message-ID: <877brumv7r.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=LSdo5cY2Gb9TcBCBgKYMG01ukCFJIbraZNU27gOFUfnML/LPjffXQXs+hz2wz9V158pO/nYduOMzJAtQjj/Ws8erumfmzb5OW4DHzNdn5pNkquQiXwTDTGz5r3i8zu5HSyYzHeZGDFRNJ1w2RSQfRITqO391uhXQhpHoKEBscH8f9xjIFJ9wjC2yxebVYCfSBZqifP9gUcntkFPqej2DyDHHN3rg2SMqpYx2KKB+pNmBw/lEESMQC8EQYyiinoSa8mBc+f6TcIcIoy3ysy6EKvqNkXR5TjPOzXyEpUzPZD7lYts6NaB5vBtm5d19wuupYNr91gQ4Et0X9uEO9kjP8w==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=7o3Jaw/mmvbKf+6I4EbEN8phZLxkZbA165JAbgbbEuI=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=LSdo5cY2
-Subject: Re: [Buildroot] [PATCH v2] package/openscap: add patch to enforce
+To: buildroot@buildroot.org
+Date: Mon, 2 Mar 2026 10:32:59 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 156e5fa7eb0de95076a54a93f66ba32ec1591853
+X-Git-Newrev: 093725864a150ad2034bee78230e5151fb7004d4
+X-Patchwork-Hint: ignore
+Message-Id: <20260302093359.5903A81785@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openscap: add patch to enforce
  project as C project
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -95,71 +70,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1108527626242776565=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkFsZXhpcyIgPT0gQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6CgogPiBXaGVuIHRoZSB0b29sY2hhaW4gaW52b2x2ZWQg
-aW4gb3BlbnNjYXAgYnVpbGQgZG9lcyBub3Qgc3VwcG9ydCBDKyssIHRoZQogPiBjb25maWd1cmUg
-c3RlcCBmYWlscyB3aXRoIHRoZSBmb2xsb3dpbmcgZXJyb3I6CgogPiAgIC0tIERldGVjdGluZyBD
-WFggY29tcGlsZXIgQUJJIGluZm8KID4gICAtLSBEZXRlY3RpbmcgQ1hYIGNvbXBpbGVyIEFCSSBp
-bmZvIC0gZmFpbGVkCiA+ICAgLS0gQ2hlY2sgZm9yIHdvcmtpbmcgQ1hYIGNvbXBpbGVyOiAvYmlu
-L2ZhbHNlCiA+ICAgLS0gQ2hlY2sgZm9yIHdvcmtpbmcgQ1hYIGNvbXBpbGVyOiAvYmluL2ZhbHNl
-IC0gYnJva2VuCiA+ICAgQ01ha2UgRXJyb3IgYXQgL3Vzci9zaGFyZS9jbWFrZS9Nb2R1bGVzL0NN
-YWtlVGVzdENYWENvbXBpbGVyLmNtYWtlOjczIChtZXNzYWdlKToKID4gICAgIFRoZSBDKysgY29t
-cGlsZXIKCiA+ICAgICAgICIvYmluL2ZhbHNlIgoKID4gICAgIGlzIG5vdCBhYmxlIHRvIGNvbXBp
-bGUgYSBzaW1wbGUgdGVzdCBwcm9ncmFtLgoKID4gICAgIEl0IGZhaWxzIHdpdGggdGhlIGZvbGxv
-d2luZyBvdXRwdXQ6CgogPiAgICAgICBDaGFuZ2UgRGlyOiAnL2hvbWUvYXV0b2J1aWxkL2F1dG9i
-dWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL29wZW5zY2FwLTEuMy4xMi9idWlsZHJvb3Qt
-YnVpbGQvQ01ha2VGaWxlcy9DTWFrZVNjcmF0Y2gvVHJ5Q29tcGlsZS10VXlkcUknCgogPiAgICAg
-ICBSdW4gQnVpbGQgQ29tbWFuZChzKTogL3Vzci9iaW4vY21ha2UgLUUgZW52IFZFUkJPU0U9MSAv
-dXNyL2Jpbi9tYWtlIC1mIE1ha2VmaWxlIGNtVENfMTgzNGIvZmFzdAogPiAgICAgICBtYWtlWzFd
-OiBFbnRlcmluZyBkaXJlY3RvcnkgJy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2Ut
-Ni9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmls
-ZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBpbGUtdFV5ZHFJJwogPiAgICAgICAvdXNyL2Jpbi9tYWtl
-ICAtZiBDTWFrZUZpbGVzL2NtVENfMTgzNGIuZGlyL2J1aWxkLm1ha2UgQ01ha2VGaWxlcy9jbVRD
-XzE4MzRiLmRpci9idWlsZAogPiAgICAgICBtYWtlWzJdOiBFbnRlcmluZyBkaXJlY3RvcnkgJy9o
-b21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2Nh
-cC0xLjMuMTIvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1RyeUNvbXBp
-bGUtdFV5ZHFJJwogPiAgICAgICBCdWlsZGluZyBDWFggb2JqZWN0IENNYWtlRmlsZXMvY21UQ18x
-ODM0Yi5kaXIvdGVzdENYWENvbXBpbGVyLmN4eC5vIC9iaW4vZmFsc2UgICAgLW8gQ01ha2VGaWxl
-cy9jbVRDXzE4MzRiLmRpci90ZXN0Q1hYQ29tcGlsZXIuY3h4Lm8gLWMgL2hvbWUvYXV0b2J1aWxk
-L2F1dG9idWlsZC9pbnN0YW5jZS02L291dHB1dC0xL2J1aWxkL29wZW5zY2FwLTEuMy4xMi9idWls
-ZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVNjcmF0Y2gvVHJ5Q29tcGlsZS10VXlkcUkvdGVz
-dENYWENvbXBpbGVyLmN4eAogPiAgICAgICBtYWtlWzJdOiAqKiogW0NNYWtlRmlsZXMvY21UQ18x
-ODM0Yi5kaXIvYnVpbGQubWFrZTo4MTogQ01ha2VGaWxlcy9jbVRDXzE4MzRiLmRpci90ZXN0Q1hY
-Q29tcGlsZXIuY3h4Lm9dIEVycm9yIDEKID4gICAgICAgbWFrZVsyXTogTGVhdmluZyBkaXJlY3Rv
-cnkgJy9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtNi9vdXRwdXQtMS9idWlsZC9v
-cGVuc2NhcC0xLjMuMTIvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VTY3JhdGNoL1Ry
-eUNvbXBpbGUtdFV5ZHFJJwogPiAgICAgICBtYWtlWzFdOiAqKiogW01ha2VmaWxlOjEzNDogY21U
-Q18xODM0Yi9mYXN0XSBFcnJvciAyCiA+ICAgICAgIG1ha2VbMV06IExlYXZpbmcgZGlyZWN0b3J5
-ICcvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvb3Bl
-bnNjYXAtMS4zLjEyL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlU2NyYXRjaC9UcnlD
-b21waWxlLXRVeWRxSScKCiA+ICAgICBDTWFrZSB3aWxsIG5vdCBiZSBhYmxlIHRvIGNvcnJlY3Rs
-eSBnZW5lcmF0ZSB0aGlzIHByb2plY3QuCiA+ICAgQ2FsbCBTdGFjayAobW9zdCByZWNlbnQgY2Fs
-bCBmaXJzdCk6CiA+ICAgICBDTWFrZUxpc3RzLnR4dDoxMSAocHJvamVjdCkKCiA+ICAgLS0gQ29u
-ZmlndXJpbmcgaW5jb21wbGV0ZSwgZXJyb3JzIG9jY3VycmVkIQogPiAgIG1ha2U6ICoqKiBbcGFj
-a2FnZS9wa2ctZ2VuZXJpYy5tazoyNjM6IC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFu
-Y2UtNi9vdXRwdXQtMS9idWlsZC9vcGVuc2NhcC0xLjMuMTIvLnN0YW1wX2NvbmZpZ3VyZWRdIEVy
-cm9yIDEKID4gICBtYWtlOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvYXV0b2J1aWxkL2F1dG9i
-dWlsZC9pbnN0YW5jZS02L2J1aWxkcm9vdCcKCiA+IFRoZSBvcGVuc2NhcCBwcm9qZWN0IGRvZXMg
-bm90IGNvbnRhaW4gYW55IEMrKyBmaWxlLCBhbmQgc28gZG9lcyBub3QgbmVlZAogPiBhIEMrKyBj
-YXBhYmxlIGNvbXBpbGVyLiBCcmluZyB0aGUgdG8tYmUtaW50ZWdyYXRlZC11cHN0cmVhbSBwYXRj
-aAogPiBlbmZvcmNpbmcgQyBsYW5ndWFnZSBpbiBDTWFrZUxpc3RzLnR4dCB0byBwcmV2ZW50IHRo
-aXMgYnVpbGQgZmFpbHVyZS4KCiA+IEZpeGVzOiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qu
-b3JnL3Jlc3VsdHMvMWZlNTUwZmZhNzlmMGEwODNhNDUwYWUwM2ZlMDY3YThhYjczMzZiZQogPiBG
-aXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2U5ZDUyYjUyNjU4
-NTQ0OTE2MDIyMDUwYzc4ZGNiMTM3Y2E2Yzk3ZTAKID4gRml4ZXM6IGh0dHBzOi8vYXV0b2J1aWxk
-LmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy80YTljMjE3NjNhYWRkYjIxN2VlNWY4YmI4OTQ3ZmFhZDk3
-NjdiYWEzCiA+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVA
-Ym9vdGxpbi5jb20+CiA+IC0tLQogPiBDaGFuZ2VzIGluIHYyOgogPiAtIGZpeCB1cHN0cmVhbSBD
-TWFrZUxpc3RzLnR4dCByYXRoZXIgdGhhbiBlbmFibGluZyBDKysgc3VwcG9ydCBpbiB0b29sY2hh
-aW4KID4gLSBicmluZyBpbiB0aGUgdG8tYmUtaW50ZWdyYXRlZC11cHN0cmVhbSBjb3JyZXNwb25k
-aW5nIHBhdGNoCiA+IC0gTGluayB0byB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI2
-MDIxNi1vcGVuc2NhcF9jcHAtdjEtMS0zMzcyMTQ5ZGE1YjBAYm9vdGxpbi5jb20KCkNvbW1pdHRl
-ZCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+--===============1108527626242776565==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/093725864a150ad2034bee78230e5151fb7004d4
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+When the toolchain involved in openscap build does not support C++, the
+configure step fails with the following error:
+
+  -- Detecting CXX compiler ABI info
+  -- Detecting CXX compiler ABI info - failed
+  -- Check for working CXX compiler: /bin/false
+  -- Check for working CXX compiler: /bin/false - broken
+  CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (message):
+    The C++ compiler
+
+      "/bin/false"
+
+    is not able to compile a simple test program.
+
+    It fails with the following output:
+
+      Change Dir: '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+
+      Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1834b/fast
+      make[1]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+      /usr/bin/make  -f CMakeFiles/cmTC_1834b.dir/build.make CMakeFiles/cmTC_1834b.dir/build
+      make[2]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+      Building CXX object CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o /bin/false    -o CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI/testCXXCompiler.cxx
+      make[2]: *** [CMakeFiles/cmTC_1834b.dir/build.make:81: CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o] Error 1
+      make[2]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+      make[1]: *** [Makefile:134: cmTC_1834b/fast] Error 2
+      make[1]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+
+    CMake will not be able to correctly generate this project.
+  Call Stack (most recent call first):
+    CMakeLists.txt:11 (project)
+
+  -- Configuring incomplete, errors occurred!
+  make: *** [package/pkg-generic.mk:263: /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/.stamp_configured] Error 1
+  make: Leaving directory '/home/autobuild/autobuild/instance-6/buildroot'
+
+The openscap project does not contain any C++ file, and so does not need
+a C++ capable compiler. Bring the to-be-integrated-upstream patch
+enforcing C language in CMakeLists.txt to prevent this build failure.
+
+Fixes: https://autobuild.buildroot.org/results/1fe550ffa79f0a083a450ae03fe067a8ab7336be
+Fixes: https://autobuild.buildroot.org/results/e9d52b52658544916022050c78dcb137ca6c97e0
+Fixes: https://autobuild.buildroot.org/results/4a9c21763aaddb217ee5f8bb8947faad9767baa3
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../openscap/0001-set-project-as-c-project.patch   | 78 ++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+
+diff --git a/package/openscap/0001-set-project-as-c-project.patch b/package/openscap/0001-set-project-as-c-project.patch
+new file mode 100644
+index 0000000000..c794fbaf44
+--- /dev/null
++++ b/package/openscap/0001-set-project-as-c-project.patch
+@@ -0,0 +1,78 @@
++From a742647efd215b682e4cd26b15ac3e580c10ef9f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
++Date: Mon, 16 Feb 2026 13:50:48 +0100
++Subject: [PATCH] Set project as C project in CMakeLists.txt
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The openscap tool has been recently integrated in the buildroot build
++system ([1]), which makes the openscap tool buildable for a wide variety
++or architectures/OSes, with a wide variety of _compilers_. And so when
++such compilers are not supporting C++ projects (as it is the case with a
++default buildroot toolchain), the build breaks on the following error
++(see [2] for an example):
++
++  -- Detecting CXX compiler ABI info
++  -- Detecting CXX compiler ABI info - failed
++  -- Check for working CXX compiler: /bin/false
++  -- Check for working CXX compiler: /bin/false - broken
++  CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (message):
++    The C++ compiler
++
++      "/bin/false"
++
++    is not able to compile a simple test program.
++
++    It fails with the following output:
++
++      Change Dir: '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
++
++      Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1834b/fast
++      make[1]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
++      /usr/bin/make  -f CMakeFiles/cmTC_1834b.dir/build.make CMakeFiles/cmTC_1834b.dir/build
++      make[2]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
++      Building CXX object CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o
++      /bin/false    -o CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI/testCXXCompiler.cxx
++      make[2]: *** [CMakeFiles/cmTC_1834b.dir/build.make:81: CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o] Error 1
++      make[2]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
++      make[1]: *** [Makefile:134: cmTC_1834b/fast] Error 2
++      make[1]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
++
++    CMake will not be able to correctly generate this project.
++  Call Stack (most recent call first):
++    CMakeLists.txt:11 (project)
++
++openscap does not have any C++ code to build, so restricting builds to
++toolchains supporting C++ is overconstraining, the configuration step
++should rather not try to check C++ support.
++
++Enforce the project as a C project in CMakeLists.txt to make sure not to
++test C++ features on the used toolchain.
++
++[1] https://buildroot.org/
++[2] https://autobuild.buildroot.org/results/1fe550ffa79f0a083a450ae03fe067a8ab7336be/build-end.log
++
++Upstream: https://github.com/OpenSCAP/openscap/pull/2312
++[patch slightly adapted to be applicable on v1.3.12]
++Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index cb13debb47cf..05b054327951 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -8,7 +8,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
++ 		"MinSizeRel" "RelWithDebInfo")
++ endif()
++ 
++-project("openscap")
+++project("openscap" C)
++ set(OPENSCAP_VERSION_MAJOR "1")
++ set(OPENSCAP_VERSION_MINOR "3")
++ set(OPENSCAP_VERSION_PATCH "12")
++-- 
++2.53.0
++
+
+--===============1108527626242776565==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1108527626242776565==--
