@@ -1,64 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 986E2D58E4C
-	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 09:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FAE4E9B34B
+	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 09:58:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68EEC813EE;
-	Mon,  2 Mar 2026 09:34:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DD0D418C6;
+	Mon,  2 Mar 2026 09:58:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TG1VdA43qxt6; Mon,  2 Mar 2026 09:34:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oPRxS0cxZoa8; Mon,  2 Mar 2026 09:58:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 536098146F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18E0F418BE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772444041;
-	bh=CQ7ZjyC99lepQvbuc1LT/d8f7eo3oeDur5XP+kqTEKQ=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1772445518;
+	bh=bSajD4P09aGjz/0RcxVY0oVMn2fcD3/eKodpeqGKe3Q=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=A0mpQHmCsIk9qBFd1ZafU7aOuQNWW4pXPlDA+sijFilpva6xOJtaADwucfGg3DG/S
-	 +yb4SHg3sMunUA0TNrIH9h44I1Mq5C+DZ0u4nMNc7mtO3NUDgZNobEk8UKyx1+cgle
-	 wojPY87GsTIgzv64wqf4IP1L97Qg+DmI77JO7SCy+722Cy4hDAdtiTRG8xU2Qdyamx
-	 xE1UE91PruhollMWVKOfWHmVb4+3YqfA098sLiM8at0BChxcBmzqX6p5Olyy0ohoGG
-	 lEAAlRZ01OguyqqdDwSx6EO8cwsh2P46TpX9RH7GsGqtwdvrJ97F3hXMUfsQEfCbyy
-	 0Sk9qYghR6PrA==
+	b=inODO6bCF7UG9NTtMNYSfuyr0oJDKCvtuhho0JmGpiOjsY4dZqoXKLB0a4KWga7mL
+	 MeD6L8V4ZlS7Nn/0CZKO7RTRs09QvvoLZyEDCGwuhcHNQEvji3EuuSdcJORjF52s1Z
+	 YL5ZPRWj0cYqenAgYb6SzVRAU//viHO1+ACaq+t5t9d1wVs2ZD9oDTW+PAFvsmsbNL
+	 7VFEXdjEwrfVal9tigJ9CPAX4t3aDTwP0TK4nasfuYJqBUlDiYgC4NHoJwsOq4qxgZ
+	 Hpjsz2tVmwDBD87F1JggM2Hep+l/6+ZJkFNk14tyvSNkxPSQapSqFR2m4WXY8bnayG
+	 1LlJGINOzyj5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 536098146F;
-	Mon,  2 Mar 2026 09:34:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 57677231
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:34:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18E0F418BE;
+	Mon,  2 Mar 2026 09:58:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55CF325B
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48C2C8146F
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:34:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3BBE740F22
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:58:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 08dh4IC2EIrn for <buildroot@buildroot.org>;
- Mon,  2 Mar 2026 09:33:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558AE813EE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 558AE813EE
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:33:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5903A81785; Mon,  2 Mar 2026 09:33:59 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3IA16Qe6oSKm for <buildroot@buildroot.org>;
+ Mon,  2 Mar 2026 09:58:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F253440EFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F253440EFE
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F253440EFE
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 09:58:31 +0000 (UTC)
+Received: from 91-154-227-245.elisa-laajakaista.fi ([91.154.227.245]
+ helo=kodama) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1vx02m-007pna-Sv; Mon, 02 Mar 2026 10:58:29 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 05c3ca10;
+ Mon, 2 Mar 2026 09:58:27 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 Mar 2026 10:32:59 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 156e5fa7eb0de95076a54a93f66ba32ec1591853
-X-Git-Newrev: 093725864a150ad2034bee78230e5151fb7004d4
-X-Patchwork-Hint: ignore
-Message-Id: <20260302093359.5903A81785@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openscap: add patch to enforce
- project as C project
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon,  2 Mar 2026 11:58:26 +0200
+Message-ID: <20260302095827.3021239-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.53.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=gEMnKCeEUO50ON8/m62U3lh31kktM1B4p15zzqKiSHU=; b=KBO1JLp3oDjR4SNj+1atbGA37n
+ RLsAd6zcsowr7NZ1FuiqzeXOHqexmIJJ1+ja21mTS2m5jI2uxBzLKAaEY41A420GpO1UsVfC5PBWK
+ FrjJbQ97qIpr2hk/jvJqiB4oeL2UjHztTCwzPiXf+H91Pu2IOl6+MjwM/8ZKqY5a3SeGBMBH6fYUj
+ CnMdVIfP5aP4t0rAd8MlFjcmSHG7sxZBXTTpfLGF/3DYpRQeId87Gd1hdLD7Yo7AwaUJLjfTT5YDw
+ BTDOhV8p62z559MQKIjm53xkifU4QsiaugArg+QOzFa51TORxKpdPCJgtF24MfOUwe1umnPatogW2
+ gnbPPTcg==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=KBO1JLp3
+Subject: [Buildroot] [PATCH] package/webkitgtk: use Skia on little-endian
+ targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,161 +94,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1108527626242776565=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1108527626242776565==
-Content-Type: text/plain
+WebKitGTK has included a bundled copy of Skia since version 2.46.0, and
+it has been the default for little-endian targets. Moreover, upstream
+development focus is on the Skia renderer and Cairo will be eventually
+abandoned. In preparation for that, introduce a switch to enable Skia
+usage in little-endian targets.
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/093725864a150ad2034bee78230e5151fb7004d4
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-When the toolchain involved in openscap build does not support C++, the
-configure step fails with the following error:
-
-  -- Detecting CXX compiler ABI info
-  -- Detecting CXX compiler ABI info - failed
-  -- Check for working CXX compiler: /bin/false
-  -- Check for working CXX compiler: /bin/false - broken
-  CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (message):
-    The C++ compiler
-
-      "/bin/false"
-
-    is not able to compile a simple test program.
-
-    It fails with the following output:
-
-      Change Dir: '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-
-      Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1834b/fast
-      make[1]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-      /usr/bin/make  -f CMakeFiles/cmTC_1834b.dir/build.make CMakeFiles/cmTC_1834b.dir/build
-      make[2]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-      Building CXX object CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o /bin/false    -o CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI/testCXXCompiler.cxx
-      make[2]: *** [CMakeFiles/cmTC_1834b.dir/build.make:81: CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o] Error 1
-      make[2]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-      make[1]: *** [Makefile:134: cmTC_1834b/fast] Error 2
-      make[1]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-
-    CMake will not be able to correctly generate this project.
-  Call Stack (most recent call first):
-    CMakeLists.txt:11 (project)
-
-  -- Configuring incomplete, errors occurred!
-  make: *** [package/pkg-generic.mk:263: /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/.stamp_configured] Error 1
-  make: Leaving directory '/home/autobuild/autobuild/instance-6/buildroot'
-
-The openscap project does not contain any C++ file, and so does not need
-a C++ capable compiler. Bring the to-be-integrated-upstream patch
-enforcing C language in CMakeLists.txt to prevent this build failure.
-
-Fixes: https://autobuild.buildroot.org/results/1fe550ffa79f0a083a450ae03fe067a8ab7336be
-Fixes: https://autobuild.buildroot.org/results/e9d52b52658544916022050c78dcb137ca6c97e0
-Fixes: https://autobuild.buildroot.org/results/4a9c21763aaddb217ee5f8bb8947faad9767baa3
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- .../openscap/0001-set-project-as-c-project.patch   | 78 ++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+ package/webkitgtk/Config.in    |  2 ++
+ package/webkitgtk/webkitgtk.mk | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/openscap/0001-set-project-as-c-project.patch b/package/openscap/0001-set-project-as-c-project.patch
-new file mode 100644
-index 0000000000..c794fbaf44
---- /dev/null
-+++ b/package/openscap/0001-set-project-as-c-project.patch
-@@ -0,0 +1,78 @@
-+From a742647efd215b682e4cd26b15ac3e580c10ef9f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-+Date: Mon, 16 Feb 2026 13:50:48 +0100
-+Subject: [PATCH] Set project as C project in CMakeLists.txt
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 3a4c3ed792..eadc5663b3 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -41,6 +41,8 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_ENCHANT
++	select BR2_PACKAGE_FONTCONFIG if BR2_ENDIAN = "LITTLE" # libgtk3, libgtk4
++	select BR2_PACKAGE_FREETYPE if BR2_ENDIAN = "LITTLE" # libgtk3, libgtk4
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_JPEG
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 26c70ae6c8..48a934f5a8 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -33,10 +33,19 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DPORT=GTK \
+ 	-DUSE_AVIF=OFF \
+ 	-DUSE_LIBHYPHEN=OFF \
+-	-DUSE_SKIA=OFF \
+ 	-DUSE_SYSTEM_SYSPROF_CAPTURE=OFF \
+ 	-DUSE_WOFF2=ON
+ 
++# WebKitGTK uses a bundled copy of Skia since 2.46.0 for
++# little-endian targets, and Cairo for big-endian ones.
++# Using Skia needs freetype+fontconfig as dependencies,
++# but those are already pulled in by libgtk{3,4}
++ifeq ($(BR2_ENDIAN),"BIG")
++WEBKITGTK_CONF_OPTS += -DUSE_SKIA=OFF
++else
++WEBKITGTK_CONF_OPTS += -DUSE_SKIA=ON
++endif
 +
-+The openscap tool has been recently integrated in the buildroot build
-+system ([1]), which makes the openscap tool buildable for a wide variety
-+or architectures/OSes, with a wide variety of _compilers_. And so when
-+such compilers are not supporting C++ projects (as it is the case with a
-+default buildroot toolchain), the build breaks on the following error
-+(see [2] for an example):
-+
-+  -- Detecting CXX compiler ABI info
-+  -- Detecting CXX compiler ABI info - failed
-+  -- Check for working CXX compiler: /bin/false
-+  -- Check for working CXX compiler: /bin/false - broken
-+  CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (message):
-+    The C++ compiler
-+
-+      "/bin/false"
-+
-+    is not able to compile a simple test program.
-+
-+    It fails with the following output:
-+
-+      Change Dir: '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-+
-+      Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1834b/fast
-+      make[1]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-+      /usr/bin/make  -f CMakeFiles/cmTC_1834b.dir/build.make CMakeFiles/cmTC_1834b.dir/build
-+      make[2]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-+      Building CXX object CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o
-+      /bin/false    -o CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI/testCXXCompiler.cxx
-+      make[2]: *** [CMakeFiles/cmTC_1834b.dir/build.make:81: CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o] Error 1
-+      make[2]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-+      make[1]: *** [Makefile:134: cmTC_1834b/fast] Error 2
-+      make[1]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
-+
-+    CMake will not be able to correctly generate this project.
-+  Call Stack (most recent call first):
-+    CMakeLists.txt:11 (project)
-+
-+openscap does not have any C++ code to build, so restricting builds to
-+toolchains supporting C++ is overconstraining, the configuration step
-+should rather not try to check C++ support.
-+
-+Enforce the project as a C project in CMakeLists.txt to make sure not to
-+test C++ features on the used toolchain.
-+
-+[1] https://buildroot.org/
-+[2] https://autobuild.buildroot.org/results/1fe550ffa79f0a083a450ae03fe067a8ab7336be/build-end.log
-+
-+Upstream: https://github.com/OpenSCAP/openscap/pull/2312
-+[patch slightly adapted to be applicable on v1.3.12]
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index cb13debb47cf..05b054327951 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -8,7 +8,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-+ 		"MinSizeRel" "RelWithDebInfo")
-+ endif()
-+ 
-+-project("openscap")
-++project("openscap" C)
-+ set(OPENSCAP_VERSION_MAJOR "1")
-+ set(OPENSCAP_VERSION_MINOR "3")
-+ set(OPENSCAP_VERSION_PATCH "12")
-+-- 
-+2.53.0
-+
-
---===============1108527626242776565==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ ifeq ($(BR2_PACKAGE_LIBGTK4),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_GTK4=ON
+ WEBKITGTK_DEPENDENCIES += libgtk4
+-- 
+2.53.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1108527626242776565==--
