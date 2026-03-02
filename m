@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F399EA4E2A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 15:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1E29EB3625
+	for <buildroot@archiver.kernel.org>; Mon,  2 Mar 2026 17:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF69A40CD9;
-	Mon,  2 Mar 2026 15:58:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68FA441C9F;
+	Mon,  2 Mar 2026 17:23:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eKY8gG_MMaWK; Mon,  2 Mar 2026 15:58:42 +0000 (UTC)
+ id 2C30P8ze4W-E; Mon,  2 Mar 2026 17:23:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9841409E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9348841D10
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772467121;
-	bh=2jD0vBjGq56saWIaUK3/uZ9pyLv8erkFfDyUdmJnyS0=;
+	s=default; t=1772472209;
+	bh=VafTy6LwZigDi2AA9Dbjzi212zC/m83F/k9FuVbkMeg=;
 	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=AX4aPpTVnxY9KHTwbylkbjAv/ZoEWE+xPLU4s0JZEUKSrwm5mqtXphKA3C9dUJzdg
-	 gl7nIsrSKlF6yyNziDG/Mo6kf0Y/3L0SfL8E6KYr+vcX7eds6ebOm8MCuoZe5Tnrd/
-	 bHHIQwzpjpTHMPjwFIxrn14aL3SFu3O+ADB03+c6Ji97cu5baOVf+9c0Bo7kwoKybN
-	 FWmjNEz7Nto505whhQ1IrB1pWNw4dwEuaf90ER3UPbQNeUqH7WlglfkkFSo9aFoiqV
-	 iUaxJybsOrlKKLKFiIAzHUZmmPjCvn7afxb5NdLF+H5XyuQROeoYT7N3YH8u300YfW
-	 XNe2W88ird3Nw==
+	b=Wwn1y611VsU3JmjkZu+Ia82l9u2Dd2+8RmXqw0QG9Qq7jMbpSMrm/QglrnuvrdzhU
+	 QPha+XvBr7isEV9BrNKz0KBfi0xy6UPyIi7QigA/FjNIm2EGzUeSlI/iD1lp70jLuo
+	 2a7AyG+ts4jxPj4JzPh929LcWz3iHaPb0BSfp/jFUtpicMawW/zr7FsNNkJVRcjW0J
+	 5SgyYtnw+WbZyJUqtLLvqNAhx1+eyOpB+C2B1usJ2JjzBSi9iuDjIGWTY5ca/8mQJI
+	 f1UCh6u/e20DmLSvo8GZVTuOxJtb+5o9RsQE7gxHl+Szk38gnDEpD8rK3K8BmU6Yb3
+	 vcTH8DPnygjxQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9841409E3;
-	Mon,  2 Mar 2026 15:58:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 26B9825B
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 15:58:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9348841D10;
+	Mon,  2 Mar 2026 17:23:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1A4A231
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 17:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CAB5612B5
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 15:58:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7A3941D10
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 17:23:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PySV6TA6WBRL for <buildroot@buildroot.org>;
- Mon,  2 Mar 2026 15:58:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H6MPld8yF3Ry for <buildroot@buildroot.org>;
+ Mon,  2 Mar 2026 17:23:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECBA2612B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECBA2612B3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A184F41C9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A184F41C9F
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ECBA2612B3
- for <buildroot@buildroot.org>; Mon,  2 Mar 2026 15:58:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A184F41C9F
+ for <buildroot@buildroot.org>; Mon,  2 Mar 2026 17:23:26 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id D18C731E0CB4; Mon, 02 Mar 2026 16:58:36 +0100 (CET)
-Date: Mon, 2 Mar 2026 16:58:36 +0100
+ id DABC631E0CAF; Mon, 02 Mar 2026 18:23:23 +0100 (CET)
+Date: Mon, 2 Mar 2026 18:23:23 +0100
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: Julien Olivain <ju.o@free.fr>
-Message-ID: <aaWzrHsFypr8dUwI@waldemar-brodkorb.de>
+Message-ID: <aaXHi1j_b4fRSI-V@waldemar-brodkorb.de>
 References: <aaQ0OC8I4PAx0xZz@waldemar-brodkorb.de>
  <294c54a635aa57d40cda161b8af98f8f@free.fr>
 MIME-Version: 1.0
@@ -62,15 +62,15 @@ In-Reply-To: <294c54a635aa57d40cda161b8af98f8f@free.fr>
 X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1772467117; bh=hqMXxZkEu3DdfL/Xv3iDY3LieUqpKCb7S5EXMURGOCY=;
+ t=1772472204; bh=P7iOPtgM6KB0PLGWVt/PKmaynY6OA07Ndx0t2+1eBiE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mijvvpy6B94a1pyJW7AJVK5jd68oS151l0E2Nfsl8n3ZJTR5TZvDbAMy5ieuKhYOH
- cgYIrA7qnlfLS4O4r9ePVX+P2TrDXEOvTAD84MoLsY1bYMo/4nZ5gjgGSZ3Vbi20Xr
- +2J9h8wVAB/XF84xZpc+dbJjO+NjRdhODtUqjyaG29ZBVC5wPyA00dRWmql6fwzksf
- Fl90vSe8pw1ShJuM3bEh8z6dKpWF6/3Ehwt5/7cMJDfBXNKGvjvbxS0IKKtOf63BGj
- PGEB4xOT6A94Zjv6OUojI0MuKTOnRkLwTO1635BynWBmeMYIK57MG+Ald+H+pOVmkd
- x9JRIn2yBRbZQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=ld8PPSx/SOsu7XE2gX11c5/RfR6/w4cIJJ/PR9Jr9yeIKJfg2bub7NQ/74CVCM7gd
+ Z9dKnmEvSbUEG/HF4tDotEMOnow5hRSydFVkueHN1HqFXHvXVQAECdqjoSJ9qHEzgl
+ HfZ8pbIXFxf01HbxoKsIaGhn26Gka1cPYFHWEZ7khMSWwvTTvk+bSwE/x9nGaWnrtc
+ qCqPuioDONDlNivk140nQFM4ik88hFCQzFnSgmWL1U305Hdm3oT8RUb5mU1pzveiYq
+ xiUWEmYTaPk/JLf6VE1ylf4ciI9H3tVsSur9iVgLGUjNH4OnxJJfNW2dQSc1QgOqkr
+ KxWdZ8vXIW8nA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
 Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.57
@@ -122,15 +122,7 @@ Julien Olivain wrote,
 > Do you have any idea which component should be fixed?
 > (uclibc, zfs, or the rutime test_xzf?)
 
-No, not really. I checked again all the similarities and changes
-between glibc and uClibc-ng regarding statx, but I see no reason why
-it fails for uClibc-ng and works for glibc.
-
-The test overrides the definition of statx in a way gcc complains.
-The #include <fcntl.h> also includes <sys/stat.h> which then
-includes <bits/statx.h>. 
-
-Any ideas are welcome.
+It is uclibc-ng fault. A fix and a patch v2 will follow.
 
 best regards
  Waldemar
