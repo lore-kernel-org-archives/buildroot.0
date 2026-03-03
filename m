@@ -4,110 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B3BFEDA6B2
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 17:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9047EDA6B2
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 17:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30357600B3;
-	Tue,  3 Mar 2026 17:19:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77969607BC;
+	Tue,  3 Mar 2026 17:21:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ALzYnKwrWMHo; Tue,  3 Mar 2026 17:19:54 +0000 (UTC)
+ id clIhAsSfUDKi; Tue,  3 Mar 2026 17:21:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F95A60604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F87160B96
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772558394;
-	bh=F6QdxSHcCNY8cb9Nh6AdZoleowMyeaie/CUP1vlwbbI=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=bpyhNOrvFYYybA24IEgSGuUuKcZKmmlhQzbmHTu4hdbD7RS8014ZQqQQGdCNPqQh1
-	 lrtxU3EdjdeXWvz6Z1M2QAEmygEELkMSpYmY/GR7FCc+M4Hd54uSYJU3sgQJtUlIhQ
-	 hx8mVIBHJtzbzJiQGDy6AZ8O0HwwRPuJF5wayCgO146gLJPZ9vLlGalqhVi7a8Z12X
-	 Gbx9yIihbMjKxry6H3g0pfKaAVCi6Z5+0VATDvtNaXOu93QWh09p9cVHjF2JRupuJa
-	 VzmOpx0ANxHVwKGPopo00Dzy+WHEE1+XmlslF+71uyMDsrhB8yx8nXY4saUSOjwx6u
-	 QkMjVRBzOTBZQ==
+	s=default; t=1772558504;
+	bh=hZheOuaOCKfadVR5ub6WR+2iDiQWEyWvjdQVzbvBZUk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=M+2EM9SRFWhrSgNxCLL2m0eyUwoFoEuvxjkCE5aoNPztA6zSh3gLqu8p46NHUDSTM
+	 XUPaoJBdILH4vJvOs4/GFCz/hkAx0Dv2rsTkSS8wKO5mpt+aoS7R83Odwy5mYDR63Z
+	 GA7jXtiis/HIXwCGcwJgyRwZr4DKqkjjrIgktqta4eGAEINt3DHCwwY3osY7Kzc+B1
+	 BOIXLMWaq1a+7gXpOCGOL4wETNuP8Gfk3S9WC3BjHnOLL7QXlbQDQsmX8tY6sJc93S
+	 wR1inRk+YbUDaN0OmY0olD+7c9DsPAoIGFdkgxtuN6ppeU3tYdzQlkjFl2PH3sllLU
+	 zON0XW3nqOqFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F95A60604;
-	Tue,  3 Mar 2026 17:19:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A25F25B
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:19:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F87160B96;
+	Tue,  3 Mar 2026 17:21:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3A551EB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47BE183196
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:19:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A991A4189A
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:21:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6gWQrfWZn8PM for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 17:19:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102c; helo=mail-pj1-x102c.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3D35182D0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D35182D0F
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
- [IPv6:2607:f8b0:4864:20::102c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D35182D0F
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:19:51 +0000 (UTC)
-Received: by mail-pj1-x102c.google.com with SMTP id
- 98e67ed59e1d1-3598e065d8dso1163053a91.2
- for <buildroot@buildroot.org>; Tue, 03 Mar 2026 09:19:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772558390; x=1773163190;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5+QJq6WCrN3ZlgVyHUqhYW11Roz8Q9xX3i4IZ1NXB5Q=;
- b=dGCx9/jnOHIAoFuXi/wnaeUpoOve2jP6yMhRsWKYPt17uL8OI9XS/UN3AfAw7Vqvlr
- Gv0i9BnzUWSmV3Pafh5x3VITWO5FflS8AoqA4l+OhCC8PYJV0hLS6CSm4A+uLmtZRkps
- vBmeCjrrLCuyyQt/p+QUryqwCHqFaC9TtAf2baGHOk8qmdv6/Qb7lX6afPgCYyQstIut
- abrKeJt+4omO6NYvuU13DyceRMvCiN74PXjNzaPLBR6VjgpDgCN8pnsirTSvVk72PMaC
- GM72Oz4X2Cl2+17a1+BBfrNZQv2fcMR2YFjrFsk863ZJIIx1uOF1KX22g1cPQCIME8yv
- VR8w==
-X-Gm-Message-State: AOJu0YwQlOAquN4lTcT8jShQqYAFUaEatv3Em2QDFpi/JnlWsXNdf3Ye
- PO30IFw3Y8n6/5U62MZK8NjKHWSKEyJY0Aghr/vr0NsnIhkQWCv4YvhEnT9tyw==
-X-Gm-Gg: ATEYQzyNsHsvN3JZoAg3SY5h5Wita6ZlsqUD1bhQSc/d6W6KLvtAWBMiCicwnJ1+qFR
- +xkzSUvwLE08rB19HaRUJKpkfRbJGF86G09Yv8vUloBJhwW5TdFE3AmuXt+nJENlQpyiIu7xvCN
- eoWwvZoxxtws+Rj6SX4CXs9rau+HYLA4paJ8VLrHZ5hjNIc3Z8jCqlL1lAJ99b3Fd26fMr6Hxtf
- iYrJZDZ5fM69S3EX4cosd+zL2W/rJ5WiVFKGeFQh1gDpaPQcG4u2o9BznD811v6m5iBnHTMVLj5
- 2kct9pI9cVmm+uJ2IXVtbSvjjrPAkxDbqhNEVWH6sgDaYz+tmP0TuMr99x06mBqHj4g8yaHcZbP
- 1vkjqITcI3F7SBTdr/A0e8ZaT6AKlInIugF/uaeru2RUX1OsHQFs7XK1n4LflrX+fp26zGbdICm
- 1xnwepnhPuFrRIY8pgxFaFCqUfCfojfOM1
-X-Received: by 2002:a17:90a:e18f:b0:340:4abf:391d with SMTP id
- 98e67ed59e1d1-35965cd0f39mr16143590a91.16.1772558389952; 
- Tue, 03 Mar 2026 09:19:49 -0800 (PST)
-Received: from fedora ([47.31.83.111]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-3599c3f1e0bsm2720793a91.2.2026.03.03.09.19.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Mar 2026 09:19:49 -0800 (PST)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FJdZEKbfG2Ln for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 17:21:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8B1E417DD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8B1E417DD
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:21:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C1F4585F00; Tue,  3 Mar 2026 17:21:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Tue,  3 Mar 2026 22:49:31 +0530
-Message-ID: <20260303171931.1065151-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1772558390; x=1773163190; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5+QJq6WCrN3ZlgVyHUqhYW11Roz8Q9xX3i4IZ1NXB5Q=;
- b=bYFHM2V7Zf69c7f+8qjAs9XzQBsA0gsYtCZ2/dTDrqeBiCNVGzAiW6RmN53eOVNysy
- JN/ZROm89xBvnFpMpPhUMrEiWqDeb2b60bQWWK6xPy5RdGtJwlFqgopCtmkrycnVynXS
- JyiGKcdG2DOnpXg0s7tGoEeKY+xFaad3gXtZc28xVGs0xFDIfmVvF2Z8PcVTc6TQL36+
- BGkyROrbuxF4ZcO0URG5dwd8RcLpNN1srHi4u3EvLuL7CPsSFhqSd6tMI63uyrvDxVgP
- pjFjTAauXWTjwFJ1drF40nBmIIr6SHHcy0tCq7EGTagGf6MK0ZEi0AqbOB8hdFWlxZhf
- 6YoA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=bYFHM2V7
-Subject: [Buildroot] [PATCH] package/libenca: fix getopt declaration for
- musl static builds
+Date: Tue, 3 Mar 2026 18:19:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8195c73ca33f47767b4e14f5d706acaebe0ee1f4
+X-Git-Newrev: 95dad8f85c4ce2f6956492b868bc9eba6452a9bc
+X-Patchwork-Hint: ignore
+Message-Id: <20260303172142.C1F4585F00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: security bump to v9.1.2148
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,53 +68,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libenca ships its own getopt.h with an incomplete prototype:
-  extern int getopt ();
-This conflicts with musl's unistd.h which declares the full prototype.
-Fix by providing the correct declaration.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/95dad8f85c4ce2f6956492b868bc9eba6452a9bc
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+For changes, see:
+
+  - https://github.com/vim/vim/compare/v9.1.2017...v9.1.2148
+
+Fixes the following vulnerabilities:
+
+- CVE-2026-25749:
+    Vim is an open source, command line text editor. Prior to version
+    9.1.2132, a heap buffer overflow vulnerability exists in Vim's tag
+    file resolution logic when processing the 'helpfile' option. The
+    vulnerability is located in the get_tagfname() function in src/tag.c.
+    When processing help file tags, Vim copies the user-controlled
+    'helpfile' option value into a fixed-size heap buffer of MAXPATHL + 1
+    bytes (typically 4097 bytes) using an unsafe STRCPY() operation
+    without any bounds checking. This issue has been patched in version
+    9.1.2132.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-25749
+  - https://github.com/vim/vim/commit/0714b15940b245108e6e9d7aa2260dd849a26fa9
+
+- CVE-2026-26269:
+    Vim is an open source, command line text editor. Prior to 9.1.2148, a
+    stack buffer overflow vulnerability exists in Vim's NetBeans
+    integration when processing the specialKeys command, affecting Vim
+    builds that enable and use the NetBeans feature. The Stack buffer
+    overflow exists in special_keys() (in src/netbeans.c). The while
+    (*tok) loop writes two bytes per iteration into a 64-byte stack buffer
+    (keybuf) with no bounds check. A malicious NetBeans server can
+    overflow keybuf with a single specialKeys command. The issue has been
+    fixed as of Vim patch v9.1.2148.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-26269
+  - https://github.com/vim/vim/commit/c5f312aad8e4179e437f81ad39a860cd0ef11970
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...declaration-musl-statically-building.patch | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/libenca/0001-fix-getopt-declaration-musl-statically-building.patch
+ ...0001-src-Makefile-create-links-with-ln-sf.patch | 78 ----------------------
+ package/vim/vim.hash                               |  2 +-
+ package/vim/vim.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 80 deletions(-)
 
-diff --git a/package/libenca/0001-fix-getopt-declaration-musl-statically-building.patch b/package/libenca/0001-fix-getopt-declaration-musl-statically-building.patch
-new file mode 100644
-index 0000000000..4971a7e9e2
---- /dev/null
-+++ b/package/libenca/0001-fix-getopt-declaration-musl-statically-building.patch
-@@ -0,0 +1,22 @@
-+diff --git a/src/getopt.h b/src/getopt.h
-+index 12b7ad5..e3b54ab 100644
-+--- a/src/getopt.h
-++++ b/src/getopt.h
-+@@ -144,7 +144,7 @@ struct option
-+    errors, only prototype getopt for the GNU C library.  */
-+ extern int getopt (int __argc, char *const *__argv, const char *__shortopts);
-+ # else /* not __GNU_LIBRARY__ */
-+-extern int getopt ();
-++extern int getopt (int, char * const[], const char *);
-+ # endif /* __GNU_LIBRARY__ */
-+ 
-+ # ifndef __need_getopt
-+@@ -161,7 +161,7 @@ extern int _getopt_internal (int __argc, char *const *__argv,
-+ 			     int __long_only);
-+ # endif
-+ #else /* not __STDC__ */
-+-extern int getopt ();
-++extern int getopt (int, char * const[], const char *);
-+ # ifndef __need_getopt
-+ extern int getopt_long ();
-+ extern int getopt_long_only ();
--- 
-2.53.0
-
+diff --git a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
+deleted file mode 100644
+index 54d423aacf..0000000000
+--- a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 5686ef63f81fcac2ca6ec6e7160829b295ad4e79 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sun, 28 Dec 2025 15:01:38 +0100
+-Subject: [PATCH] src/Makefile: create links with ln -sf
+-
+-Running "make installlinks" twice towards the same destination
+-directory will fail, as symlink will already exist. This is not really
+-expected as "make install" is normally expected to work again and
+-again towards the same destination directory.
+-
+-Fix this by using ln -sf.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/vim/vim/commit/6df5360691266b5eca49380e94f3e21fa48e5e0b
+----
+- src/Makefile | 24 ++++++++++++------------
+- 1 file changed, 12 insertions(+), 12 deletions(-)
+-
+-diff --git a/src/Makefile b/src/Makefile
+-index 6fb1eb95e..39f798260 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -2746,40 +2746,40 @@ installvimdiff: $(DEST_BIN)/$(VIMDIFFTARGET)
+- installgvimdiff: $(DEST_BIN)/$(GVIMDIFFTARGET)
+- 
+- $(DEST_BIN)/$(EXTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EXTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EXTARGET)
+- 
+- $(DEST_BIN)/$(VIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIEWTARGET)
+- 
+- $(DEST_BIN)/$(GVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMTARGET)
+- 
+- $(DEST_BIN)/$(GVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIEWTARGET)
+- 
+- $(DEST_BIN)/$(RVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIMTARGET)
+- 
+- $(DEST_BIN)/$(RVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIEWTARGET)
+- 
+- $(DEST_BIN)/$(RGVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIMTARGET)
+- 
+- $(DEST_BIN)/$(RGVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIEWTARGET)
+- 
+- $(DEST_BIN)/$(VIMDIFFTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIMDIFFTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIMDIFFTARGET)
+- 
+- $(DEST_BIN)/$(GVIMDIFFTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMDIFFTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMDIFFTARGET)
+- 
+- $(DEST_BIN)/$(EVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIMTARGET)
+- 
+- $(DEST_BIN)/$(EVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIEWTARGET)
+- 
+- # Create links for the manual pages with various names to vim.	This is only
+- # done when the links (or manpages with the same name) don't exist yet.
+--- 
+-2.52.0
+-
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index f7c883b929..ecc41be702 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
++sha256  f9ec31df8f1a78e130dd06c395e6626c2a8a8ec2705d8e7b7667bd3ecd499c6b  vim-9.1.2148.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+ sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index fa7d47d67d..9201587a8a 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 9.1.2017
++VIM_VERSION = 9.1.2148
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
