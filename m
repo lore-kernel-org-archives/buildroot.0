@@ -4,142 +4,107 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22406EC142A
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 10:58:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E44AEC142D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 11:04:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C11C8613AA;
-	Tue,  3 Mar 2026 10:58:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 358E161099;
+	Tue,  3 Mar 2026 11:04:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xy-KaDzszOx7; Tue,  3 Mar 2026 10:58:44 +0000 (UTC)
+ id XzUit4V9dY83; Tue,  3 Mar 2026 11:04:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 877FF6139B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20F8F6137E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772535524;
-	bh=1aRN8/A5JiptISBb4j5QYgsSVbemoESmfmoQhK8GoAA=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=sKucsQR0kuY8Oqy48IYNQMkWeqfgbw0ZfN+ptp64zskRmFhspuVEqDz9GmaMLCgY+
-	 7zr0MJDMouz3kmBCDIKSj0LKkm4LMEz6qnfOSrbNjJtbV6ZEAH0BctjMyU/N4Su1xB
-	 KLolMkwJBtIl0whY0l3uzHwD/iNginH5aTMLrjQL0ffN/ZsUEV+DX2T7NSQ0RLZ0kY
-	 ZG3TObyopq3AVRb8ZjHyXJgvG0jpuZwnjamJHtpV1Qg/y7/U3u3Yc38M958pAyoWGF
-	 xcTAfpvniE4mfl36mVjORrJqXGjXSUBrDWxsjtbH0W8cGBT/XEHqIbZJLy2USnXiJn
-	 9K91FOK2D6yNw==
+	s=default; t=1772535892;
+	bh=a3itFG77EP5jcEBg0Q8mFG+vRVhm4h1zIENhizNrl5I=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=CVLXo7S9NyrSKHjx+/sU78ALLoL9YKgBk3MCQZG8PCz2jnn2MeeWz3cW7sUIctv9H
+	 hOrnOUmWH99Ypj998YxhqzyfWhsgSISTILaV6YCKJoid+9ZnehlKzG+xaLwzzd3Uvb
+	 DOldvXOdXGt8FHTymQ6BGNUIdzA48KLq5joqzsTQ1RhonzYcv/cUiWiXvQVY9kyrtK
+	 TJTMaKTGsumVRAUNDZd1y2mzug44hjqhC3jrnZ5QExwdMmPzSjxB2DFdzZo9TaEO0L
+	 mdPrQl3eV6Mmbad8ug32Q9m0ZiW4vRBJz5H0PCAhSzFDNdZ7OUEhen2ZQHFv6kUzci
+	 K2+xufpjG+csg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 877FF6139B;
-	Tue,  3 Mar 2026 10:58:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B654625B
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:58:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20F8F6137E;
+	Tue,  3 Mar 2026 11:04:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C6D3231
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 11:04:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7BB76139B
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:58:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79AAC83D4C
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 11:04:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CZDmjqCA03aJ for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 10:58:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2hPTx8wjlhdK for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 11:04:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c10d::3;
- helo=sn4pr0501cu005.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 43E906137E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43E906137E
-Received: from SN4PR0501CU005.outbound.protection.outlook.com
- (mail-southcentralusazlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c10d::3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 43E906137E
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:58:40 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Sq1aKHbpVwZ6AtI/C0HirsOn7VSOQB/cOsoJp+CeFTBOopzjOPtVwXJribtlCfIjtkpLhUv9Alolgn0XwCXN/iwse9WVJNEQPpC2jt0+wS0SbkAK/20Y+FoeEd395miVx9e7tkkyEvsQDtYRQQN78iuwvZiqbLDL3ADNhta0Ng3Dm+w3sF6fbGUZlObyXUmct83ssrJEvc0bv00IaydZbAws2JiTCbMX34iMwfKerSZU1Nvb/IqVTIkFbmPkH12dUX9yeb15RoCD8E6mYeZX4jzI2DgDDUNrEmcYR/bc+HY/3zuXCCiUSGbagOKe5Cv9Vqitc+bdCZZVlsj5dFPLKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WT74iWkWtvZzot3rCqPxKddBUzx0Eyf3YE+PW7c1OZo=;
- b=LvmpSE21uXumgXoAGK71fgyoWyogZWcsFzV4l84aky9b3rRJPI6XK4jDHmpJZRzM9VbyJmw+JMAL+XUoyUv1VkcLDbrdFib62UILsD7dVfSCNNV4IhcCedZhbt91yfyytqB5DWV62shOhjzdn33XP9XZa1wyVwBwo4ZAS1VdtNo10rpHCfOwscI849eicxpk2ixpRVVYvEK6iiMIU/O9BQ+C4+NIqJ95pzCTeNKc6eDw5Vn2Ld0YUY+K0064y/bkh+f6wAnUzAvGI8BS0Xwvo2jBfD36kzL4YCHLtD7NdLV2du4cNRUyyGnpo+yzx/IVojVS2a2gt8Y1LS277xUkvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0P220CA0005.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:41b::12)
- by SJ2PR12MB9209.namprd12.prod.outlook.com (2603:10b6:a03:558::22)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
- 2026 10:58:33 +0000
-Received: from MWH0EPF000C6188.namprd02.prod.outlook.com
- (2603:10b6:a03:41b:cafe::1b) by SJ0P220CA0005.outlook.office365.com
- (2603:10b6:a03:41b::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.21 via Frontend Transport; Tue,
- 3 Mar 2026 10:58:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- MWH0EPF000C6188.mail.protection.outlook.com (10.167.249.120) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9654.16 via Frontend Transport; Tue, 3 Mar 2026 10:58:32 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Tue, 3 Mar
- 2026 04:58:31 -0600
-Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 3 Mar
- 2026 04:58:31 -0600
-Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Tue, 3 Mar 2026 04:58:29 -0600
-To: <buildroot@buildroot.org>
-Date: Tue, 3 Mar 2026 10:58:24 +0000
-Message-ID: <20260303105825.1234428-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260303105825.1234428-1-neal.frager@amd.com>
-References: <20260303105825.1234428-1-neal.frager@amd.com>
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 57DB983D3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57DB983D3C
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 57DB983D3C
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 11:04:48 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-48373a4bca3so33487525e9.0
+ for <buildroot@buildroot.org>; Tue, 03 Mar 2026 03:04:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1772535887; x=1773140687;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=eosQhkG0bkrh8Ix13c7Z0lYtc+ARNb8UoO+Sbz9Rq1g=;
+ b=LQNjhOljlxDKqwHACG/Suiau4Am5+qqyt6sOzsSAWmB1felT+vTtRlqJF84Nl2NzP1
+ kWEStXDkGoqstudQg7C9+qK6Y7sRD0UwnSY6sb/5Q8CuGtpPsJqYcKQzbw3YfZzvpRXx
+ iLk9+nfsrXSku469910zX/SNHQsaJSXYhPwSmj7y07wY7Ly+ouBqssUL6OmFv11AWGUM
+ 2bD5tkZ/EySwKYoHHFv9rn2jEV+imbw7jBHmWj1lhxUcYVzBqLt746v5zD5h9AR1gBiF
+ wSsjixEIIo4jt7T/6f3keIA4E/h40m8g8Kx+v/Zga/grVf5hZf9KU6YFlB01fva1Wu7d
+ tDfg==
+X-Gm-Message-State: AOJu0YxWvRH+2Jrj3ozbS18/sdHHPgjssj4UoZUeZ3xAVFkCcXf1HKoS
+ lSGp3dnBugrb52BOesk6lb8WktszGQ9of9vRoTESbzng8triN3KXpnvdRiokrbK4fypNmZfdQDk
+ Wexuu
+X-Gm-Gg: ATEYQzwsFK9TN6tLW1jfdOYam4YgozyYb2AxM+TgosB3UnLUho6XS4Ykvigjb8q+ple
+ re+waDQHClY50nENAyyTxwDAhUWeruS47mLYMRiEKe7YicnFikS7XCheKjVQSYOp56JnIiPJomX
+ M7LG/Oshm2CxkyyCf2BlFqg/P/U1sl0HICBu4gIrKdQIV41PZ0UYkPkpLGUfO8HgtNMvGPhvxLp
+ lkx0v5DpyBj8tYnHAdVHIBA3onD4dhk3EY21tXBARu5bBzW9IhcTNKF/SIb9kJmrSchHpU/p6wR
+ OrjP+ilZ80am7mz7wSDvAAbcIu+LSoo4BeFH8omUA+IyZZ68ZXjLIQ5k47diCX2k0iFAffcN4XJ
+ SPBCi6icvydswy+JyIzrnr9B9DmcV3Vcvr/8ZVXtvJ7GVQ3MFneBgHFE28plkHmGYduBdI/U2d+
+ CdYipdxH5JXSujUlo=
+X-Received: by 2002:a05:600c:6217:b0:476:d494:41d2 with SMTP id
+ 5b1f17b1804b1-483c9bc5c06mr266347075e9.29.1772535886696; 
+ Tue, 03 Mar 2026 03:04:46 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-485135b6900sm13056435e9.22.2026.03.03.03.04.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 03 Mar 2026 03:04:46 -0800 (PST)
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  3 Mar 2026 12:04:45 +0100
+Message-ID: <20260303110445.306426-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000C6188:EE_|SJ2PR12MB9209:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a4c45cd-ffe6-4578-8115-08de7913cf95
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|1800799024|7416014|376014|82310400026|36860700013|7142099003|41080700001;
-X-Microsoft-Antispam-Message-Info: LjbQHa4Fnc9LZFpcOa6p+lUxV2ycXdwF49eTT82pCMKLdIT07yOPf+o50bIofZUjFO6eMkrqic5MN1WrzpZpOYQawUA65NHPvcX5xACpBOi/1JkNJNxPTjHMCLpcqg4cexXXgD/tvlmavy2lrqqvKfOr4RcX1+EWGieeCsBaNztviSV8JK7VRXYABb5uZRE5zppasLGcCyJH61E9WipdjSbJWMxKxm8Rq1at9K477mdm1xFvA3iOTHbemicrpwMYEklfOxtUMg2cHLzrMH6+R4Zwrx+b/M+mLIV4KHU0VCdKHE3XDe+cQUf9y4yW8TG0UlEOxW9J2xvZYsGA1tqiycWwUZXqW/46SFpD8SLuYDiQEeGqMLl1C7ZU+IQlV1570FufH4lsxBZfeaSpH9TS6DJfBvij//Fo3iOuXnluyzpHQWGXDNBOza24s7fugXOfy7lb6SadZz9s6mtCk6CFakN5SuB3IXXLR1BNKn8RTe+vNzgD/+aK9K91DZ+2fGesSDgvC+ttSyzmZU5JSTsAq69VHk9Eni942oXzxOgbhotMvC9y03YekNZaFI/UYZ+Oz4ySSWFKOrxbb76sgJMwS21tFALG2SgcpSAHDjuzxqgWFrmLhRtJvNJoUG1XYzh8bCczZVkelEvsy9qI7t5o9nWjoIejg8BQFBa0QGLhqiIVvxRNg9QyXlOZhblSHq+8G1YDHx9+PPSvv5JGApFFVjUp7P4Ao5AgKrnDINF87iZ34MvBKVnn94KHB1brU6vXuqpNSwzvRi4HXHyfmD4ushqR+AS00hMgEgJeMyly2EpGL6kH3i8utyHUu/mPmtmGvpGGl87XqZjgTTPctc15BfUyvv9tE+6yvNIGOYj4okE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:satlexmb08.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013)(7142099003)(41080700001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: fMfnK9f8hbe155DS6rOZR08BKahOAKu2jtoWFX1YJw+yEXMO50reNrIoPB3TdufICpfW68EAxUWqZYB2dvc3iK+RgVq99DWGs4bgHaExZ7NjNNjuTnIX09l3L5W8hbENsFJG01xSbdt0dA/LYqCL/j+6Yty6LBQrlcMfAYrKmVe6XrlbBibddGDJvy9CJdweZgcwyoPybYtkp7AUOqRU+AKtu/W1dM3oiJhfwujJKtdfghcMqJ1k3Ay3wq7yzVT8iV0UjYmxDO0ahfA1TuNRuQrMG+kDwZtZzQK8dnXM0s/6NuehxTxQBUN1t6e7YEm9X8DwAkirnyktyHpVs653PGZ/RiEZbkujevOzq0UnuMO3qqsz/XuFzbzr1RQAtKCVu6lRgfjX4eNVPx73UN1zLIlTnhXSxJ/MPc1+Q2Gi9+vupTPTKbrdJktvpWIKIwRb
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 10:58:32.5855 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4c45cd-ffe6-4578-8115-08de7913cf95
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000C6188.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9209
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WT74iWkWtvZzot3rCqPxKddBUzx0Eyf3YE+PW7c1OZo=;
- b=kKpB4MzueUKWbk3d5TcJUS2E6JTDiFYeJkVVCvAsh7jjP2P8nMoQKsajV+3n2PYqcXtvKA+QCouYHsJn4+IAMmsdlJb61a0gqNZTQr4pLkaGHcBOb1sc2w+vG3QFlRTaXXhw9c1f1TRCrwa4zzMuDnLjmVwAvToEIpR2Kyluj4I=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1772535887; x=1773140687; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=eosQhkG0bkrh8Ix13c7Z0lYtc+ARNb8UoO+Sbz9Rq1g=;
+ b=Y5KKfi/i9IRpwaF/+Peous787maqp8OvBE6d3Kc0pw5Etfrgxr/mcom0IQd89ONRAI
+ CSWsbOIWWqj6MYLGKy9/t0gwTg0ZVR5RNIa483P5DpbOLs0HRDZUPGhXUaZ8CRfW8Mup
+ GEwmCqZFDiu/l/JCtyreUckD5cAHaGS7rZgKM81dnIFOYrsLNKx6U9wk+R2s+589wOux
+ CyOgykiC5NDhlISsQTIIC/B5FemZutlCc+mz2vMS+6PxhHZ2neURa8fLrDsOj3h8kG6W
+ 6DcduH7bvQxombTgGJVVRM1AFFScDTermMoA62O6gFt8U9O9qLSIHPwr6lURmj8Bh5kk
+ SoBQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=kKpB4Mzu
-Subject: [Buildroot] [PATCH v1 2/2] board/xilinx/arm-trusted-firmware.hash:
- add license file hashes
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Y5KKfi/i
+Subject: [Buildroot] [PATCH] package/vim: security bump to v9.1.2148
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,37 +116,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: kory.maincent@bootlin.com, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
- ju.o@free.fr, Neal Frager <neal.frager@amd.com>, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that custom arm-trusted-firmware versions can specify license files, add
-license file hashes for the Xilinx custom arm-trusted-firmware version.
+For changes, see:
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+  - https://github.com/vim/vim/compare/v9.1.2017...v9.1.2148
+
+Fixes the following vulnerabilities:
+
+- CVE-2026-25749:
+    Vim is an open source, command line text editor. Prior to version
+    9.1.2132, a heap buffer overflow vulnerability exists in Vim's tag
+    file resolution logic when processing the 'helpfile' option. The
+    vulnerability is located in the get_tagfname() function in src/tag.c.
+    When processing help file tags, Vim copies the user-controlled
+    'helpfile' option value into a fixed-size heap buffer of MAXPATHL + 1
+    bytes (typically 4097 bytes) using an unsafe STRCPY() operation
+    without any bounds checking. This issue has been patched in version
+    9.1.2132.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-25749
+  - https://github.com/vim/vim/commit/0714b15940b245108e6e9d7aa2260dd849a26fa9
+
+- CVE-2026-26269:
+    Vim is an open source, command line text editor. Prior to 9.1.2148, a
+    stack buffer overflow vulnerability exists in Vim's NetBeans
+    integration when processing the specialKeys command, affecting Vim
+    builds that enable and use the NetBeans feature. The Stack buffer
+    overflow exists in special_keys() (in src/netbeans.c). The while
+    (*tok) loop writes two bytes per iteration into a 64-byte stack buffer
+    (keybuf) with no bounds check. A malicious NetBeans server can
+    overflow keybuf with a single specialKeys command. The issue has been
+    fixed as of Vim patch v9.1.2148.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-26269
+  - https://github.com/vim/vim/commit/c5f312aad8e4179e437f81ad39a860cd0ef11970
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash     | 3 +++
- 1 file changed, 3 insertions(+)
+ ...src-Makefile-create-links-with-ln-sf.patch | 78 -------------------
+ package/vim/vim.hash                          |  2 +-
+ package/vim/vim.mk                            |  2 +-
+ 3 files changed, 2 insertions(+), 80 deletions(-)
+ delete mode 100644 package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
 
-diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 429f610a56..88e212d76d 100644
---- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256  ea59fbfb702857a24f96ee8e9cf04f997942db1de98f8406b7daf9dcc8f4e9ea  xlnx_rebase_v2.12_2025.2.tar.gz
-+
-+# Locally calculated
-+sha256  b2c79635797bafcde84c6edadadde290b9d5e05deb3ea16a847210fd2ca83669  docs/license.rst
+diff --git a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
+deleted file mode 100644
+index 54d423aacf..0000000000
+--- a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 5686ef63f81fcac2ca6ec6e7160829b295ad4e79 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sun, 28 Dec 2025 15:01:38 +0100
+-Subject: [PATCH] src/Makefile: create links with ln -sf
+-
+-Running "make installlinks" twice towards the same destination
+-directory will fail, as symlink will already exist. This is not really
+-expected as "make install" is normally expected to work again and
+-again towards the same destination directory.
+-
+-Fix this by using ln -sf.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/vim/vim/commit/6df5360691266b5eca49380e94f3e21fa48e5e0b
+----
+- src/Makefile | 24 ++++++++++++------------
+- 1 file changed, 12 insertions(+), 12 deletions(-)
+-
+-diff --git a/src/Makefile b/src/Makefile
+-index 6fb1eb95e..39f798260 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -2746,40 +2746,40 @@ installvimdiff: $(DEST_BIN)/$(VIMDIFFTARGET)
+- installgvimdiff: $(DEST_BIN)/$(GVIMDIFFTARGET)
+- 
+- $(DEST_BIN)/$(EXTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EXTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EXTARGET)
+- 
+- $(DEST_BIN)/$(VIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIEWTARGET)
+- 
+- $(DEST_BIN)/$(GVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMTARGET)
+- 
+- $(DEST_BIN)/$(GVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIEWTARGET)
+- 
+- $(DEST_BIN)/$(RVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIMTARGET)
+- 
+- $(DEST_BIN)/$(RVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIEWTARGET)
+- 
+- $(DEST_BIN)/$(RGVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIMTARGET)
+- 
+- $(DEST_BIN)/$(RGVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIEWTARGET)
+- 
+- $(DEST_BIN)/$(VIMDIFFTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIMDIFFTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIMDIFFTARGET)
+- 
+- $(DEST_BIN)/$(GVIMDIFFTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMDIFFTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMDIFFTARGET)
+- 
+- $(DEST_BIN)/$(EVIMTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIMTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIMTARGET)
+- 
+- $(DEST_BIN)/$(EVIEWTARGET): $(DEST_BIN)
+--	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIEWTARGET)
+-+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIEWTARGET)
+- 
+- # Create links for the manual pages with various names to vim.	This is only
+- # done when the links (or manpages with the same name) don't exist yet.
+--- 
+-2.52.0
+-
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index f7c883b929..ecc41be702 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
++sha256  f9ec31df8f1a78e130dd06c395e6626c2a8a8ec2705d8e7b7667bd3ecd499c6b  vim-9.1.2148.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+ sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index fa7d47d67d..9201587a8a 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 9.1.2017
++VIM_VERSION = 9.1.2148
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 -- 
-2.25.1
+2.53.0
 
 _______________________________________________
 buildroot mailing list
