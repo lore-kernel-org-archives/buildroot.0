@@ -4,113 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFB74EDA685
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 15:17:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0BF8EDA685
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 15:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E80A419E2;
-	Tue,  3 Mar 2026 15:17:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 901BD41A73;
+	Tue,  3 Mar 2026 15:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s0BTpM5Ub_ry; Tue,  3 Mar 2026 15:17:03 +0000 (UTC)
+ id 3xQfUDumUu6w; Tue,  3 Mar 2026 15:17:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB028408F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C81EF41A4B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772551023;
-	bh=U7CTyjQiG61cvBdrnSwgoJWFOqeaOV2kYHmrLeuerDo=;
+	s=default; t=1772551025;
+	bh=T9Q0BYJhWBqekfZXRrmrp7Mt6lk82ThUtGKybH32cYY=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=ghi+zXvLOnm6h+tvzSZcMBBTgcrIVR18RjIBWkeGXGMQ5ah26lDCzSyYXj1BI6huc
-	 mTlgPdK143w8sZwY267b7e76lkm0aYX8htngxLiKptKw0vxpCI1WIpyjZqXLUrZXTL
-	 fpLVdLig9Eb2O+G24n6LD4EbEewNKNjq5u3d+gGPt3uXKp12XcON456WIhWCrYeyQS
-	 /EB3RCm2qFPLoZEcX/Vo9sxrltszzp2sBDMpb07caEiZNSalB8VHY9f/g+xIA1Aiv/
-	 mDJer594MDg2UAbXAR471sFHYsWZdmB28e+qsdQhorqBcwYu1jrelY3QpFFj63TOHa
-	 hgSpZuFdNtZzg==
+	b=grfdXkw+F1jmvrCbtPDml60HeLtSZvT3AYCyOdFKdZjVz4LKmu9nS28miBBV0EjNC
+	 4+GcseVA/YsKNGVHc+bSeYlw5F0Y3CaTq7fwlTaUG73+GfryOaHpuVIxz3QaFqY6T1
+	 xq3K3+nCBIhH/iDnGkHUK9YPahta/RevGK4q4e9fGBObzGcwHCLwCGkjHr0lJvmkLO
+	 ndVkWgPWimRruG6dOtTGtllX/sv8yu07ydZ31hrRE6SK59apZxDNWwjdzrNv1wWcu1
+	 oQsKcu03Bkgn5dyAP5aMATENeFAxK2TlgxnfLqNumNv7Pu1tr7hhcE42gD8FG/SxPV
+	 +6s769woOj3tw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB028408F3;
-	Tue,  3 Mar 2026 15:17:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F3E51EB
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:17:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C81EF41A4B;
+	Tue,  3 Mar 2026 15:17:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76D46231
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:17:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8142A417D4
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:17:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68E5640281
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:17:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wT4nFYzTItX2 for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 15:17:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R89DOmjS_T9m for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 15:17:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 05881409A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05881409A1
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 05881409A1
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:17:00 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4833115090dso59904335e9.3
- for <buildroot@buildroot.org>; Tue, 03 Mar 2026 07:17:00 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3F4DC4018D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F4DC4018D
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3F4DC4018D
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:17:03 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4836f363ad2so68749275e9.1
+ for <buildroot@buildroot.org>; Tue, 03 Mar 2026 07:17:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772551019; x=1773155819;
+ d=1e100.net; s=20230601; t=1772551021; x=1773155821;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
  :cc:subject:date:message-id:reply-to;
- bh=slnfWvbx/US0359fL5rMv7nBcJwinH3yBMuirO8MNO0=;
- b=pm80qpIdDgcTh9NFHuxcYl+iaGvJrQ5GFjDxmOsp9oTY5JCOfblHiruaqLQLjhKY5G
- yCHfSleZHZCgGxfA8O6p6TEEgDfFl4iyoD8PTqwztKy+JIZi43KmpllXu+McpLk6tNYY
- KU61bdO6L08Q0ab3/q3s4x0eygoQH4fnBZByerRJUn1pluJbXQds4rKaaPwX211wwE87
- UEdO378GVE197l47IDzF1gZs5zyRbMKM/3twlUdyCW3O6CwH+MSU77X2r6E0zg8UXkvc
- u10eqMsEttcIwJmSNp5dmZao8/D92jOGsekBIF60d0bb7X6zUe0z1x6Z4EjBvSRyZd0G
- JaXA==
-X-Gm-Message-State: AOJu0YzF/IZj4nNxbunLg3gC9O8OmeDaeHGBt01GU5Z4skzM+t37O5ky
- 14NkaahnCVJ6sZ+Snuhh9q9AH9/wTGy1zbL/J90cpisuAD/+qB7ycf8DwmxSw1NdKozS/74cGve
- SL3+j
-X-Gm-Gg: ATEYQzzjc0jV46+r6QMQ3Oz/QRn9+WL19APRsNmeidiKMifDy7/CNAum7n9wHWNzNt8
- JZpWoBgVFpCh80shWLHnCRRa1rxZ/LdaXOBb49Mh0J8J6bkEmL6Wyhl/LoVoXtwHcseQZffuTy5
- dFw2O/bE//mCZBdazno11Xox3yPs8+lniF0BtOcpl+i98OD3HLv1WhU5/ddTrQW6wP3AJC9/rRX
- zDZkhrymGU6qw/u/UEUXOkIi1+UBaizkZn+pQXvFfUVrZQNL9XfabTrxBhunfGgBzO4XMofNTe5
- nxZrhBOMkkyot8MAkvfHDearoNxa+gY91l6VGGIEF2zqp3eP5Dvd6KyOkjrMr/bQen6yPijwzWV
- TF287eH99qnQiyeLd2pAqUcdFTfv0MbFFW62q9rQMfH9M3E3JRMZXkDXtSRrfTGMNLzARh4M6rD
- DnT+A6EENUGrSb5dc=
-X-Received: by 2002:a05:600c:8b12:b0:483:71f7:2794 with SMTP id
- 5b1f17b1804b1-483c9bbbe39mr302335615e9.15.1772551018756; 
- Tue, 03 Mar 2026 07:16:58 -0800 (PST)
+ bh=YzU7Wx3Fx35x3grlNU5ax/Z8kbgZd5Its6YU5BwBew0=;
+ b=tVEsT4w9qSpLxsESHd2IWU2vqhc8H6IC1lwLwkJryC5GWim8mN6dK02SmPT/IEXfAQ
+ Xw9OeNcR5vzamzrReBCdxDBCXeFI4HPA4ShHhZlnr0zMMJPy7wMGsMhBf1qcnp5a3W74
+ nXJzoLqv6NASthV3pL+sYLgI79+IfRduE9omBSFD6RO+Qey2KryU845ssAoJAserytlo
+ dV+9/MYVRi/23OVDkhwjqQSvWdpMlLQUZqUHodAnVRpeEur22faxDwK9/oaga4g2jJ1c
+ KgJ0TAxEO6qZjE+IG99TxuActu9/c/6RLyeeYiGgesN/WFb1o0ocfmvhLmi2K8iMFUit
+ BgNw==
+X-Gm-Message-State: AOJu0YzTNsQu63ko+V87iBJkGLii611s4i+QLUgN5jnZMW8cguYiunft
+ sOYEeM/YslXXcNvtKZy5Xc9SDv1lGokJzFttipKXQsGBzZ2VFXFTBTK35B8tnKf5xuv3R1NWxlF
+ 8L76V
+X-Gm-Gg: ATEYQzwIRah7nCs/4VVL9j9YTLzpaHZGwwLUCCPSaV8sFrvPmQG0RS/LLHiFfRDrKr/
+ 3EeNO/WMkasDUE6eg6YeAciV2zk94PIH9iKw0BZw3w9ZkwFC62UHllmO1o3bbJfiKJv/8oLyfLf
+ 03uITszcReApNhVtkP5k2HyTZhNTayypWRZw5Cti5LXZEHHzVh9+d+zO4GllXj1r3xBA49vlCyG
+ UCVAHJvMxcPnRV5WKsACSo9nhZ/jMtYHYdLStWBE2T/83UX0SIH6wNqTfFiMvIklE68VAs15EKa
+ xjA1VRzNVnWbUtswc9psbKXNNWi42LpXYrKfxlboYQtnftmAO8FktyEUvOay9zQ/ZnRcglsTMyJ
+ KT1VD32uTUCL3Rf1EoiW2THUuljtz9wyqFmhF/LCeJ8II/M/+v79uvX8TDBMq76boKXvKyNaGDk
+ FjO2S4GBtKeyEcVNY=
+X-Received: by 2002:a05:600c:6994:b0:477:c478:46d7 with SMTP id
+ 5b1f17b1804b1-483c9c0b88amr279977935e9.22.1772551020687; 
+ Tue, 03 Mar 2026 07:17:00 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-485135d52f6sm17839655e9.31.2026.03.03.07.16.56
+ 5b1f17b1804b1-485135d52f6sm17839655e9.31.2026.03.03.07.16.58
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Mar 2026 07:16:57 -0800 (PST)
+ Tue, 03 Mar 2026 07:16:59 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue,  3 Mar 2026 16:16:39 +0100
-Message-ID: <20260303151641.382820-8-thomas.perale@mind.be>
+Date: Tue,  3 Mar 2026 16:16:40 +0100
+Message-ID: <20260303151641.382820-9-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260303151641.382820-1-thomas.perale@mind.be>
 References: <20260303151641.382820-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772551019; x=1773155819; darn=buildroot.org;
+ d=mind.be; s=google; t=1772551021; x=1773155821; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=slnfWvbx/US0359fL5rMv7nBcJwinH3yBMuirO8MNO0=;
- b=ETJKgNKQXjfeNYmaJDbR71fM3aEq5rDnUWe89NIHHmczb6mPxJCN5/cJWFBwDgtJdL
- t4lD/ZeVKdUcD8GhKlEjWSTkLMKPU9xYhGWHaO9UPU8DbHh80JQng22BeiPG9wuSbmUl
- Qf2Ow2YPjekCsswk5/ktuRk+ckE/X3eRQw+YS2rpTzDnkE83qkpvrSpAHRZmkOwScBhx
- JX6foL0qBIiKALHv4MlfDLO4TNtB8ESfvkHgaJEzfPW3vqLZ5/4hWoPSHDh6iepBTR0b
- CX+cITTdh3wll7AbsHPkwNvxCmDjQGfcX8E9zI3pw9pnOcV1MRQHdIWgB6aQeZ0hSgC3
- OH4w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=YzU7Wx3Fx35x3grlNU5ax/Z8kbgZd5Its6YU5BwBew0=;
+ b=eTX7xZOr2Ih6QUyzfGS2nTLaWlFvVueYzOU5k/ZwrVrsKLwDJ0Vs6JDc9jCdPPePPj
+ XJyZUbdbRtiZG0gpNfKzEfyZJWX1V77i3AwnPXsA2QjnMWSb7BDNoB/OsKPnWlut/+nH
+ 9tVriCHxUzv+323AgUoV5fj4bm3U3t1nCuosBc+E9k/zhCyRCTVTns5Y4+3DFfu84ciq
+ Znr2HD/odrIcwYNOosQ6/tyqie0YUGmB4/f3TdXpCCshXYRskfR1uu32Uq08jbH0RUru
+ J5hPIUyDqDNWriBfBrp4zVDWRG/WY6B0Qj0KEMuTjMGnIcD/AH5vA4ek+qGDlbMzV2mU
+ wlgA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=ETJKgNKQ
-Subject: [Buildroot] [PATCH v4 7/8] utils/generate-cyclonedx: add 'id'
- property to resolves
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=eTX7xZOr
+Subject: [Buildroot] [PATCH v4 8/8] utils/generate-cyclonedx: split
+ vulnerabilities per state
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,53 +128,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CycloneDX spec defines the `components.pedigree.patches.resolves`
-object [1] as supporting both a 'name' & 'id' property.
+If a vulnerability is present in multiple components and only one of
+them has a patch that addresses that vulnerability, all components will
+currently have that vulnerability marked as `resolved_with_pedigree`.
 
-The definition provided for the `id` property is the following [2]:
+Right now, this issue does not affect any packages, but in the future it
+might affect packages that provide multiple version options (e.g.
+gnupg and gnupg2).
 
-> The identifier of the issue assigned by the source of the issue
+There is a small chance this happens in a real-world use case, but it
+may occur in the context of maintenance when running
+`make show-info-all`.
 
-And for the `name` property [3]:
+This commit changes how vulnerabilities fixed by a patch are stored.
+Instead of placing all vulnerabilities into a single set, it now keeps an
+index of the component for which the patch has been applied.
 
-> The name of the issue
+When generating the vulnerability list, the component reference is
+checked instead of only the vulnerability ID. If a vulnerability ID has
+multiple states for different references, multiple vulnerability
+entries are created with distinct analyses.
 
-The `resolves` object was introduced in commit [4] and only used the
-`name` property to link to the vulnerability it resolves.
+Consider the hypothetical case where gnupg ignores a vulnerability
+because it was introduced in a later version, while gnupg2 has patched
+that vulnerability. This would result in the following JSON:
 
-In example [5] provided on the CycloneDX website, both the `name` & `id`
-properties are set in the security example.
-
-In the vulnerability context, and more precisely the CVEs, the `name`
-and the `id' are the same and thus the value can be duplicated across
-the two properties.
-
-This commit replicates the behavior documented in [5] to improve
-compatibility with tools.
-
-[1] https://cyclonedx.org/docs/1.7/json/#components_items_pedigree_patches_items_resolves
-[2] https://cyclonedx.org/docs/1.7/json/#components_items_pedigree_patches_items_resolves_items_id
-[3] https://cyclonedx.org/docs/1.7/json/#components_items_pedigree_patches_items_resolves_items_name
-[4] 9415529923 utils/generate-cyclonedx: add support for 'resolved_with_pedigree'
-[5] https://cyclonedx.org/use-cases/pedigree/
+```json
+[
+    {
+        "id": "CVE-1234-1234",
+        "analysis": {
+            "state": "in_triage",
+            "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
+        },
+        "affects": [
+            {"ref": "gnupg"}
+        ]
+    },
+    {
+        "id": "CVE-1234-1234",
+        "analysis": {
+            "state": "resolved_with_pedigree",
+            "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
+        },
+        "affects": [
+            {"ref": "gnupg2"}
+        ]
+    }
+]
+```
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- utils/generate-cyclonedx | 1 +
- 1 file changed, 1 insertion(+)
+ utils/generate-cyclonedx | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 407e42fc86..f3e3102f2a 100755
+index f3e3102f2a..57e581fd35 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -329,6 +329,7 @@ class CycloneDX:
+@@ -249,10 +249,10 @@ class CycloneDX:
+     _spdx_licenses: list = field(default_factory=list)
+     """List of supported SPDX license expression. Initialized during the
+     `__post_init__` step, fetched either online or from local copy"""
+-    _vuln_with_pedigree: set = field(default_factory=set)
+-    """Set of vulnerabilities that were addressed by a patch present in
+-    buildroot tree. This set is used to set the analysis of the ignored CVEs to
+-    'resolved_with_pedigree'."""
++    _vuln_with_pedigree: dict = field(default_factory=dict)
++    """Index of vulnerabilities per component ref that were addressed by a
++    patch present in buildroot tree. This index is used to set the analysis of
++    the ignored CVEs to 'resolved_with_pedigree'."""
+ 
+     def __post_init__(self):
+         self._spdx_licenses = br2_retrieve_spdx_licenses(self.options.cyclonedx_version)
+@@ -297,11 +297,12 @@ class CycloneDX:
+             ]
+         }
+ 
+-    def _component_patches(self, patch_list: list[str]):
++    def _component_patches(self, comp_ref: str, patch_list: list[str]):
+         """Translate a list of patches from the show-info JSON to a list of
+         patches in CycloneDX format.
+ 
+         Args:
++            comp_ref (str): Reference of the component the patches are part of.
+             patch_list (list): Array of patch relative paths for a given component.
+ 
+         Returns:
+@@ -324,7 +325,7 @@ class CycloneDX:
+                 issue = {}
+                 cves = extract_cves_from_header(header)
+                 if cves:
+-                    self._vuln_with_pedigree.update(cves)
++                    self._vuln_with_pedigree.setdefault(comp_ref, set()).update(cves)
+                     issue = {
                          "resolves": [
                              {
-                                 "type": "security",
-+                                "id": cve,
-                                 "name": cve
-                             } for cve in cves
-                         ]
+@@ -387,7 +388,7 @@ class CycloneDX:
+             **({
+                 "cpe": comp["cpe-id"],
+             } if "cpe-id" in comp else {}),
+-            **(self._component_patches(comp["patches"]) if comp.get("patches") else {}),
++            **(self._component_patches(name, comp["patches"]) if comp.get("patches") else {}),
+             "properties": [{
+                 "name": "BR_TYPE",
+                 "value": comp["type"],
+@@ -421,22 +422,31 @@ class CycloneDX:
+         Returns:
+             list: Solved vulnerabilities list in CycloneDX format.
+         """
++        # This will generate an index of affected component per
++        # (<cve-id>, <analysis-state>) tuple.
++        # In the case a CVE have different analysis based on the package they
++        # affects this will enable to create multiple entries with the same
++        # vulnerability id.
+         cves = {}
+ 
+         for name, comp in self._filtered_show_info_dict.items():
+             for cve in comp.get('ignore_cves', []):
+-                cves.setdefault(cve, []).append(name)
++                state = "in_triage"
++                if cve in self._vuln_with_pedigree.get(name, {}):
++                    state = "resolved_with_pedigree"
++
++                cves.setdefault((cve, state), []).append(name)
+ 
+         return [{
+             "id": cve,
+             "analysis": {
+-                "state": "resolved_with_pedigree" if cve in self._vuln_with_pedigree else "in_triage",
++                "state": state,
+                 "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
+             },
+             "affects": [
+                 {"ref": bomref} for bomref in components
+             ]
+-        } for cve, components in cves.items()]
++        } for (cve, state), components in cves.items()]
+ 
+     @property
+     def cyclonedx(self):
 -- 
 2.53.0
 
