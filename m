@@ -1,110 +1,142 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 700A0EC1427
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 10:38:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A972EC142A
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 10:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E57BE40A8D;
-	Tue,  3 Mar 2026 10:38:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gD1sQBnWzG9L; Tue,  3 Mar 2026 10:38:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6762040A79
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772534290;
-	bh=A+xSeVnNTzRa1dZe+S1LL5/sFBtpNcesC6hzHGLPmz0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kOuPZ9ODqIKMbY6rW7etKXJozEl5BMxB/WOSpFF7zQ1+CkS+557ftKiX7yJw10LBd
-	 OSqBBY8/y8mjbrTytaWS2GT0ldOJ4ErbphGVCYnOIodBAyRE1nDRAqXvV0Tcf8y+Q4
-	 kkQ57zOtwJF974oWM9C+a7xahw5iekjh+XeFhe4MP5wcTbdfqnKipIB8PR3FCrGDzf
-	 dsmlX5TJ380DIlVJWupfsOOyzRuiNT+hVVqAIeWJP0DNFAWeJxItmicI7L5CT0FqOe
-	 oP+bU4nX72cjAxSt6TJZnWGspYCrtPZkOIoAlGgwkuGqlavBGPcbBBs/7j/UOv+S64
-	 6Uar8LedyQVMg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6762040A79;
-	Tue,  3 Mar 2026 10:38:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 59292231
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:38:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EA9C61389
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:38:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 503E961391;
+	Tue,  3 Mar 2026 10:58:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5QzpybTq7dHG for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 10:38:07 +0000 (UTC)
+ id vx6r8F4elR4U; Tue,  3 Mar 2026 10:58:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 795C361389
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772535520;
+	bh=OqBLeKjH6P80c12sQBqylF+VpKEBJtzEauOCAorp8iE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=OuSF2EHp/DdUZTruJRZ4FL7hkB8J+Eqx4lfQcrp2kdlSAbvLN4mFr+FnS4mYH3W6J
+	 qC3NA82Gg5rMRehOhmbofVvAbprK2iTTNNGnPu56J918AuTRrOZG8rGvtiQXpZTDx8
+	 kUFPrHiWgmHcyn50l3kQu0iBtHNqNvdT1wvAMY8JTV9H/uYkGv2XXv8PFu73sUSrq+
+	 Jj16go4G6Dsu7aOmR+LaXfeZA7KPbUjIKUsAEPvD4Hw+oVwSG0FO9d1NRR2HRIpXBN
+	 ojWd4VVZQfMY8x0Ducwl4sWjxzHjGvtYqZrMRz/ygeWA2MEw6tpy8L4TsVtOBH8hgq
+	 nBc+cFiPnF+9Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 795C361389;
+	Tue,  3 Mar 2026 10:58:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F3191231
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:58:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4AEB418C3
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:58:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mSMpwMOQKLGo for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 10:58:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C783761388
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C783761388
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C783761388
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:38:06 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-439aa2f8ebaso1724965f8f.2
- for <buildroot@buildroot.org>; Tue, 03 Mar 2026 02:38:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772534284; x=1773139084;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1soujd+7f1mkYJRrPpTkr/qRpDEFyYVt0fYmhrftsl4=;
- b=rfCPw7cZA0ZjqWOOMFRfOcLyNgjVdeGz48Tbw+S/Wh0KZyquHdwVSROS2XpXgpfdbx
- japlS4haLj9BF1LWP9vmts84r4DWVHQYYvV6DYYcT0Oh6YHn7A2ZUXWExhTlVmafdy30
- 90GUc+0FwzR4X9nvaRK06WcBzeWJijrLzx7eea+EEHBnhv1WiRPzMEUJxkuHSdS43r7L
- 50QCa57FyLazLfqf7ZYy4TzMWnc/T3KpkAK/DuGgY7XpFlD6ZAkfNICZReKZnyRuWpLp
- 3FPjk7qNP+NgcZPHEU5AMz9T3vdHk0Pc4rf4pma3B0+87KHOGQ2xxesML6UWM1WVyx9M
- P1iA==
-X-Gm-Message-State: AOJu0YzXw6wcbOi3r0gFIVjOOgQPrblMelXYGFwaGNyn1TW7q14XBpBA
- Qgu+atM+H/durniJjXXKy7gf8stgKIs6f5i2fj5CgLc954huGhDbCMjpmQyMnhi9mxcnbdsQCLX
- CYdtJ
-X-Gm-Gg: ATEYQzwFDCNzCbJYmSHUuTg53GCCbu7U9kl0kpdeeshv1ZcGsyQF3mg8IXfWm5Us5PR
- aBnLIIYoGoqGJGkq2vsIDxgrx6YNqpwYAZSZoLY/JhjNTzCulmXFBnW+gKxyNWkbf8bUxQggl3O
- vAiOAFYd6I6wf9raX/y65l7rrQ2QwyLDHxxxvHyyoQC7clq1rAhgw2tPb0WfCXm3ntzGjkll8C0
- hG1P5YSrZBlKkaeCQ01+GHJGQladwfBMfIH+YZ03lBhYdpPfmEWMYv+PlGnpDj5O5J8ypexnnZN
- WJ+o45plDNKBuRCvNoIXwMFHD6UA3qemNBsNv/caYYCdjZDRy/i0BSyRKPyDG0BlR6WvoV3MvW8
- bqZzxuU2SxJc8wf7cLqGtW5IAKS43fzbWVXZ+ER1RmOx6givfuADO3d+ifRHosTR0Nz7bflpzSH
- HQLVsNfxsQzFuqrxc=
-X-Received: by 2002:a05:600c:444d:b0:483:885:f0b0 with SMTP id
- 5b1f17b1804b1-483c9c243fbmr284107995e9.35.1772534283696; 
- Tue, 03 Mar 2026 02:38:03 -0800 (PST)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-485125b7ed0sm31053575e9.0.2026.03.03.02.38.03
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Mar 2026 02:38:03 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Tue,  3 Mar 2026 11:38:02 +0100
-Message-ID: <20260303103802.274517-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
+ client-ip=2a01:111:f403:c105::5;
+ helo=ch5pr02cu005.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 089A1418DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 089A1418DC
+Received: from CH5PR02CU005.outbound.protection.outlook.com
+ (mail-northcentralusazlp170120005.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c105::5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 089A1418DC
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 10:58:37 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VroFHI//u3UUJtZxmccLa1Tle13u8pBZL4CM3CaQ6wyjpEKCYMckJnTorRMa8dezbi4Y9orjIj7OWfG4JX+A1KfYBIFyGsmfw3uEAtlP/0eoFJ3JYIlsPDDlYqa6LWH71USMqDSnE1Hj6ASXqJFIBMjeddgI64DvVyHkJWs1HhwufF/TViFXtbSgSfeHBnOYVOu4HXfcT+j5GJF7S7wVzj6Sx5wwXmHiDYqQA0PobRtrfWY9E+ek31NVFW1cB19MYAEK2RleaWQQ8vi4m4UC3BHby+zlL+04V+/psttr0xB/JQ08xWcQjy382wGtuUnhnAZS+3Y6H3yyCyvVXGxK7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jA5mMPm7JvWNqZrtkO6lSAqRugSB+AT41kWdumwcTvU=;
+ b=vQDuv+wXuvKh8v+JS+XOJSGyQP5CJ6rSRYwVXan7GnQWQnk2hRBxP/WvIz/xcBsKssiKUCluMorI2w+A7Tcz9j87Fbl0D/+vZeYEWcAyGfMaDUKv0TRqIqrIsMV+q+2VdleXRtGJr88GeS1cL+8tfQ/rqHFbIYjLn0eDKXrtRzZoC+E20bm18fL0dHtiuv8nviETKJiqCOorQK/4hHDKI2bFOF8xbriSa7WcyGv3brjUw8J4SL0E2P8Hh/s77SFC2QVs4Q5cLN7M5hAWmC7K+Xv7++4Bvc6HiS/jWKX5LTpfELm6AKA3Dap+wIp2iSGF64t4l5AnuCd5bUvPMVKgFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BN1PR13CA0013.namprd13.prod.outlook.com (2603:10b6:408:e2::18)
+ by DS0PR12MB8501.namprd12.prod.outlook.com (2603:10b6:8:15d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
+ 2026 10:58:32 +0000
+Received: from BN2PEPF000044A3.namprd02.prod.outlook.com
+ (2603:10b6:408:e2:cafe::be) by BN1PR13CA0013.outlook.office365.com
+ (2603:10b6:408:e2::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.19 via Frontend Transport; Tue,
+ 3 Mar 2026 10:58:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BN2PEPF000044A3.mail.protection.outlook.com (10.167.243.154) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Tue, 3 Mar 2026 10:58:31 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 3 Mar
+ 2026 04:58:29 -0600
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb10.amd.com
+ (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 3 Mar
+ 2026 04:58:28 -0600
+Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Tue, 3 Mar 2026 04:58:27 -0600
+To: <buildroot@buildroot.org>
+Date: Tue, 3 Mar 2026 10:58:23 +0000
+Message-ID: <20260303105825.1234428-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044A3:EE_|DS0PR12MB8501:EE_
+X-MS-Office365-Filtering-Correlation-Id: b88b8444-96b7-4154-62be-08de7913ce9e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|1800799024|82310400026|7416014|376014|36860700013|7142099003|41080700001;
+X-Microsoft-Antispam-Message-Info: k3E/IsoQ9w4H4aUXGIFgrMY0QD4JU/dsMQD8bCrLRT1vH9mr68I5MTIZ21oupw67IcALbyRfQmnCpc4DQWWyvz52muZ2TiuSeKJlFM0j8b4Oz9WzFsQXzHVz1OYu6P3I+VEjPKnt8mk4uRYlBMM48NUYRS5+Id1gYiBQ6J99kGlVrtVgF8l2yaSTFnKxhqs2ActwhP9gjFCJCKIH5I6Wq7bqEBlZngugt7imQauKmEltfxqmoai2rhIv2iHSUEVvFKVtERy0WTI0q2Wd9aRh1rqSAi92Gi7wPOFltg/OlHtm249dbZ5AMburqwhDHbvynQaSwO6XXwUPl91jKXY/dSYj9BelOotP9Bz6idkCkWQoerI7DVRJbcFBZCAvHMMa4ygWROqC4cw0CtyCUpNNQlmEQzJb6MP+DA++s07lX2PO7Hb4GgAmr7a70xNbrhaASD8Qf7Zatl4OdJE7ngN3fwFfgwYG9zNVlsfd2bY0/EAcDfYse/2fHcUDTi6FKWbT78DS6MuQ8oertW9LMeHo3J3j5pVNmFsGXt32dezV98iOnTBHB7zyLYCtJ4Lwczm0ohoUmzeK8aG7nOnExHNHJzNjW0omS1w4QGld7ogVzGrKMCcaZ/FXCcZXfzuVmNFFPCzshndPZC03cVuLA/O2B6TOYQRrC43hbf6e4xZFxm3Phoqq6/g8yaCmKYLgqnFNWTSz1/nLkrIoMjDMhFH6l5JDfgr1mGQZDBi1uV2nAYDHkgUWTfunrW8Auj5+neffWrizvvzR0XYbouu2Z2C6veD4p8oOnmVeHM9sGPCHODF0QyYpGp3RxDYUHLIPdQC17SiD5iGWYVNm08AZNN11+T+7/Az2N/joPfLwfT2kakM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(1800799024)(82310400026)(7416014)(376014)(36860700013)(7142099003)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: zYNV0Tf3uwx/swjmsxF83zxKgdSmhcTzzgZ4PjUnOPVhD8avQP9qJDtvuUEUDRq+aT5BPuVxvU9XszMO6gskeHFV+WbEoTXFJfwjA0stzPFmmU4lqwm5mADLHii0Gx1ehGs6XxpSYm5uvd3oe2p4Hcmadev2KNI8U0dxH1YXR4r+sxNQF3i7/RXM8SJ++rtnEngVRJS7FbG33Ur0DIp0krF7U+jM+UROdJTZEaXcuwbjWyAMop17Q0iz5xMysUsgAUwyr5NcSKz4wkdT8KE7ia2AeNtap/mm7NuhwEQDu2Zy/CliiEVm97oVwFMuferdPSxZDhBP6MhZfWOuXUOEMCoGU8tg5ZuVEvLXNAdLu1He4leN/bYzzmRggz35v+RR5srMZT+1DSiXywp3PcWbHlPQ2HmmNS4nrXLZUJpbvTh81Ki7WQ7P6V9Oi4qfsv9Z
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 10:58:31.0589 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b88b8444-96b7-4154-62be-08de7913ce9e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF000044A3.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8501
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772534284; x=1773139084; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=1soujd+7f1mkYJRrPpTkr/qRpDEFyYVt0fYmhrftsl4=;
- b=RcO7O2XWNGTC2sGBCwXnK5Ib0RarbfXfMWyofv/YlLvAeVnLK+cdXy0Au9rPBIMW+Q
- V2kFQgO0/2FX1TxNYGzBqvzVDfrUHBEPyLWHMYMhhnIgLU7IXT0gwoPJ2v60OgFq93qI
- 600wizr26wST++ObBmJhM0meDKSvOX46XLkwqJD/HqoQ+AB7rnOFqvepU3ZXe6SI1KA6
- 7sbTR7ELhC63mh66U+9dvIkUWbyANwZoRIQleWoyZ50ZJ114dhH0yRvwpiEGU1GYEqOx
- QfJzEdbbv9du4OAR7uA5Sndd0k03KIoOcw1H9zLsTe/xjlU1uRN3Iiz614fUsrjyTCVL
- BQRw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jA5mMPm7JvWNqZrtkO6lSAqRugSB+AT41kWdumwcTvU=;
+ b=KEKHqY7SGY3whpTUfmcnUAUouLvY4BzdbNsljqPKTITLrD/8CusjrKJVqmvGH7wfveF8CX+tktlJH5hTspt9ZkI1/otIdGp+vMUYzlLXriRA7+h2TM+YN5DSxNDh53+elSssNypK0tw+qaGL35I75LU+jgRu65XnF/Pt51SfmFI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RcO7O2XW
-Subject: [Buildroot] [PATCH 1/1] package/squid: add patch for CVE-2025-62168
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=KEKHqY7S
+Subject: [Buildroot] [PATCH v1 1/2] board/xilinx/linux.hash: add license
+ file hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,277 +148,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: kory.maincent@bootlin.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
+ ju.o@free.fr, Neal Frager <neal.frager@amd.com>, thomas.petazzoni@bootlin.com,
+ romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerability:
+Now that custom Linux versions can specify license files, add license file
+hashes for the Xilinx custom Linux version.
 
-- CVE-2025-62168:
-    Squid is a caching proxy for the Web. In Squid versions prior to 7.2,
-    a failure to redact HTTP authentication credentials in error handling
-    allows information disclosure. The vulnerability allows a script to
-    bypass browser security protections and learn the credentials a
-    trusted client uses to authenticate. This potentially allows a remote
-    client to identify security tokens or credentials used internally by a
-    web application using Squid for backend load balancing. These attacks
-    do not require Squid to be configured with HTTP authentication. The
-    vulnerability is fixed in version 7.2. As a workaround, disable debug
-    information in administrator mailto links generated by Squid by
-    configuring squid.conf with email_err_data off.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-62168
-  - https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
-
-The backport has been compared against debian patch [1].
-
-[1] https://sources.debian.org/src/squid/6.13-2%2Bdeb13u1/debian/patches/CVE-2025-62168.patch
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- ...2-Proxy-auth-data-visible-to-scripts.patch | 212 ++++++++++++++++++
- package/squid/squid.mk                        |   3 +
- 2 files changed, 215 insertions(+)
- create mode 100644 package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
+ board/xilinx/patches/linux/linux.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
-new file mode 100644
-index 0000000000..2e5c67c8c1
---- /dev/null
-+++ b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
-@@ -0,0 +1,212 @@
-+From 0951a0681011dfca3d78c84fd7f1e19c78a4443f Mon Sep 17 00:00:00 2001
-+From: Amos Jeffries <yadij@users.noreply.github.com>
-+Date: Sat, 11 Oct 2025 16:33:02 +1300
-+Subject: [PATCH] Bug 3390: Proxy auth data visible to scripts (#2249)
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index 0b1d9331f0..d843dafb20 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,2 +1,7 @@
+ # Locally calculated
+ sha256  444f573cd4438af1f5062fd69fcc82965a56068e6a25cd43c062a68398f90b03  xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz
 +
-+Original changes to redact credentials from error page %R code
-+expansion output was incomplete. It missed the parse failure
-+case where ErrorState::request_hdrs raw buffer contained
-+sensitive information.
-+
-+Also missed was the %W case where full request message headers
-+were generated in a mailto link. This case is especially
-+problematic as it may be delivered over insecure SMTP even if
-+the error was secured with HTTPS.
-+
-+After this change:
-+* The HttpRequest message packing code for error pages is de-duplicated
-+  and elides authentication headers for both %R and %W code outputs.
-+* The %R code output includes the CRLF request message terminator.
-+* The email_err_data directive causing advanced details to be added to
-+  %W mailto links is disabled by default.
-+
-+Also redact credentials from generated TRACE responses.
-+
-+---------
-+
-+Co-authored-by: Alex Rousskov <rousskov@measurement-factory.com>
-+
-+CVE: CVE-2025-62168
-+Upstream: https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
-+[thomas: remove release note, backport errorpage.cc]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/HttpRequest.cc                  |  6 +++---
-+ src/HttpRequest.h                   |  2 +-
-+ src/cf.data.pre                     |  8 +++++++-
-+ src/client_side_reply.cc            | 14 +++++++-------
-+ src/errorpage.cc                    | 17 ++++-------------
-+ src/errorpage.h                     |  1 -
-+ src/tests/stub_HttpRequest.cc       |  2 +-
-+ 8 files changed, 26 insertions(+), 27 deletions(-)
-+
-+diff --git a/src/HttpRequest.cc b/src/HttpRequest.cc
-+index cd7ee71d4af..c6ed5bee45d 100644
-+--- a/src/HttpRequest.cc
-++++ b/src/HttpRequest.cc
-+@@ -341,7 +341,7 @@ HttpRequest::swapOut(StoreEntry * e)
-+ 
-+ /* packs request-line and headers, appends <crlf> terminator */
-+ void
-+-HttpRequest::pack(Packable * p) const
-++HttpRequest::pack(Packable * const p, const bool maskSensitiveInfo) const
-+ {
-+     assert(p);
-+     /* pack request-line */
-+@@ -349,8 +349,8 @@ HttpRequest::pack(Packable * p) const
-+                SQUIDSBUFPRINT(method.image()), SQUIDSBUFPRINT(url.path()),
-+                http_ver.major, http_ver.minor);
-+     /* headers */
-+-    header.packInto(p);
-+-    /* trailer */
-++    header.packInto(p, maskSensitiveInfo);
-++    /* indicate the end of the header section */
-+     p->append("\r\n", 2);
-+ }
-+ 
-+diff --git a/src/HttpRequest.h b/src/HttpRequest.h
-+index 6d369029322..28dc4daf99d 100644
-+--- a/src/HttpRequest.h
-++++ b/src/HttpRequest.h
-+@@ -206,7 +206,7 @@ class HttpRequest: public Http::Message
-+ 
-+     void swapOut(StoreEntry * e);
-+ 
-+-    void pack(Packable * p) const;
-++    void pack(Packable * p, bool maskSensitiveInfo = false) const;
-+ 
-+     static void httpRequestPack(void *obj, Packable *p);
-+ 
-+diff --git a/src/cf.data.pre b/src/cf.data.pre
-+index 0a73020e111..2dce65a4d0a 100644
-+--- a/src/cf.data.pre
-++++ b/src/cf.data.pre
-+@@ -8941,12 +8941,18 @@ NAME: email_err_data
-+ COMMENT: on|off
-+ TYPE: onoff
-+ LOC: Config.onoff.emailErrData
-+-DEFAULT: on
-++DEFAULT: off
-+ DOC_START
-+ 	If enabled, information about the occurred error will be
-+ 	included in the mailto links of the ERR pages (if %W is set)
-+ 	so that the email body contains the data.
-+ 	Syntax is <A HREF="mailto:%w%W">%w</A>
-++
-++	SECURITY WARNING:
-++		Request headers and other included facts may contain
-++		sensitive information about transaction history, the
-++		Squid instance, and its environment which would be
-++		unavailable to error recipients otherwise.
-+ DOC_END
-+ 
-+ NAME: deny_info
-+diff --git a/src/client_side_reply.cc b/src/client_side_reply.cc
-+index d73bf3f99f6..fc2feccf802 100644
-+--- a/src/client_side_reply.cc
-++++ b/src/client_side_reply.cc
-+@@ -94,7 +94,7 @@ clientReplyContext::clientReplyContext(ClientHttpRequest *clientContext) :
-+ void
-+ clientReplyContext::setReplyToError(
-+     err_type err, Http::StatusCode status, char const *uri,
-+-    const ConnStateData *conn, HttpRequest *failedrequest, const char *unparsedrequest,
-++    const ConnStateData *conn, HttpRequest *failedrequest, const char *,
-+ #if USE_AUTH
-+     Auth::UserRequest::Pointer auth_user_request
-+ #else
-+@@ -104,9 +104,6 @@ clientReplyContext::setReplyToError(
-+ {
-+     auto errstate = clientBuildError(err, status, uri, conn, failedrequest, http->al);
-+ 
-+-    if (unparsedrequest)
-+-        errstate->request_hdrs = xstrdup(unparsedrequest);
-+-
-+ #if USE_AUTH
-+     errstate->auth_user_request = auth_user_request;
-+ #endif
-+@@ -995,11 +992,14 @@ clientReplyContext::traceReply()
-+     triggerInitialStoreRead();
-+     http->storeEntry()->releaseRequest();
-+     http->storeEntry()->buffer();
-++    MemBuf content;
-++    content.init();
-++    http->request->pack(&content, true /* hide authorization data */);
-+     const HttpReplyPointer rep(new HttpReply);
-+-    rep->setHeaders(Http::scOkay, nullptr, "text/plain", http->request->prefixLen(), 0, squid_curtime);
-++    rep->setHeaders(Http::scOkay, nullptr, "message/http", content.contentSize(), 0, squid_curtime);
-++    rep->body.set(SBuf(content.buf, content.size));
-+     http->storeEntry()->replaceHttpReply(rep);
-+-    http->request->swapOut(http->storeEntry());
-+-    http->storeEntry()->complete();
-++    http->storeEntry()->completeSuccessfully("traceReply() stored the entire response");
-+ }
-+ 
-+ #define SENDING_BODY 0
-+diff --git a/src/errorpage.cc b/src/errorpage.cc
-+index d7a588d099f..06046de9ebb 100644
-+--- a/src/errorpage.cc
-++++ b/src/errorpage.cc
-+@@ -792,7 +792,6 @@ ErrorState::~ErrorState()
-+ {
-+     safe_free(redirect_url);
-+     safe_free(url);
-+-    safe_free(request_hdrs);
-+     wordlistDestroy(&ftp.server_msg);
-+     safe_free(ftp.request);
-+     safe_free(ftp.reply);
-+@@ -850,7 +849,7 @@ ErrorState::Dump(MemBuf * mb)
-+                     SQUIDSBUFPRINT(request->url.path()),
-+                     AnyP::ProtocolType_str[request->http_ver.protocol],
-+                     request->http_ver.major, request->http_ver.minor);
-+-        request->header.packInto(&str);
-++        request->header.packInto(&str, true /* hide authorization data */);
-+     }
-+ 
-+     str.append("\r\n", 2);
-+@@ -1112,18 +1111,10 @@ ErrorState::compileLegacyCode(Build &build)
-+                 p = "[no request]";
-+             break;
-+         }
-+-        if (request) {
-+-            mb.appendf(SQUIDSBUFPH " " SQUIDSBUFPH " %s/%d.%d\n",
-+-                       SQUIDSBUFPRINT(request->method.image()),
-+-                       SQUIDSBUFPRINT(request->url.path()),
-+-                       AnyP::ProtocolType_str[request->http_ver.protocol],
-+-                       request->http_ver.major, request->http_ver.minor);
-+-            request->header.packInto(&mb, true); //hide authorization data
-+-        } else if (request_hdrs) {
-+-            p = request_hdrs;
-+-        } else {
-++        else if (request)
-++            request->pack(&mb, true /* hide authorization data */);
-++        else
-+             p = "[no request]";
-+-        }
-+         break;
-+ 
-+     case 's':
-+diff --git a/src/errorpage.h b/src/errorpage.h
-+index abca4a17d7b..297b306978d 100644
-+--- a/src/errorpage.h
-++++ b/src/errorpage.h
-+@@ -194,7 +194,6 @@ class ErrorState
-+         MemBuf *listing = nullptr;
-+     } ftp;
-+ 
-+-    char *request_hdrs = nullptr;
-+     char *err_msg = nullptr; /* Preformatted error message from the cache */
-+ 
-+     AccessLogEntryPointer ale; ///< transaction details (or nil)
-+diff --git a/src/tests/stub_HttpRequest.cc b/src/tests/stub_HttpRequest.cc
-+index 495597d9a1b..48a0f1ce03e 100644
-+--- a/src/tests/stub_HttpRequest.cc
-++++ b/src/tests/stub_HttpRequest.cc
-+@@ -45,7 +45,7 @@ bool HttpRequest::expectingBody(const HttpRequestMethod &, int64_t &) const STUB
-+ bool HttpRequest::bodyNibbled() const STUB_RETVAL(false)
-+ int HttpRequest::prefixLen() const STUB_RETVAL(0)
-+ void HttpRequest::swapOut(StoreEntry *) STUB
-+-void HttpRequest::pack(Packable *) const STUB
-++void HttpRequest::pack(Packable *, bool) const STUB
-+ void HttpRequest::httpRequestPack(void *, Packable *) STUB
-+ HttpRequest * HttpRequest::FromUrl(const SBuf &, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
-+ HttpRequest * HttpRequest::FromUrlXXX(const char *, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index d445f005b7..c031f1aa03 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -15,6 +15,9 @@ SQUID_SELINUX_MODULES = apache squid
- # 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
- SQUID_IGNORE_CVES += CVE-2025-59362
- 
-+# 0002-Proxy-auth-data-visible-to-scripts.patch
-+SQUID_IGNORE_CVES += CVE-2025-62168
-+
- SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
++# Locally calculated
++sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
++sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
++sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
 -- 
-2.53.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
