@@ -1,62 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19136EDA6BC
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 17:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9949EEDA6B2
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 17:25:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E13A8605A2;
-	Tue,  3 Mar 2026 17:23:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67A6F418DC;
+	Tue,  3 Mar 2026 17:25:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IS8gCiCV0lVh; Tue,  3 Mar 2026 17:23:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-CZSQ0xMuH7; Tue,  3 Mar 2026 17:25:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4BA1605DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E64EA41834
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772558622;
-	bh=1tbaMHsjZf14Iol5d6RvpZcAId30/xrjO238nl0X3Os=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CfHTtAWGHNTVMHl9CBr1czpy8FCY5ukGIF+3s2EfJObqXRfIJNCJu5zPNic3+vXsJ
-	 g00cJQmYu+gnByby09Bb5XPS1kDeEm0KK4jcHSorDSp/ua1JhBPDj4PRqEFTuIuNlm
-	 LzB7fadSXdo4irUWo5gNM2XU7ruOrJw9Cis6mjlO8NBWcGwG3X3oC2vlMJJjfckqLI
-	 l6rqBZ5AZa45afuk4+NZd2YA9Pe0BSK5vqd7KsiAjvvVA7+nnfFQCsydFWFJNkcdpa
-	 JmiN5vZ+oBaHx4AQy/nh+4j/a0tOWZYajOU5fZKwW18hod6zJl30STp6PLvI0q0jeS
-	 Wf4cgrsSnBL9g==
+	s=default; t=1772558707;
+	bh=gbNvjjqPjvyTfExiPgmmF5ppi4nv1N+rtDra9Eddl3s=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=dNGcVkVJYRGn0aC7asoTv/Ak/Fr6f2CQjE8FA1ydmtqSbv0l5jZQMNznwLHYIaXrQ
+	 KJPnNefElNBmV1FwoZPWROjk9Vzw0BKmYHFtiOOktFQADX/q2yzAxkxmgiChwifFHV
+	 n8cqvzV50KOw5SvVQmOJGi6HKziLV+fsCAej1daJIMOM2F5zx56XL0qYyuNXg4Dc0X
+	 zQGqqvIbcGjDIssf3Do98dh33BGH+Y45cM5g0M0Z8+KAMcFti5/GyQ14YQHog0DdrI
+	 mgLtFemk+Kovcr4IQ3SGLSQHM0AJtXNTj84yDxNd/mIxty7M0GiWZoNyHCLZ2QR+05
+	 fEqzcyrbuFvSg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4BA1605DC;
-	Tue,  3 Mar 2026 17:23:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 636C025B
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:23:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E64EA41834;
+	Tue,  3 Mar 2026 17:25:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A6961EB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 557158221C
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:23:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94EC640087
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:25:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ctvi-z2VtHsU for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 17:23:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4967F82208
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4967F82208
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:23:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F6CD85F08; Tue,  3 Mar 2026 17:23:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 3 Mar 2026 18:22:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95dad8f85c4ce2f6956492b868bc9eba6452a9bc
-X-Git-Newrev: 8918f1c2c86844a5b4110cc71865838365324cfc
-X-Patchwork-Hint: ignore
-Message-Id: <20260303172340.4F6CD85F08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/squid: add patch for CVE-2025-62168
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zPvcTusUnhlB for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 17:25:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DFFDE40028
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFFDE40028
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DFFDE40028
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:25:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id BA69960128;
+ Tue,  3 Mar 2026 18:25:01 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 03 Mar 2026 18:25:01 +0100
+MIME-Version: 1.0
+Date: Tue, 03 Mar 2026 18:25:01 +0100
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260303103802.274517-1-thomas.perale@mind.be>
+References: <20260303103802.274517-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <86a6e7c962726648a8229a41738f13a6@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772558702;
+ bh=ZR14E+Ih/ZueRIXU8JgHNhnhtuzRVPHEl7cxloqBXic=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Vq06kzkmJt9oOgQat/QLeGmDSRz2Ej2EKcatN1ndX66PkeghPw1k0+F8ACoIDnZ9i
+ Ef83p9oOwgznCUicCtxPntRmFFwU6Tvx5+A478UOTcYYKFEvUG5ckRbHCGnKcegcxz
+ SxtdVibIpW8cWSiUyaT5NAyZz8AG+Js6rkmSKvxy/nGdRI3rBjnE0sq6Geh0Uv4Z2U
+ A0M+qoQq+owafdInev2BudAwMe/PiCTD3Ka91wT3MNoZKEWRVppvfSOJH33wRGrYBJ
+ /3VM8xyjVXbbTN0tcO3DZIAZ9GwHjcEk9aTXrPE1GXDCnLyM+MlkaCeEaOIQYR5rFt
+ woivLyUECi3CA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Vq06kzkm
+Subject: Re: [Buildroot] [PATCH 1/1] package/squid: add patch for
+ CVE-2025-62168
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,277 +96,16 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8918f1c2c86844a5b4110cc71865838365324cfc
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/03/2026 11:38, Thomas Perale via buildroot wrote:
+[...]
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Fixes the following vulnerability:
-
-- CVE-2025-62168:
-    Squid is a caching proxy for the Web. In Squid versions prior to 7.2,
-    a failure to redact HTTP authentication credentials in error handling
-    allows information disclosure. The vulnerability allows a script to
-    bypass browser security protections and learn the credentials a
-    trusted client uses to authenticate. This potentially allows a remote
-    client to identify security tokens or credentials used internally by a
-    web application using Squid for backend load balancing. These attacks
-    do not require Squid to be configured with HTTP authentication. The
-    vulnerability is fixed in version 7.2. As a workaround, disable debug
-    information in administrator mailto links generated by Squid by
-    configuring squid.conf with email_err_data off.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-62168
-  - https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
-
-The backport has been compared against debian patch [1].
-
-[1] https://sources.debian.org/src/squid/6.13-2%2Bdeb13u1/debian/patches/CVE-2025-62168.patch
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0002-Proxy-auth-data-visible-to-scripts.patch  | 212 +++++++++++++++++++++
- package/squid/squid.mk                             |   3 +
- 2 files changed, 215 insertions(+)
-
-diff --git a/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
-new file mode 100644
-index 0000000000..2e5c67c8c1
---- /dev/null
-+++ b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
-@@ -0,0 +1,212 @@
-+From 0951a0681011dfca3d78c84fd7f1e19c78a4443f Mon Sep 17 00:00:00 2001
-+From: Amos Jeffries <yadij@users.noreply.github.com>
-+Date: Sat, 11 Oct 2025 16:33:02 +1300
-+Subject: [PATCH] Bug 3390: Proxy auth data visible to scripts (#2249)
-+
-+Original changes to redact credentials from error page %R code
-+expansion output was incomplete. It missed the parse failure
-+case where ErrorState::request_hdrs raw buffer contained
-+sensitive information.
-+
-+Also missed was the %W case where full request message headers
-+were generated in a mailto link. This case is especially
-+problematic as it may be delivered over insecure SMTP even if
-+the error was secured with HTTPS.
-+
-+After this change:
-+* The HttpRequest message packing code for error pages is de-duplicated
-+  and elides authentication headers for both %R and %W code outputs.
-+* The %R code output includes the CRLF request message terminator.
-+* The email_err_data directive causing advanced details to be added to
-+  %W mailto links is disabled by default.
-+
-+Also redact credentials from generated TRACE responses.
-+
-+---------
-+
-+Co-authored-by: Alex Rousskov <rousskov@measurement-factory.com>
-+
-+CVE: CVE-2025-62168
-+Upstream: https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
-+[thomas: remove release note, backport errorpage.cc]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/HttpRequest.cc                  |  6 +++---
-+ src/HttpRequest.h                   |  2 +-
-+ src/cf.data.pre                     |  8 +++++++-
-+ src/client_side_reply.cc            | 14 +++++++-------
-+ src/errorpage.cc                    | 17 ++++-------------
-+ src/errorpage.h                     |  1 -
-+ src/tests/stub_HttpRequest.cc       |  2 +-
-+ 8 files changed, 26 insertions(+), 27 deletions(-)
-+
-+diff --git a/src/HttpRequest.cc b/src/HttpRequest.cc
-+index cd7ee71d4af..c6ed5bee45d 100644
-+--- a/src/HttpRequest.cc
-++++ b/src/HttpRequest.cc
-+@@ -341,7 +341,7 @@ HttpRequest::swapOut(StoreEntry * e)
-+ 
-+ /* packs request-line and headers, appends <crlf> terminator */
-+ void
-+-HttpRequest::pack(Packable * p) const
-++HttpRequest::pack(Packable * const p, const bool maskSensitiveInfo) const
-+ {
-+     assert(p);
-+     /* pack request-line */
-+@@ -349,8 +349,8 @@ HttpRequest::pack(Packable * p) const
-+                SQUIDSBUFPRINT(method.image()), SQUIDSBUFPRINT(url.path()),
-+                http_ver.major, http_ver.minor);
-+     /* headers */
-+-    header.packInto(p);
-+-    /* trailer */
-++    header.packInto(p, maskSensitiveInfo);
-++    /* indicate the end of the header section */
-+     p->append("\r\n", 2);
-+ }
-+ 
-+diff --git a/src/HttpRequest.h b/src/HttpRequest.h
-+index 6d369029322..28dc4daf99d 100644
-+--- a/src/HttpRequest.h
-++++ b/src/HttpRequest.h
-+@@ -206,7 +206,7 @@ class HttpRequest: public Http::Message
-+ 
-+     void swapOut(StoreEntry * e);
-+ 
-+-    void pack(Packable * p) const;
-++    void pack(Packable * p, bool maskSensitiveInfo = false) const;
-+ 
-+     static void httpRequestPack(void *obj, Packable *p);
-+ 
-+diff --git a/src/cf.data.pre b/src/cf.data.pre
-+index 0a73020e111..2dce65a4d0a 100644
-+--- a/src/cf.data.pre
-++++ b/src/cf.data.pre
-+@@ -8941,12 +8941,18 @@ NAME: email_err_data
-+ COMMENT: on|off
-+ TYPE: onoff
-+ LOC: Config.onoff.emailErrData
-+-DEFAULT: on
-++DEFAULT: off
-+ DOC_START
-+ 	If enabled, information about the occurred error will be
-+ 	included in the mailto links of the ERR pages (if %W is set)
-+ 	so that the email body contains the data.
-+ 	Syntax is <A HREF="mailto:%w%W">%w</A>
-++
-++	SECURITY WARNING:
-++		Request headers and other included facts may contain
-++		sensitive information about transaction history, the
-++		Squid instance, and its environment which would be
-++		unavailable to error recipients otherwise.
-+ DOC_END
-+ 
-+ NAME: deny_info
-+diff --git a/src/client_side_reply.cc b/src/client_side_reply.cc
-+index d73bf3f99f6..fc2feccf802 100644
-+--- a/src/client_side_reply.cc
-++++ b/src/client_side_reply.cc
-+@@ -94,7 +94,7 @@ clientReplyContext::clientReplyContext(ClientHttpRequest *clientContext) :
-+ void
-+ clientReplyContext::setReplyToError(
-+     err_type err, Http::StatusCode status, char const *uri,
-+-    const ConnStateData *conn, HttpRequest *failedrequest, const char *unparsedrequest,
-++    const ConnStateData *conn, HttpRequest *failedrequest, const char *,
-+ #if USE_AUTH
-+     Auth::UserRequest::Pointer auth_user_request
-+ #else
-+@@ -104,9 +104,6 @@ clientReplyContext::setReplyToError(
-+ {
-+     auto errstate = clientBuildError(err, status, uri, conn, failedrequest, http->al);
-+ 
-+-    if (unparsedrequest)
-+-        errstate->request_hdrs = xstrdup(unparsedrequest);
-+-
-+ #if USE_AUTH
-+     errstate->auth_user_request = auth_user_request;
-+ #endif
-+@@ -995,11 +992,14 @@ clientReplyContext::traceReply()
-+     triggerInitialStoreRead();
-+     http->storeEntry()->releaseRequest();
-+     http->storeEntry()->buffer();
-++    MemBuf content;
-++    content.init();
-++    http->request->pack(&content, true /* hide authorization data */);
-+     const HttpReplyPointer rep(new HttpReply);
-+-    rep->setHeaders(Http::scOkay, nullptr, "text/plain", http->request->prefixLen(), 0, squid_curtime);
-++    rep->setHeaders(Http::scOkay, nullptr, "message/http", content.contentSize(), 0, squid_curtime);
-++    rep->body.set(SBuf(content.buf, content.size));
-+     http->storeEntry()->replaceHttpReply(rep);
-+-    http->request->swapOut(http->storeEntry());
-+-    http->storeEntry()->complete();
-++    http->storeEntry()->completeSuccessfully("traceReply() stored the entire response");
-+ }
-+ 
-+ #define SENDING_BODY 0
-+diff --git a/src/errorpage.cc b/src/errorpage.cc
-+index d7a588d099f..06046de9ebb 100644
-+--- a/src/errorpage.cc
-++++ b/src/errorpage.cc
-+@@ -792,7 +792,6 @@ ErrorState::~ErrorState()
-+ {
-+     safe_free(redirect_url);
-+     safe_free(url);
-+-    safe_free(request_hdrs);
-+     wordlistDestroy(&ftp.server_msg);
-+     safe_free(ftp.request);
-+     safe_free(ftp.reply);
-+@@ -850,7 +849,7 @@ ErrorState::Dump(MemBuf * mb)
-+                     SQUIDSBUFPRINT(request->url.path()),
-+                     AnyP::ProtocolType_str[request->http_ver.protocol],
-+                     request->http_ver.major, request->http_ver.minor);
-+-        request->header.packInto(&str);
-++        request->header.packInto(&str, true /* hide authorization data */);
-+     }
-+ 
-+     str.append("\r\n", 2);
-+@@ -1112,18 +1111,10 @@ ErrorState::compileLegacyCode(Build &build)
-+                 p = "[no request]";
-+             break;
-+         }
-+-        if (request) {
-+-            mb.appendf(SQUIDSBUFPH " " SQUIDSBUFPH " %s/%d.%d\n",
-+-                       SQUIDSBUFPRINT(request->method.image()),
-+-                       SQUIDSBUFPRINT(request->url.path()),
-+-                       AnyP::ProtocolType_str[request->http_ver.protocol],
-+-                       request->http_ver.major, request->http_ver.minor);
-+-            request->header.packInto(&mb, true); //hide authorization data
-+-        } else if (request_hdrs) {
-+-            p = request_hdrs;
-+-        } else {
-++        else if (request)
-++            request->pack(&mb, true /* hide authorization data */);
-++        else
-+             p = "[no request]";
-+-        }
-+         break;
-+ 
-+     case 's':
-+diff --git a/src/errorpage.h b/src/errorpage.h
-+index abca4a17d7b..297b306978d 100644
-+--- a/src/errorpage.h
-++++ b/src/errorpage.h
-+@@ -194,7 +194,6 @@ class ErrorState
-+         MemBuf *listing = nullptr;
-+     } ftp;
-+ 
-+-    char *request_hdrs = nullptr;
-+     char *err_msg = nullptr; /* Preformatted error message from the cache */
-+ 
-+     AccessLogEntryPointer ale; ///< transaction details (or nil)
-+diff --git a/src/tests/stub_HttpRequest.cc b/src/tests/stub_HttpRequest.cc
-+index 495597d9a1b..48a0f1ce03e 100644
-+--- a/src/tests/stub_HttpRequest.cc
-++++ b/src/tests/stub_HttpRequest.cc
-+@@ -45,7 +45,7 @@ bool HttpRequest::expectingBody(const HttpRequestMethod &, int64_t &) const STUB
-+ bool HttpRequest::bodyNibbled() const STUB_RETVAL(false)
-+ int HttpRequest::prefixLen() const STUB_RETVAL(0)
-+ void HttpRequest::swapOut(StoreEntry *) STUB
-+-void HttpRequest::pack(Packable *) const STUB
-++void HttpRequest::pack(Packable *, bool) const STUB
-+ void HttpRequest::httpRequestPack(void *, Packable *) STUB
-+ HttpRequest * HttpRequest::FromUrl(const SBuf &, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
-+ HttpRequest * HttpRequest::FromUrlXXX(const char *, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index d445f005b7..c031f1aa03 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -15,6 +15,9 @@ SQUID_SELINUX_MODULES = apache squid
- # 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
- SQUID_IGNORE_CVES += CVE-2025-59362
- 
-+# 0002-Proxy-auth-data-visible-to-scripts.patch
-+SQUID_IGNORE_CVES += CVE-2025-62168
-+
- SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
