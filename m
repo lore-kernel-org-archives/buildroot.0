@@ -1,87 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4CD8EDEBF0
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 20:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4DA3EDEBF1
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 20:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD29F606F0;
-	Tue,  3 Mar 2026 20:14:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FA42818C4;
+	Tue,  3 Mar 2026 20:27:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C2dbtNKapsIA; Tue,  3 Mar 2026 20:14:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zNYfLep-Eq8x; Tue,  3 Mar 2026 20:27:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07F10606DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9FDF815B2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772568855;
-	bh=Pa+RNquWp0pGfF2M/feG2D/Tgg3GCNmPBp8VkCL3xhU=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=rCNoJkZ+VvCLcFzskRlGcsg19pPYqxyw7Jj50UjV3Tb/sBDeY1WyA4uKBsD075L+4
-	 Kl7Qr7nQoiqAYbzYEtEOYfgz7lfPkp/wIF+acvBJtB9LTc9ik5UTV8d347wSexVF26
-	 K0U//Jm2EbSD+WeL32uwFoAn7VykRSi2tJA4NOrdkCcLdkmkxZfUsZ0nRiMqCxFD3Z
-	 2vMGcqaeAjJdhQb4sPogRDnhUwNBY02Og751eNu4CqMAI950LC5AnoZRlRKW/wLm7L
-	 1XBR46kUPHItr+kI025fj75YSd0qiRT7RyKLQcYL/CEwUNHNl8i88KLfbCFZFq5TmW
-	 xHeE1o6aeR/mQ==
+	s=default; t=1772569655;
+	bh=oX2wUDISMOCMBsC/HkS1/bYIkcmVMNPSG9xk94xuMiE=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=frSk9/Nh6SopTuKynNWxNPt369QGpnQUf7wTlAiaVBWZFfZz6Sr/IYHF5HlzE87Jv
+	 M0R5jAEhTBHKyUDfSyxDLGXPwpk8GgblWl4o8wh7G5xyv4Ek9OLYeduUAllA1hfB+Q
+	 e0XqwJPx0JGi/3tBdVSS7Ezps5bQJ92oSUEQ3jeMnEdd4giKJoIPFecPjS1VYS/11X
+	 195YdUIO7fQxi5OLNB5zT7ApcKbMCnusnes8aryaeDuhmC2N9kDkIE+cOP9eZCE8z3
+	 KTsb6F/vgPtVi3fctskDB536FKTXJawJh73cfwzeZdBVJWqghvEkTyIdukJCls4/5K
+	 F/c9dSStqnbGg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07F10606DE;
-	Tue,  3 Mar 2026 20:14:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C440F1EB
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:14:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9FDF815B2;
+	Tue,  3 Mar 2026 20:27:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53A4A231
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:27:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9FFC400DC
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:14:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4559C815B2
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:27:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cMdYrox4RZfy for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 20:14:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 97FF14002D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97FF14002D
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 97FF14002D
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:14:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 10FF0B97B552; Tue,  3 Mar 2026 21:14:09 +0100 (CET)
-Message-ID: <1b273b3f-fff4-48fe-abe6-a27b2e958211@rnout.be>
-Date: Tue, 3 Mar 2026 21:14:08 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NvRIqGMuKepz for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 20:27:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1440380F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1440380F34
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1440380F34
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:27:32 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 81A2C19F59C;
+ Tue,  3 Mar 2026 21:27:27 +0100 (CET)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Tue,  3 Mar 2026 21:27:04 +0100
+Message-ID: <20260303202708.2065406-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Cc: Mark Corbin <mark@dibsco.co.uk>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann <buildroot@bubu1.eu>
-References: <20260208143604.1477756-1-ju.o@free.fr>
- <20260208143604.1477756-5-ju.o@free.fr>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20260208143604.1477756-5-ju.o@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1772568850; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=v2xTb3KtvLfbQ9wDCf4Ur+gQeDMansky0RhC+IU925w=;
- b=asOinG6JRHqPj3XVls0eHz1y46+7Lho8GgPrHskJQZ5ekxa8HTplb6b0Z4i7fotcEbY64p
- gXPPOdAzSC7hW2YUcB67P7R3JJ1GnIW6PyPFTHVREkFL4uIpTm4IkCJx0RwSzsUFgLKh14
- MX8LtyweaBQQdTCL7xJJKcxnPHkkHC65Ig761KnyWL7LOqmzL+muy6z/XBcIffmPzWrMT/
- 9RYA0zNSBHyjpDy2+UE4S8vVgOvqU0s1AFA3lMI15h9/MjYFBpiQUGjTe7DCrfDJ+7M3lT
- 4HVrCBqv9njLAtAnowoudA9Cr9rs7nMkc7KmcIxTYIC3C50Cr5XInP4jBtbTdQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772569650;
+ bh=2FKmQyqKW++9qnsK1RfByLvMPvljapNWRqc5CFJFlzY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=vOSADk6sJib0KncJilztjEKt+s8ZemviyrET68QvJRnWfxbnT2WIXCO47SrOIK1rt
+ UHKpTupmq+zAVZfYiiiE/gqX0alXrga2rTyR1YclxfsVERR85r4/bC3Jn0pe1CNW9V
+ Lqnr3aBObm7/9NnpEelYdviBAWgF437IDYzXtoAFQeUSilLe1WoJpCtBEiSD28mpmT
+ f2MeTG4kugK1xmirlSTaWDDEaHSA/Evl3uhAEOqACULv/oeSJQJnKEBCIiNq/jWiWr
+ JNV9OWUAhmJIm9ZGoYh0KbIfDNlRB0ilXkyTT3v9Rqq4PXgDo+NbMt8mMajSPvSiLm
+ qXbXdEACkwbyA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=asOinG6J
-Subject: Re: [Buildroot] [PATCH RFC 4/5] arch/Config.in: add
- BR2_SHOW_SECONDARY_TARGET_OPTIONS
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=vOSADk6s
+Subject: [Buildroot] [PATCH next 1/4] arch/arm: add the Neoverse-V1 core
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,61 +88,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This commit adds the Neoverse-V1 core, which is an armv8.4a ISA.
+See: [1] [2].
 
+This CPU support was added in GCC 11. See [3] [4] [5].
 
-On 08/02/2026 15:36, Julien Olivain wrote:
-> Suggested-by: Arnout Vandecappelle <arnout@rnout.be>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->   arch/Config.in | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
-> 
-> diff --git a/arch/Config.in b/arch/Config.in
-> index bdfc2b092c..e6b4fd040e 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -15,6 +15,27 @@ config BR2_USE_MMU
->   config BR2_ARCH_HAS_FDPIC_SUPPORT
->   	bool
->   
-> +config BR2_SHOW_SECONDARY_TARGET_OPTIONS
-> +	bool "Show secondary target options"
-> +	default y
-> +	depends on BR2_HIDE_SECONDARY_TARGET_OPTIONS != "y"
+This CPU supports Aarch64 at all exception levels (EL0 to EL3).
+It also supports Aarch32 only in EL0 (user-space). This means it's
+technically possible to compile Aarch32 code. GCC has the support
+to do so. Since Buildroot recompiles a full system (ATF, Kernel,
+user-space) this support has limited value. This is why this
+CPU is limited to 64bit builds only.
 
-  Is it actually useful to have this as a user-visible option? I would simply 
-use the environment option directly (depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS).
+Qemu added neoverse-v1 support in upstream commit [6], first included
+in v8.1.0.
 
-  Regards,
-  Arnout
+[1] https://developer.arm.com/Processors/Neoverse%20V1
+[2] https://developer.arm.com/documentation/101427/0102/Functional-description/Introduction/About-the-core
+[3] https://gcc.gnu.org/gcc-11/changes.html#arm-targets
+[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;hb=releases/gcc-11.1.0#l141
+[5] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=c9d56eb777552ac5ee0c281e1f6e34b6fe929b77
+[6] https://gitlab.com/qemu-project/qemu/-/commit/c74138c6c040b62e941326a4fbb25a93fdd35b72
 
-> +	help
-> +	  Show secondary target options.
-> +
-> +	  When selected, this option shows all target options
-> +	  available in Buildroot.
-> +
-> +	  Unselecting this option hides less common target CPU
-> +	  architectures, architecture variants, CPUs or CPU options.
-> +
-> +	  This is primarily intended for random configuration
-> +	  generation used in autobuilders. Using the command:
-> +
-> +	  BR2_HIDE_SECONDARY_TARGET_OPTIONS=y make randconfig
-> +
-> +	  generates a random configuration only using primary target
-> +	  options.
-> +
->   choice
->   	prompt "Target Architecture"
->   	default BR2_i386
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ arch/Config.in.arm | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index a0bf6c3386..16911f5b95 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -498,6 +498,12 @@ config BR2_tsv110
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 
+ comment "armv8.4a cores"
++config BR2_neoverse_v1
++	bool "neoverse-V1 (aka zeus)"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
+ config BR2_saphira
+ 	bool "saphira"
+ 	depends on BR2_ARCH_IS_64
+@@ -918,6 +924,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "neoverse-n1"	if BR2_neoverse_n1
+ 	default "tsv110"	if BR2_tsv110
+ 	# armv8.4a
++	default "neoverse-v1"   if BR2_neoverse_v1
+ 	default "saphira"	if BR2_saphira
+ 	# armv9.0a
+ 	default "cortex-a710"	if BR2_cortex_a710
+-- 
+2.53.0
 
 _______________________________________________
 buildroot mailing list
