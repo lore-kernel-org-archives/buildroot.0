@@ -1,62 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9047EDA6B2
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 17:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FD51EDA6BC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 17:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77969607BC;
-	Tue,  3 Mar 2026 17:21:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id clIhAsSfUDKi; Tue,  3 Mar 2026 17:21:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F87160B96
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772558504;
-	bh=hZheOuaOCKfadVR5ub6WR+2iDiQWEyWvjdQVzbvBZUk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=M+2EM9SRFWhrSgNxCLL2m0eyUwoFoEuvxjkCE5aoNPztA6zSh3gLqu8p46NHUDSTM
-	 XUPaoJBdILH4vJvOs4/GFCz/hkAx0Dv2rsTkSS8wKO5mpt+aoS7R83Odwy5mYDR63Z
-	 GA7jXtiis/HIXwCGcwJgyRwZr4DKqkjjrIgktqta4eGAEINt3DHCwwY3osY7Kzc+B1
-	 BOIXLMWaq1a+7gXpOCGOL4wETNuP8Gfk3S9WC3BjHnOLL7QXlbQDQsmX8tY6sJc93S
-	 wR1inRk+YbUDaN0OmY0olD+7c9DsPAoIGFdkgxtuN6ppeU3tYdzQlkjFl2PH3sllLU
-	 zON0XW3nqOqFw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F87160B96;
-	Tue,  3 Mar 2026 17:21:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C3A551EB
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:21:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A991A4189A
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:21:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C39BB40C2D;
+	Tue,  3 Mar 2026 17:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FJdZEKbfG2Ln for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 17:21:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8B1E417DD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8B1E417DD
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:21:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1F4585F00; Tue,  3 Mar 2026 17:21:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 3 Mar 2026 18:19:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8195c73ca33f47767b4e14f5d706acaebe0ee1f4
-X-Git-Newrev: 95dad8f85c4ce2f6956492b868bc9eba6452a9bc
-X-Patchwork-Hint: ignore
-Message-Id: <20260303172142.C1F4585F00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vim: security bump to v9.1.2148
+ id wKv37VFdH5dK; Tue,  3 Mar 2026 17:22:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9333540BF4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772558557;
+	bh=kcrJsyTfSY+UQDgb7TED+NXHrEm4LqLterTlirRZ8Ic=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=sZH0+fSUTFRXNso/vsOB4eaLzwTgUsTQ+K3LaD0jbXY+qV5UmeCQwCQXLjyVMwwMr
+	 49njaBFw7w2j7kkZr+0AzD0vI4eRNDqGdWjX2tEsH9JlV9PjGr4tvCHcNT4qHO0WOb
+	 gm6PnRo1iQG/V3KlgOVsM1D+g0K2+mQyFYUqnSb5ffS1QLAd649yghNsRpGf+g2mIN
+	 Jo5hd0w8UkzjT4OMrM53uhHTIlREhzaJgyRa13bPwF4GtMWTVYoTcBZdjzcLxJQOCY
+	 pcTzc8r+OEXM2BS/B4QuRKTY0ck8zcBY8GZ8bbJy/gn5WiAKpXD/LAED+mResp7YDO
+	 uNzdA94f+uuiQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9333540BF4;
+	Tue,  3 Mar 2026 17:22:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E02371EB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:22:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C627A40BF4
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:22:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id izmzOMCjr4Po for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 17:22:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8DCD440BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DCD440BD6
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8DCD440BD6
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 17:22:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 54448B00585;
+ Tue,  3 Mar 2026 18:22:29 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 03 Mar 2026 18:22:29 +0100
+MIME-Version: 1.0
+Date: Tue, 03 Mar 2026 18:22:29 +0100
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20260303110445.306426-1-thomas.perale@mind.be>
+References: <20260303110445.306426-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <96afdb808977b68849b142a880b31180@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772558551;
+ bh=z+z9XF7TUAVakYJwhEMm/ORuDq/Qy17WiMjESTApP5o=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=KLOogwEsDqPn2dPBqgEe8FPTsJT8ABpbOuHmYUiKdytrEB13os/jBRle0XYYoORe0
+ u4aFUb2R4vFgi7NiDVO2lpaqcMueDJ28i+aGX++1ioHzDP7vBT8vwbI+4TQZ5hNnKH
+ LX63N5tZaXeWH1aOG1etrJJD2dfD2A11Y7mO74orX1OAH7ujd3ozgdylxF/crQEEph
+ KHuejbDuEwz1LdCDy1Vbj56ih+f+3/aHD4nKct5TO5hyo7idtEwWipPLNf0NOIknEB
+ A3BaCf9VsOU6/22PHVsHszC8RJUWdfkti1c6riz5z0bfq2ho+R9X/hljns9svxrW3T
+ GBjr69U/TDj2w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=KLOogwEs
+Subject: Re: [Buildroot] [PATCH] package/vim: security bump to v9.1.2148
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,166 +96,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/95dad8f85c4ce2f6956492b868bc9eba6452a9bc
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/03/2026 12:04, Thomas Perale via buildroot wrote:
+> For changes, see:
+> 
+>   - https://github.com/vim/vim/compare/v9.1.2017...v9.1.2148
+[...]
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-For changes, see:
-
-  - https://github.com/vim/vim/compare/v9.1.2017...v9.1.2148
-
-Fixes the following vulnerabilities:
-
-- CVE-2026-25749:
-    Vim is an open source, command line text editor. Prior to version
-    9.1.2132, a heap buffer overflow vulnerability exists in Vim's tag
-    file resolution logic when processing the 'helpfile' option. The
-    vulnerability is located in the get_tagfname() function in src/tag.c.
-    When processing help file tags, Vim copies the user-controlled
-    'helpfile' option value into a fixed-size heap buffer of MAXPATHL + 1
-    bytes (typically 4097 bytes) using an unsafe STRCPY() operation
-    without any bounds checking. This issue has been patched in version
-    9.1.2132.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-25749
-  - https://github.com/vim/vim/commit/0714b15940b245108e6e9d7aa2260dd849a26fa9
-
-- CVE-2026-26269:
-    Vim is an open source, command line text editor. Prior to 9.1.2148, a
-    stack buffer overflow vulnerability exists in Vim's NetBeans
-    integration when processing the specialKeys command, affecting Vim
-    builds that enable and use the NetBeans feature. The Stack buffer
-    overflow exists in special_keys() (in src/netbeans.c). The while
-    (*tok) loop writes two bytes per iteration into a 64-byte stack buffer
-    (keybuf) with no bounds check. A malicious NetBeans server can
-    overflow keybuf with a single specialKeys command. The issue has been
-    fixed as of Vim patch v9.1.2148.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-26269
-  - https://github.com/vim/vim/commit/c5f312aad8e4179e437f81ad39a860cd0ef11970
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...0001-src-Makefile-create-links-with-ln-sf.patch | 78 ----------------------
- package/vim/vim.hash                               |  2 +-
- package/vim/vim.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 80 deletions(-)
-
-diff --git a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
-deleted file mode 100644
-index 54d423aacf..0000000000
---- a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 5686ef63f81fcac2ca6ec6e7160829b295ad4e79 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 28 Dec 2025 15:01:38 +0100
--Subject: [PATCH] src/Makefile: create links with ln -sf
--
--Running "make installlinks" twice towards the same destination
--directory will fail, as symlink will already exist. This is not really
--expected as "make install" is normally expected to work again and
--again towards the same destination directory.
--
--Fix this by using ln -sf.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/vim/vim/commit/6df5360691266b5eca49380e94f3e21fa48e5e0b
-----
-- src/Makefile | 24 ++++++++++++------------
-- 1 file changed, 12 insertions(+), 12 deletions(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 6fb1eb95e..39f798260 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -2746,40 +2746,40 @@ installvimdiff: $(DEST_BIN)/$(VIMDIFFTARGET)
-- installgvimdiff: $(DEST_BIN)/$(GVIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(EXTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EXTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EXTARGET)
-- 
-- $(DEST_BIN)/$(VIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIEWTARGET)
-- 
-- $(DEST_BIN)/$(GVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMTARGET)
-- 
-- $(DEST_BIN)/$(GVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIEWTARGET)
-- 
-- $(DEST_BIN)/$(RVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIMTARGET)
-- 
-- $(DEST_BIN)/$(RVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIEWTARGET)
-- 
-- $(DEST_BIN)/$(RGVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIMTARGET)
-- 
-- $(DEST_BIN)/$(RGVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIEWTARGET)
-- 
-- $(DEST_BIN)/$(VIMDIFFTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIMDIFFTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(GVIMDIFFTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMDIFFTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(EVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIMTARGET)
-- 
-- $(DEST_BIN)/$(EVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIEWTARGET)
-- 
-- # Create links for the manual pages with various names to vim.	This is only
-- # done when the links (or manpages with the same name) don't exist yet.
---- 
--2.52.0
--
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index f7c883b929..ecc41be702 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
-+sha256  f9ec31df8f1a78e130dd06c395e6626c2a8a8ec2705d8e7b7667bd3ecd499c6b  vim-9.1.2148.tar.gz
- sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
- sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index fa7d47d67d..9201587a8a 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = 9.1.2017
-+VIM_VERSION = 9.1.2148
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
