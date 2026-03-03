@@ -4,109 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D78A0E67A95
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 08:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61925E67A96
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 08:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4CC0612CA;
-	Tue,  3 Mar 2026 08:13:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 210886137E;
+	Tue,  3 Mar 2026 08:13:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OCzZI_Zicasp; Tue,  3 Mar 2026 08:13:30 +0000 (UTC)
+ id hNQIeE5ro_EM; Tue,  3 Mar 2026 08:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4564B610AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39439610AF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772525610;
-	bh=S6Zy9g8EWBgG9qL7JfpFhnZ1HQ99U/ydtkFYsCgWuQM=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=mbWtER3DKAn+GNbBHm9c19pZooeq2bjRw/PXELSabT8E/JuNwpLEHch/WOIY9ghNG
-	 HD6IXiYOGfb4xyin1nAlsHRazIT3XrDA6F8Dv0cV9EQ4bLV+Z9qjmU1tm338STBG43
-	 MdEO/9nsh0AgnhOsSkk+LMii3S1EdpzfKqPIFxQhhlW8Jt5L4UW1fJYrSoLRg1tr5o
-	 qBd3GaOUubkJLx5bgk+H5lDv3aAONuUX3o+nrfMBeqT9OEiTe6W1vFvloR9wnmkVNC
-	 AZmIz0FKEwzR+Y/iezw5b8CjNkCpUIClMQ4oMvobA43P2KBr5+5zF/WQMuxNtei1jD
-	 Z+a4Ee5oAep8Q==
+	s=default; t=1772525613;
+	bh=UjCZVhOYU6ZRzLIFQrGjHNPA+V7gdCFlnze950Lt95Y=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=dnD4dnAXwQmV1XVp3mpR1HIX+mR2Kc+BjFqQxLplUNnihKjbKzbuDHTVkihAg6aKD
+	 X/Kij4bZVYqXVjbVJ8m2eSXa4ls4rBj0UtA2A4iBMF4fCdH4BMNk/5eZ+YpzdtqbL/
+	 51wjGwp30Kt4i+S1atxPfbndv6YhBePMdHUCXd+3v5QuGydBfrfeA+FYa9SHwVcjnL
+	 xdmkurhr2lfTFRCCA8vfvPzluQvNaJ/eDTuq0cITISbMjrqFwcIgfMM72cA/SiWh/D
+	 w1UPmAWx6a9iZ0E77DZN62OfOzWTERdH90HxtZBkWLOCwJG6As3jaCntlafMBYiWpI
+	 SCiB25CP44ejg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4564B610AF;
-	Tue,  3 Mar 2026 08:13:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 094291EB
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 08:13:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39439610AF;
+	Tue,  3 Mar 2026 08:13:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EA3C1EB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 08:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06C00404EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4EB45400B3
  for <buildroot@buildroot.org>; Tue,  3 Mar 2026 08:13:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79celPSc_YXy for <buildroot@buildroot.org>;
+ id 7BOPq1-iFI7t for <buildroot@buildroot.org>;
  Tue,  3 Mar 2026 08:13:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 71FCB400B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71FCB400B3
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 71FCB400B3
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 08:13:26 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4806f3fc50bso57087705e9.0
- for <buildroot@buildroot.org>; Tue, 03 Mar 2026 00:13:26 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B0AC404DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B0AC404DB
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B0AC404DB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 08:13:27 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4837907f535so46043305e9.3
+ for <buildroot@buildroot.org>; Tue, 03 Mar 2026 00:13:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772525604; x=1773130404;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=WOf8AuOe9jWmeCemi512taPIgkCVMaZ0eQBSAj429IY=;
- b=k/fTj4UWpirVzWzhPbfBtgoM/vgYdUutbkNGTqxDDvRbu8k5feC1bfWvb465f91lDz
- hO/bvoCkqR5ClTZq4+TndPaivPwW6kcFKYi7YU/+e0gS9gWoazStTJFPKgwPFq/XCvBp
- oCAj14oCm4BKb+aO6jsngKtVKAP+yk78jBHOTQw3H93ayUQ8n8Eps/dTWGLZLWZSp9qz
- 2dRnNMDuCRC2nka3CyS45YnqD2BWqZ/YAFFFsNbgd3C9p1SGrRV84UqvLqXCtYxe/PjZ
- 0YUkEqzQEu2frcaYuA0g2PUioKyYTVcIc1tbELrmYaggX/0tTAq5oVzV6z40nJUVeH+D
- 7vRA==
-X-Gm-Message-State: AOJu0YxIYpwW9fFrUN4fLNCygoH3Syf5ZM1xiYPRrdIsxBqrwSpIuOkJ
- vyBuKs1k/d2HQ22VggvbyJq1SGhBebJleJXoI3cLt3z+HUlr1OBPOyLr8dRig/h5lEKNqUacgA9
- 4ypPk
-X-Gm-Gg: ATEYQzxPaEuVUMf7G24JhluOlxblMt8RFuHLxCx+e2RFbXRvphJjY/M/tRzy9fXstML
- ehzLVCvMyFp+6uX5aniBX9sRJZ1XyV7EsWHYy5QHJb3nQO4dz/z7X74uMZSeoFOcBadKa46j2Yp
- ePn2+WbEMDooHjZUiqCxoGMk3M008gwkGPFWVeyf4mfbQ4r+XOZxLFdqqASzbmrSbSu7JkUvHZm
- oS9klo/0RCzYEOVHgsGKQrMYMp0kkf828w4tPaj5brrpQr7QTsC1ELHWfPd9DkXmOe+vWaMjh0m
- xTbDNyo+PWRNOFThHAQaVWziNMAqLINvfrNdVYfpIQ4qZ9WBXfHSygJSdiw3vPE82na4A7WyEFI
- 7+4+kFp5pjBijc3iKfilBhM/pvo2gN505pGCbog1zN5ayy1ZJUsss+h0ZpYuQeGLs2I0xJMXEN9
- c8FXfZTTLdumbXF6I=
-X-Received: by 2002:a05:600c:3b18:b0:483:7432:a761 with SMTP id
- 5b1f17b1804b1-483c9bc558bmr253895495e9.24.1772525604437; 
- Tue, 03 Mar 2026 00:13:24 -0800 (PST)
+ d=1e100.net; s=20230601; t=1772525605; x=1773130405;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=0guPvaTsDTF5uCaQVg6M5eb55Lk/yXgTodf584MosPE=;
+ b=Y8daF/ZcwvAT1kot9r9Zh7ZvyNKsAembry/YNl1tfWidb/o3iPEc1dJAOCT9tVtnqp
+ hE/RgwWUtwNnJxTg8AHVaaXkbmS+wt3CAM2iuXwID8oZQ2HXE/BU5BM0+ScxJWhYXeQg
+ CPJC1XmKw9dyLAuRQEYsBqeeDNemyolpZVhiu3qbxStqioI5MOYd7WMsMustuhuxgxdJ
+ 55C2M1DRNji5u52H8nnnNYIFPKKIXPm1HD2y1qrvo1TmtASmj9R68zdYwAy4E+lmpAMw
+ ALDjDM1bnAp6Gv1ZAGoDOGIOsUACV91yeRAtELT+9UWAxynfZVg2+62spHfCEttZFYEy
+ 1XLA==
+X-Gm-Message-State: AOJu0YwISFyx3kjjy/N9pW3fHOel5evUdAkup5s1MZmBVvit7N4IUwtk
+ 41zSmPZDJ9XW/VmyQnoQK4SD4hp5EeQ0vADJowV0/CqlhPckMZlDlzRJVtBLioYKIGTmX4fhcTz
+ lew5B
+X-Gm-Gg: ATEYQzzh4RkFbu8fm4mPHzE+veLfSvIEmT6uLqo0WARlfdHe9C3wrSaayP9m5IKfJik
+ x842I49vO7A38BRT6k8QV7n9GXz7/6mJ+PQ8N+s4/AuSRw68/tXCyKqt7RHzgFFPwQIyIRW7GmT
+ 9LmAiF6pFPlbTlHW3GOcaLFt9gRHRPT+O/H0GNIMAqwsI+EmDKwn+jo8Mg88svPlqw14+DwIu3E
+ DGYmH6D2DJNybkovH29FhYrSiJG5oixMZnzcuGNCjivWDRPSdiko/TS2D0OBPNIujfhs5ADKK5Q
+ w5pMTgQ1IvBSHVmebSwzxnTStMWuGiMV52Xmb3cGhvWmOPh/RQu82A59YZJzPOGL8sAJ4ggzZax
+ ZgQgv86+MNidVcWuqkKe+l/13Hdbwd9+6yPUScRXdEoIrKmrPRSRB+vjjBpBsp6xgTUyYnBBi4E
+ ZA8ty/Ugorqifq4D/7OL/HNZvfDA==
+X-Received: by 2002:a05:600c:46cd:b0:483:5a29:9678 with SMTP id
+ 5b1f17b1804b1-483c9b94247mr286428655e9.2.1772525605592; 
+ Tue, 03 Mar 2026 00:13:25 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-485135d8870sm9242235e9.32.2026.03.03.00.13.23
+ 5b1f17b1804b1-485135d8870sm9242235e9.32.2026.03.03.00.13.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Mar 2026 00:13:24 -0800 (PST)
+ Tue, 03 Mar 2026 00:13:25 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Grzegorz Blach <grzegorz@blach.pl>
-Date: Tue,  3 Mar 2026 09:13:20 +0100
-Message-ID: <20260303081323.53405-1-thomas.perale@mind.be>
+Date: Tue,  3 Mar 2026 09:13:22 +0100
+Message-ID: <20260303081323.53405-3-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260303081323.53405-1-thomas.perale@mind.be>
+References: <20260303081323.53405-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772525604; x=1773130404; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WOf8AuOe9jWmeCemi512taPIgkCVMaZ0eQBSAj429IY=;
- b=RbAf/8MCgQl6FaOfUc69ubEtJMqeyM3OlVft/nlbeQiFpxN0EVeG1BDc03iwv6trFq
- Ab14XvxmYhfY0QC38QO2zNhTOQJXGchRB7QtPhNplhyh20qIdQ0eMVY6LnHrGW1HuYBb
- T4H9leEH+NFp3+hj3yu8NEJcfggocHzJuAGnwfbkH9zRfAQRK3lNSImz+MmdT6LZffSS
- gP38zDRFJWgkfxIPqhysRVkAtTQwmyHlQg5BmehfivT3fmXpfE3NHA+1oACx12+I3M17
- Cbao1BoSsUXoxmC/FqvQvGtTTbKKyDwRW2dd0mHPrKkcWweiEd53cLFSntdYsF0uIFFw
- BRHA==
+ d=mind.be; s=google; t=1772525605; x=1773130405; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0guPvaTsDTF5uCaQVg6M5eb55Lk/yXgTodf584MosPE=;
+ b=Ac/bIyvKKBrq0ZT8AyXY59Bf2WZT0OjvQHfuzPl8TVjjSEKzqklZ2MnUdfRria259Y
+ /JuLc7HoiFydKh/XkFlSVOwFWTUJay2k4jqJxsN4jqh7+xH/gc5yCUAqeGsFZSRQ/eGP
+ b1rn3MHz6Yqv5AouN0zWP+zTIKJzZ13PDzzhrlWl66DDmk4XLSVFOwviz6DK4E2BDh/z
+ 24ODI6bTohmkshEfRPmwrTptqmkHKgdy2zsTaXq0rcE9SS7GCbnLZCTDK9u12bXiWqC0
+ 2ykr/8om8Dhue460Vqdu//W/DVADE9ZvpTB42rF8j6DR8tQ5JGGio0V4sMx1ryD/gyw2
+ YiIw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=RbAf/8MC
-Subject: [Buildroot] [PATCH 1/4] package/graphicsmagick: add CVE-2008-6621
- to IGNORE_CVES
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Ac/bIyvK
+Subject: [Buildroot] [PATCH 3/4] package/graphicsmagick: add patch for
+ CVE-2025-27796
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,31 +128,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This vulnerability match on every version of graphicsmagick. Since it's
-really old it's unlikely it will be updated and is thus added to
-IGNORE_CVES. See [1].
+Fixes the following vulnerability:
 
-[1] https://nvd.nist.gov//vuln/detail/CVE-2008-6621
+- CVE-2025-27796:
+    ReadWPGImage in WPG in GraphicsMagick before 1.3.46 mishandles palette
+    buffer allocation, resulting in out-of-bounds access to heap memory in
+    ReadBlob.
+
+For more information, see
+  - https://www.cve.org/CVERecord?id=CVE-2025-27796
+  - https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/883ebf8cae6dfa5873d975fe3476b1a188ef3
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/graphicsmagick/graphicsmagick.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...er-is-allocated-and-the-current-size.patch | 55 +++++++++++++++++++
+ package/graphicsmagick/graphicsmagick.mk      |  3 +
+ 2 files changed, 58 insertions(+)
+ create mode 100644 package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
 
+diff --git a/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch b/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
+new file mode 100644
+index 0000000000..8a98034833
+--- /dev/null
++++ b/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
+@@ -0,0 +1,55 @@
++# HG changeset patch
++# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
++# Date 1734634653 21600
++#      Thu Dec 19 12:57:33 2024 -0600
++# Node ID 883ebf8cae6dfa5873d975fe3476b1a188ef3f9f
++# Parent  cf7cd5ebabb0ca40204de7539f4fb9ae02121958
++ReadWPGImage(): Assure that palette buffer is allocated and the current size.
++
++CVE: CVE-2025-27796
++Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/883ebf8cae6dfa5873d975fe3476b1a188ef3f9f
++[thomas: remove changelog and binary]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++
++diff --git a/coders/wpg.c b/coders/wpg.c
++--- a/coders/wpg.c
+++++ b/coders/wpg.c
++@@ -1704,28 +1704,23 @@
++                 ThrowReaderException(CorruptImageError,InvalidColormapIndex,image);
++               }
++ 
++-              if(pPalette!=NULL &&
++-                 PaletteAllocBytes < 4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries))
++-              {
++-                MagickFreeResourceLimitedMemory(pPalette);
++-                PaletteAllocBytes = 0;
++-              }
+++              /* Assure that buffer is allocated and the current size */
+++              if (PaletteAllocBytes != Max(4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries),4*256))
+++                {
+++                  PaletteAllocBytes = Max(4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries),4*256);
+++                  MagickReallocateResourceLimitedMemory(unsigned char *,pPalette,PaletteAllocBytes);
+++                }
++               if(pPalette==NULL)
++-              {
++-                PaletteItems = WPG_Palette.NumOfEntries;
++-                PaletteAllocBytes = 4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries);
++-                if(PaletteAllocBytes < 4*256) PaletteAllocBytes = 4*256;
++-                pPalette = MagickAllocateResourceLimitedMemory(unsigned char *,(size_t)PaletteAllocBytes);
++-                if(pPalette==NULL)
++-                    ThrowReaderException(ResourceLimitError,MemoryAllocationFailed,image);
++-                for(i=0; i<=255; i++)
+++                ThrowReaderException(ResourceLimitError,MemoryAllocationFailed,image);
+++
+++              PaletteItems = WPG_Palette.NumOfEntries;
+++              for(i=0; i<=255; i++)
++                 {
++                   pPalette[4*i] = WPG1_Palette[i].Red;
++                   pPalette[4*i+1] = WPG1_Palette[i].Green;
++                   pPalette[4*i+2] = WPG1_Palette[i].Blue;
++                   pPalette[4*i+3] = OpaqueOpacity;
++                 }
++-              }
++               if(ReadBlob(image,(size_t) PaletteItems*4,pPalette+((size_t)4*WPG_Palette.StartIndex)) != (size_t) PaletteItems*4)
++               {
++                 MagickFreeResourceLimitedMemory(pPalette);
 diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 4b9f3bd23c..40107b3aae 100644
+index 6c2885b7d8..e329e51b70 100644
 --- a/package/graphicsmagick/graphicsmagick.mk
 +++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -11,6 +11,10 @@ GRAPHICSMAGICK_LICENSE = MIT
- GRAPHICSMAGICK_LICENSE_FILES = Copyright.txt
- GRAPHICSMAGICK_CPE_ID_VENDOR = graphicsmagick
+@@ -26,6 +26,9 @@ GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
+ # 0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
+ GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-32460
  
-+# Wrong NVD annotations
-+# Fixed in version 1.2.3
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2008-6621
++# 0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
++GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27796
 +
- # 0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
- GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
+ GRAPHICSMAGICK_INSTALL_STAGING = YES
+ GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
  
 -- 
 2.53.0
