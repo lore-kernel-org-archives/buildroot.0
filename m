@@ -1,85 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D734EC047D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 09:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BCC1EC047E
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 09:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A4F561383;
-	Tue,  3 Mar 2026 09:36:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 908A741D4D;
+	Tue,  3 Mar 2026 09:51:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rOkv9YSD_sDG; Tue,  3 Mar 2026 09:36:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cInwPb-BSW9L; Tue,  3 Mar 2026 09:50:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D5C361099
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B60F41B26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772530574;
-	bh=GBBQc+to0jeOUmvke9AoKg1ZMnxYzMQeOntkpAGxjRA=;
-	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CBzauqV81Ep113FvZcYKtG5La3qiCL29Iu68O93QNoMVDlosnrHern2L8yo6cJWo/
-	 L/6xWX56kE5w8UnzEmXO8WKMISyVUyElGTBuVwsIKlHIL9kFrZENsIzCgPEiNSJ5D0
-	 7ioevCyelAVbEgbrTZRtxYxEA0cH4fxj+Q2WLA/u6sGsUnZNiiTXKS8U9ZdP/+1F62
-	 tZlt3a9cQlypN5/Vhkw8hRHF6fvSpUgwCMAcvv6WRux8Qb802FygyqEW8Olyn2pp2T
-	 GEsV00Ezww50YqqXuHFFeF+6AVWY/smLpJEve60udu3BpO17as2Ec+gckgtcvK+VgU
-	 snb/8rIPIZCog==
+	s=default; t=1772531459;
+	bh=vQpSPrDPkLlM+ROForN7ue4Mc9Ikk4b3Lt+JVt7Dmzk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=m/LljGyfTnsceJ/txOHjv0gm98e863VYCCx6YipZyg9AZtfxXM7T21oq95aNFblYK
+	 5pu88rvFjQJ0uKB74vAJhQm73lucndK8nab+m+XGitSz8dO9RtkyT5N3i6fimsAVoZ
+	 zKDPfmX2TVrjIn6sTdCCbIEY/oXNs3lqXIvJNYPY0VuuKVZ8+ChTkQlc48XP6Y/cm6
+	 zAwWag/EQ8UOsApt3Sdp0Z2bKQv8MFddta9nxoZN/3MscV3sB2CxnegaP8Wk6vQCAs
+	 Ad27okxK5T9LmkiUnc1jSVF8bB2e8wfVMdujs7sDS1rusjEPvAv4D+i4W1AmQd5NfF
+	 eVOcRlMJE6dEA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D5C361099;
-	Tue,  3 Mar 2026 09:36:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 560C2231
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 09:36:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B60F41B26;
+	Tue,  3 Mar 2026 09:50:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDD111EB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 09:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 538E382306
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 09:36:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF9D741A8C
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 09:50:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zR8Sl7T_G8PP for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 09:36:11 +0000 (UTC)
-X-Greylist: delayed 463 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 03 Mar 2026 09:36:10 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7716E822EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7716E822EE
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7716E822EE
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 09:36:10 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.2])
- by mail.tkos.co.il (Postfix) with ESMTP id 9C424440EA1;
- Tue,  3 Mar 2026 11:28:22 +0200 (IST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260217075502.713155-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 17 Feb 2026 08:55:02 +0100")
-References: <20260217075502.713155-1-bernd@kuhls.net>
-User-Agent: mu4e 1.12.14; emacs 30.2
-Date: Tue, 03 Mar 2026 11:28:23 +0200
-Message-ID: <87ms0pb6tk.fsf@tarshish>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aamo-HoFOXHm for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 09:50:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=115.124.30.118;
+ helo=out30-118.freemail.mail.aliyun.com;
+ envelope-from=cp0613@linux.alibaba.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9C5DD41B26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C5DD41B26
+Received: from out30-118.freemail.mail.aliyun.com
+ (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C5DD41B26
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 09:50:43 +0000 (UTC)
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com
+ fp:SMTPD_---0X-9LRAU_1772531429 cluster:ay36) by smtp.aliyun-inc.com;
+ Tue, 03 Mar 2026 17:50:33 +0800
+From: cp0613@linux.alibaba.com
+To: buildroot@buildroot.org
+Cc: ju.o@free.fr,
+	Chen Pei <cp0613@linux.alibaba.com>
+Date: Tue,  3 Mar 2026 17:50:28 +0800
+Message-ID: <20260303095028.9946-1-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1772530102;
- bh=8u8oKxk7qmzWQuJtUptafwg8lz9+HxwiL8PowW2lHx8=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=NGFxV880qfjHwOeoGDACFLbTYQvkWwmjruSxzWqrJpus5lIXEOVwlgTqFGp9yEuu/
- zEE7fG2ucV23OBwzoPW+3HfFlnCsb0vwitOyudeAcIuSySBRZiQwTN+8UmUmvmyDiP
- 855qRwBobvWW/1HIO1VH4ldbMmRWKT8kqrKYPU1HNZLrUn0N0XRbqzwLRCXEJF/7RM
- baNVG5GWQ4QCNf5ZZqXYrFl1RVRadGJok3mofseXyFHyjyhIL5a6ld/3WqJaFPGLXl
- eJ+EB7BC1R9v95aJRgUeRn9jy02sGjlu9I3A+3BD9oCsYtxMzwBpzg6BczskPuHLdY
- zOMkKFkRE71bQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=NGFxV880
-Subject: Re: [Buildroot] [PATCH 1/1] package/socat: bump version to 1.8.1.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linux.alibaba.com; s=default;
+ t=1772531434; h=From:To:Subject:Date:Message-ID:MIME-Version;
+ bh=07NDleBbR536mYuyhXDi/nXP9iDJ6eMj3PJope5NcsU=;
+ b=l/GN/CBGMqZeDdT2v2QJEwhTMwQ1tgpqBhWcCbSYatyAnhw3GY/b0f9pox3JLYZEwkSYEWcCBM1tn2PulCRUgO7VrX10ACfR24NR36UjJWXl3EbbRHyGqYIQ7iTWPEhHNwb9Z4yqjf6TiLk8f714tDq7oq82T4HWS+7KLnDGNYk=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=linux.alibaba.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com
+ header.a=rsa-sha256 header.s=default header.b=l/GN/CBG
+Subject: [Buildroot] [PATCH] package/iniparser: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,101 +84,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+From: Chen Pei <cp0613@linux.alibaba.com>
 
-On Tue, Feb 17 2026, Bernd Kuhls wrote:
-> http://www.dest-unreach.org/socat/
->
-> 2026-02-12: Socat version 1.8.1.1 has been released.
->  It fixes compilation with glibc 2.43, xio-netlink.c for Musl, and a few
->  minor bugs, see file CHANGES
->
-> 2025-12-08: Socat version 1.8.1.0 has been released. It fixes a couple
->  of minor issues and provides new address types TEXT and STALL and a few
->  new address options.
->
-> Rebased patch 0001 due to upstream commit
-> https://repo.or.cz/socat.git/commitdiff/2cc1f11d02928e7eca9560506dfc6e97a0ac92e3
->
-> Updated hash of README, used as license file, due to version bumps:
-> https://repo.or.cz/socat.git/history/HEAD:/README
->
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The iniparser is a simple C library offering ini file parsing services.
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+ndctl[1] requires it.
 
-Thanks,
-baruch
+[1] https://github.com/pmem/ndctl
 
-> ---
->  package/socat/0001-no-documentation.patch | 4 +++-
->  package/socat/socat.hash                  | 6 +++---
->  package/socat/socat.mk                    | 2 +-
->  3 files changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/package/socat/0001-no-documentation.patch b/package/socat/0001-no-documentation.patch
-> index 5dbce0576e..13e9e503f2 100644
-> --- a/package/socat/0001-no-documentation.patch
-> +++ b/package/socat/0001-no-documentation.patch
-> @@ -12,6 +12,8 @@ Upstream: N/A
->  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  [baruch: update for 1.8.0.0 and 1.8.0.3; git patch format]
->  Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +[Bernd: rebase on 1.8.1.1]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->  ---
->   Makefile.in | 7 ++-----
->   1 file changed, 2 insertions(+), 5 deletions(-)
-> @@ -22,7 +24,7 @@ index c01b1a4a2306..fd89acb06f3c 100644
->  +++ b/Makefile.in
->  @@ -82,7 +82,7 @@ SHFILES = socat-chain.sh socat-mux.sh socat-broker.sh \
->   TESTFILES = test.sh socks4echo.sh proxyecho.sh readline-test.sh \
-> - 	proxy.sh socks4a-echo.sh socks5server-echo.sh
-> + 	proxy.sh socks4a-echo.sh socks5server-echo.sh socks5server-auth.sh
->   
->  -all: progs doc
->  +all: progs
-> diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-> index b1c3d3cd11..3a4eec60c1 100644
-> --- a/package/socat/socat.hash
-> +++ b/package/socat/socat.hash
-> @@ -1,8 +1,8 @@
->  # From http://www.dest-unreach.org/socat/download.md5sum
-> -md5  8ef0bc4f602636797917f8574c3b249e  socat-1.8.0.3.tar.bz2
-> +md5  5456f0f0c5d4505b68edcb10e23ef128  socat-1.8.1.1.tar.bz2
->  # From http://www.dest-unreach.org/socat/download.sha256sum
-> -sha256  01eb017361d95bb3a6941e840b59e4463a3fabf92df4154ed02b16a2ed6a0095  socat-1.8.0.3.tar.bz2
-> +sha256  5ebc636b7f427053f98806696521653a614c7e06464910353cbf54e2327adc1b  socat-1.8.1.1.tar.bz2
->  # Locally calculated
-> -sha256  f51653b61cf2516c39e8f2edefc11604d0f9d14f0c6ae988bef228a1f0283ad2  README
-> +sha256  86e46422f9381b386bd2eb6606f9d6c3ff479f905660d0f318c571292ab304b8  README
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
-> diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-> index 69f8f40452..3d40540599 100644
-> --- a/package/socat/socat.mk
-> +++ b/package/socat/socat.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SOCAT_VERSION = 1.8.0.3
-> +SOCAT_VERSION = 1.8.1.1
->  SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
->  SOCAT_SITE = http://www.dest-unreach.org/socat/download
->  SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+---
+ package/Config.in                |  1 +
+ package/iniparser/Config.in      |  7 +++++++
+ package/iniparser/iniparser.hash |  3 +++
+ package/iniparser/iniparser.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/iniparser/Config.in
+ create mode 100644 package/iniparser/iniparser.hash
+ create mode 100644 package/iniparser/iniparser.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 20c9a2e155..d1dce9c4d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2336,6 +2336,7 @@ menu "Text and terminal handling"
+ 	source "package/fstrcmp/Config.in"
+ 	source "package/icu/Config.in"
+ 	source "package/inih/Config.in"
++	source "package/iniparser/Config.in"
+ 	source "package/libcli/Config.in"
+ 	source "package/libecoli/Config.in"
+ 	source "package/libedit/Config.in"
+diff --git a/package/iniparser/Config.in b/package/iniparser/Config.in
+new file mode 100644
+index 0000000000..56764c04e6
+--- /dev/null
++++ b/package/iniparser/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_INIPARSER
++	bool "iniparser"
++	help
++	  iniparser is a simple C library offering ini file
++	  parsing services.
++
++	  https://gitlab.com/iniparser/iniparser
+diff --git a/package/iniparser/iniparser.hash b/package/iniparser/iniparser.hash
+new file mode 100644
+index 0000000000..27a5fa81aa
+--- /dev/null
++++ b/package/iniparser/iniparser.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  67575ed032a544d5359610e5f697af786371bbc3eb01311218ef8adfd3e5e329  iniparser-v4.2.6.tar.gz
++sha256  da809b67f3cc571433b7b97d4253ae1f9d8817770aa859aad202df6bde1d5fde  LICENSE
+diff --git a/package/iniparser/iniparser.mk b/package/iniparser/iniparser.mk
+new file mode 100644
+index 0000000000..9034a1cb78
+--- /dev/null
++++ b/package/iniparser/iniparser.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# iniparser
++#
++################################################################################
++
++INIPARSER_VERSION = v4.2.6
++INIPARSER_SITE = https://gitlab.com/iniparser/iniparser/-/archive/$(INIPARSER_VERSION)
++INIPARSER_SOURCE = iniparser-$(INIPARSER_VERSION).tar.gz
++INIPARSER_INSTALL_STAGING = YES
++INIPARSER_LICENSE = MIT
++INIPARSER_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
