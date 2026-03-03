@@ -4,110 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9272AEC145E
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 15:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6751BEDA685
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 15:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 184D760F7C;
-	Tue,  3 Mar 2026 15:00:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 066696060B;
+	Tue,  3 Mar 2026 15:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OSsSSMJc23UA; Tue,  3 Mar 2026 15:00:25 +0000 (UTC)
+ id aQp7MZwuNTsE; Tue,  3 Mar 2026 15:16:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA73460DDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ACBF6079F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772550025;
-	bh=CehCvmjoPFhJgnyWTX8Mgx4dw/NI2WDDx7Tdgkchlz4=;
-	h=Date:To:From:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=UNo6lm2q4PUXW7uMLTTAuCpbV1UYDJuVsUYmMStpUiLUYajsEfSnD3qJabf8tWju/
-	 WZFknuNrm3jhLo6E3ObyF3k8Gfjne7nL7emE2VlcxsXWvQgwK4mOUeDnbY305z3fnd
-	 AIN/FraACnf03eS3lrWW5BJ9/UOcd6ck9WyJ/JyWSV64ycPwLEbWMcXjyWRab4Ig/+
-	 pIXsUh6silUT08nJ4RkkY1PuM1HqvHJLwlzokyslvkTzNBKtySo/GRDB6cGE+Fm6z0
-	 +R4vIjCFzNusCn2602AQI7BZ3dgYr2GYTjbBBlrYLSM5i7KpCih3wnbB21bmSVo03S
-	 Gk1WoKicFOsNw==
+	s=default; t=1772551011;
+	bh=eOCHRsnL6RFSp89AB9c0D6TibeRtbHJh4JI5A2VitCg=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=eXIgyNZKA8d4j749NHR15j5FSVkz6rhLxPE+oqceOmXH3tCZAfAStYCV6Fj2KNeRs
+	 58KoQfv+guJ/KFSUVfcsAnE68gW0BFnWeBKGJiHPEdzrFBqdwHy8KbmImr6H6TuAue
+	 OEkifZqkkD7ZK6g3SoM/3CAhkStvxxuggEzvDIoONUHv4b5JNaxZhQnqyl/knI10eV
+	 KnFllv4qQ1gQKTlNjFmN8rCDMfTajbaC3/R1BhbU056nKf1+HcIoOhRxlFqv6vvgaH
+	 DGNGE8mEThzyBdGgwwyjFmUW5kkE0HKcNVMxSEFvv15ZEP5XSNnNfkZj6IhLjQKkW1
+	 zZ3V7vybtzvBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA73460DDD;
-	Tue,  3 Mar 2026 15:00:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 784781EB
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:00:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2ACBF6079F;
+	Tue,  3 Mar 2026 15:16:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FBDB231
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E53460DDD
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:00:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D37E6079F
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:16:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Xlew8EQRBdp for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 15:00:23 +0000 (UTC)
+ id fmpOUKa3Z_H6 for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 15:16:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
- envelope-from=oxffffaa@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7F44C60BB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F44C60BB7
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7F44C60BB7
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:00:23 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id
- 38308e7fff4ca-389f9895c81so34409721fa.2
- for <buildroot@buildroot.org>; Tue, 03 Mar 2026 07:00:23 -0800 (PST)
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 32CA06060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32CA06060B
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 32CA06060B
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 15:16:47 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-48372efa020so51083005e9.2
+ for <buildroot@buildroot.org>; Tue, 03 Mar 2026 07:16:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772550021; x=1773154821;
- h=content-transfer-encoding:subject:from:cc:to:content-language
- :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=s5KaFHqciSjmP5KCWk1u8cHpNm2g3qjtsWqRfOTH5GM=;
- b=HJDCQnZsezql5a/giWr5gNKslVwd7PQjTafvCIPX1pDkoKlK44oGmSPk0XJIrri2jq
- D0NBJl5Wsw6OnHUGgIvLumPsO198S+IJcyH2eWb7s1dytpxPy/a3xbAvWkr7Re+f9Dxh
- k1SsVVNpb7jAx+MbrzcdTRe7gT47rqTnTLc/n0WkIKtkwu5U0OaWKXZIEFLpM+TdUBRb
- 1P5Et+TrX/Ia4V01VcMqwqQBy0MApjOWHTKtMvJqZ/UWt5wf3nayugSzrAF3Hl6lbXdn
- ABLvgYiFSdrtmWRt3PQht+OT0QWX252dP1oVKERiss5/KDeiLYL7AGfdl5xxC+JgzNcy
- qfDQ==
-X-Gm-Message-State: AOJu0YwUjXb++hrbOiIOALxxy3Gfo2XkxujtJ5mL1DcPXLvKN/xw0lVt
- Uu4J/khO4ev7nJoSb2OgeLejhcawNF9B0YpjqfIoJHkqOWswrEA5L/LNRePkmsP4
-X-Gm-Gg: ATEYQzylm/NhBUZRiPYx8z9aN/U8NNehyIQs/nYhjrZX8p+SrfnT0UAYEpKItBl+424
- tN8xmQhfDDvuzK9vnWrty91uFJ7/lj8PbCAH1jHxIrRJJKXtpcbJNEkOIy7yNGsOLtZbnqVaGkW
- XteLhDWQJKnkJ0aMPLqfbXlCTEDrFb2lUtaIeTXMGXKmsGsU/hrBVy6Hzjxwb1I96Z8Jlx5LHEO
- m7ToSBsblA2HyH9WSGj9rGYYTuZpibORhEAlWlnUbzuGsm63Wvtsi5g/l5QgXI+/yTv9ZXeiIlJ
- VaQaNGWo96RCdw8xN5wSXhxm7l6V/YSZuIoFCRIzW5ripQUHOi0jJdRBHqwoa2SRt2Un3oVSwwD
- K+EfGF3wkLUrTfTsY60yRlyYUDZt45xPcQ1qBhp3Zs1DN8L2V2GcGEAkrGE8SJdrHM0Tji0RRkY
- OEwkH7ihGshsfu9L9ABSfZhr0Jsrk=
-X-Received: by 2002:a2e:8890:0:b0:389:fd1d:48ed with SMTP id
- 38308e7fff4ca-389ff364574mr86036351fa.36.1772550020100; 
- Tue, 03 Mar 2026 07:00:20 -0800 (PST)
-Received: from [192.168.0.111] ([77.220.140.242])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5a1235914cdsm622369e87.8.2026.03.03.07.00.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 03 Mar 2026 07:00:19 -0800 (PST)
-Message-ID: <987bd2ed-5087-4ee4-b3ce-3cb7a9030563@gmail.com>
-Date: Tue, 3 Mar 2026 18:00:18 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: ru
+ d=1e100.net; s=20230601; t=1772551005; x=1773155805;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=H3JG57PmgEevU9Wv+oHS+57xU73tC1YmFVPz8hWos+U=;
+ b=mC3l2wxLPHn3y+21mZaAFbbu3ShxF0She1G+fahasfTMD1JZcERe1dn1uEY7Yq5nYf
+ 7zL/R47vIwvQWxrC6w/Yfa62hvmtsTKFtI6hJWSz5IfJXA92/Ek72BApr5laTDMcm8KB
+ GCR2Pf2CU0SN9Z6uNE3P4QtxwdE+GDZ7gpFCKMn/FcbRCSfhsGcktv7JG1ekVwfu3SIc
+ 9OwVgjAESW7FUveFzWyBqP4zv0SUdpFgItg/2bBvVIVgz4bQ3piClx2sJOZL3+GMvsb6
+ d50xIcer7iEnJc/xbRoYL91srkHXL+JpVgX8F055KaOL2QW2TL7grxcEQ/cb+Zu41O9L
+ w35g==
+X-Gm-Message-State: AOJu0YymZdFQYVQD9Y0i6qQNb40eUI0mublMAmKt/hXZqDL+htqLzcog
+ 7IJSMoga1vPKUfRWA7SH927BSEjEd5KPxK4eWusnnysbZqDEknhIKlmDaEf0mdSaZ8yskKGPss7
+ lPSh5
+X-Gm-Gg: ATEYQzw8G6AiL1HCSve0F9/Rj99R0Bww942g2Da+ekHo1nLmHZElbLMCm/FdfIKHj5m
+ b0t0vxFmANQAWdhPX0aVwW6SU0pp3FE1XBIRwTgtpdarTbNfy1sNFYH5kAdpytdSeo8es41As0x
+ R2alX7TkgsU9OpzjdP7+GvkTkBnKyHaAwbcvIgebTKxjoo5nRYK1WATtXf4OeVoSrItWDaTG5se
+ iqlJUx5lGDvUlxxWr0tmkpXxt5FYT/2adHxdKn8Y2wvg9bvRG4EL2qBbfbCse1LRU0qXv4sGkjL
+ TZXj9xkJTxyKjwC9kcWCQx5v08v2UZZl2XE9XifWGBr6lo9bJia4EK1AAihEypD9i+q6QRDhJud
+ G5nqHcj2HBTFbkRbISAEcjBMcblLu8FgHW6gh/2tSzlfuofCxdawkDOOzFw9Q1eeh2XDBze1DlG
+ +E852enKTNtVfhFJY=
+X-Received: by 2002:a05:600c:1f06:b0:47d:586e:2fea with SMTP id
+ 5b1f17b1804b1-483c9bc557fmr294106515e9.15.1772551005297; 
+ Tue, 03 Mar 2026 07:16:45 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-485135d52f6sm17839655e9.31.2026.03.03.07.16.43
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 03 Mar 2026 07:16:43 -0800 (PST)
 To: buildroot@buildroot.org
-From: Arseniy Krasnov <oxffffaa@gmail.com>
+Date: Tue,  3 Mar 2026 16:16:33 +0100
+Message-ID: <20260303151641.382820-2-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260303151641.382820-1-thomas.perale@mind.be>
+References: <20260303151641.382820-1-thomas.perale@mind.be>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1772550021; x=1773154821; darn=buildroot.org;
- h=content-transfer-encoding:subject:from:cc:to:content-language
- :user-agent:mime-version:date:message-id:from:to:cc:subject:date
- :message-id:reply-to;
- bh=s5KaFHqciSjmP5KCWk1u8cHpNm2g3qjtsWqRfOTH5GM=;
- b=j5MReG9lOLbU9ncqkbT3RZC/8FzSS7n3xuXWA/uXdWML1XX6FWl/G+rYk86T9XFl9S
- 93SCffrlrYb2qia4nOf6ZBfY8irw+WtxvqrfwMapL2284SzG8VIsOJSpRHr5TaxaFyrs
- 6yw2VO+tQ8zhIf9Upl+FQfZUO0TWDAf0AAN84otou492DuBYvmhy7LW9B1IsU7+aRJxv
- t0xIg/79+J8KiO/8y8w+LbuNmwwojZG8swY4tzIxAEWJVRf8NLAj4nr3k1XKAFYA2w38
- TkdipMdRVx8hfa/8a/DS1BCZILpm1JF8fTXzUC7gVluIB/pQ/+jeuJL/4KHMmgA2PsXR
- psXQ==
+ d=mind.be; s=google; t=1772551005; x=1773155805; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=H3JG57PmgEevU9Wv+oHS+57xU73tC1YmFVPz8hWos+U=;
+ b=GSXUSUHzCgqwjyMhZxzne+3OoCUsp/jdJwDv08SDf2Cafd9QFDDIdGO5/i04brHbgk
+ MSqHu7S86LBkHdSmBER7Lb2H0WJTJrXFEFlmfaxshO7I868L2hWKsprYdDRm0o8xNQsT
+ l3f7K9tA0rQF76OWUN6wnVnJJwqiD3T51woRfFm1E5sve/SuaS9IXyKyHHj7WFWLIKgt
+ /anJGxdDcex8m1dE2v8e5aB7YdBxI3rhSroNjY5qgWGBW2hjtb9EioL804WZMWhZqBz3
+ JjwsQcDFS25Uy5a0KD2KGAD4lhnF/1cQzTt+hTDY/JhXJuVRC0oMaJTk3mIlHoPReqFL
+ kPgQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=j5MReG9l
-Subject: [Buildroot] [PATCH v1] package/wpa_supplicant: add option for
- bgscan "learn"
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=GSXUSUHz
+Subject: [Buildroot] [PATCH v4 1/8] utils/generate-cyclonedx: use tuple for
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,38 +121,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ClRoaXMgbW9kZSBmb3IgYmdzY2FuIGlzIGV4cGVyaW1lbnRhbCBhbmQgdGh1cyBpcyBkaXNhYmxl
-ZCBieSBkZWZhdWx0LgoKU2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxveGZmZmZhYUBn
-bWFpbC5jb20+Ci0tLQrCoHBhY2thZ2Uvd3BhX3N1cHBsaWNhbnQvQ29uZmlnLmluwqAgwqAgwqAg
-wqAgwqB8IDUgKysrKysKwqBwYWNrYWdlL3dwYV9zdXBwbGljYW50L3dwYV9zdXBwbGljYW50Lm1r
-IHwgNCArKysrCsKgMiBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL3dwYV9zdXBwbGljYW50L0NvbmZpZy5pbiBiL3BhY2thZ2Uvd3BhX3N1cHBsaWNh
-bnQvQ29uZmlnLmluCmluZGV4IGE0NDJlYWE2NDEuLmQ2YzI5MTRiNjcgMTAwNjQ0Ci0tLSBhL3Bh
-Y2thZ2Uvd3BhX3N1cHBsaWNhbnQvQ29uZmlnLmluCisrKyBiL3BhY2thZ2Uvd3BhX3N1cHBsaWNh
-bnQvQ29uZmlnLmluCkBAIC0xODAsNCArMTgwLDkgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1dQQV9T
-VVBQTElDQU5UX0RCVVNfSU5UUk9TUEVDVElPTgrCoCDCoCDCoCDCoHNlY3VyaXR5IGNvbmNlcm5z
-LCBidXQgc29tZSBzeXN0ZW1zIG1heSB3YW50IHRvIHN1cHBvcnQgV0VQCsKgIMKgIMKgIMKgbmV0
-d29ya3MuCsKgCitjb25maWcgQlIyX1BBQ0tBR0VfV1BBX1NVUFBMSUNBTlRfQkdTQ0FOX0xFQVJO
-CivCoCDCoCBib29sICJFbmFibGUgYmdzY2FuIFwibGVhcm5cIiIKK8KgIMKgIGhlbHAKK8KgIMKg
-IMKgIEVuYWJsZSBleHBlcmltZW50YWwgImxlYXJuIiBtb2RlIGZvciBiZ3NjYW4uCisKwqBlbmRp
-ZgpkaWZmIC0tZ2l0IGEvcGFja2FnZS93cGFfc3VwcGxpY2FudC93cGFfc3VwcGxpY2FudC5tayBi
-L3BhY2thZ2Uvd3BhX3N1cHBsaWNhbnQvd3BhX3N1cHBsaWNhbnQubWsKaW5kZXggODY5OTc4MDcz
-Ni4uZWVkZDVkNDA5MyAxMDA2NDQKLS0tIGEvcGFja2FnZS93cGFfc3VwcGxpY2FudC93cGFfc3Vw
-cGxpY2FudC5taworKysgYi9wYWNrYWdlL3dwYV9zdXBwbGljYW50L3dwYV9zdXBwbGljYW50Lm1r
-CkBAIC0xMjYsNiArMTI2LDEwIEBAIGlmZXEgKCQoQlIyX1BBQ0tBR0VfV1BBX1NVUFBMSUNBTlRf
-V1BTKSwpCsKgV1BBX1NVUFBMSUNBTlRfQ09ORklHX0RJU0FCTEUgKz0gQ09ORklHX1dQUwrCoGVu
-ZGlmCsKgCitpZmVxICgkKEJSMl9QQUNLQUdFX1dQQV9TVVBQTElDQU5UX0JHU0NBTl9MRUFSTiks
-eSkKK1dQQV9TVVBQTElDQU5UX0NPTkZJR19FTkFCTEUgKz0gQ09ORklHX0JHU0NBTl9MRUFSTgor
-ZW5kaWYKKwrCoCMgV1BBMyBjb25maWd1cmF0aW9uczoKwqAjIC0gQ09ORklHX0RQUDogRWFzeSBD
-b25uZWN0IChEZXZpY2UgUHJvdmlzaW9uaW5nIFByb3RvY29sIC0gRFBQIFIxICYgUjIpCsKgIyAt
-IENPTkZJR19TQUU6IFNpbXVsdGFuZW91cyBBdXRoZW50aWNhdGlvbiBvZiBFcXVhbHMgKFNBRSks
-IFdQQTMtUGVyc29uYWwKLS3CoAoyLjQ3LjMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+Allows to compare different (major, minor) version easily.
+
+In next commit, an optional newer version of CycloneDX will be
+introduced and this syntax makes it easy to compare without introducing
+a dependency to 'packaging.version'.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ utils/generate-cyclonedx | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 2b6c6d63d3..eff55bf598 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -20,13 +20,13 @@ import sys
+ import re
+ 
+ 
+-CYCLONEDX_VERSION = "1.6"
+-SPDX_SCHEMA_URL = f"https://raw.githubusercontent.com/CycloneDX/specification/{CYCLONEDX_VERSION}/schema/spdx.schema.json"
++CYCLONEDX_VERSION = (1, 6)
++SPDX_SCHEMA_URL = "https://raw.githubusercontent.com/CycloneDX/specification/{}.{}/schema/spdx.schema.json".format(*CYCLONEDX_VERSION)
+ 
+ brpath = Path(__file__).parent.parent
+ 
+ cyclonedxpath = Path(os.getenv("BR2_DL_DIR", brpath / "dl")) / "cyclonedx"
+-SPDX_SCHEMA_PATH = cyclonedxpath / f"spdx-{CYCLONEDX_VERSION}.schema.json"
++SPDX_SCHEMA_PATH = cyclonedxpath / "spdx-{}.{}.schema.json".format(*CYCLONEDX_VERSION)
+ 
+ BR2_VERSION_FULL = (
+     subprocess.check_output(
+@@ -413,8 +413,8 @@ def main():
+ 
+     cyclonedx_dict = {
+         "bomFormat": "CycloneDX",
+-        "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+-        "specVersion": f"{CYCLONEDX_VERSION}",
++        "$schema": "http://cyclonedx.org/schema/bom-{}.{}.schema.json".format(*CYCLONEDX_VERSION),
++        "specVersion": "{}.{}".format(*CYCLONEDX_VERSION),
+         "metadata": {
+             "component": {
+                 "bom-ref": args.project_name,
+-- 
+2.53.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
