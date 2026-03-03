@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7503CEDEBF0
-	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 20:57:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 079B8EDEBF5
+	for <buildroot@archiver.kernel.org>; Tue,  3 Mar 2026 21:06:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34B868133E;
-	Tue,  3 Mar 2026 20:57:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00B2382410;
+	Tue,  3 Mar 2026 21:06:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id buN1ZQEASIba; Tue,  3 Mar 2026 20:57:01 +0000 (UTC)
+ id FMXuMwjz0PB7; Tue,  3 Mar 2026 21:06:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DD8981366
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E94B823AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772571421;
-	bh=ALaMfat59w0yNMZBmT349Sh8aYVlhxsjo1Ed7xguNjo=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1772571990;
+	bh=/AVd4LZG39XU0djsdIi8/WDKgdJ89l1P8uBHvI/zvSk=;
+	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nqw4GcrxEzjelbC/baVxvsrGAQkPqAheYVat/PIMA3sYE+AZHH/OY0VVP5dmqScZU
-	 aP7hYN1D4ws7JEpit7z1l8Nh0+yGdoFSqF33e6ysnMtwV+grrSMeOjvYhpYdm5Id7m
-	 lkkrTTIxr18brLW7QVFeGPiPtOv0kPiDrc0+iHMXo6dxA0B776VkE9iIMwmcdWUgWP
-	 YLiJn2WaV2BG0Iep7pcFjI3f+HssfKzxTWRpsOEP7TtcWZMGz6SNsWq9tN6BEX5I1D
-	 1efW0zPfar9Ta9ETS0s0hBFlZrkL2zenO7PoOnAhREn6vNEnVGCXpB/YeFcUj1SdUg
-	 vz6C4EQtGD/2A==
+	 Cc:From;
+	b=UiQ7nP3WFNoGEePX9RRalo/woNcw4tQEDLC9Y2c1uKCkL3nC01Z063z+CgEvsINmP
+	 9cSpl6Uj+gkxoUVAxi1M0eUteupAmswELCHPmK+z1MUh8dGu6k5VXE3nCm9iyVshmK
+	 WyjZFyBNz+V59tBqQRnUsdaaaWl0N2/c3Lg9hiOiPOCX5U2xs+KS1fkrQ2SoeITEGy
+	 X91sG01kggCrqKMtVF4jii6SwwW8VZZHrYQ83kpjnk1uj2/kqvSxYlQw6mUOfbcv7F
+	 USrIDwIGnDO7N5Wc5YD8aQNKMsoZv2HCW8xzC+Z8151bsVCkFnBzT9p05pIzcZG851
+	 D71cXu7UrLu/A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DD8981366;
-	Tue,  3 Mar 2026 20:57:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C2FA725B
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:56:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E94B823AB;
+	Tue,  3 Mar 2026 21:06:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDB59231
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 21:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4C6481366
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:56:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEF4540202
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 21:06:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p5nwZW9fPl4W for <buildroot@buildroot.org>;
- Tue,  3 Mar 2026 20:56:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E852F8133E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E852F8133E
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E852F8133E
- for <buildroot@buildroot.org>; Tue,  3 Mar 2026 20:56:58 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 64E91B97B552; Tue,  3 Mar 2026 21:56:55 +0100 (CET)
-Message-ID: <578a97c0-6200-4c5a-87cf-99f02e26aa64@rnout.be>
-Date: Tue, 3 Mar 2026 21:56:53 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ASF-Z7sPmWA4 for <buildroot@buildroot.org>;
+ Tue,  3 Mar 2026 21:06:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8EDFB401EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EDFB401EB
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8EDFB401EB
+ for <buildroot@buildroot.org>; Tue,  3 Mar 2026 21:06:27 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1251333206; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 03 Mar 2026 21:06:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vxWwf-0000000Glz6-3p6s;
+ Tue, 03 Mar 2026 22:06:21 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Neal Frager <neal.frager@amd.com>
+In-Reply-To: <20260303105825.1234428-1-neal.frager@amd.com> (Neal Frager's
+ message of "Tue, 3 Mar 2026 10:58:23 +0000")
+References: <20260303105825.1234428-1-neal.frager@amd.com>
+Date: Tue, 03 Mar 2026 22:06:21 +0100
+Message-ID: <87seagipwy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Quentin Schulz <quentin.schulz@cherry.de>,
- Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org
-Cc: Gregory Dymarek <gregd72002@gmail.com>
-References: <20250224-libwebsockets-zlib-opt-v1-1-16419ae3e82b@cherry.de>
- <a980f4f5-27bb-4ae1-94ee-69f7abe96ae0@rnout.be>
- <7952c8b9-0069-471d-ae1c-dd021c4bd63d@cherry.de>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <7952c8b9-0069-471d-ae1c-dd021c4bd63d@cherry.de>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1772571416; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=IvKRkh+sSKBUtPet4Ye8jEn9foReGm1ReHL4YbLlzzk=;
- b=Ap10H8xSiS7NVuk/G1dTFtt/DiB9xPKrdTGRDofBxszBdE97ENqtIIJDVfs+lRhZA/LWhl
- 8AIY+iJWv3FCcFEoBpLcausiGXgiuu/CQF11WhXDLEpAhT/wv+C2HKqwN882umjjpyq0eh
- ExMuZ9HnzuYq4YvNt9YUq+vUMHTJ8fsXWDUT5sFO0xvpXts4rUxM/+pJg8swKZR4KGkqOB
- Rqt2IX4i1Kv/fj6QQRBAnKdCAV6xOwWuxILLxWKdxY4SvOqXtDVFa8kQdhvBkcw9yjMEcy
- cO3SAuV+Y6VjO91nsoYMcin+faviDW7amWbz2gfOn78/KkCMhy//Q1Kbu5tdlQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=WIO0hejlDIEQx4HkjeV94UFD1NuOLZaN2NUQf+KEWBmLCN/VvM5g+eRHcWqm9PEidBWhCAWasignOri+G/sPLuMpYZS5H5dESDrPqFJSYovENSX65DGXo27PSnuITrd52/iBdTGVqCxY0327UluRHzO6etUTDrxmF7t6QtiQQb1+Plwm6x8jKmRfDZStWee1f/Wlk9JZZPgWuUAAbnZrlb+595V/1EtGo/2KmRic6v6Ui2RjbJ9Miefb7UDtNo9c6ik0eqjq9wPNwQL/vthetBZZmHmQ84F8WoyGFdbmSgDDsXRJh1k4pN1R0rutwDThDrADnSrJbe5UBDLyOZeaYg==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=Di2b1C0NeZQxCpZZoX6Kl7gbnT23H3v1cVQGk06VtLY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Ap10H8xS
-Subject: Re: [Buildroot] [PATCH RFC] package/libwebsockets: make zlib
- dependency optional
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=WIO0hejl
+Subject: Re: [Buildroot] [PATCH v1 1/2] board/xilinx/linux.hash: add license
+ file hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,27 +92,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: kory.maincent@bootlin.com, yann.morin@orange.com,
+ ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ buildroot@buildroot.org, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAyNy8wMi8yMDI2IDE2OjQ2LCBRdWVudGluIFNjaHVseiB3cm90ZToKPiBIaSBBcm5vdXQs
-Cj4gCj4gT24gMi80LzI2IDU6MjUgUE0sIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgpbc25p
-cF0KPj4gwqDCoEdpdmVuIHRoZSBicmVha2FnZSBvZiBleHRlcm5hbCBwYWNrYWdlcywgSSB0aGlu
-ayB0aGlzIG5lZWRzIGFuIGV4cGxpY2l0Cj4+IENvbmZpZy5pbiBvcHRpb24gdGhhdCBkZWZhdWx0
-cyB0byB5LiBCdXQgSSByZWFsbHkgZG9uJ3Qgc2VlIHRoZSBwb2ludCBhdCB0aGlzIAo+PiB0aW1l
-Lgo+Pgo+IAo+IEZhaXIgZW5vdWdoLCB0aGF0IHdhcyBteSBmaXJzdCBpZGVhIGFzIHdlbGwgKGFz
-IHlvdSBjYW4gc2VlIGJlbG93IHRoZSBjb21taXQgCj4gbG9nIDopICkgYnV0IEkgZm9yIHNvbWUg
-cmVhc29uIGNoYW5nZWQgbXkgbWluZCBhbmQgd2VudCBmb3IgdGhpcyBpbXBsZW1lbnRhdGlvbiAK
-PiBoZXJlLgo+IAo+IFdvdWxkIHlvdSBiZSBvcGVuIHRvIGEgcGF0Y2ggZm9yIGFuIG9wdGlvbiBl
-bmFibGVkIGJ5IGRlZmF1bHQgdG8gZW5hYmxlIAo+IGV4dGVuc2lvbnMgKGFuZCBzZWxlY3QgWkxJ
-QiBkZXBlbmRlbmN5KT8gU3VjaCB0aGF0IEkgY2FuIGRpc2FibGUgdGhpcyB0aHJvdWdoIGEgCj4g
-ZGVmY29uZmlnIGluc3RlYWQgb2YgYSBwYXRjaD8KCiAgWWVzLCBJIHRoaW5rIHRoYXQgd291bGQg
-YmUgdGhlIHdheSB0byBnby4KCiAgRG8gbWFrZSBzdXJlIHRvIG1lbnRpb24gdGhlIGF0dGFjayB2
-ZWN0b3IgYXNwZWN0IGluIHRoZSBjb21taXQgbWVzc2FnZS4KCiAgUmVnYXJkcywKICBBcm5vdXQK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+
+ > Now that custom Linux versions can specify license files, add license file
+ > hashes for the Xilinx custom Linux version.
+
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
