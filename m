@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BC6DEFCE4D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 21:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60759EFCE4B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 21:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B5F040940;
-	Wed,  4 Mar 2026 21:24:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDBF440940;
+	Wed,  4 Mar 2026 21:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AYKSeuq9swFk; Wed,  4 Mar 2026 21:24:52 +0000 (UTC)
+ id DnYcvr_824wx; Wed,  4 Mar 2026 21:25:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9361B40996
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 908AC40CB5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772659492;
-	bh=hWBG/7Ud8Ft+k1pC2TvOR1xY9DklwQs8tW8KlTfrsBs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gMriAOCkU2NszUfRua8AytUgMOleNQ9kZawSnlRa++qrXJAweE/JdheCTzpgwTyG2
-	 1NGkwgbnNlB8UU2Rak4CNGZzLUJd9BntszNLYYCbBLjTP6XQMxGIr7KnT5fCJi6kDa
-	 3a9CQ6Pdo2q71cMB1216Kz0+fNBi1pSNSIQ5weuhqaXUoewvFCJgn2zBoPeYNhZTnz
-	 i7gBwUtiZ7cbK17ZYf+OXqRQGt/EbJ/HvzMqhyxj+x+rZYV6fCAgjA3eBG+V6vDW6Y
-	 eFt89v5AlaIPXCta5UUEv2CXdzNeP2D2NkQsrH5G7Nt+NJFj0fmpKq3BkjOnDcg20A
-	 4I2xcoZuSAArg==
+	s=default; t=1772659511;
+	bh=vp4QJn4h07wYfF3kJjIacu36eaLqU7wPLSVrsazsEb4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=jYGf6oLYEm7D4lpV5kI0/5g0q7kw7Vfe0ahwqw4g6uKck3cz+C7TTysT1SzvRnvSo
+	 SFOuYj7uJGDtFYFuCZQsB8v6k/S1l8Z1LYkiPvd091f0i9MVSyxl4lV/Aq9916wP3X
+	 DS3mQId1Lfr5zZY4/I/M++I6181+++JFoy9taZRo3iBbX6FOoE3/xi5GIYlQp1Y06k
+	 guRzRcZjXzUrlNliBQFLWSsb1qYUecsN8T1HMWjPMO1psrj9I7OCy4vYcQmSCC4Ef+
+	 kvYPJVABdrT+gLhM3vo12JnpyiN0hCV1Pm9IRJZnTs/z8GZCN6K7M/qnTFJ1+bsZNA
+	 J6oy6DslqgSug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9361B40996;
-	Wed,  4 Mar 2026 21:24:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 35C1E223
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:24:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 908AC40CB5;
+	Wed,  4 Mar 2026 21:25:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31253223
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B92040B14
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:24:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22AF082254
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:25:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C-0Fp7B0PA29 for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 21:24:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6574E40694
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6574E40694
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:24:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6145D86210; Wed,  4 Mar 2026 21:24:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 4 Mar 2026 22:22:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a9998e511ca6aea86a166511c4e3cb8456afb06
-X-Git-Newrev: 6c3933d14bc6b8622733f1ada788c168ba9f8775
-X-Patchwork-Hint: ignore
-Message-Id: <20260304212450.6145D86210@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freetype: security bump version to
- 2.14.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y79auqdK3JEH for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 21:25:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A1FD68218C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1FD68218C
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A1FD68218C
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:25:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id DAD6813F861;
+ Wed,  4 Mar 2026 22:25:05 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 04 Mar 2026 22:25:05 +0100
+MIME-Version: 1.0
+Date: Wed, 04 Mar 2026 22:25:05 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260304190143.3481181-1-bernd@kuhls.net>
+References: <20260304190143.3481181-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <fc7398114d7645c85f13c86368e81faa@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772659507;
+ bh=bLp3qITFSKFNI8R/Tji8swAqFjYp5GmWtdiuBkWCVug=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=migTNSE3R0u5ZUA4069+SvxkMEstz3EjLKS4vHyI6f4z1VTUWafPjewyox0zpoflR
+ XpQGBpBn8A1CozSMLq2+ptJBcWpCbMRUPGkHr4Hd2q2cqT0blLSVJEuGdXWzsRKb8L
+ bGg3bjSDOeVcrHyyYkeXuOcOPW/bE/t3X1fQUc8sGwi0Zu5h3HlTjcLzMbz0LSWC2M
+ c64RRNFipKAQrdcXp2RHKOAu4VAztPE2bTDMoMLs26c/ZNdv92MlbfL8cX0OsY9pDB
+ LVOh7vsOYwjqK6fzR9stc328i/0/LL6kV7K3gM6H0KAJFzAZqEwwxZTLddQPqlM3Nn
+ Bba/Iyp1ttA9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=migTNSE3
+Subject: Re: [Buildroot] [PATCH 1/1] package/freetype: security bump version
+ to 2.14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,54 +96,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6c3933d14bc6b8622733f1ada788c168ba9f8775
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/03/2026 20:01, Bernd Kuhls wrote:
+> Release notes:
+> https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
+> 
+> Fixes CVE-2026-23865: https://seclists.org/oss-sec/2026/q1/253
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
-
-Fixes CVE-2026-23865: https://seclists.org/oss-sec/2026/q1/253
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 2c6ab20e19..520e6c2bcf 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.1/
--sha1  20f7a9a3e2996aab82b0648e82d49a78e8813bab  freetype-2.14.1.tar.xz
--sha256  32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc  freetype-2.14.1.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
-+sha1  28200b8f8df5a524f476bdacb20f05da1c33280c  freetype-2.14.2.tar.xz
-+sha256  4b62dcab4c920a1a860369933221814362e699e26f55792516d671e6ff55b5e1  freetype-2.14.2.tar.xz
- 
- # Locally calculated
- sha256  bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 00743fe358..fbf9d13235 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.14.1
-+FREETYPE_VERSION = 2.14.2
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = https://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
