@@ -4,68 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D52E2EF8FFA
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 15:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA465EF8FFC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 16:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6215881241;
-	Wed,  4 Mar 2026 15:33:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5F048137E;
+	Wed,  4 Mar 2026 16:41:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CrgYXWPh9rq0; Wed,  4 Mar 2026 15:33:08 +0000 (UTC)
+ id anLowo9kuEjQ; Wed,  4 Mar 2026 16:41:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A509881198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE1348136F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772638387;
-	bh=ngsEJ9VctEaIdbVChrSCjPD6U5XnLtt8U5MweGie7iA=;
+	s=default; t=1772642473;
+	bh=91lzo6CGAR79pP1faQXB0MofU426UKPN6N7Xb7QCORU=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=IxwIbZEUqhlFG3MCiE9LNvp7wDq+8HyaKFZY5wzWSHftQWrXQZmEGePRlVVTPGYD6
-	 wYMG4i7/UYBCdUAmA8dMFZBe+dFI0lEpIMp0cEHPSd591vuD8vSjqwqHGRJ2jrmqXc
-	 JmhvUP3AONI5NWcKtKqUExWyMAKx22dblV+0iRaUEbBVX58mXRKGjQyFYGeCkKrjpt
-	 5Yqvfjv9uiM9Phuksd3QxvyQf8mG607v/K1JN8uG01rWC3sTI8ugUiQe/eNjgqFhN6
-	 UNu7MYBNXh3m4mz+wn451icuoNnAVqa2hHUU0UWVSwZHZBiYGf5zilSrL+UegMktBo
-	 Q7hrXVhOUvYjA==
+	b=bGKnuHjOzVHNQFmX8HQtExF8UwrKN9ajRyLWY73iRJGy9O59/Yf5NhCO3P2CCjI7E
+	 d93mSsmo1S+ts7kv+YK3VS13OOTOSj5ebW7JN6LNQ8hY7EXKNfdMU9aE8cGaPT5dOX
+	 vlUkVWgBk/jCvag8WDmpBxahodcLFowdT6jju/7JNthbIpBdBeDGIjG1fsBQISUMk9
+	 PmEfyySX7oPOWqiABVEdoeLTGJSMzVjgkpuBcOuBTNTD9vl4Llq3TBmuurMYueDJCV
+	 BG7X04tRIuFEAHojqyNmg8L6GvesE85UKGjUTMJ/0Vgy+6O2TFlfCZFnTKWjbuRihU
+	 yPZR6BQj5hvjA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A509881198;
-	Wed,  4 Mar 2026 15:33:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E64142F2
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 15:33:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE1348136F;
+	Wed,  4 Mar 2026 16:41:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 939041EB
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 16:41:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D8E75607F5
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 15:33:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84F69404E1
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 16:41:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sSd9Mfz_QNDq for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 15:33:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=64.142.111.50;
- helo=d.mail.sonic.net; envelope-from=sen@hastings.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E3BC96079F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3BC96079F
-Received: from d.mail.sonic.net (d.mail.sonic.net [64.142.111.50])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3BC96079F
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 15:33:04 +0000 (UTC)
-Received: from obsidian.. ([76.137.204.246]) (authenticated bits=0)
- by d.mail.sonic.net (8.16.1/8.16.1) with ESMTPSA id 624FMhpe001587
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
- Wed, 4 Mar 2026 07:22:44 -0800
-From: Sen Hastings <sen@hastings.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7AiyGxl-6st9 for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 16:41:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.57;
+ helo=smtpcmd0757.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AAD86404D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD86404D3
+Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AAD86404D3
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 16:41:08 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id xpHVvJH8stpTfxpHVvt5JF; Wed, 04 Mar 2026 17:41:06 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Christian Stewart <christian@aperture.us>, Sen Hastings <sen@hastings.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  4 Mar 2026 07:22:15 -0800
-Message-ID: <20260304152217.2784536-1-sen@hastings.org>
-X-Mailer: git-send-email 2.43.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed,  4 Mar 2026 17:41:04 +0100
+Message-ID: <20260304164104.1764264-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Sonic-CAuth: UmFuZG9tSVaauN7sf0zzl1wZsjevHkct5Fqbpmkl1Uiz4ccCbTK5iWPXzc5nU5aTUhRg3aM3fFbCwAYbUVwJRsEuzmtUvAPP
-X-Sonic-ID: C;SOS//d0X8RGRwKIf40Rrfg== M;No7w/d0X8RGRwKIf40Rrfg==
-X-Sonic-Spam-Details: not scanned (too big) by cerberusd
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=hastings.org
-Subject: [Buildroot] [PATCH 0/2] add mediamtx and hls.js
+X-CMAE-Envelope: MS4xfB+WCPYuznvCeBGTrDredIlUJ9Uc1Tlk5S84ZIIP/nGklYu5xLIJSdPDzCeNzEmwRNcv3SZZ9t/P16RlhNemZvDng8s5l5arAtDdx1PsFde//K6811rf
+ aR3EsetiLzeeR5PBgyjtgVw9GseyjLX5p7wz7ADrX7OKXYeWCYnZe9RCdQEJo4CBOqy+y8UKjYgcSU/anYSHbZVzlQsEOBDn3kJYPN6hozxz3ngyajv7/lPG
+ CCRVRSEUCFciXq0SEjs/KH0S+atNn2805LUWD81fIyE=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1772642466; bh=pbXBzio2T4p+HsL0gpNQLxvygS174HIGMWJUWwb3000=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=TEI877c9NfnpvujtO5SZXcFgU5I4LbBx4gAt1QFpL051UDMKxIzJ//txUY3FenOZn
+ UJ5KJKoJRWviN7P0JQqLGNwbWQCg8TuaFtLeyZ38EG10X7Mli8BepQ610C0MTZw7hy
+ J57IWzVOY3OznNZIMEPNgaRHlAMaq7Kr+9ibvg7+EmqBBm0UgfOMTFul1J9WDAyJK2
+ MtjrxKG5BKzOKQX6RWUrat+GVmB621Vh8Qjb5JvDpKEhpcFpj3brttDUG6b1FZS8AU
+ Zg6o0FyupPuDcY3C842Gy/XM8GgNIQI6aNLYfjthd/c0CjjbNUT2VH6/u6IIEpK4cw
+ j709LKVbMKqyQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=TEI877c9
+Subject: [Buildroot] [PATCH] package/mali-driver: bump to version 2026-03-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,41 +95,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch series adds mediamtx along with hls.js, a required dependency.
-Please take a hard look at this patch series as it's my first time adding
-packages and I want to make sure my ettiquete surrounding host packages
-and javacript libraries is correct. Also, I'm not entirely certain my
-categorization is correct, I'm never quite sure whether to place
-multimedia-serving type packages under networking or multimedia.
+This version extends the Linux version we can build with from 5.11.0
+back to version 5.10.220.
 
-Signed-off-by: Sen Hastings <sen@hastings.org>
+Fixes:
+https://autobuild.buildroot.org/results/fa0c3acfcfc94b0600842ace6d8b09ba2c6c593f/
 
-Sen Hastings (2):
-  package/hls_js: add hls.js
-  package/mediamtx: add mediamtx
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/mali-driver/mali-driver.hash | 2 +-
+ package/mali-driver/mali-driver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- DEVELOPERS                     |  2 ++
- package/Config.in              |  2 ++
- package/hls_js/Config.in       |  7 +++++++
- package/hls_js/Config.in.host  |  7 +++++++
- package/hls_js/hls_js.hash     |  3 +++
- package/hls_js/hls_js.mk       | 25 +++++++++++++++++++++++++
- package/hls_js/host-hls_js.mk  | 19 +++++++++++++++++++
- package/mediamtx/Config.in     |  9 +++++++++
- package/mediamtx/mediamtx.hash |  3 +++
- package/mediamtx/mediamtx.mk   | 20 ++++++++++++++++++++
- 10 files changed, 97 insertions(+)
- create mode 100644 package/hls_js/Config.in
- create mode 100644 package/hls_js/Config.in.host
- create mode 100644 package/hls_js/hls_js.hash
- create mode 100644 package/hls_js/hls_js.mk
- create mode 100644 package/hls_js/host-hls_js.mk
- create mode 100644 package/mediamtx/Config.in
- create mode 100644 package/mediamtx/mediamtx.hash
- create mode 100644 package/mediamtx/mediamtx.mk
-
+diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
+index 0c0de10dac..9929788a4d 100644
+--- a/package/mali-driver/mali-driver.hash
++++ b/package/mali-driver/mali-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  cafcf9af1c8ce5045dc0f077c51b87d204ddad6cf7e5db22bbf6a3d4356be972  mali-driver-5c13ca89d83dec3e51ed1880dff726838bfdecd3.tar.gz
++sha256  438bf34c19974a4e53f60cd95c38e5f6d94089284df7d60e773e7e4e9372a716  mali-driver-5731d558a34b82290eaad22a579a1bd8588d26e8.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
+index 77ef8963a5..90aeb9384a 100644
+--- a/package/mali-driver/mali-driver.mk
++++ b/package/mali-driver/mali-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MALI_DRIVER_VERSION = 5c13ca89d83dec3e51ed1880dff726838bfdecd3
++MALI_DRIVER_VERSION = 5731d558a34b82290eaad22a579a1bd8588d26e8
+ MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
+ MALI_DRIVER_DEPENDENCIES = linux
+ MALI_DRIVER_LICENSE = GPL-2.0
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
