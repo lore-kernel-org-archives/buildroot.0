@@ -1,83 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 553E1EDEC04
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 04:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4FC1EDEC13
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 05:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D20C48156B;
-	Wed,  4 Mar 2026 04:35:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 521A440941;
+	Wed,  4 Mar 2026 05:47:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YpPWtT189w3Z; Wed,  4 Mar 2026 04:35:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sj5SHdTwGOhL; Wed,  4 Mar 2026 05:47:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B56808156D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 435DA40938
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772598910;
-	bh=KGl0pI9qAAkqyrZYOi+OyoWM4gl3SLgI16sxhoJvCNY=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1772603275;
+	bh=owQRUPxFt2F0V0+FFKD4vnKYriUCHhrHYRaVFmSQ/MQ=;
+	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=EveAfyVPfZJLxWi44KJ8lzDqGsj09OEflyy6z5ldOg/sRkDRAerCYpeJR++XtHLbb
-	 qI7nWDBfzdPTi9mOPju66SWelxSR4mhejHibMCklzT5qTU5mD+eGvpO1iBDZsr5R0T
-	 V21K9ABYA0OuhaTaDz766vTqB/1pTyHAaQLsdqYZfIdp5/IDo9ycjAW85h/61Jgphw
-	 hKLKx4PM6VN8aj3iGfgUmOgjaE52PivC3+L8ALXSy4ShECi1j72AX2cTWGRsIFm3MI
-	 qJNC4KiDgfXtBOqbndXPrOjELW2kEX392oTNLby5t9VIaplZlB0v9X/YEM6B01FDS0
-	 mpMqhB6+3wUzA==
+	 From:Reply-To:From;
+	b=UMkYi7BGRZRATgB5aQP7CpEqoyaP6rIc116EztUWlwrklcPMss4mINhcyA9ye1hs1
+	 5WnkvA6nwSOISSrY9ke0IxoXbkZYEQcaUqCCm8BsA41zxFM8AyS9va6XmDWxWGyTGa
+	 UYaPtB7Y2RtqmTEWXHdCQ46u/Ybk+h+1qf+uN8lYl6yd4g48F7wiGeJwbOi7kErVOg
+	 Ifmb9wJ49tHqaqvTWDQpFBuG1BXTZ9qSeMe2TOVQjRkaoGVLm8yiwK3x2QZs9DxmTw
+	 kY53p1pCat2RGef0uYwyN0qcxQxNYaSbiTe15CxlGQMI4UPxdTmfcMM2h5ySN3X3c9
+	 V6yPkyQWfNAzQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B56808156D;
-	Wed,  4 Mar 2026 04:35:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 85F88231
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 04:35:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 435DA40938;
+	Wed,  4 Mar 2026 05:47:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31FE925B
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 05:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BAC040342
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 04:35:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23A5840938
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 05:47:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ED5Do5Bbqv_r for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 04:35:08 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 577884019D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 577884019D
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 577884019D
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 04:35:06 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 04C84BDE0317;
- Wed, 04 Mar 2026 05:35:03 +0100 (CET)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HTEqVWLLysfR for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 05:47:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C3C9940934
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3C9940934
+Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C3C9940934
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 05:47:51 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id 829AE44004A;
+ Wed,  4 Mar 2026 07:47:44 +0200 (IST)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Adrian Perez de Castro <aperez@igalia.com>,
+ =?utf-8?Q?Andr=C3=A9?= Zwing <nerv@dawncrow.de>,  Giulio Benetti
+ <giulio.benetti@benettiengineering.com>,  =?utf-8?B?SsOpcsO0bWU=?= Pouiller
+ <jezz@sysmic.org>,  Petr Vorel <petr.vorel@gmail.com>,  Pieter De Gendt
+ <pieter.degendt@gmail.com>,  Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260303200054.784253-2-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Tue, 3 Mar 2026 21:00:40 +0100")
+References: <20260303200054.784253-1-bernd@kuhls.net>
+ <20260303200054.784253-2-bernd@kuhls.net>
+User-Agent: mu4e 1.12.14; emacs 30.2
+Date: Wed, 04 Mar 2026 07:47:46 +0200
+Message-ID: <875x7cb0xp.fsf@tarshish>
 MIME-Version: 1.0
-Date: Wed, 04 Mar 2026 04:35:02 +0000
-From: Andreas Ziegler <br025@umbiko.net>
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Cc: buildroot <buildroot@buildroot.org>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <mailman.37807.1772576641.2009750.buildroot@buildroot.org>
-References: <mailman.37807.1772576641.2009750.buildroot@buildroot.org>
-Message-ID: <dbd49ae98de7302e5a0cf5394e8c9b05@umbiko.net>
-X-Sender: br025@umbiko.net
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1772598903; bh=Uvd+FY5fcBbHIEJJK4jyKELruAoD8TBIdq35I+rKYT0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=au4yxCbH6KKIX6eM1JtnrVAyxmjcHK/2Rq5hlSTkY2blowgTU7btP5zUOFBXceo8q
- 8nnfD+EG6AbYjiOfLyr7BAFZJTgk5bPAbPlWUVRNX2Q+QqJCfSO68G94KWa+muiKjd
- n01VopnqpPnrZax4gGew2fjC9BLJ4ARd/awndhJk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=au4yxCbH
-Subject: Re: [Buildroot] [PATCH v2] package/icu: fix static linking with
- icu-uc for musl static toolchains
+ d=tkos.co.il; s=default; t=1772603264;
+ bh=QUP+rguOTAxo1TfogcwQOhHtbThc3bcaf5qcWTxn2Qw=;
+ h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+ b=y7Qnn37Nyc0SLd/QufDXo2sKyGRHAeMeBKUhw8ZBO++DBz1nKWxwuOIMbNJEanBuE
+ Qj13yKNV72reac+qHnECFhdzhS5AnwnXiTjZvgm02XL1iSXTJjckWPttSFKFDq+zH7
+ VT7CwvcI55AeeNNwak8zRnY4ogJUGVrtuLMR3CWkRD/KVtifhR34A0+j3JAwlXHhQJ
+ /L2+RaNhnw/LzM7Zdh0FXcfVdbpAGjWIl06tirpmYn7gnAPLvbxHluK5xjbN4k+B/F
+ sWKHJN/xgrLbXvJEk8KLbqrHPh6H/C9KwimH3XGhAZpSvjnHELEyaDOOGSJ2yik+2U
+ pnJ6oAC9nWvuA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=y7Qnn37N
+Subject: Re: [Buildroot] [PATCH/next 01/14] package/socat: bump version to
+ 1.8.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,94 +96,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Shubham,
+Hi Bernd,
 
-[add Romain Naour -> author of 0003]
+On Tue, Mar 03 2026, Bernd Kuhls wrote:
+> http://www.dest-unreach.org/socat/
+>
+> 2026-02-12: Socat version 1.8.1.1 has been released.
+>  It fixes compilation with glibc 2.43, xio-netlink.c for Musl, and a few
+>  minor bugs, see file CHANGES
+>
+> 2025-12-08: Socat version 1.8.1.0 has been released. It fixes a couple
+>  of minor issues and provides new address types TEXT and STALL and a few
+>  new address options.
+>
+> Rebased patch 0001 due to upstream commit
+> https://repo.or.cz/socat.git/commitdiff/2cc1f11d02928e7eca9560506dfc6e97a0ac92e3
+>
+> Updated hash of README, used as license file, due to version bumps:
+> https://repo.or.cz/socat.git/history/HEAD:/README
+>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-The commit message in patch #3 states it addresses the static linking, 
-but changes the shared linking statement instead. Since it obviously 
-works, probably the commit message is wrong? Or can this patch simply be 
-replaced with yours?
+Is this bump somehow related to the glibc bump in this series?
 
-(patch related remarks below)
+But anyway, I see no difference from your previous submission.
 
-On 2026-03-03 23:51, Shubham Chakraborty wrote:
-> 
-> During static linking with a C application and libicuuc.a,
-> -lstdc++ is required. The previous patch (0003) only addressed the
-> shared library case (Libs.private). This patch adds -lstdc++
-> to the main Libs line for the static case to fix undefined
-> reference errors when linking programs like xmlcatalog (libxml2)
-> with musl static toolchains.
-        ^^^^
-This probably affects not only musl toolchains.
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 
-> 
-> Upstream: Inactive-Upstream [Buildroot specific]
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> 
+Thanks,
+baruch
+
 > ---
-> Changes v1 -> v2:
->   - Fixed the malformed patch
->   - Removed unnecessary whitespace
-> 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> ---
->  ...atic-linking-with-icu-uc-static-musl.patch | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 
-> package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
-> 
-> diff --git 
-> a/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch 
-> b/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
-> new file mode 100644
-> index 0000000000..e17f6ac775
-> --- /dev/null
-> +++ b/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
-> @@ -0,0 +1,26 @@
-> +From 2107f9dfb39eeb6559fb4271c7af8b39aef521ca Mon Sep 17 00:00:00 2001
-> +From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> +Date: Tue, 3 Mar 2026 10:00:00 +0000
-> +Subject: [PATCH] fix static linking with icu-uc (static case)
-> +
-> +During static linking with a C application and libicuuc.a,
-> +-lstdc++ is required. The previous patch (0003) only addressed the
-> +shared library case (Libs.private). This patch adds -lstdc++ to the
-> +main Libs line for the static case to fix undefined reference
-> +errors when linking programs like xmlcatalog (libxml2) with
-> +musl toolchains.
+>  package/socat/0001-no-documentation.patch | 4 +++-
+>  package/socat/socat.hash                  | 6 +++---
+>  package/socat/socat.mk                    | 2 +-
+>  3 files changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/socat/0001-no-documentation.patch b/package/socat/0001-no-documentation.patch
+> index 5dbce0576e..13e9e503f2 100644
+> --- a/package/socat/0001-no-documentation.patch
+> +++ b/package/socat/0001-no-documentation.patch
+> @@ -12,6 +12,8 @@ Upstream: N/A
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  [baruch: update for 1.8.0.0 and 1.8.0.3; git patch format]
+>  Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +[Bernd: rebase on 1.8.1.1]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+>   Makefile.in | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+> @@ -22,7 +24,7 @@ index c01b1a4a2306..fd89acb06f3c 100644
+>  +++ b/Makefile.in
+>  @@ -82,7 +82,7 @@ SHFILES = socat-chain.sh socat-mux.sh socat-broker.sh \
+>   TESTFILES = test.sh socks4echo.sh proxyecho.sh readline-test.sh \
+> - 	proxy.sh socks4a-echo.sh socks5server-echo.sh
+> + 	proxy.sh socks4a-echo.sh socks5server-echo.sh socks5server-auth.sh
+>   
+>  -all: progs doc
+>  +all: progs
+> diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+> index b1c3d3cd11..3a4eec60c1 100644
+> --- a/package/socat/socat.hash
+> +++ b/package/socat/socat.hash
+> @@ -1,8 +1,8 @@
+>  # From http://www.dest-unreach.org/socat/download.md5sum
+> -md5  8ef0bc4f602636797917f8574c3b249e  socat-1.8.0.3.tar.bz2
+> +md5  5456f0f0c5d4505b68edcb10e23ef128  socat-1.8.1.1.tar.bz2
+>  # From http://www.dest-unreach.org/socat/download.sha256sum
+> -sha256  01eb017361d95bb3a6941e840b59e4463a3fabf92df4154ed02b16a2ed6a0095  socat-1.8.0.3.tar.bz2
+> +sha256  5ebc636b7f427053f98806696521653a614c7e06464910353cbf54e2327adc1b  socat-1.8.1.1.tar.bz2
+>  # Locally calculated
+> -sha256  f51653b61cf2516c39e8f2edefc11604d0f9d14f0c6ae988bef228a1f0283ad2  README
+> +sha256  86e46422f9381b386bd2eb6606f9d6c3ff479f905660d0f318c571292ab304b8  README
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
+> diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+> index 69f8f40452..3d40540599 100644
+> --- a/package/socat/socat.mk
+> +++ b/package/socat/socat.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SOCAT_VERSION = 1.8.0.3
+> +SOCAT_VERSION = 1.8.1.1
+>  SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+>  SOCAT_SITE = http://www.dest-unreach.org/socat/download
+>  SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
 
-The existing 0003-fix-static-linking-with-icu-uc.patch could be replaced 
-with a patch that addresses both issues.
-
-> +
-> +Upstream: Inactive-Upstream [Buildroot specific]
-> +Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> +---
-> + source/Makefile.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff -git icu.orig/source/Makefile.in icu/source/Makefile.in
-> +--- icu.orig/source/Makefile.in
-> ++++ icu/source/Makefile.in
-> +@@ -281,3 +281,3 @@
-> + ifeq ($(ENABLE_SHARED),)
-> +-	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
-> '$${baselibs}' >> $@
-> ++	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
-> '$${baselibs}' -lstdc++ >> $@
-> + else
-> --
-> 2.53.0
-
-Kind regards,
-Andreas
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
