@@ -4,109 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19A29EFCE38
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 18:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6601BEFCE37
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 18:20:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1AFC821DF;
-	Wed,  4 Mar 2026 18:14:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C0628221D;
+	Wed,  4 Mar 2026 18:20:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aZ4iUwBviAT6; Wed,  4 Mar 2026 18:14:11 +0000 (UTC)
+ id HYW8H73f9DA4; Wed,  4 Mar 2026 18:20:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F172D821E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A7988223B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772648051;
-	bh=KxooxwM/7kjuCfg7+qlROPKGR37AwQtl58hmq83eNTk=;
+	s=default; t=1772648433;
+	bh=JmSe8UqunFYQSW2xPnmyBV/Bt33PFtAzxcapwZOBU4k=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=UaITVb6b5G7PQI7DQR91IG0xhcmtOFuFzORk1lLaKURw6CwMojlXkA+hTv9nl1Hre
-	 m70bQ0fbKTvLnjOfgImpxYS9cPHOhUhLFRVCn+DA5smkf94hrMI+7njakHN0SNqJ4n
-	 0cXOF0aB1KPlcQFqHXJ8ZAVLolFjBDYLjEqN8LcNFNzN3GWRoRv9QWwdX1IP7tprDX
-	 416zx2TeSPyl5+l3gYZoHfNfk4evOxciuFXdiflEmnSa2vaYe5FGwMbTNFREVeqdmb
-	 v2CtIGIsHvYpUqLOkhbKk81tExMOQ7nI/CWdfaPzRZk7LRx4bEPvzv4hKenjp6qLXY
-	 PTTbbfSf32nJw==
+	b=kiIiEJNCR7/50PNxqn3/G1x/L8q2nG1uU3u97Fkhdmkpu8o1Pwx24E6cWGZK08oiX
+	 hTlpVkl/HK3OQ4w6xO62QICo5rhyLPK/vOt+wFYrZX/y4KDfLPxT0pOzXDDZgNaumL
+	 TsEp9tjU1in4U9smvB3xg98piCuzzybKfuhLakQPjEWh83JHSuZSlPOuEYNlNZX+tr
+	 XaWZ0rkvw93ekvCOkIQMIPftg1pwOHK7Gxs5lVUsXjNQZ1F41G49zXXRLxuFHGeVMI
+	 r3gC3KFVr3QAdts6OKv04l3ajrwhPUF4imW9xDdDR3DM/5HcXZx8GGIVJy8u/LJewX
+	 F3ciqajrCBmnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F172D821E1;
-	Wed,  4 Mar 2026 18:14:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 55F841EB
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 18:14:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A7988223B;
+	Wed,  4 Mar 2026 18:20:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6247B25B
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 18:20:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 480AD60B3C
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 18:14:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4829C8223B
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 18:20:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QB_diYlkAreJ for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 18:14:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bf7uO7lCTDBd for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 18:20:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::235; helo=mail-oi1-x235.google.com;
+ client-ip=2607:f8b0:4864:20::234; helo=mail-oi1-x234.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 66F6D60B3B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66F6D60B3B
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 66F6D60B3B
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 18:14:09 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id
- 5614622812f47-464ba2bb3aeso5446728b6e.1
- for <buildroot@buildroot.org>; Wed, 04 Mar 2026 10:14:09 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 55A208221D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55A208221D
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
+ [IPv6:2607:f8b0:4864:20::234])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 55A208221D
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 18:20:31 +0000 (UTC)
+Received: by mail-oi1-x234.google.com with SMTP id
+ 5614622812f47-464ba2bb3aeso5450931b6e.1
+ for <buildroot@buildroot.org>; Wed, 04 Mar 2026 10:20:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772648048; x=1773252848;
+ d=1e100.net; s=20230601; t=1772648430; x=1773253230;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=DUGamyC2xEzzd9S7cre+RHthRoluTQxdR4yXliRrnqQ=;
- b=U9OQT00SyV9UNSpyK5zAERNgfstlcfJSTWhGMa98fn3MIRjIcBKhXUGi47mT5cvHhL
- IarPmN7U9XeJwHvUYejz/npGuVGydyxb5ezDb0BtwRUu9fPlFVH5BgIBy9/M/P+q8G75
- Was8FmmuViFVKwXxw2cfqakabSzjE3vopWwZWH5q83hgRonp4uuQERnRxaGHvYnZmtzb
- QHMFZS3z+sHCZzevwq3r8Z8kzJKirIPTq9UoJwNPL/bZyESbk64C7QMZnvAhI2zX7BKb
- ZaiSjofbuyg6Xi7+tfBsdlGXZ2/66hmsSmBa1D6GrPXRG70i0UrzulEMKz73iIurDSrZ
- tLBQ==
-X-Gm-Message-State: AOJu0Yx7Y4Va4efS1RLyhsMlifUZZrFN08ciWLSCJwg0q/Lf+25Aqbg8
- 56a1V65K96msU5KpblSbqOlGXdgz89KBlDi69FAG7PoDZmDQnzGj5GyOuWJScg==
-X-Gm-Gg: ATEYQzzt+CmaDpRbXg8a3gw2QW+hP4FKPOCw1McqAIGkikLOpvL8gN63U0h6JrEP0gY
- W9qvxWpFF+7emkXWvloWKMEWfrvnlLQnwMVFWEMpBR1y+KRJn01+l0VJ1D3nQyeos1uVtvJhP6B
- TTUtcZ96tpNJEIvbN5MwafHvsckq8Yq5FlYKlXjrvdYzMxGnSQtTtm3W+GUCel3halaV9i0G5ID
- qx1o4UAQejNtsN1ezQ7KjKWD1+Ln+e+lrChLGdwNkhDRk/UkEhVJma1TdP6duridDWiyH7jTVCd
- 6LMVfYiWmzdp7BHsaOXQLGHZ47HygOgk0duwOm6IAKgVf8e/Slz9Vlg/aFoTo8gq+XExc4LCyre
- MUzDb8uvTOh+bl8tt71p3J5da6vaNI98WS0uT5omQz8rw7WAjUwg/RF5L30yCZhtfYoZvymzwEH
- vqxdIeFAMSdW1JUCyys4e9Xp2RSFeEBEH9QF5x+ZXyGNoofsyWlWCIHpQLHZKGyM0tkvaIQhFFz
- EBbwaoDxyE63mVs55Y1eKQmuLlB3iCLWt2+yvLEzXLhdWyTYN0ijVW+ifs2
-X-Received: by 2002:a05:6808:1494:b0:453:58dc:c006 with SMTP id
- 5614622812f47-4651acd97a8mr1336993b6e.3.1772648047953; 
- Wed, 04 Mar 2026 10:14:07 -0800 (PST)
+ bh=/oFYnP+9qzG4CukBTlS0vKQsOqmpQnA5IpqHB/3YfVQ=;
+ b=ZGsdsKVAqZyboxwvrF7BGlQSoYVxSje7yt52uJyjThl85Slh0R62wpdt9hpmCOS2UK
+ lHhO46SAP3S5wxdiaouwiobO8btv/1Sru0m4OvacVAigEdzubd+2i7869Jfnej/CcrOQ
+ cI9ZuYPhkgqhVlbdUJptDENUMq4E7PO30Nntp2xbq9M/CypRWzJy1IM9ECA17GEyiBLj
+ IUuyuMNVw7b8vkAnNuh6TEV/4bm1u8T2Q3KNgjl0EdosJvyrspyI9f70MgdRf50mkX+6
+ PXBPSAqIz3ScHi1tebVdS+RvEYxuaB4Afnxb0ZbwwzUDE2Af/nzz09O3tdsJKQhD1ecv
+ Xq3A==
+X-Gm-Message-State: AOJu0YzLmAc8ycQTvwvncLd+YGrZDC2kL8OCAFPjTIQOocpjBIico/Iw
+ /3OzDkIxBjq5Ksa98glZfiFDfA+Fg1HxJdz0tCSNB6a+2M7YW29zgG9l9Wd7yg==
+X-Gm-Gg: ATEYQzzuSvoRmJ6O37J06t1gYjAs0dQ9WBZBO8Kgsfb6UGUWO3uwa5yqfMrNee+TPCp
+ 7KKqN+iknH0qqxLSlKrlyjnQU+oLtbOJQbsOU74lbv5KkdKZkmCcMEFZq/h8xC9Ka25R4L4JWmG
+ koOlmLsqYhSjpWOB+F1qQ/+qYzql0vgkEm5YtcyuNKBWxR+cHFdRRV4IJ0KtTgJ/PPH3qrBYNkG
+ yjdbDZsJUR/Y89QBvJ/uAf7Qex1KhVgfz+Shl8qWFJ3NEeel0jDrvevkQ/S+gDRwPc8gfgNBXhk
+ kJu8cMhpgzRHUMzpoaKatRPcrxHXLWtdwIXHK5Zn3wmOcgBIg8RNtknV37HaGDxvlWBJ/NsYlxs
+ WyQO+wWZi1b5016AuxE1ukJ+OlNoeTiLd734DPjcXCQ4efpARWR59io8PgYLCEzWNgyJfCj9KLY
+ Ihx0/5JJMp3C3SZKh5b7KlI9AeAMWqajNYeKBkVPTgzvWNtSSj9XNq2BXtlnro522fiNHfaDs0U
+ 3ssBK6a3ybkI3uIeRG9Ep2wQPfwJ7QI7i/g93/R50ppirgsSJHMl9mTc6i4
+X-Received: by 2002:a05:6808:1a02:b0:45c:85fa:5a3e with SMTP id
+ 5614622812f47-4650c807a83mr2894317b6e.25.1772648429938; 
+ Wed, 04 Mar 2026 10:20:29 -0800 (PST)
 Received: from james-x399.localdomain (71-33-158-51.hlrn.qwest.net.
  [71.33.158.51]) by smtp.gmail.com with ESMTPSA id
- 5614622812f47-464bb59be78sm12373814b6e.13.2026.03.04.10.14.07
+ 586e51a60fabf-4160cf239e0sm19158250fac.1.2026.03.04.10.20.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Mar 2026 10:14:07 -0800 (PST)
+ Wed, 04 Mar 2026 10:20:29 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  4 Mar 2026 11:14:05 -0700
-Message-ID: <20260304181405.3739915-1-james.hilliard1@gmail.com>
+Date: Wed,  4 Mar 2026 11:20:21 -0700
+Message-ID: <20260304182021.3743990-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1772648048; x=1773252848; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1772648430; x=1773253230; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DUGamyC2xEzzd9S7cre+RHthRoluTQxdR4yXliRrnqQ=;
- b=H+uCSCLgCHPRN+U5QF1kxuZpeo6AKMQORF95UU1qcFAdDSCfS+d8oRRqoOdDYzIxWt
- hMYOwEonFl5p9DHLtg5r3KmnycwXrpvleVrDsq6ztQwz9nQXFOBgyK76WA/p6gCCzHDn
- UH9uE+5u37QZpv+69+K9VgsYA2WvPtgSXefT5uk0gM41SvKL7n4/Rcq04QVE7WBgoPZR
- SHEZSmFEnOZ8y4x0Mv7KbxN53XvlrelTbLSYNsaMPLA9id6lj1aRD5GIHqoaxF3fyyYU
- 05fsFB6KquN8uQyeKY/DsLkk1n3uIN9ooAbxzd6aFLZ42P3X25dmrXSmHS50laLVWCcV
- s/oQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/oFYnP+9qzG4CukBTlS0vKQsOqmpQnA5IpqHB/3YfVQ=;
+ b=iu7EdLzYAyWVyhMEtepP5cCnpWf1bAc0JYHICuJ5ei6McPQQlElOS+79WOxX4meabs
+ ZNzJ3xMRydsIcpAZelj0nDgL2PBtWRTTZ/ysvrdnFA2um+1pdkjaz28OuyndJPcZB/sh
+ 2EmuSJVxw9TrrNv6BpuaSfrAz2D9cu/3jmLPh7TPr8NzyJQ6+PBUc4q/TtErx46fPhSM
+ 7yQ+780DubHBtgONLND7BVMCcCWaiE1swT/ktee39R+EBbt19rjQOV+mKwE1gsmrOmJo
+ hHH6xDI0DJjJrHHNVGFpnvZbagqbYCwdZHhLe37WAZ+PObYAwQzmnqWVVqtoSWfWsVZJ
+ 5Zdg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=H+uCSCLg
-Subject: [Buildroot] [PATCH 1/1] package/python-tortoise-orm: bump to
- version 1.1.5
+ header.a=rsa-sha256 header.s=20230601 header.b=iu7EdLzY
+Subject: [Buildroot] [PATCH 1/1] package/python-trio: bump to version 0.33.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,55 +123,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop no longer required python-pytz runtime dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-tortoise-orm/Config.in                | 1 -
- package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
- package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-trio/python-trio.hash | 4 ++--
+ package/python-trio/python-trio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tortoise-orm/Config.in b/package/python-tortoise-orm/Config.in
-index 57cebc6489..a05bfeab50 100644
---- a/package/python-tortoise-orm/Config.in
-+++ b/package/python-tortoise-orm/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_PYTHON_TORTOISE_ORM
- 	select BR2_PACKAGE_PYTHON_ANYIO # runtime
- 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
- 	select BR2_PACKAGE_PYTHON_PYPIKA_TORTOISE # runtime
--	select BR2_PACKAGE_PYTHON_PYTZ # runtime
- 	help
- 	  Easy async ORM for python, built with relations in mind.
- 
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
-index 6e1f46dd6f..0bb4224a9e 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.hash
-+++ b/package/python-tortoise-orm/python-tortoise-orm.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
--md5  b3dab10562c6574232334e954666f3eb  tortoise_orm-0.25.3.tar.gz
--sha256  b6dedd388393624628ec46228c93df361533ceb3925986fa2d1d22debc838a7d  tortoise_orm-0.25.3.tar.gz
-+md5  5c143e93e4c35dfd8cd19dfdbc064d6d  tortoise_orm-1.1.5.tar.gz
-+sha256  d4074a7c34a8445fcca19ec865189d80ea7a00b29e4b12778460fcab67a5ce74  tortoise_orm-1.1.5.tar.gz
+diff --git a/package/python-trio/python-trio.hash b/package/python-trio/python-trio.hash
+index bd722a2367..79146dc1a2 100644
+--- a/package/python-trio/python-trio.hash
++++ b/package/python-trio/python-trio.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/trio/json
+-md5  8bc9dbdc265c291c93006f5e0f1d3918  trio-0.32.0.tar.gz
+-sha256  150f29ec923bcd51231e1d4c71c7006e65247d68759dd1c19af4ea815a25806b  trio-0.32.0.tar.gz
++md5  e778db1205fa2ea00dac9340471b8f1d  trio-0.33.0.tar.gz
++sha256  a29b92b73f09d4b48ed249acd91073281a7f1063f09caba5dc70465b5c7aa970  trio-0.33.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
-index 3a380710a0..18ad37d5d9 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.mk
-+++ b/package/python-tortoise-orm/python-tortoise-orm.mk
+ sha256  418d025e1284311f2690263e6efa6bf51585e5741818ece63e5862487e505bb9  LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
+diff --git a/package/python-trio/python-trio.mk b/package/python-trio/python-trio.mk
+index 73c1ecb461..4211dbb313 100644
+--- a/package/python-trio/python-trio.mk
++++ b/package/python-trio/python-trio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TORTOISE_ORM_VERSION = 0.25.3
-+PYTHON_TORTOISE_ORM_VERSION = 1.1.5
- PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
--PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/dd/be/0fdfcd8295f4f02a280f33bdda99c3edba450f9a212149232f2fbb6afa96
-+PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/f3/b0/2b3962847aad793d32646c6e43e7fab6f845f34a5502da5722fe704ec847
- PYTHON_TORTOISE_ORM_SETUP_TYPE = pep517
- PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
- PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
+-PYTHON_TRIO_VERSION = 0.32.0
++PYTHON_TRIO_VERSION = 0.33.0
+ PYTHON_TRIO_SOURCE = trio-$(PYTHON_TRIO_VERSION).tar.gz
+-PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/d8/ce/0041ddd9160aac0031bcf5ab786c7640d795c797e67c438e15cfedf815c8
++PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/52/b6/c744031c6f89b18b3f5f4f7338603ab381d740a7f45938c4607b2302481f
+ PYTHON_TRIO_SETUP_TYPE = setuptools
+ PYTHON_TRIO_LICENSE = Apache-2.0 or MIT
+ PYTHON_TRIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
 -- 
 2.43.0
 
