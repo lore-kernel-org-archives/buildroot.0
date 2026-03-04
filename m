@@ -1,182 +1,222 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6D8EEF8FE5
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 14:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5587EEF8FF0
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 14:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 701AE40640;
-	Wed,  4 Mar 2026 14:17:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 082DF607C6;
+	Wed,  4 Mar 2026 14:48:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KJOC-8OIr2vd; Wed,  4 Mar 2026 14:17:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M2O8UDyeV9Wd; Wed,  4 Mar 2026 14:48:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 837C44066D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B1BE607CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772633822;
-	bh=Rlk2CdkNY5tPgCSAfJyqZbvi4nKn3Kl2SsOtobU4kh8=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1772635686;
+	bh=5YlwWXiaskQs9/wFscl3c5+xBatZrcCTOPyTShh3c6Y=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=W0XqoMIOCBSESmmzE2/yAZ+/Y8v4LYlTW6cN58SEMfdV1TvM1lXct1gVAvFeDt4E4
-	 49uri8FoBX8B3BKWPOmAzOI2nwcwJfJ1p1vK8jI+ePimuQiX1xTRP/IDhe5CY6Lk/u
-	 vBi7dHD1M2Ivm2yvacyVc5fuFS09a2DlySoWCSjlnxnn0jiSgPjz5eHbV89D38YRRp
-	 5faaDVPLqIYDreEkLSBZpUcfWmtNWqiftOGVyGCCz/Bhi3ixNimCZabNEnTvUhMWiQ
-	 kXuukUgkTxmYGEmWYoFr19NfCazHBhToOKQIDen9gB7zfG5S2vpWh0XU6empzbJsih
-	 R1PUTq7UGFADw==
+	b=qQA/YUYI8a5FF7u2oDsfrgMEiFEyRto2YEENcBwL977gfOc70neSbwZkQyW5TARXG
+	 YVNBP1G9ICr8MKcHXQInjF1NpZq0QiBfJIijuumE/jID0PYYA77rzFyz5rjMPibjBI
+	 aR2R34SUUvNPP0dddtjHnlQkAzXulEx94WvDEqSrdkk8OvouTssc6Afp+FWplQP3yn
+	 cYmS/+r0AqNHwNzEMvX0Iq9mP+cm3ILA/dj2oyzmR/Sd1sW4eVWA/J0Bqh2G2OF+8z
+	 WJvs7e3SsweHXCHmbQ8su9cTtB7UP5O96CCh+iUm48QvbD133jc2g+csQ8BrLZzIEa
+	 7M2JPIwWXtcAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 837C44066D;
-	Wed,  4 Mar 2026 14:17:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9583225B
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 14:17:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B1BE607CB;
+	Wed,  4 Mar 2026 14:48:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E553225B
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 14:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AFB84066D
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 14:17:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB3DF40867
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 14:48:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UvBQlTX0DL1I for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 14:17:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c110::3;
- helo=bn8pr05cu002.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8298540640
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8298540640
-Received: from BN8PR05CU002.outbound.protection.outlook.com
- (mail-eastus2azlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c110::3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8298540640
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 14:16:59 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JgES/uo1KYkYvHinZZZRu+CmjHtehc/RZ5QgvXI3M5SvNYYqGl0p8lz2Jy/25iX8/f09FAU/T+K8jYrjEFjzusYDDeXfLHK8nb6a6HFm6p0NoStMR5zWeIo9jltgIW+UA1vnib3YQEA5VpG/4TFowtrm+l0z9I7ZQCizcH+7mS0cV+v8osCQbtJjvAROP1WjonkLrbYqTbJZGd7vvMZZ4AcrkE5vnJHeXR28FtreI/W/+i6YBQ5oG1dRxx8FvSHAmSJtK+t5JMMgJr7GaAl483ANTxJOSM9hcz0QeuDZAiEcB8dHhhqRb9sD42Zjgk3BiPDcfgDRfzfIJLRCwxpI4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WYzZrZcjYSWGUWu6GDZqNGb40Q6phBpviTl6h5ZU/iA=;
- b=mFJhZOKbE46XEzAEScq+8dy1yoZqLzqqTxymY3MDhPkypVHKUEeyg3EkOSfInGMKvNh2kuBcysYe+743KeOuTErsoI9fxsmS7465iPPDgHvfVk43tmq5ho7hyZ62grMR6uOl0CQbe009b/xeNryt+bIQIdmIp9T8tF5QCDpQeDzPfFlunjDMsrsMPS/oxhWQKWuKiYHyImWJOBJl149PdaP8X0OBw34g3E60UmnpDPfmv5r++Lz8R/3rVzTUd3YyLFN0akXCeVc+kUM4XmxNOoi1U/aL8l0fVy8MfQfMBxElKtY82SJ1SgrDKDN816IvWtdjc5AKY8a5bH7SvNEc+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from BL1PR12MB5032.namprd12.prod.outlook.com (2603:10b6:208:30a::12)
- by PH0PR12MB7079.namprd12.prod.outlook.com (2603:10b6:510:21d::8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Wed, 4 Mar
- 2026 14:16:53 +0000
-Received: from BL1PR12MB5032.namprd12.prod.outlook.com
- ([fe80::3c13:eeb6:d9ef:c95d]) by BL1PR12MB5032.namprd12.prod.outlook.com
- ([fe80::3c13:eeb6:d9ef:c95d%5]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
- 14:16:53 +0000
-To: Fiona Klute <fiona.klute@gmx.de>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-CC: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
+ id 7vFAfpQg2Z6B for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 14:48:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2AF4040861
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF4040861
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2AF4040861
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 14:48:01 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MsYqv-1vetuu12iZ-011F7F; Wed, 04
+ Mar 2026 15:47:59 +0100
+Message-ID: <c4d66d10-019a-4b37-86c6-390a4aa884c1@gmx.de>
+Date: Wed, 4 Mar 2026 15:47:56 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Frager, Neal" <neal.frager@amd.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
  "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
- "yann.morin@orange.com" <yann.morin@orange.com>, "brandon.maier@collins.com"
- <brandon.maier@collins.com>, "ju.o@free.fr" <ju.o@free.fr>,
+ "yann.morin@orange.com" <yann.morin@orange.com>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "ju.o@free.fr" <ju.o@free.fr>,
  "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek, Michal"
- <michal.simek@amd.com>, "romain.naour@gmail.com" <romain.naour@gmail.com>
-Thread-Topic: [Buildroot] [PATCH v2 2/3] board/zynqmp/post-image.sh: use
- LINUX_DTBS variable
-Thread-Index: AQHcq9uUfI7nXmsP/U600vD4Ue4egbWeZvsAgAAC+mA=
-Date: Wed, 4 Mar 2026 14:16:52 +0000
-Message-ID: <BL1PR12MB5032A1CD6A81B8C5CCBA2164F07CA@BL1PR12MB5032.namprd12.prod.outlook.com>
+ "romain.naour@smile.fr" <romain.naour@smile.fr>,
+ "Simek, Michal" <michal.simek@amd.com>,
+ "romain.naour@gmail.com" <romain.naour@gmail.com>
 References: <20260304133241.3389941-1-neal.frager@amd.com>
  <20260304133241.3389941-2-neal.frager@amd.com>
  <4a2f2b4a-ee67-4049-85cb-56285f02f619@gmx.de>
-In-Reply-To: <4a2f2b4a-ee67-4049-85cb-56285f02f619@gmx.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2026-03-04T14:11:47.0000000Z;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|PH0PR12MB7079:EE_
-x-ms-office365-filtering-correlation-id: c7cd8d03-c800-411e-7dd5-08de79f8af26
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|1800799024|366016|376014|38070700021|41080700001; 
-x-microsoft-antispam-message-info: XZCm/vIkOeRkQEIPR3Wuh8wDx+6fNdxMo7062Ve6oz0p3UKvWUi5KbeiOSeGs4Njw72Z8eRxVXhAm809espFE5oIBklDtE+76iZtgJl7Yn2lUZibABuIDjO/llItieAMectux+FO5UzXrR8YAUUkSp7qmpjAbJmjDZKPpuZPPT/agZJclDhEwpECnUdRO3zUYDIHNzmXJRHxo1a/TNrZYxtFDbL9DQn2QKxNbprtB1uNnU829bsh4I8XlRgMdIwQ4yoDcmLPgrcfEfWs/sHbMH8OyU5pNn+y96MFYbhxpBncc9NhZjZ35935xtv0BU1QBiomWifLqLkbLH4BM3orIXO5+/IxeCnd5Srx12AbpVWY+EnCVRqWqUQiTC8KC1ywjrCiXhxt+jph22WGJ9XB5/jm4lNbiBP56sAWHXroLYh3dM+70cVXCcBQ6FMT9CFIfez7m7SF0nQdaotMvvejWLpqYV+h97Gxm4vWocr5KEB7n4Svt7TJy95jDExCwWk8ngXyjae4yCr6XfDIco/POiDO3wYVf33uhBzTYmSPNkPwVXCEabB+khxZDH9icRewe/TBpa7CoqTGpcHnZ4Y1rNPP0A1qVOLK0VY127VXLAoIBdQRy3FOOHpQ5XtcTZM6/4KA2/hKziuIWeXeBv+OUScZyCoc6CQwDzS7tHsuC8qBS52vTiqhxk40M18rnug5g7ZNJkLXotjkWXVUAVVlODzELGw8UmZf4gCCKRPm3xQAWxoHHNYUdNrkSvEZlx35Vpg0IUuXQRPE0rr34pIDlX5nXpKOOgLKCrPFr/Kv2ohdt9sbJsOCucCgBp7ihjO1eI0fCr7SHMxc3674sZpD/A==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BL1PR12MB5032.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(376014)(38070700021)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RjF5QUQ3RnJSMnVJTFp4bFg4Z05ZbUdwY0kzb0NXMDlXOEhHejNXZ2kvV2oy?=
- =?utf-8?B?czA0VVhsVDluTkFERmhOK21KdlJHVXIrbGhiTjZNRGU2bHk3UkYwc1orQnlS?=
- =?utf-8?B?c1FKeG1CejZHSG9xNzhiVzZnREg4ZG5mL2lJdXIxdjNlWENZdkR5KzkxRytk?=
- =?utf-8?B?bnFJK3ZGaU1zbUxWYk1qMk1VcnowT3AzdTI3ZnJVVUJpS00xV2YrNnRiWG9q?=
- =?utf-8?B?Z2Y1V3hWcjc5aEJYRlh3S0lhOWZQalFxVDl2OCtndG8zUEIzcVFxdDJTTm4y?=
- =?utf-8?B?WHRBUTNIenFhT012MFFxdUlud091TlAyeE1IN3NNNmlaKzAxR2lQa2dSdFdh?=
- =?utf-8?B?b0l4N3dvTUkvVENsRmswT2ZudFc5bG53L002SXRlZENLRE9HT0dwMjgraHZ1?=
- =?utf-8?B?SEE0YS9LVTNock1MZnlpcHQ0TDhmUDdQVVMrbnBYZTR5cm9tNnlZTEJ6elJG?=
- =?utf-8?B?NWdHUFBHOHNIMEFvTHp0VEFHSWNWaEI4UUJQQjdQbDZQdFNEcUdwNmVNQlFH?=
- =?utf-8?B?dnIzS0tNeXl3RkxLUnpySDZHd0MycXF6cEFtUVNTcFNKVDdodEZtcDJtcGpO?=
- =?utf-8?B?MGM5SVgzZjE0Z2xrMmZaWEd5akEralFTTUZlWHVOM2lBT2ViUjZHelVQanpO?=
- =?utf-8?B?R0RpVWNzU2JzLyt4RnNyOWJIUmNCN2ZHTHd3eElsTTJBdHo5K09qMmY3azNt?=
- =?utf-8?B?VlFacTFzcHNNWFdGSHRWOFN1M0NaV2MwbTNTenh6VDViVjVnbHd1NlhYZEwv?=
- =?utf-8?B?ZXgxZGJUT3k4dm56bEkxaHdCb1gxaFg1MWNGNXV5UlR2RHY0WDhGSXNLNVZT?=
- =?utf-8?B?M3o0QXRyRzhxN0tISGNaM1BwaWk3a3J4Z1pmTW12K3FsanhYWHFxS28wZ09r?=
- =?utf-8?B?aVJmaVdqWHkvdHpYY3NkbmFGWUp3UVo5b2s1Y3lMTzBnemVqWnN2ZzlsVzVq?=
- =?utf-8?B?b3R6dXcvaFdIQS9LQXo0dHRldEp1STlzMjZ2VDNrbHBnb1ZZdjA5UXI1ZnlY?=
- =?utf-8?B?RDh5MmxKUnNmNUxadngzL0RicGRsNGgyOHhMNmliV3pKV1h5RWJoZE9ONFU0?=
- =?utf-8?B?YVFOQk1yOWhhd2RCMmtKTGpuMndFWVo5Wk13RTJ2YUsyZ1ErTERKVHFVU1h2?=
- =?utf-8?B?ZEtZZ0NIRVBDZUZtczJMNlBpZ2Jpei9kbWNXU2FzZE5WWTl5NTg2U3c5WHBW?=
- =?utf-8?B?WGhqMFMrTzF2cURpdFNCK2NKdHlYd1FBVi9jbTF0RlpaQmhtQTV3WG5ZaXoz?=
- =?utf-8?B?T0VMTFhzT2xKUnprdnBSQk5QNEhBRW1nSCt5b2hvbTNyUzFQNzAxWjNwa09L?=
- =?utf-8?B?SkhxZnFodkd2dHBhMk53NXdPQnp5V2p4YjByL3lMMDVkUnBOSG85RzE2dVJV?=
- =?utf-8?B?VjRseDZ2ZWJuRC9nMmNjbFdBWXR3bmpqZjVLc3R4OWlJRjlRYWlqUHJuR1Ba?=
- =?utf-8?B?b1JPOTV6VFpjUEIwRXgweVQrOEJrYytzajk5R2tMcEZDV0hiV0xqd1lQVEFa?=
- =?utf-8?B?L25IVmtRUDJWMW1XWFNqNmc2TGFWWFNSRzBWZkhSTGRGTGgrbHNDV2JSdEh4?=
- =?utf-8?B?ME1ueTE2ei8zNGJtQXV2RzRrTHNCdnp1SUlhMXpFeHlWQXBmUlpWQ3NCN05S?=
- =?utf-8?B?SGVxRVp2ZEk5aHZLVUFmT2F5QS9aWWorK2hrRDA4VTJHNUR3bGZIb0d5d291?=
- =?utf-8?B?MVI2YnpkS1YzQlFST1JjR2IvQ0trR0E5bGFpaERYYkVIaVp5ZVRMeU5jTGtR?=
- =?utf-8?B?eHM5SDFFdnFUeVd3Yyt3WGZDTVQ0OFNBVWpPNGFEOWUwV1I5VGdBV1VBcElr?=
- =?utf-8?B?aFh4RGpDcTNBdWV4d0FlYVVpOVoyVE1ZVGRLbXdyQkFIOStTVlBZTFFvNGdr?=
- =?utf-8?B?Z2V4R254NzJSMjQzdXNQeno5Yzhkd3FJU1o5NXEvSzMrMWVtbldhaVZ5OGNi?=
- =?utf-8?B?dGM1Qm12a210Z1NQTFFoajh6cnRIVVhWaWhZWWxrTHg3dFA2TUdMa3lCODBK?=
- =?utf-8?B?T3NjUGpQUVZneWV5eDBKd0ZjTTBhbUJ2YksxS2llYlJocXBSV3grL2t1MHhW?=
- =?utf-8?B?NkZUOWV5NHlsOER2R20zSDZub3BtbURFSnkrUHNqMW5XVzY5NEd2MkNLYXFZ?=
- =?utf-8?B?amV1cy9GclZDUk91UW1JanI1bnZhdVB3TDNsb00xbzh1ZHV1NDNBamdSZzV0?=
- =?utf-8?B?NTk1VmpWQWZEaFRzeHQ1OEZtZ2RlcjhHVEgrakNnNFJrK0thVTNRQ1JVRkpy?=
- =?utf-8?B?RjdnbzdoWFV3YWI2WloyYyswbU5QMEN5ZVRHc3RidmhuSSsxWEN0ZUlhQWEv?=
- =?utf-8?Q?Q9i68KNa/H0+M/GaRM?=
-MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5032.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7cd8d03-c800-411e-7dd5-08de79f8af26
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2026 14:16:53.0044 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AlJyvf8nWNrO6yw10QvUN7tDXjYjge5sGVRAGKeqU9P05dFg78HgPbSBfrOZCoXw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7079
+ <BL1PR12MB5032A1CD6A81B8C5CCBA2164F07CA@BL1PR12MB5032.namprd12.prod.outlook.com>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <BL1PR12MB5032A1CD6A81B8C5CCBA2164F07CA@BL1PR12MB5032.namprd12.prod.outlook.com>
+X-Provags-ID: V03:K1:CIHkDuss4xOXjTYSmptXZdB+mS8t6KedaTkRFW0BuwcRMgpYPhL
+ 8N0+RVAjZ41blmCJ/q7HL8LXisuy6lOjqXyEAlr1aJwnTjjeHdKKYCvYxnMgMFNC0rsulv3
+ DLUney059HEdI90uJY4ZkntRiybSZzyF17VWhB90TKxept5GgNfAoaqh4Fu9+1y5mdZzSKr
+ IuYe7Etue6ix32ZBNJCwA==
+UI-OutboundReport: notjunk:1;M01:P0:HQta4Cf+XqI=;r31/50OF0p7nEpCbNkUxgepcUjs
+ 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
+ WGV26d3gLPO0ddoNIa/6
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WYzZrZcjYSWGUWu6GDZqNGb40Q6phBpviTl6h5ZU/iA=;
- b=cJ43/zcvYd98iNsLYAopSQGozEXEPE9t2oGbohqFtN6ATbMYzOgrvURNOGtXW6gavqtw/Ucj1ZABqjbZLyCYUKYOOdJKov6vC+DJn4t2y6+e/TZK4GyKJgMzHEhGP0WXzn1QPvVtOiWtZMrN540TK6X0GuZGjX7HPxpSskjUpfE=
+ d=gmx.de; 
+ s=s31663417; t=1772635679; x=1773240479; i=fiona.klute@gmx.de;
+ bh=gmoUVmSZ3fEXYuVJPRr85CeUmS29KOMN6ue3yY3gdiM=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=oZgb95LOwOI6IezTWWmwTAvTiuXOoEYkMVf9QQHLIVLxgxcuVgBLxkyXKa7jMRUK
+ xd2IdK6cClhfqRUuXCe23DL3UJ6tFa4kKNEXKQI2OxmK32KT1Mr3ZEyhfs7L2aycJ
+ EO4AFpGqcss5SlF7/IcTXirqSx8y4DbTuv4J4VGUpT6okB33CJO4lLMCCXol3ytNU
+ hcD5LZTvwxQGI1/FmEgzDhnzZNooJfwS174Sl8Q/72/GEIpWdf0Up6hxl2ndCmmQx
+ 47kuQiWC5XzpqLYSzSSKa4D2Nye7Uwx7qq2U3k87IfS+yma5E/Yr79rRVSo84Acui
+ GpT95UXJOrG9L1GaWw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=cJ43/zcv
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=oZgb95LO
 Subject: Re: [Buildroot] [PATCH v2 2/3] board/zynqmp/post-image.sh: use
  LINUX_DTBS variable
 X-BeenThere: buildroot@buildroot.org
@@ -190,78 +230,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[AMD Official Use Only - AMD Internal Distribution Only]
-
-Hi Fiona,
-
-> By switching to the LINUX_DTBS variable, the post-image.sh script can now
-> work regardless of whether a user is using BR2_LINUX_KERNEL_INTREE_DTS_NAME
-> or the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR for custom hardware. This simplifies
-> the transition users will make when migrating from a zynqmp evaluation board
-> to a zynqmp custom platform.
->
-> To keep the example post-image script as simple as possible, it assumes that
-> the first DTB in the LINUX_DTBS list is the one for creating the system.dtb
-> filename that u-boot will use for booting. Users are free to implement their
-> own post-image scripts for use cases with multiple DTBs.
->
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
-> - removed unnecessary $BINARIES_DIR from symlink source
-> ---
->   board/zynqmp/post-image.sh | 9 ++-------
->   1 file changed, 2 insertions(+), 7 deletions(-)
->
-> diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
-> index f44b66342d..10a3c32b2c 100755
-> --- a/board/zynqmp/post-image.sh
-> +++ b/board/zynqmp/post-image.sh
-> @@ -2,13 +2,8 @@
->
->   # By default U-Boot loads DTB from a file named "system.dtb", so
->   # let's use a symlink with that name that points to the *first*
-> -# devicetree listed in the config.
-> -
-> -FIRST_DT=$(sed -nr \
-> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
-> -               "${BR2_CONFIG}")
-> -
-> -[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
-> +# devicetree in the LINUX_DTBS list.
-> +ln -fs "$(basename ${LINUX_DTBS})" "${BINARIES_DIR}/system.dtb"
-
-> The comment and commit message talk about the "first DTB in the
-> LINUX_DTBS list", but this command will only work right if LINUX_DTBS
-> contains *exactly one* file. With two the second file is interpreted as
-> a possible suffix to remove (in practice, probably ignored), with >= 3
-> you'll get an error.
-
-> That may be fine for the defconfig (I haven't checked), but in that case
-> comment & commit message should be clarified.
-
-> Same in patch 3.
-
-Interesting.  I only tested with two DTBs in the list, and when it worked, I
-thought that basename was ignoring all the additional filenames in the list.
-
-Since users may very well have multiple DTBs, do you know of a better command
-that we can use that will strip out the first filename in the list?
-
-What I would prefer is to have a command that matches my commit message.
-
-Any ideas?
+Am 04.03.26 um 15:16 schrieb Frager, Neal:
+> [AMD Official Use Only - AMD Internal Distribution Only]
+> 
+> Hi Fiona,
+> 
+>> By switching to the LINUX_DTBS variable, the post-image.sh script can now
+>> work regardless of whether a user is using BR2_LINUX_KERNEL_INTREE_DTS_NAME
+>> or the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR for custom hardware. This simplifies
+>> the transition users will make when migrating from a zynqmp evaluation board
+>> to a zynqmp custom platform.
+>>
+>> To keep the example post-image script as simple as possible, it assumes that
+>> the first DTB in the LINUX_DTBS list is the one for creating the system.dtb
+>> filename that u-boot will use for booting. Users are free to implement their
+>> own post-image scripts for use cases with multiple DTBs.
+>>
+>> Signed-off-by: Neal Frager <neal.frager@amd.com>
+>> ---
+>> V1->V2:
+>> - removed unnecessary $BINARIES_DIR from symlink source
+>> ---
+>>    board/zynqmp/post-image.sh | 9 ++-------
+>>    1 file changed, 2 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
+>> index f44b66342d..10a3c32b2c 100755
+>> --- a/board/zynqmp/post-image.sh
+>> +++ b/board/zynqmp/post-image.sh
+>> @@ -2,13 +2,8 @@
+>>
+>>    # By default U-Boot loads DTB from a file named "system.dtb", so
+>>    # let's use a symlink with that name that points to the *first*
+>> -# devicetree listed in the config.
+>> -
+>> -FIRST_DT=$(sed -nr \
+>> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
+>> -               "${BR2_CONFIG}")
+>> -
+>> -[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
+>> +# devicetree in the LINUX_DTBS list.
+>> +ln -fs "$(basename ${LINUX_DTBS})" "${BINARIES_DIR}/system.dtb"
+> 
+>> The comment and commit message talk about the "first DTB in the
+>> LINUX_DTBS list", but this command will only work right if LINUX_DTBS
+>> contains *exactly one* file. With two the second file is interpreted as
+>> a possible suffix to remove (in practice, probably ignored), with >= 3
+>> you'll get an error.
+> 
+>> That may be fine for the defconfig (I haven't checked), but in that case
+>> comment & commit message should be clarified.
+> 
+>> Same in patch 3.
+> 
+> Interesting.  I only tested with two DTBs in the list, and when it worked, I
+> thought that basename was ignoring all the additional filenames in the list.
+> 
+> Since users may very well have multiple DTBs, do you know of a better command
+> that we can use that will strip out the first filename in the list?
+> 
+> What I would prefer is to have a command that matches my commit message.
+> 
+> Any ideas?
+In Bash I'd say "turn LINUX_DTBS into an array", in a POSIX shell script 
+given that LINUX_DTBS is a space separated list the easiest solution is 
+probably to use "${LINUX_DTBS%% *}" in the basename command to cut off 
+everything after the first space. AFAIK there is no supported escape 
+syntax for filenames with spaces, otherwise it'd get more complicated.
 
 Best regards,
-Neal Frager
-AMD
+Fiona
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
