@@ -4,110 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 950A0EFCE49
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 21:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0119EFCE4B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 21:35:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5835681773;
-	Wed,  4 Mar 2026 21:35:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C4098174C;
+	Wed,  4 Mar 2026 21:35:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h9lkiwnhmgt8; Wed,  4 Mar 2026 21:35:46 +0000 (UTC)
+ id NsaSGUB81dkX; Wed,  4 Mar 2026 21:35:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CC9181776
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A1C81799
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772660146;
-	bh=RHb+jAQQ5asX9GmrSluTnP2WXxeTxMrC6TLnt379B88=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=J8vPnpO/txE8/PDllagBL4iwnJVI0Qm7o1spW+GjdESzb8HG244gO5NHdn0WhhiYg
-	 qyBLzNQSO1fn4Kz0zeDGtSJz3Dd79b9xgxC0jm3pLhnBtVJVdFEH3JGu9o8tQy0i4q
-	 YvuKekbr8ZI0ZqPKm/r9VxxfdP8xDJtbxbBUicPjLWOPfuMbFvxyOdpjnohIXScOjU
-	 Px0OwrUWw1sGq19hftl/L4Bj8z/3G2ovsPejaEObKEKNaUpZTJqL6pPjEbZu3f17td
-	 BIuMB+kz9qoMZeB77v5uCZDAA4iwWYM+m2HBsdvNTZcUMfkO3/uoglCkDl/F8HQlF7
-	 V+abr8Fwsf4Tg==
+	s=default; t=1772660147;
+	bh=zOBjZE7ELm/9Y8tqRA//5vK3GCVK1VdbMjczEYNk9ts=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ZdsEZsiPpzTfxL3Bd7FRFISuB7VEM9DGmGn/jwhed7sMMqZWLACzv9LwYFZo2OvLm
+	 VEFrJubnet1e9xZoc9evgOpGODjvjXicDIF3r4gJr5aEiWEDx9N3+sr56qlaeXrYll
+	 p6taihusHXGcVZTX6JvO3NQYtHHew/4WtAQhJUzd47b2baXMGGt5AjCeOQRYjVRFf9
+	 Upo6zhXe/4i5anrrdvUQj6NiNn7f0NSxP5QSOuBC2DL4T6ZuGQl7a3I+m4jk6lNDmS
+	 URqpZKlpe9amY2HI0fRs6zL0IILpjJouZcduo+cjbVvbibKHlOvbIsFlILw85tdHrp
+	 /CBZX59FzCuBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CC9181776;
-	Wed,  4 Mar 2026 21:35:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D75B734F
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4A1C81799;
+	Wed,  4 Mar 2026 21:35:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C96C25B
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD80981776
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42D7E810F3
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YbhwVQzOLax9 for <buildroot@buildroot.org>;
+ id br1pbxUatX7S for <buildroot@buildroot.org>;
  Wed,  4 Mar 2026 21:35:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 77D5C810F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77D5C810F3
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77D5C810F3
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:42 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-439b2965d4bso3651843f8f.2
- for <buildroot@buildroot.org>; Wed, 04 Mar 2026 13:35:41 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CF218174C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CF218174C
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5CF218174C
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:43 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-439c9bdc1eeso1070363f8f.3
+ for <buildroot@buildroot.org>; Wed, 04 Mar 2026 13:35:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772660140; x=1773264940;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=RzjbBDXEyWRGszFQN1fjYnZMZovpTKiyQa8/kGyFjt4=;
- b=pgCXgTGmCV0p8iOfb0dMFBjf4dE532IMjmO9XMoEeomAkGnw9Ou+1PzJuMxpYCW3sr
- EMrKz0ieCMVSHmGy1aE5PlBib8rsXKtTMIoidcQYVa+UB5V5d5nziUnNd6DI0/taFvnN
- aphavRIj7ZpttW8Fih1Ql7fXvBRBkNYk60b5YblLVeZ/O9wwWui3PrnvIqrw0ePVxisv
- F0wuXVe68NjSPblsPGiZblvDExduKRK29NXsVNP57Q/wK1fwEeQYlP2e3l5Y7RC2zn6n
- G5zqBt+ly0YZky+irJMQzmzhdOnLcJaJzBokuLBafGc4zrRy6xGxXqA9Yy5zZPhiI1zr
- OwwA==
-X-Gm-Message-State: AOJu0Yx9UIZyKfQBoLXL350Fj/oj6hF7onNbvP6ulK9SMqRufp/r1W+9
- ACTy/Pfwz6bBdqcq3/UJm2sySxmGbN7glP3E1V2XILZCLxNWf8GyBHEyuuPVG0z8NgnEpCEBPqb
- YCS0t
-X-Gm-Gg: ATEYQzzyk3F4CsDj/AvYpmHSKFwGx6k7N+4k+2Pb3W++bxJXUqbOqf+H3r7TbCw6p0D
- ruJhwwPFhO63a7dSrpG9uZOOCWIJJ78Sj2Q0X+eK11DCrV6IWevWWGuEGcnPvKcVvKPlkY0W6Ek
- tokzIJl+8HQ6UTLzv9K8LJHziuxUswdcEjJfB3miy7WQIBGBMZpyky2L5dJTZ8kVCe51rI610Rd
- DlH+Ef8rqNWJRzhq7wULxu6+gRFFZ6YbHZIo0Ynv+uQBSX6ZxCNgcpeCJB8XYiUXx1xMtGRksYp
- X9tyJmQdKORz6oEm9AtlLDsn596Mz1gF37/O+LvGEHGTWAFl660Q+q5xCUtPWEBLgGn07O5NoUm
- mBKvpxTOZj/uo/zP/tD3rAgKr6audZfVyMsJeJhMfNTCGtwJG1PGXWKSX/Kxw6Z0nQIhtKGVxNJ
- nYI1nFzqQTD+9hEz5nMJH5TRdeSgVvL7bSTOUBHwybLTt+S3aIje+j4ydRbbBAGevHM3ztrfz/Z
- FTqSGsxa+EJjHUh2xZi8ldV9Q==
-X-Received: by 2002:a05:6000:26c1:b0:439:b8e5:5c36 with SMTP id
- ffacd0b85a97d-439c7fba2cemr6423584f8f.24.1772660139963; 
- Wed, 04 Mar 2026 13:35:39 -0800 (PST)
+ d=1e100.net; s=20230601; t=1772660141; x=1773264941;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=POCdG2l+L1y7X371fiXvU3562DntpOFSLU9LK4s89+E=;
+ b=Fs4RrUl61DCIizRchYrxCsuhTl6G+4+nnoiV+9FHOMJVd8jmx5bMxPvicWTaaqAyms
+ K6I4qKpFOUx+oZOI8ZJr1+5POdg7CZC/pXgp5AlPz8AYWncwdEGIcis2zu03So59mocK
+ z6QJ1Eql2MQEy+qdSDxQO/4dMLzm3xpjfZbOsC6BQmb6i/VY/F3FEvS++ei3cDpth81G
+ ugl1RmIXIHAyPc75TwjCdmuChxjtVeQUJB5C4bu2H0lknWvt702YTZL0x0sxRp1J+yJ/
+ yZqM3ExBDgoO+R4Cm0Q7oCWJ1uMbIgqezIT8NYQO0lDd9A/MzGAo6MQPQtE7NkVXnpAo
+ RnBw==
+X-Gm-Message-State: AOJu0YypkkP5PArIZvSFXjTtBO46J/ml3evdEe+bIRKNA/laTqDRW7gt
+ BUxJv1xmiGCe13ILDRuIdbsHy0tf9r+BytJAGt86r6DRdr/20TO6Bbphmj2rgKreQEWOnLvZG1p
+ oZWlg
+X-Gm-Gg: ATEYQzwB7N3b8KfKEyC+bM3QFJpGZqfwzCZwuaIlPRnpc4oD+PZUov8ip88apr0M0iC
+ tM2nRnKGPebJML3a1gyyeva4QXICZe3AShzzEy/qt1JBK1XxIPcuHkJozI8MaWgCVcDQhrNv81H
+ acxEQ342eBHCFoad3JTwItJYkiguSWaX/28M1bf7MOGN/pn0HOQuprhzVdMWFmIj7l6GOxNZQE2
+ 6whpevzSjLjtrAK8Hu2CpDuuhphnk4FX3ldk6dqNFAmxwxigkjHkJA2A7lVWCq4jQf+CkN2MI3o
+ 0SYyBicAJS+S/q3LZ7ryXsDISmzgmco8TsoSbzBoe3V19gB3fiqBccW9vkNz0QeBf0W1e/xFyqz
+ uHgHiRvnp0o82j9vVxB3TYW+fgrCtTflzQNwJCHjGJteIVTa1BAkvfyab05Ff2Hfd/WMVjUPyEz
+ wSLSQaPEeKgmM7J2qMTAkSuJyd9Ns1qL5KzDEDpv3XAsGvgH7BpgnB7zD48v4NI7U3XStqeH/ZI
+ lp9s6U2VswXXzU4Ntt5+Sr3Zw==
+X-Received: by 2002:a05:6000:26ca:b0:439:c356:9f5d with SMTP id
+ ffacd0b85a97d-439c7f6a2bamr6808747f8f.5.1772660141290; 
+ Wed, 04 Mar 2026 13:35:41 -0800 (PST)
 Received: from P-NTS-Evian.home
  (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
  [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439b59723fesm27668606f8f.38.2026.03.04.13.35.39
+ ffacd0b85a97d-439b59723fesm27668606f8f.38.2026.03.04.13.35.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Mar 2026 13:35:39 -0800 (PST)
+ Wed, 04 Mar 2026 13:35:40 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  4 Mar 2026 22:35:26 +0100
-Message-ID: <20260304213528.1380898-1-romain.naour@smile.fr>
+Date: Wed,  4 Mar 2026 22:35:28 +0100
+Message-ID: <20260304213528.1380898-3-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260304213528.1380898-1-romain.naour@smile.fr>
+References: <20260304213528.1380898-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1772660140; x=1773264940; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=RzjbBDXEyWRGszFQN1fjYnZMZovpTKiyQa8/kGyFjt4=;
- b=2V7jj2IMDsuLBaFtiCT8VhGpi4KkOuUsCqstrl6hTlI5/4e6jKrpEJM1D3qo0NndfO
- sBhlx4lVLJGSXn/5zbahvOJowjIPXOHqjJU2g/V7C/weNkto8JGyNtHklHBjVc/NQxz+
- cyGwOJ+xO8QxUrPwjiBdYn5XwMqAE8hfazqUk=
+ d=smile.fr; s=google; t=1772660141; x=1773264941; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=POCdG2l+L1y7X371fiXvU3562DntpOFSLU9LK4s89+E=;
+ b=E/VyzHZmictBsCU4PqbhGuOnmbTXWEMy6EK2TkQWn+sphsf1dmiqV812inn9nwV5qF
+ VAuXE0pCd50e2tOVa08w0oyLkA1CVYjt10O/fBEnh0cSGvPq0POIggFCmNvyUWaAdTyc
+ 0+6UASnD1MXeRojH1ma21yOsFQG2JfCjcDK84=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=2V7jj2IM
-Subject: [Buildroot] [PATCH 1/3] boot/uboot: improve U-Boot OP-TEE TEE
- format options help text
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=E/VyzHZm
+Subject: [Buildroot] [PATCH 3/3] configs/beagleboneai64_defconfig: use
+ BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_RAW_BIN
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,48 +129,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-OP-TEE generates a few binaries that can be used by u-boot on some
-platforms (Rockchip, Texas Instruments K3) using TEE variable.
+This defconfig use BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS to provide the path
+to the TEE in raw binary format but use the legacy file name
+"tee-pager_v2.bin" rather than the recommended "tee-raw.bin" [1][2].
 
-Add a link to the OP-TEE documentation were we can find easily the
-desciption for each TEE format that can be used by u-boot.
+Instead of just replacing the file name, use the newly introduced
+BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_RAW_BIN option. Since this option
+needs BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE, we now have an explicit
+dependency between u-boot and optee-os package.
 
-For convenience, copy tee.elf and tee.bin description in each option
-choice help text.
+Previously we had an indirect dependency: optee-os <- ATF <- u-boot
+with both BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE and
+BR2_TARGET_UBOOT_NEEDS_ATF_BL31 options enabled at the same time.
+
+[1] https://github.com/OP-TEE/optee_os/commit/376cb124dd8d4f0a8737359211fa6883bdb4c77c
+[2] https://source.denx.de/u-boot/u-boot/-/commit/4e0b8238eea83b71713230e67e781111ea897035
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- boot/uboot/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+The same change can be done on other defconfig:
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 47ce24ee76..17b7f95f50 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -295,15 +295,23 @@ choice
- 	  Since this version, the TEE in binary format must be used as
- 	  it contains important meta-data.
- 
-+	  https://optee.readthedocs.io/en/4.9.0/architecture/porting_guidelines.html#binaries
-+
- config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_ELF
- 	bool "tee.elf"
- 	help
-+	  The main OP-TEE ELF file. All other OP-TEE binaries are
-+	  created with this as input.
-+
- 	  ELF format may be used only for OP-TEE versions before
- 	  3.8.0.
- 
- config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_BIN
- 	bool "tee.bin"
- 	help
-+	  The original OP-TEE binary with a header (v1) and combined
-+	  init, paged, and unpaged parts.
-+
- 	  Binary format must be used for OP-TEE versions since 3.8.0.
- 
- endchoice
+  beagleplay_defconfig
+  beagley_ai_defconfig
+  ti_am62ax_sk_defconfig
+  ti_am62px_sk_defconfig
+  ti_am62x_sk_defconfig
+  ti_am64x_sk_defconfig
+---
+ configs/beagleboneai64_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configs/beagleboneai64_defconfig b/configs/beagleboneai64_defconfig
+index db5837fe36..5e0adc0dc2 100644
+--- a/configs/beagleboneai64_defconfig
++++ b/configs/beagleboneai64_defconfig
+@@ -38,12 +38,13 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="j721e_beagleboneai64_a72"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE=y
++BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_RAW_BIN=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="tispl.bin_unsigned"
+-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="TEE=$(BINARIES_DIR)/tee-pager_v2.bin"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.52.0
 
