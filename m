@@ -1,116 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0119EFCE4B
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 21:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 823A0EFCE49
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 21:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C4098174C;
-	Wed,  4 Mar 2026 21:35:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10018408CA;
+	Wed,  4 Mar 2026 21:41:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NsaSGUB81dkX; Wed,  4 Mar 2026 21:35:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H4wfHwzM3mFq; Wed,  4 Mar 2026 21:41:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A1C81799
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30A514091D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772660147;
-	bh=zOBjZE7ELm/9Y8tqRA//5vK3GCVK1VdbMjczEYNk9ts=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZdsEZsiPpzTfxL3Bd7FRFISuB7VEM9DGmGn/jwhed7sMMqZWLACzv9LwYFZo2OvLm
-	 VEFrJubnet1e9xZoc9evgOpGODjvjXicDIF3r4gJr5aEiWEDx9N3+sr56qlaeXrYll
-	 p6taihusHXGcVZTX6JvO3NQYtHHew/4WtAQhJUzd47b2baXMGGt5AjCeOQRYjVRFf9
-	 Upo6zhXe/4i5anrrdvUQj6NiNn7f0NSxP5QSOuBC2DL4T6ZuGQl7a3I+m4jk6lNDmS
-	 URqpZKlpe9amY2HI0fRs6zL0IILpjJouZcduo+cjbVvbibKHlOvbIsFlILw85tdHrp
-	 /CBZX59FzCuBw==
+	s=default; t=1772660466;
+	bh=7zJtqcjIp7Kmwvw0qmuymQm7iSoHvguD+SjVS3w9WXk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hv0LFryLgOlIXEU1HNJwz/kk2tgxXLxMS+R7vvfauwjEe33Yerwr+MGI5dIk8NzNc
+	 RK7Rmmsi09UwXIJWoRME3VUmf7JgnxRfP8FNWtWJiij5b8568O/UGr0R3hCC8Xsi+R
+	 fB5vqeqMN8yVh/mDBIKhGlQ+4NBw63crYIqHovosNpZ3Xhfdxb8DZN+vGjkLBooIX6
+	 UVC9E2gOeCFfUdlcXWvnZhDy2vsgS4MfVQyJC7Nue51crqGmk2luUUIACmwlgMjDWl
+	 6ZrhcBAq5meTpjNJmWkGtgFUb8WPgTiwE/dG3iE0QlRPbmgKdEZinJTHpjaoNDPl2X
+	 j9xETW+d9S88g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4A1C81799;
-	Wed,  4 Mar 2026 21:35:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C96C25B
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30A514091D;
+	Wed,  4 Mar 2026 21:41:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 662EB25B
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42D7E810F3
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57D4E608E9
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:41:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id br1pbxUatX7S for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 21:35:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CF218174C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CF218174C
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5CF218174C
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:35:43 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-439c9bdc1eeso1070363f8f.3
- for <buildroot@buildroot.org>; Wed, 04 Mar 2026 13:35:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772660141; x=1773264941;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=POCdG2l+L1y7X371fiXvU3562DntpOFSLU9LK4s89+E=;
- b=Fs4RrUl61DCIizRchYrxCsuhTl6G+4+nnoiV+9FHOMJVd8jmx5bMxPvicWTaaqAyms
- K6I4qKpFOUx+oZOI8ZJr1+5POdg7CZC/pXgp5AlPz8AYWncwdEGIcis2zu03So59mocK
- z6QJ1Eql2MQEy+qdSDxQO/4dMLzm3xpjfZbOsC6BQmb6i/VY/F3FEvS++ei3cDpth81G
- ugl1RmIXIHAyPc75TwjCdmuChxjtVeQUJB5C4bu2H0lknWvt702YTZL0x0sxRp1J+yJ/
- yZqM3ExBDgoO+R4Cm0Q7oCWJ1uMbIgqezIT8NYQO0lDd9A/MzGAo6MQPQtE7NkVXnpAo
- RnBw==
-X-Gm-Message-State: AOJu0YypkkP5PArIZvSFXjTtBO46J/ml3evdEe+bIRKNA/laTqDRW7gt
- BUxJv1xmiGCe13ILDRuIdbsHy0tf9r+BytJAGt86r6DRdr/20TO6Bbphmj2rgKreQEWOnLvZG1p
- oZWlg
-X-Gm-Gg: ATEYQzwB7N3b8KfKEyC+bM3QFJpGZqfwzCZwuaIlPRnpc4oD+PZUov8ip88apr0M0iC
- tM2nRnKGPebJML3a1gyyeva4QXICZe3AShzzEy/qt1JBK1XxIPcuHkJozI8MaWgCVcDQhrNv81H
- acxEQ342eBHCFoad3JTwItJYkiguSWaX/28M1bf7MOGN/pn0HOQuprhzVdMWFmIj7l6GOxNZQE2
- 6whpevzSjLjtrAK8Hu2CpDuuhphnk4FX3ldk6dqNFAmxwxigkjHkJA2A7lVWCq4jQf+CkN2MI3o
- 0SYyBicAJS+S/q3LZ7ryXsDISmzgmco8TsoSbzBoe3V19gB3fiqBccW9vkNz0QeBf0W1e/xFyqz
- uHgHiRvnp0o82j9vVxB3TYW+fgrCtTflzQNwJCHjGJteIVTa1BAkvfyab05Ff2Hfd/WMVjUPyEz
- wSLSQaPEeKgmM7J2qMTAkSuJyd9Ns1qL5KzDEDpv3XAsGvgH7BpgnB7zD48v4NI7U3XStqeH/ZI
- lp9s6U2VswXXzU4Ntt5+Sr3Zw==
-X-Received: by 2002:a05:6000:26ca:b0:439:c356:9f5d with SMTP id
- ffacd0b85a97d-439c7f6a2bamr6808747f8f.5.1772660141290; 
- Wed, 04 Mar 2026 13:35:41 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439b59723fesm27668606f8f.38.2026.03.04.13.35.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Mar 2026 13:35:40 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 77vcVyGj75Yx for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 21:41:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 818BD608D7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 818BD608D7
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 21:41:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7A3648623B; Wed,  4 Mar 2026 21:41:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  4 Mar 2026 22:35:28 +0100
-Message-ID: <20260304213528.1380898-3-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260304213528.1380898-1-romain.naour@smile.fr>
-References: <20260304213528.1380898-1-romain.naour@smile.fr>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1772660141; x=1773264941; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=POCdG2l+L1y7X371fiXvU3562DntpOFSLU9LK4s89+E=;
- b=E/VyzHZmictBsCU4PqbhGuOnmbTXWEMy6EK2TkQWn+sphsf1dmiqV812inn9nwV5qF
- VAuXE0pCd50e2tOVa08w0oyLkA1CVYjt10O/fBEnh0cSGvPq0POIggFCmNvyUWaAdTyc
- 0+6UASnD1MXeRojH1ma21yOsFQG2JfCjcDK84=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=E/VyzHZm
-Subject: [Buildroot] [PATCH 3/3] configs/beagleboneai64_defconfig: use
- BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_RAW_BIN
+Date: Wed, 4 Mar 2026 22:34:26 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1c3aa5f977a8748f363e64b1225cccfcc848629e
+X-Git-Newrev: d225a6ffad8d1b1a40976f9c49a04d5db33e0c47
+X-Patchwork-Hint: ignore
+Message-Id: <20260304214104.7A3648623B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/clamav: security bump version to
+ 1.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,65 +69,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This defconfig use BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS to provide the path
-to the TEE in raw binary format but use the legacy file name
-"tee-pager_v2.bin" rather than the recommended "tee-raw.bin" [1][2].
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d225a6ffad8d1b1a40976f9c49a04d5db33e0c47
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Instead of just replacing the file name, use the newly introduced
-BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_RAW_BIN option. Since this option
-needs BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE, we now have an explicit
-dependency between u-boot and optee-os package.
+https://blog.clamav.net/2026/03/clamav-152-and-144-security-patch.html
 
-Previously we had an indirect dependency: optee-os <- ATF <- u-boot
-with both BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE and
-BR2_TARGET_UBOOT_NEEDS_ATF_BL31 options enabled at the same time.
+Fixes CVE-2026-20031: https://www.cve.org/CVERecord?id=CVE-2026-20031
 
-[1] https://github.com/OP-TEE/optee_os/commit/376cb124dd8d4f0a8737359211fa6883bdb4c77c
-[2] https://source.denx.de/u-boot/u-boot/-/commit/4e0b8238eea83b71713230e67e781111ea897035
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-The same change can be done on other defconfig:
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-  beagleplay_defconfig
-  beagley_ai_defconfig
-  ti_am62ax_sk_defconfig
-  ti_am62px_sk_defconfig
-  ti_am62x_sk_defconfig
-  ti_am64x_sk_defconfig
----
- configs/beagleboneai64_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/configs/beagleboneai64_defconfig b/configs/beagleboneai64_defconfig
-index db5837fe36..5e0adc0dc2 100644
---- a/configs/beagleboneai64_defconfig
-+++ b/configs/beagleboneai64_defconfig
-@@ -38,12 +38,13 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="j721e_beagleboneai64_a72"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE=y
-+BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_RAW_BIN=y
- BR2_TARGET_UBOOT_USE_BINMAN=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="tispl.bin_unsigned"
--BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="TEE=$(BINARIES_DIR)/tee-pager_v2.bin"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.52.0
-
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 807c8fc2ea..db50d77194 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  64fe4a16a5622c1d71efe9ed7f2c2fbd37f8f237da9f11ff66b73038df71db91  clamav-1.5.1.tar.gz
++sha256  f34018cf22f05bdd9d1a1574ca07193e3e030ca52050c3e5c220e23a32314965  clamav-1.5.2.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index bda714ea65..7f8008ab5f 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 1.5.1
++CLAMAV_VERSION = 1.5.2
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
