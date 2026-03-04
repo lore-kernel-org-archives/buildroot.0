@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3A1EEB7EA7
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 08:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0026FEB7EA4
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 08:22:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C10F40706;
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD2A88101C;
 	Wed,  4 Mar 2026 08:22:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uIKEh2B-iR2X; Wed,  4 Mar 2026 08:22:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1AwHlHXdK4PB; Wed,  4 Mar 2026 08:22:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D512640661
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5FE58104F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772612522;
-	bh=67cxEMWCziahMrwE2gWQ9RDnr2D57RmvXladrd/uh2Y=;
+	s=default; t=1772612523;
+	bh=Ff4Fpp3D82EEG4FNPeIWFPRrCtLnShRX0FrVt2LnlGY=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=oVdM/cNFMmXo7xYWaFLERzMpEzQmz7WF8XqsQ+U+c4jQSiHpr3hslJ2QwFmpcjy1P
-	 zg2O09HOwYs+2AHjpy8pBTjIsiIuoNJP9E7cInp5OA28ZKN5sG1gjZkS6IWDR44deM
-	 rXnduCicYkqhTs2tw3lDZ5FoNCFIeiEfZCxv07S/znKeFOolO61jS4tN3k0uV4LLMF
-	 mbSgu+5lbekkEaVYm1d5cCwMVgw5FSrtWf8sM/QboIpmWzc4Iw19UbIT4jvZ7QTJZA
-	 dVjfk1efNmCSS2Ccx+LWHMr0cpG4qvFD4erfz9RK1YwxoUdq9yNpmDHY+xwi7hHIH3
-	 NjFnVDWOw/5WQ==
+	b=LKU2yzP5Fn01xqAiGeS+NrxhdyRDKK7kYSJpm/2rdlVTuUytJoJaueTrZ7J/QtV+N
+	 9Zg6FgSOZgrQWMPHGWM7W9s+6kBbVDzV78YBS/HhEdS0Wxqq29ALJ2DAofRjGFJkNE
+	 akREoP55BUb0cgfnmZ0NAVe5+r67vnQ2NXWkFric196A3IJnfqLI56NFDj08V3nHAb
+	 qz5MFPycplZp4UYB/SSLLseXmb/mKIqf2NAxOnzU/NCLyLnF9wflJ0uNz/4/goo02l
+	 XJ6CzopAwJMzhcUy9VODUxqnoEKnaR5jhU92VG52gB08ZbCKkZcf4BkhbG13GjChnH
+	 ChtvcH/S1YpqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D512640661;
-	Wed,  4 Mar 2026 08:22:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C0BFB231
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5FE58104F;
+	Wed,  4 Mar 2026 08:22:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D00132F2
  for <buildroot@buildroot.org>; Wed,  4 Mar 2026 08:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B28C340394
+ by smtp3.osuosl.org (Postfix) with ESMTP id B65AB60693
  for <buildroot@buildroot.org>; Wed,  4 Mar 2026 08:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sYcHbu10YRRB for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6EBJGTVEnvC1 for <buildroot@buildroot.org>;
  Wed,  4 Mar 2026 08:22:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08DA340296
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189A2605FA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08DA340296
+ by smtp3.osuosl.org (Postfix) with ESMTP id 189A2605FA
  for <buildroot@buildroot.org>; Wed,  4 Mar 2026 08:22:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03026860DD; Wed,  4 Mar 2026 08:22:01 +0000 (UTC)
+ id 13892860E6; Wed,  4 Mar 2026 08:22:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Mar 2026 09:20:22 +0100
+Date: Wed, 4 Mar 2026 09:21:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52ee2f5644da5389634b2465f1dc31deb5a4807c
-X-Git-Newrev: d374a736d88f37625c5c561d7c6bec9ab1f51ec4
+X-Git-Oldrev: d374a736d88f37625c5c561d7c6bec9ab1f51ec4
+X-Git-Newrev: bd715a60eafe87eb54c9fe57cf92dd8a56447223
 X-Patchwork-Hint: ignore
-Message-Id: <20260304082201.03026860DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Kickoff 2026.05 cycle
+Message-Id: <20260304082201.13892860E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2026.02
+ announcement link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,27 +76,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d374a736d88f37625c5c561d7c6bec9ab1f51ec4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bd715a60eafe87eb54c9fe57cf92dd8a56447223
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 8e2cb0ae14..f51155b0ed 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2026.02
-+export BR2_VERSION := 2026.05-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1772611600
- 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 271c10f1b4..7cc9dd5761 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2026.02 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.02/CHANGES">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/87ecm0huqz.fsf@dell.be.48ers.dk/T/#u">announcement</a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2026.02.tar.xz">2026.02 release</a>.</p>
+       </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
