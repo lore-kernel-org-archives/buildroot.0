@@ -4,82 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E70EBEFCE41
-	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 19:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B47DEFCE37
+	for <buildroot@archiver.kernel.org>; Wed,  4 Mar 2026 19:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98BFE81302;
-	Wed,  4 Mar 2026 19:39:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 089888146C;
+	Wed,  4 Mar 2026 19:49:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5fE3u7y42A2t; Wed,  4 Mar 2026 19:39:15 +0000 (UTC)
+ id SzUKACJJ0Bnz; Wed,  4 Mar 2026 19:49:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4B0F81304
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 162D58146D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772653155;
-	bh=KBlJY+oCLsk/rFpiPRDwFye7rJqNXEyiXnu4m90p+g8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=SPRCT9VnPhCboEM9vcOu+XGKl0xgYAyBRoManrynkW/enUdvzBynWwqdZUTOlxz6+
-	 jjfKPHAx4sY8JKtIUVLV0RMAD7G688/iyDtRZk+4hD8iH/cYlstzpS272hSBEjUSFH
-	 tyCx403hcmQmhdQDM7gATHLnV22EvP99M7EPnzepNp4neecuOuk7wxZnK2rcOBGUN2
-	 N5vHhtgepcjChhqELslLggOLiEAClrlx0clP5hs9Ays8Jf8hdc4koMicJBgtlqjwwG
-	 lHI+5/kmebTW1qSZqFrHfYDI1n9NaizomjpBtpsP1aBW8CAq+gZq6pEhahay64jgmz
-	 0ZhfmBY/WU/LA==
+	s=default; t=1772653777;
+	bh=Jj+3qrAwRHV08EckPL7SrLSmUjXSLJYkY3u0hgPSPws=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=CscacW49C/4s9UTYn3Y9paVDuEW1GoSbP9dQ7PicjI2+tqeOGg4Iiu4XX9HYBMBav
+	 ktjd38MvVl2pxAyy8WTvFuXaOvfCEOULTJw9j/A5MG4n6dhLalvNvX06kMlVl9RgOK
+	 crvKgtCMmQWNie8cCQ6XN+aMQswJC+E5Ia3eMdnv3kyocbmUjbjCpOaOO/A9d5qbyq
+	 VROUA0QoCmokTtbodB9tcp8f58y7tzZjJ3smmX2S3QZwpnlaRkFmLcHMeJW7SvrGRf
+	 kgoqGSDlQn4yYbgaRYQT29emAVX3+v9EuBffZmv2wNXPqGvECy0iYiqQQUkKQ1sMdK
+	 HHRz+sXakH8xA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4B0F81304;
-	Wed,  4 Mar 2026 19:39:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 606AF1EB
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:39:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 162D58146D;
+	Wed,  4 Mar 2026 19:49:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8EBD4223
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 51D6440794
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:39:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7494B404B0
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:49:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wkx0_t4Z1wja for <buildroot@buildroot.org>;
- Wed,  4 Mar 2026 19:39:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1EE9340791
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EE9340791
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1EE9340791
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:39:11 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b996.dip0.t-ipconnect.de [84.161.185.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 47CE7A4C20C9
- for <buildroot@buildroot.org>; Wed,  4 Mar 2026 20:39:09 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49238)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vxs3p-000000002fe-12FJ
- for buildroot@buildroot.org; Wed, 04 Mar 2026 19:39:09 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Wed,  4 Mar 2026 20:39:08 +0100
-Message-ID: <20260304193908.3512983-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XXaZQLmJkOA2 for <buildroot@buildroot.org>;
+ Wed,  4 Mar 2026 19:49:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9242F40070
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9242F40070
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9242F40070
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:49:33 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 6ED191A2CB8
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:49:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3E49E5FF5C
+ for <buildroot@buildroot.org>; Wed,  4 Mar 2026 19:49:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 554EA103696B2; Wed,  4 Mar 2026 20:49:30 +0100 (CET)
+Date: Wed, 04 Mar 2026 20:47:02 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Message-Id: <20260304-openscap_nptl_threads-v2-1-9ed3efd98e9b@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNQQrDIBBFrxJmXYtRm5Kueo8SgjFjM5CqqISW4
+ N1rc4Eu34P//g4JI2GCW7NDxI0SeVdBnBowi3ZPZDRXBsFFxyVXzAd0yegwupDXMS8R9ZyYkla
+ rCZW8dB3UbYho6X10H0PlhVL28XPcbO3P/ituLeOsn63thTHyivw+eZ9XcmfjXzCUUr4PPYmOv
+ AAAAA==
+X-Change-ID: 20260304-openscap_nptl_threads-43fa4be43566
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772653149;
- bh=Yu88uA9AcmTnkQ6nWPLmLa8lozuTjRj+0f8+XRm65Lk=;
- h=From:To:Subject:Date:From;
- b=sgYpVX7CmiqJA1GkNccxOWXVwNk1Hi7CuUvqTHxQMMSHqYZzxONSFRZlktvd1xLxj
- FuFwCIixL1nXGWofF6eWfKwO8t2opARRUJFw3v6BPhbR2R4/21d3G7AFZNKJX1P8Pv
- W1g5z/PYGmg4eCJ21QHZN4eHN5wD7ASSvY2Ve4Q0rCheGkz311lNLRKtHubyjHqtre
- SNSyz9Q4qL93LTShCSTyz5M1CcB7taY1vfKeS2Tvu78ManXVb8rqHEXsPEgjIQLp6t
- NMb3ratamvrO/erOFLQh+RpW0et+fWxORYdBfmdwvEitmQXzNOVBzTi9u0qqNzOmOK
- zUPvjmPDMZ5Fw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=sgYpVX7C
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
- 1.5.2
+ d=bootlin.com; s=dkim; 
+ t=1772653770; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=ItK3a0XefcK7ECic4liQInLEtM4x7hGusfiOnHNQo7E=;
+ b=P+GZTuvxgexnHXEXw3qhU/qBoFobuB6s7FqxmYzkv2fbHzLHfHaugQRf6xTcxg4I2Uh8Ak
+ yysiyzEgXgaVPk+vv8SI/VO7hbEI2Hh4nPKjP5H+AaSQCHVKSUseivbKc78sA5yASSFZxP
+ 3LRSivBruR0VqEY56QGtq3YVrbMigZW7DfI2RtFvtSWh07wmNZRX1adnm8QJAUuNEi85S6
+ rFTi1mexjWHZn+PDJ7oy/i9E9neNaYKufq2RTpnnbMbNlw3fXJwNXgo+yCbczi24EGrPA6
+ pVX115TQ8Zbssw8XGorsxunNFMHSneTdfkcqMOWas4yT0Pwj7fya4BjXtZbiBw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=P+GZTuvx
+Subject: [Buildroot] [PATCH v2] package/openscap: add dependency on NPTL
+ threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,49 +98,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://blog.clamav.net/2026/03/clamav-152-and-144-security-patch.html
-
-Fixes CVE-2026-20031: https://www.cve.org/CVERecord?id=CVE-2026-20031
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 807c8fc2ea..db50d77194 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  64fe4a16a5622c1d71efe9ed7f2c2fbd37f8f237da9f11ff66b73038df71db91  clamav-1.5.1.tar.gz
-+sha256  f34018cf22f05bdd9d1a1574ca07193e3e030ca52050c3e5c220e23a32314965  clamav-1.5.2.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index bda714ea65..7f8008ab5f 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 1.5.1
-+CLAMAV_VERSION = 1.5.2
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = \
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T3BlbnNjYXAgY29kZSBpcyBjYWxsaW5nIE5QVEwgZnVuY3Rpb25zIHN1Y2ggYXMgcHRocmVhZF9i
+YXJyaWVyX3dhaXQsCndoaWNoIGFyZSBub3QgcHJvdmlkZWQgYnkgcHRocmVhZHMuCgpNYWtlIHRo
+ZSByZXF1aXJlbWVudCBvbiBOUFRMIHRocmVhZHMgZXhwbGljaXQgYnkgYWRkaW5nIHRoZQpjb3Jy
+ZXNwb25kaW5nICBkZXBlbmRlbmN5IGluIG9wZW5zY2FwIENvbmZpZy5pbi4KCkZpeGVzOiBodHRw
+czovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMmQ5NDc1YjdjZDJkNDEzYzk5ZDYy
+MzNlYmIyMTNiYzkzMmYxZTM5OC8KU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4
+aXMubG90aG9yZUBib290bGluLmNvbT4KLS0tCkNoYW5nZXMgaW4gdjI6Ci0gZHJvcCBib2d1cyBw
+YXRjaCAxLzIsIGFzIG9yaWdpbmFsIENvbmZpZy5pbiB3YXMgZmluZQotIHJlZm9ybWF0IG1pc3Np
+bmcgZGVwZW5kZW5jeSBjb21tZW50Ci0gTGluayB0byB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvci8yMDI2MDMwNC1vcGVuc2NhcF9ucHRsX3RocmVhZHMtdjEtMC05ZGZmOTJjYzM3ZTBAYm9v
+dGxpbi5jb20KLS0tCiBwYWNrYWdlL29wZW5zY2FwL0NvbmZpZy5pbiB8IDUgKysrLS0KIDEgZmls
+ZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9vcGVuc2NhcC9Db25maWcuaW4gYi9wYWNrYWdlL29wZW5zY2FwL0NvbmZpZy5pbgpp
+bmRleCAzMTcwNTVjNzUzMjcuLjI1YzM4NWQxNjNjZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9vcGVu
+c2NhcC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9vcGVuc2NhcC9Db25maWcuaW4KQEAgLTIsNiAr
+Miw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOU0NBUAogCWJvb2wgIm9wZW5zY2FwIgogCWRl
+cGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCR1BHX0VSUk9SX0FSQ0hfU1VQUE9SVFMgICMgbGliZ2Ny
+eXB0CiAJZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19MSUJTICMgZGxmY24uaAorCWRlcGVuZHMgb24g
+QlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEU19OUFRMCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkNV
+UkwKIAkjIEluIHRoZW9yeSBzaG91bGQgYnVpbGQgd2l0aG91dCBjcnlwdG8sIGJ1dCBpbiBwcmFj
+dGljZSBpdAogCSMgZG9lc24ndDogaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQL29wZW5zY2Fw
+L2lzc3Vlcy8yMzEwCkBAIC0xOSw2ICsyMCw2IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOU0NB
+UAogCSAgaHR0cHM6Ly93d3cub3Blbi1zY2FwLm9yZy8KIAkgIGh0dHBzOi8vZ2l0aHViLmNvbS9P
+cGVuU0NBUC9vcGVuc2NhcAogCi1jb21tZW50ICJvcGVuc2NhcCBuZWVkcyBhIHRvb2xjaGFpbiB3
+LyBkeW5hbWljIGxpYnJhcnkiCitjb21tZW50ICJvcGVuc2NhcCBuZWVkcyBhIHRvb2xjaGFpbiB3
+LyBkeW5hbWljIGxpYnJhcnksIE5QVEwiCiAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MSUJHUEdf
+RVJST1JfQVJDSF9TVVBQT1JUUwotCWRlcGVuZHMgb24gQlIyX1NUQVRJQ19MSUJTCisJZGVwZW5k
+cyBvbiBCUjJfU1RBVElDX0xJQlMgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFNfTlBUTAoK
+LS0tCmJhc2UtY29tbWl0OiAzNDZkNjY2N2ZlYmRiZWM5YTNjNTdlNDcwMDlhYjIxZTEyMWI1YjFk
+CmNoYW5nZS1pZDogMjAyNjAzMDQtb3BlbnNjYXBfbnB0bF90aHJlYWRzLTQzZmE0YmU0MzU2NgoK
+QmVzdCByZWdhcmRzLAotLSAKQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGlu
+LmNvbT4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
