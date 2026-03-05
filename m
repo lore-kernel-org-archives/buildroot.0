@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1645BF47CDA
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 21:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42141F47CD8
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 21:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF37E809B0;
-	Thu,  5 Mar 2026 21:10:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06A9F82D7C;
+	Thu,  5 Mar 2026 21:11:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l8iAXBdxd7G7; Thu,  5 Mar 2026 21:10:56 +0000 (UTC)
+ id kZ4IJoXdmD22; Thu,  5 Mar 2026 21:11:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10D6482D75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E02182DD9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772745056;
-	bh=AMQn9gtcXsCVsW2RntO4ZEr0ifUPGMhhoz0QRIu5MUg=;
+	s=default; t=1772745068;
+	bh=owATigfkOKaYJf6MsMAK5A4ZL5/lwQaEEQtNkX3YfIE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=oebN2qMuIVBlXnSe5pIuunb+XTnjIXREXS7KPWRkPp+3MMnZkCUs3L1V3U6u5DLfn
-	 xVsfz2J2qTPWnP6nL1m424eOAqycALtoTvqDuf7RC8WRPSh8RQaJ3ZPQtHy9mLBDiO
-	 aw5VG3sj8Kmwu/o+gxz8ZVyrdX1o30hZgj/SCl8om4JA8UbhHwTKRv6o7wxy4/NGPC
-	 iRG9/ri66yV8C/OY3udgFggmq64ddbCgrGDzbDY0ENpCikO7rzvB702sULNewAcsvh
-	 Zi6IPO3kI9bePlDno3ULlmEk5x/LSJt3h5NMdmL7NHXwEYbZAtiCgyToVcCblX0RNx
-	 MGVtYf11t3oag==
+	b=D/wPQsq0ZjH6Hz+NvA46xhZZtOIyL9I5GxnfqrJ06iGKGJxHjapW0NsPayow+SRee
+	 tiHpLI7TLtymNVIhASE5AFot9+VIVd05ZqDgOZ7Yx4nMfN787/SnpA/GSqPpHtABrp
+	 RBk4ODnNgiXCSrZQBN2AGqq28L2Q1lvnQqLIK6aSRFIwpUofSzbp5vWTrgblM4C+ZL
+	 coF60Wco+I6kh5/ESP6b2NFXLFSm44a36k8bP03lo/44Srp2vDWWTpGjD73N/zfy0H
+	 ZrFVNJ/Wbfl2GtxwmvfR0E81O2RW1c5AkVnEovFgbxTpFqbvEdte6tF10O4Tq7g874
+	 5R0aDKRWzuE1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10D6482D75;
-	Thu,  5 Mar 2026 21:10:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DE4E25B
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:10:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E02182DD9;
+	Thu,  5 Mar 2026 21:11:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D87FA25B
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53E2260E32
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:10:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9EF340C84
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:11:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cO3ai_ZTnv4e for <buildroot@buildroot.org>;
- Thu,  5 Mar 2026 21:10:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IIIoyufOCKAU for <buildroot@buildroot.org>;
+ Thu,  5 Mar 2026 21:11:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4451360E30
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4451360E30
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C0F8C40C34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0F8C40C34
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4451360E30
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:10:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C0F8C40C34
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:11:05 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc67.dip0.t-ipconnect.de [84.161.188.103])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EAE85A4C3734;
- Thu,  5 Mar 2026 22:09:56 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 23260A4C3739;
+ Thu,  5 Mar 2026 22:09:57 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:47648)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vyFx9-000000003FD-3UPw;
- Thu, 05 Mar 2026 21:09:51 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vyFx9-000000003FD-3uhL;
+ Thu, 05 Mar 2026 21:09:52 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  5 Mar 2026 22:09:41 +0100
-Message-ID: <20260305210950.3471974-7-bernd@kuhls.net>
+Date: Thu,  5 Mar 2026 22:09:42 +0100
+Message-ID: <20260305210950.3471974-8-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260305210950.3471974-1-bernd@kuhls.net>
 References: <20260305210950.3471974-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: ++++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1772744996;
- bh=FOJ3lAcCfJ2Dyu0pQytA3C5DKJ2C+DKsxKKxOUwiP20=;
+ s=kas202511301023; t=1772744997;
+ bh=gGNmpZLhWSKfbZwy2yI6jWFYDOTSnQYyN9ALGdSYjBA=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=DI4EZA5476Le8eXS1DCXE5NlfPJMNVrDdIEU+ksHA2jMpIs+3DX7G+rgJd89f6+Zm
- HF/OwlMrWKpugn5du76iPhFWJRN8chZeLgItAxfU5iAQMZB5JXmhg1pKF92uxPQppG
- pwTo/6lFamW1BwUkqyAZy0HF1hxki3QXCVAkvz3cd9lx3QzGBhACaAYzy/u7tS6cLH
- G79nR7ogBTiaUx9LubTFJSsQxZmYZqbGKCyZ7AleDD/zGO4Lig5ZfBZlIcYNmNzyMt
- Y3dwN1x7PRVHsSWeiACwNY//EQ1VtadCthIvj7d41eXvKPr0Ou6XGVsAxIqme2aJ01
- yKpMsVRi+Pa5w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=p4LeixHNYPGUfK1ZheqH3EI9tUijT8SgiD3wHerZlcAjBwNP8GeJNLjJ6Yt4QzQN0
+ RgvjbShBAeSPsejIbqx2l+uJfgzI47boMhFTXX+iGktHDoHkMbYNjOICxwK1UN5yFW
+ KU5FUNUFIpF2HeYmgOW3x5VR0j8umsjyC2imSu/GbHAOIMwnPIz7OeKsBIXrWbHaDM
+ eVseZEY8epM8lEfWOZc1JN4WRSPDVHgIpVDHCti4LWvUyaTaO1Vzqb/tb2a0F1ZPKb
+ BqgL9sB7H7fB5GDkz3VpTa4HAjNaKgqk+gQkANGHn2wDSljgid3N67fedCpLiyWjPI
+ K95PYoXAPQJRw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=DI4EZA54
-Subject: [Buildroot] [PATCH v2 06/14] package/ntp: fix build with glibc 2.43
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=p4LeixHN
+Subject: [Buildroot] [PATCH v2 07/14] package/waffle: fix build with glibc
+ 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,81 +106,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-sntp/crypto.c includes sntp/config.h, then sntp/crypto.h which includes
-ntp_stdlib.h which in turn includes l_stdlib.h that contains
-
-  #ifndef HAVE_MEMCHR
-  extern void *memchr(const void *s, int c, size_t n);
-  #endif
-
-and breaks the build with glibc 2.43.
-
-sntp/config.h does not contain any information about memchr() while the
-top-level config.h does but this top-level config.h is not included
-because sntp/Makefile lacks -I$(top_builddir) so sntp/config.h gets
-included which does not define HAVE_MEMCHR although glibc does provide
-memchr() but sntp/configure lacks a check for memchr().
-
-This was not a problem with previous glibc versions but due to recent
-C23 changes in glibc the ntp build is now broken.
-
-To fix the problem we add a configure check for memchr() to
-sntp/configure so HAVE_MEMCHR gets defined in sntp/config.h.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ntp/0007-memchr.patch | 42 +++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/ntp/0007-memchr.patch
+ .../0001-c11-threads-fix-build-on-c23.patch   | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/waffle/0001-c11-threads-fix-build-on-c23.patch
 
-diff --git a/package/ntp/0007-memchr.patch b/package/ntp/0007-memchr.patch
+diff --git a/package/waffle/0001-c11-threads-fix-build-on-c23.patch b/package/waffle/0001-c11-threads-fix-build-on-c23.patch
 new file mode 100644
-index 0000000000..a9c21042be
+index 0000000000..0bed2a6548
 --- /dev/null
-+++ b/package/ntp/0007-memchr.patch
-@@ -0,0 +1,42 @@
-+Fix build with glibc 2.43
++++ b/package/waffle/0001-c11-threads-fix-build-on-c23.patch
+@@ -0,0 +1,57 @@
++From 6b3c46483844faba4dfe7dd90dc2b0cd06e67158 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Mon, 10 Nov 2025 19:20:22 -0800
++Subject: [PATCH] c11/threads: fix build on c23
 +
-+sntp/crypto.c includes sntp/config.h, then sntp/crypto.h which includes
-+ntp_stdlib.h which in turn includes l_stdlib.h that contains
++C23/glibc is now including once_init in stdlib.h
 +
-+  #ifndef HAVE_MEMCHR
-+  extern void *memchr(const void *s, int c, size_t n);
-+  #endif
++https://patchwork.sourceware.org/project/glibc/patch/78061085-f04a-0c45-107b-5a8a15521083@redhat.com/#213088
 +
-+and breaks the build with glibc 2.43:
++Conditionally check if glibc already provided c23 definition via stdlib.h
 +
-+./../include/l_stdlib.h:225:14: error: expected identifier or '(' before '_Generic'
-+  225 | extern void *memchr(const void *s, int c, size_t n);
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +
-+sntp/config.h does not contain any information about memchr() while the
-+top-level config.h does but this top-level config.h is not included
-+because sntp/Makefile lacks -I$(top_builddir) so sntp/config.h gets
-+included which does not define HAVE_MEMCHR although glibc does provide
-+memchr() but sntp/configure lacks a check for memchr().
-+
-+This was not a problem with previous glibc versions but due to recent
-+C23 changes in glibc the ntp build is now broken.
-+
-+To fix the problem we add a configure check for memchr() to
-+sntp/configure so HAVE_MEMCHR gets defined in sntp/config.h.
-+
-+Upstream: https://bugs.ntp.org/show_bug.cgi?id=4015
++Upstream: https://gitlab.freedesktop.org/mesa/waffle/-/merge_requests/158
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ third_party/threads/threads.h       | 3 ++-
++ third_party/threads/threads_posix.c | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
 +
-+diff -uNr ntp-4.2.8p18/sntp/m4/ntp_libntp.m4 ntp-4.2.8p18/sntp/m4/ntp_libntp.m4
-+--- ntp-4.2.8p18/sntp/m4/ntp_libntp.m4	2024-05-07 13:21:13.000000000 +0200
-++++ ntp-4.2.8p18/sntp/m4/ntp_libntp.m4	2026-02-19 21:50:37.291724180 +0100
-+@@ -77,7 +77,7 @@
-+     ;;
-+ esac
++diff --git a/third_party/threads/threads.h b/third_party/threads/threads.h
++index b4db50c..cdc7bea 100644
++--- a/third_party/threads/threads.h
+++++ b/third_party/threads/threads.h
++@@ -102,8 +102,9 @@ typedef pthread_cond_t  cnd_t;
++ typedef pthread_t       thrd_t;
++ typedef pthread_key_t   tss_t;
++ typedef pthread_mutex_t mtx_t;
+++#ifndef __once_flag_defined
++ typedef pthread_once_t  once_flag;
++-
+++#endif
++ #else
++ #error Not supported on this platform.
++ #endif
++diff --git a/third_party/threads/threads_posix.c b/third_party/threads/threads_posix.c
++index bc50825..d93013b 100644
++--- a/third_party/threads/threads_posix.c
+++++ b/third_party/threads/threads_posix.c
++@@ -75,11 +75,12 @@ static void *impl_thrd_routine(void *p)
 + 
-+-AC_CHECK_FUNCS([getclock stime timegm strlcpy strlcat])
-++AC_CHECK_FUNCS([getclock memchr stime timegm strlcpy strlcat])
++ /*--------------- 7.25.2 Initialization functions ---------------*/
++ // 7.25.2.1
+++#ifndef __once_flag_defined
++ void call_once(once_flag *flag, void (*func)(void))
++ {
++     pthread_once(flag, func);
++ }
++-
+++#endif
 + 
-+ # Bug 2713
-+ LDADD_LIBUTIL=
++ /*------------- 7.25.3 Condition variable functions -------------*/
++ // 7.25.3.1
++-- 
++GitLab
++
 -- 
 2.47.3
 
