@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 008F1F30946
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 11:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 097B6F30946
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 11:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B28560BBF;
-	Thu,  5 Mar 2026 11:23:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A535A40B29;
+	Thu,  5 Mar 2026 11:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RjgtYnpuRbh2; Thu,  5 Mar 2026 11:23:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4pJ9V9vCzgul; Thu,  5 Mar 2026 11:23:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A626E60B27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B497640B7B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772709801;
-	bh=mguKfqm279vxt4sjTsaTfyo988iwjt61AWEwQi0kEF0=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=S+6htdmmz0HrTGPZP/8R5tLelmdpJKyUU3idbsr/WTXEe+5dstb0kZ3kDi9g0x9qv
-	 cekAy7YDPd+wKgsaBYwfGJk9QGm481JaRQZLKy690U704yv10yBhasQfCIyn3Fvnjb
-	 yjXAz4YXQYSciY1dME1q9QMeUe7Vo4SFgBfVCElkIop8FECj8IyDuM9uRNMMkL4E73
-	 CkTUOhc64032b23ifsXb06ka5QKKOTJ/+0Rq+hwbEZdmVZWDAO7+M/V9JRQM5Sx+1r
-	 PT33rF1DtGilwO6zs/qmY6aiai+5WSjdkPsMQu4E91fEUQIeZ+tHYqK2K1PYJVSXKJ
-	 bPdadMLfslfgQ==
+	s=default; t=1772709810;
+	bh=8yI1m91lFxE1a1YesUSNvN85jzigDsgi6yO8wSWcLsw=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=bXsxr10E5FxvaKeRrChKEG/FRFJQtVBYaGgQONtX2CcEFQCgrBL77VQGfFIc6ov1s
+	 dY8b/nNMhSUtmYPDYrUZ2z8zQojj38GmwivNZww+CI/N4w3miceFZpA3rCn7XEtlWQ
+	 7HKCW9fS5KkKWRA4C+tAk4C/p43pyBjHS9ypph5fE0t4BVs5tt9cmkfcIwabCSeDrS
+	 LVHkJDVK0Qgm/IQzGQMz8/Z+E+nGQdTON+e8sjeWrdgys3vyxrQMqYiyDiB0bozvbI
+	 ZGb88FThP4CfVmeIcM92Pp3/rWpadl2k5xIQTFayOz2g8/guo53EtFoIqF1sZtrk4C
+	 iOIEsIcbQogjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A626E60B27;
-	Thu,  5 Mar 2026 11:23:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BB69223
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:23:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B497640B7B;
+	Thu,  5 Mar 2026 11:23:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B392C1EB
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8958540707
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:23:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4C8140BD9
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:23:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0wBrYHuBc151 for <buildroot@buildroot.org>;
- Thu,  5 Mar 2026 11:23:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 98hRgG076Etl for <buildroot@buildroot.org>;
+ Thu,  5 Mar 2026 11:23:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C609406EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C609406EB
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1C609406EB
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:23:15 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 281189486; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 05 Mar 2026 11:23:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vy6nK-00000000ntI-3sJq;
- Thu, 05 Mar 2026 12:23:06 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE65540B7C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE65540B7C
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:23:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ECACA863E3; Thu,  5 Mar 2026 11:23:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fiona Klute via buildroot <buildroot@buildroot.org>
-Cc: Fiona Klute <fiona.klute@gmx.de>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260305002951.3614234-1-fiona.klute@gmx.de> (Fiona Klute via
- buildroot's message of "Thu, 5 Mar 2026 01:29:51 +0100")
-References: <20260305002951.3614234-1-fiona.klute@gmx.de>
-Date: Thu, 05 Mar 2026 12:23:06 +0100
-Message-ID: <874imuikpx.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ihrevpElCvzc4ZDmE1h7qRog+U/lCmKQ3zte27IweV+wAhc9Sbf17ht/6yw36Bo+oIALiFR1UNljtwe50BVwZPl0Fe4QnT11AqsJH3mY3ZaVbjuahEMie4Cd0wCFWeid5DkoPbe4lFL3A82H8VgZO0HZEqbNQ11tfugtseQqvKukks/5/GRw+TGGqTvIdAACG9/pxRkJS4bIOrdaVuLBt8pvRNIWMdr3w51BblNz1qVasBofCIp298RUydKPcLUTQl1uTcqWCoOVwxTXxdCxxRN4uDUvs2cbXuOOv+C3gRBrXoS57Hj356mc1eBHwrHywEeZOht6CCbxktVrcvxW0Q==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=fspWj216un9G6fyySwvT86oeLj1Q3Y37e9P3dVzr95g=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=ihrevpEl
-Subject: Re: [Buildroot] [PATCH 1/1] package/squashfs: bump to version 4.7.5
+To: buildroot@buildroot.org
+Date: Thu, 5 Mar 2026 12:20:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ee671bdd18792f0bace0b2de084d4fda6982ddad
+X-Git-Newrev: ea5d82f1f69dd856afc08cdc940249019cc6447a
+X-Patchwork-Hint: ignore
+Message-Id: <20260305112327.ECACA863E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/squashfs: bump to version 4.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,29 +69,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fiona" == Fiona Klute via buildroot <buildroot@buildroot.org> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ea5d82f1f69dd856afc08cdc940249019cc6447a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > Upstream changelog:
- > https://github.com/plougher/squashfs-tools/blob/4.7.5/CHANGES.md
+Upstream changelog:
+https://github.com/plougher/squashfs-tools/blob/4.7.5/CHANGES.md
 
- > Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
- > ---
- > The issues in 4.7.4 should be fixed, hopefully we can get 4.7.x into
- > Buildroot now. :-)
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squashfs/squashfs.hash | 4 ++--
+ package/squashfs/squashfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
-I see that there are now some options for reproducible file systems.
-Maybe we should use those in fs/squashfs/ if BR2_REPRODUCIBLE is
-enabled?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index c921d638bb..e24a4805a1 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,5 +1,5 @@
+-# Locally computed
+-sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-tools-4.6.1.tar.gz
++# From https://github.com/plougher/squashfs-tools/releases/tag/4.7.5
++sha256  547b7b7f4d2e44bf91b6fc554664850c69563701deab9fd9cd7e21f694c88ea6  squashfs-tools-4.7.5.tar.gz
+ 
+ # License files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index f2cb0ab25e..da22fad155 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUASHFS_VERSION = 4.6.1
++SQUASHFS_VERSION = 4.7.5
+ SQUASHFS_SOURCE = squashfs-tools-$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE = https://github.com/plougher/squashfs-tools/releases/download/$(SQUASHFS_VERSION)
+ SQUASHFS_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
