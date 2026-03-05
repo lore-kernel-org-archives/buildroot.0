@@ -4,112 +4,160 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 520B6F30924
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 09:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B1F3F30928
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 10:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF36B81E16;
-	Thu,  5 Mar 2026 09:50:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8530481E39;
+	Thu,  5 Mar 2026 10:08:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 118-mV5GMxMq; Thu,  5 Mar 2026 09:50:05 +0000 (UTC)
+ id 9mHGRbUespKN; Thu,  5 Mar 2026 10:08:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEF8781E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C002281768
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772704205;
-	bh=TN+SiO1O5YiUYgJsVmommuBQGr7zX70rEKmjcuWJiCA=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	s=default; t=1772705336;
+	bh=+esPLuNdT6jvLhYGZUgvgfsNzyb4t3hi6vU2RSLrPqA=;
+	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=FWSLg9cMNIi4otOLm0dZTNtOXqx41JHduN5QPWAN/oPDMP1mTycgqjLZS4tf+q+qc
-	 kSrXj3gInfZc1bFGZFNyz8E5VqwrkmWZH2cENh/QmQD+Vsed9PSffUdVRPYqTkJgqB
-	 D/KE3SaxJNPVzjRmB7Zs7ts23NJhqtSgrWlKpDRAbl5AAl89DdGymvTURuBLsJhAsF
-	 qNJ1MO72RDaR+XgV0JMxR8u9Md+tBSIcjrkQCu/8T7ONe94jcCuTkPiuf16QwmU9Fv
-	 iT9CjYHEeFgZybFvVwggnxiUokEe0qB7rqADE0ffpool7tkGh9L/KJS2Dj/bJDIUAZ
-	 z/76CXrrizGWw==
+	b=fEgq8l02s/ohr6uJTl706+v3I0frMsV+QoNyBabL6FuyqNsoKa25ZJMTNiD+kllDG
+	 KkfKFCNqNN2sc5+9zjS8qIJgjCXHA4tuAwcMXJ+M7K2YCeGnX96WYceuDtA1mTRYgu
+	 IrBL7pz231oNZW1NpzGBapZJcsY7geX0ol5lAYsUaKjyZ7Tf6QEoD4j5oREuvzz4S2
+	 Zwz2p63RqSqmyKCczHz469Q/zq6JwxDMaSBH7QASuTCuiQpP6xXhbcoIbqgHiHWiu3
+	 DoLzRGVKCz5Ku2TK6TQByAIyY4KguN0xQQO3KcfLrPhJg7B7ZE8yqC+dl65Xf26WDR
+	 7ZhwKvV2lkMMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEF8781E22;
-	Thu,  5 Mar 2026 09:50:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BF83C1EB
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 09:50:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C002281768;
+	Thu,  5 Mar 2026 10:08:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E902A1EB
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 10:08:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A57C0406DE
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 09:50:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE2E381768
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 10:08:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j0Fqz6iFZiRm for <buildroot@buildroot.org>;
- Thu,  5 Mar 2026 09:50:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wPopbcAJCQ5M for <buildroot@buildroot.org>;
+ Thu,  5 Mar 2026 10:08:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::431; helo=mail-pf1-x431.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C234C40AC8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C234C40AC8
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
- [IPv6:2607:f8b0:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C234C40AC8
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 09:50:02 +0000 (UTC)
-Received: by mail-pf1-x431.google.com with SMTP id
- d2e1a72fcca58-829781b2b01so914443b3a.2
- for <buildroot@buildroot.org>; Thu, 05 Mar 2026 01:50:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772704201; x=1773309001;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=2Eds7C/fkDbYFF7qK2uwWdtFZUhQy8wo1+Sb4JygY30=;
- b=F1Qp531oLdCbGbCKBVAAyUCBnIJAM0pcdPLAybmw/7glbUYtaeyB2RDAASU/BYBhA0
- ZzVRRylJpLpxeIftBFua67mXNv0qcf0Uz36IbR9byWjaLkvYx9GPStsDPV3I2u5kt8Ru
- P6CLR9RhIMzNChxqeSNp15E83FTz91V8c/iNAE8X4p6swDP1dVGiHpqiYwNkL4rptNz9
- cGsDEvwkJwynntACvKB58xKTb5AqN3AymY9oTRtVYM0aFlu8ip83lut6/DudyUm31DdS
- s9mMEHPlF/is5DGIbxmA87FLJSu/8XiXrzRytnXdav9ySsmOnPPckiQhBC+dL3M/bBTN
- 46Hg==
-X-Gm-Message-State: AOJu0YwkJLe2OYbhFEG2/zw0edtHO/pXSP1GlVkW5hSKb8VD1iLEBi1G
- r2PAOmVgkbsm0gbE+WGjKXJxBmtZv0mCNKAaf54J1RqkwKqiGPnKeurXdRjBO1Lm
-X-Gm-Gg: ATEYQzykPJb3MauwfEdq5kfSEqMKH1h8ixE/VwUnAeFv9HoVzZBmiv3hNCM+PeXrybI
- 4Umfy3xIZ8AwrUxSh6KWI6wGAOa8bryAQMFjS8mEGaYOIyFL7+Kqv7sIWtBby79t8vj3Y34sThC
- a1RaR+jps1sNew20f646D5EdPpmBS1MEa67ybcRJfwz0VNk6ZornKoBMvZwP9L9DV1KwTGVU72w
- +Og4engndIZLWZm3KB3m3YF/yVUZ2Ek/vYWtNIkPzwGrvSyEOlFKJcE9g/jrcOpNc8nzAvY7OF9
- Sk36v9oFvG9aJBh2Wa0mGIMcQYCXtVgWXnQK3z+CGLNEcFQwHr35WZ+GQGos46J4m6GlLBms4/3
- 2aFqYu8SQj5d6lSdZz86YfRDS4fY4X/HknnjvwM7RYTfamnCa3Ca395suj6ABnY/OUVEpY86rv8
- nOrFwBfQvMARVWdCRXDkfPK4wZlldo6A==
-X-Received: by 2002:a05:6a00:2499:b0:81c:92ec:ccf3 with SMTP id
- d2e1a72fcca58-82972b3c9c1mr3577872b3a.19.1772704201439; 
- Thu, 05 Mar 2026 01:50:01 -0800 (PST)
-Received: from fedora ([47.31.72.3]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-82984a01827sm1905880b3a.43.2026.03.05.01.49.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Mar 2026 01:50:00 -0800 (PST)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: joseph.kogut@gmail.com, andrew.smirnov@gmail.com,
- Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Thu,  5 Mar 2026 15:19:46 +0530
-Message-ID: <20260305094946.344077-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260222134120.1893854-1-chakrabortyshubham66@gmail.com>
-References: <20260222134120.1893854-1-chakrabortyshubham66@gmail.com>
+ client-ip=2a01:111:f403:c105::5;
+ helo=ch5pr02cu005.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B7BA68175C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7BA68175C
+Received: from CH5PR02CU005.outbound.protection.outlook.com
+ (mail-northcentralusazlp170120005.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c105::5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B7BA68175C
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 10:08:52 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BjSX1SqGSs/1jZJ5K2OMBLzQgnCNTDfNqC1oRHcKkrZHzuIQDk8fq2To9IRMWNY4zS4HACWVDk465diutHfk6ldm8KY73FFy1fGFHNQSSrw29O7dxgkttYqz+Sn0Zc5ibzK4iCOAzgTRF7xPxOmFke0uYkMcTKT2ie1/tcZYv6lvI2KclHJsVYlZMRjmEV9TUec0WgPvO2VCg3/PnjN949hyCvGlRg5D86T5/0708kM6A5pKj8Zx5dQrmtHXjRX9Ww0TK8J0dBjjlB00G4kmgONgKvVbiSThF97xtH9FPZpShJxywad7NvE862tJN45qnd6diLikGYFM3IHRiWQofg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T/dYbl42vbnI/EIyJdaQhPjjsQefzSPoMG6ZO6xf7b8=;
+ b=jLti2SoPKUPTDjQG+p6BXYlU3o437/l1lyeNSCc9yYR2qEmI5xCzIN/JPEUq6Lzp8IG6gxNR1GYR3cCvMVh5p3Kwrc/rro/ESUVqmUGOc4tGRKVjz8x2SpJKVQadhUpboMzW4GDUrfejL+343l0dJ7ebFJKO2EgbCVejPLuIFfQPV1Rfb+J6jYpoOg7d7HNj0oy4QJo1pLWpMlQHGnX2fCTRF07NpOyXa1e3tb1QlhMnC5UWw0rRSb9TWn2Ghf5CReyCrR/zs8hkPjTkqq0lm2vN+vBAyE9OWncTuUawWDCi2gMjQBaZunz5NwPTP2lFJutXX14k2sv9bxFDCPkAQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from BL1PR12MB5032.namprd12.prod.outlook.com (2603:10b6:208:30a::12)
+ by LV2PR12MB5944.namprd12.prod.outlook.com (2603:10b6:408:14f::12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.18; Thu, 5 Mar
+ 2026 10:08:48 +0000
+Received: from BL1PR12MB5032.namprd12.prod.outlook.com
+ ([fe80::3c13:eeb6:d9ef:c95d]) by BL1PR12MB5032.namprd12.prod.outlook.com
+ ([fe80::3c13:eeb6:d9ef:c95d%5]) with mapi id 15.20.9678.017; Thu, 5 Mar 2026
+ 10:08:48 +0000
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thread-Topic: [PATCH v3 1/3] linux/linux.mk: export LINUX_DTBS
+Thread-Index: AQHcq+qEwytf1SDRA0u5PL9VC8hQXLWeqbOAgAEOFYA=
+Date: Thu, 5 Mar 2026 10:08:48 +0000
+Message-ID: <BL1PR12MB50323A317245D2E484A1459AF07DA@BL1PR12MB5032.namprd12.prod.outlook.com>
+References: <20260304152057.3465672-1-neal.frager@amd.com>
+ <aahzAZ47FxSAGgEF@windsurf>
+In-Reply-To: <aahzAZ47FxSAGgEF@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2026-03-05T10:07:00.0000000Z;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|LV2PR12MB5944:EE_
+x-ms-office365-filtering-correlation-id: 62aec878-6b3f-4fa4-5254-08de7a9f3183
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|1800799024|366016|7416014|376014|38070700021|41080700001; 
+x-microsoft-antispam-message-info: jAO15aV78bz1Ge0WBUhov08y4PU3OFjHj1h5+kVwzWXfMsCC6orIfVTlwm69a1GbOjYPyZikuheYjUddp4/UHX4GbaSE2xR1rwEsmycQTuDjOC5Cvimp3Ro6W2EKbCujebgHatlBCaLbE+t4uVC2vTRsC4uO4GsBrjdrIS0mDlR3sl5hDFxtCfPZpB9DN/OWk0NM7xWQPkvo+q+s22lH/9XSfiojgz4D6GnXSmMSRw7Sz0hcTpgjEEBX63HAXK1rOsVf0pVX4WGAE+h6zFSJIVgeYjMj//uq+qQvNLMlvjULKTRyJ0aO8I05mZ83CWJ0av8VwpeYg5xFIgw+S2cf/ZsZ23ZfRQBLGoCdcJ2iV9KxG1UeqweOfGXx5v6/+VR1Y9gchbnqnQUyBv0rVorHiLzIyg+T5wrW1orAKpjMrIErtlv63HPEeh+cHf8IcQHnAoXjEH8zNAWeyZA2yuaSfs50OxGiNgZpMFfJk35VZxR3d57JKZDjnxdd+EZ0bSMISAcKNcJKpPjYWXYwet5/eDpMOqpIU7gbGw0ym55T755smnCm07OwjaZHkUWnoxDW/FfXoK9kDHhP3xnvK61txAB3qFnA4LADpADHjP7Lo9nd4B7TGBS2iIAylyiAIaza7H6Y3vGWkZP+5MFuc/W4/AWwWY307hyOSma69XiaUgTzPcPG8mQBuhLrmBLkzhNI6GsmOjAuDbLOrvNaSkLv/yhhl7zEM9nirX6kDxTXWJm1IVn4hsNcWCEEFwmcsBClM4RTEgtU7MaMyxLmvVZ3ac/JJKHwurBw0zxb/ScXTvaN2YCq3OKdWOxDXlhUMSnMAHqiRn14NNSQ4saqumAGVw==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BL1PR12MB5032.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700021)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Mxl34keVooDzxShP2WoS1Rs6eT9QmGSuj24bBHEg6Jz14GJ/VPOijlj4V38u?=
+ =?us-ascii?Q?vGpWAHprepCXTDmyhSPEcDbf9yd/BG4CCG7PFh6MWBYIqz3N9UmT38R1X92m?=
+ =?us-ascii?Q?tYnPkKc77J7FS+RBtQa55EntSmhVJttsg872L5Xa88x2YSfI4k8eT7/67ttL?=
+ =?us-ascii?Q?M01CvVb/yErW8VbH5EvQnr8tNlaT1S9BosQuMBPLb+2CCJh3qpgC/FYUcIjt?=
+ =?us-ascii?Q?OFShl8FJFdaO40N1OPQV2/8GcchUYrucxOm0A4UmmfB6pV8o3yQC7LQiMkbK?=
+ =?us-ascii?Q?b2YADLH5fldsC4gsGeBl446LyjnkTdzIbYLY3Z8Q+KNP/3VgQGVlk8erQNOA?=
+ =?us-ascii?Q?wdPN4va7P02MKuJMzisq9bTHHUQyLe7e/VAttkVD7/0Hyg3DHEQxcF7bD3uW?=
+ =?us-ascii?Q?clONLynyZumlA3FauoA3/wTGmCGpjJjLoLZmsLRkmuJpVEjj3n3j8/YZk6kn?=
+ =?us-ascii?Q?Xgw9qj8X5DOVx7u8j97X4SLPUO9agLcaEbGzTRYBF5cLb43u//U22uIM0CpL?=
+ =?us-ascii?Q?w82oQrqMWMIjvGY79T12EUtEFh/XYwuV5uTAWHURCPAZfogoXPk21mJmg/Ox?=
+ =?us-ascii?Q?KSxRnrdii98rXcGA+z3O9AmR+47Q7p9YcwJ37kg7W75AwWGgyK8eV3RGm24e?=
+ =?us-ascii?Q?F51zNMSOjTphz75m4nSKF+3LtYqjNEvqaTEIYwmzjT7d9spy80JhMU7IAz3y?=
+ =?us-ascii?Q?3SAnqXoXUXsFnGcYSlIIVJY2oUCf70IfYuhXjt2rhKQExUgW8OIcUMwqkCv0?=
+ =?us-ascii?Q?/t6yx3ATu1m9H1DjxCvzkXunaqFqDoRd6qNveHeSRP9i2s63o8fYCGCinuj5?=
+ =?us-ascii?Q?j8fyzAKrDm30uVj8ACT5WXUddCbUWylPe+fzuFA0W73HVcsQ6VsVwnWfWRPH?=
+ =?us-ascii?Q?PujuPe0TmDKUu8behLvpG2kNyCz5mnPLkH4mVzHwq4M8abGSqmgjUZZBDkPd?=
+ =?us-ascii?Q?Pf760S1xtr91fsETI+B6V/VH7ci7Nlf0AZQkZrfDt8YhQrO2q53BEVHEmJXB?=
+ =?us-ascii?Q?4zH9PxpFWo9C+7pe4xVEgI8dNK9RvAhAR+agsum9AdhKTisiQ37okBY8Xo13?=
+ =?us-ascii?Q?AsPsJtKrGFRrJV3RY+K2cZ3h2mQaxeH9M0AociMwjrTdsdbkH/D3pAD5VzwJ?=
+ =?us-ascii?Q?2G1imT0CGLsQJ4NaIM6ln7TW2sSDcAQXbEC8aZaOIuzyGJXPdsrqwrUaeowj?=
+ =?us-ascii?Q?sjWbLXXh+nxJmpUqTR4tTc7sGQR7Orhtiu7aZh0nuqv+7DyOI9Y+JXuxXctG?=
+ =?us-ascii?Q?XGDx1X4VeoPz7DhRSCevGvYzaWORWR8oMKhofrqkGbDh7DfzmWpdzn/KdUSd?=
+ =?us-ascii?Q?gML8UTe2whw+JrrskR6a/pWdgM5YiqNw9YPKMR3dTVqya1VdCtJfvbsGl6l8?=
+ =?us-ascii?Q?OCH74VyTc1xHUr/B0IK+JmmU5A6H5GZT45m+n2pPJ3QUpqQ5VNtY6kNHBTaq?=
+ =?us-ascii?Q?ulNh1M63HzQoh/UXANlZ6OikKeQGk5BE3Zxk8JAzHS94O5wsia2uyTt7OTvh?=
+ =?us-ascii?Q?AQqGxoePl7hEfQPMgfX6euu3pd84i6IB8hNS1ujSWfix09JzJT1j4X7v389G?=
+ =?us-ascii?Q?c+YyxcFrV/x8evM2sWIjoL4NraxWJcgUmfO5kP0w+GVXeD2xfuzWB5xf5Pre?=
+ =?us-ascii?Q?lSNjh/VhZrqD3LSJVDUr7hkWkTQXOyUaKLWKgBxB0k7Q6w9i46500ztt6Q27?=
+ =?us-ascii?Q?iMaaUhwm3JRaNrPJ0rMpjQx3dgNMQhF/cyftqtrR8tNZ2Da1?=
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5032.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62aec878-6b3f-4fa4-5254-08de7a9f3183
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Mar 2026 10:08:48.1751 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wcyyoh2IRu8Wwukj4CutjJQrH9VM/IoZoftAk6ZYsz6PAhOGRg2QktzDKNw3tCnq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5944
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1772704201; x=1773309001; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=2Eds7C/fkDbYFF7qK2uwWdtFZUhQy8wo1+Sb4JygY30=;
- b=GRChmTzHdm6cWPEfH7zGhRfxWBduJsiNwLgyezl+j8On6YbNI6De+Ho4YdcpCCwBv5
- lY3mVD03fFcXtBkCM4cXy49vEr5qPrdOtjkeNcjfjpt8fSUGQ1WOUvwK3DxHj4xsYZog
- QAIHHEk7F1keQO5MbDL9HttzVOpUvTz1151jeNVwgngAA58KYagdaOupHa+gbzCU8AD+
- CFLEaHI8EupHaTytdKaCGrElB3EBAsjG6PoPsoyUPRz2TM5HJOd74nZyBshVJQJoWBgt
- WmLLOuCxtg32IjopLZRrwVSaW0/TLTtW6APeCi9ExGZNUOtpgn2kuytedO73988yxvSl
- y73g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GRChmTzH
-Subject: [Buildroot] [PATCH v2] package/zstd: add pzstd support
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T/dYbl42vbnI/EIyJdaQhPjjsQefzSPoMG6ZO6xf7b8=;
+ b=Wbcy9a+fAaj8jT7URJOHBjgHjkdQnNE54IGz3JTGTdGg4+K0/RQK2muuui1EzCv/3ZIEpq+928oxfDO076QdIj1XCbrZzxodMBv9Q4OceGqYO6WCt9pzYz39D5yz0KVxR8q6c2LE8necBBin04/fBsMHPbg+hygx4nDtaTJHIQA=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=Wbcy9a+f
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v3 1/3] linux/linux.mk: export LINUX_DTBS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,161 +169,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "yann.morin@orange.com" <yann.morin@orange.com>, "Erkiaga Elorza,
+ Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "fiona.klute@gmx.de" <fiona.klute@gmx.de>, "ju.o@free.fr" <ju.o@free.fr>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ "romain.naour@gmail.com" <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for pzstd, the multi-threaded implementation of zstd.
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-The pzstd build requires C++ and threads support. On some architectures
-(e.g., Microblaze, SPARC), it also requires linking against libatomic
-due to the use of atomic operations.
+Hi Thomas,
 
-Ensure that -latomic is passed in LDFLAGS during both the build and
-install phases. Consistently passing LDFLAGS is necessary because the
-pzstd Makefile re-links the binary during the 'install' target due to
-its dependency on the static library.
+>  LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME)) $(addsuffix .dtbo,$(LINUX_DTSO_NAMES))
+> +# Post-build scripts may need to reference the LINUX_DTBS,
+> +# so export it so it is easier to use
+> +export LINUX_DTBS
 
-Fixes build failures reported with bootlin-microblazeel-uclibc and
-bootlin-sparc-uclibc toolchains:
-Pzstd.cpp:(.text+0x17e8): undefined reference to '__atomic_compare_exchange_1'
-Pzstd.cpp:(.text._ZN5pzstd15BufferWorkQueue3popERNS_6BufferE): undefined reference to '__atomic_fetch_sub_4'
+> I find this a bit "meh". What about using "make VARS=LINUX_DTBS
+> printvars" or "make VARS=LINUX_DTBS show-vars" from your post-build
+> script?
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
-v1 -> v2:
-  - Consistently pass LDFLAGS with -latomic to both build and install
-    targets to fix link failures on Microblaze and SPARC. (Joseph Kogut)
----
- DEVELOPERS                  |  3 +++
- package/zstd/Config.in      | 15 +++++++++++++++
- package/zstd/Config.in.host | 10 ++++++++++
- package/zstd/zstd.mk        | 29 +++++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+)
+Thanks for the idea!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e983ae113..526f2b81c1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3563,3 +3563,6 @@ F:	package/shapelib/
- F:	package/simple-mail/
- F:	package/tinc/
- F:	support/testing/tests/package/test_quazip.py
-+
-+N:	Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+F:	package/zstd/
-diff --git a/package/zstd/Config.in b/package/zstd/Config.in
-index 9fa70c65cc..0331c5e446 100644
---- a/package/zstd/Config.in
-+++ b/package/zstd/Config.in
-@@ -10,3 +10,18 @@ config BR2_PACKAGE_ZSTD
- 	  compression formats
- 
- 	  https://facebook.github.io/zstd
-+
-+if BR2_PACKAGE_ZSTD
-+
-+config BR2_PACKAGE_ZSTD_PZSTD
-+	bool "pzstd"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  PZstandard, or pzstd, is a multi-threaded implementation
-+	  of the Zstandard (zstd) compression algorithm.
-+
-+comment "pzstd needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+endif
-diff --git a/package/zstd/Config.in.host b/package/zstd/Config.in.host
-index 05751f8fbf..a4ab64baf5 100644
---- a/package/zstd/Config.in.host
-+++ b/package/zstd/Config.in.host
-@@ -6,3 +6,13 @@ config BR2_PACKAGE_HOST_ZSTD
- 	  scenarios at zlib-level and better compression ratios
- 
- 	  https://facebook.github.io/zstd
-+
-+if BR2_PACKAGE_HOST_ZSTD
-+
-+config BR2_PACKAGE_HOST_ZSTD_PZSTD
-+	bool "host pzstd"
-+	help
-+	  PZstandard, or pzstd, is a multi-threaded implementation
-+	  of the Zstandard (zstd) compression algorithm.
-+
-+endif
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 70da1e7354..318a2709a7 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -78,11 +78,26 @@ ZSTD_BUILD_LIBS = \
- 		$(addsuffix $(ZSTD_BUILD_LIBS_THREAD_SUFFIX), \
- 			$(ZSTD_BUILD_LIBS_BASENAMES)))
- 
-+ifeq ($(BR2_PACKAGE_ZSTD_PZSTD),y)
-+ZSTD_PZSTD_LDFLAGS = $(TARGET_LDFLAGS) $(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic)
-+define ZSTD_BUILD_PZSTD
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		LDFLAGS="$(ZSTD_PZSTD_LDFLAGS)" \
-+		HAVE_THREAD=1 -C $(@D)/contrib/pzstd
-+endef
-+define ZSTD_INSTALL_PZSTD
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		LDFLAGS="$(ZSTD_PZSTD_LDFLAGS)" \
-+		DESTDIR=$(TARGET_DIR) -C $(@D)/contrib/pzstd install
-+endef
-+endif
-+
- define ZSTD_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
- 		-C $(@D)/lib $(ZSTD_BUILD_LIBS)
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
- 		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
-+	$(ZSTD_BUILD_PZSTD)
- endef
- 
- define ZSTD_INSTALL_STAGING_CMDS
-@@ -96,6 +111,7 @@ define ZSTD_INSTALL_TARGET_CMDS
- 		DESTDIR=$(TARGET_DIR) -C $(@D)/programs install
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
- 		DESTDIR=$(TARGET_DIR) -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
-+	$(ZSTD_INSTALL_PZSTD)
- endef
- 
- HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
-@@ -104,14 +120,27 @@ HOST_ZSTD_ENV = $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS)
- # We are a ccache dependency, so we can't use ccache
- HOST_ZSTD_ENV += CC="$(HOSTCC_NOCCACHE)" CXX="$(HOSTCXX_NOCCACHE)"
- 
-+ifeq ($(BR2_PACKAGE_HOST_ZSTD_PZSTD),y)
-+define HOST_ZSTD_BUILD_PZSTD
-+	$(HOST_ZSTD_ENV) $(MAKE) $(HOST_ZSTD_OPTS) \
-+		HAVE_THREAD=1 -C $(@D)/contrib/pzstd
-+endef
-+define HOST_ZSTD_INSTALL_PZSTD
-+	$(HOST_ZSTD_ENV) $(MAKE) $(HOST_ZSTD_OPTS) \
-+		-C $(@D)/contrib/pzstd install
-+endef
-+endif
-+
- define HOST_ZSTD_BUILD_CMDS
- 	$(HOST_ZSTD_ENV) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		-C $(@D) zstd-release lib-release
-+	$(HOST_ZSTD_BUILD_PZSTD)
- endef
- 
- define HOST_ZSTD_INSTALL_CMDS
- 	$(HOST_ZSTD_ENV) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		-C $(@D) install
-+	$(HOST_ZSTD_INSTALL_PZSTD)
- endef
- 
- $(eval $(generic-package))
--- 
-2.53.0
+The following works without the linux.mk export patch:
+LINUX_DTBS="$(make --no-print-directory VARS=LINUX_DTBS printvars)"
+ln -fs "$(basename ${LINUX_DTBS%% *})" "${BINARIES_DIR}/system.dtb"
 
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
