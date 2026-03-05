@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5171DF47CDA
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 21:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1048CF47CDA
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 21:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A37C811E0;
-	Thu,  5 Mar 2026 21:11:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8EC98133E;
+	Thu,  5 Mar 2026 21:12:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 05ZffRPWXrd1; Thu,  5 Mar 2026 21:11:56 +0000 (UTC)
+ id XVp4SWp7Biqq; Thu,  5 Mar 2026 21:12:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7965381197
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AF218131F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772745116;
-	bh=u8s13NmCf5H0ay2wn4X2hCzl2QQOWTTiBW3WN1gCndI=;
+	s=default; t=1772745129;
+	bh=pfSFF1uoJKO5ZyoALoWN6RcHs4zsjbmRCGwefBs5Odo=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=oSRkuGdbr9EVJEXtxXA/lzEnzXWRIDxH5Wl1K9nKsMCzGsbf8nrWGfrScTLLNtbNK
-	 3XqrWjVfEGsDuaZJXdad+u9gtREAbheL/CEcZ7ofcyjeda06RX/PRRVcrSt0RPffAa
-	 2LGM/L2mgBcKVVA4Shmd9EgiFdK468Z5Ykrb2Nc8RfQWz40Zz6iA7gGUBChdFHqsMH
-	 YmInGi+skNhv4acOwkmoUnKUpO63RY7vx6adeEzY3KTm8n2G3uwB55REZ0rchIM8eK
-	 qgVVKO1XlAYHWoX7qFSYTiOKA9y5eJ/XquUxzL6A2aY/SkRZS/7GglAysWH4NTevfc
-	 YqGkZAQdMB5Iw==
+	b=NXt/lt1JqMZGLMaxaT0ik/CroPu0SqQdsf4fRSIFjz6cRiL4y424wEWL2l7iCz9hy
+	 WuIRGMENdAJOm52FjGtwV542KkDZVIuupZqXchxvxQOx8BaUOARyswJ+8+GMH3SzCN
+	 EbYihfxNKrREWFyYHb54weWu87Y8w52M/MqszFeMEDsiFGAifJaGtosJvDCioLcTQn
+	 eUwrMFLVFYMncvXb8njN7tAEmgjeZ4LfvEiM6+oycAEVxNBZvzIPnxc9afS5WfnOkk
+	 Gc0d6Y3Ww1DaiT18Bx95BD1wjie2npSCx6M2mxXHQ9TdtHEgEHOXLOzGhi8REkUvai
+	 xNK4Zju+t2iWQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7965381197;
-	Thu,  5 Mar 2026 21:11:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 95029223
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:11:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AF218131F;
+	Thu,  5 Mar 2026 21:12:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4D7D25B
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B29640929
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:11:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AD8B40929
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:12:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 26wvgbA0ymyk for <buildroot@buildroot.org>;
- Thu,  5 Mar 2026 21:11:54 +0000 (UTC)
+ id XGueBaZ8j8Qj for <buildroot@buildroot.org>;
+ Thu,  5 Mar 2026 21:12:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6B3D3408F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B3D3408F7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88FE7407EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88FE7407EC
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6B3D3408F7
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:11:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 88FE7407EC
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 21:12:06 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc67.dip0.t-ipconnect.de [84.161.188.103])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EA7CAA4C373C;
- Thu,  5 Mar 2026 22:09:57 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 21A46A4C373E;
+ Thu,  5 Mar 2026 22:09:58 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:47648)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vyFxA-000000003FD-0uSf;
+ (envelope-from <bernd@kuhls.net>) id 1vyFxA-000000003FD-1E8u;
  Thu, 05 Mar 2026 21:09:52 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  5 Mar 2026 22:09:45 +0100
-Message-ID: <20260305210950.3471974-11-bernd@kuhls.net>
+Date: Thu,  5 Mar 2026 22:09:46 +0100
+Message-ID: <20260305210950.3471974-12-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260305210950.3471974-1-bernd@kuhls.net>
 References: <20260305210950.3471974-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1772744997;
- bh=wgh3Iohfhnk0985DAKSpXH6rUlUDR0uCEEmAJeB6T5s=;
+ s=kas202511301023; t=1772744998;
+ bh=jBLQQ6mgmfzaXErkwatbMB+qMeBzymhMj475hZ6FP+c=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=VtMlote/CSMo2cWuYsfNe4uvYRWf+k85spWvnekE6ms8gonrfKeoaUPzwhS27XTcV
- u0lvd8FE0k/KsJmXJ12HVoXoQWGbLvtiNTyPc0xOfhon6gIEeds9F+9hFCNvjfTdSi
- 6iUVa0wCIGxvVFgwddIZ9hv9VObE+9IXe3vbhHryAcrmae+0xxurLMRmENRGznqDeI
- dDxWP7lTRWtTdXFu3ur8QSW3pAXdq/Gl/wPQ6XlbYTwp5CtpQXzjgTa6gMpU0sLoXN
- jJ83lM8GYEjfzFlFsX0QuKVhRXEtpveJ+ywYD20OabjstFikZef3Jboyv+n2H5VnXo
- 0VTJ/JoBL4lcA==
+ b=jco9wI9SJvWwrSSw+wBNHEZ5rh8YK0iN+1tvm321Z8CZtLiHo7peRKyRvXxdE/JD5
+ nZ5afVOoBv9iU8JM7xRqrPZ++EJklhsrsTzZSkoQbAAa8qIC5tkel4klGh/rwUBcg5
+ tJLmzpb0ZeAHZnzpDms7OldiOCNKqHDvL6I413v1e/YWNKXggfebs3J8dMXRIyu4LC
+ IGYREgzOQ01sGUIKU+OUFg++xWb5LWYhYs6pTVt4cdl1prAPDRRSi/+CmcD5bb+ZRA
+ yGFnCMKRZ6mssP6d9tETVz1YSY47aY80a6EyI5wh2KrXcZI2hecBIM3oLlY2u/ZZ19
+ i1j2EANhOeWTw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=VtMlote/
-Subject: [Buildroot] [PATCH v2 10/14] package/libvips: fix build with glibc
- 2.43
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=jco9wI9S
+Subject: [Buildroot] [PATCH v2 11/14] package/freeswitch: disable mod_enum
+ to fix build with glibc 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,51 +106,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Build is broken with glibc 2.43:
+
+mod_enum.c: In function 'add_result':
+mod_enum.c:246:23: error: passing argument 1 of '__assert_single_arg'
+ makes integer from pointer without a cast [-Wint-conversion]
+  246 |         switch_assert(new_result);
+      |                       ^~~~~~~~~~
+      |                       |
+      |                       enum_record_t * {aka struct enum_record *}
+
+Since both services (e164.org, freenum.org) used in the default
+configutation of mod_enum
+https://github.com/signalwire/freeswitch/blob/master/src/mod/applications/mod_enum/conf/autoload_configs/enum.conf.xml
+
+seem to be dead for years now:
+https://community.asterisk.org/t/asterisk-network-interconnect/88659
+
+we do not care to try to fix the build error.
+Instead the optional support for mod_enum is removed from the package.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...IPS_FREEF-for-expression-like-macros.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/libvips/0001-memory-fix-VIPS_FREEF-for-expression-like-macros.patch
+ package/freeswitch/freeswitch.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/libvips/0001-memory-fix-VIPS_FREEF-for-expression-like-macros.patch b/package/libvips/0001-memory-fix-VIPS_FREEF-for-expression-like-macros.patch
-new file mode 100644
-index 0000000000..cee35415c6
---- /dev/null
-+++ b/package/libvips/0001-memory-fix-VIPS_FREEF-for-expression-like-macros.patch
-@@ -0,0 +1,33 @@
-+From abb4dfad9e446e77396de9e93003af5be7aa18da Mon Sep 17 00:00:00 2001
-+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
-+Date: Sun, 18 Jan 2026 12:15:33 +0100
-+Subject: [PATCH] memory: fix `VIPS_FREEF` for expression-like macros (#4836)
-+
-+Ensure the macro works correctly when F expands to an expression,
-+such as `g_free()` using `free_sized()` (as available in the
-+upcoming glibc 2.43).
-+
-+Resolves: #4835.
-+
-+Upstream: https://github.com/libvips/libvips/commit/abb4dfad9e446e77396de9e93003af5be7aa18da
-+
-+[Bernd: dropped ChangeLog from patch]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ ChangeLog                     | 1 +
-+ libvips/include/vips/memory.h | 2 +-
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/libvips/include/vips/memory.h b/libvips/include/vips/memory.h
-+index 93e669340b..7073d1ea6a 100644
-+--- a/libvips/include/vips/memory.h
-++++ b/libvips/include/vips/memory.h
-+@@ -41,7 +41,7 @@ extern "C" {
-+ 	G_STMT_START \
-+ 	{ \
-+ 		if (S) { \
-+-			(void) F((S)); \
-++			(void) (F((S))); \
-+ 			(S) = 0; \
-+ 		} \
-+ 	} \
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 7e5dc3d872..1121bfa9cc 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -207,11 +207,6 @@ FREESWITCH_DEPENDENCIES += libks
+ FREESWITCH_ENABLED_MODULES += endpoints/mod_verto
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+-FREESWITCH_DEPENDENCIES += libldns
+-FREESWITCH_ENABLED_MODULES += applications/mod_enum
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
+ FREESWITCH_DEPENDENCIES += libmemcached
+ FREESWITCH_ENABLED_MODULES += applications/mod_memcache
 -- 
 2.47.3
 
