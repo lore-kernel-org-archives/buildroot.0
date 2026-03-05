@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B5AAF30951
-	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 11:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 506F7F30952
+	for <buildroot@archiver.kernel.org>; Thu,  5 Mar 2026 11:54:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BD5581F1A;
-	Thu,  5 Mar 2026 11:54:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C63F182043;
+	Thu,  5 Mar 2026 11:54:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbn2CB2Wc1MF; Thu,  5 Mar 2026 11:54:32 +0000 (UTC)
+ id F043zDKgJI3j; Thu,  5 Mar 2026 11:54:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1737C81EC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C13B481F93
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772711672;
-	bh=PQKLw8wZF1Jcex7dW2Q9D0ByIcz0+QPy0X9IjmXSnoc=;
+	s=default; t=1772711673;
+	bh=rlmt29gy0UQYilYI18jRdKLo8Rg/gxBiwslOasYW+7M=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=K/vqCV2iOARlujDBDt33yz1HzzkONI0GBeCuCZdqKUFkehgdtFNNWRc6Pgo/8CqkK
-	 ftnwFPmISWT912Pm7gC6m8yZrDf90HlFhVo+L19X5XVEuGdoI+1aCcxmDQvOGRpLwv
-	 p9ks59ff9gq5ixbERDY+3/QeNdDBEB6Fh/zJcSMLwJzwDmZPO5ILJf1+W7UaFLNJGq
-	 gLvYdbqtaHkwn8VcdH2DMtXevcwbRV3uguRo9y+mSdSOX33x0CGAUn3CFmiRR8USoI
-	 5ODjwBamg4p9EGj67jm1uwVPOuxtK177EW30rYahVT97EhyFYUn2/QpxN3Q2GtMn2Y
-	 p5HgeJP/0QgGg==
+	b=Gic2mDtyU3lPS1B7uOvgJoPQ/vqxdaNKc2ToztnyssCcDuVbPwIFbT0PUePvsM2dN
+	 qtNbZWH5XQn1PaqCWflcwkQ5+tyjHNVwW+Ihc7Vf/o8DOvUcuC4tYzYNMXCvtO3kLN
+	 N0xRotEKJT7ZoSIqrBdES/cLQmQ2qRXwY4SDMPHXrfH0NnLjyrHb6ZT93yT4CN+G7C
+	 Gnmu88DM99RR5iYIyrh8ecnFv1Kzdo1gydpoedd8I0ORqNWWwZTTI5QCUL7MwcJBq2
+	 /jReuU/wAwhJS7aGH0e2uadzRw9dGc0SivG5MaCEakMNh07M1psljD6uuWz54JYaBD
+	 mWCApo+AiaffQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1737C81EC0;
-	Thu,  5 Mar 2026 11:54:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3192C223
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:54:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C13B481F93;
+	Thu,  5 Mar 2026 11:54:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E8F8B223
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2386E60B08
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED28260B04
  for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:54:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZxdybvnF2gN7 for <buildroot@buildroot.org>;
+ id 9ze2MBY1QXzZ for <buildroot@buildroot.org>;
  Thu,  5 Mar 2026 11:54:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=109.202.192.35;
  helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3315360B04
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3315360B04
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 42C5E60B16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42C5E60B16
 Received: from mail.codelabs.ch (mail.codelabs.ch [109.202.192.35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3315360B04
- for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:54:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 42C5E60B16
+ for <buildroot@buildroot.org>; Thu,  5 Mar 2026 11:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id F2E8A5A0005;
- Thu, 05 Mar 2026 12:54:23 +0100 (CET)
+ by mail.codelabs.ch (Postfix) with ESMTP id 361B15A0007;
+ Thu, 05 Mar 2026 12:54:25 +0100 (CET)
 Received: from mail.codelabs.ch ([127.0.0.1])
  by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MT9rPyMKK9Dx; Thu,  5 Mar 2026 12:54:22 +0100 (CET)
+ id mQEvSXhHCO8u; Thu,  5 Mar 2026 12:54:24 +0100 (CET)
 Received: from zbook.wlp.is (unknown [185.12.128.225])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 6013D5A0007;
+ by mail.codelabs.ch (Postfix) with ESMTPSA id 728995A0009;
  Thu, 05 Mar 2026 12:54:21 +0100 (CET)
 From: Martin Willi <martin@strongswan.org>
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Thu,  5 Mar 2026 12:54:08 +0100
-Message-ID: <20260305115413.1860514-3-martin@strongswan.org>
+Date: Thu,  5 Mar 2026 12:54:10 +0100
+Message-ID: <20260305115413.1860514-5-martin@strongswan.org>
 In-Reply-To: <20260305115413.1860514-1-martin@strongswan.org>
 References: <20260305115413.1860514-1-martin@strongswan.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=strongswan.org; s=default; t=1772711661;
- bh=HwfdC8sG3x7L4vsvRMtxLolPbQ9i+78o7hRYuwEPaBY=;
+ bh=cvfV2nklym6dV8BC+v1cvO8Y549j3Wxt00VOIBwMKJY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=DRAQexace+qpgiDTGYNYX7yrCLXkjMzBzy2dy1cqRwci1qclo/8k1AJ8XGvPtWY2m
- NpgndpvGMw49YhFdUIIJJiuALP7+TLKaTkZ0CPb5NC/rfrzi8TgU3UQhXCRQE8FKpm
- 3aViA2bMIjRR5T6sFAUdUr13vb7V+a0afu+96b6EMqZROakXV/kxKtvkNkWdcwBsz8
- KpyLLuHsD7/D4uzTawGF1MSUjPhHcbd+e4bEa+5uSo/ipbqNfqAkObB43MP+xGlL53
- IYT1kCn1dFZSaZCLyuO88Khs9VSB0j0oA3MMqUYHRvyZ8b8cy2OFmy8+2AYMgR4nvd
- bVJx4W75WZ7sw==
+ b=B2jquHqFXJefG4ulbhL1zLDgHW9mzKYTEckm3PyCw/NKylLFrcd00CyFkiZT1QeCI
+ sL7zNJCzvkC46VLAXf3Ov58ChwRshuJfKYjpK8Rzys530mWhDBa1OrDeIce7mBqhU2
+ 16+Us2rP64kXBAvG6GUmrDCKuNl5b6Io6+itFq1onQ7Xjcm4HQpuAShsDTdN+3uMPt
+ ZsBthS51y8q1SE7chKkdsp9MtkMoG6jfybCNwtv0n5N0lsKYKwc5USz5g/ddf8OP6K
+ 5BJlc237Bg8ApodItIbw9V6rh6hNzlmYgv6vYCCr6yGFI/Xfhyr5Y6cQeLpGijDLLV
+ 0lTV1ezpR4KrA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=strongswan.org
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=strongswan.org header.i=@strongswan.org
- header.a=rsa-sha256 header.s=default header.b=DRAQexac
-Subject: [Buildroot] [PATCH v2 2/7] utils/generate-cyclonedx: remove
- indirect dependencies from root component
+ header.a=rsa-sha256 header.s=default header.b=B2jquHqF
+Subject: [Buildroot] [PATCH v2 4/7] utils/generate-cyclonedx: allow
+ referencing patches by upstream URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,70 +101,145 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit dc4af8bfa979 ("utils/generate-cyclonedx: use direct dependencies")
-removes indirect dependencies from any listed component, as required by
-CycloneDX. The root component, however, still includes indirect dependencies,
-as it just takes the components from the show-info output.
+Scan patches for Upstream: headers that start with http:// or https://. If
+found, reference the patch by URL instead of embedding the patch content in
+the BOM.
 
-Fix this by collecting all component dependencies, and then filter the root
-component dependencies to include direct dependencies only.
+The feature is gated by new --with-diff modes: url and url-only. url prefers
+URL references, but falls back to inline diff content. url-only skips patch
+entries without an Upstream URL, unless it resolves a CVE.
 
 Signed-off-by: Martin Willi <martin@strongswan.org>
 ---
- .../tests/utils/test_generate_cyclonedx.py     |  3 +++
- utils/generate-cyclonedx                       | 18 +++++++++++++++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ .../tests/utils/test_generate_cyclonedx.py    | 27 ++++++++++++
+ utils/generate-cyclonedx                      | 42 ++++++++++++++++++-
+ 2 files changed, 67 insertions(+), 2 deletions(-)
 
 diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-index 8baa4acce183..1ebc938f943f 100644
+index dc850dd4e2b6..274e78ab3f8d 100644
 --- a/support/testing/tests/utils/test_generate_cyclonedx.py
 +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-@@ -129,6 +129,9 @@ class TestGenerateCycloneDX(unittest.TestCase):
-         foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
-         self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
- 
-+        project_deps = next(d for d in result["dependencies"] if d["ref"] == "buildroot")
-+        self.assertEqual(project_deps["dependsOn"], ["host-tool", "package-foo"])
+@@ -149,3 +149,30 @@ class TestGenerateCycloneDX(unittest.TestCase):
+         foo = self._find_component(result, "package-foo")
+         patch = foo["pedigree"]["patches"][0]
+         self.assertNotIn("diff", patch)
 +
-     def test_virtual(self):
-         result = self._run_script(["--virtual"])
- 
++    def test_diff_url(self):
++        info = self._make_show_info()
++        result = self._run_script(["--with-diff", "url"], show_info=info)
++
++        foo = self._find_component(result, "package-foo")
++        foo_patch = foo["pedigree"]["patches"][0]
++        self.assertIn("url", foo_patch["diff"])
++        self.assertEqual(foo_patch["diff"]["url"], "https://patches.example/foo.patch")
++
++        bar = self._find_component(result, "package-bar")
++        bar_patch = bar["pedigree"]["patches"][0]
++        self.assertIn("text", bar_patch["diff"])
++        self.assertIn("world", bar_patch["diff"]["text"]["content"])
++
++    def test_diff_url_only(self):
++        info = self._make_show_info()
++        result = self._run_script(["--with-diff", "url-only"], show_info=info)
++
++        foo = self._find_component(result, "package-foo")
++        foo_patch = foo["pedigree"]["patches"][0]
++        self.assertIn("diff", foo_patch)
++        self.assertEqual(foo_patch["diff"], {"url": "https://patches.example/foo.patch"})
++
++        bar = self._find_component(result, "package-bar")
++        bar_patch = bar["pedigree"]["patches"][0]
++        self.assertNotIn("diff", bar_patch)
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 2b6c6d63d3cf..ac6fea91804b 100755
+index adae419b9cca..4cd991dde467 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -381,6 +381,22 @@ def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
-     return list(deps)
+@@ -15,7 +15,7 @@ import json
+ import os
+ from enum import Enum
+ from pathlib import Path
+-from typing import Any
++from typing import Any, Optional
+ import urllib.request
+ import subprocess
+ import sys
+@@ -47,6 +47,8 @@ SPDX_LICENSES = []
+ 
+ class DiffMode(str, Enum):
+     INLINE = "inline"
++    URL = "url"
++    URL_ONLY = "url-only"
+     NONE = "none"
+ 
+     def __str__(self) -> str:
+@@ -145,6 +147,24 @@ def extract_cves_from_header(header: str) -> list[str]:
+     ]
  
  
-+def br2_root_deps(show_info_dict, virtual=False) -> list:
-+    """Retrieve the list of direct dependencies of the root component.
++def extract_upstream_from_header(header: str) -> Optional[str]:
++    """Extract upstream information from the patch header.
 +
 +    Args:
-+        show_info_dict (dict): The JSON output of the show-info command.
-+        virtual (bool): Whether to resolve virtual dependencies to their providers.
++        header (str): Content of the header of a patch.
 +
 +    Returns:
-+        list: List of direct dependencies of the root component.
++        str|None: Upstream information if present, otherwise None.
 +    """
-+    indirect = set()
-+    for ref in show_info_dict:
-+        indirect.update(br2_parse_deps(ref, show_info_dict, virtual))
-+    return [ref for ref in show_info_dict if ref not in indirect]
++    PATCH_UPSTREAM_HEADER = "Upstream: "
++    for line in header.splitlines():
++        if line.startswith(PATCH_UPSTREAM_HEADER):
++            upstream = line.partition(PATCH_UPSTREAM_HEADER)[2].strip()
++            if upstream.startswith("http://") or upstream.startswith("https://"):
++                return upstream
++    return None
 +
 +
- def main():
-     parser = argparse.ArgumentParser(
-             description='''Create a CycloneDX SBoM for the Buildroot configuration.
-@@ -443,7 +459,7 @@ def main():
-             cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
-         ],
-         "dependencies": [
--            cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
-+            cyclonedx_dependency(args.project_name, br2_root_deps(filtered_show_info_dict, args.virtual)),
-             *[cyclonedx_dependency(ref, br2_parse_deps(ref, show_info_dict, args.virtual))
-               for ref in filtered_show_info_dict],
-         ],
+ def patch_retrieve_header(content: str) -> str:
+     """Read the content of a patch and split the header from the content.
+ 
+@@ -220,6 +240,7 @@ def cyclonedx_patches(patch_list: list[str], mode: DiffMode):
+     for path in patch_list:
+         patch_path = brpath / path
+         patch: dict[str, Any] = {}
++        upstream = None
+         if patch_path.exists():
+             try:
+                 content = read_patch_file(patch_path)
+@@ -241,16 +262,33 @@ def cyclonedx_patches(patch_list: list[str], mode: DiffMode):
+                     } for cve in cves
+                 ]
+ 
++            upstream = extract_upstream_from_header(header)
+             if mode is DiffMode.INLINE:
+                 patch["diff"] = {
+                     "text": {
+                         "content": content
+                     }
+                 }
++            elif mode is DiffMode.URL:
++                if upstream:
++                    patch["diff"] = {
++                        "url": upstream
++                    }
++                else:
++                    patch["diff"] = {
++                        "text": {
++                            "content": content
++                        }
++                    }
++            elif mode is DiffMode.URL_ONLY:
++                if upstream:
++                    patch["diff"] = {
++                        "url": upstream
++                    }
+         else:
+             # If the patch is not a file it's a tarball or diff url passed
+             # through the `<pkg-name>_PATCH` variable.
+-            if mode is not DiffMode.NONE:
++            if mode in {DiffMode.INLINE, DiffMode.URL}:
+                 patch["diff"] = {
+                     "url": path
+                 }
 -- 
 2.43.0
 
