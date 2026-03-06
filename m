@@ -4,111 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49D5CFCC068
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3640FCC067
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F11D241F78;
-	Fri,  6 Mar 2026 19:53:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58BD0420F7;
+	Fri,  6 Mar 2026 19:53:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T6vyQmb--Rqr; Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
+ id Dhw5hYYSsznH; Fri,  6 Mar 2026 19:53:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A94AE42089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0873E42042
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826795;
-	bh=KZXHW05M7PmXrKB10hZR3HfpjZ2qspoK60qljr7wfuo=;
+	s=default; t=1772826798;
+	bh=MveGS/r8+PliO/6sLuTQIrln81iE8D9Qetd/q7hLzCE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=VIvmn4QLaMKJIXvx0joXCfhcaTdlRj2eqWZWov3MiXoWRBb+1a09DnqNicMbFOVLs
-	 T2gxW8zwGvlTsvfT4rSHZfO9fGMIPH02YXyTnyA2B5sbqaUbR/OkkhLWRt2C6GBFQ5
-	 0PUNfYHNm7bLcyaGG+2oikPdvzQtwJpQV6SzCxfdWfTJcfjtinmZoghx2hrWR262qc
-	 BlHcZqphmEdF3L4rlJnbg8uh86Z1iaj9Fx3E3MKcyY0gRrjHUbPH1dXRrYc/PRgVNA
-	 4wxWYPTeaCtH+qD80nRQwbbo4xgBcFv1qdzEJGGgCLAUi8WI5L5VwKGaMCivYhOFTW
-	 vPdf49iwNbajA==
+	b=XQ8/V7joX6ErZm2ZpTQF3A64Q0gELN4frpeLSNYbClBpWrK5K6DMCb9/flQeS/tnO
+	 i23dJD9vRWHAb2Q3KPmM/91mY9U7d+in4NdNaqNex8ShoxO/SLiNkIOnraEnyF2iOb
+	 culJNAhTvckJGQIcho4uGr9iWP428WrjPRCU/Egk/Ss6oAFfcg7jJE6Guxx3p6ww4U
+	 6dtHONltSUNfHkM+yZGvPgBDxZyB1+ueKGoKRsCkTxMFSBDwpz8zZwcRCrW9ieKI77
+	 NbDakZObC+XDIQnFir7MczHMHnPRLM3eBjUaall7VbcZY89oH9cze5KEFqoGy56iVe
+	 EzPCtjr3dZaWg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A94AE42089;
-	Fri,  6 Mar 2026 19:53:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0873E42042;
+	Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A1BAA223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B70E2223
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93B5140767
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D11340343
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2-Pzq1P3X-tp for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:53:09 +0000 (UTC)
+ id jxCtclVkxw-P for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:53:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6B1D740455
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B1D740455
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B1D740455
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:09 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-48329eb96a7so63383485e9.3
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:09 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8B15C406BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B15C406BE
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B15C406BE
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:11 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-439d8dc4ae4so1151402f8f.2
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826787; x=1773431587;
+ d=1e100.net; s=20230601; t=1772826789; x=1773431589;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=Om/QHdbkcd657KAcHP4KHxpvpRWrUor6tHXNuN0acfU=;
- b=TnZNvD13YwjEeSS2iInyiG/bKTVkwyOQNqyfFlMSk2d7i1Jy1n2VEha25ZuFkZASOt
- eiDcPbbP/tlqbRx3gKGJzS94PeLJTtBy3GlCBO1+N4t3T86NnfFaQnsVhRyV1C4S8O/B
- IGYzKy8lABd1V7pCU8T1Sv5AZUX5Q/vMtV+fjlrhmfIc19ZMqtJXXchs01Ro1P0kXFU/
- nq51iKXkYfQaglkc5CeEh6blsDNM1IVPzsaGEboOJ08hkZn+3Z9xemQWqZPwili//6Jy
- M8BrTtKbpWidPA9JCxyiRYji/CHPflEAPV8yKueVUBc3er7bsZDYhonrarEToNlnWFTn
- KOnA==
-X-Gm-Message-State: AOJu0Yzr1GueHweCRf5SQgnHN+kjvzOhRNEuVBVB29UxmCqgovrBUqbB
- QTnwBTiL9aIlIeufwtdfdLv3wT0E/FdBshOP0XC2nZZU5BZcPwdI79kiLANXeEpIBoXNgNWC7OK
- Bmoi1
-X-Gm-Gg: ATEYQzxGJ26WmlRV65pby0y6iLoT7CiPPGLXqRQ+ycUcWJxYDOjlsNfcxtBSj3NnLV4
- Zm8w/PuIExAlDsUEKvc3YohP9BQMzszc1opmNceVnE6ssarmPlUSrArivMaNi0rscPM4tuBgntT
- hbWnz5Cw0yWNt54qD1R7JP0uvHTfzmmtOTSkecG4fvSxddHeNPqIlLfBQiYbJiS0BIp/oYwBPo/
- yxLCY+HC4fnswSZY2zenI3c8ESPhFUaq+4bnt25JHiTKUgiyTD0GPjsvooJtwilwvLPGfNsuCjf
- 5bSh02K8nxSQs4dLpkj1J+VadhfXsSWjmZsUVvhu4uibVGEPVAckCC205h2ZQZ6XWjaY7pSMo9B
- t/NjJ+C0jB1glzt06dgS7PA2CsHzu9Exdpfovjef0lMOe212K4UwthQEbDJzAnxRJBhiODFf2kJ
- 52NRG0exl4dp55FN4=
-X-Received: by 2002:a05:600c:821b:b0:477:89d5:fdb2 with SMTP id
- 5b1f17b1804b1-4852693049fmr54810055e9.14.1772826787370; 
- Fri, 06 Mar 2026 11:53:07 -0800 (PST)
+ bh=OntlVCpTtl45FpIjWguQZ4wy3nQzvewl9NaPLl5X8es=;
+ b=FpqvxfabOjG67AAk/j7Y1wmM49bJmGuT6JHB4piYdc1TelZB8/F7elRjdTNVstyVlp
+ gFpKguz/CR6hdo4902PSAB9POxcbu/n95eEuTHbK6FPP4rWG+4tjusLo06q0z5PYRD75
+ 537vZS9b6pFXu+ti1hMjgci1+3up/VbrCB84ziZugf9JEYR8ANBqephB+3ne7kwLcL9G
+ nk9KEjR6ZzS+maJ3mQH0UMPvgY4UmNrVKm8sEpe847sYIOxyFYvIGTxoFlWQeO6VSHix
+ +q5vhbArUX275POCNlWLsBYh01d8Ak6yZbeBelmYk005+AtNqQmfcB3cxUbqdO0aPYXB
+ F0CA==
+X-Gm-Message-State: AOJu0YxLm712GKLlKzInv/d3KMkEjn5MeihH0f54z1TzGntIUlSQRlIl
+ 2gbSvDvb+e4+bWLKUiTQRlweUevTdGojPPCXYfFHrJgRfq8gafTh/axbUk9LdN7txqwtaWo5gwI
+ Jw5G/
+X-Gm-Gg: ATEYQzw2G/hG58ewQU4z5uPhtTd8bGEzGEZ3DQlgq+95pg1lCQIH8ebsPEm4MkPYYdw
+ TpUwPz8odWpk1TlahbwTKQRObljof8Wmgq8XAvvwV2eIme5CwtcHO/GI1eRl5giLruFcDE64i1A
+ YBw4a/rpppiAuuHJMVUhxTM12QFTVJ7CZZLNrCMgLlSU9gRv3fuTMkG+EORl0mRwXWeQieO/ywy
+ a4Kb3BGwWyklK8rHF2xNLLZeb2JElb0eB2Q99u7Nnnp3pmM3QZKiwgwfm5sWlDyxONg6A3hESZP
+ kjtPdoed5cU4JJAQeLmtWzNZolHNwcX0aMt14Wtuo/MHGhkiAOb/VCK52V7LnFlnagTsRYA9o0+
+ LJ/pT4BENcg49CbjsWVk78zL+xbmFeZHa5s7t/707PrqBxyf7etLmAB2DzM46JKM8zl/GQvLQ4Z
+ 3jHRGxo/tV6wd56X4=
+X-Received: by 2002:a05:6000:4301:b0:439:c1b7:890d with SMTP id
+ ffacd0b85a97d-439da369d2fmr5751090f8f.26.1772826789417; 
+ Fri, 06 Mar 2026 11:53:09 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4852767d8e4sm53356815e9.2.2026.03.06.11.53.06
+ ffacd0b85a97d-439dae2ba66sm4961734f8f.20.2026.03.06.11.53.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:07 -0800 (PST)
+ Fri, 06 Mar 2026 11:53:08 -0800 (PST)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:06 +0100
-Message-ID: <20260306195306.7535-1-thomas.perale@mind.be>
+Date: Fri,  6 Mar 2026 20:53:08 +0100
+Message-ID: <20260306195308.7643-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260226084454.59339-1-thomas.perale@mind.be>
-References: <20260226084454.59339-1-thomas.perale@mind.be>
+In-Reply-To: <20260227084404.35563-1-thomas.perale@mind.be>
+References: <20260227084404.35563-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826787; x=1773431587; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826789; x=1773431589; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Om/QHdbkcd657KAcHP4KHxpvpRWrUor6tHXNuN0acfU=;
- b=VlJqcz7xvet0A0jdc+BvQ5/ZRbnM0FRIRvBXgNC5GuwRO1ah+6UaDfriXbT5aSoXDN
- 6Np6cKY25tni80cMb5BqfgO3xvoq4bFzerEh7t4WgaB4ZEeTrHpqk10WCUdzUfIC8H/B
- M7T5vGdj8werQiwYbXyBxR5+gMdiKEDkvrGU6Lg2Onr2YHtc0KUl5zYT36a/30uC8F1+
- IaWITLQ/a0nqA7ZK5IQltEUPCS9i9rHF/Q+gWu3P6sy1zI9C3zWBnI8YCt4f3uqc94Ry
- O9sveaeDAo633l2TDnMTemFoCYYh4q2pu3K9xF6yyJopOm3m+5oCErb19Dg4nZLN72vA
- qIsg==
+ bh=OntlVCpTtl45FpIjWguQZ4wy3nQzvewl9NaPLl5X8es=;
+ b=ZSFSSRE8PfswB+GlJKzdY2VXT8D1F65u05CGOq0nzew2xaXhhhB/8JnWiKqmGnBm7c
+ utUKwGd8pYStQXyDlN9rCoq9ALaEZ4cBow+WZEKBj338HoDys6uLYhI20pKc1XVDzTxH
+ wjUXeBFia3+NB7pcoqy4gw2J4bnfNFpErBJyKfZ+OgbgPcQu8xwkGFR9CY4RBlBYLwCy
+ uRiuLDPHLdvMMIYdFEqpu1f2l9slP1gWlVDGEDTHlP8M3itwJE93rAdMf9EF3IjNHOqL
+ +MRYpxwVq5cd1sJKDMm+WkGIPBhgAYAGLmyMlnbEeou8Qt23ZVTb7Ontjrb9vCEoIBUg
+ TpbA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VlJqcz7x
-Subject: Re: [Buildroot] [PATCH] package/cups: security bump to v2.4.16
+ header.a=rsa-sha256 header.s=google header.b=ZSFSSRE8
+Subject: Re: [Buildroot] [PATCH] package/botan: add patch for CVE-2024-50382
+ & CVE-2024-50383
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,67 +129,125 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For more information on the version bump, see:
->   - https://github.com/OpenPrinting/cups/blob/v2.4.16/CHANGES.md
->   - https://github.com/OpenPrinting/cups/releases/tag/v2.4.16
->   - https://github.com/OpenPrinting/cups/releases/tag/v2.4.15
-> 
 > Fixes the following vulnerabilities:
 > 
-> - CVE-2025-58436:
->     OpenPrinting CUPS is an open source printing system for Linux and
->     other Unix-like operating systems. Prior to version 2.4.15, a client
->     that connects to cupsd but sends slow messages, e.g. only one byte per
->     second, delays cupsd as a whole, such that it becomes unusable by
->     other clients.
+> - CVE-2024-50382:
+>     Botan before 3.6.0, when certain LLVM versions are used, has compiler-
+>     induced secret-dependent control flow in lib/utils/ghash/ghash.cpp in
+>     GHASH in AES-GCM. There is a branch instead of an XOR with carry. This
+>     was observed for Clang in LLVM 15 on RISC-V.
 > 
-> For more information, see
->   - https://www.cve.org/CVERecord?id=CVE-2025-58436
->   - https://github.com/OpenPrinting/cups/commit/40008d76a001babbb9beb9d9d74b01a86fb6ddb4
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2024-50382
+>   - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
 > 
-> - CVE-2025-61915:
->     OpenPrinting CUPS is an open source printing system for Linux and
->     other Unix-like operating systems. Prior to version 2.4.15, a user in
->     the lpadmin group can use the cups web ui to change the config and
->     insert a malicious line. Then the cupsd process which runs as root
->     will parse the new config and cause an out-of-bound write.
+> - CVE-2024-50383:
+>     Botan before 3.6.0, when certain GCC versions are used, has a
+>     compiler-induced secret-dependent operation in lib/utils/donna128.h in
+>     donna128 (used in Chacha-Poly1305 and x25519). An addition can be
+>     skipped if a carry is not set. This was observed for GCC 11.3.0 with
+>     -O2 on MIPS, and GCC on x86-i386. (Only 32-bit processors can be
+>     affected.)
 > 
-> For more information, see
->   - https://www.cve.org/CVERecord?id=CVE-2025-61915
->   - https://github.com/OpenPrinting/cups/commit/db8d560262c22a21ee1e55dfd62fa98d9359bcb0
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2024-50383
+>   - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/cups/cups.hash | 2 +-
->  package/cups/cups.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...avoid-compiler-induced-side-channels.patch | 65 +++++++++++++++++++
+>  package/botan/botan.mk                        |  3 +
+>  2 files changed, 68 insertions(+)
+>  create mode 100644 package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
 > 
-> diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-> index a200a82deb..7c08a68c10 100644
-> --- a/package/cups/cups.hash
-> +++ b/package/cups/cups.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated:
-> -sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
-> +sha256  0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d  cups-2.4.16-source.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
->  sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-> index e6de671174..d3e6094c67 100644
-> --- a/package/cups/cups.mk
-> +++ b/package/cups/cups.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+> new file mode 100644
+> index 0000000000..22f64be1b9
+> --- /dev/null
+> +++ b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+> @@ -0,0 +1,65 @@
+> +From 53b0cfde580e86b03d0d27a488b6c134f662e957 Mon Sep 17 00:00:00 2001
+> +From: Jack Lloyd <jack@randombit.net>
+> +Date: Sat, 19 Oct 2024 07:43:18 -0400
+> +Subject: [PATCH] Add more value barriers to avoid compiler induced side
+> + channels
+> +
+> +The paper https://arxiv.org/pdf/2410.13489 claims that on specific
+> +architectures Clang and GCC may introduce jumps here. The donna128
+> +issues only affect 32-bit processors, which explains why we would not
+> +see it in the x86-64 valgrind runs.
+> +
+> +The GHASH leak would seem to be generic but the authors only observed
+> +it on RISC-V.
+> +
+> +CVE: CVE-2024-50382
+> +CVE: CVE-2024-50383
+> +Upstream: https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/lib/utils/donna128.h      | 5 +++--
+> + src/lib/utils/ghash/ghash.cpp | 2 +-
+> + 2 files changed, 4 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/src/lib/utils/donna128.h b/src/lib/utils/donna128.h
+> +index 8212bd349e0..7adf54546df 100644
+> +--- a/src/lib/utils/donna128.h
+> ++++ b/src/lib/utils/donna128.h
+> +@@ -8,6 +8,7 @@
+> + #ifndef BOTAN_CURVE25519_DONNA128_H_
+> + #define BOTAN_CURVE25519_DONNA128_H_
+> + 
+> ++#include <botan/internal/ct_utils.h>
+> + #include <botan/internal/mul128.h>
+> + #include <type_traits>
+> + 
+> +@@ -73,14 +74,14 @@ class donna128 final {
+> +          l += x.l;
+> +          h += x.h;
+> + 
+> +-         const uint64_t carry = (l < x.l);
+> ++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x.l).if_set_return(1);
+> +          h += carry;
+> +          return *this;
+> +       }
+> + 
+> +       constexpr donna128& operator+=(uint64_t x) {
+> +          l += x;
+> +-         const uint64_t carry = (l < x);
+> ++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x).if_set_return(1);
+> +          h += carry;
+> +          return *this;
+> +       }
+> +diff --git a/src/lib/utils/ghash/ghash.cpp b/src/lib/utils/ghash/ghash.cpp
+> +index 8c3b1ed6c2a..61b28590002 100644
+> +--- a/src/lib/utils/ghash/ghash.cpp
+> ++++ b/src/lib/utils/ghash/ghash.cpp
+> +@@ -131,7 +131,7 @@ void GHASH::key_schedule(std::span<const uint8_t> key) {
+> +          m_HM[4 * j + 2 * i + 1] = H1;
+> + 
+> +          // GCM's bit ops are reversed so we carry out of the bottom
+> +-         const uint64_t carry = R * (H1 & 1);
+> ++         const uint64_t carry = CT::Mask<uint64_t>::expand(H1 & 1).if_set_return(R);
+> +          H1 = (H1 >> 1) | (H0 << 63);
+> +          H0 = (H0 >> 1) ^ carry;
+> +       }
+> diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+> index 561e7bf702..38948f0184 100644
+> --- a/package/botan/botan.mk
+> +++ b/package/botan/botan.mk
+> @@ -11,6 +11,9 @@ BOTAN_LICENSE = BSD-2-Clause
+>  BOTAN_LICENSE_FILES = license.txt
+>  BOTAN_CPE_ID_VALID = YES
 >  
-> -CUPS_VERSION = 2.4.14
-> +CUPS_VERSION = 2.4.16
->  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
->  CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
->  CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+> +# 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+> +BOTAN_IGNORE_CVES += CVE-2024-50382 CVE-2024-50383
+> +
+>  BOTAN_INSTALL_STAGING = YES
+>  
+>  BOTAN_DEPENDENCIES = host-python3
 > -- 
 > 2.53.0
 > 
