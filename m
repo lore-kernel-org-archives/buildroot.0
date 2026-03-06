@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D898FCC069
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 295F9FCC068
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BA8441E5D;
-	Fri,  6 Mar 2026 19:50:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GulWqp4CkvyU; Fri,  6 Mar 2026 19:50:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDAD741E54
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826658;
-	bh=DRZfcSuWKuUyAZlpvaYyCPXDXH/cnWVcbC9oHfrNwiY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=snVkHivPpktDu/XGotVrM/FycA8ilUagK4d9ZE1UK4Oct/GQ0H2p0lJcEcV3SxphE
-	 /6vyqUhUWn+76Q89U6zksFVkRq65vKFXmd6AUFC8AO43enzo0niSxqrG5fEhYh9/OF
-	 ope5UrRUZwifmGgr591fiww3+7KFljLtGgFe+O9V9+bfmw4463cD3cMPp5jNXgtQDw
-	 qpraUWqtCRZaECAwIP4vbZaRotP9uTyfKED7gynQYSzEU0+w4nfl1OjgBejD9jkUPv
-	 bHqkR1YlhWVSmcdc24UeJY6RVm/HBN53cWOxXVPlmiZx03zj7rodYcxwQs83nT3zax
-	 wFrflNHCdi8iA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDAD741E54;
-	Fri,  6 Mar 2026 19:50:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3816425B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE510613F4
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0042E613F4;
+	Fri,  6 Mar 2026 19:50:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IKkpwdU_cxWp for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ id ZE5_NYqRnZyz; Fri,  6 Mar 2026 19:50:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 457DF613D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772826655;
+	bh=eN3m5xrbz3WkAKueM38SvobHuQ9M7GDGvyS0tX3vFJU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=DgAdM9dzBiqJuUQsxv+wq9dVP0rE2MW0Sjba/X2jTIb+KLOGl+GzMIyPK87eWZokt
+	 wOoa3sCuWqishP9X+D3Go+lN6Q491rahTdMd+mXBqjVbqOhO/JWQudncBrIONUpzqo
+	 cRnPQ4CuaYh4dT1MwUXoPC5YPBkZ9oprkiArBa1ZVVsCpajgfek5N0qQTj+LOXJUNi
+	 6Vri56xsw5Ap17R6NtmfcJZGHmLpv6Xjp9jCBFaMbatLtSnKd2QPN03gcmSUuGuLge
+	 uRFR+hikmirA3/KBrecCTnx7fCyoSLeMo4nzWb3EvZZqMi8rhb4ARGmPG+bh8rf38m
+	 jqSldR9Lzf2vQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 457DF613D8;
+	Fri,  6 Mar 2026 19:50:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 582C2223
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4943583D9D
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cPEiGd-OQeGX for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:50:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20F1B613CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8E0583D53
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20F1B613CB
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8E0583D53
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29E3786834; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ id EBB9E86832; Fri,  6 Mar 2026 19:50:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 13:43:18 +0100
+Date: Fri, 6 Mar 2026 13:37:22 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 6a3aaab3bd0813eed963c638eb0b594ea0bcd9f6
-X-Git-Newrev: 4f28cf405231475fe34318f50fc7fa1450b6827e
+X-Git-Oldrev: e728b91276d63d667e0d7eae4dad88def4c0c672
+X-Git-Newrev: 968a0ca9a41960d62108269a8bc74f6975b3fe1e
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195050.29E3786834@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/imagemagick:
- security bump to v7.1.2-15
+Message-Id: <20260306195049.EBB9E86832@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/wpewebkit:
+ security bump to version 2.50.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,180 +77,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f28cf405231475fe34318f50fc7fa1450b6827e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/968a0ca9a41960d62108269a8bc74f6975b3fe1e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-For more information on the version bump, see:
-  - https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
-  - https://github.com/ImageMagick/ImageMagick/compare/7.1.2-12...7.1.2-15
+This updates WPE WebKit to the 2.50 stable series.
+WPE WebKit 2.50 highlights and 2.50.[1-5] release notes:
 
-Fixes the following vulnerabilities:
+- https://wpewebkit.org/release/wpewebkit-2.50.0.html
+- https://wpewebkit.org/release/wpewebkit-2.50.1.html
+- https://wpewebkit.org/release/wpewebkit-2.50.2.html
+- https://wpewebkit.org/release/wpewebkit-2.50.3.html
+- https://wpewebkit.org/release/wpewebkit-2.50.4.html
+- https://wpewebkit.org/release/wpewebkit-2.50.5.html
 
-- CVE-2026-22770:
-    The BilateralBlurImage method will allocate a set of double buffers
-    inside AcquireBilateralTLS. But, in versions prior to 7.1.2-13, the
-    last element in the set is not properly initialized. This will
-    result in a release of an invalid pointer inside DestroyBilateralTLS
-    when the memory allocation fails.
+Fixes the following security issues:
 
-    https://www.cve.org/CVERecord?id=CVE-2026-22770
+- From https://wpewebkit.org/security/WSA-2025-0007.html
+  CVE-2025-43343
 
-- CVE-2026-23874:
-    Versions prior to 7.1.2-13 have a stack overflow via infinite
-    recursion in MSL (Magick Scripting Language) `<write>` command when
-    writing to MSL format.
+- From https://wpewebkit.org/security/WSA-2025-0006.html
+  CVE-2025-43272, CVE-2025-43342, CVE-2025-43356, CVE-2025-43368
 
-    https://www.cve.org/CVERecord?id=CVE-2026-23874
+- From https://wpewebkit.org/security/WSA-2025-0005.html
+  CVE-2025-31273, CVE-2025-31278, CVE-2025-43211, CVE-2025-43212,
+  CVE-2025-43216, CVE-2025-43227, CVE-2025-43228, CVE-2025-43240,
+  CVE-2025-43265, CVE-2025-6558
 
-- CVE-2026-23876:
-    Prior to versions 7.1.2-13 and 6.9.13-38, a heap buffer overflow
-    vulnerability in the XBM image decoder (ReadXBMImage) allows an
-    attacker to write controlled data past the allocated heap buffer
-    when processing a maliciously crafted image file. Any operation that
-    reads or identifies an image can trigger the overflow, making it
-    exploitable via common image upload and processing pipelines.
+Removed patch 0001 which is included in this release.
 
-    https://www.cve.org/CVERecord?id=CVE-2026-23876
-
-- CVE-2026-24481:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a heap information
-    disclosure vulnerability exists in ImageMagick's PSD (Adobe
-    Photoshop) format handler. When processing a maliciously crafted PSD
-    file containing ZIP-compressed layer data that decompresses to less
-    than the expected size, uninitialized heap memory is leaked into the
-    output image.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-24481
-
-- CVE-2026-25638:
-    Prior to versions 7.1.2-15 and 6.9.13-40, memory leak exists in
-    `coders/msl.c`. In the `WriteMSLImage` function of the `msl.c` file,
-    resources are allocated. But the function returns early without
-    releasing these allocated resources.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25638
-
-- CVE-2026-25794:
-    `WriteUHDRImage` in `coders/uhdr.c` uses `int` arithmetic to compute
-    the pixel buffer size. Prior to version 7.1.2-15, when image
-    dimensions are large, the multiplication overflows 32-bit `int`,
-    causing an undersized heap allocation followed by an out-of-bounds
-    write. This can crash the process or potentially lead to an out of
-    bounds heap write.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25794
-
-- CVE-2026-25795:
-    Prior to versions 7.1.2-15 and 6.9.13-40, in `ReadSFWImage()`
-    (`coders/sfw.c`), when temporary file creation fails, `read_info` is
-    destroyed before its `filename` member is accessed, causing a NULL
-    pointer dereference and crash.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25795
-
-- CVE-2026-25796:
-    Prior to versions 7.1.2-15 and 6.9.13-40, in `ReadSTEGANOImage()`
-    (`coders/stegano.c`), the `watermark` Image object is not freed on
-    three early-return paths, resulting in a definite memory leak
-    (~13.5KB+ per invocation) that can be exploited for denial of
-    service.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25796
-
-- CVE-2026-25798:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a NULL pointer dereference
-    in ClonePixelCacheRepository allows a remote attacker to crash any
-    application linked against ImageMagick by supplying a crafted image
-    file, resulting in denial of service.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25798
-
-- CVE-2026-25799:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a logic error in YUV
-    sampling factor validation allows an invalid sampling factor to
-    bypass checks and trigger a division-by-zero during image loading,
-    resulting in a reliable denial-of-service.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25799
-
-- CVE-2026-25897:
-    Prior to versions 7.1.2-15 and 6.9.13-40, an Integer Overflow
-    vulnerability exists in the sun decoder. On 32-bit systems/builds, a
-    carefully crafted image can lead to an out of bounds heap write.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25897
-
-- CVE-2026-25989:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a crafted SVG file can
-    cause a denial of service. An off-by-one boundary check (`>` instead
-    of `>=`) that allows bypass the guard and reach an undefined
-    `(size_t)` cast.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25989
-
-- CVE-2026-26066:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a crafted profile contain
-    invalid IPTC data may cause an infinite loop when writing it with
-    `IPTCTEXT`.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26066
-
-- CVE-2026-26283:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a `continue` statement in
-    the JPEG extent binary search loop in the jpeg encoder causes an
-    infinite loop when writing persistently fails. An attacker can
-    trigger a 100% CPU consumption and process hang (Denial of Service)
-    with a crafted image.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26283
-
-- CVE-2026-26284:
-    Prior to versions 7.1.2-15 and 6.9.13-40, ImageMagick lacks proper
-    boundary checking when processing Huffman- coded data from PCD
-    (Photo CD) files. The decoder contains an function that has an
-    incorrect initialization that could cause an out of bounds read.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26284
-
-- CVE-2026-26983:
-    Prior to versions 7.1.2-15 and 6.9.13-40, the MSL interpreter
-    crashes when processing a invalid `<map>` element that causes it to
-    use an image after it has been freed.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26983
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45e009ab4ad8c41365d02daaf2074677ca92d46d)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[Bernd: bumped to 2.50.5, removed two patches originally added by Adrian
+ which were added to upstream version 2.50.2]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d27aad788d679d2a828a6bd2cb97854462201c4c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch | 44 ----------------------
+ package/wpewebkit/wpewebkit.hash                   |  8 ++--
+ package/wpewebkit/wpewebkit.mk                     |  2 +-
+ 3 files changed, 5 insertions(+), 49 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index eead3a9f97..90383c4d17 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  521fa7a8c0f664a3f5cf7437cbcc219f12bd6d5fe0c1fb014f212fa145076e60  imagemagick-7.1.2-12.tar.gz
--sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-+sha256  bf646e7fffdf50b7d886eec6bbe51c3ced1c4d68fbabfcc534e014575359fe7f  imagemagick-7.1.2-15.tar.gz
-+sha256  131447ad0099069beaa32acf1700716eea294a5bdf936d8211d7026b1849e5d4  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 0d5eb2aa34..5a03fbfd8f 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
+deleted file mode 100644
+index 8432543e07..0000000000
+--- a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 94acd1ce0ff2860b19f22ab2d386d7711c9699b7 Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Tue, 8 Jul 2025 21:46:44 +0300
+-Subject: [PATCH] [WPE] Fix the build with USE_SKIA_OPENTYPE_SVG=ON and
+- USE_SYSPROF_CAPTURE=OFF
+-
+-Unreviewed build fix.
+-
+-When backporting 287859@main the #include for the needed Skia header
+-slipped inside an USE(SYSPROF_CAPTURE) guard. This moves the guards
+-and #include statements to their correct places.
+-
+-* Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp:
+-
+-Canonical link: https://commits.webkit.org/290945.273@webkitglib/2.48
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-Upstream: https://github.com/WebKit/WebKit/commit/943d05f0c9b03c053a456c90c2a8817c1f679711
+----
+- Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
+-index a06e33fd04f8..5fb245ce0b66 100644
+---- a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
+-+++ b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
+-@@ -43,11 +43,12 @@
+- #include <skia/core/SkGraphics.h>
+- #endif
+- 
+--#if USE(SYSPROF_CAPTURE)
+--#include <wtf/SystemTracing.h>
+- #if USE(SKIA_OPENTYPE_SVG)
+- #include <skia/modules/svg/SkSVGOpenTypeSVGDecoder.h>
+- #endif
+-+
+-+#if USE(SYSPROF_CAPTURE)
+-+#include <wtf/SystemTracing.h>
+- #endif
+- 
+- namespace WebKit {
+--- 
+-2.50.1
+-
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 332fd9deaa..60a51c3e49 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.48.3.tar.xz.sums
+-md5  2d3b7fa3c62886546f918fcc289cabbe  wpewebkit-2.48.3.tar.xz
+-sha1  8a90b9ff8809c99c306defc1a08e50a31a09c590  wpewebkit-2.48.3.tar.xz
+-sha256  807571f07e87823b8fb79564692c9b1ef81ee62edbf51345a15bd0e7e1f2e07b  wpewebkit-2.48.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.50.5.tar.xz.sums
++md5  1d81485379005cca0236a278706f194f  wpewebkit-2.50.5.tar.xz
++sha1  dd56b76eff8ba157a0291c0b61220666eed59313  wpewebkit-2.50.5.tar.xz
++sha256  de4bfd20bfc921cdfc77e839ee4da84e2674bcb58b2f916172978d62fa115fc2  wpewebkit-2.50.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 31aba2a0b9..03deb6e991 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.1.2-12
-+IMAGEMAGICK_VERSION = 7.1.2-15
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+ # The middle number is even for stable releases, odd for development ones.
+-WPEWEBKIT_VERSION = 2.48.3
++WPEWEBKIT_VERSION = 2.50.5
+ WPEWEBKIT_SITE = https://wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
