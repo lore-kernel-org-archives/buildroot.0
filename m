@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4193FCC068
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D42E7FCC066
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78BAF6147F;
-	Fri,  6 Mar 2026 19:52:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA3FF41E7F;
+	Fri,  6 Mar 2026 19:52:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5v59iN6DmtH6; Fri,  6 Mar 2026 19:52:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cuq47A7VOIul; Fri,  6 Mar 2026 19:52:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 285E661476
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98AFE41FE1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826775;
-	bh=uz9o3yoHbKTefRO3rXOygDvUGvayTdx/x3PWKyyjcWc=;
+	s=default; t=1772826777;
+	bh=SPy1FQ1BgZyG+CrOhi04nj6JGXD75MGIyJW4mJru5Tw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mp0F1pE6dVs3FOdTb1jDYNJ4Lxw4koaovgerBloRGUk+fnzDRQecLPKZvfbTlY0Ez
-	 MRRtZOwoUeDLy10NVRfohFOKaMgE4B+WsrwalQsCJO9toARXzhXvJkR2q/Dwo8HuFe
-	 sV2r5GsroycaSkjSWJirzkHbi+O3YUIN3v33DgQSwmF9uJ5E2HyHfTAQBq//O5GLwR
-	 KV6qiN6lkA4hteyVWshbaYKSQyAUj7BuWHvOSehWhzUBuwsIYDhZLbDEHwUf0hNzjL
-	 gdA2a/Ke2o4hOtQ9UlsNsLl7JW6tPrcFT9w8i8/RO7sMGPgktoY2/cdsHkZ6MtSRgw
-	 Ia8BTjEelh45w==
+	b=DMu1xLDQdJcpBUUjaeZ2MWILn6w8CJNrdd/fd/n+fbgS2ctxMFUjt4dfIBtmc3Vqt
+	 KQVjr+w61QxU/vCKK4LZG1Ou4w/beX3isDIUEDaDYvlw6MLbkV0n5RHdBNq9t0k63E
+	 TlrRxgpQaRUTSUTl0bLPiRGAGMJ/0D81W8vOvDB1eYh1syGKcitf889RsWRQlbNDnx
+	 qbvuq79RyBJJE4Myo5ftxb7ANItVUeTlkhkn/BLPCLoXQ2k7CNhFwuBX2q2fiixpYY
+	 BbkqqNmyK+G1qF586n8GM2C0hDOeGQDb15zW75R+JY8bAM9Aq/c4JXVwenfC9rXiaF
+	 8a7xZuYY+36CQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 285E661476;
-	Fri,  6 Mar 2026 19:52:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98AFE41FE1;
+	Fri,  6 Mar 2026 19:52:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A747223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 55D6225B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33ECE82428
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DF9B8229B
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JUXtt7Wj7FCp for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
+ id enscxyyC3B1K for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F0DC8229B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C97D8376B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F0DC8229B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C97D8376B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 634CD86834; Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
+ id 225CC7FB67; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 13:43:16 +0100
+Date: Fri, 6 Mar 2026 14:08:42 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5621393cc205ba014735e5d60ad0d7fa43188b80
-X-Git-Newrev: a9e106312bfeeaac9ed78b206c1463426b6d5d5c
+X-Git-Oldrev: 820cbef7e1faae1c12ea11edcceaeb76b74500d2
+X-Git-Newrev: c55618c030d53564b4afe537b129212ddf5a144e
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195222.634CD86834@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/imagemagick:
- security bump to v7.1.2-15
+Message-Id: <20260306195223.225CC7FB67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-multipart:
+ bump version to 0.0.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,180 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a9e106312bfeeaac9ed78b206c1463426b6d5d5c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c55618c030d53564b4afe537b129212ddf5a144e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For more information on the version bump, see:
-  - https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
-  - https://github.com/ImageMagick/ImageMagick/compare/7.1.2-12...7.1.2-15
+https://github.com/Kludex/python-multipart/blob/0.0.21/CHANGELOG.md
 
-Fixes the following vulnerabilities:
-
-- CVE-2026-22770:
-    The BilateralBlurImage method will allocate a set of double buffers
-    inside AcquireBilateralTLS. But, in versions prior to 7.1.2-13, the
-    last element in the set is not properly initialized. This will
-    result in a release of an invalid pointer inside DestroyBilateralTLS
-    when the memory allocation fails.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-22770
-
-- CVE-2026-23874:
-    Versions prior to 7.1.2-13 have a stack overflow via infinite
-    recursion in MSL (Magick Scripting Language) `<write>` command when
-    writing to MSL format.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-23874
-
-- CVE-2026-23876:
-    Prior to versions 7.1.2-13 and 6.9.13-38, a heap buffer overflow
-    vulnerability in the XBM image decoder (ReadXBMImage) allows an
-    attacker to write controlled data past the allocated heap buffer
-    when processing a maliciously crafted image file. Any operation that
-    reads or identifies an image can trigger the overflow, making it
-    exploitable via common image upload and processing pipelines.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-23876
-
-- CVE-2026-24481:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a heap information
-    disclosure vulnerability exists in ImageMagick's PSD (Adobe
-    Photoshop) format handler. When processing a maliciously crafted PSD
-    file containing ZIP-compressed layer data that decompresses to less
-    than the expected size, uninitialized heap memory is leaked into the
-    output image.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-24481
-
-- CVE-2026-25638:
-    Prior to versions 7.1.2-15 and 6.9.13-40, memory leak exists in
-    `coders/msl.c`. In the `WriteMSLImage` function of the `msl.c` file,
-    resources are allocated. But the function returns early without
-    releasing these allocated resources.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25638
-
-- CVE-2026-25794:
-    `WriteUHDRImage` in `coders/uhdr.c` uses `int` arithmetic to compute
-    the pixel buffer size. Prior to version 7.1.2-15, when image
-    dimensions are large, the multiplication overflows 32-bit `int`,
-    causing an undersized heap allocation followed by an out-of-bounds
-    write. This can crash the process or potentially lead to an out of
-    bounds heap write.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25794
-
-- CVE-2026-25795:
-    Prior to versions 7.1.2-15 and 6.9.13-40, in `ReadSFWImage()`
-    (`coders/sfw.c`), when temporary file creation fails, `read_info` is
-    destroyed before its `filename` member is accessed, causing a NULL
-    pointer dereference and crash.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25795
-
-- CVE-2026-25796:
-    Prior to versions 7.1.2-15 and 6.9.13-40, in `ReadSTEGANOImage()`
-    (`coders/stegano.c`), the `watermark` Image object is not freed on
-    three early-return paths, resulting in a definite memory leak
-    (~13.5KB+ per invocation) that can be exploited for denial of
-    service.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25796
-
-- CVE-2026-25798:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a NULL pointer dereference
-    in ClonePixelCacheRepository allows a remote attacker to crash any
-    application linked against ImageMagick by supplying a crafted image
-    file, resulting in denial of service.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25798
-
-- CVE-2026-25799:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a logic error in YUV
-    sampling factor validation allows an invalid sampling factor to
-    bypass checks and trigger a division-by-zero during image loading,
-    resulting in a reliable denial-of-service.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25799
-
-- CVE-2026-25897:
-    Prior to versions 7.1.2-15 and 6.9.13-40, an Integer Overflow
-    vulnerability exists in the sun decoder. On 32-bit systems/builds, a
-    carefully crafted image can lead to an out of bounds heap write.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25897
-
-- CVE-2026-25989:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a crafted SVG file can
-    cause a denial of service. An off-by-one boundary check (`>` instead
-    of `>=`) that allows bypass the guard and reach an undefined
-    `(size_t)` cast.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-25989
-
-- CVE-2026-26066:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a crafted profile contain
-    invalid IPTC data may cause an infinite loop when writing it with
-    `IPTCTEXT`.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26066
-
-- CVE-2026-26283:
-    Prior to versions 7.1.2-15 and 6.9.13-40, a `continue` statement in
-    the JPEG extent binary search loop in the jpeg encoder causes an
-    infinite loop when writing persistently fails. An attacker can
-    trigger a 100% CPU consumption and process hang (Denial of Service)
-    with a crafted image.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26283
-
-- CVE-2026-26284:
-    Prior to versions 7.1.2-15 and 6.9.13-40, ImageMagick lacks proper
-    boundary checking when processing Huffman- coded data from PCD
-    (Photo CD) files. The decoder contains an function that has an
-    incorrect initialization that could cause an out of bounds read.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26284
-
-- CVE-2026-26983:
-    Prior to versions 7.1.2-15 and 6.9.13-40, the MSL interpreter
-    crashes when processing a invalid `<map>` element that causes it to
-    use an image after it has been freed.
-
-    https://www.cve.org/CVERecord?id=CVE-2026-26983
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45e009ab4ad8c41365d02daaf2074677ca92d46d)
+(cherry picked from commit fa2bb2199d64b7c7e019b23ec13ae51994899dd9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-multipart/python-multipart.hash | 6 +++---
+ package/python-multipart/python-multipart.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index eead3a9f97..90383c4d17 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  521fa7a8c0f664a3f5cf7437cbcc219f12bd6d5fe0c1fb014f212fa145076e60  imagemagick-7.1.2-12.tar.gz
--sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-+sha256  bf646e7fffdf50b7d886eec6bbe51c3ced1c4d68fbabfcc534e014575359fe7f  imagemagick-7.1.2-15.tar.gz
-+sha256  131447ad0099069beaa32acf1700716eea294a5bdf936d8211d7026b1849e5d4  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 0d5eb2aa34..5a03fbfd8f 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-multipart/python-multipart.hash b/package/python-multipart/python-multipart.hash
+index 594c7cd497..ed01763cd7 100644
+--- a/package/python-multipart/python-multipart.hash
++++ b/package/python-multipart/python-multipart.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/python-multipart/json
+-md5  fa3ee0a8ee83e24b66ab40a841922244  python_multipart-0.0.20.tar.gz
+-sha256  8dd0cab45b8e23064ae09147625994d090fa46f5b0d1e13af944c331a7fa9d13  python_multipart-0.0.20.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python_multipart/json
++md5  fd24645f1b328d5d328e8b10bc2c596c  python_multipart-0.0.21.tar.gz
++sha256  7137ebd4d3bbf70ea1622998f902b97a29434a9e8dc40eb203bbcf7c2a2cba92  python_multipart-0.0.21.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8e833176cd617daf00b9d6d39fa15ca8edebc6d1643079cd2f4893c0c289be2  LICENSE.txt
+diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
+index 8e11f5f6cd..6921d935eb 100644
+--- a/package/python-multipart/python-multipart.mk
++++ b/package/python-multipart/python-multipart.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.1.2-12
-+IMAGEMAGICK_VERSION = 7.1.2-15
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+-PYTHON_MULTIPART_VERSION = 0.0.20
++PYTHON_MULTIPART_VERSION = 0.0.21
+ PYTHON_MULTIPART_SOURCE = python_multipart-$(PYTHON_MULTIPART_VERSION).tar.gz
+-PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/f3/87/f44d7c9f274c7ee665a29b885ec97089ec5dc034c7f3fafa03da9e39a09e
++PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/78/96/804520d0850c7db98e5ccb70282e29208723f0964e88ffd9d0da2f52ea09
+ PYTHON_MULTIPART_SETUP_TYPE = hatch
+ PYTHON_MULTIPART_LICENSE = Apache-2.0
+ PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
