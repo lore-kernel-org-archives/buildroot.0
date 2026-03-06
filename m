@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B516FCC062
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ABEEFCC067
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D4BE41EED;
-	Fri,  6 Mar 2026 19:51:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4247041EEC;
+	Fri,  6 Mar 2026 19:51:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PHZMbJBTBUgJ; Fri,  6 Mar 2026 19:51:24 +0000 (UTC)
+ id H8AKxFnjYDMC; Fri,  6 Mar 2026 19:51:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21CD841EEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E17541EEA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826684;
-	bh=bAMiFp/psfu6QTyuLPSNZDBnxPBCS8xt9TCorogLfOg=;
+	s=default; t=1772826686;
+	bh=1Fk3unyGChewPN3J+Ai7J8xODLb2Q42ldnjDlGfkrzI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MCgfE3VrARsXUUEO1sHRKR5eOIFow1RMXR9t5uNeVKl7YwL9BEl7spsZY5Ciy+AmO
-	 XrxmoGEJHxK1elp38lka+ul67V9ln9d3e0qz78cq4ji6JWMI0YLTDgfJVtdq2B/P0f
-	 Lnt8eSX8QQ5G4LuXEx7EeTLKDWUz3RzP5Okah1tAB5wqV6QPFGMvsOfn2kJfk2n5mR
-	 1xehRtJLrWRMXNxTf48agmlDmzg2vGKzlFpsB3DI94C+i/oXsfRPwwcBhmFpvFeSL5
-	 Wq+MJfX48lqwIfxpcrMcRM9e0TA1uNByzQ4ga/prdpJ73zhnficGPRrwAa6ysMf8rk
-	 r4w+086KMwnow==
+	b=LaXPh0H8tKHlxzkksAc7zZDgk6IIgbfi8ux9wuTEr+Dn5BloLZX3WHaiInQHuyAKD
+	 hGRojVn0NSW7fVP4QDW4zYYTM8KZfrhvhR9KFS9jTAcXpKVHY+Yhv6tIo3ByNLro4y
+	 oLF9NBQ3qOlc1/0tjHDKfDec64nAnEztd+vVrVLXDXNwzfKpuLT1lAdWkjVpSMNemy
+	 HQIKarqQ792M4vJ636hyEmqpnbotUascur61z8LyTsjuZZuT0OkKmZtUSXTRgVfP+D
+	 AbD9UX/+9jcmUhW4YINJxU6JZBvOM0I+puFbxi4LHTkR4jzBsTrOStvmxK08n6+0pW
+	 cz0td4K928xxw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21CD841EEA;
-	Fri,  6 Mar 2026 19:51:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E17541EEA;
+	Fri,  6 Mar 2026 19:51:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E850223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:51:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D4A425B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CE8C613E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC93E613E9
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UHmpM1OyEMuj for <buildroot@buildroot.org>;
+ id mo0U-gx8FmDZ for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:50:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68466613F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2324E613ED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68466613F3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2324E613ED
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DB51855F0; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+ id 384AF80090; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:16:44 +0100
+Date: Fri, 6 Mar 2026 14:15:04 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 44c0deba937fc42181caaf37a83dd9f2916117cc
-X-Git-Newrev: ea8df0a72a745194e9693ba54385e6056a90a75b
+X-Git-Oldrev: c44241892e6a705a01e987f863c4d0d6ddf448a8
+X-Git-Newrev: 30e89e9983f8441b47c3c51c00d69775f09e3bea
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195051.7DB51855F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/graphicsmagick:
- add patch for CVE-2025-27796
+Message-Id: <20260306195051.384AF80090@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/freerdp: bump to
+ v2.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,104 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ea8df0a72a745194e9693ba54385e6056a90a75b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/30e89e9983f8441b47c3c51c00d69775f09e3bea
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Fixes the following vulnerability:
+For more information on the release, see:
 
-- CVE-2025-27796:
-    ReadWPGImage in WPG in GraphicsMagick before 1.3.46 mishandles palette
-    buffer allocation, resulting in out-of-bounds access to heap memory in
-    ReadBlob.
+- https://github.com/FreeRDP/FreeRDP/commit/9b678b6d5a40ce01607d8c3b1b1416437c8416c4
+- https://github.com/FreeRDP/FreeRDP/releases/tag/2.11.8
+- https://github.com/FreeRDP/FreeRDP/compare/2.11.7...2.11.8
 
-For more information, see
-  - https://www.cve.org/CVERecord?id=CVE-2025-27796
-  - https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/883ebf8cae6dfa5873d975fe3476b1a188ef3
+Note: the previous freerdp version 2.11.7-18-g0ee17e2f in Buildroot
+is only 5 commits prior the 2.11.8 tag. This is a very minimal bump.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Julien: add note in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6f9f9caa4516be5ca291c8da834710fe7cd0dc23)
+(cherry picked from commit 73861bb720a82316cb56e644fc75d3a7ce95980e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-buffer-is-allocated-and-the-current-size.patch | 55 ++++++++++++++++++++++
- package/graphicsmagick/graphicsmagick.mk           |  3 ++
- 2 files changed, 58 insertions(+)
+ package/freerdp/freerdp.hash | 2 +-
+ package/freerdp/freerdp.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch b/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
-new file mode 100644
-index 0000000000..8a98034833
---- /dev/null
-+++ b/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
-@@ -0,0 +1,55 @@
-+# HG changeset patch
-+# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-+# Date 1734634653 21600
-+#      Thu Dec 19 12:57:33 2024 -0600
-+# Node ID 883ebf8cae6dfa5873d975fe3476b1a188ef3f9f
-+# Parent  cf7cd5ebabb0ca40204de7539f4fb9ae02121958
-+ReadWPGImage(): Assure that palette buffer is allocated and the current size.
-+
-+CVE: CVE-2025-27796
-+Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/883ebf8cae6dfa5873d975fe3476b1a188ef3f9f
-+[thomas: remove changelog and binary]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+
-+diff --git a/coders/wpg.c b/coders/wpg.c
-+--- a/coders/wpg.c
-++++ b/coders/wpg.c
-+@@ -1704,28 +1704,23 @@
-+                 ThrowReaderException(CorruptImageError,InvalidColormapIndex,image);
-+               }
-+ 
-+-              if(pPalette!=NULL &&
-+-                 PaletteAllocBytes < 4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries))
-+-              {
-+-                MagickFreeResourceLimitedMemory(pPalette);
-+-                PaletteAllocBytes = 0;
-+-              }
-++              /* Assure that buffer is allocated and the current size */
-++              if (PaletteAllocBytes != Max(4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries),4*256))
-++                {
-++                  PaletteAllocBytes = Max(4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries),4*256);
-++                  MagickReallocateResourceLimitedMemory(unsigned char *,pPalette,PaletteAllocBytes);
-++                }
-+               if(pPalette==NULL)
-+-              {
-+-                PaletteItems = WPG_Palette.NumOfEntries;
-+-                PaletteAllocBytes = 4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries);
-+-                if(PaletteAllocBytes < 4*256) PaletteAllocBytes = 4*256;
-+-                pPalette = MagickAllocateResourceLimitedMemory(unsigned char *,(size_t)PaletteAllocBytes);
-+-                if(pPalette==NULL)
-+-                    ThrowReaderException(ResourceLimitError,MemoryAllocationFailed,image);
-+-                for(i=0; i<=255; i++)
-++                ThrowReaderException(ResourceLimitError,MemoryAllocationFailed,image);
-++
-++              PaletteItems = WPG_Palette.NumOfEntries;
-++              for(i=0; i<=255; i++)
-+                 {
-+                   pPalette[4*i] = WPG1_Palette[i].Red;
-+                   pPalette[4*i+1] = WPG1_Palette[i].Green;
-+                   pPalette[4*i+2] = WPG1_Palette[i].Blue;
-+                   pPalette[4*i+3] = OpaqueOpacity;
-+                 }
-+-              }
-+               if(ReadBlob(image,(size_t) PaletteItems*4,pPalette+((size_t)4*WPG_Palette.StartIndex)) != (size_t) PaletteItems*4)
-+               {
-+                 MagickFreeResourceLimitedMemory(pPalette);
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 6c2885b7d8..e329e51b70 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -26,6 +26,9 @@ GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
- # 0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
- GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-32460
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 83b83db121..5ae222e2ec 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f7cc2bf43b9778e9079cd229ea8e37fc1843eb1c11a8e4e003034af71858ce6a  freerdp-2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0-git4.tar.gz
++sha256  8a7c953ece217aa4fa22c4a21ab2bc4c9093fc79aa67d3e1273c140d140203f7  freerdp-2.11.8-git4.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 3a1ba61621..07b9d36339 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+# 0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27796
-+
- GRAPHICSMAGICK_INSTALL_STAGING = YES
- GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
- 
+-# Latest, and probably last, commit on the stable-2.0 branch
+-FREERDP_VERSION = 2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0
++# Latest, and probably last, release on the stable-2.0 branch
++FREERDP_VERSION = 2.11.8
+ FREERDP_SITE = https://github.com/FreeRDP/FreeRDP
+ FREERDP_SITE_METHOD = git
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
