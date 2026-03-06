@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B65FCC067
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D77EFCC062
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4553E41FE2;
-	Fri,  6 Mar 2026 19:52:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37ECD41E66;
+	Fri,  6 Mar 2026 19:52:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nO55gXBlhTlt; Fri,  6 Mar 2026 19:52:54 +0000 (UTC)
+ id 7jPtkcsI8xI2; Fri,  6 Mar 2026 19:52:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E6541FD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54E3541FEF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826773;
-	bh=V7CskEE8ZSi0tZu9J1tpfM4kdqz5u1ovw9SCD9+/LtM=;
+	s=default; t=1772826776;
+	bh=uW6QeiKeocZILrk+4TXU/mmVicCMJL3FYfUKIuMiooI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QCnmEoGyN8IrOgKYBm5H3VAMDbMH1Xp5UCImAm6El5CtWD6NnY19Q1YG7yKA0iSgp
-	 037UbQHQpizHgTHX5yksk5wIt8I6FEsALkF1uPNKTM72mpyKy3IIOhksOhAGFmsN5B
-	 XuyZiIOYGf8g36V58N1VI/wNVNIiIcS7CwI81lpGZT9IcoNqM+N4gzMAQHfy9rPhIb
-	 BdYz2QYcuAtZuGEVLmG5OUZJ5e5ohJnRlk+snh9rkL+pYBoYtN0yuM98TEynejEAzx
-	 /aNA2xynFJw+SqT3M4MRemAymAOrQQGuo87zM0DV8sJtiKuFg/N7DcRDyHv2UUs6DV
-	 qNhEvJRU//8eg==
+	b=Z5OCTZc+aeMgSIYxSSL+7/2PHOk0J6eW0TWQrzaVOS0qUSsjOP3RvkjXcwjZdzhB2
+	 Forh2mk7tSy6c2/X6mNFY5l3q1HthUI3+3DjxCBgp5wVK0iibgEUp85y/QorGdgrKK
+	 5p53UX3Ao3cQWmCsBeLPa0gJfhXlmKm3PW5Kk3msKZdihaUYBXrglkc8MbqjS/1Zhq
+	 T6BFIvCW1gjJNT0T5M/xU0WVVMY28xhKahOAMcyUV5k6xD4ky0NR7u0UUQGGRfUtFS
+	 +xECiltW+fRcw/9s/WJ2ZeNx+PVBEkw3JeoIwOwX1QZhlSc5opMPQQh85INiUWZXBw
+	 GAt5mkR8NMb+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7E6541FD2;
-	Fri,  6 Mar 2026 19:52:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 86F6A25B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54E3541FEF;
+	Fri,  6 Mar 2026 19:52:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DCAC25B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D72D882FE7
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77FF041EB5
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T_Vy90hX5rCm for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uvwx8wybVSE4 for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F8D782428
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E18A41E53
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F8D782428
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E18A41E53
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5568B7FB67; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
+ id 92F8686834; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:13:15 +0100
+Date: Fri, 6 Mar 2026 14:15:18 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6ed059ec607afc73c06872cfa60696219db9c254
-X-Git-Newrev: 1ec5a2e99db2e8b5d7f53b653eca794b39b2a4c7
+X-Git-Oldrev: f05d9ba5c998d778a2c6afe484d35f7516641914
+X-Git-Newrev: 456ecca0acc79412d3ceb3110284c99d44e5cfa3
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195223.5568B7FB67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/testing/run-tests: unbreak on Debian testing/unstable
+Message-Id: <20260306195223.92F8686834@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/freerdp: add
+ CVE-2025-68118 to IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1ec5a2e99db2e8b5d7f53b653eca794b39b2a4c7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/456ecca0acc79412d3ceb3110284c99d44e5cfa3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Commit 3d2141bcee("support/testing/run-tests: specify multiprocessing
-method") added a call to multiprocessing.set_start_method('fork') as a
-workaround for python 3.14, which changed the default start method to
-forkserver - Which is incompatible with the nose2 setup.
+Only affects Windows platform. See [1] for more information.
 
-multiprocessing.set_start_method() is only supposed to be called a maximum
-of 1 time per process and throws a RuntimeError if called more than that
-(even with the same arguments):
+[1] https://security-tracker.debian.org/tracker/CVE-2025-68118
 
->>> import multiprocessing
->>> multiprocessing.set_start_method('fork')
->>> multiprocessing.set_start_method('fork')
-Traceback (most recent call last):
-  File "<python-input-2>", line 1, in <module>
-    multiprocessing.set_start_method('fork')
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/context.py", line 247, in set_start_method
-    raise RuntimeError('context has already been set')
-
-Debian included a similar patch in python3-nose2 0.51.1-2 (currently in
-testing/unstable) which adds its own call to set_start_method():
-
-https://salsa.debian.org/python-team/packages/nose2/-/blob/debian/0.15.1-2/debian/patches/0004-plugins-mp-set-context-to-fork-for-Python-3.14-mp-AP.patch?ref_type=tags
-
-Which comes from:
-https://github.com/nose-devs/nose2/pull/644
-
-As discussed in the upstream PR, this is not a correct fix is wrong and
-breaks various use cases.  An issue has been opened to get this fixed in the
-Debian packaging at:
-
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1129350
-
-But until that is done, rework the patch to:
-
-- Only override set_start_method() if needed to limit impact
-- Monkey patch set_start_method() so additional calls are ignored
-
-To unbreak run-test on affected Debian systems and add some documentation to
-make it clear why this is done.
-
-[Peter: use allow_none / force optional arguments as pointed out by Julien]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 311e5cdc5151536ffc7280604e28de5f0fe245b5)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit dc8fc4b80367a64eaa36712d67e1795df3baa415)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/run-tests | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ package/freerdp/freerdp.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 1c4d2b4a85..2c7ce87c96 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -142,5 +142,15 @@ def main():
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index f240d789dd..a043557828 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -17,6 +17,10 @@ FREERDP_CPE_ID_VENDOR = freerdp
+ # https://security-tracker.debian.org/tracker/CVE-2024-32662
+ FREERDP_IGNORE_CVES += CVE-2024-32662
  
- 
- if __name__ == "__main__":
--    multiprocessing.set_start_method("fork")
-+    # python 3.14 changed default start method from fork to
-+    # fork-server, which is not compatible with the nose2 setup
-+    if multiprocessing.get_start_method(allow_none=True) != "fork":
-+        multiprocessing.set_start_method("fork", force=True)
-+        # set_start_method throws a RuntimeError if called more than
-+        # once.
-+        # Debian python3-nose2 0.15.1-2 includes a patch adding
-+        # another set_start_method() call, so monkey patch it out to
-+        # get rid of this
-+        multiprocessing.set_start_method = lambda *args: None
++# Windows only
++# https://security-tracker.debian.org/tracker/CVE-2025-68118
++FREERDP_IGNORE_CVES += CVE-2025-68118
 +
-     sys.exit(main())
+ FREERDP_INSTALL_STAGING = YES
+ 
+ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev -DWITH_GSTREAMER_0_10=OFF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
