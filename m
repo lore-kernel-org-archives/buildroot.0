@@ -4,161 +4,128 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD56EFCC076
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 21:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2983FCC07D
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 22:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73F4F40C47;
-	Fri,  6 Mar 2026 21:55:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BFBE41D19;
+	Fri,  6 Mar 2026 22:03:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id msYWVZtANeE1; Fri,  6 Mar 2026 21:55:57 +0000 (UTC)
+ id qbKS8kP7LpZg; Fri,  6 Mar 2026 22:03:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77619417BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74CA941BEB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772834157;
-	bh=8P4+H5ot8aO7ZJN6da0h2YapHgAY0Uw5uUboHF/fd4M=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=s7Rp5WbigcYAU4ZxWTYKYz/653o+gMnys9iQJVnbRTHxG6tQTpNp8lQeP/fOav3dm
-	 FPsz8OQ3MemW0ZBKV2J39wGb3Yj8yQ07zIByKU2SFAcrrQJ7PzW/y/iNKQfSSDRgmT
-	 I+ICEsOyzvRU30ck5NHCWYKywZdye4QSZGRsfvvkuVEruVxrrOeQ+8b8upjsV+jtB+
-	 fqR3PMaCDpQjIhLFw4AMD3N+5QoUZpY3qi4Yq1H2v8lkvoYL0sIT1yQ7xvf2B070CO
-	 WwC1eU9jbKj3UFunMvyEn4QY9GjRU8TGitDevqDCy2KIdp8cBQmleiaQSH5qWQnu06
-	 8oJqJFf6/Pylg==
+	s=default; t=1772834593;
+	bh=sRVFJYaDpPsaz7JLjYECM9Juc88DdmqQ28sFJURB5jI=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=bl9XZHnJEQ4OFBv9lIHQ1frY868ar5pOR+922l8X8UmAxJLCHwF59vUO2G5FPeMSg
+	 FEMF+Z8vsANHKpXnBqGCvG+JHO8bgc7dUVm1WTPpPI33nCqQkRNYvYbkHEx/uN4dg9
+	 KnI5GPqBUN4CwIVkowDdhV9NOfDRkMeMu5mC7HVlUxOmTKtd4jzYP47E51Wz9zNzyn
+	 jBptfVkyZwTVxtAJph3krUYGTwH7/m4Md4V5cjrF32e0tNmIqWuwg/RUovS8j4plXy
+	 NMIY5pnYRk0nPsJAughR7fyFk0WLBGE8Bimp6DZNPIhQF+1fxwtX+Z3Vo4KelpXJS7
+	 1OY78pQkySm2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77619417BB;
-	Fri,  6 Mar 2026 21:55:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DA6A25B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 21:55:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74CA941BEB;
+	Fri,  6 Mar 2026 22:03:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1708F169
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 22:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 835C1417BB
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 21:55:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0855483BD4
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 22:03:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3JsAVLEgm0lH for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 21:55:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D043140C47
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D043140C47
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D043140C47
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 21:55:53 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Msq24-1vetMs3LMu-017Xsy; Fri, 06
- Mar 2026 22:55:42 +0100
-To: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 22:55:39 +0100
-Message-ID: <20260306215539.510232-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.53.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 27T2EidU06dJ for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 22:03:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::32e; helo=mail-ot1-x32e.google.com;
+ envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 53D2483BCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53D2483BCA
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
+ [IPv6:2607:f8b0:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 53D2483BCA
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 22:03:11 +0000 (UTC)
+Received: by mail-ot1-x32e.google.com with SMTP id
+ 46e09a7af769-7d18a9d2b1aso9778448a34.2
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 14:03:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772834590; cv=none;
+ d=google.com; s=arc-20240605;
+ b=PGFgHmUIoJ4Ri5iTtMZL3fl+7jg5H+pyRolwS+uIAI29Kpvsiri2bq+8oCejzViQsA
+ hW69R999lNSjTuGcU2kUSt/gKsBtyHlXuImfPrD+/wKsuiFcKuSwmqU7l1S+L+WHy1L4
+ eYU3xSwHIhTd8jR7SnHpeUlyVkkdbCJSTwStV6fUSRWKPLgnpdNYLKsAtfQLnQJjyeTM
+ QmF26iPF0Ou0a6qMgtGoqb/Jd1yzP128W91r7nXHaxrla4QRopmBJWyukhMfqmVgya1H
+ qCDQKG3QgQdHqGQLS5LGEZp/GbngF+S2fiD929q14L9Gu3XufOhl1XqMvTQJhEmVmY3F
+ m4CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20240605; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:dkim-signature;
+ bh=gOQ9hc6lYoz9JXzvqDXMnoayVMQHcqa/ZroitMQbNkw=;
+ fh=t109lWVKkCtWRxFZrah/iuXaqNyg9EGqwBxGKsSJvEI=;
+ b=gDkTSH0329pE9tsTjevM+Xl3mxHADiGe/m5AN68dJ78Gr4xvpFOAjgZPLBWpL8YS3e
+ r19ewmMIX2fzGokpiA3coVk6Dl0zTha8SxuJDUI3djPn9EYjOit2d58c+HE9H95KwGX8
+ ENgrNy285TeIZSbpJ98ODk2rj3CqPaFOVraClmKZn6FWho90janXC6Tnda4uGERH02uU
+ HWgBUHnWilgWxr9hXlZAVoYGgasOjTativGu7+dGlgKbWcbAI/nv9b+fH4NVq5h3KsJp
+ MDFoweTR81hGw+c+tymCZgphwW4kEx+FcugHquad9094ZW14j8FpCCpjBjWHhM99xdIX
+ z3PQ==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1772834590; x=1773439390;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=gOQ9hc6lYoz9JXzvqDXMnoayVMQHcqa/ZroitMQbNkw=;
+ b=Zx+JYYJgbwffGYXNvMQbuJt6IAjFTax7uPH24ucozb7Fu2CaImcgKFYtnDkHp51T/W
+ y9BFykzc9Q7oOeUIVkKHxRioBUy4EK3kXd6uG3I0Bhw9qT2tnXQfimkJVj09T6LPxR87
+ bLLo6qKfVZ9wg1JLT5E7g7DmM+ibKW7Yp4hrNpI5QBePBrM4t/cBoEbofd/jMFav8Qx1
+ Pg48s2YoYz7Aj2hFIsge/hF3pJIacS11H+Xlsy6ioABt0z+i+b1LmyoT+HJA+KlGtS/U
+ mcbPrXZAR+8GRHa50uUAUJa6JdjAlkBW1918OKjgzxcUj+oax0rsN85+8nsxfC5w4SdY
+ SfBQ==
+X-Gm-Message-State: AOJu0Yyn5XHIdLMImOpfLdVOXBTTDidWrtl5eUpnAMYgpvNzL2dCvZBS
+ MspTmf2OtA38P4CE4kqGzya2fP5Jpv+7ZRjoIgVH1I49BLMQMLZHeGQv7aG4H57ieuUAv7Ulg+N
+ hL9Lzp1HHoZPcAT4RgD71ulhF37+Yiv/b4PyJGUc=
+X-Gm-Gg: ATEYQzyOpUojn//K7rwhWKujBXlKmyMSuQ1s6xQJqU+jKigz21zaGwpkRcdGDcp8ifq
+ 66iCjKyGa627yuu4fJHTseKYXMYOu2qCxFLtWHiPZ9gV/pbPmVxVc6Z+OVGFreb9DsSxwuRGroz
+ IEVtr3LJjf8bL2a6rvwbLWby98kV5hcmj33EZr1J3L1kzRcHLT/GU9gWJhDAkWrSiPbHLNxWqhB
+ dY42SHcBXNhS7js6DxbPxxk+Tvy+v/edCUXO4wSvOIZNpTaNyriMAq9RHUkpZ6QFTBfUKHu94NR
+ KUSFgw==
+X-Received: by 2002:a05:6820:178a:b0:66f:75e5:e886 with SMTP id
+ 006d021491bc7-67b9bd78afbmr2643857eaf.66.1772834590003; Fri, 06 Mar 2026
+ 14:03:10 -0800 (PST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:s2WmHRL+PlJBGL4ecfkXDfuin46bBnFWFstKEzEpM/m4jwSNp/+
- Jaeq138mtZUiaNJQLmhXn8phTI+9QwPYynOxDG7paS00H4b+WileuFnJ1TWZG1TvRi+9mCb
- Zc3SiRNXzoGG9EzU/0VWHXLKbCzBCJsssR3Gd9tpxiIIIUL0BHF1K781HeQs4jwdvzWWuD+
- 4eCA0ZfbDTve3n+epwnbA==
-UI-OutboundReport: notjunk:1;M01:P0:2NpdzaCd0as=;nvVcindfjohmuKFu0tV8UD/NHBH
- M1/SQJikX82OR5lSkEgsz1M3RNhERpd0e6YZ4MlWuQOJnsY9OJmWH3Zh89qgEtaweokE7teIw
- uUZQ15dNb2DRxeiHvOeuQC8Q9ld0CCzBe9NxiNcr1dUbU/zN30/TlXuROHH2yEEROgR3ng7jY
- VpBR/8K1Crj1+t+RRtJxjj1u3kkghviCDwnWqX1mlHbvzfvuoIg1iX5U31yTbIg4yrlheqzpG
- IGOB+BbFvS/BhAELPE4KcvfVAComnrVpu0gzvZ88B5T6JpFI/pmhVeB+ASm9qylcNIo/ixz9F
- tQKkSCPxd1jpNEarGBz94suh58INqUuliO6orA4tQsx9T+pz8wVHZ/q5w/32GtRLo1hUlOBOF
- B+4KckOxWayy5AILOcmuRJi5Zd4dinufJF1Qkai+UTlOJYNtvV7GzWC1Kz77HGqGFvGVH2tpM
- Ax1SRumWRqcUKDgu4ES7ny9+A0T//cU7mkisOQjsOqqw99lYiNAC6FO21c8cDVj+xfP2GJg12
- FoqEg7lIakMw2iLQzreb3J1cFi9/hhx77+pDw78AOfmIqeLzYS9eajyob4RQFD5oZVRt7xgV5
- /Oyq8c+ApDFvNUk+ybepFIA+tDc7cvt/SYECA2iQ5ArlPRkb7YmntQEE/+e+FcxiFkpfQzwFh
- 7hn9Hyg4KvhN9KEpeluprCjpX4ji5ggA/DaveK9N5JO4TJhM6KAVuNDKWodgV/tzhfp3YEmkK
- z8GR8FLtv4w4mNXfdtWvoFIPtcANBGx+3Gce8ogmxuDHM/RPbVVM6gHwBR1Teonsg1jmZfUcd
- DMf8mMoE89+RHY6osIirp5oDnFP7sl/TLi3OG1tRHq63Y6tvRBTGhyM7cqitplctw9i+H7267
- Mlw9ufHcOawzIvjQOce38Gk50qLYEmw1AWzflKduPSpLl6FG0X3JhgbI/5HJ4pOBJgj3mKtNH
- TANM8CKa+/4vhO3StKlV5Jjj5sfBvbgQGusXdqEkzPyQHGq+We6YREB1QMRKsraCDeobwEU6L
- IvTPUUpAMQzhg+hwlU666UgppQh4Pa5/I2TSSDrfee7QoygwUsTBWLv6AV3ybtcLHV2QD7SRK
- PRPD7j76Asa9+E+Mw/d+SUU2dXd9Q1jdyi8mgw6Wr5/VTn2TENt/Zs2hAYJPPYEu9mGoNMO4J
- ArW26N/95hSt4I8IzfynSNfuIyuBYbjVGtTcJvLl2eMfJeYKkMu8rrJ4V7xIgL1EJQD1OmYCM
- l+DDjRUcCtuQobJbdrmNN/X7qFRIf9YL1OAFNqqlIERXRH+LM3n6tW5zoqrI1bzbDh4z4lFjB
- xEXEpmeeOOOYMPhYDp8C2OuJUwoW68fDhoiHZsBMuVqqdD1CWxXcvkx4JAFamduQT4DH6yMNX
- FIlRwqn6N475SiGuj0eRilWoGSZgAcfR113Uwa/TMmGQrORjpHlqYppcnZQoroxEnKdAaiBUG
- JoXb4ubScRwF9jZDgUG4DBNYIML72zEkyNceAnhr+wX1gHVf3T0HZQK7ir54JPpYD49b7OO0f
- gHTowI6XAfe3BfVz88NzC/3jXcAzn1Ntg+8X7nb/x6NZQtY/pccSs+C5Um4GEBdXAQi7ox3PW
- x0R3FM2OiNs07IwRtpQAlyl5pJVuPjCSwrYy/Dm8v5/KjzTupjdqbdM71ZT3rbW5YoFSY/JFV
- 1Sgpax55P7w9CCCLFEbWlLWoWcW9YddqbrnDQO4zBoWJOFfhXP5R8VbZQ1EsIJCYpZENgqRrN
- euEy0oGpiwM7pOZLgowq9k5fz1RN9lFySPvDgahHi4jqPycjmAP3AMxr9cqM/U3DtB/6fWdF8
- s8xAWAejcjFlLiSG5w0rsx3fuCvAOcwRgi74Si+4mft8XHUlTaFk0RuAslvBo88l7n8qVTjl/
- 0NEObzu5jn6+Ya4T97Q1kAxLWu4pQQZp157CJLv0ZERtK/C0pu6TRIEFw8tKwkFcvezsegozv
- P8YgbUDw+Mlvx/V/yeAPxpBcwq9JmqYBe4OEq7RThy5KHJWU467lQCznMTlfYw5p8tcvk429T
- bTvl5oj+3vh4tlLfZ54FizCp4UQu/MRy497GRwAljTY6dQUYM0Dc8fKLwN2+eRgASQePve7ix
- 6YvUwRuiWf7tfxq0RxvlGslBKk5N/b+eU2BEhBu+xRj7Y7PUHfvLs6ENF3Fc+Yn/1nBw5jdqL
- O4PvVl+qx9fWdCRUcsTEWv8Wz2TVQlnzJk00lJarg2SAmXbQCT97Y+HAdbeuPVea+VsQkfi02
- cXru/CYL2DMBQtFpSWI4BDu54EQXGHSUnKTxoc2EHoUdLzNWfHl4ooMOIAkBPu2e3bJgALXH5
- CC8geRE8eo1izj9i/mAmxGhmssBkpklchY5RVXcXH7azdSQxe374qtwHm91k5XapjKRWetg+2
- k8Ml/zNA9ljXdYnyUkph38XCvasqHHtr8bIKEPYHNCnWoF53ACIagOVAK+2tgbMER098R/jN1
- 3OjFm7rPiA773ImH2EOcARwuArLSp4CixPHV8WIhacXtIMoaeS7wgJs2bZqyapOCMCNn0sYaO
- 4Ja0hKyoNANt03+2pLIxfOibSQlydbrYED0LWZxoCs2AoXkzCr0ShvEVbekYvDL0XSvbNX+q9
- 1on5ofDUSnh27LRQKP8TxC3Q8vfuUKy7UL1tKYNxX9x4pqBGmYQPOnIq9tw59uLZBTz/t3hxA
- rctIUuHLqfITjrKhnbSeYBx36dngmBPG79qsAQX/P+YWLUyHhXoYF3AtgrjkNrTE/mZ6Vm5Iz
- YOrfiPhEeN+MPStnnjWEcgGt0R2kogmxqt6oD7ExKEtzEAtowMY5kMtPBo/p2m/g3As2zR7P7
- CMEb1X/Uruj0M/Ee1uQEy96dabT1WdBSlQsl0fHbPT7aPkLwCsuNVzHMbwx7H0vO0BX72pHYK
- wteebNVqdvf6zFDy382ZE3NYL36TIV05ZHUkAjfnJjFqFkkkitEYFZiabPLl//LKyG34I/1d7
- YdVoWJzp0fudEZRnyOpgt4FyXWWUOkhYmMNgZt3uZnY10ijgT+eIwrV4UId8M6aSnUMMl/05S
- LbuOtJX8PwqtCwyfuF8GyqnmaWl4OtRZkyQvZTaIO5yecp+FeScLKdhfasvaIc1prSTGm60h7
- GCYiTqUkqrItYOYY/EPwgbHSpeQfSvtgEC4ErGGBvM+y0nhK0CrBd2MB7ZQe/OuMyH9g+pS1k
- juBBXU4hWiRh3L3fHAPXKLHMBvCeZnQ51r10aZWPfoKVXnDaf/uwTUrYq0doPF/kxy5gePdx5
- wC8b540oQy2e16qeq+FVi1NhWgjr8ol7NdK/JJeQsFPFYwW9kVSoUUSXYdY7yONy0wMfoWbCa
- dXadkal2cq9mfbRX64fMBwZZ6LlasPtn1ab9P2/lkZ2BXOnAXNpZQI0I9q3LL1ifzkutI5Epg
- 907Z4eOSJi/cNtTV9iI2KF4zMoEMAZOglGG95gwJBGApFjkZgPr93AcKUnuXuupUO4KCaXWtn
- uozcgLRXWwx8WeDy29nsp/D5dK4Ui+wFxIFOZoIVi//fHPqQjFpP6K+KRyRgrtmmz7tcSDnSL
- dxNb+v2+JwdEdNW+55mmy2wRtDxCl8S3yV2AglTHgicvzHQigVGnkJDNq1rvv3UGaFxV+uv90
- Dvw1ZP+QorNueTSv+GAEe86Z5OgX5IrB+aMimINfdY80f5BlukRRJxYDLr/Y+5+7UcocOHi+x
- yYpX4cLI+IHW5EyjiHDMavxdH7zCa6DcCDoEH6pnj0uKx3UPa6BgygDjcIKA+eNqH5ibF+4pW
- TzH82JQcoNEd8lbz4XyAv+HDmQ2aEnwmElp6uAMGV3vpkDxT9K7cWAq2hJrzD70/RUylCsOjf
- fnO4mm+RSfbVjmSMqFCsp95bi1xk5aQlz9Q3A+ZtZy4Y7zldxon6lYM692RsXhgRzpLwqQDXk
- M/uFq1pOUTjAHr1lajtaHbtA59gdeSoPhMClMLYHc8pZMQRuMgZTHhHCfx4tuazZF9Fy5XdEI
- B2nTEb0vNUc7tR4RqQ7Lj0t0qLr1lVHzshEC0wpi+1ZhqSW9HK/0nNIjI+xi6sxr3RsHWIkSz
- 8PYeZEWanrYecz07io4q6CPBJY96eR2ApiCvt9lPlvq34RXALMNjKIq+Zj0pkwKOYlzo4SeW3
- Ft487gq94vsiusW+ZtHMouLJYuontTE9Et6oVREtqt8Cen3BCLpS/Mt1tA79/NStVC7p/xPLf
- k2bOeddsgmxP2dM/ImNzCiyU5nFZ2CqlHPA347eKUMlLuFWp9AxGMv6YTbHCFtTnaFoFOYSvL
- pI/vpkIoMSbtKQ/qZ8dWrTqYrc8xM+ud5ErPXbB9fJflclKuOBMct46b7lPuHOzXzNePsVim/
- ahu1hsH1lQwAZylj+bvLtHGIStNV8nFWF/dFahC3SdbNxOC5ciqwXwK4nofl8s7xpb8Bvo+OX
- AZKEeYMTPczmWXPCdhyK2lloNgYp5exTntWqi08QIp4uEQGWs2Gc6Hbm14P9BITT4ZvN2idIH
- SK95LMxbNtymtNrZuw//BXiBMzAtXzuFhY9mTUnNynEm+9HAneDBe7/47z9B+mfCosBejhXR7
- jb5bEaWN5wmnpOhkQDpUvAzcVAm0uN7ke0KFV4fYtdqh+7hwPJIPOGyAh6Ao5gPpUAGFQx3Ok
- T1sfvPuQOQyVeItsQp4sjRlajnZ+FDz8l3QPdR/KIYzSkqeWfut+vL3FaGw2627b7UFp76TcV
- zKiQQp99aLecae1jbVaJ7TIice/UZh3E7pmPMBEtrq1bIe0tM5gGfOG6a82huqmdQyUha8oT+
- ts4BWdz6p3Yyx9+O4ABwug9ifBC37mKgVNUag3WRKJ1OlBJDrdQRYe0+NgAcF12yGq75FOyfe
- rgXhr0e8rCkiMgqV6aNiVsvO46Yz2wm2roWUHXPmfS0ff92HOCetnOE3ZBbM3GVJPqltXKT1R
- 1oA2O2D5ljInxAGMKbZ5iv9zzX+NPuMmmtjJAlReuPK2ZWOVdO9A5iX6ykuVBxjpQLcjRzzr2
- UHj3AqrMcQAE6fEALsl8YSi89KlyZ8jLCfWG2ZbjKDxuCa0kAeRp1l5Qp+tHE4dT2JLaeygMe
- p4atesvr+XG+j8PDlxNAJCsjKKuehZBBrUeINDygAKK4fJNBCSGqMT9afIhg7CvVIxw+qWdVe
- pVHPd8we6U3lQO+ZFa9MUM1q8vw0GDbcYW1D+0gwWD/qB7uJzFpnZ9zajD+x3Y34TvF+AijFw
- JXgW9U7Y/snCb3M/IPPLF9Hf+E9tOmnzbgV+JZZ3flAMcivbOk6Ewpdicbz78DrtA5D/o6HRs
- Mo7CMJ6CGVW77A9cm1ojkrHy/oAk9BSVEJ9EoeLb9wtuMBXOdaq7IuLBGbzap4oK6IbxGKbMX
- rEZhbLTJ6RX
+References: <20260222134120.1893854-1-chakrabortyshubham66@gmail.com>
+ <20260305094946.344077-1-chakrabortyshubham66@gmail.com>
+In-Reply-To: <20260305094946.344077-1-chakrabortyshubham66@gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Fri, 6 Mar 2026 14:02:34 -0800
+X-Gm-Features: AaiRm52FAxund6wNmRb5jk-18iAJ4iMPtkX6wxx4OzCiSXV9ug0JQ1S50QM7sIk
+Message-ID: <CAMWSM7jB7EZydwK-ppDxPLbivaoH=SvFKMMEFtUcg_4abQ-Ckw@mail.gmail.com>
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Cc: buildroot@buildroot.org, andrew.smirnov@gmail.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1772834143; x=1773438943; i=fiona.klute@gmx.de;
- bh=oNRVUoVZbDiyyBfX/ZY1fMBjr78uCtvqcavJa5KJwag=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=MEyUHqBRkEL/ial3/IqKxlDeEMH0pruuuw/k3R6eylXL2daI9jjpUmhn8lcB6JUW
- SWVAD7VEuyzg/ZhQCYvSd2zdsNCYP/Tf//9ufhKE02Zg5DGnXqOM7Rf4zRakcXlFs
- Vjd8IDp8VavnabLzm9FwxYDS914HQzpqIu0ojxW5qbU9HlmApqLHjeIaI68ukkpua
- YdXA/k9/KhmgqzHiB64aWYsREZJ65mO+XIyvYu5njRpqw8CFLIf1BDP83hi6r9k88
- vilrocDTQUna1QjrMuxb/JErP3qoH3pHJPuQzIVRNsyJE97Gp+M/ES7IijToeM/LU
- PSLkiMr7swBp+y69Jg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=MEyUHqBR
-Subject: [Buildroot] [PATCH v2 1/1] support/testing: transfer config in
- environment instead of class variables
+ d=gmail.com; s=20230601; t=1772834590; x=1773439390; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gOQ9hc6lYoz9JXzvqDXMnoayVMQHcqa/ZroitMQbNkw=;
+ b=jEAlzEX//je6bjARkREExz8E6QFDxmZptetMqV/GzrOcfJID8Ji286zjitxIpHqPPy
+ VSnwNU0n+1IMev+05rK5aXMOi7Nu96vEThKpSCKT94nFVmK73hgy7k010iW1PDN271LG
+ nCm/FNkMAejSz8RRqQGv5gVjS8PtGa2wWnbHRLwiQMSupK8UcqmElCZbYI51ZvBlJjwd
+ UdfRLFRFv2BAINVMn3O+MEpcd+ObRiIqSnXlcPjClqmmkxoel/b9Zxf2zldZs6oSZGMe
+ vcu575EQCZbuEqPnyeW+ibZw7qUE7pBmlSk25QksmjXxz4AK6B9mqsyqvN62VDjw26iB
+ 6XRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jEAlzEX/
+Subject: Re: [Buildroot] [PATCH v2] package/zstd: add pzstd support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -170,226 +137,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>,
- Julien Olivain <ju.o@free.fr>, guenther.harrasser@mobileye.com,
- Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Passing runtime configuration to tests in BRConfigTest class variables
-requires the "fork" start method for multiprocessing. With
-"forkserver" (default for POSIX platforms since Python 3.14) class
-variables modified in the parent process are lost, because the child
-process does not inherit the full Python state. This broke the way
-support/testing/run-tests sets configuration for BRConfigTest, so a
-start method override was added in commit
-3d2141bceefda32bef06ddda594eaf8665913276.
-
-Instead this patch adds a settings dataclass (requires Python >= 3.7)
-which is serialized into an environment variable from run-tests and
-read during BRConfigTest.__init__(). Reading is skipped if the
-environment variable is not set so test discovery (not execution)
-works without configuration (e.g. utils/get-developers uses this).
-
-With that, run-tests no longer relies on a specific multiprocessing
-start method.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
----
-Changes v1 -> v2:
-* Restructure to use dataclasses, which simplifies the code but
-  requires Python 3.7
-
- support/testing/infra/basetest.py | 37 ++++++++++++++++++++++++++++++
- support/testing/run-tests         | 38 ++++++++++++-------------------
- 2 files changed, 52 insertions(+), 23 deletions(-)
-
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 13f9b2d398..5fa902a77f 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -1,6 +1,9 @@
- import unittest
- import os
-+import dataclasses
- import datetime
-+import json
-+from typing import ClassVar
- 
- from infra.builder import Builder
- from infra.emulator import Emulator
-@@ -22,6 +25,33 @@ MINIMAL_CONFIG = \
-     """
- 
- 
-+@dataclasses.dataclass
-+class BRTestSettings:
-+    """support/testing/run-tests stores runtime settings in this
-+    object, and serializes it into the environment variable named in
-+    CONF_ENV. On instantiation, BRConfigTest loads this
-+    configuration. That way configuration can be transferred into
-+    multiprocessing worker processes without requiring the "fork"
-+    start method.
-+
-+    """
-+    CONF_ENV: ClassVar[str] = 'BR_TEST_CONFIG_JSON'
-+
-+    downloaddir: str
-+    outputdir: str
-+    logtofile: bool = True
-+    keepbuilds: bool = False
-+    jlevel: int = 0
-+    timeout_multiplier: int = 1
-+
-+    def to_env(self) -> None:
-+        os.environ[self.CONF_ENV] = json.dumps(dataclasses.asdict(self))
-+
-+    @classmethod
-+    def from_env(cls) -> 'BRTestSettings':
-+        return cls(**json.loads(os.environ[cls.CONF_ENV]))
-+
-+
- class BRConfigTest(unittest.TestCase):
-     """Test up to the configure stage."""
-     config: str
-@@ -35,6 +65,8 @@ class BRConfigTest(unittest.TestCase):
- 
-     def __init__(self, names):
-         super(BRConfigTest, self).__init__(names)
-+        if BRTestSettings.CONF_ENV in os.environ:
-+            self.conf_from_env()
-         self.testname = self.__class__.__name__
-         self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
-         self.config += '\nBR2_DL_DIR="{}"\n'.format(self.downloaddir)
-@@ -44,6 +76,11 @@ class BRConfigTest(unittest.TestCase):
-         print("{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
-                                     self.testname, msg))
- 
-+    def conf_from_env(self) -> None:
-+        conf = BRTestSettings.from_env()
-+        for f in dataclasses.fields(conf):
-+            setattr(self, f.name, getattr(conf, f.name))
-+
-     def setUp(self):
-         self.show_msg("Starting")
-         self.b = Builder(self.config, self.builddir, self.logtofile, self.jlevel)
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 2c7ce87c96..f0c1cc782a 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -6,7 +6,7 @@ import sys
- 
- import nose2
- 
--from infra.basetest import BRConfigTest
-+from infra.basetest import BRTestSettings
- 
- import infra
- 
-@@ -44,9 +44,6 @@ def main():
-     script_path = os.path.realpath(__file__)
-     test_dir = os.path.dirname(script_path)
- 
--    if args.stdout:
--        BRConfigTest.logtofile = False
--
-     if args.list:
-         print("List of tests")
-         nose2_args = [
-@@ -69,7 +66,7 @@ def main():
-             parser.print_help()
-             return 1
- 
--    BRConfigTest.downloaddir = os.path.abspath(args.download)
-+    args.download = os.path.abspath(args.download)
- 
-     if args.prepare_only:
-         emulator_builtin_binaries = ["kernel-vexpress-5.10.202",
-@@ -78,7 +75,7 @@ def main():
-                                      "versatile-pb-5.10.202.dtb"]
-         print("Downloading emulator builtin binaries")
-         for binary in emulator_builtin_binaries:
--            infra.download(BRConfigTest.downloaddir, binary)
-+            infra.download(args.download, binary)
-         return 0
- 
-     if args.output is None:
-@@ -90,15 +87,13 @@ def main():
-     if not os.path.exists(args.output):
-         os.mkdir(args.output)
- 
--    BRConfigTest.outputdir = os.path.abspath(args.output)
--
-     if args.all is False and not args.testname:
-         print("No test selected")
-         print("")
-         parser.print_help()
-         return 1
- 
--    BRConfigTest.keepbuilds = args.keep
-+    jlevel = 0
- 
-     if args.testcases != 1:
-         if args.testcases < 1:
-@@ -109,7 +104,7 @@ def main():
-         # same default BR2_JLEVEL as package/Makefile.in
-         br2_jlevel = 1 + multiprocessing.cpu_count()
-         each_testcase = int((br2_jlevel + args.testcases) / args.testcases)
--        BRConfigTest.jlevel = each_testcase
-+        jlevel = each_testcase
- 
-     if args.jlevel:
-         if args.jlevel < 0:
-@@ -118,14 +113,22 @@ def main():
-             parser.print_help()
-             return 1
-         # the user can override the auto calculated value
--        BRConfigTest.jlevel = args.jlevel
-+        jlevel = args.jlevel
- 
-     if args.timeout_multiplier < 1:
-         print("Invalid multiplier for timeout values")
-         print("")
-         parser.print_help()
-         return 1
--    BRConfigTest.timeout_multiplier = args.timeout_multiplier
-+
-+    BRTestSettings(
-+        logtofile=not args.stdout,
-+        downloaddir=args.download,
-+        outputdir=os.path.abspath(args.output),
-+        keepbuilds=args.keep,
-+        jlevel=jlevel,
-+        timeout_multiplier=args.timeout_multiplier
-+    ).to_env()
- 
-     nose2_args = ["-v",
-                   "-N", str(args.testcases),
-@@ -142,15 +145,4 @@ def main():
- 
- 
- if __name__ == "__main__":
--    # python 3.14 changed default start method from fork to
--    # fork-server, which is not compatible with the nose2 setup
--    if multiprocessing.get_start_method(allow_none=True) != "fork":
--        multiprocessing.set_start_method("fork", force=True)
--        # set_start_method throws a RuntimeError if called more than
--        # once.
--        # Debian python3-nose2 0.15.1-2 includes a patch adding
--        # another set_start_method() call, so monkey patch it out to
--        # get rid of this
--        multiprocessing.set_start_method = lambda *args: None
--
-     sys.exit(main())
--- 
-2.53.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gU2h1YmhhbSwKCgpPbiBUaHUsIE1hciA1LCAyMDI2IGF0IDE6NTDigK9BTSBTaHViaGFt
+IENoYWtyYWJvcnR5CjxjaGFrcmFib3J0eXNodWJoYW02NkBnbWFpbC5jb20+IHdyb3RlOgo+Cj4g
+QWRkIHN1cHBvcnQgZm9yIHB6c3RkLCB0aGUgbXVsdGktdGhyZWFkZWQgaW1wbGVtZW50YXRpb24g
+b2YgenN0ZC4KPgo+IFRoZSBwenN0ZCBidWlsZCByZXF1aXJlcyBDKysgYW5kIHRocmVhZHMgc3Vw
+cG9ydC4gT24gc29tZSBhcmNoaXRlY3R1cmVzCj4gKGUuZy4sIE1pY3JvYmxhemUsIFNQQVJDKSwg
+aXQgYWxzbyByZXF1aXJlcyBsaW5raW5nIGFnYWluc3QgbGliYXRvbWljCj4gZHVlIHRvIHRoZSB1
+c2Ugb2YgYXRvbWljIG9wZXJhdGlvbnMuCj4KPiBFbnN1cmUgdGhhdCAtbGF0b21pYyBpcyBwYXNz
+ZWQgaW4gTERGTEFHUyBkdXJpbmcgYm90aCB0aGUgYnVpbGQgYW5kCj4gaW5zdGFsbCBwaGFzZXMu
+IENvbnNpc3RlbnRseSBwYXNzaW5nIExERkxBR1MgaXMgbmVjZXNzYXJ5IGJlY2F1c2UgdGhlCj4g
+cHpzdGQgTWFrZWZpbGUgcmUtbGlua3MgdGhlIGJpbmFyeSBkdXJpbmcgdGhlICdpbnN0YWxsJyB0
+YXJnZXQgZHVlIHRvCj4gaXRzIGRlcGVuZGVuY3kgb24gdGhlIHN0YXRpYyBsaWJyYXJ5Lgo+Cj4g
+Rml4ZXMgYnVpbGQgZmFpbHVyZXMgcmVwb3J0ZWQgd2l0aCBib290bGluLW1pY3JvYmxhemVlbC11
+Y2xpYmMgYW5kCj4gYm9vdGxpbi1zcGFyYy11Y2xpYmMgdG9vbGNoYWluczoKPiBQenN0ZC5jcHA6
+KC50ZXh0KzB4MTdlOCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gJ19fYXRvbWljX2NvbXBhcmVf
+ZXhjaGFuZ2VfMScKPiBQenN0ZC5jcHA6KC50ZXh0Ll9aTjVwenN0ZDE1QnVmZmVyV29ya1F1ZXVl
+M3BvcEVSTlNfNkJ1ZmZlckUpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvICdfX2F0b21pY19mZXRj
+aF9zdWJfNCcKPgo+IFNpZ25lZC1vZmYtYnk6IFNodWJoYW0gQ2hha3JhYm9ydHkgPGNoYWtyYWJv
+cnR5c2h1YmhhbTY2QGdtYWlsLmNvbT4KClJldmlld2VkLWJ5OiBKb3NlcGggS29ndXQgPGpvc2Vw
+aC5rb2d1dEBnbWFpbC5jb20+ClRlc3RlZC1ieTogSm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRA
+Z21haWwuY29tPgoKQnVpbGRzIGZvciBhbGwgbm9uLXNraXBwZWQgdG9vbGNoYWlucyB1c2VkIGJ5
+IHRlc3QtcGtnLgoKMzIgYnVpbGRzLCAyIHNraXBwZWQsIDAgYnVpbGQgZmFpbGVkLCAwIGxlZ2Fs
+LWluZm8gZmFpbGVkLCAwIHNob3ctaW5mbyBmYWlsZWQKClRlc3RlZCBjb21wcmVzc2luZyBhIGZp
+bGUgb24geDg2LTY0LgoKQmVzdCByZWdhcmRzLApKb3NlcGgKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
