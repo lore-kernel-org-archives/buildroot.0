@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D788FCC068
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5CFDFCC062
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E727F41EC8;
-	Fri,  6 Mar 2026 19:51:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D9F741EC9;
+	Fri,  6 Mar 2026 19:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdOgQIDc3pF6; Fri,  6 Mar 2026 19:51:16 +0000 (UTC)
+ id Nl8Dx2xF13gc; Fri,  6 Mar 2026 19:51:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA9CA41EC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03A2941EA1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826675;
-	bh=kgnJ2myYvxMsdILElJAXuJ7EBnwNB0lBwSENCVaiXCY=;
+	s=default; t=1772826677;
+	bh=/EPTZ8A/r0JOVWXjdxWD9em6N7e+rSsVIJfh3eLmXyE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lvda4sQxa/UUPh3TGqR+K6ib1CWd2E3J1rdy5J+vgMHrMxhD5TYrTEvOycHbdZ/iN
-	 +nrtWb2jITNSsrzqvN5SphPU9xR+5bhTcaV/By/dXwM1OxjGLaOcowMAb8/2yWMIRW
-	 i2F6NE4GlZQ9NnARd+VYeA7znBDns47OnGVqYqW09jSVQomAM4j2Csenj6Ov7fEjXI
-	 PQk5YrUxq3gXKdFu9wf3UbaHKYtzkpexYFlE8DfpJeJqME/VA+yie8N9aTehp1pT5r
-	 WF0Scl5mlelRyhFCBFeUD6gms5GOnorZEPuJ/XUhBr/MR7ZV6TZn+LrzYanxvue28W
-	 RMYh8Ju3Z8FQw==
+	b=r8HMDiQQmqisdMX1kYnIYMjSwYUIkkAqnVAtfAsFqXMVaJdFTMdZEnbYL1TjmxqOm
+	 eM1kaK7wsgShE+7ejIKSiuAJi4GUaBzT5YRNXypgnwyH2ex3Ci0B+jUNWjc6QrPfaA
+	 BExDDR4ZxRVc6FRLqreNNz1XaJKGCmsHllTHG2w3djBbjCV9/aJamnPf/PdlceHQY0
+	 aWwqXnpoMBmF2h6IAY8E0U62CkPKC5ut4HVmTZYe4/kiitOvnh6kSv4H8zKJydXO10
+	 mVn5bkzn8L1x5uZKffMys04OEWEfx1AdPNVoBRnh4V2LZOkr+AMb38Zkz3O4wsfThk
+	 CK3iMYSU/wu2Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA9CA41EC5;
-	Fri,  6 Mar 2026 19:51:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03A2941EA1;
+	Fri,  6 Mar 2026 19:51:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 03509223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:51:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E3CF25B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFD54613DF
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCD36613E2
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8dFrsaZ97OYW for <buildroot@buildroot.org>;
+ id vOvU1SP8QhQd for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:50:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BD64613EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E126F613E5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BD64613EA
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E126F613E5
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21519841E4; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+ id 027EE841E4; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:13:51 +0100
+Date: Fri, 6 Mar 2026 14:09:53 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 2ed5ee38069f01b24092a04de129ca326b37789b
-X-Git-Newrev: 8d1a742bb3b660f4f57253c6c118f01ff26dcbe6
+X-Git-Oldrev: 75b021969c4c8bd7187415a4a1a433cd175290fd
+X-Git-Newrev: b1ff64b8e8fbb8ad172e690eeba2b3df1d8b49fb
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195051.21519841E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/vim: security
- bump to v9.1.2148
+Message-Id: <20260306195051.027EE841E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/libvirt: fix
+ dependency of lxc support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,162 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8d1a742bb3b660f4f57253c6c118f01ff26dcbe6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b1ff64b8e8fbb8ad172e690eeba2b3df1d8b49fb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-For changes, see:
+Buildroot commit ed12e2fbed3d4298ebff9da54fe56b91fa75c41e in 2021 added
+BR2_PACKAGE_LIBVIRT_LXC which selects BR2_PACKAGE_LXC but did not add
+the dependency !BR2_TOOLCHAIN_USES_UCLIBC which was added to lxc in
+2019 by buildroot commit 63aad8a53e33e3fae4793e05662f47637e9e9bfc
+causing Kconfig warnings:
 
-  - https://github.com/vim/vim/compare/v9.1.2017...v9.1.2148
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_LXC
+  Depends on [n]: BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y]
+    && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 [=y]
+    && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_LIBVIRT_LXC [=y] && BR2_PACKAGE_LIBVIRT [=y]
+      && BR2_PACKAGE_LIBVIRT_DAEMON [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 [=y]
 
-Fixes the following vulnerabilities:
-
-- CVE-2026-25749:
-    Vim is an open source, command line text editor. Prior to version
-    9.1.2132, a heap buffer overflow vulnerability exists in Vim's tag
-    file resolution logic when processing the 'helpfile' option. The
-    vulnerability is located in the get_tagfname() function in src/tag.c.
-    When processing help file tags, Vim copies the user-controlled
-    'helpfile' option value into a fixed-size heap buffer of MAXPATHL + 1
-    bytes (typically 4097 bytes) using an unsafe STRCPY() operation
-    without any bounds checking. This issue has been patched in version
-    9.1.2132.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-25749
-  - https://github.com/vim/vim/commit/0714b15940b245108e6e9d7aa2260dd849a26fa9
-
-- CVE-2026-26269:
-    Vim is an open source, command line text editor. Prior to 9.1.2148, a
-    stack buffer overflow vulnerability exists in Vim's NetBeans
-    integration when processing the specialKeys command, affecting Vim
-    builds that enable and use the NetBeans feature. The Stack buffer
-    overflow exists in special_keys() (in src/netbeans.c). The while
-    (*tok) loop writes two bytes per iteration into a 64-byte stack buffer
-    (keybuf) with no bounds check. A malicious NetBeans server can
-    overflow keybuf with a single specialKeys command. The issue has been
-    fixed as of Vim patch v9.1.2148.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-26269
-  - https://github.com/vim/vim/commit/c5f312aad8e4179e437f81ad39a860cd0ef11970
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 95dad8f85c4ce2f6956492b868bc9eba6452a9bc)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 88d1fde405054b2f39a5a12531a3a50b32c254db)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...0001-src-Makefile-create-links-with-ln-sf.patch | 78 ----------------------
- package/vim/vim.hash                               |  2 +-
- package/vim/vim.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 80 deletions(-)
+ package/libvirt/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
-deleted file mode 100644
-index 54d423aacf..0000000000
---- a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 5686ef63f81fcac2ca6ec6e7160829b295ad4e79 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 28 Dec 2025 15:01:38 +0100
--Subject: [PATCH] src/Makefile: create links with ln -sf
--
--Running "make installlinks" twice towards the same destination
--directory will fail, as symlink will already exist. This is not really
--expected as "make install" is normally expected to work again and
--again towards the same destination directory.
--
--Fix this by using ln -sf.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/vim/vim/commit/6df5360691266b5eca49380e94f3e21fa48e5e0b
-----
-- src/Makefile | 24 ++++++++++++------------
-- 1 file changed, 12 insertions(+), 12 deletions(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 6fb1eb95e..39f798260 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -2746,40 +2746,40 @@ installvimdiff: $(DEST_BIN)/$(VIMDIFFTARGET)
-- installgvimdiff: $(DEST_BIN)/$(GVIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(EXTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EXTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EXTARGET)
-- 
-- $(DEST_BIN)/$(VIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIEWTARGET)
-- 
-- $(DEST_BIN)/$(GVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMTARGET)
-- 
-- $(DEST_BIN)/$(GVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIEWTARGET)
-- 
-- $(DEST_BIN)/$(RVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIMTARGET)
-- 
-- $(DEST_BIN)/$(RVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIEWTARGET)
-- 
-- $(DEST_BIN)/$(RGVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIMTARGET)
-- 
-- $(DEST_BIN)/$(RGVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIEWTARGET)
-- 
-- $(DEST_BIN)/$(VIMDIFFTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIMDIFFTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(GVIMDIFFTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMDIFFTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(EVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIMTARGET)
-- 
-- $(DEST_BIN)/$(EVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIEWTARGET)
-- 
-- # Create links for the manual pages with various names to vim.	This is only
-- # done when the links (or manpages with the same name) don't exist yet.
---- 
--2.52.0
--
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index f7c883b929..ecc41be702 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
-+sha256  f9ec31df8f1a78e130dd06c395e6626c2a8a8ec2705d8e7b7667bd3ecd499c6b  vim-9.1.2148.tar.gz
- sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
- sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index fa7d47d67d..9201587a8a 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+index 5664f69dd8..0f73128d09 100644
+--- a/package/libvirt/Config.in
++++ b/package/libvirt/Config.in
+@@ -89,12 +89,14 @@ comment "qemu needs a toolchain with gcc >= 8"
+ config BR2_PACKAGE_LIBVIRT_LXC
+ 	bool "lxc"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # lxc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # lxc
+ 	select BR2_PACKAGE_LXC
+ 	help
+ 	  Linux Container support
  
--VIM_VERSION = 9.1.2017
-+VIM_VERSION = 9.1.2148
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-comment "lxc needs a toolchain w/ gcc >= 4.7"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++comment "lxc needs a glibc or musl toolchain w/ gcc >= 4.7"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
++		|| BR2_TOOLCHAIN_USES_UCLIBC
+ 
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
