@@ -4,112 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1DF2FCC062
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C90FCC066
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA87C614A4;
-	Fri,  6 Mar 2026 19:53:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69A6061453;
+	Fri,  6 Mar 2026 19:53:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8qSQZgqbQR7m; Fri,  6 Mar 2026 19:53:42 +0000 (UTC)
+ id c1Jz5rMuEbmq; Fri,  6 Mar 2026 19:53:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C537B614C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F214C614CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826822;
-	bh=sbCjyW3MbowMwgRGErxjuqcvrEFyY/1kOArnOJUIzqo=;
+	s=default; t=1772826825;
+	bh=sqjWkmxZwhYRHonuK4t6LRhbtEhz2DZzOPnN1eDKicI=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=AzcCF6KYNELOCZ1zfYUr67pQNJn8j+nAALt+wFHzq1OuqDA6D0u66GuVQvZhYErlE
-	 I+EhaHQ2AbKqC4ojVl99pcOJZcsP7fOk4WRiRC4ce7P1sNhq3aUVH64e84yeOd4ofA
-	 ko0H4ghREdFOg+KWzjs93ueZDLU5g+N0/PtUd2u1a+BQ9WCcy/SSMsdDfizT5za8Ed
-	 ZBrvINCEc5NpXg6/2yZhpwb0MesrBdtDT8WVAGdusFaSmgpecX/eY3AowytKFYfYIu
-	 ZJBCfgv04zjZ8FClhJF+0v6RPMKmGPfPpDiKggMqeo9vFBTT10aqxAU2eXLS2rNhE2
-	 NrWolSVIYCICg==
+	b=Os7ZNC3qaPHJh3LlcMXDgSmExCu11tqtlTEpst/4FRVIGRzE+TEMbQ3ghNwn0xQGX
+	 4hdaUUnlB3BNCuFy+7mSlgoL2zmO9AynoQHffKfJU+k2zKRvc4ZrJb2DS/1mGF3qRD
+	 pQ4QMlUZZRhdv/Z5oXgAUB6LFSkUwSuI+8U/Xw/rSn8l+ule8cmdX7M7wjOslmsT2I
+	 DSs+b1FHeM306UmgH2jBXJ58fbEbgnDBqSy0z+t0L89BZS03K6nI+8dPyw4dUovrIZ
+	 criRDobydZBRxWxBG3g4sLWSZY4hgEFPwZajQxEfujc+NdnulOO3842A5qo65vtrSG
+	 o6HlwkZS4+uuw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C537B614C1;
-	Fri,  6 Mar 2026 19:53:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 26D7B169
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F214C614CB;
+	Fri,  6 Mar 2026 19:53:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 408E8223
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4AE783D75
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2686840455
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BovGJkf4pMyx for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:53:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zuhjrrOKVVqn for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:53:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB55F83D65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB55F83D65
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BB55F83D65
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:29 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-439bcec8613so4362633f8f.3
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:29 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C41934045B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C41934045B
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C41934045B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:30 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-48334ee0aeaso79823305e9.1
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826808; x=1773431608;
+ d=1e100.net; s=20230601; t=1772826809; x=1773431609;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=KVVJCboORGr11XQo8sZTzMKcRrT/2Y21qB8jbZk/9is=;
- b=n1w9ogi0D904G9UBo5ulBWQ97tDSjeI3Yz0Y589p3CaCKQEURACP+i6FiYionHgfeS
- I9T7c+kJg1g5z8yO0MQhBI8p8sVCebtC2s7fkJ990HaOnKF8ZwSuseeMiPTHLpEp/i9T
- niEBbKjB7KIWCQHe1cuD4K0YwpqrLrvwTNJV76AM4d471z6cJ8fEyKGBAvFyuHH6aPvM
- oBcNpS2BE1GqAvXpJO64TgwB4SJAmzrwpdol/1ajdPiWhu0LYriZlZJbTFrDK8wNYuqa
- ciT+XMhuQ5NuDC3y1Nwxpiyi0PKY7qpxZl4PsnlLuhDBXe19N3W51J9Mmpac64dGw5X7
- kWQg==
-X-Gm-Message-State: AOJu0Ywe/ksFAaPvv5Jc7+NpjIUqX8q6TPBw5CWOU3vfUzHl7BFT8sn6
- 4kj3jvILXUcE950vKkS7fQ4uKaD3lZc/UKpOSnFbyOrSoOb23FbPS8iF9bl1e8JucCX9QOrEqRO
- wSKU/
-X-Gm-Gg: ATEYQzyEzyvpUY96poUmIfAPAWF7625/vXHbw3FSWPPZR4cj9Pdvqv4MJsvy3Q+tDJc
- V/9qT4anTHLxLBtXaipp/dnTjxrM3XsoKF3132GXGBQYluaHjdWnqhF4xwfNVPZR9cyOrkp7vLX
- IgZcOF30T0XleQy5ITt5fqbKyPRSfFI6zwmFheRvBHqmVv5LBuj5tXvqJy8CjQvSvJMWKe1k27b
- vTj8/IETj/kb2aJMwyQ0/chtzD5FqvEUT7uxJ15RJPk0pY/3vDJB0DmE085mUrQHb6RuGDE1rvi
- +Hc4l53U5r02SJFtkmTckEBMADSdPf4MuAgRyt/wkqN7O4xuIGojfjpMAsjVlfe2x6NX9odFovi
- nsojuDxIIYeFowRCldXpmvaozzJ/x7u74UPiVqslZVa1yRK+za1q+x8cxRWk1ygmVKfk5GIKEuP
- rxEHjROFPMEdLKvch+piZMxyY8JA==
-X-Received: by 2002:a05:600c:8218:b0:480:69ae:f0e9 with SMTP id
- 5b1f17b1804b1-48526958b30mr68850545e9.16.1772826807707; 
- Fri, 06 Mar 2026 11:53:27 -0800 (PST)
+ bh=IJjLv6+UJOFmt3QwIncluM+p96mG7sAs2zxIeF0HZ3Q=;
+ b=koMSWXrTo689mT7ydARCvhpc9a+yPlC1ZDfrNxkNbrXTh9OGqKB6zRelccubbiRh/T
+ NxP07KrNYcJQfg4/VVtumi/TrIcB5lhrtRLWOqS7rlfAwhPo4TMFP7PaKVCifoZvWw04
+ HIBFhpqOFAwNgnCdeE3mQC1RGfROAjsi/jtgbQlM6cV6j797oPgjfvh0BfDvjqNN+w74
+ sXNsoE/3EVCFPVi0q9U0o9vf258kdN2xHoFibDEPFQrI846oNxUOKWP0+J2PKCZ0Mo0K
+ RilG4WI+tdmN0bi9wG7UaMC5xMe6pUWa/4Y3sDUqtVwyH9BVyETVWDlMHMFGMIN9EJPL
+ U5eg==
+X-Gm-Message-State: AOJu0Yzg1DbyIFWoMlOjYELZ/eYhS/EaDE4Owk4TfGcx1728DUhgTtCO
+ cempVAgLXzvUzck0AJgGVZGP73VJyLDyTmXHfT7J4vc0QPnr3xeXI2z9y+1FJtUYPHiVwJLyp3c
+ Rg0qi
+X-Gm-Gg: ATEYQzx6f0ZXU2/g7qYUbzRdwQ0x4SIQW7yDC7TzlHRrEDUv/yN4G1w2v82FyjyfS1l
+ BsDbreeP5Px9G4PR7MFv8hQVlegXH5VdIuW5BF4dviyx0caAYtzPb5/LirU3qFKAdT6mQIZP4NL
+ NwLfrh8s5qP8AViGv2j6uDCrkc48AIUwscJtP0FQzZXDldsynScbJU0aVZuwnrcMFpyq7cexCiK
+ jvmc9FwHwg7Tu4Kn1tlSP2x7HQBw4i9XfezBDXgzsEAdyopHjqIppGslRS8O/rljUn5ZmQIFRJm
+ kEPD9TpgPBZUYAXsB98XooLddW+gfyEju1otM+lSapBZTMcszLWSEJesSWz4qzEDb6GqicGhDtI
+ tkrn3EWUBj6U/WSuCrvkLH/V5qgZxV2Bn0fB9Q+yCHZaO7EIiFOTJnzQXey+4ghbZuRlTsJXt00
+ pAOkowu030LDNw4gZWAbUn47AeYw==
+X-Received: by 2002:a05:600c:1e2a:b0:480:69b6:dfed with SMTP id
+ 5b1f17b1804b1-4852695d16fmr55862385e9.24.1772826808554; 
+ Fri, 06 Mar 2026 11:53:28 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4851fb27a20sm263105855e9.9.2026.03.06.11.53.27
+ 5b1f17b1804b1-485276b75eesm48696145e9.14.2026.03.06.11.53.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:27 -0800 (PST)
+ Fri, 06 Mar 2026 11:53:28 -0800 (PST)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:26 +0100
-Message-ID: <20260306195327.8533-1-thomas.perale@mind.be>
+Date: Fri,  6 Mar 2026 20:53:27 +0100
+Message-ID: <20260306195327.8582-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260303081323.53405-3-thomas.perale@mind.be>
-References: <20260303081323.53405-3-thomas.perale@mind.be>
+In-Reply-To: <20260303103802.274517-1-thomas.perale@mind.be>
+References: <20260303103802.274517-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826808; x=1773431608; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826809; x=1773431609; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KVVJCboORGr11XQo8sZTzMKcRrT/2Y21qB8jbZk/9is=;
- b=hITJ+7Afo8oO+uNnZo9jgW5+PphALksjPL15JwOER165lqklCPEwoaYTTxGa756vRT
- C1XD2ZMsL0NDVhR77i9UPHO6uQNoSdZ8SO3t6Xx0ZOQbie23XmSgEXejjTgmh8FRjYPq
- mA8Iqut8MKqiGSm9T7o+R4CBea5HgbtIW1B3+3mfuqpdzGROL01k7lSWxa6xIxigDS//
- e+xzORcKSjaG8CeSpZoZ6HvmACJJ2G5V6MYDbh7DksReoz3HwNG3JlhUEJDIrPEMzPzW
- 7f1Jy7IotTpLhaqIA6+N/FhoAnwkcB5MIv1j4qLH4vFKHjiqeUIDjVDrkGeDKrty52z2
- E0DQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=IJjLv6+UJOFmt3QwIncluM+p96mG7sAs2zxIeF0HZ3Q=;
+ b=OxqcvHjcdRtMJ7OqvtKPKcWaE18Cvl0ILrpWjapdKjxFWpHxqktEM4KaWDgN8S577k
+ ZkoCphwUX0D3yg95HxXWrLNdIpi8IR/shy+NLZ00X+CuWk5SOT7R9I3EK/iKmsHoJf6W
+ 5xU19M8DxoIbGPDqPk6iNRqJG6vCbuUc+mRfMKGWZgFhPwpz+Vcb+mneIVME90KlVKVv
+ DLeHsNPaBndQ22uduz5napWwHTxvYT/avhFWQeHgS6mCZxWwJR/H6MgDh4gs3HyFHL4G
+ n2dJhCAI6Y+gL6iSwfB9Ba2az4qEa1D57tLBly9VpJ4ElpMFdF/GTCO1WVFgY39P34Eb
+ /Htg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hITJ+7Af
-Subject: Re: [Buildroot] [PATCH 3/4] package/graphicsmagick: add patch for
- CVE-2025-27796
+ header.a=rsa-sha256 header.s=google header.b=OxqcvHjc
+Subject: Re: [Buildroot] [PATCH 1/1] package/squid: add patch for
+ CVE-2025-62168
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,100 +131,269 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 In reply of:
 > Fixes the following vulnerability:
 > 
-> - CVE-2025-27796:
->     ReadWPGImage in WPG in GraphicsMagick before 1.3.46 mishandles palette
->     buffer allocation, resulting in out-of-bounds access to heap memory in
->     ReadBlob.
+> - CVE-2025-62168:
+>     Squid is a caching proxy for the Web. In Squid versions prior to 7.2,
+>     a failure to redact HTTP authentication credentials in error handling
+>     allows information disclosure. The vulnerability allows a script to
+>     bypass browser security protections and learn the credentials a
+>     trusted client uses to authenticate. This potentially allows a remote
+>     client to identify security tokens or credentials used internally by a
+>     web application using Squid for backend load balancing. These attacks
+>     do not require Squid to be configured with HTTP authentication. The
+>     vulnerability is fixed in version 7.2. As a workaround, disable debug
+>     information in administrator mailto links generated by Squid by
+>     configuring squid.conf with email_err_data off.
 > 
-> For more information, see
->   - https://www.cve.org/CVERecord?id=CVE-2025-27796
->   - https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/883ebf8cae6dfa5873d975fe3476b1a188ef3
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2025-62168
+>   - https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
+> 
+> The backport has been compared against debian patch [1].
+> 
+> [1] https://sources.debian.org/src/squid/6.13-2%2Bdeb13u1/debian/patches/CVE-2025-62168.patch
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  ...er-is-allocated-and-the-current-size.patch | 55 +++++++++++++++++++
->  package/graphicsmagick/graphicsmagick.mk      |  3 +
->  2 files changed, 58 insertions(+)
->  create mode 100644 package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
+>  ...2-Proxy-auth-data-visible-to-scripts.patch | 212 ++++++++++++++++++
+>  package/squid/squid.mk                        |   3 +
+>  2 files changed, 215 insertions(+)
+>  create mode 100644 package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
 > 
-> diff --git a/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch b/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
+> diff --git a/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
 > new file mode 100644
-> index 0000000000..8a98034833
+> index 0000000000..2e5c67c8c1
 > --- /dev/null
-> +++ b/package/graphicsmagick/0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
-> @@ -0,0 +1,55 @@
-> +# HG changeset patch
-> +# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-> +# Date 1734634653 21600
-> +#      Thu Dec 19 12:57:33 2024 -0600
-> +# Node ID 883ebf8cae6dfa5873d975fe3476b1a188ef3f9f
-> +# Parent  cf7cd5ebabb0ca40204de7539f4fb9ae02121958
-> +ReadWPGImage(): Assure that palette buffer is allocated and the current size.
+> +++ b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
+> @@ -0,0 +1,212 @@
+> +From 0951a0681011dfca3d78c84fd7f1e19c78a4443f Mon Sep 17 00:00:00 2001
+> +From: Amos Jeffries <yadij@users.noreply.github.com>
+> +Date: Sat, 11 Oct 2025 16:33:02 +1300
+> +Subject: [PATCH] Bug 3390: Proxy auth data visible to scripts (#2249)
 > +
-> +CVE: CVE-2025-27796
-> +Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/883ebf8cae6dfa5873d975fe3476b1a188ef3f9f
-> +[thomas: remove changelog and binary]
+> +Original changes to redact credentials from error page %R code
+> +expansion output was incomplete. It missed the parse failure
+> +case where ErrorState::request_hdrs raw buffer contained
+> +sensitive information.
+> +
+> +Also missed was the %W case where full request message headers
+> +were generated in a mailto link. This case is especially
+> +problematic as it may be delivered over insecure SMTP even if
+> +the error was secured with HTTPS.
+> +
+> +After this change:
+> +* The HttpRequest message packing code for error pages is de-duplicated
+> +  and elides authentication headers for both %R and %W code outputs.
+> +* The %R code output includes the CRLF request message terminator.
+> +* The email_err_data directive causing advanced details to be added to
+> +  %W mailto links is disabled by default.
+> +
+> +Also redact credentials from generated TRACE responses.
+> +
+> +---------
+> +
+> +Co-authored-by: Alex Rousskov <rousskov@measurement-factory.com>
+> +
+> +CVE: CVE-2025-62168
+> +Upstream: https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
+> +[thomas: remove release note, backport errorpage.cc]
 > +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/HttpRequest.cc                  |  6 +++---
+> + src/HttpRequest.h                   |  2 +-
+> + src/cf.data.pre                     |  8 +++++++-
+> + src/client_side_reply.cc            | 14 +++++++-------
+> + src/errorpage.cc                    | 17 ++++-------------
+> + src/errorpage.h                     |  1 -
+> + src/tests/stub_HttpRequest.cc       |  2 +-
+> + 8 files changed, 26 insertions(+), 27 deletions(-)
 > +
-> +diff --git a/coders/wpg.c b/coders/wpg.c
-> +--- a/coders/wpg.c
-> ++++ b/coders/wpg.c
-> +@@ -1704,28 +1704,23 @@
-> +                 ThrowReaderException(CorruptImageError,InvalidColormapIndex,image);
-> +               }
+> +diff --git a/src/HttpRequest.cc b/src/HttpRequest.cc
+> +index cd7ee71d4af..c6ed5bee45d 100644
+> +--- a/src/HttpRequest.cc
+> ++++ b/src/HttpRequest.cc
+> +@@ -341,7 +341,7 @@ HttpRequest::swapOut(StoreEntry * e)
 > + 
-> +-              if(pPalette!=NULL &&
-> +-                 PaletteAllocBytes < 4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries))
-> +-              {
-> +-                MagickFreeResourceLimitedMemory(pPalette);
-> +-                PaletteAllocBytes = 0;
-> +-              }
-> ++              /* Assure that buffer is allocated and the current size */
-> ++              if (PaletteAllocBytes != Max(4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries),4*256))
-> ++                {
-> ++                  PaletteAllocBytes = Max(4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries),4*256);
-> ++                  MagickReallocateResourceLimitedMemory(unsigned char *,pPalette,PaletteAllocBytes);
-> ++                }
-> +               if(pPalette==NULL)
-> +-              {
-> +-                PaletteItems = WPG_Palette.NumOfEntries;
-> +-                PaletteAllocBytes = 4*(WPG_Palette.StartIndex+WPG_Palette.NumOfEntries);
-> +-                if(PaletteAllocBytes < 4*256) PaletteAllocBytes = 4*256;
-> +-                pPalette = MagickAllocateResourceLimitedMemory(unsigned char *,(size_t)PaletteAllocBytes);
-> +-                if(pPalette==NULL)
-> +-                    ThrowReaderException(ResourceLimitError,MemoryAllocationFailed,image);
-> +-                for(i=0; i<=255; i++)
-> ++                ThrowReaderException(ResourceLimitError,MemoryAllocationFailed,image);
+> + /* packs request-line and headers, appends <crlf> terminator */
+> + void
+> +-HttpRequest::pack(Packable * p) const
+> ++HttpRequest::pack(Packable * const p, const bool maskSensitiveInfo) const
+> + {
+> +     assert(p);
+> +     /* pack request-line */
+> +@@ -349,8 +349,8 @@ HttpRequest::pack(Packable * p) const
+> +                SQUIDSBUFPRINT(method.image()), SQUIDSBUFPRINT(url.path()),
+> +                http_ver.major, http_ver.minor);
+> +     /* headers */
+> +-    header.packInto(p);
+> +-    /* trailer */
+> ++    header.packInto(p, maskSensitiveInfo);
+> ++    /* indicate the end of the header section */
+> +     p->append("\r\n", 2);
+> + }
+> + 
+> +diff --git a/src/HttpRequest.h b/src/HttpRequest.h
+> +index 6d369029322..28dc4daf99d 100644
+> +--- a/src/HttpRequest.h
+> ++++ b/src/HttpRequest.h
+> +@@ -206,7 +206,7 @@ class HttpRequest: public Http::Message
+> + 
+> +     void swapOut(StoreEntry * e);
+> + 
+> +-    void pack(Packable * p) const;
+> ++    void pack(Packable * p, bool maskSensitiveInfo = false) const;
+> + 
+> +     static void httpRequestPack(void *obj, Packable *p);
+> + 
+> +diff --git a/src/cf.data.pre b/src/cf.data.pre
+> +index 0a73020e111..2dce65a4d0a 100644
+> +--- a/src/cf.data.pre
+> ++++ b/src/cf.data.pre
+> +@@ -8941,12 +8941,18 @@ NAME: email_err_data
+> + COMMENT: on|off
+> + TYPE: onoff
+> + LOC: Config.onoff.emailErrData
+> +-DEFAULT: on
+> ++DEFAULT: off
+> + DOC_START
+> + 	If enabled, information about the occurred error will be
+> + 	included in the mailto links of the ERR pages (if %W is set)
+> + 	so that the email body contains the data.
+> + 	Syntax is <A HREF="mailto:%w%W">%w</A>
 > ++
-> ++              PaletteItems = WPG_Palette.NumOfEntries;
-> ++              for(i=0; i<=255; i++)
-> +                 {
-> +                   pPalette[4*i] = WPG1_Palette[i].Red;
-> +                   pPalette[4*i+1] = WPG1_Palette[i].Green;
-> +                   pPalette[4*i+2] = WPG1_Palette[i].Blue;
-> +                   pPalette[4*i+3] = OpaqueOpacity;
-> +                 }
-> +-              }
-> +               if(ReadBlob(image,(size_t) PaletteItems*4,pPalette+((size_t)4*WPG_Palette.StartIndex)) != (size_t) PaletteItems*4)
-> +               {
-> +                 MagickFreeResourceLimitedMemory(pPalette);
-> diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-> index 6c2885b7d8..e329e51b70 100644
-> --- a/package/graphicsmagick/graphicsmagick.mk
-> +++ b/package/graphicsmagick/graphicsmagick.mk
-> @@ -26,6 +26,9 @@ GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
->  # 0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
->  GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-32460
+> ++	SECURITY WARNING:
+> ++		Request headers and other included facts may contain
+> ++		sensitive information about transaction history, the
+> ++		Squid instance, and its environment which would be
+> ++		unavailable to error recipients otherwise.
+> + DOC_END
+> + 
+> + NAME: deny_info
+> +diff --git a/src/client_side_reply.cc b/src/client_side_reply.cc
+> +index d73bf3f99f6..fc2feccf802 100644
+> +--- a/src/client_side_reply.cc
+> ++++ b/src/client_side_reply.cc
+> +@@ -94,7 +94,7 @@ clientReplyContext::clientReplyContext(ClientHttpRequest *clientContext) :
+> + void
+> + clientReplyContext::setReplyToError(
+> +     err_type err, Http::StatusCode status, char const *uri,
+> +-    const ConnStateData *conn, HttpRequest *failedrequest, const char *unparsedrequest,
+> ++    const ConnStateData *conn, HttpRequest *failedrequest, const char *,
+> + #if USE_AUTH
+> +     Auth::UserRequest::Pointer auth_user_request
+> + #else
+> +@@ -104,9 +104,6 @@ clientReplyContext::setReplyToError(
+> + {
+> +     auto errstate = clientBuildError(err, status, uri, conn, failedrequest, http->al);
+> + 
+> +-    if (unparsedrequest)
+> +-        errstate->request_hdrs = xstrdup(unparsedrequest);
+> +-
+> + #if USE_AUTH
+> +     errstate->auth_user_request = auth_user_request;
+> + #endif
+> +@@ -995,11 +992,14 @@ clientReplyContext::traceReply()
+> +     triggerInitialStoreRead();
+> +     http->storeEntry()->releaseRequest();
+> +     http->storeEntry()->buffer();
+> ++    MemBuf content;
+> ++    content.init();
+> ++    http->request->pack(&content, true /* hide authorization data */);
+> +     const HttpReplyPointer rep(new HttpReply);
+> +-    rep->setHeaders(Http::scOkay, nullptr, "text/plain", http->request->prefixLen(), 0, squid_curtime);
+> ++    rep->setHeaders(Http::scOkay, nullptr, "message/http", content.contentSize(), 0, squid_curtime);
+> ++    rep->body.set(SBuf(content.buf, content.size));
+> +     http->storeEntry()->replaceHttpReply(rep);
+> +-    http->request->swapOut(http->storeEntry());
+> +-    http->storeEntry()->complete();
+> ++    http->storeEntry()->completeSuccessfully("traceReply() stored the entire response");
+> + }
+> + 
+> + #define SENDING_BODY 0
+> +diff --git a/src/errorpage.cc b/src/errorpage.cc
+> +index d7a588d099f..06046de9ebb 100644
+> +--- a/src/errorpage.cc
+> ++++ b/src/errorpage.cc
+> +@@ -792,7 +792,6 @@ ErrorState::~ErrorState()
+> + {
+> +     safe_free(redirect_url);
+> +     safe_free(url);
+> +-    safe_free(request_hdrs);
+> +     wordlistDestroy(&ftp.server_msg);
+> +     safe_free(ftp.request);
+> +     safe_free(ftp.reply);
+> +@@ -850,7 +849,7 @@ ErrorState::Dump(MemBuf * mb)
+> +                     SQUIDSBUFPRINT(request->url.path()),
+> +                     AnyP::ProtocolType_str[request->http_ver.protocol],
+> +                     request->http_ver.major, request->http_ver.minor);
+> +-        request->header.packInto(&str);
+> ++        request->header.packInto(&str, true /* hide authorization data */);
+> +     }
+> + 
+> +     str.append("\r\n", 2);
+> +@@ -1112,18 +1111,10 @@ ErrorState::compileLegacyCode(Build &build)
+> +                 p = "[no request]";
+> +             break;
+> +         }
+> +-        if (request) {
+> +-            mb.appendf(SQUIDSBUFPH " " SQUIDSBUFPH " %s/%d.%d\n",
+> +-                       SQUIDSBUFPRINT(request->method.image()),
+> +-                       SQUIDSBUFPRINT(request->url.path()),
+> +-                       AnyP::ProtocolType_str[request->http_ver.protocol],
+> +-                       request->http_ver.major, request->http_ver.minor);
+> +-            request->header.packInto(&mb, true); //hide authorization data
+> +-        } else if (request_hdrs) {
+> +-            p = request_hdrs;
+> +-        } else {
+> ++        else if (request)
+> ++            request->pack(&mb, true /* hide authorization data */);
+> ++        else
+> +             p = "[no request]";
+> +-        }
+> +         break;
+> + 
+> +     case 's':
+> +diff --git a/src/errorpage.h b/src/errorpage.h
+> +index abca4a17d7b..297b306978d 100644
+> +--- a/src/errorpage.h
+> ++++ b/src/errorpage.h
+> +@@ -194,7 +194,6 @@ class ErrorState
+> +         MemBuf *listing = nullptr;
+> +     } ftp;
+> + 
+> +-    char *request_hdrs = nullptr;
+> +     char *err_msg = nullptr; /* Preformatted error message from the cache */
+> + 
+> +     AccessLogEntryPointer ale; ///< transaction details (or nil)
+> +diff --git a/src/tests/stub_HttpRequest.cc b/src/tests/stub_HttpRequest.cc
+> +index 495597d9a1b..48a0f1ce03e 100644
+> +--- a/src/tests/stub_HttpRequest.cc
+> ++++ b/src/tests/stub_HttpRequest.cc
+> +@@ -45,7 +45,7 @@ bool HttpRequest::expectingBody(const HttpRequestMethod &, int64_t &) const STUB
+> + bool HttpRequest::bodyNibbled() const STUB_RETVAL(false)
+> + int HttpRequest::prefixLen() const STUB_RETVAL(0)
+> + void HttpRequest::swapOut(StoreEntry *) STUB
+> +-void HttpRequest::pack(Packable *) const STUB
+> ++void HttpRequest::pack(Packable *, bool) const STUB
+> + void HttpRequest::httpRequestPack(void *, Packable *) STUB
+> + HttpRequest * HttpRequest::FromUrl(const SBuf &, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
+> + HttpRequest * HttpRequest::FromUrlXXX(const char *, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
+> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+> index d445f005b7..c031f1aa03 100644
+> --- a/package/squid/squid.mk
+> +++ b/package/squid/squid.mk
+> @@ -15,6 +15,9 @@ SQUID_SELINUX_MODULES = apache squid
+>  # 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+>  SQUID_IGNORE_CVES += CVE-2025-59362
 >  
-> +# 0003-Assure-that-palette-buffer-is-allocated-and-the-current-size.patch
-> +GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27796
+> +# 0002-Proxy-auth-data-visible-to-scripts.patch
+> +SQUID_IGNORE_CVES += CVE-2025-62168
 > +
->  GRAPHICSMAGICK_INSTALL_STAGING = YES
->  GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
->  
+>  SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
+>  	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+>  SQUID_CONF_ENV = \
 > -- 
 > 2.53.0
 > 
