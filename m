@@ -4,111 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 397B7FCC068
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CAEFCC067
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2759420AE;
-	Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC75342134;
+	Fri,  6 Mar 2026 19:53:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GqTwLzD2Qq4h; Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
+ id wncmZvBDzn4k; Fri,  6 Mar 2026 19:53:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9457F42118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7CC642118
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826807;
-	bh=AlC2OsD4tB49jPxGjPGmN08gnSAqr9c6tDaLA/UO6HI=;
+	s=default; t=1772826809;
+	bh=UjKi1jC+ZIomUV1iBeyVhBEMa6uZlyF6bED4zxoVHDg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=iNYnRh7RCbrl8tys4GIg4IPWldgsm2aqKSjGQnc8He/aY4sRBeCbdgTDu9jHbbGus
-	 +SsvuD6raVrokstBesmOd4BivUU7c1LYS0i5lm5Tculc4OaB4uyMdXodzybIYsD4Uq
-	 XcjqpXcbSB58wY/jcFUPII7OlCY1Y+7NQhcZYvd8Mc3m5EzoSm132ryBR5xAn5MeuH
-	 ARW13NXgKcTYjSU4/1LoFq2GhcfOzclX1uyad+BMT0o/xNZynYM93bsi+cYVM4eTym
-	 Kh651Yvmjn7R2lGG4vUNxoLl/65kDE5bWyOSTjIkN8oVusY448VuSfvo9rvnGlq8xN
-	 Ou+QukBa7wHaQ==
+	b=djaSexzlMVaqCwZqUGj5tBJEEQrXvNkzG++V15bFrjhc3S6smpyC5iHZJaJ4a5A4J
+	 TKXiSgtrvhsWjZMA1gLozECdDIHwyRqovrKyGyj8WifHRxRn/KYUMNpdI/D3hUWdxM
+	 c9dveVW+pBCIEwJp3mtaTT5kizknJxGwAAYMua8n3V1BAzFmd3TeKbMV7kAotrpuDh
+	 NTS6t79Ww0K65Lg8ngirmM8t62Wf8fMDRb9A8AffqI0DP52/7wMtLoF1Ku1qGD1GwI
+	 I0xfzBwoGmmtHPVzCMvdaSqI1+pcWFzNVhr/BIh0lGiR37805Pg/0WIfy3NlRgODln
+	 /KwTRde0ZbUHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9457F42118;
-	Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03534169
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7CC642118;
+	Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 701C6223
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F222641E5A
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE74A83D56
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XAprc8wagvMW for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:53:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Js1krdGNoW1E for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0487842085
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0487842085
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0487842085
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:14 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4852afd42ceso3873375e9.2
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:14 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D331783D75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D331783D75
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D331783D75
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:19 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-48378136adcso57543895e9.1
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826793; x=1773431593;
+ d=1e100.net; s=20230601; t=1772826798; x=1773431598;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qP5P4UGJz2atWYGE5r1vV5zbnuJXfxdwIxtwnP8YcJc=;
- b=D+IdQH7HUqAMj8PBSHtokOgPGakcPTALvbJ+x1UjMZD67u99ylSCNTZzqSZ/+6DTwi
- MbrgOvtLOVoIUMLc9sZE+1P7jismmArymwJuhe557iGKz/rmEC5Q8XQxUz8tiX74mPyL
- XFcbdWENgLBf1m/FNBY1P9bkb2qnenKH6iq98eFhC6F2Qm4HVX+a+6RHNmCMP4ItKxWT
- TTbg8/cUqNj3XEB1f56vDQsPna9pWINGgU2OHFOFw1Emmn+/BdseVtPnD7XIuVDeExd2
- PQSXcthoCEwBo1/hOSZPDljNz1RyqKvygd4lN2Iw72gsbFVKW8UflQbArQjz8sJz9phf
- Mgkw==
-X-Gm-Message-State: AOJu0Yyiu3M6vRPn0sNGdAssmScYttkbSbdKeqTSCTamHexPGlcjzipi
- FClUijjONuf6c7aJTWvqym3doGrGWvCFcJDYZoEGYPI4GK10dEZX4my6AvFmfoCKMkP4e/T5HqR
- x55fO
-X-Gm-Gg: ATEYQzz+7gmrFsFccKiSAYZIhJJmDswTvQ8B6xeO5wWxwsLXSKR69syI5OQgGrIRNCH
- eK9ESHLSyMddHEMeZu95s3Eeu5INF8G1uT+T/5/MI+UEVjVk361C3dsUzdJRDX9rowKdtCGnPaV
- b8gkwJRCc07eRKKq6IhGEGHCk452LJCU9KHtb9pLHWlk+GjUhfHLoYvo5CzzSLSF1S72SQ669oo
- 03riyxrqYmprj2O2KqCt0YkHZATIDelfAEEpqwBXChV1CyfYhIhJcGYHH3gm56InoTBYKv0QgUa
- bKdAJdiJlLg6ugPFnp1apSiWjCE9sbZSaPNLjKCgSfSyn9S0gqbMmxaGeCzjs1hgApgEgfh3OQi
- EoaIjkogpaxkv0/H88pVKpopa/wXixBI/lFrPOld0/DQ+6YV1qLCN0sSZaa/i/nGatah6gxK+1d
- G/geSL9y4oKeHQF+s=
-X-Received: by 2002:a05:600c:c10d:b0:485:2af3:3f8d with SMTP id
- 5b1f17b1804b1-4852af34027mr18879565e9.14.1772826792914; 
- Fri, 06 Mar 2026 11:53:12 -0800 (PST)
+ bh=hepprZ5d/7OvVr0t46ar4SSyUOOxMAE1uJ3d7+ynukM=;
+ b=Vgsq2E8UkpCpanKlsOmfyOr2DSlKuaDxTnKowdc3+NhyMEP2uvmXf9Z5aFJXWqUS//
+ JbTMGI1xLiqJ5BHUko7xk+CC1GdjGF7Q2gElrV8uu5k5un+CfUgWrYjfE0EDlOnuDkck
+ DdkJtZp0SyNbwYdbnpRNkW8qYxG1DpOnCKj6rtgKr1SJIG0FIEHZB73FAhlk02ANAicw
+ 5o7puVDxM3VIF+CUf2EMHh95VhpyTFP9nnjJRt+hSSP43m8SU6XorQ+hr/pyeQw4f7wr
+ RGH3RKp8RiiA/ZMXndebiivApBRO9mfzoioFLOtJYnmYbHnw2PGJY+FrXzzBkCx3HRs2
+ GQYQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCU+LYJ08hk6nZLfHYHZgI11toTJilxq7zi5jOsCW1hCMK2LVn3gZiTFMidpEFC/YjhViGnXhT/ixG0=@buildroot.org
+X-Gm-Message-State: AOJu0Yz8qXBDKYQZaQ+Ta8KQb06TfIFviKAz7OqSKMI34rr1YOkPZTwB
+ Bx6PWWOgS2H270mJiKk6MScayxs1fBkoz9xp2nmujoyzV1nJjVPudDD5gGdrqZWHTTruy+JBrmg
+ +HsM4
+X-Gm-Gg: ATEYQzxY18syDO41sKn9C+hOVqjs+q3XszTAUKEScPMrQX13Fo6FgMndBrJbbtKQBTq
+ jfCfm6U57A0D/IYa6QWTkSleGPbOzEcRsAKJ4dPgHviRjLn+y/swyrAZaBhecYTm5De5YhzZaKS
+ /9rwyTLYvFo9XY7rcxWQFXWOAuKYMZsPWRoCIVowCeZtgG/k8Z47JbRYQ57TgvzL5SRUDNAl/c0
+ SEYwhASBUWeXzi+ReqDsOBHSiiFwR12hPj2EfPu6sWp0xHByZoaao95Le3zUiJsxRImDMRxylll
+ mx24BMpChMdAsfswah378vVr4MQvj5rgo2kbvituhL3VbSyRYoa4Fxq2HrWYk4fbYr9MNrUiwU4
+ dGGUfTqn6sz60n8cdq5YFGEIw/Gq6KUFVQay7fCuzmbf35tmleDak2qXdjNU2Z8rEw1GlZhiGgn
+ cT7AgiG5lm51d1r7A=
+X-Received: by 2002:a05:600c:548b:b0:477:2f7c:314f with SMTP id
+ 5b1f17b1804b1-485269306b5mr59184915e9.10.1772826797940; 
+ Fri, 06 Mar 2026 11:53:17 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4852767d8e4sm53361435e9.2.2026.03.06.11.53.12
+ ffacd0b85a97d-439dadac2a7sm6032198f8f.15.2026.03.06.11.53.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:12 -0800 (PST)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:12 +0100
-Message-ID: <20260306195312.7802-1-thomas.perale@mind.be>
+ Fri, 06 Mar 2026 11:53:17 -0800 (PST)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  6 Mar 2026 20:53:17 +0100
+Message-ID: <20260306195317.8067-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260228201547.84699-1-thomas.perale@mind.be>
-References: <20260228201547.84699-1-thomas.perale@mind.be>
+In-Reply-To: <20260301193708.3268222-1-bernd@kuhls.net>
+References: <20260301193708.3268222-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826793; x=1773431593; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826798; x=1773431598; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qP5P4UGJz2atWYGE5r1vV5zbnuJXfxdwIxtwnP8YcJc=;
- b=S7g++joYYnBjVFykJYz5rQCt1AadiCysP7dJURx8ZwPnTTPwQiMEQeklZFFDvvCP6h
- 9rvVGV0c19e0alChbLMaeZzuy1BPvR0T2n68ueZvXhXUFneCrTxDgH8L1I23JcGEFn5f
- KevY9g1K0bidjy7vKZ9sAbjeK1a4ZT8RAYH967YeZ8KlI/aKY0p5BTBIU7IaYigVOxU0
- x3PYv7EEqrFA7xcQyy/quYY8hEe8kpXYwXGY6dKJn8ok4rvoNZUZN/kYNsZsedmAY8pU
- Q9pnToAT98WfCPk21N4MGT/H6FAQ3mZjblcDfJG3EIVOVUkdzA2DNGLMj+vbEdWYCaDF
- Um6Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hepprZ5d/7OvVr0t46ar4SSyUOOxMAE1uJ3d7+ynukM=;
+ b=ZPSGf0pizGh6VA3trQi49pHYGsjar6W7sf4+oO7HyWIAn3kMOt5g9NjKqikt7VFQbF
+ 9LWXAuj7nDeykl4ZnjWV/gk3ZcSqGYG56moUaYcXCbavomr98mbszFol5QZgwsHYMHvc
+ TGykq7Y65Z0WJqjcIuutfd8DQKo0piDBn/VC/jWaRWtN8BCFYTG1OjMHGjWvVTPdghBo
+ AkfjF7exAf1TbhsUWLJnG0iAsAhwf/c6bTWDBJsYBZrDBWQk094x29rNA4lZbAkKo4Kw
+ BX3NkTKi2sZPfA1i8s5WCqszbYcbIdcuy9AxdAhEMAZhEZjjyiiKc9rY/NdHD6cs9t4i
+ EIkg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=S7g++joY
-Subject: Re: [Buildroot] [PATCH] package/mupdf: add patch for CVE-2026-25556
+ header.a=rsa-sha256 header.s=google header.b=ZPSGf0pi
+Subject: Re: [Buildroot] [PATCH 1/1] package/libvirt: fix dependency of lxc
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,110 +132,51 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerability:
+> Buildroot commit ed12e2fbed3d4298ebff9da54fe56b91fa75c41e in 2021 added
+> BR2_PACKAGE_LIBVIRT_LXC which selects BR2_PACKAGE_LXC but did not add
+> the dependency !BR2_TOOLCHAIN_USES_UCLIBC which was added to lxc in
+> 2019 by buildroot commit 63aad8a53e33e3fae4793e05662f47637e9e9bfc
+> causing Kconfig warnings:
 > 
-> - CVE-2026-25556:
->     MuPDF versions 1.23.0 through 1.27.0 contain a double-free
->     vulnerability in fz_fill_pixmap_from_display_list() when an exception
->     occurs during display list rendering. The function accepts a caller-
->     owned fz_pixmap pointer but incorrectly drops the pixmap in its error
->     handling path before rethrowing the exception. Callers (including the
->     barcode decoding path in fz_decode_barcode_from_display_list) also
->     drop the same pixmap in cleanup, resulting in a double-free that can
->     corrupt the heap and crash the process. This issue affects
->     applications that enable and use MuPDF barcode decoding and can be
->     triggered by processing crafted input that causes a rendering-time
->     error while decoding barcodes.
+> WARNING: unmet direct dependencies detected for BR2_PACKAGE_LXC
+>   Depends on [n]: BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y]
+>     && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 [=y]
+>     && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=y]
+>   Selected by [y]:
+>   - BR2_PACKAGE_LIBVIRT_LXC [=y] && BR2_PACKAGE_LIBVIRT [=y]
+>       && BR2_PACKAGE_LIBVIRT_DAEMON [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 [=y]
 > 
-> For more information, see
->   - https://www.cve.org/CVERecord?id=CVE-2026-25556
->   - https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  ...-incorrect-error-case-free-of-pixmap.patch | 53 +++++++++++++++++++
->  package/mupdf/mupdf.mk                        |  3 ++
->  2 files changed, 56 insertions(+)
->  create mode 100644 package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
+>  package/libvirt/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
-> new file mode 100644
-> index 0000000000..f78c429cef
-> --- /dev/null
-> +++ b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
-> @@ -0,0 +1,53 @@
-> +From d4743b6092d513321c23c6f7fe5cff87cde043c1 Mon Sep 17 00:00:00 2001
-> +From: Robin Watts <Robin.Watts@artifex.com>
-> +Date: Mon, 12 Jan 2026 19:08:56 +0000
-> +Subject: Bug 709029: Fix incorrect error-case free of pixmap.
-> +
-> +Don't free a pixmap we don't own!
-> +
-> +CVE: CVE-2026-25556
-> +Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + source/fitz/util.c | 15 +++++++++------
-> + 1 file changed, 9 insertions(+), 6 deletions(-)
-> +
-> +diff --git a/source/fitz/util.c b/source/fitz/util.c
-> +index 7710124cc..90226a5c1 100644
-> +--- a/source/fitz/util.c
-> ++++ b/source/fitz/util.c
-> +@@ -119,7 +119,15 @@ fz_new_pixmap_from_display_list_with_separations(fz_context *ctx, fz_display_lis
-> + 	else
-> + 		fz_clear_pixmap_with_value(ctx, pix, 0xFF);
-> +
-> +-	return fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
-> ++	fz_try(ctx)
-> ++		fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
-> ++	fz_catch(ctx)
-> ++	{
-> ++		fz_drop_pixmap(ctx, pix);
-> ++		fz_rethrow(ctx);
-> ++	}
-> ++
-> ++	return pix;
-> + }
-> +
-> + fz_pixmap *
-> +@@ -136,14 +144,9 @@ fz_fill_pixmap_from_display_list(fz_context *ctx, fz_display_list *list, fz_matr
-> + 		fz_close_device(ctx, dev);
-> + 	}
-> + 	fz_always(ctx)
-> +-	{
-> + 		fz_drop_device(ctx, dev);
-> +-	}
-> + 	fz_catch(ctx)
-> +-	{
-> +-		fz_drop_pixmap(ctx, pix);
-> + 		fz_rethrow(ctx);
-> +-	}
-> +
-> + 	return pix;
-> + }
-> +--
-> +cgit v1.2.3
-> +
-> diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-> index fe4f3e6756..c538b9bec8 100644
-> --- a/package/mupdf/mupdf.mk
-> +++ b/package/mupdf/mupdf.mk
-> @@ -27,6 +27,9 @@ MUPDF_IGNORE_CVES = \
->  	CVE-2024-24258 \
->  	CVE-2024-24259
+> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+> index 5664f69dd8..0f73128d09 100644
+> --- a/package/libvirt/Config.in
+> +++ b/package/libvirt/Config.in
+> @@ -89,12 +89,14 @@ comment "qemu needs a toolchain with gcc >= 8"
+>  config BR2_PACKAGE_LIBVIRT_LXC
+>  	bool "lxc"
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # lxc
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # lxc
+>  	select BR2_PACKAGE_LXC
+>  	help
+>  	  Linux Container support
 >  
-> +# 0001-Fix-incorrect-error-case-free-of-pixmap.patch
-> +MUPDF_IGNORE_CVES += CVE-2026-25556
-> +
->  # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
->  # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
->  MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+> -comment "lxc needs a toolchain w/ gcc >= 4.7"
+> -	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> +comment "lxc needs a glibc or musl toolchain w/ gcc >= 4.7"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+> +		|| BR2_TOOLCHAIN_USES_UCLIBC
+>  
+>  endif
+>  
 > -- 
-> 2.53.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
