@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0656EFCC068
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B65FCC067
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D081C41FB4;
-	Fri,  6 Mar 2026 19:52:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4553E41FE2;
+	Fri,  6 Mar 2026 19:52:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cXLlAUQYDP4x; Fri,  6 Mar 2026 19:52:52 +0000 (UTC)
+ id nO55gXBlhTlt; Fri,  6 Mar 2026 19:52:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1D0441FC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E6541FD2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826772;
-	bh=DT0bF5s64ieAfrkxl0aoisPrfP8yD0QFuLR88cmJjYw=;
+	s=default; t=1772826773;
+	bh=V7CskEE8ZSi0tZu9J1tpfM4kdqz5u1ovw9SCD9+/LtM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jt/IlNIWMSX4DhdZ8QVojpWS7x35xk6MS9LX6soyyKJa6Ux/4WxYGN9V1qmaB/266
-	 O+xu3RNNZSwYKKQDT0yM9ofhH5HFy89xdQjvP7EFKKdWjkJfziIR8e40vtKPcD1wZz
-	 TxzcrAVmjJG69+JEishWmD98XDFuwblNch8oQe1VBVPNlXlDBLV7kQU4eFuEsR7XZe
-	 WkKwCrp3fSEfz8GT5qmI0xdVezyRl4FxvJbcvzA9TjLTo/LT0kqJGsDBwTZ0Hw9dQ8
-	 bh0h1Zdeq80LVul0Q2PaLoirzs28CoTxJ+ZV7pOE1wcewd3gh6AcjmuiBvKDdspsDb
-	 lJwkryznFz4zg==
+	b=QCnmEoGyN8IrOgKYBm5H3VAMDbMH1Xp5UCImAm6El5CtWD6NnY19Q1YG7yKA0iSgp
+	 037UbQHQpizHgTHX5yksk5wIt8I6FEsALkF1uPNKTM72mpyKy3IIOhksOhAGFmsN5B
+	 XuyZiIOYGf8g36V58N1VI/wNVNIiIcS7CwI81lpGZT9IcoNqM+N4gzMAQHfy9rPhIb
+	 BdYz2QYcuAtZuGEVLmG5OUZJ5e5ohJnRlk+snh9rkL+pYBoYtN0yuM98TEynejEAzx
+	 /aNA2xynFJw+SqT3M4MRemAymAOrQQGuo87zM0DV8sJtiKuFg/N7DcRDyHv2UUs6DV
+	 qNhEvJRU//8eg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1D0441FC4;
-	Fri,  6 Mar 2026 19:52:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D7E125B
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7E6541FD2;
+	Fri,  6 Mar 2026 19:52:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86F6A25B
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18B0741E42
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D72D882FE7
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tSwx-RBV-8cy for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T_Vy90hX5rCm for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C14D40310
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F8D782428
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C14D40310
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F8D782428
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 617CE83582; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
+ id 5568B7FB67; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:13:48 +0100
+Date: Fri, 6 Mar 2026 14:13:15 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 1ec5a2e99db2e8b5d7f53b653eca794b39b2a4c7
-X-Git-Newrev: 763cd0b9a384bc0ccccd99bd9876e676d4050889
+X-Git-Oldrev: 6ed059ec607afc73c06872cfa60696219db9c254
+X-Git-Newrev: 1ec5a2e99db2e8b5d7f53b653eca794b39b2a4c7
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195223.617CE83582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/vim: security
- bump to v9.1.2148
+Message-Id: <20260306195223.5568B7FB67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/testing/run-tests: unbreak on Debian testing/unstable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,162 +77,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/763cd0b9a384bc0ccccd99bd9876e676d4050889
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1ec5a2e99db2e8b5d7f53b653eca794b39b2a4c7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For changes, see:
+Commit 3d2141bcee("support/testing/run-tests: specify multiprocessing
+method") added a call to multiprocessing.set_start_method('fork') as a
+workaround for python 3.14, which changed the default start method to
+forkserver - Which is incompatible with the nose2 setup.
 
-  - https://github.com/vim/vim/compare/v9.1.2017...v9.1.2148
+multiprocessing.set_start_method() is only supposed to be called a maximum
+of 1 time per process and throws a RuntimeError if called more than that
+(even with the same arguments):
 
-Fixes the following vulnerabilities:
+>>> import multiprocessing
+>>> multiprocessing.set_start_method('fork')
+>>> multiprocessing.set_start_method('fork')
+Traceback (most recent call last):
+  File "<python-input-2>", line 1, in <module>
+    multiprocessing.set_start_method('fork')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib/python3.13/multiprocessing/context.py", line 247, in set_start_method
+    raise RuntimeError('context has already been set')
 
-- CVE-2026-25749:
-    Vim is an open source, command line text editor. Prior to version
-    9.1.2132, a heap buffer overflow vulnerability exists in Vim's tag
-    file resolution logic when processing the 'helpfile' option. The
-    vulnerability is located in the get_tagfname() function in src/tag.c.
-    When processing help file tags, Vim copies the user-controlled
-    'helpfile' option value into a fixed-size heap buffer of MAXPATHL + 1
-    bytes (typically 4097 bytes) using an unsafe STRCPY() operation
-    without any bounds checking. This issue has been patched in version
-    9.1.2132.
+Debian included a similar patch in python3-nose2 0.51.1-2 (currently in
+testing/unstable) which adds its own call to set_start_method():
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-25749
-  - https://github.com/vim/vim/commit/0714b15940b245108e6e9d7aa2260dd849a26fa9
+https://salsa.debian.org/python-team/packages/nose2/-/blob/debian/0.15.1-2/debian/patches/0004-plugins-mp-set-context-to-fork-for-Python-3.14-mp-AP.patch?ref_type=tags
 
-- CVE-2026-26269:
-    Vim is an open source, command line text editor. Prior to 9.1.2148, a
-    stack buffer overflow vulnerability exists in Vim's NetBeans
-    integration when processing the specialKeys command, affecting Vim
-    builds that enable and use the NetBeans feature. The Stack buffer
-    overflow exists in special_keys() (in src/netbeans.c). The while
-    (*tok) loop writes two bytes per iteration into a 64-byte stack buffer
-    (keybuf) with no bounds check. A malicious NetBeans server can
-    overflow keybuf with a single specialKeys command. The issue has been
-    fixed as of Vim patch v9.1.2148.
+Which comes from:
+https://github.com/nose-devs/nose2/pull/644
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-26269
-  - https://github.com/vim/vim/commit/c5f312aad8e4179e437f81ad39a860cd0ef11970
+As discussed in the upstream PR, this is not a correct fix is wrong and
+breaks various use cases.  An issue has been opened to get this fixed in the
+Debian packaging at:
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 95dad8f85c4ce2f6956492b868bc9eba6452a9bc)
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1129350
+
+But until that is done, rework the patch to:
+
+- Only override set_start_method() if needed to limit impact
+- Monkey patch set_start_method() so additional calls are ignored
+
+To unbreak run-test on affected Debian systems and add some documentation to
+make it clear why this is done.
+
+[Peter: use allow_none / force optional arguments as pointed out by Julien]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 311e5cdc5151536ffc7280604e28de5f0fe245b5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...0001-src-Makefile-create-links-with-ln-sf.patch | 78 ----------------------
- package/vim/vim.hash                               |  2 +-
- package/vim/vim.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 80 deletions(-)
+ support/testing/run-tests | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch b/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
-deleted file mode 100644
-index 54d423aacf..0000000000
---- a/package/vim/0001-src-Makefile-create-links-with-ln-sf.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 5686ef63f81fcac2ca6ec6e7160829b295ad4e79 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 28 Dec 2025 15:01:38 +0100
--Subject: [PATCH] src/Makefile: create links with ln -sf
--
--Running "make installlinks" twice towards the same destination
--directory will fail, as symlink will already exist. This is not really
--expected as "make install" is normally expected to work again and
--again towards the same destination directory.
--
--Fix this by using ln -sf.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/vim/vim/commit/6df5360691266b5eca49380e94f3e21fa48e5e0b
-----
-- src/Makefile | 24 ++++++++++++------------
-- 1 file changed, 12 insertions(+), 12 deletions(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 6fb1eb95e..39f798260 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -2746,40 +2746,40 @@ installvimdiff: $(DEST_BIN)/$(VIMDIFFTARGET)
-- installgvimdiff: $(DEST_BIN)/$(GVIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(EXTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EXTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EXTARGET)
-- 
-- $(DEST_BIN)/$(VIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIEWTARGET)
-- 
-- $(DEST_BIN)/$(GVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMTARGET)
-- 
-- $(DEST_BIN)/$(GVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIEWTARGET)
-- 
-- $(DEST_BIN)/$(RVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIMTARGET)
-- 
-- $(DEST_BIN)/$(RVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RVIEWTARGET)
-- 
-- $(DEST_BIN)/$(RGVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIMTARGET)
-- 
-- $(DEST_BIN)/$(RGVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(RGVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(RGVIEWTARGET)
-- 
-- $(DEST_BIN)/$(VIMDIFFTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(VIMDIFFTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(VIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(GVIMDIFFTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(GVIMDIFFTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(GVIMDIFFTARGET)
-- 
-- $(DEST_BIN)/$(EVIMTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIMTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIMTARGET)
-- 
-- $(DEST_BIN)/$(EVIEWTARGET): $(DEST_BIN)
---	cd $(DEST_BIN); ln -s $(VIMTARGET) $(EVIEWTARGET)
--+	cd $(DEST_BIN); ln -sf $(VIMTARGET) $(EVIEWTARGET)
-- 
-- # Create links for the manual pages with various names to vim.	This is only
-- # done when the links (or manpages with the same name) don't exist yet.
---- 
--2.52.0
--
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index f7c883b929..ecc41be702 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  be1d60091d27bbdbc090e0bb19798baeea378aa29645fd47dc4c222dc14efcaf  vim-9.1.2017.tar.gz
-+sha256  f9ec31df8f1a78e130dd06c395e6626c2a8a8ec2705d8e7b7667bd3ecd499c6b  vim-9.1.2148.tar.gz
- sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
- sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index fa7d47d67d..9201587a8a 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 1c4d2b4a85..2c7ce87c96 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -142,5 +142,15 @@ def main():
  
--VIM_VERSION = 9.1.2017
-+VIM_VERSION = 9.1.2148
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+ 
+ if __name__ == "__main__":
+-    multiprocessing.set_start_method("fork")
++    # python 3.14 changed default start method from fork to
++    # fork-server, which is not compatible with the nose2 setup
++    if multiprocessing.get_start_method(allow_none=True) != "fork":
++        multiprocessing.set_start_method("fork", force=True)
++        # set_start_method throws a RuntimeError if called more than
++        # once.
++        # Debian python3-nose2 0.15.1-2 includes a patch adding
++        # another set_start_method() call, so monkey patch it out to
++        # get rid of this
++        multiprocessing.set_start_method = lambda *args: None
++
+     sys.exit(main())
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
