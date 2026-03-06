@@ -1,118 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA69FCC066
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 397B7FCC068
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A929614AD;
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2759420AE;
 	Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l5xRgmveWb9X; Fri,  6 Mar 2026 19:53:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GqTwLzD2Qq4h; Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BAFC61499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9457F42118
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826806;
-	bh=406ufibCqlQFVxRl10W939SwRBMjq5vHUcNkMXx6Pzg=;
+	s=default; t=1772826807;
+	bh=AlC2OsD4tB49jPxGjPGmN08gnSAqr9c6tDaLA/UO6HI=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=VEa95fXIW3nsaMtO7X3ZN5zpZEyEKZftwSVGL5zz5sNuDxREJZuTnRTy2RQ1UwXJ2
-	 Wk4QcwOlZViK2YvdmKqRwLnGdxPh0fHbgJrvBZMMUWOEOdQDljm28i+/n/wblxKHWc
-	 9PVduEruC6zOm/u9HgBdGUzvMklbOIWZijVPDACJTXYu4CTyuJQo9YGirKARQ7voWG
-	 3r9jdhqAF1jduIjWhN7HpDYGnPvHaW4xeO6DvknjNYEBo2J6He8nz9wwuw5qd9PiHP
-	 Up4MYeBF/0C73JaGjhkpdpzmMlBnIbObtFtmlQRI2R1X+V6QoFz1k0hUAMbkB1uUVl
-	 DeNBZ+8rzv+MQ==
+	b=iNYnRh7RCbrl8tys4GIg4IPWldgsm2aqKSjGQnc8He/aY4sRBeCbdgTDu9jHbbGus
+	 +SsvuD6raVrokstBesmOd4BivUU7c1LYS0i5lm5Tculc4OaB4uyMdXodzybIYsD4Uq
+	 XcjqpXcbSB58wY/jcFUPII7OlCY1Y+7NQhcZYvd8Mc3m5EzoSm132ryBR5xAn5MeuH
+	 ARW13NXgKcTYjSU4/1LoFq2GhcfOzclX1uyad+BMT0o/xNZynYM93bsi+cYVM4eTym
+	 Kh651Yvmjn7R2lGG4vUNxoLl/65kDE5bWyOSTjIkN8oVusY448VuSfvo9rvnGlq8xN
+	 Ou+QukBa7wHaQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BAFC61499;
-	Fri,  6 Mar 2026 19:53:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 47DE4223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9457F42118;
+	Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03534169
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C9A583D96
+ by smtp4.osuosl.org (Postfix) with ESMTP id F222641E5A
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AvjsKWHYE0OY for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XAprc8wagvMW for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:53:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B03E83D56
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B03E83D56
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0B03E83D56
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-439c4bde55cso2639773f8f.1
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:18 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0487842085
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0487842085
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0487842085
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:14 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4852afd42ceso3873375e9.2
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826797; x=1773431597;
+ d=1e100.net; s=20230601; t=1772826793; x=1773431593;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=W1OI9B6UMMOWGcqC1nXvMbSL3hh4Tre2cKjOqXaAQgY=;
- b=k9K5p6dk5DxExhzjctwM8fVp+0qrvMcT37nw/MTvEW1hF8cc+Ox/uQQiDrTtpKSw8e
- Gn1zL6ITdMPTj2csRBXTVtaG1gS4r8N5fWgvVAsaMBWpMHU1CzJ/y/I4HtO7zAXLDBmO
- eLmwVbQ/1szQ3brDcW2a5xxSvE3m1BfFMEFOomTwLfLCY+A1gggL0/JfcCDARgXi6saR
- lXxYDxlrRh0AdFMdDe6dAAgPcEdLIgg52CVy1uLFhK+Nqleu1rBQtUxW1sykfA/A/Je7
- 4caHV7LSEbi3TaCBJA0XKF6ifZ3gOgHl9Qc8Oamvb+Pc9FkcEwqB+dgnSdD1Ug8nYH5n
- V2NQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVq9ParoEtazXIHZq7zK5wy7mDy4hWF3O9NRiV/oLwh2RVkE+1VqXw/ztP2FvjlwjhpSYJjDv9oC9E=@buildroot.org
-X-Gm-Message-State: AOJu0Ywnc1Els0aq1yo0xiHQOVG8DWSOYS//NN59CTZ3JgpYyqGlwhJh
- t0OE5FnHTDj9fA1CmN36eDiVQKViE8ZsWsj8S+Or9uz4mdUFO9ch/3ecX6mrr4wMv9Dn3Qbs/eL
- 9Mulm
-X-Gm-Gg: ATEYQzwAmgCzMShLGjDm56AdRRcG9kGo1DDtE2Hl308A+tKKnxRTrZ7NO4KilrTevSx
- hIPuW71bmvh7Gm4X9wzk0ji2cMT/e4ppEgrIEWS2wrohy56li40OYRNdx3iESL82lgyuwqZaBU/
- fEGkwMrlz0bqD7BMpvNoEpA5+HXBxMIzVEix/T6xJT2lg+IvV3yLlfxWKRkmZHNDPbinrR60ZSw
- V0DtXkBtdblJV/A1aOWRPdP2pNs8R1y4hXBTDckWTxwKsS0lom8pfIg7HYguXmaIAwNn9lge7DF
- 0IS6hrvPo+zvcmnamh+OWc7gfuEcacPcfJc/BBofcfICs1NriB5kOwuQcI/jPV+2BpanLDopGhV
- KG5sRlT29uBUjl0sej4ijC3lztmGr2kr5hJjqSmW0Vnj7k8smqu02EPd7V0PLMNIm75W4fIavzY
- 3EHfaxz2TSvXdy4JzsiyItEm6PlQ==
-X-Received: by 2002:a5d:5f86:0:b0:439:b59e:5e6a with SMTP id
- ffacd0b85a97d-439da3307b5mr5925628f8f.14.1772826796970; 
- Fri, 06 Mar 2026 11:53:16 -0800 (PST)
+ bh=qP5P4UGJz2atWYGE5r1vV5zbnuJXfxdwIxtwnP8YcJc=;
+ b=D+IdQH7HUqAMj8PBSHtokOgPGakcPTALvbJ+x1UjMZD67u99ylSCNTZzqSZ/+6DTwi
+ MbrgOvtLOVoIUMLc9sZE+1P7jismmArymwJuhe557iGKz/rmEC5Q8XQxUz8tiX74mPyL
+ XFcbdWENgLBf1m/FNBY1P9bkb2qnenKH6iq98eFhC6F2Qm4HVX+a+6RHNmCMP4ItKxWT
+ TTbg8/cUqNj3XEB1f56vDQsPna9pWINGgU2OHFOFw1Emmn+/BdseVtPnD7XIuVDeExd2
+ PQSXcthoCEwBo1/hOSZPDljNz1RyqKvygd4lN2Iw72gsbFVKW8UflQbArQjz8sJz9phf
+ Mgkw==
+X-Gm-Message-State: AOJu0Yyiu3M6vRPn0sNGdAssmScYttkbSbdKeqTSCTamHexPGlcjzipi
+ FClUijjONuf6c7aJTWvqym3doGrGWvCFcJDYZoEGYPI4GK10dEZX4my6AvFmfoCKMkP4e/T5HqR
+ x55fO
+X-Gm-Gg: ATEYQzz+7gmrFsFccKiSAYZIhJJmDswTvQ8B6xeO5wWxwsLXSKR69syI5OQgGrIRNCH
+ eK9ESHLSyMddHEMeZu95s3Eeu5INF8G1uT+T/5/MI+UEVjVk361C3dsUzdJRDX9rowKdtCGnPaV
+ b8gkwJRCc07eRKKq6IhGEGHCk452LJCU9KHtb9pLHWlk+GjUhfHLoYvo5CzzSLSF1S72SQ669oo
+ 03riyxrqYmprj2O2KqCt0YkHZATIDelfAEEpqwBXChV1CyfYhIhJcGYHH3gm56InoTBYKv0QgUa
+ bKdAJdiJlLg6ugPFnp1apSiWjCE9sbZSaPNLjKCgSfSyn9S0gqbMmxaGeCzjs1hgApgEgfh3OQi
+ EoaIjkogpaxkv0/H88pVKpopa/wXixBI/lFrPOld0/DQ+6YV1qLCN0sSZaa/i/nGatah6gxK+1d
+ G/geSL9y4oKeHQF+s=
+X-Received: by 2002:a05:600c:c10d:b0:485:2af3:3f8d with SMTP id
+ 5b1f17b1804b1-4852af34027mr18879565e9.14.1772826792914; 
+ Fri, 06 Mar 2026 11:53:12 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439dad8dbb3sm5238490f8f.4.2026.03.06.11.53.16
+ 5b1f17b1804b1-4852767d8e4sm53361435e9.2.2026.03.06.11.53.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:16 -0800 (PST)
-To: Adrian Perez de Castro <aperez@igalia.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:15 +0100
-Message-ID: <20260306195315.8013-1-thomas.perale@mind.be>
+ Fri, 06 Mar 2026 11:53:12 -0800 (PST)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri,  6 Mar 2026 20:53:12 +0100
+Message-ID: <20260306195312.7802-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260228194903.1908686-1-aperez@igalia.com>
-References: <20260228194903.1908686-1-aperez@igalia.com>
+In-Reply-To: <20260228201547.84699-1-thomas.perale@mind.be>
+References: <20260228201547.84699-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826797; x=1773431597; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826793; x=1773431593; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=W1OI9B6UMMOWGcqC1nXvMbSL3hh4Tre2cKjOqXaAQgY=;
- b=iWgx7HZTXdjuR2mQy+z/XKyRxnQ1j8TI4mMWb7DkSG6JkLoVlmi/oRJuaD/nuLbKkO
- RtE9IoX+463oGYMGtD/6xGTbI/NFsi7njRVAwNitBKAMGZOcANW2D/kWMv0N+X57dTq9
- +EFB/BiJOQFXzoZ6Eg6/j17VL/DyUcG+Kz9t2mJFu9CJMZ7XfIMH0E1Sk59OVQa6+wyW
- dWro5+8EyEJbr7cQiT1vUR1V/yf/bL5PlbY1IyljWUrgWsUgkuqWoZK9weE6jkTj/fRo
- UCJqMPOjdSrBWjFtEEXEZLt7JvLJzCikUGg9g9PHyIfexWlBH4IECeqYZYcw+xsnFCBp
- LHag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=qP5P4UGJz2atWYGE5r1vV5zbnuJXfxdwIxtwnP8YcJc=;
+ b=S7g++joYYnBjVFykJYz5rQCt1AadiCysP7dJURx8ZwPnTTPwQiMEQeklZFFDvvCP6h
+ 9rvVGV0c19e0alChbLMaeZzuy1BPvR0T2n68ueZvXhXUFneCrTxDgH8L1I23JcGEFn5f
+ KevY9g1K0bidjy7vKZ9sAbjeK1a4ZT8RAYH967YeZ8KlI/aKY0p5BTBIU7IaYigVOxU0
+ x3PYv7EEqrFA7xcQyy/quYY8hEe8kpXYwXGY6dKJn8ok4rvoNZUZN/kYNsZsedmAY8pU
+ Q9pnToAT98WfCPk21N4MGT/H6FAQ3mZjblcDfJG3EIVOVUkdzA2DNGLMj+vbEdWYCaDF
+ Um6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=iWgx7HZT
-Subject: Re: [Buildroot] [PATCH] package/wpewebkit: disable JIT for all MIPS
- CPUs
+ header.a=rsa-sha256 header.s=google header.b=S7g++joY
+Subject: Re: [Buildroot] [PATCH] package/mupdf: add patch for CVE-2026-25556
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,53 +128,108 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Change the mips32r6 into a blanket BR2_mips[el] check to disable the
-> JSC JIT. Upstream removed JIT support for all MIPS processors in
-> January 2024 [0], and the change trickled down to stable releases
-> starting on version 2.44.0 [1].
+> Fixes the following vulnerability:
 > 
-> While at it, change the upstream bug links to point to a more
-> appropriate bug report.
+> - CVE-2026-25556:
+>     MuPDF versions 1.23.0 through 1.27.0 contain a double-free
+>     vulnerability in fz_fill_pixmap_from_display_list() when an exception
+>     occurs during display list rendering. The function accepts a caller-
+>     owned fz_pixmap pointer but incorrectly drops the pixmap in its error
+>     handling path before rethrowing the exception. Callers (including the
+>     barcode decoding path in fz_decode_barcode_from_display_list) also
+>     drop the same pixmap in cleanup, resulting in a double-free that can
+>     corrupt the heap and crash the process. This issue affects
+>     applications that enable and use MuPDF barcode decoding and can be
+>     triggered by processing crafted input that causes a rendering-time
+>     error while decoding barcodes.
 > 
-> [0] https://commits.webkit.org/272866@main
-> [1] https://lists.webkit.org/archives/list/webkit-wpe@lists.webkit.org/thread/JM7GLPPKGAB6DIQ2YDHPEIWNOYSUHBC7/
+> For more information, see
+>   - https://www.cve.org/CVERecord?id=CVE-2026-25556
+>   - https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
 > 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/wpewebkit/wpewebkit.mk | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+>  ...-incorrect-error-case-free-of-pixmap.patch | 53 +++++++++++++++++++
+>  package/mupdf/mupdf.mk                        |  3 ++
+>  2 files changed, 56 insertions(+)
+>  create mode 100644 package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
 > 
-> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-> index 78c919e309..40708baa33 100644
-> --- a/package/wpewebkit/wpewebkit.mk
-> +++ b/package/wpewebkit/wpewebkit.mk
-> @@ -163,18 +163,16 @@ else
->  WPEWEBKIT_CONF_OPTS += -DUSE_GBM=OFF
->  endif
+> diff --git a/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
+> new file mode 100644
+> index 0000000000..f78c429cef
+> --- /dev/null
+> +++ b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
+> @@ -0,0 +1,53 @@
+> +From d4743b6092d513321c23c6f7fe5cff87cde043c1 Mon Sep 17 00:00:00 2001
+> +From: Robin Watts <Robin.Watts@artifex.com>
+> +Date: Mon, 12 Jan 2026 19:08:56 +0000
+> +Subject: Bug 709029: Fix incorrect error-case free of pixmap.
+> +
+> +Don't free a pixmap we don't own!
+> +
+> +CVE: CVE-2026-25556
+> +Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + source/fitz/util.c | 15 +++++++++------
+> + 1 file changed, 9 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/source/fitz/util.c b/source/fitz/util.c
+> +index 7710124cc..90226a5c1 100644
+> +--- a/source/fitz/util.c
+> ++++ b/source/fitz/util.c
+> +@@ -119,7 +119,15 @@ fz_new_pixmap_from_display_list_with_separations(fz_context *ctx, fz_display_lis
+> + 	else
+> + 		fz_clear_pixmap_with_value(ctx, pix, 0xFF);
+> +
+> +-	return fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
+> ++	fz_try(ctx)
+> ++		fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
+> ++	fz_catch(ctx)
+> ++	{
+> ++		fz_drop_pixmap(ctx, pix);
+> ++		fz_rethrow(ctx);
+> ++	}
+> ++
+> ++	return pix;
+> + }
+> +
+> + fz_pixmap *
+> +@@ -136,14 +144,9 @@ fz_fill_pixmap_from_display_list(fz_context *ctx, fz_display_list *list, fz_matr
+> + 		fz_close_device(ctx, dev);
+> + 	}
+> + 	fz_always(ctx)
+> +-	{
+> + 		fz_drop_device(ctx, dev);
+> +-	}
+> + 	fz_catch(ctx)
+> +-	{
+> +-		fz_drop_pixmap(ctx, pix);
+> + 		fz_rethrow(ctx);
+> +-	}
+> +
+> + 	return pix;
+> + }
+> +--
+> +cgit v1.2.3
+> +
+> diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+> index fe4f3e6756..c538b9bec8 100644
+> --- a/package/mupdf/mupdf.mk
+> +++ b/package/mupdf/mupdf.mk
+> @@ -27,6 +27,9 @@ MUPDF_IGNORE_CVES = \
+>  	CVE-2024-24258 \
+>  	CVE-2024-24259
 >  
-> -# JIT is not supported for MIPS r6, but the WebKit build system does not
-> -# have a check for these processors. The same goes for ARMv5 and ARMv6.
-> -# Disable JIT forcibly here and use the CLoop interpreter instead.
-> +# JIT is not supported for MIPS, ARMv5, and ARMv6, but the WebKit build
-> +# system does not have a check for some of these target processors.
->  #
-> +# Disable JIT forcibly here and use the CLoop interpreter instead.
->  # Also, we have to disable the sampling profiler and WebAssembly, which
->  # do NOT work with ENABLE_C_LOOP.
->  #
-> -# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
-> -#                https://bugs.webkit.org/show_bug.cgi?id=172765
-> -#                https://bugs.webkit.org/show_bug.cgi?id=265218
-> +# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=278559
->  #
-> -ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_mips)$(BR2_mipsel),y)
->  WPEWEBKIT_CONF_OPTS += \
->  	-DENABLE_JIT=OFF \
->  	-DENABLE_C_LOOP=ON \
+> +# 0001-Fix-incorrect-error-case-free-of-pixmap.patch
+> +MUPDF_IGNORE_CVES += CVE-2026-25556
+> +
+>  # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
+>  # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
+>  MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
 > -- 
 > 2.53.0
 > 
