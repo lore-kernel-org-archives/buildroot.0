@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C55DFCC066
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D0CFCC06B
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 503CC41F4C;
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBA946144E;
 	Fri,  6 Mar 2026 19:52:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gHP9ciaNC3Cp; Fri,  6 Mar 2026 19:52:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y8yTpc06KsO7; Fri,  6 Mar 2026 19:52:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DD0941F6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D3E06143E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826758;
-	bh=PkQmAfI+luZk2mkqbAtD/TbUDZXZY9OYuEwp7E78Pps=;
+	s=default; t=1772826757;
+	bh=crdnmKpocIl74yt70iyvKYRyAcqundOE2+GzWQG+eBQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=J5C0onGDV4Wb5hrY4ooZf/InvKZhNJA4leq4fVM8mvl9eBvXHeSR8Hhx/a92q4wh7
-	 v+VfH/fvoMYRZqD89DlqMJitVnmyXJJ+46ojR12f2BBm3e//aYEmOouGbMdkgpyKYi
-	 vl1BMzCoREcgWWILCG00MR6Crvt1wmozhtdCQk3WKAciXHye2wMQuIN0OknhFdIYCy
-	 efvuToQKst+kdNQBJglz/JrJnfGfZ0gOVivyT0BMpQksxF0JiJsTkrNaj7UVdyBDYc
-	 G0n5JhnOkygYhNM0ltUVpD4PybWYuD3gkgjvlPKThl21iBRFShBjqKVvd9CbPlHi7t
-	 +3kMw8hTV7w1w==
+	b=qynhonIvvUUmjh5h3ItxEvlOc07KGVaAi5g+obi5+JFI+O1vyFRnTRXIxOsSi7wDv
+	 c4a0beRO+pOVj/4E7QMbEKjGVt30cm+iBPA406GUIoBzlZV35/nRXduR5RLtrCkuEq
+	 CBQTE7ED9QNulTv8CcahEa7d/1yWb9+uKP86dPEjM1mm4QLBES//hgzmH5sYm3L/ss
+	 AZzIhqOl4kOpFVb2BM7RtrK7CcenvwpIO4THqX9KKe0zML6yNNW3o5HVxsLVEXSwYb
+	 dkGKSg3xweeKFZDoMvpCmbOdsGnwfliWNzc1CY4PmnAlmvPOf/g3taL1SmC+0e+T1n
+	 k86AWhrGid5cw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DD0941F6D;
-	Fri,  6 Mar 2026 19:52:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D3E06143E;
+	Fri,  6 Mar 2026 19:52:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 035F0223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EC8639B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E372641E5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B775A41E90
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MqHczfJTX3qn for <buildroot@buildroot.org>;
+ id JtH-6Nq7HnAO for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3334841E47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 015F941E5F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3334841E47
+ by smtp4.osuosl.org (Postfix) with ESMTP id 015F941E5F
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4918483582; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
+ id 172E283582; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:12:46 +0100
+Date: Fri, 6 Mar 2026 14:07:03 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 455af70596923a5eab63b6590a2c69207d5ca68e
-X-Git-Newrev: 6ed059ec607afc73c06872cfa60696219db9c254
+X-Git-Oldrev: 6a1de0c6ac045dbbef35895947bfac7800ecf27f
+X-Git-Newrev: 820cbef7e1faae1c12ea11edcceaeb76b74500d2
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195223.4918483582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/webkitgtk: bump
- to version 2.50.5
+Message-Id: <20260306195223.172E283582@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/flashbench: fix
+ download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6ed059ec607afc73c06872cfa60696219db9c254
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/820cbef7e1faae1c12ea11edcceaeb76b74500d2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes a number of crashes. Release notes:
+The original source is offline, switch to forked repo and use the same
+tree as before to only fix the download error.
 
-  https://webkitgtk.org/2026/02/09/webkitgtk2.50.5-released.html
+Fixes:
+https://autobuild.buildroot.net/results/eec/eecf2cbaafd8a170b5f5c6c24df552280a530204/
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 156e5fa7eb0de95076a54a93f66ba32ec1591853)
+(cherry picked from commit 49cabda8fb09c665f80cc45b505923b7a4a3bd60)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/flashbench/Config.in       | 2 +-
+ package/flashbench/flashbench.hash | 2 +-
+ package/flashbench/flashbench.mk   | 3 +--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 3c2f7aedbd..77bdc5485b 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.50.4.tar.xz.sums
--sha1  719c304539cecca945846700cefebc7339eb5924  webkitgtk-2.50.4.tar.xz
--sha256  d3bfa473845acfab72635bada5e0d134fda6792c5b95c5c5cd141b46125bd8e4  webkitgtk-2.50.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.50.5.tar.xz.sums
-+sha1  e93f7efa9fbc7304cc159c35d8e76d7febab2515  webkitgtk-2.50.5.tar.xz
-+sha256  8737631bac3e9c7ad3e5208f9370e076c09d9c45b39980021ce54edadcc6f94f  webkitgtk-2.50.5.tar.xz
+diff --git a/package/flashbench/Config.in b/package/flashbench/Config.in
+index a50f482ac3..8f64275745 100644
+--- a/package/flashbench/Config.in
++++ b/package/flashbench/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_FLASHBENCH
+ 	  SD cards and other media for the Linaro flash memory
+ 	  survey.
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 161807bc5a..26c70ae6c8 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
+-	  https://git.linaro.org/people/arnd.bergmann/flashbench.git
++	  https://github.com/bradfa/flashbench
+diff --git a/package/flashbench/flashbench.hash b/package/flashbench/flashbench.hash
+index 274d890f2d..8b087c2a10 100644
+--- a/package/flashbench/flashbench.hash
++++ b/package/flashbench/flashbench.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b5f95d2d057270adbce0f1a784b6a88db339b67326b6ca92474edd99f9fd4774  flashbench-2e30b1968a66147412f21002ea844122a0d5e2f0-git4.tar.gz
++sha256  408a2642700b7f8daf4356a49948b921137ad15bb6e0fd05b1cb8dc700c154dc  flashbench-2e30b1968a66147412f21002ea844122a0d5e2f0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/flashbench/flashbench.mk b/package/flashbench/flashbench.mk
+index f5791c3e95..28ce7f7dd1 100644
+--- a/package/flashbench/flashbench.mk
++++ b/package/flashbench/flashbench.mk
+@@ -5,8 +5,7 @@
  ################################################################################
  
--WEBKITGTK_VERSION = 2.50.4
-+WEBKITGTK_VERSION = 2.50.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ FLASHBENCH_VERSION = 2e30b1968a66147412f21002ea844122a0d5e2f0
+-FLASHBENCH_SITE = https://git.linaro.org/people/arnd/flashbench.git
+-FLASHBENCH_SITE_METHOD = git
++FLASHBENCH_SITE = $(call github,bradfa,flashbench,$(FLASHBENCH_VERSION))
+ FLASHBENCH_LICENSE = GPL-2.0
+ FLASHBENCH_LICENSE_FILES = COPYING
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
