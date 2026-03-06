@@ -1,115 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3DEFFCC062
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA69FCC066
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA0A04211B;
-	Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A929614AD;
+	Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wYcFj0_ivkwA; Fri,  6 Mar 2026 19:53:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l5xRgmveWb9X; Fri,  6 Mar 2026 19:53:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE8C8420E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BAFC61499
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826804;
-	bh=uU5TPZYz9YF+U7zs/zwKp6/vjAfZ9aq5Oqh3aL1ixnI=;
+	s=default; t=1772826806;
+	bh=406ufibCqlQFVxRl10W939SwRBMjq5vHUcNkMXx6Pzg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=PwzixECKZUZjuwRHRFUhgpL/sQBU9ZKUDCxUi/VfSyJOySbcNuvIJNiPCMC07itcj
-	 cmKBN5EBCKCXhCaDpPwI+dEPOFoPRWkwL2IvXH77lVzTm3LZkQyOL+KBjbAVc76pEl
-	 q2PauNys+3Krkuxe8Axz1ro1/FrGc8gS0FU08EhOJWbYpfh8iJ7plpqjpOGtLl1Jy4
-	 jWfmWyTNz85bEfvUqKajMJBoIzc5/4TGhJ9N1hKO0TBDGcPqVxTY+NzX3xmQXOJR7l
-	 NBffnEOn0p8HmB3YLf1VL42Fz7bSTtPU8+dZjbVYEwsTvGqphutrW5oKrVPMqi0lmO
-	 qBIesAoh8yKlA==
+	b=VEa95fXIW3nsaMtO7X3ZN5zpZEyEKZftwSVGL5zz5sNuDxREJZuTnRTy2RQ1UwXJ2
+	 Wk4QcwOlZViK2YvdmKqRwLnGdxPh0fHbgJrvBZMMUWOEOdQDljm28i+/n/wblxKHWc
+	 9PVduEruC6zOm/u9HgBdGUzvMklbOIWZijVPDACJTXYu4CTyuJQo9YGirKARQ7voWG
+	 3r9jdhqAF1jduIjWhN7HpDYGnPvHaW4xeO6DvknjNYEBo2J6He8nz9wwuw5qd9PiHP
+	 Up4MYeBF/0C73JaGjhkpdpzmMlBnIbObtFtmlQRI2R1X+V6QoFz1k0hUAMbkB1uUVl
+	 DeNBZ+8rzv+MQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE8C8420E7;
-	Fri,  6 Mar 2026 19:53:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BAFC61499;
+	Fri,  6 Mar 2026 19:53:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E85D169
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 47DE4223
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8431883D65
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C9A583D96
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v-nEqO4z2LYR for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:53:17 +0000 (UTC)
+ id AvjsKWHYE0OY for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:53:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 13B8A83D56
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13B8A83D56
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 13B8A83D56
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:16 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-48329eb96a7so63383995e9.3
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:16 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B03E83D56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B03E83D56
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B03E83D56
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-439c4bde55cso2639773f8f.1
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826795; x=1773431595;
+ d=1e100.net; s=20230601; t=1772826797; x=1773431597;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=nxkQTTpAHJkT0E3SATuHpWyAPevxgtpLNL9u0QAjVFk=;
- b=V+gF1aLiQMkOtM0yyqgGkwzJsWGva/eAdk7tGbJuGMzdlPvTJVEu7ejVp8gpxSXjvH
- sadQjTTIBvbsM0ReTF3iyoFHxz+Oy6W79jtTSYiWxpp0JBOKe4pxiIBG1jsRURN/O40x
- AyeDAEmF+4+4R1KaDEV2EVEVRHPBJ4H6utrxxEetAiwr91TcHobKidtaYx7BxUGH0I25
- UoTeEf9uA0tDEW0DCcM33F/9DJbvrTkwdT6rlnHC0PKEUc1D1T80PpsaO64jhPAazQAo
- 0mkJzKffWp68SFFYsI3Pg8afmkRovI0FLD6Oe6k7Qrtzeje5f0rROmIn24ERs9XWKrq0
- by9g==
-X-Gm-Message-State: AOJu0YwhhYJ2MowkOw6QK/X49+e2vGm1eOq6Zi671UCNpF2Ou8fj4quH
- +Es/xoOrdV4wIpuL6ZMwXPBsEA5cuIW6gxLyCP/XXCJaQp9DioGY0XsJraf6rCpQ/LCUyVrDWA6
- g6oDP
-X-Gm-Gg: ATEYQzw0+Mbg7T/xosP3EPLM+WaWnpH5W4e3Y4x+cP+ZbLu7X8WO3y1rm6FSr2x/sle
- /lyz7dAdQnFdoAQyCNFZ256EEnYftss0mLS74pVu0m53zfexV4QLWRNGpx05R2AOKa6SEEyW3qL
- Rk0ff3wwuoJNsrTWwvYSzdCzmNP2RBXGJWOtmb6Co2RjTGYCfL2LIj3OJ1Uz+x9XLvZNG/nX727
- c93F1ky03mR7Qdc5e5dpEAtl9sfLeTFaOjunWU0NJDi2r7CKBPjXbczSfryCv6bjNl6v0QywDwf
- A/g1uzJtY6eVjxVuAxI7+KST8V0Uplr3DJerSat5QxNaxlG+8b1hzIHxn3Nn8F/BFFNqDxH/Jlz
- Zlezx6QUAPGmJwZ4weApPbOPojfdjMDi9ZdJ2arE9brDl4wDygW+J2FsQRy/sMDxMt+qZEAeNCu
- YgR78zwX1jnOIQM+k=
-X-Received: by 2002:a05:600c:3b13:b0:47f:f952:d207 with SMTP id
- 5b1f17b1804b1-48526969359mr63231605e9.19.1772826794825; 
- Fri, 06 Mar 2026 11:53:14 -0800 (PST)
+ bh=W1OI9B6UMMOWGcqC1nXvMbSL3hh4Tre2cKjOqXaAQgY=;
+ b=k9K5p6dk5DxExhzjctwM8fVp+0qrvMcT37nw/MTvEW1hF8cc+Ox/uQQiDrTtpKSw8e
+ Gn1zL6ITdMPTj2csRBXTVtaG1gS4r8N5fWgvVAsaMBWpMHU1CzJ/y/I4HtO7zAXLDBmO
+ eLmwVbQ/1szQ3brDcW2a5xxSvE3m1BfFMEFOomTwLfLCY+A1gggL0/JfcCDARgXi6saR
+ lXxYDxlrRh0AdFMdDe6dAAgPcEdLIgg52CVy1uLFhK+Nqleu1rBQtUxW1sykfA/A/Je7
+ 4caHV7LSEbi3TaCBJA0XKF6ifZ3gOgHl9Qc8Oamvb+Pc9FkcEwqB+dgnSdD1Ug8nYH5n
+ V2NQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVq9ParoEtazXIHZq7zK5wy7mDy4hWF3O9NRiV/oLwh2RVkE+1VqXw/ztP2FvjlwjhpSYJjDv9oC9E=@buildroot.org
+X-Gm-Message-State: AOJu0Ywnc1Els0aq1yo0xiHQOVG8DWSOYS//NN59CTZ3JgpYyqGlwhJh
+ t0OE5FnHTDj9fA1CmN36eDiVQKViE8ZsWsj8S+Or9uz4mdUFO9ch/3ecX6mrr4wMv9Dn3Qbs/eL
+ 9Mulm
+X-Gm-Gg: ATEYQzwAmgCzMShLGjDm56AdRRcG9kGo1DDtE2Hl308A+tKKnxRTrZ7NO4KilrTevSx
+ hIPuW71bmvh7Gm4X9wzk0ji2cMT/e4ppEgrIEWS2wrohy56li40OYRNdx3iESL82lgyuwqZaBU/
+ fEGkwMrlz0bqD7BMpvNoEpA5+HXBxMIzVEix/T6xJT2lg+IvV3yLlfxWKRkmZHNDPbinrR60ZSw
+ V0DtXkBtdblJV/A1aOWRPdP2pNs8R1y4hXBTDckWTxwKsS0lom8pfIg7HYguXmaIAwNn9lge7DF
+ 0IS6hrvPo+zvcmnamh+OWc7gfuEcacPcfJc/BBofcfICs1NriB5kOwuQcI/jPV+2BpanLDopGhV
+ KG5sRlT29uBUjl0sej4ijC3lztmGr2kr5hJjqSmW0Vnj7k8smqu02EPd7V0PLMNIm75W4fIavzY
+ 3EHfaxz2TSvXdy4JzsiyItEm6PlQ==
+X-Received: by 2002:a5d:5f86:0:b0:439:b59e:5e6a with SMTP id
+ ffacd0b85a97d-439da3307b5mr5925628f8f.14.1772826796970; 
+ Fri, 06 Mar 2026 11:53:16 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4852687c1ecsm43227475e9.1.2026.03.06.11.53.14
+ ffacd0b85a97d-439dad8dbb3sm5238490f8f.4.2026.03.06.11.53.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:14 -0800 (PST)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:14 +0100
-Message-ID: <20260306195314.7905-1-thomas.perale@mind.be>
+ Fri, 06 Mar 2026 11:53:16 -0800 (PST)
+To: Adrian Perez de Castro <aperez@igalia.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  6 Mar 2026 20:53:15 +0100
+Message-ID: <20260306195315.8013-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260228202847.96486-1-thomas.perale@mind.be>
-References: <20260228202847.96486-1-thomas.perale@mind.be>
+In-Reply-To: <20260228194903.1908686-1-aperez@igalia.com>
+References: <20260228194903.1908686-1-aperez@igalia.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826795; x=1773431595; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826797; x=1773431597; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=nxkQTTpAHJkT0E3SATuHpWyAPevxgtpLNL9u0QAjVFk=;
- b=Qh7C1WATUXEtvWaqepVCoVvZ9PpP+wZX6Kdz8vAag7Drep5iq64sfBP9f87qPj4tzG
- xI27pu9sIsSAIyevUXV94+uqZEiKT+KDkE1ZGKCgolUwVNoW8EaaU/mhZUZ6Bw+WfZ6R
- hSy2AwRsHV656Td4RWMOxoaFwz8fai4CpxKFGlM1qxm+mytW0jU7IR9b6/K93hd+mDUD
- oQcEcml3L2QXU2lmeETI619Gt4tZqgr3wq8W82+50pscLilcB6voJMdpl8Q5Hh2juizc
- eU37XRv7hWWa6br+ZtQinaBCLfjn1DPKFwGjQwi4PJQ0trRj3NY93Jkx9we91RJxRrVd
- qSWA==
+ bh=W1OI9B6UMMOWGcqC1nXvMbSL3hh4Tre2cKjOqXaAQgY=;
+ b=iWgx7HZTXdjuR2mQy+z/XKyRxnQ1j8TI4mMWb7DkSG6JkLoVlmi/oRJuaD/nuLbKkO
+ RtE9IoX+463oGYMGtD/6xGTbI/NFsi7njRVAwNitBKAMGZOcANW2D/kWMv0N+X57dTq9
+ +EFB/BiJOQFXzoZ6Eg6/j17VL/DyUcG+Kz9t2mJFu9CJMZ7XfIMH0E1Sk59OVQa6+wyW
+ dWro5+8EyEJbr7cQiT1vUR1V/yf/bL5PlbY1IyljWUrgWsUgkuqWoZK9weE6jkTj/fRo
+ UCJqMPOjdSrBWjFtEEXEZLt7JvLJzCikUGg9g9PHyIfexWlBH4IECeqYZYcw+xsnFCBp
+ LHag==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Qh7C1WAT
-Subject: Re: [Buildroot] [PATCH] package/rtl_433: add patch for
- CVE-2025-34450
+ header.a=rsa-sha256 header.s=google header.b=iWgx7HZT
+Subject: Re: [Buildroot] [PATCH] package/wpewebkit: disable JIT for all MIPS
+ CPUs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,84 +132,53 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerability:
+> Change the mips32r6 into a blanket BR2_mips[el] check to disable the
+> JSC JIT. Upstream removed JIT support for all MIPS processors in
+> January 2024 [0], and the change trickled down to stable releases
+> starting on version 2.44.0 [1].
 > 
-> - CVE-2025-34450:
->     merbanan/rtl_433 versions up to and including 25.02 and prior to
->     commit 25e47f8 contain a stack-based buffer overflow vulnerability in
->     the function parse_rfraw() located in src/rfraw.c. When processing
->     crafted or excessively large raw RF input data, the application may
->     write beyond the bounds of a stack buffer, resulting in memory
->     corruption or a crash. This vulnerability can be exploited to cause a
->     denial of service and, under certain conditions, may be leveraged for
->     further exploitation depending on the execution environment and
->     available mitigations.
+> While at it, change the upstream bug links to point to a more
+> appropriate bug report.
 > 
-> For mroe information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2025-34450
->   - https://github.com/merbanan/rtl_433/commit/25e47f8932f0401392ef1d3c8cc9ed5595bc894a
+> [0] https://commits.webkit.org/272866@main
+> [1] https://lists.webkit.org/archives/list/webkit-wpe@lists.webkit.org/thread/JM7GLPPKGAB6DIQ2YDHPEIWNOYSUHBC7/
 > 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  ...-overflow-in-rfraw-test-data-parsing.patch | 31 +++++++++++++++++++
->  package/rtl_433/rtl_433.mk                    |  3 ++
->  2 files changed, 34 insertions(+)
->  create mode 100644 package/rtl_433/0002-Fix-overflow-in-rfraw-test-data-parsing.patch
+>  package/wpewebkit/wpewebkit.mk | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/rtl_433/0002-Fix-overflow-in-rfraw-test-data-parsing.patch b/package/rtl_433/0002-Fix-overflow-in-rfraw-test-data-parsing.patch
-> new file mode 100644
-> index 0000000000..6446fea0ab
-> --- /dev/null
-> +++ b/package/rtl_433/0002-Fix-overflow-in-rfraw-test-data-parsing.patch
-> @@ -0,0 +1,31 @@
-> +From 25e47f8932f0401392ef1d3c8cc9ed5595bc894a Mon Sep 17 00:00:00 2001
-> +From: "Christian W. Zuckschwerdt" <christian@zuckschwerdt.org>
-> +Date: Wed, 8 Oct 2025 10:11:15 +0200
-> +Subject: [PATCH] Fix overflow in rfraw test data parsing (closes #3375)
-> +
-> +CVE: CVE-2025-34450
-> +Upstream: https://github.com/merbanan/rtl_433/commit/25e47f8932f0401392ef1d3c8cc9ed5595bc894a
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + src/rfraw.c | 5 +++++
-> + 1 file changed, 5 insertions(+)
-> +
-> +diff --git a/src/rfraw.c b/src/rfraw.c
-> +index 9f4c9780c..71a1c365d 100644
-> +--- a/src/rfraw.c
-> ++++ b/src/rfraw.c
-> +@@ -159,9 +159,14 @@ static bool parse_rfraw(pulse_data_t *data, char const **p)
-> +             data->num_pulses++;
-> +             pulse_needed = true;
-> +         }
-> ++        // abort reading if the pulse data array is full
-> ++        if (data->num_pulses >= PD_MAX_PULSES) {
-> ++            break;
-> ++        }
-> +     }
-> +     //data->gap[data->num_pulses - 1] = 3000; // TODO: extend last gap?
-> + 
-> ++    // expand reapeats as long as the pulse data array has enough space
-> +     unsigned pkt_pulses = data->num_pulses - prev_pulses;
-> +     for (int i = 1; i < repeats && data->num_pulses + pkt_pulses <= PD_MAX_PULSES; ++i) {
-> +         memcpy(&data->pulse[data->num_pulses], &data->pulse[prev_pulses], pkt_pulses * sizeof (*data->pulse));
-> diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
-> index 08735be850..fc6c2bece2 100644
-> --- a/package/rtl_433/rtl_433.mk
-> +++ b/package/rtl_433/rtl_433.mk
-> @@ -10,6 +10,9 @@ RTL_433_LICENSE = GPL-2.0+
->  RTL_433_LICENSE_FILES = COPYING
->  RTL_433_CPE_ID_VALID = YES
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+> index 78c919e309..40708baa33 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
+> @@ -163,18 +163,16 @@ else
+>  WPEWEBKIT_CONF_OPTS += -DUSE_GBM=OFF
+>  endif
 >  
-> +# 0002-Fix-overflow-in-rfraw-test-data-parsing.patch
-> +RTL_433_IGNORE_CVES += CVE-2025-34450
-> +
->  # Force Release build to remove ASAN.
->  RTL_433_CONF_OPTS = \
->  	-DCMAKE_BUILD_TYPE=Release \
+> -# JIT is not supported for MIPS r6, but the WebKit build system does not
+> -# have a check for these processors. The same goes for ARMv5 and ARMv6.
+> -# Disable JIT forcibly here and use the CLoop interpreter instead.
+> +# JIT is not supported for MIPS, ARMv5, and ARMv6, but the WebKit build
+> +# system does not have a check for some of these target processors.
+>  #
+> +# Disable JIT forcibly here and use the CLoop interpreter instead.
+>  # Also, we have to disable the sampling profiler and WebAssembly, which
+>  # do NOT work with ENABLE_C_LOOP.
+>  #
+> -# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
+> -#                https://bugs.webkit.org/show_bug.cgi?id=172765
+> -#                https://bugs.webkit.org/show_bug.cgi?id=265218
+> +# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=278559
+>  #
+> -ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
+> +ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_mips)$(BR2_mipsel),y)
+>  WPEWEBKIT_CONF_OPTS += \
+>  	-DENABLE_JIT=OFF \
+>  	-DENABLE_C_LOOP=ON \
 > -- 
 > 2.53.0
 > 
