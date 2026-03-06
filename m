@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9551FCC05A
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 18:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B624AFCC05C
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 18:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E19783DDF;
-	Fri,  6 Mar 2026 18:40:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SMPrSkRluWsr; Fri,  6 Mar 2026 18:40:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95E2183DD6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772822445;
-	bh=lD7pnuTsrJXP0wt8ZvaTyZfhGBnjzl3wycwrw4kF7V0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KOtaQVb1WEFCI8TvLxLnclIL0J2NOg8fxdf5A3DcRxHEg+a3xW72JaNbP/vZPV+8Q
-	 eugzYN1gXIwDihJo3ZsPD8YT4vCbJa1kPNDhuoaglgZcIX5KcZz01UfmUKOEKKsq3h
-	 6J4ZPDOoydl0+tTRi1os2GiBFzj2YKImPpfRIElZ9sVIfKIi5Xo4ojojRUNLajQPzo
-	 t0vCsVuIeRba2ZVNQHyxx1qTWDnPG9S5yDV/L+u9CM2jXPzxpdz1XMtsbildGXWkXx
-	 k0h1AZ/aWDiL8xBV+ytI2c/DD4gfXRmacPZ1P+BxJtkMRXYllA+EDXaWHLkt96563N
-	 k73XSf/43Oy1g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95E2183DD6;
-	Fri,  6 Mar 2026 18:40:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 06F7925B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:40:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C76661398
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:40:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E6A2613EC;
+	Fri,  6 Mar 2026 18:40:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iz7Utzh0lvMY for <buildroot@buildroot.org>;
+ id qmfflbz7tRB7; Fri,  6 Mar 2026 18:40:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9632A613EE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772822446;
+	bh=yec6w4jYgCaPOejyj4PbzH7PqHhYCFHddKG+JVLVa3k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hPkEE/3XCNSD2QcsIISP+ehqFeFToTItjFgrEwvXEIpHyVpT8tfxJ5MqhQ1m0UyEx
+	 a+I134W0hGHccWUmHw0WTogkj2bo66oHp1lOyTy6mvnajyJMz5Wo8Z++wlBWjT6qA1
+	 RR97wYRwAP9hkbohhFqn4UdzqsA47yHdpR2ztFwshQOlW7qKR7bViKNmy2OTfMDaei
+	 zr0gmf1tVOkgPJywQjF+0Ek7Uea2HHdSVu78HNerO7IIfC4VLZPk/iYT3HYGRqFBl6
+	 FCUT7JvXuRB1N+S8lyEutQGyVpJy5mBNFpvsr8pH/f5Tlvnk/bJTFihJ3rn4pNldBe
+	 7d6tmK9YuRBkg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9632A613EE;
+	Fri,  6 Mar 2026 18:40:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02A3A25B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:40:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BA87612C8
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:40:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tkQ18uuuZVXn for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 18:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85FC361397
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 834A361335
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85FC361397
+ by smtp3.osuosl.org (Postfix) with ESMTP id 834A361335
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:40:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 784F0867A2; Fri,  6 Mar 2026 18:40:30 +0000 (UTC)
+ id 98938839D9; Fri,  6 Mar 2026 18:40:30 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 6 Mar 2026 19:39:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 876e987099c4e1bbd5710fa75e4187469f8969dc
-X-Git-Newrev: eb5086ae7abb3e4127bceb156363939273645044
+X-Git-Oldrev: 5d1cc4f05e4ca6f3ecabfed97d2b67f2ef28b258
+X-Git-Newrev: 1f6adca8e0fc2f42a0ac05d52b525711f1054119
 X-Patchwork-Hint: ignore
-Message-Id: <20260306184030.784F0867A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ntp: fix build with glibc 2.43
+Message-Id: <20260306184030.98938839D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ltp-testsuite: fix build with
+ glibc 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,90 +72,122 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5416017152423840914=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/eb5086ae7abb3e4127bceb156363939273645044
+--===============5416017152423840914==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1f6adca8e0fc2f42a0ac05d52b525711f1054119
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-sntp/crypto.c includes sntp/config.h, then sntp/crypto.h which includes
-ntp_stdlib.h which in turn includes l_stdlib.h that contains
-
-  #ifndef HAVE_MEMCHR
-  extern void *memchr(const void *s, int c, size_t n);
-  #endif
-
-and breaks the build with glibc 2.43.
-
-sntp/config.h does not contain any information about memchr() while the
-top-level config.h does but this top-level config.h is not included
-because sntp/Makefile lacks -I$(top_builddir) so sntp/config.h gets
-included which does not define HAVE_MEMCHR although glibc does provide
-memchr() but sntp/configure lacks a check for memchr().
-
-This was not a problem with previous glibc versions but due to recent
-C23 changes in glibc the ntp build is now broken.
-
-To fix the problem we add a configure check for memchr() to
-sntp/configure so HAVE_MEMCHR gets defined in sntp/config.h.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ntp/0007-memchr.patch | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ ...t2-define-_GNU_SOURCE-and-include-fcntl.h.patch | 84 ++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/package/ntp/0007-memchr.patch b/package/ntp/0007-memchr.patch
+diff --git a/package/ltp-testsuite/0001-openat2-define-_GNU_SOURCE-and-include-fcntl.h.patch b/package/ltp-testsuite/0001-openat2-define-_GNU_SOURCE-and-include-fcntl.h.patch
 new file mode 100644
-index 0000000000..a9c21042be
+index 0000000000..e4b654b319
 --- /dev/null
-+++ b/package/ntp/0007-memchr.patch
-@@ -0,0 +1,42 @@
-+Fix build with glibc 2.43
++++ b/package/ltp-testsuite/0001-openat2-define-_GNU_SOURCE-and-include-fcntl.h.patch
+@@ -0,0 +1,84 @@
++From 767b3e519e85095dfee3a47d15a373a403fe3dab Mon Sep 17 00:00:00 2001
++From: Li Wang <liwang@redhat.com>
++Date: Tue, 3 Feb 2026 10:43:19 +0800
++Subject: [PATCH] openat2: define _GNU_SOURCE and include <fcntl.h>
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+sntp/crypto.c includes sntp/config.h, then sntp/crypto.h which includes
-+ntp_stdlib.h which in turn includes l_stdlib.h that contains
++On Fedora Rawhide (glibc 2.43+), libc exposes openat2() and struct open_how,
++so our configure script defines HAVE_OPENAT2 and the fallback definition in
++lapi/openat2.h gets skipped. But openat20*.c never included <fcntl.h> (and
++lacked _GNU_SOURCE), so the libc-provided prototype and struct stayed hidden,
++so compilation failed:
 +
-+  #ifndef HAVE_MEMCHR
-+  extern void *memchr(const void *s, int c, size_t n);
-+  #endif
++  # uname -r
++  6.18.0-65.fc44.x86_64
 +
-+and breaks the build with glibc 2.43:
++  # rpm -qf /usr/include/fcntl.h
++  glibc-devel-2.43-1.fc44.x86_64
 +
-+./../include/l_stdlib.h:225:14: error: expected identifier or '(' before '_Generic'
-+  225 | extern void *memchr(const void *s, int c, size_t n);
++  # nm -D /usr/lib64/libc.so.6 | grep -w openat2
++  00000000000eb890 W openat2@@GLIBC_2.43
 +
-+sntp/config.h does not contain any information about memchr() while the
-+top-level config.h does but this top-level config.h is not included
-+because sntp/Makefile lacks -I$(top_builddir) so sntp/config.h gets
-+included which does not define HAVE_MEMCHR although glibc does provide
-+memchr() but sntp/configure lacks a check for memchr().
++  # make -C testcase/kernel/syscalls/openat2
++  openat201.c:27:62: error: invalid application of ‘sizeof’ to incomplete type ‘struct open_how’
++    27 |         {&dir_fd, TEST_FILE, O_RDWR, S_IRWXU, 0, &how, sizeof(*how)},
 +
-+This was not a problem with previous glibc versions but due to recent
-+C23 changes in glibc the ntp build is now broken.
++Define _GNU_SOURCE and include <fcntl.h> in openat2 tests to make the
++prototype available and fix the build.
 +
-+To fix the problem we add a configure check for memchr() to
-+sntp/configure so HAVE_MEMCHR gets defined in sntp/config.h.
++Signed-off-by: Li Wang <liwang@redhat.com>
++Reviewed-by: Petr Vorel <pvorel@suse.cz>
 +
-+Upstream: https://bugs.ntp.org/show_bug.cgi?id=4015
++Upstream: https://github.com/linux-test-project/ltp/commit/767b3e519e85095dfee3a47d15a373a403fe3dab
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ testcases/kernel/syscalls/openat2/openat201.c | 3 +++
++ testcases/kernel/syscalls/openat2/openat202.c | 3 +++
++ testcases/kernel/syscalls/openat2/openat203.c | 3 +++
++ 3 files changed, 9 insertions(+)
 +
-+diff -uNr ntp-4.2.8p18/sntp/m4/ntp_libntp.m4 ntp-4.2.8p18/sntp/m4/ntp_libntp.m4
-+--- ntp-4.2.8p18/sntp/m4/ntp_libntp.m4	2024-05-07 13:21:13.000000000 +0200
-++++ ntp-4.2.8p18/sntp/m4/ntp_libntp.m4	2026-02-19 21:50:37.291724180 +0100
-+@@ -77,7 +77,7 @@
-+     ;;
-+ esac
++diff --git a/testcases/kernel/syscalls/openat2/openat201.c b/testcases/kernel/syscalls/openat2/openat201.c
++index ecd63b150e4..40ac2f6d9ad 100644
++--- a/testcases/kernel/syscalls/openat2/openat201.c
+++++ b/testcases/kernel/syscalls/openat2/openat201.c
++@@ -4,6 +4,9 @@
++  *
++  * Basic openat2() test.
++  */
+++#define _GNU_SOURCE
+++#include <fcntl.h>
+++
++ #include "tst_test.h"
++ #include "lapi/openat2.h"
 + 
-+-AC_CHECK_FUNCS([getclock stime timegm strlcpy strlcat])
-++AC_CHECK_FUNCS([getclock memchr stime timegm strlcpy strlcat])
++diff --git a/testcases/kernel/syscalls/openat2/openat202.c b/testcases/kernel/syscalls/openat2/openat202.c
++index 6d1b5a67c7d..329c6a4a5cb 100644
++--- a/testcases/kernel/syscalls/openat2/openat202.c
+++++ b/testcases/kernel/syscalls/openat2/openat202.c
++@@ -4,6 +4,9 @@
++  *
++  * openat2() tests with various resolve flags.
++  */
+++#define _GNU_SOURCE
+++#include <fcntl.h>
+++
++ #include "tst_test.h"
++ #include "lapi/openat2.h"
 + 
-+ # Bug 2713
-+ LDADD_LIBUTIL=
++diff --git a/testcases/kernel/syscalls/openat2/openat203.c b/testcases/kernel/syscalls/openat2/openat203.c
++index 6ac49ef4c9e..cd0c00d7523 100644
++--- a/testcases/kernel/syscalls/openat2/openat203.c
+++++ b/testcases/kernel/syscalls/openat2/openat203.c
++@@ -4,6 +4,9 @@
++  *
++  * Basic openat2() test to check various failures.
++  */
+++#define _GNU_SOURCE
+++#include <fcntl.h>
+++
++ #include "tst_test.h"
++ #include "lapi/openat2.h"
++ 
+
+--===============5416017152423840914==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5416017152423840914==--
