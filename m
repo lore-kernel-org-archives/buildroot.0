@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15B3FCC062
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B5ABFCC06A
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C653261088;
-	Fri,  6 Mar 2026 19:51:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 018D641E3E;
+	Fri,  6 Mar 2026 19:51:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VeaC0friCq91; Fri,  6 Mar 2026 19:51:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SX8zjjHgxW2v; Fri,  6 Mar 2026 19:51:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D48B6613C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1432B41E65
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826659;
-	bh=UszKh3t+tukcsbkEz6Vt0XKJz5h9reTAgEkhL09mQck=;
+	s=default; t=1772826661;
+	bh=89+vzYCiKUnFpyvM7eVAJr8lEWgbH58N7mZy6XbXZrw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ojPAsB/PzapNfgcU6RTPn6d2fMSYyjkQwaREnV4VdSYIFC8W9YQU4F53XAPCy289C
-	 RChhE8CPiL1aIDGwweAAPzx3EgJZZAVZ3ExRjnq5rXd+6jMrlHPgyo7bRRKBQdieN6
-	 JjtUnsXBRG/FBwNxpcnQp32frWTWnwZeZOZYSI/xwmPLrghyjWI0ZT2eIDHPu59xyn
-	 Lr62Dverz+irpRjfP+mqeygZ1vSVXWjkwGW8glAoYhNRaphGqpgfkTNC15Pm4LZ3oW
-	 DOwUBfvVceu2QNMhF77ni+TAjDAk3XAmGqDhnjNjqMA4B4PvA8dHWcZJ6RyFJNqdlV
-	 /KDhGbz28TuGg==
+	b=GOLqVcYiqGLWMxVXa2Cfbcpo1pHa55wo4XVC6aY0Y2X4PUXH8YoFOlvN3DJcHDYUv
+	 mIRqVkH0uT8v6myGePXLK/mF1mYgHroPIe19DGxbjYgexUqGXce5Kp5q1uovXMBFO6
+	 bSP3nKLZg26C96NYBPcNGS7oVUz4OZuflzb29/bX72ITWZa3gm3/amoEIcPf4ALyqw
+	 DXYqGxsWb89TbPuXL63wr3L045imPglq8M1lBH+WMoTNtizI+QQoCTNrr2bPrkqOrP
+	 MrREY4N5BrTmFTq/W2uuiiyuC7tjpKoocTtvYbwFRsJT9Z7JrEVX4N5JcIO2ibkinw
+	 W+PFb4Elus1qA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D48B6613C1;
-	Fri,  6 Mar 2026 19:50:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1432B41E65;
+	Fri,  6 Mar 2026 19:51:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 23FA225B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 38C02223
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 045CE613CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2233460DE3
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1cnL0MZrNb64 for <buildroot@buildroot.org>;
+ id tj_GyhLGxbyt for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55C25613D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C2F613D4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55C25613D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60C2F613D4
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BB0986823; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ id 768FB855F0; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 13:49:32 +0100
+Date: Fri, 6 Mar 2026 13:51:57 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 0900d725c4e45f47902bedb6ef2cf2b06c141d4f
-X-Git-Newrev: 4ec14d6a27403dfacfd64f923a9d875be52b8e4d
+X-Git-Oldrev: 4ec14d6a27403dfacfd64f923a9d875be52b8e4d
+X-Git-Newrev: 7551b75ed766062eebb5448eaeecb362ff9099a2
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195050.6BB0986823@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/tinyproxy: add
- patch for CVE-2025-63938
+Message-Id: <20260306195050.768FB855F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/botan: add patch
+ for CVE-2024-50382 & CVE-2024-50383
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,87 +77,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4ec14d6a27403dfacfd64f923a9d875be52b8e4d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7551b75ed766062eebb5448eaeecb362ff9099a2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Fixes the following vulnerability:
+Fixes the following vulnerabilities:
 
-- CVE-2025-63938:
-    Tinyproxy through 1.11.2 contains an integer overflow vulnerability in
-    the strip_return_port() function within src/reqs.c.
+- CVE-2024-50382:
+    Botan before 3.6.0, when certain LLVM versions are used, has compiler-
+    induced secret-dependent control flow in lib/utils/ghash/ghash.cpp in
+    GHASH in AES-GCM. There is a branch instead of an XOR with carry. This
+    was observed for Clang in LLVM 15 on RISC-V.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-63938
-  - https://github.com/tinyproxy/tinyproxy/commit/3c0fde94981b025271ffa1788ae425257841bf5a
+  - https://www.cve.org/CVERecord?id=CVE-2024-50382
+  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+
+- CVE-2024-50383:
+    Botan before 3.6.0, when certain GCC versions are used, has a
+    compiler-induced secret-dependent operation in lib/utils/donna128.h in
+    donna128 (used in Chacha-Poly1305 and x25519). An addition can be
+    skipped if a carry is not set. This was observed for GCC 11.3.0 with
+    -O2 on MIPS, and GCC on x86-i386. (Only 32-bit processors can be
+    affected.)
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2024-50383
+  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit be07b5766ac92efc37b6e2cd49ccb7a43212e949)
+(cherry picked from commit e197babd387cea2ab23bb1c1735ba270f6f6edf1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...nteger-overflow-in-port-number-processing.patch | 41 ++++++++++++++++++++++
- package/tinyproxy/tinyproxy.mk                     |  3 ++
- 2 files changed, 44 insertions(+)
+ ...s-to-avoid-compiler-induced-side-channels.patch | 65 ++++++++++++++++++++++
+ package/botan/botan.mk                             |  3 +
+ 2 files changed, 68 insertions(+)
 
-diff --git a/package/tinyproxy/0001-reqs-fix-integer-overflow-in-port-number-processing.patch b/package/tinyproxy/0001-reqs-fix-integer-overflow-in-port-number-processing.patch
+diff --git a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
 new file mode 100644
-index 0000000000..3b14a58fb6
+index 0000000000..22f64be1b9
 --- /dev/null
-+++ b/package/tinyproxy/0001-reqs-fix-integer-overflow-in-port-number-processing.patch
-@@ -0,0 +1,41 @@
-+From 3c0fde94981b025271ffa1788ae425257841bf5a Mon Sep 17 00:00:00 2001
-+From: rofl0r <rofl0r@users.noreply.github.com>
-+Date: Fri, 17 Oct 2025 22:57:39 +0000
-+Subject: [PATCH] reqs: fix integer overflow in port number processing
++++ b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+@@ -0,0 +1,65 @@
++From 53b0cfde580e86b03d0d27a488b6c134f662e957 Mon Sep 17 00:00:00 2001
++From: Jack Lloyd <jack@randombit.net>
++Date: Sat, 19 Oct 2024 07:43:18 -0400
++Subject: [PATCH] Add more value barriers to avoid compiler induced side
++ channels
 +
-+closes #586
++The paper https://arxiv.org/pdf/2410.13489 claims that on specific
++architectures Clang and GCC may introduce jumps here. The donna128
++issues only affect 32-bit processors, which explains why we would not
++see it in the x86-64 valgrind runs.
 +
-+CVE: CVE-2025-63938
-+Upstream: https://github.com/tinyproxy/tinyproxy/commit/3c0fde94981b025271ffa1788ae425257841bf5a
++The GHASH leak would seem to be generic but the authors only observed
++it on RISC-V.
++
++CVE: CVE-2024-50382
++CVE: CVE-2024-50383
++Upstream: https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ src/reqs.c | 9 ++++++---
-+ 1 file changed, 6 insertions(+), 3 deletions(-)
++ src/lib/utils/donna128.h      | 5 +++--
++ src/lib/utils/ghash/ghash.cpp | 2 +-
++ 2 files changed, 4 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/reqs.c b/src/reqs.c
-+index 52135a03..a562c68a 100644
-+--- a/src/reqs.c
-++++ b/src/reqs.c
-+@@ -174,7 +174,7 @@ static int strip_return_port (char *host)
-+ {
-+         char *ptr1;
-+         char *ptr2;
-+-        int port;
-++        unsigned port;
++diff --git a/src/lib/utils/donna128.h b/src/lib/utils/donna128.h
++index 8212bd349e0..7adf54546df 100644
++--- a/src/lib/utils/donna128.h
+++++ b/src/lib/utils/donna128.h
++@@ -8,6 +8,7 @@
++ #ifndef BOTAN_CURVE25519_DONNA128_H_
++ #define BOTAN_CURVE25519_DONNA128_H_
 + 
-+         ptr1 = strrchr (host, ':');
-+         if (ptr1 == NULL)
-+@@ -186,8 +186,11 @@ static int strip_return_port (char *host)
-+                 return 0;
+++#include <botan/internal/ct_utils.h>
++ #include <botan/internal/mul128.h>
++ #include <type_traits>
 + 
-+         *ptr1++ = '\0';
-+-        if (sscanf (ptr1, "%d", &port) != 1)    /* one conversion required */
-+-                return 0;
-++
-++        port = atoi(ptr1);
-++        /* check that port string is in the valid range 1-0xffff) */
-++        if(strlen(ptr1) > 5 || (port & 0xffff0000)) return 0;
-++
-+         return port;
-+ }
++@@ -73,14 +74,14 @@ class donna128 final {
++          l += x.l;
++          h += x.h;
 + 
-diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-index 6656a752a6..c5e975d8ab 100644
---- a/package/tinyproxy/tinyproxy.mk
-+++ b/package/tinyproxy/tinyproxy.mk
-@@ -11,4 +11,7 @@ TINYPROXY_LICENSE = GPL-2.0+
- TINYPROXY_LICENSE_FILES = COPYING
- TINYPROXY_CPE_ID_VALID = YES
++-         const uint64_t carry = (l < x.l);
+++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x.l).if_set_return(1);
++          h += carry;
++          return *this;
++       }
++ 
++       constexpr donna128& operator+=(uint64_t x) {
++          l += x;
++-         const uint64_t carry = (l < x);
+++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x).if_set_return(1);
++          h += carry;
++          return *this;
++       }
++diff --git a/src/lib/utils/ghash/ghash.cpp b/src/lib/utils/ghash/ghash.cpp
++index 8c3b1ed6c2a..61b28590002 100644
++--- a/src/lib/utils/ghash/ghash.cpp
+++++ b/src/lib/utils/ghash/ghash.cpp
++@@ -131,7 +131,7 @@ void GHASH::key_schedule(std::span<const uint8_t> key) {
++          m_HM[4 * j + 2 * i + 1] = H1;
++ 
++          // GCM's bit ops are reversed so we carry out of the bottom
++-         const uint64_t carry = R * (H1 & 1);
+++         const uint64_t carry = CT::Mask<uint64_t>::expand(H1 & 1).if_set_return(R);
++          H1 = (H1 >> 1) | (H0 << 63);
++          H0 = (H0 >> 1) ^ carry;
++       }
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 561e7bf702..38948f0184 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -11,6 +11,9 @@ BOTAN_LICENSE = BSD-2-Clause
+ BOTAN_LICENSE_FILES = license.txt
+ BOTAN_CPE_ID_VALID = YES
  
-+# 0001-reqs-fix-integer-overflow-in-port-number-processing.patch
-+TINYPROXY_IGNORE_CVES += CVE-2025-63938
++# 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
++BOTAN_IGNORE_CVES += CVE-2024-50382 CVE-2024-50383
 +
- $(eval $(autotools-package))
+ BOTAN_INSTALL_STAGING = YES
+ 
+ BOTAN_DEPENDENCIES = host-python3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
