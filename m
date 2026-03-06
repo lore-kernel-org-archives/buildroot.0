@@ -1,63 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBEA3F0182F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 12:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AB41F01832
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 12:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86CFC60BA9;
-	Fri,  6 Mar 2026 12:35:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5ADF780683;
+	Fri,  6 Mar 2026 12:46:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vTZhucgSJ9hB; Fri,  6 Mar 2026 12:35:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a2_0SkOxVolx; Fri,  6 Mar 2026 12:46:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9772E60BAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82ACF80707
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772800557;
-	bh=xELVU8qHdz+eav8ikR4TwZ54JnHxhw10cUrC1S7UE5M=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=S2Z4NYscisF4zOMztzbEItRV4mGZy98K7aqKk48vnP2qQZPI5AgLxQQXNcR6zkZE9
-	 okYDsqcjY7C7ELWkQVHRNqROAS2/9cIYidXcX5f86jwFrec5/ePw91JBz4CcgOXD4T
-	 7RWfJRo8tJhpOU8KwNuRgETQO547Ioh945NHH/8iwDJnLewnL85kv0i29kQr6v2XXE
-	 n5MQpuItCQ58fNNryGw/E7TglXUG7qgMFzFC86Hj/+dTqlsVwZ+9idguGfsx8U6l1w
-	 x8WvkAeZq2CUpH1vJoG1bon88ZVET0U4JjWKGzwGl9HzHHK+qrTEZ9qQBpxPSAm069
-	 UgBNWHsqXEQkQ==
+	s=default; t=1772801200;
+	bh=05xdVC663ObQlg/jad7psaSFiVmzFK+CTdeZx3aZs6U=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=sThXm56wgw/wrAjNvCFCd0vIv6ibtF2YC2j1LYgvBSlUokeQU88AHs2IEJjiQhrRY
+	 VxoCarGZOcDH68VeFB1NYjBg1cBeHBUCKHMCIybqOCbweI9IuMJxHpeISl8hQy8waB
+	 KX+QUIxVlXtbQ/JjwyVMQaxRTJhtMib2vcaw0zTC3lGN9wYCs0s/erkAO4KyglR1tf
+	 DLGVJH0QfTTuN2MMjaUCC3wSc7vw+OtYjEY9ttxqFF4UP5slxBnAnSY9UsKew48au5
+	 rtO9UXX//jXENr7E03dTcHNkqwo4FlfsLC5SJx1wIm8WrbvW6E+eA578nBnsBNTTLd
+	 Vmg04yJN6nKHQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9772E60BAB;
-	Fri,  6 Mar 2026 12:35:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 89DB7223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 12:35:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82ACF80707;
+	Fri,  6 Mar 2026 12:46:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67772339
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 12:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F0FF60BAB
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 12:35:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58F0F409B9
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 12:46:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VlG-UyPd_wSg for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 12:35:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BD3460BA9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BD3460BA9
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 12:35:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F7568651E; Fri,  6 Mar 2026 12:35:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 13:34:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea5d82f1f69dd856afc08cdc940249019cc6447a
-X-Git-Newrev: 5e6c424cac5703a232f84e14ae360fae9cd166f1
-X-Patchwork-Hint: ignore
-Message-Id: <20260306123555.4F7568651E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/edk2-platforms: fix package patch
- newline characters
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SaHyu9xM3eaV for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 12:46:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C5CD7405CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5CD7405CC
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C5CD7405CC
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 12:46:36 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-439b9b1900bso4104444f8f.1
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 04:46:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1772801194; x=1773405994;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=oNsLaUvwXdrm5ghsjMaeNpxNHSpklaXAjiVPrGD5/04=;
+ b=wz8gtMwi28/Rs6yvknPYIhdJkAFApTbT04nFHTA+mlqLP5RgyWfdk+RtgnHRtxTCqG
+ s+kTuWxGJV3hehGaQLZMzZR/ODWYkmL3Psuf3P7AxFYMF0UQjLa5bhBFR4tVVjN66foI
+ hC23Qu5r+xuV6OrDC89N5WckkoLckTTvpo3/ftytzaKgqeSxznTpyivh9ln0kc2u/ns2
+ lKyQi+Mb3YLyH37E/lnbmEmkK6GTpHJEa3hoSSDRlsjHaIMuqS3EZAY5qS83KT7M2jIL
+ PNLf/fwY5ODdZT92pd1Mo4b8DmSw6XaUfzlH4eamr2IKqMeX8MzWUsdEJKVg6M/T9NaM
+ 7NdQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVV5GyKR2eOKTWc0fJKojdG6FAtgRiduNH2cPxKEhtSCBbR7QtQ3LsKU69fqi/YbscKitPY+itFDow=@buildroot.org
+X-Gm-Message-State: AOJu0Yye8epSGlq3i95uzGUttqudKsqWwpgnPk0bvyE1uRn3WjShWCWm
+ EhgYBAv/t6+AT+ZwuEOBAT1aNpVR4mILjFS892+uBy9cTD0xXGxU+zrbGWz4Dq/FNij/hPc1vH7
+ b0iHM
+X-Gm-Gg: ATEYQzxWD71Gh368JHylTVUWdkqXdOBek5comiHbXG6hOcgVD/XMxFNiEmrrUC2bx8S
+ OdHONZ7rq6KfAGvYewf6gPZavxah9G1NjRq1Cxl7WUVU68snYo58mkBlEnIIM96TWAhZLUG5gtf
+ ZQy5G/ISY7LqMACtkBgFBvyV14ACwaloQ2VxP6sYx513yHLSNkTVNnKDHiEN1f7ZcemHw5nS/0C
+ RoPHIdS0oHH5K3Sa7nUFZhFzHRT4fAGebu4MtR/TnkzWri5GP2JwmR3Tqa84dixLgtb1nl+2NrP
+ 1JkXLvZelZf6eMpvdt+WSy+LsEVZQFDP8tPlkvbnXuWrLLGpMD7y34Me9acLgUAcJmna3/QfCZ/
+ 5lNsbfWCyc8Sevt6kykzPqBrN5QB6xlCbto8jQ4C1klYKVtjuf+fpXdfas4OAon8RwVrzkvycdq
+ d09RnVn56ohPEpfv8=
+X-Received: by 2002:a05:6000:2c0c:b0:439:b541:a088 with SMTP id
+ ffacd0b85a97d-439da8a2e9fmr3087723f8f.54.1772801194304; 
+ Fri, 06 Mar 2026 04:46:34 -0800 (PST)
+Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-439dae2ba66sm3080843f8f.20.2026.03.06.04.46.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 06 Mar 2026 04:46:34 -0800 (PST)
+To: Paul Kocialkowski <paulk@sys-base.io>
+Cc: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org,
+ Pedro Aguilar <paguilar@paguilar.org>
+Date: Fri,  6 Mar 2026 13:46:33 +0100
+Message-ID: <20260306124633.143362-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260225175138.2965145-1-paulk@sys-base.io>
+References: <20260225175138.2965145-1-paulk@sys-base.io>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1772801194; x=1773405994; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=oNsLaUvwXdrm5ghsjMaeNpxNHSpklaXAjiVPrGD5/04=;
+ b=Kl2UfjgDJjUYihmUp7tZFsOaHZ6Dt5u02QjRT9hYqJluEpwEf/Z/YYTZdjkIYH1fYC
+ TA6sogkaMr2DOYJqRNIVKyZ1SUf6BFBnLhYALbVLEPDtBQp7gorjTa/nICrADCjkoClw
+ QumYCg7UyWl5aXX4uiqMNKfnrGQaQwBz9vqMzMFf6eVJDedze5zrW82GTEYRe5GeNF9J
+ KlOZLQFhUNi44RDq1Ns+S3tqm8FUIZNaylL6eJh/fO0x3y0ewP/akHKeDR+DNwOdpAEG
+ zmFwNSMY5EqCMLZbdF15b6mi3GisDb2h2U8hnLgEkzwcA48I4Zb5B9qIzASg7yPC551X
+ Ro+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Kl2UfjgD
+Subject: Re: [Buildroot] [PATCH] packages/libunistring: bump to version 1.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,124 +124,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5e6c424cac5703a232f84e14ae360fae9cd166f1
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Paul,
 
-Commit [1] was applied without fixing the edk2-platform patch
-newlines which are changed by the mailing list. As a result,
-the patch fails to apply.
+In reply of:
+> This minor release contains a fix for building with host glibc 2.43,
+> which fails otherwise.
+> 
 
-This commit fixes the issue.
+I'm looking at this commit to maybe cherry-pick it for the 2025.02.x branch.
+I'm running a host with glibc 2.43 and didn't manage to reproduce the build
+issue. Can you point me to the commit that fixes it or an error log.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/21baec5ef57077cc7b4ce98dbd863c5f5a6d8380
+Thanks,
+PERALE Thomas
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...icon-Marvell-fix-SMBIOS-type-7-structures.patch | 80 +++++++++++-----------
- 1 file changed, 40 insertions(+), 40 deletions(-)
+> Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
 
-diff --git a/package/edk2-platforms/0001-Silicon-Marvell-fix-SMBIOS-type-7-structures.patch b/package/edk2-platforms/0001-Silicon-Marvell-fix-SMBIOS-type-7-structures.patch
-index 9a12580a69..533b325796 100644
---- a/package/edk2-platforms/0001-Silicon-Marvell-fix-SMBIOS-type-7-structures.patch
-+++ b/package/edk2-platforms/0001-Silicon-Marvell-fix-SMBIOS-type-7-structures.patch
-@@ -32,49 +32,49 @@ index 16fe05a46c..d348bbb458 100644
- --- a/Silicon/Marvell/Drivers/SmbiosPlatformDxe/SmbiosPlatformDxe.c
- +++ b/Silicon/Marvell/Drivers/SmbiosPlatformDxe/SmbiosPlatformDxe.c
- @@ -227,8 +227,8 @@ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l1i = {
--   CacheTypeInstruction,    //instruction cache
--   CacheAssociativityOther, //three way
--   // SMBIOS 3.1.0 fields
---  48,    //48k I-cache max
---  48,    //48k installed
--+  {48,0},//48k I-cache max
--+  {48,0},//48k installed
-- };
-- 
-- STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l1d = {
-+   CacheTypeInstruction,    //instruction cache
-+   CacheAssociativityOther, //three way
-+   // SMBIOS 3.1.0 fields
-+-  48,    //48k I-cache max
-+-  48,    //48k installed
-++  {48,0},//48k I-cache max
-++  {48,0},//48k installed
-+ };
-+ 
-+ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l1d = {
- @@ -248,8 +248,8 @@ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l1d = {
--   CacheTypeData,           //data cache
--   CacheAssociativity2Way,  //two way
--   // SMBIOS 3.1.0 fields
---  32,    //32k D-cache max
---  32,    //32k installed
--+  {32,0},//32k D-cache max
--+  {32,0},//32k installed
-- };
-- 
-- STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l2 = {
-+   CacheTypeData,           //data cache
-+   CacheAssociativity2Way,  //two way
-+   // SMBIOS 3.1.0 fields
-+-  32,    //32k D-cache max
-+-  32,    //32k installed
-++  {32,0},//32k D-cache max
-++  {32,0},//32k installed
-+ };
-+ 
-+ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l2 = {
- @@ -269,8 +269,8 @@ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_a72_l2 = {
--   CacheTypeUnified,        //instruction cache
--   CacheAssociativity16Way, //16 way associative
--   // SMBIOS 3.1.0 fields
---  512,   //512k D-cache max
---  512,   //512k installed
--+  {512,0},//512k D-cache max
--+  {512,0},//512k installed
-- };
-- 
-- STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_l3 = {
-+   CacheTypeUnified,        //instruction cache
-+   CacheAssociativity16Way, //16 way associative
-+   // SMBIOS 3.1.0 fields
-+-  512,   //512k D-cache max
-+-  512,   //512k installed
-++  {512,0},//512k D-cache max
-++  {512,0},//512k installed
-+ };
-+ 
-+ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_l3 = {
- @@ -290,8 +290,8 @@ STATIC SMBIOS_TABLE_TYPE7 mArmadaDefaultType7_l3 = {
--   CacheTypeUnified,        //instruction cache
--   CacheAssociativity8Way,  //8 way associative
--   // SMBIOS 3.1.0 fields
---  1024,  //1M cache max
---  1024,  //1M installed
--+  {1024,0},//1M cache max
--+  {1024,0},//1M installed
-- };
-- 
-- STATIC CONST CHAR8 *mArmadaDefaultType7Strings[] = {
-+   CacheTypeUnified,        //instruction cache
-+   CacheAssociativity8Way,  //8 way associative
-+   // SMBIOS 3.1.0 fields
-+-  1024,  //1M cache max
-+-  1024,  //1M installed
-++  {1024,0},//1M cache max
-++  {1024,0},//1M installed
-+ };
-+ 
-+ STATIC CONST CHAR8 *mArmadaDefaultType7Strings[] = {
- -- 
- 2.52.0
- 
+> ---
+>  package/libunistring/libunistring.hash | 4 ++--
+>  package/libunistring/libunistring.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+> index f86b6f94b02b..ef2f3da34147 100644
+> --- a/package/libunistring/libunistring.hash
+> +++ b/package/libunistring/libunistring.hash
+> @@ -1,6 +1,6 @@
+>  # Locally calculated after checking pgp signature
+> -# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.xz.sig
+> -sha256  67d88430892527861903788868c77802a217b0959990f7449f2976126a307763  libunistring-1.4.1.tar.xz
+> +# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.xz.sig
+> +sha256  5b46e74377ed7409c5b75e7a96f95377b095623b689d8522620927964a41499c  libunistring-1.4.2.tar.xz
+>  # Locally calculated
+>  sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+>  sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
+> diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+> index 1abbfde6da9e..57333a35bffc 100644
+> --- a/package/libunistring/libunistring.mk
+> +++ b/package/libunistring/libunistring.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBUNISTRING_VERSION = 1.4.1
+> +LIBUNISTRING_VERSION = 1.4.2
+>  LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+>  LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+>  LIBUNISTRING_INSTALL_STAGING = YES
+> -- 
+> 2.53.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
