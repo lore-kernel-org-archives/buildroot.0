@@ -1,114 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2FA4FCC062
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73F61FCC062
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B79CC4208B;
-	Fri,  6 Mar 2026 19:53:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U_hHC6hIIvRi; Fri,  6 Mar 2026 19:53:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4076F42072
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826791;
-	bh=EX56mepw8if+tU6PSRwr48qtMiHywi4Iy+tdytx3ABM=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qaUuHwRmedW31S7TfE1ChhiH0aAqKY7ngz2tGOCfvbjWeSmHORcwVYqTUSQCd4FiG
-	 xFvIni9k0oQhYRA7+f13UszUYZsRiRUn4qPkyDYe7My3ufQ5h1XOCcZPUBPDMmzQe+
-	 E1OSyVdG3qtZvOy3/EzawH5qROLbT0CbZ+dSUmI3PEZKICz9MUdtP9E3c/h8vrpxf7
-	 yYl4bM0ZniihYBzoQ3cmxWV+DgS9Veo9c3TaiYdi8cnuFxiSfKRmW6AIwD2bR++Htu
-	 T2SX0ioxSR9hSaoeQnJAXUvt6x1GQQFrZWj6Ts7lXXPzmBSWBFfYnyF0Mm3KnLTjHp
-	 za9Y5sWkNHJSQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4076F42072;
-	Fri,  6 Mar 2026 19:53:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C52BB25B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA98761426
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B09261472;
+	Fri,  6 Mar 2026 19:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9GWKOgUNNOTL for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:53:06 +0000 (UTC)
+ id tgeuCsJ4ReKV; Fri,  6 Mar 2026 19:53:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB03D61497
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772826796;
+	bh=jYCwgN3JYeUx+PMOXjU3mbktJdvnNZKWDrlEDPq+hes=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kEwvcCWVy8B/TJNKsO5ZiOYjDAxDzgtwGdGw6/ijv4xiucNnQ/FK1p/p7FzJp5hoz
+	 PtOmw4PekZSopBGkzRZAxtCvmadFrnoANoFFvVRiQvSHuW30GC7mz5lF9l/HdmszSs
+	 mxq7yjJcGTQnql/ruonCqU6SMSqAxmdO/4h5PvpZWicDVVQRgZFidFRaSCrmDFoOB7
+	 4rUJrYYL4m+CEFsnrmfW+APXL2786SNyC3BXziKWn7nmjUzrEk1uKQpN49J7+HD0jM
+	 7dUanLVN6XRDKt0MgK4nskEDdr3+7x6RkLQGjhYx+GFog4urlJox674/0+jQj86dnN
+	 GsmL/NWCDcsvQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB03D61497;
+	Fri,  6 Mar 2026 19:53:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 896F1169
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F6A183D65
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jAI1ETMiXEm2 for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:53:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9A80861472
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A80861472
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9A80861472
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:05 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-439c56e822eso3882531f8f.2
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:05 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5D13B83D56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D13B83D56
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5D13B83D56
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:10 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-48371bb515eso142373435e9.1
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826783; x=1773431583;
+ d=1e100.net; s=20230601; t=1772826788; x=1773431588;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=K0MApGsNeBuXnheoP1VnfLoi4AAcBQlYlhM7ZUyfgTU=;
- b=dKBWBL6nSSQKYK50fsUlvr/Jt8qtZWhY+51vRAAuzFjGflmQIVXXmaGhrTWrmGRznh
- oTJM3rW9WwPnKiBxWc4jSKKCFl6I1g3Hn5+hAfD/c1R/PsTK++c+uXeSpsZ42AtofC++
- WJ5ziJ9Ve9cKWyVizl6ZZ/prVfNW9LRZXCBkfAQdO11Vi1MESB2IYUbOA4qhpz4OmvVI
- +qfUVDS6khs6unkB4mFSR/5lO0+gnF0aIMyGkMTqUEZ8f817n0WTLAKBs1CJ0AxvNqzJ
- EsyhMogYMKWHHrOxUL4vXS62q8Hlus0DsCrEIdOWDkD1bx+NMfMipGONvlCQ6r5GkTXT
- V3EA==
-X-Gm-Message-State: AOJu0YymWELyPBdTlzLyVcd0nTVSGegPXzyfgVyNd1HSrcaDxHCAOEla
- sCGmn2bi8PQXyn/V/FsmFCbCUyNiG+p94zLtEVaYjK6kIdIxuICyAtV3Bs7v1PkJSH0=
-X-Gm-Gg: ATEYQzyfupc5OuxCmnZTwFi8bNSndEy6rLwOk4DmC/wgseubLzg0KxWMZFBJy4VLPIM
- 0qweAPq5nIcTJ6O0HlAshCVKQR0+gNrbukN3J476Xc8uU3tZSLvrxL7gGePC2KNTNSvMtvxb/Z6
- qkUjSGjsSmuZ8hB2zb0kzsXiRuh+17ec37cd0YTIzceaGxkcm+rCo+cm/cSm4M7KnorKl/C5BJn
- +vnEbfFpmXL1tvu/Pt4tb71/JHVekYAfFrwTGV8t7WbhpmCPODFsPrZPLYkg/U7vrIWtmxmTfbM
- 807VONFykTv2oYohY6V7qWBjNDZBfGAgezPmNGZc3QEimpSJvvmFU3cTpmAbUzKwRQfAovbzDih
- J7YXjGJnoEDz2C/O/hd2O5I1vJ8jPxr7XhTlKKOtzD9CE0T1UE3pDAOrNL8W8kWn14lc6d9RC/O
- zVZcfdP6rRaqq52Uo=
-X-Received: by 2002:a05:6000:4205:b0:439:c677:5145 with SMTP id
- ffacd0b85a97d-439da65772dmr5491733f8f.22.1772826783457; 
- Fri, 06 Mar 2026 11:53:03 -0800 (PST)
+ bh=QB7ipHsJLUgWGKPqMbeZOlklMujB72I+shT4ro6vJCY=;
+ b=J0HMZj1HytW/GNKZqeVTdeuGfTb4ivUYrlEJKjxE3oS4ZXLKz1DQIoX96FQe0AOJt0
+ QHNr3ZQxKovo/NctdUBobLXsRQzCD+rO44zvbPSeSkMpoJng/bBpTD3cbY30dx45E0Cq
+ V89V/DrdphcCu95Hoz95Baji7kgG4fBQNzoqHhYFBFlulSCYWh6/2Es6FRcmAuTY9lx+
+ /KV5Db4RxXw8tvJ/9YEl1/3h2tkqs+EsshsqhRISe+/SY1ujVB9TQ2Ycq4FImKJVk1ll
+ uIpfy/uaDLoLLumZM599ZQ4ETtJibRDuMXJHdTr3/+C3WQG7RY3ID+T0BbK4vVDicnwl
+ pHzw==
+X-Gm-Message-State: AOJu0Yxtbb2oerW0z3Zt90U1Gad1NgDdiao46KjhANFVn7P30QvxruTZ
+ MsBrYW0TF0/x67bpKqdGsNtqUptiJEKRGfueGPi7T+o1LpSWPzUe+WICLLjcKU9cb7cQ4DxuU76
+ UKBDX
+X-Gm-Gg: ATEYQzyjiI6duXAxCPqg7ERwxPhKcy79QIJcz6JlRF4WL0qyPiPHGCl8Jplyop+tmm7
+ I0ISPPnb4V5sktqSbUkvHQ/d22hR8ju7vCz1tQGbwANKU1ngG3iZ2jxyzTDQEhDW8wa8JZOBfSW
+ yICrEU2yAgKBZxO9omsTFjleO4xmoscAD1AsG0Dt60SsnuKNnIdWoDPcOWzWcrmlBRfNuJcIijF
+ fIycrYT/i/eLiKipz6uRxgChDb7KRBchV+4yy4rO0I3LXsAAgr+mUlOi7JAo9N+vQXwNy6vVuWc
+ CXQErGIr+OYzGbhdTT9uhLbXoKM7kZvSpiS6MxVdj5YaeQ0kYkEj9NkP+LPNqJJaCUmnAWZtWf+
+ 1kdHh2eBymobcNUwPyAupPa05XFpTQCQS/EpFD4Pb5NNH/uPiakBDzyFWrLLr+1q9YduG+H6py9
+ ++2Qk7B9AZPZIiAok=
+X-Received: by 2002:a05:600c:608f:b0:483:8e43:6dce with SMTP id
+ 5b1f17b1804b1-4852696937cmr52747095e9.29.1772826788296; 
+ Fri, 06 Mar 2026 11:53:08 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439dae2b9d8sm6037936f8f.21.2026.03.06.11.53.03
+ 5b1f17b1804b1-4852378de92sm41264025e9.0.2026.03.06.11.53.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:03 -0800 (PST)
+ Fri, 06 Mar 2026 11:53:08 -0800 (PST)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:02 +0100
-Message-ID: <20260306195302.7339-1-thomas.perale@mind.be>
+Date: Fri,  6 Mar 2026 20:53:07 +0100
+Message-ID: <20260306195307.7584-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260225094824.270893-1-thomas.perale@mind.be>
-References: <20260225094824.270893-1-thomas.perale@mind.be>
+In-Reply-To: <20260226080651.19171-1-thomas.perale@mind.be>
+References: <20260226080651.19171-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826783; x=1773431583; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826788; x=1773431588; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=K0MApGsNeBuXnheoP1VnfLoi4AAcBQlYlhM7ZUyfgTU=;
- b=CE2qzpq3s2+JbhQ44zlOHto75rqIuaCnx4/Zr1p/UUbqR+UvKih2J7EkfGZStzuMnb
- ube/Djsb7svU5FfkOAyn+xXLnIlD+jJtGDHwbcIDLs7szvEyCLol3nukqrW+B6Q4Ter/
- Irq1U6XaDafvyR/OgKccN3M5hXx6qDzKYlfEs1llFbkYAibg+c3oaX9EK2Fy97JOiWXb
- DLypkfhrEtslxRc274O7qCz4ntrzihUKE3wOher/ZALK8m5Z8eY9ftHzeLd5IuRtkyNx
- 7lZLxjcNzTq/czdYJ9Ntfoa3dGy3tTEit8hZmKbaV6h9Hulfkl4L1T+UHjfunF47mV4f
- XYyA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=QB7ipHsJLUgWGKPqMbeZOlklMujB72I+shT4ro6vJCY=;
+ b=JfgwA0+GuYfUrHjE45xXDNtm3/nBRzdM+20xgJU4Z67R8NIlZEbHO1nQa0BC26zMHW
+ LgMMIo1J5OEs6WCUgOCcjEqZc3TuzGdv3hlt4XLzUP5Wd+SUn1ury0pQmYREzNM71UGv
+ /eXIZTSHBqClBBWhRet8vd5+0SuGl/YcO87AKfeMkkIQvPeYdtVo6m4iDIBkQUm6EXOM
+ eLHYF4PY2r+27Ea766i7aFoJX88NuUD9I2AnU+mH5u1S2zV10eB5zUJtqpND1qAFfCY0
+ 9v1L/RkMlq5P3h8Uy7kGj02F/qGNkRmXlcTUgYwV2YLvPlAYrpWobCFLCRwvfraHyT7X
+ 0R8A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CE2qzpq3
-Subject: Re: [Buildroot] [PATCH 1/1] package/containerd: security bump to
- v2.0.7
+ header.a=rsa-sha256 header.s=google header.b=JfgwA0+G
+Subject: Re: [Buildroot] [PATCH] package/igmpproxy: add patch for
+ CVE-2025-50681
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,81 +129,80 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For more information on the version bump, see:
->   - https://github.com/containerd/containerd/releases/tag/v2.0.7
->   - https://github.com/containerd/containerd/releases/tag/v2.0.6
->   - https://github.com/containerd/containerd/releases/tag/v2.0.5
->   - https://github.com/containerd/containerd/releases/tag/v2.0.4
->   - https://github.com/containerd/containerd/releases/tag/v2.0.3
+> Fixes the following vulnerability:
 > 
-> Fixes the following vulnerabilities:
+> - CVE-2025-50681:
+>     igmpproxy 0.4 before commit 2b30c36 allows remote attackers to cause a
+>     denial of service (application crash) via a crafted IGMPv3 membership
+>     report packet with a malicious source address. Due to insufficient
+>     validation in the `recv_igmp()` function in src/igmpproxy.c, an
+>     invalid group record type can trigger a NULL pointer dereference when
+>     logging the address using `inet_fmtsrc()`. This vulnerability can be
+>     exploited by sending malformed multicast traffic to a host running
+>     igmpproxy, leading to a crash. igmpproxy is used in various embedded
+>     networking environments and consumer-grade IoT devices (such as home
+>     routers and media gateways) to handle multicast traffic for IPTV and
+>     other streaming services. Affected devices that rely on unpatched
+>     versions of igmpproxy may be vulnerable to remote denial-of-service
+>     attacks across a LAN .
 > 
-> - CVE-2024-25621:
->     Versions 2.0.0-beta.0 through 2.0.6 have an overly broad default
->     permission vulnerability. Directory paths `/var/lib/containerd`,
->     `/run/containerd/io.containerd.grpc.v1.cri` and
->     `/run/containerd/io.containerd.sandbox.controller.v1.shim` were all
->     created with incorrect permissions.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2024-25621
-> 
-> - CVE-2024-40635:
->     A bug was found in containerd prior to versions 2.0.4 where
->     containers launched with a User set as a `UID:GID` larger than the
->     maximum 32-bit signed integer can cause an overflow condition where
->     the container ultimately runs as root (UID 0). This could cause
->     unexpected behavior for environments that require containers to run
->     as a non-root user.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2024-40635
-> 
-> - CVE-2025-47291:
->     A bug was found in the containerd's CRI implementation where
->     containerd, starting in version 2.0.1 and prior to version 2.0.5,
->     doesn't put usernamespaced containers under the Kubernetes' cgroup
->     hierarchy, therefore some Kubernetes limits are not honored. This
->     may cause a denial of service of the Kubernetes node.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-47291
-> 
-> - CVE-2025-64329:
->     Versions 2.0.0-beta.0 through 2.0.6 contain a bug in the CRI Attach
->     implementation where a user can exhaust memory on the host due to
->     goroutine leaks.
-> 
->     https://www.cve.org/CVERecord?id=CVE-2025-64329
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2025-50681
+>   - https://github.com/younix/igmpproxy/commit/2b30c36e6ab5b21defb76ec6458ab7687984484c
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/containerd/containerd.hash | 2 +-
->  package/containerd/containerd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  .../igmpproxy/0001-Fix-Buffer-Overflow.patch  | 25 +++++++++++++++++++
+>  package/igmpproxy/igmpproxy.mk                |  3 +++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 package/igmpproxy/0001-Fix-Buffer-Overflow.patch
 > 
-> diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-> index 4ec78897d9..0916c603bb 100644
-> --- a/package/containerd/containerd.hash
-> +++ b/package/containerd/containerd.hash
-> @@ -1,3 +1,3 @@
->  # Computed locally
-> -sha256  472747a7a6b360a0864bab0ee00a8a6f51da5795171e6a60ab17aa80cbd850a2  containerd-2.0.2-go2.tar.gz
-> +sha256  2bbf9fedcf4ab31736fcb3ce224ef22610a87da9d53bbd8f6d205710fd849831  containerd-2.0.7-go2.tar.gz
->  sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-> diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-> index 2ef70ab5d7..a334f0fdac 100644
-> --- a/package/containerd/containerd.mk
-> +++ b/package/containerd/containerd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/igmpproxy/0001-Fix-Buffer-Overflow.patch b/package/igmpproxy/0001-Fix-Buffer-Overflow.patch
+> new file mode 100644
+> index 0000000000..b9f03386a8
+> --- /dev/null
+> +++ b/package/igmpproxy/0001-Fix-Buffer-Overflow.patch
+> @@ -0,0 +1,25 @@
+> +From 2b30c36e6ab5b21defb76ec6458ab7687984484c Mon Sep 17 00:00:00 2001
+> +From: Jan Klemkow <j.klemkow@wemelug.de>
+> +Date: Thu, 17 Apr 2025 19:02:16 +0200
+> +Subject: [PATCH] Fix Buffer Overflow #97
+> +
+> +CVE: CVE-2025-50681
+> +Upstream: https://github.com/younix/igmpproxy/commit/2b30c36e6ab5b21defb76ec6458ab7687984484c
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/igmp.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/igmp.c b/src/igmp.c
+> +index a80c4e58..838694ce 100644
+> +--- a/src/igmp.c
+> ++++ b/src/igmp.c
+> +@@ -94,7 +94,7 @@ static const char *igmpPacketKind(unsigned int type, unsigned int code) {
+> +     case IGMP_V2_LEAVE_GROUP:        return "Leave message     ";
+> + 
+> +     default:
+> +-        sprintf(unknown, "unk: 0x%02x/0x%02x    ", type, code);
+> ++        snprintf(unknown, sizeof unknown, "unk: 0x%02x/0x%02x    ", type, code);
+> +         return unknown;
+> +     }
+> + }
+> diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+> index f2c32939ff..d7d7691c8f 100644
+> --- a/package/igmpproxy/igmpproxy.mk
+> +++ b/package/igmpproxy/igmpproxy.mk
+> @@ -13,4 +13,7 @@ IGMPPROXY_LICENSE_FILES = COPYING GPL.txt Stanford.txt
 >  
-> -CONTAINERD_VERSION = 2.0.2
-> +CONTAINERD_VERSION = 2.0.7
->  CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
->  CONTAINERD_LICENSE = Apache-2.0
->  CONTAINERD_LICENSE_FILES = LICENSE
+>  IGMPPROXY_CPE_ID_VENDOR = pali
+>  
+> +# 0001-Fix-Buffer-Overflow.patch
+> +IGMPPROXY_IGNORE_CVES += CVE-2025-50681
+> +
+>  $(eval $(autotools-package))
 > -- 
 > 2.53.0
 > 
