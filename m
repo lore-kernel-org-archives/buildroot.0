@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 866ADFCC069
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90BF6FCC066
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5341841F72;
-	Fri,  6 Mar 2026 19:52:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A38D61453;
+	Fri,  6 Mar 2026 19:52:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XpxvZEcJ0HYe; Fri,  6 Mar 2026 19:52:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37FEE6144D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772826761;
+	bh=Y0lExiu7fkCOfxdJYdgDTDkLaccj7LzHFK9w2u+gBpY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=csP1zagXHn9AlhicWqvYNRwkDppWGM74b5Wu+j/X/+lWOK49xSABLyMJDxUadZJJF
+	 Xmb3k+YT0gecS7Av7b1YPzmp6RbUaYq3KWSiRnMY3lOaqWEV+AyVRsTBR+UmcAX/oN
+	 7avGRF/VZ+AKommeEItKiZzDxRkyP9BBFw3XDamRDd4NJDYWZXlIXuN/uVqleVdDSS
+	 Behq9WSoq+SGlcJretDas1jSMl1PiLK8pvJf5hv9QsjAslteD5c1Zx8rULgJ/O95QT
+	 XZkO+q9m5WbvDms+OeEMYGnY8Vefs4A++Pr1tKI3P/dzG4xWUCQ7Kt96YdFjJJW16Y
+	 TS4XSCGtI7sGw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37FEE6144D;
+	Fri,  6 Mar 2026 19:52:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EF8D25B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2230A41E47
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NF_MQpLuIE0M; Fri,  6 Mar 2026 19:52:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C542341F4E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826759;
-	bh=nKYjmv8WzogDUJ+YlhHGCl4Mp/f6A1027Lq0lrgOXss=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nYBinfty1s1PMWGP3ivsJ1m1K3aA7MX08xGlMo7APaSbgW4LQ5E3VQeyKo0tQWlrt
-	 aUfNQmjJdhLMqKxNTc4EY2UYRtm67UqC6hqYepLyJmFepyD4XFPtaG4mhw2QMUrJZM
-	 ud1y1xH487CQtBSh0ZrrxAJvFyiyG7EhzT4hTOkDgHOhAyEvHWI4V/Vi2CG3C9Jjro
-	 kTUrPlcrB3ZvyIemrBv9EkkaVXHHt7hmqDKXt6QWYAeQTxWMroq3uJNQSH7nrrkCge
-	 EtrCGgddPERjRBdQikEcAhDBje6m2k1sO64+VntnAfQglOwP2C4pdmxIB8kmrc6Ofw
-	 97tr2iS0EjOwg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C542341F4E;
-	Fri,  6 Mar 2026 19:52:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1259E39B
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA12C833AE
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jmYGnGfkooK2 for <buildroot@buildroot.org>;
+ id Jp2Sj713yLeH for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E941283478
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 669A641E48
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E941283478
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 669A641E48
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AD1A7FB67; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
+ id 7BC7D83582; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:06:20 +0100
+Date: Fri, 6 Mar 2026 14:15:01 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 16106d4861ba51f1b7a95e3e8ec1b9289dacca12
-X-Git-Newrev: 6a1de0c6ac045dbbef35895947bfac7800ecf27f
+X-Git-Oldrev: 4859a7b0f9d12c689a73e7e1f8c26f0f19234116
+X-Git-Newrev: c68c55964c688ee0d4eff4dd48569059d373262e
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195223.0AD1A7FB67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wpewebkit:
- disable JIT for all MIPS CPUs
+Message-Id: <20260306195223.7BC7D83582@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/freerdp: bump to
+ v2.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6a1de0c6ac045dbbef35895947bfac7800ecf27f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c68c55964c688ee0d4eff4dd48569059d373262e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Change the mips32r6 into a blanket BR2_mips[el] check to disable the
-JSC JIT. Upstream removed JIT support for all MIPS processors in
-January 2024 [0], and the change trickled down to stable releases
-starting on version 2.44.0 [1].
+For more information on the release, see:
 
-While at it, change the upstream bug links to point to a more
-appropriate bug report.
+- https://github.com/FreeRDP/FreeRDP/commit/9b678b6d5a40ce01607d8c3b1b1416437c8416c4
+- https://github.com/FreeRDP/FreeRDP/releases/tag/2.11.8
+- https://github.com/FreeRDP/FreeRDP/compare/2.11.7...2.11.8
 
-[0] https://commits.webkit.org/272866@main
-[1] https://lists.webkit.org/archives/list/webkit-wpe@lists.webkit.org/thread/JM7GLPPKGAB6DIQ2YDHPEIWNOYSUHBC7/
+Note: the previous freerdp version 2.11.7-18-g0ee17e2f in Buildroot
+is only 5 commits prior the 2.11.8 tag. This is a very minimal bump.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8d222e03c74f48461562581cced7d0d28dded0ca)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Julien: add note in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 73861bb720a82316cb56e644fc75d3a7ce95980e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/wpewebkit/wpewebkit.mk | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ package/freerdp/freerdp.hash | 2 +-
+ package/freerdp/freerdp.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 03deb6e991..1f5f4aa5e6 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -156,18 +156,16 @@ else
- WPEWEBKIT_CONF_OPTS += -DUSE_GBM=OFF
- endif
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 83b83db121..5ae222e2ec 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f7cc2bf43b9778e9079cd229ea8e37fc1843eb1c11a8e4e003034af71858ce6a  freerdp-2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0-git4.tar.gz
++sha256  8a7c953ece217aa4fa22c4a21ab2bc4c9093fc79aa67d3e1273c140d140203f7  freerdp-2.11.8-git4.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 3a1ba61621..07b9d36339 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--# JIT is not supported for MIPS r6, but the WebKit build system does not
--# have a check for these processors. The same goes for ARMv5 and ARMv6.
--# Disable JIT forcibly here and use the CLoop interpreter instead.
-+# JIT is not supported for MIPS, ARMv5, and ARMv6, but the WebKit build
-+# system does not have a check for some of these target processors.
- #
-+# Disable JIT forcibly here and use the CLoop interpreter instead.
- # Also, we have to disable the sampling profiler and WebAssembly, which
- # do NOT work with ENABLE_C_LOOP.
- #
--# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
--#                https://bugs.webkit.org/show_bug.cgi?id=172765
--#                https://bugs.webkit.org/show_bug.cgi?id=265218
-+# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=278559
- #
--ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-+ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_mips)$(BR2_mipsel),y)
- WPEWEBKIT_CONF_OPTS += \
- 	-DENABLE_JIT=OFF \
- 	-DENABLE_C_LOOP=ON \
+-# Latest, and probably last, commit on the stable-2.0 branch
+-FREERDP_VERSION = 2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0
++# Latest, and probably last, release on the stable-2.0 branch
++FREERDP_VERSION = 2.11.8
+ FREERDP_SITE = https://github.com/FreeRDP/FreeRDP
+ FREERDP_SITE_METHOD = git
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
