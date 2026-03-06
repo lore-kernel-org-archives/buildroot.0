@@ -1,113 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB888FCC066
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC151FCC067
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBCE141F8E;
-	Fri,  6 Mar 2026 19:53:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B12AD614CA;
+	Fri,  6 Mar 2026 19:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tVIsKgQD1j5p; Fri,  6 Mar 2026 19:53:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bWCrKdrJS3OZ; Fri,  6 Mar 2026 19:53:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6F5442157
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB403614C0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826817;
-	bh=kG8cHlAQIYmfOwc2Kfia2OZuKMn5a64RscNSjFj23II=;
+	s=default; t=1772826819;
+	bh=XVN4Yoxx8lc8Xd4mp0BKaAqWDtGJhn0wWcKlJy/SDh0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=R2goS+uALueXLOKE9tsV4KpC+fCgZQTqYhcmMdmuO59qNJ8elIqY7ev3LZZKL6hI+
-	 g/yabsPHaYynz9f8NEwg/Fv9HXuOVbs9i1hpzmwKN/5PFEePe4Sc3CtSx6MpFNCS2e
-	 xzBnE124/+CFBgJgiN3XBXiDo9zpEatr5OWiCuPDebLUeld6fx+95oTMXKpb+Pu3Vj
-	 SPqjWdgU8UE2fLNsqENRKsdBvrgiz7Rxalmn7R/51JgG/a67Eb6aibA7ct0Wpp9D/I
-	 C/nw6h7/GyjBZXQzO3zPGHqD5L0OdY7RuPIDz3wEil9T+LeK4iSWz5NTSl2RO8Di6C
-	 InoMe77/vcPXg==
+	b=h1VmP+DasT+DPx5pH54FLggQ6zixWZvT8H3OeDsdz8826Mhmkp3dTL+f0ENmBH8KO
+	 Zenljm51pcrCsas4iPaxGRpSEm1FMfYHJ0svPf4qt+lyN+hTrl7npq3AE6/3FdjNuf
+	 BbrqjzXi99HhmnO/PcCyPiYRVqpbOvaRpEnnTQFifzuUGinV0zmk4sRiaAxAES03zW
+	 cVXw1w82EDVMKb79ij+/WyU3yYJpI6V6imH5Akw938zIsbTFGKXTVDnVuo4cGmb2O8
+	 9vfBfcFAw6lcRC+wo8JEP4ocgEDDxC3FGUwfNQlvLYh5f1gBJEZj5qI/5X/0E6yP32
+	 T48mJnxq0rfYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6F5442157;
-	Fri,  6 Mar 2026 19:53:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D220E223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB403614C0;
+	Fri,  6 Mar 2026 19:53:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9942169
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3FFB40343
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F78040455
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPGCj6yLmd6V for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:53:25 +0000 (UTC)
+ id TuRr7gLwpXce for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AC27340455
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC27340455
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AC27340455
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:24 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-439c9bdc1eeso3288965f8f.3
- for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:24 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 833AA40343
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 833AA40343
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 833AA40343
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:53:27 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-439b8a3f2bcso4674228f8f.3
+ for <buildroot@buildroot.org>; Fri, 06 Mar 2026 11:53:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1772826803; x=1773431603;
+ d=1e100.net; s=20230601; t=1772826805; x=1773431605;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=MW4Lgys8pP1sPbYs92wMrEmPKe6+3BwS3sotgzSHODE=;
- b=ouPqn/xhSf2dqJwEfHx/JCTIaw4auqc174Ttzcaco0SkLLDv+3UxLThdJZMeec0xu5
- ly0AW1O3Bn9kS5w08LH1Vko4ETETCD0+E1IrkLQspGsFGHJs8p9oFDMcOT14qajXACQP
- naw64lNsz6lQnbTu0CwefoDPUJdpDq/XKvLfxMBXMQ6AuAJX83pcYLorcjJ0G2q4D+2a
- Z2u805bGcMKqsZEEeE6q2/PKqS3pYUbPSBdgg9cdnidkwpJWOYGKVFN3M0o3Ol1vlkbS
- h4L/EB1HB4k5gzP5pEqTOzYpa3Jv1E12ker3+p/mKC87W+22FTccjMOvfR42QCAwBCmP
- zQug==
-X-Gm-Message-State: AOJu0Yw5BskW7fSdaS3RWVuKxKP9L+aAuCfDvELBspfEKrWIc+bb5OrU
- MSHqelOzi5zW8D6VsLzgGt7w4L7VLhBItjH3A3V8dhv8yHlclABiOYkVJ3nF/jE41bc=
-X-Gm-Gg: ATEYQzzNkKb0v2Xv4/MiFsIHEslLnXDo8l1w5vJP05t4/OZZHKh/bkQineZsS907eEW
- OcyItprMdK+XKhXHomGnIFS87Wnqj84YMbugF1Le728iRegM9CoG/xJj+neQs+/gZNwAnsn2zI0
- MDLEruKTavA2Bcs9uJ6Vsz7ebs1NGPU5ZHbsSJj/E2fb0Gu7F4VevnItuo5L9KDY9GsEHAWJ4I4
- 2Rb0Dmqp17cYa5HV5CMRH9Bt4wo5Um5VhvwuGdTNMVe1WKOVunPUMWEwAnL2RyNSacZUItfqgD5
- 00EI/JFB5MVdN879Zg9ZmqTZwv9i77/OUPTOYW2iYbNmMqsoE8fxDwQC+HGAhDzkCRXoARL7Pe4
- stiASLQjgIuUuxTidWv3+rp+mL0DFcP6Owess76M2cf+zEpOrNRsfvoOsl4EbvEnBQehZLm1eGP
- 2I301jOxo/ThQ8yHcb9HX3imRsTA==
-X-Received: by 2002:a05:6000:40de:b0:439:b79d:b99f with SMTP id
- ffacd0b85a97d-439da86f6c3mr5661568f8f.40.1772826802778; 
- Fri, 06 Mar 2026 11:53:22 -0800 (PST)
+ bh=pFziJ52exmLA9Q7OX5D/Egt6rrSNnHHyKUChPk9n2OM=;
+ b=YXolwQoebxjJJ3cQO/9/f380vPkszpGHt963P4ekfY2bVBo/pWS42ZUtoK43T0ln7w
+ Pjt031zC9C9NQwhOzxjgzeo09FvBklm/C1St9E2J464tftnFNY0qQVdIuUv/Y2uNrqb3
+ m5/brawjrpQGDgQBRlnXgjATsqCXsJQ6+mcZ8X7M55PcRVYQX7upD3GDATqMgSD0MX/J
+ UXNtX0WCQxDTtppk16X2z8vktaDwy99GRofafPqUoxv3QgewkFuIzayqZm8RQpv2ch64
+ qPYTFdlq6Hqa90/h06oyZqylKbYXKuxbtQKMyyNxsNcN2ov8UJ47CHvLA/uKSzwdm3Nc
+ V73Q==
+X-Gm-Message-State: AOJu0Yz3mg+sgvSiSOmWK3KgLN/Ty7Mfkwo67gMQaxNICUXE4Kiqg9aK
+ K6GktbYYBPIqjTWh5q7C0cR/GL0X79Srymmcan6T9UtVXK4P6duB+fbdGnk9nJbbUng=
+X-Gm-Gg: ATEYQzykSolAzDvD0hFtoN4AOW3gSVESxx6HbNuHsvf4mFoC9GWgTCo4r9vt4Ggs6Rz
+ 4aN+BOpHw6gQcZ41asc5qhdUM02PqscWr48bcahaZet9wfeF6hHNPbjirnI057MJXGLZGzSvlCu
+ SAfShlZfOD8WsleUTtF1r0UcS3XGbodh/XSujudurRLuY5plEnHU9IR1seJcB3OukXPzk7mebeU
+ kZMsRp1zAgL+2KpTEAfV6209LpUCC1iZS4uSB0PYNsgRbF1zwv7VraD+2hlkS3O2q//6ULPB0WC
+ m9als/mfDUCmrbTWWTh0qOSacT6dSveItp3qt7FP0ko+1OfZkOsUSegT8ZgG2PZ9Os0ZiFQvecu
+ ga2ksEXJs3lB9a3b5UDMBqYAP5dKY1ClkPfHBDSWAGErJQC8KX4JsM27Ec8NgX9vHvHDWANXyVZ
+ ar6osGCpT1QjYLHYA=
+X-Received: by 2002:a05:6000:40dd:b0:439:cb5c:b18d with SMTP id
+ ffacd0b85a97d-439da893f6cmr5723537f8f.38.1772826805470; 
+ Fri, 06 Mar 2026 11:53:25 -0800 (PST)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439dae2ba5bsm5487438f8f.22.2026.03.06.11.53.22
+ ffacd0b85a97d-439dad8d973sm5345106f8f.3.2026.03.06.11.53.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Mar 2026 11:53:22 -0800 (PST)
+ Fri, 06 Mar 2026 11:53:25 -0800 (PST)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri,  6 Mar 2026 20:53:21 +0100
-Message-ID: <20260306195321.8332-1-thomas.perale@mind.be>
+Date: Fri,  6 Mar 2026 20:53:24 +0100
+Message-ID: <20260306195324.8433-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260303101254.192225-1-thomas.perale@mind.be>
-References: <20260303101254.192225-1-thomas.perale@mind.be>
+In-Reply-To: <20260303081323.53405-2-thomas.perale@mind.be>
+References: <20260303081323.53405-2-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1772826803; x=1773431603; darn=buildroot.org;
+ d=mind.be; s=google; t=1772826805; x=1773431605; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=MW4Lgys8pP1sPbYs92wMrEmPKe6+3BwS3sotgzSHODE=;
- b=NaRMtmdYnHjd0WYchdfMHva95BpnMjDa3QNXkded0OgqJYml30Akjb8s9SQuP7pwFh
- 2o3e7fzIjD4VutmIeCegMQ4hC9a8y46M5CHA8+hMxTeV+RlGTa5zuVNhgtcW0gKpX281
- GoDUn4mMpdg94zHAZdnfptyKkeqqUZ2veidwZYYyHq4mJtRtkai2REOjC9mimMq4KV+e
- wCd1tYhMCaKQVsc7svfaXpTItZA/tpjm8d7z+i7EjCZdFtqU0QsO5LfU6F1wFW8JqkrV
- bjNZ969G2RyIvLNaUd1JELDpVV23HUtrJfNU7ZtonvSCaIKY5fpojBgaVLygBpKPK8b2
- jJug==
+ bh=pFziJ52exmLA9Q7OX5D/Egt6rrSNnHHyKUChPk9n2OM=;
+ b=IoiIezaKrk5w+KMUCBoJbb3WJraGe3GNUL2P036owSYhNrtH6C8/XZFXLqpqLykFEv
+ 6IaBG+KNS8oG/OGyq6uWEpruqqG5GL8c3lEfxVvxRurmOGSrFtFZMfomTUNtwRYv45zg
+ nwNmvVNt+//RRptmGnvX8GYks1MPHkGnoChFfnPC3sX97ldJzdNsinDMLiU4J5N4mtp8
+ qR7uPaqqV566sNhSoSwM264M43jGUEOnjQxsmWlW/c4VXeGcDVO0LMjG5AI5+PSCCe2i
+ DywolJlFJs6P+JnXEmsuY0BVe2NHrGgllzEeqTRSdQDu/Lb8qJouqQMdFhvPK8D0W1dB
+ CNMg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NaRMtmdY
-Subject: Re: [Buildroot] [PATCH 1/4] package/freerdp: bump to v2.11.8
+ header.a=rsa-sha256 header.s=google header.b=IoiIezaK
+Subject: Re: [Buildroot] [PATCH 2/4] package/graphicsmagick: add
+ CVE-2007-0770 to IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,45 +128,40 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For more information on the release, see:
+> This vulnerability match on every version of graphicsmagick [1].
+> It was issued because of an incomplete patch for CVE-2006-5456 and has
+> been since remediated [2].
 > 
-> - https://github.com/FreeRDP/FreeRDP/commit/9b678b6d5a40ce01607d8c3b1b1416437c8416c4
-> - https://github.com/FreeRDP/FreeRDP/releases/tag/2.11.8
-> - https://github.com/FreeRDP/FreeRDP/compare/2.11.7...2.11.8
+> Since it's really old it's unlikely it will be updated and is thus added
+> to IGNORE_CVES.
+> 
+> [1] https://nvd.nist.gov//vuln/detail/CVE-2007-0770
+> [2] https://bugzilla.redhat.com/show_bug.cgi?id=210921#c5
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.11.x. Thanks
 
 > ---
->  package/freerdp/freerdp.hash | 2 +-
->  package/freerdp/freerdp.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/graphicsmagick/graphicsmagick.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-> index 83b83db121..5ae222e2ec 100644
-> --- a/package/freerdp/freerdp.hash
-> +++ b/package/freerdp/freerdp.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  f7cc2bf43b9778e9079cd229ea8e37fc1843eb1c11a8e4e003034af71858ce6a  freerdp-2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0-git4.tar.gz
-> +sha256  8a7c953ece217aa4fa22c4a21ab2bc4c9093fc79aa67d3e1273c140d140203f7  freerdp-2.11.8-git4.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index eb17c80e4f..6929c73683 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
+> diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+> index 40107b3aae..6c2885b7d8 100644
+> --- a/package/graphicsmagick/graphicsmagick.mk
+> +++ b/package/graphicsmagick/graphicsmagick.mk
+> @@ -15,6 +15,11 @@ GRAPHICSMAGICK_CPE_ID_VENDOR = graphicsmagick
+>  # Fixed in version 1.2.3
+>  GRAPHICSMAGICK_IGNORE_CVES += CVE-2008-6621
 >  
-> -# Latest, and probably last, commit on the stable-2.0 branch
-> -FREERDP_VERSION = 2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0
-> +# Latest, and probably last, release on the stable-2.0 branch
-> +FREERDP_VERSION = 2.11.8
->  FREERDP_SITE = https://github.com/FreeRDP/FreeRDP
->  FREERDP_SITE_METHOD = git
->  FREERDP_DEPENDENCIES = libglib2 openssl zlib
+> +# Wrong NVD annotations englobbing all versions
+> +# Wrong patch for CVE-2006-5456 later updated
+> +# https://bugzilla.redhat.com/show_bug.cgi?id=210921#c5
+> +GRAPHICSMAGICK_IGNORE_CVES += CVE-2007-0770
+> +
+>  # 0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
+>  GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
+>  
 > -- 
 > 2.53.0
 > 
