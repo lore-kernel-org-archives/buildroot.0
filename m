@@ -4,91 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFF4FCC05C
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 18:45:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AAA0FCC063
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 18:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3851A613C9;
-	Fri,  6 Mar 2026 18:45:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56E5561417;
+	Fri,  6 Mar 2026 18:57:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cvDFqAthAbir; Fri,  6 Mar 2026 18:45:17 +0000 (UTC)
+ id V1jbRa-IkTWF; Fri,  6 Mar 2026 18:57:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F3216139F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5162F614AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772822717;
-	bh=0gfRH0VSfNBkSdhXK2x6CZedAL0ydVF4W6Nk2VFeO5M=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=e8350VvHmiHrCCr5IsF1FCQ9lFpVPr3YnJBRXXJ1zQ2Wc5FpbcYUsQKlejZUZjUtx
-	 8gWTnXCriZ3UvDmvbPxuAj04uKpx5mJQhKWSqoaOS5kmEsWCH4N9SpbpEuMgAnBA+E
-	 Pu2HWwQm796sCyKUvELBgNO+Is6njbLQi+YFC5rfY+Wa3uAkzj0Pm/O4bcrhbQPV6J
-	 TTes9uf4fqms/hqioPJsOYYkLluCKyfwgC0BS+364Qtta8h44d47smjVdFAJHKu0DO
-	 YQvl2+ixyf6SiY0jpca0I7Ln0raPrvAQHfdkW7hBEKjKlw/gtIu9I5c1Z1sQNZRMGZ
-	 f8KLEMhqjXS5w==
+	s=default; t=1772823471;
+	bh=7Z8AHKL9kfH090mGnRFCrWjCXjX86sLA7DJoqUhHHco=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mUt1n7YL5clwncI2o7NIFpHPiWJrgcYWuftJhTkAMvyX3eOXbOZBXUmiYICEXFU1a
+	 C7zBE1s9WlQA/oqM5XMWXSnnCX4plCLLxWWDgs/DZjyZyl8XBNGgPL0JMjJHgZAzDv
+	 4snmx4/UpoXXRdrK62xwughs9SRLJHXG7Nwemj9YviMCu3vHPmG2fXoTyr9Da4HnVj
+	 VmWyL0bmuvf2fte2W+m7mBp7xWT73VMjbCKqlDHGzxgK1RMaMhb2LgnKHQbbWmtIDQ
+	 cCIw+/oqnxjhdcBc/SboyNZbljh2AiMLoeMe/GLjz2Sc7RD1qLWgVnsUYzg8qf0MvN
+	 XgtAZ0nx/UfIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F3216139F;
-	Fri,  6 Mar 2026 18:45:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 478FD339
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:45:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5162F614AA;
+	Fri,  6 Mar 2026 18:57:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4974825B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:57:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3919741E24
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:45:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43B14613F1
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:57:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ue6sYxJUBRx7 for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 18:45:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2F2A441E23
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F2A441E23
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F2A441E23
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:45:15 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 1AB302003C8;
- Fri,  6 Mar 2026 19:45:03 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 06 Mar 2026 19:45:03 +0100
-MIME-Version: 1.0
-Date: Fri, 06 Mar 2026 19:45:03 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Andr=C3=A9_Zwing?=
- <nerv@dawncrow.de>, =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>,
- Pieter De Gendt <pieter.degendt@gmail.com>, Petr Vorel
- <petr.vorel@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Adrian Perez de Castro <aperez@igalia.com>, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>
-In-Reply-To: <20260305210950.3471974-15-bernd@kuhls.net>
-References: <20260305210950.3471974-1-bernd@kuhls.net>
- <20260305210950.3471974-15-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <8f9881071afd8888c1f8e1d4eb99c233@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1772822712;
- bh=LwKxHQAI7M8GVZEZiJH3hY52qdkj8fkSZnEGti1uKvo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dPX++GfHAcS4ejElEMwECsJ4LSLLyZosuqt/PVrmvOv/Mr+s++Sbwlc/il5k2OECY
- FpiZpx+foDk8uajoTP01wHetBgPp3mhXZOVdO7hsWOA+/BX+g5XlpM53FAED2+H3u5
- O2WV0Bg6ElA+ZELF6qRE+A0NY+VuBdJsyxd/OJYBv/P2/B8S1hcHqwMPLtZZzjb21e
- hMxeSUfLLaxnt6WAtiBeOPu5kqXxBUpxRRHzVdVISyR6UIV2hOtpQ2Ac3FnTuqT51o
- HtSrbEWzMOqv61AIy6rIlkln5WCS51/new5f5CHDB32CXZkrMsA2+5IGFcofCUAJVD
- 55M9XtLHFmotg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dPX++GfH
-Subject: Re: [Buildroot] [PATCH v2 14/14] package/{glibc,
- localedef}: bump version to 2.43
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XEYibbeM50ZQ for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 18:57:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3703614A3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3703614A3
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 18:57:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 11C4F867A7; Fri,  6 Mar 2026 18:57:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 6 Mar 2026 19:48:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 156e2be96cedf904d973748b8ac5d4423a0f74e6
+X-Git-Newrev: 0ed1707ba559103f0aa298d40b5017b6bad0394c
+X-Patchwork-Hint: ignore
+Message-Id: <20260306185747.11C4F867A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libid3tag: bump version to 0.16.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,48 +70,132 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0ed1707ba559103f0aa298d40b5017b6bad0394c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks for the patch. While this new glibc 2.43 generally
-works fine (I tested many configs), I've found an issue.
-See below.
+https://codeberg.org/tenacityteam/libid3tag/releases/tag/0.16.4
+"We now provide our own source packages instead of using Codeberg's
+ pre-generated sources, guaranteeing that the hash won't change."
 
-On 05/03/2026 22:09, Bernd Kuhls wrote:
-> https://sourceware.org/glibc/wiki/Release/2.43
-> 
-> Updated license files and hashes due to upstream commit:
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=a0ce8b0779e290596e99ca6d96c301684a2d7cfe
-> 
-> Rebased 
-> package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-> 
-> Removed patch 0003 to fix build on hosts with glibc < 2.43.
+Removed patches which are included in this bump.
 
-Removing this patch is reintroducing the issue described in it.
-There is still configurations in which host-localedef is
-failing to build. For example, in the Buildroot Debian
-reference image. You can reproduce the issue with:
+Used tarball and its hashes provided by upstream.
 
-utils/docker-run make host-localedef
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-Allow-build-with-CMake-4.0.0.patch        | 26 -----------------
+ package/libid3tag/0002-CMake-Disable-c.patch       | 33 ----------------------
+ package/libid3tag/libid3tag.hash                   |  4 ++-
+ package/libid3tag/libid3tag.mk                     |  6 ++--
+ 4 files changed, 6 insertions(+), 63 deletions(-)
 
-Note that, for example, host-localedef is building correctly
-on my Fedora 43 host (gcc 15, glibc 2.42).
-
-I quickly tried to put the patch back, but it does not
-solve the issue.
-
-Could you have a look, please?
-
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Best regards,
-
-Julien.
+diff --git a/package/libid3tag/0001-Allow-build-with-CMake-4.0.0.patch b/package/libid3tag/0001-Allow-build-with-CMake-4.0.0.patch
+deleted file mode 100644
+index cd14130252..0000000000
+--- a/package/libid3tag/0001-Allow-build-with-CMake-4.0.0.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From eee94b22508a066f7b9bc1ae05d2d85982e73959 Mon Sep 17 00:00:00 2001
+-From: heitbaum <heitbaum@noreply.codeberg.org>
+-Date: Thu, 1 May 2025 05:34:30 +0000
+-Subject: [PATCH] Allow build with CMake 4.0.0
+-
+-CMake 4.0.0 deprecates CMake syntax < 3.10. Update to using a minimum of 3.10.
+-
+-ref: https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html
+-
+-Upstream: https://codeberg.org/tenacityteam/libid3tag/commit/eee94b22508a066f7b9bc1ae05d2d85982e73959
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index d181300..083b5f1 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.1.0)
+-+cmake_minimum_required(VERSION 3.10)
+- project(id3tag VERSION 0.16.3)
+- 
+- option(BUILD_SHARED_LIBS "Build dynamic library" ON)
+diff --git a/package/libid3tag/0002-CMake-Disable-c.patch b/package/libid3tag/0002-CMake-Disable-c.patch
+deleted file mode 100644
+index 151084b3b2..0000000000
+--- a/package/libid3tag/0002-CMake-Disable-c.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From b3b045a762ee35fab0e13d1837b9b407da47e59e Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Mon, 29 Dec 2025 13:31:43 +0100
+-Subject: [PATCH] CMake: Disable c++
+-
+-https://cmake.org/cmake/help/latest/command/project.html
+-"By default C and CXX are enabled if no language options are given."
+-
+-libid3tag only contains C code. This fix allows the build with
+-toolchains containing no c++ compiler like some buildroot toolchains:
+-https://autobuild.buildroot.net/results/02d/02db8c1a1b461fa3b5b5932e5b48c77be50b68af/build-end.log
+-
+-Upstream: https://codeberg.org/tenacityteam/libid3tag/pulls/26
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index f71b245..0c2f13e 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 3.10)
+--project(id3tag VERSION 0.16.3)
+-+project(id3tag VERSION 0.16.3 LANGUAGES C)
+- 
+- option(BUILD_SHARED_LIBS "Build dynamic library" ON)
+- 
+--- 
+-2.47.3
+-
+diff --git a/package/libid3tag/libid3tag.hash b/package/libid3tag/libid3tag.hash
+index 5b800f3e73..b9acbf0d1e 100644
+--- a/package/libid3tag/libid3tag.hash
++++ b/package/libid3tag/libid3tag.hash
+@@ -1,4 +1,6 @@
++# From https://codeberg.org/tenacityteam/libid3tag/releases/tag/0.16.4
++sha256  8b6bc96016f6ab3a52b753349ed442e15181de9db1df01884f829e3d4f3d1e78  id3tag-0.16.4-source.tar.gz
++sha512  14f51b0c01ce931f563029976fa76f4a30e6fac7d5ad2ef9beff53bd6d1d0f7a3f9a9266a06dcf9018f306d5d3eb8467ced8d6f3aa5160a637873eb02e330c87  id3tag-0.16.4-source.tar.gz
+ # Locally computed
+-sha256  0561009778513a95d91dac33cee8418d6622f710450a7cb56a74636d53b588cb  0.16.3.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  7f12ad28dc075763e91b91bfa60fad04062380011ddad8f6bac21dd7b1f44367  COPYRIGHT
+diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
+index 6cee42eeb9..e310f50b7d 100644
+--- a/package/libid3tag/libid3tag.mk
++++ b/package/libid3tag/libid3tag.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBID3TAG_VERSION = 0.16.3
+-LIBID3TAG_SOURCE = $(LIBID3TAG_VERSION).tar.gz
+-LIBID3TAG_SITE = https://codeberg.org/tenacityteam/libid3tag/archive
++LIBID3TAG_VERSION = 0.16.4
++LIBID3TAG_SOURCE = id3tag-$(LIBID3TAG_VERSION)-source.tar.gz
++LIBID3TAG_SITE = https://codeberg.org/tenacityteam/libid3tag/releases/download/$(LIBID3TAG_VERSION)
+ LIBID3TAG_LICENSE = GPL-2.0+
+ LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
+ LIBID3TAG_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
