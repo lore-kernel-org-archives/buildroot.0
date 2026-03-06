@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5378BFCC067
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A819DFCC067
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1594341F05;
-	Fri,  6 Mar 2026 19:51:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mDQ1yyNIu9QI; Fri,  6 Mar 2026 19:51:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F2EB41E5C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826690;
-	bh=pL4wgO55D6L/P7Ea8lIt1ZrSyYCARyGj1D1mFHUTD0s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ASdht8WsGlFbZ2ewWyWFrJOchNXX+98nWwitoY7VYrCusHeygUDEYvdekPG4dAT/n
-	 qAa9wJ6IhPn7qmy9Gbfxw7qMXz280jy/l0jN32YVzOaVzviK/yijmYGC0Ep+KbGxof
-	 PYkpVTTMqzJo9IUm+EwSEWaVodXxse9S1mQXGBRteuoy9TjuEWhfS5VN0OpsAGE3eX
-	 /yRyRiJsXXCydp3e2ojsAFhknHnYwKpt6kg0WbZRALSsypO5+atKDBrESAXbEmZ/HQ
-	 jzj8MKdl6CL94rpYOn0tVgwdAURolspDUW+ifkcG8fL8CQ0NTdu+4pOHJVD0AaCxaF
-	 P52/wMwbBHlbQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F2EB41E5C;
-	Fri,  6 Mar 2026 19:51:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DA60223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:51:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E9FD60DE3
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 816C4613C1;
+	Fri,  6 Mar 2026 19:51:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yAbXO0FLguc1 for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+ id 0uw_i0psV7aS; Fri,  6 Mar 2026 19:51:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16C7661438
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772826695;
+	bh=7yfN4eBuQPt0ybjUcqFbBQTjGFZMUeBmgq3tzFplsRI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Kbshxnadt/uXVDYP0EVkksJgD9Z5O1nRRZtm8zCP2+E6mskvATKRUsa53CxC/IGBb
+	 uegNL2F8qHKtpH/IlUwiLzAjCEZhZQIqXqHdk0we78a+1AyQeAANBcQZh5PnLdXepo
+	 JhbQcr7f4a8ZKTRZFwjrsV4TkNYrF/y9d8YALz6MZruQ9xmm92j90kFYVYq5HpCqR3
+	 itMdBO+YcVyH/Dyh3NqK3B8jxfu5LdbnL+acmJdCMdY77bk2xxpQRihZKDVR4Swdmr
+	 EKryzheqC8XujBoDw8B0j7WUNwF8LVPyMlvXVFQwlYJE9Irt9TJ7lgaPidMA0mpim4
+	 BJ/OhFWhC+usw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16C7661438;
+	Fri,  6 Mar 2026 19:51:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 051AA223
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:51:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4355613E4
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fFsHxh-yZ94T for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:50:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75C2B613D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16A9C613EC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75C2B613D8
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16A9C613EC
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B76186823; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ id 2C852855F0; Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 14:02:57 +0100
+Date: Fri, 6 Mar 2026 14:14:47 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 800c989e4b539b5e8404ff19005e819d0c5f1bd5
-X-Git-Newrev: 54963e3e7b0ecd93f1a968f02148a6e68b6f0dcd
+X-Git-Oldrev: 8d1a742bb3b660f4f57253c6c118f01ff26dcbe6
+X-Git-Newrev: c44241892e6a705a01e987f863c4d0d6ddf448a8
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195050.8B76186823@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/mupdf: add patch
- for CVE-2026-25556
+Message-Id: <20260306195051.2C852855F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/squid: add patch
+ for CVE-2025-62168
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,110 +77,273 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/54963e3e7b0ecd93f1a968f02148a6e68b6f0dcd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c44241892e6a705a01e987f863c4d0d6ddf448a8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
 Fixes the following vulnerability:
 
-- CVE-2026-25556:
-    MuPDF versions 1.23.0 through 1.27.0 contain a double-free
-    vulnerability in fz_fill_pixmap_from_display_list() when an exception
-    occurs during display list rendering. The function accepts a caller-
-    owned fz_pixmap pointer but incorrectly drops the pixmap in its error
-    handling path before rethrowing the exception. Callers (including the
-    barcode decoding path in fz_decode_barcode_from_display_list) also
-    drop the same pixmap in cleanup, resulting in a double-free that can
-    corrupt the heap and crash the process. This issue affects
-    applications that enable and use MuPDF barcode decoding and can be
-    triggered by processing crafted input that causes a rendering-time
-    error while decoding barcodes.
+- CVE-2025-62168:
+    Squid is a caching proxy for the Web. In Squid versions prior to 7.2,
+    a failure to redact HTTP authentication credentials in error handling
+    allows information disclosure. The vulnerability allows a script to
+    bypass browser security protections and learn the credentials a
+    trusted client uses to authenticate. This potentially allows a remote
+    client to identify security tokens or credentials used internally by a
+    web application using Squid for backend load balancing. These attacks
+    do not require Squid to be configured with HTTP authentication. The
+    vulnerability is fixed in version 7.2. As a workaround, disable debug
+    information in administrator mailto links generated by Squid by
+    configuring squid.conf with email_err_data off.
 
-For more information, see
-  - https://www.cve.org/CVERecord?id=CVE-2026-25556
-  - https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2025-62168
+  - https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
+
+The backport has been compared against debian patch [1].
+
+[1] https://sources.debian.org/src/squid/6.13-2%2Bdeb13u1/debian/patches/CVE-2025-62168.patch
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3f4e289aab9c2aa113d05589ba6b83778e60a0f3)
+(cherry picked from commit 8918f1c2c86844a5b4110cc71865838365324cfc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...1-Fix-incorrect-error-case-free-of-pixmap.patch | 53 ++++++++++++++++++++++
- package/mupdf/mupdf.mk                             |  3 ++
- 2 files changed, 56 insertions(+)
+ .../0002-Proxy-auth-data-visible-to-scripts.patch  | 212 +++++++++++++++++++++
+ package/squid/squid.mk                             |   3 +
+ 2 files changed, 215 insertions(+)
 
-diff --git a/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
+diff --git a/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
 new file mode 100644
-index 0000000000..f78c429cef
+index 0000000000..2e5c67c8c1
 --- /dev/null
-+++ b/package/mupdf/0001-Fix-incorrect-error-case-free-of-pixmap.patch
-@@ -0,0 +1,53 @@
-+From d4743b6092d513321c23c6f7fe5cff87cde043c1 Mon Sep 17 00:00:00 2001
-+From: Robin Watts <Robin.Watts@artifex.com>
-+Date: Mon, 12 Jan 2026 19:08:56 +0000
-+Subject: Bug 709029: Fix incorrect error-case free of pixmap.
++++ b/package/squid/0002-Proxy-auth-data-visible-to-scripts.patch
+@@ -0,0 +1,212 @@
++From 0951a0681011dfca3d78c84fd7f1e19c78a4443f Mon Sep 17 00:00:00 2001
++From: Amos Jeffries <yadij@users.noreply.github.com>
++Date: Sat, 11 Oct 2025 16:33:02 +1300
++Subject: [PATCH] Bug 3390: Proxy auth data visible to scripts (#2249)
 +
-+Don't free a pixmap we don't own!
++Original changes to redact credentials from error page %R code
++expansion output was incomplete. It missed the parse failure
++case where ErrorState::request_hdrs raw buffer contained
++sensitive information.
 +
-+CVE: CVE-2026-25556
-+Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/commit/?id=d4743b6092d513321c23c6f7fe5cff87cde043c1
++Also missed was the %W case where full request message headers
++were generated in a mailto link. This case is especially
++problematic as it may be delivered over insecure SMTP even if
++the error was secured with HTTPS.
++
++After this change:
++* The HttpRequest message packing code for error pages is de-duplicated
++  and elides authentication headers for both %R and %W code outputs.
++* The %R code output includes the CRLF request message terminator.
++* The email_err_data directive causing advanced details to be added to
++  %W mailto links is disabled by default.
++
++Also redact credentials from generated TRACE responses.
++
++---------
++
++Co-authored-by: Alex Rousskov <rousskov@measurement-factory.com>
++
++CVE: CVE-2025-62168
++Upstream: https://github.com/squid-cache/squid/commit/0951a0681011dfca3d78c84fd7f1e19c78a4443f
++[thomas: remove release note, backport errorpage.cc]
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ source/fitz/util.c | 15 +++++++++------
-+ 1 file changed, 9 insertions(+), 6 deletions(-)
++ src/HttpRequest.cc                  |  6 +++---
++ src/HttpRequest.h                   |  2 +-
++ src/cf.data.pre                     |  8 +++++++-
++ src/client_side_reply.cc            | 14 +++++++-------
++ src/errorpage.cc                    | 17 ++++-------------
++ src/errorpage.h                     |  1 -
++ src/tests/stub_HttpRequest.cc       |  2 +-
++ 8 files changed, 26 insertions(+), 27 deletions(-)
 +
-+diff --git a/source/fitz/util.c b/source/fitz/util.c
-+index 7710124cc..90226a5c1 100644
-+--- a/source/fitz/util.c
-++++ b/source/fitz/util.c
-+@@ -119,7 +119,15 @@ fz_new_pixmap_from_display_list_with_separations(fz_context *ctx, fz_display_lis
-+ 	else
-+ 		fz_clear_pixmap_with_value(ctx, pix, 0xFF);
-+
-+-	return fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
-++	fz_try(ctx)
-++		fz_fill_pixmap_from_display_list(ctx, list, ctm, pix);
-++	fz_catch(ctx)
-++	{
-++		fz_drop_pixmap(ctx, pix);
-++		fz_rethrow(ctx);
-++	}
++diff --git a/src/HttpRequest.cc b/src/HttpRequest.cc
++index cd7ee71d4af..c6ed5bee45d 100644
++--- a/src/HttpRequest.cc
+++++ b/src/HttpRequest.cc
++@@ -341,7 +341,7 @@ HttpRequest::swapOut(StoreEntry * e)
++ 
++ /* packs request-line and headers, appends <crlf> terminator */
++ void
++-HttpRequest::pack(Packable * p) const
+++HttpRequest::pack(Packable * const p, const bool maskSensitiveInfo) const
++ {
++     assert(p);
++     /* pack request-line */
++@@ -349,8 +349,8 @@ HttpRequest::pack(Packable * p) const
++                SQUIDSBUFPRINT(method.image()), SQUIDSBUFPRINT(url.path()),
++                http_ver.major, http_ver.minor);
++     /* headers */
++-    header.packInto(p);
++-    /* trailer */
+++    header.packInto(p, maskSensitiveInfo);
+++    /* indicate the end of the header section */
++     p->append("\r\n", 2);
++ }
++ 
++diff --git a/src/HttpRequest.h b/src/HttpRequest.h
++index 6d369029322..28dc4daf99d 100644
++--- a/src/HttpRequest.h
+++++ b/src/HttpRequest.h
++@@ -206,7 +206,7 @@ class HttpRequest: public Http::Message
++ 
++     void swapOut(StoreEntry * e);
++ 
++-    void pack(Packable * p) const;
+++    void pack(Packable * p, bool maskSensitiveInfo = false) const;
++ 
++     static void httpRequestPack(void *obj, Packable *p);
++ 
++diff --git a/src/cf.data.pre b/src/cf.data.pre
++index 0a73020e111..2dce65a4d0a 100644
++--- a/src/cf.data.pre
+++++ b/src/cf.data.pre
++@@ -8941,12 +8941,18 @@ NAME: email_err_data
++ COMMENT: on|off
++ TYPE: onoff
++ LOC: Config.onoff.emailErrData
++-DEFAULT: on
+++DEFAULT: off
++ DOC_START
++ 	If enabled, information about the occurred error will be
++ 	included in the mailto links of the ERR pages (if %W is set)
++ 	so that the email body contains the data.
++ 	Syntax is <A HREF="mailto:%w%W">%w</A>
 ++
-++	return pix;
+++	SECURITY WARNING:
+++		Request headers and other included facts may contain
+++		sensitive information about transaction history, the
+++		Squid instance, and its environment which would be
+++		unavailable to error recipients otherwise.
++ DOC_END
++ 
++ NAME: deny_info
++diff --git a/src/client_side_reply.cc b/src/client_side_reply.cc
++index d73bf3f99f6..fc2feccf802 100644
++--- a/src/client_side_reply.cc
+++++ b/src/client_side_reply.cc
++@@ -94,7 +94,7 @@ clientReplyContext::clientReplyContext(ClientHttpRequest *clientContext) :
++ void
++ clientReplyContext::setReplyToError(
++     err_type err, Http::StatusCode status, char const *uri,
++-    const ConnStateData *conn, HttpRequest *failedrequest, const char *unparsedrequest,
+++    const ConnStateData *conn, HttpRequest *failedrequest, const char *,
++ #if USE_AUTH
++     Auth::UserRequest::Pointer auth_user_request
++ #else
++@@ -104,9 +104,6 @@ clientReplyContext::setReplyToError(
++ {
++     auto errstate = clientBuildError(err, status, uri, conn, failedrequest, http->al);
++ 
++-    if (unparsedrequest)
++-        errstate->request_hdrs = xstrdup(unparsedrequest);
++-
++ #if USE_AUTH
++     errstate->auth_user_request = auth_user_request;
++ #endif
++@@ -995,11 +992,14 @@ clientReplyContext::traceReply()
++     triggerInitialStoreRead();
++     http->storeEntry()->releaseRequest();
++     http->storeEntry()->buffer();
+++    MemBuf content;
+++    content.init();
+++    http->request->pack(&content, true /* hide authorization data */);
++     const HttpReplyPointer rep(new HttpReply);
++-    rep->setHeaders(Http::scOkay, nullptr, "text/plain", http->request->prefixLen(), 0, squid_curtime);
+++    rep->setHeaders(Http::scOkay, nullptr, "message/http", content.contentSize(), 0, squid_curtime);
+++    rep->body.set(SBuf(content.buf, content.size));
++     http->storeEntry()->replaceHttpReply(rep);
++-    http->request->swapOut(http->storeEntry());
++-    http->storeEntry()->complete();
+++    http->storeEntry()->completeSuccessfully("traceReply() stored the entire response");
 + }
-+
-+ fz_pixmap *
-+@@ -136,14 +144,9 @@ fz_fill_pixmap_from_display_list(fz_context *ctx, fz_display_list *list, fz_matr
-+ 		fz_close_device(ctx, dev);
-+ 	}
-+ 	fz_always(ctx)
-+-	{
-+ 		fz_drop_device(ctx, dev);
-+-	}
-+ 	fz_catch(ctx)
-+-	{
-+-		fz_drop_pixmap(ctx, pix);
-+ 		fz_rethrow(ctx);
-+-	}
-+
-+ 	return pix;
-+ }
-+--
-+cgit v1.2.3
-+
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index fe4f3e6756..c538b9bec8 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -27,6 +27,9 @@ MUPDF_IGNORE_CVES = \
- 	CVE-2024-24258 \
- 	CVE-2024-24259
++ 
++ #define SENDING_BODY 0
++diff --git a/src/errorpage.cc b/src/errorpage.cc
++index d7a588d099f..06046de9ebb 100644
++--- a/src/errorpage.cc
+++++ b/src/errorpage.cc
++@@ -792,7 +792,6 @@ ErrorState::~ErrorState()
++ {
++     safe_free(redirect_url);
++     safe_free(url);
++-    safe_free(request_hdrs);
++     wordlistDestroy(&ftp.server_msg);
++     safe_free(ftp.request);
++     safe_free(ftp.reply);
++@@ -850,7 +849,7 @@ ErrorState::Dump(MemBuf * mb)
++                     SQUIDSBUFPRINT(request->url.path()),
++                     AnyP::ProtocolType_str[request->http_ver.protocol],
++                     request->http_ver.major, request->http_ver.minor);
++-        request->header.packInto(&str);
+++        request->header.packInto(&str, true /* hide authorization data */);
++     }
++ 
++     str.append("\r\n", 2);
++@@ -1112,18 +1111,10 @@ ErrorState::compileLegacyCode(Build &build)
++                 p = "[no request]";
++             break;
++         }
++-        if (request) {
++-            mb.appendf(SQUIDSBUFPH " " SQUIDSBUFPH " %s/%d.%d\n",
++-                       SQUIDSBUFPRINT(request->method.image()),
++-                       SQUIDSBUFPRINT(request->url.path()),
++-                       AnyP::ProtocolType_str[request->http_ver.protocol],
++-                       request->http_ver.major, request->http_ver.minor);
++-            request->header.packInto(&mb, true); //hide authorization data
++-        } else if (request_hdrs) {
++-            p = request_hdrs;
++-        } else {
+++        else if (request)
+++            request->pack(&mb, true /* hide authorization data */);
+++        else
++             p = "[no request]";
++-        }
++         break;
++ 
++     case 's':
++diff --git a/src/errorpage.h b/src/errorpage.h
++index abca4a17d7b..297b306978d 100644
++--- a/src/errorpage.h
+++++ b/src/errorpage.h
++@@ -194,7 +194,6 @@ class ErrorState
++         MemBuf *listing = nullptr;
++     } ftp;
++ 
++-    char *request_hdrs = nullptr;
++     char *err_msg = nullptr; /* Preformatted error message from the cache */
++ 
++     AccessLogEntryPointer ale; ///< transaction details (or nil)
++diff --git a/src/tests/stub_HttpRequest.cc b/src/tests/stub_HttpRequest.cc
++index 495597d9a1b..48a0f1ce03e 100644
++--- a/src/tests/stub_HttpRequest.cc
+++++ b/src/tests/stub_HttpRequest.cc
++@@ -45,7 +45,7 @@ bool HttpRequest::expectingBody(const HttpRequestMethod &, int64_t &) const STUB
++ bool HttpRequest::bodyNibbled() const STUB_RETVAL(false)
++ int HttpRequest::prefixLen() const STUB_RETVAL(0)
++ void HttpRequest::swapOut(StoreEntry *) STUB
++-void HttpRequest::pack(Packable *) const STUB
+++void HttpRequest::pack(Packable *, bool) const STUB
++ void HttpRequest::httpRequestPack(void *, Packable *) STUB
++ HttpRequest * HttpRequest::FromUrl(const SBuf &, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
++ HttpRequest * HttpRequest::FromUrlXXX(const char *, const MasterXaction::Pointer &, const HttpRequestMethod &) STUB_RETVAL(nullptr)
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index d445f005b7..c031f1aa03 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -15,6 +15,9 @@ SQUID_SELINUX_MODULES = apache squid
+ # 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+ SQUID_IGNORE_CVES += CVE-2025-59362
  
-+# 0001-Fix-incorrect-error-case-free-of-pixmap.patch
-+MUPDF_IGNORE_CVES += CVE-2026-25556
++# 0002-Proxy-auth-data-visible-to-scripts.patch
++SQUID_IGNORE_CVES += CVE-2025-62168
 +
- # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
- # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
- MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+ SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ SQUID_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
