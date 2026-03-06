@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFFEFCC068
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39A70FCC066
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:52:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 322CD41E66;
-	Fri,  6 Mar 2026 19:52:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AA75613BA;
+	Fri,  6 Mar 2026 19:52:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iRUOj9BumuGM; Fri,  6 Mar 2026 19:52:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p10EjvCqP_Af; Fri,  6 Mar 2026 19:52:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33CB341E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A6CB613C1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826744;
-	bh=2SvPXBXP/wxvPG86MGmowyDSGM/9I01UzF+sdXPKNGo=;
+	s=default; t=1772826746;
+	bh=WPY3ZEP2hq2W+D7kJU28U8ZUoisHla5K0/NoMECHnJE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CxklwjC4zGpVNd4K4YiYjFH+Fy8NteJ2puzS6LXyevDlXbUKcrSqICVTettz8/PmV
-	 6OL2RlPCP2a4k2ipbLLpoNezHTU6SyPVcSFx0RUbUG8WQNllEbCzwUeLiCUGJzA/a8
-	 soDiVz5qKlC9z2zPhSMxv/DbdZFpO08eYeFqBUkh1k2Xueo23x6Jm7v60wrl1mafzX
-	 JT0WnH+CKlI6HCM9p0MpEyjL2lwAVUqtffXFDPkNxvCSUGm4NyXlCT5fMSpZJfjZFr
-	 A29u6I0wt3w7C5ZQ6nZkqFXyQUMoo6r4gqpyTk7enGgr9CAnmfwWUqkWQolQ04TE6t
-	 AGpZKohMK4PHw==
+	b=Wlsvn4rQjQtliIgzatlQGV6OF8QBT1Lme14cNq4QV8/oMeKSUca9DR+qXnl23J4Eu
+	 OBxIfCj3/+vavzULkX9FRTUA3D/WcFY8xd+rMImiLvwsklrXQaV5wpgve9tELbtKRN
+	 XuwJAs9BDeKs7M5EhjdOeNDvicb35YMyzlSOxym3hasy3V5yYi8OKI+nqlpxKBNL7r
+	 llxnkn4juWiWkj6FRSRXZw0ScVv7x9Xgn40E2N+wUcA4R66SznCRLIxEp07fpmL8pl
+	 Qp/L7nal+fWAwP3qQ1jTX7ui5hKVPvdk68RouB7NZnfThXYeESYd1u8Shpi+0q5jd9
+	 H85TY30tQdefw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33CB341E48;
-	Fri,  6 Mar 2026 19:52:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 39FD139B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A6CB613C1;
+	Fri,  6 Mar 2026 19:52:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75AE9223
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FC9541E66
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BB42613C1
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lnUPeOoNCWrk for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bgOv1RMyLB7i for <buildroot@buildroot.org>;
  Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41C5E41E47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8313E613BA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41C5E41E47
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8313E613BA
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 562AD83582; Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
+ id 8C53886834; Fri,  6 Mar 2026 19:52:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 13:37:19 +0100
+Date: Fri, 6 Mar 2026 13:47:25 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4a7b4bc9dadc636746210b94e37ec44d3b82f57d
-X-Git-Newrev: 5621393cc205ba014735e5d60ad0d7fa43188b80
+X-Git-Oldrev: 4bfacb70abdeecf8d763921f9493b4f43ec8b1ce
+X-Git-Newrev: bb808fcc50981a27d644b0b4db9bb8511f299fcf
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195222.562AD83582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wpewebkit:
- security bump to version 2.50.5
+Message-Id: <20260306195222.8C53886834@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cups: security
+ bump to v2.4.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,127 +77,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5621393cc205ba014735e5d60ad0d7fa43188b80
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bb808fcc50981a27d644b0b4db9bb8511f299fcf
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This updates WPE WebKit to the 2.50 stable series.
-WPE WebKit 2.50 highlights and 2.50.[1-5] release notes:
+For more information on the version bump, see:
+  - https://github.com/OpenPrinting/cups/blob/v2.4.16/CHANGES.md
+  - https://github.com/OpenPrinting/cups/releases/tag/v2.4.16
+  - https://github.com/OpenPrinting/cups/releases/tag/v2.4.15
 
-- https://wpewebkit.org/release/wpewebkit-2.50.0.html
-- https://wpewebkit.org/release/wpewebkit-2.50.1.html
-- https://wpewebkit.org/release/wpewebkit-2.50.2.html
-- https://wpewebkit.org/release/wpewebkit-2.50.3.html
-- https://wpewebkit.org/release/wpewebkit-2.50.4.html
-- https://wpewebkit.org/release/wpewebkit-2.50.5.html
+Fixes the following vulnerabilities:
 
-Fixes the following security issues:
+- CVE-2025-58436:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. Prior to version 2.4.15, a client
+    that connects to cupsd but sends slow messages, e.g. only one byte per
+    second, delays cupsd as a whole, such that it becomes unusable by
+    other clients.
 
-- From https://wpewebkit.org/security/WSA-2025-0007.html
-  CVE-2025-43343
+For more information, see
+  - https://www.cve.org/CVERecord?id=CVE-2025-58436
+  - https://github.com/OpenPrinting/cups/commit/40008d76a001babbb9beb9d9d74b01a86fb6ddb4
 
-- From https://wpewebkit.org/security/WSA-2025-0006.html
-  CVE-2025-43272, CVE-2025-43342, CVE-2025-43356, CVE-2025-43368
+- CVE-2025-61915:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. Prior to version 2.4.15, a user in
+    the lpadmin group can use the cups web ui to change the config and
+    insert a malicious line. Then the cupsd process which runs as root
+    will parse the new config and cause an out-of-bound write.
 
-- From https://wpewebkit.org/security/WSA-2025-0005.html
-  CVE-2025-31273, CVE-2025-31278, CVE-2025-43211, CVE-2025-43212,
-  CVE-2025-43216, CVE-2025-43227, CVE-2025-43228, CVE-2025-43240,
-  CVE-2025-43265, CVE-2025-6558
+For more information, see
+  - https://www.cve.org/CVERecord?id=CVE-2025-61915
+  - https://github.com/OpenPrinting/cups/commit/db8d560262c22a21ee1e55dfd62fa98d9359bcb0
 
-Removed patch 0001 which is included in this release.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-[Bernd: bumped to 2.50.5, removed two patches originally added by Adrian
- which were added to upstream version 2.50.2]
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d27aad788d679d2a828a6bd2cb97854462201c4c)
+(cherry picked from commit ea79b66ab2bc62a8e2e02b510dbf56c6aecb8725)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch | 44 ----------------------
- package/wpewebkit/wpewebkit.hash                   |  8 ++--
- package/wpewebkit/wpewebkit.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 49 deletions(-)
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-deleted file mode 100644
-index 8432543e07..0000000000
---- a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 94acd1ce0ff2860b19f22ab2d386d7711c9699b7 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Tue, 8 Jul 2025 21:46:44 +0300
--Subject: [PATCH] [WPE] Fix the build with USE_SKIA_OPENTYPE_SVG=ON and
-- USE_SYSPROF_CAPTURE=OFF
--
--Unreviewed build fix.
--
--When backporting 287859@main the #include for the needed Skia header
--slipped inside an USE(SYSPROF_CAPTURE) guard. This moves the guards
--and #include statements to their correct places.
--
--* Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp:
--
--Canonical link: https://commits.webkit.org/290945.273@webkitglib/2.48
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--Upstream: https://github.com/WebKit/WebKit/commit/943d05f0c9b03c053a456c90c2a8817c1f679711
-----
-- Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
--index a06e33fd04f8..5fb245ce0b66 100644
----- a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
--+++ b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
--@@ -43,11 +43,12 @@
-- #include <skia/core/SkGraphics.h>
-- #endif
-- 
---#if USE(SYSPROF_CAPTURE)
---#include <wtf/SystemTracing.h>
-- #if USE(SKIA_OPENTYPE_SVG)
-- #include <skia/modules/svg/SkSVGOpenTypeSVGDecoder.h>
-- #endif
--+
--+#if USE(SYSPROF_CAPTURE)
--+#include <wtf/SystemTracing.h>
-- #endif
-- 
-- namespace WebKit {
---- 
--2.50.1
--
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 332fd9deaa..60a51c3e49 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.48.3.tar.xz.sums
--md5  2d3b7fa3c62886546f918fcc289cabbe  wpewebkit-2.48.3.tar.xz
--sha1  8a90b9ff8809c99c306defc1a08e50a31a09c590  wpewebkit-2.48.3.tar.xz
--sha256  807571f07e87823b8fb79564692c9b1ef81ee62edbf51345a15bd0e7e1f2e07b  wpewebkit-2.48.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.50.5.tar.xz.sums
-+md5  1d81485379005cca0236a278706f194f  wpewebkit-2.50.5.tar.xz
-+sha1  dd56b76eff8ba157a0291c0b61220666eed59313  wpewebkit-2.50.5.tar.xz
-+sha256  de4bfd20bfc921cdfc77e839ee4da84e2674bcb58b2f916172978d62fa115fc2  wpewebkit-2.50.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 31aba2a0b9..03deb6e991 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index a200a82deb..7c08a68c10 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
++sha256  0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d  cups-2.4.16-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index e6de671174..d3e6094c67 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # The middle number is even for stable releases, odd for development ones.
--WPEWEBKIT_VERSION = 2.48.3
-+WPEWEBKIT_VERSION = 2.50.5
- WPEWEBKIT_SITE = https://wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-CUPS_VERSION = 2.4.14
++CUPS_VERSION = 2.4.16
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
