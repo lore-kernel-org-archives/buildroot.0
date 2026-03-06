@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B5ABFCC06A
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A8F5FCC062
+	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 19:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 018D641E3E;
-	Fri,  6 Mar 2026 19:51:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CF6F613E0;
+	Fri,  6 Mar 2026 19:51:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SX8zjjHgxW2v; Fri,  6 Mar 2026 19:51:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jF9AqkyLRjgK; Fri,  6 Mar 2026 19:51:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1432B41E65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C9F613D6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772826661;
-	bh=89+vzYCiKUnFpyvM7eVAJr8lEWgbH58N7mZy6XbXZrw=;
+	s=default; t=1772826663;
+	bh=6FGYA78ujkvW9TgyQJbG9KOkOpFrxdwKVjI9TaBCqB8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GOLqVcYiqGLWMxVXa2Cfbcpo1pHa55wo4XVC6aY0Y2X4PUXH8YoFOlvN3DJcHDYUv
-	 mIRqVkH0uT8v6myGePXLK/mF1mYgHroPIe19DGxbjYgexUqGXce5Kp5q1uovXMBFO6
-	 bSP3nKLZg26C96NYBPcNGS7oVUz4OZuflzb29/bX72ITWZa3gm3/amoEIcPf4ALyqw
-	 DXYqGxsWb89TbPuXL63wr3L045imPglq8M1lBH+WMoTNtizI+QQoCTNrr2bPrkqOrP
-	 MrREY4N5BrTmFTq/W2uuiiyuC7tjpKoocTtvYbwFRsJT9Z7JrEVX4N5JcIO2ibkinw
-	 W+PFb4Elus1qA==
+	b=Jiok7EJGFDwOizGC09AssTvYE+qwlW7/FrcQvjcwju8JKF+vqcbzmSNjibnBLDy5z
+	 tpJk1SDsoNfslJU8nMXJWQPnu+CIjmMuVYxaEzHIcI1ZNzZ2byIu7MLBuuo3Hu4Myx
+	 TakwGIZa7fff40dW0SltDJm0D+/rtZgk3RgU3EDfI4LpVLrs9uN06/wh0rp60y5BlT
+	 l+wzgUt1fESsfzznhlWKWvaWAQkMG0GMu6RfvSd8CWkWEB8qvCH4BM7Acg9fMwXwqi
+	 E7UQCuEAsulPdc1Ms0Cp48zVplWMBkN4xJ3SlDuJbXJ57ELknPpKG7cRlS0vEQnU8I
+	 1sq6PXvcuBAYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1432B41E65;
-	Fri,  6 Mar 2026 19:51:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60C9F613D6;
+	Fri,  6 Mar 2026 19:51:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 38C02223
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E35D25B
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2233460DE3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AEEF60E09
  for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tj_GyhLGxbyt for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 19:50:51 +0000 (UTC)
+ id nKzI_Z_b4VOb for <buildroot@buildroot.org>;
+ Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C2F613D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E02CE61088
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60C2F613D4
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E02CE61088
+ for <buildroot@buildroot.org>; Fri,  6 Mar 2026 19:50:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 768FB855F0; Fri,  6 Mar 2026 19:50:50 +0000 (UTC)
+ id E160186823; Fri,  6 Mar 2026 19:50:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Mar 2026 13:51:57 +0100
+Date: Fri, 6 Mar 2026 13:36:55 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 4ec14d6a27403dfacfd64f923a9d875be52b8e4d
-X-Git-Newrev: 7551b75ed766062eebb5448eaeecb362ff9099a2
+X-Git-Oldrev: 6930cbca0d3a25c72ff3389e6a17298688b8aad8
+X-Git-Newrev: e728b91276d63d667e0d7eae4dad88def4c0c672
 X-Patchwork-Hint: ignore
-Message-Id: <20260306195050.768FB855F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/botan: add patch
- for CVE-2024-50382 & CVE-2024-50383
+Message-Id: <20260306195049.E160186823@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/wpewebkit: add
+ dependencies to fontconfig & freetype
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,127 +77,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7551b75ed766062eebb5448eaeecb362ff9099a2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e728b91276d63d667e0d7eae4dad88def4c0c672
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Fixes the following vulnerabilities:
+Buildroot commit 2882cf4ae649f7d5e9cee72f84e672328f550845 bumped the
+package from 2.44.4 to 2.48.3. This bump includes upstream commit
+https://github.com/WebKit/WebKit/commit/3b54e45d63b84f8ab8d70179184c45be78386622
+which was added to wpewebkit 2.45.1:
+https://wpewebkit.org/release/wpewebkit-2.45.1.html
+"Use Skia by default instead of Cairo for rendering."
 
-- CVE-2024-50382:
-    Botan before 3.6.0, when certain LLVM versions are used, has compiler-
-    induced secret-dependent control flow in lib/utils/ghash/ghash.cpp in
-    GHASH in AES-GCM. There is a branch instead of an XOR with carry. This
-    was observed for Clang in LLVM 15 on RISC-V.
+The upstream commit includes dependencies to fontconfig & freetype which
+were not added to buildroot and cause build errors with this defconfig:
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2024-50382
-  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_WPEWEBKIT=y
+BR2_PACKAGE_WPEWEBKIT_SANDBOX=y
+BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA=y
+BR2_PACKAGE_WPEWEBKIT_MEDIA_STREAM=y
+BR2_PACKAGE_WPEWEBKIT_WEBDRIVER=y
 
-- CVE-2024-50383:
-    Botan before 3.6.0, when certain GCC versions are used, has a
-    compiler-induced secret-dependent operation in lib/utils/donna128.h in
-    donna128 (used in Chacha-Poly1305 and x25519). An addition can be
-    skipped if a carry is not set. This was observed for GCC 11.3.0 with
-    -O2 on MIPS, and GCC on x86-i386. (Only 32-bit processors can be
-    affected.)
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2024-50383
-  - https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e197babd387cea2ab23bb1c1735ba270f6f6edf1)
+Reported-by: Julien Olivain <ju.o@free.fr>
+[https://patchwork.ozlabs.org/project/buildroot/patch/20251017131035.224739-1-aperez@igalia.com/#3599999]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7e12d9b4810610e75edf7d108b462804b72e519e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...s-to-avoid-compiler-induced-side-channels.patch | 65 ++++++++++++++++++++++
- package/botan/botan.mk                             |  3 +
- 2 files changed, 68 insertions(+)
+ package/wpewebkit/Config.in    | 2 ++
+ package/wpewebkit/wpewebkit.mk | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
-new file mode 100644
-index 0000000000..22f64be1b9
---- /dev/null
-+++ b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
-@@ -0,0 +1,65 @@
-+From 53b0cfde580e86b03d0d27a488b6c134f662e957 Mon Sep 17 00:00:00 2001
-+From: Jack Lloyd <jack@randombit.net>
-+Date: Sat, 19 Oct 2024 07:43:18 -0400
-+Subject: [PATCH] Add more value barriers to avoid compiler induced side
-+ channels
-+
-+The paper https://arxiv.org/pdf/2410.13489 claims that on specific
-+architectures Clang and GCC may introduce jumps here. The donna128
-+issues only affect 32-bit processors, which explains why we would not
-+see it in the x86-64 valgrind runs.
-+
-+The GHASH leak would seem to be generic but the authors only observed
-+it on RISC-V.
-+
-+CVE: CVE-2024-50382
-+CVE: CVE-2024-50383
-+Upstream: https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/lib/utils/donna128.h      | 5 +++--
-+ src/lib/utils/ghash/ghash.cpp | 2 +-
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/lib/utils/donna128.h b/src/lib/utils/donna128.h
-+index 8212bd349e0..7adf54546df 100644
-+--- a/src/lib/utils/donna128.h
-++++ b/src/lib/utils/donna128.h
-+@@ -8,6 +8,7 @@
-+ #ifndef BOTAN_CURVE25519_DONNA128_H_
-+ #define BOTAN_CURVE25519_DONNA128_H_
-+ 
-++#include <botan/internal/ct_utils.h>
-+ #include <botan/internal/mul128.h>
-+ #include <type_traits>
-+ 
-+@@ -73,14 +74,14 @@ class donna128 final {
-+          l += x.l;
-+          h += x.h;
-+ 
-+-         const uint64_t carry = (l < x.l);
-++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x.l).if_set_return(1);
-+          h += carry;
-+          return *this;
-+       }
-+ 
-+       constexpr donna128& operator+=(uint64_t x) {
-+          l += x;
-+-         const uint64_t carry = (l < x);
-++         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x).if_set_return(1);
-+          h += carry;
-+          return *this;
-+       }
-+diff --git a/src/lib/utils/ghash/ghash.cpp b/src/lib/utils/ghash/ghash.cpp
-+index 8c3b1ed6c2a..61b28590002 100644
-+--- a/src/lib/utils/ghash/ghash.cpp
-++++ b/src/lib/utils/ghash/ghash.cpp
-+@@ -131,7 +131,7 @@ void GHASH::key_schedule(std::span<const uint8_t> key) {
-+          m_HM[4 * j + 2 * i + 1] = H1;
-+ 
-+          // GCM's bit ops are reversed so we carry out of the bottom
-+-         const uint64_t carry = R * (H1 & 1);
-++         const uint64_t carry = CT::Mask<uint64_t>::expand(H1 & 1).if_set_return(R);
-+          H1 = (H1 >> 1) | (H0 << 63);
-+          H0 = (H0 >> 1) ^ carry;
-+       }
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 561e7bf702..38948f0184 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -11,6 +11,9 @@ BOTAN_LICENSE = BSD-2-Clause
- BOTAN_LICENSE_FILES = license.txt
- BOTAN_CPE_ID_VALID = YES
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 73ba4e6bdf..c8602f1de6 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -44,6 +44,8 @@ config BR2_PACKAGE_WPEWEBKIT
+ 	select BR2_HOST_CMAKE_AT_LEAST_3_20
+ 	select BR2_PACKAGE_CAIRO if BR2_ENDIAN = "BIG"
+ 	select BR2_PACKAGE_CAIRO_PNG if BR2_ENDIAN = "BIG"
++	select BR2_PACKAGE_FONTCONFIG if BR2_ENDIAN = "LITTLE"
++	select BR2_PACKAGE_FREETYPE if BR2_ENDIAN = "LITTLE"
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_JPEG
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 15a2ea93e8..31aba2a0b9 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -40,6 +40,7 @@ ifeq ($(BR2_ENDIAN),"BIG")
+ WPEWEBKIT_DEPENDENCIES += cairo
+ WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=OFF
+ else
++WPEWEBKIT_DEPENDENCIES += fontconfig freetype
+ WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=ON
+ endif
  
-+# 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
-+BOTAN_IGNORE_CVES += CVE-2024-50382 CVE-2024-50383
-+
- BOTAN_INSTALL_STAGING = YES
- 
- BOTAN_DEPENDENCIES = host-python3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
