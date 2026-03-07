@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A8FAFC9EF9
-	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 12:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E237FC9ED5
+	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 12:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A60760766;
-	Sat,  7 Mar 2026 12:53:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vxz_Z7zoAIIZ; Sat,  7 Mar 2026 12:53:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C7AC6077C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772888021;
-	bh=ExGsHoGIDmjO6nhukxH0Mg7ZuhT5Qx70K9v48/KCjjY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ms2uM3cc9gwSGswuaoomWoOvDGjI1olxrKorvwCFx2EsidepV7C7lFv5lNKIMkdlM
-	 ESrVbA8xEm1alxMt5CNYqSUgBUgsUPxD3f0nNF5ZlIe4CgV3GJLgA7Srpad75Xe+dH
-	 U/7ZWHmmG+2YjL7cRdG3tZeFdiot2vt7e79+E1EzWJ3YJ+C6HSasu1nvTN17YqqgC7
-	 9DPxe44lUzxX1xPOSH5lazEaoyc+ZanTpQ1F0O8KszF8sExq4HdVR0djlfFq9zoLly
-	 XasCk8GmLzXza/xMzWH/qZtbVrpPxxYXaZOpMdYpXiJQY/rl9supBY6Km5EGTHCx/X
-	 mdscq8lTwgh/w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C7AC6077C;
-	Sat,  7 Mar 2026 12:53:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 333D825B
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 12:53:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 249F083E7B
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 12:53:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6243B83E8F;
+	Sat,  7 Mar 2026 12:54:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kE1PY1a4BPNJ for <buildroot@buildroot.org>;
- Sat,  7 Mar 2026 12:53:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F4FD83E57
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F4FD83E57
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 12:53:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76A8485E00; Sat,  7 Mar 2026 12:53:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 7 Mar 2026 13:51:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc3647e73fdf7f392f36f8160e164ec8e0698cc0
-X-Git-Newrev: 088c3602fdac3854e9949e51ada99f1443f4f69a
-X-Patchwork-Hint: ignore
-Message-Id: <20260307125339.76A8485E00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/faketime: fix host build with
+ id s5iuL0mko2vf; Sat,  7 Mar 2026 12:54:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DC8E83E7B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772888061;
+	bh=uZYd4qjk9Roj8Ia8if2XmmyYNsj9GD55pNQiHHwpDV0=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=iVGOEY/gYVwai4oPomFdI1yNjXqjpEi1mphglIljtZkOx9/nRrpkSP+GQIkhbnl4r
+	 pQL/ODfgGyiiEfanm6vB85vPdn+TPxcSMiYaIYjRB4npT3eSyizqRjbsKOYgolSERL
+	 uzO/7wRmKTAz3xJBsFZXeJosRdhAmsST061Q17fUHjN/mMc0/aU9CNJ6bMjjh9/9r/
+	 wk8LiZwNrl6vcymHvNHQZF/ZNOzk8Ag2j6sN7UGofe9GNz3oyvUM3mWvpYqwwF/oTE
+	 kQMPWZo0AEx0I9JzuHDZH1+jE8WKQVhTaebU9grcXCD/mP0I1xLxOZhBHIJuXKQeHL
+	 Fw9GqUhZpsMyQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DC8E83E7B;
+	Sat,  7 Mar 2026 12:54:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 772AF169
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 12:54:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68C1C41A2D
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 12:54:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93tPkTYTfWjJ for <buildroot@buildroot.org>;
+ Sat,  7 Mar 2026 12:54:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 92F1D41A7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F1D41A7A
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 92F1D41A7A
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 12:54:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 86994780503;
+ Sat,  7 Mar 2026 13:54:16 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 07 Mar 2026 13:54:16 +0100
+MIME-Version: 1.0
+Date: Sat, 07 Mar 2026 13:54:16 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260306224203.121328-1-bernd@kuhls.net>
+References: <20260306224203.121328-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <829698911658362744982ffb892edc69@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772888057;
+ bh=C1MeJS1h56+LYZxIOl7fTpyGt5y7FeNZshrq8SK/fE8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=A2oMlOzXrdvtyZV9/mr1zjA34o4N3/uRApCdf44tqBaErNawYSY52onDCN50SVzA2
+ qi1dGH+37rDFhaTUt4x68NZQOU+iIcc7kYdAGS85H0SPFEIsDYJ6+r7fjhIemjTjvR
+ mZg3VbIQVGWjly8uPY6Y1MMghOe7JrY8KeiW/qtss8RDW+woB9K4aBiwuYBrM0vVab
+ rbkBgWhtxlnoOIY2twXgzmVbJYxYWmZWsR9pvarTyvng74bdk8KkuVVuWTiCPhAoMf
+ ZTRAmbVeJ4ksKt9AYfiA4hchRlSOyoAsymaRWbXlcJaE0ZB0Il8ffxeRqzqYGF2moo
+ arVh0hRXgOn2w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=A2oMlOzX
+Subject: Re: [Buildroot] [PATCH 1/1] package/faketime: fix host build with
  glibc 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,69 +95,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/088c3602fdac3854e9949e51ada99f1443f4f69a
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 06/03/2026 23:42, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/911/9112933e2560b155a9c61f321874ec245b62b2a5/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes:
-https://autobuild.buildroot.net/results/911/9112933e2560b155a9c61f321874ec245b62b2a5/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...onst-qualifiers-to-fix-build-with-ISO-C23.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-new file mode 100644
-index 0000000000..ce84d40699
---- /dev/null
-+++ b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-@@ -0,0 +1,39 @@
-+From dbe865dfdba0145d993d70b7fd4ec88b2f47554b Mon Sep 17 00:00:00 2001
-+From: Tomas Korbar <tkorbar@redhat.com>
-+Date: Mon, 15 Dec 2025 11:03:21 +0100
-+Subject: [PATCH] Add const qualifiers to fix build with ISO C23
-+
-+Fix https://github.com/wolfcw/libfaketime/issues/524
-+
-+Upstream: https://github.com/wolfcw/libfaketime/commit/dbe865dfdba0145d993d70b7fd4ec88b2f47554b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/libfaketime.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/libfaketime.c b/src/libfaketime.c
-+index ef1dca9..02839c8 100644
-+--- a/src/libfaketime.c
-++++ b/src/libfaketime.c
-+@@ -2666,7 +2666,7 @@ int timespec_get(struct timespec *ts, int base)
-+ static void parse_ft_string(const char *user_faked_time)
-+ {
-+   struct tm user_faked_time_tm;
-+-  char * tmp_time_fmt;
-++  const char * tmp_time_fmt;
-+   char * nstime_str;
-+ 
-+   if (!strncmp(user_faked_time, user_faked_time_saved, BUFFERLEN))
-+@@ -3338,7 +3338,7 @@ static void prepare_config_contents(char *contents)
-+ bool str_array_contains(const char *haystack, const char *needle)
-+ {
-+   size_t needle_len = strlen(needle);
-+-  char *pos = strstr(haystack, needle);
-++  const char *pos = strstr(haystack, needle);
-+   while (pos) {
-+     if (pos == haystack || *(pos - 1) == ',') {
-+       char nextc = *(pos + needle_len);
-+-- 
-+2.47.3
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
