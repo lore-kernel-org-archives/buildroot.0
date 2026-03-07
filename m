@@ -1,86 +1,168 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E249DFC9EC0
-	for <buildroot@archiver.kernel.org>; Fri,  6 Mar 2026 23:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89E5FFC9EC3
+	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 01:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 987C7613AA;
-	Fri,  6 Mar 2026 23:25:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NXf85SPZj4JO; Fri,  6 Mar 2026 23:25:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 639E8613C9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772839539;
-	bh=72DP/IlC17lg0cTgvbS14ntHjJXEJqmz+TOrUP+Qvi8=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KffpJHbFzjKgodK3XDvPvvThug7KxTj4VrWPxSj5tSXsExxgbzRxUlwN6QfFs+xaH
-	 RggHSgZaKew5lfP5f0Ykt6CZk0Ja95rrfZd2r7uTEfqkbS2lCftWLzEH5eOxm5EWEo
-	 wY1Kb5Ewu881gr9RL2Kxwi7RDsmAaWHRcY9RHu45RikzTXnAoOsCuYEVKz2VMdsiCJ
-	 sugFkUbWOD5UjY/CxtKzQ21Zq5HF4tT1L7lZyNHxB3qr1DHAf/R4dUuZE9tepZIyva
-	 ddZ1y8Abs0CWdsHKR/J08b8e6JajSTWpXuYp+9m7gNFby71n5qOw3KGHtUCnOoy+DT
-	 Hf5narl9bd5gw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 639E8613C9;
-	Fri,  6 Mar 2026 23:25:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE5EA169
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 23:25:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 943F741F31
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 23:25:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDEC6405FF;
+	Sat,  7 Mar 2026 01:06:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ohdfdXweWjoO for <buildroot@buildroot.org>;
- Fri,  6 Mar 2026 23:25:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8F02C41EF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F02C41EF7
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F02C41EF7
- for <buildroot@buildroot.org>; Fri,  6 Mar 2026 23:25:36 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bc67.dip0.t-ipconnect.de [84.161.188.103])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2C173A4C08E6;
- Sat,  7 Mar 2026 00:25:34 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58940)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vyeY1-000000003hQ-3NRA;
- Fri, 06 Mar 2026 23:25:33 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 7wRU1RHmVO2C; Sat,  7 Mar 2026 01:06:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E934061D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772845619;
+	bh=u9CQcrq61P4MeZiT6vdUiJgLlergCcz8DSRi4elnIAY=;
+	h=Date:To:From:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=k2+wLwNLu8/LkH8E11BBIVA2s15IcUu8Gwhd78twFz1jbc1E5N7hLxSst+408uwh8
+	 3Tg2O9ssmL91tKCuOPmSE45Ht4amX54wB2xrOhnI6jb8Z/XBhU3K9FwPIlKD7hwX/i
+	 bLzaWNvnsRQZa+JykLz7WLQ86286pIQYROS59agDRzl84FY5j6sxbX9QA38KM1Qjow
+	 AW5ke0vaNRvdStmvZ2bjp2vUrzs32MypzTGIkmmHWL8WdAP1HKBEW+M5lYthwKANDn
+	 qpseK1To3uPF0V+qupbgXVct9OrqmyuSfo0ZkhOcHDr8EKe/9NrGKhaslNH+6lB7Jv
+	 MVWpH7Biu7q4Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E934061D;
+	Sat,  7 Mar 2026 01:06:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55D34223
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 01:06:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B27E6088D
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 01:06:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2_Os-Iah2zz6 for <buildroot@buildroot.org>;
+ Sat,  7 Mar 2026 01:06:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:111:f403:d100::;
+ helo=bl2pr02cu003.outbound.protection.outlook.com;
+ envelope-from=ohitsdylan@outlook.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8876C6083F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8876C6083F
+Received: from BL2PR02CU003.outbound.protection.outlook.com
+ (mail-eastusazolkn190110000.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:d100::])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8876C6083F
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 01:06:57 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QwpDa0XLSvc786mgzY1G6jnk1nVRkW2xDFMopWuHhTb3yOKjMc/WeS3YTRPywNyPqRUTvLL0pLrFUoyWZ3Z5WeGYgsqa6ipXx1p6eDuctqPaRqgRKMPSXuC7Xz97vzFSdBBGitm7HNC3MRMc8DCG+6wtJC/uC9VDXeFGOlBLceryAsG8Lv0Gv8yNgyyE06Y3pRdhTFAygMdXWsHF9/cIZrQCQwF4EGH2DJ5z+rqWvNxCnWVXDheET3e18546ZMxfBS3OQZi0gJxNLu3yDhSJ8lZAtCPy8C3oXfLYruExgHMub9mfHcogtQospElRwf1p1ug4dZB7uTxVxoa0LKUMdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9ldOUlZAjDU5ZZAnirhdEIoNs1/HPCa0zx/i1M4VP5U=;
+ b=xOHF2qMI3ByVbwcxkFnfXLXtakvGKhYkIs77nsT92cdtEbIqUTWTSkvAtgQwaQlLQJ+7ecaXhLDM2VbGdIcsU50TrSIXtXxe3pPb2Hga4QtDYAShBtQAxQ/6rXZdVQ9RGBp+FDtIm+XnQqT5U4UplN2/wCFhitl4Y+D/REeqMCW8uVq6rxjzvtGW6vtkPN96eKX//PB1y9eVPp8gkxWvarSjawFvZEaY9/fqWt27+NvGdlAX0galHPy2HPn5ZAv2kg9uIyzUGZYSZLnA1aJhkiDxnC8mJj2pFPeN18P/wJY3YBVDPRxNQJMElw8yNbFqsZpb45/Th7S6Lply+F97Ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from PH5PR05MB998506.namprd05.prod.outlook.com
+ (2603:10b6:510:39e::23) by BLAPR05MB7234.namprd05.prod.outlook.com
+ (2603:10b6:208:298::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.20; Sat, 7 Mar
+ 2026 01:06:54 +0000
+Received: from PH5PR05MB998506.namprd05.prod.outlook.com
+ ([fe80::531b:f829:63a2:1c0f]) by PH5PR05MB998506.namprd05.prod.outlook.com
+ ([fe80::531b:f829:63a2:1c0f%5]) with mapi id 15.20.9678.017; Sat, 7 Mar 2026
+ 01:06:54 +0000
+Message-ID: <PH5PR05MB998506EF0692F2B1FD864EEB3ACB7BA@PH5PR05MB998506.namprd05.prod.outlook.com>
+Date: Fri, 6 Mar 2026 20:06:52 -0500
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
 To: buildroot@buildroot.org
-Cc: Steve Kenton <skenton@ou.edu>
-Date: Sat,  7 Mar 2026 00:25:33 +0100
-Message-ID: <20260306232533.466162-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+From: Dylan Buckley <ohitsdylan@outlook.com>
+X-ClientProxiedBy: CH2PR08CA0030.namprd08.prod.outlook.com
+ (2603:10b6:610:5a::40) To PH5PR05MB998506.namprd05.prod.outlook.com
+ (2603:10b6:510:39e::23)
+X-Microsoft-Original-Message-ID: <dfabc88a-a0aa-4acf-afd9-35a8f1f3e0c3@outlook.com>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH5PR05MB998506:EE_|BLAPR05MB7234:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6122842-40f3-46fe-78a9-08de7be5d24e
+X-Microsoft-Antispam: BCL:0;
+ ARA:14566002|51005399006|6090799003|19110799012|8060799015|41001999006|5072599009|15080799012|23021999003|461199028|13041999003|40105399003|3412199025|440099028;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?RWZNWmduUUFCZTZONHk5OGY1bnNNOWFINC9UMGRqb3JNTFY5TWREMklMcDhj?=
+ =?utf-8?B?b2pKU2g0THV3Zm1XYVhuT2JCeEtLeWpGVk4yWXhLbXp2MVgxaUFUM1BKUWx3?=
+ =?utf-8?B?RTFkVWtmSGo3cGpZdVV4ai9CQ25ST2l2WFhZVnVPOWNzOEtUY3FXSFpTeEFw?=
+ =?utf-8?B?QjhOUWI1SnlMRklnTk5HWFZudk1BWWNuKzNzV0IvSzg3KzVBbmhWYURsdVlm?=
+ =?utf-8?B?VDVQOWRpUFFJYXgwQUEyUVI4OTBSaEhONkJYM1hONlJJL2k1TVZYalVvazJz?=
+ =?utf-8?B?dnkzM1MxYkpyZTI4MDZwMXBVZFhEaXUxZVU3dEovMFNCQjRhZVFTNUxpTWZ5?=
+ =?utf-8?B?RUdabHVvRXg5MHBqMGVuYlNUaG9SaUVQM3A5SG5NQSs2VEhUZHdsU0dxVEgy?=
+ =?utf-8?B?SFMvOG9XbTFlT2hucGQvend1Q0gxS3A1MWdMREFGbllqQTdIc205UFcyanFB?=
+ =?utf-8?B?b0IwNlk4elJXbllQR0VIQ250YlhXRHFENzk3Z1haWkQvSHN4RElTU0dhU0pw?=
+ =?utf-8?B?VmVNMlVWWDVxajlwdWpadW90RzgrRjIvdE9MalVmYTZXdGlncWhKVDJ3V0pC?=
+ =?utf-8?B?c1VnTUlOS1VsK3lzL1VkOFk1MmhvZFdEOE5XMkFQc2hQbFVoTWtuK0VhbGd0?=
+ =?utf-8?B?b3VBL1QzSFZCa0V0NG80TWJHMmJVZ05vbXFxTENVajI5M0dzOC9lWFJYMERD?=
+ =?utf-8?B?NEw0UStwYTBCQ0ovWVM4MDM0WDZoWGNLWjFQSDV4emlBTEJ4UFkydjloQXJX?=
+ =?utf-8?B?ZUgvL3IvN1RKWkxVcXdkaVI2bklBYzZtdUhsbnZETGxtcEo4WDRXVVhUdzlR?=
+ =?utf-8?B?UEtpbHRPaUdueWNGYnZQMU5pUk9hU2R6OHlOYjN1L055L1dOR3pINTVIZ3JZ?=
+ =?utf-8?B?V1NBaXRFWUQ3c05wU3d6MWRtUzNyUDU2c0syY0dabkRpazNtbU9uUjVIbzZZ?=
+ =?utf-8?B?aUtBYlRsV1NxbThQUTEvZVFwcHI4SjF2S0ttSGwwc1JMVnlBQjUzRWFPZlRp?=
+ =?utf-8?B?azZDYUsvdzdCMldrZ2g5N3BocitSb1hpOGxJcU1jV0lMb1ViNnFNNUpKQWFk?=
+ =?utf-8?B?Mkhza0hIaFUwQm5rajJFb0N2MU5wMVlWU2FiejNsaEdJcTFpczArTlhKTDhW?=
+ =?utf-8?B?eHRsRy85MnkrWGpJRUoza0t4aHljL0ZXeGxwUFh0ZzlhWm02L2NnaWI4M3FF?=
+ =?utf-8?B?MGo5SnZ5SktUZmRWMGVFNmNnYlpHNTQ4alBsSnZBZDB3MGF2andHdVhXNDdr?=
+ =?utf-8?B?Rmpmcm1ZYkVJaG9ENVExZUNpVHh4QlZHLytySVovMFIra0JRMmhQblZURVFs?=
+ =?utf-8?Q?CDDjdIGIErozAauk72hTYlVioFcabw3MhC?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTdLOHBqeGdzWFNnTXh4aUVmOHpOODZ0a3k4TmFJNk9UakFXWitrM0NWWlNa?=
+ =?utf-8?B?UUZHd2N1TWZtQU1MRDA2TDhxQ04vN1BwUlJ0Yk5KSDBTU3ExaHdFbEVPOTh4?=
+ =?utf-8?B?MzZFaFBldVZJQ2tPR1MzdTVlait3TXF4VWFEME1BbkwyU0grSURGdXFhZ0J5?=
+ =?utf-8?B?SllIcTNGbUR6d2tTZi9LZkZiS1paM1duWlI0MURsRVVsYmxVMUpzUVROTERl?=
+ =?utf-8?B?UEZ2Vmx6aS8yMXgrZWxmWnB6YVBFL3pLeURZZGdPV1F3UlBzdG5IYjNLdlV0?=
+ =?utf-8?B?NUZpVFB2MXdja0VzNTQwSTNraEd0VHRjKzZQZ2h1MVBTRzlvQ1BwT3RQR3Bj?=
+ =?utf-8?B?MFlrR1R4VTRabzBIeDNLR0FjbDZBVVZ5SitRU3lib1UyOXhRYkFsNEE3cFAx?=
+ =?utf-8?B?ZDF3NmxVRE1oc3RGaDBuemJWcDFScGNRMFphYnJ5VmVxNWIybGZFbksza3Q5?=
+ =?utf-8?B?Mjl6VmN3Um9pbTFIZzQ0QXRzQ294eEJXYlljRDI2ZlZ4MGRBMnFsdHNaWVgz?=
+ =?utf-8?B?ZFAxUERYZngvS1MvcEdSK01sOUdKbjRwWWhpcmZ0MjNTMjZObnVNT21SZjlK?=
+ =?utf-8?B?d1laWkNyL3RTbVJ0aVFVRjY0OU5xQnBSaUFmdEtVOFJYbUFWSSt1SUxaT09B?=
+ =?utf-8?B?bW93Z0t1dEhTSUtmTERDVGE5RjdxQ1dub1ArdXNDUzRQRmNMMVNTdkVTdnpv?=
+ =?utf-8?B?LzVUQTZHOVNpWWNFMFdib0NTNzM4TDAyUjFla0kwSE9FWTZUNEcxc0hiRjJJ?=
+ =?utf-8?B?RFhOMC84K2ZUTG1jZW1PVlhldS9MTi9wdDk1K01hUUd2akk3b1J0eVMrR2N0?=
+ =?utf-8?B?aVRIMldkTVdFdEJZTW1ld2JZeHkrcFo2djRlTzlSbDA2UzZpN0pYV0g3dm5z?=
+ =?utf-8?B?US8xSnZYTGhzVWJ0KzByRGJJaXg2Vm50V1dweWFQRWdHT0ZMdTc5TXRGWUg1?=
+ =?utf-8?B?Mm54QVZFRElBRWJHdnRRcTFOSW9scFNONW5pcUdqS0ZvS2FIMUZFQXZubVpQ?=
+ =?utf-8?B?T2gzWXEvTExGaWVXYnozZHJBWFlmMTE4QThkVnQxelVadzJXRHlaZEtNL2t5?=
+ =?utf-8?B?VUt0eTJSNkEyREtNeWxEMHZVM2cvZXQvaUJac0UwVTQ1cVdramVQM2YxS3pK?=
+ =?utf-8?B?S25TWCtyVDZRZXhrN3FpRUZHVmZ0b0JqZzgwaTRzRG5UTHl5MHZwek1NRS93?=
+ =?utf-8?B?dTNvcFpGM0lVYW9YREFTNFN5WGt6eXJMZjhmQ2czNmJwY0tBSjNnclEwKzFp?=
+ =?utf-8?B?NnpRV2p4WGFEOTJkME9kUnlRSURYby94aVRBQUoyb2hPdG1JUmNKWGhieDVi?=
+ =?utf-8?B?ZXptTlFRQndKa2UvR2VjcXU4dUVZQk9xUW14YkZEaklObUEyV1R0STErR0hM?=
+ =?utf-8?B?Qmh5VE1KR091ZGVtT0F3T3pYemluUlBXRk51OG9YZVkvMnZCemM5QkltSUdD?=
+ =?utf-8?B?RVNFN0wySC85K3pXdWRlQnFGSElKaGdxdTNKaVdEb2tEMVVKUnovaFI1SERj?=
+ =?utf-8?B?OG1jdWFwUlgzSno2UGRhN2dzcXc2ZUIyUXk1ZzBuM1pWN1JOTGxGTGNubzhp?=
+ =?utf-8?B?ZmhCdG9GcFNvWlIyajFGOXQrZ2VRWkNhRUUrekRvc3VHRTBKL1ZJSzQyNWRJ?=
+ =?utf-8?B?azIwaFNmbGpVWFEzS2dvekdsYlBlS0xxU2hzazR3cmVzVHEzRWZPcVZnZCty?=
+ =?utf-8?B?dHd1Z0o4QStqdjMvQWVscTkvMlRkSGF1SG5yWDRkZkxFOVVYemhjNldDYnVr?=
+ =?utf-8?B?cWlnSG1kaVl6Y2lSTVBDcEl2aDJxUEFyWGhrcFJvdkk1TVVxTE9wYzZIUzFC?=
+ =?utf-8?B?S1VCNCtMa1ZvdmJHMmVUUVJoRjZjNFJFZ0xrVHZiRWk0aElvcHRTYWZQZkJF?=
+ =?utf-8?Q?GI64QQNf4/aPY?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6122842-40f3-46fe-78a9-08de7be5d24e
+X-MS-Exchange-CrossTenant-AuthSource: PH5PR05MB998506.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2026 01:06:54.1388 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR05MB7234
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772839534;
- bh=O9NZAZbTRpz0jVGfcJMb9TTPnTjRjAskK62XcOrjwzY=;
- h=From:To:Cc:Subject:Date:From;
- b=g1hZf4ujuiwictNMeNnXDOxfv25atNCX6CslnruI04FLRt5K8V5sd5YuSFO13Y01g
- gKlbNgIerQRKAwpyZB83kok8jA4e/O4i7WcFQnOZJMJ2wuY3LE/36AO6fX3T68TqUm
- 11QlN3JqyNIeFqjVT47Auhv3gukbUnDgjWjVSP23IVOXC1V7f+u5SQRWPGkjesAie2
- 5fNSPGpjDW5wkLyfS633HTj9ri3wCOjDg0iHqdG9//5mzjGl0Q5zMqAeqGfOOg/LYe
- nDKIteZ6/kCII+CxgOsn/W1Lnt+hzOXlCI+ld+UvQ4YvViHFEM8ogHJ6xD/p4Mlgun
- VbHL6wjmZnXWA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=outlook.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9ldOUlZAjDU5ZZAnirhdEIoNs1/HPCa0zx/i1M4VP5U=;
+ b=kVa5657JMxcRKsPoLGZoyxMbeZXOWxcslgaN54vG/Z4x29G7hJbWfx2cr7A4jYWExFCtUSnkZM5/yZI5QOc+Rk1SEXyYC43UIGGa06PnZ3+/dsCgHzHtdWrorrW/1GM7tYgwM5U5wUMQzWkAgLBPf6tnjQUNqPQCZ9oS3CuVrS19tHBF397C0E1Kgez+scx72KbJTHW/X6NeUGM5Iw49JjVPUabMq02B4PuyW57t9yzPvX0mvoljbMrk69Qi5pX28U+KHyM2JvwKRf4G+I0fiudWBA0c75IQ8Dd1xpYgKegXSYTq39zZknQ0g75W3ffzbbCLV/tbnZlt9LvYd701hQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=outlook.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=g1hZf4uj
-Subject: [Buildroot] [PATCH 1/1] package/memtest86: bump version to 8.00
+ unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
+ header.s=selector1 header.b=kVa5657J
+Subject: [Buildroot] How to Build python-jinja2 Package as a Host Package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,120 +174,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/memtest86plus/memtest86plus/releases/tag/v8.00
+Hello,
 
-Upstream merged memtest.bin and memtest.efi into mt86plus:
-https://github.com/memtest86plus/memtest86plus/commit/71d061a4c7cd22fe882bb025b3a061745d952d4c
+I am trying to build the Python package, Jinja2, as a host package. I 
+see calls in the python-jinja2.mk file to the host-python-package 
+function, but I do not see python-jinja2 as an option in the menuconfig 
+host package list. I do have python3 enabled in the host packages.
 
-and renamed the build directories:
-https://github.com/memtest86plus/memtest86plus/commit/a10664a2515a81b07ab8ae999f91e8151a87eec6
+Am I missing something obvious here?
 
-Upstream commit
-https://github.com/memtest86plus/memtest86plus/commit/6f4ec848c4e9291626236bca457baf7b95542325
-removed the override of $CC, for details of the problem see this thread:
-https://lists.buildroot.org/pipermail/buildroot/2023-December/366174.html
-
-and in fact the first build command now reads
-
-/home/bernd/buildroot/output/per-package/memtest86/host/bin/i686-buildroot-linux-gnu-gcc
- -m32 -x assembler-with-cpp -c -I../../boot -o boot/x86/startup.o ../../boot/x86/startup32.S
-
-instead of this command seen with version 7.20:
-gcc -m32 -x assembler-with-cpp -c -I../boot -o boot/startup.o ../boot/startup32.S
-
-This should hopefully fix the build on non-x86 hosts:
-https://autobuild.buildroot.net/results/fc1/fc14be4f2e5b1db2f7313156b50c9e2e298b06e9/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Deliberately not used "Fixed:" tag because I cannot easily test the
-build on non-x86 hosts.
-
- package/memtest86/Config.in      |  6 +++---
- package/memtest86/memtest86.hash |  2 +-
- package/memtest86/memtest86.mk   | 12 +++++-------
- 3 files changed, 9 insertions(+), 11 deletions(-)
-
-diff --git a/package/memtest86/Config.in b/package/memtest86/Config.in
-index c9a8cf749f..3883176efb 100644
---- a/package/memtest86/Config.in
-+++ b/package/memtest86/Config.in
-@@ -30,17 +30,17 @@ config BR2_PACKAGE_MEMTEST86
- 	  line:
- 
- 	  menuentry "Start Memtest86+ (USB keyboards)" {
--	      linux16 /boot/memtest.bin keyboard=both
-+	      linux16 /boot/mt86plus keyboard=both
- 	  }
- 	  menuentry "Start Memtest86+ (serial line)" {
--	      linux16 /boot/memtest.bin console=ttyS0,115200
-+	      linux16 /boot/mt86plus console=ttyS0,115200
- 	  }
- 
- 	  Or for UEFI BIOS using the Linux 32-bit or 64-bit boot
- 	  protocols, using USB keyboard:
- 
- 	  menuentry "Start Memtest86+ (USB keyboards)" {
--	      linux /EFI/BOOT/memtest.efi keyboard=both
-+	      linux /EFI/BOOT/mt86plus keyboard=both
- 	  }
- 
- 	  Other boot loaders will have similar requirements.
-diff --git a/package/memtest86/memtest86.hash b/package/memtest86/memtest86.hash
-index 20d96dce95..109e9f3761 100644
---- a/package/memtest86/memtest86.hash
-+++ b/package/memtest86/memtest86.hash
-@@ -1,3 +1,3 @@
- # locally computed using sha256sum
--sha256  8bad4b5788bc28e4dd1db78c9069bd0c65a4a6baf16409ab537c795bb04578b3  memtest86-7.20.tar.gz
-+sha256  ec7edde55f60d12d9e7bc1cc560837cdbaa14cf00020cebb4a1d7fe4afeddb4a  memtest86-8.00.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/memtest86/memtest86.mk b/package/memtest86/memtest86.mk
-index 4f9c1b9a28..30336a3dc5 100644
---- a/package/memtest86/memtest86.mk
-+++ b/package/memtest86/memtest86.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMTEST86_VERSION = 7.20
-+MEMTEST86_VERSION = 8.00
- MEMTEST86_SITE = $(call github,memtest86plus,memtest86plus,v$(MEMTEST86_VERSION))
- MEMTEST86_LICENSE = GPL-2.0
- MEMTEST86_LICENSE_FILES = LICENSE
-@@ -12,10 +12,10 @@ MEMTEST86_INSTALL_IMAGES = YES
- MEMTEST86_INSTALL_TARGET = NO
- 
- ifeq ($(BR2_i386),y)
--MEMTEST86_BUILD_DIR = build32
-+MEMTEST86_BUILD_DIR = build/i586
- else
- ifeq ($(BR2_x86_64),y)
--MEMTEST86_BUILD_DIR = build64
-+MEMTEST86_BUILD_DIR = build/x86_64
- endif
- endif
- 
-@@ -24,10 +24,8 @@ define MEMTEST86_BUILD_CMDS
- endef
- 
- define MEMTEST86_INSTALL_IMAGES_CMDS
--	$(foreach ext, bin efi, \
--		$(INSTALL) -m 0755 -D $(@D)/$(MEMTEST86_BUILD_DIR)/memtest.$(ext) \
--			$(BINARIES_DIR)/memtest.$(ext)
--	)
-+	$(INSTALL) -m 0755 -D $(@D)/$(MEMTEST86_BUILD_DIR)/mt86plus \
-+		$(BINARIES_DIR)/mt86plus
- endef
- 
- $(eval $(generic-package))
--- 
-2.47.3
+Thank you,
+Dylan
 
 _______________________________________________
 buildroot mailing list
