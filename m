@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF777F55105
-	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 20:19:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8091F55102
+	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 20:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A41FF41983;
-	Sat,  7 Mar 2026 20:19:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A70F941A5F;
+	Sat,  7 Mar 2026 20:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gI8Ydp3u8LuX; Sat,  7 Mar 2026 20:19:00 +0000 (UTC)
+ id kol5ytHISQam; Sat,  7 Mar 2026 20:19:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D035741A2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D907441A3F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772914740;
-	bh=hlGwlvd9tBBSWU4fBRP8Jw/DsvWMs4b2v0LbQG1O1vs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=esfadx2xa75UBKCF2Gdzcl5eV+qq7rtoaci3/9ZuHs8uibBG4+460ttEUQDMxAmk4
-	 4lvyoMnWnjlnD4LIalve/7i1yGFabxqXvfN8zhGvvBqGbZ/L5iD/1jA6KbmOWmAZ4p
-	 QPQI+CzIEjiBtsor0f54K22vw8kXqyIHLsS81l31H6G4Gt1XxLQ95TTX+wTkxwfwNK
-	 317JfxdVJ25iIKUFR+COvg/nqiWh4dmCYD/rT6bumkKHEnNKgD3tG1tHgxs9xBz21M
-	 Q8HN9v5jurafR146cr1Ml9ogUt0tYKJUl4wsivCP4AXhfeUtnYOMCqUFGYv3Moqw+O
-	 0iGc3SaCt8Pjg==
+	s=default; t=1772914796;
+	bh=wwFM0oI/EC685JRKHB+jGfW5zguVXZsjPUjjoEnW5n8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YV7NmDPIb1lBgGp4usgB/yUuAs50I1E+eypqQihJxDdpesp/qWRU3daE2ehJlhGqV
+	 02Pf+VdQRX3CeO/EvSksBuNDLPeevtJF3vrBfeyJLOttypXqt6+CU1o5Tgk4/sTs6S
+	 iz+xQcXy4XfI6lBcPSQBjHS8dbuooAeue9yGBBqql2IqwuacgOH7mABJR8xBVgN4D5
+	 1WdjwP0+mKirVsldslCeIBJ8eW49yU9WGIKvCzhAWFOGBLsZYwxxBxJNv4UHSqP1zY
+	 96EPCfNenb2dBslkvVbtJqLyZwUBZmvOkqCkL2I8oykECOogI7Vj7CCPNnNSdZKPAq
+	 wO3Em65L6/uwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D035741A2F;
-	Sat,  7 Mar 2026 20:19:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B61C169
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:18:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D907441A3F;
+	Sat,  7 Mar 2026 20:19:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C67D169
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:19:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CFD983D43
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:18:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3991C60B05
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:19:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BJMancvLwnPL for <buildroot@buildroot.org>;
- Sat,  7 Mar 2026 20:18:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77D6F83D2F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77D6F83D2F
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:18:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B69685E1A; Sat,  7 Mar 2026 20:18:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 7 Mar 2026 21:16:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1f9109117846d6fa638a0781f7c11e13ba52612c
-X-Git-Newrev: 7323bcc1d476e965d31fd3db4046bacf6f7c0e75
-X-Patchwork-Hint: ignore
-Message-Id: <20260307201858.8B69685E1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libheif: needs gcc >= 10
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lg5KfuJH8rfY for <buildroot@buildroot.org>;
+ Sat,  7 Mar 2026 20:19:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 65CE060777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65CE060777
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 65CE060777
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:19:54 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 8234D13F88E;
+ Sat,  7 Mar 2026 21:19:50 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 07 Mar 2026 21:19:50 +0100
+MIME-Version: 1.0
+Date: Sat, 07 Mar 2026 21:19:50 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260307185425.729667-1-bernd@kuhls.net>
+References: <20260307185425.729667-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <f79eba3dfa95a1b7001bdfb4f9546c33@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1772914791;
+ bh=ycVafeBsPunLqxvBAb8tlG/D+INv065Xv1UVMBmdzr0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DXI2jdOKw8lBf3tgBVq+i5YVOtyyNe9X1zq1HtkcXIGJpSBLU5E8hA5TJNeP6sP4N
+ GFis6aCfsdTqY6UQzxVwNxM6/GToJdLnffALBaVccE+ibYvfR6rm/6Oo8au7/wkQ4B
+ pQRn5XGQNBxQIsTicsnLiEPU8HnYDUCxp3ICHJDJ5vS/bVS96cqzA417y9l92k1D7x
+ 2NQZw4OvbmJPA8lRQ4GqWqeM2kzSA9J+zsZsqZ/jtVJzAz2SN0yuLq+SKvowDbhtY3
+ /wzARHfRYREh54tFL6ouVraD4NePCPN7//eJlk3SdD6ohSM/mKnSwWzWZmfTCnomSC
+ MnIn7YwGwjnWA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=DXI2jdOK
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: needs gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,113 +95,16 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7323bcc1d476e965d31fd3db4046bacf6f7c0e75
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 07/03/2026 19:54, Bernd Kuhls wrote:
+[...]
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes build error with gcc 9.x:
-
-output/build/libheif-1.21.1/libheif/nclx.h:128:50: error:
- 'bool nclx_profile::operator==(const nclx_profile&)
- const' cannot be defaulted
-
- using this defconfig:
-
-  BR2_arm=y
-  BR2_TOOLCHAIN_EXTERNAL=y
-  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-  BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.11.2.tar.bz2"
-  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-  BR2_TOOLCHAIN_EXTERNAL_CXX=y
-  BR2_STATIC_LIBS=y
-  BR2_PACKAGE_LIBHEIF=y
-
-According to https://github.com/strukturag/libheif/issues/1615#issuecomment-3457979167
-gcc >= 10 with support for C++20 is needed for the package.
-
-The failing code was introduced upstream in version 0.21.0 with commit
-https://github.com/strukturag/libheif/commit/a62f933e380e165dc2c12a879d0ceed1529b3efa
-which was added to buildroot with commit
-a8aed698c706ec534ddc41cdce651c18016c28ca.
-
-Also removed -std=c++11 from CXXFLAGS.
-
-The build error was not yet recorded by the autobuilders.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/kodi-imagedecoder-heif/Config.in | 6 +++---
- package/libheif/Config.in                | 6 +++---
- package/libheif/libheif.mk               | 1 -
- 3 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
-index f41b164ff4..d77f10ee98 100644
---- a/package/kodi-imagedecoder-heif/Config.in
-+++ b/package/kodi-imagedecoder-heif/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
- 	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libheif
- 	select BR2_PACKAGE_LIBDE265
- 	select BR2_PACKAGE_LIBHEIF
- 	select BR2_PACKAGE_TINYXML2
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
- 
- 	  https://github.com/xbmc/imagedecoder.heif
- 
--comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 4.8"
-+comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 10"
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-diff --git a/package/libheif/Config.in b/package/libheif/Config.in
-index 0ae86a07f4..9e88fb826d 100644
---- a/package/libheif/Config.in
-+++ b/package/libheif/Config.in
-@@ -2,14 +2,14 @@ config BR2_PACKAGE_LIBHEIF
- 	bool "libheif"
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libheif is an HEIF and AVIF file format decoder and encoder.
- 
- 	  https://github.com/strukturag/libheif
- 
--comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
-+comment "libheif needs a toolchain w/ C++, threads, gcc >= 10"
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index acd302d847..c4196f9353 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
-@@ -11,7 +11,6 @@ LIBHEIF_LICENSE_FILES = COPYING
- LIBHEIF_CPE_ID_VENDOR = struktur
- LIBHEIF_INSTALL_STAGING = YES
- LIBHEIF_CONF_OPTS = \
--	-DCMAKE_CXX_FLAGS="-std=c++11" \
- 	-DENABLE_PLUGIN_LOADING=OFF \
- 	-DWITH_AOM_DECODER=OFF \
- 	-DWITH_AOM_ENCODER=OFF \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
