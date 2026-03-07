@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B13FF5510F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 22:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28EFFF55111
+	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 22:42:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17EDF40884;
-	Sat,  7 Mar 2026 22:12:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB4FE41BBD;
+	Sat,  7 Mar 2026 22:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z0uepDq5D32U; Sat,  7 Mar 2026 22:12:36 +0000 (UTC)
+ id 2M4cftETZmEc; Sat,  7 Mar 2026 22:42:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F61840857
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEB2E4193C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772921556;
-	bh=Ha3NLVXZ4KFfTHrtbnfxV4MGqWqBu7GWlo3mxi8vbMk=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ebGJKoa3UrdsGXmCE60Nd+gRiExKxIuTuO1Rl35pIifryRbMDyLnxcrAVD64qfNk3
-	 /KFDYyIS0jschm1fYu+VkBiRzuqP8NurmGx1kpxpE6HDxVEtYuS+lOz/4KEx3Of3dg
-	 ih5F6vh5yE4h9BZF/iUsZRVqb98On2oKf4krJetZuzL+IEZmnWbrIXLf20moOyOAYz
-	 TqvBdUSVX+6J2M+kCa8EABjnEKppj8aBaaX7GtZSyXIT87QDTpendPE6xGbBx9v5Hs
-	 Dh5jJnTa2i9Kdr1LofteQa8F4aDnb3MZYhTE2xgI7SbDw5zGGOnn97MRhrPHKeH/24
-	 FXgBCa4fE4FpA==
+	s=default; t=1772923374;
+	bh=np2SebnxLaSG4pAK3607kJeTBBLW1x6jMdM72tVgszI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=XszIP3m8L8LT3mDLg76kyUbKsaJj0wu6xsJw7J1SkJsa9Kt0z14eZ1/kf+CcE98Oj
+	 zK2ixGeiYkdLU+JuUOYWD7/9fAhldbe91vnpVhNKpWEklceLL+3W0266sbN+dyUBux
+	 NpjSD4YnXPO0ATwvJ8T+TPEbWCPRa2Df+MntfjpeHOsm9zSqbrqSe5f03g9KY97g9C
+	 iE4fLU5KwboxSIX3Wskcham/cV9PVsf1JzrQ6MdNH/VDbpl/eyMIOB0OuRgu4c5Cic
+	 nBNU2/w6LdSthllH74A0a0cEx013RwwnTOwEC5SOciX9uAhBzI1O1mCzlkFc/b2JbX
+	 NE5ENsY3foB7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F61840857;
-	Sat,  7 Mar 2026 22:12:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C4329223
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 22:12:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEB2E4193C;
+	Sat,  7 Mar 2026 22:42:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94058169
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 22:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9D78403FA
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 22:12:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8577083C8F
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 22:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OERTP4EH3byJ for <buildroot@buildroot.org>;
- Sat,  7 Mar 2026 22:12:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D353E40075
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D353E40075
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D353E40075
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 22:12:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 450FDB00535;
- Sat,  7 Mar 2026 23:12:30 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 07 Mar 2026 23:12:30 +0100
-MIME-Version: 1.0
-Date: Sat, 07 Mar 2026 23:12:30 +0100
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-In-Reply-To: <20260204113551.1606741-1-buildroot@bubu1.eu>
-References: <20260204113551.1606741-1-buildroot@bubu1.eu>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <a2a23dcce7e16dfb1262ce888f24731f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1772921552;
- bh=1sQO4TwOzsPP7rNMMfmZ3jQhGBlZKPNHmf8Epd/wVbw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=QavDEsA1GSavZelCBblwyJBr44A3xC/IbEmQsrhJutimx8chDtVDr82Hztz5auNyy
- DbmbNyx9W9NSmrMf1TofAQ0aJUKvbpiHHEheVFrHXR64a/ivg9EvzMhby92DNyhY99
- lik/8k6OEztU17t1tVLBPkn+lAbW0iMi5Tb7Xo815T47TKDw+LjWj0PbIlUG+tD1WQ
- rLdhJ7gn+/fc4mTuGVlpCPvqlIbbyYDTBAuIwJI5JB7ytAtk4MKQldfZaTKp7XbN6z
- /5FanjBusHR9cfn9+ecaUeOm7kyAi1LxnkMx8gssNj2Nreqc4howMBnUjJVbIcfWww
- cWr8c4dea1X/A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QavDEsA1
-Subject: Re: [Buildroot] [PATCH] package/mobile-broadband-provider-info:
- bump to 20251101
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SuwSw0qMA4-V for <buildroot@buildroot.org>;
+ Sat,  7 Mar 2026 22:42:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82C5C83C8D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82C5C83C8D
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 22:42:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8BC8C844F9; Sat,  7 Mar 2026 22:42:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 7 Mar 2026 23:39:59 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6019875dd2da189a8063130983e1dcd297de2e83
+X-Git-Newrev: f983411b57a0be2c34b0b03a33a3750fa5b77c95
+X-Patchwork-Hint: ignore
+Message-Id: <20260307224251.8BC8C844F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ftxui: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,28 +70,113 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/02/2026 12:35, Marcus Hoffmann via buildroot wrote:
-> The package switched to meson in release 20240407[1].
-> The download url changed to gnome's gitlab, no more xz tarballs are
-> available, use the bz2 one.
-> 
-> There is a signed git tag, but no signed release archives and also no
-> checksum files released, so the hashsum is now calculated locally.
-> 
-> Release notes: 
-> https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/-/blob/20251101/NEWS
-> 
-> [1] 
-> https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/-/releases/20240407
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f983411b57a0be2c34b0b03a33a3750fa5b77c95
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+FTXUI is a simple cross-platform C++ library for terminal
+based user interfaces.
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+[Julien: remove FTXUI_SOURCE to use the default archive name]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/ftxui/Config.in  | 14 ++++++++++++++
+ package/ftxui/ftxui.hash |  3 +++
+ package/ftxui/ftxui.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 44 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 835be1f6a3..106510ea84 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1262,6 +1262,7 @@ F:	package/cctz/
+ F:	package/clpeak/
+ F:	package/faad2/
+ F:	package/fdk-aac/
++F:	package/ftxui/
+ F:	package/httping/
+ F:	package/iozone/
+ F:	package/leptonica/
+diff --git a/package/Config.in b/package/Config.in
+index 5c7ab57101..fab482c52f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2303,6 +2303,7 @@ menu "Text and terminal handling"
+ 	source "package/fcft/Config.in"
+ 	source "package/fmt/Config.in"
+ 	source "package/fstrcmp/Config.in"
++	source "package/ftxui/Config.in"
+ 	source "package/icu/Config.in"
+ 	source "package/inih/Config.in"
+ 	source "package/iniparser/Config.in"
+diff --git a/package/ftxui/Config.in b/package/ftxui/Config.in
+new file mode 100644
+index 0000000000..88cd77e42e
+--- /dev/null
++++ b/package/ftxui/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_FTXUI
++	bool "ftxui"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR # std::wstring()
++	help
++	  FTXUI is a simple cross-platform C++ library
++	  for terminal based user interfaces
++
++	  https://arthursonzogni.github.io/FTXUI/
++
++comment "ftxui needs a toolchain w/ C++, wchar and threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
+diff --git a/package/ftxui/ftxui.hash b/package/ftxui/ftxui.hash
+new file mode 100644
+index 0000000000..78ea321e0d
+--- /dev/null
++++ b/package/ftxui/ftxui.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  45819c1e54914783d4a1ca5633885035d74146778a1f74e1213cdb7b76340e71  ftxui-6.1.9.tar.gz
++sha256  0224d97639ad37047d719a5ed5c0acc98de1c58ae63be0c27183dcad1328fc61  LICENSE
+diff --git a/package/ftxui/ftxui.mk b/package/ftxui/ftxui.mk
+new file mode 100644
+index 0000000000..72d5c64236
+--- /dev/null
++++ b/package/ftxui/ftxui.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# ftxui
++#
++################################################################################
++
++FTXUI_VERSION = 6.1.9
++FTXUI_SITE = $(call github,ArthurSonzogni,FTXUI,v$(FTXUI_VERSION))
++FTXUI_LICENSE = MIT
++FTXUI_LICENSE_FILES = LICENSE
++
++FTXUI_INSTALL_STAGING = YES
++
++FTXUI_CONF_OPTS = \
++	-DFTXUI_BUILD_DOCS=OFF \
++	-DFTXUI_BUILD_EXAMPLES=OFF \
++	-DFTXUI_BUILD_TESTS=OFF \
++	-DFTXUI_BUILD_TESTS_FUZZER=OFF \
++	-DFTXUI_CLANG_TIDY=OFF \
++	-DFTXUI_DEV_WARNINGS=OFF \
++	-DFTXUI_ENABLE_COVERAGE=OFF \
++	-DFTXUI_ENABLE_INSTALL=ON \
++	-DFTXUI_QUIET=OFF
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
