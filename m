@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C039AF55105
-	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 19:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE3BBF55104
+	for <buildroot@archiver.kernel.org>; Sat,  7 Mar 2026 20:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84494607C5;
-	Sat,  7 Mar 2026 19:09:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LZl-WK2mN2ig; Sat,  7 Mar 2026 19:09:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CFB4607E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1772910548;
-	bh=/6xbn4MV9idq5FWR2yPrCc9AdcflCwezIEKKAsr+0b8=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=NNbRSZTA9J6TK38j0dtE1Um94ndkLMCo4l5cPIRuV9LF8+ApPV1ayQ7866Fv3j8w+
-	 /CqPyCYIrv/6JVSxmaudErLZBl+xCabjNCPtgggsI5faCwVGjN5iF5EFZl7QcRLGPp
-	 Y9O8uSFJ02P+7LnqubVKnOwR0VgA6fTkUqgzsgRorVCr/vGP4cSVIYKmL1q1/wnwY2
-	 uMB09qqagmqQJ1J4XzqreRvRIaMCo3A1Aeb78hWo0uyE8UfDVc73fRr5aUsbPMsr+D
-	 urMo2tWzRAyPV2O38iVUxnhtJoiCjahj7ANcalu2QoNlKhdHMFyAKG9xhK/Ng7WZi5
-	 0FL1rGRd8W4Ag==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9CFB4607E3;
-	Sat,  7 Mar 2026 19:09:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 565E0223
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 19:09:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BEAF41A70
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 19:09:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12FC741BC3;
+	Sat,  7 Mar 2026 20:12:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pgs4XhdWVte6 for <buildroot@buildroot.org>;
- Sat,  7 Mar 2026 19:09:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0E8B641A6F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E8B641A6F
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0E8B641A6F
- for <buildroot@buildroot.org>; Sat,  7 Mar 2026 19:09:05 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bc67.dip0.t-ipconnect.de [84.161.188.103])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CE41DA4C3819;
- Sat,  7 Mar 2026 20:08:51 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34068)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1vyx19-000000002zL-1zc4;
- Sat, 07 Mar 2026 19:08:51 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id U4LUS1ohRCjE; Sat,  7 Mar 2026 20:12:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2158417F6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1772914345;
+	bh=GEh1GtswYyNI3YaEfVOUPDJAT1zXjpRAPJCCnqjMWqU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=SZx6Pa9n1GsGwBCtWbIlImnvTqgbNUerEuql86eFnCTi09YXalQb87PmN1iLYUoZE
+	 tUKKTr6F3Q2jpl8Gg3HmMdhjMqdG0Gt8gReOiX8ehCH7+UfFSbQ3LRpcXpCGMpHQt+
+	 VPlwyOWfRpv/qh7xyfloI0SInS7Cii9vKyaNeF9LmDAzv/HCVhAdb3EOV2DJisEZsk
+	 jEn7gNPT5MLpEpKCoIg16QkjN7NA+fz0tx59rcg76u5dyYgf5YeEvWynXh6Dsakgae
+	 c62gMr0q/AF5HhWVMmFcq8ihD48QT0qv1mTxWRt6v27g/Bz3oTSAxub7vGP8of7EoX
+	 k2f4BfgaYBXQQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2158417F6;
+	Sat,  7 Mar 2026 20:12:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E053A158
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:12:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C65A4417F6
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:12:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 35c5BkYHxjEM for <buildroot@buildroot.org>;
+ Sat,  7 Mar 2026 20:12:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9F36417A9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9F36417A9
+ for <buildroot@buildroot.org>; Sat,  7 Mar 2026 20:12:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D452085E18; Sat,  7 Mar 2026 20:12:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Pieter De Gendt <pieter.degendt@gmail.com>
-Date: Sat,  7 Mar 2026 20:08:51 +0100
-Message-ID: <20260307190851.853162-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260307190851.853162-1-bernd@kuhls.net>
-References: <20260307190851.853162-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: +++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1772910531;
- bh=08GYYMdIQwInebKfWkCSOWidsUUBPNVa8UcGDQvpPLo=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=u0JuxcUfKccP+sg4fHzaAD9/mOXaLZ04vUc2iOGnoZDVI1rofzrZv772nL0JZTT94
- 9Zbg2q9wYSM+kS6+XmqZMTM1KIsS1Zmvrg+n1yKSbJClLSeCee86cT3/N7RbEFX5Qv
- /eQaDjRBvfDDJen6cv7eQIS4IG72RWAISN6jBFq4gqqTqxPy0ZuCBkeZJaq4fq4b2F
- zT7txWsDfTneDQmok7H+f83eFGwjaVHyFOjczVbHO1FdQxKwxtWx/KjQlcaOO2l7Jh
- bLMkSHd+Y3ko9/BEyHG2VjErRCOnNDrJo9ZWW5QgdUbJ6Hu3NkTyhlzG2UqDxe/gUP
- BuaFpiz391qLQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=u0JuxcUf
-Subject: [Buildroot] [PATCH 2/2] package/libvips: bump version to 8.18.0
+Date: Sat, 7 Mar 2026 20:52:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df6e7a6664482da53c8a65a526e8dc3f5dd8aae2
+X-Git-Newrev: 86d0fcd77bba8f4fe0e4d1a054d903de3d40fd15
+X-Patchwork-Hint: ignore
+Message-Id: <20260307201223.D452085E18@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvips: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,73 +68,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/libvips/libvips/blob/v8.18.0/ChangeLog
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/86d0fcd77bba8f4fe0e4d1a054d903de3d40fd15
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Added dependency to gcc >= 4.9 due to C++14 features being used since
-this version bump:
-https://github.com/libvips/libvips/commit/3fa537480dda6170c3d8fb39abb838161d1c45ce
+Buildroot commit 72c7d99e22eb7706e413992cf7084438fea657bb switched the
+build system to meson which causes an error during configure:
+
+output/build/libvips-8.17.2/meson.build:108:4:
+ ERROR: Problem encountered: GModule is not supported on your system,
+ please reconfigure with -Dmodules=disabled
+
+using this defconfig:
+
+  BR2_arm=y
+  BR2_TOOLCHAIN_EXTERNAL=y
+  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+  BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.11.2.tar.bz2"
+  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+  BR2_STATIC_LIBS=y
+  BR2_PACKAGE_LIBVIPS=y
+
+Added configure options for -Dmodules to fix the problem which was not
+yet caught by the autobuilders.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libvips/Config.in    | 5 +++--
- package/libvips/libvips.hash | 5 +++--
- package/libvips/libvips.mk   | 2 +-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/libvips/libvips.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libvips/Config.in b/package/libvips/Config.in
-index 70d01f0e35..ec2d031141 100644
---- a/package/libvips/Config.in
-+++ b/package/libvips/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBVIPS
- 	bool "libvips"
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on BR2_USE_MMU # fork()
- 	# C++ support is required to build libvips
- 	# https://github.com/jcupitt/libvips/issues/231
-@@ -15,7 +16,7 @@ config BR2_PACKAGE_LIBVIPS
- 
- 	  http://www.vips.ecs.soton.ac.uk/
- 
--comment "libvips needs a toolchain w/ wchar, threads, C++"
-+comment "libvips needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_INSTALL_LIBSTDCPP
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
-index dd7510ecb2..956ff5924a 100644
---- a/package/libvips/libvips.hash
-+++ b/package/libvips/libvips.hash
-@@ -1,3 +1,4 @@
--# From https://github.com/libvips/libvips/releases/download/v8.17.2/vips-8.17.2.tar.xz.sha256sum
--sha256  57ea0ec4f30ea04748c9e8eec5415e7c9ac7cafe6822e4788fc110376a1d224a  vips-8.17.2.tar.xz
-+# From https://github.com/libvips/libvips/releases/download/v8.18.0/vips-8.18.0.tar.xz.sha256sum
-+sha256  b85ab92280c30d22f5c8fe2f68b809cddb7eaac437d8c33474475dac84ddc574  vips-8.18.0.tar.xz
-+# Locally computed
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
 diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 729d5fb9e3..8e576038e7 100644
+index e7641fa8cd..729d5fb9e3 100644
 --- a/package/libvips/libvips.mk
 +++ b/package/libvips/libvips.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -31,6 +31,12 @@ LIBVIPS_DEPENDENCIES = \
+ 	host-pkgconf expat libglib2 \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
--LIBVIPS_VERSION = 8.17.2
-+LIBVIPS_VERSION = 8.18.0
- LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.xz
- LIBVIPS_SITE = https://github.com/libvips/libvips/releases/download/v$(LIBVIPS_VERSION)
- LIBVIPS_LICENSE = LGPL-2.1+
--- 
-2.47.3
-
++ifeq ($(BR2_STATIC_LIBS),)
++LIBVIPS_CONF_OPTS += -Dmodules=enabled
++else
++LIBVIPS_CONF_OPTS += -Dmodules=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ LIBVIPS_CONF_OPTS += -Dintrospection=enabled
+ LIBVIPS_DEPENDENCIES += gobject-introspection
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
