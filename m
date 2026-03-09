@@ -4,114 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7BF6EF36F2
-	for <buildroot@archiver.kernel.org>; Mon,  9 Mar 2026 07:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1925EEF36E8
+	for <buildroot@archiver.kernel.org>; Mon,  9 Mar 2026 07:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A482060758;
-	Mon,  9 Mar 2026 07:08:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D364160756;
+	Mon,  9 Mar 2026 07:19:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oioe8OMDG0JO; Mon,  9 Mar 2026 07:08:25 +0000 (UTC)
+ id Xpi-NqC0MY5b; Mon,  9 Mar 2026 07:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D91FE60756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74547606B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773040104;
-	bh=ht25e4g//753sUc64GF8nCYt58VyO1FdR5A0KHo957g=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1773040798;
+	bh=VtRaFHrQIyJdX9kOwSVW8DNeOJKcS3XK0J5HPV4IJIU=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=akh1QreDlcGgN6Udw3JLhzRuq3luLXWYbIVcpgXTuSisa+6XOirMDEGY6R2xyFU3C
-	 wv3UbdR6NykMGuIkwuY0CXG5CLI7Uh+DwsjwBO+Go8rIv0yUFpLMLHlhudyMCSiSEj
-	 AJg5oXHhnSLkwN7IgNyUicIkSyjgvhzLTM37gAW//Q6Pi/q6tUiE8GpZkdwTR7KdjG
-	 UPWewimvSMySD+JrRdBeOtMVgDf/V6EG427gHJUZj1TXlbwxdY5RRqtX0ZC6h7cYRL
-	 GB19hXauqQEhZHWGaQYQgRPOvKs0qwYZtEVvNmV5w2HazxAyEHi54cfd6ogCdfiUzl
-	 s5vV2QeyEG5gA==
+	b=Q/u+0m3ix87zZQfb3uWGIPgumGnyBO4YudqJbAAXSNxIlpIu8Q0EmWsmYyH/MFPkC
+	 bAwq5+iC73o24oLSJwREbd4df32PFsjAM+NpddGzjQcAKL8rN1UZCr5qvea8Ldkllv
+	 Ge3wUH1Q472ihPrpTOVdhYF1IT4e5KLmGjD/7BOxuSYuaeeYliGqdLylLa+n5k79aK
+	 P3z1CWSgWMxuLLQInjk0U/Zyg8G60deOg51gOee3nOldeUoeKEV62SHukPW0CJuuuR
+	 Vq2CpbUVj6TWe+b3MNpGkmiMvdvkuakUfbAVFuW+wG0A8YBFgFFU+AwGwa8GOVttzH
+	 wrBcPdG2LSr1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D91FE60756;
-	Mon,  9 Mar 2026 07:08:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E2A1119
- for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:08:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74547606B6;
+	Mon,  9 Mar 2026 07:19:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E21DC119
+ for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8FAC081973
- for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:08:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7DB340D55
+ for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:19:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id itZQdOCwcjyS for <buildroot@buildroot.org>;
- Mon,  9 Mar 2026 07:08:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42b; helo=mail-pf1-x42b.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 010A1818AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 010A1818AC
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 010A1818AC
- for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:08:22 +0000 (UTC)
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-82995242934so1302205b3a.0
- for <buildroot@buildroot.org>; Mon, 09 Mar 2026 00:08:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1773040102; x=1773644902;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=7lvS0a4dGdhIS5x5iJWmch0MxhDIjNUIJzsSVPZWaZE=;
- b=CPUv6HrZJN8ebuyXyUVGBlgoBVfNI+iyJmfdzrAkXWUDfjMuLKamw2v6s0kQiBWvID
- 3+qxP6RF9evjgli9Zo04LeWDJPLa5aKWagj3NLf2tmWD1S09oAmho59q99+0vQwha2Ud
- wVSduo62vCgPMv2h8xyC0KYKmLHNaf8/qR1e/UNBZ+/4udSjb9B3QQW/kPekBDfDBjZv
- qpkw+xLnUKQvk+VuADS+U2t+wm9w5D9XvJmLzuLrMYYfi8sszIDMVDnPF04DFb4X2geC
- E65RsFx8DebGEPhMYpZCCUpCfF1mtKav4CJdv94IR2foBp9kPTS5oSwXiEFoDgWwKfzG
- YU1g==
-X-Gm-Message-State: AOJu0YzQwStO1yEDfJP1gnq4eNvRePNRE3ZVgZ8k99zqdHQWkfJPjNKK
- pYYYQxoSOTe8Oaq6aFjV0JJaPJerNKTtfI6irYuhBqqPEM1NW6SCBXwCpCFcXoKu
-X-Gm-Gg: ATEYQzyFARKW+94VELNERwIRH+9ereRM0FnSMYW8pSwnnEc7Bp0Z1UXPb0jBzBtML+d
- cboOb6VgTBenz2aciehRYyaTxc0e8wJPNvRQeli2biwStoefrsDYeyCNWHoRwcMSnn5alm9R+Kc
- wl+H3Zi3SCnIyif5YgXoUtReHmFSNxlvTRDf8s6V7wD4j42ecIbkam1Iww/Zuu4KK8i0n//CO4M
- AYw+opq3cGx1sQB0L7YTJ4TOzUwuq57qRKokjMFyXRjxGcw5/UXvF8ZLmc8DpuEzDW7yeKWPcfj
- VrSwV+UnIqwcEbF1kaq43myBJhnmQxL2ZUAH4SIaM/fEVLC9eo0DTvyLh0etqNZhKw19fGnH7Rm
- RBX3l4CsKvzw+kiHVQyFohPD7SSnGUMRb/BEEH1MU/qMy5l8YQy6CGAnQn4NJAlBqikEinevOn1
- gZev0BuBJ6R47UEBEgoJrYyIf+zkmxy6k0+bIQ
-X-Received: by 2002:a05:6a00:ae10:b0:824:a466:7470 with SMTP id
- d2e1a72fcca58-8298583d0b9mr10238589b3a.17.1773040101912; 
- Mon, 09 Mar 2026 00:08:21 -0700 (PDT)
-Received: from fedora ([2409:4064:2dc8:f3fe:2a16:d3b5:be55:778d])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-829a48a24b2sm8900756b3a.47.2026.03.09.00.08.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Mar 2026 00:08:21 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Mon,  9 Mar 2026 12:37:41 +0530
-Message-ID: <20260309070741.34152-2-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260309070741.34152-1-chakrabortyshubham66@gmail.com>
-References: <20260309070741.34152-1-chakrabortyshubham66@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XBMtw_iRZxQj for <buildroot@buildroot.org>;
+ Mon,  9 Mar 2026 07:19:55 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
+ envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E59240CC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E59240CC3
+Received: from serv15.avernis.de (serv15.avernis.de
+ [IPv6:2a01:4f8:151:30a2::163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E59240CC3
+ for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:19:53 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id EF9FDBDE15E4;
+ Mon, 09 Mar 2026 08:19:49 +0100 (CET)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1773040102; x=1773644902; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7lvS0a4dGdhIS5x5iJWmch0MxhDIjNUIJzsSVPZWaZE=;
- b=E6C7TvKlLsSdNyyithZX3YeloLA46yDh6VQL03v+ZYAFu4AVRlJvT8J83CGs1iL3mj
- wdwr/wBvYLystSFTLGX9CHgdtLfpc7bhYNJmjajGq6nmMdiYYwxaidhO3Z9hLufT82m+
- ZvjEYEjh6p9GMSRpM++LTKeRuPQ/5XmuqRxDvsus6YiOepiGben1Wl7PQyuL/D7s4L0b
- MPqjdXoXI/y8ob4lSg2osMsNMJoirNnD1Ado7825jRxfFpc0E/8VbqKL09nYsWWb1WZh
- 6fTwZQPDjvnYC8tZJRQhWtDUbXAxqUS/YOEeLaSJTLqSqg1rKVF+ePZd6umuQub5Z7sn
- 9a5g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=E6C7TvKl
-Subject: [Buildroot] [PATCH v2 2/2] DEVELOPERS: add Shubham Chakraborty as
- maintainer of package/which
+Date: Mon, 09 Mar 2026 07:19:49 +0000
+From: Andreas Ziegler <br025@umbiko.net>
+To: Andrew Barnes <umbramalison@gmail.com>
+Cc: buildroot <buildroot@buildroot.org>
+In-Reply-To: <mailman.8084.1767808015.2009750.buildroot@buildroot.org>
+References: <mailman.8084.1767808015.2009750.buildroot@buildroot.org>
+Message-ID: <baead927e63d6157abdfdde11153d262@umbiko.net>
+X-Sender: br025@umbiko.net
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1773040790; bh=tJRnpjTUbdl2DBrhZYtp0qYAz0FAtYionQRj9vFXqXY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=n8cJZmBj9S/sclx4BOG7YPYXwpsbmJAE4KYYcxQQ/QxMvplp6CmOO0L51E4Hq6PND
+ kBBKJzKJt6mA+PqaFu+82rmUm5j92xGTyBrMjq7067ySMfhhkl7eKjffnVMVbFTI32
+ rllWM/8/zMZSJjZglODqhn74e0A4RrvwI2zAuKx0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=n8cJZmBj
+Subject: Re: [Buildroot] External BR overriding upstream packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,37 +89,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
-Changes in v2:
-- Fix indentation to use tabs instead of spaces
-- Add trailing slash to package/which/
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Andy, ALL
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 835be1f6a3..51d9f8a4be 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3058,6 +3058,9 @@ F:	package/tunctl/
- F:	package/ubus/
- F:	package/wolfssl/
- 
-+N:	Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+F:	package/which/
-+
- N:	Simon Dawson <spdawson@gmail.com>
- F:	boot/at91bootstrap3/
- F:	package/cppzmq/
--- 
-2.53.0
+Definitely an interesting idea.
 
+On 2026-01-07 13:55, Andrew Barnes wrote:
+> 
+> External BR projects can curate their own packages, but they can't 
+> easily
+> modify a package if it already exists upstream.
+
+I use a lot of overlays for existing Buildroot packages. Things like 
+checking dependencies, deleting unnecessary files or modifying content 
+in the target root filesystem are mostly done from hooks defined in 
+these overlays.
+
+> Ideally such modifications should be made to buildroots package and
+> upstreamed.
+> but if the modification is not to be accepted upstream, then we need
+> another way.
+> 
+> Real examples for just one project i'm working on:
+> 1. downgrade libinput version (Touch screen doesn't work with later
+> versions, pending investigation)
+> 2. mesa3d - enable legacy api for wpewebkit/cog (wpewebkit will be 
+> adopting
+> the new mesa3d api soon)
+> 3. odd fix for getting QT6 to compile (raised already in mailing list,
+> could be an upstream patch)
+> 4. complete instrumentation of wpewebkit options (unsure if is worth
+> upstreaming, will discuss it later)
+
+5. I am currently confronted with a package requiring mbedtls-4.
+
+> All these changes can be managed as patches that are applied ontop of 
+> BR,
+> once the changes stablise that can work too.
+> 
+> However, in an IRC discussion, I suggested it could be that BR allows
+> duplicate packages, and uses the version from the external project 
+> instead
+> of the internal one.
+> 
+> here is a patch to do that:
+> 
+
+Ideally, only _complete_ external packages should be filtered, something 
+like this:
+
+> diff --git a/Makefile b/Makefile
+> index ff25027c13..efb577b2b2 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -532,7 +532,11 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
+>  -include $(PACKAGE_OVERRIDE_FILE)
+>  endif
+> 
+> -include $(sort $(wildcard package/*/*.mk))
+
++define _is_complete
++	$(shell grep -q '\$$(eval \$$([a-z]*-package))' $(1) && echo $(1))
++endef
+
+> +EXTERNAL_PACKAGE_MKS = $(foreach dir,$(BR2_EXTERNAL_DIRS),$(wildcard
+> $(dir)/package/*/*.mk))
+
++COMPLETE_PACKAGE_MKS = $(foreach file,$(EXTERNAL_PACKAGE_MKS),$(call 
+_is_complete,$(file)))
+
+> +EXTERNAL_PROVIDED_PACKAGES = $(sort $(notdir $(patsubst %/,%,$(dir
+> $(COMPLETE_PACKAGE_MKS)))))
+> +BUILTIN_PACKAGE_MKS = $(filter-out $(addprefix package/,$(addsuffix
+> /%,$(EXTERNAL_PROVIDED_PACKAGES))),$(sort $(wildcard package/*/*.mk)))
+> +
+> +include $(BUILTIN_PACKAGE_MKS)
+> 
+>  include boot/common.mk
+>  include linux/linux.mk
+> 
+> 
+> Happy to turn this into a proper patch email, I haven't done that this 
+> time
+> because I think it's more for interest than a serious suggestion.
+> 
+> Kind regards,
+> 
+> Andy
+
+Kind regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
