@@ -4,75 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 961C3EF36FC
-	for <buildroot@archiver.kernel.org>; Mon,  9 Mar 2026 07:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE23DEF36F8
+	for <buildroot@archiver.kernel.org>; Mon,  9 Mar 2026 07:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACA0F80F6B;
-	Mon,  9 Mar 2026 07:51:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD33A81A18;
+	Mon,  9 Mar 2026 07:51:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UwSCIZwznH5x; Mon,  9 Mar 2026 07:51:49 +0000 (UTC)
+ id jSvVzhibS1GI; Mon,  9 Mar 2026 07:51:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9A0980F1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0176781176
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773042709;
-	bh=A2RN9CyILVQ4BpZP0E5dyiThiNP1gA1fdHChyYnObME=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=o2C6T4RQvvhQE3ZzF1pgVXPbIJYJveXW22TJDKtucV9v1wfnoCgcF9G2H3OsAFsF9
-	 l9euRVy4kXvCZX8ZDsb8JvKu1TIhZ7ACgENo6kW5qn/CfxDQ58LxVo7WkuKZ71yDqQ
-	 ST6yHLhK7hJU1TBYo96wq16JhXq0sxQ/dlLD+oubJUxu1Gr2Lqc0DP9ZpdYh5oKuAt
-	 f1MbjCJcpyG02oJCwoeN/YEubXUDBpbDl4QhP326druTyt9qLEnr4b/MxgPFvLlavA
-	 LnOn0JxkvAewlzbU38xl7oP3egDPl6BgVLYPNWgAlpJhBfYzTQCrfdXfFA/lkzQ07A
-	 3IMyMyR3zwUwQ==
+	s=default; t=1773042711;
+	bh=88nji4xdJnFzlCXop6NLlV6sv9E62/+QEs4m/AuiTEk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=UiWm00eSGWgpzbboVqJX9BCddPX1RUF1QhNQPY3SQ5uNFJPecR5fB+4B3lz/xVwqM
+	 ynptGH0RSY+OGdNiku5p/ge+NgRFvxBowJ8IvGSWvWZLtAH6b7PAFyJCNv/26BzRxn
+	 ibLiWilSxe3vB4cc0fg4rfmyZghtTkn1rlI48k/7J/KjWEz0kKacYenPrxW3113Vhj
+	 8Tnb2kPtnZfx05mJ2yovR3PIBMdbutNKOeicoQkVyvyM9KBy0qj9pJZvDoeaId6My+
+	 yw+zfKZd6yISbREa1Lca7w87W458650qOTCb7lcztMNlCmMPtXQeARoCuFnMJNe5cw
+	 2Ct69G6nTXmJA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9A0980F1B;
-	Mon,  9 Mar 2026 07:51:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 56367158
- for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:51:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0176781176;
+	Mon,  9 Mar 2026 07:51:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75138158
+ for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:51:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5412340542
- for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:51:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66CE840568
+ for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:51:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Otx-zD59VBPV for <buildroot@buildroot.org>;
- Mon,  9 Mar 2026 07:51:46 +0000 (UTC)
+ id KhxIGgcC0Ilc for <buildroot@buildroot.org>;
+ Mon,  9 Mar 2026 07:51:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c107::3;
- helo=ph0pr06cu001.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:c112::5;
+ helo=cy7pr03cu001.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46F0C4053D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46F0C4053D
-Received: from PH0PR06CU001.outbound.protection.outlook.com
- (mail-westus3azlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c107::3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 46F0C4053D
- for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:51:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 667204053D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 667204053D
+Received: from CY7PR03CU001.outbound.protection.outlook.com
+ (mail-westcentralusazlp170100005.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c112::5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 667204053D
+ for <buildroot@buildroot.org>; Mon,  9 Mar 2026 07:51:47 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=f+430md/LKVl8iyGo/8PvcMFe/qXL+FUDXoBYwsOobdfHSXAyU+l7l1ZJQFkNgt5ngvqJoKWrCy+lIWib/BMgw7tUTZDwzvVDbjCtQ94MKrMZexufnl0vQL3rhXyL1PzFe9LR0CWdl6wgKXLPSHS3CtD1NzhWPGcNluNuo7E7wSaBl0rtVARbb8kPg9GYrKDiyFSD3FfrL9UsifMd2y/krhCCYC3QSW8GDKl2pSatC8rHB/NTOPrERKkuBVGUDOYwJ9sP9ZzsCgd8AzCXvHBjuqlQtx+bUePylRS7Yg47bAS7NmHtY7PGjP0yhPjZ2pJqZlu8WrJjwROGWJ3zK4KzA==
+ b=kYZHbEObdbSkIonVurnmxVNbN9btu2T+SIMwFEMBX7S3e09nMvbo9/WyTG/sJqV0z6bs4Tk7n5+iQ99pH4pubQCzwn/M0XrD3JfPrf/zzfT8qJz1GuPQPgTnbu6jOchN5Tiw7rNX9O/uKhB3DoIg2bI1jZNa047jaSaz6ypwbEZBZLdArBSBvfeNCfZc7Es7ux1x0LOAXoWDJZRS5KqqoIzgj1RRDqs673Gw5I41HycaFyzbilC9ocJ2wiMBOCV3l8pj9f9GDs76q0kFCz0A7NSlMO5+58jgqSxx00NBSo3VwN0HLZORvjdj8ZokjdVpX9DpGGlnnd+o+QoemZAjsQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k3KwWVjqyI3XqRigyoi5e+lNoWceSMQaS0/tlKf4WNU=;
- b=KTGl2QVwWCw6mj6v7feZh3737+01rIHwEaJ7tLlYB2OtasFBkeBpWEQ+ztm3zwsO54f42NC36ZamNCTkNJgcpAO8pLdjdbCMdr42ClvMV7g1hM5XYAMiui5fbwmg1h/1FqP0r3ePxkzgUL2OVUtC2KTR1ry0RWwLEuX28sMo91kWxENNHrJEuq1qPCABvrYWIn06YLjmvw7UKmrva+bVpWajlnhDqauT92ndsrrXEKhH0BYLUdITcvcAATv8KMtM7jJT2lJcvzSczJVLaguWWta40vhl9edgY/fIXu6bsTpP0DNuVI3TXZTc/bPu10EGA/ZUw0v5IdvS01XxgTFIoQ==
+ bh=hqezlmmAUN55KDrqFfQ3YXTARs7oU54j5SdOwSpBuSg=;
+ b=bdIBMNp26F2MYXEZ8aI4ECnW6hNNZdn6AQJgeEJLMgfTNdVvmKT9+jmwgrAtqbEKtvmPsL+U/VBiWvhMPjjQ4psa1NAsu5s4ncBXHCdJyCzlsljdzUzDuXRdPI99+Y67QANa5dmXJlKwnTuaamPXj6ME+/FPNVdrcl5LYDxjF6wONk32qRlN7hf5G4xeIvZAIJTVT+thHMZs0rLjlnGRWlMbiZyGpJ3NjGWJH7JAxKxES2M82HAjJMMtNRtLjtpcvE7pajNmTuoi5BGDOw+XlrnzVQ7dfi/Yo98HsvpMUghkQzVserTepj6FsEi1iAxfJFcWm1ct2lUWAiwqT2+fkg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from PH8PR15CA0019.namprd15.prod.outlook.com (2603:10b6:510:2d2::21)
- by IA1PR12MB6459.namprd12.prod.outlook.com (2603:10b6:208:3a9::11)
+Received: from PH8PR15CA0007.namprd15.prod.outlook.com (2603:10b6:510:2d2::10)
+ by IA1PR12MB6259.namprd12.prod.outlook.com (2603:10b6:208:3e5::17)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.11; Mon, 9 Mar
- 2026 07:51:41 +0000
+ 2026 07:51:39 +0000
 Received: from CY4PEPF0000FCC2.namprd03.prod.outlook.com
- (2603:10b6:510:2d2:cafe::38) by PH8PR15CA0019.outlook.office365.com
- (2603:10b6:510:2d2::21) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:510:2d2:cafe::e6) by PH8PR15CA0007.outlook.office365.com
+ (2603:10b6:510:2d2::10) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.24 via Frontend Transport; Mon,
- 9 Mar 2026 07:51:38 +0000
+ 9 Mar 2026 07:51:36 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -82,60 +81,64 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from satlexmb08.amd.com (165.204.84.17) by
  CY4PEPF0000FCC2.mail.protection.outlook.com (10.167.242.104) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9678.18 via Frontend Transport; Mon, 9 Mar 2026 07:51:41 +0000
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb08.amd.com
+ 15.20.9678.18 via Frontend Transport; Mon, 9 Mar 2026 07:51:37 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 9 Mar
- 2026 02:51:40 -0500
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Mon, 9 Mar
+ 2026 02:51:37 -0500
+Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 9 Mar
+ 2026 02:51:36 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Mon, 9 Mar 2026 02:51:39 -0500
+ Transport; Mon, 9 Mar 2026 02:51:35 -0500
 To: <buildroot@buildroot.org>
-Date: Mon, 9 Mar 2026 07:51:27 +0000
-Message-ID: <20260309075127.801847-2-neal.frager@amd.com>
+Date: Mon, 9 Mar 2026 07:51:26 +0000
+Message-ID: <20260309075127.801847-1-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260309075127.801847-1-neal.frager@amd.com>
-References: <20260309075127.801847-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC2:EE_|IA1PR12MB6459:EE_
-X-MS-Office365-Filtering-Correlation-Id: da9b4348-f30b-43f4-a954-08de7db0b36f
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC2:EE_|IA1PR12MB6259:EE_
+X-MS-Office365-Filtering-Correlation-Id: ddd05104-2f89-42b3-c694-08de7db0b17d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
  ARA:13230040|376014|7416014|82310400026|36860700016|1800799024|41080700001; 
-X-Microsoft-Antispam-Message-Info: 3BA8kZ50qRSGDWwmc66nd7waLw7JbJmm3HIWb7HZjFnUi/hRopzX+MQqtUyWAvtIXjRFg2dzp5WAJyLzJ7xFHs90hFYwP6MM8KhBkhnZTvG7MPoLECfzg7vfBDQbjTajTmE7/SJp+Ang+J1RjkbC9jK3PXTz0VN762Vn2N6xQSGVpUH+0CCui4yZfQol5GWsaIeVSv2bAgipHXPz3cOx2GdheeOD/bWyPTbvDpz9SaQiuEJR2VwQ7PCRVye0WgY3U5oMv0t3RMo5L3kqgaaU/JG2LUnVe6G6DDxz60iN/Adx/up/2YKfKbv9Ai0mxJzlT2GguViAjJxbeX3OMz9W+EXYpEnGc03He/t/vWt4NUt/lVyGJZ9RcSsqXKcvLhsT0+/tyorzbV9WUQRxGEtFpArwg1zKtCTbHjvyHltSy2MouO8ap74dzlPJzEEZIDkw9lO3Qjh7jmGyUk0xw7VbSCca3RBu0fSNN73N88p1dMBaaZvdIDdY4aGvQocIaFfxYZ77h8qyK8Ex4NdhPE2swHgeuhUwebiyvFFvBID1o2R+/6RCnPoPRKCev7hJ9tGg6xaYPIuToelP+Y9rSxskkYsCv/X221SpTDZvfeGmqpMMOtbKSo67ttT6UnDs1Tp1Btj7Hjt6l49/tcbJ6KBitVWyq9cW6t8I1lptVNGyuKFBbOLeDiKuK5qXv8j1g5jGX50M1gGD7xtYUuDexCFndAHyqATqw41lbcnVv4zFKjJblBkgUpZm6NErySwzUjWNfzv1BWms0qHsH0wvNZ05YnrcfiKQFwpt6Egu/7DcB0c6p0leHGh3g4THUmh2vMRlj5IM9QNtRSe+8IN4jvLVnw==
+X-Microsoft-Antispam-Message-Info: zUE1F51ne8mLWYyjLUGugNVY3DfOhHDNgvUmAeSzQ3ZEfHNmCKp6MF4egiQTDLtvhaoP+KqGlzs2vDcoqeLE+cUmsXAaisI/10/Py5j5nnSPdHqi0S2T6oKjhRWk8XfwmC5lKTebowLieElhykMNGGKHdxAX1mw9amC5URgPlcM9D32gGHFwwwuif8Z30ryxJsVJFYi1cJg05XiwJhDzHIikB6dZ+Jlit+LOMSLYJLsbuzPQxtQQ+NohwFs1RUyMYmEz2Yoomd6r1awYuvGOwfEYQZMCCA3GvhERrQQehGG/Y3XqgS4xtBTSdKDgBtJRbKyiDQyTW1612woynNOYUuXgqLLI/YUa7OoZXbv6urhnOyEeWm08sXTwQKkfAPfOXRXvcMIVQcq9uoNZ+sWzun/4uEnbV2wTn2Aq+7iVV9Cw2Qi16YIIHIx5Ep0srDZnHmQo763FgxCaCP+GDpFL1LW1ryz9kLN/Rz3shxCswdN9Dqdd5K3VvsiuGWN4/WAOHwG6dZuSZp3+O86CKKaivCPhp0A4fc53iC4GH/Vq7qbhqwiEhn9Lxvv7NzGJBuRWUQTVJCrMBNUoW8qK0EBVihzA8dDUfm/aCnO6kQxIpIyznAfnkQeSWpgPOTrBlvxe6xzmVnKWJz8vFnWq5tc0u2pBBtc0CBHKAiI1MigIOf2iEkILeTMUHNIvNPYQutZf4SrdY7bKsRZ4xFe01et/9RgYpicSU9M03fgbpeEphzq23KTWHpibed6L9qwyHBzJgXpOyP+1NycAAuv7wBoWnnQBOa779D0W7MCQvpyecOuB434SJcWybhTNhUoKW/CspPHJNtx7AP4t0qEguNiJRg==
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:satlexmb08.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
  SFS:(13230040)(376014)(7416014)(82310400026)(36860700016)(1800799024)(41080700001);
  DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: je51CevCcMOwEXzPYyVt0y1PiJqpZWGrVkW/cndCD0hAzfHBKlZdEsmzQtwAkvQdja79x9u79vTSjMRY1NLWmFf8TXzPG7S+GPwPbaITMx+KFlswainkBkFUqumnauWqr6pKPzYZlLtAtVpgI1fnbJXCbBt2+Vq34f15CRg6k44WAkKO2BAm6m6C71QDAh4n6c5exYHatwKx7q3mdRqE2qEex7yfbKZ9p+FD77gMqbMFKq4b7pkdfkrBDKBnny8vzKCfew6F+pey54Ax4E77t+XojX7o45yeVE/EEeBCbNsslLo0TGtx713brpkHvGZKjRVb/yZdD6cQ819EjHJW9FV4msqxHo5kGwe3XI59FO1ZfxJBWmdtx2OkM1Qhm/vPN97u3fxRb2HyfbVYEE95V4evpcwq/mooZudpqGk92ZEKvNwJLo2J8BDr1gd/48jJ
+X-MS-Exchange-AntiSpam-MessageData-0: TMKDQrYg976aes6zitiTGQ9sQwh0p64GhUKj9osAH1bkOzVSWSU2Nn2ju5jHqoITdLjmHqPfZUV9sQEMXESzIn/LoCPN9GMODTABCXERis7jVbHTg54zu3fKgCSfpS8j5g9lqKi8PEeAfA7IDGIAKMGrj2vU6QHL3iPDy1oCnO4Y374G2xjNJVa8OottZwTBhb4UcYKUvBHsmyVM7JXfe45eOW18+Qqp8fnXGJsK9CMKMZ8obC11WNaZ5BtkfCT6HUJBaWQxFHC3zguzcY9IpdmNkkUOW/Y+jdhavvoLmBDh3962rFuoUu3eWFUNhTIvu47Lxa3xYbVVujMXihHwwRX/7lwTeegEdPainwTeVWCSyMqaloZYENNeQVJti/K4aXkKOglBZBk/a9mZfyrfBleo7GAm56NmgOKc4ylYr3dtiTqY1D+GOAENK5fVYCae
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 07:51:41.0466 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: da9b4348-f30b-43f4-a954-08de7db0b36f
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 07:51:37.7848 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ddd05104-2f89-42b3-c694-08de7db0b17d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000FCC2.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6459
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6259
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k3KwWVjqyI3XqRigyoi5e+lNoWceSMQaS0/tlKf4WNU=;
- b=M9Lhl1oFo+oag/ks0cCHlq05KV7jJIT+H97vV2UMyuWK3GOAdcgX+b/mFSnt8V70m7OQPo7UxmbZ79TPo3I/ssjYq+DRD1Qoj1PqjghnuNU4J8PUzXwkMFOp+0wmgn4Mua6eME3ZPrzKR/0vRzzn1y4lJ/cewhZjt9xuo/WikHg=
+ bh=hqezlmmAUN55KDrqFfQ3YXTARs7oU54j5SdOwSpBuSg=;
+ b=CCK1z+Rwrzt06o/OH0TVW+JLWVRNJXC07uK8dz8+mxg4O9jVrM1GigSaeiNeeVwXsKnGwmpepdfIkQq64v14DxdxHiRmS2P79ru3KmMf542JEHEgu8tMZezsLBWnXuOw35t7uoCyLQJkDoorgZis/tHwSEs/SraWcN/mhQcjfrY=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=M9Lhl1oF
-Subject: [Buildroot] [PATCH v2 2/2] board/versal2/post-image.sh: add custom
- hardware support
+ header.s=selector1 header.b=CCK1z+Rw
+Subject: [Buildroot] [PATCH v2 1/2] board/versal2/post-image.sh: remove
+ incorrect $BINARIES_DIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,47 +161,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Users will ultimately need the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR config to
-import custom dts files for custom versal2 hardware. Improve the post-image.sh
-to support either the default device tree which comes from u-boot or a
-custom device tree for custom hardware.
-
-To keep the example post-image script as simple as possible, it assumes that
-the first DTB in the LINUX_DTBS list is the one for creating the system.dtb
-filename that u-boot will use for booting. Users are free to implement their
-own post-image scripts for use cases with multiple DTBs.
+Remove incorrect $BINARIES_DIR reference from the symbolic link creation to
+make a relative path and not an absolute path.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
 V1->V2:
-- new to patch series
+- Improved commit message
 ---
- board/versal2/post-image.sh | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ board/versal2/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/board/versal2/post-image.sh b/board/versal2/post-image.sh
-index af50909fb1..dbef33db28 100755
+index 17746271e1..af50909fb1 100755
 --- a/board/versal2/post-image.sh
 +++ b/board/versal2/post-image.sh
-@@ -1,9 +1,17 @@
- #!/bin/sh
- 
--# By default U-Boot loads DTB from a file named "system.dtb", and
--# with versal2, the Linux DTB is the same as the U-Boot DTB, so
--# let's use a symlink since the DTB is the same.
--ln -fs "u-boot.dtb" "${BINARIES_DIR}/system.dtb"
-+# By default U-Boot loads DTB from a file named "system.dtb".
-+# With versal2, there is no default dts in the Linux kernel tree
-+# because the default is the same as the u-boot.dtb. This means
-+# it is necessary to cover two cases, a custom dts or the default.
-+# The BR2_LINUX_KERNEL_DTS_SUPPORT will only be set for custom dts
-+# files, so it can be used for checking which case is configured.
-+if grep -Eq "^BR2_LINUX_KERNEL_DTS_SUPPORT=y$" "${BR2_CONFIG}"; then
-+	LINUX_DTBS="$(make --no-print-directory VARS=LINUX_DTBS printvars)"
-+	ln -fs "$(basename ${LINUX_DTBS%% *})" "${BINARIES_DIR}/system.dtb"
-+else
-+	ln -fs "u-boot.dtb" "${BINARIES_DIR}/system.dtb"
-+fi
+@@ -3,7 +3,7 @@
+ # By default U-Boot loads DTB from a file named "system.dtb", and
+ # with versal2, the Linux DTB is the same as the U-Boot DTB, so
+ # let's use a symlink since the DTB is the same.
+-ln -fs "${BINARIES_DIR}/u-boot.dtb" "${BINARIES_DIR}/system.dtb"
++ln -fs "u-boot.dtb" "${BINARIES_DIR}/system.dtb"
  
  BOARD_DIR="$(dirname "$0")"
  
