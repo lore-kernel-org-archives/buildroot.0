@@ -1,80 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87290EB1049
-	for <buildroot@archiver.kernel.org>; Tue, 10 Mar 2026 10:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C76FD2D79
+	for <buildroot@archiver.kernel.org>; Tue, 10 Mar 2026 13:16:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8311E84089;
-	Tue, 10 Mar 2026 10:45:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E23DC60860;
+	Tue, 10 Mar 2026 13:16:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NHxFZr4PcANG; Tue, 10 Mar 2026 10:45:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jrLsMHN0eg_G; Tue, 10 Mar 2026 13:16:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87ECD84054
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEFDF6087E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773139507;
-	bh=fRQP7cQdI6ailc+N/CgrqVxQcUqAhRwk3dTcdT1rOEk=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1773148613;
+	bh=7EStOIbfKybIuEP+JG4fwSoyUrTiJvwHfEt1BpA00k8=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=g/ROyQV2C5fbs+46dW2FYmTjnS4mimGXUGpgRMU6qJqB5zqKtXTyRJwTkM2LL1e3r
-	 AmAtDh7yN97dRc06h1i7PCwAlFG9//xe+bOZVobZf8ZjmWArmdbSuUkHuc9swbj9rm
-	 j/FRthqIJFDRhxBkhs2cAVb67jy5g0Xs0yHzgvhqa6Smhio38YY/Kh3MUz+uDI1GAO
-	 yLuP4GnpKuLebkBzK/7div0uR6hHeYv+GtmVeif4RaLPPDEm+OCALVHzIZiYkjz1wi
-	 0E3pM2FAhWcxQgEp/+fj8Rc9Q22aet1S0yvs4eFgctvekOKcsGLoJGOdUhYe0j7y/N
-	 9u+vYWmDjAamA==
+	b=PNqEmcEaQBxzssPkz4pTnnTXd4jpDUrFHaNB5n37pHHsmUeuW/YUcsvMdtlnPQPwp
+	 hflcYsaj2XpoBczfAFnbE2c66AaXkhPK164kX4pvZk0a2pqDANRsy5ShKnmsH5/pCQ
+	 ea94yC1xftJTcBRiQqMu9a9FPEVwXn3QNW9Zaco3eWw0yylV7ii94HgqaKvUlWFRs6
+	 n8xCnlkX/YPDdGwdnCWIYYxaSLL4QpXcTd10xzg3EpNMm3Ks+kd7KthSDMcWB7e0VJ
+	 Zn3uIPmHpjvf6EechgA02RD5G9LfA1y8vB5UHuvvXj3gtA6JW7acpCQ/nm2HYiqANW
+	 pKpkQr8ehjQ6g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87ECD84054;
-	Tue, 10 Mar 2026 10:45:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C77C201
- for <buildroot@buildroot.org>; Tue, 10 Mar 2026 10:45:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEFDF6087E;
+	Tue, 10 Mar 2026 13:16:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E73BB8
+ for <buildroot@buildroot.org>; Tue, 10 Mar 2026 13:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CAD28404F
- for <buildroot@buildroot.org>; Tue, 10 Mar 2026 10:45:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34B3F6087E
+ for <buildroot@buildroot.org>; Tue, 10 Mar 2026 13:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uLTde98U8I51 for <buildroot@buildroot.org>;
- Tue, 10 Mar 2026 10:45:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TVmSHHEFYwm8 for <buildroot@buildroot.org>;
+ Tue, 10 Mar 2026 13:16:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C273384054
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C273384054
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C273384054
- for <buildroot@buildroot.org>; Tue, 10 Mar 2026 10:45:02 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 711691814BA; Tue, 10 Mar 2026 11:45:00 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Tue, 10 Mar 2026 11:43:42 +0100
-Message-ID: <20260310104354.2488409-3-buildroot@heine.tech>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260310104354.2488409-2-buildroot@heine.tech>
-References: <20260310104354.2488409-2-buildroot@heine.tech>
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B9DEB60860
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9DEB60860
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B9DEB60860
+ for <buildroot@buildroot.org>; Tue, 10 Mar 2026 13:16:50 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-48539d21b76so18206115e9.1
+ for <buildroot@buildroot.org>; Tue, 10 Mar 2026 06:16:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1773148608; x=1773753408;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9js+9OQgO4FQ5QFIIliripj2Ot7zxIWzdG1Rlgxzlg0=;
+ b=v0XRGPnIpXJT94Pz24S12AcV5xwySExB7ZNDOQg5y7a5vqFn0uGYaVLfAr9lp3/4IG
+ daNh443WTtnTLzpHVb733l4feEmYKXddl+Gf/yl4DdL38PU9KJAHu9XsBxy2pqnJI/eY
+ BwpsgxwcuWzYHjZxCr+8ofcFanIUvr1nLBx7+5e7VzFdIhg4devJOh5Nf6IIhQ+97H2B
+ aKfAhPgqqMuLbo5yaiClsLro7K2bDfUKQ5O019LoC01lNHIoKTjOhzyO3sDIrC9qumn2
+ MCwPASqWByE8FH3/2xhvFMqeuuXjclZ2y27KgERsz9LvjzgqiXKxgDwIZ1iiEv+LiuX1
+ d3gw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXIys85e4n0ZstvCesuZyGineLYixkbC3s0HINyyJmtCeL25nJfyj9pL/W3U0ypJRJXe4iL+rrFJqI=@buildroot.org
+X-Gm-Message-State: AOJu0Yy8ddounxTh5UCOYrBOfwgit0zF0W56Dt5y0E30r2PHUKeMC7wj
+ v6CwWOCqlDotDVrWs0Dkg/6kMHAXLUv3HtbCePzc9PTV+5ZfD/ZLXfg8k/TECshuv4+xt77pNsj
+ IDwQa
+X-Gm-Gg: ATEYQzxAKZdCmo9QsweM7vnpvbUtCn4b0RWWTEUfdteMF4CgZwZ+7F1aaT2bKZ9EaYy
+ ywlx1pq35xEae/mYECbXA8uJ5EsHLvduvDcCkJ4W6fz+REGbeh7bvjnZWxpjAQ6/xPiSMoe4EQA
+ uEDCg8TpcRCWlfXz9V8HYo5BvUWDWjXolJWY0CqfnheMHgiaLfFF9uMIuAhT0/ffXmgEmuzHU+0
+ tp4ebH4OWIx87V5S1u3kbdDzD5DiQNVGyoRFd/e2d/gTKF8zEb8EzHTIcnoYzVxWH8oeKGiIOGk
+ UKyeZc79jd1b1Uotq/6cjSQLMniTaRAabBBsNRa3DUMGDo7Otn9xrldafwHGhOkZvMUbwBi2yn1
+ uhkmEVwTWyL2xWne0+r0CP6qFT/iSmfVN8Pzc6v5kKGxgaKprpZJuMnf3HPF9igYt8X/7zoDgTR
+ 9mdZ9uJ37zXSe6Apa9gBgusOf3TX9DJ23CNW8Kp6W6ale8qtyu+DPQOEurlVC4Ew4ExNbYR07lY
+ mgP3S3EkCsABu7JptdKIsWZ3eguNtytfkY4Slt7KePqbnkqNAHHc4iJmeh7oYuWgRJbfkF7nidl
+X-Received: by 2002:a05:600c:1381:b0:483:7020:864 with SMTP id
+ 5b1f17b1804b1-4852697a1d3mr247030265e9.25.1773148608160; 
+ Tue, 10 Mar 2026 06:16:48 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4853a498afbsm130486455e9.0.2026.03.10.06.16.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 10 Mar 2026 06:16:47 -0700 (PDT)
+Message-ID: <9f4dcab8-4605-4a01-b08c-d6380f6e6253@smile.fr>
+Date: Tue, 10 Mar 2026 14:16:46 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+To: Dowan Gullient <dowan.gullient@smile.fr>, buildroot@buildroot.org
+References: <20260310103027.2057907-1-dowan.gullient@smile.fr>
+Content-Language: fr
+In-Reply-To: <20260310103027.2057907-1-dowan.gullient@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1773139500; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding:in-reply-to:references;
- bh=7CK3bVecqSQw9i51+Kkpuvucim2+YSbCXwbG+bzLC7U=;
- b=QPq6/HaOaE164npwY8F7ZjSh4quhS7QF0IoYjibgjBpZivbnYE7wdWG7Xagid2uFhVshsn
- 378Ux4xjjEggaPOJAxyqbotzO690QZcDfCZn33YCQVQmHmq5tsCmjcAXoBIwmDyp0DRAL0
- fKvZfGJ/EJ2423ASq1N13N676J6Wrh4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=QPq6/HaO
-Subject: [Buildroot] [PATCH v2 2/2] package/protobuf-c: fix protobuf v34.0
- compatibility
+ d=smile.fr; s=google; t=1773148608; x=1773753408; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=9js+9OQgO4FQ5QFIIliripj2Ot7zxIWzdG1Rlgxzlg0=;
+ b=gx+nlShcfRzfjkT3WQbWDd+IkNbkUcvrpvwv+pPbd62IjPR0G2RTbqkEPWaTlNtXZd
+ VXTfGtL9zu9Y9wI2/VwYjQQTTwrwBeesLxfb1hxP8OCjyDFYCJBvANFIurHtuXbFyPSw
+ H5aPhqO7qbirpB2PfPa57zz3APdDJcbotJ258=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=gx+nlShc
+Subject: Re: [Buildroot] [PATCH v1 1/1] toolchain/toolchain-external: bump
+ to version 15.2.rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,240 +125,201 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-pull in patch from https://github.com/protobuf-c/protobuf-c/pull/797
-which fixes compatibility with Protobuf v34.0
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- .../0001-fix-protobuf-34-compatibility.patch  | 208 ++++++++++++++++++
- 1 file changed, 208 insertions(+)
- create mode 100644 package/protobuf-c/0001-fix-protobuf-34-compatibility.patch
-
-diff --git a/package/protobuf-c/0001-fix-protobuf-34-compatibility.patch b/package/protobuf-c/0001-fix-protobuf-34-compatibility.patch
-new file mode 100644
-index 0000000000..d1acdf232e
---- /dev/null
-+++ b/package/protobuf-c/0001-fix-protobuf-34-compatibility.patch
-@@ -0,0 +1,208 @@
-+From d39f001b4578966600de0aaf7fc665eec6e057e5 Mon Sep 17 00:00:00 2001
-+From: Leon White <l.white@interstellarlab.earth>
-+Date: Tue, 10 Mar 2026 10:37:18 +0100
-+Subject: [PATCH] Fix compilation against protobuf v34
-+
-+Upstream: https://github.com/protobuf-c/protobuf-c/pull/797
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-+
-+---
-+ protoc-gen-c/c_bytes_field.cc     |  4 ++--
-+ protoc-gen-c/c_enum_field.cc      |  4 ++--
-+ protoc-gen-c/c_field.cc           | 10 +++++-----
-+ protoc-gen-c/c_helpers.cc         | 11 +++++++++++
-+ protoc-gen-c/c_helpers.h          |  5 +++++
-+ protoc-gen-c/c_message_field.cc   |  4 ++--
-+ protoc-gen-c/c_primitive_field.cc |  4 ++--
-+ protoc-gen-c/c_string_field.cc    |  4 ++--
-+ 8 files changed, 31 insertions(+), 15 deletions(-)
-+
-+diff --git a/protoc-gen-c/c_bytes_field.cc b/protoc-gen-c/c_bytes_field.cc
-+index c8ac7725..ab101177 100644
-+--- a/protoc-gen-c/c_bytes_field.cc
-++++ b/protoc-gen-c/c_bytes_field.cc
-+@@ -94,7 +94,7 @@ BytesFieldGenerator::~BytesFieldGenerator() {}
-+ 
-+ void BytesFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer* printer) const
-+ {
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(variables_, "ProtobufCBinaryData $name$$deprecated$;\n");
-+       break;
-+@@ -135,7 +135,7 @@ std::string BytesFieldGenerator::GetDefaultValue(void) const
-+ }
-+ void BytesFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* printer) const
-+ {
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(variables_, "$default_value$");
-+       break;
-+diff --git a/protoc-gen-c/c_enum_field.cc b/protoc-gen-c/c_enum_field.cc
-+index c3111f50..78ffb1c7 100644
-+--- a/protoc-gen-c/c_enum_field.cc
-++++ b/protoc-gen-c/c_enum_field.cc
-+@@ -95,7 +95,7 @@ EnumFieldGenerator::~EnumFieldGenerator() {}
-+ 
-+ void EnumFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer* printer) const
-+ {
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(variables_, "$type$ $name$$deprecated$;\n");
-+       break;
-+@@ -117,7 +117,7 @@ std::string EnumFieldGenerator::GetDefaultValue(void) const
-+ }
-+ void EnumFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* printer) const
-+ {
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(variables_, "$default$");
-+       break;
-+diff --git a/protoc-gen-c/c_field.cc b/protoc-gen-c/c_field.cc
-+index 8d22343f..8f83e1b1 100644
-+--- a/protoc-gen-c/c_field.cc
-++++ b/protoc-gen-c/c_field.cc
-+@@ -125,11 +125,11 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
-+     variables["oneofname"] = CamelToLower(oneof->name());
-+ 
-+   if (FieldSyntax(descriptor_) == 3 &&
-+-    descriptor_->label() == google::protobuf::FieldDescriptor::LABEL_OPTIONAL) {
-++    FieldLabel(descriptor_) == google::protobuf::FieldDescriptor::LABEL_OPTIONAL) {
-+     variables["LABEL"] = "NONE";
-+     optional_uses_has = false;
-+   } else {
-+-    variables["LABEL"] = CamelToUpper(GetLabelName(descriptor_->label()));
-++    variables["LABEL"] = CamelToUpper(GetLabelName(FieldLabel(descriptor_)));
-+   }
-+ 
-+   if (descriptor_->has_default_value()) {
-+@@ -145,11 +145,11 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
-+ 
-+   variables["flags"] = "0";
-+ 
-+-  if (descriptor_->label() == google::protobuf::FieldDescriptor::LABEL_REPEATED
-++  if (FieldLabel(descriptor_) == google::protobuf::FieldDescriptor::LABEL_REPEATED
-+    && is_packable_type (descriptor_->type())
-+    && descriptor_->options().packed()) {
-+     variables["flags"] += " | PROTOBUF_C_FIELD_FLAG_PACKED";
-+-  } else if (descriptor_->label() == google::protobuf::FieldDescriptor::LABEL_REPEATED
-++  } else if (FieldLabel(descriptor_) == google::protobuf::FieldDescriptor::LABEL_REPEATED
-+    && is_packable_type (descriptor_->type())
-+    && FieldSyntax(descriptor_) == 3
-+    && !descriptor_->options().has_packed()) {
-+@@ -179,7 +179,7 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(google::protobuf::io::
-+     "  $value$,\n"
-+     "  PROTOBUF_C_LABEL_$LABEL$,\n"
-+     "  PROTOBUF_C_TYPE_$TYPE$,\n");
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(variables, "  0,   /* quantifier_offset */\n");
-+       break;
-+diff --git a/protoc-gen-c/c_helpers.cc b/protoc-gen-c/c_helpers.cc
-+index e5c177c9..fcfc2588 100644
-+--- a/protoc-gen-c/c_helpers.cc
-++++ b/protoc-gen-c/c_helpers.cc
-+@@ -338,6 +338,17 @@ std::string GetLabelName(google::protobuf::FieldDescriptor::Label label) {
-+   return "bad-label";
-+ }
-+ 
-++google::protobuf::FieldDescriptor::Label FieldLabel(
-++    const google::protobuf::FieldDescriptor* field) {
-++  if (field->is_repeated()) {
-++    return google::protobuf::FieldDescriptor::LABEL_REPEATED;
-++  }
-++  if (field->is_required()) {
-++    return google::protobuf::FieldDescriptor::LABEL_REQUIRED;
-++  }
-++  return google::protobuf::FieldDescriptor::LABEL_OPTIONAL;
-++}
-++
-+ unsigned
-+ WriteIntRanges(google::protobuf::io::Printer* printer, int n_values, const int *values, compat::StringView name)
-+ {
-+diff --git a/protoc-gen-c/c_helpers.h b/protoc-gen-c/c_helpers.h
-+index 69369997..210f17a9 100644
-+--- a/protoc-gen-c/c_helpers.h
-++++ b/protoc-gen-c/c_helpers.h
-+@@ -153,6 +153,11 @@ std::string FilenameIdentifier(compat::StringView filename);
-+ // return 'required', 'optional', or 'repeated'
-+ std::string GetLabelName(google::protobuf::FieldDescriptor::Label label);
-+ 
-++// Returns the field label in a way that is compatible with protobuf versions
-++// where FieldDescriptor::label() is unavailable.
-++google::protobuf::FieldDescriptor::Label FieldLabel(
-++  const google::protobuf::FieldDescriptor* field);
-++
-+ // write IntRanges entries for a bunch of sorted values.
-+ // returns the number of ranges there are to bsearch.
-+ unsigned WriteIntRanges(google::protobuf::io::Printer* printer, int n_values, const int *values, compat::StringView name);
-+diff --git a/protoc-gen-c/c_message_field.cc b/protoc-gen-c/c_message_field.cc
-+index 9fca9208..43661353 100644
-+--- a/protoc-gen-c/c_message_field.cc
-++++ b/protoc-gen-c/c_message_field.cc
-+@@ -83,7 +83,7 @@ void MessageFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer*
-+   vars["name"] = FieldName(descriptor_);
-+   vars["type"] = FullNameToC(descriptor_->message_type()->full_name(), descriptor_->message_type()->file());
-+   vars["deprecated"] = FieldDeprecated(descriptor_);
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
-+       printer->Print(vars, "$type$ *$name$$deprecated$;\n");
-+@@ -103,7 +103,7 @@ std::string MessageFieldGenerator::GetDefaultValue(void) const
-+ }
-+ void MessageFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* printer) const
-+ {
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
-+       printer->Print("NULL");
-+diff --git a/protoc-gen-c/c_primitive_field.cc b/protoc-gen-c/c_primitive_field.cc
-+index 588f60e6..b3a4a46e 100644
-+--- a/protoc-gen-c/c_primitive_field.cc
-++++ b/protoc-gen-c/c_primitive_field.cc
-+@@ -109,7 +109,7 @@ void PrimitiveFieldGenerator::GenerateStructMembers(google::protobuf::io::Printe
-+   vars["name"] = FieldName(descriptor_);
-+   vars["deprecated"] = FieldDeprecated(descriptor_);
-+ 
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(vars, "$c_type$ $name$$deprecated$;\n");
-+       break;
-+@@ -156,7 +156,7 @@ void PrimitiveFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer*
-+   } else {
-+     vars["default_value"] = "0";
-+   }
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+       printer->Print(vars, "$default_value$");
-+       break;
-+diff --git a/protoc-gen-c/c_string_field.cc b/protoc-gen-c/c_string_field.cc
-+index 163f4246..6aea8dd3 100644
-+--- a/protoc-gen-c/c_string_field.cc
-++++ b/protoc-gen-c/c_string_field.cc
-+@@ -94,7 +94,7 @@ void StringFieldGenerator::GenerateStructMembers(google::protobuf::io::Printer*
-+ {
-+   const ProtobufCFileOptions opt = descriptor_->file()->options().GetExtension(pb_c_file);
-+ 
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
-+       if (opt.const_strings())
-+@@ -138,7 +138,7 @@ void StringFieldGenerator::GenerateStaticInit(google::protobuf::io::Printer* pri
-+   } else {
-+     vars["default"] = "(char *)protobuf_c_empty_string";
-+   }
-+-  switch (descriptor_->label()) {
-++  switch (FieldLabel(descriptor_)) {
-+     case google::protobuf::FieldDescriptor::LABEL_REQUIRED:
-+     case google::protobuf::FieldDescriptor::LABEL_OPTIONAL:
-+       printer->Print(vars, "$default$");
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRG93YW4sIEFsbCwKCkxlIDEwLzAzLzIwMjYgw6AgMTE6MzAsIERvd2FuIEd1bGxpZW50
+IHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBVcGRhdGUgdGhlIEFSTSBBQXJjaDY0IGV4dGVy
+bmFsIHRvb2xjaGFpbiB0byB0aGUgbGF0ZXN0IDE1LjIucmVsMQo+IHJlbGVhc2UgZnJvbSBBUk0u
+Cj4gCj4gVGhpcyBpbnZvbHZlczoKPiAtIFVwZGF0aW5nIHRoZSB2ZXJzaW9uLCBzaXRlIFVSTCwg
+YW5kIHNvdXJjZSBmaWxlbmFtZSBpbiAubWsKPiAtIFVwZGF0aW5nIHRoZSBTSEEyNTYgaGFzaCBp
+biAuaGFzaAo+IC0gVXBkYXRpbmcgdGhlIGRpc3BsYXkgbmFtZSBhbmQgR0NDIHZlcnNpb24gZGVw
+ZW5kZW5jeSBpbiBDb25maWcuaW4KCkl0IHNlZW1zIHRoaXMgY2hhbmdlIGlzIG5vdCBpbiB0aGUg
+cGF0Y2gsIG1pc3NpbmcKQlIyX0FSQ0hfTkVFRFNfR0NDX0FUX0xFQVNUX3h4LCBCUjJfVE9PTENI
+QUlOX0dDQ19BVF9MRUFTVF94eCBhbmQKQlIyX1RPT0xDSEFJTl9IRUFERVJTX0FUX0xFQVNUX3h4
+IHVwZGF0ZS4KCj4gCj4gVmVyaWZpZWQgYnkgYnVpbGRpbmcgYSBtaW5pbWFsIEFBcmNoNjQgY29u
+ZmlndXJhdGlvbi4KCklzIHJlYWxseSBydW50aW1lIHRlc3RlZD8gYXQgbGVhc3Qgd2l0aCBRZW11
+IGZvciBBYXJjaDY0IGFuZCBBUk0zMi4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPiBTaWdu
+ZWQtb2ZmLWJ5OiBEb3dhbiBHdWxsaWVudCA8ZG93YW4uZ3VsbGllbnRAc21pbGUuZnI+Cj4gLS0t
+Cj4gIC4uLi90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQtYmUvQ29uZmlnLmluICAgICAg
+ICAgICB8IDIgKy0KPiAgLi4uL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC1iZS5oYXNo
+ICAgICAgICAgICAgICAgIHwgNCArKy0tCj4gIC4uLi90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFh
+cmNoNjQtYmUubWsgICAgICAgICAgICAgICAgICB8IDIgKy0KPiAgLi4uL3Rvb2xjaGFpbi1leHRl
+cm5hbC1hcm0tYWFyY2g2NC9Db25maWcuaW4gICAgICAgICAgICAgIHwgMiArLQo+ICAuLi4vdG9v
+bGNoYWluLWV4dGVybmFsLWFybS1hYXJjaDY0Lmhhc2ggICAgICAgICAgICAgICAgICAgfCA4ICsr
+KystLS0tCj4gIC4uLi90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQubWsgICAgICAgICAg
+ICAgICAgICAgICB8IDIgKy0KPiAgLi4uL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJtL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgIHwgMiArLQo+ICAuLi4vdG9vbGNoYWluLWV4dGVybmFsLWFy
+bS1hcm0uaGFzaCAgICAgICAgICAgICAgICAgICAgICAgfCA4ICsrKystLS0tCj4gIC4uLi90b29s
+Y2hhaW4tZXh0ZXJuYWwtYXJtLWFybS5tayAgICAgICAgICAgICAgICAgICAgICAgICB8IDIgKy0K
+PiAgOSBmaWxlcyBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCAxNiBkZWxldGlvbnMoLSkKPiAK
+PiBkaWZmIC0tZ2l0IGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0
+ZXJuYWwtYXJtLWFhcmNoNjQtYmUvQ29uZmlnLmluIGIvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRl
+cm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQtYmUvQ29uZmlnLmluCj4gaW5kZXgg
+M2E3MWUxMzU2Yi4uZDY4MTY1MzJhNCAxMDA2NDQKPiAtLS0gYS90b29sY2hhaW4vdG9vbGNoYWlu
+LWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC1iZS9Db25maWcuaW4KPiAr
+KysgYi90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0t
+YWFyY2g2NC1iZS9Db25maWcuaW4KPiBAQCAtMSw1ICsxLDUgQEAKPiAgY29uZmlnIEJSMl9UT09M
+Q0hBSU5fRVhURVJOQUxfQVJNX0FBUkNINjRfQkUKPiAtCWJvb2wgIkFybSBBQXJjaDY0IEJFIDE0
+LjIucmVsMSIKPiArCWJvb2wgIkFybSBBQXJjaDY0IEJFIDE1LjIucmVsMSIKPiAgCWRlcGVuZHMg
+b24gQlIyX2FhcmNoNjRfYmUKPiAgCWRlcGVuZHMgb24gQlIyX0hPU1RBUkNIID0gIng4Nl82NCIK
+PiAgCWRlcGVuZHMgb24gIUJSMl9BUkNIX05FRURTX0dDQ19BVF9MRUFTVF8xNQo+IGRpZmYgLS1n
+aXQgYS90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0t
+YWFyY2g2NC1iZS90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQtYmUuaGFzaCBiL3Rvb2xj
+aGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWFybS1hYXJjaDY0LWJl
+L3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC1iZS5oYXNoCj4gaW5kZXggMzE3ZmMxMGEw
+OS4uOTVkZWFkOTRkNiAxMDA2NDQKPiAtLS0gYS90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFs
+L3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC1iZS90b29sY2hhaW4tZXh0ZXJuYWwtYXJt
+LWFhcmNoNjQtYmUuaGFzaAo+ICsrKyBiL3Rvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9v
+bGNoYWluLWV4dGVybmFsLWFybS1hYXJjaDY0LWJlL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFy
+Y2g2NC1iZS5oYXNoCj4gQEAgLTEsMiArMSwyIEBACj4gLSMgRnJvbSBodHRwczovL2RldmVsb3Bl
+ci5hcm0uY29tLy0vbWVkaWEvRmlsZXMvZG93bmxvYWRzL2dudS8xNC4yLnJlbDEvYmlucmVsL2Fy
+bS1nbnUtdG9vbGNoYWluLTE0LjIucmVsMS14ODZfNjQtYWFyY2g2NF9iZS1ub25lLWxpbnV4LWdu
+dS50YXIueHouc2hhMjU2YXNjCj4gLXNoYTI1NiAgMGVhNWQwMGQwYmE0YzVkMTZiYzhlMTQwZDQz
+NGM1NDM2NzUxNmI1NjhhMTQ2ZDcyNDkzNmM1ODlhMmY1NmFhZiAgYXJtLWdudS10b29sY2hhaW4t
+MTQuMi5yZWwxLXg4Nl82NC1hYXJjaDY0X2JlLW5vbmUtbGludXgtZ251LnRhci54ego+ICsjIEZy
+b20gaHR0cHM6Ly9kZXZlbG9wZXIuYXJtLmNvbS8tL21lZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUv
+MTUuMi5yZWwxL2JpbnJlbC9hcm0tZ251LXRvb2xjaGFpbi0xNS4yLnJlbDEteDg2XzY0LWFhcmNo
+NjRfYmUtbm9uZS1saW51eC1nbnUudGFyLnh6LnNoYTI1NmFzYwo+ICtzaGEyNTYgIGY4NDhmNWIx
+NWQ0OTIxN2ZiZThiM2Q3MmUxY2M0NGVhYzA2YjA5NmU2YjY2ZmE4OTI4OThmYTljNzEwYTNjMDUg
+IGFybS1nbnUtdG9vbGNoYWluLTE1LjIucmVsMS14ODZfNjQtYWFyY2g2NF9iZS1ub25lLWxpbnV4
+LWdudS50YXIueHoKPiBcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKPiBkaWZmIC0tZ2l0IGEv
+dG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNo
+NjQtYmUvdG9vbGNoYWluLWV4dGVybmFsLWFybS1hYXJjaDY0LWJlLm1rIGIvdG9vbGNoYWluL3Rv
+b2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQtYmUvdG9vbGNo
+YWluLWV4dGVybmFsLWFybS1hYXJjaDY0LWJlLm1rCj4gaW5kZXggMzgxYTU5MTkzMi4uMjY0ZThi
+ZmY3MSAxMDA2NDQKPiAtLS0gYS90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFp
+bi1leHRlcm5hbC1hcm0tYWFyY2g2NC1iZS90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQt
+YmUubWsKPiArKysgYi90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRl
+cm5hbC1hcm0tYWFyY2g2NC1iZS90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQtYmUubWsK
+PiBAQCAtNCw3ICs0LDcgQEAKPiAgIwo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAKPiAt
+VE9PTENIQUlOX0VYVEVSTkFMX0FSTV9BQVJDSDY0X0JFX1ZFUlNJT04gPSAxNC4yLnJlbDEKPiAr
+VE9PTENIQUlOX0VYVEVSTkFMX0FSTV9BQVJDSDY0X0JFX1ZFUlNJT04gPSAxNS4yLnJlbDEKPiAg
+VE9PTENIQUlOX0VYVEVSTkFMX0FSTV9BQVJDSDY0X0JFX1NJVEUgPSBodHRwczovL2RldmVsb3Bl
+ci5hcm0uY29tLy0vbWVkaWEvRmlsZXMvZG93bmxvYWRzL2dudS8kKFRPT0xDSEFJTl9FWFRFUk5B
+TF9BUk1fQUFSQ0g2NF9CRV9WRVJTSU9OKS9iaW5yZWwKPiAgCj4gIFRPT0xDSEFJTl9FWFRFUk5B
+TF9BUk1fQUFSQ0g2NF9CRV9TT1VSQ0UgPSBhcm0tZ251LXRvb2xjaGFpbi0kKFRPT0xDSEFJTl9F
+WFRFUk5BTF9BUk1fQUFSQ0g2NF9CRV9WRVJTSU9OKS14ODZfNjQtYWFyY2g2NF9iZS1ub25lLWxp
+bnV4LWdudS50YXIueHoKPiBkaWZmIC0tZ2l0IGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5h
+bC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQvQ29uZmlnLmluIGIvdG9vbGNoYWluL3Rv
+b2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQvQ29uZmlnLmlu
+Cj4gaW5kZXggODU4MmZlMGVjOC4uZTdiMTlkODkzNiAxMDA2NDQKPiAtLS0gYS90b29sY2hhaW4v
+dG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC9Db25maWcu
+aW4KPiArKysgYi90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5h
+bC1hcm0tYWFyY2g2NC9Db25maWcuaW4KPiBAQCAtMSw1ICsxLDUgQEAKPiAgY29uZmlnIEJSMl9U
+T09MQ0hBSU5fRVhURVJOQUxfQVJNX0FBUkNINjQKPiAtCWJvb2wgIkFybSBBQXJjaDY0IDE0LjIu
+cmVsMSIKPiArCWJvb2wgIkFybSBBQXJjaDY0IDE1LjIucmVsMSIKPiAgCWRlcGVuZHMgb24gQlIy
+X2FhcmNoNjQKPiAgCWRlcGVuZHMgb24gQlIyX0hPU1RBUkNIID0gIng4Nl82NCIgfHwgQlIyX0hP
+U1RBUkNIID0gImFhcmNoNjQiCj4gIAlkZXBlbmRzIG9uICFCUjJfQVJDSF9ORUVEU19HQ0NfQVRf
+TEVBU1RfMTUKPiBkaWZmIC0tZ2l0IGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29s
+Y2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQvdG9vbGNoYWluLWV4dGVybmFsLWFybS1hYXJjaDY0
+Lmhhc2ggYi90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1h
+cm0tYWFyY2g2NC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQuaGFzaAo+IGluZGV4IDNm
+OWM5Y2VhNzEuLjk5MTM5NzQ2NDMgMTAwNjQ0Cj4gLS0tIGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1l
+eHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQvdG9vbGNoYWluLWV4dGVybmFs
+LWFybS1hYXJjaDY0Lmhhc2gKPiArKysgYi90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rv
+b2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNo
+NjQuaGFzaAo+IEBAIC0xLDQgKzEsNCBAQAo+IC0jIEZyb20gaHR0cHM6Ly9kZXZlbG9wZXIuYXJt
+LmNvbS8tL21lZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUvMTQuMi5yZWwxL2JpbnJlbC9hcm0tZ251
+LXRvb2xjaGFpbi0xNC4yLnJlbDEteDg2XzY0LWFhcmNoNjQtbm9uZS1saW51eC1nbnUudGFyLnh6
+LnNoYTI1NmFzYwo+IC1zaGEyNTYgIDQ3YWVlZmMwMmIwZWUzOWY2ZDRkMTgxMjExMDk1Mjk3NTU0
+MmQzNjU4NzJhNzQ3NGI1MzA2OTI0YmNhNGZhYTEgIGFybS1nbnUtdG9vbGNoYWluLTE0LjIucmVs
+MS14ODZfNjQtYWFyY2g2NC1ub25lLWxpbnV4LWdudS50YXIueHoKPiAtIyBGcm9tIGh0dHBzOi8v
+ZGV2ZWxvcGVyLmFybS5jb20vLS9tZWRpYS9GaWxlcy9kb3dubG9hZHMvZ251LzE0LjIucmVsMS9i
+aW5yZWwvYXJtLWdudS10b29sY2hhaW4tMTQuMi5yZWwxLWFhcmNoNjQtYWFyY2g2NC1ub25lLWxp
+bnV4LWdudS50YXIueHouc2hhMjU2YXNjCj4gLXNoYTI1NiAgMjk5YzU2ZGIxNjQ0YzEzNTY3MGFm
+YWJiZjgwMWI5N2E0MmU1ZWY2MDY5ZDczMTU3YWI4Njk0NThjYmRhMjA5NiAgYXJtLWdudS10b29s
+Y2hhaW4tMTQuMi5yZWwxLWFhcmNoNjQtYWFyY2g2NC1ub25lLWxpbnV4LWdudS50YXIueHoKPiAr
+IyBGcm9tIGh0dHBzOi8vZGV2ZWxvcGVyLmFybS5jb20vLS9tZWRpYS9GaWxlcy9kb3dubG9hZHMv
+Z251LzE1LjIucmVsMS9iaW5yZWwvYXJtLWdudS10b29sY2hhaW4tMTUuMi5yZWwxLXg4Nl82NC1h
+YXJjaDY0LW5vbmUtbGludXgtZ251LnRhci54ei5zaGEyNTZhc2MKPiArc2hhMjU2ICA5YTY4NWIz
+MzViZDcwOWQ2ODNhOGM3ODIyNTNjMzdlOGMzNmMxMGU2OTI0ZTU5ZTM5ZDQ3NjliMDIxMzJlYjQz
+ICBhcm0tZ251LXRvb2xjaGFpbi0xNS4yLnJlbDEteDg2XzY0LWFhcmNoNjQtbm9uZS1saW51eC1n
+bnUudGFyLnh6Cj4gKyMgRnJvbSBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vbWVkaWEvRmls
+ZXMvZG93bmxvYWRzL2dudS8xNS4yLnJlbDEvYmlucmVsL2FybS1nbnUtdG9vbGNoYWluLTE1LjIu
+cmVsMS1hYXJjaDY0LWFhcmNoNjQtbm9uZS1saW51eC1nbnUudGFyLnh6LnNoYTI1NmFzYwo+ICtz
+aGEyNTYgIDk3ZTNmNjAwYzAwNDEzMDg4YmIyMTEwOTQ3NTQ0M2Y5YTFjNTdiNGY3NTMzNmE2ZTgy
+MGFjZDQzYjA2NWY4NzUgIGFybS1nbnUtdG9vbGNoYWluLTE1LjIucmVsMS1hYXJjaDY0LWFhcmNo
+NjQtbm9uZS1saW51eC1nbnUudGFyLnh6Cj4gZGlmZiAtLWdpdCBhL3Rvb2xjaGFpbi90b29sY2hh
+aW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWFybS1hYXJjaDY0L3Rvb2xjaGFpbi1leHRl
+cm5hbC1hcm0tYWFyY2g2NC5tayBiL3Rvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNo
+YWluLWV4dGVybmFsLWFybS1hYXJjaDY0L3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYWFyY2g2NC5t
+awo+IGluZGV4IGNiYzkyM2JlZTUuLjVkZGI1ZTEwYzEgMTAwNjQ0Cj4gLS0tIGEvdG9vbGNoYWlu
+L3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQvdG9vbGNo
+YWluLWV4dGVybmFsLWFybS1hYXJjaDY0Lm1rCj4gKysrIGIvdG9vbGNoYWluL3Rvb2xjaGFpbi1l
+eHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFhcmNoNjQvdG9vbGNoYWluLWV4dGVybmFs
+LWFybS1hYXJjaDY0Lm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMKPiAgCj4gLVRPT0xDSEFJTl9FWFRFUk5BTF9BUk1fQUFSQ0g2NF9WRVJTSU9OID0g
+MTQuMi5yZWwxCj4gK1RPT0xDSEFJTl9FWFRFUk5BTF9BUk1fQUFSQ0g2NF9WRVJTSU9OID0gMTUu
+Mi5yZWwxCj4gIFRPT0xDSEFJTl9FWFRFUk5BTF9BUk1fQUFSQ0g2NF9TSVRFID0gaHR0cHM6Ly9k
+ZXZlbG9wZXIuYXJtLmNvbS8tL21lZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUvJChUT09MQ0hBSU5f
+RVhURVJOQUxfQVJNX0FBUkNINjRfVkVSU0lPTikvYmlucmVsCj4gIAo+ICBUT09MQ0hBSU5fRVhU
+RVJOQUxfQVJNX0FBUkNINjRfU09VUkNFID0gYXJtLWdudS10b29sY2hhaW4tJChUT09MQ0hBSU5f
+RVhURVJOQUxfQVJNX0FBUkNINjRfVkVSU0lPTiktJChIT1NUQVJDSCktYWFyY2g2NC1ub25lLWxp
+bnV4LWdudS50YXIueHoKPiBkaWZmIC0tZ2l0IGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5h
+bC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFybS9Db25maWcuaW4gYi90b29sY2hhaW4vdG9vbGNo
+YWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJtL0NvbmZpZy5pbgo+IGluZGV4
+IDdiMWE3ZmIyN2YuLmQ5NzQ0YzY5NjcgMTAwNjQ0Cj4gLS0tIGEvdG9vbGNoYWluL3Rvb2xjaGFp
+bi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFybS9Db25maWcuaW4KPiArKysgYi90
+b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJtL0Nv
+bmZpZy5pbgo+IEBAIC0zLDcgKzMsNyBAQCBjb21tZW50ICJBcm0gdG9vbGNoYWlucyBhdmFpbGFi
+bGUgZm9yIENvcnRleC1BIHdpdGggTkVPTiArIEVBQkloZiIKPiAgCWRlcGVuZHMgb24gIUJSMl9B
+Uk1fQ1BVX0FSTVY3QSB8fCAhQlIyX0FSTV9FQUJJSEYgfHwgIUJSMl9BUk1fQ1BVX0hBU19ORU9O
+Cj4gIAo+ICBjb25maWcgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9BUk1fQVJNCj4gLQlib29sICJB
+cm0gQVJNIDE0LjIucmVsMSIKPiArCWJvb2wgIkFybSBBUk0gMTUuMi5yZWwxIgo+ICAJZGVwZW5k
+cyBvbiBCUjJfYXJtCj4gIAlkZXBlbmRzIG9uIEJSMl9BUk1fQ1BVX0FSTVY3QSB8fCBCUjJfQVJN
+X0NQVV9BUk1WOEEKPiAgCWRlcGVuZHMgb24gQlIyX0FSTV9DUFVfSEFTX05FT04KPiBkaWZmIC0t
+Z2l0IGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJt
+LWFybS90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFybS5oYXNoIGIvdG9vbGNoYWluL3Rvb2xjaGFp
+bi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFybS90b29sY2hhaW4tZXh0ZXJuYWwt
+YXJtLWFybS5oYXNoCj4gaW5kZXggOWE2NTdhNWVkNC4uY2UzNzk3YWMzNCAxMDA2NDQKPiAtLS0g
+YS90b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJt
+L3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJtLmhhc2gKPiArKysgYi90b29sY2hhaW4vdG9vbGNo
+YWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJtL3Rvb2xjaGFpbi1leHRlcm5h
+bC1hcm0tYXJtLmhhc2gKPiBAQCAtMSw0ICsxLDQgQEAKPiAtIyBGcm9tIGh0dHBzOi8vZGV2ZWxv
+cGVyLmFybS5jb20vLS9tZWRpYS9GaWxlcy9kb3dubG9hZHMvZ251LzE0LjIucmVsMS9iaW5yZWwv
+YXJtLWdudS10b29sY2hhaW4tMTQuMi5yZWwxLXg4Nl82NC1hcm0tbm9uZS1saW51eC1nbnVlYWJp
+aGYudGFyLnh6LnNoYTI1NmFzYwo+IC1zaGEyNTYgIDMyMzAxYTVhMzNhYWI0NzgxMDgzN2NkYWI4
+NDhhNWE1MTNjYTIyODA0ZDMxNjhkM2FkYTU4MzM4MjhiMDc5MTIgIGFybS1nbnUtdG9vbGNoYWlu
+LTE0LjIucmVsMS14ODZfNjQtYXJtLW5vbmUtbGludXgtZ251ZWFiaWhmLnRhci54ego+IC0jIEZy
+b20gaHR0cHM6Ly9kZXZlbG9wZXIuYXJtLmNvbS8tL21lZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUv
+MTQuMi5yZWwxL2JpbnJlbC9hcm0tZ251LXRvb2xjaGFpbi0xNC4yLnJlbDEtYWFyY2g2NC1hcm0t
+bm9uZS1saW51eC1nbnVlYWJpaGYudGFyLnh6LnNoYTI1NmFzYwo+IC1zaGEyNTYgIDNmZTgzMmY5
+YzgzMTMyM2EzN2ZmNTRiZmI1YWM3YTA4M2FjZGQ0NzNmMmM5M2ZlYWYwY2IzYzFhYzY5MGQ3Mzkg
+IGFybS1nbnUtdG9vbGNoYWluLTE0LjIucmVsMS1hYXJjaDY0LWFybS1ub25lLWxpbnV4LWdudWVh
+YmloZi50YXIueHoKPiArIyBGcm9tIGh0dHBzOi8vZGV2ZWxvcGVyLmFybS5jb20vLS9tZWRpYS9G
+aWxlcy9kb3dubG9hZHMvZ251LzE1LjIucmVsMS9iaW5yZWwvYXJtLWdudS10b29sY2hhaW4tMTUu
+Mi5yZWwxLXg4Nl82NC1hcm0tbm9uZS1saW51eC1nbnVlYWJpaGYudGFyLnh6LnNoYTI1NmFzYwo+
+ICtzaGEyNTYgIDNjNjVkODIwYTZiOGY2NzdmOGY2ZmJmYzc0OWZlMDBhNGYxNmRkZTEyMzQxNDM2
+YzlkZjViNzA5MmE0N2MwZmIgIGFybS1nbnUtdG9vbGNoYWluLTE1LjIucmVsMS14ODZfNjQtYXJt
+LW5vbmUtbGludXgtZ251ZWFiaWhmLnRhci54ego+ICsjIEZyb20gaHR0cHM6Ly9kZXZlbG9wZXIu
+YXJtLmNvbS8tL21lZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUvMTUuMi5yZWwxL2JpbnJlbC9hcm0t
+Z251LXRvb2xjaGFpbi0xNS4yLnJlbDEtYWFyY2g2NC1hcm0tbm9uZS1saW51eC1nbnVlYWJpaGYu
+dGFyLnh6LnNoYTI1NmFzYwo+ICtzaGEyNTYgIDZlNTg3MWRmMzlhMzhiM2E0YzEzNzRlYTA2Zjgy
+ZmUwZmUwYzI5MjdkZGQyYzA2MDQwMWZkNjBhNWQwNDU4NTkgIGFybS1nbnUtdG9vbGNoYWluLTE1
+LjIucmVsMS1hYXJjaDY0LWFybS1ub25lLWxpbnV4LWdudWVhYmloZi50YXIueHoKPiBkaWZmIC0t
+Z2l0IGEvdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJt
+LWFybS90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFybS5tayBiL3Rvb2xjaGFpbi90b29sY2hhaW4t
+ZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWFybS1hcm0vdG9vbGNoYWluLWV4dGVybmFsLWFy
+bS1hcm0ubWsKPiBpbmRleCA4NjkzN2E3NDEyLi5mODJmMWFiMTk2IDEwMDY0NAo+IC0tLSBhL3Rv
+b2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWFybS1hcm0vdG9v
+bGNoYWluLWV4dGVybmFsLWFybS1hcm0ubWsKPiArKysgYi90b29sY2hhaW4vdG9vbGNoYWluLWV4
+dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0tYXJtL3Rvb2xjaGFpbi1leHRlcm5hbC1hcm0t
+YXJtLm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMK
+PiAgCj4gLVRPT0xDSEFJTl9FWFRFUk5BTF9BUk1fQVJNX1ZFUlNJT04gPSAxNC4yLnJlbDEKPiAr
+VE9PTENIQUlOX0VYVEVSTkFMX0FSTV9BUk1fVkVSU0lPTiA9IDE1LjIucmVsMQo+ICBUT09MQ0hB
+SU5fRVhURVJOQUxfQVJNX0FSTV9TSVRFID0gaHR0cHM6Ly9kZXZlbG9wZXIuYXJtLmNvbS8tL21l
+ZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUvJChUT09MQ0hBSU5fRVhURVJOQUxfQVJNX0FSTV9WRVJT
+SU9OKS9iaW5yZWwKPiAgCj4gIFRPT0xDSEFJTl9FWFRFUk5BTF9BUk1fQVJNX1NPVVJDRSA9IGFy
+bS1nbnUtdG9vbGNoYWluLSQoVE9PTENIQUlOX0VYVEVSTkFMX0FSTV9BUk1fVkVSU0lPTiktJChI
+T1NUQVJDSCktYXJtLW5vbmUtbGludXgtZ251ZWFiaWhmLnRhci54egoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
