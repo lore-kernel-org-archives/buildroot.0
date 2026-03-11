@@ -4,112 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B7C1125833
-	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 14:05:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 208431125838
+	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 14:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6F6F42305;
-	Wed, 11 Mar 2026 14:05:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDD3A42318;
+	Wed, 11 Mar 2026 14:05:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p_E2s7xKBmpF; Wed, 11 Mar 2026 14:05:12 +0000 (UTC)
+ id SIO4pIxw3CTd; Wed, 11 Mar 2026 14:05:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B36C142306
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E36942311
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773237912;
-	bh=2WtXP32b9Dk/h8pxKBkDXIgIy2dfrfgde+qN5m7XK/4=;
+	s=default; t=1773237914;
+	bh=9N591E2JctCUAVXScSGi+W1A81jC1EEYFqEjmaqTgZ4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=PlD7jaIL35EEbbcQtxvH22hAEcekK7JRae1cez5z0nf4h8f+mJmniOjuCWShg1nFP
-	 ULTfX1luKgXqiljsSVou4ddxmsiPwTr5X/L2EAG18IlLW9cjYKJ4jDbeRocx+6hXEX
-	 qjbMe2Q7Ow9f3RB5cNG8WYM4Mhnnyp+tIpspqOu5Y9NLeGXNHlQNA8d38LaJNveN3s
-	 njlZDAfWZpFUyOoKw1X7hX9bV5HLyNzBcdzMg4qSIYp/vK3KFsrZ3f+x2GzywCNlUM
-	 sN9+usqOvUBSepvFlEIbLfYwNS3FA5QiftN6kBjZys2eSusKnQyU5spOF80PDwBSya
-	 3LG4xZi2Mcayw==
+	b=Uf8cU73ztRpm08qN3jZRZo8xstcDbpIL7n4jZQ2BiLXzjK+rsdq+jAJk+nDoFGCf1
+	 Mg6EQ2jOS69LMOH5sPQIl0GAlpCrmcmMDABhIeb9JHuTgtYkU8w2hX/bKa+WID5MQz
+	 NDAzFGOWA7IDAnsS3wWBnpMwozGKrdvesWbzcdhQvmaOyu/xKMCzX2+ygVYYjSwDUl
+	 lGHlwM3w3JS5/6GSIEakw5cx6kyHWiCa+i/aT16fJbfYeq+irREbtx3Aba81e9snxM
+	 k4DTwv26dzdC5qq2ggjAmi5TNEQ8aUYKX4o60tvHQh4861LneZI22hAU5yON1ndQ8+
+	 Hi1BCr23d8rOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B36C142306;
-	Wed, 11 Mar 2026 14:05:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4264733A
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E36942311;
+	Wed, 11 Mar 2026 14:05:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23BDB33A
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2827040B3E
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0812884572
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sks75NmtJJod for <buildroot@buildroot.org>;
- Wed, 11 Mar 2026 14:05:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xSEHRmT_1XBT for <buildroot@buildroot.org>;
+ Wed, 11 Mar 2026 14:05:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7F63E40396
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F63E40396
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7F63E40396
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-439b2965d4bso8513575f8f.2
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 07:05:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0395884570
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0395884570
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0395884570
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:05 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-439c4bde55cso5743267f8f.1
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 07:05:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1773237902; x=1773842702;
+ d=1e100.net; s=20230601; t=1773237904; x=1773842704;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=cXRJZy0qmccc67db2/7xy+HoxIe04qj1mu1AxETkjI4=;
- b=MMfRaYrWsRD+Cky9I+EWAPbYs6VYgwNgmJr1THz0zyr8HLqy4GXMyR4i6FyCIB24vz
- 3rO12ukbS5oTYAvxQIFejJd4FE9rRmrC43tA7fTuv2fskT/cNO1vG/nXMFgSVeX8P9Vh
- rGwxrXWpuX/t1Qk8b5MclgspSGJ0MmJLtX16uAw9VAXGUB8P0YGXIzhOYUfxcoF4Tkks
- Psfs/sPGwza7e8qi73zBTpR1MHYYpAxIgtbcIkxJiLHotI7GpGvIC4/RwV+WBynPEcc5
- ptvkPgtiRS96hY2FodQSE4y0cNcqwsdHycKZ97FDyC5fNP6RJ70RM8or93uCFeVX8xyQ
- 7WKA==
-X-Gm-Message-State: AOJu0Yw080ZclD7nkOPx9yC4sZLvv4ERyLyxaWKycevgdKNk21XxZ54/
- ND52x0Ejn69JJE1h8Bh5fCYLE01iNGz4REtv7G5geg8rL1GFCGQoadkXnz1s91RNbKZ2s1v/eer
- 4Hr8V
-X-Gm-Gg: ATEYQzyrXQrc33nw6/YTZisiXokQuoFZD5U68rh5yBYzU3kGiR894FAvdOQPcJvyK7w
- QUTFszHwaMJCUlIQ+8qaxbB/f7zl8bJopeG6+UWvLuasIQRiVegrCtto9WOgZKBym5NkZqkM3wH
- R9pT/JGrxIrVt9GZ4lSTyyP7osGtZN5vlKAymW7akQxdhTP3N/F3Q2uQOBIbJswItIUp6fZCSOY
- 3eKIQsLNhlxahRRZCj9xf+iGRr9zpovvnDzrlBd0w0wJ3WO0/FKO4hzRnc9sPHjSQW912aGGkNh
- MGQlL0L9UjsgWFcolr5GWG6sWifPtnJ0tQbwfKwtPv6kzB0E59tREMXzibYI9OPr7gzq7dK+0DF
- /8O0ijU8tbVt/8wqPTwGfLj0h4QiDiuvMw0d7fdIOedrJp1DLyaPy2XGfBRSP3NrpM9+tC4B6Ex
- 3HgLm2DJiVWaT8Fks=
-X-Received: by 2002:a05:6000:200f:b0:439:b1d8:6084 with SMTP id
- ffacd0b85a97d-439f822334emr5471976f8f.44.1773237901783; 
- Wed, 11 Mar 2026 07:05:01 -0700 (PDT)
+ bh=vouraCoochXNcZCZgZPrB1MtarzEJdOeWSWOYVR15VM=;
+ b=r4gAOjBSBw05cXgkxWE/NVrv8iF3TPeCCRCP7EDE6HAZTuaK0zExWJdyHT5KY0hdi5
+ EbykUENv0O2St3O0+CmUTgwAyDvC+1W9JMUgtjodJqhK1wt+2SwZf5SMWRnvqAGuCTrO
+ SQ/Fw4HfCMULHdzqc0DPCgY2wsgCSUXvUU1oynjAFS5ZQOI5RltDhHuHPj+r5w13xVw8
+ HHInaBAWpSQt1j9w4kaos67Nl+sTt1ANarCGWveFxWh36Yet7Qy/HOPDPqwVXSnnntLo
+ E/YNz2JpxYM0qQNl3Gkft5PVXFvWLkdGOBEXkn32R0+yFB9ICOjEB28OW+pN2QQZNGBN
+ W64g==
+X-Gm-Message-State: AOJu0YwzZvN7fXusg+q9XxbI6PahsIMEsHe1/0mph0gmws1C3WQljudm
+ 3tEmCpCJ26jgz8vbR/l2rvwW6wOY54oT9Rt99+O9xiVLdYRer8RbsWmlKbXfoQdsMWqcLkhODg1
+ VhiS1
+X-Gm-Gg: ATEYQzwfWRbsrN4okrq8QlBhi0Lq/7t5x60GLvHAcSzInwaEr0Ygakatv8gF6RGw0Ca
+ RPVGHJ91cIDlxhhdQZjkfXGM2K4GZGWSybTJMK1b/GP/AbldWDh3lAJlmzv/NDBZSauUSnvwgkD
+ CSt1QnLjqBlp96wyLMrInaSNPIsFTgqsp9HQTnDr6ll4GbF7nH3TwvUzDJuhMXya5N5ADYDe0KI
+ PzHgYTT35Bl+hh/iI5DMG1/f3l8FmpxZqB41vkfpCmcwVsDhvPnWNxsrtVIo+kLUM752XUHzLC2
+ j9HvGrDEKJcppJaAHIo6ZpZgZoJWEP7lljR9w4EX/vOiDWrn9DecXQa73XhCwFUuMOV7+I1z0ee
+ F6Uy0/l5LF+XDO1bCxWtaTk3+Qzrv7cpkohrF5ZBmSX9o23khcFpYhEf8JiRdyurczxsjhFsEC6
+ zX245chdKHVfauJu400r5b0j2AnA==
+X-Received: by 2002:a05:6000:2884:b0:439:c628:2228 with SMTP id
+ ffacd0b85a97d-439f843125amr5204441f8f.31.1773237903551; 
+ Wed, 11 Mar 2026 07:05:03 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439f81f19dbsm7657610f8f.22.2026.03.11.07.05.01
+ ffacd0b85a97d-439f81f19dbsm7657610f8f.22.2026.03.11.07.05.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Mar 2026 07:05:01 -0700 (PDT)
+ Wed, 11 Mar 2026 07:05:02 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 11 Mar 2026 15:04:53 +0100
-Message-ID: <20260311140457.140041-5-thomas.perale@mind.be>
+Date: Wed, 11 Mar 2026 15:04:55 +0100
+Message-ID: <20260311140457.140041-7-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260311140457.140041-1-thomas.perale@mind.be>
 References: <20260311140457.140041-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773237902; x=1773842702; darn=buildroot.org;
+ d=mind.be; s=google; t=1773237904; x=1773842704; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=cXRJZy0qmccc67db2/7xy+HoxIe04qj1mu1AxETkjI4=;
- b=VoezHLYGDn2cAlM2ihMkgdM3lD+zexc399yJQNk6Inw3bzrVGr0k07ge5gZ8wyljJS
- prHxNjfVUDf1WbD0piZRDfDK2YOiTp2SGzpFNmERUmPk9s9o6A4mU/BCyLUPrEIAGhC6
- JJJahfdJq2tljZ0iAcT40e4BuK9x7EsHVwxl6pM7ufOZnGO2kEJnKOPJ54Q0iSarRZy3
- ciEU3E1ULQWVoLkJQ/X3lgcUvzTo+51AOOzqtKmuuE1VGffzv+i/stgHSYxBY1jAgpjD
- VnGpwXJ15MlfB7PHopzbe0s+NY5sIKiRFG4YCqbznhTZKgsy60WPktHsm70DJHOFMTB7
- /T9w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=vouraCoochXNcZCZgZPrB1MtarzEJdOeWSWOYVR15VM=;
+ b=LbVQo0n4NB4xu0o+bQtdD2YlVqbOgJyVmdub7qkWHlGoQ+IVK22A2kh+S8evsx/84U
+ 7aVwuUhNSSyChqibWdos52JBkLvsI+HVXQ/atFa+JIl4KresO3bnpFhhgd2U4pXt05Xe
+ VzE+UBxi3cUzeRR/v5J1Iv1tuS0IjIecAXrZSFJLSVDG+mFDAn5FYZn1JwUzQsXFE6FA
+ kMo1rMO35mx6rnTeKa/XPPY1COb/jrZTa0BJ41XvCMIrxu140fTpjwHnvY72uX8leBxi
+ I1YRzm0mIcZh93v0XU4qYFAXSMaat/hNSV6akVL5csCBTMZspMh9mO/2+TE7oiUgk3TE
+ 8nPg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VoezHLYG
-Subject: [Buildroot] [PATCH v5 4/8] utils/generate-cyclonedx: encapsulate
- CycloneDX generation functions
+ header.a=rsa-sha256 header.s=google header.b=LbVQo0n4
+Subject: [Buildroot] [PATCH v5 6/8] utils/generate-cyclonedx: mark host
+ packages as external
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,547 +128,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the script is starting to get bigger, it's also starting to get
-more difficult to keep track of all the different functions.
-This commit move all the functions that generate a part of the CycloneDX
-SBOM spec under the same `CycloneDX` dataclass.
+Mark Buildroot's host packages as 'external' with the 'isExternal'
+property. Starting CycloneDX v1.7 [1][2] the CycloneDX spec defines this
+property like the following [3].
 
-It also allows to avoid to have to deal with a top-level shared context
-for the SBOM generation.
+> An external component is one that is not part of an assembly, but is
+> expected to be provided by the environment, regardless of the
+> component's .scope. This setting can be useful for distinguishing which
+> components are bundled with the product and which can be relied upon to
+> be present in the deployment environment.
 
-Additionnaly, two structure are created: the `Context` and `Filter` one.
-They hold arguments passed from the CLI.
+This fits the usage of 'host' packages : a package provided by the
+environment and not bundled with the target.
+
+[1] https://github.com/CycloneDX/specification/releases/tag/1.7
+[2] https://cyclonedx.org/docs/1.7/json/#components_items_isExternal
+[3] https://github.com/CycloneDX/specification/issues/321
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- utils/generate-cyclonedx | 485 +++++++++++++++++++++------------------
- 1 file changed, 263 insertions(+), 222 deletions(-)
+ utils/generate-cyclonedx | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index facbd6c78f..24c15df94e 100755
+index cbce3364de..35d8c72057 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -18,7 +18,8 @@ import urllib.request
- import subprocess
- import sys
- import re
--from typing import Tuple
-+from typing import Mapping, Tuple
-+from dataclasses import dataclass, field
- 
- 
- CYCLONEDX_VERSION = (1, 6)
-@@ -35,13 +36,21 @@ BR2_VERSION_FULL = (
-     .strip()
- )
- 
--# Set of vulnerabilities that were addressed by a patch present in buildroot
--# tree. This set is used to set the analysis of the ignored CVEs to
--# 'resolved_with_pedigree'.
--VULN_WITH_PEDIGREE = set()
- 
--# List of supported SPDX license expression.
--SPDX_LICENSES = []
-+@dataclass(frozen=True)
-+class Options:
-+    cyclonedx_version: Tuple[int, int]
-+    """CycloneDX Spec version"""
-+    project_name: str
-+    """Specify the project name to use in the SBOM metadata"""
-+    project_version: str
-+    """Specify the project version to use in the SBOM metadata"""
-+
-+
-+@dataclass(frozen=True)
-+class Filters:
-+    virtual: bool
-+    """Includes virtual packages to the output"""
- 
- 
- def br2_retrieve_spdx_licenses(version: Tuple[int, int]):
-@@ -227,179 +236,245 @@ def split_top_level_comma(subj):
-     yield substring
- 
- 
--def cyclonedx_license(lic):
--    """Given the name of a license, create an individual entry in
--    CycloneDX format. In CycloneDX, the 'id' keyword is used for
--    names that are recognized as SPDX License abbreviations. All other
--    license names are placed under the 'name' keyword.
--
--    Args:
--        lic (str): Name of the license
--
--    Returns:
--        dict: An entry for the license in CycloneDX format.
--    """
--    key = "id" if lic in SPDX_LICENSES else "name"
--    return {
--        key: lic,
--    }
--
--
--def cyclonedx_licenses(lic_list):
--    """Create a licenses list formatted for a CycloneDX component
--
--    Args:
--        lic_list (str): A comma separated list of license names.
--
--    Returns:
--        dict: A dictionary with license information for the component,
--        in CycloneDX format.
--    """
--    return {
--        "licenses": [
--            {"license": cyclonedx_license(lic.strip())} for lic in split_top_level_comma(lic_list)
--        ]
--    }
--
--
--def cyclonedx_patches(patch_list: list[str]):
--    """Translate a list of patches from the show-info JSON to a list of
--    patches in CycloneDX format.
--
--    Args:
--        patch_list (list): Array of patch relative paths for a given component.
--
--    Returns:
--        dict: Patch information in CycloneDX format.
--    """
--    patch_contents = []
--    for patch in patch_list:
--        patch_path = brpath / patch
--        if patch_path.exists():
--            try:
--                content = read_patch_file(patch_path)
--            except Exception:
--                # If the patch can't be read it won't be added to
--                # the resulting SBOM.
--                print(f"Failed to handle patch: {patch}", file=sys.stderr)
--                continue
--
--            header = patch_retrieve_header(content)
--
--            issue = {}
--            cves = extract_cves_from_header(header)
--            if cves:
--                VULN_WITH_PEDIGREE.update(cves)
--                issue = {
--                    "resolves": [
--                        {
--                            "type": "security",
--                            "name": cve
--                        } for cve in cves
--                    ]
--                }
-+@dataclass
-+class CycloneDX:
-+    show_info_dict: Mapping
-+    """Output of Buildroot `make show-info` converted as a dict."""
-+    options: Options
-+    """CycloneDX generation options passed from the CLI arguments"""
-+    filters: Filters
-+    """Filters that apply to the `show_info_dict` content"""
-+    _filtered_show_info_dict: Mapping = field(default_factory=dict)
-+    """Subset of `show_info_dict` based on the `Filters` passed in the the
-+    `filters` argument."""
-+    _spdx_licenses: list = field(default_factory=list)
-+    """List of supported SPDX license expression. Initialized during the
-+    `__post_init__` step, fetched either online or from local copy"""
-+    _vuln_with_pedigree: set = field(default_factory=set)
-+    """Set of vulnerabilities that were addressed by a patch present in
-+    buildroot tree. This set is used to set the analysis of the ignored CVEs to
-+    'resolved_with_pedigree'."""
-+
-+    def __post_init__(self):
-+        self._spdx_licenses = br2_retrieve_spdx_licenses(self.options.cyclonedx_version)
-+
-+        # Remove rootfs and virtual packages if not explicitly included
-+        # from the cli arguments
-+        self._filtered_show_info_dict = {
-+            k: v for k, v in self.show_info_dict.items()
-+            if ("rootfs" not in v["type"]) and (self.filters.virtual or v["virtual"] is False)
-+        }
-+
-+    def _component_licenses_license(self, lic: str):
-+        """Given the name of a license, create an individual entry in
-+        CycloneDX format. In CycloneDX, the 'id' keyword is used for
-+        names that are recognized as SPDX License abbreviations. All other
-+        license names are placed under the 'name' keyword.
-+
-+        Args:
-+            lic (str): Name of the license
-+
-+        Returns:
-+            dict: An entry for the license in CycloneDX format.
-+        """
-+        key = "id" if lic in self._spdx_licenses else "name"
-+        return {
-+            key: lic,
-+        }
-+
-+    def _component_licenses(self, lic_list: str):
-+        """Create a licenses list formatted for a CycloneDX component
-+
-+        Args:
-+            lic_list (str): A comma separated list of license names.
-+
-+        Returns:
-+            dict: A dictionary with license information for the component,
-+            in CycloneDX format.
-+        """
-+        return {
-+            "licenses": [
-+                {"license": self._component_licenses_license(lic.strip())} for lic in split_top_level_comma(lic_list)
-+            ]
-+        }
-+
-+    def _component_patches(self, patch_list: list[str]):
-+        """Translate a list of patches from the show-info JSON to a list of
-+        patches in CycloneDX format.
-+
-+        Args:
-+            patch_list (list): Array of patch relative paths for a given component.
-+
-+        Returns:
-+            dict: Patch information in CycloneDX format.
-+        """
-+        patch_contents = []
-+        for patch in patch_list:
-+            patch_path = brpath / patch
-+            if patch_path.exists():
-+                try:
-+                    content = read_patch_file(patch_path)
-+                except Exception:
-+                    # If the patch can't be read it won't be added to
-+                    # the resulting SBOM.
-+                    print(f"Failed to handle patch: {patch}", file=sys.stderr)
-+                    continue
-+
-+                header = patch_retrieve_header(content)
-+
-+                issue = {}
-+                cves = extract_cves_from_header(header)
-+                if cves:
-+                    self._vuln_with_pedigree.update(cves)
-+                    issue = {
-+                        "resolves": [
-+                            {
-+                                "type": "security",
-+                                "name": cve
-+                            } for cve in cves
-+                        ]
-+                    }
- 
--            patch_contents.append({
--                "diff": {
--                    "text": {
--                        "content": content
-+                patch_contents.append({
-+                    "diff": {
-+                        "text": {
-+                            "content": content
-+                        }
-+                    },
-+                    **issue
-+                })
-+            else:
-+                # If the patch is not a file it's a tarball or diff url passed
-+                # through the `<pkg-name>_PATCH` variable.
-+                patch_contents.append({
-+                    "diff": {
-+                        "url": patch
-                     }
-+                })
-+
-+        return {
-+            "pedigree": {
-+                "patches": [{
-+                    "type": "unofficial",
-+                    **content
-+                } for content in patch_contents]
-+            },
-+        }
-+
-+    def _component(self, name: str, comp: dict):
-+        """Translate a component from the show-info output, to a component entry in CycloneDX format.
-+
-+        Args:
-+            name (str): Key used for the package in the show-info output.
-+            comp (dict): Data about the package as a Python dictionary.
-+
-+        Returns:
-+            dict: Component information in CycloneDX format.
-+        """
-+        return {
-+            "bom-ref": name,
-+            "type": "library",
+@@ -373,6 +373,9 @@ class CycloneDX:
+         return {
+             "bom-ref": name,
+             "type": "library",
 +            **({
-+                "name": comp["name"],
-+            } if "name" in comp else {}),
-+            **({
-+                "version": comp["version"],
-+                **(self._component_licenses(comp["licenses"]) if "licenses" in comp else {}),
-+            } if not comp["virtual"] else {}),
-+            **({
-+                "cpe": comp["cpe-id"],
-+            } if "cpe-id" in comp else {}),
-+            **(self._component_patches(comp["patches"]) if comp.get("patches") else {}),
-+            "properties": [{
-+                "name": "BR_TYPE",
-+                "value": comp["type"],
-+            }],
-+        }
-+
-+    def _dependency(self, ref: str, depends: list):
-+        """Create JSON for dependency relationships between components.
-+
-+        Args:
-+            ref (str): reference to a component bom-ref.
-+            depends (list): array of component bom-ref identifier to create the dependencies.
-+
-+        Returns:
-+            dict: Dependency information in CycloneDX format.
-+        """
-+        return {
-+            "ref": ref,
-+            "dependsOn": sorted(depends),
-+        }
-+
-+    @property
-+    def vulnerabilities(self):
-+        """Create a JSON list of vulnerabilities ignored by buildroot and associate
-+        the component for which they are solved.
-+
-+        Args:
-+            show_info_dict (dict): The JSON output of the show-info
-+                command, parsed into a Python dictionary.
-+
-+        Returns:
-+            list: Solved vulnerabilities list in CycloneDX format.
-+        """
-+        cves = {}
-+
-+        for name, comp in self._filtered_show_info_dict.items():
-+            for cve in comp.get('ignore_cves', []):
-+                cves.setdefault(cve, []).append(name)
-+
-+        return [{
-+            "id": cve,
-+            "analysis": {
-+                "state": "resolved_with_pedigree" if cve in self._vuln_with_pedigree else "in_triage",
-+                "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
-+            },
-+            "affects": [
-+                {"ref": bomref} for bomref in components
-+            ]
-+        } for cve, components in cves.items()]
-+
-+    @property
-+    def cyclonedx(self):
-+        return {
-+            "bomFormat": "CycloneDX",
-+            "$schema": "http://cyclonedx.org/schema/bom-{}.{}.schema.json".format(*self.options.cyclonedx_version),
-+            "specVersion": "{}.{}".format(*self.options.cyclonedx_version),
-+            "metadata": {
-+                "component": {
-+                    "bom-ref": self.options.project_name,
-+                    "name": self.options.project_name,
-+                    "version": self.options.project_version,
-+                    "type": "firmware",
-                 },
--                **issue
--            })
--        else:
--            # If the patch is not a file it's a tarball or diff url passed
--            # through the `<pkg-name>_PATCH` variable.
--            patch_contents.append({
--                "diff": {
--                    "url": patch
-+                "tools": {
-+                    "components": [
-+                        {
-+                            "type": "application",
-+                            "name": "Buildroot generate-cyclonedx",
-+                            "version": f"{BR2_VERSION_FULL}",
-+                            "licenses": [
-+                                {
-+                                    "license": {
-+                                        "id": "GPL-2.0"
-+                                    }
-+                                }
-+                            ]
-+                        }
-+                    ],
-                 }
--            })
--
--    return {
--        "pedigree": {
--            "patches": [{
--                "type": "unofficial",
--                **content
--            } for content in patch_contents]
--        },
--    }
--
--
--def cyclonedx_component(name, comp):
--    """Translate a component from the show-info output, to a component entry in CycloneDX format.
--
--    Args:
--        name (str): Key used for the package in the show-info output.
--        comp (dict): Data about the package as a Python dictionary.
--
--    Returns:
--        dict: Component information in CycloneDX format.
--    """
--    return {
--        "bom-ref": name,
--        "type": "library",
--        **({
--            "name": comp["name"],
--        } if "name" in comp else {}),
--        **({
--            "version": comp["version"],
--            **(cyclonedx_licenses(comp["licenses"]) if "licenses" in comp else {}),
--        } if not comp["virtual"] else {}),
--        **({
--            "cpe": comp["cpe-id"],
--        } if "cpe-id" in comp else {}),
--        **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
--        "properties": [{
--            "name": "BR_TYPE",
--            "value": comp["type"],
--        }],
--    }
--
--
--def cyclonedx_dependency(ref, depends):
--    """Create JSON for dependency relationships between components.
--
--    Args:
--        ref (str): reference to a component bom-ref.
--        depends (list): array of component bom-ref identifier to create the dependencies.
--
--    Returns:
--        dict: Dependency information in CycloneDX format.
--    """
--    return {
--        "ref": ref,
--        "dependsOn": sorted(depends),
--    }
--
--
--def cyclonedx_vulnerabilities(show_info_dict):
--    """Create a JSON list of vulnerabilities ignored by buildroot and associate
--    the component for which they are solved.
--
--    Args:
--        show_info_dict (dict): The JSON output of the show-info
--            command, parsed into a Python dictionary.
--
--    Returns:
--        list: Solved vulnerabilities list in CycloneDX format.
--    """
--    cves = {}
--
--    for name, comp in show_info_dict.items():
--        for cve in comp.get('ignore_cves', []):
--            cves.setdefault(cve, []).append(name)
--
--    return [{
--        "id": cve,
--        "analysis": {
--            "state": "resolved_with_pedigree" if cve in VULN_WITH_PEDIGREE else "in_triage",
--            "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
--        },
--        "affects": [
--            {"ref": bomref} for bomref in components
--        ]
--    } for cve, components in cves.items()]
-+            },
-+            "components": [
-+                self._component(name, comp) for name, comp in self._filtered_show_info_dict.items()
-+            ],
-+            "dependencies": [
-+                self._dependency(self.options.project_name, list(self._filtered_show_info_dict)),
-+                *[self._dependency(ref, br2_parse_deps(ref, self.show_info_dict, self.filters.virtual))
-+                  for ref in self._filtered_show_info_dict],
-+            ],
-+            "vulnerabilities": self.vulnerabilities,
-+        }
- 
- 
- def main():
-@@ -425,55 +500,21 @@ def main():
-         parser.print_help()
-         sys.exit(1)
- 
--    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
-+    opt = Options(
-+        cyclonedx_version=CYCLONEDX_VERSION,
-+        project_name=args.project_name,
-+        project_version=args.project_version,
-+    )
-+
-+    filters = Filters(
-+        virtual=args.virtual
-+    )
- 
-     show_info_dict = json.load(args.in_file)
- 
--    # Remove rootfs and virtual packages if not explicitly included
--    # from the cli arguments
--    filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
--                               if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
--
--    cyclonedx_dict = {
--        "bomFormat": "CycloneDX",
--        "$schema": "http://cyclonedx.org/schema/bom-{}.{}.schema.json".format(*CYCLONEDX_VERSION),
--        "specVersion": "{}.{}".format(*CYCLONEDX_VERSION),
--        "metadata": {
--            "component": {
--                "bom-ref": args.project_name,
--                "name": args.project_name,
--                "version": args.project_version,
--                "type": "firmware",
--            },
--            "tools": {
--                "components": [
--                    {
--                        "type": "application",
--                        "name": "Buildroot generate-cyclonedx",
--                        "version": f"{BR2_VERSION_FULL}",
--                        "licenses": [
--                            {
--                                "license": {
--                                    "id": "GPL-2.0"
--                                }
--                            }
--                        ]
--                    }
--                ],
--            }
--        },
--        "components": [
--            cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
--        ],
--        "dependencies": [
--            cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
--            *[cyclonedx_dependency(ref, br2_parse_deps(ref, show_info_dict, args.virtual))
--              for ref in filtered_show_info_dict],
--        ],
--        "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
--    }
--
--    args.out_file.write(json.dumps(cyclonedx_dict, indent=2))
-+    out = CycloneDX(show_info_dict=show_info_dict, options=opt, filters=filters)
-+
-+    args.out_file.write(json.dumps(out.cyclonedx, indent=2))
-     args.out_file.write('\n')
- 
- 
++                "isExternal": True
++            } if self.options.cyclonedx_version >= (1, 7) and comp["type"] == "host" else {}),
+             **({
+                 "name": comp["name"],
+             } if "name" in comp else {}),
 -- 
 2.53.0
 
