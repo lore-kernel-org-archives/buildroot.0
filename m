@@ -1,110 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B63106289F
-	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 13:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 913FA1125832
+	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 14:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D768884502;
-	Wed, 11 Mar 2026 13:15:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 425BE422DD;
+	Wed, 11 Mar 2026 14:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fcevQgGxcFGg; Wed, 11 Mar 2026 13:15:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h5dMMNnOqtyo; Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF01F844FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DE4D422D5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773234935;
-	bh=eizVENb8trpicLnXtfmhetIGTyJYLGWQf6//jNqd3Wg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m5aFTrOBIl12ecnPCUgEd/yw7MzLjErACXd/M0BB8Ehj5R/yjHsRwRcMc1MyPlVlm
-	 mvKKepKXN3rifZvIAimtYIWmag7y3TK9Vbbw21EbR9a3bpIFbwqMNBEnmU1WKQVOy0
-	 V7ujjrEbTTnp8Xq++uNlBUVIZAHmIdtlFr9CVwShpMbrlWBcOPoPN/ErjD0FHI2UOR
-	 tWxp1S6wpEwtj7hGl6zGyTt6mN8VEUKt9P2JZNJcAtvf8dkdPOamRYlm+540v2EJxQ
-	 vZdP6N7+MWQCUc3ZPrCU8DBdjd/bRwJqmyt0J0B/yTKcy0cRtQsoQlH6NwI2OySOci
-	 hntOTI+ENvuEQ==
+	s=default; t=1773237904;
+	bh=P4th6z+0tPe7tJQk6El6A/K96M4prbBTE8QdbDtcF7M=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=obdYc8Iwh1pjWnIXTbY+aS+4mAiOd382mDV4XfPC7fORx1nu88kJv95qurZHvm26P
+	 iUX/8kHGpV2R/2uM/LOslz7Q1LOJXTbhyYao5mD7mpDF5ed9UypvWm4pSAm0wh2UVw
+	 KOt7wgEL6fph59JdSc0OzdUZT9J3CzwsNLXU4yDI19/b1CVSoig/a6uXdIgKxc4jFw
+	 L5RUD84SKEGUBpiGTHrF3/sKSm9tr0vKAi/x4+LRRxawjuDQZWLhW4wPf51EUB5L9s
+	 BlipM6cxqrd4im1ADi907ZPQPV8O2BPWh1A8ucherbE8DmfurHGr7AOwDzJlkiRNGl
+	 FUvgWPB6+s7aA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF01F844FF;
-	Wed, 11 Mar 2026 13:15:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4ED61201
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 13:15:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DE4D422D5;
+	Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 600B733A
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40F8E844FE
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 13:15:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45A5B40B3E
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0TaFqhprLf9 for <buildroot@buildroot.org>;
- Wed, 11 Mar 2026 13:15:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zTly_1enLxt2 for <buildroot@buildroot.org>;
+ Wed, 11 Mar 2026 14:05:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 241C0844FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 241C0844FB
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 241C0844FB
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 13:15:32 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-439a89b6fd0so10659353f8f.2
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 06:15:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 654B840396
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 654B840396
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 654B840396
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:01 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-439ac15f35fso10596104f8f.0
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 07:05:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1773234930; x=1773839730;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qT59hx/uAO4r8kHVAs5BwoeFLFTwjXnRXWSQxP3VtLo=;
- b=PZ1+FUD7P2W3WWDbsK6aQouj0cYwskeCTlD5W2LS4nXP+w+Rv8sdQKRTHpC/r2HJb7
- k+RkjNKYWQ6p2ei0UDj+3fs1xIVgjdgMAnoXPni7XPGCx0I2iTdhk6fOMIRW4VwudLuE
- gk8CEJt8KljYK8cQFAb1ntXeSGg4zHdg6qnNwMatQ45hS1ecgunt8Ke9Ag9dGZtNP5vO
- G44BXb8sbUpXc3UUJUwEIRdwiwvHsYuDPWTlWCxVwMNnRNoaZwODPnqFC0rFc8e6jpMt
- Mt2iQuLIzprW1JHs1sm1LSkG6TmAAhZ78pHE5gmGs3XaONJOz2tbkAhHXhJhj2omVWnB
- dasA==
-X-Gm-Message-State: AOJu0YzT7TrQUt721VYsxJw5hxmw3Z/UJKShnIxZiIVx6Ao6H02Xmh8N
- UzBk6/YLNbvF0w97Sc9zVFL0pj/p2hznteqWbl6zQn8gNyBzdwvhD3yZyKo7h0mh6uUdg/aF4yV
- aKVg9
-X-Gm-Gg: ATEYQzw4RpojqnJF0v+q4+2N45blSsjOzPSp52avHDM84NPn/dhKEdOeVQRB3RyIapg
- OHIC9yRHrsfcF7+x6fAvZv14IJ8RWlHdtXzP6pVnb7Fs9lHcJDZ8B2PpQ9ic8zki8ZIVBdCIsZk
- bvQgAyLEpoLNjdh/6bpcxo4O98/q2lryn6uOVIsCKfkVP2yvNvTzYjvgegwhyT1UmoKcc19Cl/b
- B0HyqaxyCaAPBAJV4kaqg5C5vz62fGAeaFXJ3BezDFlI9+KzuRQTS7t/O8bNrvPsRow2fOfS/CG
- Jqc2cGst7qWH9nOhawr+ma73ZP/Dm4SG4VWyWOYPHagYkl6ky7b9SjjgBpIa+gGVRT+ktm+myN6
- kYchINaojxt8a8G1A4ReFHIRbqZiw5vOm8K+TlH3FunlWN6SwS0XmKNAuzxSqTVg/dbSy3I8Q7s
- 0/5x5pdcq671Jh2oIM7xOR6ZfWSg==
-X-Received: by 2002:a05:6000:2485:b0:439:cc1a:af49 with SMTP id
- ffacd0b85a97d-439f8219fb7mr5274219f8f.27.1773234930069; 
- Wed, 11 Mar 2026 06:15:30 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1773237899; x=1773842699;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=sZCLW+H/lyhf1lNoIJGoRNDj+TtmLTv31YkovE9IxSc=;
+ b=km1N+KjafaMUS5fLIvhZuKwVZVdDZQfSScn+cUEw4DhdqOIbZOHlXLlb45z5IfJMKi
+ 1SEtuqutPssFE1EwcN0g5vAq2UIZgM0hm7qCdhLuPKpxnTTZXhQ69z9sleltr99x9rZf
+ IJQ/G/EiOgGzo3AEcX4tIs2CDGuYgxK2PmXczHFV1BtES+DIqROKpALcPdyw0g5CwnLF
+ ZKxUnTAIqE1c/jzY/lNqVpgSuajCh/fZZOKMg75s8ll8zm2nvKw3hy3CweNbwLGo8YPr
+ Xq0gsMaBoS3+J2aBBkrlabmV1x9X0Oxgqt4LLN1va0yMxuLZJDlyCjjLfS2jvVKJ0DgO
+ p6xw==
+X-Gm-Message-State: AOJu0Yx77vNg9UfAuxhBI5vmCC4irSDbNR/j9UAosgAqxoT8xoiW2uI0
+ jk5PdQegfAWIGCfAShR8B3j4ebFgl2O0gMTOkCAAOs09ipjTSGdcDW+qnxPmFwCxa4bI014Qqmt
+ x+pTm
+X-Gm-Gg: ATEYQzxc8iSH/3c4iuSRo7jKYgbxlUIBEk9P7Jy0vVvycQbnsM+JaRTipiEEZtQUngk
+ 2rRG8OKvyez8WbDWZZ6mkxfk/SxqOlSRuN+BDsnswjUwPOseDDIuqG2wf6p7Fg9yaaoa+3myvYv
+ 97i7u9xo+kcQ0EyroVM7kRPGQx9QGAqvmVcfR6rDYtgIxpzjBsuQgGJr3p54f5u47y+cjB+usJg
+ QtqRgeh6q2GixSYQkPY26SlDufJJeU6OLf4+pcVNydvdPpIvmVM7YMKwCPQNPIBrBfDfMWX9L3d
+ VaxbVCPbw2U1me4d3o0hSrOOmWhPZ9AF1HGnvbFYHcP9RQ/7MpFv3XWq89JgZpEZkRB7Eno8VwA
+ PSjnH/he0vqJ7Yc7pth6OAzIhX2Bn6b4/Pd5XwxYI0xQPx/2eMbqS7l++SBPMb4RqyafFfZ7plq
+ WsdPD9RtEPIan6/pw=
+X-Received: by 2002:a05:6000:1acf:b0:439:b440:b8a2 with SMTP id
+ ffacd0b85a97d-439f8430c20mr4988180f8f.28.1773237898725; 
+ Wed, 11 Mar 2026 07:04:58 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439f821d095sm7000914f8f.32.2026.03.11.06.15.29
- for <buildroot@buildroot.org>
+ ffacd0b85a97d-439f81f19dbsm7657610f8f.22.2026.03.11.07.04.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Mar 2026 06:15:29 -0700 (PDT)
+ Wed, 11 Mar 2026 07:04:58 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 11 Mar 2026 14:15:29 +0100
-Message-ID: <20260311131529.120513-1-thomas.perale@mind.be>
+Cc: Thomas Perale <thomas.perale@mind.be>
+Date: Wed, 11 Mar 2026 15:04:49 +0100
+Message-ID: <20260311140457.140041-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773234930; x=1773839730; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=qT59hx/uAO4r8kHVAs5BwoeFLFTwjXnRXWSQxP3VtLo=;
- b=MAiPyUyf56+Rn4Nfxfr8wW2kixq8NRhD6N2glH6uvUeLXY7v29ahOECxHV2gx+SRoS
- Ovt7vYhgZAYfRGJ3uHDXBW1n7Sn11M+pT0XQZdsxKdrZ3loPGSe/WD4KnrBfz0oi7J2U
- ktRxesGbnv4dexoSMe8rM5wrvMQwLVw4EBoyPlJ0c3he4EOYjfZ8Fs56uDtgHP5hfqaK
- pL4O3hejWf3oHgx2uMVXWiLQW3eD0zcCNTJlZyKMR6JrC+aUFfg/ZlO5g/mVt8QY6SVD
- haYKmLZZ4pHWmTvusEUoBZrtMnrzrAWQrCcF2BX0ROFLb+kzhLvzCP1N9I2M5nj8JxTA
- t+EQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mind.be; s=google; t=1773237899; x=1773842699; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sZCLW+H/lyhf1lNoIJGoRNDj+TtmLTv31YkovE9IxSc=;
+ b=T1oNyYHf8fIG0uDXeVfUW3uKGZzXDemZW5Jsxc6P7T7YzjMuZwoEjfshtyiZzsnYgc
+ iMXxFwE24R7mSkvpFhJuVprU/Iw3rlfUMP3OY0h85qLQAERJdkDfTnkDdvnF9jsPoNMn
+ rr3Iy94Ryq2JfbIOv3rbZQc/vV6Mi2xHcR0HImrcfQwPNpCehF0Dc9mnv5wucE31aGlZ
+ N/Ozy2GmV4PGOjHSIw7YQ9firkhufHID4V7ye+QATZ2zsBNMot+u3QelLaiDAjmep0wr
+ hABN5uIbgQXobKsDCCc0jInkGCGf/aaGcHew00WVBEo3XW6N2/yFIxypdu1QQwR9GBkv
+ vYRw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MAiPyUyf
-Subject: [Buildroot] [v2, PATCH] Makefile: add 'show-info-all'
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=T1oNyYHf
+Subject: [Buildroot] [PATCH v5 0/8] Support CycloneDX v1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,93 +124,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The maintainance and testing workflow sometimes requires to output a
-list of every existing packages on Buildroot:
+v3 --> v4: adds the two last commits
+v4 --> v5: fix the v1.7 comparison using a tuple
 
-- Generating an SBOM of the whole Buildroot tree for
-  security.buildroot.org
-- List every sources for every packages for source.buildroot.org
+Thomas Perale (8):
+  utils/generate-cyclonedx: use tuple for version
+  utils/generate-cyclonedx: move license download in a function
+  utils/generate-cyclonedx: move utility function
+  utils/generate-cyclonedx: encapsulate CycloneDX generation functions
+  utils/generate-cyclonedx: optional bump to v1.7
+  utils/generate-cyclonedx: mark host packages as external
+  utils/generate-cyclonedx: add 'id' property to resolves
+  utils/generate-cyclonedx: split vulnerabilities per state
 
-The previous solution relied on `make allyesconfig` but always ran into
-conflicts that needed manual resolution. Also some packages would not be
-present because they are archicture dependant.
+ utils/generate-cyclonedx | 630 ++++++++++++++++++++++-----------------
+ 1 file changed, 355 insertions(+), 275 deletions(-)
 
-To avoid having to manually modify the 'show-info' command this commit
-adds the 'show-info-all' command. It accesses the PACKAGES_ALL variable
-with all the packages present on Buildroot independently of the
-archicture or any config entries.
-
-It forces the `BR2_HAVE_DOT_CONFIG` variable to be set to force the
-reading of the packages mk files.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
-
-v1 --> v2: removed TARGETS_ROOTFS and recursive dependencies. It
-  introduced "host-" package with no name that introduced an empty
-  entry when generating an sbom when `make show-info-all` is ran without
-  defconfig.
-  Checked the diff between the previous version and the new one and
-  except the empty entry nothing is changed by just iterating over
-  PACKAGES_ALL.
-
- Makefile | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index f51155b0ed..bd037cc834 100644
---- a/Makefile
-+++ b/Makefile
-@@ -126,7 +126,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	print-version olddefconfig distclean manual manual-% check-package \
--	check-package-external
-+	check-package-external show-info-all
- 
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -142,7 +142,7 @@ nobuild_targets := source %-source \
- 	clean distclean help show-targets graph-depends \
- 	%-graph-depends %-show-depends %-show-version \
- 	graph-build graph-size list-defconfigs \
--	savedefconfig update-defconfig printvars show-vars
-+	savedefconfig update-defconfig printvars show-vars show-info-all
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-@@ -236,6 +236,13 @@ BR2_CONFIG = $(CONFIG_DIR)/.config
- ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(BR2_CONFIG)
- endif
-+# show-info-all needs to access the PACKAGES_ALL variable. This variable
-+# contains a reference to every packages present in Buildroot.
-+# Since the 'show-info-all' command might be used without actually having a
-+# dotconfig this condition is forced to be set true.
-+ifeq ($(MAKECMDGOALS),show-info-all)
-+BR2_HAVE_DOT_CONFIG = y
-+endif
- 
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
- # Disable top-level parallel build if per-package directories is not
-@@ -941,6 +948,17 @@ show-info:
- 		) \
- 	)
- 
-+.PHONY: show-info-all
-+show-info-all:
-+	@:
-+	$(info $(call clean-json, \
-+			{ $(foreach p, \
-+				$(sort $(PACKAGES_ALL)), \
-+				$(call json-info,$(call UPPERCASE,$(p)))$(comma) \
-+			) } \
-+		) \
-+	)
-+
- .PHONY: pkg-stats
- pkg-stats:
- 	@cd "$(CONFIG_DIR)" ; \
 -- 
 2.53.0
 
