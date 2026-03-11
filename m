@@ -1,115 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779B41125833
-	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 14:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77CD71125842
+	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 15:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BAD8422D9;
-	Wed, 11 Mar 2026 14:05:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44C8A8465F;
+	Wed, 11 Mar 2026 15:40:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qD6s6HQN7jkd; Wed, 11 Mar 2026 15:40:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65B328465A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773243608;
+	bh=pLfRsD3hAeu+orEnGd7Q4qRdco8hK2DtpuLZn0S3+O8=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=nGczOP/7IgDn7wK5yMJErtXRraAkI4Cn9GSkFyOgqBbSJ45dy4Mszydkof1k0NV1q
+	 pgPshBqEGhu4kfB3rH0DVHeNCg/Z1aucVv6a08/5IHSscmp2D5mCFUW5isaKgQTQxu
+	 2cItc7MWXA5Ebia3vqzJuSue7IkdGcUn1s8TTLu6s2XrclyzgjhEoRZjTAzbgnu769
+	 B5ItYPtNsBzwLzxom3+KfUJQgW7fTiSD5fLTAB+7SRY/U40mzevAngmi7E5sH1md7g
+	 MDVmT3dvB//l19W6fMP7RTwhDLoefCcQH3THyQRRqCwQxizd0IbgJGkWj5/29dhGeG
+	 rRPq/F2h3IWvw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65B328465A;
+	Wed, 11 Mar 2026 15:40:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1ED62201
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 15:40:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 048DD4236B
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 15:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U8BualcB5OF9; Wed, 11 Mar 2026 14:05:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71B4C42326
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773237917;
-	bh=rWChFDdxbUR14hRIl9TSYqNJwyqGFkN3EzQDo61Hf0U=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qFyYtq09Usp1qDPTwIWP0JaVRd7IrcxsnOvWiaN11jasGZJa0Wa6y1AhYudjyHPfN
-	 n0+IBOOH+MdbeK1f5f0vJUiXc9Vk3UWGcE/2K9IEr580K5O/crOT88GU/+30nI/gnT
-	 W8BL0zDC507AN9FtPxUIFjFAvGmd1ZvMgVmpjOfnobbWPaQGqTOLpr/I12tdwDPesr
-	 baCRM4Q3ija+OICc5iy7cA3v7OC98TD0IpPrRcC8mO/SNlujCc6Zox8kxnABRLSslc
-	 c0DT7A7yhm0u0l1VYxtaBdV8BzWqGUXjdaVpo1VkjaU7ivL88Nh113ueKLPR6LUEPw
-	 Flrt+7EDIi+7w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71B4C42326;
-	Wed, 11 Mar 2026 14:05:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D97D228
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E48140B3E
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 46OZ4gi0Oyjb for <buildroot@buildroot.org>;
- Wed, 11 Mar 2026 14:05:07 +0000 (UTC)
+ id mUGIjNlMD8r7 for <buildroot@buildroot.org>;
+ Wed, 11 Mar 2026 15:40:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 224F040396
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 224F040396
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 224F040396
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:06 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-b936331786dso1573310266b.3
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 07:05:06 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7202E42368
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7202E42368
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7202E42368
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 15:40:05 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4853f2826f7so33480675e9.1
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 08:40:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1773237905; x=1773842705;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=+O53dRXKLOZUwPCKH1xipfNln9bSZ6Oymu0CwUTB/ho=;
- b=DnOrLCcMTtSUxNFCCp+gYm/KhsCmAzeI5H/OqWElquza8+O30Zo44Ypirs9ytidC+c
- 65aD/i4vlwZMPxUEGMBpCm0Y7ey9MVVUL++IfRaZEIUDkbvsJdpL50RLZo+PHluroOQw
- uoocAvOpJeCaHAbI/Dov6njd3GUpOVyW93NicpJ01ddqRjjAFeaUYvf+UkxvfP3OQHW3
- rft49U0dPChAgVb8rM0vz0hDdxViJhCxmay3bfY+FE/q05bvRBgSQImnAkjhsfNNdidQ
- 83/9B+muXrJg86SnNMGVuuJerZtO9cUSSouzYMEUpdimUdIrl8ZvMmcuijVmrmOGY+X9
- KYug==
-X-Gm-Message-State: AOJu0YytjL4/cT9wmxPFYei2ZcxvPM/MX5k6Hs7u4WNJMIbeENMT0V46
- zWilnuHfT6FEj1gnlVR48by3P4RrFJ0hn94XaIvrGJqnk1RxLnI/9Ze1PnzYGzbzaJRK53HpPw3
- LToo3
-X-Gm-Gg: ATEYQzzEEw4lowM/G4UcuuWqnMkhnYWC2GFj/Bd+YPFQCGKHl/lIduALj2K8zVMNfLV
- 9Wj5e30q97WWNE+++PRb6HBhzlxaMzDkmUIRUjMqnW+ZLxTo0ZrRNKUrAVplImqQq8hAKyESEjg
- cFlvup+RU2d3GoXJEXsKoMBZUhP4Zybh1sM+XD09ek1yJb8S4/ShPhoL0CsMaFAkAcOBphNIJCY
- a+ph+X9C4Gq0OqF/i33IHfC+d6+Bnrw+0E6EB/Okcc7EO8kjfEIH4Jv9EYZ6mlu3ZQ79v4N5kdO
- DET6FqXK+PCVuhxT4txYuD3iiaY/RaDibdJbepAb8H2HSz/kfqUOsereF02rVUdmHpzXMuEjg8s
- 3VAtUmDHNM4zIDwYsSog6BFjGFGwQa+/7/2zRjUIzjtRmlCciyw8TsEZbIFk/sCYuUM2qZwWOPE
- 6xFR7SJeZaj20sP5pXDPJnm7iU6g==
-X-Received: by 2002:a17:907:2d23:b0:b96:dcc0:2e19 with SMTP id
- a640c23a62f3a-b972e5da905mr151282666b.56.1773237904566; 
- Wed, 11 Mar 2026 07:05:04 -0700 (PDT)
-Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439f81f19dbsm7657610f8f.22.2026.03.11.07.05.04
+ d=1e100.net; s=20230601; t=1773243603; x=1773848403;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Oo6GyQk0nTHdrm8bOug4D4jfTfFXvDNd9EDTiKFeWg8=;
+ b=K2yp7V7tECa4DCsuk9zqUuW6s2FSOf/HRwjQDBmCXv70FdVtGsuIWfnfOEvhAPA4Ft
+ LH2QEBXTfw9tAFiQ+KynJpBo+OKAobviZTOVHmPyeCCgzcOSBRRtV8m368XsI1Q9IcN7
+ noOJb7unxjBrt6bY0MiV4upi8VGBS/uaOcM8yaDwCoRFceRyi0o/rFXF4m8xDe0yr3ff
+ kqsJXw9Df1bpcvkSVKkswY1fP8JRNYTjKBnVRWWO6roG9l0Pw0ccJMr94VbCEQXYJvPE
+ AhXEMIivdEJohI3d5Ydj0JAEXY9ojo8tXIMHQiDCMqj08SanGR3l5YJpphkg7ZKl2Wf7
+ zrig==
+X-Gm-Message-State: AOJu0Ywci4+11hopLetY52PJ/sIbYI3Rm4FHON2xLEFWcyGadg12yC7T
+ lWr5YR/S7MPryMeT6niDWtVLhDQp7IFYa48N8kp+dSfiOxbOvmaYoXOqBZ5KzdjNEXP/phy0ZGb
+ e1kAR0VA=
+X-Gm-Gg: ATEYQzwaJIF0ajosds6nBN06xdz8GTJr3daS2iKFvmAStOcWPzPh30Lhdl/ih1/Xwpo
+ oZtt+9RHcLT2vKhbMuE4jy51a/UDNEhWqQUnZzCkllUierwaiTPviYRW5DCKK713DtXByVGp7qu
+ OGGwwcEEnN086kOTa2ExerlZOyUGAgSAeTA1fF8l6CAe8rm0zzJJc6f0zH8MgIh/3jfvikntruI
+ y5OIpncPqaqMfEIV72fQ/1fkGTHZkZwlDrZYnwD72QSBdIUUy9NZn79ou7b+aN/3J3vXUHJEEod
+ l24c4PYoBvyvVMwFop5Az9AOT8TAc0bJsjCkZJeuEP+I9JUgpfk5ME1QheY4YIBPdtbcpKcHIrI
+ vZbPecTdK/n/3+5iUHqgnZGuXHChSW3oNM2RN8AFUzNT2w8qqVdcUsksv9W0j9+jeWq4ttZkPA1
+ G7Ygl6iHaR75F0efrB1DKLLJynzHHYMKOkE7QxxHYoxGHMguDW4BYJWeVPirxQYoKtqAqWZT7bs
+ Bu5Oam3594aQj9jJRj9
+X-Received: by 2002:a05:600c:4752:b0:485:3692:e906 with SMTP id
+ 5b1f17b1804b1-4854b0c77f4mr49414465e9.13.1773243602644; 
+ Wed, 11 Mar 2026 08:40:02 -0700 (PDT)
+Received: from P-NAN-NAPALM..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-48541b6f6b7sm205579245e9.9.2026.03.11.08.40.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Mar 2026 07:05:04 -0700 (PDT)
+ Wed, 11 Mar 2026 08:40:02 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 11 Mar 2026 15:04:57 +0100
-Message-ID: <20260311140457.140041-9-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260311140457.140041-1-thomas.perale@mind.be>
-References: <20260311140457.140041-1-thomas.perale@mind.be>
+Cc: Dowan Gullient <dowan.gullient@smile.fr>
+Date: Wed, 11 Mar 2026 16:39:43 +0100
+Message-ID: <20260311153943.527902-1-dowan.gullient@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773237905; x=1773842705; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+O53dRXKLOZUwPCKH1xipfNln9bSZ6Oymu0CwUTB/ho=;
- b=P7n1kG/0VOWueATfGkha4DUIUW0g/B+QQgr9mUD9BlUztlSlL3udkB7YP1pHwXw5cc
- mgpSda4nIkeRTEc98Lt0Jylra4w60+UyC+PbiLGO3aE58agCYc1XjhBVqROGCmYujrbS
- 7OzJFhEuv4AL0GFVQK7o5//prc/jhJ0S7/r9Lli7Wtjlj5Uv0xkPCBV1jn5kMrudLi2l
- cbOTAL2Wpw4Hpgf+l0KIBGVrnHjvEvcAkYvujPnLndj1cp+dOYsoCjHxnVRV/WFrwHvI
- fwCG7BLsIiPf9qC2WGcnE2NZioqWdv6Gj7Ks6Uc7wmZ+4dReOj6XHrB6f5uH8DbPASEk
- QOlQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=P7n1kG/0
-Subject: [Buildroot] [PATCH v5 8/8] utils/generate-cyclonedx: split
- vulnerabilities per state
+ d=smile.fr; s=google; t=1773243603; x=1773848403; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Oo6GyQk0nTHdrm8bOug4D4jfTfFXvDNd9EDTiKFeWg8=;
+ b=hk71ca+dxhnFlEbpiKe82abj2HqFHc4gjDM6nAT6cChgYQkIo7F2Ah+Z7S5pwSYXJh
+ Qyish/PiBSYtQ7jDrtFLqR99iU+yWqD4xgZAGervZ2gciUh9ChXjgEwHuTRPW4XnODG0
+ J8rDNR6E9n6/gJLLbmwZH9k+Q8Y68fjZrr52s=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=hk71ca+d
+Subject: [Buildroot] [PATCH v2] toolchain/toolchain-external: bump to
+ version 15.2.rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,156 +118,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Dowan Gullient via buildroot <buildroot@buildroot.org>
+Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If a vulnerability is present in multiple components and only one of
-them has a patch that addresses that vulnerability, all components will
-currently have that vulnerability marked as `resolved_with_pedigree`.
+Update the ARM AArch64 external toolchain to the latest 15.2.rel1
+release from ARM.
 
-Right now, this issue does not affect any packages, but in the future it
-might affect packages that provide multiple version options (e.g.
-gnupg and gnupg2).
+This involves:
+- Updating the version, site URL, and source filename in .mk
+- Updating the SHA256 hash in .hash
+- Updating the display name and GCC version dependency in Config.in
 
-There is a small chance this happens in a real-world use case, but it
-may occur in the context of maintenance when running
-`make show-info-all`.
+Verified by booting on a default Qemu configuration.
 
-This commit changes how vulnerabilities fixed by a patch are stored.
-Instead of placing all vulnerabilities into a single set, it now keeps an
-index of the component for which the patch has been applied.
-
-When generating the vulnerability list, the component reference is
-checked instead of only the vulnerability ID. If a vulnerability ID has
-multiple states for different references, multiple vulnerability
-entries are created with distinct analyses.
-
-Consider the hypothetical case where gnupg ignores a vulnerability
-because it was introduced in a later version, while gnupg2 has patched
-that vulnerability. This would result in the following JSON:
-
-```json
-[
-    {
-        "id": "CVE-1234-1234",
-        "analysis": {
-            "state": "in_triage",
-            "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
-        },
-        "affects": [
-            {"ref": "gnupg"}
-        ]
-    },
-    {
-        "id": "CVE-1234-1234",
-        "analysis": {
-            "state": "resolved_with_pedigree",
-            "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
-        },
-        "affects": [
-            {"ref": "gnupg2"}
-        ]
-    }
-]
-```
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 ---
- utils/generate-cyclonedx | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+v2: fix gcc version and kernel headers to match the minimal version required.
+---
+ .../toolchain-external-arm-aarch64-be/Config.in           | 8 ++++----
+ .../toolchain-external-arm-aarch64-be.hash                | 4 ++--
+ .../toolchain-external-arm-aarch64-be.mk                  | 2 +-
+ .../toolchain-external-arm-aarch64/Config.in              | 8 ++++----
+ .../toolchain-external-arm-aarch64.hash                   | 8 ++++----
+ .../toolchain-external-arm-aarch64.mk                     | 2 +-
+ .../toolchain-external-arm-arm/Config.in                  | 8 ++++----
+ .../toolchain-external-arm-arm.hash                       | 8 ++++----
+ .../toolchain-external-arm-arm.mk                         | 2 +-
+ 9 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 43167d12d0..f4e0e8b539 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -249,10 +249,10 @@ class CycloneDX:
-     _spdx_licenses: list = field(default_factory=list)
-     """List of supported SPDX license expression. Initialized during the
-     `__post_init__` step, fetched either online or from local copy"""
--    _vuln_with_pedigree: set = field(default_factory=set)
--    """Set of vulnerabilities that were addressed by a patch present in
--    buildroot tree. This set is used to set the analysis of the ignored CVEs to
--    'resolved_with_pedigree'."""
-+    _vuln_with_pedigree: dict = field(default_factory=dict)
-+    """Index of vulnerabilities per component ref that were addressed by a
-+    patch present in buildroot tree. This index is used to set the analysis of
-+    the ignored CVEs to 'resolved_with_pedigree'."""
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+index 3a71e1356b..c3592b9d20 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+@@ -1,13 +1,13 @@
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
+-	bool "Arm AArch64 BE 14.2.rel1"
++	bool "Arm AArch64 BE 15.2.rel1"
+ 	depends on BR2_aarch64_be
+ 	depends on BR2_HOSTARCH = "x86_64"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+index 317fc10a09..95dead94d6 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+@@ -1,2 +1,2 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
+-sha256  0ea5d00d0ba4c5d16bc8e140d434c54367516b568a146d724936c589a2f56aaf  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
++sha256  f848f5b15d49217fbe8b3d72e1cc44eac06b096e6b66fa892898fa9c710a3c05  arm-gnu-toolchain-15.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
+\ No newline at end of file
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+index 381a591932..264e8bff71 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def __post_init__(self):
-         self._spdx_licenses = br2_retrieve_spdx_licenses(self.options.cyclonedx_version)
-@@ -297,11 +297,12 @@ class CycloneDX:
-             ]
-         }
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 14.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 15.2.rel1
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
  
--    def _component_patches(self, patch_list: list[str]):
-+    def _component_patches(self, comp_ref: str, patch_list: list[str]):
-         """Translate a list of patches from the show-info JSON to a list of
-         patches in CycloneDX format.
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 8582fe0ec8..ae1298bfe2 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+@@ -1,13 +1,13 @@
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+-	bool "Arm AArch64 14.2.rel1"
++	bool "Arm AArch64 15.2.rel1"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index 3f9c9cea71..9913974643 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
+-sha256  47aeefc02b0ee39f6d4d1812110952975542d365872a7474b5306924bca4faa1  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz.sha256asc
+-sha256  299c56db1644c135670afabbf801b97a42e5ef6069d73157ab869458cbda2096  arm-gnu-toolchain-14.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
++sha256  9a685b335bd709d683a8c782253c37e8c36c10e6924e59e39d4769b02132eb43  arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz.sha256asc
++sha256  97e3f600c00413088bb21109475443f9a1c57b4f75336a6e820acd43b065f875  arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index cbc923bee5..5ddb5e10c1 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-         Args:
-+            comp_ref (str): Reference of the component the patches are part of.
-             patch_list (list): Array of patch relative paths for a given component.
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 14.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 15.2.rel1
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
  
-         Returns:
-@@ -324,7 +325,7 @@ class CycloneDX:
-                 issue = {}
-                 cves = extract_cves_from_header(header)
-                 if cves:
--                    self._vuln_with_pedigree.update(cves)
-+                    self._vuln_with_pedigree.setdefault(comp_ref, set()).update(cves)
-                     issue = {
-                         "resolves": [
-                             {
-@@ -387,7 +388,7 @@ class CycloneDX:
-             **({
-                 "cpe": comp["cpe-id"],
-             } if "cpe-id" in comp else {}),
--            **(self._component_patches(comp["patches"]) if comp.get("patches") else {}),
-+            **(self._component_patches(name, comp["patches"]) if comp.get("patches") else {}),
-             "properties": [{
-                 "name": "BR_TYPE",
-                 "value": comp["type"],
-@@ -421,22 +422,31 @@ class CycloneDX:
-         Returns:
-             list: Solved vulnerabilities list in CycloneDX format.
-         """
-+        # This will generate an index of affected component per
-+        # (<cve-id>, <analysis-state>) tuple.
-+        # In the case a CVE have different analysis based on the package they
-+        # affects this will enable to create multiple entries with the same
-+        # vulnerability id.
-         cves = {}
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-$(HOSTARCH)-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 7b1a7fb27f..992ba09518 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -3,18 +3,18 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
  
-         for name, comp in self._filtered_show_info_dict.items():
-             for cve in comp.get('ignore_cves', []):
--                cves.setdefault(cve, []).append(name)
-+                state = "in_triage"
-+                if cve in self._vuln_with_pedigree.get(name, {}):
-+                    state = "resolved_with_pedigree"
-+
-+                cves.setdefault((cve, state), []).append(name)
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+-	bool "Arm ARM 14.2.rel1"
++	bool "Arm ARM 15.2.rel1"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_ARM_CPU_HAS_NEON
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
+ 	depends on BR2_ARM_EABIHF
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+index 9a657a5ed4..ce3797ac34 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
+-sha256  32301a5a33aab47810837cdab848a5a513ca22804d3168d3ada5833828b07912  arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
+-sha256  3fe832f9c831323a37ff54bfb5ac7a083acdd473f2c93feaf0cb3c1ac690d739  arm-gnu-toolchain-14.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
++sha256  3c65d820a6b8f677f8f6fbfc749fe00a4f16dde12341436c9df5b7092a47c0fb  arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
++sha256  6e5871df39a38b3a4c1374ea06f82fe0fe0c2927ddd2c060401fd60a5d045859  arm-gnu-toolchain-15.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 86937a7412..f82f1ab196 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-         return [{
-             "id": cve,
-             "analysis": {
--                "state": "resolved_with_pedigree" if cve in self._vuln_with_pedigree else "in_triage",
-+                "state": state,
-                 "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
-             },
-             "affects": [
-                 {"ref": bomref} for bomref in components
-             ]
--        } for cve, components in cves.items()]
-+        } for (cve, state), components in cves.items()]
+-TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 14.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 15.2.rel1
+ TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
  
-     @property
-     def cyclonedx(self):
+ TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
 -- 
-2.53.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
