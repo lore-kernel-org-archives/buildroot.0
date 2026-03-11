@@ -4,112 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A7FD1125832
-	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 14:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 730101125825
+	for <buildroot@archiver.kernel.org>; Wed, 11 Mar 2026 14:05:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4ACFE422EE;
-	Wed, 11 Mar 2026 14:05:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BEBD422F6;
+	Wed, 11 Mar 2026 14:05:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KOxXtWUJTCI6; Wed, 11 Mar 2026 14:05:09 +0000 (UTC)
+ id QYAcuaj8DYac; Wed, 11 Mar 2026 14:05:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21DE2422DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E12E2422E0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773237909;
-	bh=eNBD4IXb/M+/TC8TyNsS40KX0inOW+JHlJnkPH/6uE4=;
+	s=default; t=1773237911;
+	bh=BmZssfb++sVXWhyn0G/bZJPGybGIPLcRjOMhILa6uBs=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=sQVZzpk2H7LElTEQ4/dHnYxcBjQl7CInkFs+5JX9zELN5W0QtDpz3m4PZw8D/Azrk
-	 waQhkwTfJar3XtzrhQhHpaanKA1rkvr8KVbEiMiTupaweh22u44hpHgrioXIHyeBOO
-	 mjM1B955i0lE+oRh32HTyiYDAn/yx/2IqDJLcYKJu5auC4MkrnOxYHdSbP/jwZTzde
-	 xxBotEVC6brPBJzER/yOL1F96c9NDa29p5eJztbjzrhJ4OYIjEhj9j4ro+cBrOuZF5
-	 w1mfSJrv8kqMZN2jRfU/kM+RsgElBQ9jdbSfwBMYb3Qbf7k5z6SYWnDfKKeLanp/WV
-	 q+JRn2H+gTCdQ==
+	b=ecKa4mHGKwmKbNv50j5mBp38d/966uT8iBBsqkU/FsI3VuQyrepjT6Ig1xBhvrfhA
+	 P9XdusxwjEa1CW6QlVvUzk4SPBrz6YAmgrqfX4HVdpI+EAEIs+/1i4uzxkEgUrtY6v
+	 RDEHb9vMTwLD4i3zfZmH98zYRIWYu11EI7sWrZsLVKhulvKl+QDf8WcEuHwQLNcbyN
+	 Ucb9YEnvLSPJu7EWmdow8r2tlsjK0GaXqER3VrxZS4/vBfq77Ghzmk3AqJ8wOFQ86g
+	 Xq/jD+8DDgROdP7ZmLySdssu+3Y4ieAdZ8fJ2iLuXl8Bm419lrc7yeApC5XRMh9Dfc
+	 mUjiTAH+HRt4g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21DE2422DC;
-	Wed, 11 Mar 2026 14:05:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C358A33A
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E12E2422E0;
+	Wed, 11 Mar 2026 14:05:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8A69228
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C12ED422D7
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA50B41F2A
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hBi1ynMdr35j for <buildroot@buildroot.org>;
- Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NrTrhNB9Kw87 for <buildroot@buildroot.org>;
+ Wed, 11 Mar 2026 14:05:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ADBC5422D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADBC5422D0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ADBC5422D0
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:03 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-48540355459so27531015e9.3
- for <buildroot@buildroot.org>; Wed, 11 Mar 2026 07:05:03 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DB75C40B3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB75C40B3E
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DB75C40B3E
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 14:05:04 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-439f5abc829so1584694f8f.3
+ for <buildroot@buildroot.org>; Wed, 11 Mar 2026 07:05:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1773237901; x=1773842701;
+ d=1e100.net; s=20230601; t=1773237902; x=1773842702;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=JgkKxkVuTe0R9tSaDmW2URk+KZrSCQ0dk/h/1BdOpGA=;
- b=tD7O4Xcgp2ihQ5c0iQpxqH0FddOQwzYrjSjCtqAa6uu6+I3Y7dQ1wXnV4+SaJbcHUr
- SpeZWWV+EoPGBvTgnu1c+ZjqiD3QgqLj0NmqGNCDb3mBC32qVx8fDhOi/uS/AX3MlJ2b
- s5P1+S30FBUnl/8XTizPz+369b6SVamrquLkl2VvhDq62eoq6imoUJyPzF2NXU2VzXTs
- WBt7gymlmByFXfQzrIPaPvqyqDXix50FzxjbqGIs/jAqX2KukPO0hbTTLg8G436943A2
- twvQEKlUnQkbQYjpnCKL7D/vmqMEE/gA00kptjwKxbAczJaUiPa9CO5bOan4z26ZGfhh
- qDfw==
-X-Gm-Message-State: AOJu0YwPc34CjFcS5G1uUfzrrMBIr6BZP3iKziFK6C2zIyy9hp095mzr
- GJS20kktBP46bBvT/YHsZGWFeBOh4UL7e/dRLUA+9QE19jLmiIcmzGo2bPXthlk0JajHe8EvNUj
- rtDYp
-X-Gm-Gg: ATEYQzxsifZaRWpcK6CVGz/NvvFUT1R88KpkSYr2fHRLX8zO+L2NLD2mfub8hhDWXT4
- A9XnkNof0BlcuGNCdxOJ+rWHQtzJgnGJ5H99LfXJjWAqhD5XhXHQeVNIjm6TN4SatMBbkzOLKPd
- qIdrHaSMOuecEVX8pIppHMgYYMmgefFc4M81ntI+ZY+vWY47Nj4SimaS1tkmZ0YuJqVqqIBd9lM
- r8ZXj6Ixr3bYPaBrBPckiam1nUhlwboyMWKUHdNaazv6giXHP9IZuZAq6H74YkntbQfCRFbPSGF
- 5WLwPaaMflWe/CqivWyLOKGtjnOu0IjTPB6GFqxeDiz1vMi7bb3IU+GsFmbBnNyuRAmF0xpYRFh
- lK/8cVOj+94NulpuksNmHFjo+74rNq/jbyHeIm6WTG29aT6V608io3FbuvoSiiQTzUjozMrtlks
- bl0tN7EWdsPZX1I7esFDRXDSoTtg==
-X-Received: by 2002:a05:600c:4e43:b0:485:3fd1:992c with SMTP id
- 5b1f17b1804b1-4854b0a6a05mr44111785e9.1.1773237901155; 
- Wed, 11 Mar 2026 07:05:01 -0700 (PDT)
+ bh=zFQaF1PWvIeacy2jc0gveo8ycgxeFQyyPNisALatJZs=;
+ b=UNZRvQcsvydD7Bqur6VfZDs4DM0ik9A/iO/voV1OhrUaD55+NEOxRzwoeEnWFuiMjQ
+ K3VGmAYSHyocQcADuk0WlU4RSirgEHPpsgBe/OjQnhJAp2bN/Fj+IsJTJPI9tSoyUL8I
+ +uk1NBjSLbroqMe+nZ0Kh7fr7DVZhks+UvAY+3Vre++cde6BnTegz6ZJTUhRuSTY3Fh4
+ bIvR4wiUkfuH8nWgIL3ViOho7GlczCfTjh5DYf+p7DCkjufqw5SPoaBlHm7NKx6rbn7U
+ 58F7G76QyNcAi0OIY0LMrnuhPQhVoNyHmEfcPtJlZcniznwt41KnhmvY03ehzUP9cUD8
+ nuhA==
+X-Gm-Message-State: AOJu0Yzt1DKvlX6FX+pZH1OSuRpsFIkr0E+c+6hm+Zr4lTRGxDp0o/By
+ ij6nr+hyZoQeUubsSvxItg6FnDOhxeEgo66mm2/u3iAOWVfjTBeW4FXQFHvZofXwIleMojGI1kC
+ MLsgZ
+X-Gm-Gg: ATEYQzzzA8MQAPraIcQeAxcrst/rigcKI02WT7QFKh4aDolpheLQ1hwjpBmGAiuwxav
+ KLA1UTZ53HHoWYfJiCPPjfROrZRTefp9uZplRgw0NeqQvwUPpYjNPILJgEaB2Plml9PrYUPz0Zg
+ 35voR762sWG1IPTkNtaQWSggZmlwnYWmfAX55EYZkyU9SLyDvjAIivTYlCkfx8mKR7U9kqCRN2m
+ CrjgxUo0ye5vCAV1u2Or5vZx3bOJTFiAXFcW7Y8uoLDGXcvgvMhKadk7nhqen3HZGnczYHiqr/C
+ ULBz2KxP5Kznn6mGfqDEslwI5HwtaKqSe+b+DecE2cvFs76vmGLPSZYuLIJjTD7U5+UZOH+s11s
+ Bh/aOKevVh8Z1tRJamfj3v8z8kKG7m6Nw0ynmgM2l/NwbHn+E2G3XY5gn/5LIb+U1KdjxUWHGd4
+ qSqd8aIYd4iPqgccQ=
+X-Received: by 2002:a05:6000:26ca:b0:439:b486:ba71 with SMTP id
+ ffacd0b85a97d-439f842f50bmr5218712f8f.56.1773237902392; 
+ Wed, 11 Mar 2026 07:05:02 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439f81f19dbsm7657610f8f.22.2026.03.11.07.04.59
+ ffacd0b85a97d-439f81f19dbsm7657610f8f.22.2026.03.11.07.05.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Mar 2026 07:05:00 -0700 (PDT)
+ Wed, 11 Mar 2026 07:05:01 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 11 Mar 2026 15:04:52 +0100
-Message-ID: <20260311140457.140041-4-thomas.perale@mind.be>
+Date: Wed, 11 Mar 2026 15:04:54 +0100
+Message-ID: <20260311140457.140041-6-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260311140457.140041-1-thomas.perale@mind.be>
 References: <20260311140457.140041-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773237901; x=1773842701; darn=buildroot.org;
+ d=mind.be; s=google; t=1773237902; x=1773842702; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=JgkKxkVuTe0R9tSaDmW2URk+KZrSCQ0dk/h/1BdOpGA=;
- b=OklpkUupRhOKNaQTAnza4iMgzTlHn9lrGjm6r0rmj/o5SYJV9oa9NiASorBTNRe4ZZ
- qC8C2rwtqwLaQAZLzDH4EGhoyGHi/f7pcJlNhKGB3HkClVTyxsd4M6NsHxfyOw0Z9Ml5
- MPr1YL3vLY6WbokGKYwoxhKcH53BMaZpxyag7yCBSYCe3a17cHEL+jX3NRdZWZ6GSvI2
- 4voWzUNlaCSJv+dsXAkSVvqW+32VnogIU6BMl54idzUYtYe3MYa9SU1ye/rxe+SDe8Ff
- RCUquCn+TWE22aLNzF/7opcmnxn/o79IBmn7jl4dMNobMJrvNA9JaJ5j+9jZNcOnwp8w
- H8jw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=zFQaF1PWvIeacy2jc0gveo8ycgxeFQyyPNisALatJZs=;
+ b=FcYCPRwpyrIvsScQ+ivZTJu153O7U/qGrAAw8ozqYqqYKY/tSbFlQ8eXe3ijXlZMPE
+ bWNe7UOMJ0y9wdmtk673S+xKA7yBgZ8/Rc5WfgTWRRdF24Z/nBEmUgkd+lalH/bbV62X
+ 8zyHCmk5VAIWLZdUckRaS6gEOojbjj9sm9WMTZLeU/lbkuQzg1rGbC1UxVUtaqDriVTz
+ TKPnvbPQUwvxqTx0sfYnKTQRQhkQIJc/73I0LXSzUw+atNTQOQjbdPI/wLMI+CkNJ01/
+ 5CThxyaQGjR0OeqvsBQHFa20wGUJkDvTS6A9G2Sn6V6LC1+TIJdlWFkc3GqU4qhyPQd9
+ 4qsA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OklpkUup
-Subject: [Buildroot] [PATCH v5 3/8] utils/generate-cyclonedx: move utility
- function
+ header.a=rsa-sha256 header.s=google header.b=FcYCPRwp
+Subject: [Buildroot] [PATCH v5 5/8] utils/generate-cyclonedx: optional bump
+ to v1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,240 +128,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Move all the utility functions that are not generating CycloneDX
-structure to the top of the script and group the CycloneDX generation
-function together.
+See changes:
+
+- https://cyclonedx.org/news/cyclonedx-v1.7-released/
+- https://github.com/CycloneDX/specification/releases/tag/1.7
+
+Since some tools like DependencyTrack don't support CycloneDX SBOM v1.7
+this bump is optional and default remains v1.6.
+
+To allow generation of CycloneDX based on the current version of the
+spec we are using a 'Context' datastructure is created that reference
+the CycloneDX version spec currently in use.
+
+This Context datastructure is then passed down to functions that
+generate part of the CycloneDX SBOM.
+
+All the top level datastructure are moved into the Context
+datastructure that will be generated after the arguments from the
+command line are interpreted.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- utils/generate-cyclonedx | 178 +++++++++++++++++++--------------------
- 1 file changed, 89 insertions(+), 89 deletions(-)
+ utils/generate-cyclonedx | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 52fb8cc3e9..facbd6c78f 100755
+index 24c15df94e..cbce3364de 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -78,65 +78,48 @@ def br2_retrieve_spdx_licenses(version: Tuple[int, int]):
-     return ret
+@@ -21,8 +21,7 @@ import re
+ from typing import Mapping, Tuple
+ from dataclasses import dataclass, field
  
- 
--def split_top_level_comma(subj):
--    """Split a string at comma's, but do not split at comma's in between parentheses.
-+def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
-+    """Retrieve the list of packages that provide a virtual package.
- 
-     Args:
--        subj (str): String to be split.
-+        ref (str): The identifier of the virtual package.
-+        show_info_dict (dict): The JSON output of the show-info
-+            command, parsed into a Python dictionary.
- 
-     Returns:
--        list: A list of substrings
-+        list: package list that provides the virtual package.
-     """
--    counter = 0
--    substring = ""
 -
--    for char in subj:
--        if char == "," and counter == 0:
--            yield substring
--            substring = ""
--        else:
--            if char == "(":
--                counter += 1
--            elif char == ")":
--                counter -= 1
--            substring += char
-+    return [
-+        name
-+        for name, comp in show_info_dict.items()
-+        if "provides" in comp and ref in comp["provides"]
-+    ]
+-CYCLONEDX_VERSION = (1, 6)
++DEFAULT_CYCLONEDX_VERSION = (1, 6)
  
--    yield substring
+ brpath = Path(__file__).parent.parent
  
-+def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
-+    """This function will collect all dependencies from the show-info output.
+@@ -493,6 +492,9 @@ def main():
+                         help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
+     parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
+                         help="Specify the project version to use in the SBOM metadata (default: builroot version)")
++    parser.add_argument("--v17", dest='cdx_version', action='store_const',
++                        const=(1, 7), default=DEFAULT_CYCLONEDX_VERSION,
++                        help=f"Use CycloneDX version 1.7 (default: {DEFAULT_CYCLONEDX_VERSION})")
  
--def cyclonedx_license(lic):
--    """Given the name of a license, create an individual entry in
--    CycloneDX format. In CycloneDX, the 'id' keyword is used for
--    names that are recognized as SPDX License abbreviations. All other
--    license names are placed under the 'name' keyword.
-+    The dependency on virtual package will collect the final dependency without
-+    including the virtual one.
+     args = parser.parse_args()
  
-     Args:
--        lic (str): Name of the license
-+        ref (str): The identifier of the package for which the dependencies have
-+            to be looked up.
-+        show_info_dict (dict): The JSON output of the show-info
-+            command, parsed into a Python dictionary.
+@@ -501,7 +503,7 @@ def main():
+         sys.exit(1)
  
-     Returns:
--        dict: An entry for the license in CycloneDX format.
-+        list: A list of dependencies of the 'ref' package.
-     """
--    key = "id" if lic in SPDX_LICENSES else "name"
--    return {
--        key: lic,
--    }
--
--
--def cyclonedx_licenses(lic_list):
--    """Create a licenses list formatted for a CycloneDX component
-+    deps = set()
- 
--    Args:
--        lic_list (str): A comma separated list of license names.
-+    for dep in show_info_dict.get(ref, {}).get("dependencies", []):
-+        if not virtual and show_info_dict.get(dep, {}).get("virtual"):
-+            deps.update(br2_virtual_is_provided_by(dep, show_info_dict))
-+        else:
-+            deps.add(dep)
- 
--    Returns:
--        dict: A dictionary with license information for the component,
--        in CycloneDX format.
--    """
--    return {
--        "licenses": [
--            {"license": cyclonedx_license(lic.strip())} for lic in split_top_level_comma(lic_list)
--        ]
--    }
-+    return list(deps)
- 
- 
- def extract_cves_from_header(header: str) -> list[str]:
-@@ -169,7 +152,7 @@ def patch_retrieve_header(content: str) -> str:
-     DIFF_LINE_REGEX = re.compile(r"^diff\s+(?:--git|-[-\w]+)\s+(\S+)\s+(\S+)$")
-     INDEX_LINE_REGEX = re.compile(r"^Index:\s+(\S+)$")
- 
--    lines = content.split('\n')
-+    lines = content.split("\n")
- 
-     header = []
-     for i, line in enumerate(lines):
-@@ -218,6 +201,67 @@ def read_patch_file(patch_path: Path) -> str:
-     return content
- 
- 
-+def split_top_level_comma(subj):
-+    """Split a string at comma's, but do not split at comma's in between parentheses.
-+
-+    Args:
-+        subj (str): String to be split.
-+
-+    Returns:
-+        list: A list of substrings
-+    """
-+    counter = 0
-+    substring = ""
-+
-+    for char in subj:
-+        if char == "," and counter == 0:
-+            yield substring
-+            substring = ""
-+        else:
-+            if char == "(":
-+                counter += 1
-+            elif char == ")":
-+                counter -= 1
-+            substring += char
-+
-+    yield substring
-+
-+
-+def cyclonedx_license(lic):
-+    """Given the name of a license, create an individual entry in
-+    CycloneDX format. In CycloneDX, the 'id' keyword is used for
-+    names that are recognized as SPDX License abbreviations. All other
-+    license names are placed under the 'name' keyword.
-+
-+    Args:
-+        lic (str): Name of the license
-+
-+    Returns:
-+        dict: An entry for the license in CycloneDX format.
-+    """
-+    key = "id" if lic in SPDX_LICENSES else "name"
-+    return {
-+        key: lic,
-+    }
-+
-+
-+def cyclonedx_licenses(lic_list):
-+    """Create a licenses list formatted for a CycloneDX component
-+
-+    Args:
-+        lic_list (str): A comma separated list of license names.
-+
-+    Returns:
-+        dict: A dictionary with license information for the component,
-+        in CycloneDX format.
-+    """
-+    return {
-+        "licenses": [
-+            {"license": cyclonedx_license(lic.strip())} for lic in split_top_level_comma(lic_list)
-+        ]
-+    }
-+
-+
- def cyclonedx_patches(patch_list: list[str]):
-     """Translate a list of patches from the show-info JSON to a list of
-     patches in CycloneDX format.
-@@ -358,50 +402,6 @@ def cyclonedx_vulnerabilities(show_info_dict):
-     } for cve, components in cves.items()]
- 
- 
--def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
--    """Retrieve the list of packages that provide a virtual package.
--
--    Args:
--        ref (str): The identifier of the virtual package.
--        show_info_dict (dict): The JSON output of the show-info
--            command, parsed into a Python dictionary.
--
--    Returns:
--        list: package list that provides the virtual package.
--    """
--    return [
--        name
--        for name, comp in show_info_dict.items()
--        if "provides" in comp and ref in comp["provides"]
--    ]
--
--
--def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
--    """This function will collect all dependencies from the show-info output.
--
--    The dependency on virtual package will collect the final dependency without
--    including the virtual one.
--
--    Args:
--        ref (str): The identifier of the package for which the dependencies have
--            to be looked up.
--        show_info_dict (dict): The JSON output of the show-info
--            command, parsed into a Python dictionary.
--
--    Returns:
--        list: A list of dependencies of the 'ref' package.
--    """
--    deps = set()
--
--    for dep in show_info_dict.get(ref, {}).get("dependencies", []):
--        if not virtual and show_info_dict.get(dep, {}).get("virtual"):
--            deps.update(br2_virtual_is_provided_by(dep, show_info_dict))
--        else:
--            deps.add(dep)
--
--    return list(deps)
--
--
- def main():
-     parser = argparse.ArgumentParser(
-             description='''Create a CycloneDX SBoM for the Buildroot configuration.
+     opt = Options(
+-        cyclonedx_version=CYCLONEDX_VERSION,
++        cyclonedx_version=args.cdx_version,
+         project_name=args.project_name,
+         project_version=args.project_version,
+     )
 -- 
 2.53.0
 
