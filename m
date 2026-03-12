@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 123B4106ACD6
-	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 18:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D665106ACD6
+	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 18:40:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D036E405D8;
-	Thu, 12 Mar 2026 18:40:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E15E40685;
+	Thu, 12 Mar 2026 18:40:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4PS-jcR2wqkG; Thu, 12 Mar 2026 18:40:30 +0000 (UTC)
+ id iIaqGcf6VJDB; Thu, 12 Mar 2026 18:40:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 106B44058A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63DD740637
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773340830;
-	bh=KVVlN0fh074yF5gOqIzTvU/N4kG11yN8i3eBIbLMcOU=;
+	s=default; t=1773340831;
+	bh=9GtkBZf/X3eGmuwPcrvCExxh7GoHCRYmLNImXBDA5gE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=osCVMAf9Zy9ILMamSTqCMoV5zO8GdT2QHw8xOP9J3KGXROUh1LApciDTZfY2kwDDd
-	 eOigbYXsvDTIzmGk9xWFuQJMy7mWuhyRgoYYPpHFkwQYmPvO+i6lvIGK5ZESzQQRZD
-	 ynF2rE8SeqdNQKoxT5bJZbGis54RJPCFf3DwPEuYtlFcYsZe1hr3DXShq46s2woILn
-	 HY5EczlB5Pe2cHlPPqh5gtcn9Ac3I+iKuXagM6X/OLqigU+c78fyH4v6338fRvrsS+
-	 o0Pbv2PJoi+MLN53Y32/YG1OmeS4RA3ZCDO/VQZKDgD7BZ2FOJHAx2OkZpjm1QxhbB
-	 LohHhYMUS0EqA==
+	b=CipkuZ0lrIb/q5PXE34mlf8GcOLM+FbkMtR4TOOP318unjXomR5tghlRJIjGR5Rc5
+	 cAkBSurmgWdCUdUfXN/Bdga63FfXRHDiVWeA8wcSK/jTLhuWONKUIBl79N3FER4GK0
+	 3cENQqvFHZ2lY/gI1cZUT0a7Gtpl/wrl7e26q/1QOZusexFyC68rz0kX9dvzrKP9C8
+	 vB7eNz8EB8I8d3qlLk+tltPvMHBWo3Ui1TlksEtt5xDvCtZ4XVI36lV2Zx+h9JHwmw
+	 4Q0e4BA+O+avTRY7h0A/A2LOki3ZYRIjehS+TzmDa1XwhMETciYikIj8VwNMRlPfpv
+	 CU8Ov+Y1fpOLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 106B44058A;
-	Thu, 12 Mar 2026 18:40:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 40C5B786
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:40:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63DD740637;
+	Thu, 12 Mar 2026 18:40:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 312EB201
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 265BA40532
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21C5D400EA
  for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id klLffS_ntrKL for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J_h3V_0XGOh5 for <buildroot@buildroot.org>;
  Thu, 12 Mar 2026 18:40:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 793F340528
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 452E040119
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 793F340528
+ by smtp2.osuosl.org (Postfix) with ESMTP id 452E040119
  for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:40:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88C3287191; Thu, 12 Mar 2026 18:40:28 +0000 (UTC)
+ id 66B4E8718E; Thu, 12 Mar 2026 18:40:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Mar 2026 19:39:12 +0100
+Date: Thu, 12 Mar 2026 19:37:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cb77b494020ebf7f0572526a3bb12256029495e
-X-Git-Newrev: 42a29e88648d1faafcb5718f42d47407a848c2ab
+X-Git-Oldrev: e55952b17342ee7ae09cb73b862cd5572e0a00af
+X-Git-Newrev: 18b85442351e80099fd97d20cd4774b17fc9f2c4
 X-Patchwork-Hint: ignore
-Message-Id: <20260312184028.88C3287191@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/aarch64-efi/genimage-efi.cfg: use
- readable partition type
+Message-Id: <20260312184028.66B4E8718E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/aarch64_efi: switch to external
+ toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,31 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/42a29e88648d1faafcb5718f42d47407a848c2ab
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/18b85442351e80099fd97d20cd4774b17fc9f2c4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-genimage has an alias for the root-arm64 uuid [1].
+This commit switches the aarch64_efi_defconfig to an external glibc
+stable Bootlin toolchain, to follow recommendation from [1].
 
-[1] https://github.com/pengutronix/genimage/blob/v19/image-hd.c#L284
+Since an external toolchain is used, the linux-headers.hash custom
+hash file is no longer needed and is removed.
+
+[1] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/aarch64-efi/genimage-efi.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/aarch64-efi/patches/linux-headers/linux-headers.hash | 1 -
+ configs/aarch64_efi_defconfig                              | 4 +++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-index 158deab87d..207fc3e3bc 100644
---- a/board/aarch64-efi/genimage-efi.cfg
-+++ b/board/aarch64-efi/genimage-efi.cfg
-@@ -24,7 +24,7 @@ image disk.img {
- 	}
- 
- 	partition root {
--		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
-+		partition-type-uuid = root-arm64
- 		image = "rootfs.ext2"
- 	}
- }
+diff --git a/board/aarch64-efi/patches/linux-headers/linux-headers.hash b/board/aarch64-efi/patches/linux-headers/linux-headers.hash
+deleted file mode 120000
+index 5808d92afe..0000000000
+--- a/board/aarch64-efi/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../linux/linux.hash
+\ No newline at end of file
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index 3aa649cf9c..2bc6740eaf 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -1,5 +1,7 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_GLOBAL_PATCH_DIR="board/aarch64-efi/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
