@@ -1,115 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 709EFFED2F6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942D2FED2F8
 	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 09:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29A2284C03;
-	Thu, 12 Mar 2026 09:24:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB8D241C0A;
+	Thu, 12 Mar 2026 09:24:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U00FyTiUxowG; Thu, 12 Mar 2026 09:24:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CNN72u6qDyAl; Thu, 12 Mar 2026 09:24:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1295C84BF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D44B41B70
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773307473;
-	bh=KoR0zsvYXF9k0Hx1uSQ+RVHVLMTEdar7fwM+qFm6zMw=;
+	s=default; t=1773307471;
+	bh=jRTXVcaj6i2WLtYUVgy3Zd7ndA9Sh8YHLH1Vpchijdw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cfA/yzTFn6HMehWRczUetDZguOHPvaLQdvRcYpZaUGO55qSF4z1r0Y6A5bQjFrjkM
-	 KB0yOjHQ2xG58HMjz5BG34pZnujNFXQukJyvCAnFHOEDzI3zfHLQ1Wau2hAE/o8mYs
-	 7BbF2+vj+Jn2eY+YocDK3SSDQsnitHuJ5/T9LkTowIivfFen67Xl+cSRDpJBAVnkbH
-	 bfYQfknO5uAYsAtH/xvuvzmPWFIrASEN6H8D7z+w7Cu9MYcTQHaxQ9gCnt0wTuUh+6
-	 Lo4kAJr4Rqri4HhW0KuJIBj0IG2IiHnH8FGP2r5KY/QyASZtLp89UaBKt7hlDBI+lC
-	 +PJ+gFv88YIFg==
+	b=a+MuwpHbP0JWfu2OL+4QVUi5StaLdljgegAZOG1ZRTP9B6j6VHIg1EwmxDR14rpNy
+	 R9mAJYwIcHdiCoBdt11IGXQYKYWcSc/MToR6zc/sePDqCatn7bQq8iBYx4U+NvWGem
+	 n6dy9CiAc6Utz9hmhkKE1b2eivY8C2kmeViAbqrdEcJEpNRB9FOgvk+ig1pJdgH5y3
+	 gPzbsdje4dSCtURxqE4bdqv6u5461fgxdRE8wktvPXo9BzYh8k0VXJc+S2eYM429uh
+	 ChnVquJnCMTd3gJKjV+A291vkfyBfxaersuMC5TFjEeztYVa+terrfeix033B9ELIn
+	 HIv2MQ5CpLnvQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1295C84BF9;
-	Thu, 12 Mar 2026 09:24:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D44B41B70;
+	Thu, 12 Mar 2026 09:24:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 69664201
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 09:24:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BF479228
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 09:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F1B961C2C
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 09:24:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A500461C3D
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 09:24:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id No8JFxazoh_g for <buildroot@buildroot.org>;
- Thu, 12 Mar 2026 09:24:27 +0000 (UTC)
+ id PtM353ONnL5Y for <buildroot@buildroot.org>;
+ Thu, 12 Mar 2026 09:24:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6092761C3C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6092761C3C
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6092761C3C
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 09:24:27 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-482f454be5bso19954505e9.0
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 02:24:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B2BC61C2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B2BC61C2C
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B2BC61C2C
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 09:24:26 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-439afc58ac7so973354f8f.0
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 02:24:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1773307465; x=1773912265;
+ d=1e100.net; s=20230601; t=1773307464; x=1773912264;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=7HZOWhgWGxJ+zfJ+qNIrrLim6ZzdQsIg93aGs/6Ysxk=;
- b=g9T07JYIvL5UGxjCNaFSiOrOJLgx0CihikKkK4gFfm/hp5Ov5UUeJGCGg3oR65IhEI
- 2xMKvKG2lR+8fiI78oOJ2Rjm9KXZW1YR00drYC0ehkp/yROefuzknbtX8JTTRz1nlCHu
- UdBhYgBSkkw7cRrOyjE5VJBNidA7lnyTcsh4zAvJ5FNOONjD+3RUu8VTFnn8s4rqY401
- JDbWzfMxPRjCt6KruOwBqGYUUZA0vYDuzxHLsUcuABH5gqI/xRKiUQTZmhpvODkWRxjN
- mH0cevmFpnmg/fzpmtQwtc5M8R7EYRwImGrBx4ywdgOoatutCrcTgV0ITTPXyjPMbw4R
- yeIg==
-X-Gm-Message-State: AOJu0YwX7yVJ8kaHNsLfIGgVSZTRomGNmwWyVEC0LfF/3ZzmC6E4bXB8
- SKTufQGSzxIo/oM/lUVpyHhbIMGT3NHcUYdOrjAk8XhLjnn49S8FAkRG2Eobdobwg0G95FC+zt3
- cjG6G6Xg=
-X-Gm-Gg: ATEYQzz+WY1BG+W5iquMdNYeB1kOjfUEYjshbN6BstImpcyaSrf3zIC6Ldho+Ssb/35
- PPu8yqQx/yYgW+8cTBJ35uloVBwf3uaaUQ4Rg8j2oQS0l8iGxdcpNugBznPcQL9CHdT3G+oGUwY
- zmINO/zuTm5Ikvj8yCXQFIZW15w/C8fq4u1caS/OPDxfeF3yI0WsFpPh4GDLoiS0vNMLtrHXWtD
- wTMiC0tR8XkiqqzZ8bzi+KRMb33+tQWwffgnGTVpQgOkKjLL1U0RlAwWZUpqEjNM9zzEWO/fwjc
- gFXeqwj5JzkUuofb1dG843UR/RousAWeq+mokEMYp2D/2ypwSjEdPRjvWH1uw+fEPLAEj/0s+06
- ACSE5w7xXTDN8xgkiqh37//4KNjf5q3lVfr7JF3K6uowLf/SApwLmQTrgAxsuj/00MQSdWftkEw
- UeK7Ewox66qJOU/O2UHr0qyoY8SnoEhVgcW4WWDLJsnbt7ZG5vnjZswSjsdiVafUuJyDD5uZCjL
- 1Hym4WFXjO6CVB2LFEn
-X-Received: by 2002:a05:600c:8b5c:b0:485:3c11:de84 with SMTP id
- 5b1f17b1804b1-4854f599ac7mr40705495e9.14.1773307465092; 
- Thu, 12 Mar 2026 02:24:25 -0700 (PDT)
+ bh=66OVGE4Cr+1jUmI6/kDDrsBD8q4i9yX5gN/1MmFRFB4=;
+ b=kRDTBscHBTzSFRMyLzqUaIKHeGjU52Mm2m5Vflpip0hLvVsbq5krnlugpq9B5/32z2
+ i96whyiq/R03Qv8mbY9MA5PLaDynbxJgvtH6QKMKippiIFJ7e2OS6brbhWqTPRE8cLDR
+ fu/CKiqScPlICPewPpjgiIpfHJVmbAJlx9ScrObcUyVqqteWD5LEbeZquJhIZtsEeZTq
+ ZZ1Ep0OLmdkNJf3OS57CGiFdwj015KbV6FzI8TwHNv5QWifr3rexuVe7E0SE/cBcFg7d
+ qh+07zwHpCmGuHz5v40YyV2AKVhzVqOigKgbJkTuC7YC0KZZipWkzcWCwKfWhN+qu9Xi
+ kKFg==
+X-Gm-Message-State: AOJu0YwclT/5IAA8AJwI8LMU75958lI9riMCOVSqTvf+ClketSYbcQrN
+ NSDQuaE2+M2zA7l9ay3M/vQJgpS6Zi6EzCnL2b1BPGSt5rYseBUpjgRHD7TNGAwpgOV5kLwFIrv
+ WenRYivU=
+X-Gm-Gg: ATEYQzybedPRBGRy6WU9iX4iR63vzVJdzwaB+yvHmj877LkZe7oQGr7jwFz1QceX1Y/
+ aXuwBtHpAriCwNXCIUmFQ6O+Z4Faqz70ThE7JdyuBrtsfqH/e/ci4t6nTg5KIIxmfGwpJKJqp3C
+ LpCENX0RHx0QdXQP65FxqHuvd7up7qeI7gxy2T+jK3feychSE++a2bcm1gxt6MsEuhUCwmhOCrL
+ iEhf/4fBxNQVX/HnnKVAfrEILIjIhWGpKWkvQOXWVlLhjFxMkL1FuAn7GHkhXo1vqus0VcVldmQ
+ UtVxeyaUVi9WbfQbJ9G7af1CVOuteROS5Rf60KY5qYc6s6hpGX0z7MQIXbAzmAVV/MatqEgiMRa
+ B53R9lpUfY91+1uUE1bjjhXYj+Pqggl2aLdTdsCYVCU8DEAGCyxMIWF0IVtvIGt9K71eYgsvNe8
+ ZEJZ6ieArjuYpNUqQq9A/ZuTpB/B/jMLPKvh8usrv+P88PpAvEpomPjGoiwgGPpODmhynuZUOtu
+ qSUG2hoxEOlnXyWPKde
+X-Received: by 2002:a05:600c:c4b7:b0:485:304a:58cd with SMTP id
+ 5b1f17b1804b1-4854b0a4a4cmr93312025e9.4.1773307464027; 
+ Thu, 12 Mar 2026 02:24:24 -0700 (PDT)
 Received: from P-NAN-NAPALM..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48541b7f3cdsm243996485e9.14.2026.03.12.02.24.24
+ 5b1f17b1804b1-48541b7f3cdsm243996485e9.14.2026.03.12.02.24.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 12 Mar 2026 02:24:24 -0700 (PDT)
+ Thu, 12 Mar 2026 02:24:23 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Dowan Gullient <dowan.gullient@smile.fr>
-Date: Thu, 12 Mar 2026 10:24:12 +0100
-Message-ID: <20260312092413.545638-3-dowan.gullient@smile.fr>
+Date: Thu, 12 Mar 2026 10:24:11 +0100
+Message-ID: <20260312092413.545638-2-dowan.gullient@smile.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260312092413.545638-1-dowan.gullient@smile.fr>
 References: <20260312092413.545638-1-dowan.gullient@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1773307465; x=1773912265; darn=buildroot.org;
+ d=smile.fr; s=google; t=1773307464; x=1773912264; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=7HZOWhgWGxJ+zfJ+qNIrrLim6ZzdQsIg93aGs/6Ysxk=;
- b=Dd6wBj7Kjfdop5r3V+s3tG5atxsXilXLVEW4d4c7WXPssli9Tv2ud1jt495F2Rmw14
- GbBMAxlhN4Fo1l+e8QF4Yezvd1KuGVqLQs1Kcgo+d86CDyjSXEXTkwB9MDQZjCyRJPnO
- U5Nu6F3vw3JrD631tK3BWLO590YI3kDp0JGBQ=
+ bh=66OVGE4Cr+1jUmI6/kDDrsBD8q4i9yX5gN/1MmFRFB4=;
+ b=EzG74vtsjFnwQF9iOXP+NhLgoUanvCgdFHFeqIGKL47WS99UWdR5cAy+NBLs1y9fA8
+ guXOcofcEoNHoFyikyQo3KpB16ytTuSlz1Ca+1C0x2vSxEAZsSYAYad773kM/7Wp6Lfz
+ XyAjqtD79+J5oPOcoUKrho0x6RVBPDuxw9gfs=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Dd6wBj7K
-Subject: [Buildroot] [PATCH v3 2/3]
- toolchain/toolchain-external/toolchain-external-arm-aarch64-be: bump to
+ header.a=rsa-sha256 header.s=google header.b=EzG74vts
+Subject: [Buildroot] [PATCH v3 1/3]
+ toolchain/toolchain-external/toolchain-external-arm-aarch64: bump to
  15.2.rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -129,7 +129,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update the ARM aarch64 be external toolchains to the latest 15.2.rel1
+Update the ARM aarch64 external toolchain to the latest 15.2.rel1
 release from ARM.
 
 This involves:
@@ -137,23 +137,25 @@ This involves:
 - Updating the SHA256 hash in .hash
 - Updating the display name and GCC version dependency in Config.in
 
+Verified by booting on a default Qemu configuration.
+
 Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 ---
- .../toolchain-external-arm-aarch64-be/Config.in           | 8 ++++----
- .../toolchain-external-arm-aarch64-be.hash                | 4 ++--
- .../toolchain-external-arm-aarch64-be.mk                  | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .../toolchain-external-arm-aarch64/Config.in              | 8 ++++----
+ .../toolchain-external-arm-aarch64.hash                   | 8 ++++----
+ .../toolchain-external-arm-aarch64.mk                     | 2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index 3a71e1356b..c3592b9d20 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 8582fe0ec8..ae1298bfe2 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
 @@ -1,13 +1,13 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
--	bool "Arm AArch64 BE 14.2.rel1"
-+	bool "Arm AArch64 BE 15.2.rel1"
- 	depends on BR2_aarch64_be
- 	depends on BR2_HOSTARCH = "x86_64"
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+-	bool "Arm AArch64 14.2.rel1"
++	bool "Arm AArch64 15.2.rel1"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
 -	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
 +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
@@ -166,29 +168,32 @@ index 3a71e1356b..c3592b9d20 100644
  	select BR2_TOOLCHAIN_HAS_FORTRAN
  	select BR2_TOOLCHAIN_HAS_OPENMP
  	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-index 317fc10a09..95dead94d6 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-@@ -1,2 +1,2 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
--sha256  0ea5d00d0ba4c5d16bc8e140d434c54367516b568a146d724936c589a2f56aaf  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
-+sha256  f848f5b15d49217fbe8b3d72e1cc44eac06b096e6b66fa892898fa9c710a3c05  arm-gnu-toolchain-15.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
-\ No newline at end of file
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-index 381a591932..264e8bff71 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index 3f9c9cea71..9913974643 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
+-sha256  47aeefc02b0ee39f6d4d1812110952975542d365872a7474b5306924bca4faa1  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz.sha256asc
+-sha256  299c56db1644c135670afabbf801b97a42e5ef6069d73157ab869458cbda2096  arm-gnu-toolchain-14.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
++sha256  9a685b335bd709d683a8c782253c37e8c36c10e6924e59e39d4769b02132eb43  arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz.sha256asc
++sha256  97e3f600c00413088bb21109475443f9a1c57b4f75336a6e820acd43b065f875  arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index cbc923bee5..5ddb5e10c1 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 14.2.rel1
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 15.2.rel1
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 14.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 15.2.rel1
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
  
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-$(HOSTARCH)-aarch64-none-linux-gnu.tar.xz
 -- 
 2.43.0
 
