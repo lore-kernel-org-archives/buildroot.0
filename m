@@ -1,89 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1D0EFED2CC
-	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 05:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04230FED2D9
+	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 07:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73B1A61CBF;
-	Thu, 12 Mar 2026 05:26:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bauE1LmW4EjR; Thu, 12 Mar 2026 05:26:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9290361CC8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773293202;
-	bh=M6+91c/ccUcrWG45ZsKtqD83ShmPjGZTFDLRTSmaVAQ=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=by1gkscFbYk1qGeXk6WL696dtnvdiDP12K3QEOdIzfxvKvA6+eS0uA5JEqnoPRYP7
-	 KIkW2vZUDg31IB8ExphzaaQ9nMdwm0fZbXmoRmzI1ASImnKODzc6UccU648HwPH/zS
-	 5OrYqAAjdeVT9lG9LUgxX/T2wAcFagRRi+MSU7uZe2JW7+qamyaIjljtkRl22qHv/g
-	 nd1HA2GK454ljp2G4xfj+fKHNNGzNcSWzjXa0ysFk7sphFYXBuJga16D2m4CpWcEcq
-	 cktbnarT8GaV0Bm4EadD5N4kcHjUOsn583bWLqAghcH80ZscaaDY1R5fy470P9pBti
-	 svOYD79YuKeiA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9290361CC8;
-	Thu, 12 Mar 2026 05:26:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6693B282
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 05:26:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C88E8133B
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 05:26:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8C6A84D2F;
+	Thu, 12 Mar 2026 07:11:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6-cK8B-1zR3V for <buildroot@buildroot.org>;
- Thu, 12 Mar 2026 05:26:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E4E78811E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4E78811E7
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E4E78811E7
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 05:26:39 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0199.dip0.t-ipconnect.de [91.58.1.153])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 01333A4C0337
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 06:26:22 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54452)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w0YYw-000000001zG-2wRc
- for buildroot@buildroot.org; Thu, 12 Mar 2026 05:26:22 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 12 Mar 2026 06:26:22 +0100
-Message-ID: <20260312052622.486465-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260312052622.486465-1-bernd@kuhls.net>
-References: <20260312052622.486465-1-bernd@kuhls.net>
+ id b2dDkoG3zJRN; Thu, 12 Mar 2026 07:11:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DC5284D2B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773299474;
+	bh=8/rI+90XJkE02Ns7muP5984/cuWixFpCwb2FTPw1vKw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=qD6rmJ1Zk8ZpLzKcT6X34qsFzpWUnG3kRlQOqjO7ul+wniZMOsUWPwlqMk056GVVI
+	 KM5glYqQkuN9uDDCeYPbCWkPq2TcW4VRoDyT16BuhZdrRdESW4pI7N2Ffxkl5ZUvPK
+	 znmUtGr4mgxOTmQ9O33gNacGq8nzbt3dgl/JKEJT1N7XzIv/K+aiC7ALgTWdfj5tW3
+	 Jllp5Vh0vkfCz0sTc3b2k1sHhGtbwFmpfny2khjl9ehwMhOgZWhhGc52uBHuHc3dd/
+	 AKFL1mDT485HWDT1yLrhadqrl5XbLy+JbLxIzsca3O4vHvbd4E+u2cyTNTXGaA6B5p
+	 s757G6lHwPT0w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DC5284D2B;
+	Thu, 12 Mar 2026 07:11:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CECD4282
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 07:11:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4A2941B6A
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 07:11:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4lQfDfhswX6V for <buildroot@buildroot.org>;
+ Thu, 12 Mar 2026 07:11:11 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 90B4041B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90B4041B6C
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 90B4041B6C
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 07:11:09 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 6CCE6BDE3A77;
+ Thu, 12 Mar 2026 08:11:06 +0100 (CET)
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1773293183;
- bh=0A3e1g/Dmgb1LehDLOp4yRKLWFAoPfisExQXNTVjr6g=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=KsgjLGypV0TgArLPFOROhj9DO2SPW1PsMFcOPJ+29vMe6PZtmk4YLHb7U+RoYIPRl
- rAAYSNIKtpJeZkNoyXhr6im4eGmH15RrZdqu+wMJUeTaXIozFGbkPrvjAp5eomRN7l
- IDi0vkL4k/P2+hIHWghRItRfMEkG/6nINa/PFq4RSueamz2fxDw2eFz4IOnpRSLe8U
- pq69LivfReoIbMgmwTShFl/fZFLUzNqqoNnde3W0mQYmD6yewwNwhXU4syoaEjHnpU
- h/5NBDjYibXcXx8S99UZjs8aC2jGa9IU6sKquYX2QOvs7r7zPZS/3EGiJsaeHZVNkM
- fboJg75QxEICw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=KsgjLGyp
-Subject: [Buildroot] [PATCH 2/2] package/kodi-screensaver-rsxs: remove
- dependencies to gli & glm
+Date: Thu, 12 Mar 2026 07:11:06 +0000
+From: Andreas Ziegler <br025@umbiko.net>
+To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Cc: buildroot@buildroot.org, guenther.harrasser@mobileye.com, Chris Packham
+ <judge.packham@gmail.com>
+In-Reply-To: <20260311173338.167112-1-jimmy.wesolowski@mobileye.com>
+References: <20260212110116.2451538-1-jimmy.wesolowski@mobileye.com>
+ <20260311173338.167112-1-jimmy.wesolowski@mobileye.com>
+Message-ID: <0692703c261f86d7f708093b729ec3a8@umbiko.net>
+X-Sender: br025@umbiko.net
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1773299466; bh=pxlJERUkoKc6VcHuXuyoX9RLyVdXl7Z1yBDUW8QQKVc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=5rXWeQa3eCNq4ReaWS0uH6K4p51/QejsssNffDkZrLjwyEn6UalEKTyt091DSWf2r
+ lYnvoViQTbrux1pfJg6cFSjBRcPw6wYQ5MramgwR2inxMogWnjXEJBCOvH6l6D3pTJ
+ rBCkmMZgNWXkQDDitYtwQmjQfl1Nh/Fo9QOvY1TI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=5rXWeQa3
+Subject: Re: [Buildroot] [PATCH v4] package/coremark: use USE_PTHREAD when
+ possible, allow custom CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,50 +90,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream commit
-https://github.com/xbmc/screensavers.rsxs/commit/a00a3cce3c5f24ea7274968b5b16c8d2db656a8b
-added the code of gli & glm in-tree and removed the usage as external
-packages.
+Hi Jimmy, ALL
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/kodi-screensaver-rsxs/Config.in                | 2 --
- package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Sorry for another iteration :-(
 
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
-index e88df1fe49..8185f3c424 100644
---- a/package/kodi-screensaver-rsxs/Config.in
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
- 	bool "kodi-screensaver-rsxs"
- 	depends on BR2_PACKAGE_KODI_RENDER_SYSTEM_GL
- 	select BR2_PACKAGE_BZIP2
--	select BR2_PACKAGE_GLI
--	select BR2_PACKAGE_GLM
- 	help
- 	  RSXS screensaver add-ons for Kodi
- 
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index 10539b4c37..54d054ebb4 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -8,6 +8,6 @@ KODI_SCREENSAVER_RSXS_VERSION = 22.0.4-Piers
- KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
- KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_RSXS_LICENSE_FILES = LICENSE.md
--KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm kodi
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 kodi
- 
- $(eval $(cmake-package))
--- 
-2.47.3
+On 2026-03-11 17:33, Jimmy Durand Wesolowski wrote:
+> This passes -DUSE_PTHREAD to coremark CFLAGS
+> BR2_TOOLCHAIN_HAS_THREAD is set, and allows passing any additional 
+> custom
+> ones defined in the Buildroot configuration.
+> 
+> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - do not add mips-i6500 through a patch, but copy it through rsync
+>     in POST_EXTRACT_HOOKS (suggested by
+>     Andreas Ziegler <br025@umbiko.net>)
+>   - allow specifying a port directory to use through kconfig, such as
+>     mips-i6500. The default stays linux for 32-bits architecture,
+>     linux64 for 64.
+>   - allow passing extra PORT_CFLAGS through kconfig  (suggested by
+>     Andreas Ziegler <br025@umbiko.net>)
+> 
+> Changes v2 -> v3:
+>   - do not include the mips-i6500 files as they are redundant with
+>     the linux port. (suggested by Andreas Ziegler <br025@umbiko.net>)
+>   - fix indentation in Config.in and coremark.mk
+>   - drop the ability to pass custom port (no longer necessary).
+>   - adapt the name and description of the patch accordingly.
+>   - author and signed-off-by reset due to patch significant changes.
+> 
+> Changes v3 -> v4:
+>   - add -lpthread in CFLAGS (since only CFLAGS are used to compile
+>     and link).
+> 
+> Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+> ---
+>  package/coremark/Config.in   | 10 ++++++++++
+>  package/coremark/coremark.mk | 14 +++++++++++---
+>  2 files changed, 21 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/coremark/Config.in b/package/coremark/Config.in
+> index f0e13eda63..2f3b6f9551 100644
+> --- a/package/coremark/Config.in
+> +++ b/package/coremark/Config.in
+> @@ -6,3 +6,13 @@ config BR2_PACKAGE_COREMARK
+>  	  used in embedded systems
+> 
+>  	  https://www.eembc.org/coremark/
+> +
+> +if BR2_PACKAGE_COREMARK
+> +config BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA
+> +	string "coremark port extra CFLAGS"
+> +	default ""
+> +	help
+> +	  Additional CFLAGS to pass to CoreMark platform specific port.
+> +	  Any additional flags indicated here will be added to the
+> +	  CFLAGS_PORT variable.
+> +endif
+> diff --git a/package/coremark/coremark.mk 
+> b/package/coremark/coremark.mk
+> index 9ea8693e71..38d8ce99ec 100644
+> --- a/package/coremark/coremark.mk
+> +++ b/package/coremark/coremark.mk
+> @@ -9,14 +9,22 @@ COREMARK_SITE = $(call 
+> github,eembc,coremark,v$(COREMARK_VERSION))
+>  COREMARK_LICENSE = Apache-2.0
+>  COREMARK_LICENSE_FILES = LICENSE.md
+> 
+> +COREMARK_CFLAGS = \
+> +	$(TARGET_CFLAGS) \
+> +	$(call qstrip,$(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
 
+Qstrip unfortunately removes _all_ double quotes from the string. 
+Escaped strings, as in
+
+BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA="-DUSE_CLOCK=1 
+-DMEM_LOCATION='\\\"LPDDR4-3200\\\"'"
+
+(entered as -DUSE_CLOCK=1 -DMEM_LOCATION='\"LPDDR4-3200\"') thus get 
+mangled and confuse GCC. Running the string through 'echo' works, it 
+just removes the outer quotation.
+
++	$(shell echo $(BR2_PACKAGE_COREMARK_PORT_CFLAGS_EXTRA))
+
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +COREMARK_CFLAGS += -DUSE_PTHREAD -lpthread
+> +endif # BR2_TOOLCHAIN_HAS_THREADS=y
+> +
+>  define COREMARK_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) \
+> -		PORT_CFLAGS="$(TARGET_CFLAGS)" \
+> +		PORT_CFLAGS="$(COREMARK_CFLAGS)" \
+>  		PORT_DIR=linux$(if $(BR2_ARCH_IS_64),64) EXE= link
+> -endef
+> +endef # COREMARK_BUILD_CMDS
+> 
+>  define COREMARK_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D $(@D)/coremark $(TARGET_DIR)/usr/bin/coremark
+> -endef
+> +endef # COREMARK_INSTALL_TARGET_CMDS
+> 
+>  $(eval $(generic-package))
+> --
+> 2.43.0
+
+Kind regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
