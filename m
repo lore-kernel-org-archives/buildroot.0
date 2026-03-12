@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02486106ACCB
-	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 16:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32555106ACCB
+	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 16:39:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7A0E84AC0;
-	Thu, 12 Mar 2026 16:37:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF48241ECF;
+	Thu, 12 Mar 2026 16:39:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GEYtpxB5rU7l; Thu, 12 Mar 2026 16:37:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FB71l87fmat8; Thu, 12 Mar 2026 16:39:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBF6084D5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26B8D41ED0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773333477;
-	bh=q4hvgAuwS/B4IxsNeEdO8WSd+hbERM7Mvyoxcr9CfNQ=;
+	s=default; t=1773333543;
+	bh=C2GuQHlyWwCWkvI0s8mPrHF4JHhrsiukBdNmHVLOByU=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=T8Vbzj/uT7dBGWHXzim2GfPl9qZDNBKUoRcatQZFsmBd3Pqumq/e4n83crjuPhY+h
-	 52JjCRnKSaKsVS1cZwfGKyxOfwWcnCo6cyzai5p04N1RIxfaSGodvhUO2EzbJyjX0z
-	 i62YiyMWbQU7d40WyQ4AkgJKtyZdzJe2Qb+Q0beAgNSWr7v/4kX/NJf3LDrOezls2X
-	 kgX165MQe1OZWrhzDaA+OyyXJ96ky51sZTW45GX5I4XS5l7q13lolCIG5gvSyR3Lzm
-	 JwdR8iDVUSu0dZV+dZtkgvi9ris3tZgqIHGRG5zw4YHqCWYD0Ms33LQPuc/xfUqF1q
-	 lLPkh6cDRz6DA==
+	b=V6r5B9WwCoCcrM5LxnVTaAU6Udzgs8/zxhJg9KxPq2V1Ou0iBmuulm6h79sJ1ByAq
+	 lfK7L7EvVZYkkwlCjwmYrMo06vbXsUWW1JjYQtH9y86ir/pXrmihLB1G3jjvQW87VB
+	 ZZyAFl6I07bdh84kbMEDOFQO/w44GkdtiLR/lWDskLL3R1kyaCIq6ZxRCrUdVg9pcL
+	 Ke0wro1r5h1WFUo3/ZNFgfZcWLlqp3mtVhk2y8XU+MoJNqs7hQfvC/KN0uoT0OFAQj
+	 nfxeXMGaurn6AssVmqF+syhCbibeBEBiLqfl2BSPJ8+uwF4G+1eM6KoSLoMpFofew6
+	 9f4mGoi27gskg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBF6084D5B;
-	Thu, 12 Mar 2026 16:37:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E1F9201
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 16:37:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26B8D41ED0;
+	Thu, 12 Mar 2026 16:39:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1236D201
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 16:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33DB7616C8
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 16:37:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03EA7403AD
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 16:39:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qHp2IR9n-8HT for <buildroot@buildroot.org>;
- Thu, 12 Mar 2026 16:37:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GovVe_Zhb5Fz for <buildroot@buildroot.org>;
+ Thu, 12 Mar 2026 16:39:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EDE2C60FBB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDE2C60FBB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9D7AE400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D7AE400E4
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EDE2C60FBB
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 16:37:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9D7AE400E4
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 16:38:59 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0199.dip0.t-ipconnect.de [91.58.1.153])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B8C7FA4C066D
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 17:37:37 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37448)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BBB9CA4C066D;
+ Thu, 12 Mar 2026 17:38:57 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34426)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w0j2X-000000002wq-36pW
- for buildroot@buildroot.org; Thu, 12 Mar 2026 16:37:37 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w0j3p-000000003C0-3D7q;
+ Thu, 12 Mar 2026 16:38:57 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 12 Mar 2026 17:37:36 +0100
-Message-ID: <20260312163737.3178306-1-bernd@kuhls.net>
+Date: Thu, 12 Mar 2026 17:38:57 +0100
+Message-ID: <20260312163857.3178450-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: ++++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773333457;
- bh=9eLY7EvsY60Yiy+eE4TsVFrutgZL+JO3LtiBIvFkS/8=;
- h=From:To:Subject:Date:From;
- b=QsDIMyUaHzGqyA2wm3w0+HY6tz/aDensjpM7e9Q/5dcM4rotFSfiv379sVXzVZVuk
- 9kZwmgtmweNjW6DmhAKuTeK+DY6F1P2fvNXWW+AUlIYs+Lk7OzwQO9PcF3v/OLntA7
- AEL0Ebgn0VJDtyPEFlaO6E+GegPVz245KUBOp9zwB/yYMPanEtqU3K3se51dGjMRma
- m9yBQASYzl49JkCNC75i2qrYXSU9URfSCkqx4uu7/YeeyeiwnW2pNUyvlE+gjyu/zk
- jPBExBEn9jIED2IafEl4HzNOl0AD0HV4MmaXg0X0Kqz//A88/odq5MII4Hjq4f6BhS
- EUUG1LBjTsoLw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202511301023; t=1773333537;
+ bh=Kq2T2satbdzaKUIKMlx0Ws3gN/c6TFYiMf6Xi7euqXo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=gdNC+vHvphoZa4W0/Tv42GGE/sYdL3Qmbp9Z4b51X7xSfcHJjH/9vuMjqkH8nOMNB
+ FLRXS3e7IrR/DhigWL0hnKjhwxd8rNrViOx8gCxMIG1Ki+IpU8CgpGuNvWxpl1sdX7
+ lWNKoeqvGG1r6+b6YZV7WnLWwgFuJbz9O8hpyXfIaozCOUafmMbxG3aXXVOSAz38MG
+ QCTvXxiBzh7MBl475KJT5zBgIbMczxYQ/me8zhTpGQUCvzwr3Zy5R69nuM8qI7aLYe
+ dj0RXfL9f7EKsYN5RZGHxbSSRt5snqkWve8OfSQzIx//6t9otohfgD1KubjaTz9L7K
+ vqIfztZ+QQJDA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=QsDIMyUa
-Subject: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version to
- 26.1.4
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=gdNC+vHv
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: security bump to version
+ 8.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,36 +97,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/intel/media-driver/releases/tag/intel-media-26.1.4
+https://curl.se/ch/8.19.0.html
+https://curl.se/docs/security.html
+
+Fixes the following CVEs:
+
+CVE-2026-3805: use after free in SMB connection reuse
+CVE-2026-3784: wrong proxy connection reuse with credentials
+CVE-2026-3783: token leak with redirect and netrc
+CVE-2026-1965: bad reuse of HTTP Negotiate connection
+
+Switched to sha256 tarball hash provided by upstream.
+
+Updated license hash due to copyright year bump:
+https://github.com/curl/curl/commit/e83c82f05f9b714086e62db9fe2ea9be522239bc
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 9 ++++-----
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index d4cb4dac07..350a3c8761 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6e0483625eec81aad52984cc08cc2cb38ee571ab2efd93b0d33b0c31611b0a13  intel-media-26.1.3.tar.gz
-+sha256  dd9132c69d68702b87520d9f4a4ee51796d67cb164e8befbcd024257369edba7  intel-media-26.1.4.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 6fe62ca8cd..a3f64d0542 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index de3f2402e9..5aec080ef9 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,4 @@
+-# Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.18.0.tar.xz.asc
+-# signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946  curl-8.18.0.tar.xz
+-sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
++# From https://github.com/curl/curl/releases/tag/curl-8_19_0
++sha256  4eb41489790d19e190d7ac7e18e82857cdd68af8f4e66b292ced562d333f11df  curl-8.19.0.tar.xz
++# Locally computed
++sha256  82f2f4427d6545ee5aaac4f0b80428da6cc8ba41c2cf5da3a03680ec327b9681  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 7ebf26c3b1..3d00a4a33a 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 26.1.3
-+INTEL_MEDIADRIVER_VERSION = 26.1.4
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-LIBCURL_VERSION = 8.18.0
++LIBCURL_VERSION = 8.19.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.47.3
 
