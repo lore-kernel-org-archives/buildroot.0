@@ -4,59 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B61BF106ACCD
-	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 18:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C60C106ACD6
+	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 18:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 159F34074F;
-	Thu, 12 Mar 2026 18:30:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3336C40788;
+	Thu, 12 Mar 2026 18:31:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mahy5prscZCM; Thu, 12 Mar 2026 18:30:42 +0000 (UTC)
+ id uTY22D48Nd3l; Thu, 12 Mar 2026 18:30:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4242D4073F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33F4040769
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773340242;
-	bh=59wfvnnEbO3Bzxjgl8NeQD71Hcg6kRmOwgzgPCpScao=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ktIcYDcHFZlY5GzCRyQ5OcKJXbeYsm+czVKnlprHwf7p4xmRpwFVwVdZwBYWd6kHW
-	 uNQT1ihmiJFQeQk2VwfLMzF0nOP6lHzHKQs4Shp3wD9s0qAUy1XUiOBS20Ats7bK+T
-	 t2Hyfs2nKH0NrJkK7RjqyXkWbQ2CS9fzrDna5dAmPnEJjVJNfjAjsSfAZNt+/eYD9O
-	 CGBKMtXUS9d7eYa9JRak+5YbHOapMSLZforFbFz3rkOr/SL7eC6Q2q+w8Lsh8FW1nZ
-	 KJ/SejLy0yZiOJHoefP0iJASuyHfjnoLlH8IXr1AnXc/yVnTRCBZrNAvkf2s6YOXeB
-	 ZUvURt3oK/qpw==
+	s=default; t=1773340259;
+	bh=ywmZiDgWGxJc5qni7jHDHCnPXLxN4a1wclZ+NEfQ8Io=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=U3FS6J91+HLfG2eSQNOjIyhPuQ7Dj8H4EeYnMu4RU5j+zLA5h4weUu70M/pf12brf
+	 B7zmQ0yvxOD3t35qHqg+cEjEDJ7mNZgHvdjgonhxT3Da2lgKRpbjYbuf1NE7bd3drt
+	 SgJC19nUJoFD8We4ph6xetNp82DsY+oBuvkmvfZwY7F5ADys8klmimZ9brtvqOF7WG
+	 p1ZB3ZBZNailjf3qzt1SEVnYLNjyfgbNDVVt6G6Hs6+bNqU91LR4LaIPBueDLiM008
+	 x7ZsW2D4rKYXoo1KOfinNu1YhFTkRob8V1x/mR3GfuSRBpOuu2o9MdHUvgM2oGQzQU
+	 cGxAkXyXc7t0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4242D4073F;
-	Thu, 12 Mar 2026 18:30:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AEE67786
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:30:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33F4040769;
+	Thu, 12 Mar 2026 18:30:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B41D2201
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 949714073F
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:30:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99F12606B1
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:30:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hsv1kpkNAImH for <buildroot@buildroot.org>;
- Thu, 12 Mar 2026 18:30:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B89040737
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B89040737
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:30:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE3678708E; Thu, 12 Mar 2026 18:30:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 12 Mar 2026 19:23:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccf727ab96af0ad58b432fa9ed2aed8680649f3a
-X-Git-Newrev: b08ac7636dc7b2753592989dc5fe73959e0f6507
-X-Patchwork-Hint: ignore
-Message-Id: <20260312183039.BE3678708E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openblas: bump to version v0.3.31
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TvHoIbsbCnle for <buildroot@buildroot.org>;
+ Thu, 12 Mar 2026 18:30:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 878F1606AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 878F1606AA
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 878F1606AA
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 18:30:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 336D219F576;
+ Thu, 12 Mar 2026 19:30:52 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 12 Mar 2026 19:30:52 +0100
+MIME-Version: 1.0
+Date: Thu, 12 Mar 2026 19:30:52 +0100
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260118150726.245853-1-ju.o@free.fr>
+References: <20260118150726.245853-1-ju.o@free.fr>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <be1a9843279fd17dc0ac13cb085a577d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1773340253;
+ bh=itbnWqcrnk4rMItkzmMA1KnblmC6RYdzLoouuU3kfvE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WxvSS/syvj5LnEgbtnLFHhWyFYskdSnk1V7QDNNIe3uLI1SyFXgV8YNYQ+ida3vjx
+ 1bdXX+g9tkMNNvJdfIYfVlBAYwzC1YICPq0/xoc5eQ/1tpYM0zPsWxitinecwNTntX
+ j0/zFNuv9Oo5D7iHQfQ8Z+DLOWtxwP9x7uK/kw3btvFpoQ3KJ3wTEQyU7PLVeUJXgG
+ 8ctqYmr1bMAcy3hrciynDm4H63E6GSz6h8b7F5XK6fgFo7R0XRins2AjGgk0CD3Zfk
+ wZHdhdDGckdGaM8zKJ8QUZHkN+g0u19pWltzjVLoplkv2gz50EaxD0P8c/pUHvENcP
+ o+lR89h5mMhYQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=WxvSS/sy
+Subject: Re: [Buildroot] [PATCH 1/1] package/openblas: bump to version
+ v0.3.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,50 +96,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b08ac7636dc7b2753592989dc5fe73959e0f6507
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 18/01/2026 16:07, Julien Olivain via buildroot wrote:
+> For change log since v0.3.30, see:
+> https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.31
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-For change log since v0.3.30, see:
-https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.31
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/openblas/openblas.hash | 6 +++---
- package/openblas/openblas.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
-index 965d7458ba..e97e32271a 100644
---- a/package/openblas/openblas.hash
-+++ b/package/openblas/openblas.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.30
--md5  8db3d57f4d4485c6ae3f21ea465660e7  openblas-0.3.30.tar.gz
-+# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.31
-+md5  05050271d9196f65bc4ac3a89c6a3b05  openblas-0.3.31.tar.gz
- # Locally calculated
--sha256  27342cff518646afb4c2b976d809102e368957974c250a25ccc965e53063c95d  openblas-0.3.30.tar.gz
-+sha256  6dd2a63ac9d32643b7cc636eab57bf4e57d0ed1fff926dfbc5d3d97f2d2be3a6  openblas-0.3.31.tar.gz
- sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index edab26493d..d56934e41a 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENBLAS_VERSION = 0.3.30
-+OPENBLAS_VERSION = 0.3.31
- OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
- OPENBLAS_LICENSE = BSD-3-Clause
- OPENBLAS_LICENSE_FILES = LICENSE
+Applied to master.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
