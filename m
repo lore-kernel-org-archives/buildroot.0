@@ -1,86 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4776C105A583
-	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 11:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71548105A583
+	for <buildroot@archiver.kernel.org>; Thu, 12 Mar 2026 11:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD1D86149A;
-	Thu, 12 Mar 2026 11:12:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30AB44184A;
+	Thu, 12 Mar 2026 11:13:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCGylLxGDMiy; Thu, 12 Mar 2026 11:12:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0Qn4u8caCek0; Thu, 12 Mar 2026 11:13:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A1C661470
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5153441768
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773313954;
+	s=default; t=1773314020;
 	bh=0mQBSCacwlVNaKeZwXLdt+uBjEIQ0/pLxXeRXp8nWxE=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=Czt9dXtMI6WgaaIj15YLGHW72Yh0VzMyIT8Ajuoi4IbzmWxAKTirSRu/Nw762vVwG
-	 sAXopfY3AwJNIHUFrmIaV1UG06CasZB//IpzaygFfCDBd1xbB4x72YIFqP3vXKJ7Ar
-	 5mRi7QQzXvxZ8+Lu/JXAjpHcjr2tp0+y2PP8JytGEBhIAvVmoqASM5nVSNV+Sv/b9h
-	 7S7rSFjXlYJHBepdF0qw4ZgJQMi0I6mINUDIXIQsl+poPIoGfxOulmEWwBddOMLikd
-	 ntDNipYOceTq9iCnz7gji2H3YZspSiAtH2xC0DdAVj1Ek/2vj8QFVyfUdWb8oAntAP
-	 eyyGtGuUWOQnA==
+	b=GU8JGlCXa4aH6DOkpH0mxS4jQ3q5Tl7rgYStjWhI3cGulPjWyy6yUxbr5OWqtI8hi
+	 nilmYYCQI9eRXFMaIXlfSXUMgD1PpZ8cMHSzK/IDCIz43uwSLnu/y4o7e/hYmr4VlW
+	 l93XzH0QIes8LzqgMaMB0wJ+5ZZoPN0VkbM7yIV17flDRJ4blzvyF+JK2076ihZsi8
+	 Bt0fKEAqA/QZD692vwmM42ZF5ary66fEn5gSR5GIuH3ffjAb+WLUKbiZRoRPmK6Jfk
+	 uKq+Uwk9q9T84oUtPX1WIk7zQ6eKyvo7xhwLoxgOynOJsZ9BvWJ4KnTkpLWQ11GI5/
+	 XDgLIRaHo4JgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A1C661470;
-	Thu, 12 Mar 2026 11:12:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A98E228
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:12:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5153441768;
+	Thu, 12 Mar 2026 11:13:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A5F7282
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FDF961470
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:12:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C25B409F2
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:13:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oC9b5yyv8I_T for <buildroot@buildroot.org>;
- Thu, 12 Mar 2026 11:12:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=kory.maincent@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eU4HVlJdX0jj for <buildroot@buildroot.org>;
+ Thu, 12 Mar 2026 11:13:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4A6AC6146F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A6AC6146F
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4A6AC6146F
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:12:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 64DA7401F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64DA7401F3
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 64DA7401F3
+ for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:13:37 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 5E2FF1A2DF2
- for <buildroot@buildroot.org>; Thu, 12 Mar 2026 11:12:27 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 72C414E42658;
+ Thu, 12 Mar 2026 11:13:35 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 1F8FC5FDEB;
- Thu, 12 Mar 2026 11:12:27 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 4A7525FDEB;
+ Thu, 12 Mar 2026 11:13:35 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id ACB9E10369D8E; Thu, 12 Mar 2026 12:12:23 +0100 (CET)
+ with ESMTPSA id 2F55210369D92; Thu, 12 Mar 2026 12:13:34 +0100 (CET)
 To: buildroot@buildroot.org
 Cc: Louis Chauvet <louis.chauvet@bootlin.com>,
  Kory Maincent <kory.maincent@bootlin.com>, thomas.petazzoni@bootlin.com,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 12 Mar 2026 12:12:16 +0100
-Message-ID: <20260312111218.390784-1-kory.maincent@bootlin.com>
+Date: Thu, 12 Mar 2026 12:13:30 +0100
+Message-ID: <20260312111331.391639-1-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1773313946; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1773314014; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding; bh=3jUaVqVpvzH5MM6tZBYHPJ1CjJ4kWyFX4jUHkguF1MM=;
- b=NBCsWXCdm00fiJy46ZKWkdoIRGMlIWHsao0lXRbYhQy2UgvXFdb955UKaEssV2ahIXchiE
- ZHm8EFCIcQgxKnZgV3bnPf3wB0tzyMOf4jEBJG87/D+ww3iAS7pfJh/O5aaJyD3dMSt19E
- nwDlZWN40UlaIiQTBcS5oiqZCRQkb6ZDXVhaDqWL5f3LqX6wHmuSf3F16zPrgqCv1WX23k
- loWbrV/oOXSk0zxkGEy8MgzL0hVwAqIjG5qKmmUM2994WlVI0feCEUQpYp8ehcQFakA8Ar
- gbL6GDhRl+oYnubOZlItsfSphNX0+Da7UZvGMA1hu9jTKyF3N6aIjI53Dn9SDQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=QCetkjH9qzBBkexMAV162ZBecl4LDZt4IdzVR9jcr0zy+egcYldCZEq09yqgj7+rq5Jazh
+ s1dU9HXqgaiyu6QEeruGzubZpbsSbM9MRfzFjCubatbP///SWfFYJr2lXuRDTDsGA8Kp7z
+ Emz0V1FsxuUl3P7BCGMc18ULrNMX49jDQWtttWQcpZYavcPsZusL1zP/EzIkovZuwJydC9
+ CHfoc4I6E1V82auJnRRleX0K7atYWhK5Bzc5f5ct5PKuZr7G7nm0O99f8wDIDvYmXJtPJU
+ LzVIywasMovvhSNxwSLG6i5aPxOCCNZHR3JSKF1egm6jo5OzHEDJW59uKEVebg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=NBCsWXCd
+ header.s=dkim header.b=QCetkjH9
 Subject: [Buildroot] [PATCH] package: Add drm_info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
