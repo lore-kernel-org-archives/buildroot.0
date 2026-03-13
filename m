@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739EB107BCE6
-	for <buildroot@archiver.kernel.org>; Fri, 13 Mar 2026 20:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63615107BCE2
+	for <buildroot@archiver.kernel.org>; Fri, 13 Mar 2026 20:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48CD260E18;
-	Fri, 13 Mar 2026 20:55:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDE0181206;
+	Fri, 13 Mar 2026 20:57:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3jEo-fN_Tt9V; Fri, 13 Mar 2026 20:55:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p__U14Q0mvd6; Fri, 13 Mar 2026 20:57:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5535260DEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7DFB80DCD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773435314;
-	bh=rplwVgaVyioxr+AGT31d3fZzBX+DvUGODjVuA94XBT8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CcKs2eJimDiWbrQ05arcEipTZLUszGDJTo0RQDbxbLVxb98R9SZ0CNvFleD/ZTwf2
-	 te6JGduh+ZAHS5CjVWF50ams+b7/RraTq8wrtLe8OgVTPvyHhncqG60y6MgEivM8SL
-	 MPj9yLOw2Qs7e71e/265Bum9/xFgFYagiW9sTp9eSQsw0SlgEx75JKZKtpVmwVwl6k
-	 LWqveKwdzBpf+dkgPrNPco7fHE4J0Me76/NFY8TLaOetq+K2GH1tRLtkcjHxeO7pjS
-	 84LmvBfwc9fLuJYzW8ODbkGtzHindEdrlXl8TSatrivI7n3RtuvE1VDj2dDGlNYbfB
-	 wkQsDh6+e7aFg==
+	s=default; t=1773435445;
+	bh=kO5WRbSiOC97m03bej4uKJq4inFMjH0YnfgUcUo1cGQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=f8QaqCCyHQEsePZiqikz9nmxsitBD1AYgRmDOxXoYmJ2reRH+hIZS7Gj9GKhMyjlh
+	 ao4hz62QrhCulEjRA8gf2dJ5VYSgScsdIra+hQYkngBEf0lDb/tHfZA6tadKUzzX3V
+	 fo3Q6om3Q6oDmF25+rc8g1L+EJpLP2aDAAdooNTk4fXloLfp9zcBWCjf4+xja3Yqa4
+	 4tG5Q8yhjuHApGUCsbMQMVa/H2P57YOfmU+oabQ+Qw54KFATyrQtaUxZykcIqVBky/
+	 522fThZxFnU1FKz2USgwfhA4VSaVytK7vVI8K7Hw6+czanIkkn4E826Gr4/KrIbMf8
+	 8R4p58ijR975w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5535260DEB;
-	Fri, 13 Mar 2026 20:55:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3683E787
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 20:55:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7DFB80DCD;
+	Fri, 13 Mar 2026 20:57:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82DE6201
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 20:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19C81608C5
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 20:55:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7443D80DCD
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 20:57:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1yHaoUql8gq8 for <buildroot@buildroot.org>;
- Fri, 13 Mar 2026 20:55:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F9D560832
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F9D560832
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 20:55:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43DD186FB8; Fri, 13 Mar 2026 20:55:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 21:52:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e757926757dc08022e7c57b36ae3bc2c6119339
-X-Git-Newrev: 3dbb2a0aaa66e84f7318f7bfb0f9411cf3ef5b4e
-X-Patchwork-Hint: ignore
-Message-Id: <20260313205508.43DD186FB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/arm: add the Neoverse-V3AE core
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2B0wu0id_I8L for <buildroot@buildroot.org>;
+ Fri, 13 Mar 2026 20:57:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 38B1080C66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38B1080C66
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 38B1080C66
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 20:57:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id A72AF780333;
+ Fri, 13 Mar 2026 21:57:18 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 13 Mar 2026 21:57:18 +0100
+MIME-Version: 1.0
+Date: Fri, 13 Mar 2026 21:57:18 +0100
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260303202708.2065406-1-ju.o@free.fr>
+References: <20260303202708.2065406-1-ju.o@free.fr>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <d90763e9dec2c5032dc847cf586ca4f4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1773435440;
+ bh=yZa0vrLGejzL652s/+yAnVlYZY+2MbB2DWiktuNjS+Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YjJoEU4bekOgiwcC4xTFAD0eiX5izmNqlav/RzDD3e2DN9aMFpsiP9R2BmYDBy2gl
+ NisMmPv4rly2zRA0f+rN9sFbzikgjSQj8ydwFb3G+4iuc9dle4bzVj2IgT24RivgC2
+ XTpy5CwvhMF5VN8Z9wZpdBes9utRRtk1y0zyKohJhnQWB9I6iqAv0RczxF5B83OsVl
+ mthdlKiMFYM37lRk/jzZuU39z8Xjzb3BjUdSpedNZJLJxfg+TUPVKQDaSX7P1u+SZ/
+ kiHr0JOvUcECqe5NHTRnvAgxk0wFqKEum+18aIR4MsO5USeNK90ZWboY81zGXYeoOx
+ xnWz5uTbS7FIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=YjJoEU4b
+Subject: Re: [Buildroot] [PATCH next 1/4] arch/arm: add the Neoverse-V1 core
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,70 +95,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3dbb2a0aaa66e84f7318f7bfb0f9411cf3ef5b4e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/03/2026 21:27, Julien Olivain via buildroot wrote:
+> This commit adds the Neoverse-V1 core, which is an armv8.4a ISA.
+> See: [1] [2].
+> 
+> This CPU support was added in GCC 11. See [3] [4] [5].
+> 
+> This CPU supports Aarch64 at all exception levels (EL0 to EL3).
+> It also supports Aarch32 only in EL0 (user-space). This means it's
+> technically possible to compile Aarch32 code. GCC has the support
+> to do so. Since Buildroot recompiles a full system (ATF, Kernel,
+> user-space) this support has limited value. This is why this
+> CPU is limited to 64bit builds only.
+> 
+> Qemu added neoverse-v1 support in upstream commit [6], first included
+> in v8.1.0.
+> 
+> [1] https://developer.arm.com/Processors/Neoverse%20V1
+> [2] 
+> https://developer.arm.com/documentation/101427/0102/Functional-description/Introduction/About-the-core
+> [3] https://gcc.gnu.org/gcc-11/changes.html#arm-targets
+> [4] 
+> https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;hb=releases/gcc-11.1.0#l141
+> [5] 
+> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=c9d56eb777552ac5ee0c281e1f6e34b6fe929b77
+> [6] 
+> https://gitlab.com/qemu-project/qemu/-/commit/c74138c6c040b62e941326a4fbb25a93fdd35b72
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-This commit adds the Neoverse-V3AE (Automotive Enhanced) core, which
-is an armv9.2a ISA. See: [1] [2].
-
-This CPU support was added in GCC 15. See [3] [4] [5].
-
-This CPU supports Aarch64 only at all exception levels (EL0 to EL3).
-
-This CPU is present in NVIDIA Jetson Thor / Tegra T264 [6].
-
-Note: at the time of this commit, the latest binutils v2.46 does not
-include a Neoverse-V3AE support for its '-mcpu' option. See [7]. This is
-not an issue because gcc will call the "as" assembler with the relevant
-"-march=armv9.2-a+EXTENSION..." options. Binutils supports "armv9.2-a"
-since upstream commit [8] (first included in 2.38), and the oldest
-Binutils version in Buildroot is 2.44.
-
-[1] https://developer.arm.com/Processors/Neoverse%20V3AE
-[2] https://developer.arm.com/documentation/101595/0002/The-Neoverse-V3AE--core/Neoverse-V3AE--core-features
-[3] https://gcc.gnu.org/gcc-15/changes.html#aarch64
-[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;hb=releases/gcc-15.1.0#l222
-[5] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=7ca2a803c4a0d8e894f0b36625a2c838c54fb4cd
-[6] https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/
-[7] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=gas/config/tc-aarch64.c;h=cd76163488c48e45d43c35b2704d637999d51015;hb=3e93b95c3ae3f00a0283ddbab8029cbc07d96aff#l10833
-[8] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=3518022233e6b757c57d3deb7723fd91214fe036
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- arch/Config.in.arm | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index ff301785e5..eb5babe29b 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -544,6 +544,12 @@ config BR2_neoverse_v3
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV9A
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_15
-+config BR2_neoverse_v3ae
-+	bool "neoverse-V3AE (aka poseidon)"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV9A
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- endchoice
- 
- config BR2_ARM_ENABLE_NEON
-@@ -945,6 +951,7 @@ config BR2_GCC_TARGET_CPU
- 	# armv9.2a
- 	default "cortex-a720"	if BR2_cortex_a720
- 	default "neoverse-v3"	if BR2_neoverse_v3
-+	default "neoverse-v3ae"	if BR2_neoverse_v3ae
- 
- config BR2_GCC_TARGET_ABI
- 	default "aapcs-linux"	if BR2_arm || BR2_armeb
+Series applied to master.
+For the record, I added a note in the commit log about the binutils
+support for Neoverse V2/V3.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
