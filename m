@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB6A2107BCFE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 154BC107BCF8
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:49:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E5A540FEC;
-	Sat, 14 Mar 2026 07:49:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FEF460EF3;
+	Sat, 14 Mar 2026 07:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sPq3kO0Fm0Gw; Sat, 14 Mar 2026 07:49:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IQAn2wwCbmGz; Sat, 14 Mar 2026 07:49:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CE1140FF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B29B260EFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474582;
-	bh=2ltu4TnQLaF6TcDrkIlESEHk7za7IF1sZasoI60ct3Q=;
+	s=default; t=1773474580;
+	bh=oJJsFGrEjpjE+7vTLIYmm+gJl1NiQ7w8PszWulIVOVo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=M98JMmve8xWwqoAgagnJvUXRCjbXJTuoZYEl+LUOcMXgdMOOTL+Y0ZlRNTmd+NjIh
-	 pv+bugOxSuk0n26O4zjN3UjNn5W8EnKHDXAaLoNnzYvNxHgLRG+aqXGCsBLIjyLggA
-	 zMdvJ/n6dmx8EAWTkaXhR7PpORNwoKSxVN+P1NB7VakRJx2iOP9oFryg9H3v1XVNCA
-	 vJ2Af9dLyJE+ed5TmPDD0YnKjanfx5Borpqu3wi+Qo0UDVbq7tuHqR0i+yswMDJcr6
-	 5MZyP2y9enFJ7IbPht709nOy3aDqRgovyc1Z+03WNZjLDjD3Kvz8eyJ+ext1zip9yR
-	 r6hRWDOTFrsQg==
+	b=l5oLdQZTnZ0BrnS4WotUreRwJ/amTFSlHk+HC8s+aTZXFvy3oMDNi091Y4Qb8fSGE
+	 HcqFgcuiLcmt1mipP+QyLgYbo30u9qbo1fW60PW7gnYhbLk2sD3SNVg2QK/FEbtkDq
+	 gKrqH4zL4UgVtqegc53P5HWUGtRiSH/qiu99SWQ4WxWRqZVSw1NovpVWhwMwX7Hju/
+	 ZyQVgJjwV5ngfFej4Eexd1AF5oKmv7hFioyP1RBSojQvVaociKb3CVAAvQ8glaErvs
+	 m44riYn0aIP3i0e8+ulfF4UsRhoGc+VT+ylOoWoX/p036CKd6dmp41d1/+IKvnOKHc
+	 u+WIRQtBAMDpg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CE1140FF8;
-	Sat, 14 Mar 2026 07:49:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 04A50201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B29B260EFB;
+	Sat, 14 Mar 2026 07:49:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D672878A
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEB6040FEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id B853F60EFA
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EobLOWWeN6Ry for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v0BQKv8oo-_Q for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0E9A40FE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFF4D60EF3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D0E9A40FE9
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFF4D60EF3
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E514C8514E; Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
+ id ED6E185E16; Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 16:03:42 +0100
+Date: Fri, 13 Mar 2026 16:04:46 +0100
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: b2dedc55414cfbe50d0d6237c4ad38c2343ee51c
-X-Git-Newrev: 60d110ac8d445266143b9b7611767720db6fb432
+X-Git-Oldrev: 60d110ac8d445266143b9b7611767720db6fb432
+X-Git-Newrev: 3bfce3675049bcb4ae3674817870d85ab11dbce1
 X-Patchwork-Hint: ignore
-Message-Id: <20260314074935.E514C8514E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libtpms: fix
- build with host gcc >= 15.x, glibc >= 2.43
+Message-Id: <20260314074935.ED6E185E16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libtpms: security
+ bump version to 0.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,71 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/60d110ac8d445266143b9b7611767720db6fb432
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3bfce3675049bcb4ae3674817870d85ab11dbce1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Fixes:
-https://autobuild.buildroot.net/results/7a6/7a6ea7c513e8f1dcc32d868108bfb2a907d6fe85/
+https://github.com/stefanberger/libtpms/blob/v0.10.2/CHANGES
 
-The previous change to src/tpm_library.c dates back to 2024:
-https://github.com/stefanberger/libtpms/commits/master/src/tpm_library.c
-so a backport to buildroot LTS branches should be considered.
+Fixes CVE-2026-21444.
+
+Added comment to hash file about locally computed hashes.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: reword title to mention glibc 2.43]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f773fd6787491af3c98ae30f5683b8d7a431b0e5)
+(cherry picked from commit b1c4276c2d0fb266ccf08c03b8d50961b8f7553b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-compilation-error-in-TPMLIB_GetPlaintext.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/libtpms/libtpms.hash | 3 ++-
+ package/libtpms/libtpms.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtpms/0001-Fix-a-compilation-error-in-TPMLIB_GetPlaintext.patch b/package/libtpms/0001-Fix-a-compilation-error-in-TPMLIB_GetPlaintext.patch
-new file mode 100644
-index 0000000000..02c4df9668
---- /dev/null
-+++ b/package/libtpms/0001-Fix-a-compilation-error-in-TPMLIB_GetPlaintext.patch
-@@ -0,0 +1,40 @@
-+From fc8820cfaa8b5e17328f731df93911f6ab92443b Mon Sep 17 00:00:00 2001
-+From: Stefan Berger <stefanb@linux.ibm.com>
-+Date: Fri, 2 Jan 2026 11:37:31 -0500
-+Subject: [PATCH] Fix a compilation error in TPMLIB_GetPlaintext
-+
-+Fix a compilation error that newer gcc versions may complain about:
-+
-+tpm_library.c: In function 'TPMLIB_GetPlaintext':
-+tpm_library.c:441:11: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
-+  441 |     start = strstr(stream, starttag);
-+      |           ^
-+At top level:
-+cc1: note: unrecognized command-line option '-Wno-self-assign' may have been intended to silence earlier diagnostics
-+cc1: all warnings being treated as errors
-+
-+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-+
-+Upstream: https://github.com/stefanberger/libtpms/commit/fc8820cfaa8b5e17328f731df93911f6ab92443b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/tpm_library.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/tpm_library.c b/src/tpm_library.c
-+index f48f4fd3..7b2ea687 100644
-+--- a/src/tpm_library.c
-++++ b/src/tpm_library.c
-+@@ -435,7 +435,7 @@ static unsigned char *TPMLIB_GetPlaintext(const char *stream,
-+                                           const char *endtag,
-+                                           size_t *length)
-+ {
-+-    char *start, *end;
-++    const char *start, *end;
-+     unsigned char *plaintext = NULL;
-+ 
-+     start = strstr(stream, starttag);
-+-- 
-+2.47.3
-+
+diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
+index f10364f36e..175e6e3af6 100644
+--- a/package/libtpms/libtpms.hash
++++ b/package/libtpms/libtpms.hash
+@@ -1,2 +1,3 @@
+-sha256  ebc24f3191d90f6cf0b4d4200cd876db4bd224b3c565708bbea0a82ee275e0fb  libtpms-0.10.1.tar.gz
++# Locally computed
++sha256  edac03680f8a4a1c5c1d609a10e3f41e1a129e38ff5158f0c8deaedc719fb127  libtpms-0.10.2.tar.gz
+ sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
+diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
+index 6e5708202e..7bc69a50d6 100644
+--- a/package/libtpms/libtpms.mk
++++ b/package/libtpms/libtpms.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTPMS_VERSION = 0.10.1
++LIBTPMS_VERSION = 0.10.2
+ LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
+ LIBTPMS_LICENSE = BSD-4-Clause
+ LIBTPMS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
