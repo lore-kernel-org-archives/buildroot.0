@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C0D0107BCEB
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AEB9107BCEC
 	for <buildroot@archiver.kernel.org>; Fri, 13 Mar 2026 22:50:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7031081E58;
-	Fri, 13 Mar 2026 22:50:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F289E40F27;
+	Fri, 13 Mar 2026 22:50:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ok0Uix4r3gah; Fri, 13 Mar 2026 22:50:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VwjKaGqw4cfI; Fri, 13 Mar 2026 22:50:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ADEE81EA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15E4240F2C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773442252;
-	bh=GoK4byhqnuKf05WniKdKJWEejAdZbddrT7d7CvkOgF8=;
+	s=default; t=1773442251;
+	bh=HkafPTgiHJ8A8VLoqZ8vUTCH6/0Wka66IHhfB1fZbc4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fiX3qqxxi9kzZmo1rn1CChTmy9Ve9vyzZ6RA9SSBEN8LpjFxPuHnThTeYcyCOeT2Z
-	 nf4yj0yVwmVk+TC0eaViLCXyfBoN4GALeth5XdpGvxISnvnCbyg/THcoXzrSjOuFGW
-	 KM4Lmkw2HNdjI2WRHm3WF23R4wf6zp4U2zq6I7bTzqMm0KsbDjXM8s0vkvZ3BcpWbB
-	 DbRP1C9jGqYaDYH9zXCSiRLMWDBsxvDmMYVWPvOJ6knPTjMZccMm4juLKgmDO3lead
-	 gECW+nRsh7BcVT8k7578AgK7JDJRojPPF7GS0jnvUQQWAm+/puuzenMaXVDo1m9gm+
-	 G2nQZwtShv6rg==
+	b=if7IhGfg4NqB1N9fyTz96SjMl+0TFJZFzvBr+UCkwacg3pYBiWkSVq3XPlTpTD1NN
+	 XiaYeX9+N655nlVNst0wf9rYAa0H9UxUdwNsJVBN/5ussmqAm0U9jpHCVuvcli6oWX
+	 VrMmD3VjxdK6o6T0eOhQItp8I1MTrDWwlbPxUfSOFnTMoJgHldFhvQz1PTWuZPbxif
+	 bMQHj6c3P2Bcv13dLRvEI68PMrTmXWUkhPYCkm/hLQ301BbaHZr8Wtris4NqIAsimh
+	 Jx/rKE7uOq5smm74CedHWEbn7i1I6uWv62KqUePrMqAckuDZvcIuMwhHUpo+ben4ci
+	 Pq7FCghkJfhoQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9ADEE81EA0;
-	Fri, 13 Mar 2026 22:50:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CED9201
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15E4240F2C;
+	Fri, 13 Mar 2026 22:50:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FF711B4
  for <buildroot@buildroot.org>; Fri, 13 Mar 2026 22:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6490E60AA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 627544005A
  for <buildroot@buildroot.org>; Fri, 13 Mar 2026 22:50:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nZmdxxJUqpJM for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P9fh2RSkPJ0h for <buildroot@buildroot.org>;
  Fri, 13 Mar 2026 22:50:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B519F60E61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0F9140656
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B519F60E61
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0F9140656
  for <buildroot@buildroot.org>; Fri, 13 Mar 2026 22:50:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C22CC87394; Fri, 13 Mar 2026 22:50:44 +0000 (UTC)
+ id D9B7987396; Fri, 13 Mar 2026 22:50:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 23:29:59 +0100
+Date: Fri, 13 Mar 2026 23:30:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9af1a2bd07d739ecdca5e6d3c0632cb773f46ea9
-X-Git-Newrev: 45a74068df22bd88db10bf2296cca9e995c4d097
+X-Git-Oldrev: ffaccc4cccb57ee7a34a5c1288e2ca76da944aaa
+X-Git-Newrev: c1bc1a7a617b31b997ed113b57cdc72faa04046c
 X-Patchwork-Hint: ignore
-Message-Id: <20260313225044.C22CC87394@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xfsprogs: enable host package
- variant
+Message-Id: <20260313225044.D9B7987396@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: fs: new xfs runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,67 +76,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/45a74068df22bd88db10bf2296cca9e995c4d097
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c1bc1a7a617b31b997ed113b57cdc72faa04046c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-The host mkfs.xfs is needed to create XFS root filesystems
-in Buildroot.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/Config.in.host          | 1 +
- package/xfsprogs/Config.in.host | 6 ++++++
- package/xfsprogs/xfsprogs.mk    | 8 ++++++++
- 3 files changed, 15 insertions(+)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/fs/test_xfs.py               | 55 ++++++++++++++++++++++
+ .../testing/tests/fs/test_xfs/linux-xfs.fragment   |  1 +
+ 3 files changed, 58 insertions(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 2160a0f558..b990ce8b14 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -128,6 +128,7 @@ menu "Host utilities"
- 	source "package/utp_com/Config.in.host"
- 	source "package/uuu/Config.in.host"
- 	source "package/vboot-utils/Config.in.host"
-+	source "package/xfsprogs/Config.in.host"
- 	source "package/xorriso/Config.in.host"
- 	source "package/zip/Config.in.host"
- 	source "package/zstd/Config.in.host"
-diff --git a/package/xfsprogs/Config.in.host b/package/xfsprogs/Config.in.host
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ba6ba6b221..5293d94649 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1849,6 +1849,8 @@ F:	support/testing/tests/fs/test_btrfs.py
+ F:	support/testing/tests/fs/test_btrfs/
+ F:	support/testing/tests/fs/test_erofs.py
+ F:	support/testing/tests/fs/test_erofs/
++F:	support/testing/tests/fs/test_xfs.py
++F:	support/testing/tests/fs/test_xfs/
+ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_gnupg.py
+ F:	support/testing/tests/package/sample_python_hwdata.py
+diff --git a/support/testing/tests/fs/test_xfs.py b/support/testing/tests/fs/test_xfs.py
 new file mode 100644
-index 0000000000..f200b766fe
+index 0000000000..7e4a617baf
 --- /dev/null
-+++ b/package/xfsprogs/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_XFSPROGS
-+	bool "host xfsprogs"
-+	help
-+	  The XFS file system utilities and libraries
++++ b/support/testing/tests/fs/test_xfs.py
+@@ -0,0 +1,55 @@
++import os
 +
-+	  https://xfs.wiki.kernel.org
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index ab78f8e2cc..729f4f753f 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -20,6 +20,13 @@ XFSPROGS_CONF_OPTS = \
- 	INSTALL_GROUP=root \
- 	--enable-static
- 
-+HOST_XFSPROGS_DEPENDENCIES = host-inih host-liburcu host-util-linux
-+HOST_XFSPROGS_CONF_OPTS = \
-+	--enable-gettext=no \
-+	--enable-lib64=no \
-+	--enable-libicu=no \
-+	--enable-static
++import infra.basetest
 +
- ifeq ($(BR2_PACKAGE_ICU),y)
- XFSPROGS_DEPENDENCIES += icu
- XFSPROGS_CONF_OPTS += --enable-libicu
-@@ -34,3 +41,4 @@ endif
- XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++
++class TestXfs(infra.basetest.BRTest):
++    kern_frag = \
++        infra.filepath("tests/fs/test_xfs/linux-xfs.fragment")
++    xfs_label = "BR_TEST"
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.18"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_TARGET_ROOTFS_XFS=y
++        BR2_TARGET_ROOTFS_XFS_LABEL="{xfs_label}"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        disk = os.path.join(self.builddir, "images", "rootfs.xfs")
++        kern = os.path.join(self.builddir, "images", "Image")
++        bootargs = ["root=/dev/vda"]
++        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
++                     "-drive", f"file={disk},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # We check our root filesystem is in xfs format.
++        cmd = "mount | grep '/dev/root on / type xfs'"
++        self.assertRunOk(cmd)
++
++        # We try to write data on the root filesystem.
++        msg = "Hello Buildroot"
++        fname = "/root/file.txt"
++        self.assertRunOk(f"echo '{msg}' > {fname}")
++
++        # We sync and drop all caches, to make sure we will read back
++        # from the filsystem.
++        self.assertRunOk("sync")
++        self.assertRunOk("echo 3 > /proc/sys/vm/drop_caches")
++
++        # We check we can read back out data.
++        out, ret = self.emulator.run(f"cat {fname}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
+diff --git a/support/testing/tests/fs/test_xfs/linux-xfs.fragment b/support/testing/tests/fs/test_xfs/linux-xfs.fragment
+new file mode 100644
+index 0000000000..32f7f6d872
+--- /dev/null
++++ b/support/testing/tests/fs/test_xfs/linux-xfs.fragment
+@@ -0,0 +1 @@
++CONFIG_XFS_FS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
