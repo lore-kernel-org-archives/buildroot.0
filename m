@@ -4,114 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5DA105F797
-	for <buildroot@archiver.kernel.org>; Fri, 13 Mar 2026 11:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03732107BCC6
+	for <buildroot@archiver.kernel.org>; Fri, 13 Mar 2026 16:19:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33F8560AE8;
-	Fri, 13 Mar 2026 11:08:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D6EE60BE1;
+	Fri, 13 Mar 2026 16:19:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VjllgjV-aGG3; Fri, 13 Mar 2026 11:08:02 +0000 (UTC)
+ id wln0mD0dwxXA; Fri, 13 Mar 2026 16:19:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A48B60B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B22160BE4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773400082;
-	bh=sha0hjXYJlz9VYzD8/AiBkzV3clLVDdDMPFxomGlN70=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=sW3gZh/sB1eMoJAVV3eJxOrGYTzGxI44w7uOBBG89REk7og3/fp8aCarYypVZZRTf
-	 h65rFd43asiiIKTdBsUnIA3ELz+n1dPlERn0cY78LR3EAvzg4Ah2hXTRk52avzLDYU
-	 HAYu9W8gBA8NvpNKqEmonHlBImlIlFgVAdwhKzyapEnLvP09L380W330iugpBLpEeu
-	 f7XXGnCYlISDQj2ti2CC90hlMPysKzWdsPRium2g23GDVSsZY3UpAwIw/ijJpSc7TQ
-	 +k+ll2hwgZNN+bk9Pd2L24u+xIQ99O/it/oRhoqrX7zXCQwFHZKiEnGcwSKjSveTd0
-	 8UUXErXU9EsLw==
+	s=default; t=1773418748;
+	bh=Qj90HzGBmGeKTf9dQJddzgsDj3W6/hbH6SjRRAGFoN4=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=hGpGijVYXV1U1NLzIW69Z9nrlNRq/AuoXBRu13sIbH4QmyChFIS8fB8b9j9z1Q1TF
+	 DBQOtCU+bcNJhdCIzq1uJKdHmkrx+URJdiFsw/wRbv6nUa2WQddFGLD4g8fWfA4Ws3
+	 9x9cBqzZHe3gY5I3fw1bufWeGQtW/ZdJ8S5A5UHCn4RADRbH0p8fISa6UxaPv1oMrO
+	 I4jmD71llPYMD1LSOdSsKyc8fdfNVvBny7PEjEnr2c2OgX3DaXOZ6oXKh5pUkYw+jI
+	 ezEtqQL6LnMIDu6Uc4XkHTSdlXXp9wxcWHyxgycWx+W+pB4fgrjzHUTwrWTYVJ0GVm
+	 SmHx8CtzMS0/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A48B60B74;
-	Fri, 13 Mar 2026 11:08:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 943571AF
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 11:08:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B22160BE4;
+	Fri, 13 Mar 2026 16:19:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 818C5786
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 16:19:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8666140A9B
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 11:08:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 676AC60BE4
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 16:19:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZMpUVwF-Ns1C for <buildroot@buildroot.org>;
- Fri, 13 Mar 2026 11:08:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0AsBscJcO7Le for <buildroot@buildroot.org>;
+ Fri, 13 Mar 2026 16:19:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D59C840AC9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D59C840AC9
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
- [IPv6:2607:f8b0:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D59C840AC9
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 11:07:59 +0000 (UTC)
-Received: by mail-pl1-x631.google.com with SMTP id
- d9443c01a7336-2ad21f437eeso16416765ad.0
- for <buildroot@buildroot.org>; Fri, 13 Mar 2026 04:07:59 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 66DE460BE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66DE460BE1
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 66DE460BE1
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 16:19:05 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4852ff06541so24775535e9.2
+ for <buildroot@buildroot.org>; Fri, 13 Mar 2026 09:19:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773400079; x=1774004879;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=NmFkO5Kx9c5e5fzDPkVBwi/m74cAPEkTZ/74nnkmafE=;
- b=nYNL1JnPOEf4UawXsHrK7TXMo4ZIigSDUnabwlD/MZsnPrB9HTHYE/CRcNPlf8zFEC
- DqS1+E4+9pfqAFM/RU8+3WlBjYWQfCi99goqmKwJb7vs5akY97Kb/zoGcQ64m0OqkEoQ
- UzALicHSLJKYPbbWTkh19OqSQI+ahg2GvWxNpzxcGfXc5C+S7f1rJTQSb2zJHiAGZ1oG
- beO8wUfqZQmZnxrDnYj9QTVFg5TDzBuPPA/Kv2f9RB9Eb2TljDJ3j8Kd+GYU2EufN/3W
- 5jFQKhAFJWasNhK1mRraJueTwqbpXomF8U/XppGZTOpo6kuPDxl8VqunQN7mlbf673mf
- nCIw==
-X-Gm-Message-State: AOJu0YxY8NbdYVj4RpRbF1k7kJYMYQ+SaZ5/4keJFjGaXZMzUYWjSsYS
- nnH9WOtgMowrfnvviCNFqQthgMCheCOe2BRslxitXCe/t2cBVuj32v/fxMjFQQ==
-X-Gm-Gg: ATEYQzyvVEyqkhVP3kmAO7+C83Fq7v6cf1fvFM6IWMesb7radCQ1/VzpaKFkJuHR+oR
- PAhuWrSF9qWKydOiONtWskfzuK168sDzWDJJ+I9XpRXsSUb94G4s+R/hXfXyOyl6iOredUA5mtQ
- z4yKGObwsIYHh+54krUNCymqA6gQsbyxXiZhLmBdVYQo5z/g4NDTDjmvTrh/zNOcdtAJJrBzLj8
- 66ILVVFFL2KSnLD301uL1N7dtVJIMQ2z1tBQS12i/tJiArYhGZkGuljk66BPr1n9JAQxBzXe2fF
- q1Bv8UTVGpwC15aiNHGnv9z8plWnLxnkDWZ8D583c4FxrUrLF7D/wX/cL30L6q7ki3Y3bWsYDBL
- Xy0OWzZ6OQl5iWXhGxdswBKuUhvl/GRq5/Xv2OaaTFGWhPMZtaLosTmvvvRF5qvaKBBs9TnvN6t
- Y97uDqdq3XxN47bM+tWPpqFIAM+OBm9sG6DnNozA3JNi0=
-X-Received: by 2002:a17:903:ac8:b0:2ae:ab51:a78c with SMTP id
- d9443c01a7336-2aeba59c274mr62740925ad.30.1773400078708; 
- Fri, 13 Mar 2026 04:07:58 -0700 (PDT)
-Received: from fedora ([2409:40e5:1055:572c:8b0:ced8:a8df:a66])
+ d=1e100.net; s=20251104; t=1773418742; x=1774023542;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=6AL/kvKO0tWzzOZkJ/sVdtc0ptzIH+60LxKRtCkOMCA=;
+ b=YDIJ5cdOvU3HuAiAre7sn2tFoTeTjWuSzP+aZCtpcQ3JUvllu64xgvWuDHwZ9CjDJc
+ S8Iz00Fw5c5QoLXOGAWK2kcoccydqNVfEQif9GZ80ED2AqlCxTrLrpYcAzcu2K2d+huX
+ EGHSrXcGJ4vknibntPfHGhl/ju17wTVyofUnMNsCjN/ls+KNkMg3IdWqaYA/Fa7cAU8y
+ cvWpUes9WlP6VXMQK8e4UTuKwY0KA3AfQ95aR5IVY3+map0GVBUR9/T/uKBIHYHpAhrN
+ jUKpLIk87Lgg9F+Bx6XdLB3NovyIczWvqH4YeJNoTIUXfggz9zy9b09d+jVKtX8M2nfi
+ vW2A==
+X-Gm-Message-State: AOJu0YxFb/MKNGWWcCqHZiWkSMNolQJKU7K5C87AVC/CNR67P9gew4Xt
+ mziehtZl3/5GfyuPBaW/PYc2/hDlTPSWh7bwHpedIdsEl1J99YScVGmEstG0QojJWEB+/NVSp3N
+ KRYQ5
+X-Gm-Gg: ATEYQzzArZwTzwTH3liVpiacQaSmJ2DMG7rz5cAzxjFVWEzKRFEQ6INhb6T9y8oLR6r
+ AknpGLAf+OHbqJ+OSgjOlZ3fSHVoR/j8xJC2b3pVbKOsY2PlHtujfyrgR/jm1i8vJuK+crxv9hO
+ bDBSuzkIWvQuXxcR2o4LMLti0guiIoz9NYRuZ3V05NpOL5vsZ19x22RQRNa8pSeOEFqe2L1Bceb
+ SnEEPTaflbxwPJIoKXRJHAH6a3N2+hjYUCvWzgGee/RtkRVuizysiqMfixlK0gRGaqjNmCy+qLD
+ i9W7ugMMh7tBu9B3PU4MpXfHMrOzlaI4L4XE+12V0udRJju7QCjH3A/4sSUQB1DGi0I5HTnFyK/
+ 3XkovgVfLbTFuoqbkReEf8eanC3QiUxKvMtQNDT0roVIRLMi4coepW9mL4r/aH5IJPTLEA0Ddu4
+ 8jncUuE9GnsIp6Xkr2lUSDfMaN7YfK3XME9yATtcFapEnOsGAHcwefKIS3bCSOvGO6sUJ5H+EOU
+ ih1uxDmLWft2cLyRIQbI6RLqnKjAGWp
+X-Received: by 2002:a05:600c:c162:b0:485:3fd1:992c with SMTP id
+ 5b1f17b1804b1-485566d2fe7mr59333385e9.1.1773418742556; 
+ Fri, 13 Mar 2026 09:19:02 -0700 (PDT)
+Received: from FRSMI25-BOLET..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2aece81378fsm25959655ad.66.2026.03.13.04.07.56
+ 5b1f17b1804b1-4854b5f6bb4sm215503345e9.4.2026.03.13.09.19.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Mar 2026 04:07:58 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ Fri, 13 Mar 2026 09:19:02 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Fri, 13 Mar 2026 16:37:39 +0530
-Message-ID: <20260313110739.90948-2-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260313110739.90948-1-chakrabortyshubham66@gmail.com>
-References: <20260313110739.90948-1-chakrabortyshubham66@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Date: Fri, 13 Mar 2026 17:18:20 +0100
+Message-ID: <20260313161825.1224877-1-elmehdi.younes@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1773400079; x=1774004879; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=NmFkO5Kx9c5e5fzDPkVBwi/m74cAPEkTZ/74nnkmafE=;
- b=MvINRjyfxpN9qiMrEqKH01Ac4uFJvefInxiOEwmRFVX0hnvWlr4EyzD+8OAbvbsvjl
- BxbISwApPSO9wZNxmhWowuxFZOvEPSBbvOFxeKeTbUPd/cQdhv3er0SW5XWoJJ/7mzGh
- 5+/VuJrhBVioQfKzRpgamyEL9FY4JmoMJ+/a7rPbXOZFXvwQ+m6OwiJmQmPdRn/gkLEq
- vFP7B9rUKmmimfNRfB5jDMwt7DkEltsJZA8lHWYWyrhXD3ji+VuNVDhr//CNXgTtSPrP
- 5cZ9Vh+QAzaaE2TO2HZH9NQ8IOUixp6H9mAexJabY3Zpv2N0BcIFDvLI8wgK7Kz7umTD
- 7Lyw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=MvINRjyf
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Shubham Chakraborty as ccache
- maintainer
+ d=smile.fr; s=google; t=1773418742; x=1774023542; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6AL/kvKO0tWzzOZkJ/sVdtc0ptzIH+60LxKRtCkOMCA=;
+ b=e01IylbmOHQNZiBdeRpX0srLIG0Yhi8E02KUQpGP6kKXubWtm6oApKPE25MCJmClWQ
+ e1GzAekjjE91enLrDfphqB73yxmnlXKnTgSyBxNsb9hH4pszykq2sEUfQ5b+B2clEst4
+ QhHkQt5PW11FGBvS8clfOHP8bi5lvu276tH1s=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=e01Iylbm
+Subject: [Buildroot] [PATCH v2 1/6] package/rust-bin: add
+ HOST_RUST_BIN_STD_TARBALLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,33 +120,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Add HOST_RUST_BIN_STD_TARBALLS to separate tarballs and be able to add
+other tarballs to extra-downloads.
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 ---
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+If I understood well, Thomas suggested using HOST_RUST_BIN_STD_TARBALLS = instead of +=,
+In this case we kept += as a precaution because the assignment is inside a
+conditional block. Using += ensures that we are appending to the variable rather
+than risk overwriting it.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ba6ba6b221..124f5dca4e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3025,6 +3025,9 @@ F:	package/tunctl/
- F:	package/ubus/
- F:	package/wolfssl/
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+---
+ package/rust-bin/rust-bin.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index 215bd84ad3..37df1db566 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -16,14 +16,15 @@ HOST_RUST_BIN_PROVIDES = host-rustc
+ HOST_RUST_BIN_SOURCE = rust-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
  
-+N:	Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+F:	package/ccache
-+
- N:	Simon Dawson <spdawson@gmail.com>
- F:	boot/at91bootstrap3/
- F:	package/cppzmq/
--- 
-2.53.0
-
+ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+-HOST_RUST_BIN_EXTRA_DOWNLOADS += rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
++HOST_RUST_BIN_STD_TARBALLS += rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
+ endif
+ 
++HOST_RUST_BIN_EXTRA_DOWNLOADS += $(HOST_RUST_BIN_SOURCE_TARBALL)
+ HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUSTC_HOST_NAME)
+ 
+ define HOST_RUST_BIN_LIBSTD_EXTRACT
+ 	mkdir -p $(@D)/std
+-	$(foreach f,$(HOST_RUST_BIN_EXTRA_DOWNLOADS), \
++	$(foreach f,$(HOST_RUST_BIN_STD_TARBALLS), \
+ 		$(call suitable-extractor,$(f)) $(HOST_RUST_BIN_DL_DIR)/$(f) | \
+ 			$(TAR) -C $(@D)/std $(TAR_OPTIONS) -
+ 	)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
