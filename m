@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 154BC107BCF8
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94BF4105F79E
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FEF460EF3;
-	Sat, 14 Mar 2026 07:49:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7994160F00;
+	Sat, 14 Mar 2026 07:49:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IQAn2wwCbmGz; Sat, 14 Mar 2026 07:49:41 +0000 (UTC)
+ id sfBaNbbDu3yi; Sat, 14 Mar 2026 07:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B29B260EFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A651860F0E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474580;
-	bh=oJJsFGrEjpjE+7vTLIYmm+gJl1NiQ7w8PszWulIVOVo=;
+	s=default; t=1773474583;
+	bh=MnSIbrSCLFxgCapxZMmk4otmPl0CNQnL5TBmCr0m+y8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=l5oLdQZTnZ0BrnS4WotUreRwJ/amTFSlHk+HC8s+aTZXFvy3oMDNi091Y4Qb8fSGE
-	 HcqFgcuiLcmt1mipP+QyLgYbo30u9qbo1fW60PW7gnYhbLk2sD3SNVg2QK/FEbtkDq
-	 gKrqH4zL4UgVtqegc53P5HWUGtRiSH/qiu99SWQ4WxWRqZVSw1NovpVWhwMwX7Hju/
-	 ZyQVgJjwV5ngfFej4Eexd1AF5oKmv7hFioyP1RBSojQvVaociKb3CVAAvQ8glaErvs
-	 m44riYn0aIP3i0e8+ulfF4UsRhoGc+VT+ylOoWoX/p036CKd6dmp41d1/+IKvnOKHc
-	 u+WIRQtBAMDpg==
+	b=Y/KHRJeOZyH0Kw3sCwBY4XmK4GqbIHymjUkJggqgrQ91c2WyY2rgvLFFMKqKANnwi
+	 VC45Mv8BH1111Cmf1hBAIBsINs4tKvgvacWaUpzjW4rVE4uoYjNKui2GgjFL5kusv4
+	 bqzN3yyg9tXHXR2K0V76LJS4jq5hCa+9l0IHUdjK4JIo8ggX6xTK3GKcLtDLkUZ7yN
+	 OEYhFI+dDljyzo5GVvyGPCo7nTSkYrxn7Kovsi19T81sLqILWpKQkj7YRevPNZ9MXz
+	 IpjH1vlw2j7huMGoHN/AqsALqyaq/HQYhCgFHWhnsq6v49HZqRe16xcLZTo+brFNWU
+	 YjMYG90h7tpkw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B29B260EFB;
-	Sat, 14 Mar 2026 07:49:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D672878A
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A651860F0E;
+	Sat, 14 Mar 2026 07:49:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6BD8C201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B853F60EFA
+ by smtp1.osuosl.org (Postfix) with ESMTP id C2069822C0
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0BQKv8oo-_Q for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n-qH-n9WqMQO for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFF4D60EF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF4B6822C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFF4D60EF3
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF4B6822C3
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED6E185E16; Sat, 14 Mar 2026 07:49:35 +0000 (UTC)
+ id 03B9D85EE5; Sat, 14 Mar 2026 07:49:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 16:04:46 +0100
+Date: Fri, 13 Mar 2026 16:06:47 +0100
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 60d110ac8d445266143b9b7611767720db6fb432
-X-Git-Newrev: 3bfce3675049bcb4ae3674817870d85ab11dbce1
+X-Git-Oldrev: 3bfce3675049bcb4ae3674817870d85ab11dbce1
+X-Git-Newrev: 4e594d0eda67aeb5af0bbac803ee26967e6b7372
 X-Patchwork-Hint: ignore
-Message-Id: <20260314074935.ED6E185E16@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libtpms: security
- bump version to 0.10.2
+Message-Id: <20260314074936.03B9D85EE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] support/testing/infra:
+ update artifacts URL to https and .org domain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3bfce3675049bcb4ae3674817870d85ab11dbce1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e594d0eda67aeb5af0bbac803ee26967e6b7372
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://github.com/stefanberger/libtpms/blob/v0.10.2/CHANGES
+The artifacts URL has been moved to https and domain to .org to
+improve security and avoid redirection issues. This ensures that
+downloads of kernels and rootfs images during runtime tests are
+encrypted and verified.
 
-Fixes CVE-2026-21444.
+The change has been tested by running a runtime test, confirming the
+correct download and renaming of artifacts from the new URL:
 
-Added comment to hash file about locally computed hashes.
+    Downloading to .../tmpyotq8uor
+    Renaming from .../tmpyotq8uor to .../kernel-versatile-5.10.202
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b1c4276c2d0fb266ccf08c03b8d50961b8f7553b)
+(cherry picked from commit 8313d8a2faf8423cacef7acc88bc385201beb05d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libtpms/libtpms.hash | 3 ++-
- package/libtpms/libtpms.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ support/testing/infra/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
-index f10364f36e..175e6e3af6 100644
---- a/package/libtpms/libtpms.hash
-+++ b/package/libtpms/libtpms.hash
-@@ -1,2 +1,3 @@
--sha256  ebc24f3191d90f6cf0b4d4200cd876db4bd224b3c565708bbea0a82ee275e0fb  libtpms-0.10.1.tar.gz
-+# Locally computed
-+sha256  edac03680f8a4a1c5c1d609a10e3f41e1a129e38ff5158f0c8deaedc719fb127  libtpms-0.10.2.tar.gz
- sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
-diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
-index 6e5708202e..7bc69a50d6 100644
---- a/package/libtpms/libtpms.mk
-+++ b/package/libtpms/libtpms.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+index be61d8cc4f..98215e02ab 100644
+--- a/support/testing/infra/__init__.py
++++ b/support/testing/infra/__init__.py
+@@ -6,7 +6,7 @@ import subprocess
+ from urllib.request import urlopen
+ from urllib.error import HTTPError, URLError
  
--LIBTPMS_VERSION = 0.10.1
-+LIBTPMS_VERSION = 0.10.2
- LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
- LIBTPMS_LICENSE = BSD-4-Clause
- LIBTPMS_LICENSE_FILES = LICENSE
+-ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
++ARTIFACTS_URL = "https://autobuild.buildroot.org/artefacts/"
+ BASE_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../.."))
+ 
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
