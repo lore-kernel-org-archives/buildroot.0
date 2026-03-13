@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E11A107BCFF
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 08:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 997F5107BCFE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 08:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70E2B61087;
-	Sat, 14 Mar 2026 08:00:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D0A861043;
+	Sat, 14 Mar 2026 08:00:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q1ExlGn9dx8R; Sat, 14 Mar 2026 08:00:25 +0000 (UTC)
+ id Spux-boUWAhf; Sat, 14 Mar 2026 08:00:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D8B561050
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98AFA61081
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773475225;
-	bh=JHThQd+8gpjBemz5RTqeFIRE0lfu4mAVNzQDnhezAYo=;
+	s=default; t=1773475228;
+	bh=m2+98aA2ly/8fsvWzFAlg/kXo8Cr7UZmadb1dOfUCBQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=amKyw7REjFH4OqPHXTt2HmBihiONQy9L5UB9yn5fLChCpW63eQnmKFjO8r0GYk3I9
-	 Y3+0kNAh9aKQAxBZbeXdrhtJl2flXLGYn8SmaHl3dzOXqLPfnkfMH8tx+8o1aceg4Z
-	 9eZ6iqnhTKW0AiauZ3OBMNqXElouHV0pM7p88GDjrA86QcuMzjFnPTX8oNQkVdeeNU
-	 VLbVFMdLKV2wAA9B/YbP1TH8z4leKDvUPb+ois3lVgEQav79c6H9mAEF1eV/lA3wFp
-	 GjNuP0m1hYQF6dBjnMdZY6Elojj0DppecSpfV0pox5N25PVpPJBik6UVd6mH+NpAuU
-	 vtCt3N7b4MVzg==
+	b=NtxTBzYOT64i4BLtqeoS84d7jSNMD059ub+GUYZr+od+NaFIBB9nuTZgunsKa7EoM
+	 hL3l5fkRZ5T8+tw8QcQmyh+u4i6LMFGzg0gNWSn48sm0rK9vQha81JxLJJZFYktFHF
+	 x6tDehlszmFejn732q541y+NSGxUxipsLxZ9Y7VaRCu4WiyW7Di+rLVNY5FqvlBUIM
+	 TH0axbR2uOUhnaEQe4H6Xi0SsdVHQ5RfINvKasZ/YchW7jWGp09q8nj3XQehKfI6rt
+	 2EuwmOE6NveSlxuBFoANMzsZroeMgZUH9WLYtf1E0b6qN7yCL+AOr9I+clQTP3GmCx
+	 olVeF2Zv2UtAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D8B561050;
-	Sat, 14 Mar 2026 08:00:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 697961B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 08:00:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98AFA61081;
+	Sat, 14 Mar 2026 08:00:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 519211B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 08:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FD9E822CD
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 08:00:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50F4141012
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 08:00:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V2hAYbbg7Fwa for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 08:00:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7yIfFoiOneOe for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 08:00:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9DEF822D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76D5F4103F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9DEF822D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76D5F4103F
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 08:00:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F1D384380; Sat, 14 Mar 2026 08:00:10 +0000 (UTC)
+ id 9FDA285E16; Sat, 14 Mar 2026 08:00:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 16:17:17 +0100
+Date: Fri, 13 Mar 2026 16:00:34 +0100
 X-Git-Refname: refs/heads/2025.11.x
-X-Git-Oldrev: 13241770277b4809c3633c6855a216f3ecbfaed4
-X-Git-Newrev: 0e13702babe6081ac9ffb57b72f0c5868ded8224
+X-Git-Oldrev: ea8df0a72a745194e9693ba54385e6056a90a75b
+X-Git-Newrev: 55723bb54312f86876e64940b29a90b180e8779c
 X-Patchwork-Hint: ignore
-Message-Id: <20260314080010.1F1D384380@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.11.x] package/libvips: fix
- static build
+Message-Id: <20260314080009.9FDA285E16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.11.x] package/libsoup3:
+ security bump to 3.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,59 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e13702babe6081ac9ffb57b72f0c5868ded8224
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/55723bb54312f86876e64940b29a90b180e8779c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.11.x
 
-Buildroot commit 72c7d99e22eb7706e413992cf7084438fea657bb switched the
-build system to meson which causes an error during configure:
+While there is only one CVE number assigned (CVE-2025-14523) for one of
+the patches included in this release, the bulk of the the changes are
+security fixes.
 
-output/build/libvips-8.17.2/meson.build:108:4:
- ERROR: Problem encountered: GModule is not supported on your system,
- please reconfigure with -Dmodules=disabled
+Release notes may be found at:
 
-using this defconfig:
+  https://gitlab.gnome.org/GNOME/libsoup/-/commit/25eac153004f777581ca2d95e31a02ca96844332
 
-  BR2_arm=y
-  BR2_TOOLCHAIN_EXTERNAL=y
-  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-  BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.11.2.tar.bz2"
-  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-  BR2_TOOLCHAIN_EXTERNAL_CXX=y
-  BR2_STATIC_LIBS=y
-  BR2_PACKAGE_LIBVIPS=y
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-14523
 
-Added configure options for -Dmodules to fix the problem which was not
-yet caught by the autobuilders.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 86d0fcd77bba8f4fe0e4d1a054d903de3d40fd15)
+(cherry picked from commit 1a9998e511ca6aea86a166511c4e3cb8456afb06)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libvips/libvips.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libsoup3/libsoup3.hash | 4 ++--
+ package/libsoup3/libsoup3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index e7641fa8cd..729d5fb9e3 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -31,6 +31,12 @@ LIBVIPS_DEPENDENCIES = \
- 	host-pkgconf expat libglib2 \
- 	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+index 32aa7382fa..c0b860875c 100644
+--- a/package/libsoup3/libsoup3.hash
++++ b/package/libsoup3/libsoup3.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.sha256sum
+-sha256  6891765aac3e949017945c3eaebd8cc8216df772456dc9f460976fbdb7ada234  libsoup-3.6.5.tar.xz
++# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.6.sha256sum
++sha256  51ed0ae06f9d5a40f401ff459e2e5f652f9a510b7730e1359ee66d14d4872740  libsoup-3.6.6.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+index 0db587a93a..34a9ed2741 100644
+--- a/package/libsoup3/libsoup3.mk
++++ b/package/libsoup3/libsoup3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_STATIC_LIBS),)
-+LIBVIPS_CONF_OPTS += -Dmodules=enabled
-+else
-+LIBVIPS_CONF_OPTS += -Dmodules=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBVIPS_CONF_OPTS += -Dintrospection=enabled
- LIBVIPS_DEPENDENCIES += gobject-introspection
+ LIBSOUP3_VERSION_MAJOR = 3.6
+-LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).5
++LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).6
+ LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
+ LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
+ LIBSOUP3_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
