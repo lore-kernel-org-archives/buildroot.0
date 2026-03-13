@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A65107BCF8
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C356107BCFE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32A9560EF3;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC0A4100E;
 	Sat, 14 Mar 2026 07:58:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdRNCu4PLqG4; Sat, 14 Mar 2026 07:58:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5954D60EF8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773475121;
-	bh=UjcpQY0Tw6yMNIxhX2khwFqgPWIXuS7Xt+RyrMP8TRE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XeIPZcSVhSkjuU4WmPhgkYr00o77RTYIDxXbP6+0Pmo0U+IOqJHeg+OiXeJsMQigo
-	 AUrrLZMJlrNNfR59hDEa+Dxma+fED2RRWDkYZAJDTG0lP9wCMYZrwEWWiEXhGx/78l
-	 0N3AEe4svqb5KKEUgXZ7zPDaJynw8YGuLKP5mL80YSo/3Wnb4dZFO2OalRca/R2WpS
-	 ajQSkVaRO745opJMwpjogEtxXfb81yyQ54TjhwQL0DonFPKhTpk0tu7pjWmw5bD48u
-	 I1JC2X7Ettmp9ne4lGKhWCjZxlK9622c7nlnGxUwBkjWcfZcQ/Y2L40tMDqSOAyUPj
-	 ksjBK8979JxqQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5954D60EF8;
-	Sat, 14 Mar 2026 07:58:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D291786
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EBE040FFE
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jk8rBOZIycRY for <buildroot@buildroot.org>;
+ id wINW_yzGen9r; Sat, 14 Mar 2026 07:58:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E2E40FFB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773475120;
+	bh=aelcqKFgFmnLOzqcIheZhg/O/bqBd6BQgUHp4GwpbQ0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=C8bQPKFT5n7P52SN+7MOhkpP6UI3HntkfTyLx846LPTEAmrpv6Di8daGOjd9/Sxi0
+	 z8efc5KvcW5UjG1xX5H/azJXsoeSBP72xQoSh9h+7k1BSgK+Se/fq/O96tOsohmHmw
+	 Dq7Dt3Wz2fJn8JHsH4kElJPU2mbbMsQxYPSvBnhI4P1Q7M+H4Vk+AiFqDxAHR7Dr33
+	 MI19KYNxr6DIR5CxfEe9jUDCuEI7xVs0C13J7C5+0/pSr8wcB1sF/3ZkgOxxCz2vBS
+	 Om61BfvWrdhOGgfo4HclGQOZO/IjSRnUWqQARlizfHyCnoTZoSO+WV6sqh/QDAnRxZ
+	 VYk0CPF2jaSaA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64E2E40FFB;
+	Sat, 14 Mar 2026 07:58:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 58122201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4957660F03
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DbF5foubbY9T for <buildroot@buildroot.org>;
  Sat, 14 Mar 2026 07:58:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9973240FFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 952AF60EF3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9973240FFA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 952AF60EF3
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEC6485E16; Sat, 14 Mar 2026 07:58:38 +0000 (UTC)
+ id C8E5A85EE5; Sat, 14 Mar 2026 07:58:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 16:00:28 +0100
+Date: Fri, 13 Mar 2026 16:01:47 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 80fff34d7b5e579042f32349e3180b8070214c2c
-X-Git-Newrev: 662482805098fe9093c63178c61f73d925aa1f82
+X-Git-Oldrev: 662482805098fe9093c63178c61f73d925aa1f82
+X-Git-Newrev: ecc9c6e5665b55f73c0c74d55f52dcca0d437789
 X-Patchwork-Hint: ignore
-Message-Id: <20260314075838.BEC6485E16@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libsoup3:
- security bump to 3.6.6
+Message-Id: <20260314075838.C8E5A85EE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/exiv2: security
+ bump version to 0.28.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/662482805098fe9093c63178c61f73d925aa1f82
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ecc9c6e5665b55f73c0c74d55f52dcca0d437789
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-While there is only one CVE number assigned (CVE-2025-14523) for one of
-the patches included in this release, the bulk of the the changes are
-security fixes.
+https://exiv2.org/whatsnew.html
+https://github.com/Exiv2/exiv2/blob/v0.28.8/doc/ChangeLog
 
-Release notes may be found at:
+This release fixes three low-severity vulnerabilities:
 
-  https://gitlab.gnome.org/GNOME/libsoup/-/commit/25eac153004f777581ca2d95e31a02ca96844332
+CVE-2026-25884: Out-of-bounds read in CrwMap::decode0x0805
+CVE-2026-27596: Integer overflow in LoaderNative::getData() causes out-of-bounds read
+CVE-2026-27631: Uncaught exception: cannot create std::vector larger than max_size()
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-14523
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1a9998e511ca6aea86a166511c4e3cb8456afb06)
+(cherry picked from commit 1c3aa5f977a8748f363e64b1225cccfcc848629e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/exiv2/exiv2.hash | 2 +-
+ package/exiv2/exiv2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 32aa7382fa..c0b860875c 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.sha256sum
--sha256  6891765aac3e949017945c3eaebd8cc8216df772456dc9f460976fbdb7ada234  libsoup-3.6.5.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.6.sha256sum
-+sha256  51ed0ae06f9d5a40f401ff459e2e5f652f9a510b7730e1359ee66d14d4872740  libsoup-3.6.6.tar.xz
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+index 1c85f2e1db..7c497cf0eb 100644
+--- a/package/exiv2/exiv2.hash
++++ b/package/exiv2/exiv2.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index 0db587a93a..34a9ed2741 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -5,7 +5,7 @@
+-sha256  5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638  exiv2-0.28.7.tar.gz
++sha256  ea51b0609f58a9afa063b60daa1539948b62247721e154f4fff0ad3aec9f9756  exiv2-0.28.8.tar.gz
+ sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index e5b55ecde7..d45acae34e 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSOUP3_VERSION_MAJOR = 3.6
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).5
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).6
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
+-EXIV2_VERSION = 0.28.7
++EXIV2_VERSION = 0.28.8
+ EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
+ EXIV2_INSTALL_STAGING = YES
+ EXIV2_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
