@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 629DA10706DB
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DC710706DC
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3091C410D7;
-	Sat, 14 Mar 2026 14:09:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C98A410D7;
+	Sat, 14 Mar 2026 14:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Xey4wzycNaZ; Sat, 14 Mar 2026 14:09:49 +0000 (UTC)
+ id OxAELi58LQHy; Sat, 14 Mar 2026 14:10:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5828F4105C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54264410F1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497389;
-	bh=rrsZlhaaFRJNAZNipZ1NEPs9mf+GW1cXwmdMMul4lNM=;
+	s=default; t=1773497402;
+	bh=y0fARSNmIvtObneeMVqmo+0aOiubc044vsRwwjFFW/M=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=VqujAwYqarD5NZ0no8fpAVxYjc8YbCG09t4645gA6PEf/ejvhfx+tJWzXzm8MTp+g
-	 OziBQMn8uSqjhiipaPKQli1jrPOQbn2eqC/FGmQSit0IsBxTouKle99xAVel9mBAoG
-	 zjfY+z8FOrRL+7oZGV3hPXEgf700tN5JMlWdF5z5JPvZfofdLIB49BkBsPSWBFu9qC
-	 qTMqAGZVEUSeR1OkVJy2RywtFwKx5R3Q8MHhjiQ1sR9dG4Sn7YRsKKw0fUCAtJ6Ecw
-	 LRjfAggR18V5Z61bg5GWP5z0h07do2g/X5YzO8KsxsCbIkFKrm/xwMDifIbYJemYJn
-	 cQk1DZ+KN0XQA==
+	b=kO0buhdaDqnt74SombHK3kkn4O0Ifse7yWdL60eWMy365EoROTdk9g0Ly9+gV3wpN
+	 KEycdJNtcGVw9aXUZg4Ft5EpQNnLyMpAgXkDKFbsiNZ1LJqokb8o7TQVw46L9OFip8
+	 PSTOcHs4vIKfyesi8WALaxs47K26f67rA5aonkhbCrTN0jklIYD/OsNSHXkBXodzqI
+	 zV3+qRfQ5WOV4WDGjI/vLcGAd+UmZ91z32IO1TFkMEumxEDXAK8x8yX7U9WGjSbMM5
+	 /UqsK8G8oX4CDK2wh6fSMTmOIHl+VbwvcvniFP+Fra7RRVc05oCiANF2Ptgc30zVtf
+	 iDBeTnYWKBovw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5828F4105C;
-	Sat, 14 Mar 2026 14:09:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E94DC201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54264410F1;
+	Sat, 14 Mar 2026 14:10:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 733B3201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB349410E6
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58E67401CA
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XAgFxH4dxMG9 for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:09:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UoubZC0cZGyM for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:09:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CF5294105C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF5294105C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16C70400F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16C70400F9
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CF5294105C
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16C70400F9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:59 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 77691A4C1426;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C12FCA4C1429;
  Sat, 14 Mar 2026 15:06:47 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-3hRH;
- Sat, 14 Mar 2026 14:06:38 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-44xg;
+ Sat, 14 Mar 2026 14:06:39 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:06:02 +0100
-Message-ID: <20260314140633.2967249-66-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:06:03 +0100
+Message-ID: <20260314140633.2967249-67-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497207;
- bh=oZN8grGwxttJTQU/U1nuc+jQKobgsre32ODEMSQ7Lw4=;
+ bh=/RB/VwuLSFVSc6xp2bY2XHX2OOtmU/WuN9vVJeQPIBk=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=qExtR0pD93Rfu4qojYVVRlgRGKIpGemups3NW9z5k6WTwJRIZyIGrP+JacLvuZElK
- BvH944mvfCedXZw3ahdp/0d8XZLc7jtOF/35vUymPLCb5n01Rh9e42KkGCwNNsVf6p
- fYx+2R61VaazlSQPYGQ4lauxPJWHP4/hev+LRbMHNsdGIJwhod7LKfLv20fklRIJ1g
- Lp5IjYChjJOjo87k/+mBJRBkGLGUJkHH13eXiutrhM9pgok92ZHKOPG5SlF9Kimfml
- H48Q879rOjWj2fhz3D90g3VQaH/MhgVuK0Ln7Cci/wVdzWkp0NHJH/JQKiM+CUI0oU
- oW/uai+/FvEiQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Vue0jCorQQu7i2OYKsgYfjqJUdNr45gLUFKnAtejabmxTF5QgLkIjY3w3Pzz4Rfr2
+ YODQRx8ObAK4uVfD/emIGCARRz7e95byFMR7GZ88t2LGbxnmRPF0C7XHJfwYZZc5b0
+ p9XzSC5QiKFZ8ziw03xvhdEGxrd49Byrwa8h7AnGUVvjwrI/ulwh4HP/8zjToNTVVF
+ Ro8mcT8h80vw562X0XtAwrxc+sfIFepAf7KX3OCJCeCM5wmSFe7KQAoQWLUSH824T0
+ wYDZIWMA4kM75j5S1W7XdbhP/W2+Owycpaha63LhXixT0c4edLVJe5IfaRceYkSECy
+ 1SYpWc3/bXOlg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=qExtR0pD
-Subject: [Buildroot] [PATCH 66/96] package/python-setuptools: bump version
- to 82.0.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Vue0jCor
+Subject: [Buildroot] [PATCH 67/96] package/python-smbprotocol: bump version
+ to 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pypa/setuptools/blob/v82.0.1/NEWS.rst
+https://github.com/jborean93/smbprotocol/blob/v1.16.0/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
+ package/python-smbprotocol/python-smbprotocol.hash | 4 ++--
+ package/python-smbprotocol/python-smbprotocol.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 0236a13999..12c8ac206e 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
+diff --git a/package/python-smbprotocol/python-smbprotocol.hash b/package/python-smbprotocol/python-smbprotocol.hash
+index ad0c547d7a..ca8889029a 100644
+--- a/package/python-smbprotocol/python-smbprotocol.hash
++++ b/package/python-smbprotocol/python-smbprotocol.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools/json
--md5  6e65b88d2466b35e86e5187b99502b1c  setuptools-82.0.0.tar.gz
--sha256  22e0a2d69474c6ae4feb01951cb69d515ed23728cf96d05513d36e42b62b37cb  setuptools-82.0.0.tar.gz
-+md5  2d7f1881d7a06abe7fa69412de30cda5  setuptools-82.0.1.tar.gz
-+sha256  7d872682c5d01cfde07da7bccc7b65469d3dca203318515ada1de5eda35efbf9  setuptools-82.0.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/smbprotocol/json
+-md5  3ff374488f4760f2f40e799e69671c40  smbprotocol-1.15.0.tar.gz
+-sha256  3c892f4c22ab147d0576a3a8d34279831b26ab4695b7df911a334bc41f6d652a  smbprotocol-1.15.0.tar.gz
++md5  cf9607c3d117e2c53b907f78702808b9  smbprotocol-1.16.0.tar.gz
++sha256  babeb6fa825ba57939f9637c49a34548ddca348386d34de0796d1f87882c0bda  smbprotocol-1.16.0.tar.gz
  # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 3c94931fbe..fec9153c6e 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
+ sha256  4c3c550abc2b04c507ed0d641dd7e524eaff5bd06c7862af957301836d496d15  LICENSE
+diff --git a/package/python-smbprotocol/python-smbprotocol.mk b/package/python-smbprotocol/python-smbprotocol.mk
+index 6b35cb170e..5978b3847e 100644
+--- a/package/python-smbprotocol/python-smbprotocol.mk
++++ b/package/python-smbprotocol/python-smbprotocol.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 82.0.0
-+PYTHON_SETUPTOOLS_VERSION = 82.0.1
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/82/f3/748f4d6f65d1756b9ae577f329c951cda23fb900e4de9f70900ced962085
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/4f/db/cfac1baf10650ab4d1c111714410d2fbb77ac5a616db26775db562c8fab2
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+-PYTHON_SMBPROTOCOL_VERSION = 1.15.0
++PYTHON_SMBPROTOCOL_VERSION = 1.16.0
+ PYTHON_SMBPROTOCOL_SOURCE = smbprotocol-$(PYTHON_SMBPROTOCOL_VERSION).tar.gz
+-PYTHON_SMBPROTOCOL_SITE = https://files.pythonhosted.org/packages/c7/b4/68d75ae0c2f925976c7a58dd9bd26741378c79c6d56d57c72fabcbe595c4
++PYTHON_SMBPROTOCOL_SITE = https://files.pythonhosted.org/packages/c0/5e/1eb2adb1e4739e8a1571f4a641850569ed65d72f72e3d3fd4b121e424795
+ PYTHON_SMBPROTOCOL_SETUP_TYPE = setuptools
+ PYTHON_SMBPROTOCOL_LICENSE = MIT
+ PYTHON_SMBPROTOCOL_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
