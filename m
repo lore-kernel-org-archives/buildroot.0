@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8693105F79E
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D1E2107BCF8
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D40960F4C;
-	Sat, 14 Mar 2026 07:54:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E9C760FF1;
+	Sat, 14 Mar 2026 07:54:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Wy4j9Sumshq; Sat, 14 Mar 2026 07:54:20 +0000 (UTC)
+ id Q31apqyb82ma; Sat, 14 Mar 2026 07:54:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FFA060F72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE22460FDB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474860;
-	bh=5uqnJ3KvcQbbIvhkp4d3t8s/4GNLUGgOqtMS8nw8vwE=;
+	s=default; t=1773474861;
+	bh=pykIyi6CbsuXzoRWEuZcMiEZIBKp9zniCxeiNeOTV3w=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Cm/A7UknA9Px7WU0voB+b68hwoaFlDushgR6ziQVM6l1wheqnfwH7FpYdRzmTP6qo
-	 xlHqYNSDZsabuCaMJqkL2X7Sqk0JiLYxdKTVqu6A3UfUz9/Yj0rU1qwcMP9P8Z5Vcp
-	 2Ywp+ZlEgddy9MFbH6FJDHoR93bxOLlnOiST8Bg37acJYNq/r226twOgSx7n4ucgLN
-	 7wnqRKc/yzgVZli4nN5fe+gZJQMGIpaX4WNrPR7b1YJYlIQBmV0aptA3O1NfI6t+4z
-	 yX7KY+EBO/+iqzbWqcwR1u6xeWcwp4IBu+Qjse7PFp2ih7OAOadbi59K3k0bknfQam
-	 5xgMvh0OVVyrA==
+	b=AuYtNcLIiE6EpyxI1qZO2gGRmqDZSzqaCXCxr0mXLWvobYHYlfKvwIUojmDbQW97o
+	 lGniR8uwkC9Ad8MrWgJkQG3tMqYj/F+hLe1hA1aVxSpYpvjlFIb66YUEAVD2x7HJyQ
+	 MSdp+arHvIW+35LCAlkqvm40LD/UUJcHi5pK4DOPurYuTeXWv+SopMChnqXyYBtDLy
+	 XvIKD+Qf77duDSg9riNcuTaUVo4alLZXjXvJ9b468+FfTn04XxTSARNuYGUclEVeZO
+	 7wHRHzB0DJu5R+21SW0M1iK0dTaN93PzorZ41hdx3pOXq1+RxKMCRGcaGm8g4bgdrQ
+	 IZ9wHiKecHM3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FFA060F72;
-	Sat, 14 Mar 2026 07:54:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 15C81201
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE22460FDB;
+	Sat, 14 Mar 2026 07:54:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE1E41B4
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F013F400A2
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D028D4100F
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id as6NLCcxUhBl for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:54:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SWqld7T3kWDV for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:54:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE53940135
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE53940135
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE53940135
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:17 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-439b9cf8cb5so3322305f8f.0
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:54:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B76FD40F75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B76FD40F75
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B76FD40F75
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:18 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-439bcec8613so2301981f8f.3
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:54:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20251104; t=1773474856; x=1774079656;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=T87jZAQxVQU2iZszkc5yvrgxnV8WLjTpIGaQ8oF5VcQ=;
- b=jMWadyDfgUDes67c7aqUhyOKYiRSj5Yiw78IdtPgXvu2hblcB2HyYsZL2IwSoaAjkl
- vV6HSQR7Pi7r2mGe3PvDqJ34QKvv/nkX1HQ1SuGCV6KqqYGdYuQy3CVzYEjxUPYCDTy3
- 5XIzffg1Lcp+Nivg4sjo1ybbFxkeGKuPmgjlUl4nOWju5C/dktc7JSIjXJS27JG3u5aw
- HRRnAFnuDmPUyldfxrNn+Y33zyfQdnXOyCkfMnOiiTTJv9xtP4eD8SgOiaFbWtWX0gCA
- wBN8wyylnZ42LP/0ufq0Uem21Lfp1qNutKHXOy5vF09FH8KJyWaecQWLS3o80a1al3Mr
- AVSA==
+ bh=jWGgYxs7ugSsTqsBU81KzmLGfchEK5y0ZUqx6Wh+IJ4=;
+ b=aLOnHG78Oje6sBmsxiBFEt90CcDLa2txVU909/9CRoo6FO1Bi73bMCccmWOlcz20wW
+ RdIYFc/aXjRq/CI6BUFVbGIlceh/5OHjWLzcm7KJjRW0z++Wgh+KgrFG+57j2M3fRUtk
+ Ni3U8kRYPHi1P0clWOxQmooak40FxK0HgEs1BNq4KnQeAiA97jqKCoMx8320VJEmTpyK
+ krLAX5VXuIupwxBgK7yL/XuaWnsQk1paoP/bTGqqWlpB/Bh8RSAZnrTE8BKomkHjFnJK
+ OFzmUcr11jlOCKX1+WdqUYbJLkztcUm9NjLojYDldjfXJj0lEUbwFnFjS/5l8ivtlmnd
+ sRtw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVI6kvYgwFjirhQv9xqopT5Vi42CggYZKZFZdEALxWNCxMZQ8tQMpGs6XVgg4vkE3jauQtuW3psiFg=@buildroot.org
-X-Gm-Message-State: AOJu0YzJqZ3yuqjwr5gDNmnJdgWA2pG3HgUQltUbTmZttq5+LsZ7Cl5V
- v8wI4UwST9omEoKBM6fjpB5qIXDG5ULPnYC355Xvh1vyC/tmCkTKCBiXgMevuzkhGNAwPOrWk3U
- KEhLq
-X-Gm-Gg: ATEYQzxJueaz6hc7GiK2UlL2jWL8Em/jXkx5HKaDE0RQxWLiDPwiKSTcGu2QdzGTo1B
- utdY568VXG2tGAExDIn3xJcJhReWHkNnGx5FRoa0KywsaB0GGBh8M5FidHHP7zzY/fF8gCyV6Pb
- xFrLii9iW/IjjRNnTrhyW41RgNPfLM9L/FO9dQLa4tix2dmdV5IaK9SQeNM5IhIKCIkLUeanElb
- HcdZSTCLaGpvi+4k1iAnNl8L9ACc2ifn+WhoETLP5/2TllHvdIxnMqSPoLnB48gvAZcgJ5X4Xwn
- RFZZzwWP5vcx+QAD4wChon/uiR4WItIJRq297+DUiXfSUzRGJsXDj/jzrP5MabAYDntOBvnrTVA
- jUwNS1AvdBsSjpn34jkUUDJpf2qoGJ/pXrjiQS0Q1Em9iDLKLTULuMaCN9+HJh9fIP0aJtEWOEu
- laUuSpE96WOBlmzTw=
-X-Received: by 2002:a5d:5e01:0:b0:439:befa:91cb with SMTP id
- ffacd0b85a97d-43a04dc0958mr10760430f8f.45.1773474855517; 
- Sat, 14 Mar 2026 00:54:15 -0700 (PDT)
+ AJvYcCXcgGkSANoMjo7nAzP1j1JK87gxpxM9zdTLi/ONvp1bQjbbI8/79//uH/YRBwOgWPt/5HDKAWbZ8Ic=@buildroot.org
+X-Gm-Message-State: AOJu0YyYJGcIO7xz3MgvXiuK1fWptdZGj92UkugdXExRqoUPUKrpIPpe
+ wvxytMJCrW14GIvpAYiO2k9YPaN6GbinfTnY16639aqncqS/Ypeoys/dhCAa2X9GQpfrCcsheTL
+ EPn/K
+X-Gm-Gg: ATEYQzz9yaS4taxRxASdZbXnmS8aG4+924VIhTDXKVdjK7W1HLI/kP+VpMPryWrJBMM
+ iGgedoUXSAEpnW8EV4c3rDU/UQlvCc3yh14+upJuyK0hVNv/mdtvUSz68d+R6or+zzf8tPlDM2p
+ ND+TC7/TdIvAT7u/4qxNSp9AGrEe/qYSadeRRTv7rfWxMGrQr6LhHx9bJ5Qvek7dffK79hgY+Nv
+ V2IvU5DTUpB+GLlFblOY1KVLImVLCNs21MBJgHzgUg5NXERn9zAqIN3YD6x97xd5Ij34OJeMyEv
+ YrIa+UIV8WAcgLfBggZ0+mxCDBFKWFfnrsWqU+HTHwsaJK9I7tSG4PJZDEuzSihOU2LXwcRw2V2
+ nezceGb7BIVXgsZJC9ZDalwBierfpmuIpLHMmNm0qw6AxIyQZ+VfzUjIdmmwOppcJ1F1EkHGTNM
+ 3b0D8XufNjl8vCSyM=
+X-Received: by 2002:a05:6000:2584:b0:439:abcd:b317 with SMTP id
+ ffacd0b85a97d-43a04d89241mr10586004f8f.14.1773474856414; 
+ Sat, 14 Mar 2026 00:54:16 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439fe22e9ddsm21952261f8f.37.2026.03.14.00.54.15
+ ffacd0b85a97d-439fe19ad9asm24773957f8f.7.2026.03.14.00.54.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:54:15 -0700 (PDT)
+ Sat, 14 Mar 2026 00:54:16 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:54:14 +0100
-Message-ID: <20260314075414.15484-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:54:15 +0100
+Message-ID: <20260314075415.15538-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260307185425.729667-1-bernd@kuhls.net>
-References: <20260307185425.729667-1-bernd@kuhls.net>
+In-Reply-To: <20260308160344.2593517-1-bernd@kuhls.net>
+References: <20260308160344.2593517-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1773474856; x=1774079656; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=T87jZAQxVQU2iZszkc5yvrgxnV8WLjTpIGaQ8oF5VcQ=;
- b=QTC/1eS4BC2SU4qHN/l9P9LwrMdlYl5xgQpXGNeiNRDW+6iDGbPgf6d2MzheQ+lWgb
- bA7AnirLCDtYsqtGAOHfb71mD8ldtcAqb41S5ItycfCWwo0JrkJ7oyinuB/1o1MwuYRD
- V+GQMbtkpLi0KvCsAJ72bX+sHfp4VhJufP8Ss5HVZW7RzjVnIeo5dbfGw6q9GaAIEf6G
- SDh7ZV+BbCa+3wK8DvV11djkHxyFmIbQL6E2tdCVygcM7uFQ+prPB0kEGTr7ynu3TOQy
- Y0v5eNOcoPS5CnjNhBYkst7D30a9kJtJBN22DFXTV7hpxtoSkogI7T5RecO3LT/9Xthm
- kA9A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jWGgYxs7ugSsTqsBU81KzmLGfchEK5y0ZUqx6Wh+IJ4=;
+ b=Z6q/sc4LbOkA/FjrgiNWwpwk1os7BYrmxoo64kbnwBOfqbezYLJqOAn0vV3kMOTpx2
+ i5d7fAowpkhF7JOuMaVbl81VEBcoi93PmWLRlTlHf0IgLJ8SjH+s9E9cHZ9xkmWxHR8B
+ 48/aIJgs+lzm594mD9ebOgrv6GTXm4KEE7OtjPTloRsEH06olCTGoo112nKdeD5Vku1a
+ VwgLmiqk08LDm+mSWDq0gGqKNnXF22RiKrSp7iSwzbLj7tDrblpoVNx9FVDcHbeyFema
+ 5MfF8euxb8nDuoThNJCpyX10Y2hNoHoTpHiToxj9fSLS31IluxE8e8cbcWjTunVbpGwT
+ ekFw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=QTC/1eS4
-Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: needs gcc >= 10
+ header.a=rsa-sha256 header.s=google header.b=Z6q/sc4L
+Subject: Re: [Buildroot] [PATCH 1/2] package/jasper: fix build without
+ threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,106 +132,47 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes build error with gcc 9.x:
+> Buildroot commit 03a1732dea67e088ec85f92853ca14f5a3c0f7b7 bumped the
+> package from 2.0.33 to 4.2.8. This bump includes upstream commit
+> https://github.com/jasper-software/jasper/commit/91fca092098396938830fe458f57109f0dd58a54
+> which was added to version 3.0.0 and causes build errors when threads
+> are not available:
 > 
-> output/build/libheif-1.21.1/libheif/nclx.h:128:50: error:
->  'bool nclx_profile::operator==(const nclx_profile&)
->  const' cannot be defaulted
+>     message(FATAL_ERROR "Threading support is not available.")
 > 
->  using this defconfig:
+> because JAS_ENABLE_MULTITHREADING_SUPPORT defaults to ON:
+> https://github.com/jasper-software/jasper/blob/version-4.2.8/CMakeLists.txt#L124
 > 
->   BR2_arm=y
->   BR2_TOOLCHAIN_EXTERNAL=y
->   BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
->   BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
->   BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.11.2.tar.bz2"
->   BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
->   BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
->   BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
->   # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
->   BR2_TOOLCHAIN_EXTERNAL_CXX=y
->   BR2_STATIC_LIBS=y
->   BR2_PACKAGE_LIBHEIF=y
+> Add configure options to disable thread support when needed.
 > 
-> According to https://github.com/strukturag/libheif/issues/1615#issuecomment-3457979167
-> gcc >= 10 with support for C++20 is needed for the package.
-> 
-> The failing code was introduced upstream in version 0.21.0 with commit
-> https://github.com/strukturag/libheif/commit/a62f933e380e165dc2c12a879d0ceed1529b3efa
-> which was added to buildroot with commit
-> a8aed698c706ec534ddc41cdce651c18016c28ca.
-> 
-> Also removed -std=c++11 from CXXFLAGS.
-> 
-> The build error was not yet recorded by the autobuilders.
+> Fixes:
+> https://autobuild.buildroot.net/results/870/870d6adbac166b22cce217628d477b1bce538320/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/kodi-imagedecoder-heif/Config.in | 6 +++---
->  package/libheif/Config.in                | 6 +++---
->  package/libheif/libheif.mk               | 1 -
->  3 files changed, 6 insertions(+), 7 deletions(-)
+>  package/jasper/jasper.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
-> index f41b164ff4..d77f10ee98 100644
-> --- a/package/kodi-imagedecoder-heif/Config.in
-> +++ b/package/kodi-imagedecoder-heif/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
->  	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
->  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libheif
->  	select BR2_PACKAGE_LIBDE265
->  	select BR2_PACKAGE_LIBHEIF
->  	select BR2_PACKAGE_TINYXML2
-> @@ -12,7 +12,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
+> diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+> index 88633c9661..9ed54989e2 100644
+> --- a/package/jasper/jasper.mk
+> +++ b/package/jasper/jasper.mk
+> @@ -32,6 +32,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
+>  JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
+>  endif
 >  
->  	  https://github.com/xbmc/imagedecoder.heif
->  
-> -comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 4.8"
-> +comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 10"
->  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-> diff --git a/package/libheif/Config.in b/package/libheif/Config.in
-> index 0ae86a07f4..9e88fb826d 100644
-> --- a/package/libheif/Config.in
-> +++ b/package/libheif/Config.in
-> @@ -2,14 +2,14 @@ config BR2_PACKAGE_LIBHEIF
->  	bool "libheif"
->  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
->  	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	help
->  	  libheif is an HEIF and AVIF file format decoder and encoder.
->  
->  	  https://github.com/strukturag/libheif
->  
-> -comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
-> +comment "libheif needs a toolchain w/ C++, threads, gcc >= 10"
->  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
->  		!BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-> index acd302d847..c4196f9353 100644
-> --- a/package/libheif/libheif.mk
-> +++ b/package/libheif/libheif.mk
-> @@ -11,7 +11,6 @@ LIBHEIF_LICENSE_FILES = COPYING
->  LIBHEIF_CPE_ID_VENDOR = struktur
->  LIBHEIF_INSTALL_STAGING = YES
->  LIBHEIF_CONF_OPTS = \
-> -	-DCMAKE_CXX_FLAGS="-std=c++11" \
->  	-DENABLE_PLUGIN_LOADING=OFF \
->  	-DWITH_AOM_DECODER=OFF \
->  	-DWITH_AOM_ENCODER=OFF \
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +JASPER_CONF_OPTS += -DJAS_ENABLE_MULTITHREADING_SUPPORT=ON
+> +else
+> +JASPER_CONF_OPTS += -DJAS_ENABLE_MULTITHREADING_SUPPORT=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_JPEG),y)
+>  JASPER_CONF_OPTS += -DJAS_ENABLE_LIBJPEG=ON
+>  JASPER_DEPENDENCIES += jpeg
 > -- 
 > 2.47.3
 > 
