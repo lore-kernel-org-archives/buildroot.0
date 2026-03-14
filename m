@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB8C10706DE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 081CC10706DF
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 106574142F;
-	Sat, 14 Mar 2026 14:23:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D030641688;
+	Sat, 14 Mar 2026 14:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cj06t5xhQsoC; Sat, 14 Mar 2026 14:23:06 +0000 (UTC)
+ id MArhpr3aQ7fW; Sat, 14 Mar 2026 14:23:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 017EC41363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1C5A4139D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773498186;
-	bh=EbGk5EIdbJfMiUSKtwVtiA0yarZO+DALvWMkrR+pu+g=;
+	s=default; t=1773498200;
+	bh=AHzg4ZhmCFJzKnWmPbjybF0AOMD47lwajyYLiaGkbYA=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=AJOTkS5rBLMZVvIVbAS19vwnMa2D+laBrJNCY6Vmx2SBSAPFCjv61nH/fH0Zskk3D
-	 C0wXuLlHGjMWNW6YI/jx3rRuQ6S9XPDZ0E/pnPMedQRWGvURTrXroZX79ZfordK3Tt
-	 oyUrhgzPdw5UBnj7ywl25Liu6kVHWGZIModf5oILzU3YLVSMmED7Q0w5TjZ5B05Vhz
-	 YRLjocbVBJr4qcT1icsDPRRkdz1I9UN6QgSl6q91ZBgsgwLeck0Z8+kF2Q+kU0qlWI
-	 5YC2X31HKS3Mdr7zclQvguhxv6mn1WBszqDI2LBApNLaxpyapNz+o2ad0/lxPmvrys
-	 wRyaq8be1aFbw==
+	b=aSAvLC7AXWOrkCL4VmauZlgkZ/J5VeaMVBrGUKIU3KIAYUJ6oj2r+QOnZTNDDGcXZ
+	 ArCwijAIsaVWpHaswy2mXnuvwDlKe5NHGGGBL09Zk9UTtXrMO+4sFMSmdgy11GZZgl
+	 jj6uwLb+ZoesHN6HNg11j1AtDCvLHBKuxBH1vcW5c8U9xdV8+xjkZpyDoaNRxoTFZB
+	 6Cbh5eqDKC3Xhk0lH7z/GJ5ossWkmi81wIUVAoFgI/h+p1feZTyJFHiQ2fuOI0n8Ie
+	 v5Y71sE86WnEBdAYxj6XnCgX3sxXPysHQ1ZFEjlZALzAWl4TPrSog7VS1KSDM59QPZ
+	 i+z9vXdZlvqXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 017EC41363;
-	Sat, 14 Mar 2026 14:23:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A93381B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1C5A4139D;
+	Sat, 14 Mar 2026 14:23:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4AFB2201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F25E60757
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CE8880E9F
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tc32G5W8RKyy for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:23:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93A-X8S7rA5M for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:23:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6EBC46073B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EBC46073B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 26D8080E8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26D8080E8D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6EBC46073B
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 26D8080E8D
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:15 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0CD2CA4C1A98;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 50D6EA4C1AA6;
  Sat, 14 Mar 2026 15:07:05 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdU-000000003UM-1zXn;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdU-000000003UM-2LPZ;
  Sat, 14 Mar 2026 14:06:36 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:35 +0100
-Message-ID: <20260314140633.2967249-39-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:36 +0100
+Message-ID: <20260314140633.2967249-40-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497225;
- bh=K3radR2xfXYsCtAAvOVDwSQZ2oLFF3YaUH/2eg5lHfw=;
+ bh=Wipk5jO7znGNj3EQdt+to5ro3u/iQnzXKIGFywLT3r4=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=eGO1c5Zs0ZI36xIwgNgNhQs2nRh2gmqNjg9JaqIqELels8PRFw19twZLE99+9llu0
- +Vm1aSqQk1NQ8j8cEZ3wrdoLecSBhMbTjYvnNxwS/90mAzFiTpVElx2mhNE4N+pQHN
- F8XNTov8uAS/pqOlgBp6EsfxNDqppe9q//T12qCpHoG4Xu1cWI36GoQiS6aj2qHRxM
- AxbatMs0esdYcv7g65C6lkS9uD2hHGRi3oa5yno6gsOUK3CmAAWGKlLO7/KSeGkilA
- ML1K+wRcZG2U4q0QJs5KED22V+3Vpw2d9PhnRPHlpGP+5z/GVYwAq02obmy71q4Na0
- 0in/c31yL731w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=dxU6N3taoLTeiJUZe5NYtnYEBFKstBQUK7cZA6vEXiI6Vy7gxXMMmHps6uJIi26n2
+ fpDqmRptj+mg7s014zA+k2ZQy9Vm1xkmNrt5wojGo8i8Ijoes/gkNVNheoPcsQ7yyf
+ febs9QYD4KgxTuK8bvf1KPaWMS62hwdFYBN0NTLn00PiY4LmJ59wnvcmzD1+5IzZJC
+ iWmHqta7z2xLJKtvcSJ1XwCQ8GkGwg//jHZ8bcj0gvoQOXpGQcXv1KOtcF7oDdlzgH
+ 5yqG9iavOeNg/PL202GZ3jOfRXqmilIIBI/dC8fhDAAjcvcfHZ4ogR7bNKBRlim5l8
+ LjgIHPmdmlmIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=eGO1c5Zs
-Subject: [Buildroot] [PATCH 39/96] package/python-pathspec: bump version to
- 1.0.4
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=dxU6N3ta
+Subject: [Buildroot] [PATCH 40/96] package/python-pdm-backend: bump version
+ to 2.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/cpburnz/python-pathspec/blob/v1.0.4/CHANGES.rst
+https://github.com/pdm-project/pdm-backend/releases/tag/2.4.7
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pathspec/python-pathspec.hash | 4 ++--
- package/python-pathspec/python-pathspec.mk   | 4 ++--
+ package/python-pdm-backend/python-pdm-backend.hash | 4 ++--
+ package/python-pdm-backend/python-pdm-backend.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathspec/python-pathspec.hash b/package/python-pathspec/python-pathspec.hash
-index 15283e3ac2..429fa05c3a 100644
---- a/package/python-pathspec/python-pathspec.hash
-+++ b/package/python-pathspec/python-pathspec.hash
+diff --git a/package/python-pdm-backend/python-pdm-backend.hash b/package/python-pdm-backend/python-pdm-backend.hash
+index 83e275c032..c856d1e818 100644
+--- a/package/python-pdm-backend/python-pdm-backend.hash
++++ b/package/python-pdm-backend/python-pdm-backend.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathspec/json
--md5  2b26ad1981bfa23748e115f00085624c  pathspec-0.12.1.tar.gz
--sha256  a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712  pathspec-0.12.1.tar.gz
-+md5  18d9e6adb72e544b56a88c3e53094b4e  pathspec-1.0.4.tar.gz
-+sha256  0210e2ae8a21a9137c0d470578cb0e595af87edaa6ebf12ff176f14a02e0e645  pathspec-1.0.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pdm-backend/json
+-md5  63dd231ba6206cc834b205694208df40  pdm_backend-2.4.6.tar.gz
+-sha256  5dd9cd581a4f18d57ff506a5b3aad7c8df31e5949b6fd854bbc34c38107e4532  pdm_backend-2.4.6.tar.gz
++md5  f51ca7c104f47dac6b31dc51255fab19  pdm_backend-2.4.7.tar.gz
++sha256  a509d083850378ce919d41e7a2faddfc57a1764d376913c66731125d6b14110f  pdm_backend-2.4.7.tar.gz
  # Locally computed sha256 checksums
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/python-pathspec/python-pathspec.mk b/package/python-pathspec/python-pathspec.mk
-index b46dbef7ea..9c5279e012 100644
---- a/package/python-pathspec/python-pathspec.mk
-+++ b/package/python-pathspec/python-pathspec.mk
+ sha256  1da058ed0440fea5df1765b19a1418800439b18fd6f1c13c7d429cb81e9c6d47  LICENSE
+diff --git a/package/python-pdm-backend/python-pdm-backend.mk b/package/python-pdm-backend/python-pdm-backend.mk
+index 4f30f8a909..c3cfeb6f73 100644
+--- a/package/python-pdm-backend/python-pdm-backend.mk
++++ b/package/python-pdm-backend/python-pdm-backend.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHSPEC_VERSION = 0.12.1
-+PYTHON_PATHSPEC_VERSION = 1.0.4
- PYTHON_PATHSPEC_SOURCE = pathspec-$(PYTHON_PATHSPEC_VERSION).tar.gz
--PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/ca/bc/f35b8446f4531a7cb215605d100cd88b7ac6f44ab3fc94870c120ab3adbf
-+PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/fa/36/e27608899f9b8d4dff0617b2d9ab17ca5608956ca44461ac14ac48b44015
- PYTHON_PATHSPEC_LICENSE = MPL-2.0
- PYTHON_PATHSPEC_LICENSE_FILES = LICENSE
- PYTHON_PATHSPEC_SETUP_TYPE = flit
+-PYTHON_PDM_BACKEND_VERSION = 2.4.6
++PYTHON_PDM_BACKEND_VERSION = 2.4.7
+ PYTHON_PDM_BACKEND_SOURCE = pdm_backend-$(PYTHON_PDM_BACKEND_VERSION).tar.gz
+-PYTHON_PDM_BACKEND_SITE = https://files.pythonhosted.org/packages/71/fc/15b83c93a8e7929b62debaad63a3e89b8ce7f8a86075bda0d81e42c3cad5
++PYTHON_PDM_BACKEND_SITE = https://files.pythonhosted.org/packages/e2/38/d22c1050130b8cdf16fef76c99c59968086802744947f2813d45c69cca52
+ PYTHON_PDM_BACKEND_SETUP_TYPE = pep517
+ PYTHON_PDM_BACKEND_LICENSE = MIT
+ PYTHON_PDM_BACKEND_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
