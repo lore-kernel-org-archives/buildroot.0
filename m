@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D02E410706DF
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE0EB10706DF
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB740415FD;
-	Sat, 14 Mar 2026 14:21:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6DEF41610;
+	Sat, 14 Mar 2026 14:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id myfovn6Ez6DR; Sat, 14 Mar 2026 14:21:17 +0000 (UTC)
+ id vLKWaZckeXdn; Sat, 14 Mar 2026 14:21:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01089412E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDAB441605
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773498077;
-	bh=OEs4fUchmG4SuAkyhGP8nMqSmIdPtgDAXEPTuhP1PEU=;
+	s=default; t=1773498089;
+	bh=TjEMIn4F0XoY60FCcTuN+gAZcnKn6VGAwicIUz1Z6D8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=MKtl7aSc5jEmRnvZPnukEhOE02n3Pw1gfkuBhhH04rF4D9SBtCQTvJhvpWotwhVp6
-	 wNhupg4a8RwE1sPjqBf2Htkyhkb/iXdO9VFKDZR1+QcRzkja/mYby8qmFhp1oHyIkY
-	 dGzzURya5LRjC8RSEnTeKKi4b50dSwMzTE7sWgnybRXY2owsWGeJoBQBEDnt9Qcmg1
-	 gchEFxinfHs8lDNXZxeJN8h10jgWGG1Xel1CQcAlWSTb2O4S9xDKbBup2beleUhdDA
-	 BXCqM2lGy05vcQym5PRrtWe2wwDUU5+h2wTfuRA7lmhHfOxnAipHR9CCNzeTkz7wMw
-	 9N1ViMIXUrFlA==
+	b=IRhuHr13EWbO7jhO7uATyrB2ndxQaACskC+R0CqOGXdXrKOUq9v8tw9oILFe/is0E
+	 1OeVbeyeUmNeOS7sz++MEG9PiAoVgcEX17uDFiqLXUgtfPr+b9cplBCzgb5B5hmB7C
+	 SWYqxAtmlZQZqd+gkSfuMdORvrrPsg85McNzJsc4+cMSu6guhK3siLyKxYT91bbBFG
+	 I5n7l+diUPfggHswyuaJIJAwSSXsgXqb0BcxCkoVPLb8FO3hw7LRbzLcHhlxHpEzci
+	 6WQKDOwJ2VMfMsB4T86P3g01tG9A4JbX2XjTPz6hQtl5trsVYEK2xKeMaxnivPyZLG
+	 iiFbH6bh/YN+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01089412E9;
-	Sat, 14 Mar 2026 14:21:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B652201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDAB441605;
+	Sat, 14 Mar 2026 14:21:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B68B201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D2D7400F9
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98FA9400F9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n4k-9d2SBRkX for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:21:14 +0000 (UTC)
+ id SABxBp8kwXGW for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:21:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6225940076
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6225940076
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81E3440076
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81E3440076
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6225940076
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81E3440076
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:26 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B7E68A4C19FE;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B831CA4C1A02;
  Sat, 14 Mar 2026 15:07:03 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdT-000000003UM-2whe;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdT-000000003UM-3Hpo;
  Sat, 14 Mar 2026 14:06:35 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:26 +0100
-Message-ID: <20260314140633.2967249-30-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:27 +0100
+Message-ID: <20260314140633.2967249-31-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
@@ -67,22 +67,21 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497223;
- bh=tEc/GsG0yQKy8WkotLpLDocnrU6WQIUJb5GHXu3VBkM=;
+ bh=dPNYkNv46Z4FiA/Bi1Qs+rIR/vnJK6fQFfvagblxmkI=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=pcqA3WnrjUZ9BXxWnPv8l6ziCVhmiO+faj08tmGO8afZneWwuCLcPnMTfrbzpWB7B
- gfANrUx6WgVF29Kg3yqUVCvnTzJ68p4KBVmwJwQ8t9699s3gnsMrQvatlzVyUuvUxg
- EZKsjj0K9HBKTc34jS3CFhyM0bJdOFaETKT2+0xZXDnzuD7E1CK6Zfwmpbfsu/X37V
- RAuUANuWAqOqBp+opk51hpa2+96YvN5CkrM+E3foWZ6yFFh/67mQHH91KYYy4ppDTR
- kLAOgFvecj+O2BpI0WB6PKFMkW8LBC8B4xz5ab/gHN0a7FNrl0wTZGQEsloAdLXXQv
- AzWumaVEVzhCw==
+ b=KQUIo9C99w8EOxZfVraVqrjgXzVgD/ZrHxzvpV3ZJTKMj/mYuMppyFeLCA+YoKdH2
+ U8yGwdMsmxw+nT4dZ2d9GLgoeOJALZ36KS7IG9ZBUZG7/JLNHKCNbDgUV2Awwt+hzf
+ Z9S0VvnpjhK5sko6nushSi9RFY5dxEMXijGCBm8szXFGW+sZ4CVLOlrD5towruJteq
+ nVDdjH2d9SVOs3AdRmVdjrcm0od/rfMjTWBLfXoGPjKX9vZjTaXO/Ixb7i5TbF77lC
+ O7UzpAF0idVaj70ePoNRq8IMWOYkujTyOiZmbZUStARXUJItkk5u4YsoNJJeL5I7+H
+ PBNeW2L0/SPQA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=pcqA3Wnr
-Subject: [Buildroot] [PATCH 30/96] package/python-librt: bump version to
- 0.8.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=KQUIo9C9
+Subject: [Buildroot] [PATCH 31/96] package/python-lmdb: bump version to 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,40 +115,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://github.com/jnwatson/py-lmdb/blob/py-lmdb_1.8.1/ChangeLog
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-librt/python-librt.hash | 4 ++--
- package/python-librt/python-librt.mk   | 4 ++--
+ package/python-lmdb/python-lmdb.hash | 4 ++--
+ package/python-lmdb/python-lmdb.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-librt/python-librt.hash b/package/python-librt/python-librt.hash
-index 5c7f55bbb9..e12bb75949 100644
---- a/package/python-librt/python-librt.hash
-+++ b/package/python-librt/python-librt.hash
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+index 525c434f2a..679d552d1c 100644
+--- a/package/python-lmdb/python-lmdb.hash
++++ b/package/python-lmdb/python-lmdb.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/librt/json
--md5  2f0564db5d18a9e41bcd1fbdbdbee77c  librt-0.7.7.tar.gz
--sha256  81d957b069fed1890953c3b9c3895c7689960f233eea9a1d9607f71ce7f00b2c  librt-0.7.7.tar.gz
-+md5  977ea89f85bd73d2ec17f5149f165f71  librt-0.8.1.tar.gz
-+sha256  be46a14693955b3bd96014ccbdb8339ee8c9346fbe11c1b78901b55125f14c73  librt-0.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/lmdb/json
+-md5  0996b2df3b8019b76ce1fa37913e41f0  lmdb-1.7.5.tar.gz
+-sha256  f0604751762cb097059d5412444c4057b95f386c7ed958363cf63f453e5108da  lmdb-1.7.5.tar.gz
++md5  de895e4a88eeb179aa0c185a08523d62  lmdb-1.8.1.tar.gz
++sha256  44ef24033929e9cc227a7e17287473c452b462d716f118db885c667c80f57429  lmdb-1.8.1.tar.gz
  # Locally computed sha256 checksums
- sha256  88f9e379c684580053c58e75e296ca2eb243b6edcc6e5357f247310e96eeef8a  LICENSE
-diff --git a/package/python-librt/python-librt.mk b/package/python-librt/python-librt.mk
-index 5c1ecd8e5e..8f16e762a7 100644
---- a/package/python-librt/python-librt.mk
-+++ b/package/python-librt/python-librt.mk
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index 3f92ef066f..dbdc80bfda 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LIBRT_VERSION = 0.7.7
-+PYTHON_LIBRT_VERSION = 0.8.1
- PYTHON_LIBRT_SOURCE = librt-$(PYTHON_LIBRT_VERSION).tar.gz
--PYTHON_LIBRT_SITE = https://files.pythonhosted.org/packages/b7/29/47f29026ca17f35cf299290292d5f8331f5077364974b7675a353179afa2
-+PYTHON_LIBRT_SITE = https://files.pythonhosted.org/packages/56/9c/b4b0c54d84da4a94b37bd44151e46d5e583c9534c7e02250b961b1b6d8a8
- PYTHON_LIBRT_SETUP_TYPE = setuptools
- PYTHON_LIBRT_LICENSE = MIT
- PYTHON_LIBRT_LICENSE_FILES = LICENSE
+-PYTHON_LMDB_VERSION = 1.7.5
++PYTHON_LMDB_VERSION = 1.8.1
+ PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+-PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/c7/a3/3756f2c6adba4a1413dba55e6c81a20b38a868656517308533e33cb59e1c
++PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/23/19/392f028e7ebcc1cc8212fe8a315a909b7a556278456f0bab9234d3a3b665
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
+ PYTHON_LMDB_DEPENDENCIES = host-python-cffi host-python-patch-ng
 -- 
 2.47.3
 
