@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A90F1107BCFE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38314107BCF8
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80CCD4101E;
-	Sat, 14 Mar 2026 07:54:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jyXNBhmBWcax; Sat, 14 Mar 2026 07:54:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2516541008
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474848;
-	bh=L0qVZf4NFq1wFruRmh+cbimT8HmhftQaqXwvOSGuDg8=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RoMzIAnFJBgXFibOaLw8m4HXBp58iE4MROWU3RLvfBJ8XcSdLsL7kactEzKwh6FrA
-	 pwpODMz9xh7i/+/wnAphZb2acY3l0g4YwG8INCen7CKWbj6lTlU6IVjuIHjLSLXuCV
-	 7WIdkHW1eCmq34uRrPIc6PflG38dR9IYN3/ex/+aEnilFNvbJahpS29hN4NKVV3AJ2
-	 dCESTAdWAmIKZUP0Ahfmg04KdTwr2YP1oMhy4iHUi7SJbF6F8Bk9HUpNxka3HTckJp
-	 dgjBCelz6BonTMNO2xhDe+MO+JAPbnpntiHwGc53CG4n/DWg7LsE8UGalWKDV+MS+6
-	 VsnMlsP9lHn8g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2516541008;
-	Sat, 14 Mar 2026 07:54:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 732F71B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5702560F21
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E92460FBF;
+	Sat, 14 Mar 2026 07:54:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GxQhm6vnL0wi for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:54:02 +0000 (UTC)
+ id X8uSGq7Kf881; Sat, 14 Mar 2026 07:54:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DBCB60F5C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773474849;
+	bh=4MEP8fDbmaHrwdv7vfdnucQQHEYEFMBmSe8dk939REE=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=OkA+c+lN+aD3nBsHhCGXW/WCGXdiM/za3zmOK+xC3fPhtN9FSpXBNqZrHp06CxyXd
+	 pxpFv1JRTCJdjyKWbzByM3uH3+ydWCvInkeU8Br5NdgT3UAx/hcs7JpGPdw4nblxaQ
+	 +K4jHzDGZwRi1SdRhIGWMBkVwtZzAnx/rKrhB2E0I2sMrr+/ET9A1GbxWb2r71xQwP
+	 2oL3UnNxdAxc4z+nqTtGghcGrkZTsesDD8Des1xAZDRa6n4kfYEuFP+AusVBinIE6F
+	 wNAwFB+CaWRT3ekOUUqBB9TL6woSDVzX7v/uldUNLMVHJJIU+eVYVs5s/henUkP/SB
+	 mGrwRDWtdik5g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DBCB60F5C;
+	Sat, 14 Mar 2026 07:54:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B660201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4180E822C7
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CEB7Clzy7B-s for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:54:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 51AEE60F61
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51AEE60F61
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 51AEE60F61
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:02 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-48534b59cf3so25790275e9.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3DA4C822C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DA4C822C4
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3DA4C822C4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:03 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4853c1ca73aso22724535e9.2
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:54:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474840; x=1774079640;
+ d=1e100.net; s=20251104; t=1773474841; x=1774079641;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=iH9QhYDk2X9wOHosHiJqhcNuFQ/nUO6WbFsBQGvd3rI=;
- b=XbtVtk4bt+hiiT7+cj+WlUXduNSoDov2U0s5PvjLv7WI/1NmTmhNaEQocXKQ2f7Urv
- 96VGrGp5AMzYN64E0ryF68EHICwZ5RWozc5AVupd5LMESWSxga8aZsKbTNFG4pGuTTto
- x05IVsYB6NGH40YUxE2GSBHoqs6VjyF58hOGrWGlJoXr/zx+NJIcUFcxDpp5eLlP/qrP
- SkoQG8l7Jkw4NNtvnWtQEPHhXAchsERYQ5PYAru9N1c1ed6KcOP6LAJXCyLfNTkTRzMN
- bB2b+slYmp2ZbyKGhuKYT8PuSGZdJLtrfJSNTX4SIQ/tMtPICKxyXr6s6U4Y+GS8oJCC
- A5cw==
+ bh=5E295tfTY7ffUH0M7la9g5gQJXNRCxUEFiBdg/v5x7s=;
+ b=VDMbr9SSKv1z3xa9BNp0Ldva5vKa6UhG2Eg7VBOmNVOjXCSzd4q1n5tTFn2CS9hlEj
+ BtQn8lRR6s4lYH5ViF0lQ0fz1/O2SogjzqQVrHVPBfgEz1J82Rw6iOkp9sUw7z6mL2Q/
+ Ue4gsmtP7/j1+HNyomunPJFgIUQ2Z4ecbhanb1m/Fa/4rZ6gpqC6AA77SUFZEdoec8ty
+ RIhfinNjEl8Gg7KToeN2zW0nTcXTU48J9VkKAeOBRlCoNPSm+Sc05EuKHekxSy9donIk
+ dBnl24f+DE4JTXZEsq0YrsRek11IA/BAJMndbS23Oqwvkpobmm4JGzHbzxSzys1FPJIh
+ lE9A==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUGmexMIfypQ1DTVJWB0ZYXXsWcJuExXoI4blnpnqzVOyf9YfbOaE41lqWTPaKrA8KyVJFDzFajnD0=@buildroot.org
-X-Gm-Message-State: AOJu0Yy1upGHI5G4Xy5tTUGm5O/JGX4zJ7Shy2lpkLi2UQQmdarF9Nzm
- 0Dq3JCRUWgI9WaPg82DBouhPG4iDRKgeQdIr3AfgC9y/tn5TL0CF3v8N1axZY/6avdQHQbxbre2
- 5HHtF
-X-Gm-Gg: ATEYQzwdyYYA9dWJnnGofOYwEgk3gOxex1/3EzD8NXyD1FRhacYTvd0XURHu6veumbx
- 49V/V6SLtivYFuvM1Soh96cm5JBTOJynJAwZtgGywO2jDpqVLiVrMO/U9XElA63dMBI+nYiZIYv
- pRLXwpV6zOhVbzVOI0M39RNJkZULcgdF0Q4zFFw3SC6kWzio2sowYYbsYxyiPu9ei+E/72KZDit
- SH90W97lOZOcC6t0wgUzzC6rYg7nd8bETw8RfZVUcLEyxU++mMeRJq2tJjGG4B9wL4VqkzSAHG0
- u3XteaeoAVHjuRRxPTxwMM7/CBIyhg+GrDnDzJnkmyVuukaD9xNIc+G5jC97WwOxT/0IMat9YWI
- UomeHvhwkOjsNzbhJ0xcxQWWRrgNWBh+3IdJ+iwIy87gNDQGtoFei6E4VVcPKyakfBNEEcZLAQv
- pB6gJo5+nG1/TEP2w=
-X-Received: by 2002:a05:600c:3f1a:b0:485:481c:e7bb with SMTP id
- 5b1f17b1804b1-4855670289cmr89998185e9.20.1773474840107; 
- Sat, 14 Mar 2026 00:54:00 -0700 (PDT)
+ AJvYcCWx7dGuljTXdkHISn+wQPIqAcWwyBcLACldxyJaGHfPx/R7nsgAYNLxluYw6t9bZalbRpEJEfaXkgg=@buildroot.org
+X-Gm-Message-State: AOJu0Ywm4l2zQE2Mhi+LRKP1FgTuftcVbWyc1ju2rdYXwTDp7BrsvGl1
+ z3i6dDsB4GBwon4fvj2Sn574ogBW57ljBcMVYIkEOr5BXE0GjeegPmxl4mkNUQoPGzg=
+X-Gm-Gg: ATEYQzya84w+GRZsh+quOYbk+qQ4j1tafUFdpe7BLewjulQknIMAFTNY+cYpJgrfplD
+ 9igM+Y6uyvwZLsg+gTte7Ueut1T1TOUZZUUofcIWjhV1R7NatkhuQxbZVSCzsHFkyp1ilCrAeUG
+ nIBw81As9I+tU10t0n2JHmtACxWPBxxBfAWBeotnOWhLuLgyUdlCXIgoZGdTLPi8C5rZqT4A8ZD
+ yN9W+YXD346PzjoVVTIAd99M70531s91nr+HDFjFPwOvxqz5h5zTtcCcPxepB8Wnoz86H0LcAbF
+ vFOMY5b/02uNAQ6+ZoqrR3W3CEXqzDP1zyXsO4HEplSGgAiBKg3mobdePf5b4uM8+Q85EZrRhWj
+ AGID+syJV3zwPZ1XLbdfIAKUXI45JdRSFvFhYwR/W04HplH78ibNIpeRYRvLEQqa9nI9ssS5R0B
+ 023+CpO+bTe1FwTRDuiFf7CGjzNQ==
+X-Received: by 2002:a05:600c:4592:b0:483:7980:4687 with SMTP id
+ 5b1f17b1804b1-48556714c04mr99942515e9.17.1773474841034; 
+ Sat, 14 Mar 2026 00:54:01 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4854b5f6bb4sm258663625e9.4.2026.03.14.00.53.59
+ 5b1f17b1804b1-48541aba60esm415769885e9.5.2026.03.14.00.54.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:53:59 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Sat, 14 Mar 2026 00:54:00 -0700 (PDT)
+To: Dowan Gullient <dowan.gullient@smile.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:53:59 +0100
-Message-ID: <20260314075359.15168-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:54:00 +0100
+Message-ID: <20260314075400.15217-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260306074106.124068-2-bernd@kuhls.net>
-References: <20260306074106.124068-2-bernd@kuhls.net>
+In-Reply-To: <20260306142329.1010724-1-dowan.gullient@smile.fr>
+References: <20260306142329.1010724-1-dowan.gullient@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474840; x=1774079640; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474841; x=1774079641; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=iH9QhYDk2X9wOHosHiJqhcNuFQ/nUO6WbFsBQGvd3rI=;
- b=HL2kIoWhWmFZerHMP2qpgZ+EUO3zTFf4xFs63KN8vjgkIugJX1n1L5a7n3pp40dn3+
- pu6TXhCLN0T5loqN5/Bzs/eHQ+bPekog9oyjBqu5IfQ0Jsamw0wI14k+Tuguh1Mhn8a1
- Fzuz9DPYiZ9iFwgKJF2vxLazBkKhOyjQNvGo/jiUEtSUZPegzZASYVJ/LzUONR5eMB3r
- ZX+L4chKULzpPhP02GydXm9aNZPtQGMr93M22WcAlnrDLF9RV4ic7QNnOH0l257/JRBE
- BGzalBC7EMFGNc0dHSEPBK9ag1s0F9ez1fLIp+s4CWRW6wzMUoFJQVeDHn3ufyCAVU8w
- /sug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5E295tfTY7ffUH0M7la9g5gQJXNRCxUEFiBdg/v5x7s=;
+ b=TGJAaxNAJJOqX1lR9/wt+khB3nm4WPp/Hbt4P1Z3MwnS9yVvj+sLN4RW6uzmtbE2E2
+ XJJPDoMbJ86i7P5DwyjJfz6EFAERhTIv+eOOmn1loY51CcSRESmY1blz+HCSG0Jwjfj9
+ sXYWj1AOSf0TuXEHfaDqWI9YWLRKLbpMEpw1AFN5RjB3OBythlBG+ETw2vOSXud9UR6t
+ UXBHkRC/T7QSWvP3BJshOPPkhXx5fBXA+/DNabOGX1fFgQRtAIj/VbcNeeOSOtWsXeUF
+ qK1f0Td08EXqIsxP/pJEXYM0BWinqY+T88ZdpGHxElwaCQKKpFcNw4ozEk/VfFym0jrW
+ ntpA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HL2kIoWh
-Subject: Re: [Buildroot] [PATCH 2/2] package/libtpms: security bump version
- to 0.10.2
+ header.a=rsa-sha256 header.s=google header.b=TGJAaxNA
+Subject: Re: [Buildroot] [PATCH v1 1/1] support/testing/infra: update
+ artifacts URL to https and .org domain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,45 +131,40 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/stefanberger/libtpms/blob/v0.10.2/CHANGES
+> The artifacts URL has been moved to https and domain to .org to
+> improve security and avoid redirection issues. This ensures that
+> downloads of kernels and rootfs images during runtime tests are
+> encrypted and verified.
 > 
-> Fixes CVE-2026-21444.
+> The change has been tested by running a runtime test, confirming the
+> correct download and renaming of artifacts from the new URL:
 > 
-> Added comment to hash file about locally computed hashes.
+>     Downloading to .../tmpyotq8uor
+>     Renaming from .../tmpyotq8uor to .../kernel-versatile-5.10.202
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 
 Applied to 2025.02.x, 2025.11.x & 2026.02.x. Thanks
 
 > ---
->  package/libtpms/libtpms.hash | 3 ++-
->  package/libtpms/libtpms.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  support/testing/infra/__init__.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
-> index f10364f36e..175e6e3af6 100644
-> --- a/package/libtpms/libtpms.hash
-> +++ b/package/libtpms/libtpms.hash
-> @@ -1,2 +1,3 @@
-> -sha256  ebc24f3191d90f6cf0b4d4200cd876db4bd224b3c565708bbea0a82ee275e0fb  libtpms-0.10.1.tar.gz
-> +# Locally computed
-> +sha256  edac03680f8a4a1c5c1d609a10e3f41e1a129e38ff5158f0c8deaedc719fb127  libtpms-0.10.2.tar.gz
->  sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
-> diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
-> index 6e5708202e..7bc69a50d6 100644
-> --- a/package/libtpms/libtpms.mk
-> +++ b/package/libtpms/libtpms.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+> index be61d8cc4f..98215e02ab 100644
+> --- a/support/testing/infra/__init__.py
+> +++ b/support/testing/infra/__init__.py
+> @@ -6,7 +6,7 @@ import subprocess
+>  from urllib.request import urlopen
+>  from urllib.error import HTTPError, URLError
 >  
-> -LIBTPMS_VERSION = 0.10.1
-> +LIBTPMS_VERSION = 0.10.2
->  LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
->  LIBTPMS_LICENSE = BSD-4-Clause
->  LIBTPMS_LICENSE_FILES = LICENSE
+> -ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
+> +ARTIFACTS_URL = "https://autobuild.buildroot.org/artefacts/"
+>  BASE_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../.."))
+>  
+>  
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
