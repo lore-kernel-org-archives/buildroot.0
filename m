@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D126B10706DF
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09AC110706DE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB86B412B4;
-	Sat, 14 Mar 2026 14:20:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D97C9410BA;
+	Sat, 14 Mar 2026 14:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RmuAU8547--L; Sat, 14 Mar 2026 14:20:28 +0000 (UTC)
+ id jgljDMjaOprG; Sat, 14 Mar 2026 14:20:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D52204159F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2F28410FB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773498027;
-	bh=34nb2x2hxykSIj0QIrfjT/xoeDXiIFK+tJfYZ7QRPj4=;
+	s=default; t=1773498041;
+	bh=rBMplhc+EmcucDRchVFRj8QtMyP9WzqQ05JZwI6Kcg4=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=k2kRNHJQOdSJGfbT9+5DXqVwbKbyCsAIHXzBGU2mvwJq2xwTnQlYG6P3w57r67DQ7
-	 wQ93S8wcYxhpwu0hkgZ/1RENMI3wesi9ypQRhjnbLdq5TbiXBY1CirBIzrNn0ijFv9
-	 2h/KzrfdZu9wzFBxqI93MjU3YU2qTKMbOt5QLStDSXgNutwQ0UGDfwMCiICejipznR
-	 HF9om1/lbbiDMwTn8J0/tu6esj8mlSmTP9SyabVzFa38pTlDaYlCL11uYPERwasAl2
-	 ukGIgBT0VsJBZF4g6uDN6GM0tOdCfb4aVXCGjo/0Xz3aBgxzr1lrbeEB81hS28Rpg8
-	 xEd1mFNUFZR5g==
+	b=BBP1tNeBY8yU0vndr0gVXl9QMYL3dyHStxzgq2ZhKWKydKO+/Uy4u5Xt2yCIN5dlb
+	 URj9hPzZ3uEXmvZSlQbgntc9THilmgqLRV41E5Hwf5GSfaErVvi2OFXEJug4mChJSy
+	 +U7gfU7ZLcxcZEz6YvFdohideuodOuVidf2vPEu2xK1XAmQODfjbGN7s4wk/XTLKD9
+	 0JF2+oZNU9r1v4QR8YelSbUfoTM0NCMraZKCQnt9TysIYmDz20yu6kiwRFN9H2gFXS
+	 Vl+GrciJ9A01OIeL0KRmOEM5s54+jR2BazyzQAkFetfBv4LPzE42sfmeBnqGjFF3PL
+	 Rb76rzoA5UeaA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D52204159F;
-	Sat, 14 Mar 2026 14:20:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 19DEF1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:20:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2F28410FB;
+	Sat, 14 Mar 2026 14:20:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86BD7201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:20:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3395400F9
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:20:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CE24400F9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:20:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sQtXmv6eDeto for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:20:26 +0000 (UTC)
+ id DwkSNToIOVF9 for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:20:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E12B540076
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E12B540076
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 60D3840076
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60D3840076
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E12B540076
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:20:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 60D3840076
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:20:38 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 13171A4C1950;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1506CA4C19B7;
  Sat, 14 Mar 2026 15:07:03 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdT-000000003UM-1LPF;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdT-000000003UM-1ix9;
  Sat, 14 Mar 2026 14:06:35 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:22 +0100
-Message-ID: <20260314140633.2967249-26-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:23 +0100
+Message-ID: <20260314140633.2967249-27-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497223;
- bh=X4U3ODRAL7eClYHSkdc9lSL6802QC3B0UQw5rj7zLpo=;
+ bh=HLUEDPMIjlUpu15l0yECMIJzceIt5TD5qdQ2EgXQhjg=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=No11SjS6e3BjiTRw9sVmKa5kpVQVFkelt2PVfajGgPPPbemqxA8AR/N/wJEL6Ii5V
- jHr0q0MztovVietWdRRjmosi8A0fj+QZhGXMpzSILRzqkVfgE/zTlPRyxC4CgvhZci
- 20wyyhI6V+fMbUtRd1cX6F0JcSvAlYAyDy3hXpbvyH0vD9C06xK5zk9poxpPP4Upvf
- 36VvaT+rYu8SQwsXmcjstjRyGvr7+bM+Ovyu6eJ4cU6wwxDBoH/Oe6k3LOK1pNlc3c
- kUeLhqItXJnDZ+UHWD1w8tpI4q5To8Y66qgHaV3XWFcZ/cxZWuKUp+HZQtnhGNKCTM
- Xi1xct5oPm6qg==
+ b=H/wjadvziMWgRqg4AodlxHMtXhjw4g8eDRx6PpLq/1XoRczzANf226sCDcl3kGcDp
+ I6AF4FbryNWY8Vkz3SC03wVNMr+Ia7QEcGza65oKZ+hm1d8OIuXJ/3yjUV5nmqmM48
+ 9bfjgCfjNK+wgFQzBDjgPcVgu906wLfbXU8JLmIxewOxd1TWqNhKTnCy4jzbii5Dxu
+ 1uC7i8+OWx6mf07gjQQul8s7lw2Pk2Maaf7em3voGpRpccvhD47jPevEC8Q+Aw0SBS
+ larbhYZtDU3/GBnX/1MAc17A9f1C+s9nIiciU80fBp6bLfTQ0ekj13b9eHFz9awqOu
+ cV+/Q/bUX/GWA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=No11SjS6
-Subject: [Buildroot] [PATCH 26/96] package/python-immutabledict: bump
- version to 4.3.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=H/wjadvz
+Subject: [Buildroot] [PATCH 27/96] package/python-iterable-io: bump version
+ to 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/corenting/immutabledict/blob/v4.3.1/CHANGELOG.md
+https://github.com/pR0Ps/iterable-io/blob/v1.0.1/CHANGELOG.md
+
+Updated license hash due to upstream typo fix:
+https://github.com/pR0Ps/iterable-io/commit/b9e785c76399612bfa13e69f0aa7167c803a915d
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-immutabledict/python-immutabledict.hash | 4 ++--
- package/python-immutabledict/python-immutabledict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-iterable-io/python-iterable-io.hash | 6 +++---
+ package/python-iterable-io/python-iterable-io.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-immutabledict/python-immutabledict.hash b/package/python-immutabledict/python-immutabledict.hash
-index f917e43702..b7182a48a7 100644
---- a/package/python-immutabledict/python-immutabledict.hash
-+++ b/package/python-immutabledict/python-immutabledict.hash
+diff --git a/package/python-iterable-io/python-iterable-io.hash b/package/python-iterable-io/python-iterable-io.hash
+index aae6ad547e..1407153935 100644
+--- a/package/python-iterable-io/python-iterable-io.hash
++++ b/package/python-iterable-io/python-iterable-io.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/immutabledict/json
--md5  2ddeb671f200618365b11b997d50368f  immutabledict-4.2.2.tar.gz
--sha256  cb6ed3090df593148f94cb407d218ca526fd2639694afdb553dc4f50ce6feeca  immutabledict-4.2.2.tar.gz
-+md5  8ed06e3692bae4d1df1a8818d9013ba2  immutabledict-4.3.1.tar.gz
-+sha256  f844a669106cfdc73f47b1a9da003782fb17dc955a54c80972e0d93d1c63c514  immutabledict-4.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/iterable-io/json
+-md5  d6027af37f8e15edd346bdff6d5c5e3c  iterable-io-1.0.0.tar.gz
+-sha256  fb9e1b739587a9ba0d5c60a3e1eb71246761583bc9f18b3c35bb112b44b18c3c  iterable-io-1.0.0.tar.gz
++md5  242753419dc0cfbf09bd0fc0fa09e322  iterable_io-1.0.1.tar.gz
++sha256  55db222c5914097a8508dc722f8db6112f636a04a8acb94ee6589d9b14bd4bb7  iterable_io-1.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  347f918d37d4e0556a0695d34b9fb87fa9bbe808d54949851789c6c1fc91c61f  LICENSE
-diff --git a/package/python-immutabledict/python-immutabledict.mk b/package/python-immutabledict/python-immutabledict.mk
-index 4a886b1607..1e8cbd7e7b 100644
---- a/package/python-immutabledict/python-immutabledict.mk
-+++ b/package/python-immutabledict/python-immutabledict.mk
+-sha256  5de72116ec3738168bbaea5bd3405d161246ac542456470dc074f23d336252c0  README.md
++sha256  1965c87639963d053bce1b662b86e04ce22f53d2c39f39ee416745b1fa9e6b2f  README.md
+diff --git a/package/python-iterable-io/python-iterable-io.mk b/package/python-iterable-io/python-iterable-io.mk
+index e59c7d6455..485dcc9231 100644
+--- a/package/python-iterable-io/python-iterable-io.mk
++++ b/package/python-iterable-io/python-iterable-io.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IMMUTABLEDICT_VERSION = 4.2.2
-+PYTHON_IMMUTABLEDICT_VERSION = 4.3.1
- PYTHON_IMMUTABLEDICT_SOURCE = immutabledict-$(PYTHON_IMMUTABLEDICT_VERSION).tar.gz
--PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/ce/12/1da8e1a9050d0603ba65fb1796ed8860a705b906701c96e77f85cc7490be
-+PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/1d/e6/718471048fea0366c3e3d1df3acfd914ca66d571cdffcf6d37bbcd725708
- PYTHON_IMMUTABLEDICT_SETUP_TYPE = poetry
- PYTHON_IMMUTABLEDICT_LICENSE = MIT
- PYTHON_IMMUTABLEDICT_LICENSE_FILES = LICENSE
+-PYTHON_ITERABLE_IO_VERSION = 1.0.0
+-PYTHON_ITERABLE_IO_SOURCE = iterable-io-$(PYTHON_ITERABLE_IO_VERSION).tar.gz
+-PYTHON_ITERABLE_IO_SITE = https://files.pythonhosted.org/packages/40/be/27d59b5c1d74ecbd26c1142f84b61d6cb04f0d0337697149645f34406b2d
++PYTHON_ITERABLE_IO_VERSION = 1.0.1
++PYTHON_ITERABLE_IO_SOURCE = iterable_io-$(PYTHON_ITERABLE_IO_VERSION).tar.gz
++PYTHON_ITERABLE_IO_SITE = https://files.pythonhosted.org/packages/9e/ad/cc53869e3357520033e3ab9a7d6043045bcdd666da427583678efdbb446e
+ PYTHON_ITERABLE_IO_SETUP_TYPE = setuptools
+ PYTHON_ITERABLE_IO_LICENSE = LGPL-3.0
+ PYTHON_ITERABLE_IO_LICENSE_FILES = README.md
 -- 
 2.47.3
 
