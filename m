@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50D0710706DC
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4064610706DC
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2865340A33;
-	Sat, 14 Mar 2026 14:12:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AA4C40A33;
+	Sat, 14 Mar 2026 14:12:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id stAJo738mxrw; Sat, 14 Mar 2026 14:12:04 +0000 (UTC)
+ id CGZJkH-xLrqD; Sat, 14 Mar 2026 14:12:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C8D340A3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39F7340C2B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497524;
-	bh=yH3eC5pIBP/cTJds4UVmkBNu1Jn6pBNwPUiYZet3oAE=;
+	s=default; t=1773497537;
+	bh=3PsQpJqy1LKGPSvMmvclM5yZ+qnxk6K1u+ekapShuvo=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=FIj46mcLE7NS30lu1wSbyiN+QBRKPpI5+DPgXLCg8ta4qhb/ypvcTn1du2Sa5bU76
-	 VKmS8RMKaBy0PvR1obGAzXiSweEc9dGv/oDBIF472F8KLT2f1P/L2O1cQsiFzKFHxN
-	 z6COH55qtgRehKDIw9TpsF3ldTFm4PQGNSxRvwDu7ttbgNInl933WFkb9wBXqch1za
-	 OzhgXKpWowmV//rmgwp6dBlS7Cjc0GWkg1XY1gC4SqaK1L7QSpbA0jM7D3kCz0iO8e
-	 RFdedLZL9ZamVSjHZsb4xqjhH5ezqwPEXDSBR7mIjbN/G9ifbTwllMXDbmeJPcl3kE
-	 MvfWa84faBKew==
+	b=JJReUof01qmL9srSFOhx64pEftiQWapVs35/TL9VsxzjNU5A+wf4qD3tdxop9ZpQA
+	 LcQ1qgJT2i2ONfXdDhH8rIb/iftxFGJUiNyanZ7P3WoDQ8DnbnInLhWqvUr+2prZG5
+	 9ltkL2rWF2ubIcTTWAiE115QxcIgiufM2Y9Kfb/e2k9mqCUFCAxZ2439UwkOam/1kI
+	 gqjIBh1Nuoi8iBZZrwpEy6YMopoCq4/ON5qs10XF9gisnC5Mdx4/pn98wp9iE7sUvk
+	 8HDZ6LsFlXu+IGWBUK38QMUkFMT5RFMwAEyFVDJQPwfKkL1HeaHPyFVv7POQasA+vF
+	 HgS0bIevK4Gew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C8D340A3B;
-	Sat, 14 Mar 2026 14:12:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BA600201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:12:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39F7340C2B;
+	Sat, 14 Mar 2026 14:12:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C55483C6
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7BCD401CA
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:12:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAC7B40DB1
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:12:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bRrrHr32dtsi for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:12:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vadtDsu-quzR for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:12:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AA1F1400F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA1F1400F9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A0C0E40C2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0C0E40C2B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AA1F1400F9
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:12:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A0C0E40C2B
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:12:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 01CEAA4C1456;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4DC02A4C145B;
  Sat, 14 Mar 2026 15:06:51 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdX-000000003UM-3jzZ;
- Sat, 14 Mar 2026 14:06:39 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1PdY-000000003UM-02OV;
+ Sat, 14 Mar 2026 14:06:40 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:06:13 +0100
-Message-ID: <20260314140633.2967249-77-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:06:14 +0100
+Message-ID: <20260314140633.2967249-78-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497211;
- bh=3949IFTU+Xf7KavU1nj/N0zeuOQKLgW8IU53GAoWkeE=;
+ bh=KsdeSkitz4jASaLJz4b5M8SeXmO5aqqyAtqsvieusJI=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=py8SiiCSpbOsVzxl1Ul9Ara/s1odRq9U0rDUNcso75q4jexNBsxXwFJYnyjdINHhp
- nycHiIvM4chFxLkMFPWrN5/nATcNdsDXQXtqGgU7C8DWPldg67WcWSkFwbV5xpJIZv
- DYz1BlMwvEPtMCuNmR7Yb+hd7fUBTw1tZCffew4nWJOSck7ifi4bCcg2Zvd4hB7Zgk
- YCYYkW3QBzIdT8lwJjjucgHR8997d+iCe1078VOj5jHFLcxAw+5K40zef8/ZC+aRwi
- 3rdWuX4Yb9klcn260SiK60ibNp9HL5NnB9lgt7DYff15YsCRELZeyL5dyuFIDW8HiJ
- 84CJGrsGh0jWQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=tIDCLfx03QQDFIcbaxzfmazBqW3hIzD3SQ0I6wTYvb0CP2WzTyfx/+6N7646CcxT6
+ SZw1kGBSQ9hep8S69FA0bL/W+4s5m6T+v9QaNebYtkY8PtNRWYrA7dtCEa+TsDCZqj
+ aDhcD5dNyTcszUHPJqbMcfSjRCU6EPuchCOsaU2p4Q8S9CB8rYG2SVLxGryBI5g5Qn
+ 6hrbx3+avBslTqVJk03uQIgpD+XUfa7uw4UXHZ6xWA88rdNVhG9kdEihoI7gSAk9E1
+ 1xbj7UtNdgVPEEQxEbH9luXC4JUfbOhc8N7UtNt92qfezsvKKDNzwRxhJ3IuzC8lk1
+ 5hThp0Ppjffww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=py8SiiCS
-Subject: [Buildroot] [PATCH 77/96] package/python-tortoise-orm: bump version
- to 1.1.6
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=tIDCLfx0
+Subject: [Buildroot] [PATCH 78/96] package/python-tqdm: bump version to
+ 4.67.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/tortoise/tortoise-orm/blob/1.1.6/CHANGELOG.rst
+https://tqdm.github.io/releases/
+
+Updated license hash due to copyright year bump:
+https://github.com/tqdm/tqdm/commit/a69dac84b3d2e7ab23dbfcccae29b28a753ee5eb
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
- package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-tqdm/python-tqdm.hash | 6 +++---
+ package/python-tqdm/python-tqdm.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
-index 0bb4224a9e..77144495f8 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.hash
-+++ b/package/python-tortoise-orm/python-tortoise-orm.hash
+diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
+index 1395fa2e99..4bb81e11e7 100644
+--- a/package/python-tqdm/python-tqdm.hash
++++ b/package/python-tqdm/python-tqdm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
--md5  5c143e93e4c35dfd8cd19dfdbc064d6d  tortoise_orm-1.1.5.tar.gz
--sha256  d4074a7c34a8445fcca19ec865189d80ea7a00b29e4b12778460fcab67a5ce74  tortoise_orm-1.1.5.tar.gz
-+md5  c3278bf834e12f7bcfef071ba52c0dbd  tortoise_orm-1.1.6.tar.gz
-+sha256  30095a77aa7c3eb3ede1baf4b390a66b994dc7c4d0d06a609d23a16c50e55d0c  tortoise_orm-1.1.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tqdm/json
+-md5  aca803dd7ac5c4ae233977aff41b7f7c  tqdm-4.67.1.tar.gz
+-sha256  f8aef9c52c08c13a65f30ea34f4e5aac3fd1a34959879d7e59e63027286627f2  tqdm-4.67.1.tar.gz
++md5  e1be20b64fdb913d2246c635cdf97b28  tqdm-4.67.3.tar.gz
++sha256  7d825f03f89244ef73f1d4ce193cb1774a8179fd96f31d7e1dcde62092b960bb  tqdm-4.67.3.tar.gz
  # Locally computed sha256 checksums
- sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
-index 18ad37d5d9..e0190eb9ff 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.mk
-+++ b/package/python-tortoise-orm/python-tortoise-orm.mk
+-sha256  dc33252e829015e3b150086fb9b3a40f6ad6fb32c2f4610ce812fa677d35986a  LICENCE
++sha256  fcff87c3a47ce8028a8512aa182d4fcf0ad1c90544ee75cf9b343684cac194de  LICENCE
+diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
+index b03e19ccda..df455973f4 100644
+--- a/package/python-tqdm/python-tqdm.mk
++++ b/package/python-tqdm/python-tqdm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TORTOISE_ORM_VERSION = 1.1.5
-+PYTHON_TORTOISE_ORM_VERSION = 1.1.6
- PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
--PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/f3/b0/2b3962847aad793d32646c6e43e7fab6f845f34a5502da5722fe704ec847
-+PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/40/76/629a5d69c170605dbdc10f3f3416d124fae05836860686ccd9e06726810c
- PYTHON_TORTOISE_ORM_SETUP_TYPE = pep517
- PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
- PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
+-PYTHON_TQDM_VERSION = 4.67.1
++PYTHON_TQDM_VERSION = 4.67.3
+ PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
+-PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/a8/4b/29b4ef32e036bb34e4ab51796dd745cdba7ed47ad142a9f4a1eb8e0c744d
++PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/09/a9/6ba95a270c6f1fbcd8dac228323f2777d886cb206987444e4bce66338dd4
+ PYTHON_TQDM_SETUP_TYPE = setuptools
+ PYTHON_TQDM_LICENSE = MPL-2.0, MIT
+ PYTHON_TQDM_LICENSE_FILES = LICENCE
 -- 
 2.47.3
 
