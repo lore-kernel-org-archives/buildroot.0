@@ -4,116 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F42107BCFE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B18B9107BCF8
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FADF60EF4;
-	Sat, 14 Mar 2026 07:54:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8474A60F72;
+	Sat, 14 Mar 2026 07:54:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hf8kvqLR3YDf; Sat, 14 Mar 2026 07:54:00 +0000 (UTC)
+ id hraxwe1oez2f; Sat, 14 Mar 2026 07:54:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3967860EFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5115A60EF6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474840;
-	bh=5fIkmU7SQBXpt0M4M6BRQX9mBSrHk/IOd/vkYJfpw5o=;
+	s=default; t=1773474841;
+	bh=JWec0KeRl8iPUAQcx0lxguQuKd1gL817LbzQ7uD3lA8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=IdslJh0kiLlvvl4fLVn6fNd9x8XruyLfpV3JsaWiA4zvb1/5IH4swQ5208pnudMH0
-	 m+99u7ggmRhehsSkZjIyAcjikfbM9sM79hwMBSt5QhXi5L2Tfjv+OSH9zr8bawK1Ry
-	 rGXvqHqjyA/Tx2gk5epUAmME/w05J+079yUfWz6/DKfja06SHGyK+UogvMXXXU7WGq
-	 sKEZ8385l58tPcfOw6xDEDTF2xlEhf4eB81WK3YuVG8XpJlUdo59tNIhRLw09ZaHUK
-	 sEXNWm0MXz7cFqbKKYQrIYd+I13QDSB5+EtJdO+LNvYhNTP7GB9BuD51qb5py0oGmF
-	 LVKl+J4khn81g==
+	b=egxN054ZTSMSqduoK68izLXV38jQNGJit15uda4IAHXIObK2hiWXemzPpyh76YQbL
+	 DHtHQOaV0Sb9KNLnw4VDZkgeYYSvZVvukoMUYbbIBPWnwp6+xIoYKXZJmaTSiWWzcD
+	 CY4lyjc1iJqJWkjWodWByU7lcfCtuSB0UW/IDN4ji7hBsKBSzcpZsAZwujfFRm5i6r
+	 /1jkpGacbi5VUgQMdJ4nBsrC+waRHBX7ejVjHKwycstW/vF5pq7XQWAzCAczbYCe53
+	 5ErA1aZ3omdUzf/FlaHp+xDmNzKbTGXxRIH48pE9+Jjn+JaRLKLu2LKcjfndGftvvQ
+	 E+/QmqgjhzGgg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3967860EFB;
-	Sat, 14 Mar 2026 07:54:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D4F9A201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5115A60EF6;
+	Sat, 14 Mar 2026 07:54:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93D8D1B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BAE1840135
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9062C40FEC
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LOYENNZThP4F for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wQ4SGhKsvXee for <buildroot@buildroot.org>;
  Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9045B400A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9045B400A2
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9045B400A2
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:57 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4853c3c2fe7so17476535e9.0
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:57 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88595407CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88595407CA
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 88595407CA
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48534237460so31922915e9.3
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474835; x=1774079635;
+ d=1e100.net; s=20251104; t=1773474836; x=1774079636;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ZT8z5IOnajhd0vOEjgNqI2tJHxe9bdPGULFoBIYq4tE=;
- b=m4qz5pM1aecmW1EQC1bJkaeomc077ZQHSG6EPwva6A7YBORY8YH3TMOoCUVL0IiEwN
- R9bX25rjVCUs05oLq452oDpTjii3MIbQOsEgwzCf6k4fiv914SXXG6ZPHU1lJ0D8RUPl
- 8ThCyWk2AbvMj2EPX+n6MMqezgpH2Jqdh/7ua9eXrhxFjESMOedoCdwtba+McI7d9vFP
- DPqpC+48YdBMv5PoBiF2odzk9loaeAr4LHUbd9sp68Ouz0mpsMN0I8qzvBmgXAjChBTu
- g2piNyAgOPW3TT+MRxVFpkjJFTEpu+Fvh885jBf4b+q5ywD+bj70yVqtQS6r64em+u0h
- /gIA==
+ bh=7axLCiw3yDqg8Wx5ZUpD8ivVsgimzhSovZ2urgQxpmU=;
+ b=pW2xF2awmuJmayhHfkBMy1Qz7wJLzoyol6vC0N2jPRJftxlY3+OvgUU+Supp+VnklX
+ NKpitCg8p0YWT0qoD7UbwB+1rwyOKTSjYrlgWklUfT8KMAdeX4P1lQsgV7lE9Gpu6IYy
+ xmjHkn3LOoenFMyHERQeXtfvNU0lzsNV6NQhX1gFgcqepI5nt7yPL97zVddpTVThrbcB
+ wpMJVetOBxdeaMMv9oAEU5RnHjPlkwP9DiDcBILF4kU6CpTO5Be/QWwbSnZ6f0GOA+ka
+ dlH8qTIxHoJkml9/xaqHqJGm+VKxW7RJuObFecTFr4pSFOnuVDiVpiE+Ott6xkn+8Mxn
+ SLCg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWzZfqbyWnbadbEwfMuYJ1GAL984kWRht6U4gl/adBZs4Dzr7m93t7jZKaLRV3T2b7DO+HMP2KDgeU=@buildroot.org
-X-Gm-Message-State: AOJu0YwXRIk1hq4Iz88aMSZ2iO2/zdVxcizXDjpdrAUpGYTeX76wb9nm
- vPRpKJv7+SFIL/8Vr/5yJSNRBEwW8peFec03vYu6oUw067bcJNNn93/HwB54eJpiq5NPsw5X3kn
- km9TN
-X-Gm-Gg: ATEYQzwhK451hn12umEopLV52CuUYZ0VUcjBm7Zi5kehPiY4fpYMWWgvA8iBaj9X458
- BKftLuA9ONgUMnDCEXV+mqoMmfAc8PO+D7FpJXqzosAufHHJWMWN+aAuHyPOd7M5fvPNkHY/bBA
- lqONvSdTMhQcA7q3bIBtC1HsdJYi3nhPnLb5IFz8Vg6i7IpZCI9aKTIZs/E41h5cCBMvqWnCH2L
- 8B7l51s7l+FceyRjZAYDktCBcNmJpz1H/SO0C2Zwdv3u6fzl+Oc9HEwMiNiFZSqVBejGjNzWQm1
- ghs8sq8un4S4kwE95e6wIQvYZU4v8bPlN1ajjr4WBxvy6TnAahWtdcfuc2Y6jUr/BqqCM6sxaqS
- 8Qa7+BzGKfBV0caW9QtezqtYUUJXb+TfkIwTD3KCZs5ujQrbvj5IakFgHVpo7fEnyfIRY7xtDLC
- 0KWFI74+ll4Jz8TkJXRb4htFAMwA==
-X-Received: by 2002:a05:600c:3ba4:b0:485:3f72:3230 with SMTP id
- 5b1f17b1804b1-485566d936dmr102879545e9.15.1773474835217; 
- Sat, 14 Mar 2026 00:53:55 -0700 (PDT)
+ AJvYcCUquQGqLTEKE1wLQtwP7BqM0GsV/M/3ejtswKuxMOSc2Df4iMBv6G7hUQUs5rLUOD3oSNYb8Sj7aBo=@buildroot.org
+X-Gm-Message-State: AOJu0Yw7UMuTM946MRz5iPaFClaNm5imNALuNP3C5iQ4YCmN+VfeAALD
+ ZxPB7ow0VM9q9tOU6sNLaWTpkplN9Cg9yL9e8srSue22/5yXda63a1dHDB4OFj9ujRNM1/0F5/g
+ KXQKr
+X-Gm-Gg: ATEYQzxavyqFZF7J/1DYfHfUIh60SCINunGlQ+RgcD9zzzqBXwhUMHtVKc6L8MRcWJP
+ z+fHvLVOe1hT9v6iQlTos6bDjfIntGFKmuuUF3aHTGfgFsT+HR1TsnQcMnwO/ksK7WxRfqD7gI9
+ 1obPO7WHuwjgDNcwUbsHvEtxgSVP7H2zQuStRmX1p9LLETsgnSzXrW/GICvSXCS5RftfzMnFUYb
+ mQzSOb3Ahngg0yaEOKftSqZIfsobIK3brzxNx31LKnrUGpmblDhp0WRCSM4mUc9M3Z9iMdjflsL
+ 5C/zBjegh8BPlIyAL4zH/ISN2sVE1m1sUT2Pc1HlPhA7i/DlGDY0wJJVL2GuNC3FHvjLET632We
+ mR3KQmtyPTos02gsUrewKVvjEK6z8cqb99UqYfMMF/zyR89qXqSGtk632qQ5SJi88JGfUDcRcAp
+ rRBvJuzy9IrwDkbOY=
+X-Received: by 2002:a05:600c:4fc6:b0:479:1b0f:dfff with SMTP id
+ 5b1f17b1804b1-485566cfccfmr92492595e9.10.1773474836263; 
+ Sat, 14 Mar 2026 00:53:56 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-439fe1b22e7sm23147042f8f.16.2026.03.14.00.53.54
+ 5b1f17b1804b1-48556401521sm41688495e9.2.2026.03.14.00.53.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sat, 14 Mar 2026 00:53:55 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+To: Adrian Perez de Castro <aperez@igalia.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:53:54 +0100
-Message-ID: <20260314075354.14898-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:53:55 +0100
+Message-ID: <20260314075355.14952-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260304192319.3493151-1-bernd@kuhls.net>
-References: <20260304192319.3493151-1-bernd@kuhls.net>
+In-Reply-To: <20260304093057.3638503-1-aperez@igalia.com>
+References: <20260304093057.3638503-1-aperez@igalia.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474835; x=1774079635; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474836; x=1774079636; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZT8z5IOnajhd0vOEjgNqI2tJHxe9bdPGULFoBIYq4tE=;
- b=YzyIHypm/4JFcccSyH8tjA+FSSEMN57OtGOMM/g1VtnP5CGkXUPNcORL8aAH0tDW6+
- p8y2AywYjysLIaehR/GN9hREYiJPohVj5rO1YVeVFn3KORnjG2h7j38/mDKB4IT4nVHz
- ZhwPKje7HZEyRDkkocN5MMxllV1A4+VeFXUeOgAqzm/Tx7qS3riVs7mpS4CG1BMqpm7c
- FgJO7knecWMjMyeTA0Qk3K5veg5oPr7ylC6aGaH8oImaX4CTta4w4i5tQBksvkW79O6d
- rlDZte84O75NBfAxrwrcTppbaXsQXa/D/fmfuzZfawE8PFDvZyEzLF/hv96MB0xgstdi
- FA7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=7axLCiw3yDqg8Wx5ZUpD8ivVsgimzhSovZ2urgQxpmU=;
+ b=NTd/ncCpFnBfNtSn8GJLzwXCKt6r9kSnFV74x0zPxM7iZHnUk11EEiutzAF0Riavip
+ +mNrPXFxt3/dLCunnn0yg9G5KE8A5w3arO0dh087lzE82PFmEJGsvFtCBAo+AC16A3tA
+ C/g9HJ9HyRaZ0KJEO0BBkguobwarD+lzwYY6rdR19tK9+vQjhTSD7aAPxYVO7CoFHrlt
+ geUOowFlxh5QyTzi8BoAWU52kqNAkySp8S9vkYSZpSCO3wPjcKmqDE1HuksPAC6bpVHt
+ tuweH+Zd3+nMpLlHoNLhQuF7r5PMBuQCxITjbcgb/IYRoz349Ic/3N3uuhai0ZLmLQPW
+ a3eQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=YzyIHypm
-Subject: Re: [Buildroot] [PATCH 1/1] package/exiv2: security bump version to
- 0.28.8
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=NTd/ncCp
+Subject: Re: [Buildroot] [PATCH] package/libsoup3: security bump to 3.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,48 +131,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://exiv2.org/whatsnew.html
-> https://github.com/Exiv2/exiv2/blob/v0.28.8/doc/ChangeLog
+> While there is only one CVE numebr assigned (CVE-2025-14523) for one of
+> the patches included in this release, the bulk of the the changes are
+> security fixes.
 > 
-> This release fixes three low-severity vulnerabilities:
+> Release notes may be found at:
 > 
-> CVE-2026-25884: Out-of-bounds read in CrwMap::decode0x0805
-> CVE-2026-27596: Integer overflow in LoaderNative::getData() causes out-of-bounds read
-> CVE-2026-27631: Uncaught exception: cannot create std::vector larger than max_size()
+>   https://gitlab.gnome.org/GNOME/libsoup/-/commit/25eac153004f777581ca2d95e31a02ca96844332
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Applied to 2025.02.x, 2025.11.x & 2026.02.x. Thanks
 
 > ---
->  package/exiv2/exiv2.hash | 2 +-
->  package/exiv2/exiv2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libsoup3/libsoup3.hash | 4 ++--
+>  package/libsoup3/libsoup3.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-> index 1c85f2e1db..7c497cf0eb 100644
-> --- a/package/exiv2/exiv2.hash
-> +++ b/package/exiv2/exiv2.hash
-> @@ -1,3 +1,3 @@
+> diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+> index 32aa7382fa..c0b860875c 100644
+> --- a/package/libsoup3/libsoup3.hash
+> +++ b/package/libsoup3/libsoup3.hash
+> @@ -1,4 +1,4 @@
+> -# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.sha256sum
+> -sha256  6891765aac3e949017945c3eaebd8cc8216df772456dc9f460976fbdb7ada234  libsoup-3.6.5.tar.xz
+> +# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.6.sha256sum
+> +sha256  51ed0ae06f9d5a40f401ff459e2e5f652f9a510b7730e1359ee66d14d4872740  libsoup-3.6.6.tar.xz
 >  # Locally calculated
-> -sha256  5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638  exiv2-0.28.7.tar.gz
-> +sha256  ea51b0609f58a9afa063b60daa1539948b62247721e154f4fff0ad3aec9f9756  exiv2-0.28.8.tar.gz
->  sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
-> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-> index e5b55ecde7..d45acae34e 100644
-> --- a/package/exiv2/exiv2.mk
-> +++ b/package/exiv2/exiv2.mk
-> @@ -4,7 +4,7 @@
->  #
+>  sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+> diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+> index 0db587a93a..34a9ed2741 100644
+> --- a/package/libsoup3/libsoup3.mk
+> +++ b/package/libsoup3/libsoup3.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -EXIV2_VERSION = 0.28.7
-> +EXIV2_VERSION = 0.28.8
->  EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
->  EXIV2_INSTALL_STAGING = YES
->  EXIV2_LICENSE = GPL-2.0+
+>  LIBSOUP3_VERSION_MAJOR = 3.6
+> -LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).5
+> +LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).6
+>  LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
+>  LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
+>  LIBSOUP3_LICENSE = LGPL-2.0+
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
