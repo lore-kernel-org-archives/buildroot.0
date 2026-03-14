@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A10F910706DB
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A42C10706DB
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7231041044;
-	Sat, 14 Mar 2026 14:07:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64E29407F0;
+	Sat, 14 Mar 2026 14:07:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWc8MF0rp_rJ; Sat, 14 Mar 2026 14:07:25 +0000 (UTC)
+ id 8RvyW8YTZar7; Sat, 14 Mar 2026 14:07:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A290040FF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F9AD4101E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497245;
-	bh=qYAzqspudhfPOHVGbGzkqCoTEd3IssFRAXG64Snd5us=;
+	s=default; t=1773497257;
+	bh=QlgOdHU5pdspORVm2iLEZOFYXBYUgKniBjYDI26jFfQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=Vx4Y9rcXkLyn4TymUvkrCVSS81tPkMGyPAslgzajoGIKstRBLkklXppV/2ROx0esr
-	 iuwRZPuIjRUS8u3Ls1FSe29gzpZWoRmWbbB/Embb2UasnLLtnzNeVwZ5Iaic7SXpcN
-	 DEk6BymT+IrC7dFAeladTr7TtyDSd1f63TZH7KsL7aefJTgxocUb7ztkud0EHBe+04
-	 X+WzUGzsYO2dao4hG9NwMDNm9PJlQW/KMtBOxCGlN9x/M54nL9hFLmXZ73S70HUdyD
-	 SO9G7XHL/Ax5DtrL+O6U4A0218fIDfciIjYVHCR6hLka+CgJIpbuWpnAg1O4W53rRF
-	 80GkGCbdhaFrg==
+	b=QJmascFace4xvvaRiTjpK+d7HGAdDOL2Pn/gIY6Z3P3PDhCbkcsqf6a9JAlF33agA
+	 E9qaOKYCjZocUFsIS5XlRgPsVJOLMzc2+iLbXze2Du8JGEiBQLyWm0JD4NJQJREEwj
+	 Sy3ngX5CzJQgq4dXYVtt9eLDN2EM6v4Pd8oOrCCpLdFYvGBPyu7qFTNhlko/brTb2S
+	 iYnQEpF+kF7bwq7n+kfxUeoHKeeZMmudcABC4CHh4jdxqrcuSHL63nwHF3g8icHs8F
+	 VyPkkmpL/6aNlhSH6+GQqLYMZPGyePtrXypY5yGTkJlgJqWfVw0xQCILLQf/aYIqLI
+	 aSDnIKSGWXfGQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A290040FF2;
-	Sat, 14 Mar 2026 14:07:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 515FA201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F9AD4101E;
+	Sat, 14 Mar 2026 14:07:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EEDDD3C6
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43235401CA
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E050E60640
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q7ybzOaoofhi for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:07:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bHcaMpPS7RXV for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:07:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 38E85400F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38E85400F9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C52AD60638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52AD60638
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 38E85400F9
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C52AD60638
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:34 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 875ABA4C13F6;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D360DA4C13D3;
  Sat, 14 Mar 2026 15:06:43 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdV-000000003UM-3Jk6;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdV-000000003UM-3gvx;
  Sat, 14 Mar 2026 14:06:37 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:50 +0100
-Message-ID: <20260314140633.2967249-54-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:51 +0100
+Message-ID: <20260314140633.2967249-55-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497203;
- bh=Kh7pcdqMwnPgyKn08+/orkqIuuRU9jyS94aHx0TUk44=;
+ bh=zEJss9Oa1ymkz5PLHQgfC3KeyNmi5Lu/bv/renFAxbA=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=bAeU8LVO3UQgnS3D2eumYwsfXlyhcFnfnb1zuYVa5LiNQ3vM7lHgfIFNTHOXX9PJN
- KTyLf9Lqh2BAC7tnIbQkXNHxap1JpsWq86AmQUPUhspaFlzN9rsw2G/ZITrX+ukwwL
- FxN4XlzqPFQePSYCB9Cyk0X1QAr51eKhrWVOptYibKul3zkY1RYMQ3eeux7+vwVrEv
- s1p6K6YEs43pkJNEQ/sBfpbDm1khM4/eN8UoA9w2BdkBAliqL2MBmLtZ+vaOg3EH3+
- vYZpy667u+kNVWCuw4p7cUGsBauaMxfUbmDcGuEZCSnTg0zJFuElZILMmUNHWFoyIj
- BOnJp6R3AgXmA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ufkMN7q6a8TfKKTVnsdb67g/KGZ2opE5SMRgwMXuw/8UdDAYEMHu9J8ohNYkR4v55
+ vCIX5ouvrIhgr20JBoLA1zTdDw9TKfInL4FId9xj3A1J66RfoGe4YGfejpnuDWWJln
+ ATX8k+XM5douRApAkIEgmTqkrZnGbHDtD2dLovHhiG9bnw3jipGT2yTCxrxTNwyEVC
+ TEX8JMjUPIyicvntTaExnW6WoZIkCgB2Wze5DZ1sLWM31L2xDQoBaS3RIFQFF5OmNc
+ 5GM7DH3ZlOEcLQNTTdQqwFebOP33Y7hWJCsnq4BTeClV0AiEl3AHnUODlRJfrKZTBc
+ lyz/sbiAQbJcQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=bAeU8LVO
-Subject: [Buildroot] [PATCH 54/96] package/python-pyicu: bump version to
- 2.16.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=ufkMN7q6
+Subject: [Buildroot] [PATCH 55/96] package/python-pyjwt: security bump
+ version to 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.pyicu.org/main/pyicu/-/blob/v2.16.1/CHANGES
+https://github.com/jpadilla/pyjwt/blob/2.12.1/CHANGELOG.rst
+
+Fixes CVE-2026-32597:
+https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyicu/python-pyicu.hash | 4 ++--
- package/python-pyicu/python-pyicu.mk   | 4 ++--
+ package/python-pyjwt/python-pyjwt.hash | 4 ++--
+ package/python-pyjwt/python-pyjwt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
-index 81cdd4f459..ffb89bdd84 100644
---- a/package/python-pyicu/python-pyicu.hash
-+++ b/package/python-pyicu/python-pyicu.hash
+diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
+index 5128285fec..92de436de8 100644
+--- a/package/python-pyjwt/python-pyjwt.hash
++++ b/package/python-pyjwt/python-pyjwt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyicu/json
--md5  00715b86c27c150f48554a863688e878  pyicu-2.16.tar.gz
--sha256  42b3a8062e3b23e927ca727e6b5e1730d86c70279834e4887152895d2eb012d9  pyicu-2.16.tar.gz
-+md5  1e2e506ece8f1343cb5174cfb94003a0  pyicu-2.16.1.tar.gz
-+sha256  cafdc2bc6cfbb4b6e511dedeff37316f902af900993b576116b8243f4ad6478c  pyicu-2.16.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyjwt/json
+-md5  f3273aaf736c24795e78ac48adbab111  pyjwt-2.10.1.tar.gz
+-sha256  3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953  pyjwt-2.10.1.tar.gz
++md5  12623a5898f60c4c86ad4ad8d92da216  pyjwt-2.12.1.tar.gz
++sha256  c74a7a2adf861c04d002db713dd85f84beb242228e671280bf709d765b03672b  pyjwt-2.12.1.tar.gz
  # Locally computed sha256 checksums
- sha256  00da5bf22f2386c4f6f07c734490e9b818c4dcf70e6ca49f594e9cec636b9c40  LICENSE
-diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
-index 9d3f5f6004..869f50dcd6 100644
---- a/package/python-pyicu/python-pyicu.mk
-+++ b/package/python-pyicu/python-pyicu.mk
+ sha256  797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5  LICENSE
+diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
+index 18e84b7838..268d83a487 100644
+--- a/package/python-pyjwt/python-pyjwt.mk
++++ b/package/python-pyjwt/python-pyjwt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYICU_VERSION = 2.16
-+PYTHON_PYICU_VERSION = 2.16.1
- PYTHON_PYICU_SOURCE = pyicu-$(PYTHON_PYICU_VERSION).tar.gz
--PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/11/c3/8d558b30deb33eb583c0bcae3e64d6db8316b69461a04bb9db5ff63d3f6e
-+PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/51/a9/b68d8fad5b830146c42f08b444c716ec50f576cbc8f01e26f4da6e89fc7a
- PYTHON_PYICU_LICENSE = MIT
- PYTHON_PYICU_LICENSE_FILES = LICENSE
- PYTHON_PYICU_DEPENDENCIES = icu
+-PYTHON_PYJWT_VERSION = 2.10.1
++PYTHON_PYJWT_VERSION = 2.12.1
+ PYTHON_PYJWT_SOURCE = pyjwt-$(PYTHON_PYJWT_VERSION).tar.gz
+-PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/e7/46/bd74733ff231675599650d3e47f361794b22ef3e3770998dda30d3b63726
++PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/c2/27/a3b6e5bf6ff856d2509292e95c8f57f0df7017cf5394921fc4e4ef40308a
+ PYTHON_PYJWT_SETUP_TYPE = setuptools
+ PYTHON_PYJWT_LICENSE = MIT
+ PYTHON_PYJWT_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
