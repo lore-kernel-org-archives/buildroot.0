@@ -1,88 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3912910706DE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7AD110706E2
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 16:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10AA94138C;
-	Sat, 14 Mar 2026 14:25:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF9E5608C5;
+	Sat, 14 Mar 2026 16:53:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1xei8uli3TOL; Sat, 14 Mar 2026 14:25:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6CV7g_ltOloo; Sat, 14 Mar 2026 16:53:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C86741775
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0909E607F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773498344;
-	bh=3ftlQHSl0YgG2YPbjUZG4n2XPcQKg9TVStzVQbjjWOw=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=cPtZRTGBvci05pf6oBaDYoOwL6+UzVMTmclYuOP+Hui6dLNOBpAxQWe1++bEZdfsV
-	 J+MaqtmcoF3+XxwsagAIa5O7jIAup9t67eihWzV262UPMYmt/H/kAQUiHYssFVyxSU
-	 6ziCZCJ6ZVSDYnSj0L/e/L+ESXy4iDnIDLZdQqpzL/8N5WqbE/PPYuzXTeHtbX6Dv7
-	 bwvEnFfXud9zO/iO0QFpYjEzTVixZo43fXoz21dbwXaSda+Yu+ilBOEB0zNiJkZK5S
-	 cG+3BqMGXSYgZa2+utsVRw8JNcEcx09LtosmeL05KhNVifPNSPfg8iPgCIzOnYNBdt
-	 kBj04/qjvGeHg==
+	s=default; t=1773507195;
+	bh=p59eBWDjnUf9kUCtFjBWP6nEVLF0gq9pA0gi+aoZ1Y0=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=C69BgEnwROdPXUiXapepIiIUgh60ZKms/q1O5WFuu+QIYR8NYnM5aabkLMJMiBFnD
+	 zZlJd4JGSFFavRTJFsh9U3lnitBS8fTa5Km64xQxHFz1z/8yiC9AJRXoFhg2mnkfmM
+	 G6ViSNmm4d+x7kEU57neHKY5lSdtgxwRGWa2gB22Ac84JU1VdpMif/iCOYDn3LgpRT
+	 8y3916Fj+M2wLUUZxyWH8sjlE+PBEPyqwE7uUy67csBtkgRX2eVUAzNLiP8oayaz1T
+	 i5TyGVjwfBPpwLR2uULBqWlYcVn9QSn+1Y5VFUUPLB5AZh4bqkwPxZrqkUzJ5AwRZq
+	 iljH7TQVRJubg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C86741775;
-	Sat, 14 Mar 2026 14:25:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B5BAA201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:25:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0909E607F7;
+	Sat, 14 Mar 2026 16:53:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2ACB0201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BC3D41775
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:25:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2860982253
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:53:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KTlrU2D9c6-q for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:25:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8_KA-6DJrxnr for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 16:53:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 901CE4138C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 901CE4138C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 859E58225A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 859E58225A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 901CE4138C
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:25:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 859E58225A
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:53:11 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 408B0A4C1E5C;
- Sat, 14 Mar 2026 15:07:07 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4804CA4C082E
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 17:53:08 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38116)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdV-000000003UM-2wKx;
- Sat, 14 Mar 2026 14:06:37 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1SEd-000000008CD-443d
+ for buildroot@buildroot.org; Sat, 14 Mar 2026 16:53:08 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:49 +0100
-Message-ID: <20260314140633.2967249-53-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 17:53:07 +0100
+Message-ID: <20260314165307.2987410-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
-References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773497227;
- bh=IDvLNS7qN3+2KxUKa1rR6gFqiD71U3naLipjVXQzvbI=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=YgqvvUXBzjTfHK8S2c0QeZ7XD/N7RlGxC7+vAT/WqXTTu+U/Ibf6Kbm37egCvcr6i
- ycuObouk0GjSBdu59cxZgiDEtrqp73KyiZ9jwY58iKduLEsmHHzML9SXnaYG8d4ud8
- lHWSjDX4YMn8R2jC1ioO3phHMp5SkoG2Gx7YOn5XvGdNF7C0Y1J0lGl1U5+rzJ4B3b
- K/955+dHdHho1y6+jUQu09laDFbDmRRI10RD4SXm9bZ/8W025E1XUfBXGbv2pAlxdY
- woe3jR792iyXIyP5WRK6On/GqsuRHUfLmtLoSeqfJ0cAoIw1KquomdiqGcR168gP54
- +TuSmpD64YWlQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202511301023; t=1773507188;
+ bh=zu5EAE9rcj4lNvslNHe3NoVX1x4dpWXxl5ioPlBErCI=;
+ h=From:To:Subject:Date:From;
+ b=uHA8w0MOsUHFcGcKXZs83DlEULio7/IQeELWRjcAdylNDnXCf1ynMiIqY64PIMBlM
+ kAksb++5Ggl4pyYZPW7u+N3nNg3XmbX8Roz+MeFe0jpv5vCOXOU+YvztcKOj2HWtMU
+ mnEYA4oazJc/jZM2ay498cHp42sJewh6EsHsDCuLNi5b+sf+xEIX9y840iqgrErHK5
+ +G7cH3puYXaINZuLOQSh13RzkhtFWjQGkNaSAWKfxN0y4p2ppkWDjApeIjIvDj36fN
+ kRgX29QjVRHotdvRmoOo0xEjzOk5cPsnz/hI5KCiSqMtRXYhjli/sxOgIy97jDfrLD
+ OeflINcYhQ5ow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=YgqvvUXB
-Subject: [Buildroot] [PATCH 53/96] package/python-pyftpdlib: bump version to
- 2.2.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=uHA8w0MO
+Subject: [Buildroot] [PATCH 1/1] package/dos2unix: bump version to 7.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,64 +91,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- Ralf Dragon <hypnotoad@lindra.de>,
- =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Mauro Condarelli <mc5686@mclink.it>, Heiko Thiery <heiko.thiery@gmail.com>,
- Marcus Hoffmann <bubu@bubu1.eu>, Joseph Kogut <joseph.kogut@gmail.com>,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Grzegorz Blach <grzegorz@blach.pl>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Christophe Vu-Brugier <cvubrugier@fastmail.fm>,
- =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
- Lionel Flandrin <lionel@svkt.org>, Fiona Klute <fiona.klute@gmx.de>,
- Colin Foster <colin.foster@in-advantage.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Falco Hyfing <hyfinglists@gmail.com>, Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/giampaolo/pyftpdlib/blob/release-2.2.0/HISTORY.rst
+https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
+
+Updated license hash due to copyright year bump:
+https://sourceforge.net/p/dos2unix/dos2unix/ci/0ab159a6c80bd647f4830fb45059472eb1e11d3e/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyftpdlib/python-pyftpdlib.hash | 4 ++--
- package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
+ package/dos2unix/dos2unix.hash | 6 +++---
+ package/dos2unix/dos2unix.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
-index 6c15528bf7..527af14466 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.hash
-+++ b/package/python-pyftpdlib/python-pyftpdlib.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyftpdlib/json
--md5  68632ce84491dfc2d2a4cc1426fd4d14  pyftpdlib-2.1.0.tar.gz
--sha256  5e92e7ba37c3e458ec458e5c201e2deb992cb6011c963e6a8512a634d8d80116  pyftpdlib-2.1.0.tar.gz
-+md5  988581aa4643112a647975a8173e0578  pyftpdlib-2.2.0.tar.gz
-+sha256  4ba0642078792df63dd3b2e9c8f838f2a3ecf428c7518d5921c0530d53512acf  pyftpdlib-2.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  67a832551570a5ac5f7901eaa5ece4b9491fda7f2d8c93957c3bbc68a5a76d88  LICENSE
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
-index 337d979503..97ef003b85 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.mk
-+++ b/package/python-pyftpdlib/python-pyftpdlib.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+index 3e9bf7882e..c48f70d574 100644
+--- a/package/dos2unix/dos2unix.hash
++++ b/package/dos2unix/dos2unix.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz.asc
+-sha256  28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2  dos2unix-7.5.3.tar.gz
+-sha256  bff21c3509fe7348c8327745b2f80d8847b04868073c6d0861bf8c773db66515  COPYING.txt
++# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.4.tar.gz.asc
++sha256  f811a2b9e4a0c936c61ef7c1732993d1820e5cf011f4d93861885ccb8101ca21  dos2unix-7.5.4.tar.gz
++sha256  e09d0709ac6a24d995565989267f2e097325778ed47738ee889a7124bc89a3ef  COPYING.txt
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 4c57a4de5f..8794aa46bf 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYFTPDLIB_VERSION = 2.1.0
-+PYTHON_PYFTPDLIB_VERSION = 2.2.0
- PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
--PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/fc/67/3299ce20585601d21e05153eb9275cb799ae408fe15ab93e48e4582ea9fe
-+PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/f9/42/8751c5f58ae59b09e070da4fa322ae9693a340d2cc456b5a380b2c1ee47a
- PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
- PYTHON_PYFTPDLIB_LICENSE = MIT
- PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
+-DOS2UNIX_VERSION = 7.5.3
++DOS2UNIX_VERSION = 7.5.4
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2-Clause
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
 -- 
 2.47.3
 
