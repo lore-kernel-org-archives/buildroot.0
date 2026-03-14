@@ -1,117 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47764105F79E
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F42107BCFE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19E23407CA;
-	Sat, 14 Mar 2026 07:53:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FADF60EF4;
+	Sat, 14 Mar 2026 07:54:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Hz5AMZPJHfp; Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hf8kvqLR3YDf; Sat, 14 Mar 2026 07:54:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30D6040F6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3967860EFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474812;
-	bh=RBkkS43vdu+9r/YgZU5kVqUa5ji8WLerj/WxOJKrqGk=;
+	s=default; t=1773474840;
+	bh=5fIkmU7SQBXpt0M4M6BRQX9mBSrHk/IOd/vkYJfpw5o=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Bj9tJKZ8FyT6zGU/DLdEoLlUd1V3JLhXwjsRBWvxzSxfOESji7LLvEkRjw6zVigVa
-	 ZzdogY4GCez0a1/oFr4gGazph9m+E4/Zay1TSlfujp6R+WK4aZ8pBov9/66ZbPPFx0
-	 vjyNsWq9irOt9TSta3a6XTeyd7oofHgirf5YJ6KQM56rmqDQXcClr4cyDTOKqNiVxS
-	 +XNnsKVVjvbnY4GBbcWpwdG1JaWWokW9eC9B2P+deOT8euYxetHdQTMq37JTvHBSUF
-	 eW9Aanfg8/XyyBrxwbnl5bMPE7qyq6XvCpcLbuWLCdi1/2Gdbzljb0O+iOuMwr0j9P
-	 ZF7knq8eIKtQA==
+	b=IdslJh0kiLlvvl4fLVn6fNd9x8XruyLfpV3JsaWiA4zvb1/5IH4swQ5208pnudMH0
+	 m+99u7ggmRhehsSkZjIyAcjikfbM9sM79hwMBSt5QhXi5L2Tfjv+OSH9zr8bawK1Ry
+	 rGXvqHqjyA/Tx2gk5epUAmME/w05J+079yUfWz6/DKfja06SHGyK+UogvMXXXU7WGq
+	 sKEZ8385l58tPcfOw6xDEDTF2xlEhf4eB81WK3YuVG8XpJlUdo59tNIhRLw09ZaHUK
+	 sEXNWm0MXz7cFqbKKYQrIYd+I13QDSB5+EtJdO+LNvYhNTP7GB9BuD51qb5py0oGmF
+	 LVKl+J4khn81g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30D6040F6A;
-	Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CADF1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3967860EFB;
+	Sat, 14 Mar 2026 07:54:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4F9A201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2E368229D
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAE1840135
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UejhOdKOrtQl for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LOYENNZThP4F for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:53:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D194D8229A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D194D8229A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9045B400A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9045B400A2
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
  [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D194D8229A
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9045B400A2
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:57 +0000 (UTC)
 Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-48558d6ef83so12259245e9.3
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:26 -0700 (PDT)
+ 5b1f17b1804b1-4853c3c2fe7so17476535e9.0
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474804; x=1774079604;
+ d=1e100.net; s=20251104; t=1773474835; x=1774079635;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=tRNE7z4ZKxGf2yjV9/fIJhptfet9fgreUag+v9OX/1s=;
- b=rSPSQySPS3XGTFLFztcTZlL15uiqdrQYlJfMF7ML5vWpetrmjggua7zxny1VgNrqh9
- IvL4WX0v2GZDnVW1RzYtziewkUlT2gmALxygwz3Y7DsyEsBYakQlLt1OWKTE/XR2KD4s
- zQQcfvTyuMyeX/shnkl9PZhMVYZQ/vpulcaJWYUE90kVH6dH1Vg705ktM0QEm9m7WPIQ
- yT5WDDp3HedahR7p07B7UhbH/X9ToobuLxtq6KJeAcs9YxEnxN3gBLp39HbCTBIWEBOd
- 60mCIoSxVpaZLg1au8xDJslsROc2vBDPNA774ZFSodi2KoLXrTLVV9Q11mNrlAgJCwgQ
- mwEw==
+ bh=ZT8z5IOnajhd0vOEjgNqI2tJHxe9bdPGULFoBIYq4tE=;
+ b=m4qz5pM1aecmW1EQC1bJkaeomc077ZQHSG6EPwva6A7YBORY8YH3TMOoCUVL0IiEwN
+ R9bX25rjVCUs05oLq452oDpTjii3MIbQOsEgwzCf6k4fiv914SXXG6ZPHU1lJ0D8RUPl
+ 8ThCyWk2AbvMj2EPX+n6MMqezgpH2Jqdh/7ua9eXrhxFjESMOedoCdwtba+McI7d9vFP
+ DPqpC+48YdBMv5PoBiF2odzk9loaeAr4LHUbd9sp68Ouz0mpsMN0I8qzvBmgXAjChBTu
+ g2piNyAgOPW3TT+MRxVFpkjJFTEpu+Fvh885jBf4b+q5ywD+bj70yVqtQS6r64em+u0h
+ /gIA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXf4/DHgWflGDkZPEUv1EmQiDjMtOjK8aYQJroUUC45ieveUy6doUz02TmBgJEzdWNHjV0yf8SXsM8=@buildroot.org
-X-Gm-Message-State: AOJu0YyNLSx/zWXePMEtEcBUEUj3b/VgwBpPg6dA/B8bkWCwrM9yisvL
- hNxyGTBr97vjTMF9E+5IfujHuesUBL3bL1TMT00B/R2meaoKcrl3wd4NlStuC54tVzQ=
-X-Gm-Gg: ATEYQzwAqyOPbmI8dfXq9qnwkjn3ZlE8yX0+SVCHvqZrqOa58d8/BoOZnGRHq0uLeA8
- xEdSxu6C5X2ChX1KpXDBAPl7Dwn6CKDPCkD+Ht85v3InFPK615TwyPpKkZDhOdJeD4Hp4QTLVdP
- rHdcbwYzuUxyCRfPhWQjrmD+R7EQqFZNNkrYFfs4ZzUqD8DMOGn+Xn8t00T4wKxIgvXog76bDXS
- o3NvmksQcHUUmLSnwWq9coUOY/c9azjmGolYfgvQc/OwqhdyIZKWP47NA0RVBVmxn+l+Oaw0i1M
- +INa/iczkUWe2I/r6wbOmdjoy4rlUX+W9SGth10YGU4xxcKUSYzDQFYbYsonJaqs7Kw7IZrmzoU
- fyr6LyUtAaUBhszV0t1wvz+ZdO9InC6EY7/T0al4Vks/mYxvhO6qYbqcChuQeIWjBj1ivQxFdQQ
- h4cWybGk0EW8aRAMU=
-X-Received: by 2002:a05:600c:1e8c:b0:485:40c6:f516 with SMTP id
- 5b1f17b1804b1-4855670e79dmr94330965e9.33.1773474804257; 
- Sat, 14 Mar 2026 00:53:24 -0700 (PDT)
+ AJvYcCWzZfqbyWnbadbEwfMuYJ1GAL984kWRht6U4gl/adBZs4Dzr7m93t7jZKaLRV3T2b7DO+HMP2KDgeU=@buildroot.org
+X-Gm-Message-State: AOJu0YwXRIk1hq4Iz88aMSZ2iO2/zdVxcizXDjpdrAUpGYTeX76wb9nm
+ vPRpKJv7+SFIL/8Vr/5yJSNRBEwW8peFec03vYu6oUw067bcJNNn93/HwB54eJpiq5NPsw5X3kn
+ km9TN
+X-Gm-Gg: ATEYQzwhK451hn12umEopLV52CuUYZ0VUcjBm7Zi5kehPiY4fpYMWWgvA8iBaj9X458
+ BKftLuA9ONgUMnDCEXV+mqoMmfAc8PO+D7FpJXqzosAufHHJWMWN+aAuHyPOd7M5fvPNkHY/bBA
+ lqONvSdTMhQcA7q3bIBtC1HsdJYi3nhPnLb5IFz8Vg6i7IpZCI9aKTIZs/E41h5cCBMvqWnCH2L
+ 8B7l51s7l+FceyRjZAYDktCBcNmJpz1H/SO0C2Zwdv3u6fzl+Oc9HEwMiNiFZSqVBejGjNzWQm1
+ ghs8sq8un4S4kwE95e6wIQvYZU4v8bPlN1ajjr4WBxvy6TnAahWtdcfuc2Y6jUr/BqqCM6sxaqS
+ 8Qa7+BzGKfBV0caW9QtezqtYUUJXb+TfkIwTD3KCZs5ujQrbvj5IakFgHVpo7fEnyfIRY7xtDLC
+ 0KWFI74+ll4Jz8TkJXRb4htFAMwA==
+X-Received: by 2002:a05:600c:3ba4:b0:485:3f72:3230 with SMTP id
+ 5b1f17b1804b1-485566d936dmr102879545e9.15.1773474835217; 
+ Sat, 14 Mar 2026 00:53:55 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4854b6756e4sm301907245e9.15.2026.03.14.00.53.23
+ ffacd0b85a97d-439fe1b22e7sm23147042f8f.16.2026.03.14.00.53.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:53:24 -0700 (PDT)
+ Sat, 14 Mar 2026 00:53:55 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:53:23 +0100
-Message-ID: <20260314075323.14729-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:53:54 +0100
+Message-ID: <20260314075354.14898-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260307093629.22188-1-bernd@kuhls.net>
-References: <20260307093629.22188-1-bernd@kuhls.net>
+In-Reply-To: <20260304192319.3493151-1-bernd@kuhls.net>
+References: <20260304192319.3493151-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474804; x=1774079604; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474835; x=1774079635; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=tRNE7z4ZKxGf2yjV9/fIJhptfet9fgreUag+v9OX/1s=;
- b=h8aKLYrl7OOGhqb4EM5AGSlt4dKlbei5ZrL6lASQ4yqeRTGqH2ua9EhJ/0Q//jupql
- BVSDN62gwQ7qBekZlJRM/UUM3eelv4y93F0K8viGvXp15BQPNbI4U7a7wAwDqgRilgr6
- zUJeZ0QtV1afp+3WKl1Z3xtiQtuajFJc70bZ2RRnLVT+AB0jnPupWLo8ot9JES28YXvH
- 9/oM5Iep8plEhQIotxTNsPyOBH3HthxKjow5GZXgIv1t+jsqlJmyV8jD6ED9QBtzx/gS
- hBTb9kb/Bhx0ffGE21brrGKTuY1y3hZtzaJq8/xJ76pWK5EU0Kyy9EXCCybDuhufYq6Q
- gkSg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ZT8z5IOnajhd0vOEjgNqI2tJHxe9bdPGULFoBIYq4tE=;
+ b=YzyIHypm/4JFcccSyH8tjA+FSSEMN57OtGOMM/g1VtnP5CGkXUPNcORL8aAH0tDW6+
+ p8y2AywYjysLIaehR/GN9hREYiJPohVj5rO1YVeVFn3KORnjG2h7j38/mDKB4IT4nVHz
+ ZhwPKje7HZEyRDkkocN5MMxllV1A4+VeFXUeOgAqzm/Tx7qS3riVs7mpS4CG1BMqpm7c
+ FgJO7knecWMjMyeTA0Qk3K5veg5oPr7ylC6aGaH8oImaX4CTta4w4i5tQBksvkW79O6d
+ rlDZte84O75NBfAxrwrcTppbaXsQXa/D/fmfuzZfawE8PFDvZyEzLF/hv96MB0xgstdi
+ FA7Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=h8aKLYrl
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/docker: Fix build with
- gcc-15.x
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=YzyIHypm
+Subject: Re: [Buildroot] [PATCH 1/1] package/exiv2: security bump version to
+ 0.28.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,69 +133,46 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Add patch from Debian to fix build error with gcc-15.x
+> https://exiv2.org/whatsnew.html
+> https://github.com/Exiv2/exiv2/blob/v0.28.8/doc/ChangeLog
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/495/4956555fd033d43c1877e66141789bcd06aff5be/
+> This release fixes three low-severity vulnerabilities:
 > 
-> Patch sent to fork which is used by Arch Linux:
-> https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=wmdocker
+> CVE-2026-25884: Out-of-bounds read in CrwMap::decode0x0805
+> CVE-2026-27596: Integer overflow in LoaderNative::getData() causes out-of-bounds read
+> CVE-2026-27631: Uncaught exception: cannot create std::vector larger than max_size()
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Applied to 2025.11.x & 2026.02.x. Thanks
+Applied to 2025.02.x, 2025.11.x & 2026.02.x. Thanks
 
 > ---
-> v2: updated upstream URL after commit of the PR
+>  package/exiv2/exiv2.hash | 2 +-
+>  package/exiv2/exiv2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
->  ...tibility-explicit-fallthrough-undecl.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch
-> 
-> diff --git a/package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch b/package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch
-> new file mode 100644
-> index 0000000000..c0dc18d17a
-> --- /dev/null
-> +++ b/package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch
-> @@ -0,0 +1,38 @@
-> +From 55054532589041e3c7b970fefaeeeee871f4f6be Mon Sep 17 00:00:00 2001
-> +From: Tianon Gravi <tianon@debian.org>
-> +Date: Wed, 25 Feb 2026 08:24:26 +0100
-> +Subject: [PATCH] fix gcc-15+ compatibility (explicit fallthrough,
-> + undeclared/unused arguments)
-> +
-> +Downloaded from Debian:
-> +https://sources.debian.org/src/docker/1.5-6/debian/patches/gcc-15.patch
-> +
-> +Upstream: https://github.com/mdomlop/wmdocker/commit/55054532589041e3c7b970fefaeeeee871f4f6be
-> +
-> +[Bernd: rebased patch]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + docker.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/docker.c b/docker.c
-> +index 4cc8d78..6105ab8 100644
-> +--- a/docker.c
-> ++++ b/docker.c
-> +@@ -46,7 +46,7 @@ void signal_handler(int signal)
-> + }
-> + 
-> + 
-> +-void parse_cmd_line()
-> ++void parse_cmd_line(int argc, char **argv)
-> + {
-> +   int i;
-> +   gboolean help = FALSE;
-> +@@ -283,6 +283,7 @@ void event_loop()
-> +       case ReparentNotify:
-> +         if (e.xany.window == win) /* reparented to us */
-> +           break;
-> ++        /* fallthrough */
-> +       case UnmapNotify:
-> +       case DestroyNotify:
-> +         for (it = icons; it; it = g_slist_next(it)) {
+> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+> index 1c85f2e1db..7c497cf0eb 100644
+> --- a/package/exiv2/exiv2.hash
+> +++ b/package/exiv2/exiv2.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638  exiv2-0.28.7.tar.gz
+> +sha256  ea51b0609f58a9afa063b60daa1539948b62247721e154f4fff0ad3aec9f9756  exiv2-0.28.8.tar.gz
+>  sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
+> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+> index e5b55ecde7..d45acae34e 100644
+> --- a/package/exiv2/exiv2.mk
+> +++ b/package/exiv2/exiv2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -EXIV2_VERSION = 0.28.7
+> +EXIV2_VERSION = 0.28.8
+>  EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
+>  EXIV2_INSTALL_STAGING = YES
+>  EXIV2_LICENSE = GPL-2.0+
 > -- 
 > 2.47.3
 > 
