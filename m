@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AE5910706DB
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69D2F10706DB
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:10:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50DB9410F5;
-	Sat, 14 Mar 2026 14:10:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4082D41105;
+	Sat, 14 Mar 2026 14:10:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ga3aemLc57I5; Sat, 14 Mar 2026 14:10:13 +0000 (UTC)
+ id A6J790weJl3k; Sat, 14 Mar 2026 14:10:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6181B41101
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DBDB4110F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497413;
-	bh=ttxekcE2R13j8aTY5v4l9oCtCDO5eCz8bx2NkkS9/As=;
+	s=default; t=1773497426;
+	bh=0t6Jvs6zPEBuovcwsEM98YitIxdOKxFrhNhdAsGjARE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=rbTUrUxMXCnsE4aXhTdX3WAPMxtE6Cd777mGxI+d4c5stV+2E/4r90WEvb3laShO/
-	 +jRYDzLG/SZxX7jy5cEuNYx9gNIQFpdAX21c4DGnhMcJTDm4zW/LL+GTBi3grKZKcJ
-	 Kv0Re8Ih+AmPGY0AFUQ7o9ru0S7cTr2tY7D4eoZxHN4SS56Oz/fzne3ZiKV0fP4Txp
-	 rdVPN/FDBQ4GahcpLPq9am7Kvs/rN04ffXwPKuXE3TpHmsFW76I/NqfvvbbvRZBPgw
-	 uKDwPFff4DumsO1lsSmEqRO9tB9iQiybv5p3WLygOfhOXhSFP8wJB9di9V1sf2jRWD
-	 47O1zcjtsUQJA==
+	b=HKDCK2t/HfmLZpDnzBcPF60szQ1F68HLYyTQOU8dovQCwPFsH0tHW4hhHSQxV/Rtq
+	 0hyd3qunRboRr0i1Pnk9H6fy4n+CK0nKp81TsMNBrucYpEnrmAkDZVP2a2VGxFe4FL
+	 afMNGNFvv/xRDuvB0XKyQ3HKTVbcNbmne8WwkKAyUOoVkPEjssyY9K7LzhnP50/0ki
+	 eRwoKVIASWaNbhPH8+MlMnLag8nUl0oVLUR2kOhoeHJvgrhfdsJlut0gz6ozcGrQyT
+	 PiqZYHVMasd9jwAExBzScAjh57ZUK6NQpwOfJ8F08OoN778HCMKKVuVLSSjKft7ZlH
+	 WyVsdltCd03qQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6181B41101;
-	Sat, 14 Mar 2026 14:10:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4098A201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DBDB4110F;
+	Sat, 14 Mar 2026 14:10:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 726B23C6
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2691C41101
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5789E6066F
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LChSp7gWv8IF for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:10:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UEhqZB1RZY7z for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:10:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0FB8C410F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FB8C410F5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4CF7B60640
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CF7B60640
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0FB8C410F5
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4CF7B60640
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:10:23 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1A7EEA4C142B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6A5ABA4C1433;
  Sat, 14 Mar 2026 15:06:48 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdX-000000003UM-0Fgu;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdX-000000003UM-0d9Y;
  Sat, 14 Mar 2026 14:06:39 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:06:04 +0100
-Message-ID: <20260314140633.2967249-68-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:06:05 +0100
+Message-ID: <20260314140633.2967249-69-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497208;
- bh=dVv8I5gSuUxCEODYTko7yEkhfKeB99Bx70+Nlhx0c6g=;
+ bh=mJztcHTQYUdvQ3hgvWIyQBvuzl1ahGwntd4topI8hXQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ESRvV8fHR1XflNm0NDb0+/0Nz25jMtAeU200A0vkEr9ZvbM2RFIV1NUFU5lhgG24i
- kcEnNUBXGhJuSzMqKyphjyFVY51///sy+r3MiHGypQqIE2SBmvRK/JKKYdZC3JrnfX
- fO2zJS7L3doJKgQu23uTwPCVwtUdn4f52/wm7qGeD7izj8Fp3VxU57ioNrw+MvhyiT
- QFgfCtddFZNOYs3mfRRHv5NySlBO/5hETTVgJat7W8/7n9HGnPjQR2/D6OIwHWRANg
- GqyU2GAxBHvb/56ZulhXjVRVs6VFkcgsuQZDbqVOZ6NV5rXEi9pBh4ikr3NzIj30l2
- j492ep+ulxfpA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=pKiWushhy3VTI5cX020pQNCnQshYnkFQvfluY9xuCKAE+9rQzZ/2vmrMpbCeaZ7wp
+ endOFCgaGAhBj6LywgJHfxJZ80xR9VxnSqnuuflvZjzlzmESM6gD2p7XEu6m4kHCm8
+ mToQHdyFnbDTPrVQ3NeYUhF89M3iY7UokjTNsPPMTryfMufRNrY6fS2RVspczrtW1j
+ 1ZQOupZoyI0HwBfeB8a6b4ev1f7wqicmfVHjaY8UtwvoO/x72QBgd5l4SYzZkenmn4
+ z3sPs+D799I/HQ0Ip74pT8dR3519eTAiXhvviWFmir/KqaJFQca5DwXZrChMt8la2I
+ AlBc4vEYS8Bzg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ESRvV8fH
-Subject: [Buildroot] [PATCH 68/96] package/python-soupsieve: bump version to
- 2.8.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=pKiWushh
+Subject: [Buildroot] [PATCH 69/96] package/python-sqlalchemy: bump version
+ to 2.0.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,46 +116,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/facelessuser/soupsieve/blob/2.8.3/docs/src/markdown/about/changelog.md
+https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_48/doc/build/changelog/changelog_20.rst
 
 Updated license hash due to copyright year bump:
-https://github.com/facelessuser/soupsieve/commit/09b27696ada6f07523a077950ce73da45579d524
+https://github.com/sqlalchemy/sqlalchemy/commit/9ea4237f2136081ee784d12b53f4c0605a5a15a0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-soupsieve/python-soupsieve.hash | 6 +++---
- package/python-soupsieve/python-soupsieve.mk   | 4 ++--
+ package/python-sqlalchemy/python-sqlalchemy.hash | 6 +++---
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-soupsieve/python-soupsieve.hash b/package/python-soupsieve/python-soupsieve.hash
-index be9bc3402b..e604cd2d1d 100644
---- a/package/python-soupsieve/python-soupsieve.hash
-+++ b/package/python-soupsieve/python-soupsieve.hash
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index cfc42fd77d..e94ae9acf2 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/soupsieve/json
--md5  ec2c755903968868cb307512203ef3c5  soupsieve-2.8.1.tar.gz
--sha256  4cf733bc50fa805f5df4b8ef4740fc0e0fa6218cf3006269afd3f9d6d80fd350  soupsieve-2.8.1.tar.gz
-+md5  8c20930a780872dafd6f22175398ccf7  soupsieve-2.8.3.tar.gz
-+sha256  3267f1eeea4251fb42728b6dfb746edc9acaffc4a45b27e19450b676586e8349  soupsieve-2.8.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
+-md5  9df94d7a8629cf43d2190d5e511fa47f  sqlalchemy-2.0.45.tar.gz
+-sha256  1632a4bda8d2d25703fdad6363058d882541bdaaee0e5e3ddfa0cd3229efce88  sqlalchemy-2.0.45.tar.gz
++md5  6c8b6f2648f192707671d55e96ee5ce9  sqlalchemy-2.0.48.tar.gz
++sha256  5ca74f37f3369b45e1f6b7b06afb182af1fd5dde009e4ffd831830d98cbe5fe7  sqlalchemy-2.0.48.tar.gz
  # Locally computed sha256 checksums
--sha256  571d0dafef795a196a0bbc3ac9b160a06b3cad41c320fecd98da3e26a8c81971  LICENSE.md
-+sha256  76a0acdb98c3a63681e20b6f096699ef8cad5fb35d56eef8387e0fa71d797a9a  LICENSE.md
-diff --git a/package/python-soupsieve/python-soupsieve.mk b/package/python-soupsieve/python-soupsieve.mk
-index 34fec5218a..04d33f67be 100644
---- a/package/python-soupsieve/python-soupsieve.mk
-+++ b/package/python-soupsieve/python-soupsieve.mk
+-sha256  9821720b58d4a565b61321007a8ad43ab6991a3959e66cd5db4dd9eae69c7dfc  LICENSE
++sha256  e862bb5b904fb5513c3e14288d7a25a12eb0ecc7847a0a965d310e9a955e7cb9  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index cf5440a715..88ef21f7b7 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SOUPSIEVE_VERSION = 2.8.1
-+PYTHON_SOUPSIEVE_VERSION = 2.8.3
- PYTHON_SOUPSIEVE_SOURCE = soupsieve-$(PYTHON_SOUPSIEVE_VERSION).tar.gz
--PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/89/23/adf3796d740536d63a6fbda113d07e60c734b6ed5d3058d1e47fc0495e47
-+PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/7b/ae/2d9c981590ed9999a0d91755b47fc74f74de286b0f5cee14c9269041e6c4
- PYTHON_SOUPSIEVE_SETUP_TYPE = hatch
- PYTHON_SOUPSIEVE_LICENSE = MIT
- PYTHON_SOUPSIEVE_LICENSE_FILES = LICENSE.md
+-PYTHON_SQLALCHEMY_VERSION = 2.0.45
++PYTHON_SQLALCHEMY_VERSION = 2.0.48
+ PYTHON_SQLALCHEMY_SOURCE = sqlalchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/be/f9/5e4491e5ccf42f5d9cfc663741d261b3e6e1683ae7812114e7636409fcc6
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/1f/73/b4a9737255583b5fa858e0bb8e116eb94b88c910164ed2ed719147bde3de
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
