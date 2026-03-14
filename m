@@ -4,86 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A01F10706EB
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 17:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA16E10706F1
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 18:16:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB5F760AC0;
-	Sat, 14 Mar 2026 17:18:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E57460C18;
+	Sat, 14 Mar 2026 18:16:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YlCJ08XioxJq; Sat, 14 Mar 2026 17:18:12 +0000 (UTC)
+ id oClOlQdQLyZq; Sat, 14 Mar 2026 18:16:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFB946081C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05CF8608C5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773508692;
-	bh=/0v1QLuxJBYLTPkTk3VlwWsGDMzx2VzGvQ0BLGEUnMk=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=eLik+04lcCDno2YX/JLe/CGBI3g0MkSjNyz9ucjk+z765W9RELllTMkyBX3zzxGBE
-	 QXYWA2ed3oA4keh5s9ZPFQopkbd0war1DeB1nDuk8EoqxEVEYL7a7e2lAK8oNjGIkh
-	 sa2/TixvKCGpReRWt6LO3nwZ5eODFDQ9aSt0fiyxItJi0o4R0q9W58zczKKtNAVFF/
-	 hwWK55j4kNIMGt5UjwIz48LlSQ4L4GOKAxDLJfQ5lwSw+hPVfrSL9MD8ZLPv3LgsNE
-	 m28iMApNcWtjUgKSNDWK7d0NFqxlcVzb5fFG61khDFM/vy89dhj4RFW8FuD3ysAGSz
-	 CMehb11bpTHXw==
+	s=default; t=1773512177;
+	bh=0UFndZFVvOfB5IDRc9REKUMbL5fscLpUwrLdAsWsDCY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=mICtWr74Agcn47GNQDHXI3Xa97D0aKbG/wa2UTum+p1y5mlz8vjrXirtrceBlK4vc
+	 REVstsJptg8JJL1iIWEnsdqZM1mgEXxzkAAtCiarMU129DoLHeHksEF98D37kHDAiM
+	 1/ZVNLFLttbXEpy2RgconGm7Le7noUcF5WjpY57uNa5dCYJXTV0XZYp+wHWAXPtZ0B
+	 0N3vEzeli6N6HyDPvZh2EwisirKB5w1GmvHqRJsuSq+8wytVmWHvw5GXzCDsIXJ/dG
+	 45y6aieVLf4CWjpU4dikKKS0/EYeF2RpIHinTARkoQmHkKWyKVyA3iW8nSah0AtL3H
+	 CKnSoY5qkEY2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFB946081C;
-	Sat, 14 Mar 2026 17:18:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DE881B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 17:18:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05CF8608C5;
+	Sat, 14 Mar 2026 18:16:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F5601B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 18:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FBD940076
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 17:18:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B97C413C8
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 18:16:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cxIzPiSREmnh for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 17:18:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u7bdnMVgJPrN for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 18:16:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3BB0D40073
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BB0D40073
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9CD92413B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CD92413B1
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3BB0D40073
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 17:18:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9CD92413B1
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 18:16:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7DCE7A4C0E21;
- Sat, 14 Mar 2026 18:17:54 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54836)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7AB37A4C1081;
+ Sat, 14 Mar 2026 19:16:11 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38404)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1Scc-0000000045I-0d1q;
- Sat, 14 Mar 2026 17:17:54 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1TX1-000000006eH-0Rms;
+ Sat, 14 Mar 2026 18:16:11 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Julian Scheel <julian@jusst.de>
-Date: Sat, 14 Mar 2026 18:17:54 +0100
-Message-ID: <20260314171754.3071677-2-bernd@kuhls.net>
+Cc: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 14 Mar 2026 19:16:11 +0100
+Message-ID: <20260314181611.3076096-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260314171754.3071677-1-bernd@kuhls.net>
-References: <20260314171754.3071677-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773508674;
- bh=AmZMSXhfxWZw5tXBnTWwaYgjdpJ2iFyAEjwqgYDC9lE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=utfY/m6iPPzeUGVIuyiSLRjNcUXHrERxW4GN1xVc6eYXVgPjoZ0c1qXfP1BhYxU7+
- SOXuI7Lwaq+jg/jjwq6aKMbTPI5DAQ1iY+DWn7D12w8jPZKfW307bd1It5XfB1F6hn
- 3ZCBaZF3ffdUwGjq8nhCO0dM7PkJSK8po6SOYsPyZCZdYmErvHtpvSDT3tOM34RTR3
- WnzdJWJ1I8i7Nk117VKdVhZBRIV587viqxmUbm/RcuWoaQjsl1xSX/3Tofp2IMGqhK
- C97LEXUD09DzbGAEy91sYy8XVbIqfpbKYfbYtDF9EcA8/2f/wcFUq2k6SVt+50S4fi
- FgaQjCbCRd7pg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202511301023; t=1773512171;
+ bh=57MsO0QNw1ntCFs79McOESCFsDR2AHi5ZOkPZTD2JxE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=tmcsQRz0ClLbAjXBbKFpr+1Atg5LMhteiwZHMBWwBw3f50NnfLDcAp1BBexz7ngoG
+ N4Vq/9LAn5VdBbkoqPbPDqbwGicBk3Mzg6vKipwv/rBKq+U38+vuUa/c+mYBvm9/f1
+ o+GrM0meunG0Sw39VbsTBkbe4OO3hoPbjPPZP+g45tFRXQ98kr1/ktlGyYi7DJLuAh
+ AIK/KE+HiaR3rGLWe1kJYQ3lue/HxoaOs9HyGZDtP7cJdFVT5b6rpNGmkZ6CVTFC/Y
+ +l6qtpQBTXNhiX13E982Ac9/xSs09bYKVqvrswQr6mkoXzDiJ2bvE4OpCgO3nN1PIl
+ Am6cbddL0tXSg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=utfY/m6i
-Subject: [Buildroot] [PATCH 2/2] package/dvblast: bump version to 3.5
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=tmcsQRz0
+Subject: [Buildroot] [PATCH 1/1] package/cutekeyboard: bump version to 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,45 +97,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://code.videolan.org/videolan/dvblast/-/blob/3.5/NEWS
-
-Depends on bitstream >= 1.6.
+https://github.com/amarula/cutekeyboard/releases/tag/v1.6.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dvblast/dvblast.hash | 8 ++++----
- package/dvblast/dvblast.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/cutekeyboard/cutekeyboard.hash | 2 +-
+ package/cutekeyboard/cutekeyboard.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dvblast/dvblast.hash b/package/dvblast/dvblast.hash
-index 1b75d779d9..3776cef525 100644
---- a/package/dvblast/dvblast.hash
-+++ b/package/dvblast/dvblast.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/dvblast/3.4/dvblast-3.4.tar.bz2.md5
--md5  148a26e1207e111f905461cfb1cd106a  dvblast-3.4.tar.bz2
--# From https://get.videolan.org/dvblast/3.4/dvblast-3.4.tar.bz2.sha256
--sha256  7abd45aff738544017350af87ec7ebad00fcfb4e4effd04f35023d504d9b6f44  dvblast-3.4.tar.bz2
-+# From https://get.videolan.org/dvblast/3.5/dvblast-3.5.tar.bz2.md5
-+md5  d244aadb0b202a0838449235fc5f27dd  dvblast-3.5.tar.bz2
-+# From https://get.videolan.org/dvblast/3.5/dvblast-3.5.tar.bz2.sha256
-+sha256  baa5a9aa1726b97240e16fef8856395cd42440aee410bf479479249f9cce6076  dvblast-3.5.tar.bz2
+diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
+index 5800865230..acd2017056 100644
+--- a/package/cutekeyboard/cutekeyboard.hash
++++ b/package/cutekeyboard/cutekeyboard.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  94f68aec169fb6c9937eade757251714d38a56812be5dbfc3973914a71ad8d2d  COPYING
- sha256  2c1bea2f338d46ee6f2712f2c2bf05b874327ca0bec5eb0b7b4fbe208a23677f  COPYING.WTFPL
-diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-index 3571ff3c74..c3e19f3e3f 100644
---- a/package/dvblast/dvblast.mk
-+++ b/package/dvblast/dvblast.mk
+-sha256  5ac0521f89ee9b7a2793150f09a77693b797301d12b8a65fe214387d8e8c0845  cutekeyboard-1.5.0.tar.gz
++sha256  5e00ab346038e41e11662016b56c4e95fa08e7efeb7ca61aeab5b863a0bb7300  cutekeyboard-1.6.0.tar.gz
+ sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
+diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
+index 9a29f5df02..12a6573d52 100644
+--- a/package/cutekeyboard/cutekeyboard.mk
++++ b/package/cutekeyboard/cutekeyboard.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DVBLAST_VERSION = 3.4
-+DVBLAST_VERSION = 3.5
- DVBLAST_SOURCE = dvblast-$(DVBLAST_VERSION).tar.bz2
- DVBLAST_SITE = https://get.videolan.org/dvblast/$(DVBLAST_VERSION)
- DVBLAST_LICENSE = GPL-2.0+, WTFPL
+-CUTEKEYBOARD_VERSION = 1.5.0
++CUTEKEYBOARD_VERSION = 1.6.0
+ CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,v$(CUTEKEYBOARD_VERSION))
+ CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
+ CUTEKEYBOARD_INSTALL_STAGING = YES
 -- 
 2.47.3
 
