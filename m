@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD7710706DF
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D02E410706DF
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4C00410BA;
-	Sat, 14 Mar 2026 14:21:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB740415FD;
+	Sat, 14 Mar 2026 14:21:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qCcSiygWUsfZ; Sat, 14 Mar 2026 14:21:05 +0000 (UTC)
+ id myfovn6Ez6DR; Sat, 14 Mar 2026 14:21:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4AEF41272
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01089412E9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773498064;
-	bh=HVeJY7hxeqQSfiQeExtebgK29aVc5cCtywXyytwPJEQ=;
+	s=default; t=1773498077;
+	bh=OEs4fUchmG4SuAkyhGP8nMqSmIdPtgDAXEPTuhP1PEU=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=ZZBLLmJwppig3Ny8brLrb87lPiHiEt1GLRVLFLPcSSwrdDzQLpQU1pJIhjmD+zUxu
-	 R7kgptyd2MecD1LxoIWi2tzcQ6VArZU2iI6gs1d/uOkzn/4VcI+vB0Cw8CQGoGKI+y
-	 EsfGyLIIVELcynLlEGvXip84OtFrL+JKj5VNrC9nFQYfC02yAUaCGm+kDxmzf/twb7
-	 kBriJCbYyN/AWu6bveXkSEY21/JNEwSBypIYoKO6NQ/+65KpJ8UZfQWBPAhKccviuV
-	 Tz6fPEG4q+Nb1rme/xY/oWOKbaa8qnp0mfixylVL/DmLDNTOU3i2kw7Nk7V33k0KEk
-	 RCxqEnT5HSZZg==
+	b=MKtl7aSc5jEmRnvZPnukEhOE02n3Pw1gfkuBhhH04rF4D9SBtCQTvJhvpWotwhVp6
+	 wNhupg4a8RwE1sPjqBf2Htkyhkb/iXdO9VFKDZR1+QcRzkja/mYby8qmFhp1oHyIkY
+	 dGzzURya5LRjC8RSEnTeKKi4b50dSwMzTE7sWgnybRXY2owsWGeJoBQBEDnt9Qcmg1
+	 gchEFxinfHs8lDNXZxeJN8h10jgWGG1Xel1CQcAlWSTb2O4S9xDKbBup2beleUhdDA
+	 BXCqM2lGy05vcQym5PRrtWe2wwDUU5+h2wTfuRA7lmhHfOxnAipHR9CCNzeTkz7wMw
+	 9N1ViMIXUrFlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4AEF41272;
-	Sat, 14 Mar 2026 14:21:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A0EF201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01089412E9;
+	Sat, 14 Mar 2026 14:21:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B652201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57D66415B3
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D2D7400F9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id llMqXJuGYzhC for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:21:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n4k-9d2SBRkX for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:21:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A503410BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A503410BA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6225940076
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6225940076
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A503410BA
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6225940076
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:21:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6E59DA4C19FC;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B7E68A4C19FE;
  Sat, 14 Mar 2026 15:07:03 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdT-000000003UM-2BW7;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdT-000000003UM-2whe;
  Sat, 14 Mar 2026 14:06:35 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:24 +0100
-Message-ID: <20260314140633.2967249-28-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:26 +0100
+Message-ID: <20260314140633.2967249-30-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497223;
- bh=6POPWsmKfvmi4oj0HRz7XfmqJiJO0Kvi2/F0AjT/o4I=;
+ bh=tEc/GsG0yQKy8WkotLpLDocnrU6WQIUJb5GHXu3VBkM=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Bx9bm/IrtNFb1+EN+A2gM69NWaVLQZxZzahhlLhGNu3fqvYpVmcCSlGTfwV7Ez0Y/
- iET/RSW6TgcObfJN2eO7tuuUL3mau8pIKk054v0OMGuYv4LDBzj5jjzCO55PGAGjbH
- seZE0CaHl8JcA99qj9wNHKwtKNkto6ap0Y6s/I0AJwH3I6+4fLDYZgc9TaqYHeRukT
- 2SJzJNhX7O0yYmHLn+kBo8X1R9iKJalH44iS8MdiILSxFXP51WQtLLEr8fC2sc0Q1T
- j776faFPxBhQICbJl8/0noL5DMWx04+8OqZIAMm3EoPSwOh72tm0UbhVdW0l/15GSF
- xDjcsmJoxQp3A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=pcqA3WnrjUZ9BXxWnPv8l6ziCVhmiO+faj08tmGO8afZneWwuCLcPnMTfrbzpWB7B
+ gfANrUx6WgVF29Kg3yqUVCvnTzJ68p4KBVmwJwQ8t9699s3gnsMrQvatlzVyUuvUxg
+ EZKsjj0K9HBKTc34jS3CFhyM0bJdOFaETKT2+0xZXDnzuD7E1CK6Zfwmpbfsu/X37V
+ RAuUANuWAqOqBp+opk51hpa2+96YvN5CkrM+E3foWZ6yFFh/67mQHH91KYYy4ppDTR
+ kLAOgFvecj+O2BpI0WB6PKFMkW8LBC8B4xz5ab/gHN0a7FNrl0wTZGQEsloAdLXXQv
+ AzWumaVEVzhCw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Bx9bm/Ir
-Subject: [Buildroot] [PATCH 28/96] package/python-jmespath: bump version to
- 1.1.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=pcqA3Wnr
+Subject: [Buildroot] [PATCH 30/96] package/python-librt: bump version to
+ 0.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,50 +116,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream removed the old license file
-https://github.com/jmespath/jmespath.py/commit/772c03afe10f5b09c5f5a31742a76777f4f0fc34
-
-and added a new one
-https://github.com/jmespath/jmespath.py/commit/5634c661b8e42294f04de610ef8906b59ed96eee
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-jmespath/python-jmespath.hash | 5 +++--
- package/python-jmespath/python-jmespath.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-librt/python-librt.hash | 4 ++--
+ package/python-librt/python-librt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jmespath/python-jmespath.hash b/package/python-jmespath/python-jmespath.hash
-index 03f64f3b74..147688a899 100644
---- a/package/python-jmespath/python-jmespath.hash
-+++ b/package/python-jmespath/python-jmespath.hash
-@@ -1,5 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jmespath/json
--md5  2dd28beb22d698f58fe2281bfe5fe3a3  jmespath-1.0.1.tar.gz
--sha256  90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe  jmespath-1.0.1.tar.gz
-+md5  ecc9e47d433b539b7fc87e61972d3746  jmespath-1.1.0.tar.gz
-+sha256  472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d  jmespath-1.1.0.tar.gz
+diff --git a/package/python-librt/python-librt.hash b/package/python-librt/python-librt.hash
+index 5c7f55bbb9..e12bb75949 100644
+--- a/package/python-librt/python-librt.hash
++++ b/package/python-librt/python-librt.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/librt/json
+-md5  2f0564db5d18a9e41bcd1fbdbdbee77c  librt-0.7.7.tar.gz
+-sha256  81d957b069fed1890953c3b9c3895c7689960f233eea9a1d9607f71ce7f00b2c  librt-0.7.7.tar.gz
++md5  977ea89f85bd73d2ec17f5149f165f71  librt-0.8.1.tar.gz
++sha256  be46a14693955b3bd96014ccbdb8339ee8c9346fbe11c1b78901b55125f14c73  librt-0.8.1.tar.gz
  # Locally computed sha256 checksums
- sha256  66b313cce80ed0623fc7db3f24863a0c80fd83eb341a46b57864158ae74faa56  LICENSE.txt
-+sha256  6eefacfa4d71b82d08408c751470ac8d9854538da2142cb27be0287fb13d0ab9  LICENSE
-diff --git a/package/python-jmespath/python-jmespath.mk b/package/python-jmespath/python-jmespath.mk
-index a94a13a229..b717e2e3ed 100644
---- a/package/python-jmespath/python-jmespath.mk
-+++ b/package/python-jmespath/python-jmespath.mk
-@@ -4,11 +4,11 @@
+ sha256  88f9e379c684580053c58e75e296ca2eb243b6edcc6e5357f247310e96eeef8a  LICENSE
+diff --git a/package/python-librt/python-librt.mk b/package/python-librt/python-librt.mk
+index 5c1ecd8e5e..8f16e762a7 100644
+--- a/package/python-librt/python-librt.mk
++++ b/package/python-librt/python-librt.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JMESPATH_VERSION = 1.0.1
-+PYTHON_JMESPATH_VERSION = 1.1.0
- PYTHON_JMESPATH_SOURCE = jmespath-$(PYTHON_JMESPATH_VERSION).tar.gz
--PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/00/2a/e867e8531cf3e36b41201936b7fa7ba7b5702dbef42922193f05c8976cd6
-+PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/d3/59/322338183ecda247fb5d1763a6cbe46eff7222eaeebafd9fa65d4bf5cb11
- PYTHON_JMESPATH_SETUP_TYPE = setuptools
- PYTHON_JMESPATH_LICENSE = MIT
--PYTHON_JMESPATH_LICENSE_FILES = LICENSE.txt
-+PYTHON_JMESPATH_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_LIBRT_VERSION = 0.7.7
++PYTHON_LIBRT_VERSION = 0.8.1
+ PYTHON_LIBRT_SOURCE = librt-$(PYTHON_LIBRT_VERSION).tar.gz
+-PYTHON_LIBRT_SITE = https://files.pythonhosted.org/packages/b7/29/47f29026ca17f35cf299290292d5f8331f5077364974b7675a353179afa2
++PYTHON_LIBRT_SITE = https://files.pythonhosted.org/packages/56/9c/b4b0c54d84da4a94b37bd44151e46d5e583c9534c7e02250b961b1b6d8a8
+ PYTHON_LIBRT_SETUP_TYPE = setuptools
+ PYTHON_LIBRT_LICENSE = MIT
+ PYTHON_LIBRT_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
