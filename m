@@ -4,113 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B77F10854B4
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 23:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BA6510854B2
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 23:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD76180F63;
-	Sat, 14 Mar 2026 23:07:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11A0682404;
+	Sat, 14 Mar 2026 23:21:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MVmvE_LRX-oE; Sat, 14 Mar 2026 23:07:16 +0000 (UTC)
+ id QVfE0aEr8b53; Sat, 14 Mar 2026 23:21:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2CE580F17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10A3E823E0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773529635;
-	bh=wB1pRVHcAdTmG9izw4i4M4Ch+TovN6OO+H0oMyBWIWo=;
+	s=default; t=1773530477;
+	bh=4j/D8XQ/f1xMiG92TfXlH1zK5if68PgiPPWdyODxXhc=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Wu/TBnQRra4G7etQmUfW/Dlbx6fHmyT6lj/BYeeKtziFyhaXN1gAE/FcuwuQvEHHq
-	 YRWyWFhA4X1kQgUNHHocDj8hUEMxXgdARjXgfi0beEAucZvEuizE/J8EsDOn8JmbrE
-	 wfy0YraHHxRahaaptaWEILxaQSTLJANsDH09EmOw2j3s9+FnWXzsVHXlEuN9xuA0lk
-	 Cv17eSpritm/UW5POUbK4qfSMVNi+e0L4Pr6PlYk/7gMwZl6W68FNohGZ/lTEwbIfW
-	 xFfigcN3NiUg4o0/sFtHjbuynQF3TsFpItX+gWWJ8WoEl0an8arXgOxk7R06IK+iWw
-	 cT1vagK27JqAg==
+	b=aVfKzlA54941vAY3Htcp83pnAs9ivzbu/F9bNJMFUtZ7gjchJUShgvPW58yZQmgFc
+	 aT3kz0RgwEv6EIR7qVgfkuLrrIAV6zb7qhRmcwKOv0WyHcS2s1uZ/m2yzBshxTYzsy
+	 ZYinB4gCYfaJ08zIzrklgA4nST0vCmmg+nTCEy4piLo/UZ9JKopD5A98jJSWMefdcG
+	 jWpuclm5t/kwzUFWEUUuKA9VSLqBHZuJICQ2u36AnaBOTfAlalTB3d9u9KsWzcMocy
+	 knkOMDmzxROYPJN4tpZTj+7wLBwE7UD+0jdYYlnR81RrU/0fn4ZJx3wyHoZyl/yj3B
+	 2QAgZ+E5SNuNg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2CE580F17;
-	Sat, 14 Mar 2026 23:07:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C3F461B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:07:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10A3E823E0;
+	Sat, 14 Mar 2026 23:21:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE098118
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B58DB80F02
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:07:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9CB240544
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:21:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qq6IGqfqVUbN for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 23:07:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zZtZ_UGY6Ddb for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 23:21:14 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
  envelope-from=stephan@asklandd.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D63CE80EFA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D63CE80EFA
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D63CE80EFA
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:07:13 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-661d929219bso3900741a12.0
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:07:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F01B4401BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F01B4401BC
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F01B4401BC
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:21:13 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-b94358796a1so478688366b.2
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:21:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773529632; x=1774134432;
+ d=1e100.net; s=20251104; t=1773530472; x=1774135272;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2DXm0lR48P4UHXPjIi6OyXyxSRvBGBpjKmHrUJUjol8=;
- b=SHQChmhvYoPGgcCWJhFimlS2aYsuMCFAdfOIlE8KgGv9UBIxqnAXRkXZruxf4vumLL
- tV4nB5xLavgGPw3h7rrrURyXCM6WWOip8OM1XSLFqnYoVp4oTFtvHVEbm1WnxtTeyh3T
- 2xVFfONwz9lniHgv27/SJs2qreuhNW26RBRThbLlzp8NOweAQnPRfERr0l10WY7YfmKZ
- kuzfTjtYRCXq+juNStsKn5qKn3uBy12U/qTPh8UXrvn4/ceeNcprytPLOrcOHvjHQlBg
- HhqBG5mBAe2JRF+fxaVc5XTD71KoFNKADHFIWc7XnD71MTdx5C+bjk63crXX35Jh5xP1
- FSeg==
-X-Gm-Message-State: AOJu0YzxNv8owxQsvJ8M1jh6LQQ0xfj7pSmePYFJQ31zUVFbFO9rDu4/
- qhSwMxDwWdCfNpvUau11xVPs4q1vdz/p+4sCDR2eMGUWYQaeXNROYhVeJtnFFZ3h+cZFOWp8+1I
- NYeAl
-X-Gm-Gg: ATEYQzyy5juRykd8YKqGSxA6Bb16LB8cxOvC0s9bybLAHwKB8+bjH9XoOoCm3oFdkRu
- ovei64/sG1smAhRZo4Le6S1QuSUJATIqL7mpW2cFF6nl+Dd4Zh3qTN+APQtaMeUzGn/C89Ozopz
- pPn2FjVHaD1sy7XyxNXYirOo7aCFTPzSvDRUiejSmGiL1JkhJ4GjNNp8PdGJgJd61vjResQdB+p
- uoBExk4yqkYe2/GIleE8W/XYx+yb1bjQqHw+kXS87682nJNI3qa4hXlXsKOnzvIb1C9pzx/i06h
- 0w0q1lw2IGshY/D2zVSBRx2h2UPjMO7x4c6m34SY/bLJe1/36wf7zkIhZ99wOtSbfqpZKXyA8om
- Xknc3mfoBl81YPyytBFbQXrDb8nIf5ElbjooNG8x4iPHGLjv4E8/mrU1VWCyxBNf8SLdEcXFy7y
- 35ewVBav38TzgbuMPjXyHKtOrRYJUcwOfT9R/qrHpV6gYO/pxR2hq0P4hqYynlXcasg2NXsw==
-X-Received: by 2002:a17:907:724c:b0:b96:fbeb:f7b0 with SMTP id
- a640c23a62f3a-b976513ecd2mr460054166b.39.1773529631750; 
- Sat, 14 Mar 2026 16:07:11 -0700 (PDT)
+ bh=rQVLY31BLuXPbSl3LombX+SiAgEdnCHX4t0zyZsDBWk=;
+ b=j1VYsYcS7oGn+2gI1X90GmQJUPIDgUTtLZmE0VowZGJjzRkKpEnItHq0vX1V99HiaQ
+ PmKW2WTaEt0BWx/duIrus5gLtk25vthez5aV0C5Col5Eqfa1cRBCzC+E1K3AiLOELskI
+ 02PIBEO7ftbvVTpq03RjNC2rbOScTZHKxiHBc2gbGv6GMxvs3LYp83HGfVtBTzD3d8Lf
+ 4b2sK5sYbldC/fU5yhVXI+uDI7ZGduU7qTgbpvbZPiVANsir8dmO7pnDoAPLbuD7nAS8
+ yE41vA41S6V8pbskhUbHvRfK7bWYYc28PfSLr9WLnbqY0BCZuWKXn/nONC5PWBJdHTQp
+ df9Q==
+X-Gm-Message-State: AOJu0YyC8E0h/IcfhaNDZn7jxE4TiVMd/C8vL3hXgXa/ru8ydzJrODHF
+ IysXx23O+VN/S5xdtNF0sQIqiAAVnH0RvxrBUgrCZlhJ+7K6TFlpBxqWcmnZhckXv8CMXzQPIJZ
+ Y/TiI
+X-Gm-Gg: ATEYQzxI7UJvIzgtQfEzWwg5MuTjxFQGMJIh1IGKIiYFONHO/g7T2Ae04GP7eSv2M9o
+ Kd1SyUNNsZNmnRMe8eXJq4wyzpm/T7mHiYCxDccW4MbkhmJOM2jEA6a3fVjRLZSsw1n01OGEWFY
+ orbZzdqVwJlgNgQ+az6YP+MPHCEz+woOWui1AtlPgF/MOhtZFg6VwqDGb9Y7IpOJPVutUxml2In
+ 0z9Opexm3Nib65MPWLjRU0Dgg/kmMEw/2w1fsRH+ld8kcfUAzUbSirW+2obnD9xB5W8ZWbGyJ9W
+ n6kgij86O+uFntPgzTKsKwBw4anmxtDRPsYVd60x5eg9n/7yWL+oq7VVpppbu8HomJxzcfM01Rr
+ YGxhPpKywS0GuPS1Op48SKQZJPFJsTnWxN+vF55/kpFdxGL4S+aC8YuF4FMRcUoU4DiHirawBiW
+ mxC4TFwhnaJAMa46YPHsufsu8r+Layo3f7Cn16zzamak/QaGLuv7OqZ6ZK4N0=
+X-Received: by 2002:a17:907:72c3:b0:b97:9569:5161 with SMTP id
+ a640c23a62f3a-b9795695a75mr169694466b.40.1773530471793; 
+ Sat, 14 Mar 2026 16:21:11 -0700 (PDT)
 Received: from flashback (85.184.166.47.static.dhcp.aura-net.dk.
  [85.184.166.47]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b976cba6e4bsm298001066b.3.2026.03.14.16.07.10
+ a640c23a62f3a-b978b8625d3sm204479766b.52.2026.03.14.16.21.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 16:07:11 -0700 (PDT)
+ Sat, 14 Mar 2026 16:21:11 -0700 (PDT)
 From: stephan@asklandd.dk
 To: buildroot@buildroot.org
 Cc: Stephan Henningsen <stephan@asklandd.dk>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 15 Mar 2026 00:07:08 +0100
-Message-ID: <20260314230709.2917642-1-stephan@asklandd.dk>
+Date: Sun, 15 Mar 2026 00:21:05 +0100
+Message-ID: <20260314232106.2944800-1-stephan@asklandd.dk>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=asklandd-dk.20230601.gappssmtp.com; s=20230601; t=1773529632; x=1774134432;
+ d=asklandd-dk.20230601.gappssmtp.com; s=20230601; t=1773530472; x=1774135272;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2DXm0lR48P4UHXPjIi6OyXyxSRvBGBpjKmHrUJUjol8=;
- b=UwgMtCxldmBnALYki6PpPNO+EfvPbZTe7mhvkATJHTYrabIZpMV6dgjzM31iVHcZ8R
- XyIETE98+J7djakL//NiNybaK3L45ZaeKKIyrtjo2Mjhmu3rZhOScK4HX4doI4UgyJyR
- zdBkmFYNbBQS4OXEj53VN/gxh8f7XxLqJeQHVvoXBF+jaK4mUcL3wz+dtZzMyX7HxWG0
- C24LXjdv6LmdGaxAc4KHljglk6qNa7k1MwNQQhKBTkdAW5F9eWUzLzPluX9mau99UGVS
- ql7nIpTukZBvBwwxfGttoQXp901EZ6Cxcd0iBuD0WWN+6s/qDexImI99nY+XMs5cguyO
- 1D3w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=rQVLY31BLuXPbSl3LombX+SiAgEdnCHX4t0zyZsDBWk=;
+ b=BIyxe0HSSQ15u8kwKMpcwLP4Aytqoxp+Z1fC3zVy9ioost/wrOKG8/pdfxPP68WfbU
+ 7An4h0UpeLf7Bkw00PEXxSAw4drD2LyHyU2tTdebsRqNwOZF+MYq8t57yDRVdGUm/BK3
+ Oi6g5dBTePZnCl28HCMUEy6to6GBmZF7bO61PFcwa92H+ELK74w5j6/H0wVR+NWfmWAD
+ EdgrQgwQY9tlBwJw1S7NnmKNtSLrn94kuex9qWHHm8qDD+zCSsDD0im/eBPA82ZaFF3X
+ fvuNo2uqGlWbz2d7sAuqAolwNwHBBKg2ZHObgnzD52fR7KQwjALxnWqiWowM/K+YshcM
+ eCaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=asklandd.dk
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=asklandd-dk.20230601.gappssmtp.com
  header.i=@asklandd-dk.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=UwgMtCxl
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: add patch to use
- correct fs search path
+ header.s=20230601 header.b=BIyxe0HS
+Subject: [Buildroot] [PATCH 2/2] package/util-linux: fix mount helper lookup
+ path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -138,33 +138,27 @@ In reality, Buildroot installs e.g. mount.fuse.sshfs into /usr/sbin,
 and as a result /bin/mount fails to mount sshfs entries defined in
 /etc/fstab.
 
-The patch changes the default search path defined by FS_PATHS_DEFAULT
-in configure.ac to /sbin, /usr/sbin so mount can find the helper.
+The patch changes the default search path at configuration.
 
 Signed-off-by: Stephan Henningsen <stephan@asklandd.dk>
 ---
- .../0001-default-search-path-for-fs-helpers.patch    | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
- create mode 100644 package/util-linux/0001-default-search-path-for-fs-helpers.patch
+ package/util-linux/util-linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/util-linux/0001-default-search-path-for-fs-helpers.patch b/package/util-linux/0001-default-search-path-for-fs-helpers.patch
-new file mode 100644
-index 0000000000..1d88bdf9ac
---- /dev/null
-+++ b/package/util-linux/0001-default-search-path-for-fs-helpers.patch
-@@ -0,0 +1,12 @@
-+diff -purN util-linux-2.41.1.orig/configure.ac util-linux-2.41.1/configure.ac
-+--- util-linux-2.41.1.orig/configure.ac	2025-06-24 07:55:28.420692425 +0000
-++++ util-linux-2.41.1/configure.ac	2026-03-14 21:40:16.749465392 +0000
-+@@ -2919,7 +2919,7 @@ AS_IF([test "x$enable_pg_bell" = xyes],
-+ ])
-+ 
-+ 
-+-AC_DEFUN([FS_PATHS_DEFAULT], [/sbin:/sbin/fs.d:/sbin/fs])
-++AC_DEFUN([FS_PATHS_DEFAULT], [/sbin:/usr/sbin])
-+ AC_ARG_ENABLE([fs-paths-default],
-+   AS_HELP_STRING([--enable-fs-paths-default=paths], [default search path for fs helpers @<:@FS_PATHS_DEFAULT@:>@]),
-+   [AS_CASE([$enableval],
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index f43a1a128b..a2a11c35d3 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -51,7 +51,8 @@ UTIL_LINUX_CONF_OPTS += \
+ 	--disable-makeinstall-chown \
+ 	--disable-poman \
+ 	--disable-rpath \
+-	--disable-year2038
++	--disable-year2038 \
++	--enable-fs-paths-default=/sbin:/usr/sbin
+ 
+ UTIL_LINUX_LINK_LIBS = $(TARGET_NLS_LIBS)
+ 
 -- 
 2.53.0
 
