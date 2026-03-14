@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 752D710706DC
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA83210706DB
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BB7C41069;
-	Sat, 14 Mar 2026 14:08:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C80E40756;
+	Sat, 14 Mar 2026 14:08:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EnPSlLYQx8qJ; Sat, 14 Mar 2026 14:08:01 +0000 (UTC)
+ id QNndXkN4bMnX; Sat, 14 Mar 2026 14:08:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 776C24105B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D74A41069
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497281;
-	bh=v7BqwiQdUbjtoVmvEXsQih4i7E17mHYbUSWl8JFesYg=;
+	s=default; t=1773497293;
+	bh=/wazWt3JcMGMYbhp7Lf4aH4fctobz4N20Gx45jFZVVA=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=gEy7gKG9zt+AsIPQ/gQtAL7qtzadCeZV/O1NZpUUp76XMS7QoI5Z6U2DuZ1Lzn0+f
-	 tL7Qpd5zqOp2rE3RYa6ouXgTaY4xfQxRIGowLAnO5kHLfGAq79n5UiVUTrF4GsrUPV
-	 tjDx49yhJnCiQW+Ekr++FhX0PTaTGFmpFgJ18uUlAlApLFJcGTWVvoMJDXyVVNE5lA
-	 I4Ql4BYL9gswASw5rDOiaxJ/Qk5qPNnoQdc2IGsHcO+Azk1pR6wBt9qRDMtp8ijVoR
-	 pWJhEe6bpjaFk2oN48LhCP3J4A5JQTftoRDeGxiK/jeLCNEVoms/uEfR09zwty2tz3
-	 g1dv1NnsuiQsA==
+	b=GzslRq17EAhhjs6Eh1n9GvKRsHbPtI6kMKIUdiei3FsRetcmUiOwHkRdoJWSi+bRA
+	 MS04KgOI2dUyLjPDC6hoP5qNZmtSCWgJldR9sdDD32MuPUJyDG8m4cu14EHmTCf99E
+	 NApBk87BsIcQM4SgSrKr4IZS1BeFJS6PYbM2UpHxTqr4h1m5gFtG+saFV/wkhKyN9x
+	 OhnL+XHwVyk2qYVgj73cBaZhEXam0Zh//MpYG8O41woFBRtxmKAgWVmzruct6KSjhE
+	 ED4xWkXIhC4K5rJ8o50Z5Wpp6dhJvAiQYXg294WWI0uLAFQ7D01k08KugkybOtOXO7
+	 LRABSTUWieQlw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 776C24105B;
-	Sat, 14 Mar 2026 14:08:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D2ED03C6
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D74A41069;
+	Sat, 14 Mar 2026 14:08:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 58B07201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B807A6066F
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5591182241
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JGmcxSyaGRRB for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:07:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D6-P99k0KQuE for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:08:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AAF0760640
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAF0760640
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 45D178222D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45D178222D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AAF0760640
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:07:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 45D178222D
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:11 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7EC20A4C13F9;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C9333A4C13FF;
  Sat, 14 Mar 2026 15:06:44 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-0HLA;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-0dYN;
  Sat, 14 Mar 2026 14:06:38 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:53 +0100
-Message-ID: <20260314140633.2967249-57-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:54 +0100
+Message-ID: <20260314140633.2967249-58-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497204;
- bh=xvugiu1ISuHygu+3o/y8/AE6BcSenSCC6VKPP2Imwoc=;
+ bh=EF/MkmrUn+0Exsgb/nfrbMQuzvLiUTFSnUxmsrZZq3E=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=UPOOo7A6oowtNmGIkocvk9lJ+Rqah1YNt9e/uUr+TEDQJp8FUSG8Hvh68bo1Jo9CG
- tPpjCBw3XzmDhtpqm+st4qBilbzQ+q0fO9nYyNPamxxWjt02OINqG/j1w2Fr9SpX65
- JBuNhFa3n8Z34s+blcB8TdEldOpzEJGc4l/G4D5w+x8WiZ0/hleMNNpvRA83NYAOo+
- OPGpKfoNIzVOAu0ebkMsO7l6lkk95sZfFmzPYg6nvA9LggvxoMSM80COuWVdZnlnuI
- 1JTeKxfQwwpZI70yE53Z9u60my6T4VV33v6qc3x6OB1026G/C4y2uZDFHGLVvMVwL6
- F58Whv1Kn5aOw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=kdGfbsaKLBvxYiebIGOU8X6yvkyDSDkeZa58kot0loaWdezOk3cc2D8kDkyCTWNc8
+ 8HHp+8iG+vmLnTTzdmcOU+9vmC88ndz5TIxVQ6W8h2ADo0RcKp/kcIN4PjEpUhcofC
+ WN06A177xDs8+LSsoOyeEZpbIOToR8g0xpGF5yPKE6qrlKSJUKF99GJb2mnO200GRZ
+ kCtnB4TBcKAGM+1J6pCZAYDea29t2leN6YbHpo09bPU0VNHHt2sxozFMgumqUSFCy3
+ bUtlGGNXJjwSSUqEXGaD8Iap2vzzTl7hw+YwVUl4JZbLuvR23Y9tCZBwLsVjO+Vv0D
+ dnYv1hsCoVRLA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=UPOOo7A6
-Subject: [Buildroot] [PATCH 57/96] package/python-pyparsing: bump version to
- 3.3.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=kdGfbsaK
+Subject: [Buildroot] [PATCH 58/96] package/python-pypika-tortoise: bump
+ version to 0.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pyparsing/pyparsing/blob/3.3.2/CHANGES
+https://github.com/tortoise/pypika-tortoise/blob/v0.6.5/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyparsing/python-pyparsing.hash | 4 ++--
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
+ package/python-pypika-tortoise/python-pypika-tortoise.hash | 4 ++--
+ package/python-pypika-tortoise/python-pypika-tortoise.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index b5cfebef68..509813d777 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
+diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+index 9dc7ea9aa0..9e8c096c9e 100644
+--- a/package/python-pypika-tortoise/python-pypika-tortoise.hash
++++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  2b7937d58eb818a33687e3ddef860638  pyparsing-3.3.1.tar.gz
--sha256  47fad0f17ac1e2cad3de3b458570fbc9b03560aa029ed5e16ee5554da9a2251c  pyparsing-3.3.1.tar.gz
-+md5  ca3bea68cd1a84584b68cd7bed679464  pyparsing-3.3.2.tar.gz
-+sha256  c777f4d763f140633dcb6d8a3eda953bf7a214dc4eff598413c070bcdc117cbc  pyparsing-3.3.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
+-md5  21a08e348b537e745964323874f5a6fc  pypika_tortoise-0.6.3.tar.gz
+-sha256  6e17f00e77e78468836cb5c63eb6dc01445f83b1167e4f29f1c678949179c079  pypika_tortoise-0.6.3.tar.gz
++md5  59bd939b42834b622e14aba292d8ec32  pypika_tortoise-0.6.5.tar.gz
++sha256  64d96c9b88450f6360ad22a7063933b6a90961a7317f04b2b63c98fd5d705506  pypika_tortoise-0.6.5.tar.gz
  # Locally computed sha256 checksums
- sha256  a5425f9dc14ac74d4c5f0b679e941f2442e32cca7452a4418d5b1a49893ebe4e  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 743e361b59..316b864302 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+index 72669f36b2..9b920e75a3 100644
+--- a/package/python-pypika-tortoise/python-pypika-tortoise.mk
++++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 3.3.1
-+PYTHON_PYPARSING_VERSION = 3.3.2
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/33/c1/1d9de9aeaa1b89b0186e5fe23294ff6517fce1bc69149185577cd31016b2
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/f3/91/9c6ee907786a473bf81c5f53cf703ba0957b23ab84c264080fb5a450416f
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = flit
+-PYTHON_PYPIKA_TORTOISE_VERSION = 0.6.3
++PYTHON_PYPIKA_TORTOISE_VERSION = 0.6.5
+ PYTHON_PYPIKA_TORTOISE_SOURCE = pypika_tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
+-PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/cc/28/86ec1bccb2609d20349def444ef9dfe84aeccc984caa62f4634d50fee164
++PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/c2/06/89fe5fff93c5a01dbdeb9f3d843a7e997dc6e3a87222a260a164ff91fb81
+ PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = pep517
+ PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
+ PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
