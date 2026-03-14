@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA8910706DF
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1676910706DE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9D74416F4;
-	Sat, 14 Mar 2026 14:23:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE51141091;
+	Sat, 14 Mar 2026 14:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n77e7DkhwT2B; Sat, 14 Mar 2026 14:23:56 +0000 (UTC)
+ id xNkxVk5TCFsN; Sat, 14 Mar 2026 14:24:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1514416F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15AE8416F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773498236;
-	bh=saK3yS2toPmBIszLJSZzn6hSxJtO3SShTrov325SsUU=;
+	s=default; t=1773498248;
+	bh=0jpvBj9DYUminM17a084JkhWM/HDPwJiuKSKnxqwjLk=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=gpXeXBaBW2lmweTHw7LXbdCqbuYyGIQzDgFdTYoaYieqZECZuTK+7ceyTwu2ZHE08
-	 lCokZEJ3Anb4fbAre+4P0SRMLerkcjdFJNPitPRTA+H/q2Pnv1qBkL1riDsZCtDbbD
-	 MuP6stIZ8uWoHCHshIuarg094a4FUpD9AO62FFuk09XmusKpd4h8Icw7Vy7pB8mugd
-	 vbsERuzRJyr0DqmlSNrqb3BBUHd4K3Y16TqrklPaNNmSaZ4BZLzC0Fn8mQHdLiF7Zm
-	 aKGpiVY1WixzFzcaXcHRBp65vRlmWglMf1mkjEH1fis148uQqr8uFCclkETZw+/tyJ
-	 ybj5w5iCeIxZA==
+	b=mggqFaDNC/WNK8Q9heJHLtWzqUaHnfQVMMOSo/G39CqpCIdqe/iiOQmHVdOa4UHk2
+	 e7Wocyg9Knz91FIikRpgv7KPdWQZsuarpoz20IV/n4Xej1K1lcUjQyUdMlBJRu3AJn
+	 Vq4Ax7LDwb2XCMn8X65/JWYFDHTnhGUozla7okZyd5uIlS5+a+IJfhmrDcKJuK4iGN
+	 1XGCyKogaEjN27CyfafymIlUOZS4DA8shGCDYnXx9dnmrEXYxdy65jlJezjf+TW6dx
+	 yJLlMZF8Usv6WHUgxx7teGS68pV04BLpTRJwPf/o6hSDQacSg4b5YLSGonejH3rRtp
+	 tCMyj+RTdlo6w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1514416F8;
-	Sat, 14 Mar 2026 14:23:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15AE8416F4;
+	Sat, 14 Mar 2026 14:24:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5EB0B1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 86083201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:24:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50C51400F9
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C06D400F9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:24:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qXKbU9vEbpr for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:23:53 +0000 (UTC)
+ id kfA1q6L6l-SO for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:24:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BC6F440076
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC6F440076
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B39640076
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B39640076
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BC6F440076
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:23:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B39640076
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:24:05 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A31CFA4C1AED;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F2E3BA4C1B9C;
  Sat, 14 Mar 2026 15:07:05 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdU-000000003UM-3RNJ;
- Sat, 14 Mar 2026 14:06:36 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1PdV-000000003UM-00B4;
+ Sat, 14 Mar 2026 14:06:37 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:39 +0100
-Message-ID: <20260314140633.2967249-43-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:41 +0100
+Message-ID: <20260314140633.2967249-45-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773497225;
- bh=dAUEZY8c+Dbd1QQP9EggOX74/kx9AVkvcHN1sh1MybY=;
+ s=kas202511301023; t=1773497226;
+ bh=0nDez3jjjFnc211YXqhxPEJniatjB8heKsouct/DxLo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=m3eaTyioShNzVH2V7lvdnq8Z9GbT5dOfZ51jeY5jI9r/2rPpLD8Z3Ef87AHzvsktz
- yZKw8MmbFdyBMh5tWYAfVo4fpbJ2mCZ1wQRB7F9novmL24Ez3RGAjbpjSXJK67N5kB
- AUtRT5VhnH/lQS3joOg+AbvEFNJ6Ic/cjGAPATxut6dWexZjOB1+mSULIQwJsWKrZ5
- PCqZzXZ9tDbXAhQwgZGLVRG+0x5M2C3Oaljb4rpFbe3qBHGUeSaecgbZinwv+qKF79
- Mfh1kjSalMbjQBkuh6b/f8Og5ok33LTmdLw+6zg/RPRjGI259XY2nH6BkNWnRhdueS
- cyp89kiKTYEXQ==
+ b=Vkk2hJt3YAyT1nWa2dIqxGhJwhJKjOJt5vXOrFUs5joj+AbA/SIjaz59H82dtAh1B
+ 0x1znKV3Cp7vhAr3IyxywP34ZliaQdBTSVnVa3wQw/W0criLaUqAcOPNxmTsKCA3VO
+ CVffejRT0r338PDlVAn3iZ7tNfXlTVGGylaNhKl2s3JzchGl+oN9Gh3bHpSoqcnC29
+ fInxOXmNbkx4oDxGjiC6nLEsMP1O2Wiipdai7qAO7mkt0cgyhYsWbxjgw209w4X83A
+ sKZdPT7hIkBIOXp64RWeHkNy8mxp6rVBkigFNHgjQMybi4hMcG/1j8VwGxWzZZCaz1
+ shIQq03ojH5gg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=m3eaTyio
-Subject: [Buildroot] [PATCH 43/96] package/python-platformdirs: bump version
- to 4.9.4
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Vkk2hJt3
+Subject: [Buildroot] [PATCH 45/96] package/python-proto-plus: bump version
+ to 1.27.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,42 +116,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/tox-dev/platformdirs/blob/4.9.4/docs/changelog.rst
+https://github.com/googleapis/proto-plus-python/blob/v1.27.1/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-platformdirs/python-platformdirs.hash | 4 ++--
- package/python-platformdirs/python-platformdirs.mk   | 4 ++--
+ package/python-proto-plus/python-proto-plus.hash | 4 ++--
+ package/python-proto-plus/python-proto-plus.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-platformdirs/python-platformdirs.hash b/package/python-platformdirs/python-platformdirs.hash
-index bbf94f6b6f..cc92e4a824 100644
---- a/package/python-platformdirs/python-platformdirs.hash
-+++ b/package/python-platformdirs/python-platformdirs.hash
+diff --git a/package/python-proto-plus/python-proto-plus.hash b/package/python-proto-plus/python-proto-plus.hash
+index d5d4270293..4a57f84917 100644
+--- a/package/python-proto-plus/python-proto-plus.hash
++++ b/package/python-proto-plus/python-proto-plus.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/platformdirs/json
--md5  e1000e5728e36717b1832e77dc3590c9  platformdirs-4.5.1.tar.gz
--sha256  61d5cdcc6065745cdd94f0f878977f8de9437be93de97c1c12f853c9c0cdcbda  platformdirs-4.5.1.tar.gz
-+md5  8168f7450c9606bfa4a28268f0f59a37  platformdirs-4.9.4.tar.gz
-+sha256  1ec356301b7dc906d83f371c8f487070e99d3ccf9e501686456394622a01a934  platformdirs-4.9.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/proto-plus/json
+-md5  008448fc31ca36c2a9185a070126e16d  proto_plus-1.27.0.tar.gz
+-sha256  873af56dd0d7e91836aee871e5799e1c6f1bda86ac9a983e0bb9f0c266a568c4  proto_plus-1.27.0.tar.gz
++md5  ca9bbf1118228b94e10c552d94193fe5  proto_plus-1.27.1.tar.gz
++sha256  912a7460446625b792f6448bade9e55cd4e41e6ac10e27009ef71a7f317fa147  proto_plus-1.27.1.tar.gz
  # Locally computed sha256 checksums
- sha256  29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6  LICENSE
-diff --git a/package/python-platformdirs/python-platformdirs.mk b/package/python-platformdirs/python-platformdirs.mk
-index e099c486c4..11e8acd078 100644
---- a/package/python-platformdirs/python-platformdirs.mk
-+++ b/package/python-platformdirs/python-platformdirs.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-proto-plus/python-proto-plus.mk b/package/python-proto-plus/python-proto-plus.mk
+index 3d02dd321f..1a5a0b2598 100644
+--- a/package/python-proto-plus/python-proto-plus.mk
++++ b/package/python-proto-plus/python-proto-plus.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PLATFORMDIRS_VERSION = 4.5.1
-+PYTHON_PLATFORMDIRS_VERSION = 4.9.4
- PYTHON_PLATFORMDIRS_SOURCE = platformdirs-$(PYTHON_PLATFORMDIRS_VERSION).tar.gz
--PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/cf/86/0248f086a84f01b37aaec0fa567b397df1a119f73c16f6c7a9aac73ea309
-+PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/19/56/8d4c30c8a1d07013911a8fdbd8f89440ef9f08d07a1b50ab8ca8be5a20f9
- PYTHON_PLATFORMDIRS_SETUP_TYPE = hatch
- PYTHON_PLATFORMDIRS_LICENSE = MIT
- PYTHON_PLATFORMDIRS_LICENSE_FILES = LICENSE
+-PYTHON_PROTO_PLUS_VERSION = 1.27.0
++PYTHON_PROTO_PLUS_VERSION = 1.27.1
+ PYTHON_PROTO_PLUS_SOURCE = proto_plus-$(PYTHON_PROTO_PLUS_VERSION).tar.gz
+-PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/01/89/9cbe2f4bba860e149108b683bc2efec21f14d5f7ed6e25562ad86acbc373
++PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/3a/02/8832cde80e7380c600fbf55090b6ab7b62bd6825dbedde6d6657c15a1f8e
+ PYTHON_PROTO_PLUS_SETUP_TYPE = setuptools
+ PYTHON_PROTO_PLUS_LICENSE = Apache-2.0
+ PYTHON_PROTO_PLUS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
