@@ -1,118 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4684E107BCF8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02839107BCFE
 	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 184DD40785;
-	Sat, 14 Mar 2026 07:53:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC41960EFB;
+	Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mvM-gSWP0R_t; Sat, 14 Mar 2026 07:53:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cveu6hmz6fzz; Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4327C407AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AACFC60F01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474808;
-	bh=5ks/qHF+yQJNF9KKYEI9Pn5g4npxNCZb/sxODy+IuDo=;
+	s=default; t=1773474806;
+	bh=V0wZ8e/UvkPmGi/K9NQsdmjy5koe0RmjNvqyEktmVwI=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YkEUlTkLJ5+xXru0o0/QOvsxKCIz/bbg33i7ZPeaswrILHROW5+PVRX+7iziDGm+w
-	 GS2R5hUH+lpSbl03sDWlq40Y0pIDj+jLFouLDj/VyydwQmDEUTeMTwEhj4MDeF3mv0
-	 oiMTUDrmliKLpRUqEEbN4mWvd3AV53RRqMKdTSgqxT1rx9TrfaamAaFrDiinSaxPVc
-	 X075VqufPY3wMq8WPp8bffSyZU8CIBq7cY+hvI44GgzEg3dXsedbKMbdRdZwqsxMfM
-	 CMZNOyp4SG1gpx90VV2xxxq4M9j2oPBbANkQsNmKxKGKLfbHE+eK5BQDkBXVJrSTZp
-	 RmFRPcdp3zZwg==
+	b=Bclk+CHa0Je98o1BWHa56LID4vQg3LQOwZoR1jRgCZkolfJrvwJ+f3KDha5+saAgd
+	 alQws5Nzh0/SvUjLnkvXfVIXe+MMTl+TZ3ihN3O18mvF26G3wFY6/xxnuxC4vaSglD
+	 rKS72s3g21oJ4pt4mxj1hqWBScv8+ySKPL/D3oVgvV5ni0SjVrkmL/ta5sVuWGvztq
+	 SLcnMFLovVubPasNWx9Z8UqLsnSdv8xj2iNpnxsc3xDVHEE1J9T8mEJWC8HspTbF7l
+	 k3ywye/MiIlLndDTwDxbNyQahjJbGLEZSv38MsN35oVrmtBMJEl9xw1srOlxDCIYls
+	 GO+UU4YyVqskg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4327C407AE;
-	Sat, 14 Mar 2026 07:53:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE87F1B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id AACFC60F01;
+	Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A4BE201
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7784240785
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7BDDF60EE7
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oJ_YMOXdyxb1 for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:53:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O3PBPb-1kMtr for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:53:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E7D240786
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E7D240786
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E7D240786
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:22 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-43a03cb1df9so2731295f8f.1
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6F34360ED9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F34360ED9
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6F34360ED9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:23 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-48541edecf9so30760035e9.1
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474800; x=1774079600;
+ d=1e100.net; s=20251104; t=1773474801; x=1774079601;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=J5KDTeK9EI+euws399RgI25zz3wFBE1gHfxp/1gFBHc=;
- b=gVXeL1VwZvUDtbZKBu0ItVzzbbNZlJUJJavRuRn1CRYwj5zywxUeQZP140Bkg9aziM
- T3xn8mMQBI1SVy1qxVZ77gqdTP4z+D6ya62+Y1RWXNaJGP5TdYF0aqowxgr/6Y/jZcmq
- 8Sei9e/UkNHEYbREizFwu44FOzo/3VirGO1Eeg4mmfypZdYbD/Cm+AFyxOODYzwDLq0K
- Iqehu6TIqQa8BFaJFDREBPZxdOXPJoJ9VilwnIUmdqDs090SvJLwshybgnCfNL/U49lr
- wBQ1KppTmiAHjn8lyeYanE2nDG4WngPZysH/WhiyPgjEOQ28VCekiH5p9yTOvQDz5Xle
- eYgw==
+ bh=JlTaxu+yEuX0sHTzhP/qLjxEpEFmYJ2fG0my/EyHNnk=;
+ b=r4LRAKkdyJ08/EjadTwN9d3M4k87CbDSqgsDlYTAhhxRkBJU0oFfWvSQsMjkTzb+Zf
+ Z7DiCgEso4qfMfrO2aXnBC5T/scQDbG1zb9JrFBWIU+XT9FHtCUu8R3qfPDWR2y/qzzj
+ C5AR67zBgBR7x7W7Ri1rl4aeZfqHFgcKUcWTC7Ph8z1rjUd2RgTXWakeEcyiWOsR0YIk
+ y+we3E2zUlhJFJmbsnxpFkimKC1ji2Rb6J1oskF7KVDZTZYDe0zeoh3Loe5UPbPUjImh
+ whpQV5vgmI6E8xL/i+U58pzqTEJ0IPNXiiZrgShe9/DaAPD6V1WrvLmvqwNMvGVJeAvl
+ AA6Q==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUywPDV986N+dmneR7n681Q/3XgETDTMkh9nZH67hqY0hRVyjQfo989DX7KuCg9nazoevRwvHXz9bE=@buildroot.org
-X-Gm-Message-State: AOJu0YzToSLSxHCzMkDa6NgzN9yxVv3UDRHHRtNhEJaddv5VT6KrUr/c
- w6JSvb60O/toorV+E9x9lwinmyudjYVuZZHegWhRN/PqbsEFgtAzLu1+5pXJlM3CNI9R8ij83AM
- txZ7k
-X-Gm-Gg: ATEYQzysliYmLnFMw92/EaWrZFtXvP95VH0z5OBHzl3Ts1q+LQIjM3qnZ6r2Q/YGTAs
- 3JN0WIocANIqGdqjXk5hqyAqzefwyhq3uaHrQCyd2c6Avx+jDcnzjoYvoKV0V9z2xFmmUWDcyoF
- EhP3nwTdQ5Grkgftafguy1cdXYEBWNFUVO1+hQs3l/f4feie02PXEcrEQm3KkjkHLdGPGVBAFF+
- 1nilcHFB2hTAzL/Me5K+oC4Pn1ft1XEInIodSq8RZUadEkz+3t4Tf6Ebt0YKGF4rUalYujW3kTg
- vlhNrkHmmTnoVFyQqx36aUAII3rLbw0f5Ds6iFDoSld+hZJXgsesFWToNI1pkIL01WUjXjnyXbn
- xmshL0ylup+H5JVuRrSW2qX6Io2Z6pwBI0R6L6IRghZE/wNb+m6vVKFSWgYzZM4MEdWm3Gxgs+U
- 7v+C0mnIbkWo7i7ck=
-X-Received: by 2002:a05:6000:2584:b0:439:abcd:b314 with SMTP id
- ffacd0b85a97d-43a04d87b68mr11576522f8f.18.1773474799693; 
- Sat, 14 Mar 2026 00:53:19 -0700 (PDT)
+ AJvYcCVQE3Hiyiv4TtfORGURd1lEZHhHytgaFmKR6NZSNsaGmaIU9fbBVe1ETulWKOnegUlybNhYHi7NBgg=@buildroot.org
+X-Gm-Message-State: AOJu0YwhQVUn0PWWttH2pXikMPmXIB+hPdXR5Nrgrfb89Njs64WOlE3p
+ X5hL0r+xS1ZEJS3aq45LUKCw+EAeXIr7vpSi/u1yLV0kc4EQcFO18n6/OFvzTvMnB6pjH0Tcg55
+ Uyw4t
+X-Gm-Gg: ATEYQzwStTQu7XMsK0RJw5LtKGre0ysXTmuF2JM1S/8Ecrlj9ta+CROTZvU5NdPomH6
+ oaG8E6EfDdDtYVs0VZBEtsKr07itBqENP91IdW0g3ZJHlatsDe1agjgM4xj+ccR+qkb/7kBYZya
+ j/U5sqe77t7ss/58NL8IGIrBM7AFcn84Z2wEopPBWQHfcrGJ28qACT1vteCT4THOPXZi3WT4H7n
+ mqUvaVdp5JcwDcFBEiJBvg7jq/heNjqMu4kVXhSYB8SKZjxbabVnpfLegZ6imxzpOWTCKU/gqyI
+ MwdeGd3Au892z/V5fek0op3OfSykE+HfP+7qi74fSkcugZAb2/AyD1490r+WI+gc07eFu05tlDQ
+ 0XqvbB98VCzMaX2h8iftTJYYSdHUaq5G1OJFLAim50TAQG526nmq3WYk7DZ5DLOblAMsFTR85F5
+ drcEE9cSigvlmjhnKcIKMciSqjEQ==
+X-Received: by 2002:a05:600c:8b72:b0:485:4328:407a with SMTP id
+ 5b1f17b1804b1-485566f7999mr97146055e9.19.1773474801162; 
+ Sat, 14 Mar 2026 00:53:21 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43a0b2e2c71sm8245891f8f.22.2026.03.14.00.53.19
+ 5b1f17b1804b1-48556413456sm39886275e9.5.2026.03.14.00.53.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:53:19 -0700 (PDT)
-To: Julien Olivain <ju.o@free.fr>
+ Sat, 14 Mar 2026 00:53:20 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:53:18 +0100
-Message-ID: <20260314075318.14501-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:53:19 +0100
+Message-ID: <20260314075319.14555-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260124131337.1022030-1-ju.o@free.fr>
-References: <20260124131337.1022030-1-ju.o@free.fr>
+In-Reply-To: <20260304193908.3512983-1-bernd@kuhls.net>
+References: <20260304193908.3512983-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474800; x=1774079600; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474801; x=1774079601; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=J5KDTeK9EI+euws399RgI25zz3wFBE1gHfxp/1gFBHc=;
- b=LpKqlSJBmUZuyXUE0P2G0T4RT9xPvEjgptN3NDClSK7w33nFsttpCCymRoXzCuwtkq
- MrBiDFWojZxO5r21x4iiMcBdDHiPj8HS4pK9pfJJdrxk+bSkUot9+GFWUsKp4fKbZ5iZ
- W5xE7J5HW91NOuz33n8V3UCb6pofSlDy0JRv8xJIh6ynIcOdfHHli/1SBhrTZOvzkXnO
- IVshEdgha1MTfFrhqGfukh6Ux2LbQHHFF4Hg+rkzZg7RemrUuI91RjMEqnXYPtSscxUP
- +DeD5VhBTZBZQ8pyyFY36Qrl5jOJkTbiMPXs6BW2pxDpYS1lER+hKiGxQhp8PS59ECFv
- u1mA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=JlTaxu+yEuX0sHTzhP/qLjxEpEFmYJ2fG0my/EyHNnk=;
+ b=aAQA1/U8FT3WpA3UZQfl0fWyL7D2aVl8aQVKpUHCeCkL+vE/MT4EkI1PifOdXAIgXh
+ kBHmQUoTltH70KiWaD2rNbmVd8egh+LtxFZ6vgI4Tijk2AbKJjE4PsV+VoPkBwaVWvRb
+ i3tn6ZzwDEZ+Mzj6Unjt1zDwJ5aIFg1d8RFaGty7vI621lqUAq5PMX3NAzzBBg9g1uWb
+ uN4v4/X36g4/4ey9XI7wRUQpDPCieopiFs2hwp+6rq1f6zoHLy+TEA9Y+6LE+DUGnXYl
+ mYhEp8Z130LAnfvqHAJCviaQRFUfNf8hfoR+yablxZ+FngxI7HWQG2yr69/LEqFKEYSc
+ EzfQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=LpKqlSJB
-Subject: Re: [Buildroot] [PATCH 1/3] support/testing: fs/test_iso9660:
- remove 32bit EFI tests
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=aAQA1/U8
+Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: security bump version
+ to 1.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,119 +133,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> EDK2 removed OVMF IA32 support in commit [1], which is included in
-> version edk2-stable202511. This commit removes tests relying on it.
+> https://blog.clamav.net/2026/03/clamav-152-and-144-security-patch.html
 > 
-> [1] https://github.com/tianocore/edk2/commit/1fb88ffe284782cc79e306306b8d19829b6248b7
+> Fixes CVE-2026-20031: https://www.cve.org/CVERecord?id=CVE-2026-20031
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.11.x & 2026.02.x. Thanks
 
 > ---
->  support/testing/tests/fs/test_iso9660.py | 79 +-----------------------
->  1 file changed, 2 insertions(+), 77 deletions(-)
+>  package/clamav/clamav.hash | 2 +-
+>  package/clamav/clamav.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-> index 1b86bfbfc1..947aca5f54 100644
-> --- a/support/testing/tests/fs/test_iso9660.py
-> +++ b/support/testing/tests/fs/test_iso9660.py
-> @@ -18,22 +18,9 @@ BASIC_CONFIG = \
->      """.format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
->  
->  
-> -def test_mount_internal_external(emulator, builddir, internal=True, efi=False):
-> +def test_mount_internal_external(emulator, builddir, internal=True):
->      img = os.path.join(builddir, "images", "rootfs.iso9660")
-> -    if efi:
-> -        efi_img = os.path.join(builddir, "images", "OVMF.fd")
-> -        # In QEMU v5.1.0 up to v7.2.0, the CPU hotplug register block misbehaves.
-> -        # EDK2 hang if the bug is detected in Qemu after printing errors to IO port 0x402
-> -        # (requires BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL to see them)
-> -        # The Docker image used by the Buildroot gitlab-ci uses Qemu 5.2.0, the workaround
-> -        # can be removed as soon as the Docker image is updated to provided Qemu >= 8.0.0.
-> -        # This workaround is needed only when efi=True since it imply EDK2 is used.
-> -        # https://github.com/tianocore/edk2/commit/bf5678b5802685e07583e3c7ec56d883cbdd5da3
-> -        # http://lists.busybox.net/pipermail/buildroot/2023-July/670825.html
-> -        qemu_fw_cfg = "name=opt/org.tianocore/X-Cpuhp-Bugcheck-Override,string=yes"
-> -        emulator.boot(arch="i386", options=["-cdrom", img, "-bios", efi_img, "-fw_cfg", qemu_fw_cfg])
-> -    else:
-> -        emulator.boot(arch="i386", options=["-cdrom", img])
-> +    emulator.boot(arch="i386", options=["-cdrom", img])
->      emulator.login()
->  
->      if internal:
-> @@ -114,68 +101,6 @@ class TestIso9660Grub2Internal(infra.basetest.BRTest):
->          self.assertEqual(exit_code, 0)
->  
->  
-> -class TestIso9660Grub2EFI(infra.basetest.BRTest):
-> -    config = BASIC_CONFIG + \
-> -        """
-> -        BR2_TARGET_ROOTFS_ISO9660=y
-> -        BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-> -        BR2_TARGET_GRUB2=y
-> -        BR2_TARGET_GRUB2_I386_EFI=y
-> -        BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI="boot linux ext2 fat part_msdos part_gpt normal iso9660"
-> -        BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI="{}"
-> -        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-> -        BR2_TARGET_EDK2=y
-> -        """.format(infra.filepath("conf/grub2-efi.cfg"),
-> -                   infra.filepath("conf/grub2.cfg"))
-> -
-> -    def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> -                                                 self.builddir, internal=True,
-> -                                                 efi=True)
-> -        self.assertEqual(exit_code, 0)
-> -
-> -        exit_code = test_touch_file(self.emulator)
-> -        self.assertEqual(exit_code, 0)
-> -
-> -
-> -class TestIso9660Grub2Hybrid(infra.basetest.BRTest):
-> -    config = BASIC_CONFIG + \
-> -        """
-> -        BR2_TARGET_ROOTFS_ISO9660=y
-> -        BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-> -        BR2_TARGET_GRUB2=y
-> -        BR2_TARGET_GRUB2_I386_PC=y
-> -        BR2_TARGET_GRUB2_I386_EFI=y
-> -        BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
-> -        BR2_TARGET_GRUB2_BUILTIN_MODULES_PC="boot linux ext2 fat squash4 part_msdos part_gpt normal iso9660 biosdisk"
-> -        BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC=""
-> -        BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI="boot linux ext2 fat squash4 part_msdos part_gpt normal iso9660 efi_gop"
-> -        BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI="{}"
-> -        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-> -        BR2_TARGET_EDK2=y
-> -        """.format(infra.filepath("conf/grub2-efi.cfg"),
-> -                   infra.filepath("conf/grub2.cfg"))
-> -
-> -    def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> -                                                 self.builddir, internal=True,
-> -                                                 efi=False)
-> -        self.assertEqual(exit_code, 0)
-> -
-> -        exit_code = test_touch_file(self.emulator)
-> -        self.assertEqual(exit_code, 0)
-> -
-> -        self.emulator.stop()
-> -
-> -        exit_code = test_mount_internal_external(self.emulator,
-> -                                                 self.builddir, internal=True,
-> -                                                 efi=True)
-> -        self.assertEqual(exit_code, 0)
-> -
-> -        exit_code = test_touch_file(self.emulator)
-> -        self.assertEqual(exit_code, 0)
-> -
-> -
+> diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+> index 807c8fc2ea..db50d77194 100644
+> --- a/package/clamav/clamav.hash
+> +++ b/package/clamav/clamav.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated
+> -sha256  64fe4a16a5622c1d71efe9ed7f2c2fbd37f8f237da9f11ff66b73038df71db91  clamav-1.5.1.tar.gz
+> +sha256  f34018cf22f05bdd9d1a1574ca07193e3e030ca52050c3e5c220e23a32314965  clamav-1.5.2.tar.gz
+>  sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
+>  sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
+>  sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
+> diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+> index bda714ea65..7f8008ab5f 100644
+> --- a/package/clamav/clamav.mk
+> +++ b/package/clamav/clamav.mk
+> @@ -4,7 +4,7 @@
 >  #
->  # Syslinux
+>  ################################################################################
 >  
+> -CLAMAV_VERSION = 1.5.1
+> +CLAMAV_VERSION = 1.5.2
+>  CLAMAV_SITE = https://www.clamav.net/downloads/production
+>  CLAMAV_LICENSE = GPL-2.0
+>  CLAMAV_LICENSE_FILES = \
 > -- 
-> 2.52.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
