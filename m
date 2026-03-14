@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E898D107BCFE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47764105F79E
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BECAA60F23;
-	Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A2ZtbqfiXz_K; Sat, 14 Mar 2026 07:53:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E1760F26
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474810;
-	bh=30t42dHw7iMSt5IONfhZm7XTRkA7j0DGpfibVGhYxgE=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=PuNUMjD6QpFNrlWGBo3H69Lv+3pe8H8cREoVFkhNfmihPdOWPgSqMQTugYrtSHqKI
-	 9912uJuNJDrdy1e36VRIycDe36WxJCfXF7uftAVyGIUztyM+tTJeqa44wVPkRjoaXs
-	 0u1MnLApsNQQQBti7xAIFkjJaHeMnlMr2hhWTyHgt93n73A1HqD8MCqZw5HO4RMZex
-	 eGtKfSerjmYJe7Q+61Ls0WKChNI7T9nl5YAnWPfdrBBzXhBlgumvMCCZhDZocP7XHn
-	 wWtLuahlz1pW7Q7IZhTlanqOHlQMpKNmKi3NCotMNLBEQgIwf6YRqmO7ZDmMNyiUiZ
-	 q1enJVgl8/3kg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6E1760F26;
-	Sat, 14 Mar 2026 07:53:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14ACA201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE21A407AE
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19E23407CA;
+	Sat, 14 Mar 2026 07:53:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n5IKGHKFJtKU for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
+ id 9Hz5AMZPJHfp; Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30D6040F6A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773474812;
+	bh=RBkkS43vdu+9r/YgZU5kVqUa5ji8WLerj/WxOJKrqGk=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Bj9tJKZ8FyT6zGU/DLdEoLlUd1V3JLhXwjsRBWvxzSxfOESji7LLvEkRjw6zVigVa
+	 ZzdogY4GCez0a1/oFr4gGazph9m+E4/Zay1TSlfujp6R+WK4aZ8pBov9/66ZbPPFx0
+	 vjyNsWq9irOt9TSta3a6XTeyd7oofHgirf5YJ6KQM56rmqDQXcClr4cyDTOKqNiVxS
+	 +XNnsKVVjvbnY4GBbcWpwdG1JaWWokW9eC9B2P+deOT8euYxetHdQTMq37JTvHBSUF
+	 eW9Aanfg8/XyyBrxwbnl5bMPE7qyq6XvCpcLbuWLCdi1/2Gdbzljb0O+iOuMwr0j9P
+	 ZF7knq8eIKtQA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30D6040F6A;
+	Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CADF1B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2E368229D
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UejhOdKOrtQl for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B514440785
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B514440785
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B514440785
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:25 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4838c15e3cbso26020985e9.3
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:25 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D194D8229A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D194D8229A
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D194D8229A
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-48558d6ef83so12259245e9.3
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474803; x=1774079603;
+ d=1e100.net; s=20251104; t=1773474804; x=1774079604;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=q1+1EM9JQoEFcp6MutQFO+Kv+kEYxmVCOjBBxbtEk9g=;
- b=VEdT9whXBc7lJUkyQv3ZvxF1IUpgI6fGrUF4Apc88PhvQqXCrbrX0agNQF2tr89S1Z
- QkCtW7vXN1iapx9IeYJn316k68XmGxfs2tbkthPrUggi/ytPxZh05+kW6utwyq7paCf9
- v0utgFY2R7LYJZqd6IffRpESFREt3+Tw1Qi1PzV7bJh1ro/4Lu9qufn72PwaR5KwfRoF
- 76TulBFxNjwX9xRDzdQjAHF9Ep6fvoc9pfPpOyd9KFfD5FYcjYwjBNKAAIDxLo2NdOsS
- wJxMfkbm/YtmZUJb/6vCUy3zmPa7PzZGrLMlwhDoE9MlfhaRpPHktpm9rIWbnE0fTBpD
- qvDg==
+ bh=tRNE7z4ZKxGf2yjV9/fIJhptfet9fgreUag+v9OX/1s=;
+ b=rSPSQySPS3XGTFLFztcTZlL15uiqdrQYlJfMF7ML5vWpetrmjggua7zxny1VgNrqh9
+ IvL4WX0v2GZDnVW1RzYtziewkUlT2gmALxygwz3Y7DsyEsBYakQlLt1OWKTE/XR2KD4s
+ zQQcfvTyuMyeX/shnkl9PZhMVYZQ/vpulcaJWYUE90kVH6dH1Vg705ktM0QEm9m7WPIQ
+ yT5WDDp3HedahR7p07B7UhbH/X9ToobuLxtq6KJeAcs9YxEnxN3gBLp39HbCTBIWEBOd
+ 60mCIoSxVpaZLg1au8xDJslsROc2vBDPNA774ZFSodi2KoLXrTLVV9Q11mNrlAgJCwgQ
+ mwEw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWjFTxpqOqbTf3KqcUhMRCk7z6g2miejdEP9DMjsUti2LAgtMPKdkZK5LxgtaofN+XBaA5Qsecx14k=@buildroot.org
-X-Gm-Message-State: AOJu0YzX+yh4HUEYcvlWbzsI4SN/pmyIgqDCEPHPw28GTuIdRDLE1QM6
- G40+fcKRqoUMySMylAW8GTYUbrn43qhM+1wMYN1LJmJcHA2jf4GlwHswtvxsLzLMWog=
-X-Gm-Gg: ATEYQzyb9fNQ0/iTTJU9feQ729nvXuKx8uHlrjiD9BU1chnt0WJfGwjrtpKWVDErCJv
- jfDLVISDsxCrizfwu09MCtPNflNwQpw+MD9Ay+HK6ofIZfTaSSaizDsUChCzVgqsrO10HN8rz5z
- tL7IL6WrdfFytzYvKItUAjAlLJepSxq1/Rq58mQu8qefVLx8O9buF0Hpw71gKwk4SA/DqRY/yKo
- XKJe28Rh8UMD9j7TqS+m6ljuHQRyR914WYsEdCFN8YANW4Ms0OEHi3s7e/59buKeLgeeKBoDv/P
- A5SATCtlaGHJxwR28ByTjoRhVCoYe8K9+bA8i5sBQsi/aAB7ReBilbis5I/DDJnauNJ1z2TXmH0
- QI+cYbbSZN8lt20ySGBr2qdWcteN697LbSFw5LKhTLAVxsOsg60oeWZyVpOf6Z0zjQLRDvKMTg6
- dFCLupdZs1B0GbDV0=
-X-Received: by 2002:a05:600c:1d2a:b0:483:a27e:6706 with SMTP id
- 5b1f17b1804b1-485566d4e69mr111077865e9.9.1773474803261; 
- Sat, 14 Mar 2026 00:53:23 -0700 (PDT)
+ AJvYcCXf4/DHgWflGDkZPEUv1EmQiDjMtOjK8aYQJroUUC45ieveUy6doUz02TmBgJEzdWNHjV0yf8SXsM8=@buildroot.org
+X-Gm-Message-State: AOJu0YyNLSx/zWXePMEtEcBUEUj3b/VgwBpPg6dA/B8bkWCwrM9yisvL
+ hNxyGTBr97vjTMF9E+5IfujHuesUBL3bL1TMT00B/R2meaoKcrl3wd4NlStuC54tVzQ=
+X-Gm-Gg: ATEYQzwAqyOPbmI8dfXq9qnwkjn3ZlE8yX0+SVCHvqZrqOa58d8/BoOZnGRHq0uLeA8
+ xEdSxu6C5X2ChX1KpXDBAPl7Dwn6CKDPCkD+Ht85v3InFPK615TwyPpKkZDhOdJeD4Hp4QTLVdP
+ rHdcbwYzuUxyCRfPhWQjrmD+R7EQqFZNNkrYFfs4ZzUqD8DMOGn+Xn8t00T4wKxIgvXog76bDXS
+ o3NvmksQcHUUmLSnwWq9coUOY/c9azjmGolYfgvQc/OwqhdyIZKWP47NA0RVBVmxn+l+Oaw0i1M
+ +INa/iczkUWe2I/r6wbOmdjoy4rlUX+W9SGth10YGU4xxcKUSYzDQFYbYsonJaqs7Kw7IZrmzoU
+ fyr6LyUtAaUBhszV0t1wvz+ZdO9InC6EY7/T0al4Vks/mYxvhO6qYbqcChuQeIWjBj1ivQxFdQQ
+ h4cWybGk0EW8aRAMU=
+X-Received: by 2002:a05:600c:1e8c:b0:485:40c6:f516 with SMTP id
+ 5b1f17b1804b1-4855670e79dmr94330965e9.33.1773474804257; 
+ Sat, 14 Mar 2026 00:53:24 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4854b66ffe2sm243666735e9.13.2026.03.14.00.53.22
+ 5b1f17b1804b1-4854b6756e4sm301907245e9.15.2026.03.14.00.53.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:53:23 -0700 (PDT)
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ Sat, 14 Mar 2026 00:53:24 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:53:22 +0100
-Message-ID: <20260314075322.14664-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:53:23 +0100
+Message-ID: <20260314075323.14729-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260304074234.15910-1-chakrabortyshubham66@gmail.com>
-References: <20260304074234.15910-1-chakrabortyshubham66@gmail.com>
+In-Reply-To: <20260307093629.22188-1-bernd@kuhls.net>
+References: <20260307093629.22188-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474803; x=1774079603; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474804; x=1774079604; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=q1+1EM9JQoEFcp6MutQFO+Kv+kEYxmVCOjBBxbtEk9g=;
- b=ZcEFl9ixmKAItMW7nzGOeHrNWL+u2U+1Znq7dI4Fi4BaowmNzGDi/ga5EEaVG3pJhs
- Yvlxzr30rg5CJeC3V6lLhqzJvjsyVDHYjqC5xa3ijJO5D+dsioVwL4wCLLAQrHqPXPcS
- GSwQwQwCcvwYFDnvWwFHBqtliHqaitnZRIHBcmVJOQFLC78d9XfaPoYSfnz5JRf+tO51
- QMRw3QSBY8r1R9i1aRqNQigN+BDbnSSc4M3oJLBE2ABUTQEsnFjU0wvVRB802R1oc7SE
- 1g7eYsc+Zw0RG3pW24zdV7ujTraKFaJVvMHz/HlhVvzUIXZ5GJB4WOpo0lBv9tjBBL3z
- P5jg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=tRNE7z4ZKxGf2yjV9/fIJhptfet9fgreUag+v9OX/1s=;
+ b=h8aKLYrl7OOGhqb4EM5AGSlt4dKlbei5ZrL6lASQ4yqeRTGqH2ua9EhJ/0Q//jupql
+ BVSDN62gwQ7qBekZlJRM/UUM3eelv4y93F0K8viGvXp15BQPNbI4U7a7wAwDqgRilgr6
+ zUJeZ0QtV1afp+3WKl1Z3xtiQtuajFJc70bZ2RRnLVT+AB0jnPupWLo8ot9JES28YXvH
+ 9/oM5Iep8plEhQIotxTNsPyOBH3HthxKjow5GZXgIv1t+jsqlJmyV8jD6ED9QBtzx/gS
+ hBTb9kb/Bhx0ffGE21brrGKTuY1y3hZtzaJq8/xJ76pWK5EU0Kyy9EXCCybDuhufYq6Q
+ gkSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZcEFl9ix
-Subject: Re: [Buildroot] [PATCH] package/python3: remove nis and ossaudiodev
- modules
+ header.a=rsa-sha256 header.s=google header.b=h8aKLYrl
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/docker: Fix build with
+ gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,100 +131,71 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> These modules were dropped in Python 3.13 as per PEP 594.
-> The current version in Buildroot is 3.14.3.
+> Add patch from Debian to fix build error with gcc-15.x
 > 
-> - Remove the TODO and related config overrides in python3.mk.
-> - Remove BR2_PACKAGE_PYTHON3_OSSAUDIODEV from Config.in.
-> - Add BR2_PACKAGE_PYTHON3_OSSAUDIODEV to Config.in.legacy.
+> Fixes:
+> https://autobuild.buildroot.net/results/495/4956555fd033d43c1877e66141789bcd06aff5be/
 > 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> Patch sent to fork which is used by Arch Linux:
+> https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=wmdocker
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.11.x & 2026.02.x. Thanks
 
 > ---
->  Config.in.legacy           |  6 ++++++
->  package/python3/Config.in  |  5 -----
->  package/python3/python3.mk | 12 ++----------
->  3 files changed, 8 insertions(+), 15 deletions(-)
+> v2: updated upstream URL after commit of the PR
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index a2a7b06a6d..9a9f83eb36 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2026.02"
->  
-> +config BR2_PACKAGE_PYTHON3_OSSAUDIODEV
-> +	bool "python3 ossaudiodev module removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The ossaudiodev module was removed in Python 3.13.
+>  ...tibility-explicit-fallthrough-undecl.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch
+> 
+> diff --git a/package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch b/package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch
+> new file mode 100644
+> index 0000000000..c0dc18d17a
+> --- /dev/null
+> +++ b/package/docker/0001-fix-gcc-15-compatibility-explicit-fallthrough-undecl.patch
+> @@ -0,0 +1,38 @@
+> +From 55054532589041e3c7b970fefaeeeee871f4f6be Mon Sep 17 00:00:00 2001
+> +From: Tianon Gravi <tianon@debian.org>
+> +Date: Wed, 25 Feb 2026 08:24:26 +0100
+> +Subject: [PATCH] fix gcc-15+ compatibility (explicit fallthrough,
+> + undeclared/unused arguments)
 > +
->  config BR2_PACKAGE_QEMU_TARGET_CRIS
->  	bool "qemu cris support has been removed"
->  	select BR2_LEGACY
-> diff --git a/package/python3/Config.in b/package/python3/Config.in
-> index 423e5daabb..f9d3d3aaa2 100644
-> --- a/package/python3/Config.in
-> +++ b/package/python3/Config.in
-> @@ -76,11 +76,6 @@ config BR2_PACKAGE_PYTHON3_DECIMAL
->  	help
->  	  decimal module for Python3.
->  
-> -config BR2_PACKAGE_PYTHON3_OSSAUDIODEV
-> -	bool "ossaudiodev module"
-> -	help
-> -	  ossaudiodev module for Python3.
-> -
->  config BR2_PACKAGE_PYTHON3_READLINE
->  	bool "readline"
->  	select BR2_PACKAGE_READLINE
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index a240349d3e..07cba7c02d 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -28,7 +28,6 @@ HOST_PYTHON3_CONF_OPTS += \
->  # Make sure that LD_LIBRARY_PATH overrides -rpath.
->  # This is needed because libpython may be installed at the same time that
->  # python is called.
-> -# TODO: nis and ossaudiodev modules will be dropped in 3.13: https://peps.python.org/pep-0594/
->  HOST_PYTHON3_CONF_ENV += \
->  	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
->  	py_cv_module_unicodedata=yes \
-> @@ -38,9 +37,7 @@ HOST_PYTHON3_CONF_ENV += \
->  	py_cv_module__codecs_jp=n/a \
->  	py_cv_module__codecs_kr=n/a \
->  	py_cv_module__codecs_tw=n/a \
-> -	py_cv_module__uuid=n/a \
-> -	py_cv_module_nis=n/a \
-> -	py_cv_module_ossaudiodev=n/a
-> +	py_cv_module__uuid=n/a
->  
->  PYTHON3_DEPENDENCIES = host-python3 libffi
->  
-> @@ -176,17 +173,12 @@ else
->  PYTHON3_CONF_ENV += py_cv_module__zstd=n/a
->  endif
->  
-> -ifneq ($(BR2_PACKAGE_PYTHON3_OSSAUDIODEV),y)
-> -PYTHON3_CONF_ENV += py_cv_module_ossaudiodev=n/a
-> -endif
-> -
->  PYTHON3_CONF_ENV += \
->  	ac_cv_have_long_long_format=yes \
->  	ac_cv_buggy_getaddrinfo=no \
->  	ac_cv_file__dev_ptmx=yes \
->  	ac_cv_file__dev_ptc=yes \
-> -	ac_cv_working_tzset=yes \
-> -	py_cv_module_nis=n/a
-> +	ac_cv_working_tzset=yes
->  
->  # GCC is always compliant with IEEE754
->  ifeq ($(BR2_ENDIAN),"LITTLE")
+> +Downloaded from Debian:
+> +https://sources.debian.org/src/docker/1.5-6/debian/patches/gcc-15.patch
+> +
+> +Upstream: https://github.com/mdomlop/wmdocker/commit/55054532589041e3c7b970fefaeeeee871f4f6be
+> +
+> +[Bernd: rebased patch]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + docker.c | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/docker.c b/docker.c
+> +index 4cc8d78..6105ab8 100644
+> +--- a/docker.c
+> ++++ b/docker.c
+> +@@ -46,7 +46,7 @@ void signal_handler(int signal)
+> + }
+> + 
+> + 
+> +-void parse_cmd_line()
+> ++void parse_cmd_line(int argc, char **argv)
+> + {
+> +   int i;
+> +   gboolean help = FALSE;
+> +@@ -283,6 +283,7 @@ void event_loop()
+> +       case ReparentNotify:
+> +         if (e.xany.window == win) /* reparented to us */
+> +           break;
+> ++        /* fallthrough */
+> +       case UnmapNotify:
+> +       case DestroyNotify:
+> +         for (it = icons; it; it = g_slist_next(it)) {
 > -- 
-> 2.53.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
