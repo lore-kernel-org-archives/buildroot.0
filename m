@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE88B107BCFE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8693105F79E
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B054407AE;
-	Sat, 14 Mar 2026 07:54:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D40960F4C;
+	Sat, 14 Mar 2026 07:54:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYUSLrRLz4a5; Sat, 14 Mar 2026 07:54:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2Wy4j9Sumshq; Sat, 14 Mar 2026 07:54:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7DFD40FED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FFA060F72
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474859;
-	bh=S+JwQPIVhsomdqFFgGtoa473JOIw3JlHCfGWGc6LN+A=;
+	s=default; t=1773474860;
+	bh=5uqnJ3KvcQbbIvhkp4d3t8s/4GNLUGgOqtMS8nw8vwE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=kH+Fak/a+ggVDcrBnMuXxkR1CXArV3OpFvXE1jGKii2YrdHZwSNAHGvq66XWqh68H
-	 BcaUGqXLhJC9ju4uvjaZB1/FtQ6q339qpx80mt4Jyp2Vb+1Ya/frTtT7upSORMmlCU
-	 vRr6Ib0L28hNTc0aklZq8BVLpopezqkG9+Jd1ac5Lz6WVgKqpCL4jt94Xfz5bHU5+n
-	 WVcjHXqJ0GqsYHte+jtqbizq381hiTYX3hKnZu4tzDPhuBlIZSulpfs5JY5PVCBANl
-	 kmawJnc1xAhlJNk97S2fUYLgU5XnkHpwEK/CtVjhz1Vr8tUQ3Fk0AXcOR8WqLoufZX
-	 1Mwp0iqrD37fA==
+	b=Cm/A7UknA9Px7WU0voB+b68hwoaFlDushgR6ziQVM6l1wheqnfwH7FpYdRzmTP6qo
+	 xlHqYNSDZsabuCaMJqkL2X7Sqk0JiLYxdKTVqu6A3UfUz9/Yj0rU1qwcMP9P8Z5Vcp
+	 2Ywp+ZlEgddy9MFbH6FJDHoR93bxOLlnOiST8Bg37acJYNq/r226twOgSx7n4ucgLN
+	 7wnqRKc/yzgVZli4nN5fe+gZJQMGIpaX4WNrPR7b1YJYlIQBmV0aptA3O1NfI6t+4z
+	 yX7KY+EBO/+iqzbWqcwR1u6xeWcwp4IBu+Qjse7PFp2ih7OAOadbi59K3k0bknfQam
+	 5xgMvh0OVVyrA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7DFD40FED;
-	Sat, 14 Mar 2026 07:54:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 072B8201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FFA060F72;
+	Sat, 14 Mar 2026 07:54:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15C81201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04AFE40FE9
+ by smtp2.osuosl.org (Postfix) with ESMTP id F013F400A2
  for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2WdsNQn1I6u5 for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:54:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id as6NLCcxUhBl for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:54:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ED2FA407AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED2FA407AE
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ED2FA407AE
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:16 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-439bcec8613so2301965f8f.3
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:54:16 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE53940135
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE53940135
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BE53940135
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:54:17 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-439b9cf8cb5so3322305f8f.0
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:54:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474855; x=1774079655;
+ d=1e100.net; s=20251104; t=1773474856; x=1774079656;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=T3Ujb7MUwNnbDF1jtGP4Co2THF2kn7EzbZNg9q8iD+I=;
- b=kleopm4rWOtD1yKx6zFLNyYY5iKVgo/qk0+9UyXVu5BxIHgPhVpqMuhDK38VKnPDHS
- pTgJVGYB6/2YIGxmiumeMElgDtcrdgKcVZk8Em2i4dyk4zQTyluF7PUvysa5LrSaZnCJ
- bsZezsh8oY+kdfawPlxakcoTEAD9UZrjKLJqAbduq5b2FP2dpoJvqD5pKfVunWAvn7Sm
- UmV8YogpCqL1Ylh5pXnzqUEvPR6RpxZBgWYqLIG1qq9GDhWQwMqnGRv49cLlsHGfJRtB
- RFbFV5ekbp475lrcFLmUMF0udHSwach9yMA7woNpCpocha6sfSJhuWj6H/22wzeprjc6
- UiOw==
+ bh=T87jZAQxVQU2iZszkc5yvrgxnV8WLjTpIGaQ8oF5VcQ=;
+ b=jMWadyDfgUDes67c7aqUhyOKYiRSj5Yiw78IdtPgXvu2hblcB2HyYsZL2IwSoaAjkl
+ vV6HSQR7Pi7r2mGe3PvDqJ34QKvv/nkX1HQ1SuGCV6KqqYGdYuQy3CVzYEjxUPYCDTy3
+ 5XIzffg1Lcp+Nivg4sjo1ybbFxkeGKuPmgjlUl4nOWju5C/dktc7JSIjXJS27JG3u5aw
+ HRRnAFnuDmPUyldfxrNn+Y33zyfQdnXOyCkfMnOiiTTJv9xtP4eD8SgOiaFbWtWX0gCA
+ wBN8wyylnZ42LP/0ufq0Uem21Lfp1qNutKHXOy5vF09FH8KJyWaecQWLS3o80a1al3Mr
+ AVSA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUesE/eMNSuxgXbwV8S5MdEeBZC8NozP+xp2yGa79KsSccjQkTU1MKEjM1eX2yM/vOFGKIaurlXyyA=@buildroot.org
-X-Gm-Message-State: AOJu0YxwkCGZvkFVi2FHvd5JLnDkObRDdVQMQnDjBI6MHNF/HhA87lbK
- loTtKxBub5Cf6sDjfVFnoVPIJaNV6jUiwCRCwl+Fiq7VGpd1K9A3HNJesPw313noERg=
-X-Gm-Gg: ATEYQzwB2ypSVZ0HcP9K3dzp+6qWxgjS4QajgweF21Rgez7hTsABjb9A0XlBygE2oow
- WrhyGCR4tp9zN8rxyukTAKiHoZ0Lr+ltDnYw23Y5E4h6jnqaRfJPwHajKAGKoSsYuUhSDoNJJzR
- ELWqEZTIWIIC2UgnrwFsNoBQoWfsKOjsH8AnAPi1+eXjjOZ76mR9c6Wt7ZrdxLKSsPYRQj8La53
- XioUc/7x+/aFiMMQuUdhPgceZ+oVffRx1Alc42b0gmJcmAx8Emb6eBrlTz54QKLOsTFciHNqYOz
- t09lVgWdp7Wp80fZV2YfSrNAi6B10cLdhdto42tTCHTb0ybNZw4JjZ/zmECHBWMa/VmYjyqLaJ3
- ns5ezpmErA5m/Z38GlUBNyTACnAMqviHM4uFkW1bHcAElB3a/PG3z3aOSWNBR1p/a5A6xgpimqh
- swPq0Y5wIuRteI79c=
-X-Received: by 2002:a05:6000:40da:b0:439:c661:3245 with SMTP id
- ffacd0b85a97d-43a04db7ed0mr11003643f8f.34.1773474854594; 
- Sat, 14 Mar 2026 00:54:14 -0700 (PDT)
+ AJvYcCVI6kvYgwFjirhQv9xqopT5Vi42CggYZKZFZdEALxWNCxMZQ8tQMpGs6XVgg4vkE3jauQtuW3psiFg=@buildroot.org
+X-Gm-Message-State: AOJu0YzJqZ3yuqjwr5gDNmnJdgWA2pG3HgUQltUbTmZttq5+LsZ7Cl5V
+ v8wI4UwST9omEoKBM6fjpB5qIXDG5ULPnYC355Xvh1vyC/tmCkTKCBiXgMevuzkhGNAwPOrWk3U
+ KEhLq
+X-Gm-Gg: ATEYQzxJueaz6hc7GiK2UlL2jWL8Em/jXkx5HKaDE0RQxWLiDPwiKSTcGu2QdzGTo1B
+ utdY568VXG2tGAExDIn3xJcJhReWHkNnGx5FRoa0KywsaB0GGBh8M5FidHHP7zzY/fF8gCyV6Pb
+ xFrLii9iW/IjjRNnTrhyW41RgNPfLM9L/FO9dQLa4tix2dmdV5IaK9SQeNM5IhIKCIkLUeanElb
+ HcdZSTCLaGpvi+4k1iAnNl8L9ACc2ifn+WhoETLP5/2TllHvdIxnMqSPoLnB48gvAZcgJ5X4Xwn
+ RFZZzwWP5vcx+QAD4wChon/uiR4WItIJRq297+DUiXfSUzRGJsXDj/jzrP5MabAYDntOBvnrTVA
+ jUwNS1AvdBsSjpn34jkUUDJpf2qoGJ/pXrjiQS0Q1Em9iDLKLTULuMaCN9+HJh9fIP0aJtEWOEu
+ laUuSpE96WOBlmzTw=
+X-Received: by 2002:a5d:5e01:0:b0:439:befa:91cb with SMTP id
+ ffacd0b85a97d-43a04dc0958mr10760430f8f.45.1773474855517; 
+ Sat, 14 Mar 2026 00:54:15 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43b3a09e453sm1426617f8f.0.2026.03.14.00.54.14
+ ffacd0b85a97d-439fe22e9ddsm21952261f8f.37.2026.03.14.00.54.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:54:14 -0700 (PDT)
+ Sat, 14 Mar 2026 00:54:15 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:54:13 +0100
-Message-ID: <20260314075413.15419-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:54:14 +0100
+Message-ID: <20260314075414.15484-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260304191607.3488559-1-bernd@kuhls.net>
-References: <20260304191607.3488559-1-bernd@kuhls.net>
+In-Reply-To: <20260307185425.729667-1-bernd@kuhls.net>
+References: <20260307185425.729667-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474855; x=1774079655; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474856; x=1774079656; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=T3Ujb7MUwNnbDF1jtGP4Co2THF2kn7EzbZNg9q8iD+I=;
- b=W+LtVD+iKu7Sb7nFHQ02eC53tgyNXEJQ7nknf0zGR+0Ttz/CfJRg3FHFVGY1nVjp8B
- /uwpWvdJ30Q3VvK/yXOmDBAMTCEF3p1zWld1UlK2vcu24COJ+aftIFeUyZmmS/fsaxEq
- y+ZXPQYGzE2VEzwrcMFARoUBazu8EFfPxGHpMQ371AtCAG7SgJxbKgCHFSZT+veHN9wu
- 3F7vU/RwjlGKrIT3cIfkP7u21zbCqxuFkHrxGKxV9+ahjWPlCz8qAO6Nw/Q+C0WW3J9r
- RCSlOxae52cG/I/Lc3hnKyxrw8B8+EXNU2MMIhLCkHW/hjyN4TruNRk07a+F1XPKvYZM
- 2JQA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=T87jZAQxVQU2iZszkc5yvrgxnV8WLjTpIGaQ8oF5VcQ=;
+ b=QTC/1eS4BC2SU4qHN/l9P9LwrMdlYl5xgQpXGNeiNRDW+6iDGbPgf6d2MzheQ+lWgb
+ bA7AnirLCDtYsqtGAOHfb71mD8ldtcAqb41S5ItycfCWwo0JrkJ7oyinuB/1o1MwuYRD
+ V+GQMbtkpLi0KvCsAJ72bX+sHfp4VhJufP8Ss5HVZW7RzjVnIeo5dbfGw6q9GaAIEf6G
+ SDh7ZV+BbCa+3wK8DvV11djkHxyFmIbQL6E2tdCVygcM7uFQ+prPB0kEGTr7ynu3TOQy
+ Y0v5eNOcoPS5CnjNhBYkst7D30a9kJtJBN22DFXTV7hpxtoSkogI7T5RecO3LT/9Xthm
+ kA9A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=W+LtVD+i
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 18.3
+ header.a=rsa-sha256 header.s=google header.b=QTC/1eS4
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: needs gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,41 +131,106 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://www.postgresql.org/about/news/postgresql-183-179-1613-1517-and-1422-released-3246/
+> Fixes build error with gcc 9.x:
+> 
+> output/build/libheif-1.21.1/libheif/nclx.h:128:50: error:
+>  'bool nclx_profile::operator==(const nclx_profile&)
+>  const' cannot be defaulted
+> 
+>  using this defconfig:
+> 
+>   BR2_arm=y
+>   BR2_TOOLCHAIN_EXTERNAL=y
+>   BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>   BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>   BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.11.2.tar.bz2"
+>   BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+>   BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+>   BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>   # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>   BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>   BR2_STATIC_LIBS=y
+>   BR2_PACKAGE_LIBHEIF=y
+> 
+> According to https://github.com/strukturag/libheif/issues/1615#issuecomment-3457979167
+> gcc >= 10 with support for C++20 is needed for the package.
+> 
+> The failing code was introduced upstream in version 0.21.0 with commit
+> https://github.com/strukturag/libheif/commit/a62f933e380e165dc2c12a879d0ceed1529b3efa
+> which was added to buildroot with commit
+> a8aed698c706ec534ddc41cdce651c18016c28ca.
+> 
+> Also removed -std=c++11 from CXXFLAGS.
+> 
+> The build error was not yet recorded by the autobuilders.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/postgresql/postgresql.hash | 4 ++--
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/kodi-imagedecoder-heif/Config.in | 6 +++---
+>  package/libheif/Config.in                | 6 +++---
+>  package/libheif/libheif.mk               | 1 -
+>  3 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index 8d47db5b7f..58eab8e548 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,4 +1,4 @@
-> -# From https://ftp.postgresql.org/pub/source/v18.2/postgresql-18.2.tar.bz2.sha256
-> -sha256  5245bd1b79700d55b8e0575be0325ef61e7bbef627e6a616e4cf36ad4687be36  postgresql-18.2.tar.bz2
-> +# From https://ftp.postgresql.org/pub/source/v18.3/postgresql-18.3.tar.bz2.sha256
-> +sha256  d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f  postgresql-18.3.tar.bz2
->  # License file, Locally calculated
->  sha256  3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd  COPYRIGHT
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 542fe05264..fed3887ef5 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
+> index f41b164ff4..d77f10ee98 100644
+> --- a/package/kodi-imagedecoder-heif/Config.in
+> +++ b/package/kodi-imagedecoder-heif/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
+>  	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libheif
+>  	select BR2_PACKAGE_LIBDE265
+>  	select BR2_PACKAGE_LIBHEIF
+>  	select BR2_PACKAGE_TINYXML2
+> @@ -12,7 +12,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
 >  
-> -POSTGRESQL_VERSION = 18.2
-> +POSTGRESQL_VERSION = 18.3
->  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
->  POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
->  POSTGRESQL_LICENSE = PostgreSQL
+>  	  https://github.com/xbmc/imagedecoder.heif
+>  
+> -comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 4.8"
+> +comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 10"
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
+> diff --git a/package/libheif/Config.in b/package/libheif/Config.in
+> index 0ae86a07f4..9e88fb826d 100644
+> --- a/package/libheif/Config.in
+> +++ b/package/libheif/Config.in
+> @@ -2,14 +2,14 @@ config BR2_PACKAGE_LIBHEIF
+>  	bool "libheif"
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	help
+>  	  libheif is an HEIF and AVIF file format decoder and encoder.
+>  
+>  	  https://github.com/strukturag/libheif
+>  
+> -comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
+> +comment "libheif needs a toolchain w/ C++, threads, gcc >= 10"
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+>  		!BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+> index acd302d847..c4196f9353 100644
+> --- a/package/libheif/libheif.mk
+> +++ b/package/libheif/libheif.mk
+> @@ -11,7 +11,6 @@ LIBHEIF_LICENSE_FILES = COPYING
+>  LIBHEIF_CPE_ID_VENDOR = struktur
+>  LIBHEIF_INSTALL_STAGING = YES
+>  LIBHEIF_CONF_OPTS = \
+> -	-DCMAKE_CXX_FLAGS="-std=c++11" \
+>  	-DENABLE_PLUGIN_LOADING=OFF \
+>  	-DWITH_AOM_DECODER=OFF \
+>  	-DWITH_AOM_ENCODER=OFF \
 > -- 
 > 2.47.3
 > 
