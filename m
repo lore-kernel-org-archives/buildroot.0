@@ -4,115 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F5B5105F79E
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E898D107BCFE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D2D760EF4;
-	Sat, 14 Mar 2026 07:53:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BECAA60F23;
+	Sat, 14 Mar 2026 07:53:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sUfbe0otMZO4; Sat, 14 Mar 2026 07:53:29 +0000 (UTC)
+ id A2ZtbqfiXz_K; Sat, 14 Mar 2026 07:53:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41DC760F1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E1760F26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773474809;
-	bh=3XH7alry+O5TTayjcJvMODWQ6ao3WTy1Crxoxv96yh8=;
+	s=default; t=1773474810;
+	bh=30t42dHw7iMSt5IONfhZm7XTRkA7j0DGpfibVGhYxgE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=R7r3DSVk5qZpFp5qglbPG8ZG1nbCiaO49jW7CBBVmd1J2RDWvi+PYAqNWcYgizkjw
-	 D3bMkPYD3kBwmc/ROycI/OVXSFP/Uj2acg2T1Hk6xQE04tfn1YqPjO7fqOZfY+DApX
-	 jFmwJFQcoPUOTbIgavc6eOlQPhg7QIUUMiHY6M4c0uUw/QHSmRFT+F/AmY5zPqyDkf
-	 hC6cr7CB3pFknP4OoALlDWsJhfqHO4pk1xWHJGk1Sg8M7cg2qakZ60H9Uo/r8RtUCs
-	 k3YYlF1VoQig7z1eggU/D3abeX1OC8Fv/kjckpdhGr0ILvW5cNpfQTQ2591TBaF25n
-	 /Q2Q8ZgO49/pw==
+	b=PuNUMjD6QpFNrlWGBo3H69Lv+3pe8H8cREoVFkhNfmihPdOWPgSqMQTugYrtSHqKI
+	 9912uJuNJDrdy1e36VRIycDe36WxJCfXF7uftAVyGIUztyM+tTJeqa44wVPkRjoaXs
+	 0u1MnLApsNQQQBti7xAIFkjJaHeMnlMr2hhWTyHgt93n73A1HqD8MCqZw5HO4RMZex
+	 eGtKfSerjmYJe7Q+61Ls0WKChNI7T9nl5YAnWPfdrBBzXhBlgumvMCCZhDZocP7XHn
+	 wWtLuahlz1pW7Q7IZhTlanqOHlQMpKNmKi3NCotMNLBEQgIwf6YRqmO7ZDmMNyiUiZ
+	 q1enJVgl8/3kg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41DC760F1C;
-	Sat, 14 Mar 2026 07:53:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA67A201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6E1760F26;
+	Sat, 14 Mar 2026 07:53:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14ACA201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C02E8229D
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE21A407AE
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ku5WFZOr5NsE for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:53:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n5IKGHKFJtKU for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:53:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4ECE28229A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ECE28229A
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4ECE28229A
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:24 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-439afc58ac7so3398589f8f.0
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B514440785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B514440785
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B514440785
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:53:25 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4838c15e3cbso26020985e9.3
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 00:53:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773474802; x=1774079602;
+ d=1e100.net; s=20251104; t=1773474803; x=1774079603;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=YDWaMbaZTWTgHg+t52OjcoSFnezsvAjoox/EAvbM2q4=;
- b=Xbqr3pIetBsyDrmiLqMM0Z3166XXrG5C5e/HtTT3bD1uy3NBYX54var38RyQWT1pXC
- iKHELVhv9OB+yMF4SDjVNsFRXB6172YFeM4YLV6KMFWbkXfz3T5N64qeBX/Bd0nhGqy6
- PZYZd42LDlL7lSiNcCT/7S6kZD7Aotm3dwgOL63PZUY/W7IyFvQSBSUakZHIAehCUQAa
- N/+5ZERNoA3GVo1Ato480V88iIGP80qevqtN/SmvISSByjMiR3VXekfAi9KzvazR/Y/0
- ey+dQgCmPIYOoF7nS4pjLhygiSmG8LVy2mTBlY2IMH9UkmTW2QH6oRsaBi1m3KahpYdL
- 6QOw==
+ bh=q1+1EM9JQoEFcp6MutQFO+Kv+kEYxmVCOjBBxbtEk9g=;
+ b=VEdT9whXBc7lJUkyQv3ZvxF1IUpgI6fGrUF4Apc88PhvQqXCrbrX0agNQF2tr89S1Z
+ QkCtW7vXN1iapx9IeYJn316k68XmGxfs2tbkthPrUggi/ytPxZh05+kW6utwyq7paCf9
+ v0utgFY2R7LYJZqd6IffRpESFREt3+Tw1Qi1PzV7bJh1ro/4Lu9qufn72PwaR5KwfRoF
+ 76TulBFxNjwX9xRDzdQjAHF9Ep6fvoc9pfPpOyd9KFfD5FYcjYwjBNKAAIDxLo2NdOsS
+ wJxMfkbm/YtmZUJb/6vCUy3zmPa7PzZGrLMlwhDoE9MlfhaRpPHktpm9rIWbnE0fTBpD
+ qvDg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVPvviGra2il0AZOKKfKMNvm8uxMLenqf50WGrG6v3jjaDn7ooHO9mvAJbm6k72AHheO10uke/bejk=@buildroot.org
-X-Gm-Message-State: AOJu0YxIkfavYeFVEdexdqh3IJQZyrknHXgNOoodGy2G/bdfbF3ZY+ej
- JPhm5rTOtjKn6ADvpBb075IqOqNvaeOiFlItXtvjOXl0dd1OGQBgR25N9Mmwi0sOLCQ=
-X-Gm-Gg: ATEYQzw5vJLCyBNboDOkf1tC3a4sDHbO+QBu94fA8K6JJFiDgciN8dDS7yPKE8VZeus
- Lu4d6LoA0nSEQyti6bvfEUGJCYfWWmSJtefRRC3xrif68eu3obzxxEMfPb+LMm24yL1h3lWEF58
- YlGnIxwJAKV8jrOpo46baBmwRbUHLbcAwWoJEkpjn/TfOKssodGVvu4v9lx3vfWM8Rd5F/hV6IK
- XMsUxARQbRbHJpqSjmC49xC0AIiX5tOkpvdzgFY2tkqdhrIdC8sCsH0GHablmmSQirBzPZkC3fd
- sFLtbPDRv6rY4xgecuFv8cxNFdon31uaPRhhdWIok8ZbDaoTciM7/bFo7zcUqt3WCG85xw15Fm1
- qXlmLWa/THnKH3m0SKAUijM7Z7R1VBaaMhDP/gMEuZN+Mn+2b39MuRQzjl/a5bQ+oAC4wcGFtaq
- EjTFZzl5CYuZUdwzg=
-X-Received: by 2002:a05:6000:2dc5:b0:439:905e:1236 with SMTP id
- ffacd0b85a97d-43a04d83c58mr12510875f8f.2.1773474802134; 
- Sat, 14 Mar 2026 00:53:22 -0700 (PDT)
+ AJvYcCWjFTxpqOqbTf3KqcUhMRCk7z6g2miejdEP9DMjsUti2LAgtMPKdkZK5LxgtaofN+XBaA5Qsecx14k=@buildroot.org
+X-Gm-Message-State: AOJu0YzX+yh4HUEYcvlWbzsI4SN/pmyIgqDCEPHPw28GTuIdRDLE1QM6
+ G40+fcKRqoUMySMylAW8GTYUbrn43qhM+1wMYN1LJmJcHA2jf4GlwHswtvxsLzLMWog=
+X-Gm-Gg: ATEYQzyb9fNQ0/iTTJU9feQ729nvXuKx8uHlrjiD9BU1chnt0WJfGwjrtpKWVDErCJv
+ jfDLVISDsxCrizfwu09MCtPNflNwQpw+MD9Ay+HK6ofIZfTaSSaizDsUChCzVgqsrO10HN8rz5z
+ tL7IL6WrdfFytzYvKItUAjAlLJepSxq1/Rq58mQu8qefVLx8O9buF0Hpw71gKwk4SA/DqRY/yKo
+ XKJe28Rh8UMD9j7TqS+m6ljuHQRyR914WYsEdCFN8YANW4Ms0OEHi3s7e/59buKeLgeeKBoDv/P
+ A5SATCtlaGHJxwR28ByTjoRhVCoYe8K9+bA8i5sBQsi/aAB7ReBilbis5I/DDJnauNJ1z2TXmH0
+ QI+cYbbSZN8lt20ySGBr2qdWcteN697LbSFw5LKhTLAVxsOsg60oeWZyVpOf6Z0zjQLRDvKMTg6
+ dFCLupdZs1B0GbDV0=
+X-Received: by 2002:a05:600c:1d2a:b0:483:a27e:6706 with SMTP id
+ 5b1f17b1804b1-485566d4e69mr111077865e9.9.1773474803261; 
+ Sat, 14 Mar 2026 00:53:23 -0700 (PDT)
 Received: from arch ([79.132.229.53]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43a0b2db487sm7958664f8f.28.2026.03.14.00.53.21
+ 5b1f17b1804b1-4854b66ffe2sm243666735e9.13.2026.03.14.00.53.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 00:53:21 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Sat, 14 Mar 2026 00:53:23 -0700 (PDT)
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 08:53:21 +0100
-Message-ID: <20260314075321.14610-1-thomas.perale@mind.be>
+Date: Sat, 14 Mar 2026 08:53:22 +0100
+Message-ID: <20260314075322.14664-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260304190143.3481181-1-bernd@kuhls.net>
-References: <20260304190143.3481181-1-bernd@kuhls.net>
+In-Reply-To: <20260304074234.15910-1-chakrabortyshubham66@gmail.com>
+References: <20260304074234.15910-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1773474802; x=1774079602; darn=buildroot.org;
+ d=mind.be; s=google; t=1773474803; x=1774079603; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=YDWaMbaZTWTgHg+t52OjcoSFnezsvAjoox/EAvbM2q4=;
- b=Gz8MyodLUrvKttM6VqL51hZZWAI9aw3SLpkQHdMQHDFtHJViXkqmJugnkAvwhawARN
- iIB9svIQjFBJoW/hpyGf810x/zm4w811O/zgfuJbsXYOhGtZbIGuuGFqZH9geM8QPF+i
- QjlwrQlDq6zkCUE/+hno0DHQK4fwopxYASxyKyP8EKiRgOO/BrdehOAQOk+L0CD6sYHn
- JyyFAODtYjTpEIkuhVOlWxCPKBmp1QMamsNs/fl0f52hEo6dBwQfx0B3+cTRff6Fuy5d
- +BoxM+Ig1nOB4naseEH8WP4MbhfWQPbSIGq8SHm7SH0aCxvaE+nz6qOqzh35y+FHeIA7
- xTpg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=q1+1EM9JQoEFcp6MutQFO+Kv+kEYxmVCOjBBxbtEk9g=;
+ b=ZcEFl9ixmKAItMW7nzGOeHrNWL+u2U+1Znq7dI4Fi4BaowmNzGDi/ga5EEaVG3pJhs
+ Yvlxzr30rg5CJeC3V6lLhqzJvjsyVDHYjqC5xa3ijJO5D+dsioVwL4wCLLAQrHqPXPcS
+ GSwQwQwCcvwYFDnvWwFHBqtliHqaitnZRIHBcmVJOQFLC78d9XfaPoYSfnz5JRf+tO51
+ QMRw3QSBY8r1R9i1aRqNQigN+BDbnSSc4M3oJLBE2ABUTQEsnFjU0wvVRB802R1oc7SE
+ 1g7eYsc+Zw0RG3pW24zdV7ujTraKFaJVvMHz/HlhVvzUIXZ5GJB4WOpo0lBv9tjBBL3z
+ P5jg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Gz8MyodL
-Subject: Re: [Buildroot] [PATCH 1/1] package/freetype: security bump version
- to 2.14.2
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=ZcEFl9ix
+Subject: Re: [Buildroot] [PATCH] package/python3: remove nis and ossaudiodev
+ modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,49 +131,100 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release notes:
-> https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
+> These modules were dropped in Python 3.13 as per PEP 594.
+> The current version in Buildroot is 3.14.3.
 > 
-> Fixes CVE-2026-23865: https://seclists.org/oss-sec/2026/q1/253
+> - Remove the TODO and related config overrides in python3.mk.
+> - Remove BR2_PACKAGE_PYTHON3_OSSAUDIODEV from Config.in.
+> - Add BR2_PACKAGE_PYTHON3_OSSAUDIODEV to Config.in.legacy.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 
 Applied to 2025.11.x & 2026.02.x. Thanks
 
 > ---
->  package/freetype/freetype.hash | 6 +++---
->  package/freetype/freetype.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  Config.in.legacy           |  6 ++++++
+>  package/python3/Config.in  |  5 -----
+>  package/python3/python3.mk | 12 ++----------
+>  3 files changed, 8 insertions(+), 15 deletions(-)
 > 
-> diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-> index 2c6ab20e19..520e6c2bcf 100644
-> --- a/package/freetype/freetype.hash
-> +++ b/package/freetype/freetype.hash
-> @@ -1,6 +1,6 @@
-> -# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.1/
-> -sha1  20f7a9a3e2996aab82b0648e82d49a78e8813bab  freetype-2.14.1.tar.xz
-> -sha256  32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc  freetype-2.14.1.tar.xz
-> +# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
-> +sha1  28200b8f8df5a524f476bdacb20f05da1c33280c  freetype-2.14.2.tar.xz
-> +sha256  4b62dcab4c920a1a860369933221814362e699e26f55792516d671e6ff55b5e1  freetype-2.14.2.tar.xz
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index a2a7b06a6d..9a9f83eb36 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,12 @@ endif
 >  
->  # Locally calculated
->  sha256  bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b  LICENSE.TXT
-> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-> index 00743fe358..fbf9d13235 100644
-> --- a/package/freetype/freetype.mk
-> +++ b/package/freetype/freetype.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  comment "Legacy options removed in 2026.02"
 >  
-> -FREETYPE_VERSION = 2.14.1
-> +FREETYPE_VERSION = 2.14.2
->  FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
->  FREETYPE_SITE = https://download.savannah.gnu.org/releases/freetype
->  FREETYPE_INSTALL_STAGING = YES
+> +config BR2_PACKAGE_PYTHON3_OSSAUDIODEV
+> +	bool "python3 ossaudiodev module removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The ossaudiodev module was removed in Python 3.13.
+> +
+>  config BR2_PACKAGE_QEMU_TARGET_CRIS
+>  	bool "qemu cris support has been removed"
+>  	select BR2_LEGACY
+> diff --git a/package/python3/Config.in b/package/python3/Config.in
+> index 423e5daabb..f9d3d3aaa2 100644
+> --- a/package/python3/Config.in
+> +++ b/package/python3/Config.in
+> @@ -76,11 +76,6 @@ config BR2_PACKAGE_PYTHON3_DECIMAL
+>  	help
+>  	  decimal module for Python3.
+>  
+> -config BR2_PACKAGE_PYTHON3_OSSAUDIODEV
+> -	bool "ossaudiodev module"
+> -	help
+> -	  ossaudiodev module for Python3.
+> -
+>  config BR2_PACKAGE_PYTHON3_READLINE
+>  	bool "readline"
+>  	select BR2_PACKAGE_READLINE
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index a240349d3e..07cba7c02d 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -28,7 +28,6 @@ HOST_PYTHON3_CONF_OPTS += \
+>  # Make sure that LD_LIBRARY_PATH overrides -rpath.
+>  # This is needed because libpython may be installed at the same time that
+>  # python is called.
+> -# TODO: nis and ossaudiodev modules will be dropped in 3.13: https://peps.python.org/pep-0594/
+>  HOST_PYTHON3_CONF_ENV += \
+>  	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
+>  	py_cv_module_unicodedata=yes \
+> @@ -38,9 +37,7 @@ HOST_PYTHON3_CONF_ENV += \
+>  	py_cv_module__codecs_jp=n/a \
+>  	py_cv_module__codecs_kr=n/a \
+>  	py_cv_module__codecs_tw=n/a \
+> -	py_cv_module__uuid=n/a \
+> -	py_cv_module_nis=n/a \
+> -	py_cv_module_ossaudiodev=n/a
+> +	py_cv_module__uuid=n/a
+>  
+>  PYTHON3_DEPENDENCIES = host-python3 libffi
+>  
+> @@ -176,17 +173,12 @@ else
+>  PYTHON3_CONF_ENV += py_cv_module__zstd=n/a
+>  endif
+>  
+> -ifneq ($(BR2_PACKAGE_PYTHON3_OSSAUDIODEV),y)
+> -PYTHON3_CONF_ENV += py_cv_module_ossaudiodev=n/a
+> -endif
+> -
+>  PYTHON3_CONF_ENV += \
+>  	ac_cv_have_long_long_format=yes \
+>  	ac_cv_buggy_getaddrinfo=no \
+>  	ac_cv_file__dev_ptmx=yes \
+>  	ac_cv_file__dev_ptc=yes \
+> -	ac_cv_working_tzset=yes \
+> -	py_cv_module_nis=n/a
+> +	ac_cv_working_tzset=yes
+>  
+>  # GCC is always compliant with IEEE754
+>  ifeq ($(BR2_ENDIAN),"LITTLE")
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
