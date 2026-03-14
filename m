@@ -4,109 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0797010854AA
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 23:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B77F10854B4
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 23:07:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C3E4822E7;
-	Sat, 14 Mar 2026 23:05:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD76180F63;
+	Sat, 14 Mar 2026 23:07:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6WTOJ_4XM8CZ; Sat, 14 Mar 2026 23:05:23 +0000 (UTC)
+ id MVmvE_LRX-oE; Sat, 14 Mar 2026 23:07:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 336C781E7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2CE580F17
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773529523;
-	bh=dKFLdszrvsnqTlYtTL4gofXnaaLe61uH3TQb7tI/3ks=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=JwNv1zNAdhCrSS9BjvGHbgZIDRysfQFDyLYduoAgPCmOLAjpZCG082URbqvmztx1Z
-	 q8Yzmci1qG8LU1R/rhBqR7KuGD9/KlSjnktYllQSf1W6Y7tfmiWqPF/MBcd7bOyJVn
-	 AALUXWDLOMrsPVhMBYmmvLfx42sfk4NYbvRj6UobtFsqM921Vkw27ERAw0THuAxGpQ
-	 N/Uh4Ilm16VY/yV0PC6qI5IIIQEwcyidlPoqytdpWrcYO5NZnnUGIZZ4zKDY34WLD7
-	 rUD2ykNnYhwaZuqrd+Hdx6eEBM2Ahbrzb+5DDHznrQ6LfirGOq0Tn6nsojZ8NDPL10
-	 cHplX2HcAgWCg==
+	s=default; t=1773529635;
+	bh=wB1pRVHcAdTmG9izw4i4M4Ch+TovN6OO+H0oMyBWIWo=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Wu/TBnQRra4G7etQmUfW/Dlbx6fHmyT6lj/BYeeKtziFyhaXN1gAE/FcuwuQvEHHq
+	 YRWyWFhA4X1kQgUNHHocDj8hUEMxXgdARjXgfi0beEAucZvEuizE/J8EsDOn8JmbrE
+	 wfy0YraHHxRahaaptaWEILxaQSTLJANsDH09EmOw2j3s9+FnWXzsVHXlEuN9xuA0lk
+	 Cv17eSpritm/UW5POUbK4qfSMVNi+e0L4Pr6PlYk/7gMwZl6W68FNohGZ/lTEwbIfW
+	 xFfigcN3NiUg4o0/sFtHjbuynQF3TsFpItX+gWWJ8WoEl0an8arXgOxk7R06IK+iWw
+	 cT1vagK27JqAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 336C781E7B;
-	Sat, 14 Mar 2026 23:05:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4307D1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:05:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2CE580F17;
+	Sat, 14 Mar 2026 23:07:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3F461B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 347BE4055D
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:05:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B58DB80F02
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:07:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZjCNsWfCj6ln for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 23:05:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::431; helo=mail-pf1-x431.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 526B040547
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 526B040547
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
- [IPv6:2607:f8b0:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 526B040547
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:05:21 +0000 (UTC)
-Received: by mail-pf1-x431.google.com with SMTP id
- d2e1a72fcca58-823c56765fdso1894274b3a.1
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:05:21 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qq6IGqfqVUbN for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 23:07:14 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ envelope-from=stephan@asklandd.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D63CE80EFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D63CE80EFA
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D63CE80EFA
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:07:13 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-661d929219bso3900741a12.0
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:07:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773529520; x=1774134320;
+ d=1e100.net; s=20251104; t=1773529632; x=1774134432;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=b5KXXlmNm/rT+nIrVmWz3oaOCIH09Qoc43fC25AkdpA=;
- b=ZcErfAgPCf30NXTZYR5gvh2gHPW7st6YSkuBiW2DCYx0S8QKWhTOcWKROrfeYIIexZ
- TGUZ0i+nVPB/lnBsRInBBwFyJJ6fMxTiKlhuwgsMWIra8WMkGzkekF8L14IwFDWi5lfT
- xa7WShJPWGChEGN65MljNiz7Z7xMhRNu95XPnOsJvlX5naNctiGyBizjEQ5hQ7yx/8IC
- Dau2zebq44wkhLhth9gKpdG2/EiwQBRjtLN2aVKA+g3mEkTNxhdMSx/ZCod2SJTqbUVR
- D7ORrFYTkqyNGgFOGGbdS6/8F548ToJ0OXqT037fnIFa34bpG3Rn/mG6wqneE8dqbk+5
- UULQ==
-X-Gm-Message-State: AOJu0YwAHpvyYuNPyOZpcAbLgziqbyWDittef+agE0wwpQvyb1L/0RHa
- d1szMazj494Nl5/yymrK3WaufJz/hHnnR7PL5EEICGbYmLs1yvYzVfCuL5dmz3eWNiWE8CKuXhD
- 3ZywT4y9rsg==
-X-Gm-Gg: ATEYQzzjGaFlt4fTTgW+3ky/tpcad6LDJJuk2rHVh4FgctATEsyXZpoqqa4L7DGqK1R
- tOeLv1P8E8kdiIW28pzQfvyYWMJ6Q+9XF1QQDT4FMTlnOAHGR6NdSvZLyuB5Np3Gj41/5Rh7qMX
- VWm7f5H6uDgpVpUgMsCrCAWkvIxqsUVyewPOJMaDFVKghTQ2gSeUOSkgCSevb3VlYmv7YqWdA6S
- SQ4VS6gFdb36dl6el+/JuIZFTsPyr3f/FZ3iVUo/vh88EogcQUGQtJDUL/dm1zeBy7YwrqrlC0Q
- kgJppd4PLKHoLNO+0Qg8QmXAFssJAH5fFSn4FEEylDw8JrBwwIUSR3O+aVRcY6lmfNtKt8YmFx0
- n39Yqs5AtnQm93Ww66t9nFf+35Q4XGs/8d31a9lS42eDDlAJlX2vwhOujk0Ft4EYrYluOa//GRQ
- RGT+2Xjvoq3DF/+Vy7+7TsWB39gc9PfZ1PzBUwi3SsTlZL2zHb
-X-Received: by 2002:a05:6a00:754f:b0:81a:b602:daf6 with SMTP id
- d2e1a72fcca58-82a19910d05mr5311597b3a.48.1773529520303; 
- Sat, 14 Mar 2026 16:05:20 -0700 (PDT)
-Received: from localhost.localdomain ([185.216.231.84])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-82a0738422esm9575472b3a.55.2026.03.14.16.05.19
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Sat, 14 Mar 2026 16:05:19 -0700 (PDT)
+ bh=2DXm0lR48P4UHXPjIi6OyXyxSRvBGBpjKmHrUJUjol8=;
+ b=SHQChmhvYoPGgcCWJhFimlS2aYsuMCFAdfOIlE8KgGv9UBIxqnAXRkXZruxf4vumLL
+ tV4nB5xLavgGPw3h7rrrURyXCM6WWOip8OM1XSLFqnYoVp4oTFtvHVEbm1WnxtTeyh3T
+ 2xVFfONwz9lniHgv27/SJs2qreuhNW26RBRThbLlzp8NOweAQnPRfERr0l10WY7YfmKZ
+ kuzfTjtYRCXq+juNStsKn5qKn3uBy12U/qTPh8UXrvn4/ceeNcprytPLOrcOHvjHQlBg
+ HhqBG5mBAe2JRF+fxaVc5XTD71KoFNKADHFIWc7XnD71MTdx5C+bjk63crXX35Jh5xP1
+ FSeg==
+X-Gm-Message-State: AOJu0YzxNv8owxQsvJ8M1jh6LQQ0xfj7pSmePYFJQ31zUVFbFO9rDu4/
+ qhSwMxDwWdCfNpvUau11xVPs4q1vdz/p+4sCDR2eMGUWYQaeXNROYhVeJtnFFZ3h+cZFOWp8+1I
+ NYeAl
+X-Gm-Gg: ATEYQzyy5juRykd8YKqGSxA6Bb16LB8cxOvC0s9bybLAHwKB8+bjH9XoOoCm3oFdkRu
+ ovei64/sG1smAhRZo4Le6S1QuSUJATIqL7mpW2cFF6nl+Dd4Zh3qTN+APQtaMeUzGn/C89Ozopz
+ pPn2FjVHaD1sy7XyxNXYirOo7aCFTPzSvDRUiejSmGiL1JkhJ4GjNNp8PdGJgJd61vjResQdB+p
+ uoBExk4yqkYe2/GIleE8W/XYx+yb1bjQqHw+kXS87682nJNI3qa4hXlXsKOnzvIb1C9pzx/i06h
+ 0w0q1lw2IGshY/D2zVSBRx2h2UPjMO7x4c6m34SY/bLJe1/36wf7zkIhZ99wOtSbfqpZKXyA8om
+ Xknc3mfoBl81YPyytBFbQXrDb8nIf5ElbjooNG8x4iPHGLjv4E8/mrU1VWCyxBNf8SLdEcXFy7y
+ 35ewVBav38TzgbuMPjXyHKtOrRYJUcwOfT9R/qrHpV6gYO/pxR2hq0P4hqYynlXcasg2NXsw==
+X-Received: by 2002:a17:907:724c:b0:b96:fbeb:f7b0 with SMTP id
+ a640c23a62f3a-b976513ecd2mr460054166b.39.1773529631750; 
+ Sat, 14 Mar 2026 16:07:11 -0700 (PDT)
+Received: from flashback (85.184.166.47.static.dhcp.aura-net.dk.
+ [85.184.166.47]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b976cba6e4bsm298001066b.3.2026.03.14.16.07.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 Mar 2026 16:07:11 -0700 (PDT)
+From: stephan@asklandd.dk
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 16:05:17 -0700
-Message-ID: <20260314230517.4160-1-christian@aperture.us>
-X-Mailer: git-send-email 2.50.1
+Cc: Stephan Henningsen <stephan@asklandd.dk>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 15 Mar 2026 00:07:08 +0100
+Message-ID: <20260314230709.2917642-1-stephan@asklandd.dk>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1773529520; x=1774134320; darn=buildroot.org;
+ d=asklandd-dk.20230601.gappssmtp.com; s=20230601; t=1773529632; x=1774134432;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=b5KXXlmNm/rT+nIrVmWz3oaOCIH09Qoc43fC25AkdpA=;
- b=TU69Dh4tcW6LlpJ6SWa2F7E5Qg+TDAImeTfZcmgXZbigSJQr74/qytY7rmVCrA+c3R
- YrZZ7ZLttFdqi8SueY270ZCQJjPEKv0tciNaB6fbebUy56yaZ63cH8RwIntcvZBI15Hj
- 98KeUDAhXM9jxC70mU8AgRalLWxQujPgUrhNQePUbDVVxVfJO2op3pRDgtgTgQ8o0Bwi
- kc1MzA++LVlFfrInKPO9QnL7GCbjKImvaNciFSRnn/yEhWw08NeIFZ/T+j+8G+uRzwuK
- CQahrOtVcnh36ETVA6/TA0obgO2fgaU5LF4osCByqgYQUDtIECBB6ztEw+9VJz9oNe4/
- V6UA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=TU69Dh4t
-Subject: [Buildroot] [PATCH v1 1/1] package/rtl8812au-aircrack-ng: fix build
- with Linux 6.19
+ bh=2DXm0lR48P4UHXPjIi6OyXyxSRvBGBpjKmHrUJUjol8=;
+ b=UwgMtCxldmBnALYki6PpPNO+EfvPbZTe7mhvkATJHTYrabIZpMV6dgjzM31iVHcZ8R
+ XyIETE98+J7djakL//NiNybaK3L45ZaeKKIyrtjo2Mjhmu3rZhOScK4HX4doI4UgyJyR
+ zdBkmFYNbBQS4OXEj53VN/gxh8f7XxLqJeQHVvoXBF+jaK4mUcL3wz+dtZzMyX7HxWG0
+ C24LXjdv6LmdGaxAc4KHljglk6qNa7k1MwNQQhKBTkdAW5F9eWUzLzPluX9mau99UGVS
+ ql7nIpTukZBvBwwxfGttoQXp901EZ6Cxcd0iBuD0WWN+6s/qDexImI99nY+XMs5cguyO
+ 1D3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=asklandd.dk
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=asklandd-dk.20230601.gappssmtp.com
+ header.i=@asklandd-dk.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=UwgMtCxl
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: add patch to use
+ correct fs search path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,69 +122,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Olivain <ju.o@free.fr>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch pending upstream to fix build failure with Linux 6.19.
+From: Stephan Henningsen <stephan@asklandd.dk>
 
-Upstream: https://github.com/aircrack-ng/rtl8812au/pull/1254
+When using /bin/mount to mount filesystems that are not supported
+directly by the kernel, it delegates the mount operatin to helper
+programs, e.g. mount.fuse.sshfs.  Normally /bin/mount searches
+these directories in order for a helper: /sbin, /sbin/fs.d, /sbin/fs.
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+In reality, Buildroot installs e.g. mount.fuse.sshfs into /usr/sbin,
+and as a result /bin/mount fails to mount sshfs entries defined in
+/etc/fstab.
+
+The patch changes the default search path defined by FS_PATHS_DEFAULT
+in configure.ac to /sbin, /usr/sbin so mount can find the helper.
+
+Signed-off-by: Stephan Henningsen <stephan@asklandd.dk>
 ---
- .../0004-fix-build-for-kernel-6.19.patch      | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/rtl8812au-aircrack-ng/0004-fix-build-for-kernel-6.19.patch
+ .../0001-default-search-path-for-fs-helpers.patch    | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/util-linux/0001-default-search-path-for-fs-helpers.patch
 
-diff --git a/package/rtl8812au-aircrack-ng/0004-fix-build-for-kernel-6.19.patch b/package/rtl8812au-aircrack-ng/0004-fix-build-for-kernel-6.19.patch
+diff --git a/package/util-linux/0001-default-search-path-for-fs-helpers.patch b/package/util-linux/0001-default-search-path-for-fs-helpers.patch
 new file mode 100644
-index 0000000000..64101a5709
+index 0000000000..1d88bdf9ac
 --- /dev/null
-+++ b/package/rtl8812au-aircrack-ng/0004-fix-build-for-kernel-6.19.patch
-@@ -0,0 +1,37 @@
-+From f17facc866cb36bc889f873beb36e7991fa5e71c Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@aperture.us>
-+Date: Sat, 14 Mar 2026 14:53:48 -0700
-+Subject: [PATCH] Fix build for kernel 6.19
-+
-+With kernel 6.19 and CONFIG_X86_KERNEL_IBT or CONFIG_KLP_BUILD enabled,
-+objtool runs on the linked module object (delayed objtool via --link).
-+The module Makefile passes --strip-all to ld -r, which strips local
-+function symbols. Without these symbols, objtool cannot determine
-+function boundaries and reports errors like:
-+
-+  88XXau.o: warning: objtool: rtw_mp_cmd+0xf8: unannotated intra-function call
-+
-+Replace --strip-all with --strip-debug to preserve function symbols
-+while still stripping debug information, allowing objtool to properly
-+validate the linked module object.
-+
-+Upstream: https://github.com/aircrack-ng/rtl8812au/pull/1254
-+Signed-off-by: Christian Stewart <christian@aperture.us>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+--- a/Makefile
-++++ b/Makefile
-+@@ -22,7 +22,7 @@
-+
-+ ccflags-y += -I$(src)/include -I$(srctree)/$(src)/include
-+ ccflags-y += -I$(src)/hal/phydm -I$(srctree)/$(src)/hal/phydm
-+-ldflags-y += --strip-all -O3
-++ldflags-y += --strip-debug -O3
-+
-+ ########################## WIFI IC ############################
-+ CONFIG_RTL8812A = y
-+--
-+2.50.1 (Apple Git-155)
++++ b/package/util-linux/0001-default-search-path-for-fs-helpers.patch
+@@ -0,0 +1,12 @@
++diff -purN util-linux-2.41.1.orig/configure.ac util-linux-2.41.1/configure.ac
++--- util-linux-2.41.1.orig/configure.ac	2025-06-24 07:55:28.420692425 +0000
+++++ util-linux-2.41.1/configure.ac	2026-03-14 21:40:16.749465392 +0000
++@@ -2919,7 +2919,7 @@ AS_IF([test "x$enable_pg_bell" = xyes],
++ ])
++ 
++ 
++-AC_DEFUN([FS_PATHS_DEFAULT], [/sbin:/sbin/fs.d:/sbin/fs])
+++AC_DEFUN([FS_PATHS_DEFAULT], [/sbin:/usr/sbin])
++ AC_ARG_ENABLE([fs-paths-default],
++   AS_HELP_STRING([--enable-fs-paths-default=paths], [default search path for fs helpers @<:@FS_PATHS_DEFAULT@:>@]),
++   [AS_CASE([$enableval],
 -- 
 2.53.0
 
