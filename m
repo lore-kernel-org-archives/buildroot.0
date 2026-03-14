@@ -1,87 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5083F10706D7
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 12:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8E9B10706CD
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 12:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C95CE40B4C;
-	Sat, 14 Mar 2026 12:23:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A6E860733;
+	Sat, 14 Mar 2026 12:32:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j7_U0Rw2JVX7; Sat, 14 Mar 2026 12:32:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC3FD6075D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773491554;
+	bh=EXftHmkAmVl+zXVlz/lst13F84WH4RvrX6Xi/U1wn3Y=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=lGW6erVOVoQEeOWx9oVHE19y+XnJeOHHQxtKfpiKz0AKk7afJnZMQg5UyxPrbpR1V
+	 edLnZ2lj1KShSG8ekG0ppyYIRwtVjVzXHRnEK8t3s3j/EGBdZ8TFmYdvKAkjsFhh+i
+	 f/Q3odU8XPkaxJhK4xhSHxhiymW7Mwx5xMKPrVMQJuKhx9BuRMPnZaclonyUTCaUg5
+	 bYfNtByoc0Pt7F0xk1ZYU77yofja/HCEqhPcD8n/lXq6T7WSRV/PXeTShw5M4dfr/E
+	 1nduUEIgiHNhCTXhllFOnff8M4qvYE8vCcPc8AS/LCaO+k6Lmk4BJastjMfII8n6oj
+	 cDbrgCQZdetDw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC3FD6075D;
+	Sat, 14 Mar 2026 12:32:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AD1A201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:32:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20C9F40786
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:32:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MALZwVNIfVer; Sat, 14 Mar 2026 12:23:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6B4740B60
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773491015;
-	bh=Yu206wXMkoGpZDeSotnMznhlQLrysgmmBHhnz6wJOY4=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=VTfyeXHRTGaYPEYGpkVQUgrih/U8Yasrsky3inzj9qYYTeN8E1KCVVBst/XiZ5Xim
-	 yHvk4a4mOkw3Z2+zYKxlYQfyeU5PSbTqsiSa+ogwRQpuWJnrDb9SSq2DnLj5hqXGyu
-	 9xRDZTkz9KYoYW0O+jhAitK+i2CCpyB7madcA/uO32c7bowiCy+dNjYefO7yuU0bJK
-	 rIHcWhvEWAUpkPxzRalCxPknL739w9fIrstonnC+Bwt8yCgRndFwka8EgI6YF9aF8b
-	 wBNdVVtMYxMSnwrqrFTcQuvcsdcJGL7roRB3suNRpDZURfhbk9lMzsa+Cn1ryMd3gH
-	 QY7bPVFXJcRQw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6B4740B60;
-	Sat, 14 Mar 2026 12:23:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E3C2B1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:23:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0AFE401BC
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:23:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5S1UvpxyYjdT for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 12:23:32 +0000 (UTC)
+ id Us4HOUcfYXnU for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 12:32:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 068604019B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 068604019B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EED9E40785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EED9E40785
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 068604019B
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:23:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EED9E40785
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:32:32 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AA066A4C11F9;
- Sat, 14 Mar 2026 13:23:27 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56432)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4831FA4C0E21
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 13:32:30 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37614)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1O1f-000000002Aj-04W8;
- Sat, 14 Mar 2026 12:23:27 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1OAP-000000003lN-3wXB
+ for buildroot@buildroot.org; Sat, 14 Mar 2026 12:32:30 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Sat, 14 Mar 2026 13:23:26 +0100
-Message-ID: <20260314122326.600040-1-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 13:32:29 +0100
+Message-ID: <20260314123229.1234005-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773491007;
- bh=27UJWaIWcpnlS+ZnEXpMUQuXP86vR8//fNo++N+FuME=;
- h=From:To:Cc:Subject:Date:From;
- b=Bkpa/lhovC2Y9pogN+YesVw9moe+LP6u/psaW2fAfJpbZ33qwUMeql+60DQuEdidT
- VAw11C/VbLLuxzL6zbEUIqQ414MPgZVi19/0IqQBlJorYBZd3r5KENTHEUCluAnmIu
- llJLNMtCKfxW1SRRJpsKSQrbMxfpdD+G67q6tq2ee8UZMgsbjie0R6SfEODY0SHphj
- 5/xQOF3bmByTuTQ8VYXlvp1Y13gtsRNif8Om9X4H8ZKWUtzQXkijWsPK1p8rC4hrsH
- a3FCrC/im/+pXuZ6ohvpRydf6b88dbbd8K22bzubvtGImra8Eqa8MOruQZ6MkHuNKv
- zBLwccWlf7KRw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202511301023; t=1773491550;
+ bh=PTjlev1DxjugYlUswYwBTEdwDWH0MNfjjduchSkNyuU=;
+ h=From:To:Subject:Date:From;
+ b=a5wFmRRDuwTMg2PJ6nWu577W0lBw2KP2aHZDCZguwWmzRs7M/+uuQmEZaFYojbhaU
+ hk29S6YWRxmjSNXbaS3cnWvO6lBTyRyz1vGloFYflrAM5Bz9binwtZhnBGxSY+HgPu
+ d8HFuh8NZq6KCadGU1c83gUK2FrWA7E1wRD61KHi1XiWZBLw/8YFLcaUYETDxoeaC3
+ 0hf8Q9ccEc0KF/uVuevgmBfzZ4VOFFmWzViVls/GSmjmtWVs+esVMjHMfw5GD5pSwK
+ jVXIdcwu0TQgKXl3xkusF5BN9Me9wZcitK8QJeTmnAY/JB0b6o/i+tcilxnBhB3EMg
+ eMltMgqUek40g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=Bkpa/lho
-Subject: [Buildroot] [PATCH 1/1] package/libxml2: security bump version to
- 2.15.2
+ header.s=kas202511301023 header.b=a5wFmRRD
+Subject: [Buildroot] [PATCH 1/1] package/xz: bump version to 5.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,79 +96,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.2.news
+https://github.com/tukaani-project/xz/releases/tag/v5.8.2
+"- Fix the build on ARM64 on glibc versions older than
+   2.24 (2016). They don't have HWCAP_CRC32 in <sys/auxv.h>."
 
-- CVE-2026-1757 fix: Memory leak in xmllint Shell - shell.c
-- CVE-2026-0990 fix: Prevent infinite recursion in
-  xmlCatalogListXMLResolve
-- CVE-2026-0992 fix: Exponential behavior when handling
-- parser: Fix infinite loop in xmlCtxtParseContent
-- CVE-2025-10911 libxslt related: Ignore next/prev of documents when
-  traversing XPath
-- CVE-2026-0989 fix: Add RelaxNG include limit
+Updated license hashes due to upstream commit
+https://github.com/tukaani-project/xz/commit/6d287a3ae90e1b990294f3d5264003d81e853c5e
+
+Fixes:
+https://autobuild.buildroot.net/results/b0d/b0dbae7b2c884f5fef0017755b28932a83921a5a/
+"check/crc32_arm64.h:27:25: fatal error: sys/auxv.h: No such file or directory
+   27 | #               include <sys/auxv.h>"
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...evert-cmake-Fix-installation-directories-in-libxml2.patch | 5 +++--
- package/libxml2/libxml2.hash                                 | 4 ++--
- package/libxml2/libxml2.mk                                   | 2 +-
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/xz/xz.hash | 8 ++++----
+ package/xz/xz.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch b/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch
-index 75232b6f00..70f1d9899c 100644
---- a/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch
-+++ b/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch
-@@ -8,6 +8,7 @@ This reverts commit 75dde50b20215a2a3a445b62f36a67c8ed337cab.
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 0e0618ec02..99daa5e9df 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,11 +1,11 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.bz2.sig
++# https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.bz2.sig
+ # using key 3690C240CE51B4670D30AD1C38EE757D69184620 Lasse Collin <lasse.collin@tukaani.org>
+-sha256  5965c692c4c8800cd4b33ce6d0f6ac9ac9d6ab227b17c512b6561bce4f08d47e  xz-5.8.1.tar.bz2
++sha256  60345d7c0b9c8d7ffa469e96898c300def3669f5047fc76219b819340839f3d8  xz-5.8.2.tar.bz2
  
- Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/issues/898#note_2452864
- 
-+[Bernd: rebased for 2.15.2]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  configure.ac            | 11 -----------
-@@ -19,7 +20,7 @@ diff --git a/configure.ac b/configure.ac
- index 4eb629bb..150e06eb 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1006,17 +1006,6 @@ AC_SUBST(XML_PRIVATE_LIBS)
-+@@ -1008,17 +1008,6 @@ AC_SUBST(XML_PRIVATE_LIBS)
-  AC_SUBST(XML_PRIVATE_CFLAGS)
-  AC_SUBST(XML_INCLUDEDIR)
-  
-@@ -70,7 +71,7 @@ diff --git a/meson.build b/meson.build
- index 31c73b62..8728852c 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -577,9 +577,6 @@ config_cmake = configuration_data()
-+@@ -590,9 +590,6 @@ config_cmake = configuration_data()
-  config_cmake.set('LIBXML_MAJOR_VERSION', v_maj)
-  config_cmake.set('LIBXML_MINOR_VERSION', v_min)
-  config_cmake.set('LIBXML_MICRO_VERSION', v_mic)
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 637ba52bb8..35c8810ed9 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.1.sha256sum
--sha256  c008bac08fd5c7b4a87f7b8a71f283fa581d80d80ff8d2efd3b26224c39bc54c  libxml2-2.15.1.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.2.sha256sum
-+sha256  c8b9bc81f8b590c33af8cc6c336dbff2f53409973588a351c95f1c621b13d09d  libxml2-2.15.2.tar.xz
- # License files, locally calculated
- sha256  5d4873884a890122a4b9b20ad56ac6f7da1d796a5bfcf04a427970ac96217626  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 35d373e130..0a365fa689 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+ # Hash for license files
+ sha256  616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8  COPYING
+ sha256  0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1  COPYING.0BSD
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
++sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING.GPLv2
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING.GPLv3
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
++sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LGPLv2.1
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index b1e210a172..8aa0716b18 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.15
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).1
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).2
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-XZ_VERSION = 5.8.1
++XZ_VERSION = 5.8.2
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
+ XZ_INSTALL_STAGING = YES
 -- 
 2.47.3
 
