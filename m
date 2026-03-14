@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC50A106FD70
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 20:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBFE410854A8
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 20:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A49DB60F89;
-	Sat, 14 Mar 2026 20:30:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07324821BE;
+	Sat, 14 Mar 2026 20:46:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C4r3jAiDewxt; Sat, 14 Mar 2026 20:30:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qj5kEgMHOGt4; Sat, 14 Mar 2026 20:46:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFB5360F7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC3B682151
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773520246;
-	bh=jldhMgUe0iyCmGbMCUdyG3T+yE1ogpzAcdzqwmUrzUw=;
-	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=iLq4z2X/IR2rOdRH8/ZPpznS3bSItocpSvwZusJ/9yU9vmrH1q4CfFxn4Ly0iFflH
-	 t7YTuT+d41wPzz1DJx/6NqLh5jWSjTQsNPlCxZnZWWR23IF7a2lHWoe4T0hJ7PAnsD
-	 tABEa0cM83tejV7ydYxsmIbBBn51jO1PJBNGC17RukhWQpfHBlnVyRYUo0rHYF43Ya
-	 obwaXpRDZ5aRSR3DzO/JZlkCHS9xa4WZbhzYs/RwRUXJ3dsBuu+ll6gFAXySed4bqd
-	 J5xkgBw8qeo/XRPKfAYaC4wZVVieRm5L2+swuNqvVOl+m3Ni/5vrz/deD2NhBubt49
-	 J/FL5DM9cOJzA==
+	s=default; t=1773521174;
+	bh=Z8LjgGAEiXJXUzD7TReT7+91cajyVMdwhuNq8qug9RQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=X2I0vTdimceO3xf4iF/Atg05fvoQHiq28T3f79ELCpszuHs8bFiDkIglXlksW3p2O
+	 CM6Q5T7aOaBWx61kiZBCPnD5jbTfNTNKs+VIlhIpjoDXDBerUsUhNsO0trn3luO5ir
+	 jeYqJuhRXbTnVPS2tJhXKOCMrPt/R8LVnFu9LBpNF1z4J5jBIV5LRuHL/3clD0OB0V
+	 wBzz+5uUOmmic6GNTisOBl/zn3SgKU8mNbY1SwLylMRG4VFUzhuT1DnRhBO+vFjh1u
+	 mj1loG+jagjMk70lKgcEI4P0sT5InkObRbvsdnay/kz4ElelQ2ZJZREmvecNRxrsOz
+	 fgcGfMTuYjrRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFB5360F7C;
-	Sat, 14 Mar 2026 20:30:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 617DA1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:30:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC3B682151;
+	Sat, 14 Mar 2026 20:46:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ECF6C118
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46E4940479
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:30:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2B4D404A7
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:46:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZYdNDbzzOHbL for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 20:30:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AFF45403C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFF45403C6
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AFF45403C6
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:30:43 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.3])
- by mail.tkos.co.il (Postfix) with ESMTP id D5F2A440588;
- Sat, 14 Mar 2026 22:30:25 +0200 (IST)
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,  Thomas Perale
- <thomas.perale@mind.be>
-In-Reply-To: <20260306195347.8941-1-thomas.perale@mind.be> (Thomas Perale via
- buildroot's message of "Fri, 6 Mar 2026 20:53:47 +0100")
-References: <20260227194921.3401564-1-giulio.benetti@benettiengineering.com>
- <20260306195347.8941-1-thomas.perale@mind.be>
-User-Agent: mu4e 1.12.15; emacs 30.2
-Date: Sat, 14 Mar 2026 22:30:39 +0200
-Message-ID: <87h5qiqhlc.fsf@tarshish>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1773520225;
- bh=ccgRA1oCQsDwQDiJ7ErsiTtjwozif8rYRENrVDt4MZs=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=yhwgzMB++TTGsiueXKX1P2AO6MK0cAk2QypLme+/O0h1ovMcTnI+GNNxP4145Cz0J
- Ewp2L3XSnpMl075ph+o9pt+whHgx/3PIRPQI1IAHPNfUoo4uRQV4CSJq/Zf09WJ3oW
- SMPuSS1e/XmWU9muNUX6dsuSAHKNEjNsI7OlsJ5X/NERN0w8RD/fjCHU8bl55E88UN
- yMMhSo73nRp+SoeH0DBkm5uBdJvSITKXOx8hsWPxC+wGw4Wf4RVW54xisW6/CkSHKi
- MXO+7SyvBktq5boMa6IBBB8mbShwqk9lSoYifFWwXl4hbhnvcMVSxdxNn2R41Rxvzp
- VLtyYwpFs9HFg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=yhwgzMB+
-Subject: Re: [Buildroot] [PATCH] package/udisks: security bump to version
- 2.11.1
+ id Nq_yPrjLAXC4 for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 20:46:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CF7340498
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CF7340498
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:46:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 42D9386267; Sat, 14 Mar 2026 20:46:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 14 Mar 2026 21:38:16 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9b839527e38a2ed71ab7d5432ad740d5e7b71962
+X-Git-Newrev: 66b617af7bc53c9e4dfb3bc12a75902417847666
+X-Patchwork-Hint: ignore
+Message-Id: <20260314204612.42D9386267@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iwd: bump version to 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,79 +68,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Tomas,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/66b617af7bc53c9e4dfb3bc12a75902417847666
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On Fri, Mar 06 2026, Thomas Perale via buildroot wrote:
-> In reply of:
->> This fixes these CVEs:
->> CVE-2026-26103:
->> https://github.com/storaged-project/udisks/security/advisories/GHSA-c75h-phf8-ccjm
->> CVE-2026-26104:
->> https://github.com/storaged-project/udisks/security/advisories/GHSA-fcvx-497g-6xmw
->> 
->> Release notes:
->> https://github.com/storaged-project/udisks/releases/tag/udisks-2.11.1
->> 
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->
-> Applied to 2025.11.x. Thanks
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog?h=3.12
 
-Not in 2025.11.x as of commit 0e13702babe60 ("package/libvips: fix
-static build").
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-baruch
-
->
->> ---
->>  package/udisks/udisks.hash | 2 +-
->>  package/udisks/udisks.mk   | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->> 
->> diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
->> index a62e6b5ed6..8a70b90a67 100644
->> --- a/package/udisks/udisks.hash
->> +++ b/package/udisks/udisks.hash
->> @@ -1,3 +1,3 @@
->>  # Locally calculated
->> -sha256  0bf30151fe8d9d2fb59b57f6630739dfbbd16417dee69ec57d43b37335bd649a  udisks-2.11.0.tar.bz2
->> +sha256  e88c52bae02fa13414604bbef42c6bb91c2e24177ee0057ed55c6bd7451bcb6d  udisks-2.11.1.tar.bz2
->>  sha256  98046e932dc6c739001e79d7079a3bd958fc55475dcd917d27f884c0c93525cc  COPYING
->> diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
->> index c9b66872e9..43d066c9e1 100644
->> --- a/package/udisks/udisks.mk
->> +++ b/package/udisks/udisks.mk
->> @@ -4,7 +4,7 @@
->>  #
->>  ################################################################################
->>  
->> -UDISKS_VERSION = 2.11.0
->> +UDISKS_VERSION = 2.11.1
->>  UDISKS_SOURCE = udisks-$(UDISKS_VERSION).tar.bz2
->>  UDISKS_SITE = https://github.com/storaged-project/udisks/releases/download/udisks-$(UDISKS_VERSION)
->>  UDISKS_LICENSE = GPL-2.0+
->> -- 
->> 2.47.3
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 7ad2fb382d..67064e35eb 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  640bff22540e1714f71772a83123aff6f810b7eb9d7d6df1e10fb2695beb5115  iwd-3.10.tar.xz
++sha256  d89a5e45c7180170e19be828f9e944a768c593758094fc57a358d0e7c4cb1a49  iwd-3.12.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index a150a3048b..caecb62d64 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 3.10
++IWD_VERSION = 3.12
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
