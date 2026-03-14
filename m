@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF180106ACF9
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 20:29:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC50A106FD70
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 20:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2581160F8B;
-	Sat, 14 Mar 2026 20:29:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A49DB60F89;
+	Sat, 14 Mar 2026 20:30:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jXfU30EZA3Jc; Sat, 14 Mar 2026 20:29:53 +0000 (UTC)
+ id C4r3jAiDewxt; Sat, 14 Mar 2026 20:30:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF65460853
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFB5360F7C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773520193;
-	bh=ndTQz/MC6FyLCl4VYy/wCScNLxxeqSpNE6rgPCfsIjQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1773520246;
+	bh=jldhMgUe0iyCmGbMCUdyG3T+yE1ogpzAcdzqwmUrzUw=;
+	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pf+rxgl4eTSFrDhjXUJEEVYcDiR2/9WgZjl9G0DrQPrBD5nYEJdn2CH3rn0MT0+gW
-	 vzsQo30Y5bgVudiifiXGrevSMbUPVAM/OCNnp2bt9YNIq8IQMRRJriVZm5WMq679Wi
-	 N/UQ7unfBMppAi7VorqDrlkdjC0iWCz5RGuclx/TOlhkPZj074QeHRFuU5rqbWzwS1
-	 rjpC1B/cY2FtWNPjB0BgWWgU55y4JdIxjwIjJ6TMBWaNcZ5ADCiTIopPE/wkoL/wyy
-	 jxxyQFNebZccp3uY1eYQCJYPYlMSVd1EoXRlwwPh0tsVNFrggUIYq8TumzyJ/rx5rZ
-	 ii5En32fVtv4w==
+	b=iLq4z2X/IR2rOdRH8/ZPpznS3bSItocpSvwZusJ/9yU9vmrH1q4CfFxn4Ly0iFflH
+	 t7YTuT+d41wPzz1DJx/6NqLh5jWSjTQsNPlCxZnZWWR23IF7a2lHWoe4T0hJ7PAnsD
+	 tABEa0cM83tejV7ydYxsmIbBBn51jO1PJBNGC17RukhWQpfHBlnVyRYUo0rHYF43Ya
+	 obwaXpRDZ5aRSR3DzO/JZlkCHS9xa4WZbhzYs/RwRUXJ3dsBuu+ll6gFAXySed4bqd
+	 J5xkgBw8qeo/XRPKfAYaC4wZVVieRm5L2+swuNqvVOl+m3Ni/5vrz/deD2NhBubt49
+	 J/FL5DM9cOJzA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF65460853;
-	Sat, 14 Mar 2026 20:29:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A8FAA1B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:29:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFB5360F7C;
+	Sat, 14 Mar 2026 20:30:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 617DA1B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8ED77823E2
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:29:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46E4940479
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FIDJRKM3ZzwM for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 20:29:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B4D92823DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4D92823DD
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B4D92823DD
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:29:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 511065FFBA;
- Sat, 14 Mar 2026 21:29:45 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Mar 2026 21:29:45 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZYdNDbzzOHbL for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 20:30:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AFF45403C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFF45403C6
+Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AFF45403C6
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 20:30:43 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.3])
+ by mail.tkos.co.il (Postfix) with ESMTP id D5F2A440588;
+ Sat, 14 Mar 2026 22:30:25 +0200 (IST)
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,  Thomas Perale
+ <thomas.perale@mind.be>
+In-Reply-To: <20260306195347.8941-1-thomas.perale@mind.be> (Thomas Perale via
+ buildroot's message of "Fri, 6 Mar 2026 20:53:47 +0100")
+References: <20260227194921.3401564-1-giulio.benetti@benettiengineering.com>
+ <20260306195347.8941-1-thomas.perale@mind.be>
+User-Agent: mu4e 1.12.15; emacs 30.2
+Date: Sat, 14 Mar 2026 22:30:39 +0200
+Message-ID: <87h5qiqhlc.fsf@tarshish>
 MIME-Version: 1.0
-Date: Sat, 14 Mar 2026 21:29:45 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
-In-Reply-To: <20260314122326.600040-1-bernd@kuhls.net>
-References: <20260314122326.600040-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <e0b8b426fe2141877328229b06fb298c@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1773520187;
- bh=IMlDfM3AgrUn+vzydXjHi8pm/x3r5EyId9/AMl9/Z2w=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=VNLAdpCj6S9YbzDM8QcncCaRPWykhiTxrKm2PHS3BEZlQn4wvK6BAypNyIQVCyjnL
- joUfWR8QSqUUsJTZyQLd4f3QNDvVqRiCoqhV9qq/SCMv/A5GzzujVOnaIAA0Bh69Xa
- HuK2NKII9mPpY/rej7CibGW9UZeKr3RviRGC0oBg3l62+1txVDiUVbKzO1g7bYIgFB
- XkVq5oHms8W60hZRuEZ2jZVXDg1lNExjk1MwTW1ty0oRYYTXai9ggi3qGSTAP8Cx11
- y8SE8OkxyCiTxyPJ+1fCOLJfwsdMakTlahAizOniJh005gOm7LrIy2AlBsDwVaDdHn
- kxoUqy5bOKKQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=tkos.co.il; s=default; t=1773520225;
+ bh=ccgRA1oCQsDwQDiJ7ErsiTtjwozif8rYRENrVDt4MZs=;
+ h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+ b=yhwgzMB++TTGsiueXKX1P2AO6MK0cAk2QypLme+/O0h1ovMcTnI+GNNxP4145Cz0J
+ Ewp2L3XSnpMl075ph+o9pt+whHgx/3PIRPQI1IAHPNfUoo4uRQV4CSJq/Zf09WJ3oW
+ SMPuSS1e/XmWU9muNUX6dsuSAHKNEjNsI7OlsJ5X/NERN0w8RD/fjCHU8bl55E88UN
+ yMMhSo73nRp+SoeH0DBkm5uBdJvSITKXOx8hsWPxC+wGw4Wf4RVW54xisW6/CkSHKi
+ MXO+7SyvBktq5boMa6IBBB8mbShwqk9lSoYifFWwXl4hbhnvcMVSxdxNn2R41Rxvzp
+ VLtyYwpFs9HFg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VNLAdpCj
-Subject: Re: [Buildroot] [PATCH 1/1] package/libxml2: security bump version
- to 2.15.2
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=yhwgzMB+
+Subject: Re: [Buildroot] [PATCH] package/udisks: security bump to version
+ 2.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,29 +92,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/03/2026 13:23, Bernd Kuhls wrote:
-> Release notes:
-> https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.2.news
-> 
-> - CVE-2026-1757 fix: Memory leak in xmllint Shell - shell.c
-> - CVE-2026-0990 fix: Prevent infinite recursion in
->   xmlCatalogListXMLResolve
-> - CVE-2026-0992 fix: Exponential behavior when handling
-> - parser: Fix infinite loop in xmlCtxtParseContent
-> - CVE-2025-10911 libxslt related: Ignore next/prev of documents when
->   traversing XPath
-> - CVE-2026-0989 fix: Add RelaxNG include limit
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Hi Tomas,
 
-Applied to master, thanks.
+On Fri, Mar 06 2026, Thomas Perale via buildroot wrote:
+> In reply of:
+>> This fixes these CVEs:
+>> CVE-2026-26103:
+>> https://github.com/storaged-project/udisks/security/advisories/GHSA-c75h-phf8-ccjm
+>> CVE-2026-26104:
+>> https://github.com/storaged-project/udisks/security/advisories/GHSA-fcvx-497g-6xmw
+>> 
+>> Release notes:
+>> https://github.com/storaged-project/udisks/releases/tag/udisks-2.11.1
+>> 
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>
+> Applied to 2025.11.x. Thanks
+
+Not in 2025.11.x as of commit 0e13702babe60 ("package/libvips: fix
+static build").
+
+baruch
+
+>
+>> ---
+>>  package/udisks/udisks.hash | 2 +-
+>>  package/udisks/udisks.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
+>> index a62e6b5ed6..8a70b90a67 100644
+>> --- a/package/udisks/udisks.hash
+>> +++ b/package/udisks/udisks.hash
+>> @@ -1,3 +1,3 @@
+>>  # Locally calculated
+>> -sha256  0bf30151fe8d9d2fb59b57f6630739dfbbd16417dee69ec57d43b37335bd649a  udisks-2.11.0.tar.bz2
+>> +sha256  e88c52bae02fa13414604bbef42c6bb91c2e24177ee0057ed55c6bd7451bcb6d  udisks-2.11.1.tar.bz2
+>>  sha256  98046e932dc6c739001e79d7079a3bd958fc55475dcd917d27f884c0c93525cc  COPYING
+>> diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+>> index c9b66872e9..43d066c9e1 100644
+>> --- a/package/udisks/udisks.mk
+>> +++ b/package/udisks/udisks.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -UDISKS_VERSION = 2.11.0
+>> +UDISKS_VERSION = 2.11.1
+>>  UDISKS_SOURCE = udisks-$(UDISKS_VERSION).tar.bz2
+>>  UDISKS_SITE = https://github.com/storaged-project/udisks/releases/download/udisks-$(UDISKS_VERSION)
+>>  UDISKS_LICENSE = GPL-2.0+
+>> -- 
+>> 2.47.3
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
