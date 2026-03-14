@@ -4,85 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D9B10706DC
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:06:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C51D10706DC
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A1BF40AE1;
-	Sat, 14 Mar 2026 14:06:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 612F440C69;
+	Sat, 14 Mar 2026 14:07:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vmE6cKBhcwdI; Sat, 14 Mar 2026 14:06:49 +0000 (UTC)
+ id d_FKFUa-kOSg; Sat, 14 Mar 2026 14:07:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A620840683
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88F4140C6A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497209;
-	bh=5lTNDg5q4gnEFOj7IHJ9dITvyOTZHyXd/vtdqZIlGhk=;
+	s=default; t=1773497221;
+	bh=NXeiUygwMhYwTTwwgpEHpBnuUjwiFCuty/PfsxS4NzI=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=oR/pALso4FbGhuLgjXUeum50lVHjGHX13jZmM/H2CZ5TwsUrT8DIztiP18Al6eV0u
-	 RcnuhcbsFQku8Qs102955X6q3oXfwB3SYQ/MTo88of6nqm5IRGwspfWzfZr/y9iJkl
-	 THh/RSPInmYEWuxjSB0/P1QFa/JGryR9LwzyERwEXk+3gC8NLgPMXj0KgBUIi/DRuK
-	 FJOjdx030xV5c1+BW4J+ANZzAy1f47W8M6sPAurEyRLily68r9vrxpbVq0To8czUGn
-	 +Oe+gXQtLt9QExk7di6Hurjzkox4ZQ8rirtgSWlJdiHCZEhWNF4V1EDvbCh5z+7e2S
-	 YRxsqOVyyR+pQ==
+	b=lHNPKX85LhXRP+moohlS4MLSRuHCng3M51ET6x4LSaMID6+/4C7AArJd68Qnw2CCS
+	 LC3eg2OLMKaRv4Qt+WsR4HZTXzWKkT9n33Ji6J4RUIX7CGc1TNAYXIDcL7b67mYFk5
+	 lY0dXEsgUT4jPd1e7PCZy9TcbLFD9Ogh5V+UI/maA7YSuEtSfVAEcIYRCINWX8kipU
+	 iSWIYJj2+oZIqTTvvJMntxy2H0UlfhUm6VWu2Ln95HPKA4aLz7M4zdSwZzLXw/7ksK
+	 kQgwQ01NLYvci+e3ggVJniaI7KT9K8wWKDXheLXDMOTeO7rbxtNs+UMnKUUh+sV3D/
+	 jHr1Fi6cwcBbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A620840683;
-	Sat, 14 Mar 2026 14:06:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 557C6201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88F4140C6A;
+	Sat, 14 Mar 2026 14:07:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1C9A3C6
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B63440683
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7D0B8129F
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lHh96t_iTv5g for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:06:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AIg5-MJvPB43 for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:06:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 273474064D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 273474064D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD9048129A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD9048129A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 273474064D
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD9048129A
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:58 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A2CD2A4C13DD;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BCD89A4C13EE;
  Sat, 14 Mar 2026 15:06:33 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdR-000000003UM-0Zas;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdR-000000003UM-0xY1;
  Sat, 14 Mar 2026 14:06:33 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:04:58 +0100
-Message-ID: <20260314140633.2967249-2-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:04:59 +0100
+Message-ID: <20260314140633.2967249-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497193;
- bh=jNGGFsF7DrnopX14KO1YoYdC27RgfhBZtyUANnyg7M4=;
+ bh=1Qbs8miSAris7+ClHoDVr9GlgIrzHJsurbF3An2ucT8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=A9fssrBGHchTUjm3ku24QYcimm+/Qdz/OszPf4CVgAjIUvy2QLz8yYk4W95x7nu/o
- jT4BumOWueIoADpAiOgU8lOT8meKS/N1neHXlmmFlcZLUwMc3gU7jV6kYDnOS6jx19
- h69lGFlHYHjYp+5ulp19dfbysKPU/Di5VzI0c4n5IFz35LWjPRr1m7SLZFhqi+SzKw
- O5OtQWW3CQyCh+Lda1ZXRxvIB+6pgZKqODX1XUTvP5cYAKqfiyyv6/qKTZbODgdAkJ
- 4tnDvkEB2ZqapYia3fEtRB5mXf6K9NdobkuCcy2K8aKl/vis/NGoIpHYcW1xwBjSkV
- 7VT3Kyr5FYySQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Tp1m5jsgYxFLRWB/sqMLk5sCnmPLMrJV50OlAuoCeGMMUmQ2ijh9HlxUX8iA6z+iq
+ 2Hkg5VufBwvjfalOBId5TkkWgCSaC7rS+dhJ8b23hrXZWgivaLegeGAGYV6CqvfYY1
+ hohNBk+OyLqcmsaagE61/4yR8wXq64Y2bB3obzCFBs1N3iCTErkTfFq+VqD3xWAnBB
+ CZGn/NnVhp0t+8OCsR/IqVfOsXTye05zHOalKXwZlGhAMfVCUOR1Z5qhFuyiszETIu
+ UtU3ndV93IRh6pkJqQ/L+pr8S4O/Y32hd0DwiZs+1/dFKMmFQzoz+lSbfkCq5cWIjv
+ vZorrRKPJCTOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=A9fssrBG
-Subject: [Buildroot] [PATCH 02/96] package/python-aenum: bump version to
- 3.1.16
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Tp1m5jsg
+Subject: [Buildroot] [PATCH 03/96] package/python-aiomqtt: bump version to
+ 2.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,40 +117,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://github.com/empicano/aiomqtt/blob/v2.5.1/CHANGELOG.md
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-aenum/python-aenum.hash | 4 ++--
- package/python-aenum/python-aenum.mk   | 4 ++--
+ package/python-aiomqtt/python-aiomqtt.hash | 4 ++--
+ package/python-aiomqtt/python-aiomqtt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
-index 9c59804d6e..dcef45a701 100644
---- a/package/python-aenum/python-aenum.hash
-+++ b/package/python-aenum/python-aenum.hash
+diff --git a/package/python-aiomqtt/python-aiomqtt.hash b/package/python-aiomqtt/python-aiomqtt.hash
+index eab5a1938f..01dc68f671 100644
+--- a/package/python-aiomqtt/python-aiomqtt.hash
++++ b/package/python-aiomqtt/python-aiomqtt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aenum/json
--md5  f3fa11cda9ddaaed4d3f03b35f3a65ea  aenum-3.1.15.tar.gz
--sha256  8cbd76cd18c4f870ff39b24284d3ea028fbe8731a58df3aa581e434c575b9559  aenum-3.1.15.tar.gz
-+md5  2e00e2da1c6a2aa8b6a8fae85292e44a  aenum-3.1.16.tar.gz
-+sha256  bfaf9589bdb418ee3a986d85750c7318d9d2839c1b1a1d6fe8fc53ec201cf140  aenum-3.1.16.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiomqtt/json
+-md5  9ded3fea036dc979d7855a6b3fd1dc33  aiomqtt-2.4.0.tar.gz
+-sha256  ab0f18fc5b7ffaa57451c407417d674db837b00a9c7d953cccd02be64f046c17  aiomqtt-2.4.0.tar.gz
++md5  75cb0ed1ad029d19cb76478879aba12b  aiomqtt-2.5.1.tar.gz
++sha256  25a0a47d157e8f158d2da1110ea4786c0615518751e94f7b04976c977a8ff20d  aiomqtt-2.5.1.tar.gz
  # Locally computed sha256 checksums
- sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
-diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
-index 27f9e5cea6..4b59216722 100644
---- a/package/python-aenum/python-aenum.mk
-+++ b/package/python-aenum/python-aenum.mk
+ sha256  2cdee9e997c759749069649dfb9060fdb885da82bc50c0dcb4841b1dcab0b032  LICENSE
+diff --git a/package/python-aiomqtt/python-aiomqtt.mk b/package/python-aiomqtt/python-aiomqtt.mk
+index c5b932838d..53a2125d87 100644
+--- a/package/python-aiomqtt/python-aiomqtt.mk
++++ b/package/python-aiomqtt/python-aiomqtt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AENUM_VERSION = 3.1.15
-+PYTHON_AENUM_VERSION = 3.1.16
- PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
--PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/d0/f8/33e75863394f42e429bb553e05fda7c59763f0fd6848de847a25b3fbccf6
-+PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/09/7a/61ed58e8be9e30c3fe518899cc78c284896d246d51381bab59b5db11e1f3
- PYTHON_AENUM_SETUP_TYPE = setuptools
- PYTHON_AENUM_LICENSE = BSD-3-Clause
- PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
+-PYTHON_AIOMQTT_VERSION = 2.4.0
++PYTHON_AIOMQTT_VERSION = 2.5.1
+ PYTHON_AIOMQTT_SOURCE = aiomqtt-$(PYTHON_AIOMQTT_VERSION).tar.gz
+-PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/45/9a/863bc34c64bc4acb9720a9950bfc77d6f324640cdf1f420bb5d9ee624975
++PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/70/44/cfc58272783a11729462dc6df5adbfeabd084f840f609054ac772ae98c19
+ PYTHON_AIOMQTT_SETUP_TYPE = hatch
+ PYTHON_AIOMQTT_LICENSE = BSD-3-Clause
+ PYTHON_AIOMQTT_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
