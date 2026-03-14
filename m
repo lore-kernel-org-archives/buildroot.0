@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEA2510854A7
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 21:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E9F210854B2
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 21:55:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F1B160FDA;
-	Sat, 14 Mar 2026 21:04:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E03196069D;
+	Sat, 14 Mar 2026 21:55:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u3OzBEDGCpnU; Sat, 14 Mar 2026 21:04:13 +0000 (UTC)
+ id CtJYP1AZy3Qv; Sat, 14 Mar 2026 21:55:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C8A60F8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E9CA6085C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773522253;
-	bh=jj/5qG39zzh2dbbrbx2fiVLmRBY7GbXEW2whT1i3SZg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=VnrGWj+V3jSJnAqBF6uwjkqUTrlUWOFpn7G+caM9y8TSFjbyMOtbM8p2+6LhJ2gjE
-	 OiqvH7tGi72iEnNWzxLljq1LQtHvWwIU4kDMHq3CCH6HMXmcNI1XveXkYEKC9k/buP
-	 Dmx8EbuwT+YOkDq3ftO9rxDx3m6fUnfJ09kz486pIQkWmvVLrq4QRkK72fxCEQ8+CG
-	 y1f8mdDY8Rg1kdaz2Miy0mwg3tSpgkh9PyeN9IdYZYcuEOW0qeC0GCbsfr+y7//Z9h
-	 B3vR9ImP423H9JnBOR+JTdR0E8wtTg9W2XFGRxwfqB+f+uyb1XPd1mKe1GWkKBGZxT
-	 u7Xs2pjxUVtnA==
+	s=default; t=1773525330;
+	bh=LYdRCxJI9TOCEJJXLtFFXdASOoNk0Sv7sOmpbl2d6TA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=BVpnAbTg9es5bU881h+/duRl2Ji4sJSVdBtTMVWjmhWKUTWDGQGiVMl3GjGJV2cUA
+	 hqBnDi/JzfqHklcg0/kIBcpd23ffJpmmuLNNC/fecb1f29xt+ujm3xTi+dVbl2HSII
+	 EYnJ10/hLhPTpdrK6ney7pEpYb54kC3VuCXdb8iZuG62ugM6JOFXN6gHIhuLegeDun
+	 wjUm6V8DfPP+77FuPY6pz5qclFjRRqn0BQF0ZoTWWwgKsoxW8xtU4dX1OBpG/F0J7D
+	 EKutJMFa7YBRfjtDaTpFdLuo3sbGjjax0zUqa+NLtbKsZpRob/A067LyczK0vPf76F
+	 CxIy8p4opT5oQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85C8A60F8D;
-	Sat, 14 Mar 2026 21:04:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E9CA6085C;
+	Sat, 14 Mar 2026 21:55:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC33A1B2
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 21:04:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 41AA01B2
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 21:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEF7E40FDC
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 21:04:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3358341098
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 21:55:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ir5-aVPDBg8v for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 21:04:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9ACC540FD7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ACC540FD7
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9ACC540FD7
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 21:04:10 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 855DBB0053E;
- Sat, 14 Mar 2026 22:04:06 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Mar 2026 22:04:06 +0100
-MIME-Version: 1.0
-Date: Sat, 14 Mar 2026 22:04:06 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260314183904.3171654-1-bernd@kuhls.net>
-References: <20260314183904.3171654-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.13
-Message-ID: <0f9c4be5e4d726508a5319c189cd3ce0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1773522247;
- bh=Vg1uNCyi+QBk0DpuAOaJAD2j6G5aK9QgSbGr9unszLY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=PfSbTz4RhJjMNLfHco58KbdK9PDajknS7njwHwpShvvm4/Y2nZzHDDdS6Gc216A+t
- jNeggE8TgQ1kdj/AmSmC9BGZKRdm5xRpvjTazeeGI8ewSVvWocnenZF6WU5c5l6Vjq
- 1u4fBJLz3oG0rivfhcyaR9n7NzouJ18dQG/awVI3edhWBvMYeSGC1BliiuTLGrGwXW
- qd7x4LywZe9DiRrAEgl3IkfNxGlWMeq9xKmAid1GMRXIQXlyCPyMkSzEUjXnsZRrX2
- RzsnzbSQK43uhuEA2EaYXb++Usi5m4b0kLIimGMKtqzW+S/g8aMJgsr5k9kFAiflmA
- 7uDtwo8mI2WiQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=PfSbTz4R
-Subject: Re: [Buildroot] [PATCH 1/1] package/file: bump version to 5.47
+ id yDMxdaAMsbYw for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 21:55:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9708B41091
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9708B41091
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 21:55:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BF13B84393; Sat, 14 Mar 2026 21:55:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 14 Mar 2026 22:48:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b38ef052d6124aecee2803ce1b46b354437b8619
+X-Git-Newrev: cc80c554154edf9aec9d65a49f72f685c5f21b4c
+X-Patchwork-Hint: ignore
+Message-Id: <20260314215527.BF13B84393@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dos2unix: bump version to 7.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,17 +70,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/03/2026 19:39, Bernd Kuhls wrote:
-> https://github.com/file/file/blob/FILE5_47/ChangeLog
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cc80c554154edf9aec9d65a49f72f685c5f21b4c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
+
+Updated license hash due to copyright year bump:
+https://sourceforge.net/p/dos2unix/dos2unix/ci/0ab159a6c80bd647f4830fb45059472eb1e11d3e/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/dos2unix/dos2unix.hash | 6 +++---
+ package/dos2unix/dos2unix.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+index 3e9bf7882e..c48f70d574 100644
+--- a/package/dos2unix/dos2unix.hash
++++ b/package/dos2unix/dos2unix.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz.asc
+-sha256  28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2  dos2unix-7.5.3.tar.gz
+-sha256  bff21c3509fe7348c8327745b2f80d8847b04868073c6d0861bf8c773db66515  COPYING.txt
++# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.4.tar.gz.asc
++sha256  f811a2b9e4a0c936c61ef7c1732993d1820e5cf011f4d93861885ccb8101ca21  dos2unix-7.5.4.tar.gz
++sha256  e09d0709ac6a24d995565989267f2e097325778ed47738ee889a7124bc89a3ef  COPYING.txt
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 4c57a4de5f..8794aa46bf 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOS2UNIX_VERSION = 7.5.3
++DOS2UNIX_VERSION = 7.5.4
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2-Clause
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
