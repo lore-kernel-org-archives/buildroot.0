@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7AD110706E2
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 16:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8401610706E2
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 16:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF9E5608C5;
-	Sat, 14 Mar 2026 16:53:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6CV7g_ltOloo; Sat, 14 Mar 2026 16:53:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0909E607F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773507195;
-	bh=p59eBWDjnUf9kUCtFjBWP6nEVLF0gq9pA0gi+aoZ1Y0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=C69BgEnwROdPXUiXapepIiIUgh60ZKms/q1O5WFuu+QIYR8NYnM5aabkLMJMiBFnD
-	 zZlJd4JGSFFavRTJFsh9U3lnitBS8fTa5Km64xQxHFz1z/8yiC9AJRXoFhg2mnkfmM
-	 G6ViSNmm4d+x7kEU57neHKY5lSdtgxwRGWa2gB22Ac84JU1VdpMif/iCOYDn3LgpRT
-	 8y3916Fj+M2wLUUZxyWH8sjlE+PBEPyqwE7uUy67csBtkgRX2eVUAzNLiP8oayaz1T
-	 i5TyGVjwfBPpwLR2uULBqWlYcVn9QSn+1Y5VFUUPLB5AZh4bqkwPxZrqkUzJ5AwRZq
-	 iljH7TQVRJubg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0909E607F7;
-	Sat, 14 Mar 2026 16:53:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2ACB0201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:53:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2860982253
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:53:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85CD3822F7;
+	Sat, 14 Mar 2026 16:59:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8_KA-6DJrxnr for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 16:53:13 +0000 (UTC)
+ id FiQrFeubQuXe; Sat, 14 Mar 2026 16:59:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1B318227A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773507587;
+	bh=xM1X+tZh0YFrsRYT8/FOAtOpgpUnQz8f4vSoBXz2gps=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=NviKwdTZWc0pnfeEEodGESILlB+xWkxCngmM67cmzBK1BSHfd4l42GOvBOV9vJuWb
+	 mOXp9oHU2YInLAdeJEnpU3WXbOP4Ps0wHBbQC2qEF6CKdGrChMncs3Dl1tnrnJ54KV
+	 CigaJ3f3RooSbVjxibgXkw+MBfkZTMJj/mtSSxvrUBufxWsuHVgYp1H+p68NhdwE7S
+	 QF3gVpRzYEnHbQXu4NPqdkgZ73d4lJLm2JESMBjwee62JGs8HELZRtgdeuLDnxmJsM
+	 Gv4zxoLMTk6V0aFkbG5ZzOFNgOYiT/tzDWBjZTV97sCXDqEi0k+f732nw9MKWW27dW
+	 If7G01Rwu+ybQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1B318227A;
+	Sat, 14 Mar 2026 16:59:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D70DC1B4
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:59:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC8DE60845
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:59:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GtPqoNPvzTJB for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 16:59:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 859E58225A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 859E58225A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 65D9E6081C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65D9E6081C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 859E58225A
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:53:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 65D9E6081C
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 16:59:45 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4804CA4C082E
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 17:53:08 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38116)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E8D0FA4C0891;
+ Sat, 14 Mar 2026 17:59:42 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60764)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1SEd-000000008CD-443d
- for buildroot@buildroot.org; Sat, 14 Mar 2026 16:53:08 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w1SL0-000000000uN-2UWD;
+ Sat, 14 Mar 2026 16:59:42 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 17:53:07 +0100
-Message-ID: <20260314165307.2987410-1-bernd@kuhls.net>
+Cc: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Sat, 14 Mar 2026 17:59:42 +0100
+Message-ID: <20260314165942.3057310-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773507188;
- bh=zu5EAE9rcj4lNvslNHe3NoVX1x4dpWXxl5ioPlBErCI=;
- h=From:To:Subject:Date:From;
- b=uHA8w0MOsUHFcGcKXZs83DlEULio7/IQeELWRjcAdylNDnXCf1ynMiIqY64PIMBlM
- kAksb++5Ggl4pyYZPW7u+N3nNg3XmbX8Roz+MeFe0jpv5vCOXOU+YvztcKOj2HWtMU
- mnEYA4oazJc/jZM2ay498cHp42sJewh6EsHsDCuLNi5b+sf+xEIX9y840iqgrErHK5
- +G7cH3puYXaINZuLOQSh13RzkhtFWjQGkNaSAWKfxN0y4p2ppkWDjApeIjIvDj36fN
- kRgX29QjVRHotdvRmoOo0xEjzOk5cPsnz/hI5KCiSqMtRXYhjli/sxOgIy97jDfrLD
- OeflINcYhQ5ow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202511301023; t=1773507582;
+ bh=YT1I1GhhmyRSKrpJptvTKXjgpdduYJT6nzQl2LUgGzk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=TNff6SQOjA8g2WAGF848R7v5c+SfoGdyq1LQ0s0i57vUdYgxqFeoxMcu46qX/Rfdz
+ 7xTUXgPnUXLNZJCGZC+sns6nWs2LvmJ2sTfX4H8XHHA1UTJqSdHte9BqJYa9JyrpW9
+ Vyd17GtaEQ9Cg47cO2AatTnRor32Jue0LzZoMIC2ciWEALAf7D+qhbvfw7MOBm3n3F
+ G7ZN7rb2Z/k94jhdyQCtA8at5UZlnWPZ999fcQ5QAoS7W5sQ21QeDcrlxYPFfAgZ0j
+ Z2zAfqKewlozuHho4pvIyUxAHwgdG/Ng7XtutBEGMI2xyDNxZS7IN4kAW8+Y1DRrXa
+ g4Kli1lK6B6cg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=uHA8w0MO
-Subject: [Buildroot] [PATCH 1/1] package/dos2unix: bump version to 7.5.4
+ header.s=kas202511301023 header.b=TNff6SQO
+Subject: [Buildroot] [PATCH 1/1] package/dropwatch: bump version to 1.5.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,42 +97,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://waterlan.home.xs4all.nl/dos2unix/ChangeLog.txt
-
-Updated license hash due to copyright year bump:
-https://sourceforge.net/p/dos2unix/dos2unix/ci/0ab159a6c80bd647f4830fb45059472eb1e11d3e/
+https://github.com/nhorman/dropwatch/releases/tag/v1.5.5
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dos2unix/dos2unix.hash | 6 +++---
- package/dos2unix/dos2unix.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dropwatch/dropwatch.hash | 2 +-
+ package/dropwatch/dropwatch.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index 3e9bf7882e..c48f70d574 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz.asc
--sha256  28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2  dos2unix-7.5.3.tar.gz
--sha256  bff21c3509fe7348c8327745b2f80d8847b04868073c6d0861bf8c773db66515  COPYING.txt
-+# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.4.tar.gz.asc
-+sha256  f811a2b9e4a0c936c61ef7c1732993d1820e5cf011f4d93861885ccb8101ca21  dos2unix-7.5.4.tar.gz
-+sha256  e09d0709ac6a24d995565989267f2e097325778ed47738ee889a7124bc89a3ef  COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 4c57a4de5f..8794aa46bf 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
+diff --git a/package/dropwatch/dropwatch.hash b/package/dropwatch/dropwatch.hash
+index 24fc03097b..c4b85d9354 100644
+--- a/package/dropwatch/dropwatch.hash
++++ b/package/dropwatch/dropwatch.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8c43d0c15d0cb9ce179fa1fb0610611723689a6f551b23c70a7ddc1cf068e8d2  dropwatch-1.5.4.tar.gz
++sha256  73d4bcbbb056b3bd514b7d88ef927ece8aca32c2d50724b37c7d0a0d4d133009  dropwatch-1.5.5.tar.gz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 33775f6c02..e7b796a837 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOS2UNIX_VERSION = 7.5.3
-+DOS2UNIX_VERSION = 7.5.4
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+-DROPWATCH_VERSION = 1.5.4
++DROPWATCH_VERSION = 1.5.5
+ DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
+ DROPWATCH_DEPENDENCIES = libnl readline libpcap host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ DROPWATCH_LICENSE = GPL-2.0+
 -- 
 2.47.3
 
