@@ -4,82 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01B310706DC
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D9B10706DC
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D5D140FE3;
-	Sat, 14 Mar 2026 14:06:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A1BF40AE1;
+	Sat, 14 Mar 2026 14:06:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id acgZUAhhFoXp; Sat, 14 Mar 2026 14:06:37 +0000 (UTC)
+ id vmE6cKBhcwdI; Sat, 14 Mar 2026 14:06:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B39B240FE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A620840683
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497197;
-	bh=u4s8Qdo+rl4NRe8HWQN+uv3yvFNsQGzb0tbDw6j/q4k=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=NTszlYF71AMCqlbqese++chQf8mWwAG63KN32zMT1aBd8AenhmXHi0w1oPHahdRH6
-	 QVA4Zw1viprBvIvkBjtDGqwBSqL032dNVaur+MAtLroj/HTvV6oDzW4OHM2X5gt/7n
-	 PDAd6k3N/GAfSronrI6HC26rfCdm90G3xGrNz1k+IYXr55yBKM//j1fOBJOZx4QBjc
-	 oa1g6dfVNMWFGetzJhUor1+Rm/OQT2ZelS3ohOne/0sZR2wUztMEy/sYdVAuZ1ydYK
-	 1ZcJBfcrrtWG61X5d4YS89CuTOCLK212DNgYS4lA4iQO2NgfACBbKzaIY+JVcQ1yqp
-	 sJM63Cshqmm9g==
+	s=default; t=1773497209;
+	bh=5lTNDg5q4gnEFOj7IHJ9dITvyOTZHyXd/vtdqZIlGhk=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=oR/pALso4FbGhuLgjXUeum50lVHjGHX13jZmM/H2CZ5TwsUrT8DIztiP18Al6eV0u
+	 RcnuhcbsFQku8Qs102955X6q3oXfwB3SYQ/MTo88of6nqm5IRGwspfWzfZr/y9iJkl
+	 THh/RSPInmYEWuxjSB0/P1QFa/JGryR9LwzyERwEXk+3gC8NLgPMXj0KgBUIi/DRuK
+	 FJOjdx030xV5c1+BW4J+ANZzAy1f47W8M6sPAurEyRLily68r9vrxpbVq0To8czUGn
+	 +Oe+gXQtLt9QExk7di6Hurjzkox4ZQ8rirtgSWlJdiHCZEhWNF4V1EDvbCh5z+7e2S
+	 YRxsqOVyyR+pQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B39B240FE4;
-	Sat, 14 Mar 2026 14:06:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 90036201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A620840683;
+	Sat, 14 Mar 2026 14:06:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 557C6201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81637605D2
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B63440683
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k3avWxh7tjn2 for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:06:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lHh96t_iTv5g for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:06:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 756D1605CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 756D1605CE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 273474064D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 273474064D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 756D1605CE
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 273474064D
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:06:46 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 91094A4C13D3;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A2CD2A4C13DD;
  Sat, 14 Mar 2026 15:06:33 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdR-000000003UM-0BqF;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdR-000000003UM-0Zas;
  Sat, 14 Mar 2026 14:06:33 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:04:57 +0100
-Message-ID: <20260314140633.2967249-1-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:04:58 +0100
+Message-ID: <20260314140633.2967249-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
+References: <20260314140633.2967249-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497193;
- bh=40Udnwn0FEHKQM5WtQumzZxdULDVdE+pGZSeFRMENyI=;
- h=From:To:Cc:Subject:Date:From;
- b=H0lnTB2XR4ZANUjKBI8O/3l/S4VNoVP8B+RVYpDmt1KU1qO/7sYk/zQT/iMGxznid
- cB1X5Kt/BUyUPNG5P9btDRlZf4QVBlVIVkrN15Uj+oucX+L/QbsXM/PLpWYkaSO19i
- ZZAhusqJl+bfpJiM+mUFwah0ipfj0g/HYUcaOAzax2lz6u9KPQZBimIgbBpzFwgnWK
- SmSqobpn4lQtszhw3+bqMqNYv9Er5N4CM2JZNcCMeIEMBtVBNOiLg/AXpjPPfxlJWq
- Y+xLDZpmzJd2WS1jwPW6uNfMsat65PT4A1cnoqcBTeBN2BFOnylDG3k+HsRsf3CwXl
- ivCCGcr2IcMgg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=jNGGFsF7DrnopX14KO1YoYdC27RgfhBZtyUANnyg7M4=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=A9fssrBGHchTUjm3ku24QYcimm+/Qdz/OszPf4CVgAjIUvy2QLz8yYk4W95x7nu/o
+ jT4BumOWueIoADpAiOgU8lOT8meKS/N1neHXlmmFlcZLUwMc3gU7jV6kYDnOS6jx19
+ h69lGFlHYHjYp+5ulp19dfbysKPU/Di5VzI0c4n5IFz35LWjPRr1m7SLZFhqi+SzKw
+ O5OtQWW3CQyCh+Lda1ZXRxvIB+6pgZKqODX1XUTvP5cYAKqfiyyv6/qKTZbODgdAkJ
+ 4tnDvkEB2ZqapYia3fEtRB5mXf6K9NdobkuCcy2K8aKl/vis/NGoIpHYcW1xwBjSkV
+ 7VT3Kyr5FYySQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=H0lnTB2X
-Subject: [Buildroot] [PATCH 01/96] package/python-hatchling: bump version to
- 1.29.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=A9fssrBG
+Subject: [Buildroot] [PATCH 02/96] package/python-aenum: bump version to
+ 3.1.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +116,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pypa/hatch/blob/hatchling-v1.29.0/docs/history/hatchling.md
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-hatchling/python-hatchling.hash | 4 ++--
- package/python-hatchling/python-hatchling.mk   | 4 ++--
+ package/python-aenum/python-aenum.hash | 4 ++--
+ package/python-aenum/python-aenum.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
-index b6fb2b6d3e..8443d4f412 100644
---- a/package/python-hatchling/python-hatchling.hash
-+++ b/package/python-hatchling/python-hatchling.hash
+diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+index 9c59804d6e..dcef45a701 100644
+--- a/package/python-aenum/python-aenum.hash
++++ b/package/python-aenum/python-aenum.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/hatchling/json
--md5  0d40370d4684147d6e3d1e3800298bd0  hatchling-1.28.0.tar.gz
--sha256  4d50b02aece6892b8cd0b3ce6c82cb218594d3ec5836dbde75bf41a21ab004c8  hatchling-1.28.0.tar.gz
-+md5  52ab8110a3a114ddeeb7dd82a624ca53  hatchling-1.29.0.tar.gz
-+sha256  793c31816d952cee405b83488ce001c719f325d9cda69f1fc4cd750527640ea6  hatchling-1.29.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aenum/json
+-md5  f3fa11cda9ddaaed4d3f03b35f3a65ea  aenum-3.1.15.tar.gz
+-sha256  8cbd76cd18c4f870ff39b24284d3ea028fbe8731a58df3aa581e434c575b9559  aenum-3.1.15.tar.gz
++md5  2e00e2da1c6a2aa8b6a8fae85292e44a  aenum-3.1.16.tar.gz
++sha256  bfaf9589bdb418ee3a986d85750c7318d9d2839c1b1a1d6fe8fc53ec201cf140  aenum-3.1.16.tar.gz
  # Locally computed sha256 checksums
- sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
-diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
-index a5a29aa20b..e82cb8d5b4 100644
---- a/package/python-hatchling/python-hatchling.mk
-+++ b/package/python-hatchling/python-hatchling.mk
+ sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 27f9e5cea6..4b59216722 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HATCHLING_VERSION = 1.28.0
-+PYTHON_HATCHLING_VERSION = 1.29.0
- PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
--PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/0b/8e/e480359492affde4119a131da729dd26da742c2c9b604dff74836e47eef9
-+PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/cf/9c/b4cfe330cd4f49cff17fd771154730555fa4123beb7f292cf0098b4e6c20
- PYTHON_HATCHLING_LICENSE = MIT
- PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
- PYTHON_HATCHLING_SETUP_TYPE = pep517
+-PYTHON_AENUM_VERSION = 3.1.15
++PYTHON_AENUM_VERSION = 3.1.16
+ PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
+-PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/d0/f8/33e75863394f42e429bb553e05fda7c59763f0fd6848de847a25b3fbccf6
++PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/09/7a/61ed58e8be9e30c3fe518899cc78c284896d246d51381bab59b5db11e1f3
+ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
 -- 
 2.47.3
 
