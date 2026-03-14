@@ -4,84 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67D5110706F7
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 18:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE1E5105F79E
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 19:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69C3982243;
-	Sat, 14 Mar 2026 18:51:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 557B6821D4;
+	Sat, 14 Mar 2026 19:57:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6aEvYU7osA9S; Sat, 14 Mar 2026 18:51:17 +0000 (UTC)
+ id hvH8Ozt-8-K8; Sat, 14 Mar 2026 19:57:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C85C8222F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A50982089
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773514277;
-	bh=Sgyn5fZEH1IYwN3/PELDlwrfa4wSolLkLeRQFtkva18=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1773518254;
+	bh=h0dlGvq4Vdw1SMODTSt+rx96igir3BpyRakFgljJ4w8=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=PeslLrb9XaF2Xh3SzPxjOa6ZgIighfhmYxPX8r0S8XGxj/OhAvIxRwdLnuo6z8/J6
-	 eTqUMejCv1fHEnp0DddB7TVjWQ6KNwnwjQuhE6fs6VqgVOcG1iuDYi2JnN4PYun3r8
-	 XARl22s48Tpb48THh+vh4MZJnwnuOuk0v/zZecRLbCHd/Vf/aAIpUfEmpLlHom6eno
-	 Ck7QXQFaE0Eah6a8ISvPTT+X8PwPe48hlV8U/isVyG3uf1b0Ue73wqhPrUEaJF17ak
-	 hVX1q3uxcqyrupHZqJyXLYOfrq06mN/aMzR0JzwQ3Z6/Fh8nFR5vHui9sqULkVfyhH
-	 MR0Ijjs5Pcz0A==
+	 Reply-To:From;
+	b=nnZGQNEBqY2kCrsE29yzN7lOztXVYZZX4xUxtgttB5rlrVOZNy7r6Ja2GfL9NPZyg
+	 pNzDNMEO1wJgNILQcqVq30+aP+Ou85HY3mBoXnEwMlmhCr7Vb9JkhY0fkhn4hsRyu0
+	 s3ogjY27QPPwmmjuWSGtY97ri1kGsiRdVZPj2vpxVcTImWvEPudhl4P1snD/cAIY+J
+	 /IBKCgQoRokpRAokvHa1YEYUv5PpKReDWBwVhpQkYPFh1UDnrUC8bFjylyz9ujb97W
+	 sZoRhD0H9fSApK4UHcFp3u/ZZKfXw7t9jxVQszmercyl3iDrO+sZoA6Kq15pXBVNMo
+	 BxmK2yF2qP2Vw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C85C8222F;
-	Sat, 14 Mar 2026 18:51:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A50982089;
+	Sat, 14 Mar 2026 19:57:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C0EE81B2
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 18:51:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 86735118
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 19:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B21FA60ECB
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 18:51:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7844160F4A
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 19:57:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y5ZrtkC9vs1w for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 18:51:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A2F5260A82
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2F5260A82
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A2F5260A82
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 18:51:15 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B113BA4C1174
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 19:51:01 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36564)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1U4j-000000004PV-1dkM
- for buildroot@buildroot.org; Sat, 14 Mar 2026 18:51:01 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 19:51:01 +0100
-Message-ID: <20260314185101.3226151-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260314185101.3226151-1-bernd@kuhls.net>
-References: <20260314185101.3226151-1-bernd@kuhls.net>
+ id 2xNGSHDbc2tK for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 19:57:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A7FEE607AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7FEE607AE
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A7FEE607AE
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 19:57:31 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4853f2826f7so34715785e9.1
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 12:57:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1773518249; x=1774123049;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=onID7J3V1wzPYBDlJ8o/P6Iy2p/OjwkwkqdGZZ3NTYw=;
+ b=OFX6+7wMSEJ3KcZpRUGRtuVaCK6u7b0biztqzkvCW53jDXRGTOVgPoSq8sX6/17Wlj
+ lQz/VNfvu3DtOqHPdYVLWxCtSUxYpiITUJstoX3dSdI7qOfza8dUV399gn9OTcxCRAHw
+ 96mDA4zVcihykk6xNWjb8dlYp1/D7h74Edvh4la8X2oycSth7QV/pSiPQOeOevu8L5W9
+ Xh1SNb57cFNRLtsDE0Bkw9jwdNijC5KU9CEH11pCZ676lq/vcfUPlaNracqDy96PGU2I
+ XfdJlDnfaxSrQlora1R18uBQ2bYUT1L6bWzDs3C/DPeXNq1peIblO4LkWIgtl7N9g0U3
+ oIGw==
+X-Gm-Message-State: AOJu0YzxZcIf0X8jOGMMoSxW9mQ/6o1IFicsDwrPELy1K1OV9AMZniTt
+ OtTO4hNRVo9cl9ERw08BHFpbDDzX4YFMXwg1Sz8n/BiEOnk8xIeYZfEmvf7uowAh
+X-Gm-Gg: ATEYQzx7kjK6cqXjRiYUS4sJJ1iSA8/IgpJKCrb3th3pt7Sy7FLNvjMsKxqL63/mQO8
+ nJVPfBw2bNfmVlrwij7A//0bqKhPlcGIq/iUXQ/HLDTptbkumUiHKPEuvyX5dDsvAMygc9gI7uo
+ nwxH4rOZz4OhQaA/0u1vppf2SJXz8tEkplnJy/hrTfd0DmO7dTaeK3qkyNcgd2spIUzL9MmydmC
+ u8n/1+FDuuXdSbMfJ3LgS5cIRjiAIC4CzxsVvtf73EXgh3ocK2xdPHpOl//Q78wl27qdX5BPi3u
+ JgwiNhHDjvvjFDFofLPk41TzK2vzTwdPk4x894xi1ok2VeUaU1ktzu0HVeDryy/jMNmgA1U5Umn
+ dMRbrEIUTEfDiUEwiOPZ5G4tgsdT21EUbtrxeQuOwcbObjigeqwVxTV38ym2V8wdY7WS9Rq01sz
+ okiH1jIoIfMxBweYlDNXY5f3U7wFR9L7BrfoT6dAAqMih/E44NU3o4zjLAJmh5
+X-Received: by 2002:a05:600c:1c21:b0:485:5981:1423 with SMTP id
+ 5b1f17b1804b1-485598116femr121274115e9.3.1773518249164; 
+ Sat, 14 Mar 2026 12:57:29 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43b3a09e453sm5716068f8f.0.2026.03.14.12.57.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 Mar 2026 12:57:28 -0700 (PDT)
+Date: Sat, 14 Mar 2026 20:57:26 +0100
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20260314195726.GA261122@pevik>
+References: <20260313211015.4152659-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <20260313211015.4152659-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1773514261;
- bh=fed2OnoFAXvwSlW+XXCCO94pHvDQPVB0SCzgHcFXgtg=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=e8E0Io0N7c+dmFewTRagNE/hqjuP4hEawutIgk1etGkqqYnDa56zKFN44iCyXyf6z
- 54R18/mNYMHDWf5xSVM5F0/wKRTdR0suVRQW7KakmCX0vDUojyPLssB5VXVvHriCMl
- 38FjqXZTUhlTREctJljzOqcehsVu1VTXVfz7gSp43XGurHPGrbqm9SbU98MPnrjA++
- nYFU1oRawxK53AuEe8F5qLIQ0C1D+bQmwh6YaWTQAfE/jLI4VrZ4hwYaigmlaMlE0G
- nlKG1P+sszwgLRcOkHgRtAD5j30FQ7hPBBLzjULkg76J1eaxB0wPfSkowNf5ZORJvC
- 25Mle55YnP0oA==
+ d=gmail.com; s=20230601; t=1773518249; x=1774123049; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=onID7J3V1wzPYBDlJ8o/P6Iy2p/OjwkwkqdGZZ3NTYw=;
+ b=KiHHyVls2k2exM6Cc+PoXj3FDbSlTKjGQ67ozcqHNC4dfFuyTUikI0qtII8jcBdQeB
+ 7jnhaqhbSsz9+WtUi5LUZa58Naobp1rXBJXKaRZQW9LGre1KJqyVh8+KJmXARjvjenyM
+ nwElKuzIcBsIHOq/pSbrPoeKQW/uFzPvpO69CufXRA7TPSqrDZqtaeyy9iBbToE0dVP4
+ 2TUGaTlXr8uhDqHWdU8WIF4m+fBWRyv22C1JzDpQcTzrQer1/Oc1GxEbmgCIBB9/Q0Em
+ wv20GVb6QoVE5x8csEuSKll8QN6wn4iU9fR0y7Opo5yZUMtioG5x3z7ecQ5UnDV0um5Z
+ Un9A==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=e8E0Io0N
-Subject: [Buildroot] [PATCH 2/2] package/iwd: bump version to 3.12
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=KiHHyVls
+Subject: Re: [Buildroot] [PATCH] package/nfs-utils: security bump version to
+ 2.8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,46 +122,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog?h=3.12
+Hi Giulio,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Release announce:
+> https://lore.kernel.org/linux-nfs/4d11b9d7-7b49-4a1e-8c26-29ecb2fefe2f@redhat.com/
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 7ad2fb382d..67064e35eb 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  640bff22540e1714f71772a83123aff6f810b7eb9d7d6df1e10fb2695beb5115  iwd-3.10.tar.xz
-+sha256  d89a5e45c7180170e19be828f9e944a768c593758094fc57a358d0e7c4cb1a49  iwd-3.12.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index a150a3048b..caecb62d64 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 3.10
-+IWD_VERSION = 3.12
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
--- 
-2.47.3
+Thanks for update!
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
+Kind regards,
+Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
