@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6917210706DC
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6910410706DB
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:09:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C1F7410AB;
-	Sat, 14 Mar 2026 14:09:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42D744105C;
+	Sat, 14 Mar 2026 14:09:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xx8ttGKPgnJ7; Sat, 14 Mar 2026 14:09:27 +0000 (UTC)
+ id ZqAfCoot1AMI; Sat, 14 Mar 2026 14:09:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59A88410B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69D23410AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497367;
-	bh=yk/tr56j0hu99Wn7FFxpvIN5/tGVSbUy6ZJSj7c6JH8=;
+	s=default; t=1773497378;
+	bh=lMiu1XEpquh6TQ2fYzISWsGn4svZi46H/dSJoQK5I54=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=PusWjgkYptuQSafb2WAWCgYGF30BATLuyzL+3DONgvdVWp+UHSO0Jo69iB4nySWcs
-	 XMFXiZ3qEuF0OM95QenWgP8wjLAsasjUihyEKTa4FK0p5z5OWaC9mnfW+U3FUnFPN5
-	 I+aSzfKa3rXHIyDJLZGlsJsSFlWud54bxO2tc9Zbg10xa6XX2m+acmTphXzTnrtYyc
-	 a4okAN4h64JFU5HlS0y4goM5Ri92XhmLpv1tlEBHsC8iSjH/w40GHdd5BfvA/8w/N+
-	 U3NciDYRdqvD7c46Bp4sgBlWRcXa3QZzx16i2PZNLtLNkfqZWgD9Ue0D5XEr2Pf46w
-	 V8TYvyNOoqIDg==
+	b=Z191DTqpUxDderVk/ER7TWhfLF2vL85J4hOLSIDQQxEuYXrmf3zZVos16vnjIH1M9
+	 S1Od+rDuCaJIUuBtT2z7R0apesep2jTTxEqyfa8ME5enX4sVJsyI5qwcartU8p3zwy
+	 JbnOcrrFUeEXgy6uc6Smv9t3xgUuGv6JodjJ8SZCHdPVgXKlb8YTXSjRzorma8RudZ
+	 C07NpANRO0U8HwZtPeo7OpNKF3HGGw6gQUtckW+OGggbTbBUjOYCH5jTs/CACMMJCV
+	 IaRI9MKnE1mQo1ImbxujQzkll861fat1bMWx1AnjHSWKlnojVw1A5QfHMNggSUlkeq
+	 ORhyCh2Pgfv2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59A88410B9;
-	Sat, 14 Mar 2026 14:09:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69D23410AB;
+	Sat, 14 Mar 2026 14:09:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 945AC201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 82C04201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DF56410AB
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68B36410C7
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FygTMdznNkhS for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:09:23 +0000 (UTC)
+ id kdULcG9RQw_B for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:09:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6FA24410B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA24410B9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A3B2410AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A3B2410AB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6FA24410B9
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5A3B2410AB
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:09:35 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D1BCCA4C1420;
- Sat, 14 Mar 2026 15:06:46 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2979CA4C1424;
+ Sat, 14 Mar 2026 15:06:47 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-2toW;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-3HSt;
  Sat, 14 Mar 2026 14:06:38 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:06:00 +0100
-Message-ID: <20260314140633.2967249-64-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:06:01 +0100
+Message-ID: <20260314140633.2967249-65-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1773497206;
- bh=58NXwA96xBfVQDaa3pMD8Q7LS6/B8IT0Y6UuMBD/6Xg=;
+ s=kas202511301023; t=1773497207;
+ bh=HrDqH6KzHwF7IBzeTwHojJ+FTSrxfW0UwD32qU/Dfvc=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=smWEFycrhyvpNz3eE7QSYmX2IAKQVr74WQLutqbY4d/Jlr5y0mhaXuQDIe3RUnfSj
- thAMwRIWUkrgEUTsPldsd6uCJianzVaucHnkmmODdp5Aw56e2mDI7WoMUaf2i6froB
- GwNy3Si6GUIsgo7LL0XBy/9aYYJ/LGfeGjlAPhySY7nvEnttp0NaossQGO5rqpo5HO
- Ir7XEYrl5KJBNuQuRS0xK2Pb/pCI+5KVsvneO+7nUtOKUa2RTU1vFh+/QYkIEmpH8c
- IxaCkOsajzAdk/tfnjc56aWD8yTSDCcJpwz/MORL41e3yQB+QH8Mz2bW8UYOFBtKS3
- VYMOTm2SHiB6A==
+ b=lhSZP1F1hE42pSQkWNmp6V3hWFH3o/4YvwDkvh0m3dTBx951ozr1XuxFH6PcFywPX
+ Y7rHiXCX2kAP9lnEMT2HAr4hno+5Mt1nUwEnq2zcPES2RFB9ZhkV7AE5Q+J7YixblE
+ 8tPsMvR8YcDDKadXylkcOLsIX6+8SceS4pZ9Qo/1Ccal3jJ6tHFssGHUVdvuDGNBbO
+ TGjXajUxp/D3O9Huh/if9Rt25xtddxoGe+QlsrwG1vHTr1EUExlEbjkA2X6HuXKtbv
+ uX8n5wh9vL3u1ryH0k5YpJZ3d2XLwlI5Vy8PFuRQRYRdUSikp5enJ3xklV1bx7iS+q
+ hXnvTkzB1WmEg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=smWEFycr
-Subject: [Buildroot] [PATCH 64/96] package/python-regex: bump version to
- 2026.2.28
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=lhSZP1F1
+Subject: [Buildroot] [PATCH 65/96] package/python-sdbus-modemmanager: bump
+ version to 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,42 +116,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/mrabarnett/mrab-regex/blob/2026.2.28/changelog.txt
+https://github.com/zhanglongqi/python-sdbus-modemmanager/blob/master/changelog.md
+
+Upstream switched to poetry:
+https://github.com/zhanglongqi/python-sdbus-modemmanager/commit/0d8ae7217841ab1bc12282076f766f94415573f5
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-regex/python-regex.hash | 4 ++--
- package/python-regex/python-regex.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../python-sdbus-modemmanager.hash                          | 4 ++--
+ .../python-sdbus-modemmanager/python-sdbus-modemmanager.mk  | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-regex/python-regex.hash b/package/python-regex/python-regex.hash
-index 0b1bf1a350..3251993d45 100644
---- a/package/python-regex/python-regex.hash
-+++ b/package/python-regex/python-regex.hash
+diff --git a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash
+index 980568cb0d..3833864bd8 100644
+--- a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash
++++ b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/regex/json
--md5  23b45104a418985aa934ce00b094ec5a  regex-2025.11.3.tar.gz
--sha256  1fedc720f9bb2494ce31a58a1631f9c82df6a09b49c19517ea5cc280b4541e01  regex-2025.11.3.tar.gz
-+md5  d0ce2a36afe1d6fe7b6e188963db1b22  regex-2026.2.28.tar.gz
-+sha256  a729e47d418ea11d03469f321aaf67cdee8954cde3ff2cf8403ab87951ad10f2  regex-2026.2.28.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sdbus-modemmanager/json
+-md5  720d59e444d84d77c184bc73844cfebd  sdbus_modemmanager-1.0.2.tar.gz
+-sha256  80ed83a158eeb8d9b0e0c1e5110c5f71307df87523245e4d0e79ebe200932fc6  sdbus_modemmanager-1.0.2.tar.gz
++md5  d75c065dd08ce96e37db0858af0dd44f  sdbus_modemmanager-1.0.3.tar.gz
++sha256  8fd5509de6ce363019667a14267ebce99f2b67849d1d7ee72d0228611ac1ba0a  sdbus_modemmanager-1.0.3.tar.gz
  # Locally computed sha256 checksums
- sha256  bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d  LICENSE.txt
-diff --git a/package/python-regex/python-regex.mk b/package/python-regex/python-regex.mk
-index a6a8d6e3fc..281a0e83a1 100644
---- a/package/python-regex/python-regex.mk
-+++ b/package/python-regex/python-regex.mk
-@@ -4,9 +4,9 @@
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk
+index 2821453270..62d128b264 100644
+--- a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk
++++ b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_REGEX_VERSION = 2025.11.3
-+PYTHON_REGEX_VERSION = 2026.2.28
- PYTHON_REGEX_SOURCE = regex-$(PYTHON_REGEX_VERSION).tar.gz
--PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/cc/a9/546676f25e573a4cf00fe8e119b78a37b6a8fe2dc95cda877b30889c9c45
-+PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/8b/71/41455aa99a5a5ac1eaf311f5d8efd9ce6433c03ac1e0962de163350d0d97
- PYTHON_REGEX_SETUP_TYPE = setuptools
- PYTHON_REGEX_LICENSE = Apache-2.0
- PYTHON_REGEX_LICENSE_FILES = LICENSE.txt
+-PYTHON_SDBUS_MODEMMANAGER_VERSION = 1.0.2
++PYTHON_SDBUS_MODEMMANAGER_VERSION = 1.0.3
+ PYTHON_SDBUS_MODEMMANAGER_SOURCE = sdbus_modemmanager-$(PYTHON_SDBUS_MODEMMANAGER_VERSION).tar.gz
+-PYTHON_SDBUS_MODEMMANAGER_SITE = https://files.pythonhosted.org/packages/af/99/a17942d9abda13ad1f27f39e900e39852a6215b70e30b682b777dfeff818
+-PYTHON_SDBUS_MODEMMANAGER_SETUP_TYPE = setuptools
++PYTHON_SDBUS_MODEMMANAGER_SITE = https://files.pythonhosted.org/packages/38/2c/d66aa7f981df1d654bf70942964a4ca24cf930815fe7d656e1979c44a33a
++PYTHON_SDBUS_MODEMMANAGER_SETUP_TYPE = poetry
+ PYTHON_SDBUS_MODEMMANAGER_LICENSE = LGPL-2.1+
+ PYTHON_SDBUS_MODEMMANAGER_LICENSE_FILES = COPYING.LESSER
+ 
 -- 
 2.47.3
 
