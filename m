@@ -4,60 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 375FE105F7B0
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51CCE107BCFE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 07:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 079AB60FF1;
-	Sat, 14 Mar 2026 07:58:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 280C860FB5;
+	Sat, 14 Mar 2026 07:59:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VGDMe5Zxu16U; Sat, 14 Mar 2026 07:58:49 +0000 (UTC)
+ id UwyiXN59KTZY; Sat, 14 Mar 2026 07:59:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 162BF60FE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D7B960EFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773475129;
-	bh=CT1zRo9Mqq73ZJTU0wRHIvx8AnXFxI2OVrW5pKdNOKY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HwZuCPCnasC4wEZz8zQk2vtHoWgOLQErwhAmcUYkXmtoE5HWdbW+Ogas2NrdeDjGs
-	 sub8KzyuuYMqXG3CJ3JpgTGqGhO3dSRLrA1DYfcEz4eiH1jiwE4CL6kCsthJzFkiJS
-	 Rh/Pe3W/3/XnA3/nlsWw50RCwgnDWwkaJT+3aLg5TH3RDBoENymA8ipvmb26zPxNIV
-	 OsRYalDr9eZxTltTwY3EzXVq0nuaQybcnxRv8xFZ+6O2Bs7BUzlLS44pSCX1JMVN+g
-	 nW+HQGlkwFgomLFYJjq616NpWuI+cS/Z0FKKKBM9i/7dvM3aXVPOy9ppytH1jIae4W
-	 dWmVJ2Q8Wo3oA==
+	s=default; t=1773475182;
+	bh=88DcGUU7AD37F0lFekGIPF+nhxRgZ+EVLuw91NyMPeI=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=lD4Wk0DlsvlA1aJ+jeUzSwMYwsSy0NpsKLm7hBBGV0k2hpRvAVu8AlUsga4G4rmNo
+	 Ds2AvZ+MsDqbVcwcoNoS4/fIqHjuS5FIRqo45b1Xs3wgm4LUsH4+du1Bki94HcQP50
+	 AUj0QiAGk1C3wsAT45WN+5gBm74A27Gb4LO5XMrDpLKJX6/t3PUO/RHItOgZcK/a3f
+	 FtAM//XGScRHQQEC4OUUtyilfODxIyigdhiaVXSHX8kKlGc9E1+cV9D1PloTD8iLdC
+	 VZ4I1pDM/nE5WlsDD88qld6uzEnVXiFKVCL4me4aGD4gGLNGR40k22akEldvIXOyX6
+	 OypatmodDWoCw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 162BF60FE4;
-	Sat, 14 Mar 2026 07:58:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 196321B4
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D7B960EFB;
+	Sat, 14 Mar 2026 07:59:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82593201
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AACBD60EF8
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6789440135
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:59:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1vbdfkybOhmp for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zzc_c5eEIDPK for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 07:59:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFBEF60EFB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFBEF60EFB
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:58:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 019468651C; Sat, 14 Mar 2026 07:58:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 13 Mar 2026 16:11:24 +0100
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a9c5fc6729e42023e97b65c2ee9373c76e027b64
-X-Git-Newrev: dd839dbed2fb3b36615f30e289b5b7ae2af2bc54
-X-Patchwork-Hint: ignore
-Message-Id: <20260314075839.019468651C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/faketime: fix
- host build with glibc 2.43
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E3852400A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3852400A2
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3852400A2
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 07:59:38 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -348104203; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 14 Mar 2026 07:59:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1w1JuH-00000002LTa-0AIh;
+ Sat, 14 Mar 2026 08:59:33 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Christian Stewart <christian@aperture.us>
+Cc: Julien Olivain <ju.o@free.fr>,  Julien Olivain via buildroot
+ <buildroot@buildroot.org>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>,  James Hilliard
+ <james.hilliard1@gmail.com>,  Thomas Perale <thomas.perale@mind.be>
+In-Reply-To: <CA+h8R2pDgzU6i3P1aLR_uPdd3baK0Kc=hV1oRbnbrHoBFbU7uA@mail.gmail.com>
+ (Christian Stewart's message of "Fri, 13 Mar 2026 16:02:00 -0700")
+References: <20260312075722.86111-1-christian@aperture.us>
+ <4529c7b6d321750cc0d99e8e02c4758f@free.fr>
+ <875x6zirde.fsf@dell.be.48ers.dk>
+ <11d74c7acb42b8608bae709315dd7468@free.fr>
+ <CA+h8R2pDgzU6i3P1aLR_uPdd3baK0Kc=hV1oRbnbrHoBFbU7uA@mail.gmail.com>
+Date: Sat, 14 Mar 2026 08:59:32 +0100
+Message-ID: <87wlzehme3.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=SsdFrv/o/lUlsho7tmwOBBq9rVJayjPobd46L5xa9By2fcnrP7K1/hRN0/1I3z7vwH9PxeUS1gVnytP931vhdczSLLvWv2k37xMy+UdIDNKLi6bjp6+LweeG+eve9P9X5tFlNrNMibSnWYQkvmEwzsEKKu6cfeTYHFFg/7FopqXCtEu7Yxgdm/loswEEcSOLYhUuiWugYeG/z2pL3BduH35zTQVyD1vhA9u0NqWTWVoAydYlUDyHhmLgwYRrD6Yg84EWXbvohSeVTr/v4hjuV/4W790/M8WevNTInezLPjhSuX4NUptg0s2OW5Z0x6jbZPSok8GaVTZq1XVklaD4mA==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=BIxGLFCXbb9j1GeVcXGYIm4EhzIL7mRJlUiZBdGvOcw=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=SsdFrv/o
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/go: security bump to version
+ 1.26.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,73 +100,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd839dbed2fb3b36615f30e289b5b7ae2af2bc54
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
+>>>>> "Christian" == Christian Stewart <christian@aperture.us> writes:
 
-Fixes:
-https://autobuild.buildroot.net/results/911/9112933e2560b155a9c61f321874ec245b62b2a5/
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 088c3602fdac3854e9949e51ada99f1443f4f69a)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...onst-qualifiers-to-fix-build-with-ISO-C23.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ >> > NIT: It would have been better to first bump to 1.25.8 (which includes
+ >> > the same security fixes) and then afterwards add the feature bump from
+ >> > 1.25.x to 1.26.x so the security fix could be backported.
 
-diff --git a/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-new file mode 100644
-index 0000000000..ce84d40699
---- /dev/null
-+++ b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-@@ -0,0 +1,39 @@
-+From dbe865dfdba0145d993d70b7fd4ec88b2f47554b Mon Sep 17 00:00:00 2001
-+From: Tomas Korbar <tkorbar@redhat.com>
-+Date: Mon, 15 Dec 2025 11:03:21 +0100
-+Subject: [PATCH] Add const qualifiers to fix build with ISO C23
-+
-+Fix https://github.com/wolfcw/libfaketime/issues/524
-+
-+Upstream: https://github.com/wolfcw/libfaketime/commit/dbe865dfdba0145d993d70b7fd4ec88b2f47554b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/libfaketime.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/libfaketime.c b/src/libfaketime.c
-+index ef1dca9..02839c8 100644
-+--- a/src/libfaketime.c
-++++ b/src/libfaketime.c
-+@@ -2666,7 +2666,7 @@ int timespec_get(struct timespec *ts, int base)
-+ static void parse_ft_string(const char *user_faked_time)
-+ {
-+   struct tm user_faked_time_tm;
-+-  char * tmp_time_fmt;
-++  const char * tmp_time_fmt;
-+   char * nstime_str;
-+ 
-+   if (!strncmp(user_faked_time, user_faked_time_saved, BUFFERLEN))
-+@@ -3338,7 +3338,7 @@ static void prepare_config_contents(char *contents)
-+ bool str_array_contains(const char *haystack, const char *needle)
-+ {
-+   size_t needle_len = strlen(needle);
-+-  char *pos = strstr(haystack, needle);
-++  const char *pos = strstr(haystack, needle);
-+   while (pos) {
-+     if (pos == haystack || *(pos - 1) == ',') {
-+       char nextc = *(pos + needle_len);
-+-- 
-+2.47.3
-+
+ > I understand, will do in future.
+
+Great!
+
+ > So, right now go1.26 is the latest, go1.25 is supported, and go1.24 is
+ > the oldest supported.
+
+ > Go1.23 isn't getting even security fixes anymore, so we should at
+ > least update the LTS branch to go1.24.
+
+Yes, agreed.
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
