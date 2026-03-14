@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BEDD10706DB
-	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:08:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76CF810706DC
+	for <buildroot@archiver.kernel.org>; Sat, 14 Mar 2026 14:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60DC64102B;
-	Sat, 14 Mar 2026 14:08:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EB944102B;
+	Sat, 14 Mar 2026 14:08:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ru7euEO5DYQ1; Sat, 14 Mar 2026 14:08:38 +0000 (UTC)
+ id 2F-opag9LMqj; Sat, 14 Mar 2026 14:08:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C3C641089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 740CE4109D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773497318;
-	bh=YwIle7AnmXN0x/PMZ9gVTimsje2qWC7q9ayPYQh7WyI=;
+	s=default; t=1773497329;
+	bh=hRRLh6Err0CmfkiV1fKf8lhBqSYJ5cJWTW/ERonmN10=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=VYtQ+LZnyFs9pHXRLGfPcy4Um+Kz9/GMgzH+4c4u7BaqJ9ko2sGd0hwx0QFwj4d4d
-	 SFRcBP8wdt/5ye06RAtbDDOnbMlJgkGN9V1vHvPf5eKEeiDkqYt2QpYq6yOxeymQgH
-	 rADd9FDyZtNLnzBV6qa+B3Iu0+P40gPoEySlQC5IweaKECxsWg9mUOyB5GI+MzK7pm
-	 g0uEE24Iw1a2HVWWKq8OQD/a0XeBfYn9atx12fCENMYxBhLnQh6Kowdb6gcmGKKHq0
-	 R10H1Yft9yMI84g3m9NDHeCetLD1QrrvSCLBYJLFrUq/MwHVmCHbexDsr+Kwzz60/t
-	 NeCIG6a2SNNbQ==
+	b=euHJNSiKkxrxrsFQ5nmCrC5uI9BNh6FhHSEWtsT6oMFMLRw31yKPo91dRE+ypWhyl
+	 ulqQJ8mmvjon5GHF+nuQluJop6McE96UPAIr79LZ1kFGPg0fXG3nyc5HqQFZI4CZus
+	 SyAQtX2UO5S0zBSo7wEMNUtsABJiMAdFzPFaS3SAoqAD3hbINLQYMzLshdjxh4hrD5
+	 JBV94viJguziYcoOJ6IeT23Yb9ijt2vy8zcLaezkWD5FLNBwyrfoU6R5OXXRuH5xF3
+	 AaGQ5PzTWWVz/UBuh99c+QSCbINp4ZGBIOb/lIzJ2NN4QHXYU8kL3LS4gasXcVMV7i
+	 SaMvRgdClH+/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C3C641089;
-	Sat, 14 Mar 2026 14:08:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3ED5F201
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 740CE4109D;
+	Sat, 14 Mar 2026 14:08:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C2FF3C6
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72D4C41089
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59942401CA
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ex1BFs7UTm6u for <buildroot@buildroot.org>;
- Sat, 14 Mar 2026 14:08:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YfeDzp6R_8vT for <buildroot@buildroot.org>;
+ Sat, 14 Mar 2026 14:08:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6BE3B4102B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE3B4102B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 49158400F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49158400F9
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6BE3B4102B
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 49158400F9
+ for <buildroot@buildroot.org>; Sat, 14 Mar 2026 14:08:47 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8B480A4C1403;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E0292A4C1408;
  Sat, 14 Mar 2026 15:06:45 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41874)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-1O0f;
+ (envelope-from <bernd@kuhls.net>) id 1w1PdW-000000003UM-1o4l;
  Sat, 14 Mar 2026 14:06:38 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Mar 2026 15:05:56 +0100
-Message-ID: <20260314140633.2967249-60-bernd@kuhls.net>
+Date: Sat, 14 Mar 2026 15:05:57 +0100
+Message-ID: <20260314140633.2967249-61-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260314140633.2967249-1-bernd@kuhls.net>
 References: <20260314140633.2967249-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1773497205;
- bh=pTnU/YPaBZdULm5S22H6O7o+uKGZDZySm1Tb7PqNVkc=;
+ bh=qhtpdVqptbd62nsrWi0PvBJyfoZilI0zNSQExiXDFDY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=EhiCg51lLh1A1aYr+e+/6V2d3AKH/ldiDmlOex5Aa5EKKT5BCaOW7W88wu0KGu0Ms
- UpFMUzYSyOk+hWfpYWnKOnGZzb6A90NfEvSHk8jz/+NopYoLrK7Nz1nmSlJk3jOpA6
- hxKoF3TjPDhc43oy6EQWZNDbz5bM1RvXI5i02oS5JprrjU+iW/Y3Udk4uPcOxbtpXr
- DufeAdFpaBdBLWrkY9A9HflrPoRsCAYuyTnXxWn6CtLkTfTmR6oTBzcP9E8F/HYvZe
- tg/CYuAz4aU44+VkcXL9m/4S4yYMLjX0zamcfyGjDG96HganujT9IbqyfY9eNMecCU
- GJuW9U/fGRFpw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=R+nyBHMVjDZ00kUprqfRz99wo75igEnP+MARyXFr5vC6IGeQ4Km49cB0C+oO4PLDS
+ ZPHcRGlA90BzoEdvtIpB34j11h41HJ4wj4m9U98iXGirwnmQcyN79TQTAweBevCwJg
+ juHaDndKAuN3SPUCTwhx4JnhrQ0+mcpZ7WYSZXZ/onb1NAZB5GtHhk58jAIk+SuUDm
+ EXdnUGoypNokUaCvDTybPfmax4w8JXm6fKHWfD5Fn4+zFzQ23j03/0VkvdwEeFPIvm
+ Uz/Evy2ttZnR/+smBHXhP6WYdXOvZ672SrAWC4842SZKv5+7f7wgW7NfBQAir9f0+x
+ qsPK/xG8XLbsg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=EhiCg51l
-Subject: [Buildroot] [PATCH 60/96] package/python-pyqt5-sip: bump version to
- 12.18.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=R+nyBHMV
+Subject: [Buildroot] [PATCH 61/96] package/python-pyspnego: bump version to
+ 0.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,51 +116,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Package was updated using an updated version of scanpypi:
-https://patchwork.ozlabs.org/project/buildroot/patch/20251001002004.3178942-1-james.hilliard1@gmail.com/
-
-Updated license hash due to copyright year bump:
-https://github.com/Python-SIP/sip/commit/394e97272bc7d0b7a350e722ad2b748e07556fb1
+https://github.com/jborean93/pyspnego/blob/v0.12.1/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyqt5-sip/python-pyqt5-sip.hash | 11 +++++------
- package/python-pyqt5-sip/python-pyqt5-sip.mk   |  6 +++---
- 2 files changed, 8 insertions(+), 9 deletions(-)
+ package/python-pyspnego/python-pyspnego.hash | 4 ++--
+ package/python-pyspnego/python-pyspnego.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.hash b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-index 909ee2ef33..bf5560dab1 100644
---- a/package/python-pyqt5-sip/python-pyqt5-sip.hash
-+++ b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-@@ -1,6 +1,5 @@
--# From https://pypi.org/pypi/PyQt5-sip/json
--md5  9e0909e79f40619b0f2d3d3c33b4d4f7  PyQt5_sip-12.15.0.tar.gz
--sha256  d23fdfcf363b5cedd9d39f8a9c5710e7d52804f5b08a58e91c638b36eafcb702  PyQt5_sip-12.15.0.tar.gz
--
--# Locally calculated
--sha256  3859cfca971e429d6b79bdfeb1dc9e43aa9592f7295bf28fdd62824097909383  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pyqt5-sip/json
-+md5  739bb540472188851f15aac80bf8e715  pyqt5_sip-12.18.0.tar.gz
-+sha256  71c37db75a0664325de149f43e2a712ec5fa1f90429a21dafbca005cb6767f94  pyqt5_sip-12.18.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  3e6f5b427c36f94ecf86bc01698af7030a1ed6eb3748110d5dbb8d142d804611  LICENSE
-diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.mk b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-index 49762ec58c..7360e6dd48 100644
---- a/package/python-pyqt5-sip/python-pyqt5-sip.mk
-+++ b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-@@ -14,9 +14,9 @@
- # recorded in the PyPI source file "sip.h", in the SIP_VERSION_STR
- # macro. For example, PyQt5-sip 12.15.0 was generated with Python-SIP
- # 6.8.6.
--PYTHON_PYQT5_SIP_VERSION = 12.15.0
--PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/1b/15/78318d50f10062c428e97e7ce387e772616a4673c356018b905f247a6a85
--PYTHON_PYQT5_SIP_SOURCE = PyQt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
-+PYTHON_PYQT5_SIP_VERSION = 12.18.0
-+PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/f3/31/5ef342de9faee0f3801088946ae103db9b9eaeba3d6a64fefd5ce74df244
-+PYTHON_PYQT5_SIP_SOURCE = pyqt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
- PYTHON_PYQT5_SIP_LICENSE = BSD-2-Clause
- PYTHON_PYQT5_SIP_LICENSE_FILES = LICENSE
- PYTHON_PYQT5_SIP_SETUP_TYPE = setuptools
+diff --git a/package/python-pyspnego/python-pyspnego.hash b/package/python-pyspnego/python-pyspnego.hash
+index 1feca5d305..f74e9c2aa5 100644
+--- a/package/python-pyspnego/python-pyspnego.hash
++++ b/package/python-pyspnego/python-pyspnego.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyspnego/json
+-md5  f1e4eb073641fc00dfd0ce053963c73b  pyspnego-0.12.0.tar.gz
+-sha256  e1d9cd3520a87a1d6db8d68783b17edc4e1464eae3d51ead411a51c82dbaae67  pyspnego-0.12.0.tar.gz
++md5  bdbd0013e9f7bd8d076c339af9c9a73b  pyspnego-0.12.1.tar.gz
++sha256  ff4fb6df38202a012ea2a0f43091ae9680878443f0ea61c9ea0e2e8152a4b810  pyspnego-0.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  286517c93031c343f809f64b38563a783614b762e1367242af6cdd4107335471  LICENSE
+diff --git a/package/python-pyspnego/python-pyspnego.mk b/package/python-pyspnego/python-pyspnego.mk
+index 5e982ac7cf..ebe74bd879 100644
+--- a/package/python-pyspnego/python-pyspnego.mk
++++ b/package/python-pyspnego/python-pyspnego.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYSPNEGO_VERSION = 0.12.0
++PYTHON_PYSPNEGO_VERSION = 0.12.1
+ PYTHON_PYSPNEGO_SOURCE = pyspnego-$(PYTHON_PYSPNEGO_VERSION).tar.gz
+-PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/f9/e4/8b32a91aeba6fbc6943a630c44b2fe038615e5c7dec8814316fafdcf4bf4
++PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/7d/84/58577bd1b14293650879de0579ec263a1d8350f1d6d227226cf776b5a6a6
+ PYTHON_PYSPNEGO_SETUP_TYPE = setuptools
+ PYTHON_PYSPNEGO_LICENSE = MIT
+ PYTHON_PYSPNEGO_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
