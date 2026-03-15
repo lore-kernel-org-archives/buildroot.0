@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06FA2F3028A
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18F63F3027F
 	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0503416CD;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6A6A614C8;
 	Sun, 15 Mar 2026 22:20:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T4hzRXdmMbgd; Sun, 15 Mar 2026 22:20:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qEL-mqqKwnPE; Sun, 15 Mar 2026 22:19:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEF2C416DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB9C8614AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613201;
-	bh=DNu7S+GI53tfMMy7Tp4iAwG71Gn8l+IV7DIEJfIRI5M=;
+	s=default; t=1773613199;
+	bh=HyspiPvMj0jwS24ePSxH36XnfMSs9vg2jQe6s8ScEuA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GNKGLd7J+/1a0dPZh1dVKjMIlYxy2JaJG8EiQg1LnBlxt+oTpzApiDX+VrDOnFBuA
-	 vU4BIG0v22UYfYILN8x9swK0H6aw53R9arFWz4Fg6C+lTPgHVDxZZdXKQNyIAVLLLL
-	 2X+7AvHhYMcZuYPZ7lF0wIAtkg/WYUJV6m2+sb4LIUMVzbg9xr/hb0fZk2ws9w97yi
-	 qgbpFXOtSa4RpGN9qVmteMq82O02/xsskzljTMxfx9TCvVBlN08JkDHfsleg4LL8Ih
-	 MSjnci8svBMHFsACucdalqlkfUBDBWG70X/Ovi8ytBTURW4IYnQl7rHDWg0y2z336X
-	 2GAik4nH2JOWA==
+	b=IaGiqa9iqmw3sDh3lYVDgqyyjw9+oxieZonaE7sCqIj9j4N8q6LSsdJJp/RES+2kb
+	 WVbp7y9/v2gBAsmj123J4m1zP+HZygs+2fc9Qm2fXOMZqrUmsvbk3GqXLRqYjcj7l8
+	 vzDe+aAnnIrKvP/JsjUPiMGeZMuKzPu4LjJKmmSfvORRiqlQMarDjPvkoxwxXt3ldA
+	 AbxkeVlXJv3F/TPavoaNzHbKwwNHiFKsda0AWyQjfjmj1y60OY2XKm6G93wWyyFH4k
+	 ufHiV4jvxW4D3sxFsQ/Ji9k06xqH4rKhHjES79sKT7Kxee4n5FdbjEDw1xix2hnr6w
+	 sAo90XkzGsfDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEF2C416DA;
-	Sun, 15 Mar 2026 22:20:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F4421B2
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB9C8614AB;
+	Sun, 15 Mar 2026 22:19:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F116357
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C58840A22
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2EDE3610C5
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3DOwf3lk4gep for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rjjvy6L524nf for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B702840AB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FE5E610A6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B702840AB9
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FE5E610A6
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0543983D9E; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
+ id 721E382642; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c479ac460172be6203b543de30c83f98055aa54b
-X-Git-Newrev: df796e693c3b7049e23536b5b403b55a06f4bc77
+X-Git-Oldrev: 48c3146af2a16480929e81f6e5250ed53c5e971b
+X-Git-Newrev: 35cdefb97d3205cc7be284c2655ed70ae9389aac
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221805.0543983D9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-urwid: bump version to 3.0.5
+Message-Id: <20260315221805.721E382642@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-yarl: bump version to 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +76,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/df796e693c3b7049e23536b5b403b55a06f4bc77
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/35cdefb97d3205cc7be284c2655ed70ae9389aac
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/urwid/urwid/blob/3.0.5/docs/changelog.rst
+https://github.com/aio-libs/yarl/blob/v1.23.0/CHANGES.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-urwid/python-urwid.hash | 4 ++--
- package/python-urwid/python-urwid.mk   | 4 ++--
+ package/python-yarl/python-yarl.hash | 4 ++--
+ package/python-yarl/python-yarl.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
-index dd9c208ad0..56ea763deb 100644
---- a/package/python-urwid/python-urwid.hash
-+++ b/package/python-urwid/python-urwid.hash
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+index 62b78010f1..1bbc3e9edb 100644
+--- a/package/python-yarl/python-yarl.hash
++++ b/package/python-yarl/python-yarl.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urwid/json
--md5  6cf95702b787fd7e5f90e74d9900f000  urwid-3.0.4.tar.gz
--sha256  c3d0d2f47602b21949ffb8669a7ef0a8ca5fa13ed5c1ee1d2d81edf05616187f  urwid-3.0.4.tar.gz
-+md5  ee84dfeeac19cb4b09a9d90b64029c20  urwid-3.0.5.tar.gz
-+sha256  24be27ffafdb68c09cd95dc21b60ccfd02843320b25ce5feee1708b34fad5a23  urwid-3.0.5.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/yarl/json
+-md5  21bde2ca6df9bfc66b1810461e0ded05  yarl-1.22.0.tar.gz
+-sha256  bebf8557577d4401ba8bd9ff33906f1376c877aa78d1fe216ad01b4d6745af71  yarl-1.22.0.tar.gz
++md5  323301056acefbfe0d57e8ab8ba33eb3  yarl-1.23.0.tar.gz
++sha256  53b1ea6ca88ebd4420379c330aea57e258408dd0df9af0992e5de2078dc9f5d5  yarl-1.23.0.tar.gz
  # Locally computed sha256 checksums
- sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
-diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
-index b3069fdaff..0c29c9ab75 100644
---- a/package/python-urwid/python-urwid.mk
-+++ b/package/python-urwid/python-urwid.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+index dea4e34739..d04713e569 100644
+--- a/package/python-yarl/python-yarl.mk
++++ b/package/python-yarl/python-yarl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_URWID_VERSION = 3.0.4
-+PYTHON_URWID_VERSION = 3.0.5
- PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
--PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/e0/4d/f0832a6bf0986bdd770d61f9cf9e9915741171502c0c399bf934c72a3e5e
-+PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/b1/59/67cd42db7c549c0c106d2b56d2d2ec1915c459e0a92722029efc5359e871
- PYTHON_URWID_LICENSE = LGPL-2.1+
- PYTHON_URWID_LICENSE_FILES = COPYING
- PYTHON_URWID_SETUP_TYPE = setuptools
+-PYTHON_YARL_VERSION = 1.22.0
++PYTHON_YARL_VERSION = 1.23.0
+ PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+-PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/57/63/0c6ebca57330cd313f6102b16dd57ffaf3ec4c83403dcb45dbd15c6f3ea1
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/23/6e/beb1beec874a72f23815c1434518bfc4ed2175065173fb138c3705f658d4
+ PYTHON_YARL_LICENSE = Apache-2.0
+ PYTHON_YARL_LICENSE_FILES = LICENSE
+ PYTHON_YARL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
