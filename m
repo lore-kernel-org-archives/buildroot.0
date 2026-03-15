@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF02F3028C
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879ECF3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32963613E8;
-	Sun, 15 Mar 2026 22:19:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C59D415BF;
+	Sun, 15 Mar 2026 22:19:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WgcnSwT1QA8e; Sun, 15 Mar 2026 22:19:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cmkzV_-hHZk0; Sun, 15 Mar 2026 22:19:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189476132B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81C6C415B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613170;
-	bh=Xy2GNouBfaBYnEh4pnnkSSlY5xzMn/gPpa14tNOxU5A=;
+	s=default; t=1773613171;
+	bh=UrkbZ0MAsHGuyDcTuhH2x7AorffogaAUHWKhOBE/06o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KeHFnxAcPAyGLF9RU8D6AsVx/AzjLAzQmCtsmt7yE/WbT1Bp5DV75YkCZH5PjXRR5
-	 YjgNC3yYpQUqqb/a7TqNEHKlAjJLlJRCm7CqZ/HZC46QT9VusYiMl8VzI3cfq8AguS
-	 ugcDg9mIjUN0rzvIXfonigr9sZqaFIli3VkabcLY/0oCuu7xYMyYd3rgGbPJXmo84H
-	 15hZbY9TnbhgNBdSOO8XsbjO1e0eNGCIn8cpzMBhy4A50a19274frcd/DR82NwiWQU
-	 5OKLTl/OWcHmRarmykKWGKrqz8cUwczRVzBUj8DQQjc2hksDziCRZimFefDbQ9R1fI
-	 oRVA4buWUJPUw==
+	b=F1HucXMmEfjgqvh3720ZF36LNcNa83TcGYKi53bmV7HyLfVmk15mHRkhV4FWk6bSY
+	 W3ycFMldnLose8MKtD/f9WTa3NqAO3x1G5iHKWij/YJk1Rsb3ja6N2z/rcSUBwiLYj
+	 61SVIf6sPh/s5tBKSpaT6UApoJKJbxvqbCkJdZCXtfJEbvdL7+jjVuKB6huN9fEC7q
+	 MjelVkMvXRAVG1BOAgTE6PKjYLqVvIiaS00YouZ7apaMt2bXr+W4hS2L1bHMDYavUF
+	 nGVwy7cgIuScaw+1jCEYaQRX5vYudsDkSxmLFPrbY95276ETRMUSWv+QBz+rdnKbkz
+	 3YksbQb8KSYBg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 189476132B;
-	Sun, 15 Mar 2026 22:19:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 114B4357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81C6C415B6;
+	Sun, 15 Mar 2026 22:19:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05C441B4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16597610C2
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E26CD40AD4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dYfCWPkwwV-Y for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L53zwn0IqPT8 for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D13761087
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 656304095F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D13761087
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 656304095F
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE7A785C3A; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ id A7B5A80FBC; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7ace0430270b339fb837dbaf2fc5e29dc07dd45
-X-Git-Newrev: 7c30b1e522988ffe5d4b300b2447f912b83558ad
+X-Git-Oldrev: 7ad3ec1c6fb0db80551b87802f1045391a37d169
+X-Git-Newrev: 374f45b0faf0ca5fdd2488fa8d1fe0e589a3a032
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221803.DE7A785C3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sdbus-modemmanager: bump
- version to 1.0.3
+Message-Id: <20260315221804.A7B5A80FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-trove-classifiers: bump
+ version to 2026.1.14.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7c30b1e522988ffe5d4b300b2447f912b83558ad
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/374f45b0faf0ca5fdd2488fa8d1fe0e589a3a032
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/zhanglongqi/python-sdbus-modemmanager/blob/master/changelog.md
-
-Upstream switched to poetry:
-https://github.com/zhanglongqi/python-sdbus-modemmanager/commit/0d8ae7217841ab1bc12282076f766f94415573f5
+https://github.com/pypa/trove-classifiers/releases
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash | 4 ++--
- package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-trove-classifiers/python-trove-classifiers.hash | 4 ++--
+ package/python-trove-classifiers/python-trove-classifiers.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash
-index 980568cb0d..3833864bd8 100644
---- a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash
-+++ b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.hash
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
+index 5e3bd86638..871f8675fe 100644
+--- a/package/python-trove-classifiers/python-trove-classifiers.hash
++++ b/package/python-trove-classifiers/python-trove-classifiers.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sdbus-modemmanager/json
--md5  720d59e444d84d77c184bc73844cfebd  sdbus_modemmanager-1.0.2.tar.gz
--sha256  80ed83a158eeb8d9b0e0c1e5110c5f71307df87523245e4d0e79ebe200932fc6  sdbus_modemmanager-1.0.2.tar.gz
-+md5  d75c065dd08ce96e37db0858af0dd44f  sdbus_modemmanager-1.0.3.tar.gz
-+sha256  8fd5509de6ce363019667a14267ebce99f2b67849d1d7ee72d0228611ac1ba0a  sdbus_modemmanager-1.0.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
+-md5  38bcf32894b739e814f3362ce191b62b  trove_classifiers-2025.12.1.14.tar.gz
+-sha256  a74f0400524fc83620a9be74a07074b5cbe7594fd4d97fd4c2bfde625fdc1633  trove_classifiers-2025.12.1.14.tar.gz
++md5  ded610aa62cf3dc78360e96802ca72e8  trove_classifiers-2026.1.14.14.tar.gz
++sha256  00492545a1402b09d4858605ba190ea33243d361e2b01c9c296ce06b5c3325f3  trove_classifiers-2026.1.14.14.tar.gz
  # Locally computed sha256 checksums
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk
-index 2821453270..62d128b264 100644
---- a/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk
-+++ b/package/python-sdbus-modemmanager/python-sdbus-modemmanager.mk
-@@ -4,10 +4,10 @@
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
+index 5a6d8f49d7..5c5ebb5950 100644
+--- a/package/python-trove-classifiers/python-trove-classifiers.mk
++++ b/package/python-trove-classifiers/python-trove-classifiers.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SDBUS_MODEMMANAGER_VERSION = 1.0.2
-+PYTHON_SDBUS_MODEMMANAGER_VERSION = 1.0.3
- PYTHON_SDBUS_MODEMMANAGER_SOURCE = sdbus_modemmanager-$(PYTHON_SDBUS_MODEMMANAGER_VERSION).tar.gz
--PYTHON_SDBUS_MODEMMANAGER_SITE = https://files.pythonhosted.org/packages/af/99/a17942d9abda13ad1f27f39e900e39852a6215b70e30b682b777dfeff818
--PYTHON_SDBUS_MODEMMANAGER_SETUP_TYPE = setuptools
-+PYTHON_SDBUS_MODEMMANAGER_SITE = https://files.pythonhosted.org/packages/38/2c/d66aa7f981df1d654bf70942964a4ca24cf930815fe7d656e1979c44a33a
-+PYTHON_SDBUS_MODEMMANAGER_SETUP_TYPE = poetry
- PYTHON_SDBUS_MODEMMANAGER_LICENSE = LGPL-2.1+
- PYTHON_SDBUS_MODEMMANAGER_LICENSE_FILES = COPYING.LESSER
- 
+-PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.12.1.14
++PYTHON_TROVE_CLASSIFIERS_VERSION = 2026.1.14.14
+ PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
+-PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/80/e1/000add3b3e0725ce7ee0ea6ea4543f1e1d9519742f3b2320de41eeefa7c7
++PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/d8/43/7935f8ea93fcb6680bc10a6fdbf534075c198eeead59150dd5ed68449642
+ PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
+ PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
+ PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
