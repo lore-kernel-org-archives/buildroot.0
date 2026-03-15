@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E93F3028C
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73DAAF3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ADCF612DA;
-	Sun, 15 Mar 2026 22:18:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4982F612EC;
+	Sun, 15 Mar 2026 22:18:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbi4_66RFBFl; Sun, 15 Mar 2026 22:18:52 +0000 (UTC)
+ id s9QsPLuDL-xd; Sun, 15 Mar 2026 22:18:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D01B610AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC6AB610AC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613132;
-	bh=D8ARLBFeQ06O7sDy1BzQ9hD+CYeRxBhcdR7bQVWBpfc=;
+	s=default; t=1773613133;
+	bh=Fv31J6H05r4ZGsKmXjPNeAmU8YfLz8l20zgQwxwugUg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=F5VWVtdbDw+gjVyFEYbU8CS2e5q6uyd4/Fj63MhwpUvok7wwfR+vEXBFQStsGtmQw
-	 t1we+3RJuKmymgw2ayvXd2J1gkIvryHVaiOqbcJUH7TAxXqqFp1KAQLZqmYZFywTrp
-	 lsuEl7oUftZBWjCbJEvAv+uu9U1En0AsPsgOg6UQhmYVDP7IgqqpamdddmnR4wo/r6
-	 2OWFGE3utoQ8oN0aI2aXFpxxQq3wzfC3Q1HT+7bqV9InceBgneC3prB6tySSPZ4iuU
-	 CcYF50MkjctUVy1bTTUG3d+6K3dNyhkprmUjH0GiwfdIX667GnQMSTRshatmuPknTp
-	 8qD/00IolJhWw==
+	b=nxZFHv0VPLjN6ZoDApV1hPYlaSaMMW3c4caYzV/jGtomIEDKlaHT41EMiwlkwKCGF
+	 N3/EyRkTE3zF32to0I83RaSbmSUcytOSt2SLVLG/01r9ZJJqcQdsvJyntIXo1nVTaQ
+	 +ymCtvCwv4Ty0YzpHPGrgY8TJd+MeGp07JKAfKLHGHUVfuyzES/RHSzalr9MK8kzUv
+	 UExXLh/jwCvv1P/hkEWYCbl03gwXF1tAY8I19RfEVHDeB/d+HBA6oH7XoRSWhBbWRX
+	 wOTzTSJxgKUl59m5g5HhC74ZPJVvuBF5ZmaByp0Z37UtUi16PxPCqIq1+v0lVc01z5
+	 LV4gIuLTtQgdQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D01B610AC;
-	Sun, 15 Mar 2026 22:18:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0290D1B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC6AB610AC;
+	Sun, 15 Mar 2026 22:18:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1707F357
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69546610E0
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C921040AB4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P0UywP6h6-lj for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NtP9ZNzXNG6j for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FBA56108A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F733408CD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FBA56108A
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F733408CD
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D275283F4D; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
+ id B4E508285B; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:33:04 +0100
+Date: Sun, 15 Mar 2026 16:21:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de96f9aefed303b1af822d17c964b537d77b511d
-X-Git-Newrev: d5d17fc404bc04a0f4af5d217412bac740193efa
+X-Git-Oldrev: bdacb1a48389f4ee41facb56c941e3ca50f6c431
+X-Git-Newrev: 44c2393af96bc29cd2a7a9c28ab334925760c7c3
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221801.D275283F4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-immutabledict: bump version
- to 4.3.1
+Message-Id: <20260315221800.B4E508285B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-apispec: bump version to
+ 6.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d5d17fc404bc04a0f4af5d217412bac740193efa
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/44c2393af96bc29cd2a7a9c28ab334925760c7c3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/corenting/immutabledict/blob/v4.3.1/CHANGELOG.md
+https://github.com/marshmallow-code/apispec/blob/6.10.0/CHANGELOG.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-immutabledict/python-immutabledict.hash | 4 ++--
- package/python-immutabledict/python-immutabledict.mk   | 4 ++--
+ package/python-apispec/python-apispec.hash | 4 ++--
+ package/python-apispec/python-apispec.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-immutabledict/python-immutabledict.hash b/package/python-immutabledict/python-immutabledict.hash
-index f917e43702..b7182a48a7 100644
---- a/package/python-immutabledict/python-immutabledict.hash
-+++ b/package/python-immutabledict/python-immutabledict.hash
+diff --git a/package/python-apispec/python-apispec.hash b/package/python-apispec/python-apispec.hash
+index 45571f4c53..cd3a0c8aaf 100644
+--- a/package/python-apispec/python-apispec.hash
++++ b/package/python-apispec/python-apispec.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/immutabledict/json
--md5  2ddeb671f200618365b11b997d50368f  immutabledict-4.2.2.tar.gz
--sha256  cb6ed3090df593148f94cb407d218ca526fd2639694afdb553dc4f50ce6feeca  immutabledict-4.2.2.tar.gz
-+md5  8ed06e3692bae4d1df1a8818d9013ba2  immutabledict-4.3.1.tar.gz
-+sha256  f844a669106cfdc73f47b1a9da003782fb17dc955a54c80972e0d93d1c63c514  immutabledict-4.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/apispec/json
+-md5  ccd10389ca94fe9acc7ff542b9bf1fa2  apispec-6.9.0.tar.gz
+-sha256  7a38ce7c3eedc7771e6e33295afdd8c4b0acdd9865b483f8cf6cc369c93e8d1e  apispec-6.9.0.tar.gz
++md5  847fa44044377f3e52bf15abc471fe8c  apispec-6.10.0.tar.gz
++sha256  0a888555cd4aa5fb7176041be15684154fd8961055e1672e703abf737e8761bf  apispec-6.10.0.tar.gz
  # Locally computed sha256 checksums
- sha256  347f918d37d4e0556a0695d34b9fb87fa9bbe808d54949851789c6c1fc91c61f  LICENSE
-diff --git a/package/python-immutabledict/python-immutabledict.mk b/package/python-immutabledict/python-immutabledict.mk
-index 4a886b1607..1e8cbd7e7b 100644
---- a/package/python-immutabledict/python-immutabledict.mk
-+++ b/package/python-immutabledict/python-immutabledict.mk
+ sha256  f345555ff39d6b573342781a6346a5202a8f14bce424fee41f910c6c5379cc7d  LICENSE
+diff --git a/package/python-apispec/python-apispec.mk b/package/python-apispec/python-apispec.mk
+index 2cc8bc2304..ddbb211244 100644
+--- a/package/python-apispec/python-apispec.mk
++++ b/package/python-apispec/python-apispec.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IMMUTABLEDICT_VERSION = 4.2.2
-+PYTHON_IMMUTABLEDICT_VERSION = 4.3.1
- PYTHON_IMMUTABLEDICT_SOURCE = immutabledict-$(PYTHON_IMMUTABLEDICT_VERSION).tar.gz
--PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/ce/12/1da8e1a9050d0603ba65fb1796ed8860a705b906701c96e77f85cc7490be
-+PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/1d/e6/718471048fea0366c3e3d1df3acfd914ca66d571cdffcf6d37bbcd725708
- PYTHON_IMMUTABLEDICT_SETUP_TYPE = poetry
- PYTHON_IMMUTABLEDICT_LICENSE = MIT
- PYTHON_IMMUTABLEDICT_LICENSE_FILES = LICENSE
+-PYTHON_APISPEC_VERSION = 6.9.0
++PYTHON_APISPEC_VERSION = 6.10.0
+ PYTHON_APISPEC_SOURCE = apispec-$(PYTHON_APISPEC_VERSION).tar.gz
+-PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/02/ad/30cd449f3a0cf213dd13d9af7ba869214d8c66d517939964d3f490307e46
++PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/4a/f1/1f5a9332df3ecd90cc5ab69bc58a4174b8ba2ac1720c4c26b01d20751bf5
+ PYTHON_APISPEC_SETUP_TYPE = flit
+ PYTHON_APISPEC_LICENSE = MIT
+ PYTHON_APISPEC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
