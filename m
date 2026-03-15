@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A91F3028F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0880F3028C
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FB6E611E2;
-	Sun, 15 Mar 2026 22:18:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A99461145;
+	Sun, 15 Mar 2026 22:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-jltDzh9Im7; Sun, 15 Mar 2026 22:18:11 +0000 (UTC)
+ id xWY2kXGvHJkP; Sun, 15 Mar 2026 22:18:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A07161102
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF709611A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613088;
-	bh=+tqfpsAz8jSuiCTqN0ckx9tiq7N5hkZ51jCQWJ0o8gw=;
+	s=default; t=1773613089;
+	bh=QSEh4zvZTzdyfRQoBN9VKuBBI8iRa5KusMp4C3ZNjhg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ojYIxyPtObdcVB85Tl+kpLMPboGf7fJZGPlYGvDrNjZCyqkEoqZ+4XsGulnEpVajW
-	 /Ue5rzAt5wwG/FXenep9A7/6Qz3x7iH3WajqXIuzFcEEAqrqDsNg4a4NsiACZbkatb
-	 t6/+KLjCZj1xuTmooXqun71MIfJJXTdkQV4r5YtbaVy1It2mR6mdyFuVgZg/eBnYb2
-	 F28kzEDdCZUUrvTrLf+7BrJVohPHz4xAs3fd4tRT5Q6Kkh/6oQD855nlb4Q7snel0N
-	 oFzoatQfXg7w/MiqrKj1uiqr5k80vfoXCTjBQM8djO75lMeB80pwhgqU0fWEPG/nkx
-	 u0I0sXcpJwW8Q==
+	b=UBuyHk1quY5WDvWS0Ilt698GYTe/RNeaplaq7ifXI5/3qTIlDbtt8uaHaomtI+smc
+	 M2juZluVEkTQLP/SWx1w1Tajz5d73YpIgOSyIDaaNlFQAwJ/8B8pGjwvLFFY25S9xT
+	 BurPihhv39ueQOdndVro7qDHYUnW7QeiKo0WK28AsLSLPCElWPy+znDoUnAdB8/m28
+	 rlZWvL2TCxbFO5PdVp49pYs3nt5alNY2y5+CYJ9hHrPIBJlmkbz2spaCx7HWTmGW8c
+	 3MdZd4OSOeZ1OZs9bWi4YAfcaVKUL1Wcu/Zp3fZl5Daj4d0f2xefBFUJQHxWmzpD/I
+	 1IQBADh1JtUcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A07161102;
-	Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3544A357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF709611A9;
+	Sun, 15 Mar 2026 22:18:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D7971B4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F04740727
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A2FC610A4
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOvAr-P-y1Px for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y4s6hrYCpDXv for <buildroot@buildroot.org>;
  Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F90B40721
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD3616108C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F90B40721
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD3616108C
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9280583F4D; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
+ id 1B93883F4D; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 16:21:19 +0100
+Date: Sun, 15 Mar 2026 16:21:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d6b8a00b6f13e1d7641bce61d687566170f4e0a
-X-Git-Newrev: 146f315ff68fa5b95c89a13140c9873cf54896f5
+X-Git-Oldrev: 81541039cd10d778472f2fba54c549478023213f
+X-Git-Newrev: e3fee9b0987c4530031cf0e5a1225bdffda48a8a
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221801.9280583F4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-google-api-core: bump
- version to 2.30.0
+Message-Id: <20260315221801.1B93883F4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-charset-normalizer: bump
+ version to 3.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/146f315ff68fa5b95c89a13140c9873cf54896f5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e3fee9b0987c4530031cf0e5a1225bdffda48a8a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/googleapis/google-cloud-python/blob/main/packages/google-api-core/CHANGELOG.md
+https://github.com/jawah/charset_normalizer/blob/3.4.5/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-google-api-core/python-google-api-core.hash | 4 ++--
- package/python-google-api-core/python-google-api-core.mk   | 4 ++--
+ package/python-charset-normalizer/python-charset-normalizer.hash | 4 ++--
+ package/python-charset-normalizer/python-charset-normalizer.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-google-api-core/python-google-api-core.hash b/package/python-google-api-core/python-google-api-core.hash
-index 9e3c732773..83377ccd41 100644
---- a/package/python-google-api-core/python-google-api-core.hash
-+++ b/package/python-google-api-core/python-google-api-core.hash
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.hash b/package/python-charset-normalizer/python-charset-normalizer.hash
+index dd10c11e73..1094f419a3 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.hash
++++ b/package/python-charset-normalizer/python-charset-normalizer.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/google-api-core/json
--md5  fc633e6fd830f249f8dd205f10544660  google_api_core-2.28.1.tar.gz
--sha256  2b405df02d68e68ce0fbc138559e6036559e685159d148ae5861013dc201baf8  google_api_core-2.28.1.tar.gz
-+md5  8c5ab43e8f25708f22a6f28d919bb45f  google_api_core-2.30.0.tar.gz
-+sha256  02edfa9fab31e17fc0befb5f161b3bf93c9096d99aed584625f38065c511ad9b  google_api_core-2.30.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/charset-normalizer/json
+-md5  3c73a3c5c05a896c1169d8b5298dc4e5  charset_normalizer-3.4.4.tar.gz
+-sha256  94537985111c35f28720e43603b8e7b43a6ecfb2ce1d3058bbe955b73404e21a  charset_normalizer-3.4.4.tar.gz
++md5  cde800b3dada84f6041196f40f4b2ad1  charset_normalizer-3.4.5.tar.gz
++sha256  95adae7b6c42a6c5b5b559b1a99149f090a57128155daeea91732c8d970d8644  charset_normalizer-3.4.5.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-google-api-core/python-google-api-core.mk b/package/python-google-api-core/python-google-api-core.mk
-index 908a37c3e4..28c4518aef 100644
---- a/package/python-google-api-core/python-google-api-core.mk
-+++ b/package/python-google-api-core/python-google-api-core.mk
+ sha256  6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887  LICENSE
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index f793241a1e..ce91028b31 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLE_API_CORE_VERSION = 2.28.1
-+PYTHON_GOOGLE_API_CORE_VERSION = 2.30.0
- PYTHON_GOOGLE_API_CORE_SOURCE = google_api_core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
--PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/61/da/83d7043169ac2c8c7469f0e375610d78ae2160134bf1b80634c482fa079c
-+PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/22/98/586ec94553b569080caef635f98a3723db36a38eac0e3d7eb3ea9d2e4b9a
- PYTHON_GOOGLE_API_CORE_SETUP_TYPE = setuptools
- PYTHON_GOOGLE_API_CORE_LICENSE = Apache-2.0
- PYTHON_GOOGLE_API_CORE_LICENSE_FILES = LICENSE
+-PYTHON_CHARSET_NORMALIZER_VERSION = 3.4.4
++PYTHON_CHARSET_NORMALIZER_VERSION = 3.4.5
+ PYTHON_CHARSET_NORMALIZER_SOURCE = charset_normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
+-PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/13/69/33ddede1939fdd074bce5434295f38fae7136463422fe4fd3e0e89b98062
++PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/1d/35/02daf95b9cd686320bb622eb148792655c9412dbb9b67abb5694e5910a24
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
