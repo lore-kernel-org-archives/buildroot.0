@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8884F3027F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D175CF3028A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CE414159F;
-	Sun, 15 Mar 2026 22:19:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2531611F1;
+	Sun, 15 Mar 2026 22:19:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 36dkAUozFZOc; Sun, 15 Mar 2026 22:19:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oFQhj_TyEzym; Sun, 15 Mar 2026 22:19:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF61B41598
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C33FE613D8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613167;
-	bh=pyRbWardeMQE8SMD9YaCAn/ip0czxxC9J2mL8aBoPbU=;
+	s=default; t=1773613168;
+	bh=K1NupAPOeI+yD/ZAYLZeJENLANYgF8NUDXZ4o0FsbfQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=im5jQ2zRK0vyF1R0cagRc+dCO+MgcGFb42D5Z8+OZm1/fNhm95CFtuoQd60bCRI/y
-	 P/XSM1I9tGdVvrxABJR6eBfwXeKo1U2rweSlLv5reU+5/z7m+iUY6OSUKYn0c87bkg
-	 IyCogZmmcbQaauGOAkMcN3sXiwzM+YYkCzaB1vvIENLCZ+jxntF2QBNaDlizvLNh5C
-	 XZDz/5tV6wmMkh7JW7JzY3RP2mPoaC0mkBcWAPM8UEX+E+HoyF1OaayYUSfA1CSexO
-	 77CKdvDVftd88G8pyz8ozWz89y46X4hhRjof2YDV8X3XfZTIkd8xHIWqotCRgk4ZUL
-	 VLQiBpQ+5tiYw==
+	b=ayZf4T2Duro+xThmw+dIH5XjjlM2mIghGiCT6bhbc8qLjhdJiO1+NV51AX6WDofZu
+	 0pqy4JoxL7gN5jKK5ZNuOMzHtxPlWacPs3E4OHjLt3xDgaGH5F/ui9wYWcwFgVKK5N
+	 0iIcfJjecJwnUqcV+/WAxsxvt7KDGMKHuCPZJruSoyoVnrS6en6H8x3HOcHhQkjgct
+	 IIzAxgFEflwQ52suOtHbyoG/ECPO4U/IsKz3vBIkPOVUYNEzulBAm71RmvX5uFiYXS
+	 u9tCmtNgOHNv9qsaTNxIwiGAGmZIqhZbuCtbJ5Ycql2kGNfkkvXKF4NVu9//wtdoXW
+	 +6Z586p2oeHyA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF61B41598;
-	Sun, 15 Mar 2026 22:19:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C33FE613D8;
+	Sun, 15 Mar 2026 22:19:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E0541B4
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D16B1B2
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C571740B80
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFDA4409DF
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T1EL0WzhL7Sb for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ id n45iw63tnoQg for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6C6E409DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4806840AD4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6C6E409DF
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4806840AD4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 34D0F80FBC; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ id 8A9E880FBC; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25867d252b92ead57d63c565f186e16dc08be134
-X-Git-Newrev: 9f17e0c2c92b58fad20f49e1fa9142ecbb87c593
+X-Git-Oldrev: e59cc42d2f4b4fd557ceb4fef4b7865da17bf4b7
+X-Git-Newrev: 50c9c7f5536966d907c4c922c03834be53ec9446
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221804.34D0F80FBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-textual: bump version to
- 8.1.1
+Message-Id: <20260315221804.8A9E880FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tortoise-orm: bump version
+ to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9f17e0c2c92b58fad20f49e1fa9142ecbb87c593
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/50c9c7f5536966d907c4c922c03834be53ec9446
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/Textualize/textual/blob/v8.1.1/CHANGELOG.md
+https://github.com/tortoise/tortoise-orm/blob/1.1.6/CHANGELOG.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-textual/python-textual.hash | 4 ++--
- package/python-textual/python-textual.mk   | 4 ++--
+ package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
+ package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-textual/python-textual.hash b/package/python-textual/python-textual.hash
-index 68f996aeec..00a6759383 100644
---- a/package/python-textual/python-textual.hash
-+++ b/package/python-textual/python-textual.hash
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
+index 0bb4224a9e..77144495f8 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.hash
++++ b/package/python-tortoise-orm/python-tortoise-orm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/textual/json
--md5  88b5c60f9713a6cc3b5cf625c4f5efe3  textual-7.5.0.tar.gz
--sha256  c730cba1e3d704e8f1ca915b6a3af01451e3bca380114baacf6abf87e9dac8b6  textual-7.5.0.tar.gz
-+md5  d94bf25d9e81458d56b86aa108bb3fea  textual-8.1.1.tar.gz
-+sha256  eef0256a6131f06a20ad7576412138c1f30f92ddeedd055953c08d97044bc317  textual-8.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
+-md5  5c143e93e4c35dfd8cd19dfdbc064d6d  tortoise_orm-1.1.5.tar.gz
+-sha256  d4074a7c34a8445fcca19ec865189d80ea7a00b29e4b12778460fcab67a5ce74  tortoise_orm-1.1.5.tar.gz
++md5  c3278bf834e12f7bcfef071ba52c0dbd  tortoise_orm-1.1.6.tar.gz
++sha256  30095a77aa7c3eb3ede1baf4b390a66b994dc7c4d0d06a609d23a16c50e55d0c  tortoise_orm-1.1.6.tar.gz
  # Locally computed sha256 checksums
- sha256  94f290a762376dfdb7768e42070618b0abfd2a2799eab1b1c097816c3a39eb57  LICENSE
-diff --git a/package/python-textual/python-textual.mk b/package/python-textual/python-textual.mk
-index 93881f6d02..9401964732 100644
---- a/package/python-textual/python-textual.mk
-+++ b/package/python-textual/python-textual.mk
+ sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
+index 18ad37d5d9..e0190eb9ff 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.mk
++++ b/package/python-tortoise-orm/python-tortoise-orm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TEXTUAL_VERSION = 7.5.0
-+PYTHON_TEXTUAL_VERSION = 8.1.1
- PYTHON_TEXTUAL_SOURCE = textual-$(PYTHON_TEXTUAL_VERSION).tar.gz
--PYTHON_TEXTUAL_SITE = https://files.pythonhosted.org/packages/9f/38/7d169a765993efde5095c70a668bf4f5831bb7ac099e932f2783e9b71abf
-+PYTHON_TEXTUAL_SITE = https://files.pythonhosted.org/packages/72/23/8c709655c5f2208ee82ab81b8104802421865535c278a7649b842b129db1
- PYTHON_TEXTUAL_SETUP_TYPE = poetry
- PYTHON_TEXTUAL_LICENSE = MIT
- PYTHON_TEXTUAL_LICENSE_FILES = LICENSE
+-PYTHON_TORTOISE_ORM_VERSION = 1.1.5
++PYTHON_TORTOISE_ORM_VERSION = 1.1.6
+ PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
+-PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/f3/b0/2b3962847aad793d32646c6e43e7fab6f845f34a5502da5722fe704ec847
++PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/40/76/629a5d69c170605dbdc10f3f3416d124fae05836860686ccd9e06726810c
+ PYTHON_TORTOISE_ORM_SETUP_TYPE = pep517
+ PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
+ PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
