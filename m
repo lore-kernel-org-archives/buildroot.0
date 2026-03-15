@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F55EF3028D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FC0F3028C
 	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B35CF6119A;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13A0B40A1C;
 	Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P2T-ZCliuzFN; Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3231540B00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773613087;
+	bh=ihC8VG4kUwzxqmzRUreiS03DpdoZeXPRuufe4JD48rk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LD6BLSrqHiAab430ngBvPNiBhQuc/aESoFuisV9mchUjS39IKMmxlagiaEZHPWZOE
+	 xNdxB+7L/mDq3qXcQBYNntDZQ38H+LWyPuXPWPK3RYolS6LTMKCaUZcx+CfInSkAXW
+	 6nyicz5A6JwGjbYMzC2i0euL2xt7GAfjS037giSm2i3hhfGUzE1JMXH1mkqVoUMaaW
+	 LNoayjbgw+4WNapj/5C/Exk2ILh7ZGi95I7rO2hQx8o9mXqDSI3Eixrtmrfxz50yVJ
+	 FX9zqE6X2ytBhDdLUuBnp7TA72TN4xTeIXNkTFt7O+cWUENlIB8Ddn/RoewjOh02w3
+	 JCCxrDM06gDqQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3231540B00;
+	Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 304AB1B4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 954C661095
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BiGX_z0BtEuh; Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE422610B9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613084;
-	bh=+yaPDsV/0rQBttwAyRgjsRqk5nsLxVUKVPiCk2DkBFg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cgfNOc0XbOEeYukMpPG/qN7+R4ObUn/7UyX4tmnSSeFa5whbRKAURelgic0ogvb/0
-	 40/qPIif+rZJ6KLmVFkVdR439rpZke3edcgaq9c7Aq87wyL8Rg5gSbETi5+IoHBv0X
-	 yNoRwxEAMvhod5YHvcJQ0SmCVhsVd71+Tdva7vrNU70BNTpmiCtdmQS36o1e92PvS4
-	 8fr3Mw4dwck73hxXWrogX4gJLra1tYFW43NUIZDV94H9CATpSsgBA2uTEwChv5YHz1
-	 xwKI4b3v8YKXmAVDpBgcOHHn0xzi2XV6+a5RphWHZw2yjMktMkRefN9hXZftQw+k89
-	 BU6dodRz2E/cg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE422610B9;
-	Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9370E3BA
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 795F040724
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6w8ZruFSAaZ5 for <buildroot@buildroot.org>;
+ id WAXU3sj_gfvs for <buildroot@buildroot.org>;
  Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 838A440711
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5372D61088
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 838A440711
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5372D61088
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C514285BFF; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
+ id 865C382803; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 16:21:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 44c2393af96bc29cd2a7a9c28ab334925760c7c3
-X-Git-Newrev: 69b36ebac9b83991739e7ece34fc029cb8cd9434
+X-Git-Oldrev: 808bb5fea304be67f1d58bb22a189e1989959290
+X-Git-Newrev: 5e49c6e18bfa185a68e3172cd46313aa19525904
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221800.C514285BFF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-async-lru: bump version to
- 2.2.0
+Message-Id: <20260315221800.865C382803@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aenum: bump version to
+ 3.1.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/69b36ebac9b83991739e7ece34fc029cb8cd9434
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5e49c6e18bfa185a68e3172cd46313aa19525904
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-https://github.com/aio-libs/async-lru/blob/v2.2.0/CHANGES.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-async-lru/python-async-lru.hash | 4 ++--
- package/python-async-lru/python-async-lru.mk   | 4 ++--
+ package/python-aenum/python-aenum.hash | 4 ++--
+ package/python-aenum/python-aenum.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-async-lru/python-async-lru.hash b/package/python-async-lru/python-async-lru.hash
-index 8f296ce1ee..40cb990ee4 100644
---- a/package/python-async-lru/python-async-lru.hash
-+++ b/package/python-async-lru/python-async-lru.hash
+diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+index 9c59804d6e..dcef45a701 100644
+--- a/package/python-aenum/python-aenum.hash
++++ b/package/python-aenum/python-aenum.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/async-lru/json
--md5  c972e8755626506ca019085e0620e192  async_lru-2.0.5.tar.gz
--sha256  481d52ccdd27275f42c43a928b4a50c3bfb2d67af4e78b170e3e0bb39c66e5bb  async_lru-2.0.5.tar.gz
-+md5  588dd2fcc8ca6a808a8ecbfca4f92ca1  async_lru-2.2.0.tar.gz
-+sha256  80abae2a237dbc6c60861d621619af39f0d920aea306de34cb992c879e01370c  async_lru-2.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aenum/json
+-md5  f3fa11cda9ddaaed4d3f03b35f3a65ea  aenum-3.1.15.tar.gz
+-sha256  8cbd76cd18c4f870ff39b24284d3ea028fbe8731a58df3aa581e434c575b9559  aenum-3.1.15.tar.gz
++md5  2e00e2da1c6a2aa8b6a8fae85292e44a  aenum-3.1.16.tar.gz
++sha256  bfaf9589bdb418ee3a986d85750c7318d9d2839c1b1a1d6fe8fc53ec201cf140  aenum-3.1.16.tar.gz
  # Locally computed sha256 checksums
- sha256  ea65975679bc2093be925d520358e41096bd96fddedee3e929160a5faadcf573  LICENSE
-diff --git a/package/python-async-lru/python-async-lru.mk b/package/python-async-lru/python-async-lru.mk
-index d80a8dfb6c..1a146ed2ad 100644
---- a/package/python-async-lru/python-async-lru.mk
-+++ b/package/python-async-lru/python-async-lru.mk
+ sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 27f9e5cea6..4b59216722 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASYNC_LRU_VERSION = 2.0.5
-+PYTHON_ASYNC_LRU_VERSION = 2.2.0
- PYTHON_ASYNC_LRU_SOURCE = async_lru-$(PYTHON_ASYNC_LRU_VERSION).tar.gz
--PYTHON_ASYNC_LRU_SITE = https://files.pythonhosted.org/packages/b2/4d/71ec4d3939dc755264f680f6c2b4906423a304c3d18e96853f0a595dfe97
-+PYTHON_ASYNC_LRU_SITE = https://files.pythonhosted.org/packages/05/8a/ca724066c32a53fa75f59e0f21aa822fdaa8a0dffa112d223634e3caabf9
- PYTHON_ASYNC_LRU_SETUP_TYPE = setuptools
- PYTHON_ASYNC_LRU_LICENSE = MIT
- PYTHON_ASYNC_LRU_LICENSE_FILES = LICENSE
+-PYTHON_AENUM_VERSION = 3.1.15
++PYTHON_AENUM_VERSION = 3.1.16
+ PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
+-PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/d0/f8/33e75863394f42e429bb553e05fda7c59763f0fd6848de847a25b3fbccf6
++PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/09/7a/61ed58e8be9e30c3fe518899cc78c284896d246d51381bab59b5db11e1f3
+ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
