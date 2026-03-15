@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BA9FF3028C
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8884F3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CECA613AA;
-	Sun, 15 Mar 2026 22:19:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CE414159F;
+	Sun, 15 Mar 2026 22:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4ckJvkuB4Wm; Sun, 15 Mar 2026 22:19:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 36dkAUozFZOc; Sun, 15 Mar 2026 22:19:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1282A613C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF61B41598
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613166;
-	bh=mMBNZJTIYBPsQH4wzNUTyO8qybM7PwEp18Cy0wG6Jt8=;
+	s=default; t=1773613167;
+	bh=pyRbWardeMQE8SMD9YaCAn/ip0czxxC9J2mL8aBoPbU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=g4bHhhF7ORjelAz8asOv4ibvEeRI6OqbL/bwIu290t7/lX5kppqU4naic6aSDUfOd
-	 HMw91EjsNB9Z9PK2EgHlNsuz/PyFdegU2b9pSNEtRyVmCuJ5tqRluKb9+fZKR5C5Ys
-	 /fWwcjPPxFk31kgQCql1EyxrjebI+f4M+KRR1acstPWvIcm2h7mM+Un97j4pjUGhJx
-	 FoWhWrihbyWDxyT4YtPNS2CJX5lm1Bvk3WeM2NUqTR3mswzW/AkbMBH9pHzeeZ//yC
-	 QL7fltdjMFsrL+gmDesanC2A/iP4ouxGziBLlsATaN/BBHaUxReZ1fDHbWnBwc+RBG
-	 xVsst5GR1d6ow==
+	b=im5jQ2zRK0vyF1R0cagRc+dCO+MgcGFb42D5Z8+OZm1/fNhm95CFtuoQd60bCRI/y
+	 P/XSM1I9tGdVvrxABJR6eBfwXeKo1U2rweSlLv5reU+5/z7m+iUY6OSUKYn0c87bkg
+	 IyCogZmmcbQaauGOAkMcN3sXiwzM+YYkCzaB1vvIENLCZ+jxntF2QBNaDlizvLNh5C
+	 XZDz/5tV6wmMkh7JW7JzY3RP2mPoaC0mkBcWAPM8UEX+E+HoyF1OaayYUSfA1CSexO
+	 77CKdvDVftd88G8pyz8ozWz89y46X4hhRjof2YDV8X3XfZTIkd8xHIWqotCRgk4ZUL
+	 VLQiBpQ+5tiYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1282A613C1;
-	Sun, 15 Mar 2026 22:19:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F81B357
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF61B41598;
+	Sun, 15 Mar 2026 22:19:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E0541B4
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DAA7561089
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C571740B80
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fRsIiDEJNpRM for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T1EL0WzhL7Sb for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCAFF6109A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6C6E409DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCAFF6109A
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6C6E409DF
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A47085BFF; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+ id 34D0F80FBC; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:34:38 +0100
+Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 348d65c7260f3b6205e1fe39de1d9a3430ac4cb9
-X-Git-Newrev: 2448519264d136ff9ef8c0f37676df8634f4a212
+X-Git-Oldrev: 25867d252b92ead57d63c565f186e16dc08be134
+X-Git-Newrev: 9f17e0c2c92b58fad20f49e1fa9142ecbb87c593
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221802.0A47085BFF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-librt: bump version to 0.8.1
+Message-Id: <20260315221804.34D0F80FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-textual: bump version to
+ 8.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,44 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2448519264d136ff9ef8c0f37676df8634f4a212
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9f17e0c2c92b58fad20f49e1fa9142ecbb87c593
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+https://github.com/Textualize/textual/blob/v8.1.1/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-librt/python-librt.hash | 4 ++--
- package/python-librt/python-librt.mk   | 4 ++--
+ package/python-textual/python-textual.hash | 4 ++--
+ package/python-textual/python-textual.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-librt/python-librt.hash b/package/python-librt/python-librt.hash
-index 5c7f55bbb9..e12bb75949 100644
---- a/package/python-librt/python-librt.hash
-+++ b/package/python-librt/python-librt.hash
+diff --git a/package/python-textual/python-textual.hash b/package/python-textual/python-textual.hash
+index 68f996aeec..00a6759383 100644
+--- a/package/python-textual/python-textual.hash
++++ b/package/python-textual/python-textual.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/librt/json
--md5  2f0564db5d18a9e41bcd1fbdbdbee77c  librt-0.7.7.tar.gz
--sha256  81d957b069fed1890953c3b9c3895c7689960f233eea9a1d9607f71ce7f00b2c  librt-0.7.7.tar.gz
-+md5  977ea89f85bd73d2ec17f5149f165f71  librt-0.8.1.tar.gz
-+sha256  be46a14693955b3bd96014ccbdb8339ee8c9346fbe11c1b78901b55125f14c73  librt-0.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/textual/json
+-md5  88b5c60f9713a6cc3b5cf625c4f5efe3  textual-7.5.0.tar.gz
+-sha256  c730cba1e3d704e8f1ca915b6a3af01451e3bca380114baacf6abf87e9dac8b6  textual-7.5.0.tar.gz
++md5  d94bf25d9e81458d56b86aa108bb3fea  textual-8.1.1.tar.gz
++sha256  eef0256a6131f06a20ad7576412138c1f30f92ddeedd055953c08d97044bc317  textual-8.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  88f9e379c684580053c58e75e296ca2eb243b6edcc6e5357f247310e96eeef8a  LICENSE
-diff --git a/package/python-librt/python-librt.mk b/package/python-librt/python-librt.mk
-index 5c1ecd8e5e..8f16e762a7 100644
---- a/package/python-librt/python-librt.mk
-+++ b/package/python-librt/python-librt.mk
+ sha256  94f290a762376dfdb7768e42070618b0abfd2a2799eab1b1c097816c3a39eb57  LICENSE
+diff --git a/package/python-textual/python-textual.mk b/package/python-textual/python-textual.mk
+index 93881f6d02..9401964732 100644
+--- a/package/python-textual/python-textual.mk
++++ b/package/python-textual/python-textual.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LIBRT_VERSION = 0.7.7
-+PYTHON_LIBRT_VERSION = 0.8.1
- PYTHON_LIBRT_SOURCE = librt-$(PYTHON_LIBRT_VERSION).tar.gz
--PYTHON_LIBRT_SITE = https://files.pythonhosted.org/packages/b7/29/47f29026ca17f35cf299290292d5f8331f5077364974b7675a353179afa2
-+PYTHON_LIBRT_SITE = https://files.pythonhosted.org/packages/56/9c/b4b0c54d84da4a94b37bd44151e46d5e583c9534c7e02250b961b1b6d8a8
- PYTHON_LIBRT_SETUP_TYPE = setuptools
- PYTHON_LIBRT_LICENSE = MIT
- PYTHON_LIBRT_LICENSE_FILES = LICENSE
+-PYTHON_TEXTUAL_VERSION = 7.5.0
++PYTHON_TEXTUAL_VERSION = 8.1.1
+ PYTHON_TEXTUAL_SOURCE = textual-$(PYTHON_TEXTUAL_VERSION).tar.gz
+-PYTHON_TEXTUAL_SITE = https://files.pythonhosted.org/packages/9f/38/7d169a765993efde5095c70a668bf4f5831bb7ac099e932f2783e9b71abf
++PYTHON_TEXTUAL_SITE = https://files.pythonhosted.org/packages/72/23/8c709655c5f2208ee82ab81b8104802421865535c278a7649b842b129db1
+ PYTHON_TEXTUAL_SETUP_TYPE = poetry
+ PYTHON_TEXTUAL_LICENSE = MIT
+ PYTHON_TEXTUAL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
