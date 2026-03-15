@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837F7F3028C
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39046F3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B08461350;
-	Sun, 15 Mar 2026 22:19:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F340461389;
+	Sun, 15 Mar 2026 22:19:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9KoR-KRRglo; Sun, 15 Mar 2026 22:19:21 +0000 (UTC)
+ id 4uv_W655x-X8; Sun, 15 Mar 2026 22:19:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B04161389
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B438361395
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613161;
-	bh=M2LE0JzECMxA6bUs6UstKo1xYVSo56M0+V9ICpCbnIs=;
+	s=default; t=1773613162;
+	bh=yRns0L+JQTe9gDbMVowa9lK2PYfELbKxYvx1PrkdrCA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YDmS3RPP14en+Tgrr+gGlu9HyWpkdnX/lulpONUk904Ulb12hvCz4u11Pw+bXMDqc
-	 bRdIWLmx1cZAVuTP2IWSLJ3da26ZeB/mL6U2xV2WzNDRvSwcKRBE6fVIR2lhUaMzvd
-	 dH++FaV+aR2X/DVjl52Wh/84MRdp5QQZ7iR0u9OCVfVEbuQaFrV2L16G6ui6UA9CzK
-	 DipcsowEB4fDZLJPixYEWOLNGo1QcjIjlCWIfuJeaFD7/J8EOoJGsTz3TTYpHkwVuH
-	 eAsQH2HOM4O0N4UglAmGWEh5wjri94KeoVoOWwJeqewYvcDvNi0bVZTluYLSiFdTv+
-	 PiIXE6q0bz26w==
+	b=dbA0d1Oq0i4aP+/u7BnUwdO6Ih1yaOb893+j5ljT94CTgTu2NwJhaMryaxDR5RKAw
+	 JhjpNwmu2ykNGG2d8/LLEOdqTnDiJRvzuDDfaurIsFHnfZOLB7b7rQLfJoHi63nBXR
+	 lFu6fVnO5doorlQA7qdv8SajvA9uM7ydi1u5yFsJh27n3sjpindn7dPXpFFRGS4rXW
+	 BLdA9FnVyhAA5zE6TCU7ZT8qBq/29N46xDGFBEimzzCxm8MQIQwhIlNe6r6LF+GR+k
+	 Ww9fWz6zBaL1YDRx3wDNMbLdOSjQXJMzX/T3a7DorXWR1bpgTmfHTewDJtzPo6SqYL
+	 8R0zafKwuaRRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B04161389;
-	Sun, 15 Mar 2026 22:19:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 107AA357
+	by smtp3.osuosl.org (Postfix) with ESMTP id B438361395;
+	Sun, 15 Mar 2026 22:19:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DF4C1B4
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A919C610CF
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4146940B60
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6gDZqFHKjRov for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9X5yFCQC42bi for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8CFB61093
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560BF40891
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D8CFB61093
+ by smtp4.osuosl.org (Postfix) with ESMTP id 560BF40891
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26FB085C3A; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ id 982CB80FBC; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50007f836aacaac0f3878bf6499bbb8ade7ff4e0
-X-Git-Newrev: 25867d252b92ead57d63c565f186e16dc08be134
+X-Git-Oldrev: 219bec157532539ed3a0b11a131d9eb17752483f
+X-Git-Newrev: 0d0fdd3358c1ddcc73bab5f8de08ab0d5dfa112f
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221804.26FB085C3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-telnetlib3: bump version to
- 4.0.1
+Message-Id: <20260315221803.982CB80FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyqt5-sip: bump version to
+ 12.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/25867d252b92ead57d63c565f186e16dc08be134
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0d0fdd3358c1ddcc73bab5f8de08ab0d5dfa112f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/jquast/telnetlib3/blob/4.0.1/docs/history.rst
+Package was updated using an updated version of scanpypi:
+https://patchwork.ozlabs.org/project/buildroot/patch/20251001002004.3178942-1-james.hilliard1@gmail.com/
 
-Updated license hash due to upstream commit:
-https://github.com/jquast/telnetlib3/commit/1af3eee85961a57be1987bd31706d443b2df7d83
-
-Upstream switched to hatch:
-https://github.com/jquast/telnetlib3/commit/c4b848893067e8a673b715550bcf179354b2e61f
+Updated license hash due to copyright year bump:
+https://github.com/Python-SIP/sip/commit/394e97272bc7d0b7a350e722ad2b748e07556fb1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-telnetlib3/python-telnetlib3.hash | 6 +++---
- package/python-telnetlib3/python-telnetlib3.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-pyqt5-sip/python-pyqt5-sip.hash | 11 +++++------
+ package/python-pyqt5-sip/python-pyqt5-sip.mk   |  6 +++---
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-telnetlib3/python-telnetlib3.hash b/package/python-telnetlib3/python-telnetlib3.hash
-index 135b985625..889a7aa428 100644
---- a/package/python-telnetlib3/python-telnetlib3.hash
-+++ b/package/python-telnetlib3/python-telnetlib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/telnetlib3/json
--md5  effe967417ede0c7dadcc3ccd3263d5f  telnetlib3-2.0.8.tar.gz
--sha256  08a2a7a3a6790f89617442b7d491da8b531d87706fffd6a33eeff57ac440b752  telnetlib3-2.0.8.tar.gz
-+md5  468f4d8cd3571065d093d9abcf8b8f39  telnetlib3-4.0.1.tar.gz
-+sha256  819aa9dae793d66e9fef5524ce838eabc4723589b0f81c72fccd3f2448cbc2fb  telnetlib3-4.0.1.tar.gz
- # Locally computed sha256 checksums
--sha256  df4b9fddd41b5811d9ba61952c7513ab3b0ca1d00efe611d19c51eda756f5dd1  LICENSE.txt
-+sha256  23bf24a5fe7cbfc70b962da94334649cf60a3b309834c72eb053d91d8caf60cb  LICENSE.txt
-diff --git a/package/python-telnetlib3/python-telnetlib3.mk b/package/python-telnetlib3/python-telnetlib3.mk
-index d8968d4f15..8d47ca44d4 100644
---- a/package/python-telnetlib3/python-telnetlib3.mk
-+++ b/package/python-telnetlib3/python-telnetlib3.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_TELNETLIB3_VERSION = 2.0.8
-+PYTHON_TELNETLIB3_VERSION = 4.0.1
- PYTHON_TELNETLIB3_SOURCE = telnetlib3-$(PYTHON_TELNETLIB3_VERSION).tar.gz
--PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/b7/12/305101cfdec4863c088e520cbb698b08ebd3396904ecfe0062612db77c66
--PYTHON_TELNETLIB3_SETUP_TYPE = setuptools
-+PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/5d/57/42acb7ce2c1b3d88ab28d6b1de41a08fdd5180d262d728fd10071950566b
-+PYTHON_TELNETLIB3_SETUP_TYPE = hatch
- PYTHON_TELNETLIB3_LICENSE = ISC
- PYTHON_TELNETLIB3_LICENSE_FILES = LICENSE.txt
- 
+diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.hash b/package/python-pyqt5-sip/python-pyqt5-sip.hash
+index 909ee2ef33..bf5560dab1 100644
+--- a/package/python-pyqt5-sip/python-pyqt5-sip.hash
++++ b/package/python-pyqt5-sip/python-pyqt5-sip.hash
+@@ -1,6 +1,5 @@
+-# From https://pypi.org/pypi/PyQt5-sip/json
+-md5  9e0909e79f40619b0f2d3d3c33b4d4f7  PyQt5_sip-12.15.0.tar.gz
+-sha256  d23fdfcf363b5cedd9d39f8a9c5710e7d52804f5b08a58e91c638b36eafcb702  PyQt5_sip-12.15.0.tar.gz
+-
+-# Locally calculated
+-sha256  3859cfca971e429d6b79bdfeb1dc9e43aa9592f7295bf28fdd62824097909383  LICENSE
++# md5, sha256 from https://pypi.org/pypi/pyqt5-sip/json
++md5  739bb540472188851f15aac80bf8e715  pyqt5_sip-12.18.0.tar.gz
++sha256  71c37db75a0664325de149f43e2a712ec5fa1f90429a21dafbca005cb6767f94  pyqt5_sip-12.18.0.tar.gz
++# Locally computed sha256 checksums
++sha256  3e6f5b427c36f94ecf86bc01698af7030a1ed6eb3748110d5dbb8d142d804611  LICENSE
+diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.mk b/package/python-pyqt5-sip/python-pyqt5-sip.mk
+index 49762ec58c..7360e6dd48 100644
+--- a/package/python-pyqt5-sip/python-pyqt5-sip.mk
++++ b/package/python-pyqt5-sip/python-pyqt5-sip.mk
+@@ -14,9 +14,9 @@
+ # recorded in the PyPI source file "sip.h", in the SIP_VERSION_STR
+ # macro. For example, PyQt5-sip 12.15.0 was generated with Python-SIP
+ # 6.8.6.
+-PYTHON_PYQT5_SIP_VERSION = 12.15.0
+-PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/1b/15/78318d50f10062c428e97e7ce387e772616a4673c356018b905f247a6a85
+-PYTHON_PYQT5_SIP_SOURCE = PyQt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
++PYTHON_PYQT5_SIP_VERSION = 12.18.0
++PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/f3/31/5ef342de9faee0f3801088946ae103db9b9eaeba3d6a64fefd5ce74df244
++PYTHON_PYQT5_SIP_SOURCE = pyqt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
+ PYTHON_PYQT5_SIP_LICENSE = BSD-2-Clause
+ PYTHON_PYQT5_SIP_LICENSE_FILES = LICENSE
+ PYTHON_PYQT5_SIP_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
