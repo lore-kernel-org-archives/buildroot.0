@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7377F3027F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DCBBF3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9038415DA;
-	Sun, 15 Mar 2026 22:19:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IEAyYRYrZ3cs; Sun, 15 Mar 2026 22:19:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5816415E2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613177;
-	bh=KjPEi2QLRjVwAWf9nPSf0NkFLD+4gemnXKdSAPmS93k=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ExX2x8sflbgPbtXJkzKeMsUbdNASmVf0jf5il+h2D+t8n8SPmCShOMqwJ0MY36Smi
-	 xxVnnzLw0W3XxsW7p4XmnQ9p0OqrwRg1zmqniDXt82VganqtaPw1CVAgknZ5/MkCfI
-	 sokuPv1Zdd6eu78l2+bMTzGT1h4l/UdJ485yU1YUWr2jSLGayxm75pACvyBnJwXmPX
-	 ye1jqtxboVfxKn1p5DyOsdyxUe1RFuyCOBbNi+q9fZ8A8V6TDAO68H2CSzxAGXhMnX
-	 yFCEyJaQReDC9IDngH36sQYigxpbXVq/LPZuuvHhwGwMYIRJ6QcAs/bx9f76lBoxpH
-	 hq4t02PKRPTvQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5816415E2;
-	Sun, 15 Mar 2026 22:19:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D1611B4
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E1C161192
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59077610B9;
+	Sun, 15 Mar 2026 22:19:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9o9KZl3fYKqX for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
+ id bL7c0KaanRG0; Sun, 15 Mar 2026 22:19:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C26E6140C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773613179;
+	bh=stVhz+RDXmYcPsuDDDf6aEgdUja5AEUvnmMBq+Zpy7I=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=fUXHb20P3sqLP8Nf3Bxs42kx+3C62bfbMom1xwgGDn1txZuLrfgA6Sf750n6Y5Hb6
+	 aexnbyrqLNn0fdY/oG5FXqZE6ZUousQZMmSi5s4iEfXPUVRk9AwexzY3e3j3SoNqeM
+	 HSXz4WumLGbRvvQU1at8rTlNyBYPlzJVq4gxEHpjz8YHeiUkL3O7mPYBEv33we688c
+	 vvUhdrVdld9bjrZzSEZO1gahx+/+LwPhdHMJfvI3AYBSwc1ehzdofrHMEw8wvJ6mWy
+	 oBfcfc9Ia2RNZlmsuJ2YSEeqBDrEEYLoVClQV1TCS5J7AQz+gF0NxXzce3jjwljzQA
+	 IyArpiT23PynQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C26E6140C;
+	Sun, 15 Mar 2026 22:19:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F1BD357
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 408A140A1F
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LbjwH7V9ph2W for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A87DC61102
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81BAE40AF1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A87DC61102
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81BAE40AF1
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA66C82642; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ id C3B3080FBC; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d26060f11033a24552a9adea1d594cdbc3a99e48
-X-Git-Newrev: c479ac460172be6203b543de30c83f98055aa54b
+X-Git-Oldrev: f90a703b2733a7c1ca8cbf07249dd32c69cc76de
+X-Git-Newrev: 52f5beb7d41789470464c29cad10acb97bf8d1bb
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221804.EA66C82642@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ujson: bump version to
- 5.12.0
+Message-Id: <20260315221804.C3B3080FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-types-psutil: bump version
+ to 7.2.2.20260130
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c479ac460172be6203b543de30c83f98055aa54b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/52f5beb7d41789470464c29cad10acb97bf8d1bb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/ultrajson/ultrajson/releases/tag/5.12.0
+https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/psutil.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-ujson/python-ujson.hash | 4 ++--
- package/python-ujson/python-ujson.mk   | 4 ++--
+ package/python-types-psutil/python-types-psutil.hash | 4 ++--
+ package/python-types-psutil/python-types-psutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
-index b4b0a4906e..58fa1b611f 100644
---- a/package/python-ujson/python-ujson.hash
-+++ b/package/python-ujson/python-ujson.hash
+diff --git a/package/python-types-psutil/python-types-psutil.hash b/package/python-types-psutil/python-types-psutil.hash
+index ac43dcce97..0b2e5aa7c7 100644
+--- a/package/python-types-psutil/python-types-psutil.hash
++++ b/package/python-types-psutil/python-types-psutil.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ujson/json
--md5  dfe38201fc1cdbb6f9e0bdf135173a6a  ujson-5.11.0.tar.gz
--sha256  e204ae6f909f099ba6b6b942131cee359ddda2b6e4ea39c12eb8b991fe2010e0  ujson-5.11.0.tar.gz
-+md5  a1104b826ed8414130553e4482bd714d  ujson-5.12.0.tar.gz
-+sha256  14b2e1eb528d77bc0f4c5bd1a7ebc05e02b5b41beefb7e8567c9675b8b13bcf4  ujson-5.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/types-psutil/json
+-md5  4c6196cba53b8b8218bc829681e82a67  types_psutil-7.2.1.20251231.tar.gz
+-sha256  dbf9df530b1130e131e4211ed8cea62c08007bfa69faf2883d296bd241d30e4a  types_psutil-7.2.1.20251231.tar.gz
++md5  d4d19bc7bb21bd5ff2c909e425760f79  types_psutil-7.2.2.20260130.tar.gz
++sha256  15b0ab69c52841cf9ce3c383e8480c620a4d13d6a8e22b16978ebddac5590950  types_psutil-7.2.2.20260130.tar.gz
  # Locally computed sha256 checksums
- sha256  36866344f0a486541bd9800f1a407a056c0c214a82c658f059694daf3dc394d2  LICENSE.txt
-diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
-index 88e6c736b9..3893a205c8 100644
---- a/package/python-ujson/python-ujson.mk
-+++ b/package/python-ujson/python-ujson.mk
+ sha256  295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe  LICENSE
+diff --git a/package/python-types-psutil/python-types-psutil.mk b/package/python-types-psutil/python-types-psutil.mk
+index f935b28ae0..4a596de1b1 100644
+--- a/package/python-types-psutil/python-types-psutil.mk
++++ b/package/python-types-psutil/python-types-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_UJSON_VERSION = 5.11.0
-+PYTHON_UJSON_VERSION = 5.12.0
- PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
--PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/43/d9/3f17e3c5773fb4941c68d9a37a47b1a79c9649d6c56aefbed87cc409d18a
-+PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/cb/3e/c35530c5ffc25b71c59ae0cd7b8f99df37313daa162ce1e2f7925f7c2877
- PYTHON_UJSON_SETUP_TYPE = setuptools
- PYTHON_UJSON_LICENSE = BSD-3-Clause, TCL
- PYTHON_UJSON_LICENSE_FILES = LICENSE.txt
+-PYTHON_TYPES_PSUTIL_VERSION = 7.2.1.20251231
++PYTHON_TYPES_PSUTIL_VERSION = 7.2.2.20260130
+ PYTHON_TYPES_PSUTIL_SOURCE = types_psutil-$(PYTHON_TYPES_PSUTIL_VERSION).tar.gz
+-PYTHON_TYPES_PSUTIL_SITE = https://files.pythonhosted.org/packages/09/e0/f4881668da3fcc9473b3fb4b3dc028840cf57374d72b798c0912a183163a
++PYTHON_TYPES_PSUTIL_SITE = https://files.pythonhosted.org/packages/69/14/fc5fb0a6ddfadf68c27e254a02ececd4d5c7fdb0efcb7e7e917a183497fb
+ PYTHON_TYPES_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_TYPES_PSUTIL_LICENSE = Apache-2.0
+ PYTHON_TYPES_PSUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
