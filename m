@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB4E6F3027F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6962F3028C
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4088413F8;
-	Sun, 15 Mar 2026 22:18:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC981612CA;
+	Sun, 15 Mar 2026 22:18:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0AQ4YtDwBJ-X; Sun, 15 Mar 2026 22:18:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CguuffJiaK6B; Sun, 15 Mar 2026 22:18:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D596841407
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3DA9612C5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613127;
-	bh=csxDaSIgovJF8XYHMrxjbe682eal4POPIYBgD3eLFgo=;
+	s=default; t=1773613129;
+	bh=u5QAtQGUJpTb5ZPRrs+ZSZqIRSj+PjzO4fYp/wglsQ8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lifWheSF+iScorfxD3RyBnRsiKYgAuSs0q7tsKBQqSP8QO/wUT4goD8ZsMJwpCyBV
-	 MgpPN5KDrV4iwVyy+MSmxkOKmCvRxvU0/bY5Vpk8uxahxQxKy94kEZibOQS/mRCUFl
-	 h6i7xfeQIxWTl/7hVzj5AJpL38wPvQ3S5hbPhQQYx8yU8k8J0Y2IQUy5Ta7C4pZUVE
-	 in6BLlhaNxlOb/sNVBax7MAb4jIe32J7orVHw1U7Ayb1UwdtdvETKyATJckvRrB8Nn
-	 Vsamo6Iz+fUCqKS0B6HLRLMf72mis+bi/r9qjMx8hL4ZUvmSujboogimPNNClxt8Xd
-	 o2KfAvKVkMysg==
+	b=kUZvqe3FvwltP5TIZLddhiukFkvEWusx6+rVlJ0nUZ42drw76FwJ+Yvo22AI8175j
+	 Y+PLwhCTWfNnaAm1Fhg/FYIZAq1Jx8YnqCYlKZLbidT90auwEAGAou4vhUHCAkEZTn
+	 bx5zo+/8/RUmMUBfp5o1y8pketNP/mgVU7VIkeWeCVPiT9PX9VJ1fO4Fp9E20yqB8W
+	 p6ZflPd8lWmHVSNLkRLH73AoJiVCU5yxquKe3oPZq1iqumL3VxjTE2FXfxpxf+ad3r
+	 h7UQh1EgWCDAs+VPv81qsKk5VMk3Elq6gHmGfRqSqjghonvCKOi4OFjc0Zr+EBXvUJ
+	 KZ4p323ZlpmJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D596841407;
-	Sun, 15 Mar 2026 22:18:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E8101B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3DA9612C5;
+	Sun, 15 Mar 2026 22:18:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1651E357
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75EE740A93
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36B996108E
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PysLfqgCEjE9 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id faBjvhr9pFs5 for <buildroot@buildroot.org>;
  Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C579A40930
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6467661092
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C579A40930
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6467661092
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1439485C3A; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+ id A76D185AD6; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:34:38 +0100
+Date: Sun, 15 Mar 2026 21:33:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2448519264d136ff9ef8c0f37676df8634f4a212
-X-Git-Newrev: 6df86418f57771419e63aceb1b6a2b2aab16ae37
+X-Git-Oldrev: 582c6272394cf79d534fcae5e2677dd4d87ee49c
+X-Git-Newrev: cb1410862a002f823da11f1929714f19e1995505
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221802.1439485C3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lmdb: bump version to 1.8.1
+Message-Id: <20260315221801.A76D185AD6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-googleapis-common-protos:
+ bump version to 1.73.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6df86418f57771419e63aceb1b6a2b2aab16ae37
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cb1410862a002f823da11f1929714f19e1995505
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/jnwatson/py-lmdb/blob/py-lmdb_1.8.1/ChangeLog
+https://github.com/googleapis/google-cloud-python/blob/main/packages/googleapis-common-protos/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 4 ++--
+ .../python-googleapis-common-protos.hash                              | 4 ++--
+ .../python-googleapis-common-protos.mk                                | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index 525c434f2a..679d552d1c 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
+diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
+index 682ea22690..682b995bd6 100644
+--- a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
++++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5  0996b2df3b8019b76ce1fa37913e41f0  lmdb-1.7.5.tar.gz
--sha256  f0604751762cb097059d5412444c4057b95f386c7ed958363cf63f453e5108da  lmdb-1.7.5.tar.gz
-+md5  de895e4a88eeb179aa0c185a08523d62  lmdb-1.8.1.tar.gz
-+sha256  44ef24033929e9cc227a7e17287473c452b462d716f118db885c667c80f57429  lmdb-1.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/googleapis-common-protos/json
+-md5  58ddbf8920c529b542af9be18101fe61  googleapis_common_protos-1.72.0.tar.gz
+-sha256  e55a601c1b32b52d7a3e65f43563e2aa61bcd737998ee672ac9b951cd49319f5  googleapis_common_protos-1.72.0.tar.gz
++md5  8af6ac195972be9e561438dff863170e  googleapis_common_protos-1.73.0.tar.gz
++sha256  778d07cd4fbeff84c6f7c72102f0daf98fa2bfd3fa8bea426edc545588da0b5a  googleapis_common_protos-1.73.0.tar.gz
  # Locally computed sha256 checksums
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index 3f92ef066f..dbdc80bfda 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
+index e72a7b45de..3bc384efa5 100644
+--- a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
++++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LMDB_VERSION = 1.7.5
-+PYTHON_LMDB_VERSION = 1.8.1
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/c7/a3/3756f2c6adba4a1413dba55e6c81a20b38a868656517308533e33cb59e1c
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/23/19/392f028e7ebcc1cc8212fe8a315a909b7a556278456f0bab9234d3a3b665
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
- PYTHON_LMDB_DEPENDENCIES = host-python-cffi host-python-patch-ng
+-PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.72.0
++PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.73.0
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_SOURCE = googleapis_common_protos-$(PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION).tar.gz
+-PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/e5/7b/adfd75544c415c487b33061fe7ae526165241c1ea133f9a9125a56b39fd8
++PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/99/96/a0205167fa0154f4a542fd6925bdc63d039d88dab3588b875078107e6f06
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_SETUP_TYPE = setuptools
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE = Apache-2.0
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
