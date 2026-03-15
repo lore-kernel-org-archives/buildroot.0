@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFBACF3028A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB59F3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6D0E4148E;
-	Sun, 15 Mar 2026 22:19:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 135856147E;
+	Sun, 15 Mar 2026 22:19:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lV1RuKAnUygE; Sun, 15 Mar 2026 22:19:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JfPZ0fvW1jTO; Sun, 15 Mar 2026 22:19:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E96054168F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A2061453
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613193;
-	bh=8PVSpglbWGICqcDmlAILzEGa6ULiX7yLd9yTLXi+jRM=;
+	s=default; t=1773613189;
+	bh=VNcTeFHFPDnAstJ5cl361uL+OPUlf9a/owpBZckorws=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=R7cz6fvsZnIj9j2IkNzOb65evGAqLKLLKZno9Xsw9Lu2FXJCZY1bqKNf3BglmZLDs
-	 teyugY+5ICPKJJ33Sr/GWJ7wjfixR2uMHDjRh9BPwabm/rljI99W0PPPrU7ehO38eA
-	 4X0xRRrT9GDpDg2BbBeZ04YYL9fByY3+jwYXQEPNTJZZOzNapm+IGkGW2wN81DfH35
-	 MOwPY2lwCpQLoLMPYtgv1eMaW6+ae6S9PbAK21nZI12005cEISQQNm7uL0fb85MKMD
-	 Mii6yDyM+PRFsCNhw35jnJPNo5axqPkXO+WIjwfaF6jY5w/lvi0S0Y8ndp9cZAhrTw
-	 ooLjm3aQS6MuQ==
+	b=EANdlJEvqYPgWomzuk452+v74GOcf0d/ovgMTJqR2iB9NkzsQAIxwwK4MdRxBvpn6
+	 5UZdINdJeRjCpUZhKg/nOBaSTvuRvoN2l2ZZmaeDLG7vVwRUxH84UUs+EH5TKBp3Wv
+	 KaRQiiDGIBzDuTenoAtUrRepXZpvQObYEc9lgUmdSDUAprWZtZb6NtpRXnhd9lZnpA
+	 3n6d/DE0glFZ2VzxXceJ5THcJAwXvWRmIu6f4zF72/iTYnMesuglvo6n3JtAc1xaZs
+	 70uZF0W7AzOCF+I0VAND8OrWkmr4qGYyNfV2Opu4KRq4o108UiMeY2AGmHO4QLJmWb
+	 CjtmTNvCG1MDA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E96054168F;
-	Sun, 15 Mar 2026 22:19:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3A2061453;
+	Sun, 15 Mar 2026 22:19:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D9D41B4
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 062CF1B2
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1667140A16
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF9D040B22
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id In1Bz0ZXopUo for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
+ id MDRtq2zS2qS6 for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D189D40B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23F0740B24
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D189D40B00
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23F0740B24
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F1C283D9E; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
+ id 65FB08226F; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3fb9b3b8f4e050b95d6e16391d3d74d6abb33af7
-X-Git-Newrev: 29bc88d4fb42ffaa561bc9fa7891325c551496a4
+X-Git-Oldrev: 351f4543cb5d9997bd66a1919ebd55e77cd7405e
+X-Git-Newrev: 48c3146af2a16480929e81f6e5250ed53c5e971b
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221805.1F1C283D9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-weasyprint: security bump
- version to 68.1
+Message-Id: <20260315221805.65FB08226F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-yamllint: bump version to
+ 1.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/29bc88d4fb42ffaa561bc9fa7891325c551496a4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/48c3146af2a16480929e81f6e5250ed53c5e971b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/Kozea/WeasyPrint/blob/v68.1/docs/changelog.rst
+https://github.com/adrienverge/yamllint/blob/v1.38.0/CHANGELOG.rst
 
-Version 68.0 fixes CVE-2025-68616.
+Tarball hashes were computed by scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-weasyprint/python-weasyprint.hash | 4 ++--
- package/python-weasyprint/python-weasyprint.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-yamllint/python-yamllint.hash | 4 +++-
+ package/python-yamllint/python-yamllint.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
-index d67415bcc6..6c482e0445 100644
---- a/package/python-weasyprint/python-weasyprint.hash
-+++ b/package/python-weasyprint/python-weasyprint.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/weasyprint/json
--md5  55d8d8d72a1e7e6b209f7485fd5ad1f6  weasyprint-67.0.tar.gz
--sha256  fdfbccf700e8086c8fd1607ec42e25d4b584512c29af2d9913587a4e448dead4  weasyprint-67.0.tar.gz
-+md5  be6662c500fe803df4f2d1bf512671af  weasyprint-68.1.tar.gz
-+sha256  d3b752049b453a5c95edb27ce78d69e9319af5a34f257fa0f4c738c701b4184e  weasyprint-68.1.tar.gz
+diff --git a/package/python-yamllint/python-yamllint.hash b/package/python-yamllint/python-yamllint.hash
+index 3287d4f2b2..d087e4906d 100644
+--- a/package/python-yamllint/python-yamllint.hash
++++ b/package/python-yamllint/python-yamllint.hash
+@@ -1,3 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/yamllint/json
++md5  dff4ef2d07d5b185c9d74256b42e9122  yamllint-1.38.0.tar.gz
++sha256  09e5f29531daab93366bb061e76019d5e91691ef0a40328f04c927387d1d364d  yamllint-1.38.0.tar.gz
  # Locally computed sha256 checksums
- sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
-diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
-index 73bcb1b12a..b36d96fd1d 100644
---- a/package/python-weasyprint/python-weasyprint.mk
-+++ b/package/python-weasyprint/python-weasyprint.mk
+-sha256  81f7c0c5559becc8049470d86046b36e96113637bcbe4753ecef06977c00245d  yamllint-1.37.1.tar.gz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/python-yamllint/python-yamllint.mk b/package/python-yamllint/python-yamllint.mk
+index 835ee2ffb2..9b79d1766f 100644
+--- a/package/python-yamllint/python-yamllint.mk
++++ b/package/python-yamllint/python-yamllint.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEASYPRINT_VERSION = 67.0
-+PYTHON_WEASYPRINT_VERSION = 68.1
- PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
--PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/fd/bc/79a65b3a406cb62a1982fec8b49134b25a3b31abb094ca493c9fddff5492
-+PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/db/3e/65c0f176e6fb5c2b0a1ac13185b366f727d9723541babfa7fa4309998169
- PYTHON_WEASYPRINT_SETUP_TYPE = flit
- PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
- PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+-PYTHON_YAMLLINT_VERSION = 1.37.1
++PYTHON_YAMLLINT_VERSION = 1.38.0
+ PYTHON_YAMLLINT_SOURCE = yamllint-$(PYTHON_YAMLLINT_VERSION).tar.gz
+-PYTHON_YAMLLINT_SITE = https://files.pythonhosted.org/packages/46/f2/cd8b7584a48ee83f0bc94f8a32fea38734cefcdc6f7324c4d3bfc699457b
++PYTHON_YAMLLINT_SITE = https://files.pythonhosted.org/packages/28/a0/8fc2d68e132cf918f18273fdc8a1b8432b60d75ac12fdae4b0ef5c9d2e8d
+ PYTHON_YAMLLINT_SETUP_TYPE = setuptools
+ PYTHON_YAMLLINT_LICENSE = GPL-3.0
+ PYTHON_YAMLLINT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
